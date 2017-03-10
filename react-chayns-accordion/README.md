@@ -28,8 +28,8 @@ The following properties can be set
 
 | Property   | Description                                                                                        | Type    | Default Value |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| head | Headline of the accordion                                                | String, React-Elements | --required-- |
-| children | React components that should be stored in the accordion body                                                           | React-Elements | --required-- |
+| head | Headline of the accordion                                                | String, React-Elements | *required* |
+| children | React components that should be stored in the accordion body                                                           | React-Elements | *required* |
 | badge | Inhalt des Badges                                                          | String |              |
 | renderClosed | Renders the accordion even if it is closed                                                        | bool | false |
 | isWrapped | Makes this accordion a wrapped accordion                                                       | bool | false |
@@ -45,8 +45,8 @@ The following properties can be set
 | reference | A reference for the accordion                                                         | Function | |
 
 
-### Examples ###
-#### Accordion-Badge ####
+### Examples
+#### Accordion-Badge
 The Accordion-Component allows you to create badges using a prop. The badge wont be created it the props are falsely.
 ```jsx
 <Accordion head="No JSX" badge="15.02.">
@@ -55,7 +55,7 @@ The Accordion-Component allows you to create badges using a prop. The badge wont
 	</div>
 </Accordion>
 ```
-#### Always render content ####
+#### Always render content
 The content of an accordion can be rendered anytime instead of just when opening it. This function is set to false by default, since it is rarely used.
 I.e. it is useful if it is necessary to execute JavaScript-Code that is stored inside this accordion.
 ```jsx

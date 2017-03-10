@@ -1,4 +1,4 @@
-# ModeSwitch-Component #
+# ModeSwitch-Component
 
 The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via the Tobit-NPM-Server:
 
@@ -6,7 +6,7 @@ The ModeSwitch-Component is part of the *tobit-chayns_components* package. It ca
     
 The ModeSwitch-Component decides itself, whether to show the ModeSwitch and if so, which modes to show.
 
-## Usage of the ModeSwitch ##
+## Usage of the ModeSwitch
 At first the component needs to be imported:
 
 ```jsx
@@ -34,7 +34,7 @@ ModeSwitch.init({
 })
 ``` 
 
-### Props ###
+### Props
 Both ways of initialization allow the following settings (No checking in the JavaScript variant):
 
 | Property   | Description                                                                                        | Type    | Default Value |
@@ -44,12 +44,12 @@ Both ways of initialization allow the following settings (No checking in the Jav
 | onChange    | Callback will be executed on mode switch. Returns the current group object                                                          | Function |              |
 
 
-#### Group Object ####
+#### Group Object
 The group object represents a group (mode) in the ModeSwitch.
 It requires an *id** and a **name**.
 It is also possible to provide an array containing UAC group ids. This causes that the specific mode (group object) can only be selected by users, that are member of the specified uac groups.
 
-## Verwendung von Mode ##
+## Verwendung von Mode
 The mode component is used to display and hide other react components. The decision is made by the provided groups/modes.
 
 ***Important: The group property expects an ID that was provided on the ModeSwitches initialization , and not a uac group id***
@@ -84,21 +84,21 @@ The following shows you the usage:
 
 
 
-| Property   | Description                                                                                         | Type   |  |
-|------------|-----------------------------------------------------------------------------------------------------|--------|
-| mode | Mode to check for                                                 | Int | |
-| modes | Modes to check for                                                           | Array (Int) | |
-| group | Mode to check for                                                 | Int | **deprecated** |
-| groups | Modes to check for                                                           | Array (Int) | **deprecated** |
-| children | Elements to render                                                          | React-Component(s) | |
+| Property   | Description                                                                                         | Type        |  |
+|------------|-----------------------------------------------------------------------------------------------------|-------------|----|
+| mode | Mode to check for                                                                                         | Int         |  |
+| modes | Modes to check for                                                                                       | Array (Int) |  |
+| group | Mode to check for                                                                                        | Int | **deprecated** |
+| groups | Modes to check for                                                                                      | Array (Int) | **deprecated** |
+| children | Elements to render                                                                                    | React-Component(s) | |
 
-## Usage of connectToModeSwitch ##
+## Usage of connectToModeSwitch
 ConnectToModeSwitch is the Decorator-Variant of mode. It only takes no parameter or an array as parameter.
 The current mode will be provideded as mode prop to the specific react element.
 If an array is provided, it will be checked whether one of the modes contained in the array is selected. Based to this, the react element will be rendered, or not.
 The props of the react element will be forwarded.
 
-### Example ###
+### Example
 ```jsx
 import {connectToModeSwitch} from 'tobit-chayns_components/react-chayns-modeswitch';
 
@@ -115,7 +115,7 @@ export default class Example extends React.Component {
 }
 ```
 
-## Usage of the ModeSwitch-Functions ##
+## Usage of the ModeSwitch-Functions
 The ModeSwitch-Component has some functions, which are static and may be called independent of React:
 
 | Function | Description  | Parameter |
