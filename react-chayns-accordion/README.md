@@ -16,8 +16,8 @@ import Accordion from 'tobit-chayns_components/react-chayns-accordion';
 
 Then it can be used like in the following:
 ```jsx
-	<Accordion>
-		<div class="accordion__content" head="Hallo">
+	<Accordion head="Hallo">
+		<div className="accordion__content">
 			Hello World!
 		</div>
 	</Accordion>
