@@ -1,6 +1,6 @@
 # chayns-components
 
-The ChaynsComponents can be installed directly from the internal Tobit NPM server by using the following package:
+The ChaynsComponents can be installed directly from npm by using the following package:
 
     npm install --save-dev tobit-chayns_components
 

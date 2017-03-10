@@ -1,6 +1,6 @@
 # ModeSwitch-Component
 
-The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via the Tobit-NPM-Server:
+The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
 
     npm install --save-dev tobit-chayns_components
     
