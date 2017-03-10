@@ -1,0 +1,63 @@
+.weather-widget {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  user-select: none;
+
+  cursor: pointer;
+
+  &__icon, &__temp, &__info {
+    flex-shrink: 1;
+  }
+
+  &__empty {
+    flex-grow: 1;
+  }
+
+  &__icon {
+    text-align: right;
+    flex-basis: 0;
+  }
+
+  &__icon .wi {
+    line-height: 40px;
+    font-size: 30px !important;
+
+    font-weight: normal;
+  }
+
+  &__temp {
+    font-size: 40px;
+    line-height: 40px;
+    margin: 0 5px;
+  }
+
+  &__celsius {
+    font-size: 18px;
+    align-self: flex-start;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+
+    margin-left: 15px;
+
+    &__max, &__min {
+      font-size: 80%;
+      line-height: normal;
+      text-align: center;
+    }
+
+    &__max i {
+      color: #FF0000;
+    }
+
+    &__min i {
+      color: #0000FF;
+    }
+  }
+}
