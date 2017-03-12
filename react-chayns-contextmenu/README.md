@@ -9,7 +9,7 @@ The **ContextMenu** - Component is part of the **tobit-chayns_component** packag
 First of all import the component to a component of your own project.
 
 ```jsx
-import {ModeSwitch} from 'tobit-chayns_components/react-chayns-contextmenu';
+import {ContextMenu} from 'tobit-chayns_components/react-chayns-contextmenu';
 ```
 I would recommend to import this component to a high level component of your project, because with that you can use one **ContextMenu** component for your whole project and you can store the properties for the **ContextMenu** at one place.
 
