@@ -11,7 +11,7 @@ The **Setup Wizard** is usually used for setting up Tapps for the first time. My
 For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupItem*.
 
 ```jsx
-import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-contextmenu';
+import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
 ```
 
 The basic structure of the component will be the following:
