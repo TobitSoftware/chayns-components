@@ -17,20 +17,20 @@ Afterwards the ModeSwitch-Component has to be initialized at any time (it is rec
 
 JSX initialization
 ```jsx
-	<ModeSwitch groups={{
+	<ModeSwitch groups={[{
 		id: 1,
 		uacIds: [1],
 		name: 'chayns-Manager'
-	}}/>
+	}]}/>
 ```
 JavaScript initialization
 ```javascript
 ModeSwitch.init({
-	groups: {
+	groups: [{
 		id: 1,
 		uacIds: [1],
 		name: 'chayns-Manager'
-	}
+	}]
 })
 ``` 
 
