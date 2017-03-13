@@ -10,6 +10,7 @@ First of all import the component to a component of your own project.
 
 ```jsx
 import {Calendar} from 'tobit-chayns_components/react-chayns-calendar';
+import 'tobit-chayns_components/react-chayns-calendar/style.css';
 ```
 
 
@@ -17,6 +18,10 @@ You can init the **Calendar** like this:
 ```jsx
 	<Calendar/>
 ```
+
+
+ **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
+
 
 ### Props ###
 The component got the following properties:
@@ -46,3 +51,5 @@ npm i
 ```
 npm start
 ```
+
+[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

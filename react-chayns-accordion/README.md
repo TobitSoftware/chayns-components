@@ -1,6 +1,6 @@
 # Accordion-Component #
 
-The Accordion-Component is part of the *tobit-chayns_components* package. It can be installed via the Tobit-Npm-Server:
+The Accordion-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
 
     npm install --save-dev tobit-chayns_components
 
@@ -16,8 +16,8 @@ import Accordion from 'tobit-chayns_components/react-chayns-accordion';
 
 Then it can be used like in the following:
 ```jsx
-	<Accordion>
-		<div class="accordion__content" head="Hallo">
+	<Accordion head="Hallo">
+		<div className="accordion__content">
 			Hello World!
 		</div>
 	</Accordion>

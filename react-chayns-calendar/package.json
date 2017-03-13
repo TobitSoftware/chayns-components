@@ -13,7 +13,7 @@
   ],
   "author": "Philipp Hugenroth",
   "license": "MIT",
-  "devDependencies":{
+  "devDependencies": {
     "babel": "~6.5.2",
     "babel-cli": "^6.7.7",
     "babel-core": "^6.10.4",
@@ -32,6 +32,7 @@
     "sass-loader": "^4.0.0",
     "strip-loader": "^0.1.2",
     "style-loader": "^0.13.1",
+    "tobit-chayns_components": "^1.0.33",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-replace": "^1.0.0"

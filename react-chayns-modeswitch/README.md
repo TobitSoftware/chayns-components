@@ -1,6 +1,6 @@
 # ModeSwitch-Component
 
-The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via the Tobit-NPM-Server:
+The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
 
     npm install --save-dev tobit-chayns_components
     
@@ -17,20 +17,20 @@ Afterwards the ModeSwitch-Component has to be initialized at any time (it is rec
 
 JSX initialization
 ```jsx
-	<ModeSwitch groups={{
+	<ModeSwitch groups={[{
 		id: 1,
 		uacIds: [1],
 		name: 'chayns-Manager'
-	}}/>
+	}]}/>
 ```
 JavaScript initialization
 ```javascript
 ModeSwitch.init({
-	groups: {
+	groups: [{
 		id: 1,
 		uacIds: [1],
 		name: 'chayns-Manager'
-	}
+	}]
 })
 ``` 
 

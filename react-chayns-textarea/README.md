@@ -1,5 +1,5 @@
 # Textarea-Component #
-The Textarea-Component is part of the *tobit-chayns_componetns* package. It can be installed via the Tobit-NPM-Server:
+The Textarea-Component is part of the *tobit-chayns_componetns* package. It can be installed via npm:
 
     npm install --save-dev tobit-chayns_components
 
