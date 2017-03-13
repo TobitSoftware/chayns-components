@@ -7,18 +7,27 @@ class Mode extends React.Component {
         super();
 
         this.state = {
-            group: ModeSwitchHelper.getCurrentMode().id
+            modeId: ModeSwitchHelper.getCurrentMode().id
         };
     }
 
     render() {
         if(!ModeSwitchHelper.isInitialized()) return null;
 
-        if(window.chayns.utils.isNumber(this.props.group) && this.state.group == this.props.group) {
+        if(window.chayns.utils.isNumber(this.props.mode) && this.state.modeId == this.props.mode) {
             return this.renderChildren();
         }
 
-        if(window.chayns.utils.isArray(this.props.group) && this.props.group.indexOf(this.state.group) != -1) {
+        if(window.chayns.utils.isArray(this.props.modes) && this.props.modes.indexOf(this.state.modeId) != -1) {
+            return this.renderChildren();
+        }
+
+
+        if(window.chayns.utils.isNumber(this.props.group) && this.state.modeId == this.props.group) {
+            return this.renderChildren();
+        }
+
+        if(window.chayns.utils.isArray(this.props.group) && this.props.group.indexOf(this.state.modeId) != -1) {
             return this.renderChildren();
         }
 
@@ -39,7 +48,7 @@ class Mode extends React.Component {
 
     updatedMode = (group) => {
         this.setState({
-            group: group.id
+            modeId: group.id
         });
     };
 
@@ -108,7 +117,9 @@ function createChainableTypeChecker(validate) {
 let groupChecker = createChainableTypeChecker(groups);
 
 Mode.propTypes = {
-    group: groupChecker.isRequired,
+    group: groupChecker,
+    mode: React.PropTypes.number,
+    modes: React.PropTypes.arrayOf(React.PropTypes.number),
     children: React.PropTypes.node.isRequired
 };
 /* End PropTypes */
