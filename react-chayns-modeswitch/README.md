@@ -65,7 +65,7 @@ import {Mode} from 'tobit-chayns_components/react-chayns-modeswitch';
 
 The following shows you the usage:
 ```jsx
-<Mode group={1}>
+<Mode mode={1}>
 	<div class="tapp__intro">
 		Hello Admin
 	</div>
@@ -75,7 +75,7 @@ The following shows you the usage:
 	</div>
 </Mode>
 
-<Mode group={[0, 1563]}>
+<Mode mode={[0, 1563]}>
 	<div class="tapp__intro">
 		Hello Stranger
 	</div>
@@ -89,7 +89,7 @@ The following shows you the usage:
 | mode | Mode to check for                                                                                         | Int         |  |
 | modes | Modes to check for                                                                                       | Array (Int) |  |
 | group | Mode to check for                                                                                        | Int | **deprecated** |
-| groups | Modes to check for                                                                                      | Array (Int) | **deprecated** |
+| group | Modes to check for                                                                                      | Array (Int) | **deprecated** |
 | children | Elements to render                                                                                    | React-Component(s) | |
 
 ## Usage of connectToModeSwitch
