@@ -37,9 +37,13 @@ export default class ModeSwitchHelper {
                 allowedGroups.push(groupObject);
 
 
-                let savedGroupId = null, changeGroupIndex = 0;
+                let savedModeId = null, changeGroupIndex = 0;
                 if (options.save) {
-                    savedGroupId = getSavedMode();
+                    savedModeId = getSavedMode();
+                }
+
+                if(savedModeId === null && options.defaultMode) {
+                    savedModeId = options.defaultMode;
                 }
 
                 let changeGroup = false;
@@ -59,7 +63,7 @@ export default class ModeSwitchHelper {
                             allowedGroups.push(groupObject);
 
 
-                            if (groupObject.id == savedGroupId) {
+                            if (groupObject.id == savedModeId) {
                                 changeGroup = true;
                                 changeGroupIndex = allowedGroups.length - 1;
                                 changeGroupValue = groupObject;
