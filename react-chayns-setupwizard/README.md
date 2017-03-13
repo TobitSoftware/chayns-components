@@ -12,6 +12,7 @@ For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *
 
 ```jsx
 import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
+import 'tobit-chayns_components/react-chayns-contextmenu/style.css';
 ```
 
 The basic structure of the component will be the following:
@@ -28,6 +29,20 @@ The basic structure of the component will be the following:
 	</SetupItem>
 </SetupWizard>
 ```
+
+There are 3 different methods for changing the current step. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
+```jsx
+ static contextTypes = {
+     nextStep: React.PropTypes.func,
+     previousStep: React.PropTypes.func,
+     toStep: React.PropTypes.func
+ };
+```
+
+
+ **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
+
+
 
 ## Props ##
 The components got the following properties:
@@ -60,3 +75,5 @@ npm i
 ```
 npm start
 ```
+
+[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

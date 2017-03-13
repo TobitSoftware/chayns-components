@@ -4,14 +4,14 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Month from './Month';
 
 
-const TODAY = new Date();
+const TODAY = new Date(),
+    TRANSITION_TIME = 300;
+
 
 export default class Calendar extends React.Component {
 
     static defaultProps = {
         selected: TODAY,
-        startDate: new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()-30),
-        endDate: new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()+30),
         activateAll: true
     };
 
@@ -89,12 +89,12 @@ export default class Calendar extends React.Component {
     }
 
     getNavigateLeft(){
-        return (this.props.activateAll ||  (this.props.startDate && (this.props.startDate.getYear() < this.state.focus.getYear() || (this.props.startDate.getYear() === this.state.focus.getYear() && this.props.startDate.getMonth()<this.state.focus.getMonth()))))
+        return (this.props.activateAll && !this.props.startDate ||  (this.props.startDate && (this.props.startDate.getYear() < this.state.focus.getYear() || (this.props.startDate.getYear() === this.state.focus.getYear() && this.props.startDate.getMonth()<this.state.focus.getMonth()))))
     }
 
     getNavigateRight(){
         let FOCUS_FACTOR = window.screen.width<450 ? 0 : 1;
-        return (this.props.activateAll || (this.props.endDate && (this.props.endDate.getYear() > this.state.focus.getYear() || (this.props.endDate.getYear() === this.state.focus.getYear() && this.props.endDate.getMonth()-FOCUS_FACTOR>this.state.focus.getMonth()))))
+        return (this.props.activateAll && !this.props.endDate || (this.props.endDate && (this.props.endDate.getYear() > this.state.focus.getYear() || (this.props.endDate.getYear() === this.state.focus.getYear() && this.props.endDate.getMonth()-FOCUS_FACTOR>this.state.focus.getMonth()))))
     }
 
     navigateRightOnClick(){
@@ -132,6 +132,7 @@ export default class Calendar extends React.Component {
         //console.log('ELEMENT',this.calendarMonths.offsetWidth);
         //this.move = -1*(this.swipeX-event.touches[0].clientX);
         //this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}px)`;
+
         this.moveSwipeX = event.touches[0].clientX;
     }
 
@@ -191,24 +192,43 @@ export default class Calendar extends React.Component {
                 }
             }
 
-            for(let i in activated){
-                if(_highlighted instanceof Array) {
-                    for(let j = 0; j <_highlighted.length; j++) {
+            if(this.props.activateAll){
+                if (_highlighted instanceof Array) {
+                    for (let j = 0; j < _highlighted.length; j++) {
                         let dates = [];
-                        for (let k = 0; k <_highlighted[j].dates.length; k++) {
-                            if (_highlighted[j].dates[k].getYear() === activated[i].getYear() && _highlighted[j].dates[k].getMonth() === activated[i].getMonth() && _highlighted[j].dates[k].getDate() === activated[i].getDate()) {
+                        for (let k = 0; k < _highlighted[j].dates.length; k++) {
+                            if (_highlighted[j].dates[k].getTime() >= month.startDate && _highlighted[j].dates[k].getTime() <= month.endDate) {
                                 dates.push(_highlighted[j].dates[k]);
                             }
                         }
-                        if(dates.length>0) {
-                            tempObj.push({dates:dates,color:_highlighted[j].color});
+
+                        if (dates.length > 0) {
+                            tempObj.push({dates: dates, color: _highlighted[j].color});
                         }
                     }
                 }else{
-                    if(_highlighted) {
-                        for (let j in _highlighted.dates) {
-                            if (_highlighted.dates[j].getYear() === activated[i].getYear() && _highlighted.dates[j].getMonth() === activated[i].getMonth() && _highlighted.dates[j].getDate() === activated[i].getDate()) {
-                                tempDates.push(_highlighted.dates[j]);
+                    //TODO
+                }
+            }else {
+                for (let i in activated) {
+                    if (_highlighted instanceof Array) {
+                        for (let j = 0; j < _highlighted.length; j++) {
+                            let dates = [];
+                            for (let k = 0; k < _highlighted[j].dates.length; k++) {
+                                if (_highlighted[j].dates[k].getYear() === activated[i].getYear() && _highlighted[j].dates[k].getMonth() === activated[i].getMonth() && _highlighted[j].dates[k].getDate() === activated[i].getDate()) {
+                                    dates.push(_highlighted[j].dates[k]);
+                                }
+                            }
+                            if (dates.length > 0) {
+                                tempObj.push({dates: dates, color: _highlighted[j].color});
+                            }
+                        }
+                    } else {
+                        if (_highlighted) {
+                            for (let j in _highlighted.dates) {
+                                if (_highlighted.dates[j].getYear() === activated[i].getYear() && _highlighted.dates[j].getMonth() === activated[i].getMonth() && _highlighted.dates[j].getDate() === activated[i].getDate()) {
+                                    tempDates.push(_highlighted.dates[j]);
+                                }
                             }
                         }
                     }
@@ -220,6 +240,7 @@ export default class Calendar extends React.Component {
             if(tempObj.length>0){
                 tempHighlighted = tempObj;
             }
+
             return (
                 <Month
                     onDateSelect={this.props.onDateSelect}
@@ -242,7 +263,7 @@ export default class Calendar extends React.Component {
 
         let _months = this.renderMonths();
         return (
-            <div className="puffer" onTouchMove={this.handleTouchMove.bind(this)} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
+            <div className="buffer" onTouchMove={this.handleTouchMove.bind(this)} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
                 <div className="absolute">
                     <div className="calendar__navigation">
                         <div onClick={this.navigateLeftOnClick.bind(this)} className="calendar__navigate left" hidden={_navigateLeft}>
@@ -256,8 +277,8 @@ export default class Calendar extends React.Component {
                 <div className="calendar__months">
                     <ReactCSSTransitionGroup
                         transitionName={this.state.animation}
-                        transitionEnterTimeout={300}
-                        transitionLeaveTimeout={0.001}
+                        transitionEnterTimeout={TRANSITION_TIME}
+                        transitionLeaveTimeout={0.000001}
                     >
                         {_months}
                     </ReactCSSTransitionGroup>

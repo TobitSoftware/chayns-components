@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {Calendar} from '../src/index';
+import {Calendar} from 'tobit-chayns_components/react-chayns-calendar';
+import 'tobit-chayns_components/react-chayns-calendar/style.css';
 
 export default class Example extends React.Component {
 
