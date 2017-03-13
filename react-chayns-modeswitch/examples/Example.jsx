@@ -26,19 +26,13 @@ export default class Example extends React.Component {
     render() {
         return(
             <div>
-                {/*<ModeSwitch groups={[{*/}
-                    {/*id: 1,*/}
-                    {/*uacIds: [1, 34542],*/}
-                    {/*name: 'Chayns Manager'*/}
-                {/*}]} save={true}/>*/}
-
-                <Mode group={0}>
+                <Mode mode={0}>
                     <div>
                         Hello world
                     </div>
                 </Mode>
 
-                <Mode group={1}>
+                <Mode mode={1}>
                     <div>
                         Administration
                     </div>
@@ -52,9 +46,11 @@ export default class Example extends React.Component {
                     </div>
                 </Mode>
 
-                <div>
-                    <button onClick={this.getModeSwitchStatus}>ModeSwitch Status</button>
-                </div>
+                <Mode modes={[0,1]}>
+                    <div>
+                        <button onClick={this.getModeSwitchStatus}>ModeSwitch Status</button>
+                    </div>
+                </Mode>
 
                 <ExampleDecorator test="1" hallo="hi" />
             </div>

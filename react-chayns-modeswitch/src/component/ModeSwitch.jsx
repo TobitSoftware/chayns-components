@@ -9,7 +9,8 @@ class ModeSwitch extends React.Component {
             React.PropTypes.oneOf([React.PropTypes.number, React.PropTypes.object])
         ),
         save: React.PropTypes.bool,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        defaultMode: React.PropTypes.number
     };
 
     constructor() {
@@ -20,7 +21,8 @@ class ModeSwitch extends React.Component {
         ModeSwitchHelper.init({
             groups: this.props.groups,
             save: this.props.save,
-            onChange: this.props.onChange
+            onChange: this.props.onChange,
+            defaultMode: this.props.defaultMode
         });
     }
 
