@@ -73,51 +73,8 @@ class Mode extends React.Component {
 
 
 /* PropTypes */
-function groups(props, propName, componentName) {
-    componentName = componentName || 'ANONYMOUS';
-
-    if (props[propName]) {
-        let value = props[propName];
-        if (window.chayns.utils.isNumber(value)) {
-            return null;
-        } else if(window.chayns.utils.isArray(value)) {
-            return null;
-        } else {
-            return new Error(propName + ' in ' + componentName + " should be a number or an array of numbers");
-        }
-    }
-
-    // assume all ok
-    return null;
-}
-
-function createChainableTypeChecker(validate) {
-    function checkType(isRequired, props, propName, componentName, location) {
-        componentName = componentName || ANONYMOUS;
-        if (props[propName] == null) {
-            var locationName = ReactPropTypeLocationNames[location];
-            if (isRequired) {
-                return new Error(
-                    ("Required " + locationName + " `" + propName + "` was not specified in ") +
-                    ("`" + componentName + "`.")
-                );
-            }
-            return null;
-        } else {
-            return validate(props, propName, componentName, location);
-        }
-    }
-
-    let chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-
-    return chainedCheckType;
-}
-
-let groupChecker = createChainableTypeChecker(groups);
-
 Mode.propTypes = {
-    group: groupChecker,
+    group: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.arrayOf(React.PropTypes.number)]),
     mode: React.PropTypes.number,
     modes: React.PropTypes.arrayOf(React.PropTypes.number),
     children: React.PropTypes.node.isRequired
