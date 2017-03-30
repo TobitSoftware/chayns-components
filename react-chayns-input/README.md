@@ -1,57 +1,42 @@
-# Button / ChooseButton
+# Input
 
-The Button/ChooseButton is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Input is part of the *tobit-chayns_components* package. It can be installed via npm:
 
     npm install -S tobit-chayns_components@latest
 
 
-## Usage of the Button
-At least one of the components has to be imported:
+## Usage of the Input
+The input has to be imported:
 
 ```jsx
-import {Button, ChooseButton} from 'tobit-chayns_components/react-chayns-accordion';
+import {Input} from 'tobit-chayns_components/react-chayns-input';
 ```
 
 
-You can use the button like this:
+You can use the input like this:
 ```jsx
-<Button>Test</Button>
+<Input placeholder="this is a placeholder" />
 ```
 
 ## Props
-The following properties can be set on the Button and the ChooseButton-Component
+The following properties can be set on the Input-Component
 
 | Property   | Description                                                                                        | Type    | Default Value |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| children | Value of the button                                                           | String | *required* |
-| chooseButton | Render Button as ChooseButton (not necessary when using the ChooseButton-component)                                                          | bool | false (Button) / true (ChooseButton)             |
-| disabled | Disabled the button and set the correct style                                                        | bool | false |
-| onClick | onClick-event                                                       | function |  |
+| style | Additional styles that should be set to the input                                                           | Object | |
 | className | Additional CSS-Classes that should be set to the button                                                        | String | |
-| style | Additional styles that should be set to the button                                                           | Object | |
+| placeholder | Animated placeholder that will be shown inside the input                                                        | String | |
+| onChange | onChange-event                                                       | function |  |
+| responsive | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool | false  |
+| regExp | The input will check if the entered text is valid (see Regular Expressions). onChange only triggers if the entered text is valid                                       | string |  |
 
 
 ### Examples
-#### Disabled Button
+#### Regex Input
 ```jsx
-<Button
-	disabled={true}
-	onClick={function(event) {
-		console.log(event);
-	}}
->
-	Hello World!
-</Button>
-```
-#### ChooseButton
-```jsx
-<ChooseButton>
-	Hello World!
-</ChooseButton>
-```
-Is the same as:
-```jsx
-<Button chooseButton={true} >
-	Hello World!
-</Button>
+<Input
+    placeholder="Looking for 3 lowercase a's"
+    regExp="^a{3}$" 
+    onChange={ (text) => { console.log(text); }}
+/>
 ```
