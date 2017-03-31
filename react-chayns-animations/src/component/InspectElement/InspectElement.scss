@@ -1,0 +1,10 @@
+.inspect-element-animation {
+  &>span:not(.inspect-element-animation__tile) {
+    position: fixed;
+  }
+
+  .inspect-element-animation__tile {
+    display: inline-block;
+    box-sizing: content-box;
+  }
+}
