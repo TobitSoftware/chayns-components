@@ -11,18 +11,34 @@ export default class Input extends React.Component {
         regExp: React.PropTypes.string
     };
 
-    defaultStyle = {
-        width: '100%',
-        marginBottom: '5px'
+    static defaultProps = {
+        style: {}
     };
 
     constructor() {
         super();
     }
 
-    render() {
-        const {placeholder, className, style} = this.props;
+    componentDidMount() {
+        if (this.props.regExp)
+            this._node.setAttribute('validate', this.props.regExp);
+    }
 
+    onChange = () => {
+        const {onChange} = this.props;
+
+        if (this.props.onChange)
+            if (this.props.regExp) {
+                if (this._node.value.match(new RegExp(this.props.regExp)))
+                    onChange(this._node.value);
+            }
+            else
+                onChange(this._node.value);
+    };
+
+    render() {
+        let {placeholder, className, style} = this.props;
+        if (style === undefined) style = {};
         let classNames = classnames({
             'input-group': this.props.responsive,
             'input': !this.props.responsive,
@@ -37,54 +53,33 @@ export default class Input extends React.Component {
                 >
                     <input
                         style={{width: '100%', marginBottom: '5px'}}
-                        ref={this.ref}
+                        ref={(ref) => {this._node = ref}}
                         onChange={this.onChange}
                         className="input"
-                    >
-                    </input>
+                        type="text"
+                        required
+                    />
                     <label>{placeholder}</label>
                 </div>
             );
-        }
+        };
 
         let input = () => {
+            style.width = '100%';
+            style.marginBottom = '5px';
             return (
                 <input
                     className={classNames}
-                    ref={this.ref}
+                    ref={(ref) => {this._node = ref}}
                     placeholder={placeholder}
                     style={style}
                     onChange={this.onChange}
-                >
-                </input>
+                    type="text"
+                    required
+                />
             );
-        }
+        };
 
         return (this.props.responsive ? responsiveInput() : input());
     }
-
-    componentDidMount() {
-        if (this.props.regExp)
-            this._node.setAttribute('validate', this.props.regExp);
-
-        this._node.setAttribute('required', '')
-
-        this._node.setAttribute('type', 'text');
-    }
-
-    onChange = (event) => {
-        const {onChange} = this.props;
-
-        if (this.props.onChange)
-            if (this.props.regExp) {
-                if (this._node.value.match(new RegExp(this.props.regExp)))
-                    onChange(this._node.value);
-            }
-            else
-                onChange(this._node.value);
-    };
-
-    ref = (node) => {
-        this._node = node;
-    };
 }

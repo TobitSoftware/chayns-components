@@ -14,9 +14,7 @@ export default class Example extends React.Component {
                     placeholder="Looking for 3 lowercase a's"
                     regExp="^a{3}$"
                     onChange={ (text) => { console.log(text); }}
-                    responsive={true}
-                    style={{width: '80%'}}
-                    className="test"
+                    responsive={false}
                 />
             </div>
         );
