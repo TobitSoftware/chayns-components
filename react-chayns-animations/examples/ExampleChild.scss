@@ -1,0 +1,23 @@
+.example-child {
+  &.enter {
+    transition: width .65s;
+  }
+
+  &.enterActive, &.visible {
+    width: 380px !important;
+  }
+
+  &.leave {
+    width: 380px !important;
+  }
+
+  &.leaveActive {
+    transition: width .65s;
+  }
+
+  width: 200px;
+}
+
+.chayns--desktop .example-child {
+  padding: 14px;
+}
