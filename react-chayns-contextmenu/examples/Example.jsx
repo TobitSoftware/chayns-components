@@ -22,8 +22,8 @@ export default class Example extends React.Component {
 
     setContextMenu(event){
         this.setState({
-            x: event.clientX,
-            y: event.clientY,
+            x: event.pageX,
+            y: event.pageY,
             hideContextMenu: false
         })
     }
