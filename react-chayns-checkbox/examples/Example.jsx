@@ -14,9 +14,10 @@ export default class Example extends React.Component {
         return(
             <div>
                <Checkbox
-                label="testlabel"
-                onChange={(value) => { console.log(value)}}
-            />
+                   label="testlabel"
+                   onChange={(value) => { console.log(value)}}
+                   toggleButton={true}
+               />
             </div>
         );
     }
