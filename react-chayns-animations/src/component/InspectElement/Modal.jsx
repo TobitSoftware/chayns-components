@@ -122,6 +122,7 @@ export default class Modal extends React.Component {
                     top: top,
                     left: (direction === Constants.DIRECTION_LEFT) ? left : null,
                     right: (direction === Constants.DIRECTION_RIGHT) ? right : null,
+                    width: this.getWidth()
                 }} ref={(ref) => this._content = ref}>
                     {renderComponent({
                         visible: didEnter,
@@ -133,5 +134,16 @@ export default class Modal extends React.Component {
                 </div>
             </span>
         );
+    }
+
+    getWidth() {
+        const {width, expandedWidth} = this.props;
+        const {willEnter, willLeaveActive} = this.state;
+
+        if(willEnter || willLeaveActive) {
+            return width;
+        }
+
+        return window.chayns.utils.isString(expandedWidth) ? expandedWidth : `${expandedWidth}px`;
     }
 }

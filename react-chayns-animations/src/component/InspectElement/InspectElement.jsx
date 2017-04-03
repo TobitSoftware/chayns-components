@@ -6,7 +6,11 @@ import * as Constants from './constants';
 export default class InspectElement extends React.Component {
 
     static PropTypes = {
-        component: React.PropTypes.func.isRequired
+        component: React.PropTypes.func.isRequired,
+        expandedWidth: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.number
+        ])
     };
 
     constructor() {
@@ -87,10 +91,13 @@ export default class InspectElement extends React.Component {
     };
 
     renderTile() {
+        const {showTile, modalWidth} = this.state;
+
         return (
             <span
                 style={{
-                    visibility: !this.state.showTile ? 'hidden' : 'visible'
+                    visibility: !showTile ? 'hidden' : 'visible',
+                    width: modalWidth
                 }}
                 className="inspect-element-animation__tile"
                 ref={(ref) => this._container = ref} >
@@ -113,6 +120,7 @@ export default class InspectElement extends React.Component {
                         right={modalRight}
                         width={modalWidth}
                         direction={modalDirection}
+                        expandedWidth={this.props.expandedWidth}
                         renderComponent={this.renderComponent}
                         closeOverlay={this.closeOverlay}
                     />
