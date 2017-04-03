@@ -13,13 +13,13 @@ export default class Example extends React.Component {
         return(
             <div>
                 <span style={{margin: '15px'}}>
-                    <InspectElement component={ExampleChild} name="Test1">
+                    <InspectElement component={ExampleChild} name="Test1" expandedWidth="500px">
                         test
                     </InspectElement>
                 </span>
 
                 <span style={{margin: '15px'}}>
-                    <InspectElement component={ExampleChild} name="Test2">
+                    <InspectElement component={ExampleChild} name="Test2"  expandedWidth={400}>
                     </InspectElement>
                 </span>
 
