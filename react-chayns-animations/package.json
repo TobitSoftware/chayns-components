@@ -5,9 +5,9 @@
   "main": "./lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js --colors --progress --host 0.0.0.0 --port 9000",
-    "build": "babel src/ --out-dir lib/ && node-sass src/css/index.scss index.css",
+    "build": "babel src/ --out-dir lib/ && node-sass src/index.scss index.css",
     "build:js": "babel src/ --out-dir lib/",
-    "build:sass": "node-sass src/css/index.scss index.css"
+    "build:sass": "node-sass src/index.scss index.css"
   },
   "keywords": [
     "react"
