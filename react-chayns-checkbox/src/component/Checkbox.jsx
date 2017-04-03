@@ -11,8 +11,6 @@ export default class Checkbox extends React.Component {
         toggleButton: React.PropTypes.bool
     };
 
-
-
     constructor() {
         super();
         this.id = Math.random();
@@ -25,7 +23,7 @@ export default class Checkbox extends React.Component {
         const {onChange} = this.props;
 
         if (onChange) onChange(this._node.checked);
-    }
+    };
 
     render() {
         let {className, style} = this.props;
@@ -67,8 +65,7 @@ export default class Checkbox extends React.Component {
                     {this.props.label ? this.props.label : ''}
                 </div>
             )
-        }
-
+        };
 
         return ( this.props.toggleButton ? toggleButton() : checkbox() );
     }

@@ -35,6 +35,8 @@ export default class Input extends React.Component {
             if (regExp) {
                 if (this._node.value.match(new RegExp(regExp)))
                     onBlur(this._node.value);
+                else
+                    return null;
             } else
                 onBlur(this._node.value);
     }
@@ -42,15 +44,16 @@ export default class Input extends React.Component {
     onKeyUp = () => {
         const {onKeyUp, regExp} = this.props;
 
-        //validates entered text if it turned invalid alreasy
         if (regExp)
             if (this._node.value.match(new RegExp(regExp)))
-                this._node.classList.remove('invalid');
+                this._node.classList.remove('invalid'); //validates entered text if it turned invalid already
 
         if (onKeyUp)
             if (regExp) {
                 if (this._node.value.match(new RegExp(regExp)))
                     onKeyUp(this._node.value);
+                else
+                    return null;
             }
             else
                 onKeyUp(this._node.value);
