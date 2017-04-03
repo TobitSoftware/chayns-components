@@ -38,7 +38,7 @@ export default class Modal extends React.Component {
 
         window.setTimeout(() => {
             this.setState({
-                willEnter: true,
+                willEnter: false,
                 willEnterActive: true,
                 didEnter: false,
                 willLeave: false,
