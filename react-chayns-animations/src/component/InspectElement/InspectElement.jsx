@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import Modal from './Modal';
+import * as Constants from './constants';
 
 export default class InspectElement extends React.Component {
 
@@ -23,11 +24,15 @@ export default class InspectElement extends React.Component {
         const boundingClientRect = this._container.getBoundingClientRect();
         const bodyWidth = document.body.getBoundingClientRect().width;
 
+        const tileMiddle = boundingClientRect.left + (boundingClientRect.width/2);
+        const bodyMiddle = bodyWidth/2;
+
         this.setState({
             modalTop: `${boundingClientRect.top}px`,
             modalLeft: `${boundingClientRect.left}px`,
             modalRight: `${bodyWidth-boundingClientRect.right}px`,
             modalWidth: `${boundingClientRect.width}px`,
+            modalDirection: tileMiddle < bodyMiddle ? Constants.DIRECTION_LEFT : Constants.DIRECTION_RIGHT,
             showModal: true,
             showTile: false
         });
@@ -96,7 +101,7 @@ export default class InspectElement extends React.Component {
     }
 
     renderModal() {
-        const {showModal, modalTop, modalLeft, modalRight, modalWidth} = this.state;
+        const {showModal, modalTop, modalLeft, modalRight, modalWidth, modalDirection} = this.state;
 
         return (
             <ReactTransitionGroup>
@@ -107,6 +112,7 @@ export default class InspectElement extends React.Component {
                         left={modalLeft}
                         right={modalRight}
                         width={modalWidth}
+                        direction={modalDirection}
                         renderComponent={this.renderComponent}
                         closeOverlay={this.closeOverlay}
                     />
