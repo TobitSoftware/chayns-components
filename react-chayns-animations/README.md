@@ -49,4 +49,5 @@ Both ways of initialization allow the following settings (No checking in the Jav
 | Property   | Description                                                                                        | Type    | Default Value |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
 | componenent | The component that should get animated                                                 | React.Component| --required--             |
+| expandedWidth | The width the modal-box/overlay should have                                                 | string, number | same width as the normal element |
 | * | Props that should be set to your own component (includes children)                                                | any |            |

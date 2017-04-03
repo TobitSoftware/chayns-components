@@ -53,17 +53,21 @@ export default class ModeSwitchHelper {
                     if (!groups[i].uacId && !groups[i].uacIds) {
                         let groupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
                         allowedGroups.push(groupObject);
+
+                        if (groupObject.id === savedModeId) {
+                            changeGroup = true;
+                            changeGroupIndex = allowedGroups.length - 1;
+                            changeGroupValue = groupObject;
+                        }
                     } else {
                         let uacIds = getUacIds(groups[i]);
                         let allowedUacs = getAllowedUacIdsFromArray(uacIds);
 
                         if (allowedUacs.length > 0) {
-
                             let groupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
                             allowedGroups.push(groupObject);
 
-
-                            if (groupObject.id == savedModeId) {
+                            if (groupObject.id === savedModeId) {
                                 changeGroup = true;
                                 changeGroupIndex = allowedGroups.length - 1;
                                 changeGroupValue = groupObject;
@@ -81,7 +85,6 @@ export default class ModeSwitchHelper {
 
 
                     initialized = true;
-
 
                     if (changeGroup) {
                         getChangeListener()(changeGroupValue);
