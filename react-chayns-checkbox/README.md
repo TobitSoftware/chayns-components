@@ -28,6 +28,8 @@ The following properties can be set on the Checkbox-Component
 | label | Label that will be shown next to the checkbox                                                        | String | |
 | onChange | onChange-event. Returns true or false                                                       | function |  |
 | toggleButton | Renders checkbox as toggleButton (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#toggle-button)) | bool | false  |
+| checked | Set the default value of the checkbox               | bool | false  |
+
 
 
 ### Examples
