@@ -1,4 +1,3 @@
-import '../css/index.scss';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -20,15 +19,25 @@ export default class Input extends React.Component {
         };
     }
 
+    setValid() {
+        this._node.style.color = 'inherit';
+        this._node.style.fontWeight = 'inherit';
+    }
+
+    setInvalid() {
+        this._node.style.color = '#d23f31';
+        this._node.style.fontWeight = '700';
+    }
+
     onBlur = () => {
         const {onBlur, regExp} = this.props;
 
         //validates entered text when the input loses focus
         if (regExp) {
             if (this._node.value.match(new RegExp(regExp)))
-                this._node.classList.remove('invalid');
+                this.setValid();
             else
-                this._node.classList.add('invalid');
+                this.setInvalid();
         }
 
         if (onBlur)
@@ -36,7 +45,7 @@ export default class Input extends React.Component {
                 if (this._node.value.match(new RegExp(regExp)))
                     onBlur(this._node.value);
                 else
-                    return null;
+                    onBlur(null);
             } else
                 onBlur(this._node.value);
     }
@@ -46,14 +55,14 @@ export default class Input extends React.Component {
 
         if (regExp)
             if (this._node.value.match(new RegExp(regExp)))
-                this._node.classList.remove('invalid'); //validates entered text if it turned invalid already
+                this.setValid(); //validates entered text if it turned invalid already
 
         if (onKeyUp)
             if (regExp) {
                 if (this._node.value.match(new RegExp(regExp)))
                     onKeyUp(this._node.value);
                 else
-                    return null;
+                    onKeyUp(null);
             }
             else
                 onKeyUp(this._node.value);
