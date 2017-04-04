@@ -31,7 +31,7 @@ The following properties can be set on the Checkbox-Component
 
 
 ### Examples
-#### Togglebutton
+#### ToggleButton
 ```jsx
 <Checkbox
     label="This is a toggle button"

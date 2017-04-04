@@ -17,6 +17,7 @@ export default class Example extends React.Component {
                    label="testlabel"
                    onChange={(value) => { console.log(value)}}
                    toggleButton={true}
+                   checked={false}
                />
             </div>
         );
