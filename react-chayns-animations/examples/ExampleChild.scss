@@ -3,21 +3,15 @@
     transition: width .65s;
   }
 
-  &.enterActive, &.visible {
-    width: 380px !important;
-  }
-
-  &.leave {
-    width: 380px !important;
-  }
-
-  &.leaveActive {
-    transition: width .65s;
-  }
-
-  width: 200px;
+  width: 100%;
+  float: left;
 }
 
 .chayns--desktop .example-child {
   padding: 14px;
+}
+
+.inspect-element-animation {
+  width: 40% !important;
+  display: inline-block;
 }

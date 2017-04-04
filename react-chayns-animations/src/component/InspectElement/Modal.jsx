@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import * as Constants from './constants';
 
 export default class Modal extends React.Component {
 
@@ -37,7 +38,7 @@ export default class Modal extends React.Component {
 
         window.setTimeout(() => {
             this.setState({
-                willEnter: true,
+                willEnter: false,
                 willEnterActive: true,
                 didEnter: false,
                 willLeave: false,
@@ -102,7 +103,7 @@ export default class Modal extends React.Component {
 
     render() {
 
-        const {top, left, right, renderComponent, closeOverlay} = this.props;
+        const {top, left, right, renderComponent, closeOverlay, direction} = this.props;
         const {willEnter, willEnterActive, willLeave, willLeaveActive, didEnter} = this.state;
 
         return (
@@ -112,15 +113,16 @@ export default class Modal extends React.Component {
                 'modal--enter--active': willEnterActive,
                 'modal--leave': willLeave,
                 'modal--leave--active': willLeaveActive,
-                'modal--left': (left > right),
-                'modal--right': (left <= right)
+                'modal--left': (direction === Constants.DIRECTION_LEFT),
+                'modal--right': (direction === Constants.DIRECTION_RIGHT)
             })}>
                 <div className="modal--overlay"
                      onClick={closeOverlay} />
                 <div className="modal--content" style={{
                     top: top,
-                    left: (left > right) ? left : null,
-                    right: (left <= right) ? right : null
+                    left: (direction === Constants.DIRECTION_LEFT) ? left : null,
+                    right: (direction === Constants.DIRECTION_RIGHT) ? right : null,
+                    width: this.getWidth()
                 }} ref={(ref) => this._content = ref}>
                     {renderComponent({
                         visible: didEnter,
@@ -132,5 +134,20 @@ export default class Modal extends React.Component {
                 </div>
             </span>
         );
+    }
+
+    getWidth() {
+        const {width, expandedWidth} = this.props;
+        const {didLeave, willEnter, willEnterActive, didEnter, willLeave, willLeaveActive} = this.state;
+
+        if(!didLeave && !didEnter && !willEnterActive && !willEnter && !willLeave && !willLeaveActive) {
+            return width;
+        }
+
+        if(willEnter || willLeaveActive) {
+            return width;
+        }
+
+        return window.chayns.utils.isString(expandedWidth) ? expandedWidth : `${expandedWidth}px`;
     }
 }

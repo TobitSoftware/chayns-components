@@ -6,34 +6,66 @@ export default class Input extends React.Component {
         style: React.PropTypes.object,
         className: React.PropTypes.string,
         placeholder: React.PropTypes.string,
-        onChange: React.PropTypes.func,
+        onKeyUp: React.PropTypes.func,
+        onBlur: React.PropTypes.func,
         responsive: React.PropTypes.bool,
         regExp: React.PropTypes.string
     };
 
-    static defaultProps = {
-        style: {}
-    };
-
     constructor() {
         super();
+        this.state = {
+            value: null
+        };
     }
 
-    componentDidMount() {
-        if (this.props.regExp)
-            this._node.setAttribute('validate', this.props.regExp);
+    setValid() {
+        this._node.style.color = 'inherit';
+        this._node.style.fontWeight = 'inherit';
     }
 
-    onChange = () => {
-        const {onChange} = this.props;
+    setInvalid() {
+        this._node.style.color = '#d23f31';
+        this._node.style.fontWeight = '700';
+    }
 
-        if (this.props.onChange)
-            if (this.props.regExp) {
-                if (this._node.value.match(new RegExp(this.props.regExp)))
-                    onChange(this._node.value);
+    onBlur = () => {
+        const {onBlur, regExp} = this.props;
+
+        //validates entered text when the input loses focus
+        if (regExp) {
+            if (this._node.value.match(new RegExp(regExp)))
+                this.setValid();
+            else
+                this.setInvalid();
+        }
+
+        if (onBlur)
+            if (regExp) {
+                if (this._node.value.match(new RegExp(regExp)))
+                    onBlur(this._node.value);
+                else
+                    onBlur(null);
+            } else
+                onBlur(this._node.value);
+    }
+
+    onKeyUp = () => {
+        const {onKeyUp, regExp} = this.props;
+
+        if (regExp)
+            if (this._node.value.match(new RegExp(regExp)))
+                this.setValid(); //validates entered text if it turned invalid already
+
+        if (onKeyUp)
+            if (regExp) {
+                if (this._node.value.match(new RegExp(regExp)))
+                    onKeyUp(this._node.value);
+                else
+                    onKeyUp(null);
             }
             else
-                onChange(this._node.value);
+                onKeyUp(this._node.value);
     };
 
     render() {
@@ -54,7 +86,8 @@ export default class Input extends React.Component {
                     <input
                         style={{width: '100%', marginBottom: '5px'}}
                         ref={(ref) => {this._node = ref}}
-                        onChange={this.onChange}
+                        onKeyUp={this.onKeyUp}
+                        onBlur={this.onBlur}
                         className="input"
                         type="text"
                         required
@@ -73,7 +106,8 @@ export default class Input extends React.Component {
                     ref={(ref) => {this._node = ref}}
                     placeholder={placeholder}
                     style={style}
-                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onBlur={this.onBlur}
                     type="text"
                     required
                 />
