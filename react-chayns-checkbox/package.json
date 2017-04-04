@@ -1,7 +1,7 @@
 {
-  "name": "react-chayns-input",
+  "name": "react-chayns-checkbox",
   "version": "0.0.1",
-  "description": "Input/ResponsiveInput component for chayns",
+  "description": "Checkbox component for chayns",
   "main": "./lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js --colors --progress --host 0.0.0.0 --port 9000",
