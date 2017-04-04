@@ -14,6 +14,9 @@ export default class Example extends React.Component {
                     id: 1,
                     uacIds: [1, 34542],
                     name: 'Chayns Manager'
+                },{
+                    id: 2,
+                    name: 'Employee'
                 }],
                 save: true,
                 onChange: (data) => {
@@ -49,6 +52,12 @@ export default class Example extends React.Component {
                 <Mode modes={[0,1]}>
                     <div>
                         <button onClick={this.getModeSwitchStatus}>ModeSwitch Status</button>
+                    </div>
+                </Mode>
+
+                <Mode modes={[2]}>
+                    <div>
+                        Mitarbeiter
                     </div>
                 </Mode>
 
