@@ -138,7 +138,11 @@ export default class Modal extends React.Component {
 
     getWidth() {
         const {width, expandedWidth} = this.props;
-        const {willEnter, willLeaveActive} = this.state;
+        const {didLeave, willEnter, willEnterActive, didEnter, willLeave, willLeaveActive} = this.state;
+
+        if(!didLeave && !didEnter && !willEnterActive && !willEnter && !willLeave && !willLeaveActive) {
+            return width;
+        }
 
         if(willEnter || willLeaveActive) {
             return width;
