@@ -1,4 +1,3 @@
-import '../css/index.scss';
 import React from 'react';
 import classnames from 'classnames';
 
@@ -8,7 +7,12 @@ export default class Checkbox extends React.Component {
         className: React.PropTypes.string,
         label: React.PropTypes.string,
         onChange: React.PropTypes.func,
-        toggleButton: React.PropTypes.bool
+        toggleButton: React.PropTypes.bool,
+        checked: React.PropTypes.bool
+    };
+
+    static defaultProps = {
+        checked: false
     };
 
     constructor() {
@@ -17,6 +21,13 @@ export default class Checkbox extends React.Component {
         this.state = {
             value: null
         };
+    }
+
+    componentDidMount() {
+        this._node.checked = this.props.checked
+        this.setState({
+            value: this.props.checked
+        });
     }
 
     onChange = () => {
@@ -40,6 +51,7 @@ export default class Checkbox extends React.Component {
                         onChange={this.onChange}
                         type="checkbox"
                         id={this.id}
+                        checked={this.state.checked}
                     />
                     <label htmlFor={this.id} >
                         {this.props.label}
