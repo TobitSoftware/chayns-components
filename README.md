@@ -1,4 +1,8 @@
-[![npm](https://img.shields.io/npm/v/tobit-chayns_components.svg)]() [![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg)]() [![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg)]() [![](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg)]()
+[![npm](https://img.shields.io/npm/v/tobit-chayns_components.svg)](https://github.com/TobitSoftware/chayns-components/) 
+[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
+[![hghfgh](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/)
+[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
 
 # chayns-components
 
