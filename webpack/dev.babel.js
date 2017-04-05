@@ -49,12 +49,6 @@ export default {
                         }
                     },
                     {
-                        loader: 'postcss-loader',
-                        options: {
-                            sourceMap: true
-                        }
-                    },
-                    {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true
