@@ -14,7 +14,8 @@ export default class SelectButton extends React.Component {
         multiSelect: React.PropTypes.bool,
         quickFind: React.PropTypes.bool,
         className: React.PropTypes.string,
-        style: React.PropTypes.object
+        style: React.PropTypes.object,
+        showSelection: React.PropTypes.bool
     };
 
     static defaultProps = {
@@ -22,7 +23,8 @@ export default class SelectButton extends React.Component {
         multiSelect: false,
         title: 'Select Dialog',
         description: 'Please select an item',
-        label: 'Select'
+        label: 'Select',
+        showSelection: true
     };
 
     constructor(props) {
@@ -67,6 +69,8 @@ export default class SelectButton extends React.Component {
 
     onSelect(selection) {
         const {onSelect} = this.props;
+        if (selection.length === 1)
+            this.setLabel(selection[0].name);
         if (onSelect)
             onSelect(this.getReturnList(selection));
     }
@@ -91,10 +95,15 @@ export default class SelectButton extends React.Component {
         });
     }
 
+    setLabel(text) {
+        if (this.props.showSelection)
+            this._btn.innerText = text;
+    }
+
     render() {
         let {className, label} = this.props;
         let classNames = classnames({
-            'chooseButton': true,
+            'choosebutton': true,
             [className]: className
         });
 
@@ -102,6 +111,7 @@ export default class SelectButton extends React.Component {
             <div
                 className={classNames}
                 onClick={this.onClick}
+                ref={ref => {this._btn = ref;}}
             >
                 {label}
             </div>
