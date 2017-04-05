@@ -67,9 +67,13 @@ export default class Modal extends React.Component {
             const bottom = this._content.getBoundingClientRect().bottom;
             const height = document.body.getBoundingClientRect().height;
             const newPadding = bottom-height+25;
+            const tapp = document.querySelector('.tapp') || document.body;
 
-            if(bottom > height && document.body.style.paddingBottom < newPadding)
-                document.body.style.paddingBottom = newPadding + 'px';
+            if(tapp && bottom > height && tapp.style.borderBottomWidth < newPadding) {
+                tapp.style.borderBottomWidth = newPadding + 'px';
+                tapp.style.borderBottomStyle = 'solid';
+                tapp.style.borderBottomColor = 'transparent';
+            }
         }
 
     }
