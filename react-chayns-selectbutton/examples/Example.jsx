@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {SelectButton} from '../src/index';
-import '../src/css/index.scss';
 
 export default class Example extends React.Component {
     constructor() {
@@ -31,7 +30,7 @@ export default class Example extends React.Component {
 
         return(
             <SelectButton
-                label="Select-Button"
+                label="Select Pizza"
                 list={pizza}
                 onSelect={(value) => { console.log(value) }}
                 listKey="id"
