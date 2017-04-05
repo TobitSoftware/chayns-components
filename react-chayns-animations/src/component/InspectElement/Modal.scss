@@ -3,13 +3,12 @@ $fade-out-time: .65s;
 
 .inspect-element-animation .modal {
   &--enter .modal--overlay {
-    background-color: rgba(0, 0, 0, 0.8);
-    //background-color: rgba(0, 0, 0, 0.01);
+    background-color: rgba(0, 0, 0, 0);
   }
 
   &--enter--active .modal--overlay {
     background-color: rgba(0, 0, 0, 0.8);
-    //transition: background-color $fade-in-time;
+    transition: background-color $fade-in-time - 0.1s ease;
   }
 
   &--leave .modal--overlay {
@@ -17,8 +16,8 @@ $fade-out-time: .65s;
   }
 
   &--leave--active .modal--overlay {
-    //background-color: rgba(0, 0, 0, 0.01);
-    //transition: background-color $fade-out-time;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color $fade-out-time - 0.1s ease;
   }
 
   &--overlay {
