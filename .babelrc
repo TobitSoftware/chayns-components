@@ -1,0 +1,18 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 3 versions"
+          ]
+        },
+        "modules": false
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
+  "plugins": []
+}
