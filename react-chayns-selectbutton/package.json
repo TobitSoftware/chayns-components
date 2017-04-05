@@ -1,6 +1,6 @@
 {
   "name": "react-chayns-selectbutton",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "SelectButton component for chayns",
   "main": "./lib/index.js",
   "scripts": {
