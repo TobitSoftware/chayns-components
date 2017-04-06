@@ -1,3 +1,3 @@
-import TextString from "./component/TextString.jsx";
+import TextString from "./component/TextString";
 
 export default TextString;
