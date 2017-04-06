@@ -1,16 +1,6 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": [
-            "last 3 versions"
-          ]
-        },
-        "modules": false
-      }
-    ],
+    "es2015",
     "stage-0",
     "react"
   ],
