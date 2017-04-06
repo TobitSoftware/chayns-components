@@ -22,11 +22,6 @@ export default class Modal extends React.Component {
 
     componentWillEnter(callback) {
 
-        window.chayns.showOverlay().then(() => {
-            if(this.props.closeOverlay)
-                this.props.closeOverlay()
-        });
-
         this.setState({
             willEnter: true,
             willEnterActive: false,
@@ -37,6 +32,11 @@ export default class Modal extends React.Component {
         });
 
         window.setTimeout(() => {
+            window.chayns.showOverlay('rgba(0, 0, 0, 0.8)', '.55s').then(() => {
+                if(this.props.closeOverlay)
+                    this.props.closeOverlay()
+            });
+
             this.setState({
                 willEnter: false,
                 willEnterActive: true,
@@ -67,9 +67,13 @@ export default class Modal extends React.Component {
             const bottom = this._content.getBoundingClientRect().bottom;
             const height = document.body.getBoundingClientRect().height;
             const newPadding = bottom-height+25;
+            const tapp = document.querySelector('.tapp') || document.body;
 
-            if(bottom > height && document.body.style.paddingBottom < newPadding)
-                document.body.style.paddingBottom = newPadding + 'px';
+            if(tapp && bottom > height && tapp.style.borderBottomWidth < newPadding) {
+                tapp.style.borderBottomWidth = newPadding + 'px';
+                tapp.style.borderBottomStyle = 'solid';
+                tapp.style.borderBottomColor = 'transparent';
+            }
         }
 
     }
@@ -93,10 +97,19 @@ export default class Modal extends React.Component {
                 willLeaveActive: true,
                 didLeave: false
             });
+
+            window.chayns.invokeCall({  // invoke setOverlay-call (same behavior like hideOverlay, but allows to set a transition)
+                "action": 116,
+                "value": {
+                    "enabled": false,
+                    "color": "rgba(0, 0, 0, 0.8)",
+                    "transition": "0.55s",
+                    "callback": ""
+                }
+            });
         }, 100);
 
         window.setTimeout(() => {
-            window.chayns.hideOverlay();
             callback();
         }, 650);
     }
