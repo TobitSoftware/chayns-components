@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {SelectList, SelectItem} from '../../src/react-chayns-selectlist/index';
-import '../../src/react-chayns-selectlist/css/index.scss';
+import '../../src/react-chayns-selectlist/index.scss';
 
 export default class Example extends React.Component {
     constructor() {

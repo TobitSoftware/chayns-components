@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 
 import {Weather as WeatherWidget} from '../../src/react-weather/index';
 
-import '../../src/react-weather/css/index.scss';
+import '../../src/react-weather/index.scss';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
