@@ -17,6 +17,7 @@ export default class Form extends React.Component {
     constructor() {
         super();
         this.form = {};
+        this.refElems = {};
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -24,7 +25,12 @@ export default class Form extends React.Component {
         this.props.form.map((key, i) => {
             this.form[key] = null;
         });
-        console.log(this.props.children)
+
+        if (this.props && this.props.children)
+            this.getFormProps(this.props.children);
+        
+        console.log(this.form)
+        console.log(this.refElems)
     }
 
     isValid() {
@@ -34,6 +40,24 @@ export default class Form extends React.Component {
                 valid = false;
         });
         return valid;
+    }
+
+    getFormProps(elems) {
+        if (elems && elems.map)
+            elems.map((elem, i) => {
+                if (elem.props && elem.props.children)
+                    this.getFormProps(elem.props.children);
+                if (elem.props && elem.props.formProp) {
+                    this.form[elem.props.formProp] = null;
+                    this.refElems[elem.props.formProp] = elem;
+                }
+
+            });
+        else if (elems && elems.props && elems.props.formProp)
+        {
+            this.form[elems.props.formProp] = null;
+            this.refElems[elems.props.formProp] = elems;
+        }
     }
 
     setValue(key, value) {
