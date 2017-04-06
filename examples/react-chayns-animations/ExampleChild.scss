@@ -15,3 +15,7 @@
   width: 40% !important;
   display: inline-block;
 }
+
+.modal--content {
+  transition: width .65s;
+}
