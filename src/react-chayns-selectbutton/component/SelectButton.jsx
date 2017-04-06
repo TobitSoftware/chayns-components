@@ -46,7 +46,6 @@ export default class SelectButton extends React.Component {
                 if (item[listKey] && item[listValue])
                     list.push({name: item[listValue], value: item[listKey]});
             });
-
         return list;
     }
 

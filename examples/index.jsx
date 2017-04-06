@@ -13,3 +13,4 @@ import './react-chayns-setupwizard/index';
 import './react-chayns-textarea/index';
 import './react-chayns-textstring/index';
 import './react-weather/index';
+import './react-chayns-form/index';

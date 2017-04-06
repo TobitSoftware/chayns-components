@@ -19,6 +19,7 @@ The following components are part of this package:
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/) | ModeSwitch Component (React + ES6)                                                 | [Readme](/src/react-chayns-modeswitch/README.md) |
 | [react-chayns-button](/src/react-chayns-button/) | Button Component                                                | [Readme](/src/react-chayns-button/README.md) |
 | [react-chayns-accordion](/src/react-chayns-accordion/) | Accordion Component                                                 | [Readme](/src/react-chayns-accordion/README.md) |
+| [react-chayns-form](/src/react-chayns-form/) | Form Component                                                 | [Readme](/src/react-chayns-form/README.md) |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/) | PersonFinder Component                                                 | [Readme](/src/react-chayns-personfinder/README.md) |
 | [react-chayns-textarea](/src/react-chayns-textarea/) | TextArea Component                                                 | [Readme](/src/react-chayns-textarea/README.md) |
 | [react-chayns-input](/src/react-chayns-input/) | Input Component                                                 | [Readme](/src/react-chayns-input/README.md) |

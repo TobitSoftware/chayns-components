@@ -7,7 +7,7 @@ export default class Example extends React.Component {
         super();
         this.state = {
             userName: null
-        }
+        };
     }
 
     render() {
@@ -19,6 +19,7 @@ export default class Example extends React.Component {
                     onBlur={ (text) => { this.setState({userName: text}, () => { console.log(this.state)}) }}
                     responsive={false}
                     ref={(ref) => {this._node = ref}}
+                    type="text"
                 />
             </div>
         );
