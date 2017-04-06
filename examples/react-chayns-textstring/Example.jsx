@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TextString from '../src/index.jsx';
+import TextString from '../../src/react-chayns-textstring/index.jsx';
 
 export default class Example extends React.Component {
     constructor() {

@@ -1,5 +1,3 @@
-export default from "./component/TextString";
+import TextString from "./component/TextString.jsx";
 
-// export {
-//     default as AccordionIntro,
-// } from "./component/AccordionIntro";
+export default TextString;

@@ -14,5 +14,5 @@
     "stage-0",
     "react"
   ],
-  "plugins": []
+  "plugins": ["transform-decorators-legacy"]
 }

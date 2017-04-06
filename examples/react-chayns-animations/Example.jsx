@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {InspectElementAnimation as InspectElement} from '../src/index';
+import {InspectElementAnimation as InspectElement} from '../../src/react-chayns-animations/index';
 import ExampleChild from './ExampleChild';
-import '../src/index.scss';
+import '../../src/react-chayns-animations/index.scss';
 
 export default class Example extends React.Component {
     constructor() {

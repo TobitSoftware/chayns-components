@@ -30,7 +30,7 @@ export default {
             {
                 test: /\.(js|jsx)$/,
                 use: ['babel-loader'],
-                include: path.resolve(ROOT_PATH, 'examples')
+                exclude: path.resolve(ROOT_PATH, 'node_modules')
             },
             {
                 test: /\.scss$/,

@@ -1,3 +1,3 @@
 export {
-    default as Checkbox,
-} from "./component/Checkbox";
+    default as ContextMenu
+} from "./component/ContextMenu";

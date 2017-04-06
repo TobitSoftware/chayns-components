@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
-import 'tobit-chayns_components/react-chayns-setupwizard/style.css';
+import {SetupWizard, SetupItem} from '../../src/react-chayns-setupwizard/index.jsx';
+import '../../src/react-chayns-setupwizard/style.scss';
 
 import Step1 from './setup/Step1';
 import Step2 from './setup/Step2';

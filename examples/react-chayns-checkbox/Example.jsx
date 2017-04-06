@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Checkbox} from '../src/index';
+import {Checkbox} from '../../src/react-chayns-checkbox/index';
 
 export default class Example extends React.Component {
     constructor() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import PersonFinder from '../src/index';
+import PersonFinder from '../../src/react-chayns-personfinder/index';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
@@ -12,6 +12,6 @@ window.chayns.ready.then(() => {
             }}
             defaultValue="michael braun"
         />,
-        document.querySelector('.tapp')
+        document.querySelector('#react-chayns-personfinder')
     );
 });

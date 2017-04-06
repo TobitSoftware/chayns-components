@@ -6,6 +6,6 @@ import Example from './Example.jsx';
 window.chayns.ready.then(() => {
     ReactDom.render(
         <Example />,
-        document.querySelector('.tapp')
+        document.querySelector('#react-chayns-gridcalendar')
     );
 });

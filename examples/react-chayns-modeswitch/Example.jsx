@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ModeSwitch, Mode} from '../src/index';
+import {ModeSwitch, Mode} from '../../src/react-chayns-modeswitch/index';
 
 import ExampleDecorator from './ExampleDecorator';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SelectButton} from '../src/index';
+import {SelectButton} from '../../src/react-chayns-selectbutton/index';
 
 export default class Example extends React.Component {
     constructor() {
