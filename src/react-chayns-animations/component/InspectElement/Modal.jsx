@@ -153,6 +153,9 @@ export default class Modal extends React.Component {
         const {width, expandedWidth} = this.props;
         const {didLeave, willEnter, willEnterActive, didEnter, willLeave, willLeaveActive} = this.state;
 
+
+        if(!didLeave && window.chayns.env.browser.name === "safari") return expandedWidth;
+
         if(!didLeave && !didEnter && !willEnterActive && !willEnter && !willLeave && !willLeaveActive) {
             return width;
         }

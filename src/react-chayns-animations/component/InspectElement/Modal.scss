@@ -8,7 +8,7 @@ $fade-out-time: .65s;
 
   &--enter--active .modal--overlay {
     background-color: rgba(0, 0, 0, 0.8);
-    transition: background-color $fade-in-time - 0.1s ease;
+    transition: background-color ($fade-in-time - 0.1s) ease;
   }
 
   &--leave .modal--overlay {
@@ -17,7 +17,7 @@ $fade-out-time: .65s;
 
   &--leave--active .modal--overlay {
     background-color: rgba(0, 0, 0, 0);
-    transition: background-color $fade-out-time - 0.1s ease;
+    transition: background-color ($fade-out-time - 0.1s) ease;
   }
 
   &--overlay {
@@ -31,74 +31,99 @@ $fade-out-time: .65s;
     will-change: background-color;
 
     background-color: rgba(0, 0, 0, 0.8);
-    //transition: background-color $fade-in-time;
   }
 }
 
-.inspect-element-animation .modal--left {
-  &.modal--enter .modal--content {
-    transform: translateX(0);
+html.chayns-browser--safari {
+  .inspect-element-animation .modal--left {
+    .modal--content {
+      position: fixed;
+    }
+
+    &.modal--visible, &.modal--enter, &.modal--enter--active, &.modal--leave--active, &.modal--leave {
+      .modal--content {
+        left: 50% !important;
+        transform: translateX(-50%);
+      }
+    }
   }
 
-  &.modal--enter--active .modal--content {
-    left: 50% !important;
-    transform: translateX(-50%);
-  }
+  .inspect-element-animation .modal--right {
+    .modal--content {
+      position: fixed;
+    }
 
-  &.modal--leave .modal--content {
-    left: 50% !important;
-    transform: translateX(-50%);
-  }
-
-  &.modal--leave--active .modal--content {
-    transform: translateX(0);
-  }
-
-
-  .modal--content {
-    position: fixed;
-    transition: left $fade-in-time, transform $fade-in-time, width $fade-in-time;
-
-    will-change: left, transform, width;
-  }
-
-  &.modal--visible .modal--content {
-    left: 50% !important;
-    transform: translateX(-50%);
+    &.modal--visible, &.modal--enter, &.modal--enter--active, &.modal--leave--active, &.modal--leave {
+      .modal--content {
+        right: 50% !important;
+        transform: translateX(50%);
+      }
+    }
   }
 }
 
+html:not(.chayns-browser--safari) {
+  .inspect-element-animation .modal--left {
+    &.modal--enter .modal--content {
+      transform: translateX(0);
+    }
 
+    &.modal--enter--active .modal--content {
+      left: 50% !important;
+      transform: translateX(-50%);
+    }
 
-.inspect-element-animation .modal--right {
-  &.modal--enter .modal--content {
-    transform: translateX(0);
+    &.modal--leave .modal--content {
+      left: 50% !important;
+      transform: translateX(-50%);
+    }
+
+    &.modal--leave--active .modal--content {
+      transform: translateX(0);
+    }
+
+    .modal--content {
+      position: fixed;
+      transition: left $fade-in-time, transform $fade-in-time, width $fade-in-time;
+
+      will-change: left, transform, width;
+    }
+
+    &.modal--visible .modal--content {
+      left: 50% !important;
+      transform: translateX(-50%);
+    }
   }
 
-  &.modal--enter--active .modal--content {
-    right: 50% !important;
-    transform: translateX(50%);
-  }
+  .inspect-element-animation .modal--right {
+    &.modal--enter .modal--content {
+      transform: translateX(0);
+    }
 
-  &.modal--leave .modal--content {
-    right: 50% !important;
-    transform: translateX(50%);
-  }
+    &.modal--enter--active .modal--content {
+      right: 50% !important;
+      transform: translateX(50%);
+    }
 
-  &.modal--leave--active .modal--content {
-    transform: translateX(0);
-  }
+    &.modal--leave .modal--content {
+      right: 50% !important;
+      transform: translateX(50%);
+    }
 
+    &.modal--leave--active .modal--content {
+      transform: translateX(0);
+    }
 
-  .modal--content {
-    position: fixed;
-    transition: right $fade-in-time, transform $fade-in-time, width $fade-in-time;
+    .modal--content {
+      position: fixed;
+      transition: right $fade-in-time, transform $fade-in-time, width $fade-in-time;
 
-    will-change: right, transform, width;
-  }
+      will-change: right, transform, width;
+    }
 
-  &.modal--visible .modal--content {
-    right: 50% !important;
-    transform: translateX(50%);
+    &.modal--visible .modal--content {
+      right: 50% !important;
+      transform: translateX(50%);
+    }
   }
 }
