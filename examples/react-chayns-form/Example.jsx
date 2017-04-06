@@ -48,7 +48,7 @@ export default class Example extends React.Component {
                    ref={ref => {this.form = ref;}}
                    form={['phone', 'siteId', 'problem', 'system', 'changes', 'radio', 'where', 'when']}
                >
-                   <Input placeholder='Phonenumber' regExp='^[0-9|+]*$' onKeyUp={value => { this.form.setValue('phone', value) } } />
+                   <Input formElem="phone" placeholder='Phonenumber' regExp='^[0-9|+]*$' onKeyUp={value => { this.form.setValue('phone', value) } } />
 
                    <div style={{ marginTop: '20px' }}>
                        <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>

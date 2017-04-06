@@ -5,7 +5,6 @@ export default class Form extends React.Component {
     static propTypes = {
         submit: React.PropTypes.func.isRequired,
         submitButton: React.PropTypes.bool,
-        intro: React.PropTypes.string,
         className: React.PropTypes.object,
         form: React.PropTypes.array
     };
@@ -25,6 +24,7 @@ export default class Form extends React.Component {
         this.props.form.map((key, i) => {
             this.form[key] = null;
         });
+        console.log(this.props.children)
     }
 
     isValid() {
@@ -51,17 +51,10 @@ export default class Form extends React.Component {
 
 
     render() {
-        let {className, intro, submitButton} = this.props;
+        let {className, submitButton} = this.props;
         let classNames = classnames({
-            'content__card': true,
             [className]: className
         });
-
-        let _intro = (
-            <div style={{marginBottom: '40px'}}>
-                {intro ? intro : null}
-            </div>
-        );
 
         let _submitButton = (
             <div style={{ width: '100%', textAlign: 'center', marginTop: '20px'}}>
@@ -77,7 +70,6 @@ export default class Form extends React.Component {
 
         return (
             <div className={classNames}>
-                {intro ? _intro : null}
                 <div>
                     {this.props.children}
                 </div>
