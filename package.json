@@ -4,7 +4,10 @@
   "description": "some standalone react components",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack/dev.babel.js"
+    "start": "webpack-dev-server --config ./webpack/dev.babel.js",
+    "build": "npm run build:js && npm run build:sass",
+    "build:js": "babel src/ --out-dir ./",
+    "build:sass": "node-sass src/ -o ./"
   },
   "author": "kkonermann",
   "license": "MIT",
