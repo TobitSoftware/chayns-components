@@ -28,7 +28,7 @@ export default class Form extends React.Component {
 
         if (this.props && this.props.children)
             this.getFormProps(this.props.children);
-        
+
         console.log(this.form)
         console.log(this.refElems)
     }
@@ -36,7 +36,7 @@ export default class Form extends React.Component {
     isValid() {
         let valid = true;
         Object.keys(this.form ? this.form : null).forEach((key) => {
-            if (this.form[key] === null)
+            if (this.form[key] == null || this.form[key] == undefined)
                 valid = false;
         });
         return valid;
@@ -51,13 +51,22 @@ export default class Form extends React.Component {
                     this.form[elem.props.formProp] = null;
                     this.refElems[elem.props.formProp] = elem;
                 }
-
             });
         else if (elems && elems.props && elems.props.formProp)
         {
             this.form[elems.props.formProp] = null;
             this.refElems[elems.props.formProp] = elems;
         }
+    }
+
+    getValue() {
+        Object.keys(this.refElems ? this.refElems : null).forEach((elem) => {
+            this.form[elem] = this.refElems[elem].value;
+        });
+        if (this.isValid() && this.props.submitButton)
+            this._submit.classList.remove('button--disabled');
+        else if (this.props.submitButton)
+            this._submit.classList.add('button--disabled');
     }
 
     setValue(key, value) {
@@ -69,6 +78,7 @@ export default class Form extends React.Component {
     }
 
     onSubmit() {
+        //this.getValue();
         if (this.isValid())
             this.props.submit ? this.props.submit(this.form ? this.form : null) : null;
     }
