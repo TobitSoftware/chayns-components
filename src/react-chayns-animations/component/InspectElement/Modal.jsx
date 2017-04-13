@@ -128,13 +128,15 @@ export default class Modal extends React.Component {
                 'modal--leave--active': willLeaveActive,
                 'modal--left': (direction === Constants.DIRECTION_LEFT),
                 'modal--right': (direction === Constants.DIRECTION_RIGHT)
-            })}>
+            })} style={{
+                top: top,
+                left: (direction === Constants.DIRECTION_LEFT) ? 0 : null,
+                right: (direction === Constants.DIRECTION_RIGHT) ? 0 : null,
+                width: this.getModalWidth()
+            }}>
                 <div className="modal--overlay"
                      onClick={closeOverlay} />
                 <div className="modal--content" style={{
-                    top: top,
-                    left: (direction === Constants.DIRECTION_LEFT) ? left : null,
-                    right: (direction === Constants.DIRECTION_RIGHT) ? right : null,
                     width: this.getWidth()
                 }} ref={(ref) => this._content = ref}>
                     {renderComponent({
@@ -149,12 +151,19 @@ export default class Modal extends React.Component {
         );
     }
 
+    getModalWidth() {
+        const {width, left, right, direction} = this.props;
+
+        if(direction === Constants.DIRECTION_LEFT)
+            return `${parseFloat(width) + 2*parseFloat(left)}px`;
+
+        return `${parseFloat(width) + 2*parseFloat(right)}px`
+    }
+
     getWidth() {
         const {width, expandedWidth} = this.props;
         const {didLeave, willEnter, willEnterActive, didEnter, willLeave, willLeaveActive} = this.state;
 
-
-        if(!didLeave && window.chayns.env.browser.name === "safari") return expandedWidth;
 
         if(!didLeave && !didEnter && !willEnterActive && !willEnter && !willLeave && !willLeaveActive) {
             return width;
