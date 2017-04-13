@@ -2,6 +2,22 @@ $fade-in-time: .65s;
 $fade-out-time: .65s;
 
 .inspect-element-animation .modal {
+  position: fixed;
+  transition: width $fade-in-time;
+
+  &--enter--active, &--leave, &--visible {
+    width: 100% !important;
+  }
+
+  &--content {
+    position: relative;
+    margin: 0 auto;
+
+    transition: width $fade-in-time;
+
+    will-change: margin, width;
+  }
+
   &--enter .modal--overlay {
     background-color: rgba(0, 0, 0, 0);
   }
@@ -31,99 +47,5 @@ $fade-out-time: .65s;
     will-change: background-color;
 
     background-color: rgba(0, 0, 0, 0.8);
-  }
-}
-
-html.chayns-browser--safari {
-  .inspect-element-animation .modal--left {
-    .modal--content {
-      position: fixed;
-    }
-
-    &.modal--visible, &.modal--enter, &.modal--enter--active, &.modal--leave--active, &.modal--leave {
-      .modal--content {
-        left: 50% !important;
-        transform: translateX(-50%);
-      }
-    }
-  }
-
-  .inspect-element-animation .modal--right {
-    .modal--content {
-      position: fixed;
-    }
-
-    &.modal--visible, &.modal--enter, &.modal--enter--active, &.modal--leave--active, &.modal--leave {
-      .modal--content {
-        right: 50% !important;
-        transform: translateX(50%);
-      }
-    }
-  }
-}
-
-html:not(.chayns-browser--safari) {
-  .inspect-element-animation .modal--left {
-    &.modal--enter .modal--content {
-      transform: translateX(0);
-    }
-
-    &.modal--enter--active .modal--content {
-      left: 50% !important;
-      transform: translateX(-50%);
-    }
-
-    &.modal--leave .modal--content {
-      left: 50% !important;
-      transform: translateX(-50%);
-    }
-
-    &.modal--leave--active .modal--content {
-      transform: translateX(0);
-    }
-
-    .modal--content {
-      position: fixed;
-      transition: left $fade-in-time, transform $fade-in-time, width $fade-in-time;
-
-      will-change: left, transform, width;
-    }
-
-    &.modal--visible .modal--content {
-      left: 50% !important;
-      transform: translateX(-50%);
-    }
-  }
-
-  .inspect-element-animation .modal--right {
-    &.modal--enter .modal--content {
-      transform: translateX(0);
-    }
-
-    &.modal--enter--active .modal--content {
-      right: 50% !important;
-      transform: translateX(50%);
-    }
-
-    &.modal--leave .modal--content {
-      right: 50% !important;
-      transform: translateX(50%);
-    }
-
-    &.modal--leave--active .modal--content {
-      transform: translateX(0);
-    }
-
-    .modal--content {
-      position: fixed;
-      transition: right $fade-in-time, transform $fade-in-time, width $fade-in-time;
-
-      will-change: right, transform, width;
-    }
-
-    &.modal--visible .modal--content {
-      right: 50% !important;
-      transform: translateX(50%);
-    }
   }
 }
