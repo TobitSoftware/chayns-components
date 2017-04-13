@@ -13,7 +13,9 @@ $fade-out-time: .65s;
     position: relative;
     margin: 0 auto;
 
-    will-change: margin;
+    transition: width $fade-in-time;
+
+    will-change: margin, width;
   }
 
   &--enter .modal--overlay {
