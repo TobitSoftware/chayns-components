@@ -100,7 +100,7 @@ export default class Example extends React.Component {
 
                                <div className='table__cell'>
                                     <span>
-                                        <input ref="r4" type='radio' className='radio' name='rbutton' value='Everywhere' id='radio4w47653' onClick={() => { this.form.setValue('Everywhere', value);}} />
+                                        <input ref="r4" type='radio' className='radio' name='rbutton' value='Everywhere' id='radio4w47653' onClick={() => { this.form.setValue('radio', 'Everywhere');}} />
                                         <label htmlFor='radio4w47653'>
                                             Everywhere
                                         </label>
