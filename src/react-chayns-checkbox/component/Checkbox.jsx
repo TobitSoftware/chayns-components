@@ -62,7 +62,7 @@ export default class Checkbox extends React.Component {
                         checked={this.state.checked}
                     />
                     <label htmlFor={this.id} >
-                        {this.props.label}
+                        {children || label || ''}
                     </label>
                 </div>
             );
@@ -85,7 +85,7 @@ export default class Checkbox extends React.Component {
                         htmlFor={this.id}
                         style={this.props.label ? {marginRight: '10px'} : null}
                     />
-                    {this.props.label ? this.props.label : ''}
+                    {children || label || ''}
                 </div>
             )
         };
