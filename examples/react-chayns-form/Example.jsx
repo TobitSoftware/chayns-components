@@ -5,6 +5,8 @@ import {Form} from '../../src/react-chayns-form/index';
 import {Input} from '../../src/react-chayns-input/index';
 import {SelectButton} from '../../src/react-chayns-selectbutton/index';
 import Textarea from '../../src/react-chayns-textarea/index';
+import {SelectList, SelectItem} from '../../src/react-chayns-selectlist/index';
+import '../../src/react-chayns-selectlist/index.scss';
 
 const osList = [
     {
@@ -48,7 +50,11 @@ export default class Example extends React.Component {
                    ref={ref => {this.form = ref;}}
                    submitButton={true}
                >
-                   <Input formProp="phone" ref={ref => {this.phone = ref;}} placeholder='Phonenumber' regExp='^[0-9|+]*$' onKeyUp={value => { this.form.setValue('phone', value); }}  /> {/**  this.form.setValue('phone', value)  */}
+                   <Input
+                       formProp="phone"
+                       placeholder='Phonenumber'
+                       onKeyUp={value => { this.form.setValue('phone', value); }}
+                   />
 
                    <div style={{ marginTop: '20px' }}>
                        <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
@@ -62,67 +68,55 @@ export default class Example extends React.Component {
 
                    <div style={{ marginTop: '20px' }}>
                        <p>3. Since when does the problem occur? Were any changes made (e.g. new operating system, new hardware...)?</p>
-                       <Textarea formProp="changes" placeholder='Answer' autogrow onKeyUp={value => { this.form.setValue('changes', value); }} />
+                       <Textarea formProp="changes" placeholder='Answer' autogrow onKeyUp={event => { this.form.setValue('changes', event.target.value); }} />
                    </div>
 
-                   <div style={{ marginTop: '20px' }}>
-                       <p>4. Does the problem  occur at specific PCs or Accounts, or does it occur everywhere?</p>
-                       <div is formProp="radio" ref={ref => {this.radio = ref;}} className='table'>
-                           <div className='table__row'>
-                               <div className='table__cell'>
-                                    <span>
-                                        <input ref="r1" type='radio' className='radio' name='rbutton' value='At some users' id='radio1w47653' onClick={() => { this.form.setValue('radio', 'Users');}} defaultChecked />
-                                        <label htmlFor='radio1w47653'>
-                                            At some users
-                                        </label>
-                                    </span>
-                               </div>
+                   <p>4. Does the problem occur at specific PCs or Accounts, or does it occur everywhere?</p>
+                   <SelectList
+                       style={{ marginTop: '20px' }}
+                       ref={(ref) => { this._selectList = ref;}}
+                       formProp="radio"
+                       onChange={(value) => {
+                         this.form.setValue('radio', value)
+                       }}
+                   >
 
-                               <div className='table__cell'>
-                                    <span>
-                                        <input ref="r2" type='radio' className='radio' name='rbutton' value='At some PCs' id='radio2w47653' onClick={() => { this.form.setValue('radio', 'PCs');} } />
-                                        <label htmlFor='radio2w47653'>
-                                            At some PCs
-                                        </label>
-                                    </span>
-                               </div>
-                           </div>
+                       {{/** <div is formProp="radio" ref={ref => {this.radio = ref;}} className='table'> */}}
+                       <SelectItem
+                           id="1"
+                           name="At some users"
+                       />
+                       {{ /** onClick={() => { this.form.setValue('radio', 'Users');}} */}}
 
-                           <div className='table__row'>
-                               <div className='table__cell'>
-                                    <span>
-                                        <input ref="r3" type='radio' className='radio' name='rbutton' value='At the Server' id='radio3w47653' onClick={() => { this.form.setValue('radio', 'Server');}} />
-                                        <label htmlFor='radio3w47653'>
-                                            At the Server
-                                        </label>
-                                    </span>
-                               </div>
+                       <SelectItem
+                           id="2"
+                           name="At some PCs"
+                       />
 
-                               <div className='table__cell'>
-                                    <span>
-                                        <input ref="r4" type='radio' className='radio' name='rbutton' value='Everywhere' id='radio4w47653' onClick={() => { this.form.setValue('radio', 'Everywhere');}} />
-                                        <label htmlFor='radio4w47653'>
-                                            Everywhere
-                                        </label>
-                                    </span>
-                               </div>
-                           </div>
-                       </div>
+                       <SelectItem
+                           id="3"
+                           name="At the Server"
+                       />
 
-                        <Textarea
-                            placeholder='Note'
-                            autogrow
-                            onKeyUp={value => { this.form.setValue('where', value); }}
-                            formProp="where"
-                        />
-                   </div>
+                       <SelectItem
+                           id="4"
+                           name="Everywhere"
+                       />
+                   </SelectList>
+
+                    <Textarea
+                        placeholder='Note'
+                        autogrow
+                        onKeyUp={event => { this.form.setValue('where', event.target.value); }}
+                        formProp="where"
+                    />
 
                    <div style={{ marginTop: '20px' }}>
                        <p>5. Is there a special situation where the problem occur, for example a special action from the user or in connection with an other app (which)? Can this be repeated?</p>
                         <Textarea
                             placeholder='Description'
                             autogrow
-                            onKeyUp={value => { this.form.setValue('when', value); }}
+                            onKeyUp={event => { this.form.setValue('when', event.target.value); }}
                             formProp="when"
                         />
                    </div>

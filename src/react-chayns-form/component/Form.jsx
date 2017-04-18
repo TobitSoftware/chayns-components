@@ -6,12 +6,14 @@ export default class Form extends React.Component {
         submit: React.PropTypes.func.isRequired,
         submitButton: React.PropTypes.bool,
         className: React.PropTypes.object,
-        form: React.PropTypes.array
+        form: React.PropTypes.array,
+        reset: React.PropTypes.bool
     };
 
     static defaultProps = {
         submitButton: false,
-        form: []
+        form: [],
+        reset: true
     };
 
     constructor() {
@@ -22,15 +24,11 @@ export default class Form extends React.Component {
     }
 
     componentDidMount() {
-        this.props.form.map((key, i) => {
-            this.form[key] = null;
-        });
-
+        //this.props.form.map((key, i) => {
+        //    this.form[key] = null;
+        //});
         if (this.props && this.props.children)
             this.getFormProps(this.props.children);
-
-        console.log(this.form)
-        console.log(this.refElems)
     }
 
     isValid() {
@@ -40,6 +38,14 @@ export default class Form extends React.Component {
                 valid = false;
         });
         return valid;
+    }
+
+    setValue(key, value) {
+        this.form[key] = value;
+        if (this.isValid() && this.props.submitButton)
+            this._submit.classList.remove('button--disabled');
+        else if (this.props.submitButton)
+            this._submit.classList.add('button--disabled');
     }
 
     getFormProps(elems) {
@@ -59,30 +65,18 @@ export default class Form extends React.Component {
         }
     }
 
-    getValue() {
-        Object.keys(this.refElems ? this.refElems : null).forEach((elem) => {
-            this.form[elem] = this.refElems[elem].value;
-        });
-        if (this.isValid() && this.props.submitButton)
-            this._submit.classList.remove('button--disabled');
-        else if (this.props.submitButton)
-            this._submit.classList.add('button--disabled');
-    }
-
-    setValue(key, value) {
-        this.form[key] = value;
-        if (this.isValid() && this.props.submitButton)
-            this._submit.classList.remove('button--disabled');
-        else if (this.props.submitButton)
-            this._submit.classList.add('button--disabled');
-    }
-
     onSubmit() {
-        //this.getValue();
         if (this.isValid())
+        {
             this.props.submit ? this.props.submit(this.form ? this.form : null) : null;
+            this.props.reset ? this.reset() : null;
+        }
     }
 
+    reset() {
+        this.form = {};
+        this.getFormProps(this.props.children);
+    }
 
     render() {
         let {className, submitButton} = this.props;

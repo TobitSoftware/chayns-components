@@ -13,8 +13,8 @@ export default class Input extends React.Component {
         type: React.PropTypes.string
     };
 
-    static defaultProps = {
-        type: 'text'
+     static defaultProps = {
+         type: 'text'
     };
 
     constructor() {
@@ -108,6 +108,7 @@ export default class Input extends React.Component {
                         className="input"
                         type={this.props.type}
                         required
+                        getValue={() => {return this._node}}
                     />
                     <label>{placeholder}</label>
                 </div>
