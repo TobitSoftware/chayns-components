@@ -17,7 +17,7 @@ export default class PersonFinder extends React.Component {
         reference: React.PropTypes.func
     };
 
-    defaultStyle = {
+    static defaultStyle = {
         width: '100%',
         paddingBottom: '12px'
     };
@@ -67,6 +67,7 @@ export default class PersonFinder extends React.Component {
     }
 
     onChange = (event) => {
+
         if(this.props.onChange)
             this.props.onChange(event);
 

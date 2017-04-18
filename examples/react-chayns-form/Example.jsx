@@ -107,7 +107,6 @@ export default class Example extends React.Component {
                     <Textarea
                         placeholder='Note'
                         autogrow
-                        onKeyUp={event => { this.form.setValue('where', event.target.value); }}
                         formProp="where"
                     />
 
@@ -116,7 +115,6 @@ export default class Example extends React.Component {
                         <Textarea
                             placeholder='Description'
                             autogrow
-                            onKeyUp={event => { this.form.setValue('when', event.target.value); }}
                             formProp="when"
                         />
                    </div>

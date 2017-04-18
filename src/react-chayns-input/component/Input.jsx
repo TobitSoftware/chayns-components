@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-export default class Input extends React.Component {
+export default class Input extends FormElement {
     static propTypes = {
         style: React.PropTypes.object,
         className: React.PropTypes.string,
@@ -10,7 +10,8 @@ export default class Input extends React.Component {
         onBlur: React.PropTypes.func,
         responsive: React.PropTypes.bool,
         regExp: React.PropTypes.string,
-        type: React.PropTypes.string
+        type: React.PropTypes.string,
+        formProp: React.PropTypes.string
     };
 
      static defaultProps = {
