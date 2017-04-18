@@ -10,7 +10,8 @@ export default class Checkbox extends React.Component {
         onChange: React.PropTypes.func,
         toggleButton: React.PropTypes.bool,
         checked: React.PropTypes.bool,
-        disabled: React.PropTypes.bool
+        disabled: React.PropTypes.bool,
+        tooltip: React.PropTypes.string
     };
 
     static defaultProps = {

@@ -31,6 +31,7 @@ The following properties can be set on the Checkbox-Component
 | toggleButton | Renders checkbox as toggleButton (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#toggle-button)) | bool | false  |
 | checked | Set the default value of the checkbox               | bool | false  |
 | disabled | Disables the checkbox               | bool | false  |
+| tooltip | Tooltip that will be shown behind the label               | String |   |
 
 
 
