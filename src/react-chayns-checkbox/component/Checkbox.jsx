@@ -24,10 +24,15 @@ export default class Checkbox extends React.Component {
     }
 
     componentDidMount() {
-        this._node.checked = this.props.checked
+        const {tooltip, checked} = this.props;
+
+        this._node.checked = checked;
         this.setState({
-            value: this.props.checked
+            value: checked
         });
+
+        if(tooltip)
+            this._container.setAttribute('tooltip', tooltip);
     }
 
     onChange = () => {
@@ -44,7 +49,10 @@ export default class Checkbox extends React.Component {
 
         let checkbox = () => {
             return(
-                <div style={style} className={classNames}>
+                <div style={style}
+                     className={classNames}
+                     ref={(ref) => {this._container = ref}}
+                >
                     <input
                         className="checkbox"
                         ref={(ref) => {this._node = ref}}
@@ -62,7 +70,10 @@ export default class Checkbox extends React.Component {
 
         let toggleButton = () => {
             return (
-                <div style={style} className={classNames}>
+                <div style={style}
+                     className={classNames}
+                     ref={(ref) => {this._container = ref}}
+                >
                     <input
                         className="switch"
                         ref={(ref) => {this._node = ref}}
