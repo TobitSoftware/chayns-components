@@ -1,7 +1,8 @@
+import FormElement from '../../react-chayns-form/component/FormElement.jsx';
 import React from 'react';
 import classnames from 'classnames';
 
-export default class PersonFinder extends React.Component {
+export default class PersonFinder extends FormElement {
 
     static propTypes = {
         style: React.PropTypes.object,
@@ -24,10 +25,14 @@ export default class PersonFinder extends React.Component {
 
     constructor() {
         super();
+        this.state = {
+            value: null
+        }
     }
 
     render() {
         let style = Object.assign({}, this.defaultStyle, this.props.style);
+        const props = this.props;
 
         let className = classnames({
             input: true,
@@ -38,18 +43,19 @@ export default class PersonFinder extends React.Component {
             <textarea
                    className={className}
                    ref={this.ref}
-                   placeholder={this.props.placeholder}
+                   placeholder={props.placeholder}
                    style={style}
-                   defaultValue={this.props.defaultValue}
-                   onChange={(this.props.onChange || this.props.autogrow) ? this.onChange : null}
-                   onKeyUp={this.props.onKeyUp}
-                   onKeyDown={this.props.onKeyDown}
-                   value={this.props.value}
+                   defaultValue={props.defaultValue}
+                   onChange={this.onChange}
+                   onKeyUp={props.onKeyUp}
+                   onKeyDown={props.onKeyDown}
+                   value={props.value}
             />
         );
     }
 
     componentDidMount() {
+        super.componentDidMount();
         if(this.props.required)
             this._node.setAttribute('required', '');
 
@@ -66,7 +72,16 @@ export default class PersonFinder extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        super.componentWillUnmount();
+    }
+
     onChange = (event) => {
+
+        if (event.target.value)
+            this.setState({
+                value: event.target.value
+            });
 
         if(this.props.onChange)
             this.props.onChange(event);

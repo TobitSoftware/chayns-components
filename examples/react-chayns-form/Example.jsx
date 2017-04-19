@@ -8,6 +8,13 @@ import Textarea from '../../src/react-chayns-textarea/index';
 import {SelectList, SelectItem} from '../../src/react-chayns-selectlist/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
+const rules = [{
+    name: 'siteId',
+    check: function (text) {
+        return (text.match('^[0-9]+$') ? true : false);
+    }
+}];
+
 const osList = [
     {
         id: 1,
@@ -46,39 +53,42 @@ export default class Example extends React.Component {
             <div>
                <Form
                    intro="You can ask concrete questions directly to the Tobit.Software Premium Services. No charge. Please understand that the processing can take up to 48 hours. The more precise the questions are ask, the faster we can answer."
-                   submit={res => {console.log(res)}}
+                   onSubmit={res => {console.log('submitted:', res)}}
                    ref={ref => {this.form = ref;}}
                    submitButton={true}
+                   rules={rules}
                >
-                   <Input
-                       formProp="phone"
-                       placeholder='Phonenumber'
-                       onKeyUp={value => { this.form.setValue('phone', value); }}
-                   />
-
                    <div style={{ marginTop: '20px' }}>
                        <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
-                       <Input formProp="siteId" placeholder='SiteId (e.g. 12345-67890)' regExp='^[0-9]{5}-[0-9]{5}$' onKeyUp={value => { this.form.setValue('siteId', value); }} />
+                       <Input
+                           name="siteId"
+                           placeholder='SiteId (e.g. 12345-67890)'
+                           required
+                       />
                    </div>
 
                    <div style={{ marginTop: '20px' }}>
                        <p>2. Please describe your problem as precisely as possible. </p>
-                       <Textarea formProp="problem" placeholder='Description' autogrow onKeyUp={value => { this.form.setValue('problem', value.target.value); }} />
+                       <Textarea
+                           name="problem"
+                           placeholder='Description'
+                           autogrow
+                       />
                    </div>
 
                    <div style={{ marginTop: '20px' }}>
                        <p>3. Since when does the problem occur? Were any changes made (e.g. new operating system, new hardware...)?</p>
-                       <Textarea formProp="changes" placeholder='Answer' autogrow onKeyUp={event => { this.form.setValue('changes', event.target.value); }} />
+                       <Textarea
+                           name="changes"
+                           placeholder='Answer'
+                           autogrow
+                       />
                    </div>
 
                    <p>4. Does the problem occur at specific PCs or Accounts, or does it occur everywhere?</p>
                    <SelectList
                        style={{ marginTop: '20px' }}
-                       ref={(ref) => { this._selectList = ref;}}
-                       formProp="radio"
-                       onChange={(value) => {
-                         this.form.setValue('radio', value)
-                       }}
+                       name="where"
                    >
 
                        {{/** <div is formProp="radio" ref={ref => {this.radio = ref;}} className='table'> */}}
@@ -107,7 +117,7 @@ export default class Example extends React.Component {
                     <Textarea
                         placeholder='Note'
                         autogrow
-                        formProp="where"
+                        name="whereNote"
                     />
 
                    <div style={{ marginTop: '20px' }}>
@@ -115,7 +125,7 @@ export default class Example extends React.Component {
                         <Textarea
                             placeholder='Description'
                             autogrow
-                            formProp="when"
+                            name="when"
                         />
                    </div>
 
@@ -125,10 +135,9 @@ export default class Example extends React.Component {
                            <SelectButton
                                label='Operating System'
                                list={osList}
-                               onSelect={(value) => { this.form.setValue('system', value); }}
                                listKey='id'
                                listValue='name'
-                               formProp="system"
+                               name="system"
                            />
                        </div>
                    </div>

@@ -1,7 +1,10 @@
+
+import FormElement from '../../react-chayns-form/component/FormElement.jsx';
 import React from 'react';
 import classnames from 'classnames';
 
 export default class Input extends FormElement {
+
     static propTypes = {
         style: React.PropTypes.object,
         className: React.PropTypes.string,
@@ -86,6 +89,12 @@ export default class Input extends FormElement {
                 onKeyUp(this._node.value);
     };
 
+    onChange = (event) => {
+        this.setState({
+            value: event.target.value
+        });
+    };
+
     render() {
         let {placeholder, className, style} = this.props;
         if (style === undefined) style = {};
@@ -106,6 +115,7 @@ export default class Input extends FormElement {
                         ref={(ref) => {this._node = ref}}
                         onKeyUp={this.onKeyUp}
                         onBlur={this.onBlur}
+                        onChange={this.onChange}
                         className="input"
                         type={this.props.type}
                         required
@@ -127,6 +137,7 @@ export default class Input extends FormElement {
                     style={style}
                     onKeyUp={this.onKeyUp}
                     onBlur={this.onBlur}
+                    onChange={this.onChange}
                     type={this.props.type}
                     required
                 />
