@@ -19,6 +19,15 @@ export default class Example extends React.Component {
                    toggleButton={true}
                    checked={false}
                />
+
+                <Checkbox
+                    onChange={(value) => { console.log(value)}}
+                    checked={false}
+                    disabled={true}
+                    tooltip="Description for xyz"
+                >
+                    Enable xyz
+                </Checkbox>
             </div>
         );
     }

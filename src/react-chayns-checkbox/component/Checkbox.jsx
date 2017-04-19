@@ -6,9 +6,12 @@ export default class Checkbox extends React.Component {
         style: React.PropTypes.object,
         className: React.PropTypes.string,
         label: React.PropTypes.string,
+        children: React.PropTypes.string,
         onChange: React.PropTypes.func,
         toggleButton: React.PropTypes.bool,
-        checked: React.PropTypes.bool
+        checked: React.PropTypes.bool,
+        disabled: React.PropTypes.bool,
+        tooltip: React.PropTypes.string
     };
 
     static defaultProps = {
@@ -24,37 +27,47 @@ export default class Checkbox extends React.Component {
     }
 
     componentDidMount() {
-        this._node.checked = this.props.checked
+        const {tooltip, checked} = this.props;
+
+        this._node.checked = checked;
         this.setState({
-            value: this.props.checked
+            value: checked
         });
+
+        if(tooltip)
+            this._container.setAttribute('tooltip', tooltip);
     }
 
     onChange = () => {
-        const {onChange} = this.props;
+        const {onChange, disabled} = this.props;
 
+        if(!disabled)
         if (onChange) onChange(this._node.checked);
     };
 
     render() {
-        let {className, style} = this.props;
+        let {className, style, disabled, children, label} = this.props;
         let classNames = classnames({
             [className]: className
         });
 
         let checkbox = () => {
             return(
-                <div style={style} className={classNames}>
+                <div style={style}
+                     className={classNames}
+                     ref={(ref) => {this._container = ref}}
+                >
                     <input
                         className="checkbox"
                         ref={(ref) => {this._node = ref}}
                         onChange={this.onChange}
                         type="checkbox"
                         id={this.id}
+                        disabled={disabled}
                         checked={this.state.checked}
                     />
                     <label htmlFor={this.id} >
-                        {this.props.label}
+                        {children || label || ''}
                     </label>
                 </div>
             );
@@ -62,19 +75,23 @@ export default class Checkbox extends React.Component {
 
         let toggleButton = () => {
             return (
-                <div style={style} className={classNames}>
+                <div style={style}
+                     className={classNames}
+                     ref={(ref) => {this._container = ref}}
+                >
                     <input
                         className="switch"
                         ref={(ref) => {this._node = ref}}
                         onChange={this.onChange}
+                        disabled={disabled}
                         type="checkbox"
                         id={this.id}
                     />
                     <label
                         htmlFor={this.id}
-                        style={this.props.label ? {marginRight: '10px'} : null}
+                        style={label ? {marginRight: '10px'} : null}
                     />
-                    {this.props.label ? this.props.label : ''}
+                    {children || label || ''}
                 </div>
             )
         };

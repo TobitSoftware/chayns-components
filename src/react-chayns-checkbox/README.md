@@ -26,9 +26,12 @@ The following properties can be set on the Checkbox-Component
 | style | Additional styles that should be set to the checkbox                                                           | Object | |
 | className | Additional CSS-Classes that should be add to the checkbox                                                        | String | |
 | label | Label that will be shown next to the checkbox                                                        | String | |
+| children | Label that will be shown next to the checkbox               | String |  |
 | onChange | onChange-event. Returns true or false                                                       | function |  |
 | toggleButton | Renders checkbox as toggleButton (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#toggle-button)) | bool | false  |
 | checked | Set the default value of the checkbox               | bool | false  |
+| disabled | Disables the checkbox               | bool | false  |
+| tooltip | Tooltip that will be shown behind the label               | String |   |
 
 
 
@@ -40,4 +43,13 @@ The following properties can be set on the Checkbox-Component
     toggleButton={true}
     onChange={ (value) => { console.log(value); }}
 />
+```
+#### Checkbox
+```jsx
+<Checkbox
+    onChange={ (value) => { console.log(value); }}
+    disabled={true}
+>
+    This is a normal checkbox
+</Checkbox>
 ```
