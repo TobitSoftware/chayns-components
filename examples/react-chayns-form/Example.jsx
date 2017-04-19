@@ -52,10 +52,8 @@ export default class Example extends React.Component {
         return(
             <div>
                <Form
-                   intro="You can ask concrete questions directly to the Tobit.Software Premium Services. No charge. Please understand that the processing can take up to 48 hours. The more precise the questions are ask, the faster we can answer."
                    onSubmit={res => {console.log('submitted:', res)}}
                    ref={ref => {this.form = ref;}}
-                   submitButton={true}
                    rules={rules}
                >
                    <div style={{ marginTop: '20px' }}>

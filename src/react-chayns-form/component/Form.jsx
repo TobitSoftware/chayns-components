@@ -4,11 +4,12 @@ import classnames from 'classnames';
 export default class Form extends Component {
 
     static propTypes = {
-        onSubmit: PropTypes.func,
-        onValid: PropTypes.func,
-        onInvalid: PropTypes.func,
-        className: PropTypes.object,
-        rules: PropTypes.array
+        onSubmit: PropTypes.func, //called onSubmit, receives the form values
+        //onValid: PropTypes.func, //onInput if the input is valid -> highlight the input
+        //onInvalid: PropTypes.func, //onInput if the input is invalid -> highlight the  input
+        className: PropTypes.object, //add additional styles to the form using a class
+        rules: PropTypes.array, //validate an input by any function you provide. Structure: [{name, check}, ..] where name is equal to the inputs name. check returns the valid state
+        submitButton: PropTypes.bool //If true displays a submitButton on the bottom of the form
     };
 
     static defaultPropTypes = {
@@ -26,10 +27,10 @@ export default class Form extends Component {
     }
 
     /** //example rule
-        [{
-            name: 'siteId',
-            check: function (text) { return (text.match('^[0-9]+$') ? true : false);  }
-        }]; //input name, check (rule function) -> will be ignored if not set
+     * [{
+     * name: 'siteId',
+     * check: function (text) { return (text.match('^[0-9]+$') ? true : false);  }
+     * }]; //input name, check (rule function) -> will be ignored if not set
      */
 
     componentDidMount() {
@@ -37,6 +38,10 @@ export default class Form extends Component {
         this.rules = this.props.rules;
     }
 
+    /**
+     * lifts down functions required by form children (input elements) to register/unRegister to the form
+     * @returns {{form: {attachToForm: Form.attachToForm, detachFromForm: Form.detachFromForm}}}
+     */
     getChildContext() {
         return {
             form: {
@@ -59,7 +64,7 @@ export default class Form extends Component {
      * @param element
      */
     detachFromForm = (element) => {
-        this.inputs.map(input, i => {
+        this.inputs.map((input, i) => {
             if (input.props.name === element.props.name)
                 this.inputs.splice(i, 1);
         });
@@ -72,7 +77,7 @@ export default class Form extends Component {
     getCurrentValues() {
         const inputs = this.inputs;
         let retVal = [];
-        inputs.map((input, i) => {
+        inputs.map(input => {
             retVal.push({
                 name: input.props.name ? input.props.name : '',
                 required: input.props.required ? input.props.required : false,
@@ -137,15 +142,16 @@ export default class Form extends Component {
         if(!checked) return true;
     }
 
+    /**
+     * Called after submit.
+     * Resets the inputs values and states
+     */
     resetForm = ()  => {
-        //setTimeout(() => {
-        //
-        //    this.inputs.map(input => {
-        //        input.setValue(null)
-        //        input.forceUpdate();
-        //    });
-        //
-        //}, 1000);
+        setTimeout(() => {
+            this.inputs.map(input => {
+                input.reset ? input.reset() : null; //setValue nur in react-chayns-input.... | null wird abgefangen in react-chayns-input....
+            });
+        }, 1000);
     };
 
     /**
@@ -155,7 +161,8 @@ export default class Form extends Component {
      * @param event
      */
     onSubmit = (event) => {
-        event.preventDefault();
+        if (event)
+            event.preventDefault();
         const onSub = this.props.onSubmit;
         const formValues = this.getCurrentValues();
 
@@ -170,10 +177,21 @@ export default class Form extends Component {
     };
 
     render() {
-        let {className, children} = this.props;
+        let {className, children, submitButton} = this.props;
         let classNames = classnames({
             [className]: className
         });
+
+        const _submitButton = (
+            <div style={{marginTop: '30px', width: '100%', textAlign: 'center'}}>
+                <button
+                    className="button"
+                    type="submit"
+                >
+                    Submit
+                </button>
+            </div>
+        );
 
         return (
             <form
@@ -181,14 +199,7 @@ export default class Form extends Component {
                 onSubmit={this.onSubmit}
             >
                 {children}
-                <div style={{marginTop: '30px', width: '100%', textAlign: 'center'}}>
-                    <button
-                        className="button"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
-                </div>
+                {submitButton ? _submitButton : null}
             </form>
         );
     }
