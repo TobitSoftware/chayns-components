@@ -113,7 +113,10 @@ export default class SelectList extends FormElement {
 
         if(this.state.children.length > 0) {
             return (
-                <div className={this.props.className}>
+                <div
+                    className={this.props.className}
+                    ref={(ref) => {this._node = ref;}}
+                >
                     {this._renderChildren(this.state.children)}
                 </div>
             );

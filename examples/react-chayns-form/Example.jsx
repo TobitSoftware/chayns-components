@@ -11,7 +11,7 @@ import '../../src/react-chayns-selectlist/index.scss';
 const rules = [{
     name: 'siteId',
     check: function (text) {
-        return (text.match('^[0-9]+$') ? true : false);
+        return (text.match('^[0-9]{1}$') ? true : false);
     }
 }];
 
@@ -26,14 +26,10 @@ const osList = [
     },
     {
         id: 3,
-        name: 'Windows 8.1'
-    },
-    {
-        id: 4,
         name: 'Windows 10'
     },
     {
-        id: 5,
+        id: 4,
         name: 'Other'
     }
 ];
@@ -42,10 +38,17 @@ export default class Example extends React.Component {
 
     constructor() {
         super();
-    }
 
-    componentDidMount() {
-        window.submit = this.form.onSubmit;
+        //
+        var valid = document.createElement('style');
+        valid.type = 'text/css';
+        valid.innerHTML = '.input.valid { border-bottom: 1px solid green } .selectList.valid { border-left: 1px solid green; padding-left: 5px; }';
+        var invalid = document.createElement('style');
+        invalid.type = 'text/css';
+        invalid.innerHTML = '.input.invalid { border-bottom: 1px solid red } .selectList.invalid { border-left: 1px solid red; padding-left: 5px; } .choosebutton.invalid { border: 1px solid red }';
+        document.getElementsByTagName('head')[0].appendChild(valid);
+        document.getElementsByTagName('head')[0].appendChild(invalid);
+        //
     }
 
     render() {
@@ -53,8 +56,9 @@ export default class Example extends React.Component {
             <div>
                <Form
                    onSubmit={res => {console.log('submitted:', res)}}
-                   ref={ref => {this.form = ref;}}
                    rules={rules}
+                   submitButton={true}
+                   ref={ref => { window.form = ref; }}
                >
                    <div style={{ marginTop: '20px' }}>
                        <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
@@ -71,6 +75,7 @@ export default class Example extends React.Component {
                            name="problem"
                            placeholder='Description'
                            autogrow
+                           required
                        />
                    </div>
 
@@ -87,6 +92,8 @@ export default class Example extends React.Component {
                    <SelectList
                        style={{ marginTop: '20px' }}
                        name="where"
+                       required
+                       className="selectList"
                    >
 
                        {{/** <div is formProp="radio" ref={ref => {this.radio = ref;}} className='table'> */}}
@@ -136,6 +143,7 @@ export default class Example extends React.Component {
                                listKey='id'
                                listValue='name'
                                name="system"
+                               required
                            />
                        </div>
                    </div>

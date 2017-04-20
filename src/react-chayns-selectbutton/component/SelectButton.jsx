@@ -101,7 +101,7 @@ export default class SelectButton extends FormElement {
 
     setLabel(text) {
         if (this.props.showSelection)
-            this._btn.innerText = text;
+            this._node.innerText = text;
     }
 
     render() {
@@ -115,7 +115,7 @@ export default class SelectButton extends FormElement {
             <div
                 className={classNames}
                 onClick={this.onClick}
-                ref={ref => {this._btn = ref;}}
+                ref={ref => {this._node = ref;}}
             >
                 {label}
             </div>

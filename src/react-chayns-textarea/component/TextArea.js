@@ -78,7 +78,7 @@ export default class PersonFinder extends FormElement {
 
     onChange = (event) => {
 
-        if (event.target.value)
+        //if (event.target.value) //should not define the values to return in a component itself
             this.setState({
                 value: event.target.value
             });

@@ -46,7 +46,8 @@ export default class Form extends Component {
         return {
             form: {
                 attachToForm: this.attachToForm,
-                detachFromForm: this.detachFromForm
+                detachFromForm: this.detachFromForm,
+                runRules: this.runRules
             }
         }
     }
@@ -97,19 +98,26 @@ export default class Form extends Component {
         const _values = values;
         let valid = true;
 
-        _values.map(_value => {
-            if (_value.required && _value.name) { //if required and name for checks is set. Otherwise no check is possible and the value counts as true
+        _values.map((_value, i) => {
+            let _valueValid = true;
+            if (_value.required) {
                 if (_value.value) {
-                    if (typeof _value.value === 'string' && _value.value === '') { //if string is null or empty -> invalid
+                    if (typeof _value.value === 'string' && _value.value === '') {
                         valid = false;
-                    } else {
+                        _valueValid = false;
+                    } else if (_value.name) {
                         const ruleResult = this.runRules(_value);
                         valid = (!ruleResult ? ruleResult : valid); //if value is invalid the whole form is invalid
+                        _valueValid = (!ruleResult ? ruleResult : valid);
+                    } else {
+                        //highlight errors? -> required + no name
                     }
                 } else {
                     valid = false;
+                    _valueValid = false;
                 }
             }
+            if (!_valueValid) this.inputs[i].highlight();
         });
         return valid;
     }
@@ -121,7 +129,7 @@ export default class Form extends Component {
      * @param value
      * @returns {boolean}
      */
-    runRules(value) {
+    runRules = (value) => {
         const rules = this.rules;
         let checked = false; //fallback in case no name or rule for the value is provided
         if (rules && rules.length > 0) {
@@ -149,9 +157,9 @@ export default class Form extends Component {
     resetForm = ()  => {
         setTimeout(() => {
             this.inputs.map(input => {
-                input.reset ? input.reset() : null; //setValue nur in react-chayns-input.... | null wird abgefangen in react-chayns-input....
+                input.reset ? input.reset() : null; //reset in FormElement implementieren
             });
-        }, 1000);
+        }, 0);
     };
 
     /**
@@ -170,8 +178,8 @@ export default class Form extends Component {
             const isValid = formValues ? this.runValidation(formValues) : false;
             if (isValid)
             {
-                onSub(formValues);
                 this.resetForm();
+                onSub(formValues);
             }
         }
     };
