@@ -5,8 +5,7 @@ export default class Form extends Component {
 
     static propTypes = {
         onSubmit: PropTypes.func, //called onSubmit, receives the form values
-        //onValid: PropTypes.func, //onInput if the input is valid -> highlight the input
-        //onInvalid: PropTypes.func, //onInput if the input is invalid -> highlight the  input
+        showValidation: PropTypes.bool, //if true, valid/invalid inputs will be highlighted (currently for input, textarea, selectList, selectButton
         className: PropTypes.object, //add additional styles to the form using a class
         rules: PropTypes.array, //validate an input by any function you provide. Structure: [{name, check}, ..] where name is equal to the inputs name. check returns the valid state
         submitButton: PropTypes.bool //If true displays a submitButton on the bottom of the form
@@ -23,10 +22,20 @@ export default class Form extends Component {
     constructor() {
         super();
         this.inputs = []; //retrieves all inputs inside the form, they are specified via the extended chayns-component 'FormElement'
-        this.rules = []; // [{name, check}] -> rules consist of an input name and a function to determine its validity
+        this.rules = []; // [{name, check}] -> rules consist of an input name and a function to determine its validity. If check isn't set, the rule will be ignored
+
+        //provisional classes to include error highlighting. Final versions should be included into the chayns API itself
+        var valid = document.createElement('style');
+        valid.type = 'text/css';
+        valid.innerHTML = '.input.valid { border-bottom: 1px solid green } .selectList.valid { border-left: 1px solid green; padding-left: 5px; }';
+        var invalid = document.createElement('style');
+        invalid.type = 'text/css';
+        invalid.innerHTML = '.input.invalid { border-bottom: 1px solid red } .selectList.invalid { border-left: 1px solid red; padding-left: 5px; } .choosebutton.invalid { border: 1px solid red }';
+        document.getElementsByTagName('head')[0].appendChild(valid);
+        document.getElementsByTagName('head')[0].appendChild(invalid);
     }
 
-    /** //example rule
+    /** example rule
      * [{
      * name: 'siteId',
      * check: function (text) { return (text.match('^[0-9]+$') ? true : false);  }
@@ -47,7 +56,8 @@ export default class Form extends Component {
             form: {
                 attachToForm: this.attachToForm,
                 detachFromForm: this.detachFromForm,
-                runRules: this.runRules
+                runRules: this.runRules,
+                showValidation: this.props.showValidation
             }
         }
     }
@@ -109,15 +119,13 @@ export default class Form extends Component {
                         const ruleResult = this.runRules(_value);
                         valid = (!ruleResult ? ruleResult : valid); //if value is invalid the whole form is invalid
                         _valueValid = (!ruleResult ? ruleResult : valid);
-                    } else {
-                        //highlight errors? -> required + no name
                     }
                 } else {
                     valid = false;
                     _valueValid = false;
                 }
             }
-            if (!_valueValid) this.inputs[i].highlight();
+            if (this.props.showValidation && !_valueValid) this.inputs[i].highlight();
         });
         return valid;
     }

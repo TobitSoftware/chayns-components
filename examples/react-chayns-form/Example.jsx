@@ -38,17 +38,6 @@ export default class Example extends React.Component {
 
     constructor() {
         super();
-
-        //
-        var valid = document.createElement('style');
-        valid.type = 'text/css';
-        valid.innerHTML = '.input.valid { border-bottom: 1px solid green } .selectList.valid { border-left: 1px solid green; padding-left: 5px; }';
-        var invalid = document.createElement('style');
-        invalid.type = 'text/css';
-        invalid.innerHTML = '.input.invalid { border-bottom: 1px solid red } .selectList.invalid { border-left: 1px solid red; padding-left: 5px; } .choosebutton.invalid { border: 1px solid red }';
-        document.getElementsByTagName('head')[0].appendChild(valid);
-        document.getElementsByTagName('head')[0].appendChild(invalid);
-        //
     }
 
     render() {
@@ -57,8 +46,9 @@ export default class Example extends React.Component {
                <Form
                    onSubmit={res => {console.log('submitted:', res)}}
                    rules={rules}
-                   submitButton={true}
                    ref={ref => { window.form = ref; }}
+                   submitButton={true}
+                   showValidation={true}
                >
                    <div style={{ marginTop: '20px' }}>
                        <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
