@@ -5,9 +5,9 @@ export default class Form extends Component {
 
     static propTypes = {
         onSubmit: PropTypes.func, //called onSubmit, receives the form values
+        rules: PropTypes.array, //validate an input by any function you provide. Structure: [{name, check}, ..] where name is equal to the inputs name. check returns the valid state
         showValidation: PropTypes.bool, //if true, valid/invalid inputs will be highlighted (currently for input, textarea, selectList, selectButton
         className: PropTypes.object, //add additional styles to the form using a class
-        rules: PropTypes.array, //validate an input by any function you provide. Structure: [{name, check}, ..] where name is equal to the inputs name. check returns the valid state
         submitButton: PropTypes.bool //If true displays a submitButton on the bottom of the form
     };
 
@@ -191,6 +191,10 @@ export default class Form extends Component {
             }
         }
     };
+
+    submit() {
+        this.onSubmit();
+    }
 
     render() {
         let {className, children, submitButton} = this.props;
