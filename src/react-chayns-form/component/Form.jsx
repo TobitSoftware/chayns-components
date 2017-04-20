@@ -215,6 +215,7 @@ export default class Form extends Component {
 
         return (
             <form
+                noValidate={true}
                 className={classNames}
                 onSubmit={this.onSubmit}
             >

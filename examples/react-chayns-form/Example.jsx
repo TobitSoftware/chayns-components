@@ -11,7 +11,7 @@ import '../../src/react-chayns-selectlist/index.scss';
 const rules = [{
     name: 'siteId',
     check: function (text) {
-        return (text.match('^[0-9]{1}$') ? true : false);
+        return (text.match('^[0-9]{5}\-[0-9]{5}$') ? true : false);
     }
 }];
 
