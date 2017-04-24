@@ -5,14 +5,17 @@ export default class Form extends Component {
 
     static propTypes = {
         onSubmit: PropTypes.func, //called onSubmit, receives the form values
+        intercom: PropTypes.string, //Send an intercom message to the page using variables named after your inputs. ##input## will be replace by that inputs value
         rules: PropTypes.array, //validate an input by any function you provide. Structure: [{name, check}, ..] where name is equal to the inputs name. check returns the valid state
         showValidation: PropTypes.bool, //if true, valid/invalid inputs will be highlighted (currently for input, textarea, selectList, selectButton
-        className: PropTypes.object, //add additional styles to the form using a class
-        submitButton: PropTypes.bool //If true displays a submitButton on the bottom of the form
+        submitButton: PropTypes.bool, //If true displays a submitButton on the bottom of the form
+        className: PropTypes.object //add additional styles to the form using a class
     };
 
     static defaultPropTypes = {
-        rules: []
+        rules: [],
+        submitButton: true,
+        showValidation: false
     };
 
     static childContextTypes = {
@@ -80,6 +83,35 @@ export default class Form extends Component {
                 this.inputs.splice(i, 1);
         });
     };
+
+    /**
+     * Creates an intercom message using getIntercomText() and sends it to the page from the current user.
+     * @param _values
+     */
+    sendIntercomToPage(_values) {
+        const preset = this.props.intercom;
+        let text = this.getIntercomText(_values, preset);
+        if (text.length > 0)
+            chayns.intercom.sendMessageToPage({
+                text: text
+            });
+    }
+
+    /**
+     * Takes a preset string and removes placeholders using chayns.utils.replacePlaceholder().
+     * This method helps setting up an intercom message for submitting the form.
+     * @param _values
+     * @param preset
+     * @returns string
+     */
+    getIntercomText(_values, preset) {
+        return chayns.utils.replacePlaceholder(preset, _values.map(value => {
+            return {
+                'key': value.name || '',
+                'value': ((value.value && typeof value.value === 'object' ? (value.value.length === 1 ? value.value[0].name : (value.value[0].name + '(+ ' + value.value.length-1 + ' more item' + (value.value.length > 2 ? 's' : null) + ')' )) : value.value) || '[not defined]')
+            };
+        }));
+    }
 
     /**
      * Retrieves all the values from the inputs and creates an array containing objects
@@ -165,7 +197,7 @@ export default class Form extends Component {
     resetForm = ()  => {
         setTimeout(() => {
             this.inputs.map(input => {
-                input.reset ? input.reset() : null; //reset in FormElement implementieren
+                input.reset ? input.reset() : null;
             });
         }, 0);
     };
@@ -179,15 +211,18 @@ export default class Form extends Component {
     onSubmit = (event) => {
         if (event)
             event.preventDefault();
-        const onSub = this.props.onSubmit;
+        const { onSubmit, intercom } = this.props;
         const formValues = this.getCurrentValues();
 
-        if (onSub && formValues) {
+        if ((onSubmit || intercom ) && formValues) {
             const isValid = formValues ? this.runValidation(formValues) : false;
             if (isValid)
             {
+                if (intercom)
+                    this.sendIntercomToPage(formValues);
+                if (onSubmit)
+                    onSubmit(formValues);
                 this.resetForm();
-                onSub(formValues);
             }
         }
     };

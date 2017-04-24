@@ -44,14 +44,12 @@ export default class Example extends React.Component {
         return(
             <div>
                <Form
-                   onSubmit={res => {console.log('submitted:', res)}}
+                   onSubmit={res => { console.log('submit: ', res);}}
+                   intercom="Support request on siteId: ##siteId##. The problem occurs on the following system: ##system##. It is described as follows: ##problem##."
                    rules={rules}
-                   ref={ref => { window.form = ref; }}
-                   submitButton={true}
-                   showValidation={true}
                >
                    <div style={{ marginTop: '20px' }}>
-                       <p>1. Please enter the SiteID of the site where the problem occures. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
+                       <p>1. Please enter the SiteID of the site where the problem occurs. The SiteID includes <b>the 10 first characters</b> of your david® startlicence.</p>
                        <Input
                            name="siteId"
                            placeholder='SiteId (e.g. 12345-67890)'
@@ -82,27 +80,20 @@ export default class Example extends React.Component {
                    <SelectList
                        style={{ marginTop: '20px' }}
                        name="where"
-                       required
                        className="selectList"
                    >
-
-                       {{/** <div is formProp="radio" ref={ref => {this.radio = ref;}} className='table'> */}}
                        <SelectItem
                            id="1"
-                           name="At some users"
+                           name="At some Users"
                        />
-                       {{ /** onClick={() => { this.form.setValue('radio', 'Users');}} */}}
-
                        <SelectItem
                            id="2"
                            name="At some PCs"
                        />
-
                        <SelectItem
                            id="3"
                            name="At the Server"
                        />
-
                        <SelectItem
                            id="4"
                            name="Everywhere"
@@ -116,7 +107,7 @@ export default class Example extends React.Component {
                     />
 
                    <div style={{ marginTop: '20px' }}>
-                       <p>5. Is there a special situation where the problem occur, for example a special action from the user or in connection with an other app (which)? Can this be repeated?</p>
+                       <p>5. Is there a special situation where the problem occurs, in example after a special action of the user or in connection with any other app (which)? Can this be repeated?</p>
                         <Textarea
                             placeholder='Description'
                             autogrow
@@ -125,7 +116,7 @@ export default class Example extends React.Component {
                    </div>
 
                    <div style={{ marginTop: '20px' }}>
-                       Choose your operating system.
+                       Select the affected operating system.
                        <div style={{ float: 'right' }}>
                            <SelectButton
                                label='Operating System'
