@@ -16,7 +16,7 @@ import {Form} from 'tobit-chayns_components/react-chayns-form';
 You can use the form like this:
 ```jsx
 <Form
-    onSubmit={res => {console.log(res)}
+    onSubmit={res => { console.log(res); }
 >
     <Input
         name="sample"
@@ -67,10 +67,13 @@ Important: due to the name attribute on the input the Form knows that this input
 **Intercom messages**<br>
 Using the Form component you can even send intercom messages from the user to your chayns site.<br>
 The message uses placeholders that are named equal to the inputs. They will be replaced onSubmit.<br>
+```JavaScript
+const intercomStr = "A new chayns site was added: ##siteId##. See the description in the following: ##description##.";
+```
 ```jsx
 <Form
     onSubmit={res => { console.log(res); }}
-    intercom="A new chayns site was added: ##siteId##. See the description in the following: ##description##."
+    intercom={intercomStr}
 >
     <p>Please enter the SiteID of your chayns site.</p>
     <Input
@@ -134,5 +137,5 @@ This example shows you how to use the form even if the submitButton is hidden. Y
 Of course you don't have to store the submit function inside the window object but you can store it in any variable.<br>
 Then you only have to call the function and the form submit triggers.
 ```JavaScript
-window.submit();
+window.submitForm();
 ```
