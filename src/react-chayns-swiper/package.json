@@ -1,0 +1,27 @@
+{
+  "name": "react-chayns-swiper",
+  "version": "1.0.0",
+  "description": "The **Swiper** - Component is part of the **tobit-chayns_component** package, you have to add the swiper framework seperately",
+  "main": "./index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+  },
+  "author": "Michael Braun",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "chayns",
+    "component",
+    "swiper",
+    "sliper"
+  ]
+}
