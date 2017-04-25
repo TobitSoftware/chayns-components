@@ -10,54 +10,29 @@ export default class Example extends React.Component {
 
     render() {
 
-        let elements = [];
-
-        elements.push(
-            <Swipe
-                className="selectitem__content"
-                image="https://iisfs-shop.tobit.com/0/1e4e8073-7576-438a-8d2e-1fd2d8972e71.jpg"
-                key="Intro"
-            >
-            </Swipe>
-        );
-
-        elements.push(
-            <Swipe
-                className="selectitem__content"
-                image="https://iisfs-shop.tobit.com/0/1e4e8073-7576-438a-8d2e-1fd2d8972e71.jpg"
-                key="test"
-            >
-            </Swipe>
-        );
-
-        elements.push(
-            <Swipe
-                className="selectitem__content"
-                image="https://iisfs-shop.tobit.com/0/1e4e8073-7576-438a-8d2e-1fd2d8972e71.jpg"
-                key="test2"
-            >
-            </Swipe>
-        );
-
-        elements.push(null);
-
         return(
 
             <Swiper
+                setHeight={(width) => { return width; }}
                 overlay={(
                     <div className="swiper-overlay">
                         <div className="swiper-overlay--title">
-                            Tests
+                            Technology
                         </div>
                     </div>
                 )}
-                setHeight={(width) => {return width}}
             >
-                {
-                    elements.map((slide) => {
-                        return slide;
-                    })
-                }
+                <Swipe image="http://lorempixel.com/output/technics-q-g-640-480-1.jpg">
+                </Swipe>
+                <Swipe image="http://lorempixel.com/output/technics-q-g-640-480-7.jpg">
+                </Swipe>
+                <Swipe
+                    image="http://lorempixel.com/output/technics-q-g-640-480-4.jpg"
+                    onClick={() => {
+                        console.log('click3');
+                    }}
+                >
+                </Swipe>
             </Swiper>
         );
     }
