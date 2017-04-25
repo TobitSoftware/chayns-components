@@ -1,7 +1,8 @@
+import FormElement from '../../react-chayns-form/component/FormElement.jsx';
 import React from 'react';
 import classnames from 'classnames';
 
-export default class SelectButton extends React.Component {
+export default class SelectButton extends FormElement {
 
     static propTypes = {
         onSelect: React.PropTypes.func,
@@ -30,9 +31,8 @@ export default class SelectButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: []
+            value: null
         };
-
         this.onClick = this.onClick.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.onSelect = this.onSelect.bind(this);
@@ -46,7 +46,6 @@ export default class SelectButton extends React.Component {
                 if (item[listKey] && item[listValue])
                     list.push({name: item[listValue], value: item[listKey]});
             });
-
         return list;
     }
 
@@ -70,7 +69,12 @@ export default class SelectButton extends React.Component {
     onSelect(selection) {
         const {onSelect} = this.props;
         if (selection.length === 1)
+        {
             this.setLabel(selection[0].name);
+            this.setState({
+                value: selection
+            });
+        }
         if (onSelect)
             onSelect(this.getReturnList(selection));
     }
@@ -97,7 +101,7 @@ export default class SelectButton extends React.Component {
 
     setLabel(text) {
         if (this.props.showSelection)
-            this._btn.innerText = text;
+            this._node.innerText = text;
     }
 
     render() {
@@ -111,7 +115,7 @@ export default class SelectButton extends React.Component {
             <div
                 className={classNames}
                 onClick={this.onClick}
-                ref={ref => {this._btn = ref;}}
+                ref={ref => {this._node = ref;}}
             >
                 {label}
             </div>

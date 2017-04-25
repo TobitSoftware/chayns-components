@@ -1,7 +1,10 @@
+
+import FormElement from '../../react-chayns-form/component/FormElement.jsx';
 import React from 'react';
 import classnames from 'classnames';
 
-export default class Input extends React.Component {
+export default class Input extends FormElement {
+
     static propTypes = {
         style: React.PropTypes.object,
         className: React.PropTypes.string,
@@ -9,7 +12,13 @@ export default class Input extends React.Component {
         onKeyUp: React.PropTypes.func,
         onBlur: React.PropTypes.func,
         responsive: React.PropTypes.bool,
-        regExp: React.PropTypes.string
+        regExp: React.PropTypes.string,
+        type: React.PropTypes.string,
+        formProp: React.PropTypes.string
+    };
+
+     static defaultProps = {
+         type: 'text'
     };
 
     constructor() {
@@ -27,6 +36,18 @@ export default class Input extends React.Component {
     setInvalid() {
         this._node.style.color = '#d23f31';
         this._node.style.fontWeight = '700';
+    }
+
+    setValue(value) {
+        value ? this._node.value = value : null;
+        if (value && this.props.regExp) {
+            {
+                if (this._node.value.match(new RegExp(this.props.regExp)))
+                    this.setValid();
+                else
+                    this.setInvalid();
+            }
+        }
     }
 
     onBlur = () => {
@@ -68,6 +89,12 @@ export default class Input extends React.Component {
                 onKeyUp(this._node.value);
     };
 
+    onChange = (event) => {
+        this.setState({
+            value: event.target.value
+        });
+    };
+
     render() {
         let {placeholder, className, style} = this.props;
         if (style === undefined) style = {};
@@ -88,9 +115,11 @@ export default class Input extends React.Component {
                         ref={(ref) => {this._node = ref}}
                         onKeyUp={this.onKeyUp}
                         onBlur={this.onBlur}
+                        onChange={this.onChange}
                         className="input"
-                        type="text"
+                        type={this.props.type}
                         required
+                        getValue={() => {return this._node}}
                     />
                     <label>{placeholder}</label>
                 </div>
@@ -108,7 +137,8 @@ export default class Input extends React.Component {
                     style={style}
                     onKeyUp={this.onKeyUp}
                     onBlur={this.onBlur}
-                    type="text"
+                    onChange={this.onChange}
+                    type={this.props.type}
                     required
                 />
             );

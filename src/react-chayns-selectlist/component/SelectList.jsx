@@ -1,9 +1,11 @@
 import React from 'react';
 
+import FormElement from '../../react-chayns-form/component/FormElement.jsx';
+
 import SelectItem from './SelectItem';
 import SelectItemInternal from './internal/SelectItemInternal';
 
-export default class SelectList extends React.Component {
+export default class SelectList extends FormElement {
     static maxId = 0;
 
     static propTypes = {
@@ -21,7 +23,8 @@ export default class SelectList extends React.Component {
 
         this.state = {
             selectedId: props.defaultId || 0,
-            children: []
+            children: [],
+            value: props.defaultId || 0
         };
 
         if(props.defaultId && props.onChange)
@@ -64,7 +67,8 @@ export default class SelectList extends React.Component {
         if(id === this.state.selectedId) return;
 
         this.setState({
-            selectedId: id
+            selectedId: id,
+            value: id
         });
 
         if(this.props.onChange)
@@ -109,7 +113,10 @@ export default class SelectList extends React.Component {
 
         if(this.state.children.length > 0) {
             return (
-                <div className={this.props.className}>
+                <div
+                    className={this.props.className}
+                    ref={(ref) => {this._node = ref;}}
+                >
                     {this._renderChildren(this.state.children)}
                 </div>
             );
