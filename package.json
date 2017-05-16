@@ -1,6 +1,6 @@
 {
   "name": "tobit-chayns_components",
-  "version": "1.0.45",
+  "version": "1.0.49",
   "description": "some standalone react components",
   "main": "index.js",
   "scripts": {

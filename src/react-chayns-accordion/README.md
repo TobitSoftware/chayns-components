@@ -55,6 +55,25 @@ The Accordion-Component allows you to create badges using a prop. The badge wont
 	</div>
 </Accordion>
 ```
+
+#### Multiple wrapped accordions
+The Accordion-Component allows you to wrap accordions (like the normal chayns API).
+You can do so by specify multiple children. Do not wrap the Accordions in an other element (e.g. accordion__content).
+```jsx
+<Accordion head="JavaScript" badge="1997">
+    <Accordion head="ES5" isWrapped>
+    	<div className="accordion__content">
+    		Hello functions
+    	</div>
+    </Accordion>
+    <Accordion head="ES6" badge="2015" isWrapped>
+    	<div className="accordion__content">
+    		Hello classes (functions)
+    	</div>
+    </Accordion>
+</Accordion>
+```
+
 #### Always render content
 The content of an accordion can be rendered anytime instead of just when opening it. This function is set to false by default, since it is rarely used.
 I.e. it is useful if it is necessary to execute JavaScript-Code that is stored inside this accordion.
