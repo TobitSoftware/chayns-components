@@ -3,6 +3,8 @@ import React from 'react';
 import SelectItem from './SelectItem';
 import SelectItemInternal from './internal/SelectItemInternal';
 
+const ANIMATION_TIMEOUT = 500;
+
 export default class SelectList extends React.Component {
     static maxId = 0;
 
@@ -62,6 +64,15 @@ export default class SelectList extends React.Component {
     _changeActiveItem = (id) => {
 
         if(id === this.state.selectedId) return;
+
+
+        if(this.changing) return;
+
+        this.changing = true;
+
+        window.setTimeout(() => {
+            this.changing = false;
+        }, ANIMATION_TIMEOUT);
 
         this.setState({
             selectedId: id
