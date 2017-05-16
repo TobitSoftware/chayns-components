@@ -9,7 +9,7 @@ $marginBottom: 15px;
   &.react-fade {
     &-enter {
       max-height: 0;
-      transition: max-height .5s cubic-bezier(0.5, 0, 1, 0);
+      transition: max-height 0.5s cubic-bezier(0.5, 0, 1, 0) 0s;
     }
 
     &-enter-active {
@@ -18,7 +18,7 @@ $marginBottom: 15px;
 
     &-leave {
       max-height: 9999px;
-      transition: max-height .5s cubic-bezier(0, 1, 0, 1);
+      transition: max-height 0.5s cubic-bezier(0, 1, 0, 1) -0.2s;
     }
 
     &-leave-active {
