@@ -54,6 +54,8 @@ class ModeSwitch extends React.Component {
 ModeSwitch.getCurrentMode = ModeSwitchHelper.getCurrentMode;
 ModeSwitch.addChangeListener = ModeSwitchHelper.onChange;
 ModeSwitch.removeChangeListener = ModeSwitchHelper.unregisterOnChange;
+ModeSwitch.show = ModeSwitchHelper.show;
+ModeSwitch.hide = ModeSwitchHelper.hide;
 
 ModeSwitch.propTypes = {
     onChange: React.PropTypes.func,

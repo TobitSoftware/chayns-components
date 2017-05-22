@@ -123,3 +123,5 @@ The ModeSwitch-Component has some functions, which are static and may be called 
 | getCurrentMode | Returns the current mode. |  |
 | addChangeListener | Sets a callback for the mode switch. | Function |
 | removeChangeListener | Removes a callback. The callback function has to be provided as parameter. | Function |
+| hide | Hides the modeswitch (using chaynsAPI). |  |
+| show | Shows the modeswitch (using chaynsAPI). |  |

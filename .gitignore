@@ -112,3 +112,4 @@ cert.txt
 
 lib
 /react-*/
+/polyfills/
