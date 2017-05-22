@@ -1,4 +1,5 @@
-import './utils/polyfills';
+import '../polyfills/object-assign';
+import '../polyfills/array-index-of';
 
 export {
     default as ModeSwitch,
