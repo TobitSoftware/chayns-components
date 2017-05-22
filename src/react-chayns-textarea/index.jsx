@@ -1,5 +1,3 @@
-export default from './component/TextArea';
+import '../polyfills/object-assign';
 
-// export {
-//     default as ModeSwitch,
-// } from "./component/ModeSwitch";
+export default from './component/TextArea';
