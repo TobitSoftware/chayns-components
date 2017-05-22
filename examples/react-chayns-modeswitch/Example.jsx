@@ -61,6 +61,9 @@ export default class Example extends React.Component {
                     </div>
                 </Mode>
 
+                <div className="button" onClick={ModeSwitch.show} >Show ModeSwitch</div>
+                <div className="button" onClick={ModeSwitch.hide} >Hide ModeSwitch</div>
+
                 <ExampleDecorator test="1" hallo="hi" />
             </div>
         );
