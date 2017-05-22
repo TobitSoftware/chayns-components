@@ -137,6 +137,14 @@ export default class ModeSwitchHelper {
     static isInitialized() {
         return initialized;
     }
+
+    static hide() {
+        window.chayns.ui.modeSwitch.remove();
+    }
+
+    static show() {
+        window.chayns.ui.modeSwitch.add();
+    }
 }
 
 function getChangeListener() {
