@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactTransitionGroup from 'react-addons-transition-group';
+import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
+
 import Modal from './Modal';
 import * as Constants from './constants';
 
