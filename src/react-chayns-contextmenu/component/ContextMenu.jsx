@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ContextMenuItem from './ContextMenuItem';
 
 
@@ -35,15 +36,15 @@ ContextMenu.defaultProps = {
 };
 
 ContextMenu.propTypes = {
-    hide: React.PropTypes.bool,
-    onLayerClick: React.PropTypes.func,
-    x: React.PropTypes.number.isRequired,
-    y: React.PropTypes.number.isRequired,
-    items: React.PropTypes.arrayOf(
-        React.PropTypes.shape({
-            className: React.PropTypes.string,
-            onClick: React.PropTypes.func,
-            text: React.PropTypes.string
+    hide: PropTypes.bool,
+    onLayerClick: PropTypes.func,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            className: PropTypes.string,
+            onClick: PropTypes.func,
+            text: PropTypes.string
         })
     )
 };

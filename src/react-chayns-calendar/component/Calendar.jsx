@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 
 import Month from './Month';
@@ -16,22 +17,22 @@ export default class Calendar extends React.Component {
     };
 
     static propTypes = {
-        startDate: React.PropTypes.instanceOf(Date),
-        endDate: React.PropTypes.instanceOf(Date),
-        selected: React.PropTypes.instanceOf(Date),
-        activated: React.PropTypes.arrayOf(React.PropTypes.instanceOf(Date)),
-        highlighted: React.PropTypes.oneOfType([
-            React.PropTypes.shape({
-                dates: React.PropTypes.arrayOf(React.PropTypes.instanceOf(Date)),
-                color: React.PropTypes.string
+        startDate: PropTypes.instanceOf(Date),
+        endDate: PropTypes.instanceOf(Date),
+        selected: PropTypes.instanceOf(Date),
+        activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+        highlighted: PropTypes.oneOfType([
+            PropTypes.shape({
+                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+                color: PropTypes.string
             }),
-            React.PropTypes.arrayOf(React.PropTypes.shape({
-                dates: React.PropTypes.arrayOf(React.PropTypes.instanceOf(Date)),
-                color: React.PropTypes.string
+            PropTypes.arrayOf(PropTypes.shape({
+                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+                color: PropTypes.string
             }))
         ]),
-        activateAll: React.PropTypes.bool,
-        onDateSelect: React.PropTypes.func,
+        activateAll: PropTypes.bool,
+        onDateSelect: PropTypes.func,
     };
 
     constructor() {

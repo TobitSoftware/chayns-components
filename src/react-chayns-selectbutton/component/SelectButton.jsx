@@ -1,21 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class SelectButton extends React.Component {
 
     static propTypes = {
-        onSelect: React.PropTypes.func,
-        title: React.PropTypes.string,
-        description: React.PropTypes.string,
-        label: React.PropTypes.string,
-        list: React.PropTypes.array.isRequired,
-        listKey: React.PropTypes.string.isRequired,
-        listValue: React.PropTypes.string.isRequired,
-        multiSelect: React.PropTypes.bool,
-        quickFind: React.PropTypes.bool,
-        className: React.PropTypes.string,
-        style: React.PropTypes.object,
-        showSelection: React.PropTypes.bool
+        onSelect: PropTypes.func,
+        title: PropTypes.string,
+        description: PropTypes.string,
+        label: PropTypes.string,
+        list: PropTypes.array.isRequired,
+        listKey: PropTypes.string.isRequired,
+        listValue: PropTypes.string.isRequired,
+        multiSelect: PropTypes.bool,
+        quickFind: PropTypes.bool,
+        className: PropTypes.string,
+        style: PropTypes.object,
+        showSelection: PropTypes.bool
     };
 
     static defaultProps = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import SelectItem from './SelectItem';
 import SelectItemInternal from './internal/SelectItemInternal';
@@ -9,13 +10,13 @@ export default class SelectList extends React.Component {
     static maxId = 0;
 
     static propTypes = {
-        onChange: React.PropTypes.func,
-        defaultId: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.number
+        onChange: PropTypes.func,
+        defaultId: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
         ]),
-        selectFirst: React.PropTypes.bool,
-        className: React.PropTypes.string
+        selectFirst: PropTypes.bool,
+        className: PropTypes.string
     };
 
     constructor(props) {

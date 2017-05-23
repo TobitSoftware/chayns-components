@@ -1,16 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ModeSwitchHelper from './ModeSwitchHelper.js';
 
 class ModeSwitch extends React.Component {
 
     static propTypes = {
-        groups: React.PropTypes.arrayOf(
-            React.PropTypes.oneOf([React.PropTypes.number, React.PropTypes.object])
+        groups: PropTypes.arrayOf(
+            PropTypes.oneOf([PropTypes.number, PropTypes.object])
         ),
-        save: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        defaultMode: React.PropTypes.number
+        save: PropTypes.bool,
+        onChange: PropTypes.func,
+        defaultMode: PropTypes.number
     };
 
     constructor() {
@@ -56,11 +57,5 @@ ModeSwitch.addChangeListener = ModeSwitchHelper.onChange;
 ModeSwitch.removeChangeListener = ModeSwitchHelper.unregisterOnChange;
 ModeSwitch.show = ModeSwitchHelper.show;
 ModeSwitch.hide = ModeSwitchHelper.hide;
-
-ModeSwitch.propTypes = {
-    onChange: React.PropTypes.func,
-    groups: React.PropTypes.array,
-    save: React.PropTypes.bool
-};
 
 export default ModeSwitch;

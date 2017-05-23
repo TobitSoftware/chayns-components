@@ -1,7 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
-class Mode extends React.Component {
+export default class Mode extends React.Component {
+
+    static propTypes = {
+        group: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.arrayOf(PropTypes.number)
+        ]),
+        mode: PropTypes.number,
+        modes: PropTypes.arrayOf(PropTypes.number),
+        children: PropTypes.node.isRequired
+    };
 
     constructor() {
         super();
@@ -69,18 +80,3 @@ class Mode extends React.Component {
 
 
 }
-
-
-
-/* PropTypes */
-Mode.propTypes = {
-    group: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.arrayOf(React.PropTypes.number)]),
-    mode: React.PropTypes.number,
-    modes: React.PropTypes.arrayOf(React.PropTypes.number),
-    children: React.PropTypes.node.isRequired
-};
-/* End PropTypes */
-
-
-
-export default Mode;

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 import Loader from '../helper/Loader';
 
@@ -6,10 +8,10 @@ import Loader from '../helper/Loader';
 
 class TextString extends React.Component {
     static propTypes = {
-        textString: React.PropTypes.string.isRequired,
-        render: React.PropTypes.bool,
-        replace: React.PropTypes.object,
-        renderHtml: React.PropTypes.bool
+        textString: PropTypes.string.isRequired,
+        render: PropTypes.bool,
+        replace: PropTypes.object,
+        renderHtml: PropTypes.bool
     };
 
     constructor() {

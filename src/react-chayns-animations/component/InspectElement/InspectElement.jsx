@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
 import Modal from './Modal';
@@ -7,10 +8,10 @@ import * as Constants from './constants';
 export default class InspectElement extends React.Component {
 
     static PropTypes = {
-        component: React.PropTypes.func.isRequired,
-        expandedWidth: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.number
+        component: PropTypes.func.isRequired,
+        expandedWidth: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
         ])
     };
 

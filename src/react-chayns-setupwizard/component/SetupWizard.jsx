@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /**
@@ -13,17 +14,17 @@ export default class SetupWizard extends React.Component{
     };
 
     static childContextTypes = {
-        nextStep: React.PropTypes.func,
-        previousStep: React.PropTypes.func,
-        toStep: React.PropTypes.func
+        nextStep: PropTypes.func,
+        previousStep: PropTypes.func,
+        toStep: PropTypes.func
     };
 
     static propTypes = {
-        children: React.PropTypes.oneOfType([
-            React.PropTypes.arrayOf(React.PropTypes.element),
-            React.PropTypes.element
+        children: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.element),
+            PropTypes.element
         ]),
-        ready: React.PropTypes.func
+        ready: PropTypes.func
     };
 
     constructor(){

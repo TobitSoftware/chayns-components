@@ -1,14 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class Button extends React.Component {
     static propTypes = {
-        chooseButton: React.PropTypes.bool,
-        disabled: React.PropTypes.bool,
-        children: React.PropTypes.string.isRequired,
-        onClick: React.PropTypes.func,
-        className: React.PropTypes.string,
-        style: React.PropTypes.object
+        chooseButton: PropTypes.bool,
+        disabled: PropTypes.bool,
+        children: PropTypes.string.isRequired,
+        onClick: PropTypes.func,
+        className: PropTypes.string,
+        style: PropTypes.object
     };
 
     handleClick = (event) => {
