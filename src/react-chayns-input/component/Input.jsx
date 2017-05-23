@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class Input extends React.Component {
     static propTypes = {
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        onKeyUp: React.PropTypes.func,
-        onBlur: React.PropTypes.func,
-        responsive: React.PropTypes.bool,
-        regExp: React.PropTypes.string
+        style: PropTypes.object,
+        className: PropTypes.string,
+        placeholder: PropTypes.string,
+        onKeyUp: PropTypes.func,
+        onBlur: PropTypes.func,
+        responsive: PropTypes.bool,
+        regExp: PropTypes.string
     };
 
     constructor() {

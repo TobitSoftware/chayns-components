@@ -1,26 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class Accordion extends React.Component {
     static propTypes = {
-        head: React.PropTypes.any.isRequired,
-        badge: React.PropTypes.string,
-        children: React.PropTypes.any.isRequired,
-        renderClosed: React.PropTypes.bool,
-        isOpened: React.PropTypes.bool,
-        isWrapped: React.PropTypes.bool,
-        dataGroup: React.PropTypes.string,
-        classNames: React.PropTypes.string,
-        id: React.PropTypes.string,
-        style: React.PropTypes.object,
-        styleBody: React.PropTypes.object,
-        onOpen: React.PropTypes.func,
-        onOpened: React.PropTypes.func,
-        onClose: React.PropTypes.func,
-        onClosed: React.PropTypes.func,
-        ellipsis: React.PropTypes.bool,
-        defaultOpened: React.PropTypes.bool,
-        reference: React.PropTypes.func
+        head: PropTypes.any.isRequired,
+        badge: PropTypes.string,
+        children: PropTypes.any.isRequired,
+        renderClosed: PropTypes.bool,
+        isOpened: PropTypes.bool,
+        isWrapped: PropTypes.bool,
+        dataGroup: PropTypes.string,
+        classNames: PropTypes.string,
+        id: PropTypes.string,
+        style: PropTypes.object,
+        styleBody: PropTypes.object,
+        onOpen: PropTypes.func,
+        onOpened: PropTypes.func,
+        onClose: PropTypes.func,
+        onClosed: PropTypes.func,
+        ellipsis: PropTypes.bool,
+        defaultOpened: PropTypes.bool,
+        reference: PropTypes.func
     };
 
     constructor() {

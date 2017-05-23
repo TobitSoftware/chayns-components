@@ -33,9 +33,9 @@ The basic structure of the component will be the following:
 There are 3 different methods for changing the current step. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
 ```jsx
  static contextTypes = {
-     nextStep: React.PropTypes.func,
-     previousStep: React.PropTypes.func,
-     toStep: React.PropTypes.func
+     nextStep: PropTypes.func,
+     previousStep: PropTypes.func,
+     toStep: PropTypes.func
  };
 ```
 

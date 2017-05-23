@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 export default class SetupItem extends React.Component{
 
     static propTypes = {
-        title: React.PropTypes.string,
-        children: React.PropTypes.element
+        title: PropTypes.string,
+        children: PropTypes.element
     };
 
     constructor(){

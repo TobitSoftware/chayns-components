@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class Groups extends React.Component{
 
     static propTypes = {
-        groups: React.PropTypes.array,
-        onClick: React.PropTypes.func,
-        focus: React.PropTypes.number
+        groups: PropTypes.array,
+        onClick: PropTypes.func,
+        focus: PropTypes.number
     };
 
     constructor(){

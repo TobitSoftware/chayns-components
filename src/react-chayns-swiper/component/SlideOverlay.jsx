@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 
 export default class SlideOverlay extends React.Component {
     static propTypes = {
-        children: React.PropTypes.oneOfType([
-                React.PropTypes.object,
-                React.PropTypes.arrayOf(React.PropTypes.object)
+        children: PropTypes.oneOfType([
+                PropTypes.object,
+                PropTypes.arrayOf(PropTypes.object)
             ]).isRequired,
-        position: React.PropTypes.string,
-        gradient: React.PropTypes.bool
+        position: PropTypes.string,
+        gradient: PropTypes.bool
     };
 
     constructor() {

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Week from './Week';
 
 
@@ -11,19 +13,19 @@ export default class User extends React.Component{
     };
 
     static propTypes = {
-        entries: React.PropTypes.arrayOf(
-            React.PropTypes.array
+        entries: PropTypes.arrayOf(
+            PropTypes.array
         ),
-        groups: React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                id: React.PropTypes.number,
-                name: React.PropTypes.string,
-                color: React.PropTypes.string
+        groups: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                name: PropTypes.string,
+                color: PropTypes.string
             })
         ),
-        onClick: React.PropTypes.func,
-        focus: React.PropTypes.objectOf(Date),
-        groupFocus: React.PropTypes.number
+        onClick: PropTypes.func,
+        focus: PropTypes.objectOf(Date),
+        groupFocus: PropTypes.number
     };
 
     constructor(){
