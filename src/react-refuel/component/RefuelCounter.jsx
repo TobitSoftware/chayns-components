@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class RefuelCounter extends React.Component {
     static propTypes = {
-        onClick: React.PropTypes.func
+        onClick: PropTypes.func
     };
 
     render() {

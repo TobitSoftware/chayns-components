@@ -1,19 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class Checkbox extends React.Component {
     static propTypes = {
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        label: React.PropTypes.string,
-        children: React.PropTypes.string,
-        onChange: React.PropTypes.func,
-        toggleButton: React.PropTypes.bool,
-        checked: React.PropTypes.bool,
-        staticChecked: React.PropTypes.bool,
-        defaultChecked: React.PropTypes.bool,
-        disabled: React.PropTypes.bool,
-        tooltip: React.PropTypes.string
+        style: PropTypes.object,
+        className: PropTypes.string,
+        label: PropTypes.string,
+        children: PropTypes.string,
+        onChange: PropTypes.func,
+        toggleButton: PropTypes.bool,
+        checked: PropTypes.bool,
+        staticChecked: PropTypes.bool,
+        defaultChecked: PropTypes.bool,
+        disabled: PropTypes.bool,
+        tooltip: PropTypes.string
     };
 
     constructor() {

@@ -1,20 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class PersonFinder extends React.Component {
 
     static propTypes = {
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        placeholder: React.PropTypes.string,
-        required: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        defaultValue: React.PropTypes.string,
-        value: React.PropTypes.string,
-        onKeyUp: React.PropTypes.func,
-        onKeyDown: React.PropTypes.func,
-        autogrow: React.PropTypes.bool,
-        reference: React.PropTypes.func
+        style: PropTypes.object,
+        className: PropTypes.string,
+        placeholder: PropTypes.string,
+        required: PropTypes.bool,
+        onChange: PropTypes.func,
+        defaultValue: PropTypes.string,
+        value: PropTypes.string,
+        onKeyUp: PropTypes.func,
+        onKeyDown: PropTypes.func,
+        autogrow: PropTypes.bool,
+        reference: PropTypes.func
     };
 
     defaultStyle = {

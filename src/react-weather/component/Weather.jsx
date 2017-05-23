@@ -1,17 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import WorldWeather from '../utils/WorldWeatherOnline';
 import {fetchDataFromApi} from '../utils/fetch';
 
 export default class Weather extends React.Component {
     static PropTypes = {
-        longitude: React.PropTypes.float,
-        latitude: React.PropTypes.float,
-        onLoaded: React.PropTypes.func,
-        onError: React.PropTypes.func,
-        server: React.PropTypes.string,
-        city: React.PropTypes.string,
-        qa: React.PropTypes.boolean
+        longitude: PropTypes.float,
+        latitude: PropTypes.float,
+        onLoaded: PropTypes.func,
+        onError: PropTypes.func,
+        server: PropTypes.string,
+        city: PropTypes.string,
+        qa: PropTypes.boolean
     };
 
     constructor() {

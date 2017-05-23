@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {fetchDataFromApi} from '../utils/fetch';
 
@@ -7,18 +8,18 @@ import RefuelCounter from './RefuelCounter';
 export default class Refuel extends React.Component {
 
     static propTypes = {
-        locationId: React.PropTypes.number,
-        tappId: React.PropTypes.number,
-        noContent: React.PropTypes.any,
-        isFetching: React.PropTypes.any,
-        onLoaded: React.PropTypes.func,
-        onError: React.PropTypes.func,
-        latitude: React.PropTypes.number,
-        longitude: React.PropTypes.number,
-        server: React.PropTypes.string,
-        waitForLatLng: React.PropTypes.bool,
-        city: React.PropTypes.string,
-        qa: React.PropTypes.bool
+        locationId: PropTypes.number,
+        tappId: PropTypes.number,
+        noContent: PropTypes.any,
+        isFetching: PropTypes.any,
+        onLoaded: PropTypes.func,
+        onError: PropTypes.func,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+        server: PropTypes.string,
+        waitForLatLng: PropTypes.bool,
+        city: PropTypes.string,
+        qa: PropTypes.bool
     };
 
     constructor() {

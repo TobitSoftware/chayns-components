@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Week from './Week';
 
@@ -49,15 +50,15 @@ Navigator.defaultProps = {
 };
 
 Navigator.propTypes = {
-    text: React.PropTypes.string,
-    onClick: React.PropTypes.shape({
-        left: React.PropTypes.func.isRequired,
-        right: React.PropTypes.func.isRequired,
-        day: React.PropTypes.func.isRequired
+    text: PropTypes.string,
+    onClick: PropTypes.shape({
+        left: PropTypes.func.isRequired,
+        right: PropTypes.func.isRequired,
+        day: PropTypes.func.isRequired
     }),
-    hidden: React.PropTypes.shape({
-        left: React.PropTypes.bool,
-        right: React.PropTypes.bool
+    hidden: PropTypes.shape({
+        left: PropTypes.bool,
+        right: PropTypes.bool
     })
 };
 

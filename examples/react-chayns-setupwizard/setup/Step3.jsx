@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Step3 extends React.Component{
 
     static contextTypes = {
-        nextStep: React.PropTypes.func,
-        previousStep: React.PropTypes.func,
-        toStep: React.PropTypes.func
+        nextStep: PropTypes.func,
+        previousStep: PropTypes.func,
+        toStep: PropTypes.func
     };
 
     constructor(){

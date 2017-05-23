@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import * as Constants from './constants';
 
 export default class Modal extends React.Component {
 
     static PropTypes = {
-        top: React.PropTypes.number,
-        left: React.PropTypes.number,
-        right: React.PropTypes.number,
-        renderComponent: React.PropTypes.func.isRequired,
-        closeOverlay: React.PropTypes.func.isRequired
+        top: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number,
+        renderComponent: PropTypes.func.isRequired,
+        closeOverlay: PropTypes.func.isRequired
     };
 
     constructor() {

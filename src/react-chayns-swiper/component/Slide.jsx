@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Slide extends React.Component {
     static propTypes = {
-        image: React.PropTypes.string.isRequired,
-        onClick: React.PropTypes.func
+        image: PropTypes.string.isRequired,
+        onClick: PropTypes.func
     };
 
     componentWillMount() {

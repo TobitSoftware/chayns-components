@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 
@@ -9,18 +10,18 @@ export default class Week extends React.Component{
     };
 
     static propTypes = {
-        startTime: React.PropTypes.objectOf(Date),
-        data: React.PropTypes.array,
-        groups: React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                id: React.PropTypes.number,
-                name: React.PropTypes.string,
-                color: React.PropTypes.string
+        startTime: PropTypes.objectOf(Date),
+        data: PropTypes.array,
+        groups: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                name: PropTypes.string,
+                color: PropTypes.string
             })
         ),
-        onClick: React.PropTypes.func,
-        focus: React.PropTypes.objectOf(Date),
-        groupFocus: React.PropTypes.number
+        onClick: PropTypes.func,
+        focus: PropTypes.objectOf(Date),
+        groupFocus: PropTypes.number
     };
 
     static hexToRgb(hex) {

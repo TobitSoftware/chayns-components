@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Navigator from './content/Navigator';
 import User from './content/User';
@@ -26,37 +27,37 @@ export default class ProgressCalendar extends React.Component{
     };
 
     static propTypes = {
-        data: React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                id: React.PropTypes.number,
-                name: React.PropTypes.string,
-                entries: React.PropTypes.arrayOf(
-                    React.PropTypes.shape({
-                        id: React.PropTypes.number,
-                        groupId: React.PropTypes.number,
-                        startTime: React.PropTypes.number,
-                        endTime: React.PropTypes.number
+        data: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                name: PropTypes.string,
+                entries: PropTypes.arrayOf(
+                    PropTypes.shape({
+                        id: PropTypes.number,
+                        groupId: PropTypes.number,
+                        startTime: PropTypes.number,
+                        endTime: PropTypes.number
                     })
                 )
             })
         ),
-        columns: React.PropTypes.shape({
-            names: React.PropTypes.arrayOf(React.PropTypes.string),
-            highlightedColor: React.PropTypes.string
+        columns: PropTypes.shape({
+            names: PropTypes.arrayOf(PropTypes.string),
+            highlightedColor: PropTypes.string
         }),
-        groups: React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                id: React.PropTypes.number,
-                name: React.PropTypes.string,
-                color: React.PropTypes.string
+        groups: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number,
+                name: PropTypes.string,
+                color: PropTypes.string
             })
         ),
-        onClick: React.PropTypes.func.isRequired,
-        onNavigateLeft: React.PropTypes.func,
-        onNavigateRight: React.PropTypes.func,
-        focus: React.PropTypes.objectOf(Date),
-        startTime: React.PropTypes.objectOf(Date).isRequired,
-        endTime: React.PropTypes.objectOf(Date).isRequired
+        onClick: PropTypes.func.isRequired,
+        onNavigateLeft: PropTypes.func,
+        onNavigateRight: PropTypes.func,
+        focus: PropTypes.objectOf(Date),
+        startTime: PropTypes.objectOf(Date).isRequired,
+        endTime: PropTypes.objectOf(Date).isRequired
     };
 
     static dateInterval(dateStart,dateEnd){

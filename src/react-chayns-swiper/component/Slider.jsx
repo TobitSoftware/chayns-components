@@ -1,15 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class App extends React.Component {
 
     static propTypes = {
-        autoplay: React.PropTypes.number,
-        loop: React.PropTypes.bool,
-        lazyLoading: React.PropTypes.bool,
-        preloadImages: React.PropTypes.bool,
-        setHeight: React.PropTypes.func,
-        overlay: React.PropTypes.node
+        autoplay: PropTypes.number,
+        loop: PropTypes.bool,
+        lazyLoading: PropTypes.bool,
+        preloadImages: PropTypes.bool,
+        setHeight: PropTypes.func,
+        overlay: PropTypes.node
     };
 
     static defaultProps = {

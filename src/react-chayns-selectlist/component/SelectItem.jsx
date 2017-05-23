@@ -1,17 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 export default class SelectItem extends React.Component {
 
     static componentName = 'SelectItem';
 
     static PropTypes = {
-        id: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.number
+        id: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
         ]),
-        name: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
-        className: React.PropTypes.string
+        name: PropTypes.string,
+        disabled: PropTypes.bool,
+        className: PropTypes.string
     };
 
     render() {
