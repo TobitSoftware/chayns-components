@@ -20,6 +20,7 @@ export default {
     },
     devServer: {
         host: '0.0.0.0',
+        disableHostCheck: true,
         port: 9000,
         historyApiFallback: true,
         compress: true,
