@@ -10,12 +10,10 @@ export default class Checkbox extends React.Component {
         onChange: React.PropTypes.func,
         toggleButton: React.PropTypes.bool,
         checked: React.PropTypes.bool,
+        staticChecked: React.PropTypes.bool,
+        defaultChecked: React.PropTypes.bool,
         disabled: React.PropTypes.bool,
         tooltip: React.PropTypes.string
-    };
-
-    static defaultProps = {
-        checked: false
     };
 
     constructor() {
@@ -28,6 +26,13 @@ export default class Checkbox extends React.Component {
 
     componentDidMount() {
         const {tooltip, checked} = this.props;
+
+        if((checked === true || checked === false ) &&
+            (process && process.env && process.env.NODE_ENV !== "production") &&
+            window.env !== "production") {
+
+            console.warn('The prop "checked" is deprecated and will be changed in future releases. Please use "defaultChecked" or "staticChecked" (will be checked-prop in next major release) instead.');
+        }
 
         this._node.checked = checked;
         this.setState({
@@ -46,10 +51,13 @@ export default class Checkbox extends React.Component {
     };
 
     render() {
-        let {className, style, disabled, children, label} = this.props;
+        const {className, style, disabled, children, label, staticChecked, defaultChecked} = this.props;
         let classNames = classnames({
             [className]: className
         });
+        let {checked} = this.state;
+
+        if(staticChecked === false || staticChecked === true) checked = staticChecked;
 
         let checkbox = () => {
             return(
@@ -64,7 +72,8 @@ export default class Checkbox extends React.Component {
                         type="checkbox"
                         id={this.id}
                         disabled={disabled}
-                        checked={this.state.checked}
+                        checked={checked}
+                        defaultChecked={defaultChecked}
                     />
                     <label htmlFor={this.id} >
                         {children || label || ''}

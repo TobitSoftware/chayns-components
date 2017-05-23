@@ -17,12 +17,12 @@ export default class Example extends React.Component {
                    label="testlabel"
                    onChange={(value) => { console.log(value)}}
                    toggleButton={true}
-                   checked={false}
+                   defaultChecked={false}
                />
 
                 <Checkbox
                     onChange={(value) => { console.log(value)}}
-                    checked={false}
+                    staticChecked={true}
                     disabled={true}
                     tooltip="Description for xyz"
                 >
