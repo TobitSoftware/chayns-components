@@ -6,6 +6,6 @@ import Example from './Example.jsx';
 window.chayns.ready.then(() => {
     ReactDom.render(
         <Example />,
-        document.querySelector('#react-chayns-emojiInput')
+        document.querySelector('#react-chayns-emoji_input')
     );
 });
