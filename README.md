@@ -29,6 +29,7 @@ The following components are part of this package:
 | [react-chayns-setupwizard](/src/react-chayns-setupwizard/) | SetupWizard Component                                               | [Readme](/src/react-chayns-setupwizard/README.md) |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/) | SelectButton Component                                               | [Readme](/src/react-chayns-selectbutton/README.md) |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/) | SelectList Component                                               | [Readme](/src/react-chayns-selectlist/README.md) |
+| [react-chayns-emoji_input](/src/react-chayns-emoji_input/) | EmojiInput Component                                               | [Readme](/src/react-chayns-emojiInput/README.md) |
 
 ## Additional Components
 

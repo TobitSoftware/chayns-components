@@ -1,0 +1,51 @@
+.message--input--box {
+  position: relative;
+
+  .input--placeholder {
+    -webkit-transition: opacity .35s ease-in-out;
+    transition: opacity .35s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+    position: absolute;
+    user-select: none;
+    font-weight: 400;
+    padding: 4px 8px;
+    color: #757575;
+    font-size: 85%;
+    opacity: 1;
+    left: 1px;
+    top: 3px;
+  }
+
+  .input--placeholder.invisible {
+    opacity: 0 !important;
+  }
+
+  .message--input {
+    max-height: 100px;
+    min-height: 33px;
+    overflow-y: auto;
+
+    &.hide--border {
+      border: none;
+    }
+
+    .emojione {
+      font-size: inherit;
+      height: 3ex;
+      width: auto;
+      min-height: 15px;
+      min-width: 15px;
+      display: inline-block;
+      margin: -.2ex .15em .2ex;
+      line-height: normal;
+      vertical-align: middle;
+    }
+  }
+
+  .message--input:focus + .input--placeholder {
+    opacity: 0 !important;
+  }
+}
