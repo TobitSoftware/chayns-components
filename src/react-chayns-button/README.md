@@ -9,7 +9,7 @@ The Button/ChooseButton is part of the *tobit-chayns_components* package. It can
 At least one of the components has to be imported:
 
 ```jsx
-import {Button, ChooseButton} from 'tobit-chayns_components/react-chayns-accordion';
+import {Button, ChooseButton} from 'tobit-chayns_components/react-chayns-button';
 ```
 
 
