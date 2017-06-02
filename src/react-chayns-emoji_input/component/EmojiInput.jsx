@@ -289,7 +289,7 @@ export default class EmojiInput extends React.Component {
             }
         }
 
-        return textLines.join('\n');
+        return emojione.shortnameToUnicode(textLines.join('\n'));
     };
 
     render() {
