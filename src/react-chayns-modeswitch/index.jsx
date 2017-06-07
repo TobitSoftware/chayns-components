@@ -6,6 +6,10 @@ export {
 } from "./component/ModeSwitch";
 
 export {
+    default as ModeSwitchHelper,
+} from "./component/ModeSwitchHelper";
+
+export {
     default as Mode,
 } from "./component/Mode";
 

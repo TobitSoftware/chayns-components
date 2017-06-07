@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ModeSwitch, Mode} from '../../src/react-chayns-modeswitch/index';
+import {ModeSwitchHelper, ModeSwitch, Mode} from '../../src/react-chayns-modeswitch/index';
 
 import ExampleDecorator from './ExampleDecorator';
 
@@ -8,12 +8,14 @@ export default class Example extends React.Component {
     constructor() {
         super();
 
+        console.log(ModeSwitchHelper.isUserInGroup(1), ModeSwitchHelper.isUserInGroup(2), ModeSwitchHelper.isUserInGroup(3), ModeSwitchHelper.isChaynsManager());
+
         window.setTimeout(() => {
             ModeSwitch.init({
                 groups: [{
                     id: 1,
                     uacIds: [1, 34542],
-                    name: 'Chayns Manager'
+                    name: 'chayns® Manager'
                 },{
                     id: 2,
                     name: 'Employee'

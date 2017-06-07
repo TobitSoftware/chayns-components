@@ -1,3 +1,5 @@
+import '../../polyfills/array-find';
+
 let callbacks = [];
 let currentMode = null;
 let initialized = false;
@@ -144,6 +146,18 @@ export default class ModeSwitchHelper {
 
     static show() {
         window.chayns.ui.modeSwitch.add();
+    }
+
+    static isUserInGroup(uacId) {
+        if(!window.chayns.env.user.isAuthenticated) return false;
+
+        return !!window.chayns.env.user.groups.find((element) => {
+            return element.id === uacId;
+        });
+    }
+
+    static isChaynsManager() {
+        return this.isUserInGroup(1);
     }
 }
 

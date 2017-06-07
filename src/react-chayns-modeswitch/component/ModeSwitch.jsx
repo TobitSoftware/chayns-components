@@ -57,5 +57,7 @@ ModeSwitch.addChangeListener = ModeSwitchHelper.onChange;
 ModeSwitch.removeChangeListener = ModeSwitchHelper.unregisterOnChange;
 ModeSwitch.show = ModeSwitchHelper.show;
 ModeSwitch.hide = ModeSwitchHelper.hide;
+ModeSwitch.isUserInGroup = ModeSwitchHelper.isUserInGroup;
+ModeSwitch.isChaynsManager = ModeSwitchHelper.isChaynsManager;
 
 export default ModeSwitch;
