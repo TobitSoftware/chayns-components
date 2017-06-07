@@ -125,3 +125,5 @@ The ModeSwitch-Component has some functions, which are static and may be called 
 | removeChangeListener | Removes a callback. The callback function has to be provided as parameter. | Function |
 | hide | Hides the modeswitch (using chaynsAPI). |  |
 | show | Shows the modeswitch (using chaynsAPI). |  |
+| isUserInGroup | Returns whether the current user is in a specific user-group. | int |
+| isChaynsManager | Returns whether the current user is in the chayns® Manager group. | int |
