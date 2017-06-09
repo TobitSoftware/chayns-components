@@ -8,7 +8,7 @@
 
 The ChaynsComponents can be installed directly from npm by using the following package:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S tobit-chayns_components@latest
 
 
 ## Chayns Components
