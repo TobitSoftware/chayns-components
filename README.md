@@ -8,7 +8,7 @@
 
 The ChaynsComponents can be installed directly from npm by using the following package:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S tobit-chayns_components@latest
 
 
 ## Chayns Components
@@ -26,6 +26,7 @@ The following components are part of this package:
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/) | ContextMenu Component                                               | [Readme](/src/react-chayns-contextmenu/README.md) |
 | [react-chayns-calendar](/src/react-chayns-calendar/) | Calendar Component                                               | [Readme](/src/react-chayns-calendar/README.md) |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/) | GridCalendar Component                                               | [Readme](/src/react-chayns-gridcalendar/README.md) |
+| [react-chayns-radiobutton](/src/react-chayns-radiobutton/) | RadioButton Component                                               | [Readme](/src/react-chayns-radiobutton/README.md) |
 | [react-chayns-setupwizard](/src/react-chayns-setupwizard/) | SetupWizard Component                                               | [Readme](/src/react-chayns-setupwizard/README.md) |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/) | SelectButton Component                                               | [Readme](/src/react-chayns-selectbutton/README.md) |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/) | SelectList Component                                               | [Readme](/src/react-chayns-selectlist/README.md) |
