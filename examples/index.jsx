@@ -9,6 +9,7 @@ import './react-chayns-gridcalendar/index';
 import './react-chayns-input/index';
 import './react-chayns-modeswitch/index';
 import './react-chayns-personfinder/index';
+import './react-chayns-radiobutton/index';
 import './react-chayns-selectbutton/index';
 import './react-chayns-selectlist/index';
 import './react-chayns-setupwizard/index';
