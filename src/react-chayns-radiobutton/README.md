@@ -31,6 +31,7 @@ You can set the following props on a RadioButton element:
 | onChange   | Function that will be called on change                                                              | function |  |
 | disabled   | Disables the RadioButton                                                                            | bool | false |
 | children   | Content of the label                                                                                | any |  |
+| value      | Value that should be send to onChange-function                                                      | string, number, boolean | "on" |
 
 ### Beispiele ###
 #### RadioButton-group ####

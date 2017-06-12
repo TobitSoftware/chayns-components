@@ -12,6 +12,11 @@ export default class RadioButton extends Component {
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
         children: PropTypes.any,
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+            PropTypes.bool
+        ]),
         tooltip: PropTypes.string
     };
 
@@ -26,9 +31,9 @@ export default class RadioButton extends Component {
      * @param event
      */
     handleChange = (event) => {
-        const {disabled, onChange} = this.props;
+        const {disabled, onChange, value} = this.props;
         if (!disabled && onChange) {
-            onChange(event.target.value);
+            onChange(value || event.target.value);
         }
     };
 
