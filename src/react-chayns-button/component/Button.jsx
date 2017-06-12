@@ -13,9 +13,9 @@ export default class Button extends React.Component {
     };
 
     handleClick = (event) => {
-        const {onClick} = this.props;
+        const {onClick, disabled} = this.props;
 
-        if (onClick) {
+        if (onClick && !disabled) {
             onClick(event);
         }
     };
