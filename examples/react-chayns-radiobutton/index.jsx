@@ -10,6 +10,7 @@ window.chayns.ready.then(() => {
                 onChange={function(data) {
                     console.log(data)
                 }}
+                value="Test1"
             >
                 String: Test1
             </RadioButton>
@@ -33,8 +34,9 @@ window.chayns.ready.then(() => {
 
             <RadioButton
                 onChange={function(data) {
-                    console.log(data)
+                    console.log('button1', data)
                 }}
+                value="1"
                 name="group1"
             >
                 Name: group1
@@ -42,8 +44,9 @@ window.chayns.ready.then(() => {
 
             <RadioButton
                 onChange={function(data) {
-                    console.log(data)
+                    console.log('button2', data)
                 }}
+                value="2"
                 name="group1"
             >
                 Name: group1
