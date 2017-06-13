@@ -26,23 +26,24 @@ Then it can be used like in the following:
 ### Props ###
 The following properties can be set
 
-| Property   | Description                                                                                        | Type    | Default Value |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| head | Headline of the accordion                                                | String, React-Elements | *required* |
-| children | React components that should be stored in the accordion body                                                           | React-Elements | *required* |
-| badge | Inhalt des Badges                                                          | String |              |
-| renderClosed | Renders the accordion even if it is closed                                                        | bool | false |
-| isWrapped | Makes this accordion a wrapped accordion                                                       | bool | false |
-| dataGroup | Accordion group. Accordions of one group close each other on opening                                                        | String | |
-| classNames | CSS classes for the accordion                                                          | String | |
-| id | The accordions Id                                                    | String | |
-| style | Accordion styles                                                        | Object | |
-| styleBody | Accordion body styles                                                           | Function | |
-| onOpen | onOpened-Event                                                           | Function | |
-| onClose | onClose-Event                                                           | Function | |
-| ellipsis | Cuts the accordion headline if it is too long                                                  | bool | |
-| defaultOpened | The accordion is default opened                                                    | bool | |
-| reference | A reference for the accordion                                                         | Function | |
+| Property     | Description                                                            | Type                       | Default Value |
+|--------------|------------------------------------------------------------------------|----------------------------|---------------|
+| head         | Headline of the accordion                                              | String, React-Elements     | *required*    |
+| children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
+| badge        | Content of the Badge                                                   | String                     |               |
+| right        | Node that get rendered in the right side of the accordion head         | React-Element              |               |
+| renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
+| isWrapped    | Makes this accordion a wrapped accordion                               | bool                       | false         |
+| dataGroup    | Accordion group. Accordions of one group close each other on opening   | String                     |               |
+| classNames   | CSS classes for the accordion                                          | String                     |               |
+| id           | The accordions Id                                                      | String                     |               |
+| style        | Accordion styles                                                       | Object                     |               |
+| styleBody    | Accordion body styles                                                  | Function                   |               |
+| onOpen       | onOpened-Event                                                         | Function                   |               |
+| onClose      | onClose-Event                                                          | Function                   |               |
+| ellipsis     | Cuts the accordion headline if it is too long                          | bool                       |               |
+| defaultOpened| The accordion is default opened                                        | bool                       |               |
+| reference    | A reference for the accordion                                          | Function                   |               |
 
 
 ### Examples

@@ -6,6 +6,7 @@ export default class Accordion extends React.Component {
     static propTypes = {
         head: PropTypes.any.isRequired,
         badge: PropTypes.string,
+        right: PropTypes.node,
         children: PropTypes.any.isRequired,
         renderClosed: PropTypes.bool,
         isOpened: PropTypes.bool,
@@ -49,7 +50,7 @@ export default class Accordion extends React.Component {
     }
 
     componentWillMount() {
-        if((this.props.isOpened != null && this.props.isOpened) || (this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1)) {
+        if ((this.props.isOpened != null && this.props.isOpened) || (this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1)) {
             this.setState({
                 isOpened: true
             });
@@ -57,7 +58,7 @@ export default class Accordion extends React.Component {
     }
 
     componentDidUpdate() {
-        if(this.accordion && this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1) {
+        if (this.accordion && this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1) {
             //this.accordion.classList.add('accordion--open');
             //this.props.defaultOpened = true;
         }
@@ -65,20 +66,20 @@ export default class Accordion extends React.Component {
 
     render() {
         let dataGroup;
-        if(this.props.dataGroup && this.props.dataGroup != '') {
+        if (this.props.dataGroup && this.props.dataGroup != '') {
             dataGroup = this.props.dataGroup;
         }
 
         let others = {};
-        if(this.props.id && this.props.id != '') {
+        if (this.props.id && this.props.id != '') {
             others.id = this.props.id;
         }
 
-        if(this.props.style) {
+        if (this.props.style) {
             others.style = this.props.style;
         }
 
-        if(this.props.isOpened != null && !this.props.isOpened && this.accordion != null) {
+        if (this.props.isOpened != null && !this.props.isOpened && this.accordion != null) {
             this.accordion.classList.remove('accordion--open');
         }
 
@@ -95,20 +96,26 @@ export default class Accordion extends React.Component {
         });
 
         let othersBody = {};
-        if(this.props.styleBody) othersBody.style = this.props.styleBody;
+        if (this.props.styleBody) othersBody.style = this.props.styleBody;
 
 
-            return (
-                <div className={classNames} data-group={dataGroup}
-                     ref={(ref) => { this.accordion = ref; if(this.props.reference) this.props.reference(ref); }} {...others}>
-                    <div className={classNamesHead}>
-                        {this._renderHead()}
-                    </div>
-                    <div className="accordion__body" {...othersBody}>
-                        {this._getBody()}
-                    </div>
+        return (
+            <div
+                className={classNames}
+                data-group={dataGroup}
+                ref={(ref) => {
+                    this.accordion = ref;
+                    if (this.props.reference) this.props.reference(ref);
+                }} {...others}
+            >
+                <div className={classNamesHead}>
+                    {this._renderHead()}
                 </div>
-            );
+                <div className="accordion__body" {...othersBody}>
+                    {this._getBody()}
+                </div>
+            </div>
+        );
     }
 
     componentDidMount() {
@@ -117,21 +124,21 @@ export default class Accordion extends React.Component {
         this.accordion.addEventListener('open', this._accordionOpenListener.bind(this));
         this.accordion.addEventListener('opened', this._accordionOpenedListener.bind(this));
 
-        if(this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1) {
+        if (this.props.classNames && this.props.classNames.indexOf('accordion--open') != -1) {
             this.accordion.classList.add('accordion--open');
         }
 
-        if(this.props.defaultOpened) {
+        if (this.props.defaultOpened) {
             this.accordion.classList.add('accordion--open');
         }
     }
 
     _getBody() {
-        if(this.state.isOpen || this.state.isOpened || this.state.isClose || this.props.renderClosed) {
+        if (this.state.isOpen || this.state.isOpened || this.state.isClose || this.props.renderClosed) {
             return this.props.children;
         }
 
-        if(this.props.defaultOpened && this.firstRender) {
+        if (this.props.defaultOpened && this.firstRender) {
             return this.props.children;
         }
 
@@ -139,17 +146,21 @@ export default class Accordion extends React.Component {
     }
 
     _renderHead() {
+        const { badge, right, head } = this.props;
 
-        if(this.props.badge) {
-            let array = [];
-
-            array.push(this.props.head);
-            array.push(<div className="right badge accordion--trigger" key="badge">{this.props.badge}</div>);
-
-            return array;
+        if (!badge && !right) {
+            return head;
         }
 
-        return this.props.head;
+        return [
+            head,
+            <div className="right" style={{ display: 'flex', flexDirection: 'row' }}>
+                {right}
+                {badge && <div key="badge" className="badge accordion--trigger">
+                    {badge}
+                </div>}
+            </div>
+        ];
     }
 
     _accordionClosedListener(event) {
@@ -160,7 +171,7 @@ export default class Accordion extends React.Component {
             isClose: false
         });
 
-        if(this.props.onClosed != null) {
+        if (this.props.onClosed != null) {
             this.props.onClosed(event);
         }
     }
@@ -173,7 +184,7 @@ export default class Accordion extends React.Component {
             isClose: true
         });
 
-        if(this.props.onClose != null) {
+        if (this.props.onClose != null) {
             this.props.onClose(event);
         }
 
@@ -188,7 +199,7 @@ export default class Accordion extends React.Component {
             isClose: false
         });
 
-        if(this.props.onOpen != null) {
+        if (this.props.onOpen != null) {
             this.props.onOpen(event);
         }
     }
@@ -201,7 +212,7 @@ export default class Accordion extends React.Component {
             isClose: false
         });
 
-        if(this.props.onOpened != null) {
+        if (this.props.onOpened != null) {
             this.props.onOpened(event);
         }
     }
