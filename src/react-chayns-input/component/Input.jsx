@@ -6,6 +6,14 @@ export default class Input extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
+        staticValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        defaultValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
         placeholder: PropTypes.string,
         onKeyUp: PropTypes.func,
         onChange: PropTypes.func,
@@ -14,42 +22,45 @@ export default class Input extends React.Component {
         regExp: PropTypes.string
     };
 
-    constructor() {
-        super();
-        this.state = {
-            value: null
+    static defaultProps = {
+        style: {},
+        responsive: false
     };
+
+    constructor(props) {
+        super();
+
+        const { defaultValue, staticValue, regExp } = props;
+
+        const value = staticValue || defaultValue;
+
+        this.state = {
+            isValid: regExp && (value ? value.match(new RegExp(regExp)) : true)
+        };
     }
 
-    setValid() {
-        this._node.style.color = 'inherit';
-        this._node.style.fontWeight = 'inherit';
-    }
+    validateInput(doInvalidate = true) {
+        const { regExp } = this.props;
+        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
 
-    setInvalid() {
-        this._node.style.color = '#d23f31';
-        this._node.style.fontWeight = '700';
+        if (isValid || doInvalidate) {
+            this.setState({
+                isValid
+            });
+        }
+
+        return isValid;
     }
 
     handleEvent = (callback, doInvalidate = false) => {
         const { regExp } = this.props;
 
-        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
+        const isValid = this.validateInput(doInvalidate);
 
-        if (isValid) {
-            if (regExp) {
-                this.setValid();
-            }
-
-            if (callback) {
+        if (callback) {
+            if (isValid) {
                 callback(this._node.value);
-            }
-        } else {
-            if (doInvalidate) {
-                this.setInvalid();
-            }
-
-            if (callback) {
+            } else {
                 callback(null);
             }
         }
@@ -65,23 +76,36 @@ export default class Input extends React.Component {
     onInput = () => this.handleEvent(this.props.onChange);
 
     render() {
-        let {placeholder, className, style} = this.props;
-        if (style === undefined) style = {};
-        let classNames = classnames({
-            'input-group': this.props.responsive,
-            'input': !this.props.responsive,
+        const { staticValue, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
+        const { isValid } = this.state;
+
+        const classNames = classnames({
+            'input-group': responsive,
+            'input': !responsive,
             [className]: className
         });
 
-        let responsiveInput = () => {
-            return (
+        const inputStyles = regExp && !isValid ? {
+            color: '#d23f31',
+            fontWeight: '700'
+        } : null;
+
+        const responsiveInput = () => (
             <div
                 className={classNames}
                 style={style}
             >
                 <input
-                    style={{ width: '100%', marginBottom: '5px' }}
-                        ref={(ref) => {this._node = ref}}
+                    style={{
+                        ...inputStyles,
+                        width: '100%',
+                        marginBottom: '5px'
+                    }}
+                    ref={(ref) => {
+                        this._node = ref
+                    }}
+                    value={staticValue}
+                    defaultValue={defaultValue}
                     onKeyUp={this.onKeyUp}
                     onInput={this.onInput}
                     onBlur={this.onBlur}
@@ -92,26 +116,30 @@ export default class Input extends React.Component {
                 <label>{placeholder}</label>
             </div>
         );
-        };
 
-        let input = () => {
-            style.width = '100%';
-            style.marginBottom = '5px';
-            return (
-                <input
-                    className={classNames}
-                    ref={(ref) => {this._node = ref}}
-                    placeholder={placeholder}
-                    style={style}
-                    onKeyUp={this.onKeyUp}
-                    onInput={this.onInput}
-                    onBlur={this.onBlur}
-                    type="text"
-                    required
-                />
-            );
-        };
+        const input = () => (
+            <input
+                className={classNames}
+                ref={(ref) => {
+                    this._node = ref
+                }}
+                value={staticValue}
+                defaultValue={defaultValue}
+                placeholder={placeholder}
+                style={{
+                    ...style,
+                    ...inputStyles,
+                    width: '100%',
+                    marginBottom: '5px'
+                }}
+                onKeyUp={this.onKeyUp}
+                onInput={this.onInput}
+                onBlur={this.onBlur}
+                type="text"
+                required
+            />
+        );
 
-        return (this.props.responsive ? responsiveInput() : input());
+        return (responsive ? responsiveInput() : input());
     }
-    }
+};
