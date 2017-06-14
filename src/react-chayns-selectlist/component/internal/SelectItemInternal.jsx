@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 export default class SelectItemInternal extends React.Component {
 
@@ -10,7 +10,7 @@ export default class SelectItemInternal extends React.Component {
     }
 
     render() {
-        return(
+        return (
             <div key={this.props.id} className={this.props.className || ''}>
                 <input name="sampleRadio"
                        type="radio"
@@ -18,25 +18,25 @@ export default class SelectItemInternal extends React.Component {
                        id={this.radioId}
                        checked={this.props.checked}
                        onChange={this._handleChange}
-                       disabled={this.props.disabled} />
-                
+                       disabled={this.props.disabled}/>
+
                 <label htmlFor={this.radioId}>
                     {this.props.name}
                 </label>
 
-                <ReactCSSTransitionGroup
+                <CSSTransitionGroup
                     transitionName="react-fade"
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={500}>
 
                     {this._renderChildren()}
-                </ReactCSSTransitionGroup>
+                </CSSTransitionGroup>
             </div>
         );
     }
 
     _renderChildren() {
-        if(this.props.checked)
+        if (this.props.checked)
             return this.props.children;
 
         return null;

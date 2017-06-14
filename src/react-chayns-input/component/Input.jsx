@@ -6,115 +6,140 @@ export default class Input extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
+        staticValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        defaultValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
         placeholder: PropTypes.string,
         onKeyUp: PropTypes.func,
+        onChange: PropTypes.func,
         onBlur: PropTypes.func,
         responsive: PropTypes.bool,
         regExp: PropTypes.string
     };
 
-    constructor() {
+    static defaultProps = {
+        style: {},
+        responsive: false
+    };
+
+    constructor(props) {
         super();
+
+        const { defaultValue, staticValue, regExp } = props;
+
+        const value = staticValue || defaultValue;
+
         this.state = {
-            value: null
+            isValid: regExp && (value ? value.match(new RegExp(regExp)) : true)
         };
     }
 
-    setValid() {
-        this._node.style.color = 'inherit';
-        this._node.style.fontWeight = 'inherit';
-    }
+    validateInput(doInvalidate = true) {
+        const { regExp } = this.props;
+        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
 
-    setInvalid() {
-        this._node.style.color = '#d23f31';
-        this._node.style.fontWeight = '700';
-    }
-
-    onBlur = () => {
-        const {onBlur, regExp} = this.props;
-
-        //validates entered text when the input loses focus
-        if (regExp) {
-            if (this._node.value.match(new RegExp(regExp)))
-                this.setValid();
-            else
-                this.setInvalid();
+        if (isValid || doInvalidate) {
+            this.setState({
+                isValid
+            });
         }
 
-        if (onBlur)
-            if (regExp) {
-                if (this._node.value.match(new RegExp(regExp)))
-                    onBlur(this._node.value);
-                else
-                    onBlur(null);
-            } else
-                onBlur(this._node.value);
+        return isValid;
     }
 
-    onKeyUp = () => {
-        const {onKeyUp, regExp} = this.props;
+    handleEvent = (callback, doInvalidate = false) => {
+        const { regExp } = this.props;
 
-        if (regExp)
-            if (this._node.value.match(new RegExp(regExp)))
-                this.setValid(); //validates entered text if it turned invalid already
+        const isValid = this.validateInput(doInvalidate);
 
-        if (onKeyUp)
-            if (regExp) {
-                if (this._node.value.match(new RegExp(regExp)))
-                    onKeyUp(this._node.value);
-                else
-                    onKeyUp(null);
+        if (callback) {
+            if (isValid) {
+                callback(this._node.value);
+            } else {
+                callback(null);
             }
-            else
-                onKeyUp(this._node.value);
+        }
     };
 
+    onBlur = () => this.handleEvent(this.props.onBlur, true);
+
+    /**
+     * @deprecated
+     */
+    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
+
+    onInput = () => this.handleEvent(this.props.onChange);
+
     render() {
-        let {placeholder, className, style} = this.props;
-        if (style === undefined) style = {};
-        let classNames = classnames({
-            'input-group': this.props.responsive,
-            'input': !this.props.responsive,
+        const { staticValue, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
+        const { isValid } = this.state;
+
+        const classNames = classnames({
+            'input-group': responsive,
+            'input': !responsive,
             [className]: className
         });
 
-        let responsiveInput = () => {
-            return (
-                <div
-                    className={classNames}
-                    style={style}
-                >
-                    <input
-                        style={{width: '100%', marginBottom: '5px'}}
-                        ref={(ref) => {this._node = ref}}
-                        onKeyUp={this.onKeyUp}
-                        onBlur={this.onBlur}
-                        className="input"
-                        type="text"
-                        required
-                    />
-                    <label>{placeholder}</label>
-                </div>
-            );
-        };
+        const inputStyles = regExp && !isValid ? {
+            color: '#d23f31',
+            fontWeight: '700'
+        } : null;
 
-        let input = () => {
-            style.width = '100%';
-            style.marginBottom = '5px';
-            return (
+        const responsiveInput = () => (
+            <div
+                className={classNames}
+                style={style}
+            >
                 <input
-                    className={classNames}
-                    ref={(ref) => {this._node = ref}}
-                    placeholder={placeholder}
-                    style={style}
+                    style={{
+                        ...inputStyles,
+                        width: '100%',
+                        marginBottom: '5px'
+                    }}
+                    ref={(ref) => {
+                        this._node = ref
+                    }}
+                    value={staticValue}
+                    defaultValue={defaultValue}
                     onKeyUp={this.onKeyUp}
+                    onInput={this.onInput}
                     onBlur={this.onBlur}
+                    className="input"
                     type="text"
                     required
                 />
-            );
-        };
+                <label>{placeholder}</label>
+            </div>
+        );
 
-        return (this.props.responsive ? responsiveInput() : input());
+        const input = () => (
+            <input
+                className={classNames}
+                ref={(ref) => {
+                    this._node = ref
+                }}
+                value={staticValue}
+                defaultValue={defaultValue}
+                placeholder={placeholder}
+                style={{
+                    ...style,
+                    ...inputStyles,
+                    width: '100%',
+                    marginBottom: '5px'
+                }}
+                onKeyUp={this.onKeyUp}
+                onInput={this.onInput}
+                onBlur={this.onBlur}
+                type="text"
+                required
+            />
+        );
+
+        return (responsive ? responsiveInput() : input());
     }
-}
+};

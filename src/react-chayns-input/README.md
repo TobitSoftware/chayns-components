@@ -8,7 +8,7 @@ The Input is part of the *tobit-chayns_components* package. It can be installed 
 ## Usage of the Input
 The input has to be imported:
 
-```jsx
+```js
 import {Input} from 'tobit-chayns_components/react-chayns-input';
 ```
 
@@ -21,22 +21,26 @@ You can use the input like this:
 ## Props
 The following properties can be set on the Input-Component
 
-| Property   | Description                                                                                        | Type    | Default Value |
+| Property   | Description   | Type    | Default Value |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| style | Additional styles that should be set to the input                                                           | Object | |
-| className | Additional CSS-Classes that should be set to the button                                                        | String | |
-| placeholder | Animated placeholder that will be shown inside the input                                                        | String | |
-| onChange | onChange-event                                                       | function |  |
+| style      | Additional styles that should be set to the input  | object | |
+| className | Additional CSS-Classes that should be set to the button | string | |
+| placeholder | Animated placeholder that will be shown inside the input  | string | |
+| defaultValue | the value does not update if this prop updates  | string/number | |
+| staticValue | the value updates if this prop updates  | String/Number | |
+| onChange | returns the value as an result of the onInput-event (if a RegExp is given but it does not match the input the return value is null) | function |  |
+| onBlur | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function |  |
 | responsive | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool | false  |
-| regExp | The input will check if the entered text is valid (see Regular Expressions). onChange only triggers if the entered text is valid                                       | string |  |
+| regExp | The input will check if the entered text is valid (see Regular Expressions) | string |  |
 
 
 ### Examples
 #### Regex Input
 ```jsx
 <Input
-    placeholder="Looking for 3 lowercase a's"
-    regExp="^a{3}$" 
-    onChange={ (text) => { console.log(text); }}
+    placeholder="Looking for 3 lowercase e's"
+    regExp="^e{3}$" 
+    onInput={ (text) => { console.log('There is some new input. Check the new text: ', text); }}
+    onBlur={ (text) => { console.log('The input losted its focus, the final input is: ', text); }}
 />
 ```
