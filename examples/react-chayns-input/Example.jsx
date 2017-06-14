@@ -7,7 +7,7 @@ export default class Example extends React.Component {
         super();
         this.state = {
             userNameOnBlur: null,
-            userNameOnChange: 'heeello',
+            userNameOnChange: null,
         }
     }
 
@@ -24,7 +24,7 @@ export default class Example extends React.Component {
                 <p>{userNameOnChange || '-'}</p>
 
                 <Input
-                    defaultValue="heello i bims 1 invalid default Value ;)"
+                    defaultValue="heello i am a invalid default value"
                     placeholder="Looking for 3 lowercase e's in a row"
                     //regExp=".*e{3}.*"
                     onBlur={(text) => {
