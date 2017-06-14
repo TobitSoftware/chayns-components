@@ -8,6 +8,7 @@ export default class Input extends React.Component {
         className: PropTypes.string,
         placeholder: PropTypes.string,
         onKeyUp: PropTypes.func,
+        onChange: PropTypes.func,
         onBlur: PropTypes.func,
         responsive: PropTypes.bool,
         regExp: PropTypes.string
@@ -17,7 +18,7 @@ export default class Input extends React.Component {
         super();
         this.state = {
             value: null
-        };
+    };
     }
 
     setValid() {
@@ -30,44 +31,38 @@ export default class Input extends React.Component {
         this._node.style.fontWeight = '700';
     }
 
-    onBlur = () => {
-        const {onBlur, regExp} = this.props;
+    handleEvent = (callback, doInvalidate = false) => {
+        const { regExp } = this.props;
 
-        //validates entered text when the input loses focus
-        if (regExp) {
-            if (this._node.value.match(new RegExp(regExp)))
+        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
+
+        if (isValid) {
+            if (regExp) {
                 this.setValid();
-            else
-                this.setInvalid();
-        }
-
-        if (onBlur)
-            if (regExp) {
-                if (this._node.value.match(new RegExp(regExp)))
-                    onBlur(this._node.value);
-                else
-                    onBlur(null);
-            } else
-                onBlur(this._node.value);
-    }
-
-    onKeyUp = () => {
-        const {onKeyUp, regExp} = this.props;
-
-        if (regExp)
-            if (this._node.value.match(new RegExp(regExp)))
-                this.setValid(); //validates entered text if it turned invalid already
-
-        if (onKeyUp)
-            if (regExp) {
-                if (this._node.value.match(new RegExp(regExp)))
-                    onKeyUp(this._node.value);
-                else
-                    onKeyUp(null);
             }
-            else
-                onKeyUp(this._node.value);
+
+            if (callback) {
+                callback(this._node.value);
+            }
+        } else {
+            if (doInvalidate) {
+                this.setInvalid();
+            }
+
+            if (callback) {
+                callback(null);
+            }
+        }
     };
+
+    onBlur = () => this.handleEvent(this.props.onBlur, true);
+
+    /**
+     * @deprecated
+     */
+    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
+
+    onInput = () => this.handleEvent(this.props.onChange);
 
     render() {
         let {placeholder, className, style} = this.props;
@@ -80,22 +75,23 @@ export default class Input extends React.Component {
 
         let responsiveInput = () => {
             return (
-                <div
-                    className={classNames}
-                    style={style}
-                >
-                    <input
-                        style={{width: '100%', marginBottom: '5px'}}
+            <div
+                className={classNames}
+                style={style}
+            >
+                <input
+                    style={{ width: '100%', marginBottom: '5px' }}
                         ref={(ref) => {this._node = ref}}
-                        onKeyUp={this.onKeyUp}
-                        onBlur={this.onBlur}
-                        className="input"
-                        type="text"
-                        required
-                    />
-                    <label>{placeholder}</label>
-                </div>
-            );
+                    onKeyUp={this.onKeyUp}
+                    onInput={this.onInput}
+                    onBlur={this.onBlur}
+                    className="input"
+                    type="text"
+                    required
+                />
+                <label>{placeholder}</label>
+            </div>
+        );
         };
 
         let input = () => {
@@ -108,6 +104,7 @@ export default class Input extends React.Component {
                     placeholder={placeholder}
                     style={style}
                     onKeyUp={this.onKeyUp}
+                    onInput={this.onInput}
                     onBlur={this.onBlur}
                     type="text"
                     required
@@ -117,4 +114,4 @@ export default class Input extends React.Component {
 
         return (this.props.responsive ? responsiveInput() : input());
     }
-}
+    }
