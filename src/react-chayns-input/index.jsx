@@ -1,3 +1,2 @@
-export {
-    default as Input,
-} from "./component/Input";
+import Input from './component/Input';
+export default Input;

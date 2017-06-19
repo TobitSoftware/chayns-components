@@ -128,9 +128,7 @@ export default class Input extends React.Component {
                 placeholder={placeholder}
                 style={{
                     ...style,
-                    ...inputStyles,
-                    width: '100%',
-                    marginBottom: '5px'
+                    ...inputStyles
                 }}
                 onKeyUp={this.onKeyUp}
                 onInput={this.onInput}
