@@ -97,9 +97,9 @@ export default class Input extends React.Component {
             >
                 <input
                     style={{
-                        ...inputStyles,
                         width: '100%',
-                        marginBottom: '5px'
+                        marginBottom: '5px',
+                        ...inputStyles,
                     }}
                     ref={(ref) => {
                         this._node = ref
@@ -127,10 +127,10 @@ export default class Input extends React.Component {
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 style={{
-                    ...style,
-                    ...inputStyles,
                     width: '100%',
-                    marginBottom: '5px'
+                    marginBottom: '5px',
+                    ...style,
+                    ...inputStyles
                 }}
                 onKeyUp={this.onKeyUp}
                 onInput={this.onInput}
