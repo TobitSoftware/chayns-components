@@ -5,7 +5,8 @@
 
   user-select: none;
 
-  cursor: pointer;
+  //cursor: pointer;
+  cursor: default;
 
   &__icon, &__temp, &__info {
     flex-shrink: 1;

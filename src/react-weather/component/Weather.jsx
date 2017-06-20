@@ -64,25 +64,25 @@ export default class Weather extends React.Component {
     }
 
     _openWeather() {
-        let url = `https://tapp01.tobit.com/Tapps/Weather/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`; //${window.chayns.env.site.tapp.id}
-        if(this.props.qa) {
-            url = `${this.props.server || 'https://tappqa.tobit.com/Tapps/WeatherTapp'}/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`;
-        }
-
-        if(this.props.latitude && this.props.longitude) {
-            url += `&lat=${encodeURI(this.props.latitude+"")}&lng=${encodeURI(this.props.longitude+"")}`;
-        }
-
-        let title = 'Wetter';
-        if(this.props.city) {
-            title += ' in ' + this.props.city;
-        }
-
-        window.chayns.openUrl({
-            "url": url,
-            "exclusiveView": false,
-            "title": title
-        });
+        // let url = `https://tapp01.tobit.com/Tapps/Weather/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`; //${window.chayns.env.site.tapp.id}
+        // if(this.props.qa) {
+        //     url = `${this.props.server || 'https://tappqa.tobit.com/Tapps/WeatherTapp'}/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`;
+        // }
+        //
+        // if(this.props.latitude && this.props.longitude) {
+        //     url += `&lat=${encodeURI(this.props.latitude+"")}&lng=${encodeURI(this.props.longitude+"")}`;
+        // }
+        //
+        // let title = 'Wetter';
+        // if(this.props.city) {
+        //     title += ' in ' + this.props.city;
+        // }
+        //
+        // window.chayns.openUrl({
+        //     "url": url,
+        //     "exclusiveView": false,
+        //     "title": title
+        // });
     }
 
     componentDidMount() {
