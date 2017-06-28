@@ -10,7 +10,7 @@ export default class Example extends React.Component {
     render() {
         return(
             <div>
-                <Accordion head="Test">
+                <Accordion head="Test" badge="2">
                     <Accordion
                         head={<span style={{color: '#FF0000'}} className="accordion--trigger">
                                 Test
@@ -23,6 +23,11 @@ export default class Example extends React.Component {
                         </div>
                     </Accordion>
                     <Accordion head="Test" isWrapped>
+                        <div className="accordion__content">
+                            Hello World 2
+                        </div>
+                    </Accordion>
+                    <Accordion head="Test" badge={<i className="fa fa-warning" />} isWrapped>
                         <div className="accordion__content">
                             Hello World 2
                         </div>
