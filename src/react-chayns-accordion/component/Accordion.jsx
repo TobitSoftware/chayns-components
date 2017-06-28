@@ -5,7 +5,7 @@ import classnames from 'classnames';
 export default class Accordion extends React.Component {
     static propTypes = {
         head: PropTypes.any.isRequired,
-        badge: PropTypes.string,
+        badge: PropTypes.node,
         right: PropTypes.node,
         children: PropTypes.any.isRequired,
         renderClosed: PropTypes.bool,
