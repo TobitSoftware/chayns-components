@@ -153,12 +153,21 @@ export default class Accordion extends React.Component {
         }
 
         return [
-            head,
-            <div className="right" style={{ display: 'flex', flexDirection: 'row' }}>
+            <span
+                key="head"
+                className="accordion--trigger"
+            >
+                head
+            </span>,
+            <div
+                key="right"
+                className="right"
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}>
                 {right}
-                {badge && <div key="badge" className="badge accordion--trigger">
-                    {badge}
-                </div>}
+                {badge && <div key="badge" className="badge accordion--trigger">{badge}</div>}
             </div>
         ];
     }
