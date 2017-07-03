@@ -33,7 +33,11 @@ export default class RadioButton extends Component {
     handleChange = (event) => {
         const {disabled, onChange, value} = this.props;
         if (!disabled && onChange) {
-            onChange(value || event.target.value);
+            if(value !== undefined) {
+                onChange(value);
+            } else {
+                onChange(event.target.value);
+            }
         }
     };
 
