@@ -28,6 +28,12 @@ export default class Example extends React.Component {
                 >
                     Enable xyz
                 </Checkbox>
+
+                <Checkbox
+                    onChange={(value) => { console.log(value)}}
+                    defaultChecked={true}
+                    dangerouslySetLabel={{__html: '<b>Test</b>'}}
+                />
             </div>
         );
     }
