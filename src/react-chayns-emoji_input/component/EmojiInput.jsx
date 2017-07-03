@@ -143,8 +143,9 @@ export default class EmojiInput extends React.Component {
             .replace(/&reg;/g, '®');
 
         const lines = newText.split('\n');
+        const isInDavid = location.href.indexOf('davidDetail') > -1 || location.href.indexOf('davidPersonInfo') > -1 || location.href.indexOf('davidNewThread') > -1;
 
-        if (chayns.env.browser.name.toLowerCase() === 'chrome') {
+        if (chayns.env.browser.name.toLowerCase() === 'chrome' && !isInDavid) {
             if (lines[lines.length - 1] === '' && this.lastKeyPressed === 8 && lines.length > 1) {
                 lines[lines.length - 1] = '<br>';
             }
