@@ -14,7 +14,8 @@ export default class Checkbox extends React.Component {
         staticChecked: PropTypes.bool,
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
-        tooltip: PropTypes.string
+        tooltip: PropTypes.string,
+        dangerouslySetLabel: PropTypes.object
     };
 
     constructor() {
@@ -52,7 +53,7 @@ export default class Checkbox extends React.Component {
     };
 
     render() {
-        const {className, style, disabled, children, label, staticChecked, defaultChecked} = this.props;
+        const {className, style, disabled, children, label, staticChecked, defaultChecked, dangerouslySetLabel} = this.props;
         let classNames = classnames({
             [className]: className
         });
@@ -76,8 +77,8 @@ export default class Checkbox extends React.Component {
                         checked={checked}
                         defaultChecked={defaultChecked}
                     />
-                    <label htmlFor={this.id} >
-                        {children || label || ''}
+                    <label htmlFor={this.id} dangerouslySetInnerHTML={dangerouslySetLabel} >
+                        {!dangerouslySetLabel ? (children || label || '') : null}
                     </label>
                 </div>
             );
