@@ -253,6 +253,8 @@ export default class EmojiInput extends React.Component {
         let lineIndex = 0;
         let curChild = elem.firstChild;
 
+        const isInDavid = location.href.indexOf('davidDetail') > -1 || location.href.indexOf('davidPersonInfo') > -1 || location.href.indexOf('davidNewThread') > -1;
+
         while (curChild !== null) {
             if (curChild.nodeType === 1) {
                 switch (curChild.tagName) {
@@ -264,7 +266,7 @@ export default class EmojiInput extends React.Component {
                         lineIndex++;
                         break;
                     case 'BR':
-                        if (chayns.env.browser.name.toLowerCase() !== 'chrome') {
+                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
                             textLines[lineIndex] += '\n';
                         }
                         break;
