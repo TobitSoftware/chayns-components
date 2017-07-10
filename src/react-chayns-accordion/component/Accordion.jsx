@@ -157,7 +157,7 @@ export default class Accordion extends React.Component {
                 key="head"
                 className="accordion--trigger"
             >
-                head
+                { head }
             </span>,
             <div
                 key="right"
