@@ -1,6 +1,6 @@
 {
   "name": "tobit-chayns_components",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "description": "some standalone react components",
   "main": "index.js",
   "scripts": {
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "emojione": "^3.0.3",
+    "emojione": "^3.1.1",
     "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
