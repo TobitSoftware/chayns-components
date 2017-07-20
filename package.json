@@ -1,13 +1,14 @@
 {
   "name": "tobit-chayns_components",
-  "version": "1.1.14",
+  "version": "2.0.0-alpha.1",
   "description": "some standalone react components",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
-    "build": "npm run build:js && npm run build:sass && node ./copyPackageJson.js",
-    "build:js": "babel src/ --out-dir ./",
-    "build:sass": "node-sass src/ -o ./"
+    "prepublish": "npm run build",
+    "build": "npm run build:js && npm run build:sass",
+    "build:js": "babel src/ --out-dir ./lib",
+    "build:sass": "node-sass src/ -o ./lib"
   },
   "author": "kkonermann",
   "license": "MIT",

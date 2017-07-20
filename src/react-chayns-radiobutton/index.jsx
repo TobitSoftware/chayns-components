@@ -1,3 +1,1 @@
-export {
-    default as RadioButton,
-} from "./component/RadioButton";
+export default from "./component/RadioButton";
