@@ -1,3 +1,1 @@
-export {
-    default as Input,
-} from "./component/Input";
+export default from "./component/Input";
