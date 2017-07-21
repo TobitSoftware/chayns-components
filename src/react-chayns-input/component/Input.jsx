@@ -6,7 +6,7 @@ export default class Input extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
-        staticValue: PropTypes.oneOfType([
+        value: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
@@ -19,7 +19,8 @@ export default class Input extends React.Component {
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
         responsive: PropTypes.bool,
-        regExp: PropTypes.string
+        regExp: PropTypes.string,
+        inputRef: PropTypes.func
     };
 
     static defaultProps = {
@@ -30,12 +31,12 @@ export default class Input extends React.Component {
     constructor(props) {
         super();
 
-        const { defaultValue, staticValue, regExp } = props;
+        const { defaultValue, value, regExp } = props;
 
-        const value = staticValue || defaultValue;
+        const testValue = value || defaultValue;
 
         this.state = {
-            isValid: regExp && (value ? value.match(new RegExp(regExp)) : true)
+            isValid: regExp && (testValue ? testValue.match(new RegExp(regExp)) : true)
         };
     }
 
@@ -73,10 +74,10 @@ export default class Input extends React.Component {
      */
     onKeyUp = () => this.handleEvent(this.props.onKeyUp);
 
-    onInput = () => this.handleEvent(this.props.onChange);
+    onChange = () => this.handleEvent(this.props.onChange);
 
     render() {
-        const { staticValue, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
+        const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef, onChange, onBlur, onKeyUp, ...other } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
@@ -96,22 +97,20 @@ export default class Input extends React.Component {
                 style={style}
             >
                 <input
-                    style={{
-                        width: '100%',
-                        marginBottom: '5px',
-                        ...inputStyles,
-                    }}
+                    style={inputStyles}
                     ref={(ref) => {
-                        this._node = ref
+                        if(inputRef) inputRef(ref);
+                        this._node = ref;
                     }}
-                    value={staticValue}
+                    value={value}
                     defaultValue={defaultValue}
                     onKeyUp={this.onKeyUp}
-                    onInput={this.onInput}
+                    onChange={this.onChange}
                     onBlur={this.onBlur}
                     className="input"
                     type="text"
                     required
+                    {...other}
                 />
                 <label>{placeholder}</label>
             </div>
@@ -121,22 +120,22 @@ export default class Input extends React.Component {
             <input
                 className={classNames}
                 ref={(ref) => {
-                    this._node = ref
+                    if(inputRef) inputRef(ref);
+                    this._node = ref;
                 }}
-                value={staticValue}
+                value={value}
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 style={{
-                    width: '100%',
-                    marginBottom: '5px',
                     ...style,
                     ...inputStyles
                 }}
                 onKeyUp={this.onKeyUp}
-                onInput={this.onInput}
+                onChange={this.onChange}
                 onBlur={this.onBlur}
                 type="text"
                 required
+                {...other}
             />
         );
 

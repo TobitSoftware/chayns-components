@@ -32,6 +32,7 @@ The following properties can be set on the Input-Component
 | onBlur | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function |  |
 | responsive | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool | false  |
 | regExp | The input will check if the entered text is valid (see Regular Expressions) | string |  |
+| inputRef | Exposes the input DOM Ref to the parent component | func |  |
 
 
 ### Examples
