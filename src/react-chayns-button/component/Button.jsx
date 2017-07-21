@@ -22,7 +22,7 @@ export default class Button extends React.Component {
     };
 
     render() {
-        const {chooseButton, disabled, children, className, style, buttonRef} = this.props;
+        const {chooseButton, disabled, children, className, style, buttonRef, onClick, ...other} = this.props;
 
         let classNames = classnames({
             'button': !chooseButton,
@@ -38,6 +38,7 @@ export default class Button extends React.Component {
                 style={style}
                 disabled={disabled}
                 ref={buttonRef}
+                {...other}
             >
 
                 {children}
