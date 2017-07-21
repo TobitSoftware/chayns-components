@@ -31,6 +31,7 @@ The following components are part of this package:
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/) | SelectButton Component                                               | [Readme](/src/react-chayns-selectbutton/README.md) |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/) | SelectList Component                                               | [Readme](/src/react-chayns-selectlist/README.md) |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/) | EmojiInput Component                                               | [Readme](/src/react-chayns-emoji_input/README.md) |
+| [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/) | AmountControl Component                                               | [Readme](/src/react-chayns-amountcontrol/README.md) |
 
 ## Additional Components
 
