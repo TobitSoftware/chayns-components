@@ -73,7 +73,7 @@ export default class Input extends React.Component {
      */
     onKeyUp = () => this.handleEvent(this.props.onKeyUp);
 
-    onInput = () => this.handleEvent(this.props.onChange);
+    onChange = () => this.handleEvent(this.props.onChange);
 
     render() {
         const { value, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
@@ -103,7 +103,7 @@ export default class Input extends React.Component {
                     value={value}
                     defaultValue={defaultValue}
                     onKeyUp={this.onKeyUp}
-                    onInput={this.onInput}
+                    onChange={this.onChange}
                     onBlur={this.onBlur}
                     className="input"
                     type="text"
@@ -127,7 +127,7 @@ export default class Input extends React.Component {
                     ...inputStyles
                 }}
                 onKeyUp={this.onKeyUp}
-                onInput={this.onInput}
+                onChange={this.onChange}
                 onBlur={this.onBlur}
                 type="text"
                 required
