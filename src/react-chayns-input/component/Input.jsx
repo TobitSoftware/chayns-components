@@ -77,7 +77,7 @@ export default class Input extends React.Component {
     onChange = () => this.handleEvent(this.props.onChange);
 
     render() {
-        const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef } = this.props;
+        const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef, onChange, onBlur, onKeyUp, ...other } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
@@ -110,6 +110,7 @@ export default class Input extends React.Component {
                     className="input"
                     type="text"
                     required
+                    {...other}
                 />
                 <label>{placeholder}</label>
             </div>
@@ -134,6 +135,7 @@ export default class Input extends React.Component {
                 onBlur={this.onBlur}
                 type="text"
                 required
+                {...other}
             />
         );
 
