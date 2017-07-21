@@ -19,7 +19,8 @@ export default class Input extends React.Component {
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
         responsive: PropTypes.bool,
-        regExp: PropTypes.string
+        regExp: PropTypes.string,
+        inputRef: PropTypes.func
     };
 
     static defaultProps = {
@@ -76,7 +77,7 @@ export default class Input extends React.Component {
     onChange = () => this.handleEvent(this.props.onChange);
 
     render() {
-        const { value, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
+        const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
@@ -98,7 +99,8 @@ export default class Input extends React.Component {
                 <input
                     style={inputStyles}
                     ref={(ref) => {
-                        this._node = ref
+                        if(inputRef) inputRef(ref);
+                        this._node = ref;
                     }}
                     value={value}
                     defaultValue={defaultValue}
@@ -117,7 +119,8 @@ export default class Input extends React.Component {
             <input
                 className={classNames}
                 ref={(ref) => {
-                    this._node = ref
+                    if(inputRef) inputRef(ref);
+                    this._node = ref;
                 }}
                 value={value}
                 defaultValue={defaultValue}
