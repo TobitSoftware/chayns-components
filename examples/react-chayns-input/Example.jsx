@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Input } from '../../src/react-chayns-input/index';
+import Input from '../../src/react-chayns-input/index';
 
 export default class Example extends React.Component {
     constructor() {
