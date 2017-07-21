@@ -29,6 +29,7 @@ The following properties can be set on the Button and the ChooseButton-Component
 | onClick | onClick-event                                                       | function |  |
 | className | Additional CSS-Classes that should be set to the button                                                        | String | |
 | style | Additional styles that should be set to the button                                                           | Object | |
+| buttonRef | Exposes the button DOM Ref to the parent component | func |  |
 
 
 ### Examples
