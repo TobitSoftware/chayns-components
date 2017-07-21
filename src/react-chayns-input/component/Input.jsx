@@ -96,11 +96,7 @@ export default class Input extends React.Component {
                 style={style}
             >
                 <input
-                    style={{
-                        width: '100%',
-                        marginBottom: '5px',
-                        ...inputStyles,
-                    }}
+                    style={inputStyles}
                     ref={(ref) => {
                         this._node = ref
                     }}
@@ -127,8 +123,6 @@ export default class Input extends React.Component {
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 style={{
-                    width: '100%',
-                    marginBottom: '5px',
                     ...style,
                     ...inputStyles
                 }}
