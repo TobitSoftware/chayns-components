@@ -1,4 +1,5 @@
 import './react-chayns-accordion/index';
+import './react-chayns-amountcontrol/index';
 import './react-chayns-animations/index';
 import './react-chayns-button/index';
 import './react-chayns-calendar/index';

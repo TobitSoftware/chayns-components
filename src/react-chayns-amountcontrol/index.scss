@@ -1,0 +1,78 @@
+.amount-control {
+  display: inline-flex;
+  margin-right: 6px;
+  align-items: baseline;
+
+
+  &__add,
+  &__remove {
+    width: 31px;
+    height: 26px;
+    padding: 0;
+
+    align-self: stretch;
+
+    box-sizing: border-box;
+
+    font-size: 10px;
+
+    opacity: 0;
+  }
+
+  &__add {
+    transition: opacity .1s ease-in-out;
+    margin-left: 5px;
+  }
+
+  &__remove {
+    transition: margin-right .1s ease-in-out, opacity .1s ease-in-out;
+    margin: 0 -40px 0 5px;
+  }
+
+  &__input {
+    position: relative;
+
+    height: 26px;
+
+    display: inline-block;
+    width: 0;
+    text-align: center;
+    min-width: 60px;
+    margin-left:5px;
+
+    & > input {
+      text-align: center;
+    }
+  }
+
+  &--active {
+    .amount-control__button,
+    .amount-control__remove {
+      margin-right: 0;
+    }
+
+    .amount-control__add,
+    .amount-control__remove {
+      opacity: 1;
+    }
+
+    .button--disabled.amount-control__add,
+    .button--disabled.amount-control__remove {
+      opacity: 0.6;
+    }
+  }
+
+  &__button {
+    position: relative;
+    white-space: nowrap;
+    z-index: 1;
+    min-width: 60px;
+
+    transition: margin-right .1s ease-in-out;
+    margin: 0 -40px 0 5px;
+    padding: 2px 10px;
+
+    height: 26px;
+    box-sizing: border-box;
+  }
+}

@@ -3,6 +3,10 @@ export {
 } from "./react-chayns-accordion/index";
 
 export {
+    default as AmountControl,
+} from "./react-chayns-amountcontrol/index";
+
+export {
     InspectElementAnimation,
 } from "./react-chayns-animations/index";
 
