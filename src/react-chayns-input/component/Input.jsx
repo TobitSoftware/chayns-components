@@ -6,7 +6,7 @@ export default class Input extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
-        staticValue: PropTypes.oneOfType([
+        value: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
@@ -30,12 +30,12 @@ export default class Input extends React.Component {
     constructor(props) {
         super();
 
-        const { defaultValue, staticValue, regExp } = props;
+        const { defaultValue, value, regExp } = props;
 
-        const value = staticValue || defaultValue;
+        const testValue = value || defaultValue;
 
         this.state = {
-            isValid: regExp && (value ? value.match(new RegExp(regExp)) : true)
+            isValid: regExp && (testValue ? testValue.match(new RegExp(regExp)) : true)
         };
     }
 
@@ -76,7 +76,7 @@ export default class Input extends React.Component {
     onInput = () => this.handleEvent(this.props.onChange);
 
     render() {
-        const { staticValue, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
+        const { value, defaultValue, placeholder, className, style, responsive, regExp } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
@@ -100,7 +100,7 @@ export default class Input extends React.Component {
                     ref={(ref) => {
                         this._node = ref
                     }}
-                    value={staticValue}
+                    value={value}
                     defaultValue={defaultValue}
                     onKeyUp={this.onKeyUp}
                     onInput={this.onInput}
@@ -119,7 +119,7 @@ export default class Input extends React.Component {
                 ref={(ref) => {
                     this._node = ref
                 }}
-                value={staticValue}
+                value={value}
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 style={{
