@@ -11,7 +11,6 @@ export default class Checkbox extends React.Component {
         onChange: PropTypes.func,
         toggleButton: PropTypes.bool,
         checked: PropTypes.bool,
-        staticChecked: PropTypes.bool,
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
         tooltip: PropTypes.string,
@@ -21,25 +20,10 @@ export default class Checkbox extends React.Component {
     constructor() {
         super();
         this.id = Math.random();
-        this.state = {
-            value: null
-        };
     }
 
     componentDidMount() {
-        const {tooltip, checked} = this.props;
-
-        if((checked === true || checked === false ) &&
-            (process && process.env && process.env.NODE_ENV !== "production") &&
-            window.env !== "production") {
-
-            console.warn('The prop "checked" is deprecated and will be changed in future releases. Please use "defaultChecked" or "staticChecked" (will be checked-prop in next major release) instead.');
-        }
-
-        this._node.checked = checked;
-        this.setState({
-            value: checked
-        });
+        const {tooltip} = this.props;
 
         if(tooltip)
             this._container.setAttribute('tooltip', tooltip);
@@ -53,13 +37,10 @@ export default class Checkbox extends React.Component {
     };
 
     render() {
-        const {className, style, disabled, children, label, staticChecked, defaultChecked, dangerouslySetLabel} = this.props;
+        const {className, style, disabled, children, label, checked, defaultChecked, dangerouslySetLabel} = this.props;
         let classNames = classnames({
             [className]: className
         });
-        let {checked} = this.state;
-
-        if(staticChecked === false || staticChecked === true) checked = staticChecked;
 
         let checkbox = () => {
             return(
@@ -68,10 +49,10 @@ export default class Checkbox extends React.Component {
                      ref={(ref) => {this._container = ref}}
                 >
                     <input
+                        type="checkbox"
                         className="checkbox"
                         ref={(ref) => {this._node = ref}}
                         onChange={this.onChange}
-                        type="checkbox"
                         id={this.id}
                         disabled={disabled}
                         checked={checked}
@@ -91,11 +72,11 @@ export default class Checkbox extends React.Component {
                      ref={(ref) => {this._container = ref}}
                 >
                     <input
+                        type="checkbox"
                         className="switch"
                         ref={(ref) => {this._node = ref}}
                         onChange={this.onChange}
                         disabled={disabled}
-                        type="checkbox"
                         id={this.id}
                     />
                     <label

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Checkbox} from '../../src/react-chayns-checkbox/index';
+import Checkbox from '../../src/react-chayns-checkbox/index';
 
 export default class Example extends React.Component {
     constructor() {
@@ -22,7 +22,7 @@ export default class Example extends React.Component {
 
                 <Checkbox
                     onChange={(value) => { console.log(value)}}
-                    staticChecked={true}
+                    checked={true}
                     disabled={true}
                     tooltip="Description for xyz"
                 >
