@@ -28,7 +28,8 @@
     "jsx-a11y/href-no-hash": "off",
     "array-callback-return": "off",
     "arrow-body-style": "off",
-    "keyword-spacing": "off"
+    "keyword-spacing": "off",
+    "jsx-a11y/label-has-for": "off"
   },
   "extends": "airbnb"
 }

@@ -15,8 +15,15 @@ export default class SelectList extends React.Component {
             PropTypes.string,
             PropTypes.number
         ]),
-        selectFirst: PropTypes.bool,
-        className: PropTypes.string
+        selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+        className: PropTypes.string,
+    };
+
+    static defaultProps = {
+        className: null,
+        defaultId: null,
+        onChange: null,
+        selectFirst: null,
     };
 
     constructor(props) {
@@ -27,13 +34,14 @@ export default class SelectList extends React.Component {
             children: []
         };
 
-        if(props.defaultId && props.onChange)
+        if(props.defaultId && props.onChange) {
             props.onChange(props.defaultId);
+        }
     }
 
     componentWillMount() {
         this.selectListId = SelectList.maxId;
-        SelectList.maxId++;
+        SelectList.maxId += 1;
 
         this._cleanChildren(this.props);
     }
@@ -43,29 +51,29 @@ export default class SelectList extends React.Component {
     }
 
     _cleanChildren(props) {
-        let children = [];
+        const children = [];
 
         if(window.chayns.utils.isArray(props.children)) {
             props.children.map((child) => {
-                if(child && child.type && child.type.componentName === SelectItem.componentName)
-                    if(child.props && (child.props.id || child.props.id === 0) && child.props.name)
+                if(child && child.type && child.type.componentName === SelectItem.componentName) {
+                    if (child.props && (child.props.id || child.props.id === 0) && child.props.name) {
                         children.push(child);
-            })
+                    }
+                }
+            });
         }
 
-        if(this.state.selectedId == 0 && props.selectFirst && children.length > 0) {
+        if(this.state.selectedId === 0 && props.selectFirst && children.length > 0) {
             this._selectFirstItem(children);
         }
 
         this.setState({
-            children: children
+            children
         });
     }
 
     _changeActiveItem = (id) => {
-
         if(id === this.state.selectedId) return;
-
 
         if(this.changing) return;
 
@@ -79,13 +87,14 @@ export default class SelectList extends React.Component {
             selectedId: id
         });
 
-        if(this.props.onChange)
+        if(this.props.onChange) {
             this.props.onChange(id);
+        }
     };
 
     _selectFirstItem(children) {
-        for(let i = 0, z = children.length; i < z; i++) {
-            let props = children[i].props;
+        for(let i = 0, z = children.length; i < z; i += 1) {
+            const props = children[i].props;
 
             if(!props.disabled) {
                 this._changeActiveItem(props.id);
@@ -98,27 +107,28 @@ export default class SelectList extends React.Component {
         if(children.length === 1) return children;
 
         return children.map((child) => {
-            let id = child.props.id;
+            const id = child.props.id;
 
             return (
-                <SelectItemInternal id={id}
-                                    selectListId={this.selectListId}
-                                    onChange={this._changeActiveItem}
-                                    checked={id == this.state.selectedId}
-                                    disabled={child.props.disabled}
-                                    key={id}
-                                    name={child.props.name}
-                                    className={child.props.className}>
+                <SelectItemInternal
+                    id={id}
+                    selectListId={this.selectListId}
+                    onChange={this._changeActiveItem}
+                    checked={id === this.state.selectedId}
+                    disabled={child.props.disabled}
+                    key={id}
+                    name={child.props.name}
+                    className={child.props.className}
+                >
 
                     {child}
                 </SelectItemInternal>
-            )
-        })
+            );
+        });
     }
 
 
     render() {
-
         if(this.state.children.length > 0) {
             return (
                 <div className={this.props.className}>
