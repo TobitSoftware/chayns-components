@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class PersonFinder extends React.Component {
-
     static propTypes = {
-        style: PropTypes.object,
+        style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
         placeholder: PropTypes.string,
         required: PropTypes.bool,
@@ -18,41 +17,29 @@ export default class PersonFinder extends React.Component {
         reference: PropTypes.func
     };
 
-    defaultStyle = {
+    static defaultProps = {
+        style: null,
+        className: null,
+        placeholder: null,
+        required: null,
+        onChange: null,
+        defaultValue: null,
+        value: null,
+        onKeyUp: null,
+        onKeyDown: null,
+        autogrow: null,
+        reference: null,
+    };
+
+    static defaultStyle = {
         width: '100%',
         paddingBottom: '12px'
     };
 
-    constructor() {
-        super();
-    }
-
-    render() {
-        let style = Object.assign({}, this.defaultStyle, this.props.style);
-
-        let className = classnames({
-            input: true,
-            [this.props.className]: this.props.className
-        });
-
-        return (
-            <textarea
-                   className={className}
-                   ref={this.ref}
-                   placeholder={this.props.placeholder}
-                   style={style}
-                   defaultValue={this.props.defaultValue}
-                   onChange={(this.props.onChange || this.props.autogrow) ? this.onChange : null}
-                   onKeyUp={this.props.onKeyUp}
-                   onKeyDown={this.props.onKeyDown}
-                   value={this.props.value}
-            />
-        );
-    }
-
     componentDidMount() {
-        if(this.props.required)
+        if(this.props.required) {
             this._node.setAttribute('required', '');
+        }
 
         if(this.props.autogrow) {
             this.offset = this._node.offsetHeight - this._node.clientHeight;
@@ -68,22 +55,25 @@ export default class PersonFinder extends React.Component {
     }
 
     onChange = (event) => {
-        if(this.props.onChange)
+        if(this.props.onChange) {
             this.props.onChange(event);
+        }
 
         if(this.props.autogrow) {
-            if(this._node.value === '')
+            if(this._node.value === '') {
                 this.grow(this.initialHeight);
-            else
+            } else {
                 this.grow('0');
+            }
         }
     };
 
     ref = (node) => {
         this._node = node;
 
-        if(this.props.reference)
+        if(this.props.reference) {
             this.props.reference(node);
+        }
     };
 
     grow(initHeight) {
@@ -94,5 +84,28 @@ export default class PersonFinder extends React.Component {
         if (this._node.scrollHeight + this.offset > 0) {
             this._node.style.height = `${this._node.scrollHeight + this.offset}px`;
         }
+    }
+
+    render() {
+        const style = Object.assign({}, this.defaultStyle, this.props.style);
+
+        const className = classnames({
+            input: true,
+            [this.props.className]: this.props.className
+        });
+
+        return (
+            <textarea
+                className={className}
+                ref={this.ref}
+                placeholder={this.props.placeholder}
+                style={style}
+                defaultValue={this.props.defaultValue}
+                onChange={(this.props.onChange || this.props.autogrow) ? this.onChange : null}
+                onKeyUp={this.props.onKeyUp}
+                onKeyDown={this.props.onKeyDown}
+                value={this.props.value}
+            />
+        );
     }
 }
