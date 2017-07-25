@@ -1,1 +1,1 @@
-export default from "./component/SelectButton";
+export default from './component/SelectButton';
