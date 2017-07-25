@@ -19,6 +19,12 @@ export default class EmojiInput extends React.Component {
     activeNode = 0;
     cursorPos = 0;
 
+    componentWillMount() {
+        emojione.ascii = true;
+        emojione.imageTitleTag = false;
+        emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/32/';
+    }
+
     static shouldComponentUpdate() {
         return false;
     }
@@ -133,8 +139,6 @@ export default class EmojiInput extends React.Component {
             .replace(/®/g, '&reg;')
             .replace(/\(y\)/g, '👍')
             .replace(/\(n\)/g, '👎');
-
-        emojione.ascii = true;
 
         newText = emojione.toImage(newText);
         newText = newText.replace(/(<img[^<]*)\/>/g, '$1>')
