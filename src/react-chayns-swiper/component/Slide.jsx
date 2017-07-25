@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 export default class Slide extends React.Component {
     static propTypes = {
         image: PropTypes.string.isRequired,
-        onClick: PropTypes.func
+        onClick: PropTypes.func,
+        children: PropTypes.node,
+    };
+
+    static defaultProps = {
+        onClick: null,
+        children: null,
     };
 
     componentWillMount() {
@@ -34,7 +40,8 @@ export default class Slide extends React.Component {
                 }}
                 className="swiper-slide"
                 data-callbackid={this._callbackId}
-                ref={(div) => this._div = div}>
+                ref={(div) => { this._div = div; }}
+            >
                 {this.props.children}
             </div>
         );
