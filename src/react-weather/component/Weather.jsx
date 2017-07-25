@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import WorldWeather from '../utils/WorldWeatherOnline';
-import {fetchDataFromApi} from '../utils/fetch';
+import {fetchDataFromApi} from '../../utils/fetch';
 
 export default class Weather extends React.Component {
     static PropTypes = {
