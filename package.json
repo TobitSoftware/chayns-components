@@ -9,7 +9,7 @@
     "build": "npm run build:js && npm run build:sass",
     "build:js": "babel src/ --out-dir ./lib",
     "build:sass": "node-sass src/ -o ./lib",
-    "eslint": "./node_modules/.bin/eslint src"
+    "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js"
   },
   "author": "kkonermann",
   "license": "MIT",
