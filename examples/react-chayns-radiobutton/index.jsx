@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import {RadioButton} from '../../src/react-chayns-radiobutton/index';
+import RadioButton from '../../src/react-chayns-radiobutton/index';
 
 window.chayns.ready.then(() => {
     ReactDom.render(

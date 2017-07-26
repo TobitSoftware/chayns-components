@@ -11,19 +11,32 @@ export default class RadioButton extends Component {
         checked: PropTypes.bool,
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
-        children: PropTypes.any,
+        children: PropTypes.node,
         value: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
             PropTypes.bool
         ]),
-        tooltip: PropTypes.string
+        className: PropTypes.string
+    };
+
+    static defaultProps = {
+        id: null,
+        name: null,
+        checked: false,
+        onChange: null,
+        disabled: false,
+        children: null,
+        value: null,
+        tooltip: null,
+        className: null
     };
 
     constructor() {
         super();
 
-        this._id = PREFIX + currentId++;
+        currentId += 1;
+        this._id = PREFIX + currentId;
     }
 
     /**
@@ -31,7 +44,7 @@ export default class RadioButton extends Component {
      * @param event
      */
     handleChange = (event) => {
-        const {disabled, onChange, value} = this.props;
+        const { disabled, onChange, value } = this.props;
         if (!disabled && onChange) {
             if(value !== undefined) {
                 onChange(value);
@@ -46,7 +59,7 @@ export default class RadioButton extends Component {
      * @returns {XML}
      */
     render() {
-        const {checked, id, children, disabled, name, className} = this.props;
+        const { checked, id, children, disabled, name, className } = this.props;
 
         return (
             <div className={className}>
@@ -57,12 +70,12 @@ export default class RadioButton extends Component {
                     checked={checked}
                     onChange={this.handleChange}
                     name={name}
-                    disabled={disabled} />
+                    disabled={disabled}
+                />
                 <label htmlFor={id || this._id}>
                     {children}
                 </label>
             </div>
         );
     }
-
 }
