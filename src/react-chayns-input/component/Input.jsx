@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 export default class Input extends React.Component {
     static propTypes = {
-        style: PropTypes.object,
+        style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
         value: PropTypes.oneOfType([
             PropTypes.string,
@@ -25,7 +25,16 @@ export default class Input extends React.Component {
 
     static defaultProps = {
         style: {},
-        responsive: false
+        responsive: false,
+        className: null,
+        value: null,
+        defaultValue: null,
+        placeholder: null,
+        onKeyUp: null,
+        onChange: null,
+        onBlur: null,
+        regExp: null,
+        inputRef: null
     };
 
     constructor(props) {
@@ -40,6 +49,27 @@ export default class Input extends React.Component {
         };
     }
 
+    onBlur = () => this.handleEvent(this.props.onBlur, true);
+
+    /**
+     * @deprecated
+     */
+    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
+
+    onChange = () => this.handleEvent(this.props.onChange);
+
+    handleEvent = (callback, doInvalidate = false) => {
+        const isValid = this.validateInput(doInvalidate);
+
+        if (callback) {
+            if (isValid) {
+                callback(this._node.value);
+            } else {
+                callback(null);
+            }
+        }
+    };
+
     validateInput(doInvalidate = true) {
         const { regExp } = this.props;
         const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
@@ -53,36 +83,13 @@ export default class Input extends React.Component {
         return isValid;
     }
 
-    handleEvent = (callback, doInvalidate = false) => {
-        const { regExp } = this.props;
-
-        const isValid = this.validateInput(doInvalidate);
-
-        if (callback) {
-            if (isValid) {
-                callback(this._node.value);
-            } else {
-                callback(null);
-            }
-        }
-    };
-
-    onBlur = () => this.handleEvent(this.props.onBlur, true);
-
-    /**
-     * @deprecated
-     */
-    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
-
-    onChange = () => this.handleEvent(this.props.onChange);
-
     render() {
         const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef, onChange, onBlur, onKeyUp, ...other } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
             'input-group': responsive,
-            'input': !responsive,
+            input: !responsive,
             [className]: className
         });
 
@@ -141,4 +148,4 @@ export default class Input extends React.Component {
 
         return (responsive ? responsiveInput() : input());
     }
-};
+}
