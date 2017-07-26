@@ -4,8 +4,7 @@ import '../../polyfills/object-assign';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
 
-export default (...conf) => (Component) => class PureComponent extends React.Component {
-
+export default (...conf) => Component => class PureComponent extends React.Component {
     static getStores = Component.getStores;
     static getPropsFromStores = Component.getPropsFromStores;
 
@@ -32,7 +31,7 @@ export default (...conf) => (Component) => class PureComponent extends React.Com
 
     update = (mode) => {
         this.setState({
-            mode: mode
+            mode
         });
     };
 
@@ -40,8 +39,7 @@ export default (...conf) => (Component) => class PureComponent extends React.Com
         if(window.chayns.utils.isArray(conf) && !ModeSwitchHelper.isInitialized()) return null;
 
         if(this._shouldRender()) {
-
-            let props = Object.assign({}, this.props, {
+            const props = Object.assign({}, this.props, {
                 mode: this.state.mode
             });
 
@@ -61,5 +59,4 @@ export default (...conf) => (Component) => class PureComponent extends React.Com
 
         return false;
     }
-
-}
+};
