@@ -22,7 +22,7 @@ You can use the input like this:
 <EmojiInput 
     placeholder="Test me!"
     onInput={ (event) => {console.log(event)} }
-    value="This text is shown in input"
+    value="This text is shown in input, re-set it onChange to display emojis"
     id="emojiInput_1"
 />
 ```
