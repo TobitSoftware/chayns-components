@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import RadioButton from '../../src/react-chayns-radiobutton/index';
+import { RadioButton } from '../../src/index';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
-        <div>
+        <div style={{ border: '1px solid black' }}>
             <RadioButton
-                onChange={function(data) {
-                    console.log(data)
+                onChange={(data) => {
+                    console.log(data);
                 }}
                 value="Test1"
             >
@@ -16,16 +16,16 @@ window.chayns.ready.then(() => {
             </RadioButton>
 
             <RadioButton
-                onChange={function(data) {
-                    console.log(data)
+                onChange={(data) => {
+                    console.log(data);
                 }}
             >
                 Number: 2
             </RadioButton>
 
             <RadioButton
-                onChange={function(data) {
-                    console.log(data)
+                onChange={(data) => {
+                    console.log(data);
                 }}
                 disabled
             >
@@ -33,8 +33,8 @@ window.chayns.ready.then(() => {
             </RadioButton>
 
             <RadioButton
-                onChange={function(data) {
-                    console.log('button1', data)
+                onChange={(data) => {
+                    console.log('button1', data);
                 }}
                 value="1"
                 name="group1"
@@ -43,8 +43,8 @@ window.chayns.ready.then(() => {
             </RadioButton>
 
             <RadioButton
-                onChange={function(data) {
-                    console.log('button2', data)
+                onChange={(data) => {
+                    console.log('button2', data);
                 }}
                 value="2"
                 name="group1"

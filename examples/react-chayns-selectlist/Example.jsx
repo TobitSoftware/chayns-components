@@ -1,16 +1,11 @@
 import React from 'react';
 
-import {SelectList, SelectItem} from '../../src/react-chayns-selectlist/index';
+import { SelectList, SelectItem } from '../../src/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
-
-        let elements = [];
+        const elements = [];
 
         elements.push(<div className="selectitem__content">
             Intro
@@ -28,20 +23,20 @@ export default class Example extends React.Component {
 
         return(
 
-            <SelectList selectFirst={true} className="hello world">
+            <SelectList selectFirst className="hello world">
                 {
                     elements.map((element, index) => {
                         if(!element) return null;
 
-                        let others = {
-                            disabled: index===0
+                        const others = {
+                            disabled: index === 0
                         };
 
                         return (
                             <SelectItem name="Hi" id={index} key={index} {...others} className="Hi">
                                 {element}
                             </SelectItem>
-                        )
+                        );
                     })
                 }
             </SelectList>

@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import TextString from '../../src/react-chayns-textstring';
-
 import Example from './Example';
 
 window.chayns.ready.then(() => {
-
-    function textStringReady () {
+    function textStringReady() {
         ReactDom.render(
             <Example />,
             document.querySelector('#react-chayns-textstring')

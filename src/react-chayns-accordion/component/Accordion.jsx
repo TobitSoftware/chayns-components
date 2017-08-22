@@ -17,7 +17,7 @@ class Accordion extends React.Component {
     }
 
     componentWillMount() {
-        if (this.props.isOpened || this.props.className.indexOf('accordion--open') !== -1) {
+        if (this.props.isOpened || (this.props.className && this.props.className.indexOf('accordion--open') !== -1)) {
             this.setState({
                 isOpened: true
             });
@@ -40,7 +40,7 @@ class Accordion extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.accordion && this.props.className.indexOf('accordion--open') !== -1) {
+        if (this.accordion && this.props.className && this.props.className.indexOf('accordion--open') !== -1) {
             // this.accordion.classList.add('accordion--open');
             // this.props.defaultOpened = true;
         }
@@ -94,7 +94,7 @@ class Accordion extends React.Component {
             isClose: false
         });
 
-        if (this.props.onClosed != null) {
+        if (this.props.onClosed) {
             this.props.onClosed(event);
         }
     }
@@ -107,7 +107,7 @@ class Accordion extends React.Component {
             isClose: true
         });
 
-        if (this.props.onClose != null) {
+        if (this.props.onClose) {
             this.props.onClose(event);
         }
 
@@ -122,7 +122,7 @@ class Accordion extends React.Component {
             isClose: false
         });
 
-        if (this.props.onOpen != null) {
+        if (this.props.onOpen) {
             this.props.onOpen(event);
         }
     }
@@ -135,7 +135,7 @@ class Accordion extends React.Component {
             isClose: false
         });
 
-        if (this.props.onOpened != null) {
+        if (this.props.onOpened) {
             this.props.onOpened(event);
         }
     }
@@ -155,7 +155,7 @@ class Accordion extends React.Component {
             others.style = this.props.style;
         }
 
-        if (this.props.isOpened != null && !this.props.isOpened && this.accordion != null) {
+        if (this.props.isOpened && !this.props.isOpened && this.accordion) {
             this.accordion.classList.remove('accordion--open');
         }
 
@@ -222,8 +222,8 @@ Accordion.propTypes = {
 Accordion.defaultProps = {
     isOpened: false,
     className: '',
-    dataGroup: '',
-    id: '',
+    dataGroup: null,
+    id: null,
     style: null,
     styleBody: null,
     onOpen: null,
@@ -231,7 +231,7 @@ Accordion.defaultProps = {
     onClose: null,
     onClosed: null,
     ellipsis: false,
-    defaultOpened: false,
+    defaultOpened: null,
     reference: null,
     isWrapped: false,
     renderClosed: false,

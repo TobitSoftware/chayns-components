@@ -17,6 +17,10 @@ export {
 } from './react-chayns-button/index';
 
 export {
+    default as Calendar,
+} from './react-chayns-calendar/index';
+
+export {
     default as Checkbox,
 } from './react-chayns-checkbox/index';
 

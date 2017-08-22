@@ -1,17 +1,11 @@
 import React from 'react';
 
-import {Swiper, Swipe, SwipeOverlay} from '../../src/react-chayns-swiper/index';
+import { Swiper, Swipe } from '../../src/index';
 import '../../src/react-chayns-swiper/index.scss';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
-
         return(
-
             <Swiper
                 setHeight={(width) => { return width; }}
                 overlay={(

@@ -7,12 +7,9 @@ export default class Step1 extends React.Component{
         nextStep: PropTypes.func
     };
 
-    constructor(){
-        super();
-    }
-    render(){
+    render() {
         return(
-            <div style={{textAlign: "center"}}>
+            <div style={{ textAlign: 'center' }}>
                 <div className="button" onClick={this.context.nextStep}>Next</div>
             </div>
         );

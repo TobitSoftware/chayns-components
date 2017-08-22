@@ -1,14 +1,10 @@
 import React from 'react';
 
-import SelectButton from '../../src/react-chayns-selectbutton/index';
+import { SelectButton } from '../../src/index';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
-        let pizza = [
+        const pizza = [
             {
                 id: '0',
                 name: 'Margherita',
@@ -32,7 +28,7 @@ export default class Example extends React.Component {
             <SelectButton
                 label="Select Pizza"
                 list={pizza}
-                onSelect={(value) => { console.log(value) }}
+                onSelect={(value) => { console.log(value); }}
                 listKey="id"
                 listValue="name"
             />
