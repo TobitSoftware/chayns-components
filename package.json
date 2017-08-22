@@ -1,8 +1,8 @@
 {
   "name": "tobit-chayns_components",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "some standalone react components",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
     "prepublish": "npm run build",
