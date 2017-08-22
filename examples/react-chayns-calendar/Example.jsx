@@ -1,23 +1,22 @@
 import React from 'react';
 
-import {Calendar} from '../../src/react-chayns-calendar/index.jsx';
+import { Calendar } from '../../src/index';
 import '../../src/react-chayns-calendar/style.scss';
 
 export default class Example extends React.Component {
-
-    constructor(){
+    constructor() {
         super();
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(){
+    onClick() {
 
     }
 
     render(){
         return(
-            <div className="content">
-                <h2 style={{marginBottom:'8%'}}>Option 1:</h2>
+            <div className="content" style={{ position: 'relative', overflow: 'hidden', height: '500px', border: '1px solid black' }}>
+                <h2 style={{ marginBottom: '8%' }}>Option 1:</h2>
                 <div className="accordion accordion--open">
                     <div className="accordion__head">
                         Calendar
@@ -28,9 +27,9 @@ export default class Example extends React.Component {
                         </div>
                     </div>
                 </div>
-                <h2 style={{marginBottom:'8%'}}>Option 2:</h2>
+                <h2 style={{ marginBottom: '8%' }}>Option 2:</h2>
                 <Calendar onDateSelect={this.onClick}/>
             </div>
-        )
+        );
     }
 }

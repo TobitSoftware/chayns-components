@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SetupWizard, SetupItem} from '../../src/react-chayns-setupwizard/index.jsx';
+import { SetupWizard, SetupItem } from '../../src/index';
 import '../../src/react-chayns-setupwizard/style.scss';
 
 import Step1 from './setup/Step1';
@@ -8,21 +8,23 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 
 export default class Example extends React.Component {
-    constructor(){
+    constructor() {
         super();
-        this.state={
+
+        this.state = {
             ready: false
         };
+
         this.ready = this.ready.bind(this);
     }
 
-    ready(){
+    ready() {
         this.setState({
             ready: true
-        })
+        });
     }
 
-    render(){
+    render() {
         if(!this.state.ready) {
             return (
                 <SetupWizard ready={this.ready}>
@@ -36,13 +38,13 @@ export default class Example extends React.Component {
                         <Step3/>
                     </SetupItem>
                 </SetupWizard>
-            )
-        }else{
-            return(
-                <h1>
-                   Ready
-                </h1>
-            )
+            );
         }
+
+        return(
+            <h1>
+               Ready
+            </h1>
+        );
     }
 }

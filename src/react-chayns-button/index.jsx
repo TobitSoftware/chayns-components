@@ -1,7 +1,7 @@
 export {
     default as Button,
-} from "./component/Button";
+} from './component/Button';
 
 export {
     default as ChooseButton,
-} from "./component/ChooseButton";
+} from './component/ChooseButton';

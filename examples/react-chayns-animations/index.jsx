@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import Example from './Example.jsx';
+import Example from './Example';
 
 window.chayns.ready.then(() => {
     ReactDom.render(

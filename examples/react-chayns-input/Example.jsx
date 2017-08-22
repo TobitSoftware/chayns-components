@@ -1,14 +1,15 @@
 import React from 'react';
 
-import Input from '../../src/react-chayns-input/index';
+import { Input } from '../../src/index';
 
 export default class Example extends React.Component {
     constructor() {
         super();
+
         this.state = {
             userNameOnBlur: null,
             userNameOnChange: null,
-        }
+        };
     }
 
     render() {
@@ -26,12 +27,16 @@ export default class Example extends React.Component {
                 <Input
                     defaultValue="heello i am a invalid default value"
                     placeholder="Looking for 3 lowercase e's in a row"
-                    //regExp=".*e{3}.*"
+                    // regExp=".*e{3}.*"
                     onBlur={(text) => {
-                        this.setState({ userNameOnBlur: text })
+                        this.setState({
+                            userNameOnBlur: text
+                        });
                     }}
                     onChange={(text) => {
-                        this.setState({ userNameOnChange: text })
+                        this.setState({
+                            userNameOnChange: text
+                        });
                     }}
                     responsive={false}
                 />

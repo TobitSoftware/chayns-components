@@ -1,18 +1,14 @@
 import React from 'react';
 
-import Accordion from "../../src/react-chayns-accordion/component/Accordion";
+import { Accordion } from '../../src/index';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
         return(
             <div>
                 <Accordion head="Test" badge="2">
                     <Accordion
-                        head={<span style={{color: '#FF0000'}} className="accordion--trigger">
+                        head={<span style={{ color: '#FF0000' }} className="accordion--trigger">
                                 Test
                               </span>}
                         isWrapped

@@ -4,8 +4,7 @@ import GridCalendar from '../../src/react-chayns-gridcalendar/index';
 import '../../src/react-chayns-gridcalendar/style.scss';
 
 export default class Example extends React.Component {
-
-    constructor(){
+    constructor() {
         super();
         this.state = {
             date: new Date()
@@ -13,13 +12,15 @@ export default class Example extends React.Component {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(data){
-        if(data.selected){
-            this.setState({date: data.selected.date})
+    onClick(data) {
+        if(data.selected) {
+            this.setState({
+                date: data.selected.date
+            });
         }
     }
 
-    render(){
+    render() {
         const TODAY = new Date();
 
         return(
@@ -32,8 +33,8 @@ export default class Example extends React.Component {
                         <div className="accordion__content">
                             <GridCalendar
                                 onClick={this.onClick}
-                                startTime={new Date(TODAY.getFullYear(),TODAY.getMonth()-1,TODAY.getDate())}
-                                endTime={new Date(TODAY.getFullYear(),TODAY.getMonth()+1,TODAY.getDate())}
+                                startTime={new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, TODAY.getDate())}
+                                endTime={new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, TODAY.getDate())}
                                 focus={this.state.date}
                                 data={[{
                                     id: 0,
@@ -41,26 +42,26 @@ export default class Example extends React.Component {
                                     entries: [{
                                         id: 0,
                                         groupId: 1,
-                                        startTime: new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()+1,12).getTime(),
-                                        endTime: new Date(TODAY.getFullYear(),TODAY.getMonth(),TODAY.getDate()+1,23,59).getTime()
+                                        startTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 12).getTime(),
+                                        endTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 23, 59).getTime()
                                     }]
                                 }]}
                                 columns={{
-                                    names: ["Mo","Di","Mi","Do","Fr","Sa","So"],
+                                    names: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
                                     highlightedColor: chayns.env.site.color
                                 }}
                                 groups={[{
                                     id: 1,
-                                    name: "Important day",
-                                    color: "red"
+                                    name: 'Important day',
+                                    color: 'red'
                                 }]}
-                                onNavigateLeft={()=>console.log('LEFT')}
-                                onNavigateRight={()=>console.log('RIGHT')}
+                                onNavigateLeft={() => console.log('LEFT')}
+                                onNavigateRight={() => console.log('RIGHT')}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }

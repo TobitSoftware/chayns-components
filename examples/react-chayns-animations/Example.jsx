@@ -1,14 +1,10 @@
 import React from 'react';
 
-import {InspectElementAnimation as InspectElement} from '../../src/react-chayns-animations/index';
+import { InspectElementAnimation as InspectElement } from '../../src/index';
 import ExampleChild from './ExampleChild';
 import '../../src/react-chayns-animations/index.scss';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
         return(
             <div>
@@ -16,14 +12,14 @@ export default class Example extends React.Component {
                     <div className="accordion__head">Test</div>
                     <div className="accordion__body">
                         <div className="accordion__content">
-                            <span style={{margin: '15px'}}>
+                            <span style={{ margin: '15px' }}>
                                 <InspectElement component={ExampleChild} name="Test1" expandedWidth="500px">
                                     test
                                 </InspectElement>
                             </span>
 
-                            <span style={{margin: '15px'}}>
-                                <InspectElement component={ExampleChild} name="Test2"  expandedWidth={400}>
+                            <span style={{ margin: '15px' }}>
+                                <InspectElement component={ExampleChild} name="Test2" expandedWidth={400}>
                                 </InspectElement>
                             </span>
                         </div>
@@ -34,27 +30,23 @@ export default class Example extends React.Component {
                     <div className="accordion__head">Test</div>
                     <div className="accordion__body">
                         <div className="accordion__content">
-                            <span style={{margin: '15px'}}>
-                                <InspectElement component={ExampleChild} name="Test3">
-                                </InspectElement>
+                            <span style={{ margin: '15px' }}>
+                                <InspectElement component={ExampleChild} name="Test3" />
                             </span>
 
-                            <span style={{margin: '15px'}}>
-                                <InspectElement component={ExampleChild} name="Test4">
-                                </InspectElement>
+                            <span style={{ margin: '15px' }}>
+                                <InspectElement component={ExampleChild} name="Test4" />
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <span style={{margin: '15px'}}>
-                    <InspectElement component={ExampleChild} name="Test5">
-                    </InspectElement>
+                <span style={{ margin: '15px' }}>
+                    <InspectElement component={ExampleChild} name="Test5" />
                 </span>
 
-                <span style={{margin: '15px'}}>
-                    <InspectElement component={ExampleChild} name="Test6">
-                    </InspectElement>
+                <span style={{ margin: '15px' }}>
+                    <InspectElement component={ExampleChild} name="Test6" />
                 </span>
             </div>
         );

@@ -1,3 +1,3 @@
 export {
     default as InspectElementAnimation,
-} from "./component/InspectElement/InspectElement";
+} from './component/InspectElement/InspectElement';

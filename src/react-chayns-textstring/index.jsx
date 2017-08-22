@@ -1,3 +1,1 @@
-import TextString from "./component/TextString";
-
-export default TextString;
+export default from './component/TextString';

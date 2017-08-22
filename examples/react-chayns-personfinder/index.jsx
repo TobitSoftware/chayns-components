@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import PersonFinder from '../../src/react-chayns-personfinder/index';
+import { PersonFinder } from '../../src/index';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
         <PersonFinder
             placeholder="Person finden"
-            onChange={function(data) {
-                console.log(data)
+            onChange={(data) => {
+                console.log(data);
             }}
             defaultValue="michael braun"
         />,
