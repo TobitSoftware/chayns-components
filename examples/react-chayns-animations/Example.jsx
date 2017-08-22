@@ -5,7 +5,22 @@ import ExampleChild from './ExampleChild';
 import '../../src/react-chayns-animations/index.scss';
 
 export default class Example extends React.Component {
+
+    state = {
+        open: false
+    };
+
+    componentDidMount() {
+        window.setTimeout(() => {
+            this.setState({
+                open: true
+            });
+        }, 1000);
+    }
+
     render() {
+        const { open } = this.state;
+
         return(
             <div>
                 <div className="accordion accordion--open" data-group="acc">
@@ -13,14 +28,22 @@ export default class Example extends React.Component {
                     <div className="accordion__body">
                         <div className="accordion__content">
                             <span style={{ margin: '15px' }}>
-                                <InspectElement component={ExampleChild} name="Test1" expandedWidth="500px">
+                                <InspectElement
+                                    component={ExampleChild}
+                                    name="Test1"
+                                    // expanded={open}
+                                    expandedWidth={500}
+                                >
                                     test
                                 </InspectElement>
                             </span>
 
                             <span style={{ margin: '15px' }}>
-                                <InspectElement component={ExampleChild} name="Test2" expandedWidth={400}>
-                                </InspectElement>
+                                <InspectElement
+                                    component={ExampleChild}
+                                    name="Test2"
+                                    expandedWidth={400}
+                                />
                             </span>
                         </div>
                     </div>
@@ -31,11 +54,17 @@ export default class Example extends React.Component {
                     <div className="accordion__body">
                         <div className="accordion__content">
                             <span style={{ margin: '15px' }}>
-                                <InspectElement component={ExampleChild} name="Test3" />
+                                <InspectElement
+                                    component={ExampleChild}
+                                    name="Test3"
+                                />
                             </span>
 
                             <span style={{ margin: '15px' }}>
-                                <InspectElement component={ExampleChild} name="Test4" />
+                                <InspectElement
+                                    component={ExampleChild}
+                                    name="Test4"
+                                />
                             </span>
                         </div>
                     </div>
