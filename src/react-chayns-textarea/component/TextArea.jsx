@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class PersonFinder extends React.Component {
+export default class TextArea extends React.Component {
     static propTypes = {
         style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
@@ -23,8 +23,8 @@ export default class PersonFinder extends React.Component {
         placeholder: null,
         required: null,
         onChange: null,
-        defaultValue: null,
-        value: null,
+        defaultValue: undefined,
+        value: undefined,
         onKeyUp: null,
         onKeyDown: null,
         autogrow: null,

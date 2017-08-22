@@ -24,8 +24,8 @@ export default class Checkbox extends React.Component {
         children: null,
         onChange: null,
         toggleButton: false,
-        checked: null,
-        defaultChecked: null,
+        checked: undefined,
+        defaultChecked: undefined,
         disabled: false,
         tooltip: null,
         dangerouslySetLabel: null
