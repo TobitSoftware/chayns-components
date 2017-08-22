@@ -4,17 +4,26 @@ import classnames from 'classnames';
 
 export default class Button extends React.Component {
     static propTypes = {
+        children: PropTypes.node.isRequired,
         chooseButton: PropTypes.bool,
         disabled: PropTypes.bool,
-        children: PropTypes.string.isRequired,
         onClick: PropTypes.func,
         className: PropTypes.string,
         style: PropTypes.object,
-        buttonRef: PropTypes.func
+        buttonRef: PropTypes.func,
+    };
+
+    static defaultProps = {
+        buttonRef: null,
+        style: null,
+        className: null,
+        onClick: null,
+        disabled: false,
+        chooseButton: false,
     };
 
     handleClick = (event) => {
-        const {onClick, disabled} = this.props;
+        const { onClick, disabled } = this.props;
 
         if (onClick && !disabled) {
             onClick(event);
@@ -22,11 +31,11 @@ export default class Button extends React.Component {
     };
 
     render() {
-        const {chooseButton, disabled, children, className, style, buttonRef, onClick, ...other} = this.props;
+        const { chooseButton, disabled, children, className, style, buttonRef, onClick, ...other } = this.props;
 
-        let classNames = classnames({
-            'button': !chooseButton,
-            'choosebutton': chooseButton,
+        const classNames = classnames({
+            button: !chooseButton,
+            choosebutton: chooseButton,
             'button--disabled': disabled,
             [className]: className
         });
@@ -40,7 +49,6 @@ export default class Button extends React.Component {
                 ref={buttonRef}
                 {...other}
             >
-
                 {children}
             </button>
         );

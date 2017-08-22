@@ -5,12 +5,18 @@ import Button from './Button';
 export default class ChooseButton extends React.Component {
 
     static propTypes = {
-        chooseButton: PropTypes.bool,
-        disabled: PropTypes.bool,
         children: PropTypes.string.isRequired,
+        disabled: PropTypes.bool,
         onClick: PropTypes.func,
         className: PropTypes.string,
         style: PropTypes.object
+    };
+
+    static defaultProps = {
+        style: null,
+        className: null,
+        onClick: null,
+        disabled: false,
     };
 
     render() {
@@ -21,7 +27,7 @@ export default class ChooseButton extends React.Component {
 
         return(
             <Button
-                chooseButton={true}
+                chooseButton
                 {...props}
             >
                 {children}
