@@ -5,7 +5,7 @@ import Button from './Button';
 export default class ChooseButton extends React.Component {
 
     static propTypes = {
-        children: PropTypes.string.isRequired,
+        children: PropTypes.node.isRequired,
         disabled: PropTypes.bool,
         onClick: PropTypes.func,
         className: PropTypes.string,
