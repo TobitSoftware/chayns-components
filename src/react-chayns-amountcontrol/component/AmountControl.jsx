@@ -6,21 +6,26 @@ import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 
 export default class AmountControl extends React.Component {
-
     static propTypes = {
+        buttonText: PropTypes.string.isRequired,
         amount: PropTypes.number,
         onChange: PropTypes.func,
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         equalize: PropTypes.string,
         disabled: PropTypes.bool,
-        disableInput: PropTypes.bool
+        disableInput: PropTypes.bool,
     };
 
     static defaultProps = {
-        amount: 0
+        amount: 0,
+        onChange: null,
+        onAdd: null,
+        onRemove: null,
+        equalize: null,
+        disabled: false,
+        disableInput: false,
     };
-
 
     constructor() {
         super();
@@ -30,14 +35,39 @@ export default class AmountControl extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
         this.setState({
             tempValue: null
         });
     }
 
+    onInput = (value) => {
+        this.setState({
+            tempValue: value
+        });
+    };
+
+    getRemoveIcon() {
+        const { amount } = this.props;
+        const { tempValue } = this.state;
+
+        if(amount > 1 && tempValue > 1) {
+            return 'fa-minus';
+        }
+
+        if(tempValue > 1) {
+            return 'fa-minus';
+        }
+
+        if(amount > 1 && tempValue === null) {
+            return 'fa-minus';
+        }
+
+        return 'fa-trash fa-2x';
+    }
+
     addItem = () => {
-        const {amount, onAdd} = this.props;
+        const { amount, onAdd } = this.props;
 
         if(onAdd) onAdd();
 
@@ -45,7 +75,7 @@ export default class AmountControl extends React.Component {
     };
 
     removeItem = () => {
-        const {amount, onRemove} = this.props;
+        const { amount, onRemove } = this.props;
 
         if(onRemove) onRemove();
 
@@ -55,32 +85,15 @@ export default class AmountControl extends React.Component {
     };
 
     changeAmount = (amount) => {
-        const {onChange} = this.props;
+        const { onChange } = this.props;
 
         if(onChange) {
             onChange(amount);
         }
     };
 
-    onInput = (value) => {
-        this.setState({
-            tempValue: value
-        });
-    };
-
-    getRemoveIcon() {
-        const {amount} = this.props;
-        const {tempValue} = this.state;
-
-        if(amount > 1 && tempValue > 1) return 'fa-minus';
-        if(tempValue > 1) return 'fa-minus';
-        if(amount > 1 && tempValue === null)  return 'fa-minus';
-
-        return 'fa-trash fa-2x';
-    }
-
     render() {
-        const {amount, buttonText, equalize, disabled, disableInput} = this.props;
+        const { amount, buttonText, equalize, disabled, disableInput } = this.props;
 
         const className = classnames('amount-control', {
             'amount-control--active': amount > 0
@@ -89,7 +102,7 @@ export default class AmountControl extends React.Component {
         return(
             <div
                 className={className}
-                ref={(node) => this.node = node}
+                ref={(node) => { this.node = node; }}
             >
                 <ControlButton
                     icon={this.getRemoveIcon()}

@@ -2,21 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import {ChooseButton} from '../../index';
-import {Input} from '../../index';
+import { ChooseButton, Input } from '../../index';
 
 
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
 export default class AmountInput extends React.Component {
-
     static propTypes = {
-        amount: PropTypes.number,
-        onChange: PropTypes.func,
-        buttonText: PropTypes.string,
+        amount: PropTypes.number.isRequired,
+        onAdd: PropTypes.func.isRequired,
+        onInput: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired,
+        buttonText: PropTypes.string.isRequired,
         equalize: PropTypes.string,
         disabled: PropTypes.bool,
-        disableInput: PropTypes.bool
+        disableInput: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        equalize: null,
+        disabled: false,
+        disableInput: false
     };
 
     constructor() {
@@ -27,14 +33,6 @@ export default class AmountInput extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.amount !== this.props.amount && this.state.value !== nextProps.amount) {
-            this.setState({
-                value: nextProps.amount
-            });
-        }
-    }
-
     componentDidMount() {
         window.chayns.ui.equalizer.init();
 
@@ -43,8 +41,16 @@ export default class AmountInput extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.amount !== this.props.amount && this.state.value !== nextProps.amount) {
+            this.setState({
+                value: nextProps.amount
+            });
+        }
+    }
+
     onButtonClick = () => {
-        const {amount, onAdd} = this.props;
+        const { amount, onAdd } = this.props;
 
         if(amount > 0) {
             this.setState({
@@ -56,22 +62,25 @@ export default class AmountInput extends React.Component {
     };
 
     onInputChange = (value) => {
-        value = value.replace(/[\D\s]+/g, '');
-        value = parseInt(value, 10);
-        if(!window.chayns.utils.isNumber(value)) value = null;
+        let inputValue = value.replace(/[\D\s]+/g, '');
+        inputValue = parseInt(inputValue, 10);
+
+        if(!window.chayns.utils.isNumber(value)) {
+            inputValue = null;
+        }
 
         this.setState({
-            value: value
+            value: inputValue
         });
 
         if(this.props.onInput) {
-            this.props.onInput(value);
+            this.props.onInput(inputValue);
         }
     };
 
     onInputBlur = () => {
-        const {onChange} = this.props;
-        const {value} = this.state;
+        const { onChange } = this.props;
+        const { value } = this.state;
 
         if(onChange) {
             onChange(value);
@@ -83,18 +92,22 @@ export default class AmountInput extends React.Component {
     };
 
     getButtonValue() {
-        if(this.props.amount > 0) {
-            return this.props.amount + '';
+        const { amount, buttonText } = this.props;
+
+        if(amount > 0) {
+            return `${amount}`;
         }
 
-        return this.props.buttonText;
+        return buttonText;
     }
 
     getInputValue() {
-        const {amount} = this.props.amount;
+        const { amount } = this.props.amount;
+        const inputValue = this.state.value;
 
-        let inputValue = this.state.value;
-        if(inputValue || inputValue === 0 ||inputValue === '') return inputValue;
+        if(inputValue || inputValue === 0 || inputValue === '') {
+            return inputValue;
+        }
 
         if(window.chayns.utils.isNumber(amount)) {
             return amount;
@@ -104,12 +117,12 @@ export default class AmountInput extends React.Component {
     }
 
     render() {
-        const {amount, equalize, disabled, disableInput} = this.props;
-        const {showInput} = this.state;
+        const { amount, equalize, disabled, disableInput } = this.props;
+        const { showInput } = this.state;
 
         const buttonClassName = classnames('amount-control__button', {
-            "amount-control__button--price": !amount,
-            "amount-control__button--amount": amount
+            'amount-control__button--price': !amount,
+            'amount-control__button--amount': amount
         });
 
         if((amount <= AUTO_HIDE_INPUT_MAX_AMOUNT && !showInput) || disableInput || disabled) {
@@ -118,8 +131,8 @@ export default class AmountInput extends React.Component {
                     onClick={this.onButtonClick}
                     className={buttonClassName}
                     data-equalize-width={equalize}
-                    buttonRef={(node) => this.node = node}
-                    style={{width: this.state.width}}
+                    buttonRef={(node) => { this.node = node; }}
+                    style={{ width: this.state.width }}
                     disabled={disabled}
                 >
                     {this.getButtonValue()}
@@ -134,11 +147,11 @@ export default class AmountInput extends React.Component {
                 className="amount-control__input"
                 onBlur={this.onInputBlur}
                 data-equalize-width={equalize}
-                inputRef={(node) => this.node = node}
-                style={{width: this.state.width}}
+                inputRef={(node) => { this.node = node; }}
+                style={{ width: this.state.width }}
                 disabled={disabled}
                 autoFocus
             />
-        )
+        );
     }
 }
