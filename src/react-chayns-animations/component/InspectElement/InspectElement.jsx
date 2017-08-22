@@ -13,6 +13,7 @@ export default class InspectElement extends React.Component {
             PropTypes.number
         ]),
         children: PropTypes.node,
+        expanded: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -28,6 +29,16 @@ export default class InspectElement extends React.Component {
             showModal: false,
             showTile: true
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.expanded !== nextProps.expanded && nextProps.expanded !== this.state.showModal) {
+            if(nextProps.expanded) {
+                this.openOverlay();
+            } else {
+                this.closeOverlay();
+            }
+        }
     }
 
     getCustomProps() {
@@ -98,7 +109,6 @@ export default class InspectElement extends React.Component {
                 className="inspect-element-animation__tile"
                 ref={(ref) => { this._container = ref; }}
             >
-
                 {this.renderComponent()}
             </span>
         );

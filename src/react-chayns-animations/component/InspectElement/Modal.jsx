@@ -6,13 +6,13 @@ import * as Constants from './constants';
 export default class Modal extends React.Component {
 
     static propTypes = {
-        top: PropTypes.number,
-        left: PropTypes.number,
-        right: PropTypes.number,
+        top: PropTypes.string,
+        left: PropTypes.string,
+        right: PropTypes.string,
         renderComponent: PropTypes.func.isRequired,
         closeOverlay: PropTypes.func.isRequired,
         direction: PropTypes.number,
-        width: PropTypes.number,
+        width: PropTypes.string,
         expandedWidth: PropTypes.number,
     };
 
