@@ -45,6 +45,7 @@ The following properties can be set
 | defaultOpened| The accordion is default opened                                        | bool                       |               |
 | autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
 | reference    | A reference for the accordion                                          | Function                   |               |
+| *            | Props that should be set on the accordion-div                          | any                        |               |
 
 
 ### Examples

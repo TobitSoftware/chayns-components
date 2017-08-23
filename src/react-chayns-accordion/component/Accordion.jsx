@@ -149,43 +149,62 @@ class Accordion extends React.Component {
     }
 
     render() {
-        let dataGroup;
-        if (this.props.dataGroup !== '') {
-            dataGroup = this.props.dataGroup;
-        }
+        const {
+            dataGroup,
+            id,
+            style,
+            isOpened,
+            isWrapped,
+            className,
+            ellipsis,
+            styleBody,
+            reference,
+            badge,
+            right,
+            head,
+            defaultOpened,
+            children,
+            autogrow,
+            renderClosed,
+            onOpen,
+            onOpened,
+            onClose,
+            onClosed,
+            ...customProps
+        } = this.props;
 
         const others = {};
 
-        if (this.props.id !== '') {
-            others.id = this.props.id;
+        if (id !== '') {
+            others.id = id;
         }
 
-        if (this.props.style) {
-            others.style = this.props.style;
+        if (style) {
+            others.style = style;
         }
 
-        if (this.props.isOpened && !this.props.isOpened && this.accordion) {
+        if (isOpened && !isOpened && this.accordion) {
             this.accordion.classList.remove('accordion--open');
         }
 
         const classNames = classnames({
             accordion: true,
-            'accordion--wrapped': (this.props.isWrapped === true),
-            [this.props.className]: this.props.className
+            'accordion--wrapped': (isWrapped === true),
+            [className]: className
         });
 
 
         const classNamesHead = classnames({
             accordion__head: true,
-            ellipsis: this.props.ellipsis
+            ellipsis
         });
 
         const othersBody = {
             style: {}
         };
 
-        if (this.props.styleBody) {
-            othersBody.style = this.props.styleBody;
+        if (styleBody) {
+            othersBody.style = styleBody;
         }
 
 
@@ -195,9 +214,10 @@ class Accordion extends React.Component {
                 data-group={dataGroup}
                 ref={(ref) => {
                     this.accordion = ref;
-                    if (this.props.reference) this.props.reference(ref);
+                    if (reference) this.props.reference(ref);
                 }}
                 {...others}
+                {...customProps}
             >
                 <div className={classNamesHead}>
                     {this._renderHead()}
