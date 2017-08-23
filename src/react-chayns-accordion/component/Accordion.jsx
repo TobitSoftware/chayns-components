@@ -40,6 +40,10 @@ class Accordion extends React.Component {
     }
 
     componentDidUpdate() {
+        if (this.props.autogrow && this.state.isOpened && this._body) {
+            this._body.style.setProperty('max-height', 'initial', 'important');
+        }
+
         if (this.accordion && this.props.className && this.props.className.indexOf('accordion--open') !== -1) {
             // this.accordion.classList.add('accordion--open');
             // this.props.defaultOpened = true;
@@ -107,6 +111,10 @@ class Accordion extends React.Component {
             isClose: true
         });
 
+        if (this.props.autogrow && this._body) {
+            this._body.style.maxHeight = null;
+        }
+
         if (this.props.onClose) {
             this.props.onClose(event);
         }
@@ -147,6 +155,7 @@ class Accordion extends React.Component {
         }
 
         const others = {};
+
         if (this.props.id !== '') {
             others.id = this.props.id;
         }
@@ -171,8 +180,13 @@ class Accordion extends React.Component {
             ellipsis: this.props.ellipsis
         });
 
-        const othersBody = {};
-        if (this.props.styleBody) othersBody.style = this.props.styleBody;
+        const othersBody = {
+            style: {}
+        };
+
+        if (this.props.styleBody) {
+            othersBody.style = this.props.styleBody;
+        }
 
 
         return (
@@ -188,7 +202,11 @@ class Accordion extends React.Component {
                 <div className={classNamesHead}>
                     {this._renderHead()}
                 </div>
-                <div className="accordion__body" {...othersBody}>
+                <div
+                    className="accordion__body"
+                    ref={(ref) => { this._body = ref; }}
+                    {...othersBody}
+                >
                     {this._getBody()}
                 </div>
             </div>
@@ -216,7 +234,8 @@ Accordion.propTypes = {
     onClosed: PropTypes.func,
     ellipsis: PropTypes.bool,
     defaultOpened: PropTypes.bool,
-    reference: PropTypes.func
+    reference: PropTypes.func,
+    autogrow: PropTypes.bool,
 };
 
 Accordion.defaultProps = {
@@ -237,6 +256,7 @@ Accordion.defaultProps = {
     renderClosed: false,
     badge: null,
     right: null,
+    autogrow: false,
 };
 
 export default Accordion;
