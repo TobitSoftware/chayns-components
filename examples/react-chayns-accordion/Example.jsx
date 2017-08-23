@@ -29,6 +29,10 @@ export default class Example extends React.Component {
                         </div>
                     </Accordion>
                 </Accordion>
+
+                <Accordion head="Autogrow" autogrow>
+                    <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }} />
+                </Accordion>
             </div>
         );
     }
