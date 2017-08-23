@@ -31,6 +31,14 @@ export default class InspectElement extends React.Component {
         };
     }
 
+    componentDidMount() {
+        if(this.props.expanded) {
+            this.openOverlay();
+        } else {
+            this.closeOverlay();
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         if(this.props.expanded !== nextProps.expanded && nextProps.expanded !== this.state.showModal) {
             if(nextProps.expanded) {
