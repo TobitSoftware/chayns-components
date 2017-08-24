@@ -54,9 +54,9 @@ export default class TextArea extends React.Component {
         }
     }
 
-    onChange = (event) => {
+    onChange = () => {
         if(this.props.onChange) {
-            this.props.onChange(event);
+            this.props.onChange(this._node.value);
         }
 
         if(this.props.autogrow) {
