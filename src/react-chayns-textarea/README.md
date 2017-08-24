@@ -19,17 +19,18 @@ Then it can be used like in the following example:
 
 ### Props ###
 
-| Property   | Description                                                                                        | Type    |
-|------------|-----------------------------------------------------------------------------------------------------|--------|
-| placeholder | Placeholder of the textarea                                                | String |
-| defaultValue | defaultValue of the textarea                                                 | String |
-| className | CSS classes for the textarea                                                          | String   |
-| style    | Styles for the textarea                                                    | Object |
-| required    | Makes the textarea required                                                  | bool |
-| autogrow    | Activates the auto resizing of the textarea                                                   | bool |
-| reference    | References the textarea element                                                   | function |
-| onKeyUp    | onKeyUp-Event                                                   | function |
-| onKeyDown    | onKeyDown-Event                                                   | function |
+| Property   | Description                                                                            | Type     |
+|------------|----------------------------------------------------------------------------------------|----------|
+| placeholder  | Placeholder of the textarea                                                          | String   |
+| defaultValue | defaultValue of the textarea                                                         | String   |
+| className    | CSS classes for the textarea                                                         | String   |
+| style        | Styles for the textarea                                                              | Object   |
+| required     | Makes the textarea required                                                          | bool     |
+| autogrow     | Activates the auto resizing of the textarea                                          | bool     |
+| reference    | References the textarea element                                                      | function |
+| onKeyUp      | onKeyUp-Event                                                                        | function |
+| onKeyDown    | onKeyDown-Event                                                                      | function |
+| onChange     | Callback that is fired at onChange (from react) with textarea-value                  | function |
 
 
 ## Examples ##
