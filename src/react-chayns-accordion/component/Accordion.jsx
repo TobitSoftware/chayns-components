@@ -36,6 +36,10 @@ class Accordion extends React.Component {
 
         if (this.props.defaultOpened) {
             this.accordion.classList.add('accordion--open');
+
+            if(this.props.autogrow && this._body) {
+                this._body.style.setProperty('max-height', 'initial', 'important');
+            }
         }
     }
 
