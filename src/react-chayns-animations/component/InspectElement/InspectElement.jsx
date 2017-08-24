@@ -14,12 +14,16 @@ export default class InspectElement extends React.Component {
         ]),
         children: PropTypes.node,
         expanded: PropTypes.bool,
+        onClose: PropTypes.func,
+        onClosed: PropTypes.func,
     };
 
     static defaultProps = {
         expanded: false,
         children: null,
         expandedWidth: null,
+        onClose: null,
+        onClosed: null,
     };
 
     constructor() {
@@ -81,10 +85,18 @@ export default class InspectElement extends React.Component {
             showModal: false
         });
 
+        if(this.props.onClose) {
+            this.props.onClose();
+        }
+
         this.closeTimeout = window.setTimeout(() => {
             this.setState({
                 showTile: true
             });
+
+            if(this.props.onClosed) {
+                this.props.onClosed();
+            }
         }, 650);
     };
 
