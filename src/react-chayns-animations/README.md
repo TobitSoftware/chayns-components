@@ -50,4 +50,6 @@ Both ways of initialization allow the following settings (No checking in the Jav
 | componenent   | The component that should get animated                                      | React.Component | --required--                     |
 | expandedWidth | The width the modal-box/overlay should have                                 | number          | same width as the normal element |
 | expanded      | Sets the expanded state (updates the view)                                  | boolean         | false                            |
+| onClose       | Callback that is fired when inspect element closes                          | func            |                                  |
+| onClosed      | Callback that is fired when inspect element is closed                       | func            |                                  |
 | *             | Props that should be set to your own component (includes children)          | any             |                                  |
