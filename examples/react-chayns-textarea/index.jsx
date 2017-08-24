@@ -8,7 +8,7 @@ window.chayns.ready.then(() => {
         <TextArea
             placeholder="Input"
             onChange={(data) => {
-                console.log(data.target.value);
+                console.log(data);
             }}
             defaultValue="Test"
             autogrow
