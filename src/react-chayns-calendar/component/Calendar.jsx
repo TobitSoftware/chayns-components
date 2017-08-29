@@ -177,7 +177,7 @@ export default class Calendar extends React.Component {
                 _selected = this.props.selected;
             }
 
-            for (let i in _activated) {
+            for (var i = 0; _activated && i < _activated.length; i++) {
                 if (month.startDate.getYear() === _activated[i].getYear() && month.startDate.getMonth() === _activated[i].getMonth()) {
                     if (_startDate) {
 
@@ -211,24 +211,26 @@ export default class Calendar extends React.Component {
                     //TODO
                 }
             }else {
-                for (let i in activated) {
-                    if (_highlighted instanceof Array) {
-                        for (let j = 0; j < _highlighted.length; j++) {
-                            let dates = [];
-                            for (let k = 0; k < _highlighted[j].dates.length; k++) {
-                                if (_highlighted[j].dates[k].getYear() === activated[i].getYear() && _highlighted[j].dates[k].getMonth() === activated[i].getMonth() && _highlighted[j].dates[k].getDate() === activated[i].getDate()) {
-                                    dates.push(_highlighted[j].dates[k]);
+                if(activated){
+                    for (let i = 0; i < activated.length; i++) {
+                        if (_highlighted instanceof Array) {
+                            for (let j = 0; j < _highlighted.length; j++) {
+                                let dates = [];
+                                for (let k = 0; k < _highlighted[j].dates.length; k++) {
+                                    if (_highlighted[j].dates[k].getYear() === activated[i].getYear() && _highlighted[j].dates[k].getMonth() === activated[i].getMonth() && _highlighted[j].dates[k].getDate() === activated[i].getDate()) {
+                                        dates.push(_highlighted[j].dates[k]);
+                                    }
+                                }
+                                if (dates.length > 0) {
+                                    tempObj.push({dates: dates, color: _highlighted[j].color});
                                 }
                             }
-                            if (dates.length > 0) {
-                                tempObj.push({dates: dates, color: _highlighted[j].color});
-                            }
-                        }
-                    } else {
-                        if (_highlighted) {
-                            for (let j in _highlighted.dates) {
-                                if (_highlighted.dates[j].getYear() === activated[i].getYear() && _highlighted.dates[j].getMonth() === activated[i].getMonth() && _highlighted.dates[j].getDate() === activated[i].getDate()) {
-                                    tempDates.push(_highlighted.dates[j]);
+                        } else {
+                            if (_highlighted && _highlighted.dates) {
+                                for (let j = 0; _highlighted.dates.length < j; j++) {
+                                    if (_highlighted.dates[j].getYear() === activated[i].getYear() && _highlighted.dates[j].getMonth() === activated[i].getMonth() && _highlighted.dates[j].getDate() === activated[i].getDate()) {
+                                        tempDates.push(_highlighted.dates[j]);
+                                    }
                                 }
                             }
                         }
