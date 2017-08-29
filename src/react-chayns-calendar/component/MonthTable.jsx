@@ -32,12 +32,14 @@ export default class MonthTable extends React.Component{
                             if(_active){
                                 _onClick = true;
                             }
-                            for (let i in this.props.activated) {
-                                if (this.props.activated[i].getYear() === day.date.getYear() && this.props.activated[i].getMonth() === day.date.getMonth() && this.props.activated[i].getDate() === day.date.getDate()) {
-                                    _active = true;
-                                    _marked = true;
-                                    _onClick = true;
-                                    break;
+                            if(this.props.activated){
+                                for (let i = 0; i < this.props.activated.length; i++) {
+                                    if (this.props.activated[i].getYear() === day.date.getYear() && this.props.activated[i].getMonth() === day.date.getMonth() && this.props.activated[i].getDate() === day.date.getDate()) {
+                                        _active = true;
+                                        _marked = true;
+                                        _onClick = true;
+                                        break;
+                                    }
                                 }
                             }
                             if(this.props.selected && this.props.selected.getYear() === day.date.getYear()&& this.props.selected.getMonth() === day.date.getMonth() && this.props.selected.getDate() === day.date.getDate()) {
@@ -45,8 +47,8 @@ export default class MonthTable extends React.Component{
                                 _selected = true;//`-is-active-is-selected${_marked} chayns__color--100`;
                             }
                             if(this.props.highlighted instanceof Array){
-                                for(let k in this.props.highlighted){
-                                    for(let l in this.props.highlighted[k].dates){
+                                for(let k = 0; k < this.props.highlighted.length; k++){
+                                    for(let l = 0; this.props.highlighted[k].dates && l < this.props.highlighted[k].dates.length; l++){
                                         if (this.props.highlighted[k].dates[l].getYear() === day.date.getYear() && this.props.highlighted[k].dates[l].getMonth() === day.date.getMonth() && this.props.highlighted[k].dates[l].getDate() === day.date.getDate()) {
                                             _active = true;
                                             _marked = true;
@@ -59,8 +61,8 @@ export default class MonthTable extends React.Component{
                                     }
                                 }
                             }else{
-                                if(this.props.highlighted) {
-                                    for (let k in this.props.highlighted.dates) {
+                                if(this.props.highlighted && this.props.highlighted.dates) {
+                                    for (let k = 0; k < this.props.highlighted.dates.length; k++) {
                                         if (this.props.highlighted.dates[k].getYear() === day.date.getYear() && this.props.highlighted.dates[k].getMonth() === day.date.getMonth() && this.props.highlighted.dates[k].getDate() === day.date.getDate()) {
                                             _active = true;
                                             _marked = true;
