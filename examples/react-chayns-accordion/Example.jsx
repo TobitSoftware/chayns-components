@@ -23,7 +23,7 @@ export default class Example extends React.Component {
                             Hello World 2
                         </div>
                     </Accordion>
-                    <Accordion head="Test" badge={<i className="fa fa-warning" />} isWrapped>
+                    <Accordion head="Test" badge={<i className="fa fa-warning" />} badgeStyle={{ backgroundColor: 'red' }} isWrapped>
                         <div className="accordion__content">
                             Hello World 2
                         </div>
