@@ -104,7 +104,6 @@ export default class InspectElement extends React.Component {
         const Component = this.props.component;
 
         if(!Component) return null;
-        if(!(Component.prototype instanceof React.Component)) return null;
 
         return (
             <Component
