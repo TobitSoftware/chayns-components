@@ -28,10 +28,10 @@ export default class Modal extends React.Component {
         const { width, left, right, direction } = this.props;
 
         if(direction === Constants.DIRECTION_LEFT) {
-            return `${parseFloat(width) + (2 * parseFloat(left))}px`;
+            return `${parseFloat(width) + (2 * parseFloat(right))}px`;
         }
 
-        return `${parseFloat(width) + (2 * parseFloat(right))}px`;
+        return `${parseFloat(width) + (2 * parseFloat(left))}px`;
     }
 
     getWidth() {
@@ -65,7 +65,7 @@ export default class Modal extends React.Component {
                 if(this.props.closeOverlay) {
                     this.props.closeOverlay();
                 }
-            });
+            }).catch(() => {});
 
             this.setState({
                 willEnter: false,
@@ -160,8 +160,8 @@ export default class Modal extends React.Component {
                 })}
                 style={{
                     top,
-                    left: (direction === Constants.DIRECTION_LEFT) ? 0 : null,
-                    right: (direction === Constants.DIRECTION_RIGHT) ? 0 : null,
+                    left: (direction === Constants.DIRECTION_RIGHT) ? 0 : null,
+                    right: (direction === Constants.DIRECTION_LEFT) ? 0 : null,
                     width: this.getModalWidth()
                 }}
             >
