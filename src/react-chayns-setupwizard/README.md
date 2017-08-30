@@ -51,9 +51,11 @@ The components got the following properties:
 **SetupWizard**:
 
 
-| Property   | Description                                                                                        | Type   | Default | Required
-|------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
-| ready | callback-Function which gets called right after the last step finished | func |        | true |
+| Property     | Description                                                                | Type   | Default | Required |
+|--------------|----------------------------------------------------------------------------|--------|---------|----------|
+| ready        | callback-Function which gets called right after the last step finished     | func   |         | true     |
+| style        | style of the wizard-root-element                                           | object |         | false    |
+| contentStyle | style of the wizard-content-element                                        | object |         | false    |
 
 **SetupItem**:
 
