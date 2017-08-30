@@ -67,7 +67,7 @@ class Accordion extends React.Component {
     }
 
     _renderHead() {
-        const { badge, right, head } = this.props;
+        const { badge, badgeStyle, right, head } = this.props;
 
         if (!badge && !right) {
             return head;
@@ -89,7 +89,7 @@ class Accordion extends React.Component {
                 }}
             >
                 {right}
-                {badge && <div key="badge" className="badge accordion--trigger">{badge}</div>}
+                {badge && <div key="badge" className="badge accordion--trigger" style={badgeStyle}>{badge}</div>}
             </div>
         ];
     }
@@ -164,6 +164,7 @@ class Accordion extends React.Component {
             styleBody,
             reference,
             badge,
+            badgeStyle,
             right,
             head,
             defaultOpened,
@@ -260,6 +261,7 @@ Accordion.propTypes = {
     defaultOpened: PropTypes.bool,
     reference: PropTypes.func,
     autogrow: PropTypes.bool,
+    badgeStyle: PropTypes.object,
 };
 
 Accordion.defaultProps = {
@@ -281,6 +283,7 @@ Accordion.defaultProps = {
     badge: null,
     right: null,
     autogrow: false,
+    badgeStyle: null,
 };
 
 export default Accordion;
