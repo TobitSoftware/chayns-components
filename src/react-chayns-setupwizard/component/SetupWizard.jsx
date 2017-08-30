@@ -11,6 +11,8 @@ export default class SetupWizard extends React.Component {
     static defaultProps = {
         ready: () => { },
         children: null,
+        style: null,
+        contentStyle: null,
     };
 
     static childContextTypes = {
@@ -25,6 +27,8 @@ export default class SetupWizard extends React.Component {
             PropTypes.element
         ]),
         ready: PropTypes.func,
+        style: PropTypes.object,
+        contentStyle: PropTypes.object,
     };
 
     constructor() {
@@ -114,6 +118,7 @@ export default class SetupWizard extends React.Component {
     }
 
     render() {
+        const { contentStyle, style } = this.props;
         let children = '';
 
         if(this.props.children) {
@@ -125,7 +130,10 @@ export default class SetupWizard extends React.Component {
         }
 
         return(
-            <div className="sw__top">
+            <div
+                className="sw__top"
+                style={style}
+            >
                 <div
                     className="sw__head chayns__color--100"
                     hidden={!(this.props.children instanceof Array)}
@@ -134,6 +142,7 @@ export default class SetupWizard extends React.Component {
                 </div>
                 <div
                     ref={(content) => { this.content = content; }}
+                    style={contentStyle}
                     className="sw__content animated"
                 >
                     {children}

@@ -27,7 +27,11 @@ export default class Example extends React.Component {
     render() {
         if(!this.state.ready) {
             return (
-                <SetupWizard ready={this.ready}>
+                <SetupWizard
+                    ready={this.ready}
+                    contentStyle={{ minHeight: '150px' }}
+                    style={{ backgroundColor: 'lightgray' }}
+                >
                     <SetupItem title="First">
                         <Step1/>
                     </SetupItem>
