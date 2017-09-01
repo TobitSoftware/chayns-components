@@ -54,7 +54,7 @@ export default class EmojiInput extends React.Component {
         const oldHtml = inputDiv.innerHTML
             .replace(/&nbsp;/gm, String.fromCharCode(32))
             .replace(/&amp;/gm, String.fromCharCode(38))
-            .replace(String.fromCharCode(160), String.fromCharCode(32));
+            .replace(/\s/gm, String.fromCharCode(32));
 
         if (newHtml !== oldHtml) {
             this.activeNode = this.getActiveChildNode();
@@ -163,8 +163,9 @@ export default class EmojiInput extends React.Component {
             result = lines.join('<br>');
         }
 
-        result = result.replace(String.fromCharCode(160), String.fromCharCode(32));
-        return result.replace(/&nbsp;/gm, String.fromCharCode(32));
+        return result.replace(/&nbsp;/gm, String.fromCharCode(32))
+            .replace(/&amp;/gm, String.fromCharCode(38))
+            .replace(/\s/gm, String.fromCharCode(32));
     };
 
     setCursorPos = () => {
