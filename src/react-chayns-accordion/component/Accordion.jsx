@@ -17,7 +17,7 @@ class Accordion extends React.Component {
     }
 
     componentWillMount() {
-        if (this.props.isOpened || (this.props.className && this.props.className.indexOf('accordion--open') !== -1)) {
+        if (this.props.open || (this.props.className && this.props.className.indexOf('accordion--open') !== -1)) {
             this.setState({
                 isOpened: true
             });
@@ -43,14 +43,24 @@ class Accordion extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.open !== nextProps.open || (nextProps.open && (!this.state.isOpened || !this.state.isOpen)) || (!nextProps.open && (!this.state.isClose || !this.state.isClosed))) {
+            this.setState({
+                isOpened: nextProps.open,
+                isClosed: !nextProps.open,
+                isClose: false,
+                isOpen: false
+            });
+        }
+    }
+
     componentDidUpdate() {
         if (this.props.autogrow && this.state.isOpened && this._body) {
             this._body.style.setProperty('max-height', 'initial', 'important');
         }
 
-        if (this.accordion && this.props.className && this.props.className.indexOf('accordion--open') !== -1) {
-            // this.accordion.classList.add('accordion--open');
-            // this.props.defaultOpened = true;
+        if (this.props.autogrow && this.state.isClose && this._body) {
+            this._body.style.maxHeight = null;
         }
     }
 
@@ -115,12 +125,12 @@ class Accordion extends React.Component {
             isClose: true
         });
 
-        if (this.props.autogrow && this._body) {
-            this._body.style.maxHeight = null;
-        }
-
         if (this.props.onClose) {
             this.props.onClose(event);
+        }
+
+        if (this.props.autogrow && this._body) {
+            this._body.style.maxHeight = null;
         }
 
         this.firstRender = false;
@@ -157,12 +167,12 @@ class Accordion extends React.Component {
             dataGroup,
             id,
             style,
-            isOpened,
             isWrapped,
             className,
             ellipsis,
             styleBody,
             reference,
+            open,
             badge,
             badgeStyle,
             right,
@@ -188,13 +198,10 @@ class Accordion extends React.Component {
             others.style = style;
         }
 
-        if (isOpened && !isOpened && this.accordion) {
-            this.accordion.classList.remove('accordion--open');
-        }
-
         const classNames = classnames({
             accordion: true,
             'accordion--wrapped': (isWrapped === true),
+            'accordion--open': this.state.isOpen || this.state.isOpened,
             [className]: className
         });
 
@@ -246,7 +253,6 @@ Accordion.propTypes = {
     badge: PropTypes.node,
     right: PropTypes.node,
     renderClosed: PropTypes.bool,
-    isOpened: PropTypes.bool,
     isWrapped: PropTypes.bool,
     dataGroup: PropTypes.string,
     className: PropTypes.string,
@@ -262,10 +268,10 @@ Accordion.propTypes = {
     reference: PropTypes.func,
     autogrow: PropTypes.bool,
     badgeStyle: PropTypes.object,
+    open: PropTypes.bool,
 };
 
 Accordion.defaultProps = {
-    isOpened: false,
     className: '',
     dataGroup: null,
     id: null,
@@ -284,6 +290,7 @@ Accordion.defaultProps = {
     right: null,
     autogrow: false,
     badgeStyle: null,
+    open: false,
 };
 
 export default Accordion;

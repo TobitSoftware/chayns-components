@@ -3,15 +3,28 @@ import React from 'react';
 import { Accordion } from '../../src/index';
 
 export default class Example extends React.Component {
+    state = {
+        open: true
+    };
+
+    componentDidMount() {
+        window.setTimeout(() => {
+            this.setState({
+                open: false
+            });
+        }, 5000);
+    }
+
     render() {
         return(
             <div>
-                <Accordion head="Test" badge="2">
+                <Accordion head="Test" badge="2" open={this.state.open}>
                     <Accordion
                         head={<span style={{ color: '#FF0000' }} className="accordion--trigger">
                                 Test
                               </span>}
                         isWrapped
+                        open
                     >
 
                         <div className="accordion__content">
