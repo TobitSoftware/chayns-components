@@ -54,7 +54,7 @@ export default class EmojiInput extends React.Component {
         const oldHtml = inputDiv.innerHTML
             .replace(/&nbsp;/gm, String.fromCharCode(32))
             .replace(/&amp;/gm, String.fromCharCode(38))
-            .replace(/\s/gm, String.fromCharCode(32));
+            .replace(String.fromCharCode(160), String.fromCharCode(32));
 
         if (newHtml !== oldHtml) {
             this.activeNode = this.getActiveChildNode();
@@ -147,7 +147,7 @@ export default class EmojiInput extends React.Component {
             .replace(/&reg;/g, '®');
 
         const lines = newText.split('\n');
-        const isInDavid = location.href.indexOf('davidDetail') > -1 || location.href.indexOf('davidPersonInfo') > -1 || location.href.indexOf('davidNewThread') > -1;
+        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
 
         if (chayns.env.browser.name.toLowerCase() === 'chrome' && !isInDavid) {
             if (lines[lines.length - 1] === '' && this.lastKeyPressed === 8 && lines.length > 1) {
@@ -163,9 +163,9 @@ export default class EmojiInput extends React.Component {
             result = lines.join('<br>');
         }
 
-        return result.replace(/&nbsp;/gm, String.fromCharCode(32))
-            .replace(/&amp;/gm, String.fromCharCode(38))
-            .replace(/\s/gm, String.fromCharCode(32));
+        return result.replace(String.fromCharCode(160), String.fromCharCode(32))
+            .replace(/&nbsp;/gm, String.fromCharCode(32))
+            .replace(/&amp;/gm, String.fromCharCode(38));
     };
 
     setCursorPos = () => {
@@ -259,7 +259,7 @@ export default class EmojiInput extends React.Component {
         let lineIndex = 0;
         let curChild = elem.firstChild;
 
-        const isInDavid = location.href.indexOf('davidDetail') > -1 || location.href.indexOf('davidPersonInfo') > -1 || location.href.indexOf('davidNewThread') > -1;
+        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
 
         while (curChild !== null) {
             if (curChild.nodeType === 1) {
