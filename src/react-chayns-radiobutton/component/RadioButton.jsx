@@ -23,7 +23,7 @@ export default class RadioButton extends Component {
     static defaultProps = {
         id: null,
         name: null,
-        checked: false,
+        checked: undefined,
         onChange: null,
         disabled: false,
         children: null,
