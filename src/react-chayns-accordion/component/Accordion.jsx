@@ -2,6 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+const CLOSED = 5;
+const CLOSE = 1;
+
+const OPENED = 6;
+const OPEN = 2;
+
+function hasFlag(value, flag) {
+    return !!(value & flag); // eslint-disable-line no-bitwise
+}
+
 class Accordion extends React.Component {
     constructor() {
         super();
@@ -9,68 +19,84 @@ class Accordion extends React.Component {
         this.firstRender = true;
 
         this.state = {
-            isOpened: false,
-            isClosed: true,
-            isOpen: false,
-            isClose: false
+            currentState: CLOSED
         };
     }
 
     componentWillMount() {
-        if (this.props.open || (this.props.className && this.props.className.indexOf('accordion--open') !== -1)) {
+        const { open, className } = this.props;
+
+        if (open || (className && className.indexOf('accordion--open') !== -1)) {
             this.setState({
-                isOpened: true
+                currentState: OPENED
             });
         }
     }
 
     componentDidMount() {
-        this.accordion.addEventListener('closed', this._accordionClosedListener.bind(this));
-        this.accordion.addEventListener('close', this._accordionCloseListener.bind(this));
-        this.accordion.addEventListener('open', this._accordionOpenListener.bind(this));
-        this.accordion.addEventListener('opened', this._accordionOpenedListener.bind(this));
+        const { className, defaultOpened, autogrow } = this.props;
 
-        if (this.props.className.indexOf('accordion--open') !== -1) {
+        this.accordion.addEventListener('closed', this.accordionClosedListener.bind(this));
+        this.accordion.addEventListener('close', this.accordionCloseListener.bind(this));
+        this.accordion.addEventListener('open', this.accordionOpenListener.bind(this));
+        this.accordion.addEventListener('opened', this.accordionOpenedListener.bind(this));
+
+        if (className.indexOf('accordion--open') !== -1) {
             this.accordion.classList.add('accordion--open');
         }
 
-        if (this.props.defaultOpened) {
+        if (defaultOpened) {
             this.accordion.classList.add('accordion--open');
 
-            if(this.props.autogrow && this._body) {
+            if(autogrow && this._body) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.open !== nextProps.open || (nextProps.open && (!this.state.isOpened || !this.state.isOpen)) || (!nextProps.open && (!this.state.isClose || !this.state.isClosed))) {
+        if(this.props.open !== nextProps.open) {
             this.setState({
-                isOpened: nextProps.open,
-                isClosed: !nextProps.open,
-                isClose: false,
-                isOpen: false
+                currentState: nextProps.open ? OPENED : CLOSED
+            });
+        }
+
+        if(nextProps.open && !hasFlag(this.state.currentState, OPEN)) {
+            this.setState({
+                currentState: OPENED
+            });
+        }
+
+        if(!nextProps.open && !hasFlag(this.state.currentState, CLOSE)) {
+            this.setState({
+                currentState: CLOSED
             });
         }
     }
 
     componentDidUpdate() {
-        if (this.props.autogrow && this.state.isOpened && this._body) {
-            this._body.style.setProperty('max-height', 'initial', 'important');
-        }
+        const { autogrow } = this.props;
+        const { currentState } = this.state;
 
-        if (this.props.autogrow && this.state.isClose && this._body) {
-            this._body.style.maxHeight = null;
+        if(autogrow && this._body) {
+            if(currentState === OPENED) {
+                this._body.style.setProperty('max-height', 'initial', 'important');
+            } else if(currentState === CLOSE) {
+                this._body.style.maxHeight = null;
+            }
         }
     }
 
     _getBody() {
-        if (this.state.isOpen || this.state.isOpened || this.state.isClose || this.props.renderClosed) {
-            return this.props.children;
+        const { renderClosed, defaultOpened, children } = this.props;
+        const { currentState } = this.state;
+
+        if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
+            return children;
         }
 
-        if (this.props.defaultOpened && this.firstRender) {
-            return this.props.children;
+        if (defaultOpened && this.firstRender) {
+            return children;
         }
 
         return null;
@@ -99,66 +125,68 @@ class Accordion extends React.Component {
                 }}
             >
                 {right}
-                {badge && <div key="badge" className="badge accordion--trigger" style={badgeStyle}>{badge}</div>}
+                {badge && (
+                    <div
+                        key="badge"
+                        className="badge accordion--trigger"
+                        style={badgeStyle}
+                    >{badge}</div>
+                )}
             </div>
         ];
     }
 
-    _accordionClosedListener(event) {
+    accordionClosedListener(event) {
+        const { onClosed } = this.props;
+
         this.setState({
-            isOpened: false,
-            isClosed: true,
-            isOpen: false,
-            isClose: false
+            currentState: CLOSED
         });
 
-        if (this.props.onClosed) {
-            this.props.onClosed(event);
+        if (onClosed) {
+            onClosed(event);
         }
     }
 
-    _accordionCloseListener(event) {
+    accordionCloseListener(event) {
+        const { onClose, autogrow } = this.props;
+
         this.setState({
-            isOpened: false,
-            isClosed: false,
-            isOpen: false,
-            isClose: true
+            currentState: CLOSE
         });
 
-        if (this.props.onClose) {
-            this.props.onClose(event);
+        if (onClose) {
+            onClose(event);
         }
 
-        if (this.props.autogrow && this._body) {
+        if (autogrow && this._body) {
             this._body.style.maxHeight = null;
         }
 
         this.firstRender = false;
     }
 
-    _accordionOpenListener(event) {
+    accordionOpenListener(event) {
+        const { onOpen } = this.props;
+
         this.setState({
-            isOpened: false,
-            isClosed: false,
-            isOpen: true,
-            isClose: false
+            currentState: OPEN
         });
 
-        if (this.props.onOpen) {
-            this.props.onOpen(event);
+        if (onOpen) {
+            onOpen(event);
         }
     }
 
-    _accordionOpenedListener(event) {
+    accordionOpenedListener(event) {
+        const { onOpened } = this.props;
+
         this.setState({
-            isOpened: true,
-            isClosed: false,
-            isOpen: false,
-            isClose: false
+            currentState: OPENED
         });
 
-        if (this.props.onOpened) {
-            this.props.onOpened(event);
+        if (onOpened) {
+            onOpened(event);
         }
     }
 
@@ -201,7 +229,7 @@ class Accordion extends React.Component {
         const classNames = classnames({
             accordion: true,
             'accordion--wrapped': (isWrapped === true),
-            'accordion--open': this.state.isOpen || this.state.isOpened,
+            'accordion--open': hasFlag(this.state.currentState, OPEN),
             [className]: className
         });
 
@@ -248,8 +276,8 @@ class Accordion extends React.Component {
 
 
 Accordion.propTypes = {
-    head: PropTypes.any.isRequired,
-    children: PropTypes.any.isRequired,
+    head: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
     badge: PropTypes.node,
     right: PropTypes.node,
     renderClosed: PropTypes.bool,
