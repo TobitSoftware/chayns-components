@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EmojiInput } from '../../src/index';
-import '../../src/react-chayns-emoji_input/style.scss';
+import '../../src/react-chayns-emoji_input/index.scss';
 
 export default class Example extends React.Component {
     constructor() {

@@ -12,7 +12,7 @@ For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *
 
 ```jsx
 import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
-import 'tobit-chayns_components/react-chayns-setupwizard/style.css';
+import 'tobit-chayns_components/react-chayns-setupwizard/index.css';
 ```
 
 The basic structure of the component will be the following:
