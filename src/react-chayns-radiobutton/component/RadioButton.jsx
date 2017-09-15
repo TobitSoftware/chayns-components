@@ -27,7 +27,7 @@ export default class RadioButton extends Component {
         onChange: null,
         disabled: false,
         children: null,
-        value: null,
+        value: undefined,
         tooltip: null,
         className: null
     };
