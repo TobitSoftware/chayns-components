@@ -13,7 +13,7 @@ The input has to be imported:
 
 ```jsx
 import {EmojiInput} from 'tobit-chayns_components/react-chayns-emojiInput';
-import 'tobit-chayns_components/react-chayns-emojiInput/style.css';
+import 'tobit-chayns_components/react-chayns-emojiInput/index.css';
 ```
 
 

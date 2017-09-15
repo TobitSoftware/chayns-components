@@ -10,7 +10,7 @@ First of all import the component to a component of your own project.
 
 ```jsx
 import GridCalendar from 'tobit-chayns_components/react-chayns-gridcalendar';
-import 'tobit-chayns_components/react-chayns-gridcalendar/style.css';
+import 'tobit-chayns_components/react-chayns-gridcalendar/index.css';
 ```
 
 

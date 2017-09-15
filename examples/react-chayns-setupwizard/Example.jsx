@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { SetupWizard, SetupItem } from '../../src/index';
-import '../../src/react-chayns-setupwizard/style.scss';
+import '../../src/react-chayns-setupwizard/index.scss';
 
 import Step1 from './setup/Step1';
 import Step2 from './setup/Step2';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ContextMenu } from '../../src/index';
-import '../../src/react-chayns-contextmenu/style.scss';
+import '../../src/react-chayns-contextmenu/index.scss';
 
 export default class Example extends React.Component {
     constructor() {

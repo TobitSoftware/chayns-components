@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GridCalendar from '../../src/react-chayns-gridcalendar/index';
-import '../../src/react-chayns-gridcalendar/style.scss';
+import '../../src/react-chayns-gridcalendar/index.scss';
 
 export default class Example extends React.Component {
     constructor() {
