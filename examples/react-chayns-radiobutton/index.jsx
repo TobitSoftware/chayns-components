@@ -6,9 +6,13 @@ import { RadioButton } from '../../src/index';
 window.chayns.ready.then(() => {
     ReactDom.render(
         <div style={{ border: '1px solid black' }}>
+            <h1>RadioButton Example</h1>
             <RadioButton
                 onChange={(data) => {
                     console.log(data);
+                }}
+                onClick={(value) => {
+                    console.log('click', value);
                 }}
                 value="Test1"
             >
@@ -38,6 +42,7 @@ window.chayns.ready.then(() => {
                 }}
                 value="1"
                 name="group1"
+                defaultChecked
             >
                 Name: group1
             </RadioButton>
