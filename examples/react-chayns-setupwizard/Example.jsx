@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ExampleContainer from '../ExampleContainer';
+
 import { SetupWizard, SetupItem } from '../../src/index';
 import '../../src/react-chayns-setupwizard/index.scss';
 
@@ -27,21 +29,23 @@ export default class Example extends React.Component {
     render() {
         if(!this.state.ready) {
             return (
-                <SetupWizard
-                    ready={this.ready}
-                    contentStyle={{ minHeight: '150px' }}
-                    style={{ backgroundColor: 'lightgray' }}
-                >
-                    <SetupItem title="First">
-                        <Step1/>
-                    </SetupItem>
-                    <SetupItem title="Second">
-                        <Step2/>
-                    </SetupItem>
-                    <SetupItem title="Third">
-                        <Step3/>
-                    </SetupItem>
-                </SetupWizard>
+                <ExampleContainer headline="SetupWizard">
+                    <SetupWizard
+                        ready={this.ready}
+                        contentStyle={{ minHeight: '150px' }}
+                        style={{ backgroundColor: 'lightgray' }}
+                    >
+                        <SetupItem title="First">
+                            <Step1/>
+                        </SetupItem>
+                        <SetupItem title="Second">
+                            <Step2/>
+                        </SetupItem>
+                        <SetupItem title="Third">
+                            <Step3/>
+                        </SetupItem>
+                    </SetupWizard>
+                </ExampleContainer>
             );
         }
 

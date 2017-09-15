@@ -2,6 +2,7 @@ import React from 'react';
 
 import { AmountControl } from '../../src/index';
 import '../../src/react-chayns-amountcontrol/index.scss';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -22,12 +23,10 @@ export default class Example extends React.Component {
         const { amount } = this.state;
 
         return(
-            <div
+            <ExampleContainer
+                headline="AmountControl Example"
                 data-equalize="group-1"
-                style={{ border: 'solid 1px grey', padding: '5px' }}
             >
-                <h1>AmountControl Example</h1>
-
                 <AmountControl
                     disabled={false}
                     amount={amount}
@@ -55,7 +54,7 @@ export default class Example extends React.Component {
                     equalize="group-1"
                     buttonText="test-article"
                 />
-            </div>
+            </ExampleContainer>
         );
     }
 }

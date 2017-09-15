@@ -3,6 +3,7 @@ import React from 'react';
 import { ModeSwitchHelper, ModeSwitch, Mode } from '../../src/index';
 
 import ExampleDecorator from './ExampleDecorator';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -34,7 +35,7 @@ export default class Example extends React.Component {
 
     render() {
         return(
-            <div style={{ border: '1px solid black' }}>
+            <ExampleContainer headline="ModeSwitch">
                 <Mode mode={0}>
                     <div>
                         Hello world
@@ -71,7 +72,7 @@ export default class Example extends React.Component {
                 <div className="button" onClick={ModeSwitch.hide} >Hide ModeSwitch</div>
 
                 <ExampleDecorator test="1" hallo="hi" />
-            </div>
+            </ExampleContainer>
         );
     }
 }

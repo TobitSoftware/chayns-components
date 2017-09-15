@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Checkbox } from '../../src/index';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -12,7 +13,7 @@ export default class Example extends React.Component {
 
     render() {
         return(
-            <div>
+            <ExampleContainer headline="Checkbox">
                <Checkbox
                    label="testlabel"
                    onChange={(value) => { console.log(value); }}
@@ -34,7 +35,7 @@ export default class Example extends React.Component {
                     defaultChecked
                     dangerouslySetLabel={{ __html: '<b>Test</b>' }}
                 />
-            </div>
+            </ExampleContainer>
         );
     }
 }

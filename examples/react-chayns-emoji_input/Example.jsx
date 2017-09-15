@@ -2,6 +2,7 @@ import React from 'react';
 
 import { EmojiInput } from '../../src/index';
 import '../../src/react-chayns-emoji_input/index.scss';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -22,14 +23,14 @@ export default class Example extends React.Component {
         const { text } = this.state;
 
         return(
-            <div>
+            <ExampleContainer headline="EmojiInput">
                 <EmojiInput
                     onInput={this.handleInput}
                     placeholder="Test me!"
                     id="emojiInput_1"
                     value={text}
                 />
-            </div>
+            </ExampleContainer>
         );
     }
 }

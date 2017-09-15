@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ExampleContainer from '../ExampleContainer';
+
 import { TextString } from '../../src/index';
 
 export default class Example extends React.Component {
@@ -16,18 +18,20 @@ export default class Example extends React.Component {
             this.setState({
                 txt: 'txt_rating_average_emojis'
             });
-        }, 5000)
+        }, 5000);
     }
 
     render() {
         return(
-            <TextString
-                textString={this.state.txt}
-                replace={{
-                    '##feedback_count##': 1
-                }}
-                renderHtml
-            />
+            <ExampleContainer headline="TextString">
+                <TextString
+                    textString={this.state.txt}
+                    replace={{
+                        '##feedback_count##': 1
+                    }}
+                    renderHtml
+                />
+            </ExampleContainer>
         );
     }
 }

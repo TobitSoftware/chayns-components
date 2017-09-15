@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Accordion } from '../../src/index';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     state = {
@@ -17,7 +18,7 @@ export default class Example extends React.Component {
 
     render() {
         return(
-            <div>
+            <ExampleContainer headline="Accordion">
                 <Accordion head="Test" badge="2" open={this.state.open}>
                     <Accordion
                         head={<span style={{ color: '#FF0000' }} className="accordion--trigger">
@@ -46,7 +47,7 @@ export default class Example extends React.Component {
                 <Accordion head="Autogrow" autogrow>
                     <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }} />
                 </Accordion>
-            </div>
+            </ExampleContainer>
         );
     }
 }
