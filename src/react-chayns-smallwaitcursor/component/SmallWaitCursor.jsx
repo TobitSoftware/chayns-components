@@ -18,12 +18,14 @@ const SmallWaitCursor = ({ show, style, absolute }) => {
 };
 
 SmallWaitCursor.propTypes = {
-    absolute: PropTypes.bool.isRequired,
-    show: PropTypes.bool.isRequired,
+    absolute: PropTypes.bool,
+    show: PropTypes.bool,
     style: PropTypes.object,
 };
 
 SmallWaitCursor.defaultProps = {
+    absolute: false,
+    show: false,
     style: null,
 };
 
