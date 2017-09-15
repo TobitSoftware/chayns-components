@@ -2,6 +2,7 @@ import React from 'react';
 
 import { ContextMenu } from '../../src/index';
 import '../../src/react-chayns-contextmenu/index.scss';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -62,16 +63,18 @@ export default class Example extends React.Component {
         ];
 
         return(
-            <div style={{ margin: '45%' }}>
-                <i className="fa fa-info-circle" style={{ fontSize: '5rem', alignSelf: 'center' }} onClick={this.setContextMenu}/>
-                <ContextMenu
-                    x={this.state.x}
-                    y={this.state.y}
-                    hide={this.state.hideContextMenu}
-                    items={items}
-                    onLayerClick={this.removeContextMenu}
-                />
-            </div>
+            <ExampleContainer headline="ContextMenu">
+                <div style={{ margin: '15% 45%' }}>
+                    <i className="fa fa-info-circle" style={{ fontSize: '5rem', alignSelf: 'center' }} onClick={this.setContextMenu}/>
+                    <ContextMenu
+                        x={this.state.x}
+                        y={this.state.y}
+                        hide={this.state.hideContextMenu}
+                        items={items}
+                        onLayerClick={this.removeContextMenu}
+                    />
+                </div>
+            </ExampleContainer>
         );
     }
 }

@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { Button, ChooseButton } from '../../src/index';
+import ExampleContainer from "../ExampleContainer";
 
 export default class Example extends React.Component {
     render() {
         return(
-            <div>
+            <ExampleContainer headline="Button">
                 <Button
                     disabled
                     onClick={(event) => {
@@ -36,7 +37,7 @@ export default class Example extends React.Component {
                         Hallo
                     </ChooseButton>
                 </div>
-            </div>
+            </ExampleContainer>
         );
     }
 }

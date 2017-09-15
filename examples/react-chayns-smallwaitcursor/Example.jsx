@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 import '../../src/react-chayns-smallwaitcursor/index.scss';
 
@@ -10,9 +11,7 @@ export default class Example extends React.Component {
 
     render() {
         return(
-            <div style={{ border: '1px solid black' }}>
-                <h1>SmallWaitCursor</h1>
-
+            <ExampleContainer headline="SmallWaitCursor">
                 <h2>inline WaitCursor</h2>
                 <SmallWaitCursor
                     show
@@ -31,7 +30,7 @@ export default class Example extends React.Component {
                         show
                     />
                 </div>
-            </div>
+            </ExampleContainer>
         );
     }
 }

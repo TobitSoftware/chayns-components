@@ -1,11 +1,11 @@
 import React from 'react';
 
+import ExampleContainer from '../ExampleContainer';
 import { InspectElementAnimation as InspectElement } from '../../src/index';
 import ExampleChild from './ExampleChild';
 import '../../src/react-chayns-animations/index.scss';
 
 export default class Example extends React.Component {
-
     state = {
         open: false
     };
@@ -22,7 +22,7 @@ export default class Example extends React.Component {
         const { open } = this.state;
 
         return(
-            <div>
+            <ExampleContainer headline="Animations" >
                 <div className="accordion accordion--open" data-group="acc">
                     <div className="accordion__head">Test</div>
                     <div className="accordion__body">
@@ -77,7 +77,7 @@ export default class Example extends React.Component {
                 <span style={{ margin: '15px' }}>
                     <InspectElement component={ExampleChild} name="Test6" />
                 </span>
-            </div>
+            </ExampleContainer>
         );
     }
 }

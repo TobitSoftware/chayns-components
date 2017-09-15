@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDom from 'react-dom';
 
 import { RadioButton } from '../../src/index';
+import ExampleContainer from '../ExampleContainer';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
-        <div style={{ border: '1px solid black' }}>
-            <h1>RadioButton Example</h1>
+        <ExampleContainer headline="RadioButton">
             <RadioButton
                 onChange={(data) => {
                     console.log(data);
@@ -56,7 +56,7 @@ window.chayns.ready.then(() => {
             >
                 Name: group1
             </RadioButton>
-        </div>,
+        </ExampleContainer>,
         document.querySelector('#react-chayns-radiobutton')
     );
 });

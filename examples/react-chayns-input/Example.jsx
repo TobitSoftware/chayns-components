@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Input } from '../../src/index';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -15,9 +16,7 @@ export default class Example extends React.Component {
     render() {
         const { userNameOnBlur, userNameOnChange } = this.state;
         return (
-            <div style={{ border: 'solid 1px grey', padding: '5px' }}>
-                <h1>Input Example</h1>
-
+            <ExampleContainer headline="Input">
                 <h3>userNameOnBlur</h3>
                 <p>{userNameOnBlur || '-'}</p>
 
@@ -40,7 +39,7 @@ export default class Example extends React.Component {
                     }}
                     responsive={false}
                 />
-            </div>
+            </ExampleContainer>
         );
     }
 }
