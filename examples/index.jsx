@@ -14,6 +14,7 @@ import './react-chayns-radiobutton/index';
 import './react-chayns-selectbutton/index';
 import './react-chayns-selectlist/index';
 import './react-chayns-setupwizard/index';
+import './react-chayns-smallwaitcursor/index';
 import './react-chayns-swiper/index';
 import './react-chayns-textarea/index';
 import './react-chayns-textstring/index';

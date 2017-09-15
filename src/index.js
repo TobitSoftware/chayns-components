@@ -70,6 +70,10 @@ export {
 } from './react-chayns-setupwizard/index';
 
 export {
+    default as SmallWaitCursor
+} from './react-chayns-smallwaitcursor/index';
+
+export {
     Swiper,
     SwipeOverlay,
     Swipe
