@@ -55,22 +55,24 @@ class Accordion extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.open !== nextProps.open) {
-            this.setState({
-                currentState: nextProps.open ? OPENED : CLOSED
-            });
-        }
+        if(nextProps.open !== undefined) {
+            if (this.props.open !== nextProps.open) {
+                this.setState({
+                    currentState: nextProps.open ? OPENED : CLOSED
+                });
+            }
 
-        if(nextProps.open && !hasFlag(this.state.currentState, OPEN)) {
-            this.setState({
-                currentState: OPENED
-            });
-        }
+            if (nextProps.open && !hasFlag(this.state.currentState, OPEN)) {
+                this.setState({
+                    currentState: OPENED
+                });
+            }
 
-        if(!nextProps.open && !hasFlag(this.state.currentState, CLOSE)) {
-            this.setState({
-                currentState: CLOSED
-            });
+            if (!nextProps.open && !hasFlag(this.state.currentState, CLOSE)) {
+                this.setState({
+                    currentState: CLOSED
+                });
+            }
         }
     }
 
@@ -81,7 +83,7 @@ class Accordion extends React.Component {
         if(autogrow && this._body) {
             if(currentState === OPENED) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
-            } else if(currentState === CLOSE) {
+            } else if(hasFlag(currentState, CLOSE)) {
                 this._body.style.maxHeight = null;
             }
         }
@@ -318,7 +320,7 @@ Accordion.defaultProps = {
     right: null,
     autogrow: false,
     badgeStyle: null,
-    open: false,
+    open: undefined,
 };
 
 export default Accordion;
