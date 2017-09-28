@@ -59,11 +59,12 @@ export default class RadioButton extends Component {
      * @returns {XML}
      */
     render() {
-        const { checked, id, children, disabled, name, className, ...props } = this.props;
+        const { checked, id, children, disabled, name, className, onChange, ...props } = this.props;
 
         return (
             <div className={className}>
                 <input
+                    {...props}
                     id={id || this._id}
                     type="radio"
                     className="radio"
@@ -71,7 +72,6 @@ export default class RadioButton extends Component {
                     onChange={this.handleChange}
                     name={name}
                     disabled={disabled}
-                    {...props}
                 />
                 <label htmlFor={id || this._id}>
                     {children}
