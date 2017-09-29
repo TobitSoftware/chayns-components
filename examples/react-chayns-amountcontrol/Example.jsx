@@ -54,6 +54,46 @@ export default class Example extends React.Component {
                     equalize="group-1"
                     buttonText="test-article"
                 />
+
+                <br />
+
+                <AmountControl
+                    amount={amount}
+                    onChange={this.onChange}
+                    equalize="group-1"
+                    buttonText="mtl. 15,95 €"
+                    disableInput
+                />
+
+                <br />
+
+
+                <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                    <AmountControl
+                        amount={amount}
+                        onChange={this.onChange}
+                        equalize="group-1"
+                        buttonText="mtl. 15,95 €"
+                        disableRemove
+                    />
+
+                    <AmountControl
+                        amount={amount}
+                        onChange={this.onChange}
+                        equalize="group-1"
+                        buttonText="mtl. 15,95 €"
+                        disableAdd
+                    />
+
+                    <AmountControl
+                        amount={amount}
+                        onChange={this.onChange}
+                        equalize="group-1"
+                        buttonText="mtl. 15,95 €"
+                        disableAdd
+                        disableRemove
+                    />
+                </div>
             </ExampleContainer>
         );
     }

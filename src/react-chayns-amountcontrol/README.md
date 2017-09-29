@@ -27,15 +27,17 @@ You can now use the components as followed:
 ### Props ###
 You can set the following props on a AmountControl element:
 
-| Property     | Description                                                                             | Type     | Default |
-|--------------|-----------------------------------------------------------------------------------------|----------|---------|
-| amount       | The current amount (behaves like value, not like defaultValue)                          | number   | 0       |
-| onChange     | Function that is called when the user changes the amount                                | function |         |
-| onAdd        | Function that is called when the user click on the add button                           | function |         |
-| onRemove     | Function that is called when the user click on the remove button                        | function |         |
-| equalize     | Equalizes a set of AmountControls (see examples)                                        | string   |         |
-| disabled     | Disables all buttons and inputs                                                         | bool     |         |
-| disableInput | Disables the input field (forces the user to use the control-buttons)                   | bool     |         |
+| Property      | Description                                                                             | Type     | Default |
+|---------------|-----------------------------------------------------------------------------------------|----------|---------|
+| amount        | The current amount (behaves like value, not like defaultValue)                          | number   | 0       |
+| onChange      | Function that is called when the user changes the amount                                | function |         |
+| onAdd         | Function that is called when the user click on the add button                           | function |         |
+| onRemove      | Function that is called when the user click on the remove button                        | function |         |
+| equalize      | Equalizes a set of AmountControls (see examples)                                        | string   |         |
+| disabled      | Disables all buttons and inputs                                                         | bool     |         |
+| disableAdd    | Disables the add button                                                                 | bool     |         |
+| disableInput  | Disables the input field (forces the user to use the control-buttons)                   | bool     |         |
+| disableRemove | Disables the remove button                                                              | bool     |         |
 
 
 ### Examples ###
