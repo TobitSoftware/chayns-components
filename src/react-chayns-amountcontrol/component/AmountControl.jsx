@@ -15,6 +15,8 @@ export default class AmountControl extends React.Component {
         equalize: PropTypes.string,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
+        disableAdd: PropTypes.bool,
+        disableRemove: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -25,6 +27,8 @@ export default class AmountControl extends React.Component {
         equalize: null,
         disabled: false,
         disableInput: false,
+        disableAdd: false,
+        disableRemove: false,
     };
 
     constructor() {
@@ -93,7 +97,7 @@ export default class AmountControl extends React.Component {
     };
 
     render() {
-        const { amount, buttonText, equalize, disabled, disableInput } = this.props;
+        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove } = this.props;
 
         const className = classnames('amount-control', {
             'amount-control--active': amount > 0
@@ -107,7 +111,7 @@ export default class AmountControl extends React.Component {
                 <ControlButton
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
-                    disabled={disabled}
+                    disabled={disabled || disableRemove}
                     className="amount-control__remove"
                 />
                 <AmountInput
@@ -123,7 +127,7 @@ export default class AmountControl extends React.Component {
                 <ControlButton
                     icon="fa-plus"
                     onClick={this.addItem}
-                    disabled={disabled}
+                    disabled={disabled || disableAdd}
                     className="amount-control__add"
                 />
             </div>
