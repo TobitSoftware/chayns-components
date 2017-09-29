@@ -65,7 +65,7 @@ export default class AmountInput extends React.Component {
         let inputValue = value.replace(/[\D\s]+/g, '');
         inputValue = parseInt(inputValue, 10);
 
-        if(!window.chayns.utils.isNumber(value)) {
+        if(!window.chayns.utils.isNumber(inputValue)) {
             inputValue = null;
         }
 
