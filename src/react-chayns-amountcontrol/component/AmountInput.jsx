@@ -33,6 +33,16 @@ export default class AmountInput extends React.Component {
         };
     }
 
+    componentWillMount() {
+        const { amount } = this.props;
+
+        if (window.chayns.utils.isNumber(amount)) {
+            this.setState({
+                value: amount
+            });
+        }
+    }
+
     componentDidMount() {
         window.chayns.ui.equalizer.init();
 
@@ -120,12 +130,12 @@ export default class AmountInput extends React.Component {
         const { amount, equalize, disabled, disableInput } = this.props;
         const { showInput } = this.state;
 
-        const buttonClassName = classnames('amount-control__button', {
-            'amount-control__button--price': !amount,
-            'amount-control__button--amount': amount
-        });
-
         if((amount <= AUTO_HIDE_INPUT_MAX_AMOUNT && !showInput) || disableInput || disabled) {
+            const buttonClassName = classnames('amount-control__button', {
+                'amount-control__button--price': !amount,
+                'amount-control__button--amount': amount
+            });
+
             return (
                 <ChooseButton
                     onClick={this.onButtonClick}
