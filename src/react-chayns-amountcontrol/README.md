@@ -2,15 +2,15 @@
 
 The AmountControl-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
 You have to import the components and styles first:
 
 ```jsx
-import {AmountControl} from 'tobit-chayns_components';
-import 'tobit-chayns_components/react-chayns-amountcontrol/index.css';
+import { AmountControl } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-amountcontrol/index.css';
 ```
 
 
@@ -30,6 +30,7 @@ You can set the following props on a AmountControl element:
 | Property      | Description                                                                             | Type     | Default |
 |---------------|-----------------------------------------------------------------------------------------|----------|---------|
 | amount        | The current amount (behaves like value, not like defaultValue)                          | number   | 0       |
+| className     | The css class of the AmountControl-wrapper                                              | string   |         |
 | onChange      | Function that is called when the user changes the amount                                | function |         |
 | onAdd         | Function that is called when the user click on the add button                           | function |         |
 | onRemove      | Function that is called when the user click on the remove button                        | function |         |

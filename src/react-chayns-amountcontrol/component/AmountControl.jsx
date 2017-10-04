@@ -97,15 +97,16 @@ export default class AmountControl extends React.Component {
     };
 
     render() {
-        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove } = this.props;
+        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className } = this.props;
 
-        const className = classnames('amount-control', {
-            'amount-control--active': amount > 0
+        const classNames = classnames('amount-control', {
+            'amount-control--active': amount > 0,
+            [className]: className
         });
 
         return(
             <div
-                className={className}
+                className={classNames}
                 ref={(node) => { this.node = node; }}
             >
                 <ControlButton
