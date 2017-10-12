@@ -8,7 +8,8 @@
   &__remove {
     width: 37.86px;
     height: 24px;
-    padding: 0;
+    padding: 0 !important;
+    margin-top: 0 !important;
 
     align-self: stretch;
 
@@ -48,6 +49,8 @@
     min-width: 60px;
     margin-left: 6px;
 
+    font-size: 15px !important;
+
     & > input {
       text-align: center;
     }
@@ -78,6 +81,7 @@
 
     transition: margin-right .1s ease-in-out !important;
     margin: 0 -40px 0 6px;
+    margin-top: 0 !important;
     padding: 2px 10px;
 
     height: 24px;
