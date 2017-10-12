@@ -28,12 +28,12 @@
   }
 
   &__add {
-    transition: opacity .1s ease-in-out;
+    transition: opacity .1s ease-in-out !important;
     margin-left: 6px;
   }
 
   &__remove {
-    transition: margin-right .1s ease-in-out, opacity .1s ease-in-out;
+    transition: margin-right .1s ease-in-out, opacity .1s ease-in-out !important;
     margin: 0 -40px 0 5px;
   }
 
@@ -76,7 +76,7 @@
     z-index: 1;
     min-width: 60px;
 
-    transition: margin-right .1s ease-in-out;
+    transition: margin-right .1s ease-in-out !important;
     margin: 0 -40px 0 6px;
     padding: 2px 10px;
 
