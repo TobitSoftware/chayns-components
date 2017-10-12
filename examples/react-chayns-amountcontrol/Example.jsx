@@ -3,6 +3,7 @@ import React from 'react';
 import { AmountControl } from '../../src/index';
 import '../../src/react-chayns-amountcontrol/index.scss';
 import ExampleContainer from '../ExampleContainer';
+import Accordion from "../../src/react-chayns-accordion/component/Accordion";
 
 export default class Example extends React.Component {
     constructor() {
@@ -54,6 +55,20 @@ export default class Example extends React.Component {
                     equalize="group-1"
                     buttonText="test-article"
                 />
+
+                <br />
+
+                <Accordion head={
+                    <AmountControl
+                        disabled={false}
+                        amount={amount}
+                        onChange={this.onChange}
+                        equalize="group-1"
+                        buttonText="0,15"
+                    />}
+                >
+                    Test
+                </Accordion>
 
                 <br />
 
