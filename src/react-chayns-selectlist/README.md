@@ -10,7 +10,7 @@ The package has two components included: SelectList and SelectListItem
 You have to import the components and styles first:
 
 ```jsx
-import {SelectList, SelectListItem} from 'tobit-chayns_components/react-chayns-selectlist';
+import {SelectList, SelectItem} from 'tobit-chayns_components/react-chayns-selectlist';
 import 'tobit-chayns_components/react-chayns-selectlist/index.css';
 ```
 
