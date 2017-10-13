@@ -35,7 +35,7 @@ export default class SelectButton extends React.Component {
             _list.map((item, i) => {
                 const curListKey = listKey || i;
                 if (item[curListKey] && item[listValue]) {
-                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item['isSelected']});
+                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item['isSelected'] });
                 }
             });
         }
