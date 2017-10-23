@@ -50,26 +50,19 @@ export default class SelectButton extends React.Component {
         };
 
         this.onClick = this.onClick.bind(this);
-        this.onCancel = this.onCancel.bind(this);
         this.onSelect = this.onSelect.bind(this);
     }
 
-    onCancel() {
-        const onSelect = this.props.onSelect;
-        if(onSelect) {
-            onSelect(null);
-        }
-    }
-
-    onSelect(selection) {
+    onSelect(selected) {
         const { onSelect } = this.props;
+        const selection = selected.selection;
 
         if(selection.length === 1) {
             this.setLabel(selection[0].name);
         }
 
         if(onSelect) {
-            onSelect(this.getReturnList(selection));
+            onSelect(this.getReturnList(selected));
         }
     }
 
@@ -84,18 +77,16 @@ export default class SelectButton extends React.Component {
             multiselect: multiSelect,
             list: _list
         }).then((selected) => {
-            if(selected.selection.length > 0) {
-                this.onSelect(selected.selection);
-            } else {
-                this.onCancel();
-            }
+            this.onSelect(selected);
         }).catch((e) => {
             console.error(e);
         });
     }
 
-    getReturnList(selectedItems) {
+    getReturnList(selected) {
         const { list, listKey } = this.props;
+        const selectedItems = selected.selection;
+        const buttonType = selected.buttonType;
         const result = [];
 
         selectedItems.map((item) => {
@@ -103,7 +94,7 @@ export default class SelectButton extends React.Component {
                 if (listItem[listKey] === item.value) result.push(listItem);
             });
         });
-        return result;
+        return { buttonType, selection: result };
     }
 
     setLabel(text) {
