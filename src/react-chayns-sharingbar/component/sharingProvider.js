@@ -56,7 +56,7 @@ export const shareProvider = [
         androidIdentifier: null,
         icon: 'fa-twitter',
         action: 1,
-        url: 'http://twitter.com/intent/tweet?text=' + '' + '&url={url}&hashtags=chayns',
+        url: 'http://twitter.com/intent/tweet?text=&url={url}&hashtags=chayns',
         available: true
     },
     {

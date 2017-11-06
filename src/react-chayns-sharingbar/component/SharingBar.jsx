@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SharingBarItem from './SharingbarItem';
+import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 import '../index.scss';
 
@@ -19,20 +19,30 @@ export default class SharingBar extends React.Component {
     constructor() {
         super();
         this.state = {
-            sharigProvider: []
+            sharingProvider: []
         };
     }
 
     componentWillMount() {
         getAvailableShareProviders().then((provider) => {
             const sharingItems = [];
+
             provider.map((item) => {
                 if(item.available) {
-                    sharingItems.push(<SharingBarItem icon={item.icon} name={item.name} provider={item} key={item.id} link={this.props.link || getDefaultShareLink()} />);
+                    sharingItems.push((
+                        <SharingBarItem
+                            icon={item.icon}
+                            name={item.name}
+                            provider={item}
+                            key={item.id}
+                            link={this.props.link || getDefaultShareLink()}
+                        />
+                    ));
                 }
             });
+
             this.setState({
-                sharigProvider: sharingItems
+                sharingProvider: sharingItems
             });
         });
     }
@@ -47,9 +57,7 @@ export default class SharingBar extends React.Component {
 
         return (
             <div className={classNames}>
-                {
-                    this.state.sharigProvider
-                }
+                {this.state.sharingProvider}
             </div>
         );
     }

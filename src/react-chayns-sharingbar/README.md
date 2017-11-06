@@ -1,34 +1,34 @@
-# Sharingbar
+# SharingBar
 
-The Sharingbar is part of the *chayns-components* package. It can be installed via npm:
+The SharingBar is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Sharingbar
+## Usage of the SharingBar
 At least one of the components has to be imported:
 
 ```jsx
-import {Sharingbar} from 'chayns-components/react-chayns-sharingbar';
+import {SharingBar} from 'chayns-components';
 ```
 
 
-You can use the button like this:
+You can use the SharingBar like this:
 ```jsx
-<Sharingbar/>
+<SharingBar/>
 ```
 
 ## Props
-The following properties can be set on the Sharingbar-Component
+The following properties can be set on the SharingBar-Component
 
 | Property   | Description                                                                                        | Type    | Default Value |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| link | The link shared by the sharingbar                                                           | String | Link to the current Site and Tapp |
+| link | The link shared by the SharingBar                                                           | String | Link to the current Site and Tapp |
 | className | Additional CSS-Classes that should be set to the button                                                        | String |
 
 
 ### Examples
 #### Share link
 ```jsx
- <Sharingbar link="https://www.facebook.com/tobit.software/"/>
+ <SharingBar link="https://www.facebook.com/tobit.software/"/>
 ```

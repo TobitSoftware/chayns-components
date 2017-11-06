@@ -1,1 +1,1 @@
-export default from './component/Sharingbar';
+export default from './component/SharingBar';
