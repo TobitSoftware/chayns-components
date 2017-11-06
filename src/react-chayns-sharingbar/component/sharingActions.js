@@ -27,6 +27,6 @@ const actions = {
     2: shareWithApp
 };
 
-export function share(provider, link) {
+export default function share(provider, link) {
     actions[provider.action](provider, link);
 }

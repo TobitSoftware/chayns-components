@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,no-else-return */
 import { shareProvider, shareActions } from './sharingProvider';
 
 export function getAvailableShareProviders() {
@@ -55,21 +55,21 @@ export function getAvailableShareProviders() {
     }
 }
 
-export function getDefaultShareLink(){
+export function getDefaultShareLink() {
     if (chayns.env.isChaynsWeb) {
         return chayns.env.site.url;
     }
-        const tapp = chayns.env.site.tapps.find((element) => {
-            return element.id === chayns.env.site.tapp.id;
-        });
+    const tapp = chayns.env.site.tapps.find((element) => {
+        return element.id === chayns.env.site.tapp.id;
+    });
 
-        let shareLink = `http://${chayns.env.site.domain || `chayns.net/${chayns.env.site.id}`}/`;
+    let shareLink = `http://${chayns.env.site.domain || `chayns.net/${chayns.env.site.id}`}/`;
 
-        if (tapp) {
-            shareLink += tapp.customUrl || (`tapp/index/${tapp.id}`);
-        } else {
-            shareLink += `tapp/index/${chayns.env.site.tapp.id}`;
-        }
+    if (tapp) {
+        shareLink += tapp.customUrl || (`tapp/index/${tapp.id}`);
+    } else {
+        shareLink += `tapp/index/${chayns.env.site.tapp.id}`;
+    }
 
-        return shareLink;
+    return shareLink;
 }
