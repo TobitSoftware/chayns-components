@@ -1,0 +1,27 @@
+.sharing-bar__iten{
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  margin-top: 8px;
+  position: relative;
+  color: white;
+  cursor: pointer;
+  transition: background-color ease 0.2s;
+  >i {
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.sharing-bar__item-list {
+  line-height: 0;
+  padding-bottom:8px;
+}
