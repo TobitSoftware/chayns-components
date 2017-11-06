@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
-import '../index.scss';
 
 export default class SharingBar extends React.Component {
     static propTypes = {
