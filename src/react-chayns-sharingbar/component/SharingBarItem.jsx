@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { insertStyle } from '../../utils/insertStyle';
 import share from './sharingActions';
-import '../index.scss';
 
 export default class SharingBarItem extends React.Component {
     static propTypes ={

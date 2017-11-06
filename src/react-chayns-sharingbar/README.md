@@ -10,6 +10,7 @@ At least one of the components has to be imported:
 
 ```jsx
 import {SharingBar} from 'chayns-components';
+import 'chayns-components/lib/react-chayns-sharingbar/index.css';
 ```
 
 
