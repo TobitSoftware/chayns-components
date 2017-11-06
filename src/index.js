@@ -70,6 +70,10 @@ export {
 } from './react-chayns-setupwizard/index';
 
 export {
+    default as Sharingbar
+} from './react-chayns-sharingbar/index'
+
+export {
     default as SmallWaitCursor
 } from './react-chayns-smallwaitcursor/index';
 
