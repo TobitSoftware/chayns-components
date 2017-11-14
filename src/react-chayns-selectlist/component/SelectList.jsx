@@ -56,7 +56,9 @@ export default class SelectList extends React.Component {
         if(window.chayns.utils.isArray(props.children)) {
             props.children.map((child) => {
                 if(child && child.type && child.type.componentName === SelectItem.componentName) {
-                    if (child.props && (child.props.id || child.props.id === 0) && child.props.name) {
+                    if (child.props &&
+                        (child.props.id || child.props.id === 0) &&
+                        child.props.name) {
                         children.push(child);
                     }
                 }
@@ -105,20 +107,21 @@ export default class SelectList extends React.Component {
 
     _renderChildren(children) {
         if(children.length === 1) return children;
+        const { selectedId } = this.state;
 
         return children.map((child) => {
-            const id = child.props.id;
+            const { id, disabled, className, name } = child.props;
 
             return (
                 <SelectItemInternal
                     id={id}
                     selectListId={this.selectListId}
                     onChange={this._changeActiveItem}
-                    checked={id === this.state.selectedId}
-                    disabled={child.props.disabled}
+                    checked={id === selectedId}
+                    disabled={disabled}
                     key={id}
-                    name={child.props.name}
-                    className={child.props.className}
+                    name={name}
+                    className={className}
                 >
 
                     {child}

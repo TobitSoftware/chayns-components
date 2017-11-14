@@ -30,8 +30,10 @@ export default class SelectItemInternal extends React.Component {
     }
 
     _renderChildren() {
-        if(this.props.checked) {
-            return this.props.children;
+        const { checked, children } = this.props;
+
+        if(checked) {
+            return children;
         }
 
         return null;
@@ -42,26 +44,31 @@ export default class SelectItemInternal extends React.Component {
     }
 
     _handleChange = () => {
-        this.props.onChange(this.props.id);
+        const { onChange, id } = this.props;
+
+        onChange(id);
     };
 
     render() {
-        const { selectListId } = this.props;
+        const { id, className, selectListId, disabled, name, checked } = this.props;
 
         return (
-            <div key={this.props.id} className={this.props.className}>
+            <div
+                key={id}
+                className={className}
+            >
                 <input
                     name={selectListId}
                     type="radio"
                     className="radio"
                     id={this.radioId}
-                    checked={this.props.checked}
+                    checked={checked}
                     onChange={this._handleChange}
-                    disabled={this.props.disabled}
+                    disabled={disabled}
                 />
 
                 <label htmlFor={this.radioId}>
-                    {this.props.name}
+                    {name}
                 </label>
 
                 <CSSTransitionGroup
