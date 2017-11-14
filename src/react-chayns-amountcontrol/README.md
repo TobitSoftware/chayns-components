@@ -1,6 +1,6 @@
 # AmountControl-Component #
 
-The AmountControl-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
+The AmountControl-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
     npm install -S chayns-components@latest
 

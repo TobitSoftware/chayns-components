@@ -60,25 +60,27 @@ You can set a defaultId. In the following example, the second item will be selec
 ```jsx
 <SelectList
     onChange={(id) => {
-	    console.log(id);
-	}}
-	defaultId="hello2"
+        console.log(id);
+    }}
+    defaultId="hello2"
 >
-	<SelectItem id="hello1"
-				name="Hello World">
-				
-		<div>
-			Hello World!
-		</div>
-	</SelectItem>
+    <SelectItem
+        id="hello1"
+        name="Hello World"
+    >
+        <div>
+            Hello World!
+        </div>
+    </SelectItem>
 
-	<SelectItem id="hello2"
-				name="Hello World 2">
-				
-		<div>
-			Hello World 2!
-		</div>
-	</SelectItem>
+    <SelectItem
+        id="hello2"
+        name="Hello World 2"
+    >
+        <div>
+            Hello World 2!
+        </div>
+    </SelectItem>
 </SelectList>
 ```
 #### selectFirst ####
@@ -90,20 +92,21 @@ The following example will select the first valid item from the SelectList and o
     }}
     selectFirst={true}
 >		
-	<div>Hallo</div>
+    <div>Hallo</div>
 
-	<SelectItem id="hello2">	
-		<div>
-			Hello World 2!
-		</div>
-	</SelectItem>
+    <SelectItem id="hello2">	
+        <div>
+            Hello World 2!
+        </div>
+    </SelectItem>
 
-	<SelectItem id="hello3"
-				name="Hello World 3">
-				
-		<div>
-			Hello World 3!
-		</div>
-	</SelectItem>
+    <SelectItem
+        id="hello3"
+        name="Hello World 3"
+    >
+        <div>
+            Hello World 3!
+        </div>
+    </SelectItem>
 </SelectList>
 ```

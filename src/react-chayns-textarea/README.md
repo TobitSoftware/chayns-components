@@ -1,20 +1,22 @@
 # Textarea-Component #
-The Textarea-Component is part of the *tobit-chayns_componetns* package. It can be installed via npm:
+The Textarea-Component is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage of the Textarea ##
 At first the component has to be imported:
 
 ```jsx
-import Textarea from 'tobit-chayns_components/react-chayns-textarea';
+import { TextArea } from 'chayns-components';
 ```
 
 Then it can be used like in the following example:
 ```jsx
-<Textarea placeholder="Eingabefeld"
-		  onChange={this.change} />
+<Textarea
+    placeholder="Eingabefeld"
+    onChange={this.change}
+/>
 ```
 
 ### Props ###
@@ -37,8 +39,10 @@ Then it can be used like in the following example:
 
 ### Autogrow ###
 ```jsx
-<Textarea placeholder="Hello World!"
-		  autogrow={true} />
+<Textarea
+    placeholder="Hello World!"
+    autogrow={true}
+/>
 ```
 
 ### Reference ###

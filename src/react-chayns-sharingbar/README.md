@@ -9,7 +9,7 @@ The SharingBar is part of the *chayns-components* package. It can be installed v
 At least one of the components has to be imported:
 
 ```jsx
-import {SharingBar} from 'chayns-components';
+import { SharingBar } from 'chayns-components';
 import 'chayns-components/lib/react-chayns-sharingbar/index.css';
 ```
 

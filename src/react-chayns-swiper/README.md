@@ -1,8 +1,8 @@
 # Tapp - Setup Wizard #
 
-The **Swiper** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **Swiper** - Component is part of the **chayns-components** package. You can install the whole package with the following statement:
 
-    npm install -D tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 ## Use ##
 
@@ -13,8 +13,8 @@ The swiper-files itself should be 'imported' in the index.html.
 
 You could use it like this:
 ```jsx
-import {Swiper, Swipe} from 'tobit-chayns_components/react-chayns-swiper';
-import 'tobit-chayns_components/react-chayns-swiper/index.css';
+import { Swiper, Swipe } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-swiper/index.css';
 
 return (
     <Swiper>

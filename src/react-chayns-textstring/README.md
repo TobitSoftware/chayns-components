@@ -1,20 +1,20 @@
 # TextString-Component #
 
-The TextString-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
+The TextString-Component is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
 At first the component needs to be imported:
 
 ```jsx
-import TextString from 'tobit-chayns_components/react-chayns-textstring';
+import { TextString } from 'chayns-components';
 ```
 
 The component can be used in JSX like in the following example:
 ```jsx
-	<TextString textString="txt_mein_textstring"/>
+<TextString textString="txt_mein_textstring" />
 ```
 
 
@@ -30,17 +30,21 @@ The component can be used in JSX like in the following example:
 ## Example ##
 ### Replacing Variables ###
 ```jsx
-<TextStrings textString="txt_rating"
-			 replace={{
-				 '##location_id##': window.chayns.env.site.locationId,
-				 '##site_id##': window.chayns.env.site.id
-			 }} />
+<TextStrings
+    textString="txt_rating"
+    replace={{
+        '##location_id##': window.chayns.env.site.locationId,
+        '##site_id##': window.chayns.env.site.id
+    }}
+/>
 ```
 
 
 ### Usage of HTML###
 To use HTML in an textstring it has to be activated in the component.
 ```jsx
-<TextStrings textString="txt_rating"
-			 renderHtml={true} />
+<TextStrings
+    textString="txt_rating"
+    renderHtml
+/>
 ```

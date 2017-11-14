@@ -1,15 +1,15 @@
 # Checkbox
 
-The Checkbox is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Checkbox is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage of the Checkbox
 The checkbox has to be imported:
 
 ```jsx
-import {Checkbox} from 'tobit-chayns_components/react-chayns-checkbox';
+import { Checkbox } from 'chayns-components';
 ```
 
 

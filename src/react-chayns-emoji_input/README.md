@@ -3,17 +3,17 @@
 **WARNING: The EmojiInput does not work correct in the Internet Explorer.**  
 **Please use a normal Input or Textarea there!!!**
 
-The EmojiInput is part of the *tobit-chayns_components* package. It can be installed via npm:
+The EmojiInput is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage of the EmojiInput
 The input has to be imported:
 
 ```jsx
-import {EmojiInput} from 'tobit-chayns_components/react-chayns-emojiInput';
-import 'tobit-chayns_components/react-chayns-emojiInput/index.css';
+import { EmojiInput } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-emojiInput/index.css';
 ```
 
 

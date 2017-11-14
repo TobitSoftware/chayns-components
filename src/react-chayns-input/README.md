@@ -1,15 +1,15 @@
 # Input
 
-The Input is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Input is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage of the Input
 The input has to be imported:
 
 ```js
-import {Input} from 'tobit-chayns_components/react-chayns-input';
+import { Input } from 'chayns-components';
 ```
 
 

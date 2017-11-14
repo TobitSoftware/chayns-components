@@ -9,8 +9,8 @@ The SmallWaitCursor-Component is part of the *chayns-components*-Package. You ca
 You have to import the components and styles first:
 
 ```jsx
-import { SmallWaitCursor } from 'tobit-chayns_components';
-import 'chayns-components/react-chayns-smallwaitcursor/index.css';
+import { SmallWaitCursor } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-smallwaitcursor/index.css';
 ```
 
 

@@ -1,8 +1,8 @@
 # Accordion-Component #
 
-The Accordion-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Accordion-Component is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 The Accordion-Component hides(actually removes) all child elements when it gets closed and makes the webpage faster. This gets very useful if many elements are stored in the accordion or if there are even wrapped accordions.
 
@@ -10,17 +10,17 @@ The Accordion-Component hides(actually removes) all child elements when it gets 
 At first the component has to be imported:
 
 ```jsx
-import Accordion from 'tobit-chayns_components/react-chayns-accordion';
+import { Accordion } from 'chayns-components';
 ```
 
 
 Then it can be used like in the following:
 ```jsx
-	<Accordion head="Hallo">
-		<div className="accordion__content">
-			Hello World!
-		</div>
-	</Accordion>
+<Accordion head="Hallo">
+    <div className="accordion__content">
+        Hello World!
+    </div>
+</Accordion>
 ```
 
 ### Props ###
@@ -54,9 +54,9 @@ The following properties can be set
 The Accordion-Component allows you to create badges using a prop. The badge wont be created it the props are falsely.
 ```jsx
 <Accordion head="No JSX" badge="15.02.">
-	<div className="accordion__content">
-		<Calendar />
-	</div>
+    <div className="accordion__content">
+        <Calendar />
+    </div>
 </Accordion>
 ```
 
@@ -66,14 +66,14 @@ You can do so by specify multiple children. Do not wrap the Accordions in an oth
 ```jsx
 <Accordion head="JavaScript" badge="1997">
     <Accordion head="ES5" isWrapped>
-    	<div className="accordion__content">
-    		Hello functions
-    	</div>
+        <div className="accordion__content">
+            Hello functions
+        </div>
     </Accordion>
     <Accordion head="ES6" badge="2015" isWrapped>
-    	<div className="accordion__content">
-    		Hello classes (functions)
-    	</div>
+        <div className="accordion__content">
+            Hello classes (functions)
+        </div>
     </Accordion>
 </Accordion>
 ```
@@ -83,8 +83,8 @@ The content of an accordion can be rendered anytime instead of just when opening
 I.e. it is useful if it is necessary to execute JavaScript-Code that is stored inside this accordion.
 ```jsx
 <Accordion head="No JSX" renderClosed={true}>
-	<div className="accordion__content">
-		<MyAwesomeES5Script />
-	</div>
+    <div className="accordion__content">
+        <MyAwesomeES5Script />
+    </div>
 </Accordion>
 ```

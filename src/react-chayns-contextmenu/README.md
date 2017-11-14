@@ -1,32 +1,32 @@
 # ContextMenu - Component #
 
-The **ContextMenu** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **ContextMenu** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 ## Use ##
 
 First of all import the component to a component of your own project.
 
 ```jsx
-import {ContextMenu} from 'tobit-chayns_components/react-chayns-contextmenu';
-import 'tobit-chayns_components/react-chayns-contextmenu/index.css';
+import { ContextMenu } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-contextmenu/index.css';
 ```
 I would recommend to import this component to a high level component of your project, because with that you can use one **ContextMenu** component for your whole project and you can store the properties for the **ContextMenu** at one place.
 
 You can init your **ContextMenu** like this:
 ```jsx
-	<ContextMenu
-        x={100}
-        y={100}
-        hide={false}
-        items={[{
-            className: 'fa fa-plus',
-            onClick: this.addOnClick,
-            text: 'Hinzufügen'
-        }]}
-        onLayerClick={()=>console.log('hide')}
-    />
+<ContextMenu
+    x={100}
+    y={100}
+    hide={false}
+    items={[{
+        className: 'fa fa-plus',
+        onClick: this.addOnClick,
+        text: 'Hinzufügen'
+    }]}
+    onLayerClick={()=>console.log('hide')}
+/>
 ```
 
 

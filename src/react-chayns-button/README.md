@@ -1,15 +1,15 @@
 # Button / ChooseButton
 
-The Button/ChooseButton is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Button/ChooseButton is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage of the Button
 At least one of the components has to be imported:
 
 ```jsx
-import {Button, ChooseButton} from 'tobit-chayns_components/react-chayns-button';
+import { Button, ChooseButton } from 'chayns-components';
 ```
 
 
@@ -36,10 +36,10 @@ The following properties can be set on the Button and the ChooseButton-Component
 #### Disabled Button
 ```jsx
 <Button
-	disabled={true}
-	onClick={function(event) {
-		console.log(event);
-	}}
+    disabled={true}
+    onClick={function(event) {
+        console.log(event);
+    }}
 >
 	Hello World!
 </Button>
@@ -47,12 +47,12 @@ The following properties can be set on the Button and the ChooseButton-Component
 #### ChooseButton
 ```jsx
 <ChooseButton>
-	Hello World!
+    Hello World!
 </ChooseButton>
 ```
 Is the same as:
 ```jsx
-<Button chooseButton={true} >
-	Hello World!
+<Button chooseButton >
+    Hello World!
 </Button>
 ```

@@ -1,8 +1,8 @@
 # Animation-Components
 
-The Animation-Components are part of the *tobit-chayns_components* package. It can be installed via npm:
+The Animation-Components are part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -D tobit-chayns_components@latest
+    npm install -S chayns-components@latest
     
 The Animation-Components are a collection of components to animate other React-Components.
 
@@ -10,7 +10,8 @@ The Animation-Components are a collection of components to animate other React-C
 At first the component needs to be imported:
 
 ```jsx
-import { InspectElementAnimation } from 'tobit-chayns_components/react-chayns-animations';
+import { InspectElementAnimation } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-animations/index.css'
 ```
 
 You can then animate nearly any of your own React-Compnents with some changes with the InspectElementAnimation-tag. You have to specify the React-class itself.
@@ -24,7 +25,7 @@ Your component gets two additional props (both are functions): *openOverlay* and
 export default class MyComponent extends React.Component {
     render() {
         const {openOverlay} = this.props;
-		
+        
         return (
             <div
                 onClick={openOverlay}

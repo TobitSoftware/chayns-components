@@ -1,8 +1,8 @@
 # Tapp - Setup Wizard #
 
-The **Tapp - Setup Wizard** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **Tapp - Setup Wizard** - Component is part of the **chayns-components** package. You can install the whole package with the following statement:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 ## Use ##
 
@@ -11,22 +11,22 @@ The **Setup Wizard** is usually used for setting up Tapps for the first time. My
 For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupItem*.
 
 ```jsx
-import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
-import 'tobit-chayns_components/react-chayns-setupwizard/index.css';
+import {SetupWizard, SetupItem} from 'chayns-components/react-chayns-setupwizard';
+import 'chayns-components/lib/react-chayns-setupwizard/index.css';
 ```
 
 The basic structure of the component will be the following:
 ```jsx
 <SetupWizard ready={()=>{}}>
-	<SetupItem title="First">
-		<FirstSetup/>
-	</SetupItem>
-	<SetupItem title="Second">
-		<SecondSetup/>
-	</SetupItem>
-	<SetupItem title="Third">
-		<ThirdSetup/>
-	</SetupItem>
+    <SetupItem title="First">
+        <FirstSetup/>
+    </SetupItem>
+    <SetupItem title="Second">
+        <SecondSetup/>
+    </SetupItem>
+    <SetupItem title="Third">
+        <ThirdSetup/>
+    </SetupItem>
 </SetupWizard>
 ```
 
