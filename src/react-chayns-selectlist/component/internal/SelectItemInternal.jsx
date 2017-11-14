@@ -46,10 +46,12 @@ export default class SelectItemInternal extends React.Component {
     };
 
     render() {
+        const { selectListId } = this.props;
+
         return (
             <div key={this.props.id} className={this.props.className}>
                 <input
-                    name="sampleRadio"
+                    name={selectListId}
                     type="radio"
                     className="radio"
                     id={this.radioId}

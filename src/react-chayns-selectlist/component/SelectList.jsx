@@ -40,7 +40,7 @@ export default class SelectList extends React.Component {
     }
 
     componentWillMount() {
-        this.selectListId = SelectList.maxId;
+        this.selectListId = `cc_selectlist__${SelectList.maxId}`;
         SelectList.maxId += 1;
 
         this._cleanChildren(this.props);
