@@ -6,11 +6,14 @@ export default class SelectItemInternal extends React.Component {
     static propTypes = {
         id: PropTypes.number,
         onChange: PropTypes.func.isRequired,
+        selectListId: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string,
+        ]).isRequired,
         className: PropTypes.string,
         checked: PropTypes.bool,
         disabled: PropTypes.bool,
         children: PropTypes.node,
-        selectListId: PropTypes.number.isRequired,
         name: PropTypes.string
     };
 

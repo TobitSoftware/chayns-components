@@ -5,6 +5,18 @@ import { SelectList, SelectItem } from '../../src/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
 export default class Example extends React.Component {
+    state = {
+        selectedId: 1
+    };
+
+    componentDidMount() {
+        window.setTimeout(() => {
+            this.setState({
+                selectedId: 2
+            });
+        }, 1000);
+    }
+
     render() {
         const elements = [];
 
@@ -24,7 +36,14 @@ export default class Example extends React.Component {
 
         return(
             <ExampleContainer headline="SelectList">
-                <SelectList selectFirst className="hello world">
+                <SelectList
+                    selectFirst
+                    // value={this.state.selectedId}
+                    className="hello world"
+                    onChange={(value) => {
+                        console.log('change selectlist', value);
+                    }}
+                >
                     {
                         elements.map((element, index) => {
                             if(!element) return null;
@@ -34,7 +53,13 @@ export default class Example extends React.Component {
                             };
 
                             return (
-                                <SelectItem name="Hi" id={index} key={index} {...others} className="Hi">
+                                <SelectItem
+                                    name="Hi"
+                                    id={index}
+                                    key={index}
+                                    {...others}
+                                    className="Hi"
+                                >
                                     {element}
                                 </SelectItem>
                             );

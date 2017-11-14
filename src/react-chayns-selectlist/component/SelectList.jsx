@@ -11,7 +11,11 @@ export default class SelectList extends React.Component {
 
     static propTypes = {
         onChange: PropTypes.func,
-        defaultId: PropTypes.oneOfType([
+        defaultValue: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        value: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
@@ -21,7 +25,8 @@ export default class SelectList extends React.Component {
 
     static defaultProps = {
         className: null,
-        defaultId: null,
+        defaultValue: null,
+        value: null,
         onChange: null,
         selectFirst: null,
     };
@@ -30,12 +35,12 @@ export default class SelectList extends React.Component {
         super(props);
 
         this.state = {
-            selectedId: props.defaultId || 0,
+            selectedId: props.defaultValue || 0,
             children: []
         };
 
-        if(props.defaultId && props.onChange) {
-            props.onChange(props.defaultId);
+        if(props.defaultValue && props.onChange) {
+            props.onChange(props.defaultValue);
         }
     }
 
@@ -47,6 +52,12 @@ export default class SelectList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (nextProps.value && nextProps.value !== this.props.value) {
+            this.setState({
+                selectedId: nextProps.value,
+            });
+        }
+
         this._cleanChildren(nextProps);
     }
 
@@ -79,6 +90,14 @@ export default class SelectList extends React.Component {
 
         if(this.changing) return;
 
+        if(this.props.onChange) {
+            this.props.onChange(id);
+        }
+
+        if(this.props.value) {
+            return;
+        }
+
         this.changing = true;
 
         window.setTimeout(() => {
@@ -88,10 +107,6 @@ export default class SelectList extends React.Component {
         this.setState({
             selectedId: id
         });
-
-        if(this.props.onChange) {
-            this.props.onChange(id);
-        }
     };
 
     _selectFirstItem(children) {

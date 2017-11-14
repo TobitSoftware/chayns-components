@@ -37,32 +37,32 @@ The SelectList only shows valid SelectItems (they need at least the following pr
 ### Props (SelectList) ###
 You can set the following props on a SelectList element:
 
-| Property   | Description                                                                                        | Type    | Default |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| onChange | Callback that will be triggered when the selection changes                                                 | function |  |
-| defaultId | Sets the id of an element that should be preselected                                                           | string, int |  |
-| selectFirst | Automatically select the first entry, triggers onChange-callback                                                          | boolean |  false            |
-| className | Sets the css-class of the selectlist                                                         | boolean |  false            |
+| Property     | Description                                                                   | Type        | Default      |
+|--------------|-------------------------------------------------------------------------------|-------------|--------------|
+| onChange     | Callback that will be triggered when the selection changes                    | function    |              |
+| defaultValue | Sets the id of an element that should be preselected                          | string, int |              |
+| selectFirst  | Automatically select the first entry, triggers onChange-callback              | boolean     |  false       |
+| className    | Sets the css-class of the selectlist                                          | boolean     |  false       |
 
 
 ### Props (SelectItem) ###
 You can set the following props on a SelectList element:
 
-| Property   | Description                                                                                        | Type    | Default |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| id | The id of the item, will be send to onChange-callback and used in defaultId prop of the SelectList                                                 | string, int | *required* |
-| name | Sets the id of an element that should be preselected                                                           | string | *required* |
-| className | Sets the css-class of the parent element above the radiobutton                                                         | boolean |  false            |
+| Property  | Description                                                                                         | Type        | Default    |
+|-----------|-----------------------------------------------------------------------------------------------------|-------------|------------|
+| id        | The id of the item, will be send to onChange-callback and used in defaultId prop of the SelectList  | string, int | *required* |
+| name      | Sets the id of an element that should be preselected                                                | string      | *required* |
+| className | Sets the css-class of the parent element above the radiobutton                                      | boolean     |  false     |
 
 ### Beispiele ###
-#### defaultId ####
-You can set a defaultId. In the following example, the second item will be selected and "hello2" will be printed to the console.
+#### defaultValue ####
+You can set a defaultValue. In the following example, the second item will be selected and "hello2" will be printed to the console.
 ```jsx
 <SelectList
     onChange={(id) => {
         console.log(id);
     }}
-    defaultId="hello2"
+    defaultValue="hello2"
 >
     <SelectItem
         id="hello1"
@@ -90,7 +90,7 @@ The following example will select the first valid item from the SelectList and o
     onChange={(id) => {
         console.log(id);
     }}
-    selectFirst={true}
+    selectFirst
 >		
     <div>Hallo</div>
 
