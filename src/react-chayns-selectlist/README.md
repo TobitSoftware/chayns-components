@@ -1,8 +1,8 @@
 # SelectList-Component #
 
-The SelectList-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
+The SelectList-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
@@ -10,8 +10,8 @@ The package has two components included: SelectList and SelectListItem
 You have to import the components and styles first:
 
 ```jsx
-import {SelectList, SelectListItem} from 'tobit-chayns_components/react-chayns-selectlist';
-import 'tobit-chayns_components/react-chayns-selectlist/index.css';
+import { SelectList, SelectListItem } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-selectlist/index.css';
 ```
 
 
@@ -58,11 +58,12 @@ You can set the following props on a SelectList element:
 #### defaultId ####
 You can set a defaultId. In the following example, the second item will be selected and "hello2" will be printed to the console.
 ```jsx
-<SelectList onChange={(id) => {
-				console.log(id);
-			}}
-			defaultId="hello2">
-			
+<SelectList
+    onChange={(id) => {
+	    console.log(id);
+	}}
+	defaultId="hello2"
+>
 	<SelectItem id="hello1"
 				name="Hello World">
 				
@@ -78,17 +79,17 @@ You can set a defaultId. In the following example, the second item will be selec
 			Hello World 2!
 		</div>
 	</SelectItem>
-
 </SelectList>
 ```
 #### selectFirst ####
 The following example will select the first valid item from the SelectList and output "hello3" to the console:
 ```jsx
-<SelectList onChange={(id) => {
-				console.log(id);
-			}}
-			selectFirst={true}>
-			
+<SelectList
+    onChange={(id) => {
+        console.log(id);
+    }}
+    selectFirst={true}
+>		
 	<div>Hallo</div>
 
 	<SelectItem id="hello2">	
@@ -104,6 +105,5 @@ The following example will select the first valid item from the SelectList and o
 			Hello World 3!
 		</div>
 	</SelectItem>
-
 </SelectList>
 ```
