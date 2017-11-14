@@ -10,7 +10,11 @@ export default class SelectItem extends React.Component {
             PropTypes.string,
             PropTypes.number
         ]),
-        name: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
+        name: PropTypes.oneOfType([ // eslint-disable-line react/no-unused-prop-types
+            PropTypes.string,
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
         disabled: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
         className: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
         children: PropTypes.node,
