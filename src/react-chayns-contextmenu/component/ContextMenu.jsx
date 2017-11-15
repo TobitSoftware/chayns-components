@@ -33,13 +33,15 @@ const ContextMenu = ({hide, onLayerClick, x, y, items}) => {
 ContextMenu.defaultProps = {
     hide: true,
     onLayerClick: () => {},
+    x: undefined,
+    y: undefined
 };
 
 ContextMenu.propTypes = {
     hide: PropTypes.bool,
     onLayerClick: PropTypes.func,
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
+    x: PropTypes.number,
+    y: PropTypes.number,
     items: PropTypes.arrayOf(
         PropTypes.shape({
             className: PropTypes.string,
