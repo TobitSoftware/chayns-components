@@ -1,0 +1,31 @@
+.cc__scroll-view {
+  position: relative;
+  overflow: hidden;
+
+  &--scroll {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &__content {
+    float: left;
+    overflow-y: scroll;
+  }
+
+  &__bar {
+    position: absolute;
+
+    right: 0;
+    width: 10px;
+
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
