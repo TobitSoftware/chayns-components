@@ -1,1 +1,1 @@
-export default from "./component/ContextMenu";
+export default from './component/ContextMenu';
