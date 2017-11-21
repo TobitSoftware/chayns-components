@@ -20,6 +20,9 @@
     right: 0;
     width: 10px;
 
+    opacity: 0;
+    transition: opacity 250ms;
+
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
@@ -27,5 +30,9 @@
     &:hover {
       background-color: rgba(0, 0, 0, 0.5);
     }
+  }
+
+  &--show-scrollbar .cc__scroll-view__bar, &--scroll .cc__scroll-view__bar {
+    opacity: 1;
   }
 }
