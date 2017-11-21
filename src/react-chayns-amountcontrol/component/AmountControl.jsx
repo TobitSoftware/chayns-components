@@ -18,6 +18,7 @@ export default class AmountControl extends React.Component {
         disableAdd: PropTypes.bool,
         disableRemove: PropTypes.bool,
         className: PropTypes.string,
+        autoInput: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -31,6 +32,7 @@ export default class AmountControl extends React.Component {
         disableAdd: false,
         disableRemove: false,
         className: '',
+        autoInput: false,
     };
 
     constructor() {
@@ -99,7 +101,7 @@ export default class AmountControl extends React.Component {
     };
 
     render() {
-        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className } = this.props;
+        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className, autoInput } = this.props;
 
         const classNames = classnames('amount-control', {
             'amount-control--active': amount > 0,
@@ -118,6 +120,7 @@ export default class AmountControl extends React.Component {
                     className="amount-control__remove"
                 />
                 <AmountInput
+                    autoInput={autoInput}
                     amount={amount}
                     onChange={this.changeAmount}
                     onInput={this.onInput}

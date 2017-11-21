@@ -17,12 +17,14 @@ export default class AmountInput extends React.Component {
         equalize: PropTypes.string,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
+        autoInput: PropTypes.bool,
     };
 
     static defaultProps = {
         equalize: null,
         disabled: false,
-        disableInput: false
+        disableInput: false,
+        autoInput: false,
     };
 
     constructor() {
@@ -128,10 +130,10 @@ export default class AmountInput extends React.Component {
     }
 
     render() {
-        const { amount, equalize, disabled, disableInput } = this.props;
+        const { amount, equalize, disabled, disableInput, autoInput } = this.props;
         const { showInput } = this.state;
 
-        if((amount <= AUTO_HIDE_INPUT_MAX_AMOUNT && !showInput) || disableInput || disabled) {
+        if(((!autoInput || amount <= AUTO_HIDE_INPUT_MAX_AMOUNT) && !showInput) || disableInput || disabled) {
             const buttonClassName = classnames('amount-control__button', {
                 'amount-control__button--price': !amount,
                 'amount-control__button--amount': amount
