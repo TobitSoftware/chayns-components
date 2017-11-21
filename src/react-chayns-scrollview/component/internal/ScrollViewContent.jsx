@@ -12,6 +12,12 @@ export default class ScrollViewContent extends React.Component {
 
     onScroll = () => {
         this.updateScrollBarPosition();
+
+        this.isScrolling = true;
+        window.clearTimeout(this.scrollTimeout);
+        this.scrollTimeout = window.setTimeout(() => {
+            this.isScrolling = false;
+        }, 100);
     };
 
     update() {
@@ -27,12 +33,14 @@ export default class ScrollViewContent extends React.Component {
         this.dim.offsetWidth = this.scrollView.offsetWidth;
         this.dim.clientWidth = this.scrollView.clientWidth;
 
-        if(propScrollTop < 0) {
-            onScrollTopChange(0);
-        } else if(propScrollTop > this.dim.scrollHeight - this.dim.offsetHeight) {
-            onScrollTopChange(this.dim.scrollHeight - this.dim.offsetHeight);
-        } else {
-            this.scrollView.scrollTop = this.props.scrollTop || 0;
+        if(!this.isScrolling) {
+            if (propScrollTop < 0) {
+                onScrollTopChange(0);
+            } else if (propScrollTop > this.dim.scrollHeight - this.dim.offsetHeight) {
+                onScrollTopChange(this.dim.scrollHeight - this.dim.offsetHeight);
+            } else {
+                this.scrollView.scrollTop = this.props.scrollTop || 0;
+            }
         }
 
         if(lastOffsetHeight !== this.dim.offsetHeight || lastScrollHeight !== this.dim.scrollHeight) {
@@ -69,11 +77,11 @@ export default class ScrollViewContent extends React.Component {
         const scrollTopPosition = this.scrollView.scrollTop / this.scrollView.scrollHeight;
         const scrollArea = this.scrollView.offsetHeight;
 
+        onScrollTopChange(this.scrollView.scrollTop);
+
         onUpdateScrollBar({
             top: Math.round(scrollTopPosition * scrollArea),
         });
-
-        onScrollTopChange(this.scrollView.scrollTop);
     }
 
     dim = {};
