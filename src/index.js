@@ -56,6 +56,10 @@ export {
 } from './react-chayns-radiobutton/index';
 
 export {
+    default as ScrollView
+} from './react-chayns-scrollview/index';
+
+export {
     default as SelectButton
 } from './react-chayns-selectbutton/index';
 
