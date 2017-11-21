@@ -40,6 +40,7 @@ You can set the following props on a AmountControl element:
 | disableInput  | Disables the input field (forces the user to use the control-buttons)                   | bool     |         |
 | disableRemove | Disables the remove button                                                              | bool     |         |
 | autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
+| buttonFormatHandler | A function that should return the button-content                                  | func     |         |
 
 
 ### Examples ###
@@ -99,4 +100,15 @@ The following example exactly does that:
         buttonText="test-article"
     />
 </div>
+```
+
+#### buttonFormatHandler ####
+When you use a buttonFormatHandler you could specify the content of the button.
+You should disable the input, when using it.
+```jsx
+<AmountControl
+    amount={1}
+    buttonFormatHandler={({ amount }) => `${amount} h`}
+    disableInput
+/>
 ```

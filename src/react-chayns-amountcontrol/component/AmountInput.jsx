@@ -18,6 +18,7 @@ export default class AmountInput extends React.Component {
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
         autoInput: PropTypes.bool,
+        buttonFormatHandler: PropTypes.func,
     };
 
     static defaultProps = {
@@ -25,6 +26,7 @@ export default class AmountInput extends React.Component {
         disabled: false,
         disableInput: false,
         autoInput: false,
+        buttonFormatHandler: undefined,
     };
 
     constructor() {
@@ -105,7 +107,11 @@ export default class AmountInput extends React.Component {
     };
 
     getButtonValue() {
-        const { amount, buttonText } = this.props;
+        const { amount, buttonText, buttonFormatHandler } = this.props;
+
+        if(buttonFormatHandler) {
+            return buttonFormatHandler({ amount, buttonText });
+        }
 
         if(amount > 0) {
             return `${amount}`;

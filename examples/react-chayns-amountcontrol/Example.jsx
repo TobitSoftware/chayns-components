@@ -110,6 +110,13 @@ export default class Example extends React.Component {
                         disableRemove
                     />
                 </div>
+
+                <AmountControl
+                    amount={amount}
+                    onChange={this.onChange}
+                    buttonFormatHandler={({ amount: a }) => `${a} h`}
+                    disableInput
+                />
             </ExampleContainer>
         );
     }
