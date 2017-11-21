@@ -17,6 +17,7 @@ export default class AmountControl extends React.Component {
         disableInput: PropTypes.bool,
         disableAdd: PropTypes.bool,
         disableRemove: PropTypes.bool,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
@@ -29,6 +30,7 @@ export default class AmountControl extends React.Component {
         disableInput: false,
         disableAdd: false,
         disableRemove: false,
+        className: '',
     };
 
     constructor() {

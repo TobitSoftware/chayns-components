@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 export default class ChooseButton extends React.Component {
-
     static propTypes = {
         children: PropTypes.node.isRequired,
         disabled: PropTypes.bool,

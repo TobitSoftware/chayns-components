@@ -6,8 +6,14 @@ export default class Checkbox extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
-        label: PropTypes.any,
-        children: PropTypes.any,
+        label: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node)
+        ]),
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node)
+        ]),
         onChange: PropTypes.func,
         toggleButton: PropTypes.bool,
         checked: PropTypes.bool,

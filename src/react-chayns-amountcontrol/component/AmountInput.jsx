@@ -46,6 +46,7 @@ export default class AmountInput extends React.Component {
     componentDidMount() {
         window.chayns.ui.equalizer.init();
 
+        // eslint-disable-next-line react/no-did-mount-set-state
         this.setState({
             width: this.node.style.width
         });
