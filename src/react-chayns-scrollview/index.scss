@@ -27,10 +27,6 @@
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
   }
 
   &--show-scrollbar .cc__scroll-view__bar, &--scroll .cc__scroll-view__bar {
@@ -38,10 +34,16 @@
   }
 }
 
-.chayns-color-mode--1 .cc__scroll-view__bar {
-  background-color: rgba(255, 255, 255, 0.1);
+.cc__scroll-view__bar:hover, .cc__scroll-view--scroll .cc__scroll-view__bar {
+  background-color: rgba(0, 0, 0, 0.3);
+}
 
-  &:hover {
+.chayns-color-mode--1 {
+  .cc__scroll-view__bar {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .cc__scroll-view__bar:hover, .cc__scroll-view--scroll .cc__scroll-view__bar {
     background-color: rgba(255, 255, 255, 0.3);
   }
 }
