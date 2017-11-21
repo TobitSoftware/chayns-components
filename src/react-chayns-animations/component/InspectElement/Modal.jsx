@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import * as Constants from './constants';
 
 export default class Modal extends React.Component {
-
     static propTypes = {
         top: PropTypes.string,
         left: PropTypes.string,
@@ -14,6 +13,15 @@ export default class Modal extends React.Component {
         direction: PropTypes.number,
         width: PropTypes.string,
         expandedWidth: PropTypes.number,
+    };
+
+    static defaultProps = {
+        top: undefined,
+        left: undefined,
+        right: undefined,
+        direction: undefined,
+        width: undefined,
+        expandedWidth: undefined,
     };
 
     constructor() {
