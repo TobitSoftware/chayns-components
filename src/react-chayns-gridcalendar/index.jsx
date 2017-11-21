@@ -1,2 +1,3 @@
-import GridCalendar from "./component/GridCalendar";
+import GridCalendar from './component/GridCalendar';
+
 export default GridCalendar;
