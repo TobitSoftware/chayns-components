@@ -19,14 +19,15 @@
     position: absolute;
 
     right: 0;
-    width: 10px;
+    width: 5px;
 
     opacity: 0;
     transition: opacity 250ms;
 
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    box-sizing: border-box;
+    border-radius: 3px;
   }
 
   &--show-scrollbar .cc__scroll-view__bar, &--scroll .cc__scroll-view__bar {
