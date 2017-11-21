@@ -29,6 +29,7 @@ export default class Example extends React.Component {
                 data-equalize="group-1"
             >
                 <AmountControl
+                    autoInput
                     disabled={false}
                     amount={amount}
                     onChange={this.onChange}

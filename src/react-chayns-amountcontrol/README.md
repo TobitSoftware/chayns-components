@@ -39,6 +39,7 @@ You can set the following props on a AmountControl element:
 | disableAdd    | Disables the add button                                                                 | bool     |         |
 | disableInput  | Disables the input field (forces the user to use the control-buttons)                   | bool     |         |
 | disableRemove | Disables the remove button                                                              | bool     |         |
+| autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
 
 
 ### Examples ###
