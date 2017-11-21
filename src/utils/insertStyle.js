@@ -1,6 +1,6 @@
-let styleMap = new Map();
+const styleMap = new Map();
 
-export function insertStyle(id, css) {
+export default function insertStyle(id, css) {
     let styleTag = styleMap.get(id);
     if(!styleTag) {
         styleTag = document.createElement('style');
@@ -10,7 +10,7 @@ export function insertStyle(id, css) {
         styleMap.set(id, styleTag);
     }
 
-    if (styleTag.styleSheet){
+    if (styleTag.styleSheet) {
         styleTag.styleSheet.cssText = css;
     } else {
         styleTag.appendChild(document.createTextNode(css));
