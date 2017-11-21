@@ -54,7 +54,7 @@ export default class ScrollViewContent extends React.Component {
 
     updateScrollBarWidth() {
         const scrollBarWidth = this.scrollView.offsetWidth - this.scrollView.clientWidth;
-        this.scrollView.style.width = `calc(100% + ${scrollBarWidth}px)`;
+        this.scrollView.style.width = `calc(100% + ${scrollBarWidth + 2}px)`;
     }
 
     updateScrollBarHeight() {

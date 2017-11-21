@@ -12,27 +12,39 @@
   &__content {
     float: left;
     overflow-y: scroll;
+    padding-right: 2px;
   }
 
   &__bar {
     position: absolute;
 
     right: 0;
-    width: 10px;
+    width: 5px;
 
     opacity: 0;
     transition: opacity 250ms;
 
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
+    background-color: rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 3px;
   }
 
   &--show-scrollbar .cc__scroll-view__bar, &--scroll .cc__scroll-view__bar {
     opacity: 1;
+  }
+}
+
+.cc__scroll-view__bar:hover, .cc__scroll-view--scroll .cc__scroll-view__bar {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.chayns-color-mode--1 {
+  .cc__scroll-view__bar {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .cc__scroll-view__bar:hover, .cc__scroll-view--scroll .cc__scroll-view__bar {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 }
