@@ -117,6 +117,16 @@ export default class Example extends React.Component {
                     buttonFormatHandler={({ amount: a }) => `${a} h`}
                     disableInput
                 />
+
+                <br />
+
+                <AmountControl
+                    amount={amount}
+                    onChange={this.onChange}
+                    equalize="group-1"
+                    buttonText="(Amount > 0) => Input"
+                    showInput={amount > 0}
+                />
             </ExampleContainer>
         );
     }
