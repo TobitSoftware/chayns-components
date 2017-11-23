@@ -1,8 +1,7 @@
 .amount-control {
   display: inline-flex;
-  margin-right: 6px;
+  margin-right: 0;
   align-items: baseline;
-
 
   &__add,
   &__remove {
@@ -29,8 +28,8 @@
   }
 
   &__add {
-    transition: opacity .1s ease-in-out !important;
-    margin-left: 6px;
+    transition: margin-left .1s ease-in-out, opacity .1s ease-in-out !important;
+    margin-left: 0;
   }
 
   &__remove {
@@ -57,6 +56,12 @@
   }
 
   &--active {
+    margin-right: 6px;
+
+    .amount-control__add {
+      margin-left: 6px;
+    }
+
     .amount-control__button,
     .amount-control__remove {
       margin-right: 0;
