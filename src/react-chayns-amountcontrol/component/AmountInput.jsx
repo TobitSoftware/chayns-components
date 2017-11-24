@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import * as equalizer from '../../utils/equalizer';
 import { ChooseButton, Input } from '../../index';
 
 
@@ -49,12 +50,11 @@ export default class AmountInput extends React.Component {
     }
 
     componentDidMount() {
-        window.chayns.ui.equalizer.init();
+        const { equalize } = this.props;
 
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState({
-            width: this.node.style.width
-        });
+        if(equalize) {
+            equalizer.init();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -62,6 +62,10 @@ export default class AmountInput extends React.Component {
             this.setState({
                 value: nextProps.amount
             });
+        }
+
+        if(nextProps.equalize) {
+            equalizer.init();
         }
     }
 
@@ -150,9 +154,7 @@ export default class AmountInput extends React.Component {
                 <ChooseButton
                     onClick={this.onButtonClick}
                     className={buttonClassName}
-                    data-equalize-width={equalize}
-                    buttonRef={(node) => { this.node = node; }}
-                    style={{ width: this.state.width }}
+                    data-cc-equalize-width={equalize}
                     disabled={disabled}
                 >
                     {this.getButtonValue()}
@@ -166,9 +168,7 @@ export default class AmountInput extends React.Component {
                 onChange={this.onInputChange}
                 className="cc__amount-control__input"
                 onBlur={this.onInputBlur}
-                data-equalize-width={equalize}
-                inputRef={(node) => { this.node = node; }}
-                style={{ width: this.state.width }}
+                data-cc-equalize-width={equalize}
                 disabled={disabled}
                 autoFocus
             />
