@@ -1,7 +1,10 @@
 .cc__amount-control {
+  position: relative;
+  right: 1px;
   display: inline-flex;
   margin-right: 0;
   align-items: baseline;
+  transition: margin-right .2s;
 
   &__add,
   &__remove {
@@ -56,7 +59,7 @@
   }
 
   &--active {
-    margin-right: 6px;
+    right: -1px;
 
     .cc__amount-control__add {
       margin-left: 6px;
