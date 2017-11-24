@@ -1,16 +1,16 @@
 import React from 'react';
 
 import { AmountControl } from '../../src/index';
-import '../../src/react-chayns-amountcontrol/index.scss';
+import '../../src/react-chayns-amountcontrol/shop.scss';
 import ExampleContainer from '../ExampleContainer';
-import Accordion from "../../src/react-chayns-accordion/component/Accordion";
+import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
 export default class Example extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            amount: 0
+            amount: 1
         };
     }
 
@@ -123,7 +123,6 @@ export default class Example extends React.Component {
                 <AmountControl
                     amount={amount}
                     onChange={this.onChange}
-                    equalize="group-1"
                     buttonText="(Amount > 0) => Input"
                     showInput={amount > 0}
                 />
