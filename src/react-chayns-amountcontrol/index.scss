@@ -1,4 +1,4 @@
-.amount-control {
+.cc__amount-control {
   display: inline-flex;
   margin-right: 0;
   align-items: baseline;
@@ -58,22 +58,22 @@
   &--active {
     margin-right: 6px;
 
-    .amount-control__add {
+    .cc__amount-control__add {
       margin-left: 6px;
     }
 
-    .amount-control__button,
-    .amount-control__remove {
+    .cc__amount-control__button,
+    .cc__amount-control__remove {
       margin-right: 0;
     }
 
-    .amount-control__add,
-    .amount-control__remove {
+    .cc__amount-control__add,
+    .cc__amount-control__remove {
       opacity: 1;
     }
 
-    .button--disabled.amount-control__add,
-    .button--disabled.amount-control__remove {
+    .button--disabled.cc__amount-control__add,
+    .button--disabled.cc__amount-control__remove {
       opacity: 0.6;
     }
   }

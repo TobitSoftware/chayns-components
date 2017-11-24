@@ -1,0 +1,37 @@
+@import './index.scss';
+
+$add-color: #20c65a;
+$choosebutton-normal: #e3e3e3;
+$choosebutton-darkmode: #5d5d5d;
+
+.cc__amount-control {
+  .choosebutton {
+    background-color: $choosebutton-normal;
+  }
+
+  &__remove {
+    color: #d23f31;
+  }
+
+  &__add {
+    color: $add-color;
+  }
+
+  &__button--price {
+    &:before {
+      content: '\F07A';
+      font-family: FontAwesome;
+      margin-right: 5px;
+
+      color: $add-color;
+    }
+  }
+}
+
+.chayns-color-mode--1 {
+  .cc__amount-control {
+    .choosebutton {
+      background-color: $choosebutton-darkmode;
+    }
+  }
+}
