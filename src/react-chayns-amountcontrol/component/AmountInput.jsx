@@ -141,9 +141,9 @@ export default class AmountInput extends React.Component {
         const { showInput } = this.state;
 
         if(((!autoInput || amount <= AUTO_HIDE_INPUT_MAX_AMOUNT) && !showInput && !showInputProp) || disableInput || disabled) {
-            const buttonClassName = classnames('amount-control__button', {
-                'amount-control__button--price': !amount,
-                'amount-control__button--amount': amount
+            const buttonClassName = classnames('cc__amount-control__button', {
+                'cc__amount-control__button--price': !amount,
+                'cc__amount-control__button--amount': amount
             });
 
             return (
@@ -164,7 +164,7 @@ export default class AmountInput extends React.Component {
             <Input
                 value={this.getInputValue()}
                 onChange={this.onInputChange}
-                className="amount-control__input"
+                className="cc__amount-control__input"
                 onBlur={this.onInputBlur}
                 data-equalize-width={equalize}
                 inputRef={(node) => { this.node = node; }}

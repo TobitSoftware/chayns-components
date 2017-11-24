@@ -107,8 +107,8 @@ export default class AmountControl extends React.Component {
     render() {
         const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className, autoInput, buttonFormatHandler, showInput } = this.props;
 
-        const classNames = classnames('amount-control', {
-            'amount-control--active': amount > 0,
+        const classNames = classnames('cc__amount-control', {
+            'cc__amount-control--active': amount > 0,
             [className]: className
         });
 
@@ -121,7 +121,7 @@ export default class AmountControl extends React.Component {
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
                     disabled={disabled || disableRemove}
-                    className="amount-control__remove"
+                    className="cc__amount-control__remove"
                 />
                 <AmountInput
                     autoInput={autoInput}
@@ -140,7 +140,7 @@ export default class AmountControl extends React.Component {
                     icon="fa-plus"
                     onClick={this.addItem}
                     disabled={disabled || disableAdd}
-                    className="amount-control__add"
+                    className="cc__amount-control__add"
                 />
             </div>
         );
