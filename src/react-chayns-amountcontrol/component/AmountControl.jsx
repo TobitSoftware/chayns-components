@@ -21,6 +21,7 @@ export default class AmountControl extends React.Component {
         autoInput: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
         showInput: PropTypes.bool,
+        shopStyle: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -37,6 +38,7 @@ export default class AmountControl extends React.Component {
         autoInput: false,
         buttonFormatHandler: undefined,
         showInput: false,
+        shopStyle: false,
     };
 
     constructor() {
@@ -105,10 +107,11 @@ export default class AmountControl extends React.Component {
     };
 
     render() {
-        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className, autoInput, buttonFormatHandler, showInput } = this.props;
+        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className, autoInput, buttonFormatHandler, showInput, shopStyle } = this.props;
 
         const classNames = classnames('cc__amount-control', {
             'cc__amount-control--active': amount > 0,
+            'cc__amount-control--shop': shopStyle,
             [className]: className
         });
 

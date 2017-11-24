@@ -35,6 +35,7 @@ export default class Example extends React.Component {
                     onChange={this.onChange}
                     equalize="group-1"
                     buttonText="0,15"
+                    shopStyle
                 />
 
                 <br />
@@ -126,6 +127,18 @@ export default class Example extends React.Component {
                     buttonText="(Amount > 0) => Input"
                     showInput={amount > 0}
                 />
+
+                <div style={{ textAlign: 'right' }}>
+                    <AmountControl
+                        autoInput
+                        disabled={false}
+                        amount={amount}
+                        onChange={this.onChange}
+                        equalize="group-1"
+                        buttonText="0,15"
+                        shopStyle
+                    />
+                </div>
             </ExampleContainer>
         );
     }
