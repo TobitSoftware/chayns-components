@@ -13,6 +13,13 @@ import { AmountControl } from 'chayns-components';
 import 'chayns-components/lib/react-chayns-amountcontrol/index.css';
 ```
 
+If you want to use the shopStyle-prop you have to import an other css
+(it's a drop-in for index.css to reduce bundle-sizes):
+``` jsx
+-- import 'chayns-components/lib/react-chayns-amountcontrol/index.css';
+++ import 'chayns-components/lib/react-chayns-amountcontrol/shop.css';
+```
+
 
 You can now use the components as followed:
 ```jsx
@@ -42,6 +49,7 @@ You can set the following props on a AmountControl element:
 | autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
 | showInput     | Shows the input as long the buttons are not disabled                                    | bool     | false   |
 | buttonFormatHandler | A function that should return the button-content                                  | func     |         |
+| shopStyle     | Enables the shop-styles for this element                                                | bool     | false   |
 
 
 ### Examples ###
@@ -111,5 +119,14 @@ You should disable the input, when using it.
     amount={1}
     buttonFormatHandler={({ amount }) => `${amount} h`}
     disableInput
+/>
+```
+
+#### shopStyle ####
+You could add the shopStyle-prop to display the component like in the microshop™.
+```jsx
+<AmountControl
+    amount={1}
+    shopStyle
 />
 ```
