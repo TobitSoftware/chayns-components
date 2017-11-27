@@ -138,6 +138,7 @@ export default class AmountControl extends React.Component {
                     equalize={equalize}
                     buttonFormatHandler={buttonFormatHandler}
                     showInput={!!showInput}
+                    shopStyle={shopStyle}
                 />
                 <ControlButton
                     icon="fa-plus"
