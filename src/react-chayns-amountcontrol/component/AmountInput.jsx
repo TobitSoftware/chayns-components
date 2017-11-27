@@ -20,6 +20,7 @@ export default class AmountInput extends React.Component {
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
         autoInput: PropTypes.bool,
+        shopStyle: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
     };
 
@@ -28,6 +29,7 @@ export default class AmountInput extends React.Component {
         disabled: false,
         disableInput: false,
         autoInput: false,
+        shopStyle: false,
         buttonFormatHandler: undefined,
     };
 
@@ -141,7 +143,7 @@ export default class AmountInput extends React.Component {
     }
 
     render() {
-        const { amount, equalize, disabled, disableInput, autoInput, showInput: showInputProp } = this.props;
+        const { amount, equalize, disabled, disableInput, autoInput, showInput: showInputProp, shopStyle } = this.props;
         const { showInput } = this.state;
 
         if(((!autoInput || amount <= AUTO_HIDE_INPUT_MAX_AMOUNT) && !showInput && !showInputProp) || disableInput || disabled) {
