@@ -172,7 +172,7 @@ export default class AmountInput extends React.Component {
                 onBlur={this.onInputBlur}
                 data-cc-equalize-width={equalize}
                 disabled={disabled}
-                autoFocus={window.chayns.env.isDesktop}
+                autoFocus={!shopStyle && window.chayns.env.isDesktop}
             />
         );
     }
