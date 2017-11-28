@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import { ScrollView } from '../../src/index';
 
