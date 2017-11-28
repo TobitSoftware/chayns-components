@@ -63,6 +63,10 @@ export default class InspectElement extends React.Component {
     openOverlay = () => {
         window.clearTimeout(this.closeTimeout);
 
+        if(window.debugLevel >= 1) {
+            console.debug('inspect-element component: openOverlay', this.props, this.state);
+        }
+
         const boundingClientRect = this._container.getBoundingClientRect();
         const bodyWidth = document.body.getBoundingClientRect().width;
 
@@ -81,6 +85,10 @@ export default class InspectElement extends React.Component {
     };
 
     closeOverlay = () => {
+        if(window.debugLevel >= 1) {
+            console.debug('inspect-element component: closeOverlay', this.props, this.state);
+        }
+
         this.setState({
             showModal: false
         });
@@ -156,6 +164,10 @@ export default class InspectElement extends React.Component {
     }
 
     render() {
+        if(window.debugLevel >= 1) {
+            console.debug('render inspect-element component', this.props, this.state);
+        }
+
         return (
             <span className="inspect-element-animation">
                 {this.renderTile()}
