@@ -59,6 +59,10 @@ export default class Modal extends React.Component {
     }
 
     componentWillEnter(callback) {
+        if(window.debugLevel >= 2) {
+            console.debug('inspect-element (Modal) component: componentWillEnter', this.props, this.state);
+        }
+
         this.setState({
             willEnter: true,
             willEnterActive: false,
@@ -91,6 +95,10 @@ export default class Modal extends React.Component {
     }
 
     componentDidEnter() {
+        if(window.debugLevel >= 2) {
+            console.debug('inspect-element (Modal) component: componentDidEnter', this.props, this.state);
+        }
+
         this.setState({
             willEnter: false,
             willEnterActive: false,
@@ -116,6 +124,10 @@ export default class Modal extends React.Component {
     }
 
     componentWillLeave(callback) {
+        if(window.debugLevel >= 2) {
+            console.debug('inspect-element (Modal) component: componentWillLeave', this.props, this.state);
+        }
+
         this.setState({
             willEnter: false,
             willEnterActive: false,
@@ -154,6 +166,10 @@ export default class Modal extends React.Component {
     render() {
         const { top, renderComponent, closeOverlay, direction } = this.props;
         const { willEnter, willEnterActive, willLeave, willLeaveActive, didEnter } = this.state;
+
+        if(window.debugLevel >= 2) {
+            console.debug('render inspect-element (Modal) component', this.props, this.state);
+        }
 
         return (
             <span
