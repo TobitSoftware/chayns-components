@@ -17,7 +17,8 @@ const ContextMenu = ({ hide, onLayerClick, x, y, items }) => {
                 style={{
                     position: 'absolute',
                     left: x,
-                    top: y
+                    top: y,
+                    overflowY: 'scroll'
                 }}
             >
                 <ul className="context-menu__item-list">
