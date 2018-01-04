@@ -65,12 +65,12 @@ export {
 
 export {
     SelectList,
-    SelectItem
+    SelectItem as SelectListItem
 } from './react-chayns-selectlist/index';
 
 export {
     SetupWizard,
-    SetupItem
+    SetupItem as SetupWizardItem
 } from './react-chayns-setupwizard/index';
 
 export {

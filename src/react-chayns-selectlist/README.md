@@ -18,17 +18,17 @@ import 'chayns-components/lib/react-chayns-selectlist/index.css';
 You can now use the components as followed:
 ```jsx
 <SelectList>
-	<SelectItem id="1" name="Hello World">
+	<SelectListItem id="1" name="Hello World">
 		<div>
 			Hello World!
 		</div>
-	</SelectItem>
+	</SelectListItem>
 
-	<SelectItem id="2" name="Hello World 2">
+	<SelectListItem id="2" name="Hello World 2">
 		<div>
 			Hello World 2!
 		</div>
-	</SelectItem>
+	</SelectListItem>
 </SelectList>
 ```
 
@@ -64,23 +64,23 @@ You can set a defaultValue. In the following example, the second item will be se
     }}
     defaultValue="hello2"
 >
-    <SelectItem
+    <SelectListItem
         id="hello1"
         name="Hello World"
     >
         <div>
             Hello World!
         </div>
-    </SelectItem>
+    </SelectListItem>
 
-    <SelectItem
+    <SelectListItem
         id="hello2"
         name="Hello World 2"
     >
         <div>
             Hello World 2!
         </div>
-    </SelectItem>
+    </SelectListItem>
 </SelectList>
 ```
 #### selectFirst ####
@@ -94,19 +94,19 @@ The following example will select the first valid item from the SelectList and o
 >		
     <div>Hallo</div>
 
-    <SelectItem id="hello2">	
+    <SelectListItem id="hello2">
         <div>
             Hello World 2!
         </div>
-    </SelectItem>
+    </SelectListItem>
 
-    <SelectItem
+    <SelectListItem
         id="hello3"
         name="Hello World 3"
     >
         <div>
             Hello World 3!
         </div>
-    </SelectItem>
+    </SelectListItem>
 </SelectList>
 ```

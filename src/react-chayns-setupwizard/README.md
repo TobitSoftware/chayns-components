@@ -11,22 +11,22 @@ The **Setup Wizard** is usually used for setting up Tapps for the first time. My
 For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupItem*.
 
 ```jsx
-import {SetupWizard, SetupItem} from 'chayns-components/react-chayns-setupwizard';
+import {SetupWizard, SetupWizardItem} from 'chayns-components/react-chayns-setupwizard';
 import 'chayns-components/lib/react-chayns-setupwizard/index.css';
 ```
 
 The basic structure of the component will be the following:
 ```jsx
 <SetupWizard ready={()=>{}}>
-    <SetupItem title="First">
+    <SetupWizardItem title="First">
         <FirstSetup/>
-    </SetupItem>
-    <SetupItem title="Second">
+    </SetupWizardItem>
+    <SetupWizardItem title="Second">
         <SecondSetup/>
-    </SetupItem>
-    <SetupItem title="Third">
+    </SetupWizardItem>
+    <SetupWizardItem title="Third">
         <ThirdSetup/>
-    </SetupItem>
+    </SetupWizardItem>
 </SetupWizard>
 ```
 
