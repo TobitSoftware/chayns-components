@@ -11,63 +11,92 @@ export default class SelectList extends React.Component {
 
     static propTypes = {
         onChange: PropTypes.func,
-        defaultId: PropTypes.oneOfType([
+        defaultValue: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number
         ]),
-        selectFirst: PropTypes.bool,
-        className: PropTypes.string
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number
+        ]),
+        selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+        className: PropTypes.string,
+    };
+
+    static defaultProps = {
+        className: null,
+        defaultValue: null,
+        value: null,
+        onChange: null,
+        selectFirst: null,
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedId: props.defaultId || 0,
+            selectedId: props.defaultValue || 0,
             children: []
         };
 
-        if(props.defaultId && props.onChange)
-            props.onChange(props.defaultId);
+        if(props.defaultValue && props.onChange) {
+            props.onChange(props.defaultValue);
+        }
     }
 
     componentWillMount() {
-        this.selectListId = SelectList.maxId;
-        SelectList.maxId++;
+        this.selectListId = `cc_selectlist__${SelectList.maxId}`;
+        SelectList.maxId += 1;
 
         this._cleanChildren(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
+        if (nextProps.value && nextProps.value !== this.props.value) {
+            this.setState({
+                selectedId: nextProps.value,
+            });
+        }
+
         this._cleanChildren(nextProps);
     }
 
     _cleanChildren(props) {
-        let children = [];
+        const children = [];
 
         if(window.chayns.utils.isArray(props.children)) {
             props.children.map((child) => {
-                if(child && child.type && child.type.componentName === SelectItem.componentName)
-                    if(child.props && (child.props.id || child.props.id === 0) && child.props.name)
+                if(child && child.type && child.type.componentName === SelectItem.componentName) {
+                    if (child.props &&
+                        (child.props.id || child.props.id === 0) &&
+                        child.props.name) {
                         children.push(child);
-            })
+                    }
+                }
+            });
         }
 
-        if(this.state.selectedId == 0 && props.selectFirst && children.length > 0) {
+        if(this.state.selectedId === 0 && props.selectFirst && children.length > 0) {
             this._selectFirstItem(children);
         }
 
         this.setState({
-            children: children
+            children
         });
     }
 
     _changeActiveItem = (id) => {
-
         if(id === this.state.selectedId) return;
 
-
         if(this.changing) return;
+
+        if(this.props.onChange) {
+            this.props.onChange(id);
+        }
+
+        if(this.props.value) {
+            return;
+        }
 
         this.changing = true;
 
@@ -78,14 +107,11 @@ export default class SelectList extends React.Component {
         this.setState({
             selectedId: id
         });
-
-        if(this.props.onChange)
-            this.props.onChange(id);
     };
 
     _selectFirstItem(children) {
-        for(let i = 0, z = children.length; i < z; i++) {
-            let props = children[i].props;
+        for(let i = 0, z = children.length; i < z; i += 1) {
+            const props = children[i].props;
 
             if(!props.disabled) {
                 this._changeActiveItem(props.id);
@@ -96,29 +122,31 @@ export default class SelectList extends React.Component {
 
     _renderChildren(children) {
         if(children.length === 1) return children;
+        const { selectedId } = this.state;
 
         return children.map((child) => {
-            let id = child.props.id;
+            const { id, disabled, className, name } = child.props;
 
             return (
-                <SelectItemInternal id={id}
-                                    selectListId={this.selectListId}
-                                    onChange={this._changeActiveItem}
-                                    checked={id == this.state.selectedId}
-                                    disabled={child.props.disabled}
-                                    key={id}
-                                    name={child.props.name}
-                                    className={child.props.className}>
+                <SelectItemInternal
+                    id={id}
+                    selectListId={this.selectListId}
+                    onChange={this._changeActiveItem}
+                    checked={id === selectedId}
+                    disabled={disabled}
+                    key={id}
+                    name={name}
+                    className={className}
+                >
 
                     {child}
                 </SelectItemInternal>
-            )
-        })
+            );
+        });
     }
 
 
     render() {
-
         if(this.state.children.length > 0) {
             return (
                 <div className={this.props.className}>

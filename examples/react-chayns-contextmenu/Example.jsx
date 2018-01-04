@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {ContextMenu} from '../../src/react-chayns-contextmenu/index.jsx';
-import '../../src/react-chayns-contextmenu/style.scss';
+import { ContextMenu } from '../../src/index';
+import '../../src/react-chayns-contextmenu/index.scss';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
-
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
@@ -20,36 +20,36 @@ export default class Example extends React.Component {
         this.addOnClick = this.addOnClick.bind(this);
     }
 
-    setContextMenu(event){
+    setContextMenu(event) {
         this.setState({
             x: event.pageX,
             y: event.pageY,
             hideContextMenu: false
-        })
+        });
     }
 
-    removeContextMenu(){
+    removeContextMenu() {
         this.setState({
             hideContextMenu: true
-        })
+        });
     }
 
-    deleteOnClick(){
-        console.log('Löschen')
+    deleteOnClick() {
+        console.log('Löschen');
         this.setState({
             hideContextMenu: true
-        })
+        });
     }
 
-    addOnClick(){
+    addOnClick() {
         console.log('Hinzufügen');
         this.setState({
             hideContextMenu: true
-        })
+        });
     }
 
-    render(){
-        let items = [
+    render() {
+        const items = [
             {
                 className: 'fa fa-plus',
                 onClick: this.addOnClick,
@@ -61,17 +61,20 @@ export default class Example extends React.Component {
                 text: 'Löschen'
             }
         ];
+
         return(
-            <div style={{margin: '45%'}}>
-                <i className="fa fa-info-circle" style={{fontSize: '5rem', alignSelf: 'center'}} onClick={this.setContextMenu}/>
-                <ContextMenu
-                    x={this.state.x}
-                    y={this.state.y}
-                    hide={this.state.hideContextMenu}
-                    items={items}
-                    onLayerClick={this.removeContextMenu}
-                />
-            </div>
-        )
+            <ExampleContainer headline="ContextMenu">
+                <div style={{ margin: '15% 45%' }}>
+                    <i className="fa fa-info-circle" style={{ fontSize: '5rem', alignSelf: 'center' }} onClick={this.setContextMenu}/>
+                    <ContextMenu
+                        x={this.state.x}
+                        y={this.state.y}
+                        hide={this.state.hideContextMenu}
+                        items={items}
+                        onLayerClick={this.removeContextMenu}
+                    />
+                </div>
+            </ExampleContainer>
+        );
     }
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {EmojiInput} from '../../src/react-chayns-emoji_input/index';
-import '../../src/react-chayns-emoji_input/style.scss';
+import { EmojiInput } from '../../src/index';
+import '../../src/react-chayns-emoji_input/index.scss';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
-
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
@@ -20,17 +20,17 @@ export default class Example extends React.Component {
     };
 
     render() {
-        const {text} = this.state;
+        const { text } = this.state;
 
         return(
-            <div>
+            <ExampleContainer headline="EmojiInput">
                 <EmojiInput
                     onInput={this.handleInput}
                     placeholder="Test me!"
                     id="emojiInput_1"
                     value={text}
                 />
-            </div>
+            </ExampleContainer>
         );
     }
 }

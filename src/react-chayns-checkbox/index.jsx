@@ -1,3 +1,1 @@
-export {
-    default as Checkbox,
-} from "./component/Checkbox";
+export default from './component/Checkbox';

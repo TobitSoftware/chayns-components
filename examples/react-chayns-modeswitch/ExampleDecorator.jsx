@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {connectToModeSwitch} from '../../src/react-chayns-modeswitch/index';
+import { connectToModeSwitch } from '../../src/index';
 
 @connectToModeSwitch(0)
 export default class ExampleDecorator extends React.Component {

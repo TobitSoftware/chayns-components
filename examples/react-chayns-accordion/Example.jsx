@@ -1,21 +1,31 @@
 import React from 'react';
 
-import Accordion from "../../src/react-chayns-accordion/component/Accordion";
+import { Accordion } from '../../src/index';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
+    state = {
+        open: true
+    };
+
+    componentDidMount() {
+        window.setTimeout(() => {
+            this.setState({
+                open: false
+            });
+        }, 5000);
     }
 
     render() {
         return(
-            <div>
-                <Accordion head="Test" badge="2">
+            <ExampleContainer headline="Accordion">
+                <Accordion head="Test" badge="2" open={this.state.open}>
                     <Accordion
-                        head={<span style={{color: '#FF0000'}} className="accordion--trigger">
+                        head={<span style={{ color: '#FF0000' }} className="accordion--trigger">
                                 Test
                               </span>}
                         isWrapped
+                        open
                     >
 
                         <div className="accordion__content">
@@ -27,13 +37,17 @@ export default class Example extends React.Component {
                             Hello World 2
                         </div>
                     </Accordion>
-                    <Accordion head="Test" badge={<i className="fa fa-warning" />} isWrapped>
+                    <Accordion head="Test" badge={<i className="fa fa-warning" />} badgeStyle={{ backgroundColor: 'red' }} isWrapped>
                         <div className="accordion__content">
                             Hello World 2
                         </div>
                     </Accordion>
                 </Accordion>
-            </div>
+
+                <Accordion head="Autogrow" autogrow>
+                    <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }} />
+                </Accordion>
+            </ExampleContainer>
         );
     }
 }

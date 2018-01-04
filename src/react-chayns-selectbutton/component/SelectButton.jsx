@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 export default class SelectButton extends React.Component {
-
     static propTypes = {
         onSelect: PropTypes.func,
         title: PropTypes.string,
         description: PropTypes.string,
         label: PropTypes.string,
-        list: PropTypes.array.isRequired,
+        list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
         listKey: PropTypes.string.isRequired,
         listValue: PropTypes.string.isRequired,
         multiSelect: PropTypes.bool,
         quickFind: PropTypes.bool,
         className: PropTypes.string,
-        style: PropTypes.object,
-        showSelection: PropTypes.bool
+        showSelection: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -25,8 +23,25 @@ export default class SelectButton extends React.Component {
         title: 'Select Dialog',
         description: 'Please select an item',
         label: 'Select',
-        showSelection: true
+        showSelection: true,
+        className: null,
+        onSelect: null,
     };
+
+    static getDialogList(_list, listKey, listValue) {
+        const list = [];
+
+        if (_list) {
+            _list.map((item, i) => {
+                const curListKey = listKey || i;
+                if (item[curListKey] && item[listValue]) {
+                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item.isSelected });
+                }
+            });
+        }
+
+        return list;
+    }
 
     constructor(props) {
         super(props);
@@ -35,76 +50,63 @@ export default class SelectButton extends React.Component {
         };
 
         this.onClick = this.onClick.bind(this);
-        this.onCancel = this.onCancel.bind(this);
         this.onSelect = this.onSelect.bind(this);
     }
 
-    getDialogList(_list, listKey, listValue) {
-        let list = [];
-        if (_list)
-            _list.map((item, i) => {
-                listKey = (listKey ? listKey : i);
-                if (item[listKey] && item[listValue])
-                    list.push({name: item[listValue], value: item[listKey]});
-            });
+    onSelect(selected) {
+        const { onSelect } = this.props;
+        const selection = selected.selection;
 
-        return list;
-    }
-
-    getReturnList(selectedItems) {
-        const {list, listKey} = this.props;
-        let result = [];
-        selectedItems.map((item, i) => {
-            list.map((listItem, j) => {
-               if (listItem[listKey] === item.value) result.push(listItem);
-            });
-        });
-        return result;
-    }
-
-    onCancel() {
-        const onSelect = this.props.onSelect;
-        if (onSelect)
-            onSelect(null);
-    }
-
-    onSelect(selection) {
-        const {onSelect} = this.props;
-        if (selection.length === 1)
+        if(selection.length === 1) {
             this.setLabel(selection[0].name);
-        if (onSelect)
-            onSelect(this.getReturnList(selection));
+        }
+
+        if(onSelect) {
+            onSelect(this.getReturnList(selected));
+        }
     }
 
     onClick() {
-        let {quickFind, multiSelect, title, description, list, listKey, listValue} = this.props;
-        let _list = this.getDialogList(list, listKey, listValue);
+        const { quickFind, multiSelect, title, description, list, listKey, listValue } = this.props;
+        const _list = SelectButton.getDialogList(list, listKey, listValue);
 
         chayns.dialog.select({
-            title: title,
+            title,
             message: description,
             quickfind: quickFind,
             multiselect: multiSelect,
             list: _list
         }).then((selected) => {
-            if (selected.selection.length > 0)
-                this.onSelect(selected.selection);
-            else
-                this.onCancel();
+            this.onSelect(selected);
         }).catch((e) => {
-            console.error(e)
+            console.error(e);
         });
     }
 
+    getReturnList(selected) {
+        const { list, listKey } = this.props;
+        const selectedItems = selected.selection;
+        const buttonType = selected.buttonType;
+        const result = [];
+
+        selectedItems.map((item) => {
+            list.map((listItem) => {
+                if (listItem[listKey] === item.value) result.push(listItem);
+            });
+        });
+        return { buttonType, selection: result };
+    }
+
     setLabel(text) {
-        if (this.props.showSelection)
+        if (this.props.showSelection) {
             this._btn.innerText = text;
+        }
     }
 
     render() {
-        let {className, label} = this.props;
-        let classNames = classnames({
-            'choosebutton': true,
+        const { className, label } = this.props;
+        const classNames = classnames({
+            choosebutton: true,
             [className]: className
         });
 
@@ -112,7 +114,7 @@ export default class SelectButton extends React.Component {
             <div
                 className={classNames}
                 onClick={this.onClick}
-                ref={ref => {this._btn = ref;}}
+                ref={(ref) => { this._btn = ref; }}
             >
                 {label}
             </div>

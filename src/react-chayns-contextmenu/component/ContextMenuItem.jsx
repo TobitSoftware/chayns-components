@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-const ContextMenuItem = ({iconClassName, onClick, text}) => {
+const ContextMenuItem = ({ iconClassName, onClick, text }) => {
     return (
         <li className="context-menu__item" onClick={onClick}>
             <i className={iconClassName}/>
             <span className="context-menu__item-text">{text}</span>
         </li>
-    )
+    );
 };
 
 ContextMenuItem.defaultProps = {

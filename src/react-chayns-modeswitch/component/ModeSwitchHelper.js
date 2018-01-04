@@ -1,14 +1,89 @@
 import '../../polyfills/array-find';
 
-let callbacks = [];
+const callbacks = [];
 let currentMode = null;
 let initialized = false;
+
+function callCallbacks(data) {
+    callbacks.map((callback) => {
+        if(callback && window.chayns.utils.isFunction(callback)) {
+            callback(data);
+        }
+    });
+}
+
+function getChangeListener() {
+    return function (data) {
+        callCallbacks(data);
+
+        currentMode = data;
+    };
+}
+
+function setDefaultGroup() {
+    initialized = true;
+
+    getChangeListener()({
+        id: 0
+    });
+
+    window.chayns.ui.modeSwitch.changeMode(0);
+}
+
+function getUacIds(group) {
+    let retval = [];
+
+    if(group.uacId && window.chayns.utils.isNumber(group.uacId)) {
+        retval.push(group.uacId);
+    }
+
+    if(group.uacIds && window.chayns.utils.isArray(group.uacIds)) {
+        retval = retval.concat(group.uacIds);
+    }
+
+    return retval;
+}
+
+function getAllowedUacIdsFromArray(uacArray) {
+    const userGroups = window.chayns.env.user.groups;
+
+    const allowedUacIds = [];
+
+    for (let i = 0, x = userGroups.length; i < x; i += 1) {
+        if(uacArray.indexOf(userGroups[i].id) !== -1) {
+            allowedUacIds.push(userGroups[i].id);
+        }
+    }
+
+    return allowedUacIds;
+}
+
+function getGroupObject(id, name, uacs) {
+    return {
+        id,
+        uacIds: uacs,
+        name
+    };
+}
+
+function getSavedMode() {
+    return window.chayns.utils.ls.get('react__modeSwitch--currentMode');
+}
+
+function setSavedMode(mode) {
+    return window.chayns.utils.ls.set('react__modeSwitch--currentMode', mode.id);
+}
+
+function getDefaultMode() {
+    const name = (window.chayns.env.user.isAuthenticated) ? window.chayns.env.user.name : '';
+
+    return getGroupObject(0, name, null);
+}
 
 export default class ModeSwitchHelper {
     static init(options) {
         if(options.groups) {
-
-            if( window.chayns.utils.isFunction(options.onChange) ) {
+            if(window.chayns.utils.isFunction(options.onChange)) {
                 callbacks.push(options.onChange);
             }
 
@@ -16,9 +91,9 @@ export default class ModeSwitchHelper {
                 callbacks.push(setSavedMode);
             }
 
-            let allowedGroups = [];
+            const allowedGroups = [];
 
-            let groups = [];
+            const groups = [];
             if (options.groups) {
                 options.groups.map((element) => {
                     if (window.chayns.utils.isObject(element)) {
@@ -33,14 +108,14 @@ export default class ModeSwitchHelper {
             }
 
             if (window.chayns.env.user.isAuthenticated) {
-
-                let groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
+                const groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
                 groupObject.default = true;
                 allowedGroups.push(groupObject);
 
 
-                let savedModeId = null, changeGroupIndex = 0;
-                if (options.save) {
+                let savedModeId = null;
+                let changeGroupIndex = 0;
+                if(options.save) {
                     savedModeId = getSavedMode();
                 }
 
@@ -51,35 +126,34 @@ export default class ModeSwitchHelper {
                 let changeGroup = false;
                 let changeGroupValue = null;
 
-                for (let i = 0, x = groups.length; i < x; i++) {
+                for (let i = 0, x = groups.length; i < x; i += 1) {
                     if (!groups[i].uacId && !groups[i].uacIds) {
-                        let groupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
-                        allowedGroups.push(groupObject);
+                        const addGroupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
+                        allowedGroups.push(addGroupObject);
 
-                        if (groupObject.id === savedModeId) {
+                        if (addGroupObject.id === savedModeId) {
                             changeGroup = true;
                             changeGroupIndex = allowedGroups.length - 1;
-                            changeGroupValue = groupObject;
+                            changeGroupValue = addGroupObject;
                         }
                     } else {
-                        let uacIds = getUacIds(groups[i]);
-                        let allowedUacs = getAllowedUacIdsFromArray(uacIds);
+                        const uacIds = getUacIds(groups[i]);
+                        const allowedUacs = getAllowedUacIdsFromArray(uacIds);
 
                         if (allowedUacs.length > 0) {
-                            let groupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
-                            allowedGroups.push(groupObject);
+                            const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
+                            allowedGroups.push(addGroupObject);
 
-                            if (groupObject.id === savedModeId) {
+                            if (addGroupObject.id === savedModeId) {
                                 changeGroup = true;
                                 changeGroupIndex = allowedGroups.length - 1;
-                                changeGroupValue = groupObject;
+                                changeGroupValue = addGroupObject;
                             }
                         }
                     }
                 }
 
                 if (allowedGroups.length > 1) {
-
                     window.chayns.ui.modeSwitch.init({
                         items: allowedGroups,
                         callback: getChangeListener()
@@ -97,10 +171,11 @@ export default class ModeSwitchHelper {
                     }
 
 
-                    if (changeGroup)
-                    window.setTimeout(() => {
-                        window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                    }, 0);
+                    if (changeGroup) {
+                        window.setTimeout(() => {
+                            window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
+                        }, 0);
+                    }
                 } else {
                     setDefaultGroup();
                 }
@@ -129,7 +204,7 @@ export default class ModeSwitchHelper {
     }
 
     static unregisterOnChange(callback) {
-        let index = callbacks.indexOf(callback);
+        const index = callbacks.indexOf(callback);
 
         if (index > -1) {
             callbacks.splice(index, 1);
@@ -159,80 +234,4 @@ export default class ModeSwitchHelper {
     static isChaynsManager() {
         return this.isUserInGroup(1);
     }
-}
-
-function getChangeListener() {
-    return function(data) {
-        callCallbacks(data);
-
-        currentMode = data;
-    }
-}
-
-function setDefaultGroup() {
-    initialized = true;
-
-    getChangeListener()({
-        id: 0
-    });
-
-    window.chayns.ui.modeSwitch.changeMode(0);
-}
-
-function callCallbacks(data) {
-    callbacks.map((callback) => {
-        if(callback && window.chayns.utils.isFunction(callback)) {
-            callback(data);
-        }
-    });
-}
-
-function getUacIds(group) {
-    let retval = [];
-
-    if(group.uacId && window.chayns.utils.isNumber( group.uacId )) {
-        retval.push(group.uacId);
-    }
-
-    if(group.uacIds && window.chayns.utils.isArray( group.uacIds )) {
-        retval = retval.concat(group.uacIds);
-    }
-
-    return retval;
-}
-
-function getAllowedUacIdsFromArray(uacArray) {
-    let userGroups = window.chayns.env.user.groups;
-
-    let allowedUacIds = [];
-
-    for (let i = 0, x = userGroups.length; i < x; i++) {
-        if(uacArray.indexOf(userGroups[i].id) !== -1) {
-            allowedUacIds.push(userGroups[i].id)
-        }
-    }
-
-    return allowedUacIds;
-}
-
-function getGroupObject(id, name, uacs) {
-    return {
-        id: id,
-        uacIds: uacs,
-        name: name
-    };
-}
-
-function getSavedMode() {
-    return window.chayns.utils.ls.get('react__modeSwitch--currentMode');
-}
-
-function setSavedMode(mode) {
-    return window.chayns.utils.ls.set('react__modeSwitch--currentMode', mode.id);
-}
-
-function getDefaultMode() {
-    let name = (window.chayns.env.user.isAuthenticated) ? window.chayns.env.user.name : '';
-
-    return getGroupObject(0, name, null);
 }

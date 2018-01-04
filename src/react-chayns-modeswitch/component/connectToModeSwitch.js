@@ -4,8 +4,7 @@ import '../../polyfills/object-assign';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
 
-export default (...conf) => (Component) => class PureComponent extends React.Component {
-
+export default (...conf) => Component => class PureComponent extends React.Component {
     static getStores = Component.getStores;
     static getPropsFromStores = Component.getPropsFromStores;
 
@@ -32,27 +31,9 @@ export default (...conf) => (Component) => class PureComponent extends React.Com
 
     update = (mode) => {
         this.setState({
-            mode: mode
+            mode
         });
     };
-
-    render() {
-        if(window.chayns.utils.isArray(conf) && !ModeSwitchHelper.isInitialized()) return null;
-
-        if(this._shouldRender()) {
-
-            let props = Object.assign({}, this.props, {
-                mode: this.state.mode
-            });
-
-            return React.createElement(Component, {
-                    ...props,
-                ...this.state
-            });
-        }
-
-        return null;
-    }
 
     _shouldRender() {
         if(window.chayns.utils.isArray(conf) && conf.indexOf(this.state.mode.id) !== -1) return true;
@@ -62,4 +43,20 @@ export default (...conf) => (Component) => class PureComponent extends React.Com
         return false;
     }
 
-}
+    render() {
+        if(window.chayns.utils.isArray(conf) && !ModeSwitchHelper.isInitialized()) return null;
+
+        if(this._shouldRender()) {
+            const props = Object.assign({}, this.props, {
+                mode: this.state.mode
+            });
+
+            return React.createElement(Component, {
+                ...props,
+                ...this.state
+            });
+        }
+
+        return null;
+    }
+};

@@ -1,16 +1,24 @@
 import React from 'react';
 
-import {SelectList, SelectItem} from '../../src/react-chayns-selectlist/index';
+import ExampleContainer from '../ExampleContainer';
+import { SelectList, SelectItem } from '../../src/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
+    state = {
+        selectedId: 1
+    };
+
+    componentDidMount() {
+        window.setTimeout(() => {
+            this.setState({
+                selectedId: 2
+            });
+        }, 1000);
     }
 
     render() {
-
-        let elements = [];
+        const elements = [];
 
         elements.push(<div className="selectitem__content">
             Intro
@@ -27,24 +35,38 @@ export default class Example extends React.Component {
         elements.push(null);
 
         return(
+            <ExampleContainer headline="SelectList">
+                <SelectList
+                    selectFirst
+                    // value={this.state.selectedId}
+                    className="hello world"
+                    onChange={(value) => {
+                        console.log('change selectlist', value);
+                    }}
+                >
+                    {
+                        elements.map((element, index) => {
+                            if(!element) return null;
 
-            <SelectList selectFirst={true} className="hello world">
-                {
-                    elements.map((element, index) => {
-                        if(!element) return null;
+                            const others = {
+                                disabled: index === 0
+                            };
 
-                        let others = {
-                            disabled: index===0
-                        };
-
-                        return (
-                            <SelectItem name="Hi" id={index} key={index} {...others} className="Hi">
-                                {element}
-                            </SelectItem>
-                        )
-                    })
-                }
-            </SelectList>
+                            return (
+                                <SelectItem
+                                    name="Hi"
+                                    id={index}
+                                    key={index}
+                                    {...others}
+                                    className="Hi"
+                                >
+                                    {element}
+                                </SelectItem>
+                            );
+                        })
+                    }
+                </SelectList>
+            </ExampleContainer>
         );
     }
 }

@@ -3,16 +3,16 @@ import '../polyfills/array-index-of';
 
 export {
     default as ModeSwitch,
-} from "./component/ModeSwitch";
+} from './component/ModeSwitch';
 
 export {
     default as ModeSwitchHelper,
-} from "./component/ModeSwitchHelper";
+} from './component/ModeSwitchHelper';
 
 export {
     default as Mode,
-} from "./component/Mode";
+} from './component/Mode';
 
 export {
     default as connectToModeSwitch,
-} from "./component/connectToModeSwitch";
+} from './component/connectToModeSwitch';

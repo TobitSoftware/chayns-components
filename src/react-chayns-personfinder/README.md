@@ -1,21 +1,23 @@
 # PersonFinder-Component # 
 
-The PersonFinder-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
+The PersonFinder-Component is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage of the PersonFinder ##
 At first the component has to be imported:
 
 ```jsx
-import PersonFinder from 'tobit-chayns_components/react-chayns-personfinder';
+import { PersonFinder } from 'chayns-components';
 ```
 
 Then it can be used like in the following example:
 ```jsx
-<PersonFinder placeholder="Person suchen"
-			  onChange={this.personChanged} />
+<PersonFinder
+    placeholder="Person suchen"
+    onChange={this.personChanged}
+/>
 ```
 
 ### Props ###

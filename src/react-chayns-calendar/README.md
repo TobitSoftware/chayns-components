@@ -1,22 +1,22 @@
 # Calendar - Component #
 
-The **Calendar** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **Calendar** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 ## Use ##
 
 First of all import the component to a component of your own project.
 
 ```jsx
-import {Calendar} from 'tobit-chayns_components/react-chayns-calendar';
-import 'tobit-chayns_components/react-chayns-calendar/style.css';
+import { Calendar } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-calendar/index.css';
 ```
 
 
 You can init the **Calendar** like this:
 ```jsx
-	<Calendar/>
+<Calendar/>
 ```
 
 
