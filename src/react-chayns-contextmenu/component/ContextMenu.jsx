@@ -18,7 +18,6 @@ const ContextMenu = ({ hide, onLayerClick, x, y, items }) => {
                     position: 'absolute',
                     left: x,
                     top: y,
-                    overflowY: 'auto'
                 }}
             >
                 <ul className="context-menu__item-list">

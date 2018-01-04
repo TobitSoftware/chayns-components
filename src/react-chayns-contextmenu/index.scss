@@ -24,6 +24,7 @@
 
 .context-menu.context-menu--active .context-menu__body {
   max-height: 400px!important;
+  overflow-y: auto;
   transition: max-height .3s ease-in 0s;
 }
 
