@@ -1,8 +1,8 @@
 # SelectList-Component #
 
-The SelectList-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
+The SelectList-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
@@ -10,25 +10,25 @@ The package has two components included: SelectList and SelectListItem
 You have to import the components and styles first:
 
 ```jsx
-import {SelectList, SelectItem} from 'tobit-chayns_components/react-chayns-selectlist';
-import 'tobit-chayns_components/react-chayns-selectlist/index.css';
+import { SelectList, SelectListItem } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-selectlist/index.css';
 ```
 
 
 You can now use the components as followed:
 ```jsx
 <SelectList>
-	<SelectItem id="1" name="Hello World">
+	<SelectListItem id="1" name="Hello World">
 		<div>
 			Hello World!
 		</div>
-	</SelectItem>
+	</SelectListItem>
 
-	<SelectItem id="2" name="Hello World 2">
+	<SelectListItem id="2" name="Hello World 2">
 		<div>
 			Hello World 2!
 		</div>
-	</SelectItem>
+	</SelectListItem>
 </SelectList>
 ```
 
@@ -37,73 +37,76 @@ The SelectList only shows valid SelectItems (they need at least the following pr
 ### Props (SelectList) ###
 You can set the following props on a SelectList element:
 
-| Property   | Description                                                                                        | Type    | Default |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| onChange | Callback that will be triggered when the selection changes                                                 | function |  |
-| defaultId | Sets the id of an element that should be preselected                                                           | string, int |  |
-| selectFirst | Automatically select the first entry, triggers onChange-callback                                                          | boolean |  false            |
-| className | Sets the css-class of the selectlist                                                         | boolean |  false            |
+| Property     | Description                                                                   | Type        | Default      |
+|--------------|-------------------------------------------------------------------------------|-------------|--------------|
+| onChange     | Callback that will be triggered when the selection changes                    | function    |              |
+| defaultValue | Sets the id of an element that should be preselected                          | string, int |              |
+| selectFirst  | Automatically select the first entry, triggers onChange-callback              | boolean     |  false       |
+| className    | Sets the css-class of the selectlist                                          | boolean     |  false       |
 
 
 ### Props (SelectItem) ###
 You can set the following props on a SelectList element:
 
-| Property   | Description                                                                                        | Type    | Default |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| id | The id of the item, will be send to onChange-callback and used in defaultId prop of the SelectList                                                 | string, int | *required* |
-| name | Sets the id of an element that should be preselected                                                           | string | *required* |
-| className | Sets the css-class of the parent element above the radiobutton                                                         | boolean |  false            |
+| Property  | Description                                                                                         | Type        | Default    |
+|-----------|-----------------------------------------------------------------------------------------------------|-------------|------------|
+| id        | The id of the item, will be send to onChange-callback and used in defaultId prop of the SelectList  | string, int | *required* |
+| name      | Sets the id of an element that should be preselected                                                | string      | *required* |
+| className | Sets the css-class of the parent element above the radiobutton                                      | boolean     |  false     |
 
 ### Beispiele ###
-#### defaultId ####
-You can set a defaultId. In the following example, the second item will be selected and "hello2" will be printed to the console.
+#### defaultValue ####
+You can set a defaultValue. In the following example, the second item will be selected and "hello2" will be printed to the console.
 ```jsx
-<SelectList onChange={(id) => {
-				console.log(id);
-			}}
-			defaultId="hello2">
-			
-	<SelectItem id="hello1"
-				name="Hello World">
-				
-		<div>
-			Hello World!
-		</div>
-	</SelectItem>
+<SelectList
+    onChange={(id) => {
+        console.log(id);
+    }}
+    defaultValue="hello2"
+>
+    <SelectListItem
+        id="hello1"
+        name="Hello World"
+    >
+        <div>
+            Hello World!
+        </div>
+    </SelectListItem>
 
-	<SelectItem id="hello2"
-				name="Hello World 2">
-				
-		<div>
-			Hello World 2!
-		</div>
-	</SelectItem>
-
+    <SelectListItem
+        id="hello2"
+        name="Hello World 2"
+    >
+        <div>
+            Hello World 2!
+        </div>
+    </SelectListItem>
 </SelectList>
 ```
 #### selectFirst ####
 The following example will select the first valid item from the SelectList and output "hello3" to the console:
 ```jsx
-<SelectList onChange={(id) => {
-				console.log(id);
-			}}
-			selectFirst={true}>
-			
-	<div>Hallo</div>
+<SelectList
+    onChange={(id) => {
+        console.log(id);
+    }}
+    selectFirst
+>		
+    <div>Hallo</div>
 
-	<SelectItem id="hello2">	
-		<div>
-			Hello World 2!
-		</div>
-	</SelectItem>
+    <SelectListItem id="hello2">
+        <div>
+            Hello World 2!
+        </div>
+    </SelectListItem>
 
-	<SelectItem id="hello3"
-				name="Hello World 3">
-				
-		<div>
-			Hello World 3!
-		</div>
-	</SelectItem>
-
+    <SelectListItem
+        id="hello3"
+        name="Hello World 3"
+    >
+        <div>
+            Hello World 3!
+        </div>
+    </SelectListItem>
 </SelectList>
 ```

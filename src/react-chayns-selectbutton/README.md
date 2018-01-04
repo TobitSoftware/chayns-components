@@ -1,15 +1,15 @@
 # SelectButton-Component #
 
-The SelectButton-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
+The SelectButton-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
 You have to import the component first:
 
 ```jsx
-import {SelectButton} from 'tobit-chayns_components/react-chayns-selectbutton';
+import { SelectButton } from 'chayns-components';
 ```
 
 
@@ -46,26 +46,25 @@ You can set the following props on a SelectButton element:
 #### selectFirst ####
 The following example will implement a chayns® chooseButton which onClick opens a selectDialog using the defined array :
 ```jsx
-
-    let pizza = [
-        {
-            id: '0', //this is the listKey
-            name: 'Margherita', //this ist the listValue (shown value inside the dialog)
-            price: '4.00' //additional data that will be returned after selection
-        }, {
-            id: '1',
-            name: 'Salami',
-            price: '4.50'
-        }, {
-            id: '2',
-            name: 'Prosciutto',
-            price: '4.50'
-        }, {
-            id: '3',
-            name: 'Funghi',
-            price: '5.00'
-        }
-    ];
+let pizza = [
+    {
+        id: '0', //this is the listKey
+        name: 'Margherita', //this ist the listValue (shown value inside the dialog)
+        price: '4.00' //additional data that will be returned after selection
+    }, {
+        id: '1',
+        name: 'Salami',
+        price: '4.50'
+    }, {
+        id: '2',
+        name: 'Prosciutto',
+        price: '4.50'
+    }, {
+        id: '3',
+        name: 'Funghi',
+        price: '5.00'
+    }
+];
 
 return (
     <SelectButton

@@ -1,11 +1,11 @@
 export {
     default as Swiper,
-} from "./component/Slider";
+} from './component/Slider';
 
 export {
     default as Swipe,
-} from "./component/Slide";
+} from './component/Slide';
 
 export {
     default as SwipeOverlay,
-} from "./component/SlideOverlay";
+} from './component/SlideOverlay';

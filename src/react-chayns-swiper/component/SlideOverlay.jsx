@@ -13,6 +13,11 @@ export default class SlideOverlay extends React.Component {
         gradient: PropTypes.bool
     };
 
+    static defaultProps = {
+        position: null,
+        gradient: null
+    };
+
     constructor() {
         super();
 
@@ -20,13 +25,13 @@ export default class SlideOverlay extends React.Component {
     }
 
     render() {
-        let className = "slide__overlay__text slide__overlay__text";
+        let className = 'slide__overlay__text slide__overlay__text';
         if(this.props.position) {
             className += `--${this.props.position}`;
         }
 
-        let classNamesTop = classNames({
-            'slide__overlay': true,
+        const classNamesTop = classNames({
+            slide__overlay: true,
             'slide__overlay--gradient': this.props.gradient
         });
 

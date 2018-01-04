@@ -1,8 +1,8 @@
 # Tapp - Setup Wizard #
 
-The **Tapp - Setup Wizard** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **Tapp - Setup Wizard** - Component is part of the **chayns-components** package. You can install the whole package with the following statement:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 ## Use ##
 
@@ -11,22 +11,22 @@ The **Setup Wizard** is usually used for setting up Tapps for the first time. My
 For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupItem*.
 
 ```jsx
-import {SetupWizard, SetupItem} from 'tobit-chayns_components/react-chayns-setupwizard';
-import 'tobit-chayns_components/react-chayns-setupwizard/style.css';
+import {SetupWizard, SetupWizardItem} from 'chayns-components/react-chayns-setupwizard';
+import 'chayns-components/lib/react-chayns-setupwizard/index.css';
 ```
 
 The basic structure of the component will be the following:
 ```jsx
 <SetupWizard ready={()=>{}}>
-	<SetupItem title="First">
-		<FirstSetup/>
-	</SetupItem>
-	<SetupItem title="Second">
-		<SecondSetup/>
-	</SetupItem>
-	<SetupItem title="Third">
-		<ThirdSetup/>
-	</SetupItem>
+    <SetupWizardItem title="First">
+        <FirstSetup/>
+    </SetupWizardItem>
+    <SetupWizardItem title="Second">
+        <SecondSetup/>
+    </SetupWizardItem>
+    <SetupWizardItem title="Third">
+        <ThirdSetup/>
+    </SetupWizardItem>
 </SetupWizard>
 ```
 
@@ -51,9 +51,11 @@ The components got the following properties:
 **SetupWizard**:
 
 
-| Property   | Description                                                                                        | Type   | Default | Required
-|------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
-| ready | callback-Function which gets called right after the last step finished | func |        | true |
+| Property     | Description                                                                | Type   | Default | Required |
+|--------------|----------------------------------------------------------------------------|--------|---------|----------|
+| ready        | callback-Function which gets called right after the last step finished     | func   |         | true     |
+| style        | style of the wizard-root-element                                           | object |         | false    |
+| contentStyle | style of the wizard-content-element                                        | object |         | false    |
 
 **SetupItem**:
 

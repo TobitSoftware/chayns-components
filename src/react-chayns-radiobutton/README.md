@@ -1,22 +1,22 @@
 # RadioButton-Component #
 
-The RadioButton-Component is part of the *tobit-chayns_components*-Package. You can install it with the following command:
+The RadioButton-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage ##
 You have to import the component first:
 
 ```jsx
-import {RadioButton} from 'tobit-chayns_components/react-chayns-radiobutton';
+import { RadioButton } from 'chayns-components';
 ```
 
 
 You can now use the components as followed:
 ```jsx
 <RadioButton>
-	Hello World
+    Hello World
 </RadioButton>
 ```
 
@@ -38,7 +38,7 @@ You can set the following props on a RadioButton element:
 You can set the same name-prop on multiple elements to group them.
 ```jsx
 <div>
-	<RadioButton name="group1">
+    <RadioButton name="group1">
     	Group 1, Entry 1
     </RadioButton>
     

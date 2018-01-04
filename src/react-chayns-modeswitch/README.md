@@ -1,8 +1,8 @@
 # ModeSwitch-Component
 
-The ModeSwitch-Component is part of the *tobit-chayns_components* package. It can be installed via npm:
+The ModeSwitch-Component is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components
     
 The ModeSwitch-Component decides itself, whether to show the ModeSwitch and if so, which modes to show.
 
@@ -10,27 +10,27 @@ The ModeSwitch-Component decides itself, whether to show the ModeSwitch and if s
 At first the component needs to be imported:
 
 ```jsx
-import {ModeSwitch} from 'tobit-chayns_components/react-chayns-modeswitch';
+import { ModeSwitch } from 'chayns-components';
 ```
 
 Afterwards the ModeSwitch-Component has to be initialized at any time (it is recommended to initialize it on tapp start).
 
 JSX initialization
 ```jsx
-	<ModeSwitch groups={[{
-		id: 1,
-		uacIds: [1],
-		name: 'chayns-Manager'
-	}]}/>
+<ModeSwitch groups={[{
+    id: 1,
+    uacIds: [1],
+    name: 'chayns-Manager'
+}]}/>
 ```
 JavaScript initialization
 ```javascript
 ModeSwitch.init({
-	groups: [{
-		id: 1,
-		uacIds: [1],
-		name: 'chayns-Manager'
-	}]
+    groups: [{
+        id: 1,
+        uacIds: [1],
+        name: 'chayns-Manager'
+    }]
 })
 ``` 
 
@@ -60,25 +60,25 @@ A check for the Group '0' will check if the users hasn't selected any mode(usern
 
 The component can be imported with the following line:
 ```jsx
-import {Mode} from 'tobit-chayns_components/react-chayns-modeswitch';
+import { Mode } from 'chayns-components';
 ```
 
 The following shows you the usage:
 ```jsx
 <Mode mode={1}>
-	<div class="tapp__intro">
-		Hello Admin
-	</div>
+    <div class="tapp__intro">
+        Hello Admin
+    </div>
 
-	<div class="tapp__content">
-		Secured Content
-	</div>
+    <div class="tapp__content">
+        Secured Content
+    </div>
 </Mode>
 
 <Mode mode={[0, 1563]}>
-	<div class="tapp__intro">
-		Hello Stranger
-	</div>
+    <div class="tapp__intro">
+        Hello Stranger
+    </div>
 </Mode>
 ```
 
@@ -100,7 +100,7 @@ The props of the react element will be forwarded.
 
 ### Example
 ```jsx
-import {connectToModeSwitch} from 'tobit-chayns_components/react-chayns-modeswitch';
+import { connectToModeSwitch } from 'chayns-components';
 
 @connectToModeSwitch([1])
 export default class Example extends React.Component {

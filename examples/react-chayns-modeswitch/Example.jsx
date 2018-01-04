@@ -1,8 +1,9 @@
 import React from 'react';
 
-import {ModeSwitchHelper, ModeSwitch, Mode} from '../../src/react-chayns-modeswitch/index';
+import { ModeSwitchHelper, ModeSwitch, Mode } from '../../src/index';
 
 import ExampleDecorator from './ExampleDecorator';
+import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends React.Component {
     constructor() {
@@ -16,7 +17,7 @@ export default class Example extends React.Component {
                     id: 1,
                     uacIds: [1, 34542],
                     name: 'chayns® Manager'
-                },{
+                }, {
                     id: 2,
                     name: 'Employee'
                 }],
@@ -28,9 +29,13 @@ export default class Example extends React.Component {
         }, 1000);
     }
 
+    getModeSwitchStatus = () => {
+        window.chayns.dialog.alert(JSON.stringify(ModeSwitch.getCurrentMode(), null, 3));
+    };
+
     render() {
         return(
-            <div>
+            <ExampleContainer headline="ModeSwitch">
                 <Mode mode={0}>
                     <div>
                         Hello world
@@ -51,7 +56,7 @@ export default class Example extends React.Component {
                     </div>
                 </Mode>
 
-                <Mode modes={[0,1]}>
+                <Mode modes={[0, 1]}>
                     <div>
                         <button onClick={this.getModeSwitchStatus}>ModeSwitch Status</button>
                     </div>
@@ -67,11 +72,7 @@ export default class Example extends React.Component {
                 <div className="button" onClick={ModeSwitch.hide} >Hide ModeSwitch</div>
 
                 <ExampleDecorator test="1" hallo="hi" />
-            </div>
+            </ExampleContainer>
         );
     }
-
-    getModeSwitchStatus = () => {
-        window.chayns.dialog.alert(JSON.stringify(ModeSwitch.getCurrentMode(), null, 3));
-    };
 }

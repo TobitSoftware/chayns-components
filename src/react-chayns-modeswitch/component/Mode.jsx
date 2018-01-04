@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
 export default class Mode extends React.Component {
-
     static propTypes = {
         group: PropTypes.oneOfType([
             PropTypes.number,
@@ -14,35 +13,18 @@ export default class Mode extends React.Component {
         children: PropTypes.node.isRequired
     };
 
+    static defaultProps = {
+        group: null,
+        mode: null,
+        modes: null
+    };
+
     constructor() {
         super();
 
         this.state = {
             modeId: ModeSwitchHelper.getCurrentMode().id
         };
-    }
-
-    render() {
-        if(!ModeSwitchHelper.isInitialized()) return null;
-
-        if(window.chayns.utils.isNumber(this.props.mode) && this.state.modeId == this.props.mode) {
-            return this.renderChildren();
-        }
-
-        if(window.chayns.utils.isArray(this.props.modes) && this.props.modes.indexOf(this.state.modeId) != -1) {
-            return this.renderChildren();
-        }
-
-
-        if(window.chayns.utils.isNumber(this.props.group) && this.state.modeId == this.props.group) {
-            return this.renderChildren();
-        }
-
-        if(window.chayns.utils.isArray(this.props.group) && this.props.group.indexOf(this.state.modeId) != -1) {
-            return this.renderChildren();
-        }
-
-        return null;
     }
 
     componentWillMount() {
@@ -64,7 +46,7 @@ export default class Mode extends React.Component {
     };
 
     renderChildren() {
-        if( window.chayns.utils.isArray( this.props.children ) ) {
+        if(window.chayns.utils.isArray(this.props.children)) {
             return(
                 <div className="modeswitch__mode">
                     {
@@ -78,5 +60,26 @@ export default class Mode extends React.Component {
         return this.props.children;
     }
 
+    render() {
+        if(!ModeSwitchHelper.isInitialized()) return null;
 
+        if(window.chayns.utils.isNumber(this.props.mode) && this.state.modeId === this.props.mode) {
+            return this.renderChildren();
+        }
+
+        if(window.chayns.utils.isArray(this.props.modes) && this.props.modes.indexOf(this.state.modeId) !== -1) {
+            return this.renderChildren();
+        }
+
+
+        if(window.chayns.utils.isNumber(this.props.group) && this.state.modeId === this.props.group) {
+            return this.renderChildren();
+        }
+
+        if(window.chayns.utils.isArray(this.props.group) && this.props.group.indexOf(this.state.modeId) !== -1) {
+            return this.renderChildren();
+        }
+
+        return null;
+    }
 }

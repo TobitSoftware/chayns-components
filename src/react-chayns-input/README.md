@@ -1,15 +1,15 @@
 # Input
 
-The Input is part of the *tobit-chayns_components* package. It can be installed via npm:
+The Input is part of the *chayns-components* package. It can be installed via npm:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Usage of the Input
 The input has to be imported:
 
 ```js
-import {Input} from 'tobit-chayns_components/react-chayns-input';
+import { Input } from 'chayns-components';
 ```
 
 
@@ -21,17 +21,18 @@ You can use the input like this:
 ## Props
 The following properties can be set on the Input-Component
 
-| Property   | Description   | Type    | Default Value |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| style      | Additional styles that should be set to the input  | object | |
-| className | Additional CSS-Classes that should be set to the button | string | |
-| placeholder | Animated placeholder that will be shown inside the input  | string | |
-| defaultValue | the value does not update if this prop updates  | string/number | |
-| staticValue | the value updates if this prop updates  | String/Number | |
-| onChange | returns the value as an result of the onInput-event (if a RegExp is given but it does not match the input the return value is null) | function |  |
-| onBlur | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function |  |
-| responsive | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool | false  |
-| regExp | The input will check if the entered text is valid (see Regular Expressions) | string |  |
+| Property     | Description                                                                       | Type          | Default Value |
+|--------------|-----------------------------------------------------------------------------------|---------------|---------------|
+| style        | Additional styles that should be set to the input                                 | object        |               |
+| className    | Additional CSS-Classes that should be set to the button                           | string        |               |
+| placeholder  | Animated placeholder that will be shown inside the input                          | string        |               |
+| defaultValue | the value does not update if this prop updates                                    | string/number |               |
+| value        | the value updates if this prop updates                                            | string/number |               |
+| onChange     | returns the value as an result of the onInput-event (if a RegExp is given but it does not match the input the return value is null) | function |  |
+| onBlur       | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function |  |
+| responsive   | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool | false  |
+| regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string        |               |
+| inputRef     | Exposes the input DOM Ref to the parent component                                 | func          |               |
 
 
 ### Examples

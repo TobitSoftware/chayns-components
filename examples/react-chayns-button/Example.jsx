@@ -1,17 +1,14 @@
 import React from 'react';
 
-import {Button, ChooseButton} from '../../src/react-chayns-button/index';
+import { Button, ChooseButton } from '../../src/index';
+import ExampleContainer from "../ExampleContainer";
 
 export default class Example extends React.Component {
-    constructor() {
-        super();
-    }
-
     render() {
         return(
-            <div>
+            <ExampleContainer headline="Button">
                 <Button
-                    disabled={true}
+                    disabled
                     onClick={(event) => {
                         window.chayns.dialog.alert(JSON.stringify(event));
                     }}
@@ -20,7 +17,7 @@ export default class Example extends React.Component {
                 </Button>
 
 
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <ChooseButton
                         onClick={(event) => {
                             console.log(event);
@@ -30,7 +27,7 @@ export default class Example extends React.Component {
                     </ChooseButton>
                 </div>
 
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     <ChooseButton
                         style={{
                             marginTop: '15px'
@@ -40,7 +37,7 @@ export default class Example extends React.Component {
                         Hallo
                     </ChooseButton>
                 </div>
-            </div>
+            </ExampleContainer>
         );
     }
 }

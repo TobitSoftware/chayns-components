@@ -1,22 +1,22 @@
 # GridCalendar - Component #
 
-The **GridCalendar** - Component is part of the **tobit-chayns_component** package. You can install the whole package with the following statement:
+The **GridCalendar** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
-    npm install --save-dev tobit-chayns_components
+    npm install -S chayns-components@latest
 
 ## Use ##
 
 First of all import the component to a component of your own project.
 
 ```jsx
-import GridCalendar from 'tobit-chayns_components/react-chayns-gridcalendar';
-import 'tobit-chayns_components/react-chayns-gridcalendar/style.css';
+import { GridCalendar } from 'chayns-components';
+import 'chayns-components/lib/react-chayns-gridcalendar/index.css';
 ```
 
 
 You can init the **GridCalendar** like this:
 ```jsx
-	<GridCalendar/>
+<GridCalendar/>
 ```
 
 

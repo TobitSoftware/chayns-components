@@ -1,15 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class AccordionIntro extends React.Component {
-    render() {
-        if(this.props.content)
-        return(
-            <div className="accordion__intro">
-                {this.props.content}
-            </div>
-        );
+const AccordionIntro = ({ children }) => {
+    return (
+        <div className="accordion__intro">
+            {children}
+        </div>
+    );
+};
 
 
-        return null;
-    }
-}
+AccordionIntro.propTypes = {
+    children: PropTypes.node.isRequired
+};
+
+export default AccordionIntro;

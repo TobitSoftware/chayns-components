@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 if (typeof Object.assign !== 'function') {
     Object.assign = function(target) {
         'use strict';

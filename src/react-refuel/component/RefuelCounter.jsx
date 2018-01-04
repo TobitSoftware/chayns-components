@@ -3,28 +3,21 @@ import PropTypes from 'prop-types';
 
 export default class RefuelCounter extends React.Component {
     static propTypes = {
-        onClick: PropTypes.func
+        onClick: PropTypes.func,
+        value: PropTypes.number,
+        name: PropTypes.string,
     };
 
-    render() {
-        return(
-            <div className="refuel-info" onClick={this._onClick.bind(this)}>
-                <div className="refuel-info__name">{this.props.name}</div>
-
-                <div className="refuel-counter__container chayns__background-color--100">
-                    <div style={{verticalAlign: 'center'}}>
-                        {this._getLower()}
-                        {this._getUpper()}
-                    </div>
-                </div>
-            </div>
-        );
-    }
+    static defaultProps = {
+        onClick: null,
+        value: null,
+        name: null,
+    };
 
     _getLower() {
         return (
             <span className="refuel-counter refuel-counter__lower noselect">
-                {Math.floor( parseFloat(this.props.value) ) + ',' + (parseFloat(this.props.value) % 1).toFixed(2).substring(2)}
+                {`${Math.floor(parseFloat(this.props.value))},${(parseFloat(this.props.value) % 1).toFixed(2).substring(2)}`}
             </span>
         );
     }
@@ -37,9 +30,27 @@ export default class RefuelCounter extends React.Component {
         );
     }
 
-    _onClick() {
+    _onClick = () => {
         if(this.props.onClick) {
             this.props.onClick();
         }
+    };
+
+    render() {
+        return(
+            <div
+                className="refuel-info"
+                onClick={this._onClick}
+            >
+                <div className="refuel-info__name">{this.props.name}</div>
+
+                <div className="refuel-counter__container chayns__background-color--100">
+                    <div style={{ verticalAlign: 'center' }}>
+                        {this._getLower()}
+                        {this._getUpper()}
+                    </div>
+                </div>
+            </div>
+        );
     }
 }

@@ -1,3 +1,1 @@
-export {
-    default as EmojiInput,
-} from "./component/EmojiInput";
+export default from './component/EmojiInput';

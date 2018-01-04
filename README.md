@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/tobit-chayns_components.svg)](https://github.com/TobitSoftware/chayns-components/) 
+[![npm](https://img.shields.io/npm/v/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
 [![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/) 
 [![hghfgh](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/)
@@ -8,7 +8,7 @@
 
 The ChaynsComponents can be installed directly from npm by using the following package:
 
-    npm install -S tobit-chayns_components@latest
+    npm install -S chayns-components@latest
 
 
 ## Chayns Components
@@ -31,6 +31,7 @@ The following components are part of this package:
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/) | SelectButton Component                                               | [Readme](/src/react-chayns-selectbutton/README.md) |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/) | SelectList Component                                               | [Readme](/src/react-chayns-selectlist/README.md) |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/) | EmojiInput Component                                               | [Readme](/src/react-chayns-emoji_input/README.md) |
+| [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/) | AmountControl Component                                               | [Readme](/src/react-chayns-amountcontrol/README.md) |
 
 ## Additional Components
 

@@ -2,19 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default class App extends React.Component {
+/* global Swiper */
 
+export default class App extends React.Component {
     static propTypes = {
         autoplay: PropTypes.number,
         loop: PropTypes.bool,
         lazyLoading: PropTypes.bool,
         preloadImages: PropTypes.bool,
         setHeight: PropTypes.func,
-        overlay: PropTypes.node
+        overlay: PropTypes.node,
+        className: PropTypes.string,
+        children: PropTypes.node,
+        length: PropTypes.number,
     };
 
     static defaultProps = {
-        loop: true
+        loop: true,
+        autoplay: null,
+        lazyLoading: null,
+        preloadImages: null,
+        setHeight: null,
+        overlay: null,
+        className: null,
+        children: null,
+        length: null,
     };
 
     constructor() {
@@ -31,45 +43,15 @@ export default class App extends React.Component {
         };
     }
 
-    render() {
-        let className = classNames({
-            'swiper-container': true,
-            'swiper-container-horizontal': true,
-            [this.props.className]: this.props.className
-        });
-
-        return (
-            <div
-                className={className}
-            >
-                <div
-                    ref={(swiper) => this._swiperElement = swiper}
-                    className="swiper-overlay--wrapper"
-                >
-                    {this.props.overlay}
-                    <div className="swiper-wrapper">
-                        {this.props.children}
-                    </div>
-                </div>
-                <div
-                    className="swiper-pagination"
-                    ref={(pagination) => this._paginationElement = pagination}
-                />
-            </div>
-        );
-    }
-
     componentDidMount() {
         this._updateSwiper();
 
 
-        let elements = this._swiperElement.querySelectorAll(".swiper-slide");
-        for(let i = 0, x = elements.length; i < x; i++) {
+        const elements = this._swiperElement.querySelectorAll('.swiper-slide');
+        for(let i = 0, x = elements.length; i < x; i += 1) {
             elements[i].addEventListener('click', (event) => {
-
                 if(elements[i].dataset && elements[i].dataset.callbackid) {
-
-                    let callbackid = elements[i].dataset.callbackid;
+                    const callbackid = elements[i].dataset.callbackid;
 
                     if(callbackid && window.react && window.react.slider && window.react.slider.callbacks && window.react.slider.callbacks[callbackid]) {
                         window.react.slider.callbacks[callbackid](event);
@@ -79,14 +61,15 @@ export default class App extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate() {
         this._updateSwiper();
     }
 
     _updateSwiper() {
         if (this._swiper) {
-            if(this._swiper.destroy)
+            if(this._swiper.destroy) {
                 this._swiper.destroy();
+            }
 
             this._swiper = null;
         }
@@ -103,8 +86,8 @@ export default class App extends React.Component {
                 autoplayDisableOnInteraction: false,
                 preloadImages: this.props.preloadImages,
                 lazyLoading: this.props.lazyLoading || false,
-                paginationBulletRender: function (index, className) {
-                    return '<span class="swiper-pagination-bullet ' + className + ' " style="background-color: ' + window.chayns.env.site.color + ' !important"></span>';
+                paginationBulletRender: (index, className) => {
+                    return `<span class="swiper-pagination-bullet ${className}" style="background-color: ${window.chayns.env.site.color} !important"></span>`;
                 }
             });
         } else {
@@ -119,10 +102,10 @@ export default class App extends React.Component {
 
     _onResize() {
         if(this._swiperElement) {
-            let width = this._swiperElement.getBoundingClientRect().width;
-            let height = this._getHeight(width);
+            const width = this._swiperElement.getBoundingClientRect().width;
+            const height = this._getHeight(width);
 
-            this._swiperElement.style.height = height + 'px';
+            this._swiperElement.style.height = `${height}px`;
         }
     }
 
@@ -131,7 +114,34 @@ export default class App extends React.Component {
             return this.props.setHeight(width);
         }
 
-        return (9/16) * width;
+        return (9 / 16) * width;
     }
 
+    render() {
+        const className = classNames({
+            'swiper-container': true,
+            'swiper-container-horizontal': true,
+            [this.props.className]: this.props.className
+        });
+
+        return (
+            <div
+                className={className}
+            >
+                <div
+                    ref={(swiper) => { this._swiperElement = swiper; }}
+                    className="swiper-overlay--wrapper"
+                >
+                    {this.props.overlay}
+                    <div className="swiper-wrapper">
+                        {this.props.children}
+                    </div>
+                </div>
+                <div
+                    className="swiper-pagination"
+                    ref={(pagination) => { this._paginationElement = pagination; }}
+                />
+            </div>
+        );
+    }
 }
