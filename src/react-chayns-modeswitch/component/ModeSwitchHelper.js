@@ -162,12 +162,12 @@ export default class ModeSwitchHelper {
 
                     initialized = true;
 
-                     let getAdminMode = allowedGroups.find((group) => {
+                     const getAdminMode = allowedGroups.find((group) => {
                         return group.uacIds.find((id) => id === 1);
                     });
 
                     if(getAdminMode && getAdminMode.id) {
-                        chayns.ready.then(data => {
+                        chayns.ready.then((data) => {
                             if(data.AppUser.AdminMode) {
                                 window.chayns.ui.modeSwitch.changeMode(getAdminMode.id);
                             }
