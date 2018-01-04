@@ -163,7 +163,9 @@ export default class ModeSwitchHelper {
                     initialized = true;
 
                      const getAdminMode = allowedGroups.find((group) => {
-                        return group.uacIds.find((id) => id === 1);
+                        return group.uacIds.find((id) => {
+                            return id === 1;
+                        });
                     });
 
                     if(getAdminMode && getAdminMode.id) {
@@ -181,11 +183,7 @@ export default class ModeSwitchHelper {
                             setDefaultGroup();
                         }
 
-
-                        if (changeGroup)
-                            window.setTimeout(() => {
-                                window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                            }, 0);
+                        if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     }
                 } else {
                     setDefaultGroup();
