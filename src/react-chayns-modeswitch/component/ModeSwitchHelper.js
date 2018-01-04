@@ -162,19 +162,30 @@ export default class ModeSwitchHelper {
 
                     initialized = true;
 
-                    if (changeGroup) {
-                        getChangeListener()(changeGroupValue);
+                     let getAdminMode = allowedGroups.find((group) => {
+                        return group.uacIds.find((id) => id === 1);
+                    });
 
-                        window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
+                    if(getAdminMode && getAdminMode.id) {
+                        chayns.ready.then(data => {
+                            if(data.AppUser.AdminMode) {
+                                window.chayns.ui.modeSwitch.changeMode(getAdminMode.id);
+                            }
+                        });
                     } else {
-                        setDefaultGroup();
-                    }
+                        if (changeGroup) {
+                            getChangeListener()(changeGroupValue);
 
-
-                    if (changeGroup) {
-                        window.setTimeout(() => {
                             window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                        }, 0);
+                        } else {
+                            setDefaultGroup();
+                        }
+
+
+                        if (changeGroup)
+                            window.setTimeout(() => {
+                                window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
+                            }, 0);
                     }
                 } else {
                     setDefaultGroup();
