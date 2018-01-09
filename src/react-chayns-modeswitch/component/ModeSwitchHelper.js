@@ -112,14 +112,11 @@ export default class ModeSwitchHelper {
                 if (window.chayns.env.user.isAuthenticated) {
                     // Condition if adminMode ChaynsId
                     let groupObject;
-                    const managerGroup = groups.find((uac) => {
-                        return uac.uacIds.find(id => id === 1);
-                    });
 
-                    const isManager = data.AppUser.UACGroups.find(group => group.id === 1);
+                    const managerGroup = this.findManagerGroup(groups);
 
                     if(managerGroup && data && data.AppUser.AdminMode) {
-                        groupObject = getGroupObject(managerGroup.id, managerGroup.name, [1]);
+                        groupObject = getGroupObject(managerGroup.id, managerGroup.name, managerGroup.uacIds);
                         isChaynsIdAdmin = true;
                     } else {
                         groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
@@ -155,7 +152,7 @@ export default class ModeSwitchHelper {
                             const uacIds = getUacIds(groups[i]);
                             const allowedUacs = getAllowedUacIdsFromArray(uacIds);
 
-                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1)) && !isManager) {
+                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1))) {
                                 const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
                                 allowedGroups.push(addGroupObject);
 
@@ -181,13 +178,12 @@ export default class ModeSwitchHelper {
 
                             window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
                         } else {
-                            setDefaultGroup(isChaynsIdAdmin ? managerGroup.id : 0);
+                            setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
                         }
 
                         //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     } else {
-                        console.log('default group set');
-                        setDefaultGroup(isChaynsIdAdmin ? managerGroup.id : 0);
+                        setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
                     }
                 } else {
                     setDefaultGroup();
@@ -239,6 +235,16 @@ export default class ModeSwitchHelper {
 
         return !!window.chayns.env.user.groups.find((element) => {
             return element.id === uacId;
+        });
+    }
+
+    static findManagerGroup(groups) {
+        if(!window.chayns.env.user.isAuthenticated) return false;
+
+        return groups.find((uac) => {
+            return uac.uacIds.length === 1 && uac.uacIds[0] === 1;
+        }) || groups.find((uac) => {
+            return uac.uacIds && uac.uacIds.find(id => id === 1);
         });
     }
 
