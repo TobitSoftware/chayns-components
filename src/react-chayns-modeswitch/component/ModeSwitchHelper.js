@@ -120,8 +120,9 @@ export default class ModeSwitchHelper {
                         isChaynsIdAdmin = true;
                     } else {
                         groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
+                        groupObject.default = true;
                     }
-                    groupObject.default = true;
+
                     allowedGroups.push(groupObject);
 
 
