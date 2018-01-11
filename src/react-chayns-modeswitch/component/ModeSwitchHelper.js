@@ -13,18 +13,18 @@ function callCallbacks(data) {
 }
 
 function getChangeListener() {
-    return function (data) {
+    return (data) => {
         callCallbacks(data);
 
         currentMode = data;
     };
 }
 
-function setDefaultGroup() {
+function setDefaultGroup(mode = 0) {
     initialized = true;
 
     getChangeListener()({
-        id: 0
+        id: mode
     });
 
     window.chayns.ui.modeSwitch.changeMode(0);
@@ -92,6 +92,7 @@ export default class ModeSwitchHelper {
             }
 
             const allowedGroups = [];
+            let isChaynsIdAdmin = false;
 
             const groups = [];
             if (options.groups) {
@@ -107,41 +108,40 @@ export default class ModeSwitchHelper {
                 });
             }
 
-            if (window.chayns.env.user.isAuthenticated) {
-                const groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
-                groupObject.default = true;
-                allowedGroups.push(groupObject);
+            chayns.ready.then((data) => {
+                if (window.chayns.env.user.isAuthenticated) {
+                    // Condition if adminMode ChaynsId
+                    let groupObject;
 
+                    const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
 
-                let savedModeId = null;
-                let changeGroupIndex = 0;
-                if(options.save) {
-                    savedModeId = getSavedMode();
-                }
-
-                if(savedModeId === null && options.defaultMode) {
-                    savedModeId = options.defaultMode;
-                }
-
-                let changeGroup = false;
-                let changeGroupValue = null;
-
-                for (let i = 0, x = groups.length; i < x; i += 1) {
-                    if (!groups[i].uacId && !groups[i].uacIds) {
-                        const addGroupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
-                        allowedGroups.push(addGroupObject);
-
-                        if (addGroupObject.id === savedModeId) {
-                            changeGroup = true;
-                            changeGroupIndex = allowedGroups.length - 1;
-                            changeGroupValue = addGroupObject;
-                        }
+                    if(managerGroup && data && data.AppUser.AdminMode) {
+                        groupObject = getGroupObject(managerGroup.id, managerGroup.name, managerGroup.uacIds);
+                        isChaynsIdAdmin = true;
                     } else {
-                        const uacIds = getUacIds(groups[i]);
-                        const allowedUacs = getAllowedUacIdsFromArray(uacIds);
+                        groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
+                        groupObject.default = true;
+                    }
 
-                        if (allowedUacs.length > 0) {
-                            const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
+                    allowedGroups.push(groupObject);
+
+
+                    let savedModeId = null;
+                    let changeGroupIndex = 0;
+                    if(options.save) {
+                        savedModeId = getSavedMode();
+                    }
+
+                    if(savedModeId === null && options.defaultMode) {
+                        savedModeId = options.defaultMode;
+                    }
+
+                    let changeGroup = false;
+                    let changeGroupValue = null;
+
+                    for (let i = 0, x = groups.length; i < x; i += 1) {
+                        if (!groups[i].uacId && !groups[i].uacIds) {
+                            const addGroupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
                             allowedGroups.push(addGroupObject);
 
                             if (addGroupObject.id === savedModeId) {
@@ -149,39 +149,47 @@ export default class ModeSwitchHelper {
                                 changeGroupIndex = allowedGroups.length - 1;
                                 changeGroupValue = addGroupObject;
                             }
+                        } else {
+                            const uacIds = getUacIds(groups[i]);
+                            const allowedUacs = getAllowedUacIdsFromArray(uacIds);
+
+                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1))) {
+                                const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
+                                allowedGroups.push(addGroupObject);
+
+                                if (addGroupObject.id === savedModeId) {
+                                    changeGroup = true;
+                                    changeGroupIndex = allowedGroups.length - 1;
+                                    changeGroupValue = addGroupObject;
+                                }
+                            }
                         }
                     }
-                }
 
-                if (allowedGroups.length > 1) {
-                    window.chayns.ui.modeSwitch.init({
-                        items: allowedGroups,
-                        callback: getChangeListener()
-                    });
+                    if (allowedGroups.length > 1) {
+                        window.chayns.ui.modeSwitch.init({
+                            items: allowedGroups,
+                            callback: getChangeListener()
+                        });
 
+                        initialized = true;
 
-                    initialized = true;
+                        if (changeGroup) {
+                            getChangeListener()(changeGroupValue);
 
-                    if (changeGroup) {
-                        getChangeListener()(changeGroupValue);
-
-                        window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                    } else {
-                        setDefaultGroup();
-                    }
-
-
-                    if (changeGroup) {
-                        window.setTimeout(() => {
                             window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                        }, 0);
+                        } else {
+                            setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
+                        }
+
+                        //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
+                    } else {
+                        setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
                     }
                 } else {
                     setDefaultGroup();
                 }
-            } else {
-                setDefaultGroup();
-            }
+            });
         } else {
             console.warn('No groups specified');
         }
@@ -228,6 +236,16 @@ export default class ModeSwitchHelper {
 
         return !!window.chayns.env.user.groups.find((element) => {
             return element.id === uacId;
+        });
+    }
+
+    static findManagerGroup(groups) {
+        if(!window.chayns.env.user.isAuthenticated) return false;
+
+        return groups.find((uac) => {
+            return uac.uacIds && uac.uacIds.length === 1 && uac.uacIds[0] === 1;
+        }) || groups.find((uac) => {
+            return uac.uacIds && uac.uacIds.find(id => id === 1);
         });
     }
 
