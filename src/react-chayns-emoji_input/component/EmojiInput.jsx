@@ -12,19 +12,50 @@ function requireEmojione(returnPromise) {
 }
 
 export default class EmojiInput extends React.Component {
-    static PropTypes = {
+    static propTypes = {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
         value: PropTypes.string.isRequired,
         id: PropTypes.string.isRequired,
         hideBorder: PropTypes.bool,
-        onKeyDown: PropTypes.func
+        onKeyDown: PropTypes.func,
     };
 
-    lastKeyPressed = null;
-    firstRender = true;
-    activeNode = 0;
-    cursorPos = 0;
+    static defaultProps = {
+        hideBorder: false,
+        onKeyDown: null,
+    };
+
+    static shouldComponentUpdate() {
+        return false;
+    }
+
+    static getCaretCharacterOffsetWithin(element) {
+        let caretOffset = -1;
+
+        if (typeof window.getSelection !== 'undefined') {
+            const sel = window.getSelection();
+
+            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+                const range = sel.getRangeAt(0);
+                const preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                caretOffset = preCaretRange.toString().length;
+            }
+        } else if (typeof document.selection !== 'undefined' && document.selection.type !== 'Control') {
+            const sel = document.selection;
+
+            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+                const textRange = document.selection.createRange();
+                const preCaretTextRange = document.body.createTextRange();
+                preCaretTextRange.moveToElementText(element);
+                preCaretTextRange.setEndPoint('EndToEnd', textRange);
+                caretOffset = preCaretTextRange.text.length;
+            }
+        }
+        return caretOffset;
+    }
 
     componentWillMount() {
         requireEmojione().then((emojione) => {
@@ -34,12 +65,8 @@ export default class EmojiInput extends React.Component {
         });
     }
 
-    static shouldComponentUpdate() {
-        return false;
-    }
-
     componentWillReceiveProps(nextProps) {
-        const {value, placeholder} = this.props;
+        const { value, placeholder } = this.props;
 
         if (nextProps.value.trim() === '') {
             this.placeholder.classList.remove('invisible');
@@ -57,33 +84,6 @@ export default class EmojiInput extends React.Component {
         }
     }
 
-    updateDOM = (newProps) => {
-        const inputDiv = this.input;
-        const newHtml = this.formatText(newProps.value);
-        const oldHtml = inputDiv.innerHTML
-            .replace(/&nbsp;/gm, String.fromCharCode(32))
-            .replace(/&amp;/gm, String.fromCharCode(38))
-            .replace(String.fromCharCode(160), String.fromCharCode(32));
-
-        if (newHtml !== oldHtml) {
-            this.activeNode = this.getActiveChildNode();
-            const activeElem = inputDiv.childNodes[this.activeNode];
-            if (activeElem) {
-                this.cursorPos = EmojiInput.getCaretCharacterOffsetWithin(activeElem);
-
-                const scrollTop = inputDiv.scrollTop;
-                const scrollHeight = inputDiv.scrollHeight;
-
-                inputDiv.innerHTML = newHtml;
-
-                this.scrollToCursor(scrollTop, scrollHeight);
-                this.setCursorPos();
-            } else {
-                inputDiv.innerHTML = newHtml;
-            }
-        }
-    };
-
     getActiveChildNode = () => {
         const inputDiv = this.input;
         const selection = window.getSelection();
@@ -92,7 +92,7 @@ export default class EmojiInput extends React.Component {
         let activeChildNode = -1;
 
         if (anchorNode && anchorNode !== inputDiv) {
-            for (let i = 0; i < childNodes.length; i++) {
+            for (let i = 0; i < childNodes.length; i += 1) {
                 let curNode = childNodes[i];
 
                 if (chayns.env.isIOS && curNode.nodeName.toUpperCase() === 'I') {
@@ -111,32 +111,144 @@ export default class EmojiInput extends React.Component {
         return activeChildNode;
     };
 
-    static getCaretCharacterOffsetWithin(element) {
-        let caretOffset = -1;
+    setCursorPos = () => {
+        const inputDiv = this.input;
+        const { activeNode, cursorPos } = this;
 
-        if (typeof window.getSelection !== "undefined") {
+        if (cursorPos > -1) {
+            inputDiv.focus();
+            const inputChildNodes = inputDiv.childNodes;
+
+            const range = document.createRange();
+
+            if (activeNode > -1) {
+                const cursorNode = inputChildNodes[activeNode];
+
+                if (cursorNode) {
+                    if (cursorNode.nodeType === 1 || cursorNode.length < cursorPos) {
+                        const nextSibling = cursorNode.nextSibling ? cursorNode.nextSibling.nextSibling : undefined;
+
+                        if (nextSibling && nextSibling.nodeType === 3) {
+                            range.setStart(nextSibling, 0);
+                            range.setEnd(nextSibling, 0);
+                        } else {
+                            const newTextNode = document.createTextNode('');
+
+                            inputDiv.insertBefore(newTextNode, nextSibling);
+
+                            range.setStart(newTextNode, 0);
+                            range.setEnd(newTextNode, 0);
+                        }
+                    } else {
+                        range.setStart(cursorNode, cursorPos);
+                        range.setEnd(cursorNode, cursorPos);
+                    }
+                }
+            } else {
+                const newTextNode = document.createTextNode('');
+                inputDiv.appendChild(newTextNode);
+
+                range.setStart(newTextNode, 0);
+                range.setEnd(newTextNode, 0);
+            }
+
             const sel = window.getSelection();
 
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
-                const range = sel.getRangeAt(0);
-                const preCaretRange = range.cloneRange();
-                preCaretRange.selectNodeContents(element);
-                preCaretRange.setEnd(range.endContainer, range.endOffset);
-                caretOffset = preCaretRange.toString().length;
-            }
-        } else if (typeof document.selection !== "undefined" && document.selection.type !== "Control") {
-            const sel = document.selection;
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    };
 
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
-                const textRange = document.selection.createRange();
-                const preCaretTextRange = document.body.createTextRange();
-                preCaretTextRange.moveToElementText(element);
-                preCaretTextRange.setEndPoint("EndToEnd", textRange);
-                caretOffset = preCaretTextRange.text.length;
+    getPureInnerText = (elem) => {
+        const emojione = requireEmojione(false);
+
+        const textLines = [''];
+        let lineIndex = 0;
+        let curChild = elem.firstChild;
+
+        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
+
+        while (curChild !== null) {
+            if (curChild.nodeType === 1) {
+                switch (curChild.tagName) {
+                    case 'IMG':
+                        textLines[lineIndex] += curChild.getAttribute('alt');
+                        break;
+                    case 'DIV':
+                        textLines.push('');
+                        lineIndex += 1;
+                        break;
+                    case 'BR':
+                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
+                            textLines[lineIndex] += '\n';
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } else if (curChild.nodeType === 3) {
+                textLines[lineIndex] += curChild.nodeValue;
+            }
+
+            if (curChild.hasChildNodes()) {
+                curChild = curChild.firstChild;
+            } else {
+                while (curChild.nextSibling === null) {
+                    curChild = curChild.parentNode;
+
+                    if (curChild === elem) {
+                        return textLines.join('\n');
+                    }
+                }
+                curChild = curChild.nextSibling;
             }
         }
-        return caretOffset;
-    }
+
+        if(!emojione) {
+            return emojione.shortnameToUnicode(textLines.join('\n'));
+        }
+
+        return textLines.join('\n');
+    };
+
+    handleInput = (event) => {
+        const { onInput } = this.props;
+
+        // eslint-disable-next-line no-param-reassign
+        event.target.pureInnerText = this.getPureInnerText(event.target);
+
+        onInput(event);
+    };
+
+    handleKeyDown = (event) => {
+        const { onKeyDown } = this.props;
+
+        this.lastKeyPressed = event.keyCode;
+
+        if (onKeyDown) {
+            onKeyDown(event);
+        }
+    };
+
+    handleKeyUp = (event) => {
+        if (chayns.env.browser.name.toLowerCase() === 'ie' && event.keyCode !== 16) {
+            this.handleInput(event);
+        }
+        if (chayns.env.browser.name.toLowerCase() === 'edge' && event.keyCode === 13 && event.shiftKey) {
+            this.handleInput(event);
+        }
+    };
+
+    scrollToCursor = (scrollTop, scrollHeight) => {
+        const inputDiv = this.input;
+        const elemScrollHeight = inputDiv.scrollHeight;
+        const elemClientHeight = inputDiv.clientHeight;
+
+        if (!(elemScrollHeight <= elemClientHeight)) {
+            const diff = elemScrollHeight - scrollHeight;
+            this.input.scrollTop = (scrollTop || 0) + diff;
+        }
+    };
 
     formatText = (text) => {
         const emojione = requireEmojione(false);
@@ -180,148 +292,42 @@ export default class EmojiInput extends React.Component {
         return result.replace(String.fromCharCode(160), String.fromCharCode(32))
             .replace(/&nbsp;/gm, String.fromCharCode(32))
             .replace(/&amp;/gm, String.fromCharCode(38));
-    }
+    };
 
-    setCursorPos = () => {
+    updateDOM = (newProps) => {
         const inputDiv = this.input;
-        const {activeNode, cursorPos} = this;
+        const newHtml = this.formatText(newProps.value);
+        const oldHtml = inputDiv.innerHTML
+            .replace(/&nbsp;/gm, String.fromCharCode(32))
+            .replace(/&amp;/gm, String.fromCharCode(38))
+            .replace(String.fromCharCode(160), String.fromCharCode(32));
 
-        if (cursorPos > -1) {
-            inputDiv.focus();
-            const inputChildNodes = inputDiv.childNodes;
+        if (newHtml !== oldHtml) {
+            this.activeNode = this.getActiveChildNode();
+            const activeElem = inputDiv.childNodes[this.activeNode];
+            if (activeElem) {
+                this.cursorPos = EmojiInput.getCaretCharacterOffsetWithin(activeElem);
 
-            const range = document.createRange();
+                const scrollTop = inputDiv.scrollTop;
+                const scrollHeight = inputDiv.scrollHeight;
 
-            if (activeNode > -1) {
-                let cursorNode = inputChildNodes[activeNode];
+                inputDiv.innerHTML = newHtml;
 
-                if (cursorNode) {
-                    if (cursorNode.nodeType === 1 || cursorNode.length < cursorPos) {
-                        let nextSibling = cursorNode.nextSibling ? cursorNode.nextSibling.nextSibling : undefined;
-
-                        if (nextSibling && nextSibling.nodeType === 3) {
-                            range.setStart(nextSibling, 0);
-                            range.setEnd(nextSibling, 0);
-                        } else {
-                            let newTextNode = document.createTextNode('');
-
-                            inputDiv.insertBefore(newTextNode, nextSibling);
-
-                            range.setStart(newTextNode, 0);
-                            range.setEnd(newTextNode, 0);
-                        }
-                    } else {
-                        range.setStart(cursorNode, cursorPos);
-                        range.setEnd(cursorNode, cursorPos);
-                    }
-                }
+                this.scrollToCursor(scrollTop, scrollHeight);
+                this.setCursorPos();
             } else {
-                let newTextNode = document.createTextNode('');
-                inputDiv.appendChild(newTextNode);
-
-                range.setStart(newTextNode, 0);
-                range.setEnd(newTextNode, 0);
-            }
-
-            let sel = window.getSelection();
-
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }
-    };
-
-    scrollToCursor = (scrollTop, scrollHeight) => {
-        const inputDiv = this.input;
-        const elemScrollHeight = inputDiv.scrollHeight;
-        const elemClientHeight = inputDiv.clientHeight;
-
-        if (!(elemScrollHeight <= elemClientHeight)) {
-            const diff = elemScrollHeight - scrollHeight;
-            this.input.scrollTop = (scrollTop || 0) + diff;
-        }
-    };
-
-    handleInput = (event) => {
-        const {onInput} = this.props;
-
-        event.target.pureInnerText = this.getPureInnerText(event.target);
-
-        onInput(event);
-    };
-
-    handleKeyDown = (event) => {
-        const {onKeyDown} = this.props;
-
-        this.lastKeyPressed = event.keyCode;
-
-        if (onKeyDown) {
-            onKeyDown(event);
-        }
-    };
-
-    handleKeyUp = (event) => {
-        if (chayns.env.browser.name.toLowerCase() === 'ie' && event.keyCode !== 16) {
-            this.handleInput(event);
-        }
-        if (chayns.env.browser.name.toLowerCase() === 'edge' && event.keyCode === 13 && event.shiftKey) {
-            this.handleInput(event);
-        }
-    };
-
-    getPureInnerText = (elem) => {
-        const emojione = requireEmojione(false);
-
-        let textLines = [''];
-        let lineIndex = 0;
-        let curChild = elem.firstChild;
-
-        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
-
-        while (curChild !== null) {
-            if (curChild.nodeType === 1) {
-                switch (curChild.tagName) {
-                    case 'IMG':
-                        textLines[lineIndex] += curChild.getAttribute('alt');
-                        break;
-                    case 'DIV':
-                        textLines.push('');
-                        lineIndex++;
-                        break;
-                    case 'BR':
-                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
-                            textLines[lineIndex] += '\n';
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            } else if (curChild.nodeType === 3) {
-                textLines[lineIndex] += curChild.nodeValue;
-            }
-
-            if (curChild.hasChildNodes()) {
-                curChild = curChild.firstChild;
-            } else {
-                while (curChild.nextSibling === null) {
-                    curChild = curChild.parentNode;
-
-                    if (curChild === elem) {
-                        return textLines.join('\n');
-                    }
-                }
-                curChild = curChild.nextSibling
+                inputDiv.innerHTML = newHtml;
             }
         }
+    };
 
-        if(!emojione) {
-            return emojione.shortnameToUnicode(textLines.join('\n'));
-        }
-
-        return textLines.join('\n');
-    }
+    lastKeyPressed = null;
+    firstRender = true;
+    activeNode = 0;
+    cursorPos = 0;
 
     render() {
-        const {id, hideBorder} = this.props;
+        const { id, hideBorder } = this.props;
 
         const messageInputClasses = classNames('input message--input', {
             'hide--border': hideBorder
@@ -330,17 +336,22 @@ export default class EmojiInput extends React.Component {
         return (
             <div className="message--input--box">
                 <div
-                    dangerouslySetInnerHTML={{__html: '<br />'}}
+                    dangerouslySetInnerHTML={{
+                        __html: '<br />'
+                    }}
                     className={messageInputClasses}
                     onKeyDown={this.handleKeyDown}
-                    ref={ref => this.input = ref}
+                    ref={(ref) => { this.input = ref; }}
                     onKeyUp={this.handleKeyUp}
                     onInput={this.handleInput}
                     contentEditable="true"
                     dir="auto"
                     id={id}
                 />
-                <div className="input--placeholder" ref={ref => this.placeholder = ref} />
+                <div
+                    className="input--placeholder"
+                    ref={(ref) => { this.placeholder = ref; }}
+                />
             </div>
         );
     }
