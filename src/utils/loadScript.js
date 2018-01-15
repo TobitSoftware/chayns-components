@@ -4,7 +4,7 @@ export default function loadScript(id, src) {
     return new Promise((resolve, reject) => {
         let scriptTag = scriptMap.get(id);
         if(scriptTag) {
-            return reject();
+            return resolve();
         }
 
         scriptTag = document.createElement('script');
