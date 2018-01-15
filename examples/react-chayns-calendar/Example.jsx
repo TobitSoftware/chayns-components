@@ -17,14 +17,14 @@ export default class Example extends React.Component {
     render() {
         return(
             <ExampleContainer headline="Calendar">
-                <div className="content" style={{ position: 'relative', overflow: 'hidden', height: '500px', border: '1px solid black' }}>
+                <div className="content" style={{ position: 'relative', overflow: 'hidden', height: '700px', border: '1px solid black' }}>
                     <h2 style={{ marginBottom: '8%' }}>Option 1:</h2>
                     <div className="accordion accordion--open">
                         <div className="accordion__head">
                             Calendar
                         </div>
                         <div className="accordion__body">
-                            <div className="accordion__content">
+                            <div className="accordion__content" style={{ minHeight: '200px' }}>
                                 <Calendar onDateSelect={this.onClick}/>
                             </div>
                         </div>
