@@ -24,5 +24,7 @@ export default function loadStyle(id, src) {
 
         styleTag.onload = resolve;
         styleTag.onerror = reject;
+
+        return null;
     });
 }

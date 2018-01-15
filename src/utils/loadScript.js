@@ -21,5 +21,7 @@ export default function loadScript(id, src) {
 
         scriptTag.onload = resolve;
         scriptTag.onerror = reject;
+
+        return null;
     });
 }
