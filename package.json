@@ -1,11 +1,11 @@
 {
   "name": "chayns-components",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "some standalone react components",
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
-    "prepublish": "npm run build",
+    "prepublish": "npm run eslint & npm run build",
     "build": "npm run build:js && npm run build:sass",
     "build:js": "babel src/ --out-dir ./lib",
     "build:sass": "node-sass src/ -o ./lib",
@@ -20,33 +20,35 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-env": "^1.3.2",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.22.0",
-    "css-loader": "^0.28.5",
+    "css-loader": "^0.28.8",
     "eslint": "^4.5.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.3.0",
     "html-webpack-plugin": "^2.30.1",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.7.2",
     "react-hot-loader": "^1.3.1",
     "sass-loader": "^6.0.3",
-    "style-loader": "^0.18.2",
-    "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "emojione": "^3.1.2",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.6.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-transition-group": "^1.2.0"
+  },
+  "optionalDependencies": {
+    "emojione": "^3.1.2"
   }
 }
