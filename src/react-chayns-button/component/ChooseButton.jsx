@@ -2,35 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
 
-export default class ChooseButton extends React.Component {
-    static propTypes = {
-        children: PropTypes.node.isRequired,
-        disabled: PropTypes.bool,
-        onClick: PropTypes.func,
-        className: PropTypes.string,
-        style: PropTypes.object
-    };
+const ChooseButton = ({ children, ...props }) => (
+    <Button
+        chooseButton
+        {...props}
+    >
+        {children}
+    </Button>
+);
 
-    static defaultProps = {
-        style: null,
-        className: null,
-        onClick: null,
-        disabled: false,
-    };
+ChooseButton.propTypes = {
+    children: PropTypes.node.isRequired,
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func,
+    className: PropTypes.string,
+    style: PropTypes.object
+};
 
-    render() {
-        const {
-            children,
-            ...props
-        } = this.props;
+ChooseButton.defaultProps = {
+    style: null,
+    className: null,
+    onClick: null,
+    disabled: false,
+};
 
-        return(
-            <Button
-                chooseButton
-                {...props}
-            >
-                {children}
-            </Button>
-        );
-    }
-}
+export default ChooseButton;

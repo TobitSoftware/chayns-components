@@ -111,7 +111,7 @@ export default class SelectList extends React.Component {
 
     _selectFirstItem(children) {
         for(let i = 0, z = children.length; i < z; i += 1) {
-            const props = children[i].props;
+            const { props } = children[i];
 
             if(!props.disabled) {
                 this._changeActiveItem(props.id);
@@ -125,7 +125,12 @@ export default class SelectList extends React.Component {
         const { selectedId } = this.state;
 
         return children.map((child) => {
-            const { id, disabled, className, name } = child.props;
+            const {
+                id,
+                disabled,
+                className,
+                name,
+            } = child.props;
 
             return (
                 <SelectItemInternal

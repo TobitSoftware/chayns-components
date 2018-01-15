@@ -28,7 +28,6 @@ export default class RadioButton extends Component {
         disabled: false,
         children: null,
         value: undefined,
-        tooltip: null,
         className: null
     };
 
@@ -59,7 +58,16 @@ export default class RadioButton extends Component {
      * @returns {XML}
      */
     render() {
-        const { checked, id, children, disabled, name, className, onChange, ...props } = this.props;
+        const {
+            checked,
+            id,
+            children,
+            disabled,
+            name,
+            className,
+            onChange,
+            ...props
+        } = this.props;
 
         return (
             <div className={className}>

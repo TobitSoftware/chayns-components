@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -33,7 +34,12 @@ export default class Modal extends React.Component {
     }
 
     getModalWidth() {
-        const { width, left, right, direction } = this.props;
+        const {
+            width,
+            left,
+            right,
+            direction,
+        } = this.props;
 
         if(direction === Constants.DIRECTION_LEFT) {
             return `${parseFloat(width) + (2 * parseFloat(right))}px`;
@@ -44,7 +50,14 @@ export default class Modal extends React.Component {
 
     getWidth() {
         const { width, expandedWidth } = this.props;
-        const { didLeave, willEnter, willEnterActive, didEnter, willLeave, willLeaveActive } = this.state;
+        const {
+            didLeave,
+            willEnter,
+            willEnterActive,
+            didEnter,
+            willLeave,
+            willLeaveActive,
+        } = this.state;
 
 
         if(!didLeave && !didEnter && !willEnterActive && !willEnter && !willLeave && !willLeaveActive) {
@@ -110,8 +123,8 @@ export default class Modal extends React.Component {
 
 
         if(this._content) {
-            const bottom = this._content.getBoundingClientRect().bottom;
-            const height = document.body.getBoundingClientRect().height;
+            const { bottom } = this._content.getBoundingClientRect();
+            const { height } = document.body.getBoundingClientRect();
             const newPadding = (bottom - height) + 25;
             const tapp = document.querySelector('.tapp') || document.body;
 
@@ -164,8 +177,19 @@ export default class Modal extends React.Component {
     }
 
     render() {
-        const { top, renderComponent, closeOverlay, direction } = this.props;
-        const { willEnter, willEnterActive, willLeave, willLeaveActive, didEnter } = this.state;
+        const {
+            top,
+            renderComponent,
+            closeOverlay,
+            direction,
+        } = this.props;
+        const {
+            willEnter,
+            willEnterActive,
+            willLeave,
+            willLeaveActive,
+            didEnter,
+        } = this.state;
 
         if(window.debugLevel >= 2) {
             console.debug('render inspect-element (Modal) component', this.props, this.state);

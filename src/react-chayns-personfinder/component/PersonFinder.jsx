@@ -27,7 +27,7 @@ export default class PersonFinder extends React.Component {
         this._node.setAttribute('finder', 'person');
 
         this._node.addEventListener('finderChange', (data) => {
-            const user = data.user;
+            const { user } = data;
             this.props.onChange({ user, node: this._node });
         });
 

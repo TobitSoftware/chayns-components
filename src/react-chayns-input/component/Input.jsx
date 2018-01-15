@@ -84,7 +84,20 @@ export default class Input extends React.Component {
     }
 
     render() {
-        const { value, defaultValue, placeholder, className, style, responsive, regExp, inputRef, onChange, onBlur, onKeyUp, ...other } = this.props;
+        const {
+            value,
+            defaultValue,
+            placeholder,
+            className,
+            style,
+            responsive,
+            regExp,
+            inputRef,
+            onChange,
+            onBlur,
+            onKeyUp,
+            ...other
+        } = this.props;
         const { isValid } = this.state;
 
         const classNames = classnames({
