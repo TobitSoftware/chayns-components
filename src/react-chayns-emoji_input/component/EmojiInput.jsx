@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import emojione from 'emojione';
 import classNames from 'classnames';
+import loadOptionalDependency from '../../utils/loadOptionalDependency';
+
+function requireEmojione(returnPromise) {
+    return loadOptionalDependency('emojione', 'emojione', [
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js'
+    ], [
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css'
+    ], returnPromise);
+}
 
 export default class EmojiInput extends React.Component {
-
     static PropTypes = {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -20,9 +27,11 @@ export default class EmojiInput extends React.Component {
     cursorPos = 0;
 
     componentWillMount() {
-        emojione.ascii = true;
-        emojione.imageTitleTag = false;
-        emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/32/';
+        requireEmojione().then((emojione) => {
+            emojione.ascii = true; // eslint-disable-line no-param-reassign
+            emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
+            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/32/'; // eslint-disable-line no-param-reassign
+        });
     }
 
     static shouldComponentUpdate() {
@@ -130,6 +139,8 @@ export default class EmojiInput extends React.Component {
     }
 
     formatText = (text) => {
+        const emojione = requireEmojione(false);
+
         let result = '';
         let newText = text
             .replace(/</g, '&lt;')
@@ -140,7 +151,10 @@ export default class EmojiInput extends React.Component {
             .replace(/\(y\)/g, '👍')
             .replace(/\(n\)/g, '👎');
 
-        newText = emojione.toImage(newText);
+        if(emojione) {
+            newText = emojione.toImage(newText);
+        }
+
         newText = newText.replace(/(<img[^<]*)\/>/g, '$1>')
             .replace(/&#153;/g, '™')
             .replace(/&copy;/g, '©')
@@ -166,7 +180,7 @@ export default class EmojiInput extends React.Component {
         return result.replace(String.fromCharCode(160), String.fromCharCode(32))
             .replace(/&nbsp;/gm, String.fromCharCode(32))
             .replace(/&amp;/gm, String.fromCharCode(38));
-    };
+    }
 
     setCursorPos = () => {
         const inputDiv = this.input;
@@ -255,6 +269,8 @@ export default class EmojiInput extends React.Component {
     };
 
     getPureInnerText = (elem) => {
+        const emojione = requireEmojione(false);
+
         let textLines = [''];
         let lineIndex = 0;
         let curChild = elem.firstChild;
@@ -297,8 +313,12 @@ export default class EmojiInput extends React.Component {
             }
         }
 
-        return emojione.shortnameToUnicode(textLines.join('\n'));
-    };
+        if(!emojione) {
+            return emojione.shortnameToUnicode(textLines.join('\n'));
+        }
+
+        return textLines.join('\n');
+    }
 
     render() {
         const {id, hideBorder} = this.props;
