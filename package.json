@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
-    "prepublish": "npm run build",
+    "prepublish": "npm run eslint & npm run build",
     "build": "npm run build:js && npm run build:sass",
     "build:js": "babel src/ --out-dir ./lib",
     "build:sass": "node-sass src/ -o ./lib",
