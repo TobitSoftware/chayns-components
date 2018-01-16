@@ -59,7 +59,16 @@ export default class Checkbox extends React.Component {
     };
 
     render() {
-        const { className, style, disabled, children, label, checked, defaultChecked, dangerouslySetLabel } = this.props;
+        const {
+            className,
+            style,
+            disabled,
+            children,
+            label,
+            checked,
+            defaultChecked,
+            dangerouslySetLabel,
+        } = this.props;
         const classNames = classnames({
             [className]: className
         });

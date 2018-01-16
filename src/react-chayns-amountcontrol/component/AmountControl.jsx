@@ -107,7 +107,20 @@ export default class AmountControl extends React.Component {
     };
 
     render() {
-        const { amount, buttonText, equalize, disabled, disableInput, disableAdd, disableRemove, className, autoInput, buttonFormatHandler, showInput, shopStyle } = this.props;
+        const {
+            amount,
+            buttonText,
+            equalize,
+            disabled,
+            disableInput,
+            disableAdd,
+            disableRemove,
+            className,
+            autoInput,
+            buttonFormatHandler,
+            showInput,
+            shopStyle,
+        } = this.props;
 
         if(window.debugLevel >= 3) {
             console.debug('render amount-control component', this.props, this.state);

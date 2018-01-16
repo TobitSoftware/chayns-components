@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -46,6 +47,7 @@ export default class SelectButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // eslint-disable-next-line react/no-unused-state
             selected: []
         };
 
@@ -55,7 +57,7 @@ export default class SelectButton extends React.Component {
 
     onSelect(selected) {
         const { onSelect } = this.props;
-        const selection = selected.selection;
+        const { selection } = selected;
 
         if(selection.length === 1) {
             this.setLabel(selection[0].name);
@@ -67,7 +69,15 @@ export default class SelectButton extends React.Component {
     }
 
     onClick() {
-        const { quickFind, multiSelect, title, description, list, listKey, listValue } = this.props;
+        const {
+            quickFind,
+            multiSelect,
+            title,
+            description,
+            list,
+            listKey,
+            listValue,
+        } = this.props;
         const _list = SelectButton.getDialogList(list, listKey, listValue);
 
         chayns.dialog.select({
@@ -85,8 +95,7 @@ export default class SelectButton extends React.Component {
 
     getReturnList(selected) {
         const { list, listKey } = this.props;
-        const selectedItems = selected.selection;
-        const buttonType = selected.buttonType;
+        const { buttonType, selection: selectedItems } = selected;
         const result = [];
 
         selectedItems.map((item) => {

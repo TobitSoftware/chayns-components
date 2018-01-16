@@ -122,29 +122,31 @@ export default class Refuel extends React.Component {
 
     render() {
         if(this._refuel) {
-            return (<div className="refuel">
-                {
-                    this._refuel.map((element) => {
-                        let name = element.fuelId;
-                        if (name === 2) {
-                            name = 'Super';
-                        } else if (name === 1) {
-                            name = 'Diesel';
-                        } else if (name === 3) {
-                            name = 'Super E10';
-                        }
+            return (
+                <div className="refuel">
+                    {
+                        this._refuel.map((element) => {
+                            let name = element.fuelId;
+                            if (name === 2) {
+                                name = 'Super';
+                            } else if (name === 1) {
+                                name = 'Diesel';
+                            } else if (name === 3) {
+                                name = 'Super E10';
+                            }
 
-                        return (
-                            <RefuelCounter
-                                name={name}
-                                value={element.data[0].cost}
-                                key={element.fuelId}
-                                onClick={this._openRefuel}
-                            />
-                        );
-                    })
-                }
-            </div>);
+                            return (
+                                <RefuelCounter
+                                    name={name}
+                                    value={element.data[0].cost}
+                                    key={element.fuelId}
+                                    onClick={this._openRefuel}
+                                />
+                            );
+                        })
+                    }
+                </div>
+            );
         }
 
 

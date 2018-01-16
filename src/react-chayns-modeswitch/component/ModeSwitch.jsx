@@ -5,9 +5,7 @@ import ModeSwitchHelper from './ModeSwitchHelper';
 
 class ModeSwitch extends React.Component {
     static propTypes = {
-        groups: PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.number, PropTypes.object])
-        ),
+        groups: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.object])),
         save: PropTypes.bool,
         onChange: PropTypes.func,
         defaultMode: PropTypes.number

@@ -87,8 +87,8 @@ export default class EmojiInput extends React.Component {
     getActiveChildNode = () => {
         const inputDiv = this.input;
         const selection = window.getSelection();
-        const anchorNode = selection.anchorNode;
-        const childNodes = inputDiv.childNodes;
+        const { anchorNode } = selection;
+        const { childNodes } = inputDiv;
         let activeChildNode = -1;
 
         if (anchorNode && anchorNode !== inputDiv) {
@@ -96,6 +96,7 @@ export default class EmojiInput extends React.Component {
                 let curNode = childNodes[i];
 
                 if (chayns.env.isIOS && curNode.nodeName.toUpperCase() === 'I') {
+                    // eslint-disable-next-line prefer-destructuring
                     curNode = curNode.childNodes[0];
                 }
 
@@ -308,8 +309,7 @@ export default class EmojiInput extends React.Component {
             if (activeElem) {
                 this.cursorPos = EmojiInput.getCaretCharacterOffsetWithin(activeElem);
 
-                const scrollTop = inputDiv.scrollTop;
-                const scrollHeight = inputDiv.scrollHeight;
+                const { scrollTop, scrollHeight } = inputDiv.scrollTop;
 
                 inputDiv.innerHTML = newHtml;
 

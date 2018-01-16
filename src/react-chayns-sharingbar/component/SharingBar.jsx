@@ -47,7 +47,7 @@ export default class SharingBar extends React.Component {
     }
 
     render() {
-        const className = this.props.className;
+        const { className } = this.props;
 
         const classNames = classnames({
             'sharing-bar__item-list': 'sharing-bar__item-list',

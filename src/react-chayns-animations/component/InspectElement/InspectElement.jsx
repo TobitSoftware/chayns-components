@@ -142,7 +142,14 @@ export default class InspectElement extends React.Component {
     }
 
     renderModal() {
-        const { showModal, modalTop, modalLeft, modalRight, modalWidth, modalDirection } = this.state;
+        const {
+            showModal,
+            modalTop,
+            modalLeft,
+            modalRight,
+            modalWidth,
+            modalDirection,
+        } = this.state;
 
         return (
             <ReactTransitionGroup>

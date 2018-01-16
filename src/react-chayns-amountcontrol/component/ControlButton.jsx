@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 import { ChooseButton } from '../../index';
 
-const ControlButton = ({ icon, onClick, className, disabled }) => {
+const ControlButton = ({
+    icon,
+    onClick,
+    className,
+    disabled,
+}) => {
     return(
         <ChooseButton
             onClick={onClick}

@@ -53,7 +53,14 @@ export default class SelectItemInternal extends React.Component {
     };
 
     render() {
-        const { id, className, selectListId, disabled, name, checked } = this.props;
+        const {
+            id,
+            className,
+            selectListId,
+            disabled,
+            name,
+            checked,
+        } = this.props;
 
         return (
             <div
