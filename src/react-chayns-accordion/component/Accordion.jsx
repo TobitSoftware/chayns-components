@@ -105,7 +105,12 @@ class Accordion extends React.Component {
     }
 
     _renderHead() {
-        const { badge, badgeStyle, right, head } = this.props;
+        const {
+            badge,
+            badgeStyle,
+            right,
+            head,
+        } = this.props;
 
         if (!badge && !right) {
             return head;
@@ -132,7 +137,9 @@ class Accordion extends React.Component {
                         key="badge"
                         className="badge accordion--trigger"
                         style={badgeStyle}
-                    >{badge}</div>
+                    >
+                        {badge}
+                    </div>
                 )}
             </div>
         ];

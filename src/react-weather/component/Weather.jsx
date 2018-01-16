@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -74,6 +75,7 @@ export default class Weather extends React.Component {
         const lng = this.props.longitude;
 
         this.setState({
+            // eslint-disable-next-line react/no-unused-state
             isFetching: true
         });
 
@@ -103,6 +105,7 @@ export default class Weather extends React.Component {
             }
         }).then(() => {
             this.setState({
+                // eslint-disable-next-line react/no-unused-state
                 isFetching: false
             });
         });

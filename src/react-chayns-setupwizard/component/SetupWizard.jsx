@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -125,6 +126,7 @@ export default class SetupWizard extends React.Component {
             if(this.props.children instanceof Array) {
                 children = this.props.children[this.state.currentStep];
             } else {
+                // eslint-disable-next-line prefer-destructuring
                 children = this.props.children;
             }
         }

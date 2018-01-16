@@ -31,6 +31,7 @@ export default class Mode extends React.Component {
         ModeSwitchHelper.onChange(this.updatedMode);
 
         this.setState({
+            // eslint-disable-next-line react/no-unused-state
             group: ModeSwitchHelper.getCurrentMode().id
         });
     }

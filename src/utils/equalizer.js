@@ -13,9 +13,9 @@ const dimension = {
  * @param [d2=d] Dimension that should be set
  */
 function equalize(elements, d, d2) {
-    let max = 0;
-    const length = elements.length;
+    const { length } = elements;
     const dimensionToSet = d2 || d;
+    let max = 0;
 
     if (length > 1) {
         let currentDim;

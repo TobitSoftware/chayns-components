@@ -39,6 +39,7 @@ export default class App extends React.Component {
         this._swiper = null;
 
         this.state = {
+            // eslint-disable-next-line react/no-unused-state
             swiperLoaded: false
         };
     }
@@ -51,7 +52,7 @@ export default class App extends React.Component {
         for(let i = 0, x = elements.length; i < x; i += 1) {
             elements[i].addEventListener('click', (event) => {
                 if(elements[i].dataset && elements[i].dataset.callbackid) {
-                    const callbackid = elements[i].dataset.callbackid;
+                    const { callbackid } = elements[i].dataset;
 
                     if(callbackid && window.react && window.react.slider && window.react.slider.callbacks && window.react.slider.callbacks[callbackid]) {
                         window.react.slider.callbacks[callbackid](event);
@@ -102,7 +103,7 @@ export default class App extends React.Component {
 
     _onResize() {
         if(this._swiperElement) {
-            const width = this._swiperElement.getBoundingClientRect().width;
+            const { width } = this._swiperElement.getBoundingClientRect();
             const height = this._getHeight(width);
 
             this._swiperElement.style.height = `${height}px`;

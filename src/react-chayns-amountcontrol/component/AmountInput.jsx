@@ -143,7 +143,15 @@ export default class AmountInput extends React.Component {
     }
 
     render() {
-        const { amount, equalize, disabled, disableInput, autoInput, showInput: showInputProp, shopStyle } = this.props;
+        const {
+            amount,
+            equalize,
+            disabled,
+            disableInput,
+            autoInput,
+            showInput: showInputProp,
+            shopStyle,
+        } = this.props;
         const { showInput } = this.state;
 
         if(((!autoInput || amount <= AUTO_HIDE_INPUT_MAX_AMOUNT) && !showInput && !showInputProp) || disableInput || disabled) {

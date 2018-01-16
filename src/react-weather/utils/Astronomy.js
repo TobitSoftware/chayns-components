@@ -3,6 +3,7 @@ import WorldWeatherOnline from './WorldWeatherOnline';
 export default class Astronomy {
     constructor(jsonObject, parent) {
         if (jsonObject[0]) {
+            // eslint-disable-next-line prefer-destructuring
             this._info = jsonObject[0];
         }
 
