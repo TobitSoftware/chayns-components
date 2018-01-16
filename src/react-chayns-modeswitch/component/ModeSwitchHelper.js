@@ -115,7 +115,7 @@ export default class ModeSwitchHelper {
 
                     const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
 
-                    if(managerGroup && data && data.AppUser.AdminMode) {
+                    if(managerGroup && data && data.AppUser.AdminMode && !chayns.env.isApp) {
                         groupObject = getGroupObject(managerGroup.id, managerGroup.name, managerGroup.uacIds);
                         isChaynsIdAdmin = true;
                     } else {
@@ -153,7 +153,7 @@ export default class ModeSwitchHelper {
                             const uacIds = getUacIds(groups[i]);
                             const allowedUacs = getAllowedUacIdsFromArray(uacIds);
 
-                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1))) {
+                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1) && !chayns.env.isApp)) {
                                 const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
                                 allowedGroups.push(addGroupObject);
 
