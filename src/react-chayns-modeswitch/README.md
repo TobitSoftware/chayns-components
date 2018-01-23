@@ -6,6 +6,9 @@ The ModeSwitch-Component is part of the *chayns-components* package. It can be i
     
 The ModeSwitch-Component decides itself, whether to show the ModeSwitch and if so, which modes to show.
 
+Note: In case you add the chayns-manager UAC-Group (1) at point of initialization, the ModeSwitch-Component relies on the 
+the current chaynsId-settings which can be found at the top of each chayns site.
+
 ## Usage of the ModeSwitch
 At first the component needs to be imported:
 
@@ -49,7 +52,7 @@ The group object represents a group (mode) in the ModeSwitch.
 It requires an *id** and a **name**.
 It is also possible to provide an array containing UAC group ids. This causes that the specific mode (group object) can only be selected by users, that are member of the specified uac groups.
 
-## Verwendung von Mode
+## Usage of Mode
 The mode component is used to display and hide other react components. The decision is made by the provided groups/modes.
 
 ***Important: The group property expects an ID that was provided on the ModeSwitches initialization , and not a uac group id***
