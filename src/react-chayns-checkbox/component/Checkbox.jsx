@@ -112,8 +112,10 @@ export default class Checkbox extends React.Component {
                         className="switch"
                         ref={(ref) => { this._node = ref; }}
                         onChange={this.onChange}
-                        disabled={disabled}
                         id={this.id}
+                        disabled={disabled}
+                        checked={checked}
+                        defaultChecked={defaultChecked}
                     />
                     <label
                         htmlFor={this.id}
