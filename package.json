@@ -3,6 +3,7 @@
   "version": "2.0.3",
   "description": "some standalone react components",
   "main": "lib/index.js",
+  "jsnext:main": "lib_esnext/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
     "prepublish": "npm run eslint & npm run build",
