@@ -20,7 +20,8 @@ export default class Input extends React.Component {
         onBlur: PropTypes.func,
         responsive: PropTypes.bool,
         regExp: PropTypes.string,
-        inputRef: PropTypes.func
+        inputRef: PropTypes.func,
+        type: PropTypes.string,
     };
 
     static defaultProps = {
@@ -34,7 +35,8 @@ export default class Input extends React.Component {
         onChange: null,
         onBlur: null,
         regExp: null,
-        inputRef: null
+        inputRef: null,
+        type: 'text',
     };
 
     constructor(props) {
@@ -85,6 +87,7 @@ export default class Input extends React.Component {
 
     render() {
         const {
+            type,
             value,
             defaultValue,
             placeholder,
@@ -128,7 +131,7 @@ export default class Input extends React.Component {
                     onChange={this.onChange}
                     onBlur={this.onBlur}
                     className="input"
-                    type="text"
+                    type={type || 'text'}
                     required
                     {...other}
                 />
@@ -153,7 +156,7 @@ export default class Input extends React.Component {
                 onKeyUp={this.onKeyUp}
                 onChange={this.onChange}
                 onBlur={this.onBlur}
-                type="text"
+                type={type || 'text'}
                 required
                 {...other}
             />
