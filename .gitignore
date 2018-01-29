@@ -113,3 +113,4 @@ cert.txt
 lib
 /react-*/
 /polyfills/
+lib_esnext/

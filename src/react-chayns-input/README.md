@@ -23,6 +23,7 @@ The following properties can be set on the Input-Component
 
 | Property     | Description                                                                       | Type          | Default Value |
 |--------------|-----------------------------------------------------------------------------------|---------------|---------------|
+| type         | The type that should be set on the input (e.g. text, password, number)            | string        | "text"        |
 | style        | Additional styles that should be set to the input                                 | object        |               |
 | className    | Additional CSS-Classes that should be set to the button                           | string        |               |
 | placeholder  | Animated placeholder that will be shown inside the input                          | string        |               |

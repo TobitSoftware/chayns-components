@@ -174,6 +174,7 @@ export default class AmountInput extends React.Component {
 
         return (
             <Input
+                type="number"
                 value={this.getInputValue()}
                 onChange={this.onInputChange}
                 className="cc__amount-control__input"
