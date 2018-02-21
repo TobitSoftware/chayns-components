@@ -1,105 +1,82 @@
+import Accordion from './react-chayns-accordion/component/Accordion';
+import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
+import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
+import InspectElementAnimation from './react-chayns-animations/component/InspectElement/InspectElement';
+
+import Button from './react-chayns-button/component/Button';
+import ChooseButton from './react-chayns-button/component/ChooseButton';
+
+import Calendar from './react-chayns-calendar/component/Calendar';
+import Checkbox from './react-chayns-checkbox/component/Checkbox';
+import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
+import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
+import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
+import Input from './react-chayns-input/component/Input';
+
+import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
+import Mode from './react-chayns-modeswitch/component/Mode';
+import ModeSwitchHelper from './react-chayns-modeswitch/component/ModeSwitchHelper';
+import connectToModeSwitch from './react-chayns-modeswitch/component/connectToModeSwitch';
+
+import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+import RadioButton from './react-chayns-radiobutton/component/RadioButton';
+import ScrollView from './react-chayns-scrollview/component/ScrollView';
+import SelectButton from './react-chayns-selectbutton/component/SelectButton';
+
+import SelectList from './react-chayns-selectlist/component/SelectList';
+import SelectListItem from './react-chayns-selectlist/component/SelectItem';
+
+import SetupWizard from './react-chayns-setupwizard/component/SetupWizard';
+import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
+
+import SharingBar from './react-chayns-sharingbar/component/SharingBar';
+import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
+
+import Swipe from './react-chayns-swiper/component/Slide';
+import Swiper from './react-chayns-swiper/component/Slider';
+import SwipeOverlay from './react-chayns-swiper/component/SlideOverlay';
+
+import TextArea from './react-chayns-textarea/component/TextArea';
+import TextString from './react-chayns-textstring/component/TextString';
+import RefuelWidget from './react-refuel/component/Refuel';
+
+import WeatherWidget from './react-weather/component/Weather';
+import WorldWeatherOnline from './react-weather/utils/WorldWeatherOnline';
+
+
 export {
     Accordion,
-    AccordionIntro
-} from './react-chayns-accordion/index';
-
-export {
-    default as AmountControl,
-} from './react-chayns-amountcontrol/index';
-
-export {
+    AccordionIntro,
+    AmountControl,
     InspectElementAnimation,
-} from './react-chayns-animations/index';
-
-export {
     Button,
     ChooseButton,
-} from './react-chayns-button/index';
-
-export {
-    default as Calendar,
-} from './react-chayns-calendar/index';
-
-export {
-    default as Checkbox,
-} from './react-chayns-checkbox/index';
-
-export {
-    default as ContextMenu,
-} from './react-chayns-contextmenu/index';
-
-export {
-    default as EmojiInput,
-} from './react-chayns-emoji_input/index';
-
-export {
-    default as GridCalendar,
-} from './react-chayns-gridcalendar/index';
-
-export {
-    default as Input,
-} from './react-chayns-input/index';
-
-export {
+    Calendar,
+    Checkbox,
+    ContextMenu,
+    EmojiInput,
+    GridCalendar,
+    Input,
     ModeSwitch,
-    ModeSwitchHelper,
     Mode,
-    connectToModeSwitch
-} from './react-chayns-modeswitch/index';
-
-export {
-    default as PersonFinder
-} from './react-chayns-personfinder/index';
-
-export {
-    default as RadioButton
-} from './react-chayns-radiobutton/index';
-
-export {
-    default as ScrollView
-} from './react-chayns-scrollview/index';
-
-export {
-    default as SelectButton
-} from './react-chayns-selectbutton/index';
-
-export {
+    ModeSwitchHelper,
+    connectToModeSwitch,
+    PersonFinder,
+    RadioButton,
+    ScrollView,
+    SelectButton,
     SelectList,
-    SelectItem as SelectListItem
-} from './react-chayns-selectlist/index';
-
-export {
+    SelectListItem,
     SetupWizard,
-    SetupItem as SetupWizardItem
-} from './react-chayns-setupwizard/index';
-
-export {
-    default as SharingBar
-} from './react-chayns-sharingbar/index';
-
-export {
-    default as SmallWaitCursor
-} from './react-chayns-smallwaitcursor/index';
-
-export {
+    SetupWizardItem,
+    SharingBar,
+    SmallWaitCursor,
     Swiper,
     SwipeOverlay,
-    Swipe
-} from './react-chayns-swiper/index';
-
-export {
-    default as TextArea
-} from './react-chayns-textarea/index';
-
-export {
-    default as TextString
-} from './react-chayns-textstring/index';
-
-export {
-    default as RefuelWidget
-} from './react-refuel/index';
-
-export {
-    Weather as WeatherWidget,
-    WorldWeatherOnline
-} from './react-weather/index';
+    Swipe,
+    TextArea,
+    TextString,
+    RefuelWidget,
+    WeatherWidget,
+    WorldWeatherOnline,
+};
