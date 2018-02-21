@@ -13,7 +13,7 @@ import { SelectButton } from 'chayns-components';
 ```
 
 
-You can now use the component as followed:
+You can now use the component as follows:
 ```jsx
 <SelectButton
     label="Select-Button"
