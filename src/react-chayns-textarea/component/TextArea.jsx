@@ -9,6 +9,7 @@ export default class TextArea extends React.Component {
         placeholder: PropTypes.string,
         required: PropTypes.bool,
         onChange: PropTypes.func,
+        onBlur: PropTypes.func,
         defaultValue: PropTypes.string,
         value: PropTypes.string,
         onKeyUp: PropTypes.func,
@@ -23,6 +24,7 @@ export default class TextArea extends React.Component {
         placeholder: null,
         required: null,
         onChange: null,
+        onBlur: null,
         defaultValue: undefined,
         value: undefined,
         onKeyUp: null,
@@ -37,16 +39,16 @@ export default class TextArea extends React.Component {
     };
 
     componentDidMount() {
-        if(this.props.required) {
+        if (this.props.required) {
             this._node.setAttribute('required', '');
         }
 
-        if(this.props.autogrow) {
+        if (this.props.autogrow) {
             this.offset = this._node.offsetHeight - this._node.clientHeight;
 
             this.initialHeight = `${this._node.scrollHeight + this.offset}px`;
 
-            if(!this.props.defaultValue) {
+            if (!this.props.defaultValue) {
                 this.grow();
             } else {
                 this.grow('0');
@@ -55,12 +57,12 @@ export default class TextArea extends React.Component {
     }
 
     onChange = () => {
-        if(this.props.onChange) {
+        if (this.props.onChange) {
             this.props.onChange(this._node.value);
         }
 
-        if(this.props.autogrow) {
-            if(this._node.value === '') {
+        if (this.props.autogrow) {
+            if (this._node.value === '') {
                 this.grow(this.initialHeight);
             } else {
                 this.grow('0');
@@ -68,10 +70,16 @@ export default class TextArea extends React.Component {
         }
     };
 
+    onBlur = () => {
+        if (this.props.onBlur) {
+            this.props.onBlur(this._node.value);
+        }
+    };
+
     ref = (node) => {
         this._node = node;
 
-        if(this.props.reference) {
+        if (this.props.reference) {
             this.props.reference(node);
         }
     };
@@ -102,6 +110,7 @@ export default class TextArea extends React.Component {
                 style={style}
                 defaultValue={this.props.defaultValue}
                 onChange={(this.props.onChange || this.props.autogrow) ? this.onChange : null}
+                onBlur={this.props.onBlur ? this.onBlur : null}
                 onKeyUp={this.props.onKeyUp}
                 onKeyDown={this.props.onKeyDown}
                 value={this.props.value}
