@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ChooseButton } from '../../index';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 const ControlButton = ({
     icon,

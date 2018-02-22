@@ -1,11 +1,9 @@
-import WorldWeatherOnline from './WorldWeatherOnline';
 import Astronomy from './Astronomy';
 import WeatherInfo from './WeatherInfo';
 
 export default class WeatherForecast {
     constructor(jsonObject) {
         this._forecast = jsonObject;
-        this._wwo = WorldWeatherOnline;
     }
 
     getMinTemp(fahrenheit) {
@@ -84,13 +82,13 @@ export default class WeatherForecast {
     }
 
     getHourByIndex(index) {
-        return new WeatherInfo(this._forecast.hourly[index], this._wwo);
+        return new WeatherInfo(this._forecast.hourly[index]);
     }
 
     getHours() {
         if (this._forecast.hourly) {
             return this._forecast.hourly.map((element) => {
-                return new WeatherInfo(element, this._wwo);
+                return new WeatherInfo(element);
             });
         }
 

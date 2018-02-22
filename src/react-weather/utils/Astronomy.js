@@ -1,4 +1,4 @@
-import WorldWeatherOnline from './WorldWeatherOnline';
+import parseAstronomyTime from './parseAstronomyTime';
 
 export default class Astronomy {
     constructor(jsonObject, parent) {
@@ -14,7 +14,7 @@ export default class Astronomy {
 
     getMoonrise() {
         if (this._info) {
-            return WorldWeatherOnline.parseAstronomyTime(this._info.moonrise, this._parent) || null;
+            return parseAstronomyTime(this._info.moonrise, this._parent) || null;
         }
 
         return null;
@@ -22,7 +22,7 @@ export default class Astronomy {
 
     getMoonset() {
         if (this._info) {
-            return WorldWeatherOnline.parseAstronomyTime(this._info.moonset, this._parent) || null;
+            return parseAstronomyTime(this._info.moonset, this._parent) || null;
         }
 
         return null;
@@ -30,7 +30,7 @@ export default class Astronomy {
 
     getSunrise() {
         if (this._info) {
-            return WorldWeatherOnline.parseAstronomyTime(this._info.sunrise, this._parent) || null;
+            return parseAstronomyTime(this._info.sunrise, this._parent) || null;
         }
 
         return null;
@@ -38,7 +38,7 @@ export default class Astronomy {
 
     getSunset() {
         if (this._info) {
-            return WorldWeatherOnline.parseAstronomyTime(this._info.sunset, this._parent) || null;
+            return parseAstronomyTime(this._info.sunset, this._parent) || null;
         }
 
         return null;
