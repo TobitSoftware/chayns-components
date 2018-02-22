@@ -1,9 +1,9 @@
-import WorldWeatherOnline from './WorldWeatherOnline';
+import getWeatherIcon from './getWeatherIcon';
+import parseHmmTime from './parseHmmTime';
 
 export default class WeatherInfo {
-    constructor(jsonObject, parent) {
+    constructor(jsonObject) {
         this._info = jsonObject;
-        this._parent = parent;
     }
 
     getRaw() {
@@ -31,7 +31,7 @@ export default class WeatherInfo {
     }
 
     getWeatherIcon(isNight) {
-        return WorldWeatherOnline.getWeatherIcon(this.getWeatherCode(), isNight);
+        return getWeatherIcon(this.getWeatherCode(), isNight);
     }
 
     getWeatherCode() {
@@ -65,7 +65,7 @@ export default class WeatherInfo {
     getTime() {
         if (!this._info.time) return null;
 
-        return WorldWeatherOnline.parseHmmTime(this._info.time, new Date());
+        return parseHmmTime(this._info.time, new Date());
     }
 
     getPrecipitation(inches) {

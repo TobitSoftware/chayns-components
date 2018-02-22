@@ -138,5 +138,7 @@ webpack
 auth.txt
 cert.txt
 
-# file for copying package.json's
-copyPackageJson.js
+.eslintrc
+package-lock.json
+postcss.config.js
+rollup.config.js
