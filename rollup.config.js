@@ -1,14 +1,14 @@
-import resolve from "rollup-plugin-node-resolve";
-import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
-import filesize from "rollup-plugin-filesize";
+import resolve from 'rollup-plugin-node-resolve';
+import babel from 'rollup-plugin-babel';
+import commonjs from 'rollup-plugin-commonjs';
+import filesize from 'rollup-plugin-filesize';
 import external from 'rollup-plugin-peer-deps-external';
 
 const env = process.env.NODE_ENV;
-const pkg = require("./package.json");
+const pkg = require('./package.json');
 
 export default {
-    input: "src/index.js",
+    input: 'src/index.js',
     output: {
         file: {
             es: pkg.module,
@@ -16,16 +16,16 @@ export default {
         }[env],
         format: env
     },
-    external: ["react", "classnames", "prop-types", "ract-dom", "react-transition-group", "emojione"],
+    external: ['react', 'classnames', 'prop-types', 'ract-dom', 'react-transition-group', 'emojione'],
     plugins: [
         external(),
         resolve({
-            extensions: [ '.js', '.jsx' ],
+            extensions: ['.js', '.jsx'],
         }),
         babel({
-            exclude: "node_modules/**",
+            exclude: 'node_modules/**',
             presets: ['react'],
-            plugins: ["external-helpers"],
+            plugins: ['external-helpers'],
             // if external helpers true then use global babel object
             externalHelpers: true
         }),
