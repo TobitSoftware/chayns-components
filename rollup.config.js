@@ -3,6 +3,7 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import external from 'rollup-plugin-peer-deps-external';
+import autoExternal from 'rollup-plugin-auto-external';
 
 const env = process.env.NODE_ENV;
 const pkg = require('./package.json');
@@ -19,6 +20,7 @@ export default {
     external: ['react', 'classnames', 'prop-types', 'ract-dom', 'react-transition-group', 'emojione'],
     plugins: [
         external(),
+        autoExternal(),
         resolve({
             extensions: ['.js', '.jsx'],
         }),
