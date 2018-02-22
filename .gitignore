@@ -114,3 +114,4 @@ lib
 /react-*/
 /polyfills/
 lib_esnext/
+dist/
