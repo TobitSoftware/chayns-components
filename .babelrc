@@ -6,5 +6,5 @@
     "stage-0",
     "react"
   ],
-  "plugins": ["transform-decorators-legacy", "external-helpers"]
+  "plugins": ["transform-decorators-legacy"]
 }

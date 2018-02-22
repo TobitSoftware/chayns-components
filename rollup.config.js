@@ -24,8 +24,6 @@ export default {
         }),
         babel({
             exclude: 'node_modules/**',
-            presets: ['react'],
-            plugins: ['external-helpers'],
             // if external helpers true then use global babel object
             externalHelpers: true
         }),
