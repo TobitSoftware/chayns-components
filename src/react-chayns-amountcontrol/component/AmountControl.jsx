@@ -10,6 +10,7 @@ export default class AmountControl extends React.Component {
         buttonText: PropTypes.string.isRequired,
         amount: PropTypes.number,
         onChange: PropTypes.func,
+        onInput: PropTypes.func,
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         equalize: PropTypes.string,
@@ -27,6 +28,7 @@ export default class AmountControl extends React.Component {
     static defaultProps = {
         amount: 0,
         onChange: null,
+        onInput: null,
         onAdd: null,
         onRemove: null,
         equalize: null,
@@ -59,6 +61,12 @@ export default class AmountControl extends React.Component {
         this.setState({
             tempValue: value
         });
+
+        const { onInput } = this.props;
+
+        if(onInput && (value || value === 0)) {
+            onInput(value);
+        }
     };
 
     getRemoveIcon() {
@@ -99,10 +107,14 @@ export default class AmountControl extends React.Component {
     };
 
     changeAmount = (amount) => {
-        const { onChange } = this.props;
+        const { onChange, onInput } = this.props;
 
         if(onChange) {
             onChange(amount);
+        }
+
+        if(onInput) {
+            onInput(amount);
         }
     };
 

@@ -139,6 +139,13 @@ export default class Example extends React.Component {
                         shopStyle
                     />
                 </div>
+
+                <AmountControl
+                    amount={amount}
+                    onInput={this.onChange}
+                    buttonText="0,10"
+                    showInput={amount > 0}
+                />
             </ExampleContainer>
         );
     }

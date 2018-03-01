@@ -39,6 +39,7 @@ You can set the following props on a AmountControl element:
 | amount        | The current amount (behaves like value, not like defaultValue)                          | number   | 0       |
 | className     | The css class of the AmountControl-wrapper                                              | string   |         |
 | onChange      | Function that is called when the user changes the amount                                | function |         |
+| onInput       | Function that is called directly when the user changes the amount                       | function |         |
 | onAdd         | Function that is called when the user click on the add button                           | function |         |
 | onRemove      | Function that is called when the user click on the remove button                        | function |         |
 | equalize      | Equalizes a set of AmountControls (see examples)                                        | string   |         |
