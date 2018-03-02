@@ -43,6 +43,8 @@ import RefuelWidget from './react-refuel/component/Refuel';
 import WeatherWidget from './react-weather/component/Weather';
 import WorldWeatherOnline from './react-weather/utils/WorldWeatherOnline';
 
+import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
+
 
 export {
     Accordion,
@@ -79,4 +81,5 @@ export {
     RefuelWidget,
     WeatherWidget,
     WorldWeatherOnline,
+    resolveAbsoluteImport,
 };
