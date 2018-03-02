@@ -1,4 +1,4 @@
-export default function resolveAbsoluteImport(importName) {
+module.exports = function resolveAbsoluteImport(importName) {
     const values = {
         Accordion: 'react-chayns-accordion/component/Accordion.js',
         AccordionIntro: 'react-chayns-accordion/component/AccordionIntro.js',
@@ -41,4 +41,4 @@ export default function resolveAbsoluteImport(importName) {
     }
 
     return `chayns-components/lib/${values[importName]}`;
-}
+};
