@@ -1,4 +1,4 @@
-export const IMAGE_MIME_TYPES = ['images/png', 'image/jpeg'];
+export const IMAGE_MIME_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/webp', 'image/x-icon', 'image/*'];
 
 function isImage(file) {
     const type = (file.type || '').toLowerCase();
