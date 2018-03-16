@@ -31,6 +31,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         Swipe: 'react-chayns-swiper/component/Slide.js',
         TextArea: 'react-chayns-textarea/component/TextArea.js',
         TextString: 'react-chayns-textstring/component/TextString.js',
+        FileUpload: 'react-chayns-upload/component/FileUpload.js',
         RefuelWidget: 'react-refuel/component/Refuel.js',
         WeatherWidget: 'react-weather/component/Weather.js',
         WorldWeatherOnline: 'react-weather/component/utils/WorldWeatherOnline.js',
