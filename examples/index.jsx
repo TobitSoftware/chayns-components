@@ -20,4 +20,5 @@ import './react-chayns-smallwaitcursor/index';
 import './react-chayns-swiper/index';
 import './react-chayns-textarea/index';
 import './react-chayns-textstring/index';
+import './react-chayns-upload/index';
 import './react-weather/index';
