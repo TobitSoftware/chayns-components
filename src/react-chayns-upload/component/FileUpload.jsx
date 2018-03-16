@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import selectFile from '../../utils/selectFile';
 import getCompareFunction, { IMAGE_MIME_TYPES } from '../utils/getCompareFunction';
+import getMimeTypes from '../utils/getMimeTypes';
 
 export default class FileUpload extends Component {
     static propTypes = {
-        type: PropTypes.oneOf(['images', 'all']),
+        type: PropTypes.oneOf(['image', 'video', 'audio', 'all']),
         multiple: PropTypes.bool,
         onChange: PropTypes.func,
         className: PropTypes.string,
@@ -22,8 +23,12 @@ export default class FileUpload extends Component {
 
     static getText(type) {
         switch (type) {
-            case 'images':
+            case 'image':
                 return 'Bild hochladen';
+            case 'video':
+                return 'Video hochladen';
+            case 'audio':
+                return 'Song hochladen';
             default:
                 return 'Datei hochladen';
         }
@@ -46,7 +51,7 @@ export default class FileUpload extends Component {
         const { type, multiple } = this.props;
 
         selectFile({
-            type: (type === 'images') ? IMAGE_MIME_TYPES.join(',') : '*/*',
+            type: getMimeTypes(type),
             multiple,
         }).then((files) => {
             const fileList = !multiple ? [files] : files;
@@ -117,7 +122,9 @@ export default class FileUpload extends Component {
 
         const classNames = classnames('cc__file-upload', {
             'chayns__color--70': chayns.env.site.colorMode !== 1,
-            'cc__file-upload--image': (type === 'images'),
+            'cc__file-upload--image': (type === 'image'),
+            'cc__file-upload--audio': (type === 'audio'),
+            'cc__file-upload--video': (type === 'video'),
             'cc__file-upload--documents': (!type || type === 'all'),
             'cc__file-upload--hover': hover,
             [className]: className,
