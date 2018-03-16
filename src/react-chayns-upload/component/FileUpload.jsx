@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import selectFile from '../../utils/selectFile';
-import getCompareFunction, { IMAGE_MIME_TYPES } from '../utils/getCompareFunction';
+import getCompareFunction from '../utils/getCompareFunction';
 import getMimeTypes from '../utils/getMimeTypes';
 
 export default class FileUpload extends Component {

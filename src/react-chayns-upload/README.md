@@ -33,7 +33,7 @@ The component can be used in JSX like in the following example:
 ```jsx
 <FileUpload
     multiple={false}
-    type="images"
+    type="image"
     onChange={(files, validFiles) => {
         console.log(`You have selected ${files.length} files of which ${validFiles.length} are valid`);
     }}
