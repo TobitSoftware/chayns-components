@@ -30,7 +30,13 @@ export default class FileUpload extends Component {
     constructor() {
         super();
 
+        this.state = {
+            hover: false,
+        };
+
         this.onDrop = this.onDrop.bind(this);
+        this.onDragOver = this.onDragOver.bind(this);
+        this.onDragLeave = this.onDragLeave.bind(this);
         this.onClick = this.onClick.bind(this);
     }
 
@@ -52,6 +58,10 @@ export default class FileUpload extends Component {
         event.stopPropagation();
         event.preventDefault();
 
+        this.setState({
+            hover: false,
+        });
+
         const { files } = event.dataTransfer;
 
         if (onChange) {
@@ -59,13 +69,22 @@ export default class FileUpload extends Component {
         }
     }
 
-    // eslint-disable-next-line class-methods-use-this
     onDragOver(event) {
         event.stopPropagation();
         event.preventDefault();
 
+        this.setState({
+            hover: true,
+        });
+
         // eslint-disable-next-line no-param-reassign
         event.dataTransfer.dropEffect = 'copy';
+    }
+
+    onDragLeave() {
+        this.setState({
+            hover: false,
+        });
     }
 
     checkFiles(files) {
@@ -92,11 +111,13 @@ export default class FileUpload extends Component {
 
     render() {
         const { type } = this.props;
+        const { hover } = this.state;
 
-        const classNames = classnames('cc__drop-zone', {
+        const classNames = classnames('cc__file-upload', {
             'chayns__color--70': chayns.env.site.colorMode !== 1,
-            'cc__drop-zone--image': (type === 'images'),
-            'cc__drop-zone--documents': (!type || type === 'all')
+            'cc__file-upload--image': (type === 'images'),
+            'cc__file-upload--documents': (!type || type === 'all'),
+            'cc__file-upload--hover': hover,
         });
 
         return (
@@ -105,13 +126,14 @@ export default class FileUpload extends Component {
                 onClick={this.onClick}
                 onDrop={this.onDrop}
                 onDragOver={this.onDragOver}
+                onDragLeave={this.onDragLeave}
             >
                 <i
-                    className="cc__drop-zone__icon"
+                    className="cc__file-upload__icon"
                     aria-hidden="true"
                 />
                 <div
-                    className="cc__drop-zone__message"
+                    className="cc__file-upload__message"
                 >
                     {FileUpload.getText(type)}
                 </div>

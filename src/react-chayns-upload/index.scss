@@ -1,4 +1,4 @@
-.cc__drop-zone {
+.cc__file-upload {
   height: 60px;
   opacity: 0.6;
   transition: all .2s;
@@ -8,8 +8,14 @@
   justify-content: center;
   cursor: pointer;
 
+  &--hover {
+    .cc__file-upload__icon {
+      animation: cc__file-upload--bounce 1s infinite;
+    }
+  }
+
   &--image {
-    .cc__drop-zone__icon {
+    .cc__file-upload__icon {
       &:before {
         content: '\f03e';
       }
@@ -17,7 +23,7 @@
   }
 
   &--documents {
-    .cc__drop-zone__icon {
+    .cc__file-upload__icon {
       &:before {
         content: '\f0f6';
       }
@@ -39,7 +45,19 @@
     justify-self: center;
   }
 
-  &:hover {
+  &:hover, &--hover {
     opacity: 1;
+  }
+}
+
+@keyframes cc__file-upload--bounce {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
   }
 }
