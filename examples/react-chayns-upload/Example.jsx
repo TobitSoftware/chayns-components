@@ -27,6 +27,7 @@ export default class Example extends React.Component {
         return(
             <ExampleContainer headline="FileUpload">
                 <FileUpload
+                    className="file-upload--files"
                     onChange={this.selectFiles}
                 />
                 <br />

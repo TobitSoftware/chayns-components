@@ -25,6 +25,7 @@ The component can be used in JSX like in the following example:
 | onChange   | Callback-function (parameter: files, validFiles, invalidFiles)             | function |               |
 | type       | Allowed types (currently supported: all, images)                           | String   | all           |
 | multiple   | Enables/Disables upload of multiple files                                  | Bool     | true          |
+| className  | CSS-classes that should be set on root-element                             | String   |               |
 
 
 ## Example ##

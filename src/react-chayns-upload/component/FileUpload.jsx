@@ -10,12 +10,14 @@ export default class FileUpload extends Component {
         type: PropTypes.oneOf(['images', 'all']),
         multiple: PropTypes.bool,
         onChange: PropTypes.func,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
         type: 'all',
         multiple: true,
         onChange: null,
+        className: '',
     };
 
     static getText(type) {
@@ -110,7 +112,7 @@ export default class FileUpload extends Component {
     }
 
     render() {
-        const { type } = this.props;
+        const { type, className } = this.props;
         const { hover } = this.state;
 
         const classNames = classnames('cc__file-upload', {
@@ -118,6 +120,7 @@ export default class FileUpload extends Component {
             'cc__file-upload--image': (type === 'images'),
             'cc__file-upload--documents': (!type || type === 'all'),
             'cc__file-upload--hover': hover,
+            [className]: className,
         });
 
         return (
