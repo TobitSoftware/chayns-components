@@ -23,7 +23,7 @@ The component can be used in JSX like in the following example:
 | Property   | Description                                                                | Type     | Default Value |
 |------------|----------------------------------------------------------------------------|----------|---------------|
 | onChange   | Callback-function (parameter: files, validFiles, invalidFiles)             | function |               |
-| type       | Allowed types (currently supported: all, images)                           | String   | all           |
+| type       | Allowed types (currently supported: all, image, audio, video)              | String   | all           |
 | multiple   | Enables/Disables upload of multiple files                                  | Bool     | true          |
 | className  | CSS-classes that should be set on root-element                             | String   |               |
 

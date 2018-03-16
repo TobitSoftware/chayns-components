@@ -1,9 +1,11 @@
-export const IMAGE_MIME_TYPES = ['images/png', 'image/jpeg'];
+import getMimeTypes from './getMimeTypes';
 
-function isImage(file) {
-    const type = (file.type || '').toLowerCase();
+function isOfType(types) {
+    return (file) => {
+        const type = (file.type || '').toLowerCase();
 
-    return (IMAGE_MIME_TYPES.indexOf(type) !== -1);
+        return (types.indexOf(type) !== -1);
+    };
 }
 
 function isDoc() {
@@ -11,8 +13,10 @@ function isDoc() {
 }
 
 export default function getCompareFunction(type) {
-    if (type === 'images') {
-        return isImage;
+    if (type === 'image' ||
+        type === 'audio' ||
+        type === 'video') {
+        return isOfType(getMimeTypes(type));
     }
 
     return isDoc;
