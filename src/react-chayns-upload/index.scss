@@ -14,22 +14,6 @@
     }
   }
 
-  &--image {
-    .cc__file-upload__icon {
-      &:before {
-        content: '\f03e';
-      }
-    }
-  }
-
-  &--documents {
-    .cc__file-upload__icon {
-      &:before {
-        content: '\f0f6';
-      }
-    }
-  }
-
   &__icon {
     &:before {
       font: normal normal normal 24px FontAwesome;
@@ -47,6 +31,39 @@
 
   &:hover, &--hover {
     opacity: 1;
+  }
+
+  // Icons
+  &--image {
+    .cc__file-upload__icon {
+      &:before {
+        content: '\f03e';
+      }
+    }
+  }
+
+  &--audio {
+    .cc__file-upload__icon {
+      &:before {
+        content: '\f001';
+      }
+    }
+  }
+
+  &--video {
+    .cc__file-upload__icon {
+      &:before {
+        content: '\f008';
+      }
+    }
+  }
+
+  &--documents {
+    .cc__file-upload__icon {
+      &:before {
+        content: '\f0f6';
+      }
+    }
   }
 }
 
