@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ExampleContainer from '../ExampleContainer';
-import { SelectList, SelectItem } from '../../src/index';
+import { SelectList, SelectListItem } from '../../src/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
 export default class Example extends React.Component {
@@ -53,7 +53,7 @@ export default class Example extends React.Component {
                             };
 
                             return (
-                                <SelectItem
+                                <SelectListItem
                                     name="Hi"
                                     id={index}
                                     key={index}
@@ -61,7 +61,7 @@ export default class Example extends React.Component {
                                     className="Hi"
                                 >
                                     {element}
-                                </SelectItem>
+                                </SelectListItem>
                             );
                         })
                     }
