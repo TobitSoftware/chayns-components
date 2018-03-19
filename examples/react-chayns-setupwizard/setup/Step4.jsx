@@ -2,16 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class Step3 extends React.Component {
+export default class Step4 extends React.Component {
     static contextTypes = {
         nextStep: PropTypes.func,
         stepComplete: PropTypes.func,
-        previousStep: PropTypes.func
+        toStep: PropTypes.func
     };
 
     nextStep = this.context.nextStep;
     stepComplete = this.context.stepComplete;
-    previousStep = this.context.previousStep;
+    toStep = this.context.toStep;
 
     render() {
         return (
@@ -21,19 +21,6 @@ export default class Step3 extends React.Component {
                     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
                     rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
-                <div className="input-group">
-                    <input
-                        className="input"
-                        type="text"
-                        id="requiredInput"
-                        required
-                        style={{ marginBottom: '10px' }}
-                        onKeyUp={(response) => {
-                            this.stepComplete(response.target.value !== '');
-                        }}
-                    />
-                        <label>Eingabe</label>
-                </div>
                 <div
                     style={
                         {
@@ -45,18 +32,15 @@ export default class Step3 extends React.Component {
                         {/* className="button" */}
                         {/* style={{ marginRight: '10px' }} */}
                         {/* onClick={() => { */}
-                            {/* this.previousStep(); */}
+                            {/* this.toStep(0); */}
                         {/* }} */}
-                    {/* > */}
-                        {/* Zurück */}
+                    {/* >Zurück zum Intro */}
                     {/* </div> */}
                     <div
                         className="button"
-                        onClick={() => {
-                            this.nextStep();
-                        }}
+                        onClick={this.context.nextStep}
                     >
-                        Weiter
+                        Abschließen
                     </div>
                 </div>
             </div>
