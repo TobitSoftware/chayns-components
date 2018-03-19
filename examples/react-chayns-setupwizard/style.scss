@@ -1,0 +1,17 @@
+.input {
+  &.wrong {
+    animation-name: wrong;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+  }
+}
+@keyframes wrong {
+  45%{
+    border-bottom-color: #D43D32;
+    background-color: rgba(255, 0, 0, .06);
+  }
+  55%{
+    border-bottom-color: #D43D32;
+    background-color: rgba(255, 0, 0, .06);
+  }
+}

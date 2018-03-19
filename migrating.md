@@ -80,3 +80,62 @@ You have to change your onChange-function on the TextArea:
        }}
 /> // => v2
 ```
+
+### Wizard
+You should add a title and description to your Wizard:
+```jsx
+// <SetupWizard
+//     ready={this.ready}
+// > => v1
+
+<SetupWizard
+    ready={this.ready}
+    title="Wizard"
+    description={'Ein Wizard wird beim Anlegen eines Tapps angezeigt.'}
+> // => v2
+```
+
+You have to add `accordion__content` to your step's classNames and should use the function `stepComplete` to mark the step as completed. To mark a step as required, you simply have to add the `required` parameter to your `SetupWizardItem`. There is a callback `notComplete`, which is called when you call `nextStep` on a not-completed item.
+````jsx
+// static contextTypes = {
+//     nextStep: PropTypes.func
+// };
+// 
+// render() {
+//     return(
+//          <div>
+//              <p>Lorem ipsum dolor sit amet...</p>
+//              <div style={{ textAlign: 'center' }}>
+//                  <div className="button" onClick={this.context.nextStep}>Weiter</div>
+//              </div>
+//          </div>
+//     );
+// } => v1
+
+static contextTypes = {
+    nextStep: PropTypes.func,
+    stepComplete: PropTypes.func
+};
+
+nextStep = this.context.nextStep;
+stepComplete = this.context.stepComplete;
+
+render() {
+    return (
+        <div className="accordion__content">
+            <p>Lorem ipsum dolor sit amet...</p>
+            <div style={{ textAlign: 'center' }}>
+                <div
+                    className="button"
+                    onClick={() => {
+                        this.stepComplete(true);
+                        this.nextStep();
+                    }}
+                >
+                    Weiter
+                </div>
+            </div>
+        </div>
+    );
+} // => v2
+```

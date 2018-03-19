@@ -1,21 +1,15 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
+const SetupItem = ({ children }) => children;
 
-export default class SetupItem extends React.Component {
-    static propTypes = {
-        title: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
-        children: PropTypes.element
-    };
+SetupItem.propTypes = {
+    children: PropTypes.element,
+    title: PropTypes.string.isRequired,
+    required: PropTypes.bool
+};
 
-    static defaultProps = {
-        title: null,
-        children: null,
-    };
+SetupItem.defaultProps = {
+    children: null
+};
 
-    render() {
-        return(
-            this.props.children
-        );
-    }
-}
+export default SetupItem;

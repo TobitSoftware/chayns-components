@@ -10,15 +10,21 @@ import classNames from 'classnames';
  */
 export default class SetupWizard extends React.Component {
     static defaultProps = {
-        ready: () => { },
+        ready: () => {
+        },
+        notComplete: () => {
+        },
         children: null,
         style: null,
         contentStyle: null,
+        title: null,
+        description: null
     };
 
     static childContextTypes = {
-        nextStep: PropTypes.func,
+        stepComplete: PropTypes.func,
         previousStep: PropTypes.func,
+        nextStep: PropTypes.func,
         toStep: PropTypes.func,
     };
 
@@ -28,127 +34,159 @@ export default class SetupWizard extends React.Component {
             PropTypes.element
         ]),
         ready: PropTypes.func,
+        notComplete: PropTypes.func,
         style: PropTypes.object,
         contentStyle: PropTypes.object,
+        title: PropTypes.string,
+        description: PropTypes.node
     };
 
     constructor() {
         super();
         this.state = {
             currentStep: 0,
-            maxProgress: 0
+            maxProgress: 0,
+            completedSteps: []
         };
-        this.nextStep = this.nextStep.bind(this);
+        this.stepComplete = this.stepComplete.bind(this);
         this.previousStep = this.previousStep.bind(this);
+        this.nextStep = this.nextStep.bind(this);
         this.toStep = this.toStep.bind(this);
         this.ready = this.ready.bind(this);
+        this.notComplete = this.notComplete.bind(this);
     }
 
     getChildContext() {
         return {
-            nextStep: this.nextStep,
+            stepComplete: this.stepComplete,
             previousStep: this.previousStep,
+            nextStep: this.nextStep,
             toStep: this.toStep
         };
     }
 
-    nextStep() {
-        if(this.props.children instanceof Array && this.props.children.length - 1 > this.state.currentStep) {
-            this.updateContent(this.state.currentStep + 1);
-        }else{
-            this.ready();
+    stepComplete(value) {
+        const { currentStep, completedSteps } = this.state;
+        if (value === true) {
+            if (completedSteps.indexOf(currentStep) === -1) {
+                completedSteps.push(currentStep);
+                this.setState({ completedSteps });
+            }
+        } else if (completedSteps.indexOf(currentStep) >= 0) {
+            completedSteps.splice(completedSteps.indexOf(currentStep));
+            this.setState({ completedSteps });
+            if(this.props.children[currentStep].props.required === true) {
+                this.setState({ maxProgress: currentStep });
+            }
         }
     }
 
     previousStep() {
-        if(this.state.currentStep !== 0) {
-            this.updateContent(this.state.currentStep - 1);
+        const { currentStep } = this.state;
+        if (currentStep > 0) {
+            this.updateContent(currentStep - 1);
+        }
+    }
+
+    nextStep() {
+        const { children } = this.props;
+        const { currentStep } = this.state;
+        if (chayns.utils.isArray(children) && children.length - 1 > currentStep) {
+            this.updateContent(currentStep + 1);
+        } else {
+            this.ready();
         }
     }
 
     toStep(step) {
-        if(this.props.children instanceof Array) {
-            if((this.props.children.length - 1) >= step) {
+        const { children } = this.props;
+        if (chayns.utils.isArray(children)) {
+            if ((children.length - 1) >= step) {
                 this.updateContent(step);
-            } else if((this.props.children.length - 1) === step + 1) {
+            } else if ((children.length - 1) === step + 1) {
                 this.ready();
             }
         }
     }
 
     ready() {
-        this.props.ready();
+        const { ready } = this.props;
+        ready();
     }
 
-    updateContent(step) {
-        this.content.className = 'sw__content_old animated';
-        window.setTimeout(() => {
-            const maxProgress = (step > this.state.maxProgress) ? step : this.state.maxProgress;
+    notComplete() {
+        const { notComplete } = this.props;
+        notComplete();
+    }
+
+    updateContent(newCurrentStep) {
+        let { maxProgress } = this.state;
+        const { completedSteps, currentStep } = this.state;
+        if(!(this.props.children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+            maxProgress = (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress;
             this.setState({
-                currentStep: step,
+                currentStep: newCurrentStep,
                 maxProgress
             });
-            this.content.className = 'sw__content animated';
-        }, 200);
-    }
-
-    renderHead() {
-        if(this.props.children instanceof Array) {
-            return this.props.children.map((children, index) => {
-                const clickable = this.state.currentStep !== index && (index < this.state.maxProgress || this.state.maxProgress === index);
-
-                const className = classNames({
-                        sw__head_item_focus: this.state.currentStep === index,
-                        sw__head_item_clickable: clickable,
-                        sw__head_item: this.state.currentStep !== index
-                    });
-
-                return(
-                    <span
-                        className={className}
-                        key={index} // eslint-disable-line react/no-array-index-key
-                        onClick={clickable ? () => this.toStep(index) : () => {}}
-                    >
-                        {index + 1} {children.props.title ? children.props.title : ''}
-                    </span>
-                );
-            });
+        } else {
+            this.notComplete();
         }
-
-        return '';
     }
 
     render() {
-        const { contentStyle, style } = this.props;
-        let children = '';
-
-        if(this.props.children) {
-            if(this.props.children instanceof Array) {
-                children = this.props.children[this.state.currentStep];
-            } else {
-                // eslint-disable-next-line prefer-destructuring
-                children = this.props.children;
-            }
-        }
-
-        return(
-            <div
-                className="sw__top"
-                style={style}
-            >
-                <div
-                    className="sw__head chayns__color--100"
-                    hidden={!(this.props.children instanceof Array)}
-                >
-                    {this.renderHead()}
-                </div>
-                <div
-                    ref={(content) => { this.content = content; }}
-                    style={contentStyle}
-                    className="sw__content animated"
-                >
-                    {children}
-                </div>
+        const {
+            style, contentStyle, title, description, children
+        } = this.props;
+        const { maxProgress, currentStep, completedSteps } = this.state;
+        return (
+            <div style={style}>
+                {(title !== null) ? <h1>{title}</h1> : null}
+                {(description !== null) ? <p dangerouslySetInnerHTML={{ __html: description }}/> :
+                    null}
+                {
+                    children.map((child, index) => {
+                        return (
+                            <div
+                                className={classNames('accordion', 'accordion--fixed', {
+                                    'accordion--open': (index === currentStep),
+                                    'accordion--disabled': (index > maxProgress)
+                                })}
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={index}
+                            >
+                                <div
+                                    className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: (index <= maxProgress) })}
+                                    onClick={() => {
+                                        if (maxProgress >= index) {
+                                            if (currentStep === index) {
+                                                this.setState({ currentStep: -1 });
+                                            } else {
+                                                this.setState({ currentStep: index });
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <div
+                                        className={classNames('number', {
+                                            numberDarkComplete: (chayns.env.site.colorMode === 1 && completedSteps.indexOf(index) >= 0),
+                                            numberDarkNotComplete: (chayns.env.site.colorMode === 1 && completedSteps.indexOf(index) === -1),
+                                            'chayns__background-color--70 chayns__color--5': (chayns.env.site.colorMode !== 1 && completedSteps.indexOf(index) >= 0),
+                                            'chayns__background-color--20 chayns__color--100': (chayns.env.site.colorMode !== 1 && completedSteps.indexOf(index) === -1)
+                                        })}
+                                    >
+                                        {index + 1}
+                                    </div>
+                                    <div className="title">
+                                        {child.props.title}
+                                    </div>
+                                </div>
+                                <div className="accordion__body" style={contentStyle}>
+                                    {child}
+                                </div>
+                            </div>
+                        );
+                    })
+                }
             </div>
         );
     }
