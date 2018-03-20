@@ -2,14 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class Step1 extends React.Component {
+export default class Step4 extends React.Component {
     static contextTypes = {
         nextStep: PropTypes.func,
-        stepComplete: PropTypes.func
+        stepComplete: PropTypes.func,
+        toStep: PropTypes.func
     };
-
-    nextStep = this.context.nextStep;
-    stepComplete = this.context.stepComplete;
 
     render() {
         return (
@@ -28,12 +26,9 @@ export default class Step1 extends React.Component {
                 >
                     <div
                         className="button"
-                        onClick={() => {
-                            this.stepComplete(true);
-                            this.nextStep();
-                        }}
+                        onClick={this.context.nextStep}
                     >
-                        Next
+                        Finish
                     </div>
                 </div>
             </div>
