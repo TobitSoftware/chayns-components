@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,7 +14,8 @@ export default class Step2 extends React.Component {
     render() {
         return (
             <div className="accordion__content">
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                <p>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                     labore
                     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
                     rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -53,12 +55,9 @@ export default class Step2 extends React.Component {
                 >
                     <div
                         className="button"
-                        onClick={() => {
-                            // this.stepComplete(true);
-                            this.nextStep();
-                        }}
+                        onClick={this.context.nextStep}
                     >
-                        Weiter
+                        Next
                     </div>
                 </div>
             </div>

@@ -10,10 +10,8 @@ import classNames from 'classnames';
  */
 export default class SetupWizard extends React.Component {
     static defaultProps = {
-        ready: () => {
-        },
-        notComplete: () => {
-        },
+        ready: null,
+        notComplete: null,
         children: null,
         style: null,
         contentStyle: null,
@@ -111,12 +109,19 @@ export default class SetupWizard extends React.Component {
 
     ready() {
         const { ready } = this.props;
-        ready();
+
+        if(ready) {
+            ready();
+        }
     }
+
 
     notComplete() {
         const { notComplete } = this.props;
-        notComplete();
+
+        if(notComplete) {
+            notComplete();
+        }
     }
 
     updateContent(newCurrentStep) {

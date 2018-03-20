@@ -91,7 +91,7 @@ You should add a title and description to your Wizard:
 <SetupWizard
     ready={this.ready}
     title="Wizard"
-    description={'Ein Wizard wird beim Anlegen eines Tapps angezeigt.'}
+    description={'A wizard will be shown to setup the tapp.'}
 > // => v2
 ```
 
@@ -106,7 +106,7 @@ You have to add `accordion__content` to your step's classNames and should use th
 //          <div>
 //              <p>Lorem ipsum dolor sit amet...</p>
 //              <div style={{ textAlign: 'center' }}>
-//                  <div className="button" onClick={this.context.nextStep}>Weiter</div>
+//                  <div className="button" onClick={this.context.nextStep}>Next</div>
 //              </div>
 //          </div>
 //     );
@@ -132,7 +132,7 @@ render() {
                         this.nextStep();
                     }}
                 >
-                    Weiter
+                    Next
                 </div>
             </div>
         </div>

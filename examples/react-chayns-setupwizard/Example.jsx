@@ -2,7 +2,7 @@ import React from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 
-import {SetupWizard, SetupWizardItem} from '../../src/index';
+import { SetupWizard, SetupWizardItem } from '../../src/index';
 import '../../src/react-chayns-setupwizard/index.scss';
 import './style.scss';
 
@@ -25,7 +25,6 @@ export default class Example extends React.Component {
         this.setState({
             ready: true
         });
-        chayns.dialog.alert('Erfolgreich eingerichtet', 'Du hast den Wizard erfolgreich abgeschlossen.');
     }
 
     notComplete() {
@@ -43,22 +42,23 @@ export default class Example extends React.Component {
                         ready={this.ready}
                         notComplete={this.notComplete}
                         // contentStyle={{ fontWeight: 'bold' }}
-                        style={{ backgroundColor: 'lightgray', padding: '10px'}}
+                        style={{backgroundColor: 'lightgray', padding: '10px'}}
                         title="Wizard"
-                        description={'Ein Wizard wird beim Anlegen eines Tapps angezeigt. Hier werden alle Einstellungen getroffen, die zum\n' +
-                        '                    Einrichten des Tapps nötig sind. Den Wizard sieht der Nutzer nur zum Einrichten. Danach darf er\n' +
-                        '                    nicht mehr erreichbar sein.'}
+                        description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n' +
+                        '                    labore\n' +
+                        '                    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n' +
+                        '                    rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
                         <SetupWizardItem title="Intro">
                             <Step1/>
                         </SetupWizardItem>
-                        <SetupWizardItem title="Eingabe optional">
+                        <SetupWizardItem title="Input optional">
                             <Step2/>
                         </SetupWizardItem>
-                        <SetupWizardItem title="Eingabe erforderlich" required>
+                        <SetupWizardItem title="Input required" required>
                             <Step3/>
                         </SetupWizardItem>
-                        <SetupWizardItem title="Abschließen">
+                        <SetupWizardItem title="Finish">
                             <Step4/>
                         </SetupWizardItem>
                     </SetupWizard>

@@ -9,9 +9,7 @@ export default class Step3 extends React.Component {
         previousStep: PropTypes.func
     };
 
-    nextStep = this.context.nextStep;
     stepComplete = this.context.stepComplete;
-    previousStep = this.context.previousStep;
 
     render() {
         return (
@@ -32,7 +30,7 @@ export default class Step3 extends React.Component {
                             this.stepComplete(response.target.value !== '');
                         }}
                     />
-                        <label>Eingabe</label>
+                        <label>Input</label>
                 </div>
                 <div
                     style={
@@ -41,22 +39,11 @@ export default class Step3 extends React.Component {
                         }
                     }
                 >
-                    {/* <div */}
-                        {/* className="button" */}
-                        {/* style={{ marginRight: '10px' }} */}
-                        {/* onClick={() => { */}
-                            {/* this.previousStep(); */}
-                        {/* }} */}
-                    {/* > */}
-                        {/* Zurück */}
-                    {/* </div> */}
                     <div
                         className="button"
-                        onClick={() => {
-                            this.nextStep();
-                        }}
+                        onClick={this.context.nextStep}
                     >
-                        Weiter
+                        Next
                     </div>
                 </div>
             </div>

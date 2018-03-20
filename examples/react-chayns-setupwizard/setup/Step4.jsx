@@ -9,10 +9,6 @@ export default class Step4 extends React.Component {
         toStep: PropTypes.func
     };
 
-    nextStep = this.context.nextStep;
-    stepComplete = this.context.stepComplete;
-    toStep = this.context.toStep;
-
     render() {
         return (
             <div className="accordion__content">
@@ -28,19 +24,11 @@ export default class Step4 extends React.Component {
                         }
                     }
                 >
-                    {/* <div */}
-                        {/* className="button" */}
-                        {/* style={{ marginRight: '10px' }} */}
-                        {/* onClick={() => { */}
-                            {/* this.toStep(0); */}
-                        {/* }} */}
-                    {/* >Zurück zum Intro */}
-                    {/* </div> */}
                     <div
                         className="button"
                         onClick={this.context.nextStep}
                     >
-                        Abschließen
+                        Finish
                     </div>
                 </div>
             </div>

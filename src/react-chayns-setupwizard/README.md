@@ -39,6 +39,7 @@ There are 3 different methods for changing the current step and one method for c
      toStep: PropTypes.func
  };
 ```
+ **Important:** `previousStep` and `toStep` are deprecated.
 
  **Note:** You have to call stepComplete with a boolean parameter for completing/not completing the current step.
 
@@ -55,18 +56,20 @@ The components got the following properties:
 
 | Property     | Description                                                                | Type   | Default | Required |
 |--------------|----------------------------------------------------------------------------|--------|---------|----------|
-| ready        | callback-Function which gets called right after the last step finished     | func   |         | true     |
-| notComplete  | callback-Function which gets called after calling nextStep but step is required and not complete     | func   |         | true     |
+| ready        | callback-function which gets called right after the last step finished     | func   |         | true     |
+| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func   |         | true     |
 | style        | style of the wizard-root-element                                           | object |         | false    |
 | contentStyle | style of the wizard-content-element                                        | object |         | false    |
+| title        | title of the wizard                                                        | object |         | false    |
+| description  | description of the wizard                                                  | object |         | false    |
 
 **SetupWizardItem**:
 
 
-| Property   | Description                                                                                        | Type   | Default | Required
-|------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
-| title | The title which is shown in the menu over the **Setup-Wizard**-Content  | string | | |
-| required | Sets the **Setup-Wizard-Item** required or not required  | string | | |
+| Property   | Description                                                                                        | Type   | Default | Required |
+|------------|----------------------------------------------------------------------------------------------------|--------|---------|----------|
+| title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string |         | true     |
+| required   | Sets the **Setup-Wizard-Item** required or not required                                            | string |         | false    |
 
 
 ## Example ##

@@ -33,7 +33,7 @@ export default class Step1 extends React.Component {
                             this.nextStep();
                         }}
                     >
-                        Weiter
+                        Next
                     </div>
                 </div>
             </div>
