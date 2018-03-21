@@ -9,9 +9,18 @@ export default class Step3 extends React.Component {
         previousStep: PropTypes.func
     };
 
-    stepComplete = this.context.stepComplete;
+    constructor(props, context) {
+        super(props, context);
+        this.inputOnKeyUp = this.inputOnKeyUp.bind(this);
+    }
+
+    inputOnKeyUp(response) {
+        const { stepComplete } = this.context;
+        stepComplete(response.target.value !== '');
+    }
 
     render() {
+        const { nextStep } = this.context;
         return (
             <div className="accordion__content">
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
@@ -26,9 +35,7 @@ export default class Step3 extends React.Component {
                         id="requiredInput"
                         required
                         style={{ marginBottom: '10px' }}
-                        onKeyUp={(response) => {
-                            this.stepComplete(response.target.value !== '');
-                        }}
+                        onKeyUp={this.inputOnKeyUp}
                     />
                         <label>Input</label>
                 </div>
@@ -41,7 +48,7 @@ export default class Step3 extends React.Component {
                 >
                     <div
                         className="button"
-                        onClick={this.context.nextStep}
+                        onClick={nextStep}
                     >
                         Next
                     </div>

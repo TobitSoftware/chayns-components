@@ -67,9 +67,11 @@ export default class Example extends React.Component {
         }
 
         return (
-            <h1>
-                Ready
-            </h1>
+            <ExampleContainer headline="SetupWizard">
+                <h1>
+                    Ready
+                </h1>
+            </ExampleContainer>
         );
     }
 }

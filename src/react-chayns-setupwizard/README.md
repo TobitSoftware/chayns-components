@@ -11,7 +11,7 @@ The **Setup Wizard** is usually used for setting up Tapps for the first time. My
 For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupWizardItem*.
 
 ```jsx
-import {SetupWizard, SetupWizardItem} from 'chayns-components/react-chayns-setupwizard';
+import {SetupWizardItem, SetupWizard} from 'chayns-components';
 import 'chayns-components/lib/react-chayns-setupwizard/index.css';
 ```
 
@@ -54,22 +54,22 @@ The components got the following properties:
 **SetupWizard**:
 
 
-| Property     | Description                                                                | Type   | Default | Required |
-|--------------|----------------------------------------------------------------------------|--------|---------|----------|
-| ready        | callback-function which gets called right after the last step finished     | func   |         | true     |
-| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func   |         | true     |
-| style        | style of the wizard-root-element                                           | object |         | false    |
-| contentStyle | style of the wizard-content-element                                        | object |         | false    |
-| title        | title of the wizard                                                        | object |         | false    |
-| description  | description of the wizard                                                  | object |         | false    |
+| Property     | Description                                                                | Type   | Required |
+|--------------|----------------------------------------------------------------------------|--------|----------|
+| ready        | callback-function which gets called right after the last step finished     | func   | true     |
+| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func   | true     |
+| style        | style of the wizard-root-element                                           | object | false    |
+| contentStyle | style of the wizard-content-element                                        | object | false    |
+| title        | title of the wizard                                                        | object | false    |
+| description  | description of the wizard                                                  | object | false    |
 
 **SetupWizardItem**:
 
 
-| Property   | Description                                                                                        | Type   | Default | Required |
-|------------|----------------------------------------------------------------------------------------------------|--------|---------|----------|
-| title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string |         | true     |
-| required   | Sets the **Setup-Wizard-Item** required or not required                                            | string |         | false    |
+| Property   | Description                                                                                        | Type   | Required |
+|------------|----------------------------------------------------------------------------------------------------|--------|----------|
+| title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string | true     |
+| required   | Sets the **Setup-Wizard-Item** required or not required                                            | string | false    |
 
 
 ## Example ##
