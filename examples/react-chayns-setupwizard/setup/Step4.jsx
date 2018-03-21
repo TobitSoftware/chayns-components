@@ -5,9 +5,19 @@ import PropTypes from 'prop-types';
 export default class Step4 extends React.Component {
     static contextTypes = {
         nextStep: PropTypes.func,
-        stepComplete: PropTypes.func,
-        toStep: PropTypes.func
+        stepComplete: PropTypes.func
     };
+
+    constructor(props, context) {
+        super(props, context);
+        this.next = this.next.bind(this);
+    }
+
+    next() {
+        const { stepComplete, nextStep } = this.context;
+        stepComplete(true);
+        nextStep();
+    }
 
     render() {
         return (
@@ -26,7 +36,7 @@ export default class Step4 extends React.Component {
                 >
                     <div
                         className="button"
-                        onClick={this.context.nextStep}
+                        onClick={this.next}
                     >
                         Finish
                     </div>

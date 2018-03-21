@@ -8,7 +8,19 @@ export default class Step2 extends React.Component {
         stepComplete: PropTypes.func
     };
 
+    constructor(props, context) {
+        super(props, context);
+        this.next = this.next.bind(this);
+    }
+
+    next() {
+        const { stepComplete, nextStep } = this.context;
+        stepComplete(true);
+        nextStep();
+    }
+
     render() {
+        const { nextStep } = this.context;
         return (
             <div className="accordion__content">
                 <p>
@@ -23,10 +35,7 @@ export default class Step2 extends React.Component {
                         type="radio"
                         className="radio"
                         id="radio1"
-                        onClick={() => {
-                            this.context.stepComplete(true);
-                            this.context.nextStep();
-                        }}
+                        onClick={this.next}
                     />
                     <label htmlFor="radio1">Option 1</label>
                 </div>
@@ -36,10 +45,7 @@ export default class Step2 extends React.Component {
                         type="radio"
                         className="radio"
                         id="radio2"
-                        onClick={() => {
-                            this.context.stepComplete(true);
-                            this.context.nextStep();
-                        }}
+                        onClick={this.next}
                     />
                     <label htmlFor="radio2">Option 2</label>
                 </div>
@@ -52,7 +58,7 @@ export default class Step2 extends React.Component {
                 >
                     <div
                         className="button"
-                        onClick={this.context.nextStep}
+                        onClick={nextStep}
                     >
                         Next
                     </div>
