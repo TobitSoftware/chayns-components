@@ -9,8 +9,6 @@ export default class Step3 extends React.Component {
         previousStep: PropTypes.func
     };
 
-    stepComplete = this.context.stepComplete;
-
     render() {
         return (
             <div className="accordion__content">
@@ -27,7 +25,7 @@ export default class Step3 extends React.Component {
                         required
                         style={{ marginBottom: '10px' }}
                         onKeyUp={(response) => {
-                            this.stepComplete(response.target.value !== '');
+                            this.context.stepComplete(response.target.value !== '');
                         }}
                     />
                         <label>Input</label>

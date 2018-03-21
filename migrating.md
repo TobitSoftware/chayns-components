@@ -117,9 +117,6 @@ static contextTypes = {
     stepComplete: PropTypes.func
 };
 
-nextStep = this.context.nextStep;
-stepComplete = this.context.stepComplete;
-
 render() {
     return (
         <div className="accordion__content">
@@ -128,8 +125,8 @@ render() {
                 <div
                     className="button"
                     onClick={() => {
-                        this.stepComplete(true);
-                        this.nextStep();
+                        this.context.stepComplete(true);
+                        this.context.nextStep();
                     }}
                 >
                     Next

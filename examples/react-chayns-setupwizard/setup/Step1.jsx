@@ -8,9 +8,6 @@ export default class Step1 extends React.Component {
         stepComplete: PropTypes.func
     };
 
-    nextStep = this.context.nextStep;
-    stepComplete = this.context.stepComplete;
-
     render() {
         return (
             <div className="accordion__content">
@@ -29,8 +26,8 @@ export default class Step1 extends React.Component {
                     <div
                         className="button"
                         onClick={() => {
-                            this.stepComplete(true);
-                            this.nextStep();
+                            this.context.stepComplete(true);
+                            this.context.nextStep();
                         }}
                     >
                         Next

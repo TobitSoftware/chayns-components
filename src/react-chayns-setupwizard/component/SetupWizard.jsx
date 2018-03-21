@@ -109,16 +109,18 @@ export default class SetupWizard extends React.Component {
 
     ready() {
         const { ready } = this.props;
-
-        if(ready) {
-            ready();
+        const { completedSteps, currentStep } = this.state;
+        if(!(this.props.children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+            if(ready) {
+                ready();
+            }
+        } else {
+            this.notComplete();
         }
     }
 
-
     notComplete() {
         const { notComplete } = this.props;
-
         if(notComplete) {
             notComplete();
         }
