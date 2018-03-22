@@ -6,10 +6,12 @@ export default class Tooltip extends React.Component {
     static propTypes = {
         text: PropTypes.string.isRequired,
         children: PropTypes.node,
+        bindListeners: PropTypes.bool,
     };
 
     static defaultProps = {
         children: null,
+        bindListeners: false,
     };
 
     constructor() {
@@ -25,8 +27,12 @@ export default class Tooltip extends React.Component {
     }
 
     componentDidMount() {
-        this.node.addEventListener('mouseover', this.show, false);
-        this.node.addEventListener('mouseleave', this.hide, false);
+        const { bindListeners } = this.props;
+
+        if(bindListeners) {
+            this.node.addEventListener('mouseover', this.show, false);
+            this.node.addEventListener('mouseleave', this.hide, false);
+        }
 
         this.show();
     }
