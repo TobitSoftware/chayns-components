@@ -38,6 +38,7 @@ import SwipeOverlay from './react-chayns-swiper/component/SlideOverlay';
 
 import TextArea from './react-chayns-textarea/component/TextArea';
 import TextString from './react-chayns-textstring/component/TextString';
+import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
 
@@ -81,6 +82,7 @@ export {
     Swipe,
     TextArea,
     TextString,
+    Tooltip,
     FileUpload,
     RefuelWidget,
     WeatherWidget,
