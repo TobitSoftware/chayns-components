@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import * as Constants from './constants';
+import { hideOverlay, showOverlay } from '../../../utils/chayns/setOverlay';
 
 export default class Modal extends React.Component {
     static propTypes = {
@@ -86,11 +87,16 @@ export default class Modal extends React.Component {
         });
 
         window.setTimeout(() => {
-            window.chayns.showOverlay('rgba(0, 0, 0, 0.8)', '.55s').then(() => {
+            showOverlay({
+                color: 'rgba(0, 0, 0, 0.8)',
+                transition: '.55s',
+                mode: 1,
+            }).then(() => {
                 if(this.props.closeOverlay) {
                     this.props.closeOverlay();
                 }
             }).catch(() => {});
+
 
             this.setState({
                 willEnter: false,
@@ -160,14 +166,9 @@ export default class Modal extends React.Component {
                 didLeave: false
             });
 
-            window.chayns.invokeCall({ // invoke setOverlay-call (same behavior like hideOverlay, but allows to set a transition)
-                action: 116,
-                value: {
-                    enabled: false,
-                    color: 'rgba(0, 0, 0, 0.8)',
-                    transition: '0.55s',
-                    callback: ''
-                }
+            hideOverlay({
+                transition: '.55s',
+                mode: 1,
             });
         }, 100);
 
