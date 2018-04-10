@@ -8,18 +8,6 @@ import '../../src/react-chayns-animations/index.scss';
 import '../../src/react-chayns-animations/component/ScaleIn/index.scss';
 
 export default class Example extends React.Component {
-    state = {
-        show: false,
-    };
-
-    componentDidMount() {
-        window.setInterval(() => {
-            this.setState({
-                show: !this.state.show,
-            });
-        }, 5000);
-    }
-
     render() {
         return(
             <ExampleContainer headline="Animations" >
@@ -33,12 +21,7 @@ export default class Example extends React.Component {
                 <div className="accordion">
                     <div className="accordion__head">ScaleIn</div>
                     <div className="accordion__body">
-                        <ScaleInExample
-                            in={this.state.show}
-                            style={{
-                                background: '#666666',
-                            }}
-                        />
+                        <ScaleInExample />
                     </div>
                 </div>
             </ExampleContainer>
