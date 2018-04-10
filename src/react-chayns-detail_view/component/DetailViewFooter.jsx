@@ -4,9 +4,13 @@ import PropTypes from 'prop-types';
 import DetailViewItem from './DetailViewItem';
 
 const DetailViewFooter = ({ children, className, ...props }) => {
+    const classNames = classnames('cc__detail-view__footer', {
+        [className]: className
+    });
+
     return (
         <DetailViewItem
-            className="cc__detail-view__footer"
+            className={classNames}
             {...props}
         >
             {children}
