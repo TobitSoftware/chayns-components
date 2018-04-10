@@ -29,6 +29,10 @@ function hideOverlay({ transitionTime, color } = {}) {
     window.setTimeout(() => {
         overlay.style.backgroundColor = 'transparent';
     }, transitionTime ? 10 : 0);
+
+    window.setTimeout(() => {
+        document.body.removeChild(overlay);
+    }, transitionTime || 0);
 }
 
 function showOverlay({
