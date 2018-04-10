@@ -9,6 +9,12 @@ import ChooseButton from './react-chayns-button/component/ChooseButton';
 import Calendar from './react-chayns-calendar/component/Calendar';
 import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
+
+import DetailView from './react-chayns-detail_view/component/DetailView';
+import DetailViewItem from './react-chayns-detail_view/component/DetailViewItem';
+import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHeader';
+import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
+
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 import Input from './react-chayns-input/component/Input';
@@ -60,6 +66,10 @@ export {
     Calendar,
     Checkbox,
     ContextMenu,
+    DetailView,
+    DetailViewItem,
+    DetailViewHeader,
+    DetailViewFooter,
     EmojiInput,
     GridCalendar,
     Input,
