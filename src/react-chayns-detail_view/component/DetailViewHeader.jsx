@@ -6,11 +6,11 @@ import DetailViewItem from './DetailViewItem';
 const DetailViewHeader = ({
     children,
     className,
-    open,
+    expanded,
     ...props
 }) => {
     const classNames = classnames('cc__detail-view__header', className, {
-        'cc__detail-view__header--open': open,
+        'cc__detail-view__header--expanded': expanded,
     });
 
     return (
@@ -31,12 +31,12 @@ DetailViewHeader.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
     className: PropTypes.string,
-    open: PropTypes.bool,
+    expanded: PropTypes.bool,
 };
 
 DetailViewHeader.defaultProps = {
     className: '',
-    open: false,
+    expanded: false,
 };
 
 export default DetailViewHeader;

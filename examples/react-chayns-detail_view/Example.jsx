@@ -31,7 +31,7 @@ export default class Example extends React.Component {
             <ExampleContainer headline="DetailView">
                 <DetailView>
                     <DetailViewHeader
-                        open={this.state.open}
+                        expanded={this.state.open}
                     >
                         <img
                             src="https://tsimg.space/v1/images/0e723eb5-88c4-e711-8381-00155d099e09.jpg"
