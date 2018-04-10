@@ -68,8 +68,8 @@ function showOverlay({
     }, transitionTime ? 10 : 0);
 }
 
-const connectToOverlay = () => {
-    return BaseComponent => props => (
+const connectToOverlay = () => (BaseComponent) => {
+    return props => (
         <BaseComponent
             showOverlay={showOverlay}
             hideOverlay={hideOverlay}
