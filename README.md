@@ -23,6 +23,7 @@ The following components are part of this package:
 | [react-chayns-calendar](/src/react-chayns-calendar/)               | Calendar Component                              | [Readme](/src/react-chayns-calendar/README.md)        |
 | [react-chayns-checkbox](/src/react-chayns-checkbox/)               | Checkbox Component                              | [Readme](/src/react-chayns-checkbox/README.md)        |
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/)         | ContextMenu Component                           | [Readme](/src/react-chayns-contextmenu/README.md)     |
+| [react-chayns-detail-view](/src/react-chayns-detail-view/)         | DetailView Component                            | [Readme](/src/react-chayns-detail-view/README.md)     |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)         | EmojiInput Component                            | [Readme](/src/react-chayns-emoji_input/README.md)     |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)       | GridCalendar Component                          | [Readme](/src/react-chayns-gridcalendar/README.md)    |
 | [react-chayns-input](/src/react-chayns-input/)                     | Input Component                                 | [Readme](/src/react-chayns-input/README.md)           |
@@ -40,12 +41,12 @@ The following components are part of this package:
 ## Additional Components
 
 | Component   | Description                                                                                        | Readme File    |
-|------------|-----------------------------------------------------------------------------------------------------|--------|
-| [react-weather](/src/react-weather/) | Weather Widget + WorldWeatherOnline-Parser                                                 | -- |
-| [react-refuel](/src/react-refuel/) | Fuel Widget                                                 | -- |
+|------------|-----------------------------------------------------------------------------------------------------|----------------|
+| [react-weather](/src/react-weather/) | Weather Widget + WorldWeatherOnline-Parser                                | --             |
+| [react-refuel](/src/react-refuel/) | Fuel Widget                                                                 | --             |
 
 
 ## Internal Chayns Components
-| Component   | Description                                                                                        | Readme File    |
-|-------------|----------------------------------------------------------------------------------------------------|----------------|
-| [react-chayns-textstring](/src/react-chayns-textstring/) | TextString Component                                                 | [Readme](/src/react-chayns-textstring/README.md) |
+| Component                                                          | Description                                     | Readme File                                           |
+|--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
+| [react-chayns-textstring](/src/react-chayns-textstring/)           | TextString Component                            | [Readme](/src/react-chayns-textstring/README.md)      |
