@@ -12,6 +12,11 @@ export default class FileUpload extends Component {
         multiple: PropTypes.bool,
         onChange: PropTypes.func,
         className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]),
+        upload: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -19,6 +24,8 @@ export default class FileUpload extends Component {
         multiple: true,
         onChange: null,
         className: '',
+        upload: false,
+        children: null,
     };
 
     static getText(type) {
