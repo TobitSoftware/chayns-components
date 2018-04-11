@@ -1,29 +1,25 @@
-.cc__animate--scale-in {
-  //position: relative;
+.cc__animation__scale-in {
+  position: absolute;
 
-  .cc__animation__scale-in {
-    position: absolute;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  z-index: 6;
+  width: 100%;
 
-    z-index: 6;
-    width: 100%;
+  &--left {
+    transform-origin: top left;
+    left: 0;
+  }
 
-    &--left {
-      transform-origin: top left;
-      left: 0;
-    }
+  &--right {
+    transform-origin: top right;
+    right: 0;
+  }
 
-    &--right {
-      transform-origin: top right;
-      right: 0;
-    }
-
-    &--show {
-      opacity: 1;
-      transform: scale(1);
-    }
+  &--show {
+    opacity: 1;
+    transform: scale(1);
   }
 }

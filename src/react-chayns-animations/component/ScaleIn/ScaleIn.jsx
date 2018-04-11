@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
+import Portal from '../../../react-chayns-portal/component/Portal';
+
+const POSITION_LEFT = 0;
+const POSITION_RIGHT = 1;
+const POSITION_UNKNOWN = POSITION_LEFT;
+
+const ANIMATION_TIME = 305;
 
 class ScaleIn extends Component {
     static propTypes = {
@@ -13,16 +22,49 @@ class ScaleIn extends Component {
         in: PropTypes.bool.isRequired,
     };
 
+    static getTappMargin() {
+        const tapp = document.querySelector('.tapp') || document.body;
+
+        if (tapp) {
+            const { marginLeft, paddingLeft } = window.getComputedStyle(tapp);
+
+            return (parseInt(marginLeft, 10) || 0) + (parseInt(paddingLeft, 10) || 0);
+        }
+
+        return 0;
+    }
+
+    state = {
+        position: POSITION_UNKNOWN,
+        show: false,
+    };
+
     componentDidMount() {
         this.props.animate.setAnimationListener(this);
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.in !== this.props.in) {
-            if (nextProps.in) {
-                this.container.classList.add('cc__animation__scale-in--show');
+            if(nextProps.in) {
+                this.setState({
+                    render: true,
+                });
+
+                window.setTimeout(() => {
+                    this.setState({
+                        show: true,
+                    });
+                }, 10);
             } else {
-                this.container.classList.remove('cc__animation__scale-in--show');
+                this.setState({
+                    show: false,
+                });
+
+                window.setTimeout(() => {
+                    this.setState({
+                        render: false,
+                    });
+                }, ANIMATION_TIME);
             }
         }
     }
@@ -32,31 +74,49 @@ class ScaleIn extends Component {
     }
 
     updateClasses(wrapper) {
-        const { left, right } = wrapper.getBoundingClientRect();
+        const bodyWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        const { left, right, top } = wrapper.getBoundingClientRect();
 
-        if (left < right) {
-            this.container.classList.add('cc__animation__scale-in--left');
-            this.container.classList.remove('cc__animation__scale-in--right');
-        } else {
-            this.container.classList.remove('cc__animation__scale-in--left');
-            this.container.classList.add('cc__animation__scale-in--right');
-        }
+        const diffRight = bodyWidth - right;
+
+        this.setState({
+            position: (left < diffRight) ? POSITION_LEFT : POSITION_RIGHT,
+            top,
+        });
     }
 
     render() {
         const { props, component: BaseComponent } = this.props;
 
+        const classNames = classnames('cc__animation__scale-in', {
+            'cc__animation__scale-in--left': this.state.position === POSITION_LEFT,
+            'cc__animation__scale-in--right': this.state.position === POSITION_RIGHT,
+            'cc__animation__scale-in--show': this.state.show,
+        });
+
+        if (!this.state.render) {
+            return null;
+        }
+
+        const tappMargin = ScaleIn.getTappMargin();
+
         return (
-            <div
-                ref={(ref) => { this.container = ref; }}
-                className="cc__animation__scale-in"
-            >
-            {/* {props.in && ( */}
-                <BaseComponent
-                    {...props}
-                />
-            {/* )} */}
-            </div>
+            <Portal name="scale-in">
+                <div
+                    className={classNames}
+                    style={{
+                        top: `${this.state.top}px`,
+                        left: `${tappMargin}px`,
+                        width: `calc(100% - ${2 * tappMargin}px)`
+                    }}
+                >
+                {/* {props.in && ( */}
+                    <BaseComponent
+                        {...props}
+                    />
+                {/* )} */}
+                </div>
+            </Portal>
         );
     }
 }

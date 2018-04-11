@@ -5,8 +5,6 @@ import classnames from 'classnames';
 import ScaleIn from './ScaleIn/ScaleIn';
 
 const animate = (AnimationComponent, config) => (BaseComponent) => {
-    console.log(AnimationComponent);
-
     return class AnimateComponent extends Component {
         static propTypes = {
             in: PropTypes.bool,
@@ -41,8 +39,6 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
         }
 
         render() {
-            console.log(AnimationComponent);
-
             if (AnimationComponent.duplicate) {
                 const classNames = classnames('cc__animate', {
                     [AnimationComponent.wrapperClassName]: AnimationComponent.wrapperClassName
