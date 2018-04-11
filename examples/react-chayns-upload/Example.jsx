@@ -64,7 +64,7 @@ export default class Example extends React.Component {
                 />
                 <br />
                 <FileUpload
-                    onChange={this.onUpload}
+                    onChange={this.selectFiles}
                 >
                     Test
                 </FileUpload>
