@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import connectToOverlay from '../../decorator/connectToOverlay';
 
 class ScaleIn extends Component {
     static propTypes = {
@@ -52,11 +51,11 @@ class ScaleIn extends Component {
                 ref={(ref) => { this.container = ref; }}
                 className="cc__animation__scale-in"
             >
-            {/*{props.in && (*/}
+            {/* {props.in && ( */}
                 <BaseComponent
                     {...props}
                 />
-            {/*)}*/}
+            {/* )} */}
             </div>
         );
     }
