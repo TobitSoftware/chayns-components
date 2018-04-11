@@ -30,6 +30,11 @@ export default class FileUpload extends Component {
         uploadText: null,
     };
 
+    static TYPE_IMAGE = 'image';
+    static TYPE_VIDEO = 'video';
+    static TYPE_AUDIO = 'audio';
+    static TYPE_ALL = 'all';
+
     static getText(type) {
         switch (type) {
             case 'image':
