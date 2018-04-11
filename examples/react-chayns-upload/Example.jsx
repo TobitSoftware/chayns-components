@@ -62,6 +62,12 @@ export default class Example extends React.Component {
                     onChange={this.selectFiles}
                     uploadText="Upload trash"
                 />
+                <br />
+                <FileUpload
+                    onChange={this.onUpload}
+                >
+                    Test
+                </FileUpload>
             </ExampleContainer>
         );
     }
