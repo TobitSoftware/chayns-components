@@ -4,79 +4,87 @@ import classnames from 'classnames';
 
 import ScaleIn from './ScaleIn/ScaleIn';
 
-const animate = (AnimationComponent, config) => BaseComponent => class AnimateComponent extends Component {
-    static propTypes = {
-        in: PropTypes.bool,
-    };
+const animate = (AnimationComponent, config) => (BaseComponent) => {
+    console.log(AnimationComponent);
 
-    static defaultProps = {
-        in: true,
-    };
+    return class AnimateComponent extends Component {
+        static propTypes = {
+            in: PropTypes.bool,
+        };
 
-    componentDidMount() {
-        this.updateRefs();
-    }
+        static defaultProps = {
+            in: true,
+        };
 
-    componentDidUpdate() {
-        this.updateRefs();
-    }
-
-    setAnimationListener(animation) {
-        this._animation = animation;
-
-        this.updateRefs();
-    }
-
-    updateRefs() {
-        if (!this._wrapper || !this._animation) {
-            return;
+        componentDidMount() {
+            this.updateRefs();
         }
 
-        if (this._animation.setWrapperReference) {
-            this._animation.setWrapperReference(this._wrapper);
+        componentDidUpdate() {
+            this.updateRefs();
         }
-    }
 
-    render() {
-        if (AnimationComponent.duplicate) {
-            const classNames = classnames('cc__animate', {
-                [AnimationComponent.wrapperClassName]: AnimationComponent.wrapperClassName
-            });
+        setAnimationListener(animation) {
+            this._animation = animation;
+
+            this.updateRefs();
+        }
+
+        updateRefs() {
+            if (!this._wrapper || !this._animation) {
+                return;
+            }
+
+            if (this._animation.setWrapperReference) {
+                this._animation.setWrapperReference(this._wrapper);
+            }
+        }
+
+        render() {
+            console.log(AnimationComponent);
+
+            if (AnimationComponent.duplicate) {
+                const classNames = classnames('cc__animate', {
+                    [AnimationComponent.wrapperClassName]: AnimationComponent.wrapperClassName
+                });
+
+                return (
+                    <div
+                        className={classNames}
+                        ref={(ref) => {
+                            this._wrapper = ref;
+                        }}
+                    >
+                        <AnimationComponent
+                            key="shadow"
+                            component={BaseComponent}
+                            config={config}
+                            in={this.props.in}
+                            props={Object.assign({
+                                animationClone: true,
+                            }, this.props)}
+                            animate={this}
+                        />
+                        <BaseComponent
+                            key="base"
+                            {...this.props}
+                        />
+                    </div>
+                );
+            }
 
             return (
-                <div
-                    className={classNames}
-                    ref={(ref) => { this._wrapper = ref; }}
-                >
-                    <AnimationComponent
-                        key="shadow"
-                        component={BaseComponent}
-                        config={config}
-                        in={this.props.in}
-                        props={Object.assign({
-                            animationClone: true,
-                        }, this.props)}
-                        animate={this}
-                    />
-                    <BaseComponent
-                        key="base"
-                        {...this.props}
-                    />
-                </div>
+                <AnimationComponent
+                    key="shadow"
+                    component={BaseComponent}
+                    config={config}
+                    in={this.props.in}
+                    props={this.props}
+                    animate={this}
+                />
             );
         }
-
-        return (
-            <AnimationComponent
-                key="shadow"
-                component={BaseComponent}
-                config={config}
-                in={this.props.in}
-                props={this.props}
-                animate={this}
-            />
-        );
-    }
+    };
 };
 
 
