@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import selectFile from '../../utils/selectFile';
 import getCompareFunction from '../utils/getCompareFunction';
 import getMimeTypes from '../utils/getMimeTypes';
+import uploadCloudImages from '../utils/uploadCloudImage';
+import normalizeUploadResponse from '../utils/normalizeUploadResponse';
 
 export default class FileUpload extends Component {
     static propTypes = {
@@ -18,6 +20,7 @@ export default class FileUpload extends Component {
         ]),
         upload: PropTypes.bool,
         uploadText: PropTypes.string,
+        onUpload: PropTypes.func,
     };
 
     static defaultProps = {
@@ -28,6 +31,7 @@ export default class FileUpload extends Component {
         upload: false,
         children: null,
         uploadText: null,
+        onUpload: null,
     };
 
     static TYPE_IMAGE = 'image';
@@ -62,9 +66,31 @@ export default class FileUpload extends Component {
     }
 
     onClick() {
-        const { type, multiple } = this.props;
+        const {
+            type,
+            multiple,
+            upload,
+            onUpload,
+        } = this.props;
 
-        selectFile({
+        if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
+            return chayns.uploadCloudImage().then((data) => {
+                if(!data.response || data.response.statusCode !== 200 || !data.response.data) {
+                    return null;
+                }
+
+                try {
+                    const responseData = JSON.parse(data.response.data);
+                    return normalizeUploadResponse(responseData);
+                } catch (ex) {
+                    return null;
+                }
+            }).then((uploadData) => {
+                onUpload(uploadData);
+            });
+        }
+
+        return selectFile({
             type: getMimeTypes(type),
             multiple,
         }).then((files) => {
@@ -74,7 +100,12 @@ export default class FileUpload extends Component {
     }
 
     onDrop(event) {
-        const { onChange } = this.props;
+        const {
+            onChange,
+            upload,
+            onUpload,
+            type,
+        } = this.props;
 
         event.stopPropagation();
         event.preventDefault();
@@ -85,9 +116,18 @@ export default class FileUpload extends Component {
 
         const { files } = event.dataTransfer;
 
-        if (onChange) {
-            this.checkFiles(files);
+        if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
+            return uploadCloudImages(files).then((data) => {
+                const uploadData = normalizeUploadResponse(data);
+                onUpload(uploadData);
+            });
         }
+
+        if (onChange) {
+            return this.checkFiles(files);
+        }
+
+        return null;
     }
 
     onDragOver(event) {
@@ -127,14 +167,20 @@ export default class FileUpload extends Component {
             }
         }
 
-        onChange(files, validFiles, invalidFiles);
+        if (onChange) {
+            onChange(files, validFiles, invalidFiles);
+        }
     }
 
-    render() {
-        const { type, className, uploadText } = this.props;
+    renderPlaceholder() {
+        const {
+            type,
+            className,
+            uploadText,
+        } = this.props;
         const { hover } = this.state;
 
-        const classNames = classnames('cc__file-upload', {
+        const classNames = classnames('cc__file-upload--placeholder', {
             'chayns__color--70': chayns.env.site.colorMode !== 1,
             'cc__file-upload--image': (type === 'image'),
             'cc__file-upload--audio': (type === 'audio'),
@@ -147,10 +193,6 @@ export default class FileUpload extends Component {
         return (
             <div
                 className={classNames}
-                onClick={this.onClick}
-                onDrop={this.onDrop}
-                onDragOver={this.onDragOver}
-                onDragLeave={this.onDragLeave}
             >
                 <i
                     className="cc__file-upload__icon"
@@ -161,6 +203,28 @@ export default class FileUpload extends Component {
                 >
                     {uploadText || FileUpload.getText(type)}
                 </div>
+            </div>
+        );
+    }
+
+    render() {
+        const {
+            children,
+        } = this.props;
+
+        const wrapperClassNames = classnames('cc__file-upload', {
+            'cc__file-upload--custom': children,
+        });
+
+        return (
+            <div
+                className={wrapperClassNames}
+                onClick={this.onClick}
+                onDrop={this.onDrop}
+                onDragOver={this.onDragOver}
+                onDragLeave={this.onDragLeave}
+            >
+                {children || this.renderPlaceholder()}
             </div>
         );
     }
