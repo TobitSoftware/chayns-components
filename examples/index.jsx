@@ -11,6 +11,7 @@ import './react-chayns-gridcalendar/index';
 import './react-chayns-input/index';
 import './react-chayns-modeswitch/index';
 import './react-chayns-personfinder/index';
+import './react-chayns-portal/index';
 import './react-chayns-radiobutton/index';
 import './react-chayns-scrollview/index';
 import './react-chayns-selectbutton/index';
