@@ -15,8 +15,6 @@ function initOverlay() {
 }
 
 export function hideOverlay({ transitionTime, color } = {}) {
-    initOverlay();
-
     chaynsCall.hideOverlay({
         color,
         transition: `${transitionTime}ms`,
@@ -30,7 +28,9 @@ export function hideOverlay({ transitionTime, color } = {}) {
     }, transitionTime ? 10 : 0);
 
     window.setTimeout(() => {
-        document.body.removeChild(overlay);
+        if(overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
     }, transitionTime || 0);
 }
 
