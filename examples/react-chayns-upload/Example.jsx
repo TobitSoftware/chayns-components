@@ -57,6 +57,11 @@ export default class Example extends React.Component {
                     type="video"
                     onChange={this.selectVideo}
                 />
+                <br />
+                <FileUpload
+                    onChange={this.selectFiles}
+                    uploadText="Upload trash"
+                />
             </ExampleContainer>
         );
     }
