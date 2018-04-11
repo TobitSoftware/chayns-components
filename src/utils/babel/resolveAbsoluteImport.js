@@ -24,6 +24,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ModeSwitchHelper: 'react-chayns-modeswitch/component/ModeSwitchHelper.js',
         connectToModeSwitch: 'react-chayns-modeswitch/component/connectToModeSwitch.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
+        Portal: 'react-chayns-portal/component/Portal.js',
         RadioButton: 'react-chayns-radiobutton/component/RadioButton.js',
         ScrollView: 'react-chayns-scrollview/component/ScrollView.js',
         SelectButton: 'react-chayns-selectbutton/component/SelectButton.js',

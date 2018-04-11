@@ -29,6 +29,7 @@ import ModeSwitchHelper from './react-chayns-modeswitch/component/ModeSwitchHelp
 import connectToModeSwitch from './react-chayns-modeswitch/component/connectToModeSwitch';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+import Portal from './react-chayns-portal/component/Portal';
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
@@ -85,6 +86,7 @@ export {
     ModeSwitchHelper,
     connectToModeSwitch,
     PersonFinder,
+    Portal,
     RadioButton,
     ScrollView,
     SelectButton,
