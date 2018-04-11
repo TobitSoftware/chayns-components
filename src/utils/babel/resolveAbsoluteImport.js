@@ -7,6 +7,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         animate: 'react-chayns-animations/component/animate.js',
         AnimationTypes: 'react-chayns-animations/component/index.js',
         connectToOverlay: 'react-chayns-animations/decorator/connectToOverlay.js',
+        OverlayHelper: 'react-chayns-animations/utils/OverlayHelper.js',
         Button: 'react-chayns-button/component/Button.js',
         ChooseButton: 'react-chayns-button/component/ChooseButton.js',
         Calendar: 'react-chayns-button/component/Calendar.js',
