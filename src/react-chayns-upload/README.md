@@ -20,12 +20,14 @@ The component can be used in JSX like in the following example:
 
 
 ## Props ##
-| Property   | Description                                                                | Type     | Default Value |
-|------------|----------------------------------------------------------------------------|----------|---------------|
-| onChange   | Callback-function (parameter: files, validFiles, invalidFiles)             | function |               |
-| type       | Allowed types (currently supported: all, image, audio, video)              | String   | all           |
-| multiple   | Enables/Disables upload of multiple files                                  | Bool     | true          |
-| className  | CSS-classes that should be set on root-element                             | String   |               |
+| Property   | Description                                                                | Type          | Default Value |
+|------------|----------------------------------------------------------------------------|---------------|---------------|
+| onChange   | Callback-function (parameter: files, validFiles, invalidFiles)             | function      |               |
+| type       | Allowed types (currently supported: all, image, audio, video)              | String        | all           |
+| multiple   | Enables/Disables upload of multiple files                                  | Bool          | true          |
+| className  | CSS-classes that should be set on root-element                             | String        |               |
+| uploadText | Text that should be shown on button                                        | String        |               |
+| children   | Component(s) that should be rendered inside component                      | ReactElements |               |
 
 
 ## Example ##
