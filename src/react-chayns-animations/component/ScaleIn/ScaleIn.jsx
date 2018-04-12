@@ -57,27 +57,27 @@ class ScaleIn extends Component {
                         show: true,
                         animationActive: true
                     });
-                }, ANIMATION_CSS_TIMEOUT);
 
-                window.setTimeout(() => {
-                    this.setState({
-                        animationActive: false,
-                    });
-                }, ANIMATION_TIME + ANIMATION_CSS_TIMEOUT);
+                    window.setTimeout(() => {
+                        this.setState({
+                            animationActive: false,
+                        });
+                    }, ANIMATION_TIME);
+                }, ANIMATION_CSS_TIMEOUT);
             } else {
                 window.setTimeout(() => {
                     this.setState({
                         show: false,
                         animationActive: true,
                     });
-                }, ANIMATION_CSS_TIMEOUT);
 
-                window.setTimeout(() => {
-                    this.setState({
-                        render: false,
-                        animationActive: false,
-                    });
-                }, ANIMATION_TIME + ANIMATION_CSS_TIMEOUT);
+                    window.setTimeout(() => {
+                        this.setState({
+                            render: false,
+                            animationActive: false,
+                        });
+                    }, ANIMATION_TIME);
+                }, ANIMATION_CSS_TIMEOUT);
             }
         }
     }
