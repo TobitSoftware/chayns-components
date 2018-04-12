@@ -29,6 +29,11 @@
       }
     }
 
+    &__content-wrapper {
+      height: auto;
+      width: 100%;
+    }
+
     &__wrapper {
       position: absolute;
       display: flex;
