@@ -43,47 +43,59 @@ class ScaleIn extends Component {
 
     componentDidMount() {
         this.props.animate.setAnimationListener(this);
+
+        if (this.props.in) {
+            this.show();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.in !== this.props.in) {
             if(nextProps.in) {
-                this.setState({
-                    render: true,
-                });
-
-                window.setTimeout(() => {
-                    this.setState({
-                        show: true,
-                        animationActive: true
-                    });
-
-                    window.setTimeout(() => {
-                        this.setState({
-                            animationActive: false,
-                        });
-                    }, ANIMATION_TIME);
-                }, ANIMATION_CSS_TIMEOUT);
+                this.show();
             } else {
-                window.setTimeout(() => {
-                    this.setState({
-                        show: false,
-                        animationActive: true,
-                    });
-
-                    window.setTimeout(() => {
-                        this.setState({
-                            render: false,
-                            animationActive: false,
-                        });
-                    }, ANIMATION_TIME);
-                }, ANIMATION_CSS_TIMEOUT);
+                this.hide();
             }
         }
     }
 
     setWrapperReference(ref) {
         this.updateClasses(ref);
+    }
+
+    show() {
+        this.setState({
+            render: true,
+        });
+
+        window.setTimeout(() => {
+            this.setState({
+                show: true,
+                animationActive: true
+            });
+
+            window.setTimeout(() => {
+                this.setState({
+                    animationActive: false,
+                });
+            }, ANIMATION_TIME);
+        }, ANIMATION_CSS_TIMEOUT);
+    }
+
+    hide() {
+        window.setTimeout(() => {
+            this.setState({
+                show: false,
+                animationActive: true,
+            });
+
+            window.setTimeout(() => {
+                this.setState({
+                    render: false,
+                    animationActive: false,
+                });
+            }, ANIMATION_TIME);
+        }, ANIMATION_CSS_TIMEOUT);
     }
 
     updateClasses(wrapper) {
