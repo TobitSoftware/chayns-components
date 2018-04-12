@@ -100,14 +100,21 @@ class ScaleIn extends Component {
 
     render() {
         const { props, component: BaseComponent } = this.props;
+        const {
+            animationActive,
+            top,
+            render,
+            show,
+            position,
+        } = this.state;
 
         const classNames = classnames('cc__animation__scale-in', {
-            'cc__animation__scale-in--left': this.state.position === POSITION_LEFT,
-            'cc__animation__scale-in--right': this.state.position === POSITION_RIGHT,
-            'cc__animation__scale-in--show': this.state.show,
+            'cc__animation__scale-in--left': position === POSITION_LEFT,
+            'cc__animation__scale-in--right': position === POSITION_RIGHT,
+            'cc__animation__scale-in--show': show,
         });
 
-        if (!this.state.render) {
+        if (!render) {
             return null;
         }
 
@@ -118,16 +125,15 @@ class ScaleIn extends Component {
                 <div
                     className={classNames}
                     style={{
-                        top: `${this.state.top}px`,
+                        top: `${top}px`,
                         left: `${tappMargin}px`,
                         width: `calc(100% - ${2 * tappMargin}px)`
                     }}
                 >
-                {/* {props.in && ( */}
                     <BaseComponent
                         {...props}
+                        animationActive={animationActive}
                     />
-                {/* )} */}
                 </div>
             </Portal>
         );
