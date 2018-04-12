@@ -1,7 +1,12 @@
 import Accordion from './react-chayns-accordion/component/Accordion';
 import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
 import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
+
 import InspectElementAnimation from './react-chayns-animations/component/InspectElement/InspectElement';
+import animate from './react-chayns-animations/component/animate';
+import AnimationTypes from './react-chayns-animations/component/index';
+import connectToOverlay from './react-chayns-animations/decorator/connectToOverlay';
+import OverlayHelper from './react-chayns-animations/utils/OverlayHelper';
 
 import Button from './react-chayns-button/component/Button';
 import ChooseButton from './react-chayns-button/component/ChooseButton';
@@ -25,6 +30,7 @@ import ModeSwitchHelper from './react-chayns-modeswitch/component/ModeSwitchHelp
 import connectToModeSwitch from './react-chayns-modeswitch/component/connectToModeSwitch';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+import Portal from './react-chayns-portal/component/Portal';
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
@@ -61,6 +67,10 @@ export {
     AccordionIntro,
     AmountControl,
     InspectElementAnimation,
+    animate,
+    AnimationTypes,
+    connectToOverlay,
+    OverlayHelper,
     Button,
     ChooseButton,
     Calendar,
@@ -78,6 +88,7 @@ export {
     ModeSwitchHelper,
     connectToModeSwitch,
     PersonFinder,
+    Portal,
     RadioButton,
     ScrollView,
     SelectButton,
