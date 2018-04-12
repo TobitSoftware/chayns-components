@@ -54,3 +54,11 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
+
+.chayns-color-mode--1 {
+  .cc__detail-view {
+    &__footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}
