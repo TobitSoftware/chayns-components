@@ -35,10 +35,10 @@ export default /* #__PURE__ */(() => class Portal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { name } = nextProps;
+        const { name, children } = nextProps;
 
-        if (name && ccPortals[name]) {
-            ccPortals[name].setChildren(nextProps.children);
+        if (children && name && ccPortals[name]) {
+            ccPortals[name].setChildren(children);
         }
     }
 
