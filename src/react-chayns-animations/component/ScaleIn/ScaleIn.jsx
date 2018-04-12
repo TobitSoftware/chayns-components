@@ -8,7 +8,8 @@ const POSITION_LEFT = 0;
 const POSITION_RIGHT = 1;
 const POSITION_UNKNOWN = POSITION_LEFT;
 
-const ANIMATION_TIME = 305;
+const ANIMATION_CSS_TIMEOUT = 10;
+const ANIMATION_TIME = 300;
 
 class ScaleIn extends Component {
     static propTypes = {
@@ -37,6 +38,7 @@ class ScaleIn extends Component {
     state = {
         position: POSITION_UNKNOWN,
         show: false,
+        animationActive: false,
     };
 
     componentDidMount() {
@@ -53,18 +55,29 @@ class ScaleIn extends Component {
                 window.setTimeout(() => {
                     this.setState({
                         show: true,
+                        animationActive: true
                     });
-                }, 10);
+                }, ANIMATION_CSS_TIMEOUT);
+
+                window.setTimeout(() => {
+                    this.setState({
+                        animationActive: false,
+                    });
+                }, ANIMATION_TIME + ANIMATION_CSS_TIMEOUT);
             } else {
-                this.setState({
-                    show: false,
-                });
+                window.setTimeout(() => {
+                    this.setState({
+                        show: false,
+                        animationActive: true,
+                    });
+                }, ANIMATION_CSS_TIMEOUT);
 
                 window.setTimeout(() => {
                     this.setState({
                         render: false,
+                        animationActive: false,
                     });
-                }, ANIMATION_TIME);
+                }, ANIMATION_TIME + ANIMATION_CSS_TIMEOUT);
             }
         }
     }
