@@ -19,7 +19,9 @@ const DetailViewHeader = ({
             {...props}
         >
             <div className="cc__detail-view__header__wrapper">
-                {children}
+                <div className="cc__detail-view__header__content-wrapper">
+                    {children}
+                </div>
             </div>
         </DetailViewItem>
     );

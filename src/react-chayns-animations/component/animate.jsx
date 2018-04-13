@@ -11,7 +11,7 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
         };
 
         static defaultProps = {
-            in: true,
+            in: false,
         };
 
         componentDidMount() {
