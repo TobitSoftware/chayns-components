@@ -47,6 +47,7 @@ export default class Checkbox extends React.Component {
 
         if(tooltip) {
             this._container.setAttribute('tooltip', tooltip);
+            window.chayns.ui.tooltip.init(null, this._container.parentNode);
         }
     }
 
