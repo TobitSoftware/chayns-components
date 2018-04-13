@@ -68,6 +68,12 @@ export default class Example extends React.Component {
                 >
                     Test
                 </FileUpload>
+                <br />
+                <FileUpload
+                    onChange={this.selectFiles}
+                    disableListeners
+                    uploadText="Upload File (disabled listeners)"
+                />
             </ExampleContainer>
         );
     }

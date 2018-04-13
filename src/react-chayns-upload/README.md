@@ -20,14 +20,17 @@ The component can be used in JSX like in the following example:
 
 
 ## Props ##
-| Property   | Description                                                                | Type          | Default Value |
-|------------|----------------------------------------------------------------------------|---------------|---------------|
-| onChange   | Callback-function (parameter: files, validFiles, invalidFiles)             | function      |               |
-| type       | Allowed types (currently supported: all, image, audio, video)              | String        | all           |
-| multiple   | Enables/Disables upload of multiple files                                  | Bool          | true          |
-| className  | CSS-classes that should be set on root-element                             | String        |               |
-| uploadText | Text that should be shown on button                                        | String        |               |
-| children   | Component(s) that should be rendered inside component                      | ReactElements |               |
+| Property          | Description                                                                | Type          | Default Value |
+|-------------------|----------------------------------------------------------------------------|---------------|---------------|
+| onChange          | Callback-function (parameter: files, validFiles, invalidFiles)             | Function      |               |
+| type              | Allowed types (currently supported: all, image, audio, video)              | String        | all           |
+| multiple          | Enables/Disables upload of multiple files                                  | Bool          | true          |
+| className         | CSS-classes that should be set on root-element                             | String        |               |
+| uploadText        | Text that should be shown on button                                        | String        |               |
+| disableListeners  | Disables all event listeners                                               | Bool          | false         |
+| onDrop            | Registers a custom onDrop-Listener (prevents default handling)             | Function      |               |
+| onClick           | Registers a custom onClick-Listener (prevents default handling)            | Function      |               |
+| children          | Component(s) that should be rendered inside component                      | ReactElements |               |
 
 
 ## Example ##

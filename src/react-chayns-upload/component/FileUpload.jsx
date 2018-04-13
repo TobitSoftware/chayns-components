@@ -21,6 +21,9 @@ export default class FileUpload extends Component {
         upload: PropTypes.bool,
         uploadText: PropTypes.string,
         onUpload: PropTypes.func,
+        disableListeners: PropTypes.bool,
+        onClick: PropTypes.func,
+        onDrop: PropTypes.func,
     };
 
     static defaultProps = {
@@ -32,6 +35,9 @@ export default class FileUpload extends Component {
         children: null,
         uploadText: null,
         onUpload: null,
+        disableListeners: false,
+        onClick: null,
+        onDrop: null,
     };
 
     static TYPE_IMAGE = 'image';
@@ -65,13 +71,20 @@ export default class FileUpload extends Component {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick() {
+    onClick(event) {
         const {
             type,
             multiple,
             upload,
             onUpload,
+            onClick
         } = this.props;
+
+        if (onClick) {
+            return onClick(event);
+        } else if (onClick === false) {
+            return false;
+        }
 
         if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
             return chayns.uploadCloudImage().then((data) => {
@@ -105,7 +118,14 @@ export default class FileUpload extends Component {
             upload,
             onUpload,
             type,
+            onDrop
         } = this.props;
+
+        if (onDrop) {
+            return onDrop(event);
+        } else if (onDrop === false) {
+            return false;
+        }
 
         event.stopPropagation();
         event.preventDefault();
@@ -210,6 +230,7 @@ export default class FileUpload extends Component {
     render() {
         const {
             children,
+            disableListeners,
         } = this.props;
 
         const wrapperClassNames = classnames('cc__file-upload', {
@@ -219,10 +240,10 @@ export default class FileUpload extends Component {
         return (
             <div
                 className={wrapperClassNames}
-                onClick={this.onClick}
-                onDrop={this.onDrop}
-                onDragOver={this.onDragOver}
-                onDragLeave={this.onDragLeave}
+                onClick={!disableListeners ? this.onClick : null}
+                onDrop={!disableListeners ? this.onDrop : null}
+                onDragOver={!disableListeners ? this.onDragOver : null}
+                onDragLeave={!disableListeners ? this.onDragLeave : null}
             >
                 {children || this.renderPlaceholder()}
             </div>
