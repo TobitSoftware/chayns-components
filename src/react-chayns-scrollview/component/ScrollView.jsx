@@ -31,7 +31,9 @@ export default class ScrollView extends React.Component {
     }
 
     componentDidUpdate() {
-        this.scrollView.refresh();
+        if (this.scrollView) {
+            this.scrollView.refresh();
+        }
     }
 
     render() {
