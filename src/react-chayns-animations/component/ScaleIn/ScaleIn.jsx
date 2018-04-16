@@ -11,6 +11,8 @@ const POSITION_UNKNOWN = POSITION_LEFT;
 const ANIMATION_CSS_TIMEOUT = 10;
 const ANIMATION_TIME = 300;
 
+let TAPP_MARGIN = 0;
+
 class ScaleIn extends Component {
     static propTypes = {
         props: PropTypes.object.isRequired,
@@ -24,15 +26,19 @@ class ScaleIn extends Component {
     };
 
     static getTappMargin() {
+        if (TAPP_MARGIN) {
+            return TAPP_MARGIN;
+        }
+
         const tapp = document.querySelector('.tapp') || document.body;
 
         if (tapp) {
             const { marginLeft, paddingLeft } = window.getComputedStyle(tapp);
 
-            return (parseInt(marginLeft, 10) || 0) + (parseInt(paddingLeft, 10) || 0);
+            TAPP_MARGIN = (parseInt(marginLeft, 10) || 0) + (parseInt(paddingLeft, 10) || 0);
         }
 
-        return 0;
+        return TAPP_MARGIN || 0;
     }
 
     state = {
