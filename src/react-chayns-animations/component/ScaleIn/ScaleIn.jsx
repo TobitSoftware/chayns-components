@@ -5,7 +5,8 @@ import classnames from 'classnames';
 import Portal from '../../../react-chayns-portal/component/Portal';
 
 const POSITION_LEFT = 0;
-const POSITION_RIGHT = 1;
+const POSITION_MIDDLE = 1;
+const POSITION_RIGHT = 2;
 const POSITION_UNKNOWN = POSITION_LEFT;
 
 const ANIMATION_CSS_TIMEOUT = 10;
@@ -106,9 +107,7 @@ class ScaleIn extends Component {
 
     updateClasses(wrapper) {
         const bodyWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        const { left, right, top: wrapperTop } = wrapper.getBoundingClientRect();
-
-        const diffRight = bodyWidth - right;
+        const { left, top: wrapperTop } = wrapper.getBoundingClientRect();
 
         let top = wrapperTop;
         if (chayns.env.isApp) {
@@ -121,8 +120,11 @@ class ScaleIn extends Component {
             }
         }
 
+        const partWidth = (1 / 3) * bodyWidth;
+        const position = Math.floor(left / partWidth);
+
         this.setState({
-            position: (left < diffRight) ? POSITION_LEFT : POSITION_RIGHT,
+            position,
             top,
         });
     }
@@ -140,6 +142,7 @@ class ScaleIn extends Component {
         const classNames = classnames('cc__animation__scale-in', {
             'cc__animation__scale-in--left': position === POSITION_LEFT,
             'cc__animation__scale-in--right': position === POSITION_RIGHT,
+            'cc__animation__scale-in--middle': position === POSITION_MIDDLE,
             'cc__animation__scale-in--show': show,
         });
 
