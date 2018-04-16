@@ -24,23 +24,27 @@ export function hideOverlay({ transitionTime, color } = {}) {
     clearInterval(showTimeout);
     clearInterval(setListenerTimeout);
 
-    chaynsCall.hideOverlay({
-        color,
-        transition: `${transitionTime}ms`,
-        mode: 1,
+    requestAnimationFrame(() => {
+        chaynsCall.hideOverlay({
+            color,
+            transition: `${transitionTime}ms`,
+            mode: 1,
+        });
+
+        overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
+
+        hideTimeout = window.setTimeout(() => {
+            requestAnimationFrame(() => {
+                overlay.style.backgroundColor = 'transparent';
+            });
+        }, transitionTime ? 10 : 0);
+
+        removeChildTimeout = window.setTimeout(() => {
+            if(overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, transitionTime || 0);
     });
-
-    overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
-
-    hideTimeout = window.setTimeout(() => {
-        overlay.style.backgroundColor = 'transparent';
-    }, transitionTime ? 10 : 0);
-
-    removeChildTimeout = window.setTimeout(() => {
-        if(overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
-        }
-    }, transitionTime || 0);
 }
 
 export function showOverlay({
@@ -56,31 +60,35 @@ export function showOverlay({
 
     closeListener = onClose;
 
-    chaynsCall.showOverlay({
-        color,
-        transition: `${transitionTime}ms`,
-        mode: 1,
-    }).then(() => {
-        if(closeListener) {
-            closeListener();
-        }
-    });
-
-    overlay.style.zIndex = zIndex;
-    overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
-
-    overlay.onclick = null;
-    setListenerTimeout = window.setTimeout(() => {
-        overlay.onclick = () => {
+    requestAnimationFrame(() => {
+        chaynsCall.showOverlay({
+            color,
+            transition: `${transitionTime}ms`,
+            mode: 1,
+        }).then(() => {
             if(closeListener) {
                 closeListener();
             }
-        };
-    }, transitionTime || 0);
+        });
 
-    showTimeout = window.setTimeout(() => {
-        overlay.style.backgroundColor = color;
-    }, transitionTime ? 10 : 0);
+        overlay.style.zIndex = zIndex;
+        overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
+
+        overlay.onclick = null;
+        setListenerTimeout = window.setTimeout(() => {
+            overlay.onclick = () => {
+                if (closeListener) {
+                    closeListener();
+                }
+            };
+        }, transitionTime || 0);
+
+        showTimeout = window.setTimeout(() => {
+            requestAnimationFrame(() => {
+                overlay.style.backgroundColor = color;
+            });
+        }, transitionTime ? 10 : 0);
+    });
 }
 
 export default {
