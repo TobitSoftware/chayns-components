@@ -100,9 +100,20 @@ class ScaleIn extends Component {
 
     updateClasses(wrapper) {
         const bodyWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        const { left, right, top } = wrapper.getBoundingClientRect();
+        const { left, right, top: wrapperTop } = wrapper.getBoundingClientRect();
 
         const diffRight = bodyWidth - right;
+
+        let top = wrapperTop;
+        if (chayns.env.isApp) {
+            const { body, documentElement } = document;
+
+            if (body.scrollTop) {
+                top += body.scrollTop;
+            } else if (documentElement.scrollTop) {
+                top += documentElement.scrollTop;
+            }
+        }
 
         this.setState({
             position: (left < diffRight) ? POSITION_LEFT : POSITION_RIGHT,
