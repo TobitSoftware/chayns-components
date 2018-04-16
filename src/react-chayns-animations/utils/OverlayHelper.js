@@ -3,6 +3,12 @@ import * as chaynsCall from '../../utils/chayns/setOverlay';
 const overlay = document.createElement('div');
 let closeListener = null;
 
+// Timeouts
+let hideTimeout;
+let removeChildTimeout;
+let showTimeout;
+let setListenerTimeout;
+
 function initOverlay() {
     overlay.style.position = 'fixed';
 
@@ -15,6 +21,9 @@ function initOverlay() {
 }
 
 export function hideOverlay({ transitionTime, color } = {}) {
+    clearInterval(showTimeout);
+    clearInterval(setListenerTimeout);
+
     chaynsCall.hideOverlay({
         color,
         transition: `${transitionTime}ms`,
@@ -23,11 +32,11 @@ export function hideOverlay({ transitionTime, color } = {}) {
 
     overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
 
-    window.setTimeout(() => {
+    hideTimeout = window.setTimeout(() => {
         overlay.style.backgroundColor = 'transparent';
     }, transitionTime ? 10 : 0);
 
-    window.setTimeout(() => {
+    removeChildTimeout = window.setTimeout(() => {
         if(overlay.parentNode) {
             overlay.parentNode.removeChild(overlay);
         }
@@ -41,6 +50,9 @@ export function showOverlay({
     onClose,
 } = {}) {
     initOverlay();
+
+    clearInterval(hideTimeout);
+    clearInterval(removeChildTimeout);
 
     closeListener = onClose;
 
@@ -56,13 +68,17 @@ export function showOverlay({
 
     overlay.style.zIndex = zIndex;
     overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
-    overlay.onclick = () => {
-        if(closeListener) {
-            closeListener();
-        }
-    };
 
-    window.setTimeout(() => {
+    overlay.onclick = null;
+    setListenerTimeout = window.setTimeout(() => {
+        overlay.onclick = () => {
+            if(closeListener) {
+                closeListener();
+            }
+        };
+    }, transitionTime || 0);
+
+    showTimeout = window.setTimeout(() => {
         overlay.style.backgroundColor = color;
     }, transitionTime ? 10 : 0);
 }
