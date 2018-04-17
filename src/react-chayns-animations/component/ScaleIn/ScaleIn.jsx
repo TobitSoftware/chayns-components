@@ -14,6 +14,11 @@ const ANIMATION_TIME = 300;
 
 let TAPP_MARGIN = 0;
 
+window.onresize = () => {
+    TAPP_MARGIN = 0;
+    ScaleIn.getTappMargin();
+};
+
 class ScaleIn extends Component {
     static propTypes = {
         props: PropTypes.object.isRequired,
@@ -107,7 +112,9 @@ class ScaleIn extends Component {
 
     updateClasses(wrapper) {
         const bodyWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        const { left, top: wrapperTop } = wrapper.getBoundingClientRect();
+        const { left, right, top: wrapperTop } = wrapper.getBoundingClientRect();
+
+        const diffRight = bodyWidth - right;
 
         let top = wrapperTop;
         if (chayns.env.isApp) {
@@ -120,8 +127,12 @@ class ScaleIn extends Component {
             }
         }
 
-        const partWidth = (1 / 3) * bodyWidth;
-        const position = Math.floor(left / partWidth);
+        let position = (left > diffRight) ? POSITION_RIGHT : POSITION_LEFT;
+
+        if (right < (3 / 4) * bodyWidth) {
+            const partWidth = (1 / 3) * bodyWidth;
+            position = Math.floor(left / partWidth);
+        }
 
         this.setState({
             position,
