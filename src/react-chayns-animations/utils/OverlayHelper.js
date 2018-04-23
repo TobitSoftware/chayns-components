@@ -3,6 +3,12 @@ import * as chaynsCall from '../../utils/chayns/setOverlay';
 const overlay = document.createElement('div');
 let closeListener = null;
 
+// Timeouts
+let hideTimeout;
+let removeChildTimeout;
+let showTimeout;
+let setListenerTimeout;
+
 function initOverlay() {
     overlay.style.position = 'fixed';
 
@@ -15,23 +21,30 @@ function initOverlay() {
 }
 
 export function hideOverlay({ transitionTime, color } = {}) {
-    chaynsCall.hideOverlay({
-        color,
-        transition: `${transitionTime}ms`,
-        mode: 1,
+    clearInterval(showTimeout);
+    clearInterval(setListenerTimeout);
+
+    requestAnimationFrame(() => {
+        chaynsCall.hideOverlay({
+            color,
+            transition: `${transitionTime}ms`,
+            mode: 1,
+        });
+
+        overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
+
+        hideTimeout = window.setTimeout(() => {
+            requestAnimationFrame(() => {
+                overlay.style.backgroundColor = 'transparent';
+            });
+        }, transitionTime ? 10 : 0);
+
+        removeChildTimeout = window.setTimeout(() => {
+            if(overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, transitionTime || 0);
     });
-
-    overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
-
-    window.setTimeout(() => {
-        overlay.style.backgroundColor = 'transparent';
-    }, transitionTime ? 10 : 0);
-
-    window.setTimeout(() => {
-        if(overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
-        }
-    }, transitionTime || 0);
 }
 
 export function showOverlay({
@@ -42,29 +55,40 @@ export function showOverlay({
 } = {}) {
     initOverlay();
 
+    clearInterval(hideTimeout);
+    clearInterval(removeChildTimeout);
+
     closeListener = onClose;
 
-    chaynsCall.showOverlay({
-        color,
-        transition: `${transitionTime}ms`,
-        mode: 1,
-    }).then(() => {
-        if(closeListener) {
-            closeListener();
-        }
+    requestAnimationFrame(() => {
+        chaynsCall.showOverlay({
+            color,
+            transition: `${transitionTime}ms`,
+            mode: 1,
+        }).then(() => {
+            if(closeListener) {
+                closeListener();
+            }
+        });
+
+        overlay.style.zIndex = zIndex;
+        overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
+
+        overlay.onclick = null;
+        setListenerTimeout = window.setTimeout(() => {
+            overlay.onclick = () => {
+                if (closeListener) {
+                    closeListener();
+                }
+            };
+        }, transitionTime || 0);
+
+        showTimeout = window.setTimeout(() => {
+            requestAnimationFrame(() => {
+                overlay.style.backgroundColor = color;
+            });
+        }, transitionTime ? 10 : 0);
     });
-
-    overlay.style.zIndex = zIndex;
-    overlay.style.transition = `background-color ${transitionTime || 0}ms ease`;
-    overlay.onclick = () => {
-        if(closeListener) {
-            closeListener();
-        }
-    };
-
-    window.setTimeout(() => {
-        overlay.style.backgroundColor = color;
-    }, transitionTime ? 10 : 0);
 }
 
 export default {

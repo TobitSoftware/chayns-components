@@ -8,8 +8,6 @@
   ],
   "plugins": [
     "transform-decorators-legacy",
-    ["transform-react-remove-prop-types", {
-      "mode": "wrap"
-    }]
+    "transform-react-remove-prop-types"
   ]
 }

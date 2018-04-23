@@ -5,11 +5,19 @@ import classnames from 'classnames';
 import Portal from '../../../react-chayns-portal/component/Portal';
 
 const POSITION_LEFT = 0;
-const POSITION_RIGHT = 1;
+const POSITION_MIDDLE = 1;
+const POSITION_RIGHT = 2;
 const POSITION_UNKNOWN = POSITION_LEFT;
 
 const ANIMATION_CSS_TIMEOUT = 10;
 const ANIMATION_TIME = 300;
+
+let TAPP_MARGIN = 0;
+
+window.onresize = () => {
+    TAPP_MARGIN = 0;
+    ScaleIn.getTappMargin();
+};
 
 class ScaleIn extends Component {
     static propTypes = {
@@ -24,15 +32,19 @@ class ScaleIn extends Component {
     };
 
     static getTappMargin() {
+        if (TAPP_MARGIN) {
+            return TAPP_MARGIN;
+        }
+
         const tapp = document.querySelector('.tapp') || document.body;
 
         if (tapp) {
             const { marginLeft, paddingLeft } = window.getComputedStyle(tapp);
 
-            return (parseInt(marginLeft, 10) || 0) + (parseInt(paddingLeft, 10) || 0);
+            TAPP_MARGIN = (parseInt(marginLeft, 10) || 0) + (parseInt(paddingLeft, 10) || 0);
         }
 
-        return 0;
+        return TAPP_MARGIN || 0;
     }
 
     state = {
@@ -100,12 +112,30 @@ class ScaleIn extends Component {
 
     updateClasses(wrapper) {
         const bodyWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        const { left, right, top } = wrapper.getBoundingClientRect();
+        const { left, right, top: wrapperTop } = wrapper.getBoundingClientRect();
 
         const diffRight = bodyWidth - right;
 
+        let top = wrapperTop;
+        if (chayns.env.isApp) {
+            const { body, documentElement } = document;
+
+            if (body.scrollTop) {
+                top += body.scrollTop;
+            } else if (documentElement.scrollTop) {
+                top += documentElement.scrollTop;
+            }
+        }
+
+        let position = (left > diffRight) ? POSITION_RIGHT : POSITION_LEFT;
+
+        if (right < (3 / 4) * bodyWidth) {
+            const partWidth = (1 / 3) * bodyWidth;
+            position = Math.floor(left / partWidth);
+        }
+
         this.setState({
-            position: (left < diffRight) ? POSITION_LEFT : POSITION_RIGHT,
+            position,
             top,
         });
     }
@@ -123,6 +153,7 @@ class ScaleIn extends Component {
         const classNames = classnames('cc__animation__scale-in', {
             'cc__animation__scale-in--left': position === POSITION_LEFT,
             'cc__animation__scale-in--right': position === POSITION_RIGHT,
+            'cc__animation__scale-in--middle': position === POSITION_MIDDLE,
             'cc__animation__scale-in--show': show,
         });
 
