@@ -41,6 +41,7 @@ export default class ScrollView extends React.Component {
 
         const classNames = classnames('cc__scroll-view', {
             'cc__scroll-view--hide': !showScrollbar,
+            'cc__scroll-view--mobile': chayns.env.isMobile,
             [className]: className,
         });
 
