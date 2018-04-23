@@ -16,7 +16,7 @@ export default class ScrollViewHelper {
         }
 
         this.dragDealer(this.bar);
-        this.moveBar();
+        this.refresh();
 
         this.content.addEventListener('scroll', this.moveBar.bind(this));
         this.content.addEventListener('mouseenter', this.moveBar.bind(this));
