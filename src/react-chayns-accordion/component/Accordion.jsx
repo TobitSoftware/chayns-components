@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import requestAnimationFrame from '../../utils/requestAnimationFrame';
 
 const CLOSED = 5;
 const CLOSE = 1;
@@ -160,16 +161,18 @@ class Accordion extends React.Component {
     accordionCloseListener(event) {
         const { onClose, autogrow } = this.props;
 
-        this.setState({
-            currentState: CLOSE
+        if (autogrow && this._body) {
+            this._body.style.setProperty('max-height', '9999px', 'important');
+        }
+
+        requestAnimationFrame(() => {
+            this.setState({
+                currentState: CLOSE
+            });
         });
 
         if (onClose) {
             onClose(event);
-        }
-
-        if (autogrow && this._body) {
-            this._body.style.maxHeight = null;
         }
 
         this.firstRender = false;
