@@ -1,6 +1,6 @@
 {
   "name": "chayns-components",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "some standalone react components",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
