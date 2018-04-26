@@ -14,13 +14,13 @@ function hasFlag(value, flag) {
 }
 
 class Accordion extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
 
         this.firstRender = true;
 
         this.state = {
-            currentState: CLOSED
+            currentState: (props && props.defaultOpened) ? OPENED : CLOSED,
         };
     }
 
@@ -35,7 +35,8 @@ class Accordion extends React.Component {
     }
 
     componentDidMount() {
-        const { className, defaultOpened, autogrow } = this.props;
+        const { className, autogrow } = this.props;
+        const { currentState } = this.state;
 
         this.accordion.addEventListener('closed', this.accordionClosedListener.bind(this));
         this.accordion.addEventListener('close', this.accordionCloseListener.bind(this));
@@ -46,9 +47,7 @@ class Accordion extends React.Component {
             this.accordion.classList.add('accordion--open');
         }
 
-        if (defaultOpened) {
-            this.accordion.classList.add('accordion--open');
-
+        if (currentState === OPENED) {
             if(autogrow && this._body) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
@@ -91,14 +90,10 @@ class Accordion extends React.Component {
     }
 
     _getBody() {
-        const { renderClosed, defaultOpened, children } = this.props;
+        const { renderClosed, children } = this.props;
         const { currentState } = this.state;
 
         if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
-            return children;
-        }
-
-        if (defaultOpened && this.firstRender) {
             return children;
         }
 
