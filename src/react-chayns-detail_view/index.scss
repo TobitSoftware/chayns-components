@@ -62,3 +62,34 @@
     }
   }
 }
+
+
+.chayns--landscape {
+  .cc__detail-view {
+    &__group {
+      display: flex;
+      flex-direction: row;
+
+      .cc__detail-view__item {
+        flex-grow: 40;
+        flex-shrink: 0;
+        flex-basis: 0;
+      }
+
+      .cc__detail-view__header {
+        flex-grow: 23;
+        flex-shrink: 0;
+        flex-basis: 0;
+        align-self: start;
+
+        &__wrapper {
+          align-items: start;
+        }
+
+        &:before {
+          padding-top: 100%;
+        }
+      }
+    }
+  }
+}
