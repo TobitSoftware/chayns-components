@@ -85,8 +85,6 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
 };
 
 
-export {
-    ScaleIn as SCALE_IN,
-};
+export { ScaleIn as SCALE_IN };
 
 export default animate;
