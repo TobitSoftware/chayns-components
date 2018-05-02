@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import assign from 'object-assign';
 
 import ScaleIn from './ScaleIn/ScaleIn';
 
@@ -56,7 +57,7 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
                             component={BaseComponent}
                             config={config}
                             in={this.props.in}
-                            props={Object.assign({
+                            props={assign({
                                 animationClone: true,
                             }, this.props)}
                             animate={this}
