@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import assign from 'object-assign';
 
 export default class TextArea extends React.Component {
     static propTypes = {
@@ -95,7 +96,7 @@ export default class TextArea extends React.Component {
     }
 
     render() {
-        const style = Object.assign({}, this.defaultStyle, this.props.style);
+        const style = assign({}, this.defaultStyle, this.props.style);
 
         const className = classnames({
             input: true,

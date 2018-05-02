@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../polyfills/object-assign';
+import assign from 'object-assign';
 
 import ModeSwitchHelper from './ModeSwitchHelper';
 
@@ -47,7 +47,7 @@ export default (...conf) => Component => class PureComponent extends React.Compo
         if(window.chayns.utils.isArray(conf) && !ModeSwitchHelper.isInitialized()) return null;
 
         if(this._shouldRender()) {
-            const props = Object.assign({}, this.props, {
+            const props = assign({}, this.props, {
                 mode: this.state.mode
             });
 
