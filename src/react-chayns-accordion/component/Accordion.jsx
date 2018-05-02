@@ -164,6 +164,8 @@ class Accordion extends React.Component {
             this.setState({
                 currentState: CLOSE
             });
+
+            this._body.style.removeProperty('max-height');
         });
 
         if (onClose) {
