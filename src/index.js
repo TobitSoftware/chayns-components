@@ -61,6 +61,7 @@ import WeatherWidget from './react-weather/component/Weather';
 import WorldWeatherOnline from './react-weather/utils/WorldWeatherOnline';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
+import OrientationHelper from './utils/OrientationHelper';
 
 
 export {
@@ -89,6 +90,7 @@ export {
     Mode,
     ModeSwitchHelper,
     connectToModeSwitch,
+    OrientationHelper,
     PersonFinder,
     Portal,
     RadioButton,
