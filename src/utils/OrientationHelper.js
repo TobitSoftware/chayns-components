@@ -16,11 +16,15 @@ class OrientationHelper {
         if (window.screen && window.screen.orientation && (window.screen.orientation.angle || window.screen.orientation.angle === 0)) {
             const angle = window.screen.orientation.angle % 360;
 
-            if (angle === 90 || angle === 270) {
+            if (angle === 90 || angle === 270 || angle === -90) {
                 return ORIENTATION_LANDSCAPE;
             }
 
             return ORIENTATION_PORTRAIT;
+        }
+
+        if (window.orientation || window.orientation === 0) {
+            return (window.orientation === -90 || window.orientation === 90) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
         }
 
         if (window.innerHeight > window.innerWidth) {
