@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import requestAnimationFrame from '../../utils/requestAnimationFrame';
 
 const CLOSED = 5;
 const CLOSE = 1;
@@ -13,13 +14,13 @@ function hasFlag(value, flag) {
 }
 
 class Accordion extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
 
         this.firstRender = true;
 
         this.state = {
-            currentState: CLOSED
+            currentState: (props && props.defaultOpened) ? OPENED : CLOSED,
         };
     }
 
@@ -34,7 +35,8 @@ class Accordion extends React.Component {
     }
 
     componentDidMount() {
-        const { className, defaultOpened, autogrow } = this.props;
+        const { className, autogrow } = this.props;
+        const { currentState } = this.state;
 
         this.accordion.addEventListener('closed', this.accordionClosedListener.bind(this));
         this.accordion.addEventListener('close', this.accordionCloseListener.bind(this));
@@ -45,9 +47,7 @@ class Accordion extends React.Component {
             this.accordion.classList.add('accordion--open');
         }
 
-        if (defaultOpened) {
-            this.accordion.classList.add('accordion--open');
-
+        if (currentState === OPENED) {
             if(autogrow && this._body) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
@@ -90,14 +90,10 @@ class Accordion extends React.Component {
     }
 
     _getBody() {
-        const { renderClosed, defaultOpened, children } = this.props;
+        const { renderClosed, children } = this.props;
         const { currentState } = this.state;
 
         if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
-            return children;
-        }
-
-        if (defaultOpened && this.firstRender) {
             return children;
         }
 
@@ -160,16 +156,20 @@ class Accordion extends React.Component {
     accordionCloseListener(event) {
         const { onClose, autogrow } = this.props;
 
-        this.setState({
-            currentState: CLOSE
+        if (autogrow && this._body) {
+            this._body.style.setProperty('max-height', '9999px', 'important');
+        }
+
+        requestAnimationFrame(() => {
+            this.setState({
+                currentState: CLOSE
+            });
+
+            this._body.style.removeProperty('max-height');
         });
 
         if (onClose) {
             onClose(event);
-        }
-
-        if (autogrow && this._body) {
-            this._body.style.maxHeight = null;
         }
 
         this.firstRender = false;

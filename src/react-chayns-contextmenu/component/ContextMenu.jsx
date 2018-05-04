@@ -17,7 +17,8 @@ const ContextMenu = ({
         <div className={contextMenuClass}>
             <div
                 className="context-menu__page-block"
-                onClick={onLayerClick}
+                onClick={!chayns.env.isMobile ? onLayerClick : null}
+                onTouchStart={chayns.env.isMobile ? onLayerClick : null}
             />
             <div
                 className="context-menu__body"

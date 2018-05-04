@@ -16,6 +16,7 @@ import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
 import DetailView from './react-chayns-detail_view/component/DetailView';
+import DetailViewGroup from './react-chayns-detail_view/component/DetailViewGroup';
 import DetailViewItem from './react-chayns-detail_view/component/DetailViewItem';
 import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHeader';
 import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
@@ -60,6 +61,7 @@ import WeatherWidget from './react-weather/component/Weather';
 import WorldWeatherOnline from './react-weather/utils/WorldWeatherOnline';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
+import OrientationHelper from './utils/OrientationHelper';
 
 
 export {
@@ -77,6 +79,7 @@ export {
     Checkbox,
     ContextMenu,
     DetailView,
+    DetailViewGroup,
     DetailViewItem,
     DetailViewHeader,
     DetailViewFooter,
@@ -87,6 +90,7 @@ export {
     Mode,
     ModeSwitchHelper,
     connectToModeSwitch,
+    OrientationHelper,
     PersonFinder,
     Portal,
     RadioButton,

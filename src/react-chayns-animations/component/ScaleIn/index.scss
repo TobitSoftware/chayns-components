@@ -2,6 +2,7 @@
   position: absolute;
 
   transform: scale(0);
+  transform-origin: top;
   opacity: 0;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
@@ -16,6 +17,10 @@
   &--right {
     transform-origin: top right;
     right: 0;
+  }
+
+  &--middle {
+    transform-origin: top center;
   }
 
   &--show {

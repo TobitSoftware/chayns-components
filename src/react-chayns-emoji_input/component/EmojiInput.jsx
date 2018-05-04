@@ -19,11 +19,17 @@ export default class EmojiInput extends React.Component {
         id: PropTypes.string.isRequired,
         hideBorder: PropTypes.bool,
         onKeyDown: PropTypes.func,
+        disabled: PropTypes.bool,
+        onFocus: PropTypes.func,
+        onBlur: PropTypes.func
     };
 
     static defaultProps = {
         hideBorder: false,
         onKeyDown: null,
+        disabled: false,
+        onFocus: null,
+        onBlur: null
     };
 
     static shouldComponentUpdate() {
@@ -66,7 +72,7 @@ export default class EmojiInput extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value, placeholder } = this.props;
+        const { placeholder, disabled, value } = this.props;
 
         if (nextProps.value.trim() === '') {
             this.placeholder.classList.remove('invisible');
@@ -76,6 +82,10 @@ export default class EmojiInput extends React.Component {
 
         if (nextProps.placeholder !== placeholder) {
             this.placeholder.innerText = nextProps.placeholder;
+        }
+
+        if (nextProps.disabled !== disabled) {
+            this.input.contentEditable = !nextProps.disabled;
         }
 
         if (nextProps.value !== value || this.firstRender) {
@@ -205,7 +215,7 @@ export default class EmojiInput extends React.Component {
             }
         }
 
-        if(!emojione) {
+        if (!emojione) {
             return emojione.shortnameToUnicode(textLines.join('\n'));
         }
 
@@ -240,6 +250,22 @@ export default class EmojiInput extends React.Component {
         }
     };
 
+    handleFocus = (event) => {
+        const { onFocus } = this.props;
+
+        if (onFocus) {
+            onFocus(event);
+        }
+    };
+
+    handleBlur = (event) => {
+        const { onBlur } = this.props;
+
+        if (onBlur) {
+            onBlur(event);
+        }
+    };
+
     scrollToCursor = (scrollTop, scrollHeight) => {
         const inputDiv = this.input;
         const elemScrollHeight = inputDiv.scrollHeight;
@@ -264,7 +290,7 @@ export default class EmojiInput extends React.Component {
             .replace(/\(y\)/g, '👍')
             .replace(/\(n\)/g, '👎');
 
-        if(emojione) {
+        if (emojione) {
             newText = emojione.toImage(newText);
         }
 
@@ -327,24 +353,26 @@ export default class EmojiInput extends React.Component {
     cursorPos = 0;
 
     render() {
-        const { id, hideBorder } = this.props;
+        const { id, hideBorder, disabled } = this.props;
 
-        const messageInputClasses = classNames('input message--input', {
-            'hide--border': hideBorder
+        const messageInputClasses = classNames('message--input', {
+            'input--disabled': disabled,
+            'hide--border': hideBorder,
+            input: !disabled
         });
 
         return (
             <div className="message--input--box">
                 <div
-                    dangerouslySetInnerHTML={{
-                        __html: '<br />'
-                    }}
+                    dangerouslySetInnerHTML={{ __html: '<br />' }}
+                    ref={(ref) => { this.input = ref; }}
                     className={messageInputClasses}
                     onKeyDown={this.handleKeyDown}
-                    ref={(ref) => { this.input = ref; }}
+                    contentEditable={!disabled}
                     onKeyUp={this.handleKeyUp}
                     onInput={this.handleInput}
-                    contentEditable="true"
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
                     dir="auto"
                     id={id}
                 />
