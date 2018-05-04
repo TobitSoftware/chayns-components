@@ -355,8 +355,10 @@ export default class EmojiInput extends React.Component {
     render() {
         const { id, hideBorder, disabled } = this.props;
 
-        const messageInputClasses = classNames('input message--input', {
-            'hide--border': hideBorder
+        const messageInputClasses = classNames('message--input', {
+            'input--disabled': disabled,
+            'hide--border': hideBorder,
+            'input': !disabled
         });
 
         return (

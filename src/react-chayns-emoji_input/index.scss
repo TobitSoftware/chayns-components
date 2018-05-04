@@ -33,6 +33,17 @@
       border: none;
     }
 
+    &.input--disabled {
+      background-color: transparent;
+      border: 1px solid transparent;
+      border-bottom-color: #5c646c;
+      padding: 4px 8px;
+      font-weight: 300;
+      box-shadow: none;
+      border-radius: 0;
+      color: #e8e8e8;
+    }
+
     .emojione {
       font-size: inherit;
       height: 3ex;
