@@ -10,7 +10,7 @@ export default class RfidInput extends React.Component {
     static propTypes = {
         className: PropTypes.string,
         placeholder: PropTypes.string,
-        confirmText: PropTypes.string,
+        confirmNode: PropTypes.oneOfType(PropTypes.array, PropTypes.node, PropTypes.string),
         scanText: PropTypes.string,
         value: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -20,7 +20,7 @@ export default class RfidInput extends React.Component {
     static defaultProps = {
         className: null,
         placeholder: 'Kartennummer',
-        confirmText: 'OK',
+        confirmNode: 'OK',
         scanText: 'Scannen',
     };
 
@@ -74,7 +74,7 @@ export default class RfidInput extends React.Component {
         const {
             className,
             placeholder,
-            confirmText,
+            confirmNode,
             scanText,
             value,
         } = this.props;
@@ -96,7 +96,7 @@ export default class RfidInput extends React.Component {
                         disabled={disabled}
                         className="cc__rfid-input__confirm"
                     >
-                        {confirmText}
+                        {confirmNode}
                     </ChooseButton>
                 </div>
                 {canScan &&
