@@ -10,7 +10,10 @@ export default class RfidInput extends React.Component {
     static propTypes = {
         className: PropTypes.string,
         placeholder: PropTypes.string,
-        confirmNode: PropTypes.oneOfType(PropTypes.array, PropTypes.node, PropTypes.string),
+        confirmNode: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node)
+        ]),
         scanText: PropTypes.string,
         value: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
