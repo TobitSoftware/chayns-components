@@ -5,18 +5,25 @@ import PropTypes from 'prop-types';
 export default class Step4 extends React.Component {
     static contextTypes = {
         nextStep: PropTypes.func,
-        stepComplete: PropTypes.func
+        stepComplete: PropTypes.func,
+        resetToStep: PropTypes.func
     };
 
     constructor(props, context) {
         super(props, context);
         this.next = this.next.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     next() {
         const { stepComplete, nextStep } = this.context;
         stepComplete(true);
         nextStep();
+    }
+
+    reset() {
+        const { resetToStep } = this.context;
+        resetToStep(0);
     }
 
     render() {
@@ -37,8 +44,15 @@ export default class Step4 extends React.Component {
                     <div
                         className="button"
                         onClick={this.next}
+                        style={{ marginRight: '10px' }}
                     >
                         Finish
+                    </div>
+                    <div
+                        className="button"
+                        onClick={this.reset}
+                    >
+                        Reset
                     </div>
                 </div>
             </div>

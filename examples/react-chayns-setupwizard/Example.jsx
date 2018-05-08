@@ -42,7 +42,7 @@ export default class Example extends React.Component {
                         ready={this.ready}
                         notComplete={this.notComplete}
                         // contentStyle={{ fontWeight: 'bold' }}
-                        style={{backgroundColor: 'lightgray', padding: '10px'}}
+                        style={{ border: '1px solid gray', padding: '10px' }}
                         title="Wizard"
                         description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n' +
                         '                    labore\n' +
