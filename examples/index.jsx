@@ -25,3 +25,4 @@ import './react-chayns-textstring/index';
 import './react-chayns-tooltip/index';
 import './react-chayns-upload/index';
 import './react-weather/index';
+import './react-chayns-rfid_input/index';

@@ -22,6 +22,7 @@ import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHea
 import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
+import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 import Input from './react-chayns-input/component/Input';
 
@@ -94,6 +95,7 @@ export {
     PersonFinder,
     Portal,
     RadioButton,
+    RfidInput,
     ScrollView,
     SelectButton,
     SelectList,
