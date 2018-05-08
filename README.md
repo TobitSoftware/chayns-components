@@ -30,6 +30,7 @@ The following components are part of this package:
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component (React + ES6)              | [Readme](/src/react-chayns-modeswitch/README.md)      |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)       | PersonFinder Component                          | [Readme](/src/react-chayns-personfinder/README.md)    |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)         | RadioButton Component                           | [Readme](/src/react-chayns-radiobutton/README.md)     |
+| [react-chayns-rfid_input](/src/react-chayns-rfid_input/)           | RfidInput Component                             | [Readme](/src/react-chayns-rfid_input/README.md)      |
 | [react-chayns-scrollview](/src/react-chayns-scrollview/)           | ScrollView Component                            | [Readme](/src/react-chayns-scrollview/README.md)      |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/)       | SelectButton Component                          | [Readme](/src/react-chayns-selectbutton/README.md)    |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/)           | SelectList Component                            | [Readme](/src/react-chayns-selectlist/README.md)      |
