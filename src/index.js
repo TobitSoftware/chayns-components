@@ -22,7 +22,6 @@ import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHea
 import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
-import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 import Input from './react-chayns-input/component/Input';
 
@@ -34,6 +33,7 @@ import connectToModeSwitch from './react-chayns-modeswitch/component/connectToMo
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 import Portal from './react-chayns-portal/component/Portal';
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
+import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
 
