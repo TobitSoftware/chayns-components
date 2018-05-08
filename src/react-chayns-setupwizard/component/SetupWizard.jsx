@@ -24,6 +24,7 @@ export default class SetupWizard extends React.Component {
         previousStep: PropTypes.func,
         nextStep: PropTypes.func,
         toStep: PropTypes.func,
+        resetToStep: PropTypes.func
     };
 
     static propTypes = {
@@ -50,6 +51,7 @@ export default class SetupWizard extends React.Component {
         this.previousStep = this.previousStep.bind(this);
         this.nextStep = this.nextStep.bind(this);
         this.toStep = this.toStep.bind(this);
+        this.resetToStep = this.resetToStep.bind(this);
         this.ready = this.ready.bind(this);
         this.notComplete = this.notComplete.bind(this);
     }
@@ -59,7 +61,8 @@ export default class SetupWizard extends React.Component {
             stepComplete: this.stepComplete,
             previousStep: this.previousStep,
             nextStep: this.nextStep,
-            toStep: this.toStep
+            toStep: this.toStep,
+            resetToStep: this.resetToStep
         };
     }
 
@@ -105,6 +108,16 @@ export default class SetupWizard extends React.Component {
                 this.ready();
             }
         }
+    }
+
+    resetToStep(step) {
+        const { completedSteps, maxProgress } = this.state;
+        for(let i = step; i < maxProgress; i += 1) {
+            if (completedSteps.indexOf(i) >= 0) {
+                completedSteps.splice(completedSteps.indexOf(i));
+            }
+        }
+        this.setState({ maxProgress: step, currentStep: step, completedSteps });
     }
 
     ready() {
