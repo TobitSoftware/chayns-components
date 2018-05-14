@@ -37,11 +37,14 @@ This value is clean from any elements to handle in the EmojiInput.
 ## Props
 The following properties can be set on the EmojiInput-Component
 
-| Property     | Description                                  | Type     | Default Value | Required |
-|--------------|----------------------------------------------|----------|---------------|----------|
-| placeholder  | Text that will be shown as placeholder       | String   |               | true     |
-| onInput      | Function that will be called on input event  | function |               | true     |
-| value        | Text that will be shown in input             | String   |               | true     |
-| id           | Id that is given to the component            | String   |               | true     |
-| hideBorder   | Hides the border below the input             | bool     | false         |          |
-| onKeyDown    | Function that will be called on input event  | function | empty         |          |
+| **Property** | **Description**                                     | **Type** | **Default Value** | **Required** |
+| ------------ | --------------------------------------------------- | -------- | ----------------- | ------------ |
+| placeholder  | Text that will be shown as placeholder              | string   |                   | true         |
+| onInput      | Function that will be called on input event         | function |                   | true         |
+| value        | Text that will be shown in input                    | string   |                   | true         |
+| id           | Id that is given to the component                   | string   |                   | true         |
+| hideBorder   | Hides the border below the input                    | boolean  | false             |              |
+| onKeyDown    | Function that will be called on input event         | function | *null*            |              |
+| disabled     | Disables the input                                  | boolean  | false             |              |
+| onFocus      | Function that will be called when input gets focus  | function | *null*            |              |
+| onBlur       | Function that will be called when input loses focus | function | *null*            |              |

@@ -1,0 +1,14 @@
+.cc__rfid-input {
+  &__wrapper {
+    display: flex;
+
+    .cc__rfid-input__input {
+      flex-grow: 1;
+      margin-right: 20px;
+    }
+  }
+  &__control {
+    text-align: center;
+    margin: 15px 0;
+  }
+}

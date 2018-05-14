@@ -14,11 +14,6 @@ const ANIMATION_TIME = 300;
 
 let TAPP_MARGIN = 0;
 
-window.onresize = () => {
-    TAPP_MARGIN = 0;
-    ScaleIn.getTappMargin();
-};
-
 class ScaleIn extends Component {
     static propTypes = {
         props: PropTypes.object.isRequired,
@@ -182,6 +177,11 @@ class ScaleIn extends Component {
         );
     }
 }
+
+window.onresize = () => {
+    TAPP_MARGIN = 0;
+    ScaleIn.getTappMargin();
+};
 
 ScaleIn.duplicate = true;
 ScaleIn.wrapperClassName = 'cc__animate--scale-in';
