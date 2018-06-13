@@ -29,6 +29,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
         Portal: 'react-chayns-portal/component/Portal.js',
         RadioButton: 'react-chayns-radiobutton/component/RadioButton.js',
+        RfidInput: 'react-chayns-rfid_input/component/RfidInput.js',
         ScrollView: 'react-chayns-scrollview/component/ScrollView.js',
         SelectButton: 'react-chayns-selectbutton/component/SelectButton.js',
         SelectList: 'react-chayns-selectlist/component/SelectList.js',

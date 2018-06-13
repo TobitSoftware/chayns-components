@@ -30,16 +30,17 @@ The basic structure of the component will be the following:
 </SetupWizard>
 ```
 
-There are 3 different methods for changing the current step and one method for completing the current step. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
+There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
 ```jsx
  static contextTypes = {
      stepComplete: PropTypes.func,
      nextStep: PropTypes.func,
      previousStep: PropTypes.func,
-     toStep: PropTypes.func
+     toStep: PropTypes.func,
+     resetToStep: PropTypes.func
  };
 ```
- **Important:** `previousStep` and `toStep` are deprecated.
+ **Important:** `previousStep` and `toStep` are deprecated according to the design guide.
 
  **Note:** You have to call stepComplete with a boolean parameter for completing/not completing the current step.
 

@@ -13,6 +13,7 @@ import './react-chayns-modeswitch/index';
 import './react-chayns-personfinder/index';
 import './react-chayns-portal/index';
 import './react-chayns-radiobutton/index';
+import './react-chayns-rfid_input/index';
 import './react-chayns-scrollview/index';
 import './react-chayns-selectbutton/index';
 import './react-chayns-selectlist/index';
