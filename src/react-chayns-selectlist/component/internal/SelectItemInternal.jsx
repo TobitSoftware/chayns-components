@@ -52,9 +52,8 @@ export default class SelectItemInternal extends React.Component {
     }
 
     _handleChange = () => {
-        const { onChange, id } = this.props;
-
-        onChange(id);
+        const { onChange, id, value } = this.props;
+        onChange(id, value);
     };
 
     render() {
