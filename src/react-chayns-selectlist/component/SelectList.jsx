@@ -130,6 +130,7 @@ export default class SelectList extends React.Component {
                 disabled,
                 className,
                 name,
+                value,
             } = child.props;
 
             return (
@@ -142,6 +143,7 @@ export default class SelectList extends React.Component {
                     key={id}
                     name={name}
                     className={className}
+                    value={value}
                 >
 
                     {child}
