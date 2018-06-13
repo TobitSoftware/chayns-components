@@ -40,8 +40,8 @@ export default class Example extends React.Component {
                     selectFirst
                     // value={this.state.selectedId}
                     className="hello world"
-                    onChange={(value) => {
-                        console.log('change selectlist', value);
+                    onChange={(id, value) => {
+                        console.log('change selectlist', { id, value });
                     }}
                 >
                     {
@@ -57,8 +57,9 @@ export default class Example extends React.Component {
                                     name="Hi"
                                     id={index}
                                     key={index}
-                                    {...others}
+                                    value={{ doubleIndex: index * 2 }}
                                     className="Hi"
+                                    {...others}
                                 >
                                     {element}
                                 </SelectListItem>
