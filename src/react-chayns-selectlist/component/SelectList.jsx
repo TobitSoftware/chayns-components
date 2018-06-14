@@ -85,13 +85,13 @@ export default class SelectList extends React.Component {
         });
     }
 
-    _changeActiveItem = (id) => {
+    _changeActiveItem = (id, value) => {
         if(id === this.state.selectedId) return;
 
         if(this.changing) return;
 
         if(this.props.onChange) {
-            this.props.onChange(id);
+            this.props.onChange(id, value);
         }
 
         if(this.props.value) {
@@ -114,7 +114,7 @@ export default class SelectList extends React.Component {
             const { props } = children[i];
 
             if(!props.disabled) {
-                this._changeActiveItem(props.id);
+                this._changeActiveItem(props.id, props.value);
                 return;
             }
         }
@@ -130,6 +130,7 @@ export default class SelectList extends React.Component {
                 disabled,
                 className,
                 name,
+                value,
             } = child.props;
 
             return (
@@ -142,6 +143,7 @@ export default class SelectList extends React.Component {
                     key={id}
                     name={name}
                     className={className}
+                    value={value}
                 >
 
                     {child}
