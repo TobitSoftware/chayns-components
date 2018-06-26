@@ -195,11 +195,6 @@ export default class ModeSwitchHelper {
                 } else {
                     setDefaultGroup();
                 }
-
-                const changeListener = getChangeListener();
-                chayns.setAdminSwitchCallback(({ mode }) => changeListener({
-                    id: mode,
-                }));
             });
         } else {
             console.warn('No groups specified');
