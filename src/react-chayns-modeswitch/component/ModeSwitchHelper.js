@@ -185,6 +185,12 @@ export default class ModeSwitchHelper {
                         //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     } else {
                         setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
+
+                        // ToDo: Implement adminSwitchCallback for allowedGroups.length > 1 too
+                        const changeListener = getChangeListener();
+                        chayns.setAdminSwitchCallback(({ mode }) => changeListener({
+                            id: mode,
+                        }));
                     }
                 } else {
                     setDefaultGroup();
