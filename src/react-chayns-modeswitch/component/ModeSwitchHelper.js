@@ -6,7 +6,7 @@ let initialized = false;
 
 function callCallbacks(data) {
     callbacks.map((callback) => {
-        if(callback && window.chayns.utils.isFunction(callback)) {
+        if (callback && window.chayns.utils.isFunction(callback)) {
             callback(data);
         }
     });
@@ -33,11 +33,11 @@ function setDefaultGroup(mode = 0) {
 function getUacIds(group) {
     let retval = [];
 
-    if(group.uacId && window.chayns.utils.isNumber(group.uacId)) {
+    if (group.uacId && window.chayns.utils.isNumber(group.uacId)) {
         retval.push(group.uacId);
     }
 
-    if(group.uacIds && window.chayns.utils.isArray(group.uacIds)) {
+    if (group.uacIds && window.chayns.utils.isArray(group.uacIds)) {
         retval = retval.concat(group.uacIds);
     }
 
@@ -50,7 +50,7 @@ function getAllowedUacIdsFromArray(uacArray) {
     const allowedUacIds = [];
 
     for (let i = 0, x = userGroups.length; i < x; i += 1) {
-        if(uacArray.indexOf(userGroups[i].id) !== -1) {
+        if (uacArray.indexOf(userGroups[i].id) !== -1) {
             allowedUacIds.push(userGroups[i].id);
         }
     }
@@ -82,12 +82,12 @@ function getDefaultMode() {
 
 export default class ModeSwitchHelper {
     static init(options) {
-        if(options.groups) {
-            if(window.chayns.utils.isFunction(options.onChange)) {
+        if (options.groups) {
+            if (window.chayns.utils.isFunction(options.onChange)) {
                 callbacks.push(options.onChange);
             }
 
-            if(options.save) {
+            if (options.save) {
                 callbacks.push(setSavedMode);
             }
 
@@ -115,7 +115,7 @@ export default class ModeSwitchHelper {
 
                     const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
 
-                    if(managerGroup && data && data.AppUser.AdminMode && !chayns.env.isApp) {
+                    if (managerGroup && data && data.AppUser.AdminMode && !chayns.env.isApp) {
                         groupObject = getGroupObject(managerGroup.id, managerGroup.name, managerGroup.uacIds);
                         isChaynsIdAdmin = true;
                     } else {
@@ -128,11 +128,11 @@ export default class ModeSwitchHelper {
 
                     let savedModeId = null;
                     let changeGroupIndex = 0;
-                    if(options.save) {
+                    if (options.save) {
                         savedModeId = getSavedMode();
                     }
 
-                    if(savedModeId === null && options.defaultMode) {
+                    if (savedModeId === null && options.defaultMode) {
                         savedModeId = options.defaultMode;
                     }
 
@@ -185,6 +185,12 @@ export default class ModeSwitchHelper {
                         //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     } else {
                         setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
+
+                        // ToDo: Implement adminSwitchCallback for allowedGroups.length > 1 too
+                        const changeListener = getChangeListener();
+                        chayns.setAdminSwitchCallback(({ mode }) => changeListener({
+                            id: mode,
+                        }));
                     }
                 } else {
                     setDefaultGroup();
@@ -196,13 +202,13 @@ export default class ModeSwitchHelper {
     }
 
     static getCurrentMode() {
-        if(currentMode) return currentMode;
+        if (currentMode) return currentMode;
 
         return getDefaultMode();
     }
 
     static onChange(callback) {
-        if(window.chayns.utils.isFunction(callback)) {
+        if (window.chayns.utils.isFunction(callback)) {
             callbacks.push(callback);
 
             return true;
@@ -232,7 +238,7 @@ export default class ModeSwitchHelper {
     }
 
     static isUserInGroup(uacId) {
-        if(!window.chayns.env.user.isAuthenticated) return false;
+        if (!window.chayns.env.user.isAuthenticated) return false;
 
         return !!window.chayns.env.user.groups.find((element) => {
             return element.id === uacId;
@@ -240,7 +246,7 @@ export default class ModeSwitchHelper {
     }
 
     static findManagerGroup(groups) {
-        if(!window.chayns.env.user.isAuthenticated) return false;
+        if (!window.chayns.env.user.isAuthenticated) return false;
 
         return groups.find((uac) => {
             return uac.uacIds && uac.uacIds.length === 1 && uac.uacIds[0] === 1;

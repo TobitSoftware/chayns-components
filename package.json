@@ -7,7 +7,7 @@
   "jsnext:main": "lib_esnext/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/dev.babel.js",
-    "prepublish": "npm run eslint & npm run build",
+    "prepublishOnly": "npm run eslint & npm run build",
     "clean": "",
     "build": "npm run build:es && npm run build:cjs && npm run build:lib:es && npm run build:sass",
     "build:es": "cross-env NODE_ENV=es rollup -c",
@@ -16,7 +16,7 @@
     "build:sass": "node-sass src/ -o ./lib",
     "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js"
   },
-  "author": "kkonermann",
+  "author": "Tobit.Software",
   "license": "MIT",
   "repository": {
     "type": "git",
