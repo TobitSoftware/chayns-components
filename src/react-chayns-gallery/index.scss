@@ -7,6 +7,8 @@
     cursor: pointer;
     background-size: cover;
     background-position: 50%;
+    outline: 1px solid rgba(0,0,0,0.1);
+    outline-offset: -1px;
   }
   .image-container--big {
     width: 49%;
