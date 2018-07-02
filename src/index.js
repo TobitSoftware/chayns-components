@@ -22,6 +22,7 @@ import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHea
 import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
+import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 import Input from './react-chayns-input/component/Input';
 
@@ -85,6 +86,7 @@ export {
     DetailViewHeader,
     DetailViewFooter,
     EmojiInput,
+    Gallery,
     GridCalendar,
     Input,
     ModeSwitch,
