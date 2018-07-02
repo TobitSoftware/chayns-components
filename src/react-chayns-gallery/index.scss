@@ -1,0 +1,59 @@
+.chayns-gallery {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  .image-container {
+    cursor: pointer;
+    background-size: cover;
+    background-position: 50%;
+  }
+  .image-container--big {
+    width: 49%;
+    height: 100%;
+
+  }
+  .wrapper {
+    width: 49%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .image-container--small {
+      height: 49%;
+    }
+
+  }
+
+  .more-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .more-images__container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .more-image__text__wrapper {
+        text-align: center;
+        .more-image__text {
+          color: rgba(255, 255, 255, 0.8);;
+          text-align: center;
+          font-size: 14px;
+          margin-top: 5px;
+        }
+        .more-image__icon:before {
+          color: rgba(255, 255, 255, 0.8);;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          content: '\f067';
+          font-size: 30px;
+        }
+      }
+    }
+  }
+}
