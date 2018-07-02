@@ -19,7 +19,7 @@ export default class Gallery extends React.Component {
         onClick: chayns.openImage
     };
 
-    constructor(){
+    constructor() {
         super();
         this.openFirstImage = this.openGallery.bind(this, 0);
         this.openSecondImage = this.openGallery.bind(this, 1);
@@ -32,11 +32,12 @@ export default class Gallery extends React.Component {
     }
 
     render() {
-        const { urls, height, width, onlyIcon } = this.props;
+        const {urls, height, width, onlyIcon} = this.props;
         const count = urls.length;
 
         return (
-            <div className="chayns-gallery" style={{ height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%' }}>
+            <div className="chayns-gallery"
+                 style={{height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%'}}>
                 <ImageContainer
                     className="image-container image-container--big"
                     url={urls[0]}
@@ -51,29 +52,24 @@ export default class Gallery extends React.Component {
                     : ''
                 }
                 {count >= 3 ?
-                    <div className="wrapper" >
-                        {count >= 3 ?
-                            <div >
-                                <ImageContainer
-                                    className="image-container image-container--small"
-                                    url={urls[1]}
-                                    onClick={this.openSecondImage}
-                                />
-                                <ImageContainer
-                                    className="image-container image-container--small"
-                                    url={urls[2]}
-                                    onClick={this.openThirdImage}
-                                >
-                                    {count > 3 ?
-                                        <MoreImages
-                                            count={count - 3}
-                                            onlyIcon={onlyIcon}
-                                        /> : ''
-                                    }
-                                </ImageContainer>
-                            </div>
-                            : ''
-                        }
+                    <div className="wrapper">
+                        <ImageContainer
+                            className="image-container image-container--small"
+                            url={urls[1]}
+                            onClick={this.openSecondImage}
+                        />
+                        <ImageContainer
+                            className="image-container image-container--small"
+                            url={urls[2]}
+                            onClick={this.openThirdImage}
+                        >
+                            {count > 3 ?
+                                <MoreImages
+                                    count={count - 3}
+                                    onlyIcon={onlyIcon}
+                                /> : ''
+                            }
+                        </ImageContainer>
                     </div> : ''
                 }
             </div>
