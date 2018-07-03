@@ -18,21 +18,25 @@ export default class Example extends React.Component {
                 <div style={{height:'500px', width: '100%'}}>
                     <Gallery urls={urls} />
                 </div>
+                <Gallery urls={urls} />
+
+                <div style={{marginTop: '30px', height:'100%', width: '50%'}}>
+                    <Gallery urls={urls} onClick={console.log} />
+                </div>
 
                 <div style={{marginTop: '30px'}}>
-                    <Gallery urls={urls} height={100} width={100}/>
-                </div>
-
-                <div style={{marginTop: '30px', height:'256px', width: '50%'}}>
-                    <Gallery urls={urls} onClick={console.log}/>
-                </div>
-
-                <div style={{marginTop: '30px', height:'200px', width: '50%'}}>
                     <Gallery urls={urls} onlyIcon/>
                 </div>
 
-                <div style={{marginTop: '30px', height:'70%', width: '50%'}}>
-                    <Gallery urls={urls} onlyIcon height={100} width={100}/>
+                <div style={{marginTop: '30px', width: '20%'}}>
+                    <Gallery urls={urls} onlyIcon />
+                </div>
+
+                <div style={{marginTop: '30px', height:'500px', width: '100%'}}>
+                    <Gallery urls={[urls[0], urls[1]]} />
+                </div>
+                <div style={{height:'500px', width: '100%'}}>
+                    <Gallery urls={[urls[0]]} />
                 </div>
             </ExampleContainer>
         );
