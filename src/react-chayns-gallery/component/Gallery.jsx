@@ -6,15 +6,11 @@ import ImageContainer from './ImageContainer';
 export default class Gallery extends React.Component {
     static propTypes = {
         urls: PropTypes.array.isRequired,
-        height: PropTypes.number,
-        width: PropTypes.number,
         onlyIcon: PropTypes.bool,
         onClick: PropTypes.func
 
     };
     static defaultProps = {
-        height: 0,
-        width: 0,
         onlyIcon: false,
         onClick: chayns.openImage
     };
@@ -24,7 +20,6 @@ export default class Gallery extends React.Component {
         this.openFirstImage = this.openGallery.bind(this, 0);
         this.openSecondImage = this.openGallery.bind(this, 1);
         this.openThirdImage = this.openGallery.bind(this, 2);
-
     }
 
     openGallery(start) {
@@ -32,7 +27,7 @@ export default class Gallery extends React.Component {
     }
 
     render() {
-        const {urls, height, width, onlyIcon} = this.props;
+        const { urls, onlyIcon } = this.props;
         const count = urls.length;
 
         return (
