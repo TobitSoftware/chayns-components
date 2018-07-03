@@ -1,31 +1,49 @@
 .chayns-gallery {
-  display: flex;
+  position: relative;
   width: 100%;
-  height: 100%;
-  justify-content: space-between;
-  .image-container {
-    cursor: pointer;
-    background-size: cover;
-    background-position: 50%;
-    outline: 1px solid rgba(0,0,0,0.1);
-    outline-offset: -1px;
-  }
-  .image-container--big {
-    width: 49%;
-    height: 100%;
+  padding-top: 428px;
 
+  .chayns--mobile & {
+    padding-top: 256px;
   }
-  .wrapper {
-    width: 49%;
+
+  .gallery-grid{
     display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    .image-container--small {
-      height: 49%;
+    flex-flow: column;
+    position: absolute;
+    flex-wrap: wrap;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    .gallery_item {
+      height: 50%;
+      .gallery_item_inner {
+        height: 100%;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
+
     }
-
+    .gallery_item:nth-child(1) {
+      height: 100%;
+      padding-right: 1%;
+      &:nth-last-child(1){
+        padding: 0;
+      }
+    }
+    .gallery_item:nth-child(2) {
+      padding: 0 0 1% 1%;
+      &:nth-last-child(1){
+        height: 100%;
+        padding: 0 0 0 1%;
+      }
+    }
+    .gallery_item:nth-child(3) {
+      padding: 1% 0 0 1%;
+    }
   }
-
   .more-images {
     position: relative;
     width: 100%;
