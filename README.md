@@ -25,6 +25,7 @@ The following components are part of this package:
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/)         | ContextMenu Component                           | [Readme](/src/react-chayns-contextmenu/README.md)     |
 | [react-chayns-detail-view](/src/react-chayns-detail-view/)         | DetailView Component                            | [Readme](/src/react-chayns-detail-view/README.md)     |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)         | EmojiInput Component                            | [Readme](/src/react-chayns-emoji_input/README.md)     |
+| [react-chayns-gallery](/src/react-chayns-gallery/)                 | Gallery Component                               | [Readme](/src/react-chayns-gallery/README.md)         |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)       | GridCalendar Component                          | [Readme](/src/react-chayns-gridcalendar/README.md)    |
 | [react-chayns-input](/src/react-chayns-input/)                     | Input Component                                 | [Readme](/src/react-chayns-input/README.md)           |
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component (React + ES6)              | [Readme](/src/react-chayns-modeswitch/README.md)      |

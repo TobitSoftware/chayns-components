@@ -19,6 +19,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         DetailViewFooter: 'react-chayns-detail_view/component/DetailViewFooter.js',
         DetailViewGroup: 'react-chayns-detail_view/component/DetailViewGroup.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
+        Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
         Input: 'react-chayns-input/component/Input.js',
         ModeSwitch: 'react-chayns-modeswitch/component/ModeSwitch.js',
