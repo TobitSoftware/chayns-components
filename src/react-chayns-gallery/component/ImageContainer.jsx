@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 
 const ImageContainer = ({ className, url, onClick, children }) => {
     return(
-        <div
-            className={className}
-            style={{ backgroundImage: `url(${url})` }}
-            onClick={onClick}
-        >{children}</div>
+        <div className={className}>
+            <div
+                className='gallery_item_inner'
+                style={{ backgroundImage: `url(${url})` }}
+                onClick={onClick}
+            >{children}</div>
+        </div>
     );
 };
 

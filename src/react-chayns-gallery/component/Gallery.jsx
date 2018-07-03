@@ -36,42 +36,33 @@ export default class Gallery extends React.Component {
         const count = urls.length;
 
         return (
-            <div className="chayns-gallery"
-                 style={{height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%'}}>
+            <div className="chayns-gallery" >
+                <div className="gallery-grid">
                 <ImageContainer
-                    className="image-container image-container--big"
+                    className="gallery_item"
                     url={urls[0]}
                     onClick={this.openFirstImage}
                 />
-                {count === 2 ?
-                    <ImageContainer
-                        className="image-container image-container--big"
-                        url={urls[1]}
-                        onClick={this.openSecondImage}
-                    />
-                    : ''
-                }
-                {count >= 3 ?
-                    <div className="wrapper">
-                        <ImageContainer
-                            className="image-container image-container--small"
-                            url={urls[1]}
-                            onClick={this.openSecondImage}
-                        />
-                        <ImageContainer
-                            className="image-container image-container--small"
-                            url={urls[2]}
-                            onClick={this.openThirdImage}
-                        >
-                            {count > 3 ?
-                                <MoreImages
-                                    count={count - 3}
-                                    onlyIcon={onlyIcon}
-                                /> : ''
-                            }
-                        </ImageContainer>
-                    </div> : ''
-                }
+                    {count > 1 ?
+                <ImageContainer
+                    className="gallery_item"
+                    url={urls[1]}
+                    onClick={this.openSecondImage}
+                /> : ''}
+                    {count > 2 ?
+                <ImageContainer
+                    className="gallery_item"
+                    url={urls[2]}
+                    onClick={this.openThirdImage}
+                >
+                    {count > 3 ?
+                        <MoreImages
+                            count={count - 3}
+                            onlyIcon={onlyIcon}
+                        /> : ''
+                    }
+                </ImageContainer> : ''}
+                </div>
             </div>
         );
     }
