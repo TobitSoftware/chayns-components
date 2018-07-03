@@ -9,9 +9,11 @@ const MoreImages = ({ count, onlyIcon }) => {
             <div className="more-images__container">
                 <div className="more-image__text__wrapper">
                     <i className="more-image__icon fa fa-plus"/>
-                    {onlyIcon ? '' :
-                        <div className="more-image__text">{text}</div>
-                    }
+                    {(!onlyIcon) && (
+                        <div className="more-image__text">
+                            {text}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
@@ -23,6 +25,8 @@ MoreImages.propTypes = {
     onlyIcon: PropTypes.bool
 };
 
-
+MoreImages.defaultProps = {
+    onlyIcon: false
+};
 
 export default MoreImages;
