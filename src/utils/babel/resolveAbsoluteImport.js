@@ -10,7 +10,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         OverlayHelper: 'react-chayns-animations/utils/OverlayHelper.js',
         Button: 'react-chayns-button/component/Button.js',
         ChooseButton: 'react-chayns-button/component/ChooseButton.js',
-        Calendar: 'react-chayns-button/component/Calendar.js',
+        Calendar: 'react-chayns-calendar/component/Calendar.js',
         Checkbox: 'react-chayns-checkbox/component/Checkbox.js',
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
         DetailView: 'react-chayns-detail_view/component/DetailView.js',
