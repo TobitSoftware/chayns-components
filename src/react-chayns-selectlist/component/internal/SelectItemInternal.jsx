@@ -14,7 +14,11 @@ export default class SelectItemInternal extends React.Component {
         checked: PropTypes.bool,
         disabled: PropTypes.bool,
         children: PropTypes.node,
-        name: PropTypes.string
+        name: PropTypes.string,
+        value: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.array,
+        ]),
     };
 
     static defaultProps = {
@@ -23,7 +27,8 @@ export default class SelectItemInternal extends React.Component {
         checked: false,
         disabled: false,
         children: null,
-        name: ''
+        name: '',
+        value: null,
     };
 
     constructor(props) {
@@ -47,9 +52,8 @@ export default class SelectItemInternal extends React.Component {
     }
 
     _handleChange = () => {
-        const { onChange, id } = this.props;
-
-        onChange(id);
+        const { onChange, id, value } = this.props;
+        onChange(id, value);
     };
 
     render() {

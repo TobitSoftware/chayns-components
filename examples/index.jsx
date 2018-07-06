@@ -7,6 +7,7 @@ import './react-chayns-checkbox/index';
 import './react-chayns-contextmenu/index';
 import './react-chayns-detail_view/index';
 import './react-chayns-emoji_input/index';
+import './react-chayns-gallery/index';
 import './react-chayns-gridcalendar/index';
 import './react-chayns-input/index';
 import './react-chayns-modeswitch/index';
