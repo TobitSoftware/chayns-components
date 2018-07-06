@@ -50,7 +50,7 @@ export default class TextArea extends React.Component {
         if (this.props.autogrow) {
             this.offset = this._node.offsetHeight - this._node.clientHeight;
 
-            this.initialHeight = `0px`;
+            this.initialHeight = '0px';
 
             if (!this.props.defaultValue) {
                 this.grow('0');
