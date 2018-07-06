@@ -37,6 +37,7 @@ The following properties can be set on the RfidInput-Component
 | className    | CSS classes for the RfidInput                             | String         |                   |              |
 | placeholder  | Text that will be shown as placeholder                    | String         | "Kartennummer"    |              |
 | confirmNode  | Element that will be load in the button behind the input  | React-Elements | "OK"              |              |
+| enableScan   | Enable the scan-button fot scan a card                    | Boolean        | false             |              |
 | scanText     | Text that will be shown in the button for scan a card     | String         | "Scannen"         |              |
 | value        | Value for the input                                       | String         |                   | true         |
 | onInput      | Event when the input was change                           | Function       |                   | true         |

@@ -14,6 +14,7 @@ export default class RfidInput extends React.Component {
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node)
         ]),
+        enableScan: PropTypes.bool,
         scanText: PropTypes.string,
         value: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -24,6 +25,7 @@ export default class RfidInput extends React.Component {
         className: null,
         placeholder: 'Kartennummer',
         confirmNode: 'OK',
+        enableScan: false,
         scanText: 'Scannen',
     };
 
@@ -78,11 +80,11 @@ export default class RfidInput extends React.Component {
             className,
             placeholder,
             confirmNode,
+            enableScan,
             scanText,
             value,
         } = this.props;
         const { isScanning } = this.state;
-        const canScan = chayns.env.isApp;
         const classNames = classnames(className, 'cc__rfid-input');
         const disabled = !VALID_RFID.test(value);
         return(
@@ -102,7 +104,7 @@ export default class RfidInput extends React.Component {
                         {confirmNode}
                     </ChooseButton>
                 </div>
-                {canScan &&
+                {enableScan &&
                 <div className="cc__rfid-input__control">
                     <ChooseButton
                         onClick={isScanning ? this.endScan : this.startScan}
