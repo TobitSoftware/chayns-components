@@ -1,10 +1,10 @@
-# Textarea-Component #
-The Textarea-Component is part of the *chayns-components* package. It can be installed via npm:
+# TextArea-Component #
+The TextArea-Component is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Textarea ##
+## Usage of the TextArea ##
 At first the component has to be imported:
 
 ```jsx
@@ -13,7 +13,7 @@ import { TextArea } from 'chayns-components';
 
 Then it can be used like in the following example:
 ```jsx
-<Textarea
+<TextArea
     placeholder="Eingabefeld"
     onChange={this.change}
 />
@@ -40,7 +40,7 @@ Then it can be used like in the following example:
 
 ### Autogrow ###
 ```jsx
-<Textarea
+<TextArea
     placeholder="Hello World!"
     autogrow={true}
 />
@@ -48,5 +48,5 @@ Then it can be used like in the following example:
 
 ### Reference ###
 ```jsx
-<Textarea reference={(node) => this._node = node} />
+<TextArea reference={(node) => this._node = node} />
 ```
