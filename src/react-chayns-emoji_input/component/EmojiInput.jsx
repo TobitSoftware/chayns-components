@@ -67,7 +67,8 @@ export default class EmojiInput extends React.Component {
         requireEmojione().then((emojione) => {
             emojione.ascii = true; // eslint-disable-line no-param-reassign
             emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
-            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/32/'; // eslint-disable-line no-param-reassign
+            emojione.blacklistChars = '*,#'; // eslint-disable-line no-param-reassign
+            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/'; // eslint-disable-line no-param-reassign
         });
     }
 
