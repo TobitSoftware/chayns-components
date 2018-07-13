@@ -5,9 +5,9 @@ import loadOptionalDependency from '../../utils/loadOptionalDependency';
 
 function requireEmojione(returnPromise) {
     return loadOptionalDependency('emojione', 'emojione', [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js'
     ], [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css'
     ], returnPromise);
 }
 
