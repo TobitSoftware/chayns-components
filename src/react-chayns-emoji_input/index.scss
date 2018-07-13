@@ -1,7 +1,8 @@
-.message--input--box {
+.emoji-input {
   position: relative;
+  line-height: 26px;
 
-  .input--placeholder {
+  &__placeholder {
     -webkit-transition: opacity .35s ease-in-out;
     transition: opacity .35s ease-in-out;
     -webkit-user-select: none;
@@ -13,28 +14,27 @@
     font-weight: 400;
     padding: 4px 8px;
     color: #757575;
-    font-size: 85%;
     opacity: 1;
     left: 1px;
-    top: 3px;
+    top: 1px;
+
+    &--hidden {
+      opacity: 0 !important;
+    }
   }
 
-  .input--placeholder.invisible {
-    opacity: 0 !important;
-  }
-
-  .message--input {
+  &__message-input {
     font-weight: 400 !important;
     word-break: break-word;
-    max-height: 100px;
-    min-height: 33px;
+    max-height: 104px;
+    min-height: 36px;
     overflow-y: auto;
 
-    &.hide--border {
+    &--hide-border {
       border: none;
     }
 
-    &.input--disabled {
+    &--disabled {
       background-color: transparent;
       border: 1px solid transparent;
       border-bottom-color: #5c646c;
@@ -45,20 +45,20 @@
       color: #e8e8e8;
     }
 
+    &:focus + .emoji-input__placeholder {
+      opacity: 0 !important;
+    }
+
     .emojione {
+      margin: -.2ex .15em .2ex;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: normal;
       font-size: inherit;
-      height: 3ex;
-      width: auto;
       min-height: 15px;
       min-width: 15px;
-      display: inline-block;
-      margin: -.2ex .15em .2ex;
-      line-height: normal;
-      vertical-align: middle;
+      height: 3ex;
+      width: auto;
     }
-  }
-
-  .message--input:focus + .input--placeholder {
-    opacity: 0 !important;
   }
 }

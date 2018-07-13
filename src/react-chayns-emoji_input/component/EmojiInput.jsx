@@ -5,9 +5,9 @@ import loadOptionalDependency from '../../utils/loadOptionalDependency';
 
 function requireEmojione(returnPromise) {
     return loadOptionalDependency('emojione', 'emojione', [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/lib/js/emojione.min.js'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js'
     ], [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.2/extras/css/emojione.min.css'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css'
     ], returnPromise);
 }
 
@@ -67,7 +67,8 @@ export default class EmojiInput extends React.Component {
         requireEmojione().then((emojione) => {
             emojione.ascii = true; // eslint-disable-line no-param-reassign
             emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
-            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/32/'; // eslint-disable-line no-param-reassign
+            emojione.blacklistChars = '*,#'; // eslint-disable-line no-param-reassign
+            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/'; // eslint-disable-line no-param-reassign
         });
     }
 
@@ -75,9 +76,9 @@ export default class EmojiInput extends React.Component {
         const { placeholder, disabled, value } = this.props;
 
         if (nextProps.value.trim() === '') {
-            this.placeholder.classList.remove('invisible');
+            this.placeholder.classList.remove('emoji-input__placeholder--hidden');
         } else {
-            this.placeholder.classList.add('invisible');
+            this.placeholder.classList.add('emoji-input__placeholder--hidden');
         }
 
         if (nextProps.placeholder !== placeholder) {
@@ -355,14 +356,14 @@ export default class EmojiInput extends React.Component {
     render() {
         const { id, hideBorder, disabled } = this.props;
 
-        const messageInputClasses = classNames('message--input', {
-            'input--disabled': disabled,
-            'hide--border': hideBorder,
+        const messageInputClasses = classNames('emoji-input__message-input', {
+            'emoji-input__message-input--hide-border': hideBorder,
+            'emoji-input__message-input--disabled': disabled,
             input: !disabled
         });
 
         return (
-            <div className="message--input--box">
+            <div className="emoji-input">
                 <div
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
                     ref={(ref) => { this.input = ref; }}
@@ -377,7 +378,7 @@ export default class EmojiInput extends React.Component {
                     id={id}
                 />
                 <div
-                    className="input--placeholder"
+                    className="emoji-input__placeholder"
                     ref={(ref) => { this.placeholder = ref; }}
                 />
             </div>
