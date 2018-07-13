@@ -76,9 +76,9 @@ export default class EmojiInput extends React.Component {
         const { placeholder, disabled, value } = this.props;
 
         if (nextProps.value.trim() === '') {
-            this.placeholder.classList.remove('invisible');
+            this.placeholder.classList.remove('emoji-input__placeholder--hidden');
         } else {
-            this.placeholder.classList.add('invisible');
+            this.placeholder.classList.add('emoji-input__placeholder--hidden');
         }
 
         if (nextProps.placeholder !== placeholder) {
@@ -356,14 +356,14 @@ export default class EmojiInput extends React.Component {
     render() {
         const { id, hideBorder, disabled } = this.props;
 
-        const messageInputClasses = classNames('message--input', {
-            'input--disabled': disabled,
-            'hide--border': hideBorder,
+        const messageInputClasses = classNames('emoji-input__message-input', {
+            'emoji-input__message-input--hide-border': hideBorder,
+            'emoji-input__message-input--disabled': disabled,
             input: !disabled
         });
 
         return (
-            <div className="message--input--box">
+            <div className="emoji-input">
                 <div
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
                     ref={(ref) => { this.input = ref; }}
@@ -378,7 +378,7 @@ export default class EmojiInput extends React.Component {
                     id={id}
                 />
                 <div
-                    className="input--placeholder"
+                    className="emoji-input__placeholder"
                     ref={(ref) => { this.placeholder = ref; }}
                 />
             </div>
