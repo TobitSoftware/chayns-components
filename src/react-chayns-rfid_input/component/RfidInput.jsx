@@ -95,6 +95,9 @@ export default class RfidInput extends React.Component {
                         placeholder={placeholder}
                         onChange={this.onInput}
                         value={RfidInput.pretifyRfid(value)}
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck="false"
                     />
                     <ChooseButton
                         onClick={this.onConfirm}
