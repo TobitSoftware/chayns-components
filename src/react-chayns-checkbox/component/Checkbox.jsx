@@ -59,9 +59,8 @@ export default class Checkbox extends React.Component {
         }
     };
 
-    render() {
+    renderCheckbox(classNames) {
         const {
-            className,
             style,
             disabled,
             children,
@@ -70,63 +69,77 @@ export default class Checkbox extends React.Component {
             defaultChecked,
             dangerouslySetLabel,
         } = this.props;
+
+        return(
+            <div
+                style={style}
+                className={classNames}
+                ref={(ref) => { this._container = ref; }}
+            >
+                <input
+                    type="checkbox"
+                    className="checkbox"
+                    ref={(ref) => { this._node = ref; }}
+                    onChange={this.onChange}
+                    id={this.id}
+                    disabled={disabled}
+                    checked={checked}
+                    defaultChecked={defaultChecked}
+                />
+                <label
+                    htmlFor={this.id}
+                    dangerouslySetInnerHTML={dangerouslySetLabel}
+                >
+                    {!dangerouslySetLabel ? (children || label || '') : null}
+                </label>
+            </div>
+        );
+    }
+
+    renderToggleButton(classNames) {
+        const {
+            style,
+            disabled,
+            children,
+            label,
+            checked,
+            defaultChecked,
+        } = this.props;
+
+        return(
+            <div
+                style={style}
+                className={classNames}
+                ref={(ref) => { this._container = ref; }}
+            >
+                <input
+                    type="checkbox"
+                    className="switch"
+                    ref={(ref) => { this._node = ref; }}
+                    onChange={this.onChange}
+                    id={this.id}
+                    disabled={disabled}
+                    checked={checked}
+                    defaultChecked={defaultChecked}
+                />
+                <label
+                    htmlFor={this.id}
+                    style={label ? { marginRight: '10px' } : null}
+                />
+                {children || label || ''}
+            </div>
+        );
+    }
+
+    render() {
+        const {
+            className,
+            toggleButton,
+        } = this.props;
         const classNames = classnames({
             [className]: className
         });
 
-        const checkbox = () => {
-            return(
-                <div
-                    style={style}
-                    className={classNames}
-                    ref={(ref) => { this._container = ref; }}
-                >
-                    <input
-                        type="checkbox"
-                        className="checkbox"
-                        ref={(ref) => { this._node = ref; }}
-                        onChange={this.onChange}
-                        id={this.id}
-                        disabled={disabled}
-                        checked={checked}
-                        defaultChecked={defaultChecked}
-                    />
-                    <label
-                        htmlFor={this.id}
-                        dangerouslySetInnerHTML={dangerouslySetLabel}
-                    >
-                        {!dangerouslySetLabel ? (children || label || '') : null}
-                    </label>
-                </div>
-            );
-        };
-
-        const toggleButton = () => {
-            return (
-                <div
-                    style={style}
-                    className={classNames}
-                    ref={(ref) => { this._container = ref; }}
-                >
-                    <input
-                        type="checkbox"
-                        className="switch"
-                        ref={(ref) => { this._node = ref; }}
-                        onChange={this.onChange}
-                        id={this.id}
-                        disabled={disabled}
-                        checked={checked}
-                        defaultChecked={defaultChecked}
-                    />
-                    <label
-                        htmlFor={this.id}
-                        style={label ? { marginRight: '10px' } : null}
-                    />
-                    {children || label || ''}
-                </div>
-            );
-        };
-
-        return this.props.toggleButton ? toggleButton() : checkbox();
+        return toggleButton ? this.renderToggleButton(classNames) : this.renderCheckbox(classNames);
     }
 }

@@ -40,6 +40,8 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
         }
 
         render() {
+            const { in: show } = this.props;
+
             if (AnimationComponent.duplicate) {
                 const classNames = classnames('cc__animate', {
                     [AnimationComponent.wrapperClassName]: AnimationComponent.wrapperClassName
@@ -56,7 +58,7 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
                             key="shadow"
                             component={BaseComponent}
                             config={config}
-                            in={this.props.in}
+                            in={show}
                             props={assign({
                                 animationClone: true,
                             }, this.props)}
@@ -75,7 +77,7 @@ const animate = (AnimationComponent, config) => (BaseComponent) => {
                     key="shadow"
                     component={BaseComponent}
                     config={config}
-                    in={this.props.in}
+                    in={show}
                     props={this.props}
                     animate={this}
                 />

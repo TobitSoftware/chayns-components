@@ -56,19 +56,22 @@ class Accordion extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.open !== undefined) {
-            if (this.props.open !== nextProps.open) {
+            const { open } = this.props;
+            const { currentState } = this.state;
+
+            if (open !== nextProps.open) {
                 this.setState({
                     currentState: nextProps.open ? OPENED : CLOSED
                 });
             }
 
-            if (nextProps.open && !hasFlag(this.state.currentState, OPEN)) {
+            if (nextProps.open && !hasFlag(currentState, OPEN)) {
                 this.setState({
                     currentState: OPENED
                 });
             }
 
-            if (!nextProps.open && !hasFlag(this.state.currentState, CLOSE)) {
+            if (!nextProps.open && !hasFlag(currentState, CLOSE)) {
                 this.setState({
                     currentState: CLOSED
                 });
@@ -225,6 +228,8 @@ class Accordion extends React.Component {
             ...customProps
         } = this.props;
 
+        const { currentState } = this.state;
+
         const others = {};
 
         if (id !== '') {
@@ -238,7 +243,7 @@ class Accordion extends React.Component {
         const classNames = classnames({
             accordion: true,
             'accordion--wrapped': (isWrapped === true),
-            'accordion--open': hasFlag(this.state.currentState, OPEN),
+            'accordion--open': hasFlag(currentState, OPEN),
             [className]: className
         });
 
@@ -263,7 +268,7 @@ class Accordion extends React.Component {
                 data-group={dataGroup}
                 ref={(ref) => {
                     this.accordion = ref;
-                    if (reference) this.props.reference(ref);
+                    if (reference) reference(ref);
                 }}
                 {...others}
                 {...customProps}

@@ -6,7 +6,9 @@ const ContextMenuItem = ({ iconClassName, onClick, text }) => {
     return (
         <li className="context-menu__item" onClick={onClick}>
             <i className={iconClassName}/>
-            <span className="context-menu__item-text">{text}</span>
+            <span className="context-menu__item-text">
+                {text}
+            </span>
         </li>
     );
 };

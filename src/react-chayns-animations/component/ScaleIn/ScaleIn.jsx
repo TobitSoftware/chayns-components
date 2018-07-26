@@ -18,13 +18,41 @@ class ScaleIn extends Component {
     static propTypes = {
         props: PropTypes.object.isRequired,
         component: PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.func
+            PropTypes.string,
+            PropTypes.func
         ]).isRequired,
         // eslint-disable-next-line react/forbid-prop-types
         animate: PropTypes.any.isRequired,
         in: PropTypes.bool.isRequired,
     };
+
+    state = {
+        position: POSITION_UNKNOWN,
+        show: false,
+        animationActive: false,
+    };
+
+    componentDidMount() {
+        const { animate, in: show } = this.props;
+
+        animate.setAnimationListener(this);
+
+        if (show) {
+            this.show();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { in: show } = this.props;
+
+        if (nextProps.in !== show) {
+            if(nextProps.in) {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+    }
 
     static getTappMargin() {
         if (TAPP_MARGIN) {
@@ -40,30 +68,6 @@ class ScaleIn extends Component {
         }
 
         return TAPP_MARGIN || 0;
-    }
-
-    state = {
-        position: POSITION_UNKNOWN,
-        show: false,
-        animationActive: false,
-    };
-
-    componentDidMount() {
-        this.props.animate.setAnimationListener(this);
-
-        if (this.props.in) {
-            this.show();
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.in !== this.props.in) {
-            if(nextProps.in) {
-                this.show();
-            } else {
-                this.hide();
-            }
-        }
     }
 
     setWrapperReference(ref) {

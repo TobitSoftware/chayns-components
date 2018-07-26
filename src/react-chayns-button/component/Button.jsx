@@ -51,6 +51,7 @@ export default class Button extends React.Component {
 
         return (
             <button
+                type="button"
                 className={classNames}
                 onClick={this.handleClick}
                 style={style}

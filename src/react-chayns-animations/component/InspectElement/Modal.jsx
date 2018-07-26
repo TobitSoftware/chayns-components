@@ -73,6 +73,8 @@ export default class Modal extends React.Component {
     }
 
     componentWillEnter(callback) {
+        const { closeOverlay } = this.props;
+
         if(window.debugLevel >= 2) {
             console.debug('inspect-element (Modal) component: componentWillEnter', this.props, this.state);
         }
@@ -92,8 +94,8 @@ export default class Modal extends React.Component {
                 transition: '.55s',
                 mode: 1,
             }).then(() => {
-                if(this.props.closeOverlay) {
-                    this.props.closeOverlay();
+                if(closeOverlay) {
+                    closeOverlay();
                 }
             }).catch(() => {});
 

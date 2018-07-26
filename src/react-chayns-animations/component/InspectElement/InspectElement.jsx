@@ -36,7 +36,9 @@ export default class InspectElement extends React.Component {
     }
 
     componentDidMount() {
-        if(this.props.expanded) {
+        const { expanded } = this.props;
+
+        if(expanded) {
             this.openOverlay();
         } else {
             this.closeOverlay();
@@ -44,7 +46,10 @@ export default class InspectElement extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.expanded !== nextProps.expanded && nextProps.expanded !== this.state.showModal) {
+        const { expanded } = this.props;
+        const { showModal } = this.state;
+
+        if(expanded !== nextProps.expanded && nextProps.expanded !== showModal) {
             if(nextProps.expanded) {
                 this.openOverlay();
             } else {
@@ -85,6 +90,8 @@ export default class InspectElement extends React.Component {
     };
 
     closeOverlay = () => {
+        const { onClose, onClosed } = this.props;
+
         if(window.debugLevel >= 1) {
             console.debug('inspect-element component: closeOverlay', this.props, this.state);
         }
@@ -93,8 +100,8 @@ export default class InspectElement extends React.Component {
             showModal: false
         });
 
-        if(this.props.onClose) {
-            this.props.onClose();
+        if(onClose) {
+            onClose();
         }
 
         this.closeTimeout = window.setTimeout(() => {
@@ -102,14 +109,14 @@ export default class InspectElement extends React.Component {
                 showTile: true
             });
 
-            if(this.props.onClosed) {
-                this.props.onClosed();
+            if(onClosed) {
+                onClosed();
             }
         }, 650);
     };
 
     renderComponent = (props) => {
-        const Component = this.props.component;
+        const { component: Component, children } = this.props;
 
         if(!Component) return null;
 
@@ -119,7 +126,7 @@ export default class InspectElement extends React.Component {
                 {...this.getCustomProps()}
                 {...props}
             >
-                {this.props.children}
+                {children}
             </Component>
         );
     };
@@ -142,6 +149,7 @@ export default class InspectElement extends React.Component {
     }
 
     renderModal() {
+        const { expandedWidth } = this.props;
         const {
             showModal,
             modalTop,
@@ -161,7 +169,7 @@ export default class InspectElement extends React.Component {
                         right={modalRight}
                         width={modalWidth}
                         direction={modalDirection}
-                        expandedWidth={this.props.expandedWidth}
+                        expandedWidth={expandedWidth}
                         renderComponent={this.renderComponent}
                         closeOverlay={this.closeOverlay}
                     />

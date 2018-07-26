@@ -61,7 +61,10 @@ export default class AmountInput extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.amount !== this.props.amount && this.state.value !== nextProps.amount) {
+        const { amount } = this.props;
+        const { value } = this.state;
+
+        if(nextProps.amount !== amount && value !== nextProps.amount) {
             this.setState({
                 value: nextProps.amount
             });
@@ -96,8 +99,10 @@ export default class AmountInput extends React.Component {
             value: inputValue
         });
 
-        if(this.props.onInput) {
-            this.props.onInput(inputValue);
+        const { onInput } = this.props;
+
+        if(onInput) {
+            onInput(inputValue);
         }
     };
 
@@ -129,14 +134,14 @@ export default class AmountInput extends React.Component {
     }
 
     getInputValue() {
-        const { amount } = this.props.amount;
-        const inputValue = this.state.value;
+        const { amount } = this.props;
+        const { value: inputValue } = this.state;
 
         if(inputValue || inputValue === 0 || inputValue === '') {
             return inputValue;
         }
 
-        if(window.chayns.utils.isNumber(amount)) {
+        if(window.chayns.utils.isNumber(amount) && parseInt(amount, 10) !== 0) {
             return amount;
         }
 
