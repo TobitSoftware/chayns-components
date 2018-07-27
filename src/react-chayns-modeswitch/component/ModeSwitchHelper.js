@@ -58,6 +58,17 @@ function getAllowedUacIdsFromArray(uacArray) {
     return allowedUacIds;
 }
 
+function convertToGroupObject(element) {
+    if (window.chayns.utils.isObject(element)) {
+        return element;
+    }
+
+    return {
+        id: element,
+        uacIds: [element]
+    };
+}
+
 function getGroupObject(id, name, uacs) {
     return {
         id,
@@ -97,14 +108,9 @@ export default class ModeSwitchHelper {
             const groups = [];
             if (options.groups) {
                 options.groups.map((element) => {
-                    if (window.chayns.utils.isObject(element)) {
-                        groups.push(element);
-                    } else {
-                        groups.push({
-                            id: element,
-                            uacId: element
-                        });
-                    }
+                    const group = convertToGroupObject(element);
+
+                    groups.push(group);
                 });
             }
 
