@@ -173,7 +173,7 @@ export default class ModeSwitchHelper {
                             const uacIds = getUacIds(groups[i]);
                             const allowedUacs = getAllowedUacIdsFromArray(uacIds);
 
-                            if (allowedUacs.length > 0 && !(allowedUacs.find(uac => uac === 1) && !chayns.env.isApp)) {
+                            if (allowedUacs.length > 0 && (!hasAdminSwitch() || !managerItem || groups[i].id !== managerItem.id)) {
                                 const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
                                 allowedGroups.push(addGroupObject);
 
