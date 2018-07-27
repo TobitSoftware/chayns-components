@@ -3,6 +3,8 @@ import '../../polyfills/array-find';
 const callbacks = [];
 let currentMode = null;
 let initialized = false;
+let managerItem = null;
+let userItem = null;
 
 function callCallbacks(data) {
     callbacks.map((callback) => {
@@ -93,6 +95,9 @@ function getDefaultMode() {
 
 export default class ModeSwitchHelper {
     static init(options) {
+        userItem = null;
+        managerItem = null;
+
         if (options.groups) {
             if (window.chayns.utils.isFunction(options.onChange)) {
                 callbacks.push(options.onChange);
@@ -114,18 +119,27 @@ export default class ModeSwitchHelper {
                 });
             }
 
+            if (window.chayns.env.user.isAuthenticated) {
+                userItem = getGroupObject(0, window.chayns.env.user.name, [0]);
+
+                const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
+                if (managerGroup) {
+                    const { id, name, uacIds } = managerGroup;
+
+                    managerItem = getGroupObject(id, name, uacIds);
+                }
+            }
+
             chayns.ready.then((data) => {
                 if (window.chayns.env.user.isAuthenticated) {
                     // Condition if adminMode ChaynsId
                     let groupObject;
 
-                    const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
-
-                    if (managerGroup && data && data.AppUser.AdminMode && !chayns.env.isApp) {
-                        groupObject = getGroupObject(managerGroup.id, managerGroup.name, managerGroup.uacIds);
+                    if (managerItem && data && data.AppUser.AdminMode && hasAdminSwitch()) {
+                        groupObject = managerItem;
                         isChaynsIdAdmin = true;
                     } else {
-                        groupObject = getGroupObject(0, window.chayns.env.user.name, [0]);
+                        groupObject = userItem;
                         groupObject.default = true;
                     }
 
@@ -185,12 +199,12 @@ export default class ModeSwitchHelper {
 
                             window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
                         } else {
-                            setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
+                            setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
                         }
 
                         //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     } else {
-                        setDefaultGroup(isChaynsIdAdmin && managerGroup ? managerGroup.id : 0);
+                        setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
 
                         // ToDo: Implement adminSwitchCallback for allowedGroups.length > 1 too
                         const changeListener = getChangeListener();
