@@ -93,6 +93,10 @@ function getDefaultMode() {
     return getGroupObject(0, name, null);
 }
 
+function hasAdminSwitch() {
+    return !chayns.env.isApp;
+}
+
 function getPreferredMode(options) {
     let savedModeId = null;
 
