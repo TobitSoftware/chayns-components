@@ -184,7 +184,6 @@ export default class ModeSwitchHelper {
 
 
                     let changeGroupIndex = 0;
-                    let changeGroup = false;
                     let changeGroupValue = null;
 
                     for (let i = 0, x = groups.length; i < x; i += 1) {
@@ -195,7 +194,6 @@ export default class ModeSwitchHelper {
                             allowedGroups.push(addGroupObject);
 
                             if (addGroupObject.id === savedModeId) {
-                                changeGroup = true;
                                 changeGroupIndex = allowedGroups.length - 1;
                                 changeGroupValue = addGroupObject;
                             }
@@ -210,15 +208,13 @@ export default class ModeSwitchHelper {
 
                         initialized = true;
 
-                        if (changeGroup) {
+                        if (changeGroupIndex) {
                             getChangeListener()(changeGroupValue);
 
                             window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
                         } else {
                             setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
                         }
-
-                        //  if (changeGroup) { window.setTimeout(() => { window.chayns.ui.modeSwitch.changeMode(changeGroupIndex); }, 0); }
                     } else {
                         setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
 
