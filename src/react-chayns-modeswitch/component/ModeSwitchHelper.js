@@ -97,6 +97,24 @@ function hasAdminSwitch() {
     return !chayns.env.isApp;
 }
 
+function getPermittedGroupObject(id, name, uacIds) {
+    if (!uacIds || uacIds.length === 0 || (uacIds.length === 1 && uacIds[0] === 0)) {
+        return getGroupObject(id, name, [0]);
+    }
+
+    if (hasAdminSwitch() && managerItem && id === managerItem.id) {
+        return null;
+    }
+
+    const allowedUacIds = getAllowedUacIdsFromArray(uacIds);
+
+    if (allowedUacIds.length === 0) {
+        return null;
+    }
+
+    return getGroupObject(id, name, allowedUacIds);
+}
+
 function getPreferredMode(options) {
     let savedModeId = null;
 
@@ -170,28 +188,16 @@ export default class ModeSwitchHelper {
                     let changeGroupValue = null;
 
                     for (let i = 0, x = groups.length; i < x; i += 1) {
-                        if (!groups[i].uacId && !groups[i].uacIds) {
-                            const addGroupObject = getGroupObject(groups[i].id, groups[i].name, [0]);
+                        const uacIds = getUacIds(groups[i]);
+                        const addGroupObject = getPermittedGroupObject(groups[i].id, groups[i].name, uacIds);
+
+                        if (addGroupObject) {
                             allowedGroups.push(addGroupObject);
 
                             if (addGroupObject.id === savedModeId) {
                                 changeGroup = true;
                                 changeGroupIndex = allowedGroups.length - 1;
                                 changeGroupValue = addGroupObject;
-                            }
-                        } else {
-                            const uacIds = getUacIds(groups[i]);
-                            const allowedUacs = getAllowedUacIdsFromArray(uacIds);
-
-                            if (allowedUacs.length > 0 && (!hasAdminSwitch() || !managerItem || groups[i].id !== managerItem.id)) {
-                                const addGroupObject = getGroupObject(groups[i].id, groups[i].name, allowedUacs);
-                                allowedGroups.push(addGroupObject);
-
-                                if (addGroupObject.id === savedModeId) {
-                                    changeGroup = true;
-                                    changeGroupIndex = allowedGroups.length - 1;
-                                    changeGroupValue = addGroupObject;
-                                }
                             }
                         }
                     }
