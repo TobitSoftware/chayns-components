@@ -93,6 +93,20 @@ function getDefaultMode() {
     return getGroupObject(0, name, null);
 }
 
+function getPreferredMode(options) {
+    let savedModeId = null;
+
+    if (options.save) {
+        savedModeId = getSavedMode();
+    }
+
+    if (savedModeId === null && options.defaultMode) {
+        savedModeId = options.defaultMode;
+    }
+
+    return savedModeId;
+}
+
 export default class ModeSwitchHelper {
     static init(options) {
         userItem = null;
@@ -108,6 +122,7 @@ export default class ModeSwitchHelper {
             }
 
             const allowedGroups = [];
+            let savedModeId = getPreferredMode(options);
             let isChaynsIdAdmin = false;
 
             const groups = [];
@@ -146,16 +161,7 @@ export default class ModeSwitchHelper {
                     allowedGroups.push(groupObject);
 
 
-                    let savedModeId = null;
                     let changeGroupIndex = 0;
-                    if (options.save) {
-                        savedModeId = getSavedMode();
-                    }
-
-                    if (savedModeId === null && options.defaultMode) {
-                        savedModeId = options.defaultMode;
-                    }
-
                     let changeGroup = false;
                     let changeGroupValue = null;
 
