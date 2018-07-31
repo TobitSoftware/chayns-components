@@ -1,6 +1,7 @@
 import '../../polyfills/array-find';
 
 const callbacks = [];
+const allowedGroups = [];
 let currentMode = null;
 let initialized = false;
 let managerItem = null;
@@ -94,7 +95,29 @@ function getDefaultMode() {
 }
 
 function hasAdminSwitch() {
-    return !chayns.env.isApp;
+    return !chayns.env.isApp || (chayns.env.isAndroid && chayns.env.appVersion >= 5735) || (chayns.env.isIOS && chayns.env.appVersion >= 5795);
+}
+
+function addAdminSwitchListener() {
+    if (!hasAdminSwitch()) {
+        return;
+    }
+
+    window.chayns.setAdminSwitchCallback(({ mode }) => {
+        let modeSwitchMode = null;
+
+        if (mode === 1) {
+            modeSwitchMode = managerItem;
+            chayns.ui.modeSwitch.updateItem(0, managerItem);
+        } else {
+            modeSwitchMode = userItem;
+            chayns.ui.modeSwitch.updateItem(0, userItem);
+        }
+
+        if (currentMode.id === userItem.id || currentMode.id === managerItem.id) {
+            chayns.ui.modeSwitch.changeMode(modeSwitchMode);
+        }
+    });
 }
 
 function getPermittedGroupObject(id, name, uacIds) {
@@ -129,6 +152,66 @@ function getPreferredMode(options) {
     return savedModeId;
 }
 
+function setModeSwitchGroups(groups, data, preferredMode) {
+    const modeSwitchItems = [];
+    let isChaynsIdAdmin = false;
+    // Condition if adminMode ChaynsId
+    let groupObject;
+
+    if (managerItem && data && data.AppUser.AdminMode && hasAdminSwitch()) {
+        groupObject = managerItem;
+        isChaynsIdAdmin = true;
+    } else {
+        groupObject = userItem;
+    }
+
+    modeSwitchItems.push(groupObject);
+
+
+    let changeGroupIndex = 0;
+    let changeGroupValue = null;
+
+    for (let i = 0, x = groups.length; i < x; i += 1) {
+        const uacIds = getUacIds(groups[i]);
+        const addGroupObject = getPermittedGroupObject(groups[i].id, groups[i].name, uacIds);
+
+        if (addGroupObject) {
+            modeSwitchItems.push(addGroupObject);
+
+            if (addGroupObject.id === preferredMode) {
+                changeGroupIndex = modeSwitchItems.length - 1;
+                changeGroupValue = addGroupObject;
+            }
+        }
+    }
+
+    console.log('modeSwitchItems', modeSwitchItems);
+
+    if (modeSwitchItems.length > 1) {
+        window.chayns.ui.modeSwitch.init({
+            items: modeSwitchItems,
+            callback: getChangeListener()
+        });
+
+        window.init = {
+            items: modeSwitchItems,
+            callback: getChangeListener()
+        };
+
+        initialized = true;
+
+        if (changeGroupIndex) {
+            getChangeListener()(changeGroupValue);
+
+            window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
+        } else {
+            setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
+        }
+    } else {
+        setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
+    }
+}
+
 export default class ModeSwitchHelper {
     static init(options) {
         userItem = null;
@@ -143,23 +226,21 @@ export default class ModeSwitchHelper {
                 callbacks.push(setSavedMode);
             }
 
-            const allowedGroups = [];
-            let savedModeId = getPreferredMode(options);
-            let isChaynsIdAdmin = false;
+            const preferredMode = getPreferredMode(options);
 
-            const groups = [];
             if (options.groups) {
                 options.groups.map((element) => {
                     const group = convertToGroupObject(element);
 
-                    groups.push(group);
+                    allowedGroups.push(group);
                 });
             }
 
             if (window.chayns.env.user.isAuthenticated) {
                 userItem = getGroupObject(0, window.chayns.env.user.name, [0]);
+                userItem.default = true;
 
-                const managerGroup = ModeSwitchHelper.findManagerGroup(groups);
+                const managerGroup = ModeSwitchHelper.findManagerGroup(allowedGroups);
                 if (managerGroup) {
                     const { id, name, uacIds } = managerGroup;
 
@@ -169,61 +250,9 @@ export default class ModeSwitchHelper {
 
             chayns.ready.then((data) => {
                 if (window.chayns.env.user.isAuthenticated) {
-                    // Condition if adminMode ChaynsId
-                    let groupObject;
+                    setModeSwitchGroups(allowedGroups, data, preferredMode);
 
-                    if (managerItem && data && data.AppUser.AdminMode && hasAdminSwitch()) {
-                        groupObject = managerItem;
-                        isChaynsIdAdmin = true;
-                    } else {
-                        groupObject = userItem;
-                        groupObject.default = true;
-                    }
-
-                    allowedGroups.push(groupObject);
-
-
-                    let changeGroupIndex = 0;
-                    let changeGroupValue = null;
-
-                    for (let i = 0, x = groups.length; i < x; i += 1) {
-                        const uacIds = getUacIds(groups[i]);
-                        const addGroupObject = getPermittedGroupObject(groups[i].id, groups[i].name, uacIds);
-
-                        if (addGroupObject) {
-                            allowedGroups.push(addGroupObject);
-
-                            if (addGroupObject.id === savedModeId) {
-                                changeGroupIndex = allowedGroups.length - 1;
-                                changeGroupValue = addGroupObject;
-                            }
-                        }
-                    }
-
-                    if (allowedGroups.length > 1) {
-                        window.chayns.ui.modeSwitch.init({
-                            items: allowedGroups,
-                            callback: getChangeListener()
-                        });
-
-                        initialized = true;
-
-                        if (changeGroupIndex) {
-                            getChangeListener()(changeGroupValue);
-
-                            window.chayns.ui.modeSwitch.changeMode(changeGroupIndex);
-                        } else {
-                            setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
-                        }
-                    } else {
-                        setDefaultGroup(isChaynsIdAdmin && managerItem ? managerItem.id : 0);
-
-                        // ToDo: Implement adminSwitchCallback for allowedGroups.length > 1 too
-                        const changeListener = getChangeListener();
-                        chayns.setAdminSwitchCallback(({ mode }) => changeListener({
-                            id: mode,
-                        }));
-                    }
+                    addAdminSwitchListener();
                 } else {
                     setDefaultGroup();
                 }
