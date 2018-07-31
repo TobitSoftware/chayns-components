@@ -4,20 +4,6 @@ import PropTypes from 'prop-types';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
 class ModeSwitch extends React.Component {
-    static propTypes = {
-        groups: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.object])),
-        save: PropTypes.bool,
-        onChange: PropTypes.func,
-        defaultMode: PropTypes.number
-    };
-
-    static defaultProps = {
-        groups: null,
-        save: false,
-        onChange: null,
-        defaultMode: null
-    };
-
     static init(config) {
         if(!config) return false;
 
@@ -38,12 +24,28 @@ class ModeSwitch extends React.Component {
         return false;
     }
 
+    static propTypes = {
+        groups: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.number, PropTypes.object])),
+        save: PropTypes.bool,
+        onChange: PropTypes.func,
+        defaultMode: PropTypes.number
+    };
+
+    static defaultProps = {
+        groups: null,
+        save: false,
+        onChange: null,
+        defaultMode: null
+    };
+
     componentDidMount() {
+        const { groups, save, onChange, defaultMode } = this.props;
+
         ModeSwitchHelper.init({
-            groups: this.props.groups,
-            save: this.props.save,
-            onChange: this.props.onChange,
-            defaultMode: this.props.defaultMode
+            groups,
+            save,
+            onChange,
+            defaultMode,
         });
     }
 

@@ -16,12 +16,12 @@ export default {
     },
     output: {
         path: path.resolve(ROOT_PATH, 'build'),
-        filename: `[name].bundle.js`
+        filename: '[name].bundle.js'
     },
     devServer: {
         host: '0.0.0.0',
         disableHostCheck: true,
-        port: 9000,
+        port: 9009,
         historyApiFallback: true,
         compress: true,
         hot: true
