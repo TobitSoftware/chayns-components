@@ -6,6 +6,7 @@ let currentMode = null;
 let initialized = false;
 let managerItem = null;
 let userItem = null;
+let modeSwitchInitialized = false;
 
 function callCallbacks(data) {
     callbacks.map((callback) => {
@@ -108,14 +109,18 @@ function addAdminSwitchListener() {
 
         if (mode === 1) {
             modeSwitchMode = managerItem;
-            chayns.ui.modeSwitch.updateItem(0, managerItem);
         } else {
             modeSwitchMode = userItem;
-            chayns.ui.modeSwitch.updateItem(0, userItem);
         }
 
-        if (currentMode.id === userItem.id || currentMode.id === managerItem.id) {
-            chayns.ui.modeSwitch.changeMode(modeSwitchMode);
+        if (modeSwitchInitialized) {
+            chayns.ui.modeSwitch.updateItem(0, modeSwitchMode);
+
+            if (currentMode.id === userItem.id || currentMode.id === managerItem.id) {
+                chayns.ui.modeSwitch.changeMode(modeSwitchMode);
+            }
+        } else {
+            getChangeListener()(modeSwitchMode);
         }
     });
 }
@@ -185,8 +190,6 @@ function setModeSwitchGroups(groups, data, preferredMode) {
         }
     }
 
-    console.log('modeSwitchItems', modeSwitchItems);
-
     if (modeSwitchItems.length > 1) {
         window.chayns.ui.modeSwitch.init({
             items: modeSwitchItems,
@@ -198,6 +201,7 @@ function setModeSwitchGroups(groups, data, preferredMode) {
             callback: getChangeListener()
         };
 
+        modeSwitchInitialized = true;
         initialized = true;
 
         if (changeGroupIndex) {
