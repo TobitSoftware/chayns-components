@@ -44,13 +44,16 @@ export default class TextArea extends React.Component {
             this._node.setAttribute('required', '');
         }
 
+        this._node.setAttribute('row', '1');
+        this._node.style.overflow = 'hidden';
+
         if (this.props.autogrow) {
             this.offset = this._node.offsetHeight - this._node.clientHeight;
 
-            this.initialHeight = `${this._node.scrollHeight + this.offset}px`;
+            this.initialHeight = '0px';
 
             if (!this.props.defaultValue) {
-                this.grow();
+                this.grow('0');
             } else {
                 this.grow('0');
             }
