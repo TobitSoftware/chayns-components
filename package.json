@@ -6,7 +6,7 @@
   "module": "dist/index.es.js",
   "jsnext:main": "lib_esnext/index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack/dev.babel.js",
+    "start": "webpack-dev-server --config ./webpack/dev.babel.js --mode=development",
     "prepublishOnly": "npm run eslint & npm run build",
     "clean": "",
     "build": "npm run build:es && npm run build:cjs && npm run build:lib:es && npm run build:sass",
