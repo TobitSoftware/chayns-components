@@ -22,6 +22,7 @@ export default class Input extends React.Component {
         regExp: PropTypes.string,
         inputRef: PropTypes.func,
         type: PropTypes.string,
+        invalid: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -37,6 +38,7 @@ export default class Input extends React.Component {
         regExp: null,
         inputRef: null,
         type: 'text',
+        invalid: false,
     };
 
     constructor(props) {
@@ -99,6 +101,7 @@ export default class Input extends React.Component {
             onChange,
             onBlur,
             onKeyUp,
+            invalid,
             ...other
         } = this.props;
         const { isValid } = this.state;
@@ -109,7 +112,7 @@ export default class Input extends React.Component {
             [className]: className
         });
 
-        const inputStyles = regExp && !isValid ? {
+        const inputStyles = (invalid || (regExp && !isValid)) ? {
             color: '#d23f31',
             fontWeight: '700'
         } : null;
