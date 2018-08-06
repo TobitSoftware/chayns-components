@@ -53,13 +53,16 @@ export default class Input extends React.Component {
         };
     }
 
+    // eslint-disable-next-line react/destructuring-assignment
     onBlur = () => this.handleEvent(this.props.onBlur, true);
 
     /**
      * @deprecated
      */
+    // eslint-disable-next-line react/destructuring-assignment
     onKeyUp = () => this.handleEvent(this.props.onKeyUp);
 
+    // eslint-disable-next-line react/destructuring-assignment
     onChange = () => this.handleEvent(this.props.onChange);
 
     handleEvent = (callback, doInvalidate = false) => {
@@ -138,7 +141,9 @@ export default class Input extends React.Component {
                     required
                     {...other}
                 />
-                <label>{placeholder}</label>
+                <label>
+                    {placeholder}
+                </label>
             </div>
         );
 
