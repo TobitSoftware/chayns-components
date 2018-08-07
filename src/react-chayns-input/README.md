@@ -34,6 +34,7 @@ The following properties can be set on the Input-Component
 | responsive   | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool  | false  |
 | regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string, RegExp |               |
 | inputRef     | Exposes the input DOM Ref to the parent component                                 | func           |               |
+| invalid      | Marks the input as invalid                                                        | bool           | false         |
 
 
 ### Examples
