@@ -60,14 +60,15 @@ export default /* #__PURE__ */(() => class Portal extends React.Component {
 
     render() {
         const { children } = this.props;
+        const { children: childrenState } = this.props;
 
-        if (children || !this.state.children) {
+        if (children || !childrenState) {
             return null;
         }
 
         return (
             <div className="cc__portal">
-                {this.state.children}
+                {childrenState}
             </div>
         );
     }

@@ -25,37 +25,50 @@ export default class PersonFinder extends React.Component {
     };
 
     componentDidMount() {
+        const { onChange, required } = this.props;
+
         this._node.setAttribute('finder', 'person');
 
         this._node.addEventListener('finderChange', (data) => {
             const { user } = data;
-            this.props.onChange({ user, node: this._node });
+            onChange({ user, node: this._node });
         });
 
-        if(this.props.required) { this._node.setAttribute('required', ''); }
+        if(required) { this._node.setAttribute('required', ''); }
     }
 
     reference = (node) => {
+        const { reference } = this.props;
+
         this._node = node;
 
-        if(this.props.reference) { this.props.reference(node); }
+        if(reference) {
+            reference(node);
+        }
     };
 
     render() {
-        const style = assign({}, this.props.style);
+        const {
+            style: styleProp,
+            className,
+            placeholder,
+            defaultValue,
+        } = this.props;
 
-        const className = classnames({
+        const style = assign({}, styleProp);
+
+        const classNames = classnames({
             input: true,
-            [this.props.className]: this.props.className
+            [className]: className
         });
 
         return (
             <input
                 type="text"
-                className={className}
+                className={classNames}
                 ref={node => this.reference(node)}
-                placeholder={this.props.placeholder || ''}
-                defaultValue={this.props.defaultValue}
+                placeholder={placeholder || ''}
+                defaultValue={defaultValue}
                 style={style}
             />
         );

@@ -5,10 +5,6 @@ import ModeSwitchHelper from './ModeSwitchHelper';
 
 
 export default (...conf) => Component => class PureComponent extends React.Component {
-    static getStores = Component.getStores;
-    static getPropsFromStores = Component.getPropsFromStores;
-
-
     constructor(...params) {
         super(...params);
 
@@ -25,9 +21,14 @@ export default (...conf) => Component => class PureComponent extends React.Compo
         });
     }
 
+
     componentWillUnmount() {
         ModeSwitchHelper.unregisterOnChange(this.updatedMode);
     }
+
+    static getStores = Component.getStores;
+
+    static getPropsFromStores = Component.getPropsFromStores;
 
     update = (mode) => {
         this.setState({
@@ -36,7 +37,9 @@ export default (...conf) => Component => class PureComponent extends React.Compo
     };
 
     _shouldRender() {
-        if(window.chayns.utils.isArray(conf) && conf.indexOf(this.state.mode.id) !== -1) return true;
+        const { mode } = this.state;
+
+        if(window.chayns.utils.isArray(conf) && conf.indexOf(mode.id) !== -1) return true;
 
         if(!conf || conf.length === 0) return true;
 
@@ -44,11 +47,13 @@ export default (...conf) => Component => class PureComponent extends React.Compo
     }
 
     render() {
+        const { mode } = this.state;
+
         if(window.chayns.utils.isArray(conf) && !ModeSwitchHelper.isInitialized()) return null;
 
         if(this._shouldRender()) {
             const props = assign({}, this.props, {
-                mode: this.state.mode
+                mode,
             });
 
             return React.createElement(Component, {

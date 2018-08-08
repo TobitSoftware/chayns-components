@@ -49,29 +49,38 @@ export default class Refuel extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.latitude !== this.props.latitude || prevProps.longitude !== this.props.longitude) {
-            if(this.props.latitude <= 90 && this.props.longitude <= 180) {
+        const { latitude, longitude, onError } = this.props;
+
+        if(prevProps.latitude !== latitude || prevProps.longitude !== longitude) {
+            if(latitude <= 90 && longitude <= 180) {
                 this._fetch(this);
-            } else if(this.props.onError) {
-                this.props.onError();
+            } else if(onError) {
+                onError();
             }
         }
     }
 
     _openRefuel = () => {
-        let url = `https://tapp01.tobit.com/Tapps/FuelPrice/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`; // ${window.chayns.env.site.tapp.id}
-        if(this.props.qa) {
-            url = `https://tappqa.tobit.com/Tapps/FuelStationTapp/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`;
+        const {
+            qa,
+            city,
+            latitude,
+            longitude,
+        } = this.props;
+
+        let url = `https://tapp01.tobit.com/Tapps/FuelPrice/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${city || ''}&TappID=3`; // ${window.chayns.env.site.tapp.id}
+        if(qa) {
+            url = `https://tappqa.tobit.com/Tapps/FuelStationTapp/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${city || ''}&TappID=3`;
         }
 
 
-        if(this.props.latitude && this.props.longitude) {
-            url += `&lat=${encodeURI(`${this.props.latitude}`)}&lng=${encodeURI(`${this.props.longitude}`)}`;
+        if(latitude && longitude) {
+            url += `&lat=${encodeURI(`${latitude}`)}&lng=${encodeURI(`${longitude}`)}`;
         }
 
         let title = 'Tanken';
-        if(this.props.city) {
-            title += ` in ${this.props.city}`;
+        if(city) {
+            title += ` in ${city}`;
         }
 
         window.chayns.openUrl({
@@ -86,31 +95,43 @@ export default class Refuel extends React.Component {
     };
 
     _fetch() {
+        const {
+            server,
+            locationId,
+            tappId,
+            qa,
+            latitude,
+            longitude,
+            onLoaded,
+            onError,
+            waitForLatLng,
+        } = this.props;
+
         this.setState({
             isFetching: true
         });
 
-        let url = `${this.props.server || 'https://tapp01.tobit.com/Tapps/FuelPrice/API/api/Fuel'}/?locationId=${this.props.locationId || window.chayns.env.site.locationId}&tappId=${this.props.tappId || (window.chayns.env.site.tapp && window.chayns.env.site.tapp.id) || 1}`;
-        if(this.props.qa) {
-            url = `https://tappqa.tobit.com/Tapps/RefuelApi/api/Fuel/?locationId=${this.props.locationId || window.chayns.env.site.locationId}&tappId=${this.props.tappId || (window.chayns.env.site.tapp && window.chayns.env.site.tapp.id) || 1}`;
+        let url = `${server || 'https://tapp01.tobit.com/Tapps/FuelPrice/API/api/Fuel'}/?locationId=${locationId || window.chayns.env.site.locationId}&tappId=${tappId || (window.chayns.env.site.tapp && window.chayns.env.site.tapp.id) || 1}`;
+        if(qa) {
+            url = `https://tappqa.tobit.com/Tapps/RefuelApi/api/Fuel/?locationId=${locationId || window.chayns.env.site.locationId}&tappId=${tappId || (window.chayns.env.site.tapp && window.chayns.env.site.tapp.id) || 1}`;
         }
 
-        if(this.props.latitude && this.props.longitude) {
-            url += `&lat=${encodeURI(`${this.props.latitude}`)}&lng=${encodeURI(`${this.props.longitude}`)}`;
+        if(latitude && longitude) {
+            url += `&lat=${encodeURI(`${latitude}`)}&lng=${encodeURI(`${longitude}`)}`;
         }
 
-        if(!this.props.waitForLatLng || (this.props.latitude && this.props.longitude)) {
+        if(!waitForLatLng || (latitude && longitude)) {
             fetchDataFromApi(url).then((data) => {
                 this._refuel = data;
 
-                if(this.props.onLoaded) {
-                    this.props.onLoaded(data);
+                if(onLoaded) {
+                    onLoaded(data);
                 }
             }).catch((error) => {
                 console.warn('Error while fetching Fuel-Data', error);
 
-                if(this.props.onError) {
-                    this.props.onError(error);
+                if(onError) {
+                    onError(error);
                 }
             }).then(() => {
                 this.setState({
@@ -149,12 +170,24 @@ export default class Refuel extends React.Component {
             );
         }
 
+        const { isFetching } = this.state;
+        const { isFetching: isFetchingText } = this.props;
 
-        if(this.state.isFetching) {
-            return (<div>{this.props.isFetching || 'Tankdaten werden vom Server geladen.'}</div>);
+
+        if(isFetching) {
+            return (
+                <div>
+                    {isFetchingText || 'Tankdaten werden vom Server geladen.'}
+                </div>
+            );
         }
 
+        const { noContent } = this.props;
 
-        return (<div>{this.props.noContent || 'Es konnten keine Tankdaten zu ihrem Standort gefunden werden.'}</div>);
+        return (
+            <div>
+                {noContent || 'Es konnten keine Tankdaten zu ihrem Standort gefunden werden.'}
+            </div>
+        );
     }
 }

@@ -13,9 +13,9 @@ function isDoc() {
 }
 
 export default function getCompareFunction(type) {
-    if (type === 'image' ||
-        type === 'audio' ||
-        type === 'video') {
+    if (type === 'image'
+        || type === 'audio'
+        || type === 'video') {
         return isOfType(getMimeTypes(type));
     }
 

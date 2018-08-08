@@ -35,21 +35,27 @@ export default class Weather extends React.Component {
     }
 
     componentDidMount() {
-        if(this.props.latitude && this.props.longitude) {
+        const { latitude, longitude } = this.props;
+
+        if(latitude && longitude) {
             this._fetch();
         }
     }
 
     componentDidUpdate(prevProps) {
-        if(this.props.latitude && this.props.longitude && prevProps.latitude !== this.props.latitude && prevProps.longitude !== this.props.longitude) {
+        const { latitude, longitude } = this.props;
+
+        if(latitude && longitude && prevProps.latitude !== latitude && prevProps.longitude !== longitude) {
             this._fetch();
         }
     }
 
     _openWeather = () => {
-        let url = `https://tapp01.tobit.com/Tapps/Weather/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`; // ${window.chayns.env.site.tapp.id}
-        if(this.props.qa) {
-             url = `${this.props.server || 'https://tappqa.tobit.com/Tapps/WeatherTapp'}/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${this.props.city || ''}&TappID=3`;
+        const { city, qa, server } = this.props;
+
+        let url = `https://tapp01.tobit.com/Tapps/Weather/Web/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${city || ''}&TappID=3`; // ${window.chayns.env.site.tapp.id}
+        if(qa) {
+             url = `${server || 'https://tappqa.tobit.com/Tapps/WeatherTapp'}/?AppVersion=##version##&ColorScheme=##colorscheme##&OS=##os##&color=##color##&colormode=##colormode##&font=##fontid##&city=${city || ''}&TappID=3`;
         }
 
         return url;
@@ -71,20 +77,27 @@ export default class Weather extends React.Component {
     };
 
     _fetch() {
-        const lat = this.props.latitude;
-        const lng = this.props.longitude;
+        const {
+            longitude: lng,
+            latitude: lat,
+            server,
+            locationId,
+            qa,
+            onLoaded,
+            onError,
+        } = this.props;
 
         this.setState({
             // eslint-disable-next-line react/no-unused-state
             isFetching: true
         });
 
-        let url = `${this.props.server || 'https://tapp01.tobit.com/Tapps/Weather/API/Weather'}/${this.props.locationId || window.chayns.env.site.locationId}/?current=true&forecast=true`;
-        if(this.props.qa) {
-            url = `${this.props.server || 'https://tappqa.tobit.com/Tapps/WeatherProxy/Weather'}/${this.props.locationId || window.chayns.env.site.locationId}/?current=true&forecast=true`;
+        let url = `${server || 'https://tapp01.tobit.com/Tapps/Weather/API/Weather'}/${locationId || window.chayns.env.site.locationId}/?current=true&forecast=true`;
+        if(qa) {
+            url = `${server || 'https://tappqa.tobit.com/Tapps/WeatherProxy/Weather'}/${locationId || window.chayns.env.site.locationId}/?current=true&forecast=true`;
         }
 
-        if(this.props.latitude && this.props.longitude) {
+        if(lat && lng) {
             url += `&lat=${encodeURI(`${lat}`)}&lng=${encodeURI(`${lng}`)}`;
         }
 
@@ -94,14 +107,14 @@ export default class Weather extends React.Component {
                 weather: new WorldWeather(data)
             });
 
-            if(this.props.onLoaded) {
-                this.props.onLoaded(data);
+            if(onLoaded) {
+                onLoaded(data);
             }
         }).catch((error) => {
             console.warn('Error while fetching Weather-Data', error);
 
-            if(this.props.onError) {
-                this.props.onError(error);
+            if(onError) {
+                onError(error);
             }
         }).then(() => {
             this.setState({
@@ -117,14 +130,16 @@ export default class Weather extends React.Component {
         let minTemp = '';
         let maxTemp = '';
 
-        if(this.state.weather) {
-            temp = this.state.weather.getCurrentCondition().getTemp();
-            icon = this.state.weather.getCurrentCondition().getWeatherIcon();
-            minTemp = this.state.weather.getForecast(1).getMinTemp();
-            maxTemp = this.state.weather.getForecast(1).getMaxTemp();
+        const { weather } = this.state;
+
+        if(weather) {
+            temp = weather.getCurrentCondition().getTemp();
+            icon = weather.getCurrentCondition().getWeatherIcon();
+            minTemp = weather.getForecast(1).getMinTemp();
+            maxTemp = weather.getForecast(1).getMaxTemp();
         }
 
-        if(this.state.weather && temp !== null && icon && minTemp !== null && maxTemp !== null) {
+        if(weather && temp !== null && icon && minTemp !== null && maxTemp !== null) {
             return (
                 <div
                     className="weather-widget"
@@ -138,15 +153,17 @@ export default class Weather extends React.Component {
                         {temp || 'non content'}
                     </div>
                     <div className="weather-widget__celsius">
-                        °C
+                        {'°C'}
                     </div>
                     <div className="weather-widget__info">
                         <div className="weather-widget__info__max">
-                            <i className="fa fa-caret-up"/> {maxTemp} °
+                            <i className="fa fa-caret-up"/>
+                            {` ${maxTemp} °`}
                         </div>
 
                         <div className="weather-widget__info__min">
-                            <i className="fa fa-caret-down"/> {minTemp} °
+                            <i className="fa fa-caret-down"/>
+                            {` ${minTemp} °`}
                         </div>
                     </div>
                 </div>

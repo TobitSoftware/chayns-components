@@ -39,7 +39,12 @@ class ModeSwitch extends React.Component {
     };
 
     componentDidMount() {
-        const { groups, save, onChange, defaultMode } = this.props;
+        const {
+            groups,
+            save,
+            onChange,
+            defaultMode,
+        } = this.props;
 
         ModeSwitchHelper.init({
             groups,

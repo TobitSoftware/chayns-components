@@ -25,20 +25,22 @@ export default class SlideOverlay extends React.Component {
     }
 
     render() {
-        let className = 'slide__overlay__text slide__overlay__text';
-        if(this.props.position) {
-            className += `--${this.props.position}`;
-        }
+        const { position, gradient, children } = this.props;
+
+        const className = classNames({
+            slide__overlay__text: true,
+            [`slide__overlay__text--${position}`]: position,
+        });
 
         const classNamesTop = classNames({
             slide__overlay: true,
-            'slide__overlay--gradient': this.props.gradient
+            'slide__overlay--gradient': gradient,
         });
 
         return(
             <div className={classNamesTop}>
                 <div className={className}>
-                    {this.props.children}
+                    {children}
                 </div>
             </div>
         );

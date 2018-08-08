@@ -52,7 +52,9 @@ export default class SelectList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.value && nextProps.value !== this.props.value) {
+        const { value } = this.props;
+
+        if (nextProps.value && nextProps.value !== value) {
             this.setState({
                 selectedId: nextProps.value,
             });
@@ -61,40 +63,20 @@ export default class SelectList extends React.Component {
         this._cleanChildren(nextProps);
     }
 
-    _cleanChildren(props) {
-        const children = [];
-
-        if(window.chayns.utils.isArray(props.children)) {
-            props.children.map((child) => {
-                if(child && child.type && child.type.componentName === SelectItem.componentName) {
-                    if (child.props &&
-                        (child.props.id || child.props.id === 0) &&
-                        child.props.name) {
-                        children.push(child);
-                    }
-                }
-            });
-        }
-
-        if(this.state.selectedId === 0 && props.selectFirst && children.length > 0) {
-            this._selectFirstItem(children);
-        }
-
-        this.setState({
-            children
-        });
-    }
-
     _changeActiveItem = (id, value) => {
-        if(id === this.state.selectedId) return;
+        const { selectedId } = this.state;
+
+        if(id === selectedId) return;
 
         if(this.changing) return;
 
-        if(this.props.onChange) {
-            this.props.onChange(id, value);
+        const { onChange, value: propValue } = this.props;
+
+        if(onChange) {
+            onChange(id, value);
         }
 
-        if(this.props.value) {
+        if(propValue) {
             return;
         }
 
@@ -108,6 +90,31 @@ export default class SelectList extends React.Component {
             selectedId: id
         });
     };
+
+    _cleanChildren(props) {
+        const { selectedId } = this.state;
+        const children = [];
+
+        if(window.chayns.utils.isArray(props.children)) {
+            props.children.map((child) => {
+                if(child && child.type && child.type.componentName === SelectItem.componentName) {
+                    if (child.props
+                        && (child.props.id || child.props.id === 0)
+                        && child.props.name) {
+                        children.push(child);
+                    }
+                }
+            });
+        }
+
+        if(selectedId === 0 && props.selectFirst && children.length > 0) {
+            this._selectFirstItem(children);
+        }
+
+        this.setState({
+            children
+        });
+    }
 
     _selectFirstItem(children) {
         for(let i = 0, z = children.length; i < z; i += 1) {
@@ -154,10 +161,13 @@ export default class SelectList extends React.Component {
 
 
     render() {
-        if(this.state.children.length > 0) {
+        const { className } = this.props;
+        const { children } = this.state;
+
+        if(children.length > 0) {
             return (
-                <div className={this.props.className}>
-                    {this._renderChildren(this.state.children)}
+                <div className={className}>
+                    {this._renderChildren(children)}
                 </div>
             );
         }

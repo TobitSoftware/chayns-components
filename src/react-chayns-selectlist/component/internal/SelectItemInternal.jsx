@@ -37,6 +37,17 @@ export default class SelectItemInternal extends React.Component {
         this.radioId = this._getRadioId(props.id);
     }
 
+    _handleChange = () => {
+        const { onChange, id, value } = this.props;
+        onChange(id, value);
+    };
+
+    _getRadioId(id) {
+        const { selectListId } = this.props;
+
+        return `${selectListId}-${id}`;
+    }
+
     _renderChildren() {
         const { checked, children } = this.props;
 
@@ -46,15 +57,6 @@ export default class SelectItemInternal extends React.Component {
 
         return null;
     }
-
-    _getRadioId(id) {
-        return `${this.props.selectListId}-${id}`;
-    }
-
-    _handleChange = () => {
-        const { onChange, id, value } = this.props;
-        onChange(id, value);
-    };
 
     render() {
         const {

@@ -12,6 +12,14 @@ function requireEmojione(returnPromise) {
 }
 
 export default class EmojiInput extends React.Component {
+    lastKeyPressed = null;
+
+    firstRender = true;
+
+    activeNode = 0;
+
+    cursorPos = 0;
+
     static propTypes = {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -31,37 +39,6 @@ export default class EmojiInput extends React.Component {
         onFocus: null,
         onBlur: null
     };
-
-    static shouldComponentUpdate() {
-        return false;
-    }
-
-    static getCaretCharacterOffsetWithin(element) {
-        let caretOffset = -1;
-
-        if (typeof window.getSelection !== 'undefined') {
-            const sel = window.getSelection();
-
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
-                const range = sel.getRangeAt(0);
-                const preCaretRange = range.cloneRange();
-                preCaretRange.selectNodeContents(element);
-                preCaretRange.setEnd(range.endContainer, range.endOffset);
-                caretOffset = preCaretRange.toString().length;
-            }
-        } else if (typeof document.selection !== 'undefined' && document.selection.type !== 'Control') {
-            const sel = document.selection;
-
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
-                const textRange = document.selection.createRange();
-                const preCaretTextRange = document.body.createTextRange();
-                preCaretTextRange.moveToElementText(element);
-                preCaretTextRange.setEndPoint('EndToEnd', textRange);
-                caretOffset = preCaretTextRange.text.length;
-            }
-        }
-        return caretOffset;
-    }
 
     componentWillMount() {
         requireEmojione().then((emojione) => {
@@ -93,6 +70,37 @@ export default class EmojiInput extends React.Component {
             this.updateDOM(nextProps);
             this.firstRender = false;
         }
+    }
+
+    static shouldComponentUpdate() {
+        return false;
+    }
+
+    static getCaretCharacterOffsetWithin(element) {
+        let caretOffset = -1;
+
+        if (typeof window.getSelection !== 'undefined') {
+            const sel = window.getSelection();
+
+            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+                const range = sel.getRangeAt(0);
+                const preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                caretOffset = preCaretRange.toString().length;
+            }
+        } else if (typeof document.selection !== 'undefined' && document.selection.type !== 'Control') {
+            const sel = document.selection;
+
+            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+                const textRange = document.selection.createRange();
+                const preCaretTextRange = document.body.createTextRange();
+                preCaretTextRange.moveToElementText(element);
+                preCaretTextRange.setEndPoint('EndToEnd', textRange);
+                caretOffset = preCaretTextRange.text.length;
+            }
+        }
+        return caretOffset;
     }
 
     getActiveChildNode = () => {
@@ -347,11 +355,6 @@ export default class EmojiInput extends React.Component {
             }
         }
     };
-
-    lastKeyPressed = null;
-    firstRender = true;
-    activeNode = 0;
-    cursorPos = 0;
 
     render() {
         const { id, hideBorder, disabled } = this.props;

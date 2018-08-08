@@ -10,6 +10,7 @@ export default class Gallery extends React.Component {
         onClick: PropTypes.func
 
     };
+
     static defaultProps = {
         onlyIcon: false,
         onClick: chayns.openImage
@@ -23,7 +24,9 @@ export default class Gallery extends React.Component {
     }
 
     openGallery(start) {
-        this.props.onClick(this.props.urls, start);
+        const { onClick, urls } = this.props;
+
+        onClick(urls, start);
     }
 
     render() {

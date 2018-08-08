@@ -14,6 +14,8 @@ export default class Slide extends React.Component {
     };
 
     componentWillMount() {
+        const { onClick } = this.props;
+
         if(!window.react) {
             window.react = {};
         }
@@ -26,23 +28,25 @@ export default class Slide extends React.Component {
             };
         }
 
-        if(this.props.onClick) {
+        if(onClick) {
             this._callbackId = window.react.slider.callbacks.length;
-            window.react.slider.callbacks.push(this.props.onClick);
+            window.react.slider.callbacks.push(onClick);
         }
     }
 
     render() {
+        const { children, image } = this.props;
+
         return(
             <div
                 style={{
-                    backgroundImage: `url('${this.props.image}')`
+                    backgroundImage: `url('${image}')`
                 }}
                 className="swiper-slide"
                 data-callbackid={this._callbackId}
                 ref={(div) => { this._div = div; }}
             >
-                {this.props.children}
+                {children}
             </div>
         );
     }

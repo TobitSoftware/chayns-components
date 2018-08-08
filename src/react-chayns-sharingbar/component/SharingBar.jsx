@@ -24,6 +24,8 @@ export default class SharingBar extends React.Component {
 
     componentWillMount() {
         getAvailableShareProviders().then((provider) => {
+            const { link } = this.props;
+
             const sharingItems = [];
 
             provider.map((item) => {
@@ -34,20 +36,21 @@ export default class SharingBar extends React.Component {
                             name={item.name}
                             provider={item}
                             key={item.id}
-                            link={this.props.link || getDefaultShareLink()}
+                            link={link || getDefaultShareLink()}
                         />
                     ));
                 }
             });
 
             this.setState({
-                sharingProvider: sharingItems
+                sharingProvider: sharingItems // TODO: save data in state and not components
             });
         });
     }
 
     render() {
         const { className } = this.props;
+        const { sharingProvider } = this.state;
 
         const classNames = classnames({
             'sharing-bar__item-list': 'sharing-bar__item-list',
@@ -56,7 +59,7 @@ export default class SharingBar extends React.Component {
 
         return (
             <div className={classNames}>
-                {this.state.sharingProvider}
+                {sharingProvider}
             </div>
         );
     }

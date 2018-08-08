@@ -9,24 +9,6 @@ import classNames from 'classnames';
  * ############################
  */
 export default class SetupWizard extends React.Component {
-    static defaultProps = {
-        ready: null,
-        notComplete: null,
-        children: null,
-        style: null,
-        contentStyle: null,
-        title: null,
-        description: null
-    };
-
-    static childContextTypes = {
-        stepComplete: PropTypes.func,
-        previousStep: PropTypes.func,
-        nextStep: PropTypes.func,
-        toStep: PropTypes.func,
-        resetToStep: PropTypes.func
-    };
-
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.element),
@@ -38,6 +20,24 @@ export default class SetupWizard extends React.Component {
         contentStyle: PropTypes.object,
         title: PropTypes.string,
         description: PropTypes.node
+    };
+
+    static childContextTypes = {
+        stepComplete: PropTypes.func,
+        previousStep: PropTypes.func,
+        nextStep: PropTypes.func,
+        toStep: PropTypes.func,
+        resetToStep: PropTypes.func
+    };
+
+    static defaultProps = {
+        ready: null,
+        notComplete: null,
+        children: null,
+        style: null,
+        contentStyle: null,
+        title: null,
+        description: null
     };
 
     constructor() {
@@ -74,9 +74,12 @@ export default class SetupWizard extends React.Component {
                 this.setState({ completedSteps });
             }
         } else if (completedSteps.indexOf(currentStep) >= 0) {
+            const { children } = this.props;
+
             completedSteps.splice(completedSteps.indexOf(currentStep));
             this.setState({ completedSteps });
-            if(this.props.children[currentStep].props.required === true) {
+
+            if(children[currentStep].props.required === true) {
                 this.setState({ maxProgress: currentStep });
             }
         }
@@ -121,9 +124,9 @@ export default class SetupWizard extends React.Component {
     }
 
     ready() {
-        const { ready } = this.props;
+        const { ready, children } = this.props;
         const { completedSteps, currentStep } = this.state;
-        if(!(this.props.children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
             if(ready) {
                 ready();
             }
@@ -140,9 +143,10 @@ export default class SetupWizard extends React.Component {
     }
 
     updateContent(newCurrentStep) {
+        const { children } = this.props;
         let { maxProgress } = this.state;
         const { completedSteps, currentStep } = this.state;
-        if(!(this.props.children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
             maxProgress = (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress;
             this.setState({
                 currentStep: newCurrentStep,
@@ -160,9 +164,14 @@ export default class SetupWizard extends React.Component {
         const { maxProgress, currentStep, completedSteps } = this.state;
         return (
             <div style={style}>
-                {(title !== null) ? <h1>{title}</h1> : null}
-                {(description !== null) ? <p dangerouslySetInnerHTML={{ __html: description }}/> :
-                    null}
+                {title && (
+                    <h1>
+                        {title}
+                    </h1>
+                )}
+                {description && (
+                    <p dangerouslySetInnerHTML={{ __html: description }}/>
+                )}
                 {
                     children.map((child, index) => {
                         return (

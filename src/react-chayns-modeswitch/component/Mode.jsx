@@ -47,37 +47,42 @@ export default class Mode extends React.Component {
     };
 
     renderChildren() {
-        if(window.chayns.utils.isArray(this.props.children)) {
+        const { children } = this.props;
+
+        if(window.chayns.utils.isArray(children)) {
             return(
                 <div className="modeswitch__mode">
                     {
-                        this.props.children.map((element) => {
+                        children.map((element) => {
                             return element;
                         })
                     }
                 </div>);
         }
 
-        return this.props.children;
+        return children;
     }
 
     render() {
+        const { modeId } = this.state;
+        const { mode, modes, group } = this.props;
+
         if(!ModeSwitchHelper.isInitialized()) return null;
 
-        if(window.chayns.utils.isNumber(this.props.mode) && this.state.modeId === this.props.mode) {
+        if(window.chayns.utils.isNumber(mode) && modeId === mode) {
             return this.renderChildren();
         }
 
-        if(window.chayns.utils.isArray(this.props.modes) && this.props.modes.indexOf(this.state.modeId) !== -1) {
+        if(window.chayns.utils.isArray(modes) && modes.indexOf(modeId) !== -1) {
             return this.renderChildren();
         }
 
 
-        if(window.chayns.utils.isNumber(this.props.group) && this.state.modeId === this.props.group) {
+        if(window.chayns.utils.isNumber(group) && group === modeId) {
             return this.renderChildren();
         }
 
-        if(window.chayns.utils.isArray(this.props.group) && this.props.group.indexOf(this.state.modeId) !== -1) {
+        if(window.chayns.utils.isArray(group) && group.indexOf(modeId) !== -1) {
             return this.renderChildren();
         }
 

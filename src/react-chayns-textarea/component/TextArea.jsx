@@ -4,6 +4,11 @@ import classnames from 'classnames';
 import assign from 'object-assign';
 
 export default class TextArea extends React.Component {
+    static defaultStyle = {
+        width: '100%',
+        paddingBottom: '12px'
+    };
+
     static propTypes = {
         style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
@@ -34,38 +39,33 @@ export default class TextArea extends React.Component {
         reference: null,
     };
 
-    static defaultStyle = {
-        width: '100%',
-        paddingBottom: '12px'
-    };
-
     componentDidMount() {
-        if (this.props.required) {
+        const { required, autogrow } = this.props;
+
+        if (required) {
             this._node.setAttribute('required', '');
         }
 
         this._node.setAttribute('row', '1');
         this._node.style.overflow = 'hidden';
 
-        if (this.props.autogrow) {
+        if (autogrow) {
             this.offset = this._node.offsetHeight - this._node.clientHeight;
 
             this.initialHeight = '0px';
 
-            if (!this.props.defaultValue) {
-                this.grow('0');
-            } else {
-                this.grow('0');
-            }
+            this.grow('0');
         }
     }
 
     onChange = () => {
-        if (this.props.onChange) {
-            this.props.onChange(this._node.value);
+        const { onChange, autogrow } = this.props;
+
+        if (onChange) {
+            onChange(this._node.value);
         }
 
-        if (this.props.autogrow) {
+        if (autogrow) {
             if (this._node.value === '') {
                 this.grow(this.initialHeight);
             } else {
@@ -75,16 +75,20 @@ export default class TextArea extends React.Component {
     };
 
     onBlur = () => {
-        if (this.props.onBlur) {
-            this.props.onBlur(this._node.value);
+        const { onBlur } = this.props;
+
+        if (onBlur) {
+            onBlur(this._node.value); // TODO: Get data from event
         }
     };
 
     ref = (node) => {
+        const { reference } = this.props;
+
         this._node = node;
 
-        if (this.props.reference) {
-            this.props.reference(node);
+        if (reference) {
+            reference(node);
         }
     };
 
@@ -99,25 +103,35 @@ export default class TextArea extends React.Component {
     }
 
     render() {
-        const style = assign({}, this.defaultStyle, this.props.style);
+        const {
+            style: styleProp,
+            className,
+            placeholder,
+            defaultValue,
+            onChange,
+            autogrow,
+            onBlur,
+            onKeyUp,
+            onKeyDown,
+            value,
+        } = this.props;
 
-        const className = classnames({
-            input: true,
-            [this.props.className]: this.props.className
-        });
+        const style = assign({}, this.defaultStyle, styleProp);
+
+        const classNames = classnames('input', className);
 
         return (
             <textarea
-                className={className}
+                className={classNames}
                 ref={this.ref}
-                placeholder={this.props.placeholder}
+                placeholder={placeholder}
                 style={style}
-                defaultValue={this.props.defaultValue}
-                onChange={(this.props.onChange || this.props.autogrow) ? this.onChange : null}
-                onBlur={this.props.onBlur ? this.onBlur : null}
-                onKeyUp={this.props.onKeyUp}
-                onKeyDown={this.props.onKeyDown}
-                value={this.props.value}
+                defaultValue={defaultValue}
+                onChange={(onChange || autogrow) ? this.onChange : null}
+                onBlur={onBlur ? this.onBlur : null}
+                onKeyUp={onKeyUp}
+                onKeyDown={onKeyDown}
+                value={value}
             />
         );
     }

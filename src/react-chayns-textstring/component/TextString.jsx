@@ -18,18 +18,6 @@ export default class TextString extends React.Component {
         classNames: null,
     };
 
-    static getEditableParent(element) {
-        let $element = element;
-
-        while ($element && !$element.hasAttribute('chayns-lang')) {
-            if($element.nodeName.toLowerCase() === 'body' || !$element) {
-                return null;
-            }
-            $element = $element.parentNode;
-        }
-        return $element;
-    }
-
     constructor() {
         super();
 
@@ -58,30 +46,16 @@ export default class TextString extends React.Component {
         this.updateTextStrings();
     }
 
-    _replacePlaceholder(value) {
-        let retVal = value;
+    static getEditableParent(element) {
+        let $element = element;
 
-        if(retVal && this.props.replace) {
-            Object.keys(this.props.replace).map((key) => {
-                retVal = retVal.replace(new RegExp(key, 'g'), this.props.replace[key]);
-            });
-        }
-
-        return retVal;
-    }
-
-    updateTextStrings() {
-        if(!this.editorInitialized && this.state.editmode && this._showTextString() && window.chayns.env.user.isAuthenticated) {
-            this._div.setAttribute('chayns-lang', this.props.textString);
-
-            if(this.props.render === null || this.props.render) {
-                window.chayns.utils.lang.renderTextStrings(this._div.parentNode);
+        while ($element && !$element.hasAttribute('chayns-lang')) {
+            if($element.nodeName.toLowerCase() === 'body' || !$element) {
+                return null;
             }
-
-            document.addEventListener('click', this._closed);
-
-            this.editorInitialized = true;
+            $element = $element.parentNode;
         }
+        return $element;
     }
 
     _closed = (event) => {
@@ -99,20 +73,53 @@ export default class TextString extends React.Component {
         }
     };
 
+    updateTextStrings() {
+        const { editmode } = this.state;
+
+        if(!this.editorInitialized && editmode && this._showTextString() && window.chayns.env.user.isAuthenticated) {
+            const { textString, render } = this.props;
+
+            this._div.setAttribute('chayns-lang', textString);
+
+            if(render === null || render) {
+                window.chayns.utils.lang.renderTextStrings(this._div.parentNode);
+            }
+
+            document.addEventListener('click', this._closed);
+
+            this.editorInitialized = true;
+        }
+    }
+
+    _replacePlaceholder(value) {
+        const { replace } = this.props;
+        let retVal = value;
+
+        if(retVal && replace) {
+            Object.keys(replace).map((key) => {
+                retVal = retVal.replace(new RegExp(key, 'g'), replace[key]);
+            });
+        }
+
+        return retVal;
+    }
+
 
     _showTextString() {
         return (this._textString !== null && this._textString !== '') || window.showTextStrings;
     }
 
     render() {
-        if(this.props.textString) {
-            this._textString = window.chayns.utils.lang.get(this.props.textString);
+        const { textString, renderHtml, classNames } = this.props;
+
+        if(textString) {
+            this._textString = window.chayns.utils.lang.get(textString);
 
             if(this._showTextString() && this._textString !== '') {
-                if(this.props.renderHtml) {
+                if(renderHtml) {
                     return (
                         <div
-                            className={this.props.classNames}
+                            className={classNames}
                             ref={(div) => { this._div = div; }}
                             dangerouslySetInnerHTML={{ __html: this._replacePlaceholder(this._textString) }}
                         />
@@ -122,19 +129,21 @@ export default class TextString extends React.Component {
 
                 return (
                     <div
-                        className={this.props.classNames}
+                        className={classNames}
                         ref={(div) => { this._div = div; }}
                     >
                         {this._replacePlaceholder(this._textString)}
                     </div>
                 );
-            } else if(this._showTextString()) {
+            }
+
+            if(this._showTextString()) {
                 return (
                     <div
-                        className={this.props.classNames}
+                        className={classNames}
                         ref={(div) => { this._div = div; }}
                     >
-                        No textstring found.
+                        {'No textstring found.'}
                     </div>
                 );
             }

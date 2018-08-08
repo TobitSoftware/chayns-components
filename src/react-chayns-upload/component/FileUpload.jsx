@@ -9,6 +9,14 @@ import uploadCloudImages from '../utils/uploadCloudImage';
 import normalizeUploadResponse from '../utils/normalizeUploadResponse';
 
 export default class FileUpload extends Component {
+    static TYPE_IMAGE = 'image';
+
+    static TYPE_VIDEO = 'video';
+
+    static TYPE_AUDIO = 'audio';
+
+    static TYPE_ALL = 'all';
+
     static propTypes = {
         type: PropTypes.oneOf(['image', 'video', 'audio', 'all']),
         multiple: PropTypes.bool,
@@ -40,24 +48,6 @@ export default class FileUpload extends Component {
         onDrop: null,
     };
 
-    static TYPE_IMAGE = 'image';
-    static TYPE_VIDEO = 'video';
-    static TYPE_AUDIO = 'audio';
-    static TYPE_ALL = 'all';
-
-    static getText(type) {
-        switch (type) {
-            case 'image':
-                return 'Bild hochladen';
-            case 'video':
-                return 'Video hochladen';
-            case 'audio':
-                return 'Song hochladen';
-            default:
-                return 'Datei hochladen';
-        }
-    }
-
     constructor() {
         super();
 
@@ -82,7 +72,9 @@ export default class FileUpload extends Component {
 
         if (onClick) {
             return onClick(event);
-        } else if (onClick === false) {
+        }
+
+        if (onClick === false) {
             return false;
         }
 
@@ -123,7 +115,9 @@ export default class FileUpload extends Component {
 
         if (onDrop) {
             return onDrop(event);
-        } else if (onDrop === false) {
+        }
+
+        if (onDrop === false) {
             return false;
         }
 
@@ -166,6 +160,19 @@ export default class FileUpload extends Component {
         this.setState({
             hover: false,
         });
+    }
+
+    static getText(type) {
+        switch (type) {
+            case 'image':
+                return 'Bild hochladen';
+            case 'video':
+                return 'Video hochladen';
+            case 'audio':
+                return 'Song hochladen';
+            default:
+                return 'Datei hochladen';
+        }
     }
 
     checkFiles(files) {

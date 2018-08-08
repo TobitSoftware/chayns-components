@@ -28,15 +28,24 @@ export default class SharingBarItem extends React.Component {
     }
 
     onClick = () => {
-        share(this.props.provider, this.props.link);
+        const { provider, link } = this.props;
+
+        share(provider, link);
     };
 
     render() {
+        const { name, icon } = this.props;
+
         return (
-            <button className="sharing-bar__iten" title={this.props.name} style={{ backgroundColor: chayns.getSchemeColor(70) }} onClick={this.onClick}>
-                <i className={this.props.icon}/>
+            <button
+                type="button"
+                className="sharing-bar__iten"
+                title={name}
+                style={{ backgroundColor: chayns.getSchemeColor(70) }}
+                onClick={this.onClick}
+            >
+                <i className={icon}/>
             </button>
         );
     }
 }
-

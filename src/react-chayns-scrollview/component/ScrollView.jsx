@@ -37,7 +37,12 @@ export default class ScrollView extends React.Component {
     }
 
     render() {
-        const { style, showScrollbar, className } = this.props;
+        const {
+            style,
+            showScrollbar,
+            className,
+            children,
+        } = this.props;
 
         const classNames = classnames('cc__scroll-view', {
             'cc__scroll-view--hide': !showScrollbar,
@@ -45,7 +50,7 @@ export default class ScrollView extends React.Component {
             [className]: className,
         });
 
-        return(
+        return (
             <div
                 ref={(ref) => { this.node = ref; }}
                 style={style}
@@ -64,7 +69,7 @@ export default class ScrollView extends React.Component {
                         className="cc__scroll-view__content"
                         ref={(ref) => { this.content = ref; }}
                     >
-                        {this.props.children}
+                        {children}
                     </div>
                 </div>
                 <div

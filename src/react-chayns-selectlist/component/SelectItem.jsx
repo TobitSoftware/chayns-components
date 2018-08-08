@@ -34,9 +34,11 @@ export default class SelectItem extends React.Component {
     };
 
     render() {
+        const { children } = this.props;
+
         return(
             <div className="selectlist__selectitem">
-                {this.props.children}
+                {children}
             </div>
         );
     }

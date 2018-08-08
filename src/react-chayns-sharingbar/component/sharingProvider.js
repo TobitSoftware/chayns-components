@@ -117,4 +117,3 @@ export const shareActions = {
     shareWithUrl: 1,
     shareWithApp: 2
 };
-

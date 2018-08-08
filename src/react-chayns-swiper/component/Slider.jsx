@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 /* global Swiper */
 
@@ -67,6 +67,15 @@ export default class App extends React.Component {
     }
 
     _updateSwiper() {
+        const {
+            children,
+            length,
+            loop,
+            autoplay,
+            preloadImages,
+            lazyLoading,
+        } = this.props;
+
         if (this._swiper) {
             if(this._swiper.destroy) {
                 this._swiper.destroy();
@@ -75,18 +84,17 @@ export default class App extends React.Component {
             this._swiper = null;
         }
 
-
-        if(window.chayns.utils.isArray(this.props.children) && this.props.children.length > 1 && (!this.props.length || this.props.length > 1)) {
+        if(window.chayns.utils.isArray(children) && children.length > 1 && (!length || length > 1)) {
             this._swiper = new Swiper(this._swiperElement, {
                 spaceBetween: 10,
-                loop: this.props.loop,
+                loop,
                 grabCursor: false,
                 pagination: this._paginationElement,
                 paginationClickable: true,
-                autoplay: this.props.autoplay,
+                autoplay,
                 autoplayDisableOnInteraction: false,
-                preloadImages: this.props.preloadImages,
-                lazyLoading: this.props.lazyLoading || false,
+                preloadImages,
+                lazyLoading: lazyLoading || false,
                 paginationBulletRender: (index, className) => {
                     return `<span class="swiper-pagination-bullet ${className}" style="background-color: ${window.chayns.env.site.color} !important"></span>`;
                 }
@@ -111,31 +119,35 @@ export default class App extends React.Component {
     }
 
     _getHeight(width) {
-        if(this.props.setHeight) {
-            return this.props.setHeight(width);
+        const { setHeight } = this.props;
+
+        if(setHeight) {
+            return setHeight(width);
         }
 
         return (9 / 16) * width;
     }
 
     render() {
-        const className = classNames({
+        const { className, overlay, children } = this.props;
+
+        const classNames = classnames({
             'swiper-container': true,
             'swiper-container-horizontal': true,
-            [this.props.className]: this.props.className
+            [className]: className
         });
 
         return (
             <div
-                className={className}
+                className={classNames}
             >
                 <div
                     ref={(swiper) => { this._swiperElement = swiper; }}
                     className="swiper-overlay--wrapper"
                 >
-                    {this.props.overlay}
+                    {overlay}
                     <div className="swiper-wrapper">
-                        {this.props.children}
+                        {children}
                     </div>
                 </div>
                 <div

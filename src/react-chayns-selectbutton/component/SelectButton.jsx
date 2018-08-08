@@ -29,21 +29,6 @@ export default class SelectButton extends React.Component {
         onSelect: null,
     };
 
-    static getDialogList(_list, listKey, listValue) {
-        const list = [];
-
-        if (_list) {
-            _list.map((item, i) => {
-                const curListKey = listKey || i;
-                if (item[curListKey] && item[listValue]) {
-                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item.isSelected });
-                }
-            });
-        }
-
-        return list;
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -93,6 +78,21 @@ export default class SelectButton extends React.Component {
         });
     }
 
+    static getDialogList(_list, listKey, listValue) {
+        const list = [];
+
+        if (_list) {
+            _list.map((item, i) => {
+                const curListKey = listKey || i;
+                if (item[curListKey] && item[listValue]) {
+                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item.isSelected });
+                }
+            });
+        }
+
+        return list;
+    }
+
     getReturnList(selected) {
         const { list, listKey } = this.props;
         const { buttonType, selection: selectedItems } = selected;
@@ -107,7 +107,9 @@ export default class SelectButton extends React.Component {
     }
 
     setLabel(text) {
-        if (this.props.showSelection) {
+        const { showSelection } = this.props;
+
+        if (showSelection) {
             this._btn.innerText = text;
         }
     }

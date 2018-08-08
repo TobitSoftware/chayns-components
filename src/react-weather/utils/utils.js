@@ -1,9 +1,9 @@
 import '../../polyfills/is-finite';
 
 export function isInteger(value) {
-    return typeof value === 'number' &&
-        Number.isFinite(value) &&
-        Math.floor(value) === value;
+    return typeof value === 'number'
+        && Number.isFinite(value)
+        && Math.floor(value) === value;
 }
 
 export function stringEndsWith(subjectString, searchString, position) {
