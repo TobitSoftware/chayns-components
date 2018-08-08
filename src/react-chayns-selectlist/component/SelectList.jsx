@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SelectItem from './SelectItem';
-
 const ANIMATION_TIMEOUT = 500;
 
 export default class SelectList extends React.Component {
