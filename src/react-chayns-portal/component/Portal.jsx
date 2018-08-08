@@ -60,7 +60,7 @@ export default /* #__PURE__ */(() => class Portal extends React.Component {
 
     render() {
         const { children } = this.props;
-        const { children: childrenState } = this.props;
+        const { children: childrenState } = this.state;
 
         if (children || !childrenState) {
             return null;
