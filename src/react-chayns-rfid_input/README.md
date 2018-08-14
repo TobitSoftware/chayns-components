@@ -29,6 +29,9 @@ You can use the input like this:
 ## RfidInput.pretifyRfid
 A static function to set a space after every second character. 
 
+## RfidInput.isNfcAvailable
+A static function which checks with a whitelist, whether the current app could support nfc-scans. 
+
 ## Props
 The following properties can be set on the RfidInput-Component
 
