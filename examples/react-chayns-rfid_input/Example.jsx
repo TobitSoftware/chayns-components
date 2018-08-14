@@ -23,24 +23,26 @@ export default class Example extends React.Component {
     };
 
     render() {
-        return(
+        const { rfid, rfidInput } = this.state;
+
+        return (
             <ExampleContainer headline="RFID Input">
                 <h3>RFID-Live</h3>
-                <p>{this.state.rfidInput || '-'}</p>
+                <p>{rfidInput || '-'}</p>
                 <h3>RFID</h3>
-                <p>{this.state.rfid || '-'}</p>
+                <p>{rfid || '-'}</p>
 
                 <RfidInput
                     onConfirm={this.onConfirm}
                     onInput={this.onInput}
-                    value={this.state.rfidInput}
-                    enableScan={chayns.env.isApp && chayns.env.isAndroid}
+                    value={rfidInput}
+                    enableScan={RfidInput.isNfcAvailable()}
                 />
 
                 <RfidInput
                     onConfirm={this.onConfirm}
                     onInput={this.onInput}
-                    value={this.state.rfidInput}
+                    value={rfidInput}
                     enableScan
                 />
             </ExampleContainer>
