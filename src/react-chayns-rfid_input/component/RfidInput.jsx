@@ -33,6 +33,11 @@ export default class RfidInput extends React.Component {
         scanText: 'Scannen',
     };
 
+    static isNfcAvailable() {
+        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.appVersion >= 5764)))
+            || (chayns.env.isApp && (chayns.env.isAndroid));
+    }
+
     state = {
         isScanning: false,
     };
