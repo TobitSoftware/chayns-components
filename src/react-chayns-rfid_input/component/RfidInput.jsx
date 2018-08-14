@@ -33,6 +33,11 @@ export default class RfidInput extends React.Component {
         scanText: 'Scannen',
     };
 
+    static isNfcAvailable() {
+        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.appVersion >= 5764)))
+            || (chayns.env.isApp && (chayns.env.isAndroid));
+    }
+
     state = {
         isScanning: false,
     };
@@ -90,8 +95,12 @@ export default class RfidInput extends React.Component {
             value,
         } = this.props;
         const { isScanning } = this.state;
-        const classNames = classnames(className, 'cc__rfid-input');
+
+        const classNames = classnames(className, 'cc__rfid-input', {
+            'cc__rfid-input--enable-scan': enableScan,
+        });
         const disabled = !VALID_RFID.test(value);
+
         return(
             <div className={classNames}>
                 <div className="cc__rfid-input__wrapper">
@@ -104,24 +113,24 @@ export default class RfidInput extends React.Component {
                         autoCapitalize="off"
                         spellCheck="false"
                     />
-                    <ChooseButton
-                        onClick={this.onConfirm}
-                        disabled={disabled}
-                        className="cc__rfid-input__confirm"
-                    >
-                        {confirmNode}
-                    </ChooseButton>
-                </div>
-                {enableScan && (
-                    <div className="cc__rfid-input__control">
+                    {enableScan && !value && (
                         <ChooseButton
                             onClick={isScanning ? this.endScan : this.startScan}
                             className="cc__rfid-input__scan"
                         >
                             {scanText}
                         </ChooseButton>
-                    </div>
-                )}
+                    )}
+                    {(!enableScan || value) && (
+                        <ChooseButton
+                            onClick={this.onConfirm}
+                            disabled={disabled}
+                            className="cc__rfid-input__confirm"
+                        >
+                            {confirmNode}
+                        </ChooseButton>
+                    )}
+                </div>
             </div>
         );
     }

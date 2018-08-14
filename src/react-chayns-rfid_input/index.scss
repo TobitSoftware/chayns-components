@@ -11,4 +11,11 @@
     text-align: center;
     margin: 15px 0;
   }
+
+  &--enable-scan {
+    .cc__rfid-input__scan, .cc__rfid-input__confirm {
+      width: 52px;
+      box-sizing: content-box;
+    }
+  }
 }
