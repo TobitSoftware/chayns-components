@@ -36,6 +36,13 @@ export default class Example extends React.Component {
                     value={this.state.rfidInput}
                     enableScan={chayns.env.isApp && chayns.env.isAndroid}
                 />
+
+                <RfidInput
+                    onConfirm={this.onConfirm}
+                    onInput={this.onInput}
+                    value={this.state.rfidInput}
+                    enableScan
+                />
             </ExampleContainer>
         );
     }
