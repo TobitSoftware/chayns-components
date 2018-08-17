@@ -11,6 +11,11 @@ export default class RfidInput extends React.Component {
         return rfid ? rfid.match(SPLIT_RFID).join(' ') : '';
     }
 
+    static isNfcAvailable() {
+        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.appVersion >= 5764)))
+            || (chayns.env.isApp && (chayns.env.isAndroid));
+    }
+
     static propTypes = {
         className: PropTypes.string,
         placeholder: PropTypes.string,
@@ -32,11 +37,6 @@ export default class RfidInput extends React.Component {
         enableScan: false,
         scanText: 'Scannen',
     };
-
-    static isNfcAvailable() {
-        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.appVersion >= 5764)))
-            || (chayns.env.isApp && (chayns.env.isAndroid));
-    }
 
     state = {
         isScanning: false,
