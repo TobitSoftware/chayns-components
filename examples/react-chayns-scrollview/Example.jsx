@@ -34,6 +34,17 @@ export default class Example extends React.Component {
                 >
                     {this.state.children}
                 </ScrollView>
+                <ScrollView
+                    style={{
+                        maxHeight: '500px',
+                        width: '500px',
+                    }}
+                    showScrollbar
+                >
+                    {'Test'}
+                    <br />
+                    {'Not scrollable'}
+                </ScrollView>
             </ExampleContainer>
         );
     }
