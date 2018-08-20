@@ -48,6 +48,12 @@
     user-select: none;
   }
 
+  &--hidden {
+    .cc__scroll-view__content {
+      overflow: hidden !important;
+    }
+  }
+
   &--hidden, &--hide {
     .cc__scroll-view__scrollbar {
       display: none;
