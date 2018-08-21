@@ -16,12 +16,12 @@ $marginBottom: 15px;
       max-height: 9999px !important;
     }
 
-    &-leave {
+    &-exit {
       max-height: 9999px;
       transition: max-height 0.5s cubic-bezier(0, 1, 0, 1) -0.2s;
     }
 
-    &-leave-active {
+    &-exit-active {
       max-height: 0 !important;
     }
   }

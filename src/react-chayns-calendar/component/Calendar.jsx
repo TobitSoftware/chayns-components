@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Month from './Month';
 
@@ -247,18 +247,29 @@ export default class Calendar extends React.Component {
             }
 
             return (
-                <Month
-                    onDateSelect={this.props.onDateSelect}
-                    title={month.title}
-                    className={month.className}
-                    startDate={month.startDate}
-                    endDate={month.endDate}
-                    selected={_selected}
-                    activated={activated}
-                    highlighted={tempHighlighted}
-                    activateAll={this.props.activateAll}
+                <CSSTransition
+                    classNames={this.state.animation}
+                    timeout={{
+                        enter: TRANSITION_TIME,
+                    }}
+                    appear
+                    exit={false}
                     key={month.startDate.getTime() * (index + 1)}
-                />)
+                >
+                    <Month
+                        onDateSelect={this.props.onDateSelect}
+                        title={month.title}
+                        className={month.className}
+                        startDate={month.startDate}
+                        endDate={month.endDate}
+                        selected={_selected}
+                        activated={activated}
+                        highlighted={tempHighlighted}
+                        activateAll={this.props.activateAll}
+                        key={month.startDate.getTime() * (index + 1)}
+                    />
+                </CSSTransition>
+            )
         })
     }
 
@@ -280,13 +291,10 @@ export default class Calendar extends React.Component {
                     </div>
                 </div>
                 <div className="calendar__months">
-                    <ReactCSSTransitionGroup
-                        transitionName={this.state.animation}
-                        transitionEnterTimeout={TRANSITION_TIME}
-                        transitionLeaveTimeout={0.000001}
+                    <TransitionGroup
                     >
                         {_months}
-                    </ReactCSSTransitionGroup>
+                    </TransitionGroup>
                 </div>
             </div>
         )

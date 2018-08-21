@@ -5,6 +5,12 @@ import classnames from 'classnames';
 import * as Constants from './constants';
 import { hideOverlay, showOverlay } from '../../../utils/chayns/setOverlay';
 
+const ENTERING = 'entering';
+const ENTERED = 'entered';
+const EXITING = 'exiting';
+const EXITED = 'exited';
+const UNMOUNTED = 'unmounted';
+
 export default class Modal extends React.Component {
     static propTypes = {
         top: PropTypes.string,
@@ -15,6 +21,13 @@ export default class Modal extends React.Component {
         direction: PropTypes.number,
         width: PropTypes.string,
         expandedWidth: PropTypes.number,
+        status: PropTypes.oneOf([
+            ENTERING,
+            ENTERED,
+            EXITING,
+            EXITED,
+            UNMOUNTED,
+        ]).isRequired,
     };
 
     static defaultProps = {
@@ -32,6 +45,23 @@ export default class Modal extends React.Component {
         this.state = {
 
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { status } = this.props;
+        const nextStatus = nextProps.status;
+
+        if (status !== ENTERING && nextStatus === ENTERING) {
+            return this.componentWillEnter();
+        }
+
+        if (status !== ENTERED && nextStatus === ENTERED) {
+            return this.componentDidEnter();
+        }
+
+        if (status !== EXITING && nextStatus === EXITING) {
+            return this.componentWillLeave();
+        }
     }
 
     getModalWidth() {
@@ -72,7 +102,7 @@ export default class Modal extends React.Component {
         return window.chayns.utils.isString(expandedWidth) ? expandedWidth : `${expandedWidth}px`;
     }
 
-    componentWillEnter(callback) {
+    componentWillEnter() {
         const { closeOverlay } = this.props;
 
         if(window.debugLevel >= 2) {
@@ -109,10 +139,6 @@ export default class Modal extends React.Component {
                 didLeave: false
             });
         }, 100);
-
-        window.setTimeout(() => {
-            callback();
-        }, 650);
     }
 
     componentDidEnter() {
@@ -144,7 +170,7 @@ export default class Modal extends React.Component {
         }
     }
 
-    componentWillLeave(callback) {
+    componentWillLeave() {
         if(window.debugLevel >= 2) {
             console.debug('inspect-element (Modal) component: componentWillLeave', this.props, this.state);
         }
@@ -173,10 +199,6 @@ export default class Modal extends React.Component {
                 mode: 1,
             });
         }, 100);
-
-        window.setTimeout(() => {
-            callback();
-        }, 650);
     }
 
     render() {

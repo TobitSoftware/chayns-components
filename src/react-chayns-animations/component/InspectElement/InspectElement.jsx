@@ -4,6 +4,7 @@ import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
 import Modal from './Modal';
 import * as Constants from './constants';
+import ModalTransition from './ModalTransition';
 
 export default class InspectElement extends React.Component {
     static propTypes = {
@@ -162,7 +163,7 @@ export default class InspectElement extends React.Component {
         return (
             <ReactTransitionGroup>
                 {showModal && (
-                    <Modal
+                    <ModalTransition
                         show={showModal}
                         top={modalTop}
                         left={modalLeft}
