@@ -1,10 +1,10 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default class Groups extends React.Component{
+export default class Groups extends Component {
 
     static propTypes = {
         groups: PropTypes.array,

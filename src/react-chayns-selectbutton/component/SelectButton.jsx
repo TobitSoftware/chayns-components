@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class SelectButton extends React.Component {
+export default class SelectButton extends Component {
     static propTypes = {
         onSelect: PropTypes.func,
         title: PropTypes.string,

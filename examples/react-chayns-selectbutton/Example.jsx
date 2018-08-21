@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { SelectButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     render() {
         const pizza = [
             {

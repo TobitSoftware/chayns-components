@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class RefuelCounter extends React.Component {
+export default class RefuelCounter extends Component {
     static propTypes = {
         onClick: PropTypes.func,
         value: PropTypes.number,

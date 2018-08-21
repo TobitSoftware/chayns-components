@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { fetchDataFromApi } from '../../utils/fetch';
 
 import RefuelCounter from './RefuelCounter';
 
-export default class Refuel extends React.Component {
+export default class Refuel extends Component {
     static propTypes = {
         locationId: PropTypes.number,
         tappId: PropTypes.number,

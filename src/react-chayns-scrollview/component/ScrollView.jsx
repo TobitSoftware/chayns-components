@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import ScrollViewHelper from './ScrollViewHelper';
 
-export default class ScrollView extends React.Component {
+export default class ScrollView extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.node,

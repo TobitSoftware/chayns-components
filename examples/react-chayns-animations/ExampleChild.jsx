@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classnames from 'classnames';
 import './ExampleChild.scss';
 
 let id = 0;
 
-export default class ExampleChild extends React.Component {
+export default class ExampleChild extends Component {
     constructor() {
         super();
 

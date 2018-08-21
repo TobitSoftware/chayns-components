@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 
-export default class SlideOverlay extends React.Component {
+export default class SlideOverlay extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
                 PropTypes.object,

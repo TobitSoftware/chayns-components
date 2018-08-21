@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class Step3 extends React.Component {
+export default class Step3 extends Component {
     static contextTypes = {
         nextStep: PropTypes.func,
         stepComplete: PropTypes.func,

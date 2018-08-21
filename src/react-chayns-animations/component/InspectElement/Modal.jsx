@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import * as Constants from './constants';
@@ -11,7 +11,7 @@ const EXITING = 'exiting';
 const EXITED = 'exited';
 const UNMOUNTED = 'unmounted';
 
-export default class Modal extends React.Component {
+export default class Modal extends Component {
     static propTypes = {
         top: PropTypes.string,
         left: PropTypes.string,

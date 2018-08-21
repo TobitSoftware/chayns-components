@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Checkbox extends React.Component {
+export default class Checkbox extends Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,

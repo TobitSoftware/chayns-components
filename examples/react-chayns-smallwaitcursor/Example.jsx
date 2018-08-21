@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 import '../../src/react-chayns-smallwaitcursor/index.scss';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     state = {
         open: true
     };

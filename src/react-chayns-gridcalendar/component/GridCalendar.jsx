@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Navigator from './content/Navigator';
@@ -15,7 +15,7 @@ let transformLeft = 0,
     focusWeek,
     isDesktop = window.innerWidth>450;
 
-export default class ProgressCalendar extends React.Component{
+export default class ProgressCalendar extends Component {
 
     static defaultProps = {
         columns: {

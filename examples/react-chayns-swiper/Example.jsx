@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 
 import { Swiper, Swipe } from '../../src/index';
 import '../../src/react-chayns-swiper/index.scss';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     render() {
         return(
             <ExampleContainer headline="Swiper">

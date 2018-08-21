@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import assign from 'object-assign';
 
 import ModeSwitchHelper from './ModeSwitchHelper';
 
 
-export default (...conf) => Component => class PureComponent extends React.Component {
+export default (...conf) => WrappedComponent => class PureComponent extends Component {
     constructor(...params) {
         super(...params);
 
@@ -26,9 +26,9 @@ export default (...conf) => Component => class PureComponent extends React.Compo
         ModeSwitchHelper.unregisterOnChange(this.updatedMode);
     }
 
-    static getStores = Component.getStores;
+    static getStores = WrappedComponent.getStores;
 
-    static getPropsFromStores = Component.getPropsFromStores;
+    static getPropsFromStores = WrappedComponent.getPropsFromStores;
 
     update = (mode) => {
         this.setState({
@@ -56,7 +56,7 @@ export default (...conf) => Component => class PureComponent extends React.Compo
                 mode,
             });
 
-            return React.createElement(Component, {
+            return React.createElement(WrappedComponent, {
                 ...props,
                 ...this.state
             });

@@ -1,11 +1,11 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import MonthTable from './MonthTable';
 
 
-export default class Month extends React.Component{
+export default class Month extends Component {
     render(){
         let _title = this.props.title ? this.props.title : '';
         return(

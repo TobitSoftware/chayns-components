@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import loadOptionalDependency from '../../utils/loadOptionalDependency';
@@ -11,7 +11,7 @@ function requireEmojione(returnPromise) {
     ], returnPromise);
 }
 
-export default class EmojiInput extends React.Component {
+export default class EmojiInput extends Component {
     lastKeyPressed = null;
 
     firstRender = true;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 
@@ -11,7 +11,7 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
         this.state = {

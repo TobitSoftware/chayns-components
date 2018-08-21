@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MoreImages from './MoreImages';
 import ImageContainer from './ImageContainer';
 
-export default class Gallery extends React.Component {
+export default class Gallery extends Component {
     static propTypes = {
         urls: PropTypes.array.isRequired,
         onlyIcon: PropTypes.bool,

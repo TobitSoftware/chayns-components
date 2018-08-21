@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import '../../src/react-chayns-gallery/index.scss';
 import ExampleContainer from '../ExampleContainer';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
     }

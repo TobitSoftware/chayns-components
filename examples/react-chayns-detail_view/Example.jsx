@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/alt-text */
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import DetailView from '../../src/react-chayns-detail_view/component/DetailView';
@@ -10,7 +10,7 @@ import DetailViewHeader from '../../src/react-chayns-detail_view/component/Detai
 import '../../src/react-chayns-detail_view/index.scss';
 import DetailViewGroup from '../../src/react-chayns-detail_view/component/DetailViewGroup';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
 

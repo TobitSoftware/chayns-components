@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Tooltip extends React.Component {
+export default class Tooltip extends Component {
     static propTypes = {
         text: PropTypes.string.isRequired,
         children: PropTypes.node,

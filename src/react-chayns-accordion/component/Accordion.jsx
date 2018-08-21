@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
@@ -13,7 +13,7 @@ function hasFlag(value, flag) {
     return !!(value & flag); // eslint-disable-line no-bitwise
 }
 
-class Accordion extends React.Component {
+class Accordion extends Component {
     constructor(props) {
         super();
 

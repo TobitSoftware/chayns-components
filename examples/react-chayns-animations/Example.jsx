@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import InspectElementExample from './InspectElementExample';
@@ -7,7 +7,7 @@ import ScaleInExample from './ScaleInExample';
 import '../../src/react-chayns-animations/index.scss';
 import '../../src/react-chayns-animations/component/ScaleIn/index.scss';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     render() {
         return(
             <ExampleContainer headline="Animations" >

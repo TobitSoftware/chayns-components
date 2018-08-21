@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ModeSwitchHelper from './ModeSwitchHelper';
 
-export default class Mode extends React.Component {
+export default class Mode extends Component {
     static propTypes = {
         group: PropTypes.oneOfType([
             PropTypes.number,

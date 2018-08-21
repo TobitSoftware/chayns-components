@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -8,7 +8,7 @@ import classNames from 'classnames';
  * # HARRY, YOU ARE A WIZARD! #
  * ############################
  */
-export default class SetupWizard extends React.Component {
+export default class SetupWizard extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.element),

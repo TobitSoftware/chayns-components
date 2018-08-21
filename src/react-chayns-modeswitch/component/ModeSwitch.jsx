@@ -1,9 +1,9 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ModeSwitchHelper from './ModeSwitchHelper';
 
-class ModeSwitch extends React.Component {
+class ModeSwitch extends Component {
     static init(config) {
         if(!config) return false;
 

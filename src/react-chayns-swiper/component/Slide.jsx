@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class Slide extends React.Component {
+export default class Slide extends Component {
     static propTypes = {
         image: PropTypes.string.isRequired,
         onClick: PropTypes.func,

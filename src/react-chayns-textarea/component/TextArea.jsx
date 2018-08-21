@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 
-export default class TextArea extends React.Component {
+export default class TextArea extends Component {
     static defaultStyle = {
         width: '100%',
         paddingBottom: '12px'

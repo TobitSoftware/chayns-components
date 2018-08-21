@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
@@ -6,7 +6,7 @@ import Modal from './Modal';
 import * as Constants from './constants';
 import ModalTransition from './ModalTransition';
 
-export default class InspectElement extends React.Component {
+export default class InspectElement extends Component {
     static propTypes = {
         component: PropTypes.func.isRequired,
         expandedWidth: PropTypes.oneOfType([

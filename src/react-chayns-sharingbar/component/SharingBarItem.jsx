@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import insertStyle from '../../utils/insertStyle';
 import share from './sharingActions';
 
-export default class SharingBarItem extends React.Component {
+export default class SharingBarItem extends Component {
     static propTypes ={
         icon: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,

@@ -1,12 +1,12 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 
 const DAYS = ["Mo","Di","Mi","Do","Fr","Sa","So"];
 
-export default class MonthTable extends React.Component{
+export default class MonthTable extends Component{
     render(){
         let _table = this.createTable();
         return(

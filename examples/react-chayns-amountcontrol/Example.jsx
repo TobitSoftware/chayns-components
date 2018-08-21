@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { AmountControl } from '../../src/index';
 import '../../src/react-chayns-amountcontrol/shop.scss';
 import ExampleContainer from '../ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
 

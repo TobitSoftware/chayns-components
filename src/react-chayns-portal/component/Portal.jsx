@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const ccPortals = {};
 
-export default /* #__PURE__ */(() => class Portal extends React.Component {
+export default /* #__PURE__ */(() => class Portal extends Component {
     static propTypes = {
         name: PropTypes.string.isRequired,
         preventPortal: PropTypes.bool,

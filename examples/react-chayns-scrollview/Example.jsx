@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { ScrollView } from '../../src/index';
 
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     state = {
         children: ['Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />],
         // children: ['Test', <br />,'Test', <br />],

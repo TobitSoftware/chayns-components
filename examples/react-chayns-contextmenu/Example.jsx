@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { ContextMenu } from '../../src/index';
 import '../../src/react-chayns-contextmenu/index.scss';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
 

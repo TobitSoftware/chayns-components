@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 
-export default class SharingBar extends React.Component {
+export default class SharingBar extends Component {
     static propTypes = {
         link: PropTypes.string,
         className: PropTypes.string

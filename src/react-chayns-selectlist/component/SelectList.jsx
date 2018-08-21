@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const ANIMATION_TIMEOUT = 500;
 
-export default class SelectList extends React.Component {
+export default class SelectList extends Component {
     static maxId = 0;
 
     static propTypes = {

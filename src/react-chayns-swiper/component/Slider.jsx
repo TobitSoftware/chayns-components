@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 /* global Swiper */
 
-export default class App extends React.Component {
+export default class App extends Component {
     static propTypes = {
         autoplay: PropTypes.number,
         loop: PropTypes.bool,

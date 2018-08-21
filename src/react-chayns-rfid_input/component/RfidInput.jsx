@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -6,7 +6,7 @@ import Input from '../../react-chayns-input/component/Input';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import { VALID_RFID, SPLIT_RFID, RFID_CONTENT } from '../constants/regex';
 
-export default class RfidInput extends React.Component {
+export default class RfidInput extends Component {
     static pretifyRfid(rfid) {
         return rfid ? rfid.match(SPLIT_RFID).join(' ') : '';
     }

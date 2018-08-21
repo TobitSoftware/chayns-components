@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { Portal } from '../../src/index';
 
-export default class PortalExample extends React.Component {
+export default class PortalExample extends Component {
     constructor() {
         super();
 

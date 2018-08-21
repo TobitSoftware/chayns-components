@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 
-export default class PersonFinder extends React.Component {
+export default class PersonFinder extends Component {
     static propTypes = {
         style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,

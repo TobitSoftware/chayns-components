@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 
-export default class AmountControl extends React.Component {
+export default class AmountControl extends Component {
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
         amount: PropTypes.number,

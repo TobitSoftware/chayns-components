@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Week from './Week';
@@ -8,7 +8,7 @@ import Week from './Week';
 
 const WEEK_WIDTH =  11.5 * (window.innerWidth>450? 1 : 2);
 
-export default class User extends React.Component{
+export default class User extends Component {
 
     static defaultProps = {
         entries: []

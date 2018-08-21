@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Input extends React.Component {
+export default class Input extends Component {
     static propTypes = {
         style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,

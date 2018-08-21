@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
@@ -11,7 +11,7 @@ const TODAY = new Date(),
     TRANSITION_TIME = 300;
 
 
-export default class Calendar extends React.Component {
+export default class Calendar extends Component {
 
     static defaultProps = {
         selected: TODAY,

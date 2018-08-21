@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
@@ -9,7 +9,7 @@ import Input from '../../react-chayns-input/component/Input';
 
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
-export default class AmountInput extends React.Component {
+export default class AmountInput extends Component {
     static propTypes = {
         amount: PropTypes.number.isRequired,
         onAdd: PropTypes.func.isRequired,

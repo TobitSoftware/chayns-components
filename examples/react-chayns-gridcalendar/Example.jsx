@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import GridCalendar from '../../src/react-chayns-gridcalendar/index';
 import '../../src/react-chayns-gridcalendar/index.scss';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     constructor() {
         super();
         this.state = {

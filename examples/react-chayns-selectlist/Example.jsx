@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { SelectList, SelectListItem } from '../../src/index';
 import '../../src/react-chayns-selectlist/index.scss';
 
-export default class Example extends React.Component {
+export default class Example extends Component {
     state = {
         selectedId: 1
     };
