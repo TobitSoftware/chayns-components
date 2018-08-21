@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 export default class SelectItem extends Component {
     static propTypes = {
@@ -84,17 +84,19 @@ export default class SelectItem extends Component {
                     {name}
                 </label>
 
-                <CSSTransitionGroup
-                    transitionName="react-fade"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={500}
-                >
+                <TransitionGroup>
                     {checked && children && (
-                        <div className="selectlist__selectitem">
-                            {children}
-                        </div>
+                        <CSSTransition
+                            key="children"
+                            classNames="react-fade"
+                            timeout={{ enter: 500, exit: 500 }}
+                        >
+                            <div className="selectlist__selectitem">
+                                {children}
+                            </div>
+                        </CSSTransition>
                     )}
-                </CSSTransitionGroup>
+                </TransitionGroup>
             </div>
         );
     }
