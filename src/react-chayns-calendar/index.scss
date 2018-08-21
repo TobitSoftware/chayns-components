@@ -1,84 +1,124 @@
-.calendar__navigation{
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
-  z-index: 50;
+.calendar {
+  &__navigation {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    z-index: 50;
+  }
+
+  &__navigate {
+    position:absolute;
+    cursor: pointer;
+    opacity: 0.8;
+
+    &.right {
+      right: 0;
+    }
+  }
+
+  &__months {
+    position: relative;
+    display: flex;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    max-height: 180px;
+  }
 }
 
-.calendar__navigate{
-  position:absolute;
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.calendar__navigate.right{
-  right:0;
-}
-
-.puffer{
+.puffer {
   height: 190px;
 }
 
-.calendar__months{
-  position: relative;
-  display: flex;
-  left: -50%;
-  width: 200%;
-  height: 100%;
-  max-height: 180px;
-}
-
-.month{
+.month {
   width: 25%;
   height: 100%;
   padding: 0 1rem;
   text-align: center;
+
+  &__title {
+    margin-bottom: 0.25rem;
+    text-align: center;
+  }
+
+  &__table {
+    display: table;
+    width: 100%;
+  }
 }
 
-.right-enter {
-  transform: translateX(100%);
+.day {
+  &__row {
+    display: table-row;
+  }
+
+  &__item {
+    display: table-cell;
+    width: 2rem;
+    height: 1rem;
+    margin: 5em;
+    flex-grow: 1;
+    text-align: center;
+    font-size: 90%;
+  }
+
+  &-text {
+    font-weight: bold;
+  }
+
+  &-out-month {
+    opacity: 0.3;
+  }
 }
 
-.right-enter.right-enter-active {
-  transform: translateX(0%);
-  transition: transform 300ms ease-in-out;
+.right {
+  &-enter {
+    transform: translateX(100%);
+  }
+
+  &-enter-active {
+    transform: translateX(0%);
+    transition: transform 300ms ease-in-out;
+  }
+
+  &__shown {
+    position: absolute;
+    left: 50%;
+  }
+
+  &__hidden {
+    position: absolute;
+    left: 75%;
+  }
 }
 
-.left-enter {
-  transform: translateX(-100%);
-}
+.left {
+  &-enter {
+    transform: translateX(-100%);
+  }
 
-.left-enter.left-enter-active {
-  transform: translateX(0%);
-  transition: transform 300ms ease-in-out;
-}
+  &-enter-active {
+    transform: translateX(0%);
+    transition: transform 300ms ease-in-out;
+  }
 
-.left__hidden{
-  position: absolute;
-  left:0;
-}
+  &__hidden {
+    position: absolute;
+    left: 0;
+  }
 
-.left__shown{
-  position: absolute;
-  left:25%;
-}
-
-.right__shown{
-  position: absolute;
-  left:50%;
-}
-
-.right__hidden{
-  position: absolute;
-  left:75%;
+  &__shown {
+    position: absolute;
+    left: 25%;
+  }
 }
 
 @media screen
 and (max-width: 450px)
 and (orientation: portrait) {
-  .calendar__months{
+  .calendar__months {
     position: relative;
     display: flex;
     left: -100%;
@@ -87,58 +127,26 @@ and (orientation: portrait) {
   }
 }
 
-.month__title{
-  margin-bottom: 0.25rem;
-  text-align: center;
-}
-
-.month__table{
-  display: table;
-  width:100%;
-}
-
-.day__row{
-  display: table-row;
-}
-
-.day__item{
-  display: table-cell;
-  width: 2rem;
-  height: 1rem;
-  margin: 5em;
-  flex-grow: 1;
-  text-align: center;
-  font-size: 90%;
-}
-
-.day-text{
-    font-weight: bold;
-  }
-.day-out-month{
-    opacity: 0.3;
-}
-
-
 .is-active {
   opacity: 0.8;
   cursor: pointer;
 }
 
-.is-marked{
+.is-marked {
     opacity: 0.7;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 0.1em solid;
 }
-.is-marked-is-highlighted{
+.is-marked-is-highlighted {
     background-color: #228b22;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 0.1em solid;
 }
-.is-selected{
+.is-selected {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -146,11 +154,11 @@ and (orientation: portrait) {
     font-weight: bolder;
 }
 
-.is-deactive{
+.is-deactive {
   opacity: 0.6;
 }
 
-.noselect{
+.noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
