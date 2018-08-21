@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import GridCalendar from '../../src/react-chayns-gridcalendar/index';
+import { GridCalendar } from '../../src/index';
 import '../../src/react-chayns-gridcalendar/index.scss';
 import ExampleContainer from '../ExampleContainer';
 
