@@ -10,8 +10,8 @@ export default class Example extends Component {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick() {
-
+    onClick(date) {
+        console.log(date);
     }
 
     render() {
@@ -25,7 +25,7 @@ export default class Example extends Component {
                         </div>
                         <div className="accordion__body">
                             <div className="accordion__content" style={{ minHeight: '200px' }}>
-                                <Calendar onDateSelect={this.onClick}/>
+                                <Calendar onDateSelect={this.onClick} endDate={new Date()}/>
                             </div>
                         </div>
                     </div>
