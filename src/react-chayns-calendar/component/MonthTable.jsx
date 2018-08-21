@@ -37,17 +37,17 @@ export default class MonthTable extends Component {
         const _table = [];
         let normalWeekStart;
 
-        if(startDate.getDay() > 0) {
+        if (startDate.getDay() > 0) {
             normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
-        }else{
+        } else {
             normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
         }
 
-        for(let i = 0; i < 6; i += 1) {
+        for (let i = 0; i < 6; i += 1) {
             const _row = [];
 
-            if(i === 0) {
-                if(startDate.getDay() > 0) {
+            if (i === 0) {
+                if (startDate.getDay() > 0) {
                     for (let j = 2; j <= startDate.getDay(); j += 1) {
                         _row.push({
                             date: new Date(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
@@ -76,7 +76,7 @@ export default class MonthTable extends Component {
             } else {
                 for(let j = 0; j < 7; j += 1) {
                     const _date = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
-                    if(_date.getMonth() === startDate.getMonth()) {
+                    if (_date.getMonth() === startDate.getMonth()) {
                         _row.push({
                             date: _date,
                             inMonth: true
@@ -117,10 +117,13 @@ export default class MonthTable extends Component {
                         </div>
                     ))}
                 </div>
-                {_table.map((row, index1) => (
-                    <div className="day__row" key={index1}>
+                {_table.map((row, index) => (
+                    <div
+                        className="day__row"
+                        key={index}
+                    >
                     {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
-                        {row.map((day, index2) => {
+                        {row.map((day) => {
                             let _active = activateAll;
                             let _selected = false;
                             let _marked = false;
@@ -129,11 +132,11 @@ export default class MonthTable extends Component {
                             let _className = 'day__item day-in-month';
                             const _style = {};
 
-                            if(_active) {
+                            if (_active) {
                                 _onClick = true;
                             }
 
-                            if(activated) {
+                            if (activated) {
                                 for (let i = 0; i < activated.length; i += 1) {
                                     if (MonthTable.areDatesEqual(activated[i], day.date)) {
                                         _active = true;
@@ -144,20 +147,20 @@ export default class MonthTable extends Component {
                                 }
                             }
 
-                            if(selected && MonthTable.areDatesEqual(selected, day.date)) {
+                            if (selected && MonthTable.areDatesEqual(selected, day.date)) {
                                 _active = true;
                                 _selected = true; // `-is-active-is-selected${_marked} chayns__color--100`;
                             }
 
-                            if(highlighted instanceof Array) {
-                                for(let k = 0; k < highlighted.length; k += 1) {
-                                    for(let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
+                            if (highlighted instanceof Array) {
+                                for (let k = 0; k < highlighted.length; k += 1) {
+                                    for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
                                         if (MonthTable.areDatesEqual(highlighted[k].dates[l], day.date)) {
                                             _active = true;
                                             _marked = true;
                                             _onClick = true;
                                             _highlighted = true;
-                                            if(highlighted[k].color) {
+                                            if (highlighted[k].color) {
                                                 _style.backgroundColor = `${highlighted[k].color}`;
                                             }
                                         }
@@ -177,7 +180,8 @@ export default class MonthTable extends Component {
                                     }
                                 }
                             }
-                            if(day.inMonth) {
+
+                            if (day.inMonth) {
                                 _className = classNames('day__item day-in-month', {
                                     'is-active': _active,
                                     'is-deactive': !_active,
@@ -189,12 +193,12 @@ export default class MonthTable extends Component {
 
                                 });
 
-                                if(_onClick && onDateSelect) {
+                                if (_onClick && onDateSelect) {
                                     return (
                                         <div
                                             className={_className}
                                             style={_style}
-                                            key={index2}
+                                            key={day.date.getTime()}
                                             onClick={() => onDateSelect(day.date)}
                                         >
                                             {day.date.getDate()}
@@ -202,15 +206,22 @@ export default class MonthTable extends Component {
                                     );
                                 }
 
-                                return(
-                                    <div className={_className} style={_style} key={index2}>
+                                return (
+                                    <div
+                                        className={_className}
+                                        style={_style}
+                                        key={day.date.getTime()}
+                                    >
                                         {day.date.getDate()}
                                     </div>
                                 );
                             }
 
-                            return(
-                                <div className="day__item day-out-month" key={index2}>
+                            return (
+                                <div
+                                    className="day__item day-out-month"
+                                    key={day.date.getTime()}
+                                >
                                     {day.date.getDate()}
                                 </div>
                             );
