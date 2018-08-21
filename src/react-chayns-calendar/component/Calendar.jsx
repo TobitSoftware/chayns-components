@@ -40,12 +40,20 @@ export default class Calendar extends Component {
 
     constructor() {
         super();
+
         this.state = {
             focus: new Date(),
             animationKey: 0.05,
             months: [],
             animation: '',
         };
+
+        this.navigateLeftOnClick = this.navigateLeftOnClick.bind(this);
+        this.navigateRightOnClick = this.navigateRightOnClick.bind(this);
+
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        this.handleTouchMove = this.handleTouchMove.bind(this);
+        this.handleTouchEnd = this.handleTouchEnd.bind(this);
     }
 
     componentWillMount() {
@@ -343,21 +351,21 @@ export default class Calendar extends Component {
         return (
             <div
                 className="buffer"
-                onTouchMove={this.handleTouchMove.bind(this)}
-                onTouchStart={this.handleTouchStart.bind(this)}
-                onTouchEnd={this.handleTouchEnd.bind(this)}
+                onTouchMove={this.handleTouchMove}
+                onTouchStart={this.handleTouchStart}
+                onTouchEnd={this.handleTouchEnd}
             >
                 <div className="absolute">
                     <div className="calendar__navigation">
                         <div
-                            onClick={this.navigateLeftOnClick.bind(this)}
+                            onClick={this.navigateLeftOnClick}
                             className="calendar__navigate left"
                             hidden={_navigateLeft}
                         >
                             <i className="fa fa-chevron-left"/>
                         </div>
                         <div
-                            onClick={this.navigateRightOnClick.bind(this)}
+                            onClick={this.navigateRightOnClick}
                             className="calendar__navigate right"
                             hidden={_navigateRight}
                         >
