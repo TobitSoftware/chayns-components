@@ -34,7 +34,7 @@ export const shareProvider = [
         providerId: 2,
         name: 'Facebook',
         androidIdentifier: 'com.facebook.katana',
-        icon: 'fa-facebook-official',
+        icon: 'fa-facebook',
         action: 1,
         url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
         available: true

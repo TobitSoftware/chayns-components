@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import insertStyle from '../../utils/insertStyle';
 import share from './sharingActions';
 
 export default class SharingBarItem extends Component {
@@ -10,22 +9,6 @@ export default class SharingBarItem extends Component {
         provider: PropTypes.object.isRequired,
         link: PropTypes.string.isRequired
     };
-
-    componentDidMount() {
-        let css = `
-            .sharing-bar__item:active {
-                background-color: ${chayns.getSchemeColor(100)}!important;
-            }
-        `;
-
-        if (chayns.env.isDesktop) {
-            css += `.sharing-bar__iten:hover {
-                background-color: ${chayns.getSchemeColor(100)}!important;
-            }`;
-        }
-
-        insertStyle('chayns-components-react-chayns-sharingbar', css);
-    }
 
     onClick = () => {
         const { provider, link } = this.props;
@@ -39,9 +22,8 @@ export default class SharingBarItem extends Component {
         return (
             <button
                 type="button"
-                className="sharing-bar__iten"
+                className="sharing-bar__iten button"
                 title={name}
-                style={{ backgroundColor: chayns.getSchemeColor(70) }}
                 onClick={this.onClick}
             >
                 <i className={icon}/>
