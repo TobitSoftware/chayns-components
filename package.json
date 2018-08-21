@@ -1,7 +1,7 @@
 {
   "name": "chayns-components",
   "version": "2.7.2",
-  "description": "some standalone react components",
+  "description": "Some react components for chayns®",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "lib_esnext/index.js",
