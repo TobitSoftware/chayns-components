@@ -19,8 +19,9 @@ export default class Calendar extends Component {
     };
 
     static propTypes = {
-        startDate: PropTypes.instanceOf(Date),
-        endDate: PropTypes.instanceOf(Date),
+        startDate: PropTypes.instanceOf(Date).isRequired,
+        endDate: PropTypes.instanceOf(Date).isRequired,
+        onDateSelect: PropTypes.func.isRequired,
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
         highlighted: PropTypes.oneOfType([
@@ -34,7 +35,6 @@ export default class Calendar extends Component {
             }))
         ]),
         activateAll: PropTypes.bool,
-        onDateSelect: PropTypes.func,
     };
 
     constructor() {
