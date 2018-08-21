@@ -1,6 +1,6 @@
 let lastPageY;
 
-const requestAnimationFrameFallback = window.requestAnimationFrame || window.setImmediate || (c => setTimeout(c, 0));
+const requestAnimationFrameFallback = window.requestAnimationFrame.bind(window) || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || (c => setTimeout(c, 0));
 
 export default class ScrollViewHelper {
     constructor(el, { wrapper, content, bar }) {
