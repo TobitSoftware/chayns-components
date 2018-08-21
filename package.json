@@ -27,6 +27,8 @@
     "tobit",
     "chayns"
   ],
+  "homepage": "https://de.tobit.software/",
+  "bugs": "https://github.com/TobitSoftware/chayns-components/issues",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
