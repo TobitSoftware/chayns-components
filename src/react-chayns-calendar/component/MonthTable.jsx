@@ -22,6 +22,15 @@ export default class MonthTable extends Component {
         activateAll: null,
     };
 
+    /**
+     * Compares two dates with year, month and date (looser equality than == operator)
+     * @param {Date} date1 - First date for comparison
+     * @param {Date} date2 - First date for comparison
+     */
+    static areDatesEqual(date1, date2) {
+        return date1.getUTCFullYear() === date2.getUTCFullYear() && date1.getUTCMonth() === date2.getUTCMonth() && date1.getUTCDate() === date2.getUTCDate();
+    }
+
     createTable() {
         const { startDate } = this.props;
 
@@ -64,7 +73,7 @@ export default class MonthTable extends Component {
                         inMonth: true
                     });
                 }
-            }else{
+            } else {
                 for(let j = 0; j < 7; j += 1) {
                     const _date = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
                     if(_date.getMonth() === startDate.getMonth()) {
@@ -126,7 +135,7 @@ export default class MonthTable extends Component {
 
                             if(activated) {
                                 for (let i = 0; i < activated.length; i += 1) {
-                                    if (activated[i].getYear() === day.date.getYear() && activated[i].getMonth() === day.date.getMonth() && activated[i].getDate() === day.date.getDate()) {
+                                    if (MonthTable.areDatesEqual(activated[i], day.date)) {
                                         _active = true;
                                         _marked = true;
                                         _onClick = true;
@@ -135,7 +144,7 @@ export default class MonthTable extends Component {
                                 }
                             }
 
-                            if(selected && selected.getYear() === day.date.getYear() && selected.getMonth() === day.date.getMonth() && selected.getDate() === day.date.getDate()) {
+                            if(selected && MonthTable.areDatesEqual(selected, day.date)) {
                                 _active = true;
                                 _selected = true; // `-is-active-is-selected${_marked} chayns__color--100`;
                             }
@@ -143,7 +152,7 @@ export default class MonthTable extends Component {
                             if(highlighted instanceof Array) {
                                 for(let k = 0; k < highlighted.length; k += 1) {
                                     for(let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
-                                        if (highlighted[k].dates[l].getYear() === day.date.getYear() && highlighted[k].dates[l].getMonth() === day.date.getMonth() && highlighted[k].dates[l].getDate() === day.date.getDate()) {
+                                        if (MonthTable.areDatesEqual(highlighted[k].dates[l], day.date)) {
                                             _active = true;
                                             _marked = true;
                                             _onClick = true;
@@ -156,7 +165,7 @@ export default class MonthTable extends Component {
                                 }
                             } else if (highlighted && highlighted.dates) {
                                 for (let k = 0; k < highlighted.dates.length; k += 1) {
-                                    if (highlighted.dates[k].getYear() === day.date.getYear() && highlighted.dates[k].getMonth() === day.date.getMonth() && highlighted.dates[k].getDate() === day.date.getDate()) {
+                                    if (MonthTable.areDatesEqual(highlighted.dates[k], day.date)) {
                                         _active = true;
                                         _marked = true;
                                         _onClick = true;
