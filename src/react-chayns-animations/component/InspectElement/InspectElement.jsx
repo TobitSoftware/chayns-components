@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactTransitionGroup from 'react-transition-group/TransitionGroup';
 
-import Modal from './Modal';
 import * as Constants from './constants';
 import ModalTransition from './ModalTransition';
 
@@ -117,18 +116,20 @@ export default class InspectElement extends Component {
     };
 
     renderComponent = (props) => {
-        const { component: Component, children } = this.props;
+        const { component: WrapperComponent, children } = this.props;
 
-        if(!Component) return null;
+        if(!WrapperComponent) {
+            return null;
+        }
 
         return (
-            <Component
+            <WrapperComponent
                 {...this.props}
                 {...this.getCustomProps()}
                 {...props}
             >
                 {children}
-            </Component>
+            </WrapperComponent>
         );
     };
 

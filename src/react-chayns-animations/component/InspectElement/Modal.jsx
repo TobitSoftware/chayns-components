@@ -62,6 +62,8 @@ export default class Modal extends Component {
         if (status !== EXITING && nextStatus === EXITING) {
             return this.componentWillLeave();
         }
+
+        return null;
     }
 
     getModalWidth() {
