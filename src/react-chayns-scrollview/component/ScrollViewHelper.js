@@ -1,6 +1,6 @@
 let lastPageY;
 
-const requestAnimationFrameFallback = window.requestAnimationFrame || window.setImmediate || (c => setTimeout(c, 0));
+const requestAnimationFrameFallback = window.requestAnimationFrame.bind(window) || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || (c => setTimeout(c, 0));
 
 export default class ScrollViewHelper {
     constructor(el, { wrapper, content, bar }) {
@@ -53,14 +53,15 @@ export default class ScrollViewHelper {
     }
 
     moveBar() {
-        const totalHeight = this.content.scrollHeight;
-        const ownHeight = this.content.clientHeight;
-
-        this.scrollRatio = ownHeight / totalHeight;
-
-        const right = (this.target.clientWidth - this.bar.clientWidth) * -1;
-
         requestAnimationFrameFallback(() => {
+            const totalHeight = this.content.scrollHeight;
+            const { height } = this.content.getBoundingClientRect();
+            const ownHeight = Math.ceil(height);
+
+            this.scrollRatio = ownHeight / totalHeight;
+
+            const right = (this.target.clientWidth - this.bar.clientWidth) * -1;
+
             if(this.scrollRatio >= 1) {
                 this.target.classList.add('cc__scroll-view--hidden');
             } else {
