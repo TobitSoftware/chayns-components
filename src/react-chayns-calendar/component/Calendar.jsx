@@ -1,26 +1,21 @@
-/* eslint-disable */
-
+/* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Month from './Month';
+import areDatesEqual from '../utils/areDatesEqual';
 
 
-const TODAY = new Date(),
-    TRANSITION_TIME = 300;
-
+const TODAY = new Date();
+const TRANSITION_TIME = 300;
+const MONTH_NAMES = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
 
 export default class Calendar extends Component {
-
-    static defaultProps = {
-        selected: TODAY,
-        activateAll: true
-    };
-
     static propTypes = {
-        startDate: PropTypes.instanceOf(Date),
-        endDate: PropTypes.instanceOf(Date),
+        startDate: PropTypes.instanceOf(Date).isRequired,
+        endDate: PropTypes.instanceOf(Date).isRequired,
+        onDateSelect: PropTypes.func.isRequired,
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
         highlighted: PropTypes.oneOfType([
@@ -34,127 +29,191 @@ export default class Calendar extends Component {
             }))
         ]),
         activateAll: PropTypes.bool,
-        onDateSelect: PropTypes.func,
+    };
+
+    static defaultProps = {
+        selected: TODAY,
+        activateAll: true,
+        activated: null,
+        highlighted: null,
     };
 
     constructor() {
         super();
+
         this.state = {
             focus: new Date(),
             animationKey: 0.05,
             months: [],
-            animation: ''
+            animation: '',
         };
-        this.MONTH_NAMES = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+        this.navigateLeftOnClick = this.navigateLeftOnClick.bind(this);
+        this.navigateRightOnClick = this.navigateRightOnClick.bind(this);
+
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        this.handleTouchMove = this.handleTouchMove.bind(this);
+        this.handleTouchEnd = this.handleTouchEnd.bind(this);
     }
 
     componentWillMount() {
-        let _focus = this.props.selected; //TODO: SELECETED SHOULD NOT BE OUTSIDE THE START AND END TIME. ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
-        _focus.setMilliseconds(0);
-        _focus.setSeconds(0);
-        _focus.setMinutes(0);
-        _focus.setHours(0);
-        this.setMonths(_focus);
+        const { selected } = this.props; // TODO: SELECTED SHOULD NOT BE OUTSIDE THE START AND END TIME. ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
+
+        const active = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
+        this.setMonths(active);
     }
 
-    setMonths(_focus){
-        let _leftHidden = new Date(_focus.getFullYear(),_focus.getMonth()-1,1);
-        let _rightShown = new Date(_focus.getFullYear(),_focus.getMonth()+1,1);
-        let _rightHidden = new Date(_focus.getFullYear(),_focus.getMonth()+2,1);
+    setMonths(_focus) {
+        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
+        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
+        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 2, 1);
+
         this.setState({
             focus: _focus,
             months: [
                 {
-                    title: this.MONTH_NAMES[_leftHidden.getMonth()],
-                    className: "left__hidden month",
+                    title: MONTH_NAMES[_leftHidden.getMonth()],
+                    className: 'left__hidden month',
                     startDate: _leftHidden,
                     endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
                 },
                 {
-                    title: this.MONTH_NAMES[_focus.getMonth()],
-                    className: "left__shown month",
+                    title: MONTH_NAMES[_focus.getMonth()],
+                    className: 'left__shown month',
                     startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
                     endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
                 },
                 {
-                    title: this.MONTH_NAMES[_rightShown.getMonth()],
-                    className: "right__shown month",
+                    title: MONTH_NAMES[_rightShown.getMonth()],
+                    className: 'right__shown month',
                     startDate: _rightShown,
                     endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
                 },
                 {
-                    title: this.MONTH_NAMES[_rightHidden.getMonth()],
-                    className: "right__hidden month",
+                    title: MONTH_NAMES[_rightHidden.getMonth()],
+                    className: 'right__hidden month',
                     startDate: _rightHidden,
                     endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
                 }]
         });
     }
 
-    getNavigateLeft(){
-        return (this.props.activateAll && !this.props.startDate ||  (this.props.startDate && (this.props.startDate.getYear() < this.state.focus.getYear() || (this.props.startDate.getYear() === this.state.focus.getYear() && this.props.startDate.getMonth()<this.state.focus.getMonth()))))
-    }
+    getNavigateLeft() {
+        const { activateAll, startDate } = this.props;
+        const { focus } = this.state;
 
-    getNavigateRight(){
-        let FOCUS_FACTOR = window.screen.width<450 ? 0 : 1;
-        return (this.props.activateAll && !this.props.endDate || (this.props.endDate && (this.props.endDate.getYear() > this.state.focus.getYear() || (this.props.endDate.getYear() === this.state.focus.getYear() && this.props.endDate.getMonth()-FOCUS_FACTOR>this.state.focus.getMonth()))))
-    }
-
-    navigateRightOnClick(){
-        if(this.getNavigateRight()){
-            let _focus = new Date(this.state.focus.getFullYear(), this.state.focus.getMonth()+1, 1);
-            this.setMonths(_focus);
-            this.setState({
-                animationKey: this.state.animationKey+1,
-                animation: 'right'
-            });
+        if (!startDate) {
+            return !!activateAll;
         }
+
+        if (startDate.getFullYear() < focus.getFullYear()) {
+            return true;
+        }
+
+        if (startDate.getFullYear() === focus.getFullYear()
+            && startDate.getMonth() < focus.getMonth()) {
+            return true;
+        }
+
+        return false;
     }
 
-    navigateLeftOnClick(){
+    getNavigateRight() {
+        const { activateAll, endDate } = this.props;
+        const { focus } = this.state;
 
-        if(this.getNavigateLeft()){
-            let _focus = new Date(this.state.focus.getFullYear(), this.state.focus.getMonth()-1, 1);
-            this.setMonths(_focus);
-            this.setState({
-                animationKey: this.state.animationKey+1,
-                animation: 'left'
-            });
+        const FOCUS_FACTOR = window.screen.width < 450 ? 0 : 1;
+
+        if (!endDate) {
+            return !!activateAll;
         }
+
+        if (endDate.getFullYear() > focus.getFullYear()) {
+            return true;
+        }
+
+        if (endDate.getFullYear() === focus.getFullYear()
+            && endDate.getMonth() - FOCUS_FACTOR > focus.getMonth()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    navigateRightOnClick() {
+        if (!this.getNavigateRight()) {
+            return;
+        }
+
+        const { focus, animationKey } = this.state;
+
+        const newFocus = new Date(focus.getFullYear(), focus.getMonth() + 1, 1);
+
+        this.setMonths(newFocus);
+        this.setState({
+            animationKey: animationKey + 1,
+            animation: 'right'
+        });
+    }
+
+    navigateLeftOnClick() {
+        if(!this.getNavigateLeft()) {
+            return;
+        }
+
+        const { focus, animationKey } = this.state;
+
+        const newFocus = new Date(focus.getFullYear(), focus.getMonth() - 1, 1);
+
+        this.setMonths(newFocus);
+        this.setState({
+            animationKey: animationKey + 1,
+            animation: 'left'
+        });
     }
 
     /*
      TODO: DER KALENDAR MUSS SICH MIT POSITION VON HANDLE TOUCH MOVE BEWEGEN
      */
 
-    handleTouchStart(event){
+    handleTouchStart(event) {
         this.swipeX = event.touches[0].clientX;
     }
 
-    handleTouchMove(event){
-        //console.log('ELEMENT',this.calendarMonths.offsetWidth);
-        //this.move = -1*(this.swipeX-event.touches[0].clientX);
-        //this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}px)`;
+    handleTouchMove(event) {
+        // console.log('ELEMENT',this.calendarMonths.offsetWidth);
+        // this.move = -1*(this.swipeX-event.touches[0].clientX);
+        // this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}px)`;
 
         this.moveSwipeX = event.touches[0].clientX;
     }
 
-    handleTouchEnd(){
-        if(this.swipeX && this.moveSwipeX){
-            if(this.moveSwipeX>=this.swipeX+60){
+    handleTouchEnd() {
+        if (this.swipeX && this.moveSwipeX) {
+            if (this.moveSwipeX >= this.swipeX + 60) {
                 this.navigateLeftOnClick();
-                this.swipeX=null;
-                this.moveSwipeX=null;
-                //this.move=null;
-            }else if(this.moveSwipeX<=this.swipeX-60){
+                this.swipeX = null;
+                this.moveSwipeX = null;
+                // this.move=null;
+            } else if (this.moveSwipeX <= this.swipeX - 60) {
                 this.navigateRightOnClick();
-                this.swipeX=null;
-                this.moveSwipeX=null;
+                this.swipeX = null;
+                this.moveSwipeX = null;
             }
         }
     }
 
-    renderMonths(){
+    renderMonths() {
+        const {
+            startDate,
+            activated: activatedProp,
+            highlighted,
+            selected,
+            activateAll,
+            onDateSelect,
+        } = this.props;
+        const { months, animation } = this.state;
+
         /**
          * TODO
          *
@@ -165,27 +224,27 @@ export default class Calendar extends Component {
          * @type {null}
          * @private
          */
-        let _startDate = this.props.startDate ? this.props.startDate : null,
-            _activated = this.props.activated && this.props.activated.length > 0 ? this.props.activated : null,
-            _highlighted = this.props.highlighted ? this.props.highlighted : null;
-        return this.state.months.map((month, index)=> {
-            let activated = [],
-                _selected;
-            let tempDates = [];
-            let tempHighlighted = [];
-            let tempObj = [];
+        const _startDate = startDate || null;
+        const _activated = activatedProp && activatedProp.length > 0 ? activatedProp : null;
+        const _highlighted = highlighted || null;
 
-            if (month.startDate.getYear() === this.props.selected.getYear() && month.startDate.getMonth() === this.props.selected.getMonth()) {
-                _selected = this.props.selected;
+        return months.map((month, index) => {
+            const activated = [];
+            const tempDates = [];
+            const tempObj = [];
+            let _selected;
+            let tempHighlighted = [];
+
+            if (month.startDate.getYear() === selected.getYear() && month.startDate.getMonth() === selected.getMonth()) {
+                _selected = selected;
             }
 
-            for (var i = 0; _activated && i < _activated.length; i++) {
+            for (let i = 0; _activated && i < _activated.length; i += 1) {
                 if (month.startDate.getYear() === _activated[i].getYear() && month.startDate.getMonth() === _activated[i].getMonth()) {
                     if (_startDate) {
-
-                        if ((_startDate.getYear() < _activated[i].getYear() ||
-                            _startDate.getYear() === _activated[i].getYear() && _startDate.getMonth() < _activated[i].getMonth()) ||
-                            (_startDate.getMonth() === _activated[i].getMonth() && _startDate.getDate() <= _activated[i].getDate())
+                        if ((_startDate.getYear() < _activated[i].getYear()
+                            || (_startDate.getYear() === _activated[i].getYear() && _startDate.getMonth() < _activated[i].getMonth()))
+                            || (_startDate.getMonth() === _activated[i].getMonth() && _startDate.getDate() <= _activated[i].getDate())
                         ) {
                             activated.push(_activated[i]);
                         }
@@ -195,60 +254,70 @@ export default class Calendar extends Component {
                 }
             }
 
-            if(this.props.activateAll){
+            if(activateAll) {
                 if (_highlighted instanceof Array) {
-                    for (let j = 0; j < _highlighted.length; j++) {
-                        let dates = [];
-                        for (let k = 0; k < _highlighted[j].dates.length; k++) {
+                    for (let j = 0; j < _highlighted.length; j += 1) {
+                        const dates = [];
+
+                        for (let k = 0; k < _highlighted[j].dates.length; k += 1) {
                             if (_highlighted[j].dates[k].getTime() >= month.startDate && _highlighted[j].dates[k].getTime() <= month.endDate) {
                                 dates.push(_highlighted[j].dates[k]);
                             }
                         }
 
                         if (dates.length > 0) {
-                            tempObj.push({dates: dates, color: _highlighted[j].color});
+                            tempObj.push({
+                                dates,
+                                color: _highlighted[j].color
+                            });
                         }
                     }
-                }else{
-                    //TODO
+                } else {
+                    // TODO
                 }
-            }else {
-                if(activated){
-                    for (let i = 0; i < activated.length; i++) {
-                        if (_highlighted instanceof Array) {
-                            for (let j = 0; j < _highlighted.length; j++) {
-                                let dates = [];
-                                for (let k = 0; k < _highlighted[j].dates.length; k++) {
-                                    if (_highlighted[j].dates[k].getYear() === activated[i].getYear() && _highlighted[j].dates[k].getMonth() === activated[i].getMonth() && _highlighted[j].dates[k].getDate() === activated[i].getDate()) {
-                                        dates.push(_highlighted[j].dates[k]);
-                                    }
-                                }
-                                if (dates.length > 0) {
-                                    tempObj.push({dates: dates, color: _highlighted[j].color});
+            } else if (activated) {
+                for (let i = 0; i < activated.length; i += 1) {
+                    if (_highlighted instanceof Array) {
+                        for (let j = 0; j < _highlighted.length; j += 1) {
+                            const dates = [];
+
+                            for (let k = 0; k < _highlighted[j].dates.length; k += 1) {
+                                if (areDatesEqual(_highlighted[j].dates[k], activated[i])) {
+                                    dates.push(_highlighted[j].dates[k]);
                                 }
                             }
-                        } else {
-                            if (_highlighted && _highlighted.dates) {
-                                for (let j = 0; _highlighted.dates.length < j; j++) {
-                                    if (_highlighted.dates[j].getYear() === activated[i].getYear() && _highlighted.dates[j].getMonth() === activated[i].getMonth() && _highlighted.dates[j].getDate() === activated[i].getDate()) {
-                                        tempDates.push(_highlighted.dates[j]);
-                                    }
-                                }
+
+                            if (dates.length > 0) {
+                                tempObj.push({
+                                    dates,
+                                    color: _highlighted[j].color
+                                });
+                            }
+                        }
+                    } else if (_highlighted && _highlighted.dates) {
+                        for (let j = 0; _highlighted.dates.length < j; j += 1) {
+                            if (areDatesEqual(_highlighted.dates[j], activated[i])) {
+                                tempDates.push(_highlighted.dates[j]);
                             }
                         }
                     }
                 }
             }
-            if(tempDates.length>0) {
-                tempHighlighted = {dates: tempDates, color: _highlighted.color};
+
+            if (tempDates.length > 0) {
+                tempHighlighted = {
+                    dates: tempDates,
+                    color: _highlighted.color
+                };
             }
-            if(tempObj.length>0){
+
+            if (tempObj.length > 0) {
                 tempHighlighted = tempObj;
             }
 
             return (
                 <CSSTransition
-                    classNames={this.state.animation}
+                    classNames={animation}
                     timeout={{
                         enter: TRANSITION_TIME,
                     }}
@@ -257,7 +326,7 @@ export default class Calendar extends Component {
                     key={month.startDate.getTime() * (index + 1)}
                 >
                     <Month
-                        onDateSelect={this.props.onDateSelect}
+                        onDateSelect={onDateSelect}
                         title={month.title}
                         className={month.className}
                         startDate={month.startDate}
@@ -265,38 +334,51 @@ export default class Calendar extends Component {
                         selected={_selected}
                         activated={activated}
                         highlighted={tempHighlighted}
-                        activateAll={this.props.activateAll}
+                        activateAll={activateAll}
                         key={month.startDate.getTime() * (index + 1)}
                     />
                 </CSSTransition>
-            )
-        })
+            );
+        });
     }
 
     render() {
-        let _navigateLeft = !(this.getNavigateLeft());
-        let _navigateRight = !(this.getNavigateRight());
+        const _navigateLeft = !(this.getNavigateLeft());
+        const _navigateRight = !(this.getNavigateRight());
 
-        let _months = this.renderMonths();
+        const _months = this.renderMonths();
+
         return (
-            <div className="buffer" onTouchMove={this.handleTouchMove.bind(this)} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
+            <div
+                className="buffer"
+                onTouchMove={this.handleTouchMove}
+                onTouchStart={this.handleTouchStart}
+                onTouchEnd={this.handleTouchEnd}
+            >
                 <div className="absolute">
                     <div className="calendar__navigation">
-                        <div onClick={this.navigateLeftOnClick.bind(this)} className="calendar__navigate left" hidden={_navigateLeft}>
+                        <div
+                            onClick={this.navigateLeftOnClick}
+                            className="calendar__navigate left"
+                            hidden={_navigateLeft}
+                        >
                             <i className="fa fa-chevron-left"/>
                         </div>
-                        <div onClick={this.navigateRightOnClick.bind(this)} className="calendar__navigate right" hidden={_navigateRight}>
+                        <div
+                            onClick={this.navigateRightOnClick}
+                            className="calendar__navigate right"
+                            hidden={_navigateRight}
+                        >
                             <i className="fa fa-chevron-right"/>
                         </div>
                     </div>
                 </div>
                 <div className="calendar__months">
-                    <TransitionGroup
-                    >
+                    <TransitionGroup>
                         {_months}
                     </TransitionGroup>
                 </div>
             </div>
-        )
+        );
     }
 }
