@@ -41,6 +41,8 @@
   &__title {
     margin-bottom: 0.25rem;
     text-align: center;
+
+    user-select: none;
   }
 
   &__table {
