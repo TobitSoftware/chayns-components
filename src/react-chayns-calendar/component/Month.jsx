@@ -37,7 +37,7 @@ Month.propTypes = {
     activateAll: PropTypes.func,
     startDate: PropTypes.instanceOf(Date).isRequired,
     endDate: PropTypes.instanceOf(Date).isRequired,
-    selected: PropTypes.bool,
+    selected: PropTypes.instanceOf(Date),
     activated: PropTypes.bool,
     highlighted: PropTypes.bool,
 };
@@ -45,7 +45,7 @@ Month.propTypes = {
 Month.defaultProps = {
     title: '',
     className: '',
-    selected: false,
+    selected: null,
     activated: false,
     highlighted: false,
     activateAll: null,
