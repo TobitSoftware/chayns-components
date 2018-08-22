@@ -1,8 +1,8 @@
-[![npm](https://img.shields.io/npm/v/chayns-components.svg)](https://www.npmjs.com/package/chayns-components) 
-[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/blob/master/LICENSE) 
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/pulls) 
-[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/pulls?q=is%3Apr+is%3Aclosed)
-[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg)](https://github.com/TobitSoftware/chayns-components/graphs/contributors) 
+[![npm](https://img.shields.io/npm/v/eslint.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components) 
+[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/blob/master/LICENSE) 
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls) 
+[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls?q=is%3Apr+is%3Aclosed)
+[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/graphs/contributors) 
 
 # chayns-components
 
