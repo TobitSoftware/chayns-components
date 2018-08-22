@@ -84,19 +84,21 @@ export default class SelectItem extends Component {
                     {name}
                 </label>
 
-                <TransitionGroup>
-                    {checked && children && (
-                        <CSSTransition
-                            key="children"
-                            classNames="react-fade"
-                            timeout={{ enter: 500, exit: 500 }}
-                        >
-                            <div className="selectlist__selectitem">
-                                {children}
-                            </div>
-                        </CSSTransition>
-                    )}
-                </TransitionGroup>
+                {children && (
+                    <TransitionGroup>
+                        {checked && (
+                            <CSSTransition
+                                key="children"
+                                classNames="react-fade"
+                                timeout={{ enter: 500, exit: 500 }}
+                            >
+                                <div className="selectlist__selectitem">
+                                    {children}
+                                </div>
+                            </CSSTransition>
+                        )}
+                    </TransitionGroup>
+                )}
             </div>
         );
     }
