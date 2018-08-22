@@ -37,6 +37,7 @@ The following components are part of this package:
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/)       | SelectButton Component                          | [Readme](/src/react-chayns-selectbutton/README.md)    |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/)           | SelectList Component                            | [Readme](/src/react-chayns-selectlist/README.md)      |
 | [react-chayns-setupwizard](/src/react-chayns-setupwizard/)         | SetupWizard Component                           | [Readme](/src/react-chayns-setupwizard/README.md)     |
+| [react-chayns-sharingbar](/src/react-chayns-sharingbar/)           | SharingBar Component                            | [Readme](/src/react-chayns-sharingbar/README.md)      |
 | [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/) | SmallWaitCursor Component                       | [Readme](/src/react-chayns-smallwaitcursor/README.md) |
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-upload](/src/react-chayns-upload/)                   | FileUpload Component                            | [Readme](/src/react-chayns-upload/README.md)          |
