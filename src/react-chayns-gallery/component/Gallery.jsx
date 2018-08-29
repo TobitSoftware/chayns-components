@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MoreImages from './MoreImages';
 import ImageContainer from './ImageContainer';
 
 export default class Gallery extends Component {
     static propTypes = {
         urls: PropTypes.array.isRequired,
-        onlyIcon: PropTypes.bool,
-        onClick: PropTypes.func
-
+        onClick: PropTypes.func,
+        onDelete: PropTypes.func,
+        deleteMode: PropTypes.bool,
+        height: PropTypes.number,
+        width: PropTypes.number
     };
 
     static defaultProps = {
-        onlyIcon: false,
-        onClick: chayns.openImage
+        onClick: chayns.openImage,
+        onDelete: () => {
+        },
+        deleteMode: false,
+        height: null,
+        width: null
     };
 
     constructor() {
         super();
-        this.openFirstImage = this.openGallery.bind(this, 0);
-        this.openSecondImage = this.openGallery.bind(this, 1);
-        this.openThirdImage = this.openGallery.bind(this, 2);
+        this.openImage = this.openGallery.bind(this);
     }
 
     openGallery(start) {
@@ -30,38 +33,41 @@ export default class Gallery extends Component {
     }
 
     render() {
-        const { urls, onlyIcon } = this.props;
-        const count = urls.length;
-
+        const {
+            urls, height, width, onDelete, deleteMode
+        } = this.props;
+        const style = {};
+        if (width) {
+            style.width = `${width}px`;
+        }
+        if (!deleteMode) {
+            style.height = (height) ? `${height}px` : (chayns.env.isMobile) ? '256px' : '428px';
+        }
         return (
-            <div className="chayns-gallery" >
+            <div className="chayns-gallery" style={style}>
                 <div className="gallery-grid">
-                    <ImageContainer
-                        className="gallery_item"
-                        url={urls[0]}
-                        onClick={this.openFirstImage}
-                    />
-                    {(count > 1) && (
-                        <ImageContainer
-                            className="gallery_item"
-                            url={urls[1]}
-                            onClick={this.openSecondImage}
-                        />
-                    )}
-                    {(count > 2) && (
-                        <ImageContainer
-                            className="gallery_item"
-                            url={urls[2]}
-                            onClick={this.openThirdImage}
-                        >
-                            {(count > 3) && (
-                                <MoreImages
-                                    count={count - 3}
-                                    onlyIcon={onlyIcon}
-                                />
-                            )}
-                        </ImageContainer>
-                    )}
+                    {
+                        urls.map((url, index) => {
+                            if (index <= 3 || deleteMode) {
+                                return (
+                                    <ImageContainer
+                                        key={url + index}
+                                        className="gallery_item"
+                                        url={url}
+                                        onClick={() => {
+                                            if(!deleteMode) {
+                                                this.openImage(index);
+                                            }
+                                        }}
+                                        onDelete={onDelete}
+                                        deleteMode={deleteMode}
+                                        moreImages={(index === 3 && !deleteMode) ? urls.length - 1 - index : 0}
+                                    />
+                                );
+                            }
+                            return null;
+                        })
+                    }
                 </div>
             </div>
         );

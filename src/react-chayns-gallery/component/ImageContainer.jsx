@@ -1,22 +1,37 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import classNames from 'classnames';
 
 const ImageContainer = ({
-    className,
-    url,
-    onClick,
-    children,
-}) => {
-    return(
-        <div className={className}>
+                            className,
+                            url,
+                            onClick,
+                            moreImages,
+                            onDelete,
+                            deleteMode
+                        }) => {
+    return (
+        <div className={classNames(className, { deleteMode })}>
             <div
-                className="gallery_item_inner"
+                className={classNames('gallery_item_inner', { moreImages: moreImages > 0 })}
                 style={{ backgroundImage: `url(${url})` }}
                 onClick={onClick}
+                data-more={(moreImages > 0) ? `+${moreImages}` : undefined}
             >
-                {children}
+                {
+                    deleteMode
+                        ? (
+                            <i
+                                className="fa fa-times deleteIcon"
+                                aria-hidden="true"
+                                onClick={() => {
+                                    onDelete(url);
+                                }}
+                            />
+                        )
+                        : null
+                }
             </div>
         </div>
     );
@@ -26,11 +41,16 @@ ImageContainer.propTypes = {
     className: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
-    children: PropTypes.element
+    moreImages: PropTypes.number,
+    deleteMode: PropTypes.bool,
+    onDelete: PropTypes.func
 };
 
 ImageContainer.defaultProps = {
-    children: undefined
+    moreImages: 0,
+    deleteMode: false,
+    onDelete: () => {
+    }
 };
 
 export default ImageContainer;
