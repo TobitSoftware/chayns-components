@@ -10,38 +10,49 @@ export default class ImageContainer extends React.PureComponent {
         onClick: PropTypes.func.isRequired,
         moreImages: PropTypes.number,
         deleteMode: PropTypes.bool,
-        onDelete: PropTypes.func
+        onDelete: PropTypes.func,
+        openImage: PropTypes.func
     };
 
     static defaultProps = {
         index: 0,
         moreImages: 0,
         deleteMode: false,
-        onDelete: () => {
-        }
+        openImage: null,
+        onDelete: null
     };
 
     constructor(props) {
         super(props);
         this.deleteOnClick = this.deleteOnClick.bind(this);
+        this.openImage = this.openImage.bind(this);
     }
 
 
     deleteOnClick() {
         const { onDelete, index, url } = this.props;
-        onDelete(url, index);
+        if(onDelete) {
+            onDelete(url, index);
+        }
+    }
+
+    openImage() {
+        const { index, openImage } = this.props;
+        if(openImage) {
+            openImage(index);
+        }
     }
 
     render() {
         const {
-            url, onClick, moreImages, deleteMode
+            url, moreImages, deleteMode
         } = this.props;
         return (
             <div className={classNames('gallery_item', { 'delete-mode': deleteMode })}>
                 <div
                     className={classNames('gallery_item_inner', { 'more-images': moreImages > 0 })}
                     style={{ backgroundImage: `url(${url})` }}
-                    onClick={onClick}
+                    onClick={this.openImage}
                     data-more={(moreImages > 0) ? `+${moreImages}` : undefined}
                 >
                     {

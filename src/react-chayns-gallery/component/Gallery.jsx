@@ -27,7 +27,6 @@ export default class Gallery extends Component {
 
     openGallery(start) {
         const { onClick, urls, deleteMode } = this.props;
-
         if(!deleteMode) {
             onClick(urls, start);
         }
@@ -44,9 +43,9 @@ export default class Gallery extends Component {
         if (!deleteMode) {
             if(height) {
                 style.height = `${height}px`;
-            }else if(chayns.env.mobile) {
+            } else if(chayns.env.mobile) {
                 style.height = '256px';
-            }else{
+            } else {
                 style.height = '428px';
             }
         }
@@ -61,9 +60,7 @@ export default class Gallery extends Component {
                                         key={url}
                                         url={url}
                                         index={index}
-                                        onClick={() => {
-                                                this.openImage(index);
-                                        }}
+                                        openImage={this.openImage}
                                         onDelete={onDelete}
                                         deleteMode={deleteMode}
                                         moreImages={(index === 3 && !deleteMode) ? urls.length - 1 - index : 0}
