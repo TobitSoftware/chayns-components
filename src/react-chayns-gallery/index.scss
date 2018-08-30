@@ -21,6 +21,7 @@
         outline: 1px solid rgba(0, 0, 0, 0.1);
         outline-offset: -1px;
         .deleteIcon{
+          color: white;
           position: absolute;
           width: 20px;
           height: 20px;
@@ -34,8 +35,8 @@
         }
       }
       &.deleteMode{
-        width: 50% !important;
-        height: 100px !important;
+        width: 33.33% !important;
+        height: 120px !important;
       }
       &:hover{
         opacity: 0.9;
@@ -94,11 +95,6 @@
       &:nth-child(4) {
         &:nth-last-child(1){
           //Image 4 of 4
-          width: 33.33%;
-          height: 33.33%;
-        }
-        &:nth-last-child(2){
-          //Image 2 of 4
           width: 33.33%;
           height: 33.33%;
         }

@@ -9,7 +9,8 @@ const ImageContainer = ({
                             onClick,
                             moreImages,
                             onDelete,
-                            deleteMode
+                            deleteMode,
+                            index
                         }) => {
     return (
         <div className={classNames(className, { deleteMode })}>
@@ -26,7 +27,7 @@ const ImageContainer = ({
                                 className="fa fa-times deleteIcon"
                                 aria-hidden="true"
                                 onClick={() => {
-                                    onDelete(url);
+                                    onDelete(url, index);
                                 }}
                             />
                         )
@@ -43,14 +44,16 @@ ImageContainer.propTypes = {
     onClick: PropTypes.func.isRequired,
     moreImages: PropTypes.number,
     deleteMode: PropTypes.bool,
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    index: PropTypes.number
 };
 
 ImageContainer.defaultProps = {
     moreImages: 0,
     deleteMode: false,
     onDelete: () => {
-    }
+    },
+    index: 0
 };
 
 export default ImageContainer;

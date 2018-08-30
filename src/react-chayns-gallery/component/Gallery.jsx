@@ -54,6 +54,7 @@ export default class Gallery extends Component {
                                         key={url + index}
                                         className="gallery_item"
                                         url={url}
+                                        index={index}
                                         onClick={() => {
                                             if(!deleteMode) {
                                                 this.openImage(index);
