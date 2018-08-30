@@ -1,8 +1,7 @@
 .chayns-gallery {
   position: relative;
   width: 100%;
-
-  .gallery-grid{
+  .gallery-grid {
     display: flex;
     flex-flow: row;
     flex-wrap: wrap;
@@ -20,7 +19,7 @@
         background-repeat: no-repeat;
         outline: 1px solid rgba(0, 0, 0, 0.1);
         outline-offset: -1px;
-        .deleteIcon{
+        .deleteIcon {
           color: white;
           position: absolute;
           width: 20px;
@@ -34,69 +33,81 @@
           font-size: 16px;
         }
       }
-      &.deleteMode{
-        width: 33.33% !important;
-        height: 120px !important;
+      &.deleteMode {
+        background-color: red;
+        width: calc(33.33% - 2px);
+        padding-top: calc(33.33% - 2px);
+        position: relative;
+        margin: 1px;
+        .gallery_item_inner {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        }
       }
-      &:hover{
+      &:hover {
         opacity: 0.9;
       }
-      &:nth-child(1) {
-        &:nth-last-child(1){
-          //Image 1 of 1
-          width: 100%;
-          height: 100%;
+      &:not(.deleteMode) {
+        &:nth-child(1) {
+          &:nth-last-child(1) {
+            //Image 1 of 1
+            width: 100%;
+            height: 100%;
+          }
+          &:nth-last-child(2) {
+            //Image 1 of 2
+            width: 50%;
+            height: 100%;
+          }
+          &:nth-last-child(3) {
+            //Image 1 of 3
+            width: 100%;
+            height: 66.66%;
+          }
+          &:nth-last-child(4) {
+            //Image 1 of 4
+            width: 100%;
+            height: 66.66%;
+          }
         }
-        &:nth-last-child(2){
-          //Image 1 of 2
-          width: 50%;
-          height: 100%;
+        &:nth-child(2) {
+          &:nth-last-child(1) {
+            //Image 2 of 2
+            width: 50%;
+            height: 100%;
+          }
+          &:nth-last-child(2) {
+            //Image 3 of 3
+            width: 50%;
+            height: 33.33%;
+          }
+          &:nth-last-child(3) {
+            //Image 2 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
         }
-        &:nth-last-child(3){
-          //Image 1 of 3
-          width: 100%;
-          height: 66.66%;
+        &:nth-child(3) {
+          &:nth-last-child(1) {
+            //Image 2 of 3
+            width: 50%;
+            height: 33.33%;
+          }
+          &:nth-last-child(2) {
+            //Image 3 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
         }
-        &:nth-last-child(4){
-          //Image 1 of 4
-          width: 100%;
-          height: 66.66%;
-        }
-      }
-      &:nth-child(2) {
-        &:nth-last-child(1){
-          //Image 2 of 2
-          width: 50%;
-          height: 100%;
-        }
-        &:nth-last-child(2){
-          //Image 3 of 3
-          width: 50%;
-          height: 33.33%;
-        }
-        &:nth-last-child(3){
-          //Image 2 of 4
-          width: 33.33%;
-          height: 33.33%;
-        }
-      }
-      &:nth-child(3) {
-        &:nth-last-child(1){
-          //Image 2 of 3
-          width: 50%;
-          height: 33.33%;
-        }
-        &:nth-last-child(2){
-          //Image 3 of 4
-          width: 33.33%;
-          height: 33.33%;
-        }
-      }
-      &:nth-child(4) {
-        &:nth-last-child(1){
-          //Image 4 of 4
-          width: 33.33%;
-          height: 33.33%;
+        &:nth-child(4) {
+          &:nth-last-child(1) {
+            //Image 4 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
         }
       }
     }
@@ -106,7 +117,6 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    flex: 1;
     &:after {
       content: attr(data-more);
       color: #fff;
@@ -116,10 +126,12 @@
       right: 0;
       bottom: 0;
       left: 0;
-      line-height: 3.6;
       text-align: center;
       text-shadow: 0 0 15px #000;
       font-size: 42px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
