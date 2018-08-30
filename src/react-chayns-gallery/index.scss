@@ -1,48 +1,115 @@
 .chayns-gallery {
   position: relative;
   width: 100%;
-  padding-top: 428px;
-
-  .chayns--mobile & {
-    padding-top: 256px;
-  }
-
-  .gallery-grid{
+  .gallery-grid {
     display: flex;
-    flex-flow: column;
-    position: absolute;
+    flex-flow: row;
     flex-wrap: wrap;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    height: 100%;
     .gallery_item {
-      height: 50%;
+      padding: 1px;
+      transition: opacity 0.2s ease;
+      cursor: pointer;
       .gallery_item_inner {
+        position: relative;
         height: 100%;
+        width: 100%;
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
-        cursor: pointer;
+        outline: 1px solid rgba(0, 0, 0, 0.1);
+        outline-offset: -1px;
+        .delete-icon {
+          color: white;
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          vertical-align: middle;
+          text-align: center;
+          top: 5px;
+          right: 5px;
+          text-shadow: 0 0 10px #000;
+          font-size: 16px;
+        }
       }
-
-    }
-    .gallery_item:nth-child(1) {
-      height: 100%;
-      padding-right: 1%;
-      &:nth-last-child(1){
-        padding: 0;
+      &.delete-mode {
+        background-color: red;
+        width: calc(33.33% - 2px);
+        padding-top: calc(33.33% - 2px);
+        position: relative;
+        margin: 1px;
+        .gallery_item_inner {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        }
       }
-    }
-    .gallery_item:nth-child(2) {
-      padding: 0 0 1% 1%;
-      &:nth-last-child(1){
-        height: 100%;
-        padding: 0 0 0 1%;
+      &:hover {
+        opacity: 0.9;
       }
-    }
-    .gallery_item:nth-child(3) {
-      padding: 1% 0 0 1%;
+      &:not(.delete-mode) {
+        &:nth-child(1) {
+          &:nth-last-child(1) {
+            //Image 1 of 1
+            width: 100%;
+            height: 100%;
+          }
+          &:nth-last-child(2) {
+            //Image 1 of 2
+            width: 50%;
+            height: 100%;
+          }
+          &:nth-last-child(3) {
+            //Image 1 of 3
+            width: 100%;
+            height: 66.66%;
+          }
+          &:nth-last-child(4) {
+            //Image 1 of 4
+            width: 100%;
+            height: 66.66%;
+          }
+        }
+        &:nth-child(2) {
+          &:nth-last-child(1) {
+            //Image 2 of 2
+            width: 50%;
+            height: 100%;
+          }
+          &:nth-last-child(2) {
+            //Image 3 of 3
+            width: 50%;
+            height: 33.33%;
+          }
+          &:nth-last-child(3) {
+            //Image 2 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
+        }
+        &:nth-child(3) {
+          &:nth-last-child(1) {
+            //Image 2 of 3
+            width: 50%;
+            height: 33.33%;
+          }
+          &:nth-last-child(2) {
+            //Image 3 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
+        }
+        &:nth-child(4) {
+          &:nth-last-child(1) {
+            //Image 4 of 4
+            width: 33.33%;
+            height: 33.33%;
+          }
+        }
+      }
     }
   }
   .more-images {
@@ -50,31 +117,21 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    .more-images__container {
-      width: 100%;
-      height: 100%;
+    &:after {
+      content: attr(data-more);
+      color: #fff;
       position: absolute;
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(0, 0, 0, 0.75);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      text-align: center;
+      text-shadow: 0 0 15px #000;
+      font-size: 42px;
       display: flex;
       justify-content: center;
       align-items: center;
-      .more-image__text__wrapper {
-        text-align: center;
-        .more-image__text {
-          color: rgba(255, 255, 255, 0.8);;
-          text-align: center;
-          font-size: 14px;
-          margin-top: 5px;
-        }
-        .more-image__icon:before {
-          color: rgba(255, 255, 255, 0.8);;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          content: '\f067';
-          font-size: 30px;
-        }
-      }
     }
   }
 }
