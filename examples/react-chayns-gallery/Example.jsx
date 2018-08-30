@@ -20,9 +20,9 @@ export default class Example extends Component {
         const urls = ['https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
             'https://tsimg.space/v1/images/c9a8d7ad-ee72-e811-80d6-0025905a8161.jpg',
             'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg'];
+            'https://tsimg.space/v1/images/6860fec5-ee72-e811-80d6-0025905a8161.jpg',
+            'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg',
+            'https://tsimg.space/v1/images/545a343f-57a4-e811-80d6-0025905a8161.jpg'];
         return (
             <ExampleContainer headline="Gallery">
                 <div style={{ marginTop: '30px' }}>

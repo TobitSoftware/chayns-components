@@ -14,8 +14,7 @@ export default class Gallery extends Component {
 
     static defaultProps = {
         onClick: chayns.openImage,
-        onDelete: () => {
-        },
+        onDelete: null,
         deleteMode: false,
         height: null,
         width: null
@@ -27,9 +26,11 @@ export default class Gallery extends Component {
     }
 
     openGallery(start) {
-        const { onClick, urls } = this.props;
+        const { onClick, urls, deleteMode } = this.props;
 
-        onClick(urls, start);
+        if(!deleteMode) {
+            onClick(urls, start);
+        }
     }
 
     render() {
@@ -41,7 +42,13 @@ export default class Gallery extends Component {
             style.width = `${width}px`;
         }
         if (!deleteMode) {
-            style.height = (height) ? `${height}px` : (chayns.env.isMobile) ? '256px' : '428px';
+            if(height) {
+                style.height = `${height}px`;
+            }else if(chayns.env.mobile) {
+                style.height = '256px';
+            }else{
+                style.height = '428px';
+            }
         }
         return (
             <div className="chayns-gallery" style={style}>
@@ -51,14 +58,11 @@ export default class Gallery extends Component {
                             if (index <= 3 || deleteMode) {
                                 return (
                                     <ImageContainer
-                                        key={url + index}
-                                        className="gallery_item"
+                                        key={url}
                                         url={url}
                                         index={index}
                                         onClick={() => {
-                                            if(!deleteMode) {
                                                 this.openImage(index);
-                                            }
                                         }}
                                         onDelete={onDelete}
                                         deleteMode={deleteMode}

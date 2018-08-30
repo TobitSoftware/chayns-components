@@ -19,7 +19,7 @@
         background-repeat: no-repeat;
         outline: 1px solid rgba(0, 0, 0, 0.1);
         outline-offset: -1px;
-        .deleteIcon {
+        .delete-icon {
           color: white;
           position: absolute;
           width: 20px;
@@ -33,7 +33,7 @@
           font-size: 16px;
         }
       }
-      &.deleteMode {
+      &.delete-mode {
         background-color: red;
         width: calc(33.33% - 2px);
         padding-top: calc(33.33% - 2px);
@@ -50,7 +50,7 @@
       &:hover {
         opacity: 0.9;
       }
-      &:not(.deleteMode) {
+      &:not(.delete-mode) {
         &:nth-child(1) {
           &:nth-last-child(1) {
             //Image 1 of 1
@@ -112,7 +112,7 @@
       }
     }
   }
-  .moreImages {
+  .more-images {
     position: relative;
     width: 100%;
     height: 100%;
