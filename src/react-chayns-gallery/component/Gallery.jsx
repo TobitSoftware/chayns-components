@@ -34,7 +34,11 @@ export default class Gallery extends Component {
 
     render() {
         const {
-            urls, height, width, onDelete, deleteMode
+            urls,
+            height,
+            width,
+            onDelete,
+            deleteMode,
         } = this.props;
         const style = {};
         if (width) {
