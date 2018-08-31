@@ -36,8 +36,10 @@ export default class SelectList extends Component {
     constructor(props) {
         super(props);
 
+        const preselectId = ((props.defaultValue || props.defaultValue === 0) ? props.defaultValue : props.value);
+
         this.state = {
-            selectedId: props.defaultValue || 0,
+            selectedId: preselectId || 0,
         };
 
         if(props.defaultValue && props.onChange) {
