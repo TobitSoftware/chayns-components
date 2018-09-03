@@ -36,14 +36,15 @@ Just use `event.target.pureInnerText` to save the text in your component and to 
 ## Props
 The following properties can be set on the EmojiInput-Component
 
-| **Property** | **Description**                                     | **Type** | **Default Value** | **Required** |
-| ------------ | --------------------------------------------------- | -------- | ----------------- | ------------ |
-| placeholder  | Text that will be shown as placeholder              | string   |                   | true         |
-| onInput      | Function that will be called on input event         | function |                   | true         |
-| value        | Text that will be shown in input                    | string   |                   | true         |
-| id           | Id that is given to the component                   | string   |                   | true         |
-| hideBorder   | Hides the border below the input                    | boolean  | false             |              |
-| onKeyDown    | Function that will be called on input event         | function | *null*            |              |
-| disabled     | Disables the input                                  | boolean  | false             |              |
-| onFocus      | Function that will be called when input gets focus  | function | *null*            |              |
-| onBlur       | Function that will be called when input loses focus | function | *null*            |              |
+| **Property**   | **Description**                                     | **Type** | **Default Value** | **Required** |
+| -------------- | --------------------------------------------------- | -------- | ----------------- | ------------ |
+| onInput        | Function that will be called on input event         | function |                   | true         |
+| placeholder    | Text that will be shown as placeholder              | string   |                   | true         |
+| value          | Text that will be shown in input                    | string   |                   | true         |
+| id             | Id that is given to the component                   | string   |                   | true         |
+| maxInputHeight | Maximum height of input (in px)                     | number   | 104               |              |
+| hideBorder     | Hides the border below the input                    | boolean  | false             |              |
+| disabled       | Disables the input                                  | boolean  | false             |              |
+| onKeyDown      | Function that will be called on input event         | function | *null*            |              |
+| onFocus        | Function that will be called when input gets focus  | function | *null*            |              |
+| onBlur         | Function that will be called when input loses focus | function | *null*            |              |
