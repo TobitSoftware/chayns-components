@@ -34,6 +34,14 @@ export default class EmojiInput extends Component {
         style: null
     };
 
+    lastKeyPressed = null;
+
+    firstRender = true;
+
+    activeNode = 0;
+
+    cursorPos = 0;
+
     componentWillMount() {
         requireEmojione().then((emojione) => {
             emojione.ascii = true; // eslint-disable-line no-param-reassign
@@ -224,14 +232,6 @@ export default class EmojiInput extends Component {
 
         return textLines.join('\n');
     };
-
-    lastKeyPressed = null;
-
-    firstRender = true;
-
-    activeNode = 0;
-
-    cursorPos = 0;
 
     handleInput = (event) => {
         const { onInput } = this.props;
