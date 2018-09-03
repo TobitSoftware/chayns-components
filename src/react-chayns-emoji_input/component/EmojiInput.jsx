@@ -12,14 +12,6 @@ function requireEmojione(returnPromise) {
 }
 
 export default class EmojiInput extends Component {
-    lastKeyPressed = null;
-
-    firstRender = true;
-
-    activeNode = 0;
-
-    cursorPos = 0;
-
     static propTypes = {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -233,6 +225,14 @@ export default class EmojiInput extends Component {
         return textLines.join('\n');
     };
 
+    lastKeyPressed = null;
+
+    firstRender = true;
+
+    activeNode = 0;
+
+    cursorPos = 0;
+
     handleInput = (event) => {
         const { onInput } = this.props;
 
@@ -359,7 +359,12 @@ export default class EmojiInput extends Component {
     };
 
     render() {
-        const { id, hideBorder, disabled, style } = this.props;
+        const {
+            hideBorder,
+            disabled,
+            style,
+            id,
+        } = this.props;
 
         const messageInputClasses = classNames('emoji-input__message-input', {
             'emoji-input__message-input--hide-border': hideBorder,
@@ -371,7 +376,9 @@ export default class EmojiInput extends Component {
             <div className="emoji-input">
                 <div
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
-                    ref={(ref) => { this.input = ref; }}
+                    ref={(ref) => {
+                        this.input = ref;
+                    }}
                     className={messageInputClasses}
                     onKeyDown={this.handleKeyDown}
                     contentEditable={!disabled}
@@ -385,7 +392,9 @@ export default class EmojiInput extends Component {
                 />
                 <div
                     className="emoji-input__placeholder"
-                    ref={(ref) => { this.placeholder = ref; }}
+                    ref={(ref) => {
+                        this.placeholder = ref;
+                    }}
                 />
             </div>
         );
