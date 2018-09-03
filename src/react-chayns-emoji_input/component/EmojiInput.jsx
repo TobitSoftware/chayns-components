@@ -12,14 +12,6 @@ function requireEmojione(returnPromise) {
 }
 
 export default class EmojiInput extends Component {
-    lastKeyPressed = null;
-
-    firstRender = true;
-
-    activeNode = 0;
-
-    cursorPos = 0;
-
     static propTypes = {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
@@ -28,6 +20,7 @@ export default class EmojiInput extends Component {
         hideBorder: PropTypes.bool,
         onKeyDown: PropTypes.func,
         disabled: PropTypes.bool,
+        style: PropTypes.object,
         onFocus: PropTypes.func,
         onBlur: PropTypes.func
     };
@@ -37,8 +30,17 @@ export default class EmojiInput extends Component {
         onKeyDown: null,
         disabled: false,
         onFocus: null,
-        onBlur: null
+        onBlur: null,
+        style: null
     };
+
+    lastKeyPressed = null;
+
+    firstRender = true;
+
+    activeNode = 0;
+
+    cursorPos = 0;
 
     componentWillMount() {
         requireEmojione().then((emojione) => {
@@ -357,7 +359,12 @@ export default class EmojiInput extends Component {
     };
 
     render() {
-        const { id, hideBorder, disabled } = this.props;
+        const {
+            hideBorder,
+            disabled,
+            style,
+            id,
+        } = this.props;
 
         const messageInputClasses = classNames('emoji-input__message-input', {
             'emoji-input__message-input--hide-border': hideBorder,
@@ -369,7 +376,9 @@ export default class EmojiInput extends Component {
             <div className="emoji-input">
                 <div
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
-                    ref={(ref) => { this.input = ref; }}
+                    ref={(ref) => {
+                        this.input = ref;
+                    }}
                     className={messageInputClasses}
                     onKeyDown={this.handleKeyDown}
                     contentEditable={!disabled}
@@ -377,12 +386,15 @@ export default class EmojiInput extends Component {
                     onInput={this.handleInput}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}
+                    style={style}
                     dir="auto"
                     id={id}
                 />
                 <div
                     className="emoji-input__placeholder"
-                    ref={(ref) => { this.placeholder = ref; }}
+                    ref={(ref) => {
+                        this.placeholder = ref;
+                    }}
                 />
             </div>
         );
