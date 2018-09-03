@@ -24,22 +24,22 @@ export default class EmojiInput extends Component {
         placeholder: PropTypes.string.isRequired,
         onInput: PropTypes.func.isRequired,
         value: PropTypes.string.isRequired,
-        maxInputHeight: PropTypes.number,
         id: PropTypes.string.isRequired,
         hideBorder: PropTypes.bool,
         onKeyDown: PropTypes.func,
         disabled: PropTypes.bool,
+        style: PropTypes.object,
         onFocus: PropTypes.func,
         onBlur: PropTypes.func
     };
 
     static defaultProps = {
-        maxInputHeight: 104,
         hideBorder: false,
         onKeyDown: null,
         disabled: false,
         onFocus: null,
-        onBlur: null
+        onBlur: null,
+        style: null
     };
 
     componentWillMount() {
@@ -359,17 +359,13 @@ export default class EmojiInput extends Component {
     };
 
     render() {
-        const { id, hideBorder, disabled, maxInputHeight } = this.props;
+        const { id, hideBorder, disabled, style } = this.props;
 
         const messageInputClasses = classNames('emoji-input__message-input', {
             'emoji-input__message-input--hide-border': hideBorder,
             'emoji-input__message-input--disabled': disabled,
             input: !disabled
         });
-
-        const messageInputStyles = {
-            maxHeight: `${maxInputHeight}px`
-        };
 
         return (
             <div className="emoji-input">
@@ -379,11 +375,11 @@ export default class EmojiInput extends Component {
                     className={messageInputClasses}
                     onKeyDown={this.handleKeyDown}
                     contentEditable={!disabled}
-                    style={messageInputStyles}
                     onKeyUp={this.handleKeyUp}
                     onInput={this.handleInput}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}
+                    style={style}
                     dir="auto"
                     id={id}
                 />
