@@ -17,7 +17,7 @@ export default {
         }[env],
         format: env
     },
-    external: ['react', 'classnames', 'prop-types', 'ract-dom', 'react-transition-group', 'emojione'],
+    external: ['react', 'classnames', 'prop-types', 'react-dom', 'react-transition-group', 'emojione'],
     plugins: [
         external(),
         autoExternal(),
