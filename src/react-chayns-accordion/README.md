@@ -43,6 +43,7 @@ The following properties can be set
 | onOpen       | onOpened-Event                                                         | Function                   |               |
 | onClose      | onClose-Event                                                          | Function                   |               |
 | ellipsis     | Cuts the accordion headline if it is too long                          | bool                       |               |
+| open         | The accordion is open                                                  | bool                       |               |
 | defaultOpened| The accordion is default opened                                        | bool                       |               |
 | autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
 | reference    | A reference for the accordion                                          | Function                   |               |
