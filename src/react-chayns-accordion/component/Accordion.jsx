@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 
-const CLOSED = 5;
 const CLOSE = 1;
 
-const OPENED = 6;
 const OPEN = 2;
 
 function hasFlag(value, flag) {
@@ -20,7 +18,7 @@ class Accordion extends Component {
         this.firstRender = true;
 
         this.state = {
-            currentState: (props && props.defaultOpened) ? OPENED : CLOSED,
+            currentState: (props && props.defaultOpened) ? OPEN : CLOSE,
         };
     }
 
@@ -29,7 +27,7 @@ class Accordion extends Component {
 
         if (open || (className && className.indexOf('accordion--open') !== -1)) {
             this.setState({
-                currentState: OPENED
+                currentState: OPEN
             });
         }
     }
@@ -38,16 +36,11 @@ class Accordion extends Component {
         const { className, autogrow } = this.props;
         const { currentState } = this.state;
 
-        this.accordion.addEventListener('closed', this.accordionClosedListener.bind(this));
-        this.accordion.addEventListener('close', this.accordionCloseListener.bind(this));
-        this.accordion.addEventListener('open', this.accordionOpenListener.bind(this));
-        this.accordion.addEventListener('opened', this.accordionOpenedListener.bind(this));
-
         if (className.indexOf('accordion--open') !== -1) {
             this.accordion.classList.add('accordion--open');
         }
 
-        if (currentState === OPENED) {
+        if (currentState === OPEN) {
             if(autogrow && this._body) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
@@ -61,19 +54,19 @@ class Accordion extends Component {
 
             if (open !== nextProps.open) {
                 this.setState({
-                    currentState: nextProps.open ? OPENED : CLOSED
+                    currentState: nextProps.open ? OPEN : CLOSE
                 });
             }
 
             if (nextProps.open && !hasFlag(currentState, OPEN)) {
                 this.setState({
-                    currentState: OPENED
+                    currentState: OPEN
                 });
             }
 
             if (!nextProps.open && !hasFlag(currentState, CLOSE)) {
                 this.setState({
-                    currentState: CLOSED
+                    currentState: CLOSE
                 });
             }
         }
@@ -84,7 +77,7 @@ class Accordion extends Component {
         const { currentState } = this.state;
 
         if(autogrow && this._body) {
-            if(currentState === OPENED) {
+            if(currentState === OPEN) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             } else if(hasFlag(currentState, CLOSE)) {
                 this._body.style.maxHeight = null;
@@ -144,17 +137,13 @@ class Accordion extends Component {
         ];
     }
 
-    accordionClosedListener(event) {
-        const { onClosed } = this.props;
-
-        this.setState({
-            currentState: CLOSED
-        });
-
-        if (onClosed) {
-            onClosed(event);
+    handleAccordionClick = (event) => {
+        if (this.state.currentState === OPEN) {
+            this.accordionCloseListener(event);
+        } else {
+            this.accordionOpenListener(event);
         }
-    }
+    };
 
     accordionCloseListener(event) {
         const { onClose, autogrow } = this.props;
@@ -187,18 +176,6 @@ class Accordion extends Component {
 
         if (onOpen) {
             onOpen(event);
-        }
-    }
-
-    accordionOpenedListener(event) {
-        const { onOpened } = this.props;
-
-        this.setState({
-            currentState: OPENED
-        });
-
-        if (onOpened) {
-            onOpened(event);
         }
     }
 
@@ -261,7 +238,6 @@ class Accordion extends Component {
             othersBody.style = styleBody;
         }
 
-
         return (
             <div
                 className={classNames}
@@ -273,7 +249,9 @@ class Accordion extends Component {
                 {...others}
                 {...customProps}
             >
-                <div className={classNamesHead}>
+                <div className={classNamesHead}
+                     onClick={this.handleAccordionClick}
+                >
                     {this._renderHead()}
                 </div>
                 <div
@@ -287,7 +265,6 @@ class Accordion extends Component {
         );
     }
 }
-
 
 Accordion.propTypes = {
     head: PropTypes.node.isRequired,
