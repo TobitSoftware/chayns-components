@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ImageContainer from './ImageContainer';
 
 export default class Gallery extends Component {
@@ -54,8 +55,8 @@ export default class Gallery extends Component {
             }
         }
         return (
-            <div className="chayns-gallery" style={style}>
-                <div className="gallery-grid">
+            <div className="chayns-gallery" style={{ height: `${styleHeight}px`, width: width ? `${width}px` : undefined }}>
+                <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })}>
                     {
                         urls.map((url, index) => {
                             if (index <= 3 || deleteMode) {

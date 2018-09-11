@@ -7,7 +7,6 @@ export default class ImageContainer extends PureComponent {
     static propTypes = {
         index: PropTypes.number,
         url: PropTypes.string.isRequired,
-        onClick: PropTypes.func.isRequired,
         moreImages: PropTypes.number,
         deleteMode: PropTypes.bool,
         onDelete: PropTypes.func,
@@ -51,7 +50,7 @@ export default class ImageContainer extends PureComponent {
         } = this.props;
 
         return (
-            <div className={classNames('gallery_item', { 'delete-mode': deleteMode })}>
+            <div className="gallery_item">
                 <div
                     className={classNames('gallery_item_inner', { 'more-images': moreImages > 0 })}
                     style={{ backgroundImage: `url(${url})` }}
