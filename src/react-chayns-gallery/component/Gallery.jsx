@@ -87,21 +87,21 @@ export default class Gallery extends Component {
                     {
                         urls.map((url, index) => {
                             if (index <= 3 || deleteMode) {
-                                let scaleHeight = 150;
+                                let shortEdge = window.innerWidth;
                                 if (!deleteMode) {
                                     if (index <= 2 && numberOfImages <= 2) {
-                                        scaleHeight = styleHeight;
+                                        shortEdge = styleHeight;
                                     } else if (index === 0) {
-                                        scaleHeight = parseInt((styleHeight * 2) / 3, 10);
+                                        shortEdge = parseInt((styleHeight * 2) / 3, 10);
                                     } else if (index < 4) {
-                                        scaleHeight = parseInt(styleHeight / 3, 10);
+                                        shortEdge = parseInt(styleHeight / 3, 10);
                                     }
                                 }
 
                                 return (
                                     <ImageContainer
                                         key={url}
-                                        url={Gallery.getScaledImageUrl(url, scaleHeight)}
+                                        url={Gallery.getScaledImageUrl(url, shortEdge)}
                                         index={index}
                                         openImage={this.openGallery}
                                         onDelete={onDelete}
