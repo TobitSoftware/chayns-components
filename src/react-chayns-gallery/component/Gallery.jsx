@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ImageContainer from './ImageContainer';
 
 export default class Gallery extends Component {
@@ -22,13 +23,37 @@ export default class Gallery extends Component {
 
     constructor() {
         super();
-        this.openImage = this.openGallery.bind(this);
+        this.openGallery = this.openGallery.bind(this);
+    }
+
+    static getScaledImageUrl(url, shortEdgeSize) {
+        if (url.indexOf('tsimg.space') >= 0) {
+            if (url.indexOf('jpg') >= 0) {
+                return url.replace('.jpg', `_s${shortEdgeSize}-mshortedgescale.jpg`);
+            }
+            if (url.indexOf('jpeg') >= 0) {
+                return url.replace('.jpeg', `_s${shortEdgeSize}-mshortedgescale.jpeg`);
+            }
+            if (url.indexOf('png') >= 0) {
+                return url.replace('.png', `_s${shortEdgeSize}-mshortedgescale.png`);
+            }
+        }
+        return url;
+    }
+
+    static getBigImages(urls) {
+        const bigUrls = [];
+        urls.forEach((url) => {
+            // eslint-disable-next-line no-restricted-globals
+            bigUrls.push(Gallery.getScaledImageUrl(url, screen.availHeight * 0.9));
+        });
+        return bigUrls;
     }
 
     openGallery(start) {
         const { onClick, urls, deleteMode } = this.props;
-        if(!deleteMode) {
-            onClick(urls, start);
+        if (!deleteMode) {
+            onClick(Gallery.getBigImages(urls), start);
         }
     }
 
@@ -40,34 +65,48 @@ export default class Gallery extends Component {
             onDelete,
             deleteMode,
         } = this.props;
+        let styleHeight;
         const style = {};
-        if (width) {
-            style.width = `${width}px`;
-        }
         if (!deleteMode) {
-            if(height) {
-                style.height = `${height}px`;
-            } else if(chayns.env.mobile) {
-                style.height = '256px';
+            if (height) {
+                styleHeight = height;
+            } else if (chayns.env.mobile) {
+                styleHeight = 256;
             } else {
-                style.height = '428px';
+                styleHeight = 428;
             }
+            style.height = `${styleHeight}px`;
         }
+        if (width) {
+            style.width = width;
+        }
+        const numberOfImages = urls.length;
         return (
             <div className="chayns-gallery" style={style}>
-                <div className="gallery-grid">
+                <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })}>
                     {
                         urls.map((url, index) => {
                             if (index <= 3 || deleteMode) {
+                                let shortEdge = window.innerWidth;
+                                if (!deleteMode) {
+                                    if (index <= 2 && numberOfImages <= 2) {
+                                        shortEdge = styleHeight;
+                                    } else if (index === 0) {
+                                        shortEdge = parseInt((styleHeight * 2) / 3, 10);
+                                    } else if (index < 4) {
+                                        shortEdge = parseInt(styleHeight / 3, 10);
+                                    }
+                                }
+
                                 return (
                                     <ImageContainer
                                         key={url}
-                                        url={url}
+                                        url={Gallery.getScaledImageUrl(url, shortEdge)}
                                         index={index}
-                                        openImage={this.openImage}
+                                        openImage={this.openGallery}
                                         onDelete={onDelete}
                                         deleteMode={deleteMode}
-                                        moreImages={(index === 3 && !deleteMode) ? urls.length - 1 - index : 0}
+                                        moreImages={(index === 3 && !deleteMode) ? numberOfImages - 1 - index : 0}
                                     />
                                 );
                             }
