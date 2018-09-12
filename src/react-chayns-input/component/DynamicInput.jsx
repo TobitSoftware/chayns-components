@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Input extends Component {
+export default class DynamicInput extends Component {
     static propTypes = {
         style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
@@ -104,7 +104,7 @@ export default class Input extends Component {
         } = this.props;
         const { isValid } = this.state;
 
-        const classNames = classnames('input', {
+        const classNames = classnames('input-group', {
             [className]: className
         });
 
@@ -114,26 +114,30 @@ export default class Input extends Component {
         } : null;
 
         return (
-            <input
+            <div
                 className={classNames}
-                ref={(ref) => {
-                    if(inputRef) inputRef(ref);
-                    this._node = ref;
-                }}
-                value={value}
-                defaultValue={defaultValue}
-                placeholder={placeholder}
-                style={{
-                    ...style,
-                    ...inputStyles
-                }}
-                onKeyUp={this.onKeyUp}
-                onChange={this.onChange}
-                onBlur={this.onBlur}
-                type={type || 'text'}
-                required
-                {...other}
-            />
+                style={style}
+            >
+                <input
+                    style={inputStyles}
+                    ref={(ref) => {
+                        if(inputRef) inputRef(ref);
+                        this._node = ref;
+                    }}
+                    value={value}
+                    defaultValue={defaultValue}
+                    onKeyUp={this.onKeyUp}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                    className="input"
+                    type={type || 'text'}
+                    required
+                    {...other}
+                />
+                <label>
+                    {placeholder}
+                </label>
+            </div>
         );
     }
 }
