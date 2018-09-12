@@ -29,11 +29,13 @@ export default class Gallery extends Component {
     static getScaledImageUrl(url, shortEdgeSize) {
         if (url.indexOf('tsimg.space') >= 0) {
             if (url.indexOf('jpg') >= 0) {
-                url.replace('.jpg', `_s${shortEdgeSize}-mshortedgescale.jpg`);
-            } else if (url.indexOf('jpeg') >= 0) {
-                url.replace('.jpeg', `_s${shortEdgeSize}-mshortedgescale.jpeg`);
-            } else if (url.indexOf('png') >= 0) {
-                url.replace('.png', `_s${shortEdgeSize}-mshortedgescale.png`);
+                return url.replace('.jpg', `_s${shortEdgeSize}-mshortedgescale.jpg`);
+            }
+            if (url.indexOf('jpeg') >= 0) {
+                return url.replace('.jpeg', `_s${shortEdgeSize}-mshortedgescale.jpeg`);
+            }
+            if (url.indexOf('png') >= 0) {
+                return url.replace('.png', `_s${shortEdgeSize}-mshortedgescale.png`);
             }
         }
         return url;
