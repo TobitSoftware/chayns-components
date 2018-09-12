@@ -7,18 +7,17 @@ export default class ImageContainer extends PureComponent {
     static propTypes = {
         index: PropTypes.number,
         url: PropTypes.string.isRequired,
+        openImage: PropTypes.func.isRequired,
         moreImages: PropTypes.number,
         deleteMode: PropTypes.bool,
         onDelete: PropTypes.func,
-        openImage: PropTypes.func
     };
 
     static defaultProps = {
         index: 0,
         moreImages: 0,
         deleteMode: false,
-        openImage: null,
-        onDelete: null
+        onDelete: null,
     };
 
     constructor(props) {

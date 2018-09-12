@@ -41,9 +41,9 @@ export default class Example extends Component {
                     }}
                     showScrollbar
                 >
-                    {'Test'}
-                    <br />
                     {'Not scrollable'}
+                    <br />
+                    {'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirm'}
                 </ScrollView>
             </ExampleContainer>
         );

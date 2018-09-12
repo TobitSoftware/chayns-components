@@ -9,7 +9,14 @@ import areDatesEqual from '../utils/areDatesEqual';
 
 const TODAY = new Date();
 const TRANSITION_TIME = 300;
-const MONTH_NAMES = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+const MONTH_NAMES = {
+    de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+};
+
+function getMonthNames(language = chayns.env.language) {
+    return MONTH_NAMES[language] || MONTH_NAMES.de;
+}
 
 export default class Calendar extends Component {
     static propTypes = {
@@ -68,29 +75,31 @@ export default class Calendar extends Component {
         const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
         const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 2, 1);
 
+        const monthNames = getMonthNames();
+
         this.setState({
             focus: _focus,
             months: [
                 {
-                    title: MONTH_NAMES[_leftHidden.getMonth()],
+                    title: monthNames[_leftHidden.getMonth()],
                     className: 'left__hidden month',
                     startDate: _leftHidden,
                     endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
                 },
                 {
-                    title: MONTH_NAMES[_focus.getMonth()],
+                    title: monthNames[_focus.getMonth()],
                     className: 'left__shown month',
                     startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
                     endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
                 },
                 {
-                    title: MONTH_NAMES[_rightShown.getMonth()],
+                    title: monthNames[_rightShown.getMonth()],
                     className: 'right__shown month',
                     startDate: _rightShown,
                     endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
                 },
                 {
-                    title: MONTH_NAMES[_rightHidden.getMonth()],
+                    title: monthNames[_rightHidden.getMonth()],
                     className: 'right__hidden month',
                     startDate: _rightHidden,
                     endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
