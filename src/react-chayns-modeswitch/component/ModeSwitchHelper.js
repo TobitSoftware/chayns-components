@@ -1,5 +1,3 @@
-import '../../polyfills/array-find';
-
 const callbacks = [];
 const allowedGroups = [];
 let currentMode = null;

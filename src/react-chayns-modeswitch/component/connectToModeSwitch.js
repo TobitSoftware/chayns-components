@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import assign from 'object-assign';
 
 import ModeSwitchHelper from './ModeSwitchHelper';
 

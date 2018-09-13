@@ -15,12 +15,6 @@ import Calendar from './react-chayns-calendar/component/Calendar';
 import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
-import DetailView from './react-chayns-detail_view/component/DetailView';
-import DetailViewGroup from './react-chayns-detail_view/component/DetailViewGroup';
-import DetailViewItem from './react-chayns-detail_view/component/DetailViewItem';
-import DetailViewHeader from './react-chayns-detail_view/component/DetailViewHeader';
-import DetailViewFooter from './react-chayns-detail_view/component/DetailViewFooter';
-
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
@@ -47,20 +41,10 @@ import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
-import Swipe from './react-chayns-swiper/component/Slide';
-import Swiper from './react-chayns-swiper/component/Slider';
-import SwipeOverlay from './react-chayns-swiper/component/SlideOverlay';
-
 import TextArea from './react-chayns-textarea/component/TextArea';
-import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
-
-import RefuelWidget from './react-refuel/component/Refuel';
-
-import WeatherWidget from './react-weather/component/Weather';
-import WorldWeatherOnline from './react-weather/utils/WorldWeatherOnline';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
@@ -80,11 +64,6 @@ export {
     Calendar,
     Checkbox,
     ContextMenu,
-    DetailView,
-    DetailViewGroup,
-    DetailViewItem,
-    DetailViewHeader,
-    DetailViewFooter,
     EmojiInput,
     Gallery,
     GridCalendar,
@@ -106,15 +85,8 @@ export {
     SetupWizardItem,
     SharingBar,
     SmallWaitCursor,
-    Swiper,
-    SwipeOverlay,
-    Swipe,
     TextArea,
-    TextString,
     Tooltip,
     FileUpload,
-    RefuelWidget,
-    WeatherWidget,
-    WorldWeatherOnline,
     resolveAbsoluteImport,
 };
