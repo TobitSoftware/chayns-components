@@ -11,7 +11,8 @@ export default class Button extends Component {
         className: PropTypes.string,
         style: PropTypes.object,
         buttonRef: PropTypes.func,
-        icon: PropTypes.string
+        icon: PropTypes.string,
+        secondary: PropTypes.bool
     };
 
     static defaultProps = {
@@ -21,7 +22,8 @@ export default class Button extends Component {
         onClick: null,
         disabled: false,
         chooseButton: false,
-        icon: null
+        icon: null,
+        secondary: false
     };
 
     handleClick = (event) => {
@@ -41,6 +43,7 @@ export default class Button extends Component {
             style,
             buttonRef,
             icon,
+            secondary,
             ...other
         } = this.props;
 
@@ -49,6 +52,7 @@ export default class Button extends Component {
             choosebutton: chooseButton,
             'button--disabled': disabled,
             'button--icon': icon,
+            'button--secondary': secondary,
             [className]: className
         });
 

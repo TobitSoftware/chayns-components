@@ -18,6 +18,13 @@ export default class Example extends PureComponent {
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
+                        disabled
+                    >
+                        Disabled Button
+                    </Button>
+                </div>
+                <div style={{ textAlign: 'center', margin: '5px' }}>
+                    <Button
                         style={{ backgroundColor: '#4c993d' }}
                     >
                         Green Button
@@ -25,12 +32,17 @@ export default class Example extends PureComponent {
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
-                        disabled
-                        onClick={(event) => {
-                            window.chayns.dialog.alert(JSON.stringify(event));
-                        }}
+                        secondary
                     >
-                        Disabled Button
+                        SecondaryButton
+                    </Button>
+                </div>
+                <div style={{ textAlign: 'center', margin: '5px' }}>
+                    <Button
+                        disabled
+                        secondary
+                    >
+                        Disabled SecondaryButton
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
