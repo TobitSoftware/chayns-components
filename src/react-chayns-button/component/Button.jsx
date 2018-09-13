@@ -11,6 +11,7 @@ export default class Button extends Component {
         className: PropTypes.string,
         style: PropTypes.object,
         buttonRef: PropTypes.func,
+        icon: PropTypes.string
     };
 
     static defaultProps = {
@@ -20,6 +21,7 @@ export default class Button extends Component {
         onClick: null,
         disabled: false,
         chooseButton: false,
+        icon: null
     };
 
     handleClick = (event) => {
@@ -38,14 +40,15 @@ export default class Button extends Component {
             className,
             style,
             buttonRef,
-            onClick,
+            icon,
             ...other
         } = this.props;
 
-        const classNames = classnames({
+        const classNames = classnames(icon, {
             button: !chooseButton,
             choosebutton: chooseButton,
             'button--disabled': disabled,
+            'button--icon': icon,
             [className]: className
         });
 
