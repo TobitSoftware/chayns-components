@@ -18,6 +18,14 @@ You can use the button like this:
 <Button>Test</Button>
 ```
 
+If you want to use a font awesome icon, you need to declare it first like this:
+```css
+.fa-rocket:before {
+    content: "\f135";
+}
+```
+The unicode characters are available under [https://fontawesome.com/v4.7.0/icons/](https://fontawesome.com/v4.7.0/icons/). TS icons can be used without special declaration.
+
 ## Props
 The following properties can be set on the Button and the ChooseButton-Component
 

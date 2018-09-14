@@ -51,7 +51,6 @@ export default class Button extends Component {
             button: !chooseButton,
             choosebutton: chooseButton,
             'button--disabled': disabled,
-            'button--icon': icon,
             'button--secondary': secondary,
             [className]: className
         });
