@@ -4,6 +4,8 @@ import ReactDom from 'react-dom';
 import ExampleContainer from '../ExampleContainer';
 import { PersonFinder } from '../../src/index';
 
+import '../../src/react-chayns-personfinder/component/person-finder.scss';
+
 window.chayns.ready.then(() => {
     ReactDom.render(
         <ExampleContainer headline="PersonFinder">

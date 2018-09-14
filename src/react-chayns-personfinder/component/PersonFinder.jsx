@@ -17,18 +17,57 @@ export default class PersonFinder extends Component {
         onChange: null
     };
 
+    state = {
+        results: []
+    };
+
+    handleOnChange = (event) => {
+        const { value } = event.target;
+
+        if (value.length < 3) {
+            return;
+        }
+
+        chayns.findPerson(value)
+            .then((data) => {
+                this.setState({
+                    results: data.Value
+                });
+            });
+    };
+
     render() {
         const { className, ...props } = this.props;
+        const { results } = this.state;
 
         const classNames = classnames('input', className);
 
         return (
-            <input
-                type="text"
-                className={classNames}
-                ref={(ref) => { this.ref = ref; }}
-                {...props}
-            />
+            <div className="person-finder">
+                <input
+                    type="text"
+                    className={classNames}
+                    {...props}
+                    onChange={this.handleOnChange}
+                />
+                <div className="person-finder__results scrollbar">
+                    {results.map(r => (
+                        <div className="result">
+                            <div className="img">
+                                <img src={`https://sub60.tobit.com/u/${r.personId}?size=40`} alt="img"/>
+                            </div>
+                            <div className="text">
+                                <div className="name">
+                                    {r.name}
+                                </div>
+                                <div className="person-id">
+                                    {`chayns® ID: ${r.personId}`}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         );
     }
 }
