@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Button, ChooseButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
+import './example.scss';
 
 export default class Example extends PureComponent {
     render() {
@@ -13,6 +14,7 @@ export default class Example extends PureComponent {
                             window.chayns.dialog.alert(JSON.stringify(event));
                         }}
                     >
+
                         Button
                     </Button>
                 </div>
@@ -20,6 +22,7 @@ export default class Example extends PureComponent {
                     <Button
                         disabled
                     >
+
                         Disabled Button
                     </Button>
                 </div>
@@ -27,6 +30,7 @@ export default class Example extends PureComponent {
                     <Button
                         style={{ backgroundColor: '#4c993d' }}
                     >
+
                         Green Button
                     </Button>
                 </div>
@@ -34,6 +38,7 @@ export default class Example extends PureComponent {
                     <Button
                         secondary
                     >
+
                         SecondaryButton
                     </Button>
                 </div>
@@ -42,24 +47,27 @@ export default class Example extends PureComponent {
                         disabled
                         secondary
                     >
+
                         Disabled SecondaryButton
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
-                        icon="fa-calendar"
+                        icon="fa-rocket"
                         onClick={(event) => {
                             window.chayns.dialog.alert(JSON.stringify(event));
                         }}
                     >
+
                         IconButton
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         disabled
-                        icon="fa-plus"
+                        icon="fa-rocket"
                     >
+
                         Disabled IconButton
                     </Button>
                 </div>
@@ -70,6 +78,7 @@ export default class Example extends PureComponent {
                             console.log(event);
                         }}
                     >
+
                         ChooseButton
                     </ChooseButton>
                 </div>
@@ -78,6 +87,7 @@ export default class Example extends PureComponent {
                     <ChooseButton
                         className="button--disabled"
                     >
+
                         Disabled ChooseButton
                     </ChooseButton>
                 </div>
@@ -89,6 +99,7 @@ export default class Example extends PureComponent {
                             console.log(event);
                         }}
                     >
+
                         ChooseButton with icon
                     </ChooseButton>
                 </div>
@@ -98,6 +109,7 @@ export default class Example extends PureComponent {
                         disabled
                         icon="fa-rocket"
                     >
+
                         Disabled ChooseButton with icon
                     </ChooseButton>
                 </div>

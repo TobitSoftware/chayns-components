@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import * as equalizer from '../../utils/equalizer';
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import Input from '../../react-chayns-input/component/Input';
 
 
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
-export default class AmountInput extends Component {
+export default class AmountInput extends PureComponent {
     static propTypes = {
         amount: PropTypes.number.isRequired,
         onAdd: PropTypes.func.isRequired,
@@ -17,87 +15,39 @@ export default class AmountInput extends Component {
         onChange: PropTypes.func.isRequired,
         buttonText: PropTypes.string.isRequired,
         showInput: PropTypes.bool.isRequired,
-        equalize: PropTypes.string,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
         autoInput: PropTypes.bool,
-        shopStyle: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
+        tempAmount: PropTypes.number,
+        setInput: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
-        equalize: null,
         disabled: false,
         disableInput: false,
         autoInput: false,
-        shopStyle: false,
         buttonFormatHandler: undefined,
+        tempAmount: 0,
     };
 
-    constructor() {
-        super();
-
-        this.state = {
-            showInput: false
-        };
-    }
-
-    componentWillMount() {
-        const { amount } = this.props;
-
-        if (window.chayns.utils.isNumber(amount)) {
-            this.setState({
-                value: amount
-            });
-        }
-    }
-
-    componentDidMount() {
-        const { equalize } = this.props;
-
-        if(equalize) {
-            equalizer.init();
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { amount } = this.props;
-        const { value } = this.state;
-
-        if(nextProps.amount !== amount && value !== nextProps.amount) {
-            this.setState({
-                value: nextProps.amount
-            });
-        }
-
-        if(nextProps.equalize) {
-            equalizer.init();
-        }
-    }
-
     onButtonClick = () => {
-        const { amount, onAdd } = this.props;
+        const { amount, onAdd, setInput } = this.props;
 
         if(amount > 0) {
-            this.setState({
-                showInput: true
-            });
+            setInput();
         } else {
             onAdd();
         }
     };
 
     onInputChange = (value) => {
-        let inputValue = value.replace(/[\D\s]+/g, '');
+        let inputValue = value.target.value.replace(/[\D\s]+/g, '');
         inputValue = parseInt(inputValue, 10);
 
         if(!window.chayns.utils.isNumber(inputValue)) {
             inputValue = null;
         }
-
-        this.setState({
-            value: inputValue
-        });
 
         const { onInput } = this.props;
 
@@ -107,16 +57,11 @@ export default class AmountInput extends Component {
     };
 
     onInputBlur = () => {
-        const { onChange } = this.props;
-        const { value } = this.state;
-
+        const { onChange, tempAmount } = this.props;
+console.log("onInputBlur")
         if(onChange) {
-            onChange(value);
+            onChange(tempAmount);
         }
-
-        this.setState({
-            showInput: false
-        });
     };
 
     getButtonValue() {
@@ -134,11 +79,10 @@ export default class AmountInput extends Component {
     }
 
     getInputValue() {
-        const { amount } = this.props;
-        const { value: inputValue } = this.state;
+        const { amount, tempAmount } = this.props;
 
-        if(inputValue || inputValue === 0 || inputValue === '') {
-            return inputValue;
+        if(tempAmount || tempAmount === 0 || tempAmount === '') {
+            return tempAmount;
         }
 
         if(window.chayns.utils.isNumber(amount) && parseInt(amount, 10) !== 0) {
@@ -151,15 +95,13 @@ export default class AmountInput extends Component {
     render() {
         const {
             amount,
-            equalize,
             disabled,
             disableInput,
             autoInput,
             showInput: showInputProp,
-            shopStyle,
+            showInput,
         } = this.props;
-        const { showInput } = this.state;
-
+console.log("input render",amount)
         if(((!autoInput || amount <= AUTO_HIDE_INPUT_MAX_AMOUNT) && !showInput && !showInputProp) || disableInput || disabled) {
             const buttonClassName = classnames('cc__amount-control__button', {
                 'cc__amount-control__button--price': !amount,
@@ -167,14 +109,13 @@ export default class AmountInput extends Component {
             });
 
             return (
-                <ChooseButton
+                <div
                     onClick={this.onButtonClick}
                     className={buttonClassName}
-                    data-cc-equalize-width={equalize}
                     disabled={disabled}
                 >
                     {this.getButtonValue()}
-                </ChooseButton>
+                </div>
             );
         }
 
@@ -185,9 +126,8 @@ export default class AmountInput extends Component {
                 onChange={this.onInputChange}
                 className="cc__amount-control__input"
                 onBlur={this.onInputBlur}
-                data-cc-equalize-width={equalize}
                 disabled={disabled}
-                autoFocus={!shopStyle && window.chayns.env.isDesktop}
+                autoFocus={window.chayns.env.isDesktop}
             />
         );
     }

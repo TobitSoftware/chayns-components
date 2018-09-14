@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { AmountControl } from '../../src/index';
-import '../../src/react-chayns-amountcontrol/shop.scss';
 import ExampleContainer from '../ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
@@ -23,7 +22,7 @@ export default class Example extends Component {
     render() {
         const { amount } = this.state;
 
-        return(
+        return (
             <ExampleContainer
                 headline="AmountControl Example"
                 data-equalize="group-1"
@@ -35,10 +34,9 @@ export default class Example extends Component {
                     onChange={this.onChange}
                     equalize="group-1"
                     buttonText="0,15"
-                    shopStyle
                 />
 
-                <br />
+                <br/>
 
                 <AmountControl
                     disabled={false}
@@ -46,9 +44,10 @@ export default class Example extends Component {
                     onChange={this.onChange}
                     equalize="group-1"
                     buttonText="mtl. 15,95 €"
+                    icon="ts-tobit"
                 />
 
-                <br />
+                <br/>
 
                 <AmountControl
                     disabled
@@ -58,21 +57,24 @@ export default class Example extends Component {
                     buttonText="test-article"
                 />
 
-                <br />
+                <br/>
 
-                <Accordion head={
+                <Accordion head={(
                     <AmountControl
                         disabled={false}
                         amount={amount}
                         onChange={this.onChange}
                         equalize="group-1"
                         buttonText="0,15"
-                    />}
+                    />
+                )}
                 >
+
+
                     Test
                 </Accordion>
 
-                <br />
+                <br/>
 
                 <AmountControl
                     amount={amount}
@@ -82,7 +84,7 @@ export default class Example extends Component {
                     disableInput
                 />
 
-                <br />
+                <br/>
 
 
                 <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
@@ -119,7 +121,7 @@ export default class Example extends Component {
                     disableInput
                 />
 
-                <br />
+                <br/>
 
                 <AmountControl
                     amount={amount}
@@ -136,7 +138,6 @@ export default class Example extends Component {
                         onChange={this.onChange}
                         equalize="group-1"
                         buttonText="0,15"
-                        shopStyle
                     />
                 </div>
 

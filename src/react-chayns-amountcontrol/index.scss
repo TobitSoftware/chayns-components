@@ -1,98 +1,44 @@
 .cc__amount-control {
-  position: relative;
-  right: 1px;
-  display: inline-flex;
-  margin-right: 0;
-  align-items: baseline;
-  transition: margin-right .2s;
-
-  &__add,
-  &__remove {
-    width: 37.86px;
-    height: 24px;
-    padding: 0 !important;
-    margin-top: 0 !important;
-
-    align-self: stretch;
-
-    box-sizing: border-box;
-
-    font-size: 10px;
-
-    opacity: 0;
-
-    .fa-minus, .fa-plus {
-      margin-top: 3px;
-    }
-
-    .fa-trash {
-      font-size: 14px;
-    }
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+  width: auto;
+  &__remove, &__add {
+    width: 0px;
+    line-height: 27px;
+    transition: width 0.2s ease-out;
+    overflow: hidden;
+    background-color: rgba(255,255,255,0.2);
   }
-
-  &__add {
-    transition: margin-left .1s ease-in-out, opacity .1s ease-in-out !important;
-    margin-left: 0;
-  }
-
-  &__remove {
-    transition: margin-right .1s ease-in-out, opacity .1s ease-in-out !important;
-    margin: 0 -40px 0 5px;
-  }
-
   &__input {
-    position: relative;
-
-    height: 24px;
-
-    display: inline-block;
-    width: 0;
-    text-align: center;
-    min-width: 60px;
-    margin-left: 6px;
-
-    font-size: 15px !important;
-
-    & > input {
-      text-align: center;
+    &:not(cc__amount-control--active) {
+      display: none;
+      width: 55px;
+      top: 0;
     }
   }
-
-  &--active {
-    right: -1px;
-
-    .cc__amount-control__add {
-      margin-left: 6px;
-    }
-
-    .cc__amount-control__button,
-    .cc__amount-control__remove {
-      margin-right: 0;
-    }
-
-    .cc__amount-control__add,
-    .cc__amount-control__remove {
-      opacity: 1;
-    }
-
-    .button--disabled.cc__amount-control__add,
-    .button--disabled.cc__amount-control__remove {
-      opacity: 0.6;
-    }
-  }
-
   &__button {
-    position: relative;
-    white-space: nowrap;
-    z-index: 1;
-    min-width: 60px;
+    padding: 0 5px;
+    width: 55px;
+    background-color: rgba(0,0,0,0.0);
+  }
+  .cc__amount-control--icon{
+    width: 27px;
+  }
+  &--active{
+    .cc__amount-control{
+      &--icon{
+        width: 40px;
+        &:hover{
+          background-color: rgba(255,255,255,0.0);
+        }
+      }
+      &__button {
+        &:hover{
+          background-color: rgba(0,0,0,0.1);
+        }
+      }
+    }
 
-    transition: margin-right .1s ease-in-out !important;
-    margin: 0 -40px 0 6px;
-    margin-top: 0 !important;
-    padding: 2px 10px;
-
-    height: 24px;
-    box-sizing: border-box;
   }
 }
