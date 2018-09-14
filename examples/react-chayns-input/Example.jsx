@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 
-import { Input } from '../../src/index';
+import { Input, DynamicInput } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
+
+import '../../src/react-chayns-input/component/dynamic-input.scss';
 
 export default class Example extends Component {
     constructor() {
@@ -37,7 +39,10 @@ export default class Example extends Component {
                             userNameOnChange: text
                         });
                     }}
-                    responsive={false}
+                />
+
+                <DynamicInput
+                    placeholder="Looking for"
                 />
             </ExampleContainer>
         );

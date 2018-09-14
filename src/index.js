@@ -19,6 +19,7 @@ import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 import Input from './react-chayns-input/component/Input';
+import DynamicInput from './react-chayns-input/component/DynamicInput';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
@@ -68,6 +69,7 @@ export {
     Gallery,
     GridCalendar,
     Input,
+    DynamicInput,
     ModeSwitch,
     Mode,
     ModeSwitchHelper,
