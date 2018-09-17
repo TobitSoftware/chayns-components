@@ -23,12 +23,31 @@ export default class PersonFinder extends Component {
         showSites: false
     };
 
-    state = {
-        persons: [],
-        sites: [],
-        showPopup: false,
-        value: ''
-    };
+    constructor(props) {
+        super();
+        const { showPersons, showSites, defaultValue } = props;
+
+        this.state = {
+            persons: [],
+            sites: [],
+            showPopup: false,
+            value: defaultValue
+        };
+
+        if (defaultValue.length === 0) {
+            return;
+        }
+
+        Promise.all([
+            showPersons ? chayns.findPerson(defaultValue) : Promise.resolve({ Value: [] }),
+            showSites ? chayns.findSite(defaultValue) : Promise.resolve({ Value: [] })
+        ]).then(([persons, sites]) => {
+            this.setState({
+                persons: persons.Value || [],
+                sites: sites.Value || []
+            });
+        });
+    }
 
     componentDidMount() {
         document.addEventListener('click', this.handleBlur);
@@ -105,6 +124,7 @@ export default class PersonFinder extends Component {
                     ref={ref => this.input = ref}
                     onChange={this.handleOnChange}
                     onFocus={this.handleFocus}
+                    defaultValue={undefined}
                 />
                 {showPopup && (persons.length > 0 || sites.length > 0) ? (
                     <div className="person-finder__results scrollbar" ref={ref => this.ref = ref}>
