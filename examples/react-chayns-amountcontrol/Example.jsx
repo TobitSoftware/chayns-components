@@ -34,6 +34,11 @@ export default class Example extends Component {
                     onChange={this.onChange}
                     equalize="group-1"
                     buttonText="0,15"
+                    addColor="#20C65A"
+                    removeColor="#E71E28"
+                    iconColor="#20C65A"
+                    focusOnClick={false}
+                    icon="fa-shopping-cart"
                 />
 
                 <br/>
@@ -59,13 +64,15 @@ export default class Example extends Component {
 
                 <br/>
 
-                <Accordion head={(
+                <Accordion right={(
                     <AmountControl
+                        icon="ts-bamboo"
                         disabled={false}
                         amount={amount}
                         onChange={this.onChange}
                         equalize="group-1"
                         buttonText="0,15"
+                        iconColor="blue"
                     />
                 )}
                 >
@@ -85,7 +92,6 @@ export default class Example extends Component {
                 />
 
                 <br/>
-
 
                 <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                     <AmountControl

@@ -50,8 +50,14 @@ You can set the following props on a AmountControl element:
 | autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
 | showInput     | Shows the input as long the buttons are not disabled                                    | bool     | false   |
 | buttonFormatHandler | A function that should return the button-content                                  | func     |         |
-| shopStyle     | Enables the shop-styles for this element                                                | bool     | false   |
+| icon          | The icon shown on the left side of the button                                           | string   |         |
+| iconColor     | Color of the icon                                                                       | string   |         |
+| addColor      | Color of the add-icon                                                                   | string   |         |
+| removeColor   | Color of the remove-icon                                                                | string   |         |
+| focusOnClick  | Enables the input autoFocus                                                             | bool     | true    |
 
+The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
+icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 
 
 ### Examples ###
 #### basic ####
@@ -124,10 +130,14 @@ You should disable the input, when using it.
 ```
 
 #### shopStyle ####
-You could add the shopStyle-prop to display the component like in the microshop™.
+You could add these props to display the component like in the microshop™.
 ```jsx
 <AmountControl
     amount={1}
-    shopStyle
+    addColor="#20C65A"
+    removeColor="#E71E28"
+    iconColor="#20C65A"
+    focusOnClick={false}
+    icon="fa-shopping-cart"
 />
 ```
