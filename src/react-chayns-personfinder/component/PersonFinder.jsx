@@ -127,7 +127,7 @@ export default class PersonFinder extends Component {
                     defaultValue={undefined}
                 />
                 {showPopup && (persons.length > 0 || sites.length > 0) ? (
-                    <div className="person-finder__results scrollbar" ref={ref => this.ref = ref}>
+                    <div className="person-finder__results scrollbar" style={this.input ? { width: `${this.input.offsetWidth}px` } : undefined} ref={ref => this.ref = ref}>
                         {showPersons && persons.map(r => (
                             <div key={r.personId} className="result" onClick={() => this.handleItemClick(r)}>
                                 <div className="img">
