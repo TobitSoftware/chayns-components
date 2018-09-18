@@ -9,7 +9,7 @@ export default class Example extends Component {
         super();
 
         this.state = {
-            amount: 1
+            amount: 0
         };
     }
 
@@ -24,7 +24,7 @@ export default class Example extends Component {
 
         return (
             <ExampleContainer
-                headline="AmountControl Example"
+                headline="AmountControl"
                 data-equalize="group-1"
             >
                 <AmountControl
@@ -64,17 +64,19 @@ export default class Example extends Component {
 
                 <br/>
 
-                <Accordion right={(
-                    <AmountControl
-                        icon="ts-bamboo"
-                        disabled={false}
-                        amount={amount}
-                        onChange={this.onChange}
-                        equalize="group-1"
-                        buttonText="0,15"
-                        iconColor="blue"
-                    />
-                )}
+                <Accordion
+                    right={(
+                        <AmountControl
+                            icon="ts-bamboo"
+                            disabled={false}
+                            amount={amount}
+                            onChange={this.onChange}
+                            equalize="group-1"
+                            buttonText="2,20€"
+                            iconColor="blue"
+                        />
+                    )}
+                    head="Afri Cola"
                 >
 
 
@@ -142,7 +144,6 @@ export default class Example extends Component {
                         disabled={false}
                         amount={amount}
                         onChange={this.onChange}
-                        equalize="group-1"
                         buttonText="0,15"
                     />
                 </div>

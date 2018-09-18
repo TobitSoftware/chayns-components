@@ -86,7 +86,6 @@ export default class AmountInput extends PureComponent {
     onInputBlur = () => {
         const { setInput, onChange } = this.props;
         let { tempAmount } = this.props;
-        console.log(tempAmount);
         tempAmount = tempAmount === null ? 0 : tempAmount;
         setInput(false);
         onChange(tempAmount);

@@ -121,7 +121,6 @@ export default class AmountControl extends Component {
         const { onChange, onInput } = this.props;
 
         if (onChange) {
-            console.log(amount);
             onChange(amount);
             this.setState({
                 showInput: false,
@@ -157,7 +156,6 @@ export default class AmountControl extends Component {
             focusOnClick,
         } = this.props;
         const { tempAmount, showInput } = this.state;
-        console.log('render', amount, showInput);
         if (window.debugLevel >= 3) {
             console.debug('render amount-control component', this.props, this.state);
         }
