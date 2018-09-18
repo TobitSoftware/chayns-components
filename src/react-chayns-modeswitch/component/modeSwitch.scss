@@ -10,6 +10,7 @@
   transform: translateY(calc(-100% + 25px));
   transition: transform 0.25s ease-out;
   animation: modeSwitchInit 2s 0s 1 ease-out;
+  z-index: 1000;
   &--open {
     transform: translateY(0);
   }

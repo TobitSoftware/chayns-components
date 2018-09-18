@@ -41,9 +41,9 @@ export default class ModeSwitch extends Component {
             globalState = { modes: this.setModes(props.modes), activeModeId: props.defaultMode || 0 };
             this.state = { ...globalState, open: false };
 
-            const isAdminMode = chayns.addAdminSwitchListener(this.switchMode);
+            chayns.addAdminSwitchListener(this.switchMode);
             if (!props.save && !props.defaultMode) {
-                if (isAdminMode) {
+                if (chayns.env.user.adminMode) {
                     globalState.activeModeId = 1;
                     this.state.activeModeId = 1;
                 } else {
@@ -59,7 +59,8 @@ export default class ModeSwitch extends Component {
     componentWillReceiveProps(nextProps) {
         const { modes } = this.props;
         if (nextProps.modes !== modes) {
-            this.setState({ modes: this.setModes(nextProps.modes) });
+            globalState.modes = this.setModes(nextProps.modes);
+            this.setState({ modes: globalState.modes });
         }
     }
 
@@ -78,7 +79,7 @@ export default class ModeSwitch extends Component {
     }
 
     isUserInGroup(uacId) {
-        return window.chayns.env.user.groups.indexOf(group => group.id === uacId) >= 0;
+        return !!window.chayns.env.user.groups.find(group => group.id === uacId);
     }
 
     switchMode(id) {
@@ -117,7 +118,7 @@ export default class ModeSwitch extends Component {
                         <h2>Diese Seite verwenden als:</h2>
                         {
                             modes.map(mode => (
-                                <div className="grid__item col-1-2-desktop col-1-1-mobile">
+                                <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
                                     <RadioButton
                                         name="modeSwitchRadioButtons"
                                         value={mode.id}
