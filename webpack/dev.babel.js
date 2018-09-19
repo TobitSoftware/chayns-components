@@ -8,6 +8,7 @@ const ROOT_PATH = path.resolve('.');
 export default {
     entry: {
         template: [
+            'babel-polyfill',
             path.resolve(ROOT_PATH, 'examples', 'index')
         ]
     },

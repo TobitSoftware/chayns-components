@@ -23,8 +23,6 @@ import DynamicInput from './react-chayns-input/component/DynamicInput';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
-import ModeSwitchHelper from './react-chayns-modeswitch/component/ModeSwitchHelper';
-import connectToModeSwitch from './react-chayns-modeswitch/component/connectToModeSwitch';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 import Portal from './react-chayns-portal/component/Portal';
