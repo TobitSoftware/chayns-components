@@ -1,68 +1,85 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-import ContextMenuItem from './ContextMenuItem';
+export default class ContextMenu extends Component {
+    static propTypes = {
+        hide: PropTypes.bool,
+        onLayerClick: PropTypes.func,
+        x: PropTypes.number,
+        y: PropTypes.number,
+        items: PropTypes.arrayOf(PropTypes.shape({
+            className: PropTypes.string,
+            onClick: PropTypes.func,
+            text: PropTypes.string
+        })),
+        position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+    };
 
-const ContextMenu = ({
-    hide,
-    onLayerClick,
-    x,
-    y,
-    items,
-}) => {
-    const contextMenuClass = hide ? 'context-menu' : 'context-menu context-menu--active';
+    static defaultProps = {
+        hide: true,
+        onLayerClick: null,
+        x: 0,
+        y: 0,
+        items: [],
+        position: 0,
+    };
 
-    return (
-        <div className={contextMenuClass}>
+    constructor() {
+        super();
+        this.state = { displayNone: true };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { hide } = this.props;
+        if (nextProps.hide && !hide) {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ displayNone: true });
+            }, 350);
+        } else if (!nextProps.hide && hide) {
+            clearTimeout(this.timeout);
+            this.setState({ displayNone: false });
+        }
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
+    }
+
+    render() {
+        const {
+            hide, onLayerClick, x, y, items, position
+        } = this.props;
+
+        const { displayNone } = this.state;
+
+        return (
             <div
-                className="context-menu__page-block"
-                onClick={!chayns.env.isMobile ? onLayerClick : null}
-                onTouchStart={chayns.env.isMobile ? onLayerClick : null}
-            />
-            <div
-                className="context-menu__body"
-                style={{
-                    position: 'absolute',
-                    left: x,
-                    top: y,
-                }}
+                className={classNames('context-menu-overlay', {
+                    'context-menu-overlay--hide': hide && displayNone,
+                    'context-menu-overlay--active': !hide,
+                })}
+                onClick={onLayerClick}
             >
-                <ul className="context-menu__item-list">
-                    {items.map((item, index) => {
-                        return (
-                            <ContextMenuItem
-                                key={`${item.className}-${index.text}`}
-                                iconClassName={item.className}
-                                text={item.text}
-                                onClick={item.onClick}
-                            />
-                        );
-                    })}
+                <ul
+                    style={{
+                        left: x,
+                        top: y,
+                    }}
+                    className={classNames('context-menu', `context-menu--position${position}`, { 'context-menu--active': !hide })}
+                >
+                    {items.map(item => (
+                        <li
+                            className={classNames('context-menu__item', item.className)}
+                            onClick={item.onClick}
+                        >
+                            {item.text}
+                        </li>
+                    ))}
                 </ul>
             </div>
-        </div>
-    );
-};
-
-ContextMenu.defaultProps = {
-    hide: true,
-    onLayerClick: () => {},
-    x: undefined,
-    y: undefined,
-    items: [],
-};
-
-ContextMenu.propTypes = {
-    hide: PropTypes.bool,
-    onLayerClick: PropTypes.func,
-    x: PropTypes.number,
-    y: PropTypes.number,
-    items: PropTypes.arrayOf(PropTypes.shape({
-        className: PropTypes.string,
-        onClick: PropTypes.func,
-        text: PropTypes.string
-    }))
-};
-
-export default ContextMenu;
+        );
+    }
+}
