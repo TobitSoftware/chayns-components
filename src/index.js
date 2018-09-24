@@ -2,12 +2,6 @@ import Accordion from './react-chayns-accordion/component/Accordion';
 import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
 import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
 
-import InspectElementAnimation from './react-chayns-animations/component/InspectElement/InspectElement';
-import animate from './react-chayns-animations/component/animate';
-import AnimationTypes from './react-chayns-animations/component/index';
-import connectToOverlay from './react-chayns-animations/decorator/connectToOverlay';
-import OverlayHelper from './react-chayns-animations/utils/OverlayHelper';
-
 import Button from './react-chayns-button/component/Button';
 import ChooseButton from './react-chayns-button/component/ChooseButton';
 
@@ -52,11 +46,6 @@ export {
     Accordion,
     AccordionIntro,
     AmountControl,
-    InspectElementAnimation,
-    animate,
-    AnimationTypes,
-    connectToOverlay,
-    OverlayHelper,
     Button,
     ChooseButton,
     Calendar,
