@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="publish" />
+    <node-interpreter value="project" />
+    <envs />
+    <method />
+  </configuration>
+</component>
