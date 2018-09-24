@@ -1,48 +1,39 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { ScrollView } from '../../src/index';
 
 
-export default class Example extends Component {
-    state = {
-        children: ['Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />,'Test', <br />],
-        // children: ['Test', <br />,'Test', <br />],
-    };
-
-    componentDidMount() {
-        // window.setInterval(() => {
-        //     let children = this.state.children || [];
-        //     children.push('Test');
-        //     children.push(<br />);
-        //
-        //     this.setState({
-        //         children,
-        //     });
-        // }, 500);
-    }
+export default class Example extends PureComponent {
+    children = ['Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test', <br/>, 'Test',
+        <br/>];
 
     render() {
-        return(
+        return (
             <ExampleContainer headline="ScrollView">
                 <ScrollView
                     style={{
                         maxHeight: '500px',
-                        width: '500px',
+                        width: '100%',
                     }}
                     showScrollbar
                 >
-                    {this.state.children}
+                    {this.children}
                 </ScrollView>
                 <ScrollView
                     style={{
                         maxHeight: '500px',
-                        width: '500px',
+                        width: '100%',
                     }}
                     showScrollbar
                 >
                     {'Not scrollable'}
-                    <br />
+                    <br/>
                     {'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirm'}
                 </ScrollView>
             </ExampleContainer>
