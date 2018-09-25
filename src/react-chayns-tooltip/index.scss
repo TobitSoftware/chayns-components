@@ -1,18 +1,55 @@
 .cc__tooltip {
   position: relative;
   display: inline;
+  z-index: 920;
+
+  /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+  &--position2{
+    .cc__tooltip{
+      &__backLayer{
+        bottom: -10px;
+        left: 0;
+      }
+      &__overlay{
+        transform: translate(0, calc(10px));
+        &:after{
+          transform: rotate(225deg);
+          top: -8px;
+          left: 13px;
+        }
+      }
+    }
+  }
+  &--position3{
+    .cc__tooltip{
+      &__backLayer{
+        top: -10px;
+        left: 0;
+      }
+      &__overlay{
+        transform: translate(0, calc(-100% + 10px));
+        &:after{
+          transform: rotate(45deg);
+          bottom: -8px;
+          left: 13px;
+        }
+      }
+    }
+  }
+
+  &__backLayer {
+    position: absolute;
+    height: 10px;
+    width: 100%;
+  }
 
   &__overlay {
     position: absolute;
-
-    top: -30px;
-    left: 0;
 
     width: 250px;
     padding: 12px;
 
     opacity: 0;
-    transform: translate(0, -100%);
 
     background-color: #fff;
     box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.3);
@@ -32,15 +69,38 @@
       width: 14px;
       height: 14px;
       background-color: #fff;
-      bottom: -8px;
-      left: 13px;
       z-index: -1;
-      transform: rotate(45deg);
       box-shadow: 2px 2px 5px rgba(4, 3, 4, 0.1);
       border-right: 1px solid rgba(0, 0, 0, 0.1);
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       border-bottom-right-radius: 2px;
     }
+  }
+
+  &__image{
+    background-position: center;
+    background-size: cover;
+    height: 100px;
+    width: 100%;
+    margin-bottom: 10px;
+    outline: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &__button{
+    text-align: center;
+  }
+
+  &__icon{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 34px;
+    z-index: 950;
   }
 
   &--active {
