@@ -26,7 +26,6 @@ export default class Example extends Component {
                     content={{
                         text: 'H5 will be used as headline inside of a tooltip.',
                         headline: 'Headline',
-                        imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png'
                     }}
                 >
                     <a>Tooltip with headline</a>
@@ -41,7 +40,7 @@ export default class Example extends Component {
                             content={{
                                 text: 'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
                                 headline: 'Headline',
-                                imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png'
+                                imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
                             }}
                         >
                             <a>Tooltip with headline and image</a>
@@ -67,8 +66,6 @@ export default class Example extends Component {
                     position={2}
                     content={{
                         html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
-
-
                             This is a static Tooltip with custom html content.
                         </div>
                     }}
@@ -80,7 +77,6 @@ export default class Example extends Component {
                             this.staticTooltip.show();
                         }}
                     >
-
                         Static Tooltip
                     </a>
                 </Tooltip>
