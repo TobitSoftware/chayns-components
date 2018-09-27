@@ -33,7 +33,6 @@ The following properties can be set on the Checkbox-Component
 | defaultChecked      | Set the default value of the checkbox                                                               | bool          | false         |
 | checked             | Set the value of the checkbox                                                                       | bool          | false         |
 | disabled            | Disables the checkbox                                                                               | bool          | false         |
-| tooltip             | Tooltip that will be shown behind the label                                                         | String        |               |
 
 
 
