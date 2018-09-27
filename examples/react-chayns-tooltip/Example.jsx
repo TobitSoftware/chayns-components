@@ -3,8 +3,6 @@ import ExampleContainer from '../ExampleContainer';
 
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
-import '../../src/react-chayns-tooltip/index.scss';
-
 export default class Example extends Component {
     render() {
         return (
@@ -69,8 +67,8 @@ export default class Example extends Component {
                             This is a static Tooltip with custom html content.
                         </div>
                     }}
-                    ref={ref => this.staticTooltip = ref}
                     removeIcon
+                    ref={ref => this.staticTooltip = ref}
                 >
                     <a
                         onClick={() => {

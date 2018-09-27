@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import Button from '../../react-chayns-button/component/Button';
+import '../index.scss';
 
 export default class Tooltip extends Component {
     static propTypes = {
@@ -124,18 +125,16 @@ export default class Tooltip extends Component {
         } = this.props;
         const { active, removed } = this.state;
 
-        const className = classnames(`cc__tooltip cc__tooltip--position${position}`, {
-            'cc__tooltip--active': active,
-        });
 
         return (
             <div
-                className={className}
+                className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
+                    'cc__tooltip--active': active,
+                })}
                 ref={(node) => {
                     this.node = node;
                 }}
             >
-
                 {!removed && (
                     <div className="cc__tooltip__backLayer">
                         <div className="cc__tooltip__overlay" style={{ width: `${width}px` }}>

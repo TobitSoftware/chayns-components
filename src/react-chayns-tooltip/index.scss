@@ -8,19 +8,15 @@
     .cc__tooltip {
       &__backLayer {
         top: -10px;
-        right: calc(50% + 23px);
+        right: 0;
       }
       &__overlay {
         transform: translate(0, -100%);
+        right: calc(50% - 23px);
         &:after {
           transform: rotate(45deg);
           bottom: -8px;
           right: 13px;
-        }
-      }
-      &--active {
-        .cc__tooltip__overlay {
-          //top: -30px;
         }
       }
     }
@@ -29,19 +25,15 @@
     .cc__tooltip {
       &__backLayer {
         bottom: -10px;
-        right: calc(-50% - 23px);
+        right: 0;
       }
       &__overlay {
-        transform: translate(-100%, 10px);
+        transform: translate(0, 10px);
+        right: calc(50% - 23px);
         &:after {
           transform: rotate(225deg);
           top: -8px;
           right: 13px;
-        }
-      }
-      &--active {
-        .cc__tooltip__overlay {
-          //top: -10px;
         }
       }
     }
@@ -50,19 +42,15 @@
     .cc__tooltip {
       &__backLayer {
         bottom: -10px;
-        left: calc(50% - 23px);
+        left: 0;
       }
       &__overlay {
         transform: translate(0, 10px);
+        left: calc(50% - 23px);
         &:after {
           transform: rotate(225deg);
           top: -8px;
           left: 13px;
-        }
-      }
-      &--active {
-        .cc__tooltip__overlay {
-          //top: -10px;
         }
       }
     }
@@ -71,19 +59,15 @@
     .cc__tooltip {
       &__backLayer {
         top: -10px;
-        left: calc(50% - 23px);
+        left: 0;
       }
       &__overlay {
         transform: translate(0, -100%);
+        left: calc(50% - 23px);
         &:after {
           transform: rotate(45deg);
           bottom: -8px;
           left: 13px;
-        }
-      }
-      &--active {
-        .cc__tooltip__overlay {
-          //transform: translate(100px, -100%);
         }
       }
     }
@@ -93,6 +77,10 @@
     position: absolute;
     height: 10px;
     width: 100%;
+
+    transition: transform 500ms ease, opacity 500ms ease;
+    transform: translateY(-20px);
+    opacity: 0;
   }
 
   &__overlay {
@@ -100,8 +88,6 @@
 
     width: 250px;
     padding: 12px;
-
-    opacity: 0;
 
     background-color: #fff;
     box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.3);
@@ -112,7 +98,7 @@
 
     z-index: 930;
 
-    transition: top 500ms, opacity 500ms;
+    text-align: left;
 
     &:after {
       position: absolute;
@@ -156,8 +142,9 @@
   }
 
   &--active {
-    .cc__tooltip__overlay {
+    .cc__tooltip__backLayer {
       opacity: 1;
+      transform: translateY(0);
     }
   }
 }
