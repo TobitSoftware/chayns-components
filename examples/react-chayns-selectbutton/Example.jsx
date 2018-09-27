@@ -34,6 +34,37 @@ export default class Example extends Component {
                     listKey="id"
                     listValue="name"
                 />
+                <br/>
+                <br/>
+                <SelectButton
+                    label="Select Pizza"
+                    list={pizza}
+                    onSelect={(value) => { console.log(value); }}
+                    listKey="id"
+                    listValue="name"
+                    disabled
+                />
+                <br/>
+                <br/>
+                <SelectButton
+                    label="Select Pizza"
+                    list={pizza}
+                    onSelect={(value) => { console.log(value); }}
+                    listKey="id"
+                    listValue="name"
+                    htmlSelect
+                />
+                <br/>
+                <br/>
+                <SelectButton
+                    label="Select Pizza"
+                    list={pizza}
+                    onSelect={(value) => { console.log(value); }}
+                    listKey="id"
+                    listValue="name"
+                    htmlSelect
+                    disabled
+                />
             </ExampleContainer>
         );
     }

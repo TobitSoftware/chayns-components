@@ -29,21 +29,23 @@ You can set the following props on a SelectButton element:
 
 | Property   | Description                                                                                        | Type    | Default |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| onSelect | Callback that will be triggered when items were selected                                       | function | |
-| title | A title shown on top of the dialog window                                                         | string   | 'Select Dialog' |
-| description | A description for the dialog placed right below the title                                   | string   | 'Please select an item' |
-| label | The text shown inside the button                                                                  | string   | 'Select' |
-| list | An array containing elements to select from                                                        | object[] | |
-| listKey | The identifier of the list items. It is required for the dialog to work                         | string   | |
-| listValue | The value of the list items. It is shown in the dialog for each item                          | string   | |
-| multiSelect | If true, more than one item can be selected                                                 | boolean  | false |
-| quickFind | If true, a search input is shown above the list                                               | boolean  | false |
-| className | Add additional classes to the button                                                          | string   | |
-| style     | Add additional styles  to the button                                                          | object   | |
+| onSelect | Callback that will be triggered when items were selected.                                       | function | |
+| title | A title shown on top of the dialog window. Not available in htmlSelect.                                                           | string   | 'Select Dialog' |
+| description | A description for the dialog placed right below the title. Not available in htmlSelect.                                     | string   | 'Please select an item' |
+| disabled | If true, button/htmlSelect will be disabled. | bool | false |
+| label | The text shown inside the button.                                                                  | string   | 'Select' |
+| list | An array containing elements to select from.                                                        | object[] | |
+| listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | |
+| listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
+| multiSelect | If true, more than one item can be selected. Not available in htmlSelect.                                                   | bool  | false |
+| quickFind | If true, a search input is shown above the list. Not available in htmlSelect.                                               | bool  | false |
+| className | Add additional classes to the button.                                                          | string   | |
+| showSelection | Shows selection in button. Not available in htmlSelect. | bool | true |
+| htmlSelect | Use html select. | bool | false | 
 
 ### Examples ###
 
-#### selectFirst ####
+#### SelectFirst ####
 The following example will implement a chayns® chooseButton which onClick opens a selectDialog using the defined array :
 ```jsx
 let pizza = [
@@ -73,6 +75,21 @@ return (
         onSelect={(value) => { console.log(value) }}
         listKey="id"
         listValue="name"
+    />
+);
+```
+
+#### HtmlSelect / Combobox ####
+The following example will implement a chayns® chooseButton which onClick opens a selectDialog using the defined array :
+```jsx
+return (
+    <SelectButton
+        label="Select Pizza"
+        list={pizza}
+        onSelect={(value) => { console.log(value) }}
+        listKey="id"
+        listValue="name"
+        htmlSelect
     />
 );
 ```

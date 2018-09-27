@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 export default class SelectButton extends Component {
     static propTypes = {
         onSelect: PropTypes.func,
         title: PropTypes.string,
         description: PropTypes.string,
+        disabled: PropTypes.bool,
         label: PropTypes.string,
         list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
         listKey: PropTypes.string.isRequired,
@@ -16,6 +18,7 @@ export default class SelectButton extends Component {
         quickFind: PropTypes.bool,
         className: PropTypes.string,
         showSelection: PropTypes.bool,
+        htmlSelect: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -27,6 +30,8 @@ export default class SelectButton extends Component {
         showSelection: true,
         className: null,
         onSelect: null,
+        htmlSelect: false,
+        disabled: false,
     };
 
     constructor(props) {
@@ -38,17 +43,18 @@ export default class SelectButton extends Component {
 
         this.onClick = this.onClick.bind(this);
         this.onSelect = this.onSelect.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     onSelect(selected) {
-        const { onSelect } = this.props;
+        const { onSelect, htmlSelect } = this.props;
         const { selection } = selected;
 
-        if(selection.length === 1) {
+        if (selection.length === 1 && !htmlSelect) {
             this.setLabel(selection[0].name);
         }
 
-        if(onSelect) {
+        if (onSelect) {
             onSelect(this.getReturnList(selected));
         }
     }
@@ -76,6 +82,10 @@ export default class SelectButton extends Component {
         }).catch((e) => {
             console.error(e);
         });
+    }
+
+    onChange(e) {
+        this.onSelect({ selection: [{ value: e.target.value }], buttonType: 1 });
     }
 
     static getDialogList(_list, listKey, listValue) {
@@ -115,20 +125,39 @@ export default class SelectButton extends Component {
     }
 
     render() {
-        const { className, label } = this.props;
-        const classNames = classnames({
-            choosebutton: true,
-            [className]: className
-        });
+        const {
+            className, label, htmlSelect, list, disabled
+        } = this.props;
+        if (htmlSelect) {
+            return (
+                <div className={classNames('select', className, { 'select--disabled': disabled })}>
+                    <select disabled={disabled} onChange={this.onChange}>
+                        {
+                            label
+                                ? <option value="" disabled selected>{label}</option>
+                                : null
+                        }
+                        {list.map(item => (
+                            <option value={item.id}>
+                                {item.name}
+                            </option>
+                        ))}
 
+                    </select>
+                </div>
+            );
+        }
         return (
-            <div
-                className={classNames}
+            <ChooseButton
+                className={className}
+                disabled={disabled}
                 onClick={this.onClick}
-                ref={(ref) => { this._btn = ref; }}
+                buttonRef={(ref) => {
+                    this._btn = ref;
+                }}
             >
                 {label}
-            </div>
+            </ChooseButton>
         );
     }
 }

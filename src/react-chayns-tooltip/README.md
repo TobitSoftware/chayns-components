@@ -41,6 +41,7 @@ The component got the following properties:
 | content.buttonOnClick | Function which will be set as onClick for the button shown in the tooltip.                                            | func      |       | false |
 | content.html          | React Node which will be rendered in the tooltip. It's required if you don't use the text property                    | node      |       | true  |
 
+Also, you can call the methods show() and hide() on the reference of the tooltip.
 
 #### Example ####
 
