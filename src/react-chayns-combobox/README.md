@@ -1,6 +1,6 @@
-# SelectButton-Component #
+# ComboBox-Component #
 
-The SelectButton-Component is part of the *chayns-components*-Package. You can install it with the following command:
+The ComboBox-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
     npm install -S chayns-components@latest
 
@@ -9,14 +9,14 @@ The SelectButton-Component is part of the *chayns-components*-Package. You can i
 You have to import the component first:
 
 ```jsx
-import { SelectButton } from 'chayns-components';
+import { ComboBox } from 'chayns-components';
 ```
 
 
 You can now use the component as follows:
 ```jsx
-<SelectButton
-    label="Select-Button"
+<ComboBox
+    label="ComboBox"
     list={list}
     onSelect={(value) => { console.log(value) }}
     listKey="id"
@@ -24,27 +24,22 @@ You can now use the component as follows:
 />
 ```
 
-### Props (SelectButton) ###
-You can set the following props on a SelectButton element:
+### Props (ComboBox) ###
+You can set the following props on a ComboBox element:
 
 | Property   | Description                                                                                        | Type    | Default |
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
 | onSelect | Callback that will be triggered when items were selected.                                       | function | |
-| title | A title shown on top of the dialog window.                                                          | string   | '' |
-| description | A description for the dialog placed right below the title.                                    | string   | '' |
-| disabled | If true, the button will be disabled. | bool | false |
-| label | The text shown inside the button.                                                                  | string   | 'Select' |
+| disabled | If true, the ComboBox will be disabled. | bool | false |
+| label | A non-chooseable text shown inside the ComboBox.                                                                 | string   | |
 | list | An array containing elements to select from.                                                        | array | |
 | listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | |
 | listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
-| multiSelect | If true, more than one item can be selected.                                               | bool  | false |
-| quickFind | If true, a search input is shown above the list.                                               | bool  | false |
 | className | Add additional classes to the button.                                                          | string   | |
-| showSelection | Shows selection in button. | bool | true |
 
-### Examples ###
+### Example ###
 
-The following example will implement a chayns® chooseButton which onClick opens a selectDialog using the defined array:
+The following example will implement a chayns® ComboBox using the defined array:
 ```jsx
 let pizza = [
     {
@@ -67,7 +62,7 @@ let pizza = [
 ];
 
 return (
-    <SelectButton
+    <ComboBox
         label="Select Pizza"
         list={pizza}
         onSelect={(value) => { console.log(value) }}

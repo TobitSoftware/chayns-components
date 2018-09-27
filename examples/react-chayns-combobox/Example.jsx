@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-import { SelectButton } from '../../src/index';
+import { ComboBox } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class Example extends PureComponent {
     render() {
         const pizza = [
             {
@@ -26,42 +26,24 @@ export default class Example extends Component {
         ];
 
         return(
-            <ExampleContainer headline="SelectButton">
-                <SelectButton
+            <ExampleContainer headline="ComboBox">
+                <ComboBox
                     label="Select Pizza"
                     list={pizza}
                     onSelect={(value) => { console.log(value); }}
                     listKey="id"
                     listValue="name"
+                    htmlSelect
                 />
                 <br/>
                 <br/>
-                <SelectButton
-                    label="Select one or more pizza"
+                <ComboBox
+                    label="Select Pizza"
                     list={pizza}
                     onSelect={(value) => { console.log(value); }}
                     listKey="id"
                     listValue="name"
-                    multiSelect
-                />
-                <br/>
-                <br/>
-                <SelectButton
-                    label="Find your pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    quickFind
-                />
-                <br/>
-                <br/>
-                <SelectButton
-                    label="Disabled Pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
+                    htmlSelect
                     disabled
                 />
             </ExampleContainer>

@@ -7,6 +7,7 @@ import ChooseButton from './react-chayns-button/component/ChooseButton';
 
 import Calendar from './react-chayns-calendar/component/Calendar';
 import Checkbox from './react-chayns-checkbox/component/Checkbox';
+import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
@@ -50,6 +51,7 @@ export {
     ChooseButton,
     Calendar,
     Checkbox,
+    ComboBox,
     ContextMenu,
     EmojiInput,
     Gallery,

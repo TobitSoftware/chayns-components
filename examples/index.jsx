@@ -3,6 +3,7 @@ import './react-chayns-amountcontrol/index';
 import './react-chayns-button/index';
 import './react-chayns-calendar/index';
 import './react-chayns-checkbox/index';
+import './react-chayns-combobox/index';
 import './react-chayns-contextmenu/index';
 import './react-chayns-emoji_input/index';
 import './react-chayns-gallery/index';
