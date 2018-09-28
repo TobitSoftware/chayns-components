@@ -22,18 +22,32 @@ export default class ScrollView extends Component {
         showScrollbar: false,
     };
 
+    constructor() {
+        super();
+        this.state = { contentWidth: 0 };
+        this.setContentWidth = this.setContentWidth.bind(this);
+    }
+
     componentDidMount() {
+        const { contentWidth } = this.state;
         this.scrollView = new ScrollViewHelper(this.node, {
             wrapper: this.wrapper,
             content: this.content,
             bar: this.bar,
         });
+        if (contentWidth === 0) {
+            this.setContentWidth();
+        }
     }
 
     componentDidUpdate() {
         if (this.scrollView) {
             this.scrollView.refresh();
         }
+    }
+
+    setContentWidth() {
+        this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width });
     }
 
     render() {
@@ -44,6 +58,8 @@ export default class ScrollView extends Component {
             children,
         } = this.props;
 
+        const { contentWidth } = this.state;
+
         const classNames = classnames('cc__scroll-view', {
             'cc__scroll-view--hide': !showScrollbar,
             'cc__scroll-view--mobile': chayns.env.isMobile,
@@ -52,29 +68,40 @@ export default class ScrollView extends Component {
 
         return (
             <div
-                ref={(ref) => { this.node = ref; }}
+                ref={(ref) => {
+                    this.node = ref;
+                }}
                 style={style}
                 className={classNames}
             >
                 <div
                     className="cc__scroll-view__wrapper"
-                    ref={(ref) => { this.wrapper = ref; }}
+                    ref={(ref) => {
+                        this.wrapper = ref;
+                    }}
                 >
                     <div
                         style={{
+                            width: `calc( 100% + ${contentWidth}px)`,
                             maxHeight: (style && style.maxHeight) ? style.maxHeight : undefined,
                             height: (style && style.height) ? style.height : undefined,
                             overflowY: 'scroll',
                         }}
                         className="cc__scroll-view__content"
-                        ref={(ref) => { this.content = ref; }}
+                        ref={(ref) => {
+                            this.content = ref;
+                        }}
                     >
-                        {children}
+                        <div className="cc__scroll-view__children" ref={ref => this.children = ref}>
+                            {children}
+                        </div>
                     </div>
                 </div>
                 <div
                     className="cc__scroll-view__scrollbar"
-                    ref={(ref) => { this.bar = ref; }}
+                    ref={(ref) => {
+                        this.bar = ref;
+                    }}
                 />
             </div>
         );
