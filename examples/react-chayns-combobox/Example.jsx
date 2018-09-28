@@ -27,6 +27,7 @@ export default class Example extends PureComponent {
 
         return(
             <ExampleContainer headline="ComboBox">
+                <div style={{ marginBottom: '20px' }}>
                 <ComboBox
                     label="Select Pizza"
                     list={pizza}
@@ -35,8 +36,7 @@ export default class Example extends PureComponent {
                     listValue="name"
                     htmlSelect
                 />
-                <br/>
-                <br/>
+                </div>
                 <ComboBox
                     label="Select Pizza"
                     list={pizza}

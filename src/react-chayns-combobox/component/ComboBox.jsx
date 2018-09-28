@@ -41,14 +41,14 @@ export default class ComboBox extends PureComponent {
         } = this.props;
         return (
             <div className={classNames('select', className, { 'select--disabled': disabled })}>
-                <select disabled={disabled} onChange={this.onSelect}>
+                <select disabled={disabled} onChange={this.onSelect} defaultValue="ComboBoxLabel">
                     {
                         label
-                            ? <option value="" disabled selected>{label}</option>
+                            ? <option value="ComboBoxLabel" disabled>{label}</option>
                             : null
                     }
                     {list.map(item => (
-                        <option value={item[listKey]}>
+                        <option key={item[listKey]} value={item[listKey]}>
                             {item[listValue]}
                         </option>
                     ))}

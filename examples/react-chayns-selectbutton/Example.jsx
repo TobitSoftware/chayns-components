@@ -25,45 +25,55 @@ export default class Example extends Component {
             }
         ];
 
-        return(
+        return (
             <ExampleContainer headline="SelectButton">
-                <SelectButton
-                    label="Select Pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                />
-                <br/>
-                <br/>
-                <SelectButton
-                    label="Select one or more pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    multiSelect
-                />
-                <br/>
-                <br/>
-                <SelectButton
-                    label="Find your pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    quickFind
-                />
-                <br/>
-                <br/>
-                <SelectButton
-                    label="Disabled Pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    disabled
-                />
+                <div style={{ marginBottom: '20px' }}>
+                    <SelectButton
+                        label="Select Pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <SelectButton
+                        label="Select one or more pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        multiSelect
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <SelectButton
+                        label="Find your pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        quickFind
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <SelectButton
+                        label="Disabled Pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        disabled
+                    />
+                </div>
             </ExampleContainer>
         );
     }

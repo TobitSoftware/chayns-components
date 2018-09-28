@@ -74,6 +74,7 @@ export default class ContextMenu extends Component {
                         <li
                             className={classNames('context-menu__item', item.className)}
                             onClick={item.onClick}
+                            key={item.text}
                         >
                             {item.text}
                         </li>
