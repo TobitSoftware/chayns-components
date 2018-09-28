@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { ContextMenu } from '../../src/index';
-import '../../src/react-chayns-contextmenu/index.scss';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 

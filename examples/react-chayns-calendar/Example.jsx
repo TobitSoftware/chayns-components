@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Calendar } from '../../src/index';
-import '../../src/react-chayns-calendar/index.scss';
 import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends Component {

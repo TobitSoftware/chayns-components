@@ -3,8 +3,6 @@ import ExampleContainer from '../ExampleContainer';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
 
-import '../../src/react-chayns-upload/index.scss';
-
 export default class Example extends Component {
     constructor() {
         super();

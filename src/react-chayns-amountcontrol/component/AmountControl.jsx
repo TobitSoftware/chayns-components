@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
-import '../index.scss';
 
 export default class AmountControl extends Component {
     static propTypes = {

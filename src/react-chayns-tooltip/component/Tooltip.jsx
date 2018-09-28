@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '../../react-chayns-button/component/Button';
-import '../index.scss';
 
 export default class Tooltip extends Component {
     static propTypes = {

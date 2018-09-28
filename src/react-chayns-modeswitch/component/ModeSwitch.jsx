@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import './modeSwitch.scss';
-
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 
 let globalState = { modes: [], activeModeId: 0 };
