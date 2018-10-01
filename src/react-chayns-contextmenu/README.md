@@ -44,6 +44,7 @@ The component got the following properties:
 | item.className | The className of an item of the **ContextMenu** | string | |
 | item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||
 | item.text | The text displayed in an item of the **ContextMenu** | string | |
+| item.text | The icon displayed in an item of the **ContextMenu** | object | |
 
 
 #### Example ####

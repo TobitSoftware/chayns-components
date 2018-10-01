@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { faInfoCircle, faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
 
 import { ContextMenu } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
+import Icon from "../../src/react-chayns-icon/component/Icon";
 
 export default class Example extends Component {
     constructor() {
@@ -56,14 +58,16 @@ export default class Example extends Component {
 
         const items = [
             {
-                className: 'fa-plus',
+                className: null,
                 onClick: this.addOnClick,
-                text: 'Hinzufügen'
+                text: 'Hinzufügen',
+                icon: faPlus,
             },
             {
-                className: 'fa-trash-o',
+                className: null,
                 onClick: this.deleteOnClick,
-                text: 'Löschen'
+                text: 'Löschen',
+                icon: faTrash,
             }
         ];
 
@@ -83,13 +87,8 @@ export default class Example extends Component {
                 >
                     Position ändern
                 </Button>
-                <div style={{ margin: '15% 45%' }}>
-                    <i
-                        className="fa fa-info-circle"
-                        style={{ fontSize: '5rem', alignSelf: 'center' }}
-                        onClick={this.setContextMenu}
-                    />
-
+                <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>
+                    <Icon icon={faInfoCircle} scale={5}/>
                 </div>
             </ExampleContainer>
         );

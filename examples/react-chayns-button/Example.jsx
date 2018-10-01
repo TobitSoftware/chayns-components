@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { faRocket } from '@fortawesome/pro-solid-svg-icons';
 
 import { Button, ChooseButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
@@ -55,7 +56,7 @@ export default class Example extends PureComponent {
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
-                        icon="fa-rocket"
+                        icon={faRocket}
                         onClick={console.log}
                     >
                         IconButton
@@ -64,7 +65,7 @@ export default class Example extends PureComponent {
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         disabled
-                        icon="fa-rocket"
+                        icon={faRocket}
                     >
                         Disabled IconButton
                     </Button>

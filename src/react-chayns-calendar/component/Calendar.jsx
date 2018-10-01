@@ -2,9 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { faChevronRight, faChevronLeft } from '@fortawesome/pro-solid-svg-icons';
 
 import Month from './Month';
 import areDatesEqual from '../utils/areDatesEqual';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 
 const TODAY = new Date();
@@ -157,7 +159,7 @@ export default class Calendar extends Component {
     }
 
     navigateLeftOnClick() {
-        if(!this.getNavigateLeft()) {
+        if (!this.getNavigateLeft()) {
             return;
         }
 
@@ -254,7 +256,7 @@ export default class Calendar extends Component {
                 }
             }
 
-            if(activateAll) {
+            if (activateAll) {
                 if (_highlighted instanceof Array) {
                     for (let j = 0; j < _highlighted.length; j += 1) {
                         const dates = [];
@@ -362,14 +364,14 @@ export default class Calendar extends Component {
                             className="calendar__navigate left"
                             hidden={_navigateLeft}
                         >
-                            <i className="fa fa-chevron-left"/>
+                            <Icon icon={faChevronLeft}/>
                         </div>
                         <div
                             onClick={this.navigateRightOnClick}
                             className="calendar__navigate right"
                             hidden={_navigateRight}
                         >
-                            <i className="fa fa-chevron-right"/>
+                            <Icon icon={faChevronRight}/>
                         </div>
                     </div>
                 </div>

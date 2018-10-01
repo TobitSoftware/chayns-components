@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { faShoppingCart } from '@fortawesome/pro-regular-svg-icons';
 
 import { AmountControl } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
@@ -38,7 +39,7 @@ export default class Example extends Component {
                     removeColor="#E71E28"
                     iconColor="#20C65A"
                     focusOnClick={false}
-                    icon="fa-shopping-cart"
+                    icon={faShoppingCart}
                 />
 
                 <br/>

@@ -5,7 +5,6 @@ import * as equalizer from '../../utils/equalizer';
 
 import Input from '../../react-chayns-input/component/Input';
 
-
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
 export default class AmountInput extends PureComponent {
@@ -60,7 +59,6 @@ export default class AmountInput extends PureComponent {
 
     onButtonClick = () => {
         const { amount, onAdd, setInput } = this.props;
-console.log("onbuttonclick")
         if (amount > 0) {
             setInput(true);
         } else {

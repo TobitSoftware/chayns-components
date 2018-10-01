@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Button extends Component {
     static propTypes = {
@@ -11,7 +12,7 @@ export default class Button extends Component {
         className: PropTypes.string,
         style: PropTypes.object,
         buttonRef: PropTypes.func,
-        icon: PropTypes.string,
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         secondary: PropTypes.bool
     };
 
@@ -47,24 +48,27 @@ export default class Button extends Component {
             ...other
         } = this.props;
 
-        const classNames = classnames(icon, {
-            button: !chooseButton,
-            choosebutton: chooseButton,
-            'button--disabled': disabled,
-            'button--secondary': secondary,
-            [className]: className
-        });
-
         return (
             <button
                 type="button"
-                className={classNames}
+                className={classNames({
+                    button: !chooseButton,
+                    choosebutton: chooseButton,
+                    'button--disabled': disabled,
+                    'button--secondary': secondary,
+                    [className]: className
+                })}
                 onClick={this.handleClick}
                 style={style}
                 disabled={disabled}
                 ref={buttonRef}
                 {...other}
             >
+                {
+                    icon
+                        ? <span className="button__icon"><Icon icon={icon}/></span>
+                        : null
+                }
                 {children}
             </button>
         );

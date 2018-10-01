@@ -16,7 +16,8 @@ ChooseButton.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
-    style: PropTypes.object
+    style: PropTypes.object,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 ChooseButton.defaultProps = {
@@ -24,6 +25,7 @@ ChooseButton.defaultProps = {
     className: null,
     onClick: null,
     disabled: false,
+    icon: null,
 };
 
 export default ChooseButton;

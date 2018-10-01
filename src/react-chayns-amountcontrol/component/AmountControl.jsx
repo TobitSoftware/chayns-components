@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { faMinus, faPlus, faTrashAlt } from '@fortawesome/pro-regular-svg-icons';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
@@ -22,7 +23,7 @@ export default class AmountControl extends Component {
         autoInput: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
         showInput: PropTypes.bool,
-        icon: PropTypes.string,
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         removeColor: PropTypes.string,
         addColor: PropTypes.string,
         iconColor: PropTypes.string,
@@ -90,10 +91,10 @@ export default class AmountControl extends Component {
         }
 
         if (tempAmount > 1 || (amount > 1 && !tempAmount)) {
-            return 'fa-minus';
+            return faMinus;
         }
 
-        return 'fa-trash-o';
+        return faTrashAlt;
     }
 
     addItem = () => {
@@ -105,7 +106,6 @@ export default class AmountControl extends Component {
     };
 
     removeItem = () => {
-        console.log("removeItoms")
         const { amount, onRemove } = this.props;
 
         if (onRemove) onRemove();
@@ -191,7 +191,7 @@ export default class AmountControl extends Component {
                     focusOnClick={focusOnClick}
                 />
                 <ControlButton
-                    icon="fa-plus"
+                    icon={faPlus}
                     onClick={this.addItem}
                     disabled={disabled || disableAdd}
                     className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}

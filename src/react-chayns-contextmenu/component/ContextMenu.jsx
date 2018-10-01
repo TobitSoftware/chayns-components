@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ContextMenu extends Component {
     static propTypes = {
@@ -12,7 +13,8 @@ export default class ContextMenu extends Component {
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
-            text: PropTypes.string
+            text: PropTypes.string.isRequired,
+            icon: PropTypes.object,
         })),
         position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
     };
@@ -76,6 +78,11 @@ export default class ContextMenu extends Component {
                             onClick={item.onClick}
                             key={item.text}
                         >
+                            {
+                                item.icon
+                                    ? <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                                    : null
+                            }
                             {item.text}
                         </li>
                     ))}
