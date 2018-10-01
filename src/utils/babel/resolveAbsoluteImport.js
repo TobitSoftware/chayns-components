@@ -21,6 +21,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
+        Icon: 'react-chayns-icon/component/icon.jsx',
         Input: 'react-chayns-input/component/Input.js',
         ModeSwitch: 'react-chayns-modeswitch/component/ModeSwitch.js',
         Mode: 'react-chayns-modeswitch/component/Mode.js',

@@ -11,8 +11,11 @@ import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
+
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
+
+import Icon from './react-chayns-icon/component/Icon';
 import Input from './react-chayns-input/component/Input';
 import DynamicInput from './react-chayns-input/component/DynamicInput';
 
@@ -20,14 +23,14 @@ import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
+
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
-
 import SelectList from './react-chayns-selectlist/component/SelectList';
 import SelectListItem from './react-chayns-selectlist/component/SelectItem';
-
 import SetupWizard from './react-chayns-setupwizard/component/SetupWizard';
 import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
 
@@ -56,6 +59,7 @@ export {
     EmojiInput,
     Gallery,
     GridCalendar,
+    Icon,
     Input,
     DynamicInput,
     ModeSwitch,
