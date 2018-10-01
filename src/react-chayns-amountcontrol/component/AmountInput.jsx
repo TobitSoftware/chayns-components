@@ -60,7 +60,7 @@ export default class AmountInput extends PureComponent {
 
     onButtonClick = () => {
         const { amount, onAdd, setInput } = this.props;
-
+console.log("onbuttonclick")
         if (amount > 0) {
             setInput(true);
         } else {

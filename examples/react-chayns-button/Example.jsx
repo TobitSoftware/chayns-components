@@ -10,11 +10,8 @@ export default class Example extends PureComponent {
             <ExampleContainer headline="Button">
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
-                        onClick={(event) => {
-                            window.chayns.dialog.alert(JSON.stringify(event));
-                        }}
+                        onClick={console.log}
                     >
-
                         Button
                     </Button>
                 </div>
@@ -22,7 +19,6 @@ export default class Example extends PureComponent {
                     <Button
                         disabled
                     >
-
                         Disabled Button
                     </Button>
                 </div>
@@ -46,7 +42,6 @@ export default class Example extends PureComponent {
                     <Button
                         secondary
                     >
-
                         SecondaryButton
                     </Button>
                 </div>
@@ -55,18 +50,14 @@ export default class Example extends PureComponent {
                         disabled
                         secondary
                     >
-
                         Disabled SecondaryButton
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         icon="fa-rocket"
-                        onClick={(event) => {
-                            console.log(JSON.stringify(event));
-                        }}
+                        onClick={console.log}
                     >
-
                         IconButton
                     </Button>
                 </div>
@@ -75,7 +66,6 @@ export default class Example extends PureComponent {
                         disabled
                         icon="fa-rocket"
                     >
-
                         Disabled IconButton
                     </Button>
                 </div>
@@ -86,7 +76,6 @@ export default class Example extends PureComponent {
                             console.log(event);
                         }}
                     >
-
                         ChooseButton
                     </ChooseButton>
                 </div>
@@ -95,7 +84,6 @@ export default class Example extends PureComponent {
                     <ChooseButton
                         className="button--disabled"
                     >
-
                         Disabled ChooseButton
                     </ChooseButton>
                 </div>
@@ -103,11 +91,8 @@ export default class Example extends PureComponent {
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <ChooseButton
                         icon="ts-chayns"
-                        onClick={(event) => {
-                            console.log(event);
-                        }}
+                        onClick={console.log}
                     >
-
                         ChooseButton with icon
                     </ChooseButton>
                 </div>
@@ -117,7 +102,6 @@ export default class Example extends PureComponent {
                         disabled
                         icon="ts-chayns"
                     >
-
                         Disabled ChooseButton with icon
                     </ChooseButton>
                 </div>

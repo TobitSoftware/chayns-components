@@ -105,6 +105,7 @@ export default class AmountControl extends Component {
     };
 
     removeItem = () => {
+        console.log("removeItoms")
         const { amount, onRemove } = this.props;
 
         if (onRemove) onRemove();
