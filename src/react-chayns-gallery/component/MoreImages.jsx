@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-const MoreImages = ({ count }) => {
-    const text = `+${count}`;
-    return(
-        <div className="more-images" data-more={text}/>
-    );
-};
+export default class MoreImages extends PureComponent {
+    static propTypes = {
+        count: PropTypes.number.isRequired
+    };
 
-MoreImages.propTypes = {
-    count: PropTypes.number.isRequired
-};
-
-export default MoreImages;
+    render() {
+        const { count } = this.props;
+        return (
+            <div className="more-images" data-more={`+${count}`}/>
+        );
+    }
+}

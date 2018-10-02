@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ExampleContainer from '../ExampleContainer';
+import { faTrash } from '@fortawesome/pro-solid-svg-icons';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
 
@@ -59,6 +60,7 @@ export default class Example extends Component {
                 <FileUpload
                     onChange={this.selectFiles}
                     uploadText="Upload trash"
+                    customIcon={faTrash}
                 />
                 <br />
                 <FileUpload

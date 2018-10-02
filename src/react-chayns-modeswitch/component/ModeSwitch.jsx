@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { faCog } from '@fortawesome/pro-solid-svg-icons';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 let globalState = { modes: [], activeModeId: 0 };
 const onChangeListener = [];
@@ -190,7 +192,9 @@ export default class ModeSwitch extends Component {
                     <div
                         className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId !== 0 })}
                         onClick={this.toggleModeSwitch}
-                    />
+                    >
+                        <Icon icon={faCog}/>
+                    </div>
                 </div>
             );
         }

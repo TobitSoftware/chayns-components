@@ -2,11 +2,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import {
+    faFile, faImage, faMusic, faFilm
+} from '@fortawesome/pro-regular-svg-icons';
+
 import selectFile from '../../utils/selectFile';
 import getCompareFunction from '../utils/getCompareFunction';
 import getMimeTypes from '../utils/getMimeTypes';
 import uploadCloudImages from '../utils/uploadCloudImage';
 import normalizeUploadResponse from '../utils/normalizeUploadResponse';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class FileUpload extends Component {
     static TYPE_IMAGE = 'image';
@@ -32,6 +37,7 @@ export default class FileUpload extends Component {
         disableListeners: PropTypes.bool,
         onClick: PropTypes.func,
         onDrop: PropTypes.func,
+        customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     };
 
     static defaultProps = {
@@ -46,6 +52,7 @@ export default class FileUpload extends Component {
         disableListeners: false,
         onClick: null,
         onDrop: null,
+        customIcon: null,
     };
 
     constructor() {
@@ -80,7 +87,7 @@ export default class FileUpload extends Component {
 
         if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
             return chayns.uploadCloudImage().then((data) => {
-                if(!data.response || data.response.statusCode !== 200 || !data.response.data) {
+                if (!data.response || data.response.statusCode !== 200 || !data.response.data) {
                     return null;
                 }
 
@@ -204,6 +211,7 @@ export default class FileUpload extends Component {
             type,
             className,
             uploadText,
+            customIcon,
         } = this.props;
         const { hover } = this.state;
 
@@ -217,14 +225,33 @@ export default class FileUpload extends Component {
             [className]: className,
         });
 
+        let icon;
+        if (customIcon) {
+            icon = customIcon;
+        } else {
+            switch (type) {
+                case 'image':
+                    icon = faImage;
+                    break;
+                case 'video':
+                    icon = faFilm;
+                    break;
+                case 'audio':
+                    icon = faMusic;
+                    break;
+                default:
+                    icon = faFile;
+                    break;
+            }
+        }
+
         return (
             <div
                 className={classNames}
             >
-                <i
-                    className="cc__file-upload__icon"
-                    aria-hidden="true"
-                />
+                <span className="cc__file-upload__icon">
+                    <Icon icon={icon} scale={1}/>
+                </span>
                 <div
                     className="cc__file-upload__message"
                 >

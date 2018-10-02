@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '../../react-chayns-button/component/Button';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Tooltip extends Component {
     static propTypes = {
@@ -139,7 +140,7 @@ export default class Tooltip extends Component {
                         <div className="cc__tooltip__overlay" style={{ width: `${width}px` }}>
                             {
                                 removeIcon
-                                    ? <div className="cc__tooltip__icon ts-wrong" onClick={this.hide}/>
+                                    ? <div className="cc__tooltip__icon" onClick={this.hide}><Icon icon="ts-wrong"/></div>
                                     : null
                             }
                             {this.getContent()}

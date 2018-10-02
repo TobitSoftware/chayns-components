@@ -56,6 +56,7 @@ export default class Example extends Component {
 
                     console.log(ModeSwitch.getCurrentMode());
                 </Button>
+                <h3>Mode</h3>
                 <Mode modes={[1]}>Admin</Mode>
                 <Mode className="mode1" modes={[0]}>User</Mode>
                 <Mode className="mode2" modes={[5]}>No uacIds set</Mode>

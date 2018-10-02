@@ -31,6 +31,7 @@ The component can be used in JSX like in the following example:
 | onDrop            | Registers a custom onDrop-Listener (prevents default handling)             | Function      |               |
 | onClick           | Registers a custom onClick-Listener (prevents default handling)            | Function      |               |
 | children          | Component(s) that should be rendered inside component                      | ReactElements |               |
+| customIcon        | CustomIcon that should be rendered inside component                        | string/object |               |
 
 
 ## Example ##
