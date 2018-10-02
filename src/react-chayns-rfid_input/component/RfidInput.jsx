@@ -71,7 +71,7 @@ export default class RfidInput extends Component {
 
     startScan = () => {
         this.setState({ isScanning: true });
-        chayns.setNfcCallback(this.onScan);
+        chayns.addNfcListener(this.onScan);
         chayns.showWaitCursor();
     };
 
@@ -81,7 +81,7 @@ export default class RfidInput extends Component {
         if(!isScanning) {
             return;
         }
-        chayns.removeNfcCallback();
+        chayns.removeNfcListener();
         chayns.hideWaitCursor();
         this.setState({ isScanning: false });
     };
