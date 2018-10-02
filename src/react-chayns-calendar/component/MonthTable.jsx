@@ -3,7 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DayItem from './DayItem';
 
-const DAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const DAYS = {
+    de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+    en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+};
+
+function getDayNames(language = chayns.env.language) {
+    return DAYS[language] || DAYS.de;
+}
 
 export default class MonthTable extends Component {
     static propTypes = {
@@ -96,10 +103,12 @@ export default class MonthTable extends Component {
         } = this.props;
         const _table = this.createTable();
 
+        const daysList = getDayNames();
+
         return(
             <div className="month__table noselect">
                 <div className="day__row">
-                    {DAYS.map((day, index) => (
+                    {daysList.map((day, index) => (
                         <div
                             className="day__item day-text chayns__color--100"
                             key={index}
