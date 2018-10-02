@@ -66,7 +66,7 @@ export default class Button extends Component {
             >
                 {
                     icon
-                        ? <span className="button__icon"><Icon icon={icon}/></span>
+                        ? <span className={classNames({ button__icon: !chooseButton, choosebutton__icon: chooseButton })}><Icon icon={icon}/></span>
                         : null
                 }
                 {children}
