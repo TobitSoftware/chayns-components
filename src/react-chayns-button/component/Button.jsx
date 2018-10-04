@@ -14,7 +14,6 @@ export default class Button extends Component {
         buttonRef: PropTypes.func,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         secondary: PropTypes.bool,
-        light: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -26,7 +25,6 @@ export default class Button extends Component {
         chooseButton: false,
         icon: null,
         secondary: false,
-        light: false,
     };
 
     handleClick = (event) => {
@@ -47,7 +45,6 @@ export default class Button extends Component {
             buttonRef,
             icon,
             secondary,
-            light,
             ...other
         } = this.props;
 
@@ -59,7 +56,6 @@ export default class Button extends Component {
                     choosebutton: chooseButton,
                     'button--disabled': disabled,
                     'button--secondary': secondary,
-                    lightbutton: light,
                     [className]: className
                 })}
                 onClick={this.handleClick}

@@ -106,24 +106,6 @@ export default class Example extends PureComponent {
                         Disabled ChooseButton with icon
                     </ChooseButton>
                 </div>
-
-                <div style={{ textAlign: 'center', margin: '5px' }}>
-                    <Button
-                        light
-                        onClick={console.log}
-                    >
-                        Light Button
-                    </Button>
-                </div>
-
-                <div style={{ textAlign: 'center', margin: '5px' }}>
-                    <Button
-                        disabled
-                        light
-                    >
-                        Disabled Light Button
-                    </Button>
-                </div>
             </ExampleContainer>
         );
     }
