@@ -14,15 +14,13 @@ export default class Icon extends PureComponent {
                 prefix: PropTypes.string.isRequired,
             }).isRequired,
         ]).isRequired,
-        scale: PropTypes.number,
-        color: PropTypes.string,
         className: PropTypes.string,
+        style: PropTypes.object()
     };
 
     static defaultProps = {
-        scale: 1,
-        color: undefined,
         className: undefined,
+        style: undefined
     };
 
     constructor(props) {
@@ -41,17 +39,17 @@ export default class Icon extends PureComponent {
     }
 
     render() {
-        const { icon, scale, color, className } = this.props;
+        const { icon, className, ...rest } = this.props;
 
         if (chayns.utils.isString(icon)) {
             const classes = classNames(icon, {
                 [className]: !!className
             });
-            return <i className={classes} style={{ fontSize: `${scale}rem`, color }}/>;
+            return <i className={classes} {...rest}/>;
         }
 
         return (
-            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} size={`${scale}x`} color={color} className={className}/>
+            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
         );
     }
 }
