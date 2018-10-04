@@ -43,12 +43,12 @@ export default class DynamicInput extends Component {
     constructor(props) {
         super();
 
-        const { defaultValue, value, regExp } = props;
+        const { value, regExp } = props;
 
-        const testValue = value || defaultValue;
+        const testValue = value;
 
         this.state = {
-            isValid: regExp && (testValue ? testValue.match(new RegExp(regExp)) : true)
+            isValid: !regExp || !testValue || testValue.match(new RegExp(regExp))
         };
     }
 
@@ -99,8 +99,7 @@ export default class DynamicInput extends Component {
             style,
             regExp,
             inputRef,
-            invalid,
-            ...other
+            invalid
         } = this.props;
         const { isValid } = this.state;
 
@@ -132,7 +131,6 @@ export default class DynamicInput extends Component {
                     className="input"
                     type={type || 'text'}
                     required
-                    {...other}
                 />
                 <label>
                     {placeholder}

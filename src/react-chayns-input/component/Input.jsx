@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-
 export default class Input extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -28,8 +27,8 @@ export default class Input extends Component {
         regExp: null,
         style: {},
         placeholder: '',
-        value: null,
-        defaultValue: '',
+        value: undefined,
+        defaultValue: undefined,
         invalid: false,
         type: 'text',
     };
@@ -37,8 +36,7 @@ export default class Input extends Component {
     constructor(props) {
         super(props);
 
-        const value = (props.value) ? props.value : props.defaultValue;
-        this.state = { valid: !props.invalid && (!props.regExp || value.match(props.regExp)) };
+        this.state = { valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) };
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
