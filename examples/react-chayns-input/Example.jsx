@@ -3,8 +3,6 @@ import React, { PureComponent } from 'react';
 import { Input, DynamicInput } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-import '../../src/react-chayns-input/component/dynamic-input.scss';
-
 export default class Example extends PureComponent {
     static onBlur(value) {
         console.log('onBlur', value);

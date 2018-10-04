@@ -86,10 +86,11 @@ export default class Example extends Component {
                 }}
                 >
 
+
                     Position ändern
                 </Button>
                 <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>
-                    <Icon icon={faInfoCircle} scale={5}/>
+                    <Icon icon={faInfoCircle} style={{ transform: 'scale(5)' }}/>
                 </div>
             </ExampleContainer>
         );
