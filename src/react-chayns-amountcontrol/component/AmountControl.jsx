@@ -29,6 +29,7 @@ export default class AmountControl extends Component {
         iconColor: PropTypes.string,
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
+        contentWidth: PropTypes.number,
     };
 
     static defaultProps = {
@@ -51,6 +52,7 @@ export default class AmountControl extends Component {
         iconColor: null,
         equalize: null,
         focusOnClick: true,
+        contentWidth: null,
     };
 
     constructor(props) {
@@ -154,6 +156,7 @@ export default class AmountControl extends Component {
             iconColor,
             equalize,
             focusOnClick,
+            contentWidth,
         } = this.props;
         const { tempAmount, showInput } = this.state;
         if (window.debugLevel >= 3) {
@@ -175,6 +178,7 @@ export default class AmountControl extends Component {
                     color={(icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) ? iconColor : removeColor}
                 />
                 <AmountInput
+                    contentWidth={contentWidth}
                     equalize={equalize}
                     autoInput={autoInput}
                     amount={amount}
