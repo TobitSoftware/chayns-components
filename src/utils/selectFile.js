@@ -22,7 +22,7 @@ function selectFile({ type = '*/*', multiple = false } = {}) {
         input.style.visibility = 'none';
         input.style.width = '0';
         input.style.height = '0';
-        input.style.display = "none";
+        input.style.display = 'none';
 
         document.body.appendChild(input);
 

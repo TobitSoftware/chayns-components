@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -130,7 +131,8 @@ export default class Accordion extends Component {
     }
 
     handleAccordionClick = (event) => {
-        if (this.state.currentState === OPEN) {
+        const { currentState } = this.state;
+        if (currentState === OPEN) {
             this.accordionCloseListener(event);
         } else {
             this.accordionOpenListener(event);

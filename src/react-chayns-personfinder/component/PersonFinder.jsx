@@ -1,5 +1,6 @@
 /* eslint-disable no-return-assign */
-import React, { Component } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import isDescendant from '../../utils/isDescendant';
@@ -25,7 +26,7 @@ export default class PersonFinder extends Component {
 
     constructor(props) {
         super();
-        const { showPersons, showSites, defaultValue } = props;
+        const {showPersons, showSites, defaultValue} = props;
 
         this.state = {
             persons: [],
@@ -39,8 +40,8 @@ export default class PersonFinder extends Component {
         }
 
         Promise.all([
-            showPersons ? chayns.findPerson(defaultValue) : Promise.resolve({ Value: [] }),
-            showSites ? chayns.findSite(defaultValue) : Promise.resolve({ Value: [] })
+            showPersons ? chayns.findPerson(defaultValue) : Promise.resolve({Value: []}),
+            showSites ? chayns.findSite(defaultValue) : Promise.resolve({Value: []})
         ]).then(([persons, sites]) => {
             this.setState({
                 persons: persons.Value || [],
@@ -58,7 +59,7 @@ export default class PersonFinder extends Component {
     }
 
     handleOnChange = (event) => {
-        const { value } = event.target;
+        const {value} = event.target;
 
         this.setState({
             value
@@ -68,10 +69,10 @@ export default class PersonFinder extends Component {
             return;
         }
 
-        const { showPersons, showSites } = this.props;
+        const {showPersons, showSites} = this.props;
         Promise.all([
-            showPersons ? chayns.findPerson(value) : Promise.resolve({ Value: [] }),
-            showSites ? chayns.findSite(value) : Promise.resolve({ Value: [] })
+            showPersons ? chayns.findPerson(value) : Promise.resolve({Value: []}),
+            showSites ? chayns.findSite(value) : Promise.resolve({Value: []})
         ]).then(([persons, sites]) => {
             this.setState({
                 persons: persons.Value || [],
@@ -102,15 +103,19 @@ export default class PersonFinder extends Component {
             value: r.name || r.appstoreName
         });
 
-        const { onChange } = this.props;
+        const {onChange} = this.props;
         if (onChange) {
             onChange(r);
         }
     };
 
     render() {
-        const { className, showPersons, showSites, ...props } = this.props;
-        const { persons, sites, showPopup, value } = this.state;
+        const {
+            className, showPersons, showSites, ...props
+        } = this.props;
+        const {
+            persons, sites, showPopup, value
+        } = this.state;
 
         const classNames = classnames('input', className);
 
@@ -127,15 +132,20 @@ export default class PersonFinder extends Component {
                     defaultValue={undefined}
                 />
                 {showPopup && (persons.length > 0 || sites.length > 0) ? (
-                    <div className="person-finder__results scrollbar" style={this.input ? { width: `${this.input.offsetWidth}px` } : undefined} ref={ref => this.ref = ref}>
+                    <div
+                        className="person-finder__results scrollbar"
+                        style={this.input ? {width: `${this.input.offsetWidth}px`} : undefined}
+                        ref={ref => this.ref = ref}
+                    >
                         {showPersons && persons.map(r => (
                             <div key={r.personId} className="result" onClick={() => this.handleItemClick(r)}>
                                 <div className="img">
                                     <img
                                         src={`https://sub60.tobit.com/u/${r.personId}?size=40`}
                                         onError={(e) => {
-                                            e.target.onError = () => {};
-                                                e.target.src = '//sub60.tobit.com/Content/unknown_user.png';
+                                            e.target.onError = () => {
+                                            };
+                                            e.target.src = '//sub60.tobit.com/Content/unknown_user.png';
                                         }}
                                     />
                                 </div>
@@ -155,7 +165,8 @@ export default class PersonFinder extends Component {
                                     <img
                                         src={`https://sub60.tobit.com/l/${r.siteId}?size=40`}
                                         onError={(e) => {
-                                            e.target.onError = () => {};
+                                            e.target.onError = () => {
+                                            };
                                             e.target.src = `//graph.facebook.com/${r.facebookId}/picture`;
                                         }}
                                     />
