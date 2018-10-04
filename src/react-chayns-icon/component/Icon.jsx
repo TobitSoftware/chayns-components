@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -15,11 +16,13 @@ export default class Icon extends PureComponent {
         ]).isRequired,
         scale: PropTypes.number,
         color: PropTypes.string,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
         scale: 1,
         color: undefined,
+        className: undefined,
     };
 
     constructor(props) {
@@ -38,12 +41,17 @@ export default class Icon extends PureComponent {
     }
 
     render() {
-        const { icon, scale, color } = this.props;
+        const { icon, scale, color, className } = this.props;
+
         if (chayns.utils.isString(icon)) {
-            return <i className={icon} style={{ fontSize: `${scale}rem`, color }}/>;
+            const classes = classNames(icon, {
+                [className]: !!className
+            });
+            return <i className={classes} style={{ fontSize: `${scale}rem`, color }}/>;
         }
+
         return (
-            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} size={`${scale}x`} color={color}/>
+            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} size={`${scale}x`} color={color} className={className}/>
         );
     }
 }
