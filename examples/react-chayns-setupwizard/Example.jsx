@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import ExampleContainer from '../ExampleContainer';
 
 import { SetupWizard, SetupWizardItem } from '../../src/index';
-import '../../src/react-chayns-setupwizard/index.scss';
 import './style.scss';
 
 import Step1 from './setup/Step1';

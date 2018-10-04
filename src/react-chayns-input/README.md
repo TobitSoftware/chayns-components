@@ -30,6 +30,8 @@ The following properties can be set on the Input-Component
 | defaultValue | the value does not update if this prop updates                                    | string/number  |               |
 | value        | the value updates if this prop updates                                            | string/number  |               |
 | onChange     | returns the value as an result of the onInput-event (if a RegExp is given but it does not match the input the return value is null) | function  |  |
+| onEnter      | returns the value if user clicks enter | function  |  |
+| onKeyUp      | returns the onKeyUp event | function  |  |
 | onBlur       | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function  |  |
 | responsive   | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool  | false  |
 | regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string, RegExp |               |

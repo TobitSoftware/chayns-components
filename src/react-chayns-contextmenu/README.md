@@ -26,13 +26,9 @@ You can init your **ContextMenu** like this:
         text: 'Hinzufügen'
     }]}
     onLayerClick={()=>console.log('hide')}
+    position=0
 />
 ```
-
-
- **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
-
-
 
 ### Props ###
 The component got the following properties:
@@ -42,11 +38,13 @@ The component got the following properties:
 | x | The x-Position of the **ContextMenu**                                     | number |        | true |
 | y | The y-Position of the **ContextMenu**                                     | bool   |        | true |
 | hide | Defines wether the Component is hidden or not   | bool | true| |
-| onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page | func | |
+| onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page | func | ||
+| position | The position the ContextMenu (top right, bottom right, bottom left, top left) | number | 0 ||
 | items | The Items which are displayed in the **ContextMenu** | array | |
 | item.className | The className of an item of the **ContextMenu** | string | |
-| item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | |
+| item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||
 | item.text | The text displayed in an item of the **ContextMenu** | string | |
+| item.text | The icon displayed in an item of the **ContextMenu** | object | |
 
 
 #### Example ####

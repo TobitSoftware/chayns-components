@@ -1,43 +1,81 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-import { Input } from '../../src/index';
+import { Input, DynamicInput } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
-    constructor() {
-        super();
+import '../../src/react-chayns-input/component/dynamic-input.scss';
 
-        this.state = {
-            userNameOnBlur: null,
-            userNameOnChange: null,
-        };
+export default class Example extends PureComponent {
+    static onBlur(value) {
+        console.log('onBlur', value);
+    }
+
+    static onChange(value) {
+        console.log('onChange', value);
+    }
+
+    static onEnter(value) {
+        console.log('onEnter', value);
+    }
+
+    static onKeyUp(e) {
+        console.log('onKeyUp', e);
     }
 
     render() {
-        const { userNameOnBlur, userNameOnChange } = this.state;
         return (
             <ExampleContainer headline="Input">
-                <h3>userNameOnBlur</h3>
-                <p>{userNameOnBlur || '-'}</p>
-
-                <h3>userNameOnChange</h3>
-                <p>{userNameOnChange || '-'}</p>
-
                 <Input
-                    defaultValue="heello i am a invalid default value"
-                    placeholder="Looking for 3 lowercase e's in a row"
-                    // regExp=".*e{3}.*"
-                    onBlur={(text) => {
-                        this.setState({
-                            userNameOnBlur: text
-                        });
+                    placeholder="input"
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
                     }}
-                    onChange={(text) => {
-                        this.setState({
-                            userNameOnChange: text
-                        });
+                />
+                <Input
+                    placeholder="password"
+                    type="password"
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
                     }}
-                    responsive={false}
+                />
+                <Input
+                    placeholder="invalid input"
+                    invalid
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
+                    }}
+                />
+                <Input
+                    defaultValue="invalid value"
+                    placeholder='type "eee"'
+                    regExp={new RegExp('.*e{3}.*')}
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
+                    }}
+                />
+
+                <DynamicInput
+                    placeholder="Dynamic Input Placeholder"
                 />
             </ExampleContainer>
         );

@@ -1,176 +1,99 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+
 
 export default class Input extends Component {
     static propTypes = {
-        style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
         className: PropTypes.string,
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
-        defaultValue: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
-        placeholder: PropTypes.string,
         onKeyUp: PropTypes.func,
+        onEnter: PropTypes.func,
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
-        responsive: PropTypes.bool,
-        regExp: PropTypes.string,
-        inputRef: PropTypes.func,
-        type: PropTypes.string,
+        regExp: PropTypes.instanceOf(RegExp),
+        style: PropTypes.object,
+        placeholder: PropTypes.string,
+        value: PropTypes.string,
+        defaultValue: PropTypes.string,
         invalid: PropTypes.bool,
+        type: PropTypes.string,
     };
 
     static defaultProps = {
-        style: {},
-        responsive: false,
-        className: null,
-        value: undefined,
-        defaultValue: undefined,
-        placeholder: null,
+        className: '',
         onKeyUp: null,
+        onEnter: null,
         onChange: null,
         onBlur: null,
         regExp: null,
-        inputRef: null,
-        type: 'text',
+        style: {},
+        placeholder: '',
+        value: null,
+        defaultValue: '',
         invalid: false,
+        type: 'text',
     };
 
     constructor(props) {
-        super();
+        super(props);
 
-        const { defaultValue, value, regExp } = props;
+        const value = (props.value) ? props.value : props.defaultValue;
+        this.state = { valid: !props.invalid && (!props.regExp || value.match(props.regExp)) };
 
-        const testValue = value || defaultValue;
-
-        this.state = {
-            isValid: regExp && (testValue ? testValue.match(new RegExp(regExp)) : true)
-        };
+        this.onKeyUp = this.onKeyUp.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.callIfValid = this.callIfValid.bind(this);
     }
 
-    // eslint-disable-next-line react/destructuring-assignment
-    onBlur = () => this.handleEvent(this.props.onBlur, true);
-
-    /**
-     * @deprecated
-     */
-    // eslint-disable-next-line react/destructuring-assignment
-    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
-
-    // eslint-disable-next-line react/destructuring-assignment
-    onChange = () => this.handleEvent(this.props.onChange);
-
-    handleEvent = (callback, doInvalidate = false) => {
-        const isValid = this.validateInput(doInvalidate);
-
-        if (callback) {
-            if (isValid) {
-                callback(this._node.value);
-            } else {
-                callback(null);
-            }
+    onKeyUp(e) {
+        const { onKeyUp, onEnter } = this.props;
+        if (onKeyUp) {
+            onKeyUp(e);
         }
-    };
-
-    validateInput(doInvalidate = true) {
-        const { regExp } = this.props;
-        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
-
-        if (isValid || doInvalidate) {
-            this.setState({
-                isValid
-            });
+        if (e.keyCode === 13) {
+            this.callIfValid(e.target.value, onEnter);
         }
+    }
 
-        return isValid;
+    onBlur(e) {
+        const { onBlur } = this.props;
+        this.callIfValid(e.target.value, onBlur);
+    }
+
+    onChange(e) {
+        const { onChange } = this.props;
+        this.callIfValid(e.target.value, onChange);
+    }
+
+    callIfValid(value, callback) {
+        const { regExp, invalid } = this.props;
+        const valid = !invalid && (!regExp || value.match(regExp));
+
+        if (valid && callback) {
+            callback(value);
+        }
+        this.setState({ valid });
     }
 
     render() {
         const {
-            type,
-            value,
-            defaultValue,
-            placeholder,
-            className,
-            style,
-            responsive,
-            regExp,
-            inputRef,
-            onChange,
-            onBlur,
-            onKeyUp,
-            invalid,
-            ...other
+            className, defaultValue, value, style, placeholder, type,
         } = this.props;
-        const { isValid } = this.state;
+        const { valid } = this.state;
 
-        const classNames = classnames({
-            'input-group': responsive,
-            input: !responsive,
-            [className]: className
-        });
-
-        const inputStyles = (invalid || (regExp && !isValid)) ? {
-            color: '#d23f31',
-            fontWeight: '700'
-        } : null;
-
-        const responsiveInput = () => (
-            <div
-                className={classNames}
-                style={style}
-            >
-                <input
-                    style={inputStyles}
-                    ref={(ref) => {
-                        if(inputRef) inputRef(ref);
-                        this._node = ref;
-                    }}
-                    value={value}
-                    defaultValue={defaultValue}
-                    onKeyUp={this.onKeyUp}
-                    onChange={this.onChange}
-                    onBlur={this.onBlur}
-                    className="input"
-                    type={type || 'text'}
-                    required
-                    {...other}
-                />
-                <label>
-                    {placeholder}
-                </label>
-            </div>
-        );
-
-        const input = () => (
+        return (
             <input
-                className={classNames}
-                ref={(ref) => {
-                    if(inputRef) inputRef(ref);
-                    this._node = ref;
-                }}
+                className={classNames('input', className, { 'input--invalid': !valid })}
+                style={style}
+                placeholder={placeholder}
+                onKeyUp={this.onKeyUp}
+                onBlur={this.onBlur}
+                onChange={this.onChange}
                 value={value}
                 defaultValue={defaultValue}
-                placeholder={placeholder}
-                style={{
-                    ...style,
-                    ...inputStyles
-                }}
-                onKeyUp={this.onKeyUp}
-                onChange={this.onChange}
-                onBlur={this.onBlur}
-                type={type || 'text'}
-                required
-                {...other}
+                type={type}
             />
         );
-
-        return (responsive ? responsiveInput() : input());
     }
 }

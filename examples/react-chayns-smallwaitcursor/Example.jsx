@@ -1,33 +1,43 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
-import '../../src/react-chayns-smallwaitcursor/index.scss';
 
-export default class Example extends Component {
-    state = {
-        open: true
-    };
-
+export default class Example extends PureComponent {
     render() {
-        return(
+        return (
             <ExampleContainer headline="SmallWaitCursor">
-                <h2>inline WaitCursor</h2>
                 <SmallWaitCursor
                     show
                 />
-
-                <h2>inline WaitCursor</h2>
                 <div
                     style={{
-                        position: 'relative',
-                        height: '200px',
-                        backgroundColor: chayns.getSchemeColor()
+                        width: '100%',
+                        padding: '10px',
+                        marginTop: '10px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                    className="chayns__background-color--white-4"
+                >
+                    <SmallWaitCursor
+                        show
+                    />
+                </div>
+                <div
+                    style={{
+                        width: '100%',
+                        padding: '10px',
+                        marginTop: '10px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
                     }}
                 >
                     <SmallWaitCursor
-                        absolute
                         show
+                        showBackground={false}
                     />
                 </div>
             </ExampleContainer>

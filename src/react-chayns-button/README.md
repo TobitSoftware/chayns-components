@@ -18,6 +18,14 @@ You can use the button like this:
 <Button>Test</Button>
 ```
 
+If you want to use a font awesome icon, you need to declare it first like this:
+```css
+.fa-rocket:before {
+    content: "\f135";
+}
+```
+The unicode characters are available under [https://fontawesome.com/v4.7.0/icons/](https://fontawesome.com/v4.7.0/icons/). TS icons can be used without special declaration.
+
 ## Props
 The following properties can be set on the Button and the ChooseButton-Component
 
@@ -30,6 +38,8 @@ The following properties can be set on the Button and the ChooseButton-Component
 | className | Additional CSS-Classes that should be set to the button                                                        | String | |
 | style | Additional styles that should be set to the button                                                           | Object | |
 | buttonRef | Exposes the button DOM Ref to the parent component | func |  |
+| icon | Renders Button as IconButton (fa- or ts-icon) | string/object |  |
+| secondary | Renders Button as a secondary button | string |  |
 
 
 ### Examples
@@ -42,6 +52,14 @@ The following properties can be set on the Button and the ChooseButton-Component
     }}
 >
 	Hello World!
+</Button>
+```
+#### Icon Button
+```jsx
+<Button
+    icon="fa-rocket"
+>
+    IconButton
 </Button>
 ```
 #### ChooseButton

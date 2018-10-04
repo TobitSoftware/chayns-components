@@ -2,6 +2,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { faTimes } from '@fortawesome/pro-solid-svg-icons';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ImageContainer extends PureComponent {
     static propTypes = {
@@ -29,14 +31,14 @@ export default class ImageContainer extends PureComponent {
 
     deleteOnClick() {
         const { onDelete, index, url } = this.props;
-        if(onDelete) {
+        if (onDelete) {
             onDelete(url, index);
         }
     }
 
     openImage() {
         const { index, openImage } = this.props;
-        if(openImage) {
+        if (openImage) {
             openImage(index);
         }
     }
@@ -57,11 +59,9 @@ export default class ImageContainer extends PureComponent {
                     data-more={(moreImages > 0) ? `+${moreImages}` : undefined}
                 >
                     {deleteMode && (
-                        <i
-                            className="fa fa-times delete-icon"
-                            aria-hidden="true"
-                            onClick={this.deleteOnClick}
-                        />
+                        <div className="delete-icon" onClick={this.deleteOnClick}>
+                            <Icon icon={faTimes}/>
+                        </div>
                     )}
                 </div>
             </div>

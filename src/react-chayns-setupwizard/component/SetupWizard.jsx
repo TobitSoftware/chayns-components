@@ -197,10 +197,8 @@ export default class SetupWizard extends Component {
                                 >
                                     <div
                                         className={classNames('number', {
-                                            numberDarkComplete: (chayns.env.site.colorMode === 1 && completedSteps.indexOf(index) >= 0),
-                                            numberDarkNotComplete: (chayns.env.site.colorMode === 1 && completedSteps.indexOf(index) === -1),
-                                            'chayns__background-color--70 chayns__color--5': (chayns.env.site.colorMode !== 1 && completedSteps.indexOf(index) >= 0),
-                                            'chayns__background-color--20 chayns__color--100': (chayns.env.site.colorMode !== 1 && completedSteps.indexOf(index) === -1)
+                                            'chayns__background-color--4 chayns__color--1': completedSteps.indexOf(index) >= 0,
+                                            'chayns__background-color--1 chayns__color--4': completedSteps.indexOf(index) === -1
                                         })}
                                     >
                                         {index + 1}

@@ -1,34 +1,39 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import Icon from '../../react-chayns-icon/component/Icon';
 
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+export default class ControlButton extends PureComponent {
+    static propTypes = {
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+        onClick: PropTypes.func.isRequired,
+        className: PropTypes.string.isRequired,
+        disabled: PropTypes.bool,
+        color: PropTypes.string,
+    };
 
-const ControlButton = ({
-    icon,
-    onClick,
-    className,
-    disabled,
-}) => {
-    return(
-        <ChooseButton
-            onClick={onClick}
-            className={className}
-            disabled={disabled}
-        >
-            <i className={`fa ${icon}`} />
-        </ChooseButton>
-    );
-};
+    static defaultProps = {
+        disabled: false,
+        color: null,
+    };
 
-ControlButton.propTypes = {
-    icon: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-    className: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-};
+    render() {
+        const {
+            icon,
+            onClick,
+            className,
+            disabled,
+            color,
+        } = this.props;
 
-ControlButton.defaultProps = {
-    disabled: false,
-};
-
-export default ControlButton;
+        return (
+            <div
+                onClick={disabled ? null : onClick}
+                className={classNames(className, { disabled })}
+                style={color ? { color } : null}
+            >
+                <Icon icon={icon}/>
+            </div>
+        );
+    }
+}

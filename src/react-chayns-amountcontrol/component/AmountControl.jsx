@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { faMinus, faPlus, faTrashAlt } from '@fortawesome/pro-regular-svg-icons';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 export default class AmountControl extends Component {
     static propTypes = {
@@ -13,7 +15,6 @@ export default class AmountControl extends Component {
         onInput: PropTypes.func,
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
-        equalize: PropTypes.string,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
         disableAdd: PropTypes.bool,
@@ -22,7 +23,12 @@ export default class AmountControl extends Component {
         autoInput: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
         showInput: PropTypes.bool,
-        shopStyle: PropTypes.bool,
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        removeColor: PropTypes.string,
+        addColor: PropTypes.string,
+        iconColor: PropTypes.string,
+        equalize: PropTypes.string,
+        focusOnClick: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -31,7 +37,6 @@ export default class AmountControl extends Component {
         onInput: null,
         onAdd: null,
         onRemove: null,
-        equalize: null,
         disabled: false,
         disableInput: false,
         disableAdd: false,
@@ -40,58 +45,62 @@ export default class AmountControl extends Component {
         autoInput: false,
         buttonFormatHandler: undefined,
         showInput: false,
-        shopStyle: false,
+        icon: null,
+        removeColor: null,
+        addColor: null,
+        iconColor: null,
+        equalize: null,
+        focusOnClick: true,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            tempValue: null
+            tempAmount: props.amount,
+            showInput: false,
         };
+
+        this.setInput = this.setInput.bind(this);
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            tempValue: null
+            tempAmount: nextProps.amount
         });
     }
 
     onInput = (value) => {
         this.setState({
-            tempValue: value
+            tempAmount: value
         });
 
         const { onInput } = this.props;
 
-        if(onInput && (value || value === 0)) {
+        if (onInput && (value || value >= 0)) {
             onInput(value);
         }
     };
 
     getRemoveIcon() {
-        const { amount } = this.props;
-        const { tempValue } = this.state;
+        const { amount, icon } = this.props;
+        const { tempAmount } = this.state;
 
-        if(amount > 1 && tempValue > 1) {
-            return 'fa-minus';
+        if (icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) {
+            return icon;
         }
 
-        if(tempValue > 1) {
-            return 'fa-minus';
+        if (tempAmount > 1 || (amount > 1 && !tempAmount)) {
+            return faMinus;
         }
 
-        if(amount > 1 && tempValue === null) {
-            return 'fa-minus';
-        }
-
-        return 'fa-trash fa-2x';
+        return faTrashAlt;
     }
 
     addItem = () => {
         const { amount, onAdd } = this.props;
 
-        if(onAdd) onAdd();
+        if (onAdd) onAdd();
 
         this.changeAmount(amount + 1);
     };
@@ -99,30 +108,38 @@ export default class AmountControl extends Component {
     removeItem = () => {
         const { amount, onRemove } = this.props;
 
-        if(onRemove) onRemove();
+        if (onRemove) onRemove();
 
-        if(amount - 1 >= 0) {
+        if (amount > 0) {
             this.changeAmount(amount - 1);
+        } else {
+            this.addItem();
         }
     };
 
     changeAmount = (amount) => {
         const { onChange, onInput } = this.props;
 
-        if(onChange) {
+        if (onChange) {
             onChange(amount);
+            this.setState({
+                showInput: false,
+            });
         }
 
-        if(onInput) {
+        if (onInput) {
             onInput(amount);
         }
+    };
+
+    setInput = (value) => {
+        this.setState({ showInput: value });
     };
 
     render() {
         const {
             amount,
             buttonText,
-            equalize,
             disabled,
             disableInput,
             disableAdd,
@@ -130,32 +147,35 @@ export default class AmountControl extends Component {
             className,
             autoInput,
             buttonFormatHandler,
-            showInput,
-            shopStyle,
+            showInput: showInputProp,
+            icon,
+            removeColor,
+            addColor,
+            iconColor,
+            equalize,
+            focusOnClick,
         } = this.props;
-
-        if(window.debugLevel >= 3) {
+        const { tempAmount, showInput } = this.state;
+        if (window.debugLevel >= 3) {
             console.debug('render amount-control component', this.props, this.state);
         }
 
-        const classNames = classnames('cc__amount-control', {
+        const classnames = classNames('cc__amount-control', {
             'cc__amount-control--active': amount > 0,
-            'cc__amount-control--shop': shopStyle,
             [className]: className
         });
 
-        return(
-            <div
-                className={classNames}
-                ref={(node) => { this.node = node; }}
-            >
+        return (
+            <ChooseButton className={classnames}>
                 <ControlButton
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
                     disabled={disabled || disableRemove}
-                    className="cc__amount-control__remove"
+                    className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon })}
+                    color={(icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) ? iconColor : removeColor}
                 />
                 <AmountInput
+                    equalize={equalize}
                     autoInput={autoInput}
                     amount={amount}
                     onChange={this.changeAmount}
@@ -164,18 +184,20 @@ export default class AmountControl extends Component {
                     buttonText={buttonText}
                     disabled={disabled}
                     disableInput={disableInput}
-                    equalize={equalize}
                     buttonFormatHandler={buttonFormatHandler}
-                    showInput={!!showInput}
-                    shopStyle={shopStyle}
+                    showInput={showInput || showInputProp}
+                    tempAmount={tempAmount}
+                    setInput={this.setInput}
+                    focusOnClick={focusOnClick}
                 />
                 <ControlButton
-                    icon="fa-plus"
+                    icon={faPlus}
                     onClick={this.addItem}
                     disabled={disabled || disableAdd}
-                    className="cc__amount-control__add"
+                    className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}
+                    color={addColor}
                 />
-            </div>
+            </ChooseButton>
         );
     }
 }

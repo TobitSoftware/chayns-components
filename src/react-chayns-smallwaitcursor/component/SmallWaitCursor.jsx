@@ -1,32 +1,35 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const SmallWaitCursor = ({ show, style, absolute }) => {
-    const waitCursorClasses = classNames('wait--cursor--wrapper', {
-        absolute,
-        hidden: !show
-    });
+export default class SmallWaitCursor extends PureComponent {
+    static propTypes = {
+        show: PropTypes.bool,
+        style: PropTypes.object,
+        showBackground: PropTypes.bool,
+    };
 
-    return (
-        <div className={waitCursorClasses} style={style}>
-            <div className="small--wait--cursor chayns__background-color--10">
-                <div className="spinner chayns__border-color--80" />
-            </div>
-        </div>
-    );
-};
+    static defaultProps = {
+        show: false,
+        style: null,
+        showBackground: true,
+    };
 
-SmallWaitCursor.propTypes = {
-    absolute: PropTypes.bool,
-    show: PropTypes.bool,
-    style: PropTypes.object,
-};
+    render() {
+        const { show, style, showBackground } = this.props;
 
-SmallWaitCursor.defaultProps = {
-    absolute: false,
-    show: false,
-    style: null,
-};
-
-export default SmallWaitCursor;
+        if (showBackground) {
+            return (
+                <div
+                    className={classNames('wait-cursor', {
+                        hidden: !show
+                    })}
+                    style={style}
+                >
+                    <div className="wait-cursor__spinner"/>
+                </div>
+            );
+        }
+        return (<div className="wait-cursor__spinner"/>);
+    }
+}

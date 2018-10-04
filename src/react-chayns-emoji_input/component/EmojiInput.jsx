@@ -373,7 +373,7 @@ export default class EmojiInput extends Component {
         });
 
         return (
-            <div className="emoji-input">
+            <div className="emoji-input notranslate">
                 <div
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
                     ref={(ref) => {

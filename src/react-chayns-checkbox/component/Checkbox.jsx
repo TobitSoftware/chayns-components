@@ -20,7 +20,6 @@ export default class Checkbox extends Component {
         checked: PropTypes.bool,
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
-        tooltip: PropTypes.string,
         dangerouslySetLabel: PropTypes.object
     };
 
@@ -34,22 +33,12 @@ export default class Checkbox extends Component {
         checked: undefined,
         defaultChecked: undefined,
         disabled: false,
-        tooltip: null,
         dangerouslySetLabel: null
     };
 
     constructor() {
         super();
         this.id = Math.random();
-    }
-
-    componentDidMount() {
-        const { tooltip } = this.props;
-
-        if(tooltip) {
-            this._container.setAttribute('tooltip', tooltip);
-            window.chayns.ui.tooltip.init(null, this._container.parentNode);
-        }
     }
 
     onChange = () => {

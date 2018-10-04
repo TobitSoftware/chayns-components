@@ -1,26 +1,68 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 
-const CLOSED = 5;
 const CLOSE = 1;
 
-const OPENED = 6;
 const OPEN = 2;
 
 function hasFlag(value, flag) {
     return !!(value & flag); // eslint-disable-line no-bitwise
 }
 
-class Accordion extends Component {
+export default class Accordion extends Component {
+    static propTypes = {
+        head: PropTypes.node.isRequired,
+        children: PropTypes.node.isRequired,
+        badge: PropTypes.node,
+        right: PropTypes.node,
+        renderClosed: PropTypes.bool,
+        isWrapped: PropTypes.bool,
+        dataGroup: PropTypes.string,
+        className: PropTypes.string,
+        id: PropTypes.string,
+        style: PropTypes.object,
+        styleBody: PropTypes.object,
+        onOpen: PropTypes.func,
+        onOpened: PropTypes.func,
+        onClose: PropTypes.func,
+        onClosed: PropTypes.func,
+        ellipsis: PropTypes.bool,
+        defaultOpened: PropTypes.bool,
+        reference: PropTypes.func,
+        autogrow: PropTypes.bool,
+        badgeStyle: PropTypes.object,
+        open: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        className: '',
+        dataGroup: null,
+        id: null,
+        style: null,
+        styleBody: null,
+        onOpen: null,
+        onOpened: null,
+        onClose: null,
+        onClosed: null,
+        ellipsis: false,
+        defaultOpened: null,
+        reference: null,
+        isWrapped: false,
+        renderClosed: false,
+        badge: null,
+        right: null,
+        autogrow: false,
+        badgeStyle: null,
+        open: undefined,
+    };
+
     constructor(props) {
         super();
 
-        this.firstRender = true;
-
         this.state = {
-            currentState: (props && props.defaultOpened) ? OPENED : CLOSED,
+            currentState: (props && props.defaultOpened) ? OPEN : CLOSE,
         };
     }
 
@@ -29,7 +71,7 @@ class Accordion extends Component {
 
         if (open || (className && className.indexOf('accordion--open') !== -1)) {
             this.setState({
-                currentState: OPENED
+                currentState: OPEN
             });
         }
     }
@@ -38,42 +80,37 @@ class Accordion extends Component {
         const { className, autogrow } = this.props;
         const { currentState } = this.state;
 
-        this.accordion.addEventListener('closed', this.accordionClosedListener.bind(this));
-        this.accordion.addEventListener('close', this.accordionCloseListener.bind(this));
-        this.accordion.addEventListener('open', this.accordionOpenListener.bind(this));
-        this.accordion.addEventListener('opened', this.accordionOpenedListener.bind(this));
-
         if (className.indexOf('accordion--open') !== -1) {
             this.accordion.classList.add('accordion--open');
         }
 
-        if (currentState === OPENED) {
-            if(autogrow && this._body) {
+        if (currentState === OPEN) {
+            if (autogrow && this._body) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.open !== undefined) {
+        if (nextProps.open !== undefined) {
             const { open } = this.props;
             const { currentState } = this.state;
 
             if (open !== nextProps.open) {
                 this.setState({
-                    currentState: nextProps.open ? OPENED : CLOSED
+                    currentState: nextProps.open ? OPEN : CLOSE
                 });
             }
 
             if (nextProps.open && !hasFlag(currentState, OPEN)) {
                 this.setState({
-                    currentState: OPENED
+                    currentState: OPEN
                 });
             }
 
             if (!nextProps.open && !hasFlag(currentState, CLOSE)) {
                 this.setState({
-                    currentState: CLOSED
+                    currentState: CLOSE
                 });
             }
         }
@@ -83,25 +120,22 @@ class Accordion extends Component {
         const { autogrow } = this.props;
         const { currentState } = this.state;
 
-        if(autogrow && this._body) {
-            if(currentState === OPENED) {
+        if (autogrow && this._body) {
+            if (currentState === OPEN) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
-            } else if(hasFlag(currentState, CLOSE)) {
+            } else if (hasFlag(currentState, CLOSE)) {
                 this._body.style.maxHeight = null;
             }
         }
     }
 
-    _getBody() {
-        const { renderClosed, children } = this.props;
-        const { currentState } = this.state;
-
-        if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
-            return children;
+    handleAccordionClick = (event) => {
+        if (this.state.currentState === OPEN) {
+            this.accordionCloseListener(event);
+        } else {
+            this.accordionOpenListener(event);
         }
-
-        return null;
-    }
+    };
 
     _renderHead() {
         const {
@@ -120,7 +154,7 @@ class Accordion extends Component {
                 key="head"
                 className="accordion--trigger"
             >
-                { head }
+                {head}
             </span>,
             <div
                 key="right"
@@ -144,16 +178,15 @@ class Accordion extends Component {
         ];
     }
 
-    accordionClosedListener(event) {
-        const { onClosed } = this.props;
+    _getBody() {
+        const { renderClosed, children } = this.props;
+        const { currentState } = this.state;
 
-        this.setState({
-            currentState: CLOSED
-        });
-
-        if (onClosed) {
-            onClosed(event);
+        if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
+            return children;
         }
+
+        return null;
     }
 
     accordionCloseListener(event) {
@@ -174,8 +207,6 @@ class Accordion extends Component {
         if (onClose) {
             onClose(event);
         }
-
-        this.firstRender = false;
     }
 
     accordionOpenListener(event) {
@@ -190,18 +221,6 @@ class Accordion extends Component {
         }
     }
 
-    accordionOpenedListener(event) {
-        const { onOpened } = this.props;
-
-        this.setState({
-            currentState: OPENED
-        });
-
-        if (onOpened) {
-            onOpened(event);
-        }
-    }
-
     render() {
         const {
             dataGroup,
@@ -212,19 +231,6 @@ class Accordion extends Component {
             ellipsis,
             styleBody,
             reference,
-            open,
-            badge,
-            badgeStyle,
-            right,
-            head,
-            defaultOpened,
-            children,
-            autogrow,
-            renderClosed,
-            onOpen,
-            onOpened,
-            onClose,
-            onClosed,
             ...customProps
         } = this.props;
 
@@ -240,19 +246,6 @@ class Accordion extends Component {
             others.style = style;
         }
 
-        const classNames = classnames({
-            accordion: true,
-            'accordion--wrapped': (isWrapped === true),
-            'accordion--open': hasFlag(currentState, OPEN),
-            [className]: className
-        });
-
-
-        const classNamesHead = classnames({
-            accordion__head: true,
-            ellipsis
-        });
-
         const othersBody = {
             style: {}
         };
@@ -261,10 +254,14 @@ class Accordion extends Component {
             othersBody.style = styleBody;
         }
 
-
         return (
             <div
-                className={classNames}
+                className={classNames({
+                    accordion: true,
+                    'accordion--wrapped': (isWrapped === true),
+                    'accordion--open': hasFlag(currentState, OPEN),
+                    [className]: className
+                })}
                 data-group={dataGroup}
                 ref={(ref) => {
                     this.accordion = ref;
@@ -273,12 +270,20 @@ class Accordion extends Component {
                 {...others}
                 {...customProps}
             >
-                <div className={classNamesHead}>
+                <div
+                    className={classNames({
+                        accordion__head: true,
+                        ellipsis
+                    })}
+                    onClick={this.handleAccordionClick}
+                >
                     {this._renderHead()}
                 </div>
                 <div
                     className="accordion__body"
-                    ref={(ref) => { this._body = ref; }}
+                    ref={(ref) => {
+                        this._body = ref;
+                    }}
                     {...othersBody}
                 >
                     {this._getBody()}
@@ -287,52 +292,3 @@ class Accordion extends Component {
         );
     }
 }
-
-
-Accordion.propTypes = {
-    head: PropTypes.node.isRequired,
-    children: PropTypes.node.isRequired,
-    badge: PropTypes.node,
-    right: PropTypes.node,
-    renderClosed: PropTypes.bool,
-    isWrapped: PropTypes.bool,
-    dataGroup: PropTypes.string,
-    className: PropTypes.string,
-    id: PropTypes.string,
-    style: PropTypes.object,
-    styleBody: PropTypes.object,
-    onOpen: PropTypes.func,
-    onOpened: PropTypes.func,
-    onClose: PropTypes.func,
-    onClosed: PropTypes.func,
-    ellipsis: PropTypes.bool,
-    defaultOpened: PropTypes.bool,
-    reference: PropTypes.func,
-    autogrow: PropTypes.bool,
-    badgeStyle: PropTypes.object,
-    open: PropTypes.bool,
-};
-
-Accordion.defaultProps = {
-    className: '',
-    dataGroup: null,
-    id: null,
-    style: null,
-    styleBody: null,
-    onOpen: null,
-    onOpened: null,
-    onClose: null,
-    onClosed: null,
-    ellipsis: false,
-    defaultOpened: null,
-    reference: null,
-    isWrapped: false,
-    renderClosed: false,
-    badge: null,
-    right: null,
-    autogrow: false,
-    badgeStyle: null,
-    open: undefined,
-};
-
-export default Accordion;

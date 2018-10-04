@@ -1,18 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { Calendar } from '../../src/index';
-import '../../src/react-chayns-calendar/index.scss';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
-    constructor() {
-        super();
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(date) {
-        console.log(date);
-    }
+export default class Example extends PureComponent {
 
     render() {
         return(
@@ -25,12 +16,12 @@ export default class Example extends Component {
                         </div>
                         <div className="accordion__body">
                             <div className="accordion__content" style={{ minHeight: '200px' }}>
-                                <Calendar onDateSelect={this.onClick} endDate={new Date()}/>
+                                <Calendar onDateSelect={console.log} endDate={new Date()}/>
                             </div>
                         </div>
                     </div>
                     <h2 style={{ marginBottom: '8%' }}>Option 2:</h2>
-                    <Calendar onDateSelect={this.onClick}/>
+                    <Calendar onDateSelect={console.log}/>
                 </div>
             </ExampleContainer>
         );

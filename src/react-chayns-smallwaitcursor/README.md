@@ -28,23 +28,5 @@ You can set the following props on a AmountControl element:
 | Property     | Description                                                                                                  | Type     | Default |
 |--------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
 | show         | Renders the WaitCursor                                                                                       | bool     | false   |
-| absolute     | Shows the WaitCursor in the center of the parent element (one of the parents needs to be position: relative) | bool     | false   |
 | style        | style-object of the wrapper                                                                                  | object   |         |
-
-
-### Examples ###
-#### absolute positioning ####
-The SmallWaitCursor could be centered horizontal and vertical using the absolute-prop and a relative wrapper:
-```jsx
-<div
-    style={{
-        position: 'relative',
-        height: '200px'
-    }}
->
-    <SmallWaitCursor
-        absolute
-        show
-    />
-</div>
-```
+| showBackground | style-object of the wrapper                                                                                | bool     | true    |

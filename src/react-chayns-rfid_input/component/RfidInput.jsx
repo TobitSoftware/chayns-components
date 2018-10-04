@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Input from '../../react-chayns-input/component/Input';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import { VALID_RFID, SPLIT_RFID, RFID_CONTENT } from '../constants/regex';
+import Button from '../../react-chayns-button/component/Button';
 
 export default class RfidInput extends Component {
     static pretifyRfid(rfid) {
@@ -70,7 +71,7 @@ export default class RfidInput extends Component {
 
     startScan = () => {
         this.setState({ isScanning: true });
-        chayns.setNfcCallback(this.onScan);
+        chayns.addNfcListener(this.onScan);
         chayns.showWaitCursor();
     };
 
@@ -80,7 +81,7 @@ export default class RfidInput extends Component {
         if(!isScanning) {
             return;
         }
-        chayns.removeNfcCallback();
+        chayns.removeNfcListener();
         chayns.hideWaitCursor();
         this.setState({ isScanning: false });
     };
@@ -114,21 +115,23 @@ export default class RfidInput extends Component {
                         spellCheck="false"
                     />
                     {enableScan && !value && (
-                        <ChooseButton
+                        <Button
+                            secondary
                             onClick={isScanning ? this.endScan : this.startScan}
                             className="cc__rfid-input__scan"
                         >
                             {scanText}
-                        </ChooseButton>
+                        </Button>
                     )}
                     {(!enableScan || value) && (
-                        <ChooseButton
+                        <Button
+                            secondary
                             onClick={this.onConfirm}
                             disabled={disabled}
                             className="cc__rfid-input__confirm"
                         >
                             {confirmNode}
-                        </ChooseButton>
+                        </Button>
                     )}
                 </div>
             </div>

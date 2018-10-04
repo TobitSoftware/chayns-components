@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 export default class SelectButton extends Component {
     static propTypes = {
         onSelect: PropTypes.func,
         title: PropTypes.string,
         description: PropTypes.string,
+        disabled: PropTypes.bool,
         label: PropTypes.string,
         list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
         listKey: PropTypes.string.isRequired,
@@ -21,36 +22,23 @@ export default class SelectButton extends Component {
     static defaultProps = {
         quickFind: false,
         multiSelect: false,
-        title: 'Select Dialog',
-        description: 'Please select an item',
+        title: '',
+        description: '',
         label: 'Select',
         showSelection: true,
         className: null,
         onSelect: null,
+        disabled: false,
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            // eslint-disable-next-line react/no-unused-state
             selected: []
         };
 
         this.onClick = this.onClick.bind(this);
-        this.onSelect = this.onSelect.bind(this);
-    }
-
-    onSelect(selected) {
-        const { onSelect } = this.props;
-        const { selection } = selected;
-
-        if(selection.length === 1) {
-            this.setLabel(selection[0].name);
-        }
-
-        if(onSelect) {
-            onSelect(this.getReturnList(selected));
-        }
+        this.getDialogList = this.getDialogList.bind(this);
     }
 
     onClick() {
@@ -62,8 +50,9 @@ export default class SelectButton extends Component {
             list,
             listKey,
             listValue,
+            onSelect,
         } = this.props;
-        const _list = SelectButton.getDialogList(list, listKey, listValue);
+        const _list = this.getDialogList(list, listKey, listValue);
 
         chayns.dialog.select({
             title,
@@ -71,21 +60,29 @@ export default class SelectButton extends Component {
             quickfind: quickFind,
             multiselect: multiSelect,
             list: _list
-        }).then((selected) => {
-            this.onSelect(selected);
+        }).then((result) => {
+            if (onSelect && result.buttonType > 0) {
+                onSelect(this.getReturnList(result));
+            }
         }).catch((e) => {
             console.error(e);
         });
     }
 
-    static getDialogList(_list, listKey, listValue) {
+    getDialogList(_list, listKey, listValue) {
+        const { selected } = this.state;
+        const { showSelection } = this.props;
         const list = [];
 
         if (_list) {
             _list.map((item, i) => {
                 const curListKey = listKey || i;
                 if (item[curListKey] && item[listValue]) {
-                    list.push({ name: item[listValue], value: item[curListKey], isSelected: !!item.isSelected });
+                    list.push({
+                        name: item[listValue],
+                        value: item[curListKey],
+                        isSelected: selected.indexOf(item) >= 0 && showSelection
+                    });
                 }
             });
         }
@@ -103,6 +100,7 @@ export default class SelectButton extends Component {
                 if (listItem[listKey] === item.value) result.push(listItem);
             });
         });
+        this.setState({ selected: result });
         return { buttonType, selection: result };
     }
 
@@ -115,20 +113,23 @@ export default class SelectButton extends Component {
     }
 
     render() {
-        const { className, label } = this.props;
-        const classNames = classnames({
-            choosebutton: true,
-            [className]: className
-        });
-
+        const {
+            className, label, disabled, listValue
+        } = this.props;
+        const { selected } = this.state;
         return (
-            <div
-                className={classNames}
+            <ChooseButton
+                className={className}
+                disabled={disabled}
                 onClick={this.onClick}
-                ref={(ref) => { this._btn = ref; }}
             >
-                {label}
-            </div>
+                {selected && selected.length > 0 ? selected.map((item, index) => {
+                    let str = (index === 1) ? ', ' : '';
+                    str += (index < 2) ? item[listValue] : '';
+                    str += (index === 2) ? '...' : '';
+                    return str;
+                }) : label}
+            </ChooseButton>
         );
     }
 }
