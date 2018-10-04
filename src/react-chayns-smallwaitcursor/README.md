@@ -29,3 +29,4 @@ You can set the following props on a AmountControl element:
 |--------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
 | show         | Renders the WaitCursor                                                                                       | bool     | false   |
 | style        | style-object of the wrapper                                                                                  | object   |         |
+| showBackground | style-object of the wrapper                                                                                | bool     | true    |
