@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, react/no-array-index-key */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { faChevronRight, faChevronLeft } from '@fortawesome/pro-solid-svg-icons';
+import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import Icon from '../../../react-chayns-icon/component/Icon';
 

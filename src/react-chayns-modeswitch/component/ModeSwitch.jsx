@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faCog } from '@fortawesome/pro-solid-svg-icons';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Icon from '../../react-chayns-icon/component/Icon';

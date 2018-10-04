@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { faRocket } from '@fortawesome/pro-solid-svg-icons';
+import { faRocket } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, ChooseButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';

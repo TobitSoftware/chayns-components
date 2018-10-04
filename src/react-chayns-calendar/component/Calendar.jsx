@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { faChevronRight, faChevronLeft } from '@fortawesome/pro-solid-svg-icons';
+import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 import Month from './Month';
 import areDatesEqual from '../utils/areDatesEqual';

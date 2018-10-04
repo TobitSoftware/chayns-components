@@ -1,7 +1,7 @@
 import {
     faFacebookF, faWhatsapp, faGooglePlusG, faTwitter, faTumblr, faTelegram, faSkype
 } from '@fortawesome/free-brands-svg-icons';
-import { faCopy, faEnvelope, faShareAlt } from '@fortawesome/pro-regular-svg-icons';
+import { faCopy, faEnvelope, faShare } from '@fortawesome/free-regular-svg-icons';
 
 export const shareProvider = [
     {
@@ -109,7 +109,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
-        icon: faShareAlt,
+        icon: faShare,
         action: 2,
         url: null,
         available: false

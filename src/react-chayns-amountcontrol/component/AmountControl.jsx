@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faMinus, faPlus, faTrashAlt } from '@fortawesome/pro-regular-svg-icons';
+import { faMinus, faPlus, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { faInfoCircle, faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
+import { faInfoCircle, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { ContextMenu } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
-import Icon from "../../src/react-chayns-icon/component/Icon";
+import Icon from '../../src/react-chayns-icon/component/Icon';
 
 export default class Example extends Component {
     constructor() {
@@ -85,6 +85,7 @@ export default class Example extends Component {
                     this.setState({ position: (position + 1) % 4 });
                 }}
                 >
+
                     Position ändern
                 </Button>
                 <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>
