@@ -30,6 +30,13 @@ export default class Icon extends PureComponent {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { icon } = this.props;
+        if(icon !== nextProps.icon && !chayns.utils.isString(nextProps.icon)) {
+            library.add(nextProps.icon);
+        }
+    }
+
     render() {
         const { icon, scale, color } = this.props;
         if (chayns.utils.isString(icon)) {

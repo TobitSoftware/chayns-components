@@ -17,17 +17,19 @@ export default class Example extends Component {
     }
 
     render() {
-        return(
+        return (
             <ExampleContainer headline="Accordion">
                 <Accordion head="Test" badge="2" open={this.state.open}>
                     <Accordion
-                        head={<span style={{ color: '#FF0000' }} className="accordion--trigger">
+                        plusStyle
+                        head={(
+                            <span style={{ color: '#FF0000' }} className="accordion--trigger">
                                 Test
-                              </span>}
+                            </span>
+                        )}
                         isWrapped
                         open
                     >
-
                         <div className="accordion__content">
                             Hello World 1
                         </div>
@@ -37,7 +39,12 @@ export default class Example extends Component {
                             Hello World 2
                         </div>
                     </Accordion>
-                    <Accordion head="Test" badge={<i className="fa fa-warning" />} badgeStyle={{ backgroundColor: 'red' }} isWrapped>
+                    <Accordion
+                        head="Test"
+                        badge={<i className="fa fa-warning"/>}
+                        badgeStyle={{ backgroundColor: 'red' }}
+                        isWrapped
+                    >
                         <div className="accordion__content">
                             Hello World 2
                         </div>
@@ -45,7 +52,7 @@ export default class Example extends Component {
                 </Accordion>
 
                 <Accordion head="Autogrow" autogrow>
-                    <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }} />
+                    <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
                 </Accordion>
             </ExampleContainer>
         );

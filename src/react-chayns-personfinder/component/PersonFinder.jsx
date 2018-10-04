@@ -18,10 +18,10 @@ export default class PersonFinder extends Component {
     static defaultProps = {
         className: null,
         placeholder: '',
-        defaultValue: null,
+        defaultValue: '',
         onChange: null,
         showPersons: true,
-        showSites: false
+        showSites: false,
     };
 
     constructor(props) {

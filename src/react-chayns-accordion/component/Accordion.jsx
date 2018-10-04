@@ -8,10 +8,6 @@ const CLOSE = 1;
 
 const OPEN = 2;
 
-function hasFlag(value, flag) {
-    return !!(value & flag); // eslint-disable-line no-bitwise
-}
-
 export default class Accordion extends Component {
     static propTypes = {
         head: PropTypes.node.isRequired,
@@ -26,15 +22,14 @@ export default class Accordion extends Component {
         style: PropTypes.object,
         styleBody: PropTypes.object,
         onOpen: PropTypes.func,
-        onOpened: PropTypes.func,
         onClose: PropTypes.func,
-        onClosed: PropTypes.func,
         ellipsis: PropTypes.bool,
         defaultOpened: PropTypes.bool,
         reference: PropTypes.func,
         autogrow: PropTypes.bool,
         badgeStyle: PropTypes.object,
         open: PropTypes.bool,
+        plusStyle: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -44,9 +39,7 @@ export default class Accordion extends Component {
         style: null,
         styleBody: null,
         onOpen: null,
-        onOpened: null,
         onClose: null,
-        onClosed: null,
         ellipsis: false,
         defaultOpened: null,
         reference: null,
@@ -57,6 +50,7 @@ export default class Accordion extends Component {
         autogrow: false,
         badgeStyle: null,
         open: undefined,
+        plusStyle: false,
     };
 
     constructor(props) {
@@ -103,13 +97,13 @@ export default class Accordion extends Component {
                 });
             }
 
-            if (nextProps.open && !hasFlag(currentState, OPEN)) {
+            if (nextProps.open && !currentState === OPEN) {
                 this.setState({
                     currentState: OPEN
                 });
             }
 
-            if (!nextProps.open && !hasFlag(currentState, CLOSE)) {
+            if (!nextProps.open && !currentState === CLOSE) {
                 this.setState({
                     currentState: CLOSE
                 });
@@ -124,7 +118,7 @@ export default class Accordion extends Component {
         if (autogrow && this._body) {
             if (currentState === OPEN) {
                 this._body.style.setProperty('max-height', 'initial', 'important');
-            } else if (hasFlag(currentState, CLOSE)) {
+            } else if (currentState === CLOSE) {
                 this._body.style.maxHeight = null;
             }
         }
@@ -184,7 +178,7 @@ export default class Accordion extends Component {
         const { renderClosed, children } = this.props;
         const { currentState } = this.state;
 
-        if (hasFlag(currentState, OPEN) || currentState === CLOSE || renderClosed) {
+        if (currentState === OPEN || renderClosed) {
             return children;
         }
 
@@ -233,35 +227,18 @@ export default class Accordion extends Component {
             ellipsis,
             styleBody,
             reference,
-            ...customProps
+            plusStyle,
         } = this.props;
 
         const { currentState } = this.state;
-
-        const others = {};
-
-        if (id !== '') {
-            others.id = id;
-        }
-
-        if (style) {
-            others.style = style;
-        }
-
-        const othersBody = {
-            style: {}
-        };
-
-        if (styleBody) {
-            othersBody.style = styleBody;
-        }
 
         return (
             <div
                 className={classNames({
                     accordion: true,
                     'accordion--wrapped': (isWrapped === true),
-                    'accordion--open': hasFlag(currentState, OPEN),
+                    'accordion--open': currentState === OPEN,
+                    'accordion--add': plusStyle,
                     [className]: className
                 })}
                 data-group={dataGroup}
@@ -269,8 +246,8 @@ export default class Accordion extends Component {
                     this.accordion = ref;
                     if (reference) reference(ref);
                 }}
-                {...others}
-                {...customProps}
+                id={id}
+                style={style}
             >
                 <div
                     className={classNames({
@@ -286,7 +263,7 @@ export default class Accordion extends Component {
                     ref={(ref) => {
                         this._body = ref;
                     }}
-                    {...othersBody}
+                    style={styleBody}
                 >
                     {this._getBody()}
                 </div>
