@@ -48,7 +48,7 @@ export default class Example extends Component {
                     disabled={false}
                     amount={amount}
                     onChange={this.onChange}
-                    equalize="group-1"
+                    contentWidth={200}
                     buttonText="mtl. 15,95 €"
                     icon="ts-tobit"
                 />

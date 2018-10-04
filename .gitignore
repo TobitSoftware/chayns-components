@@ -115,3 +115,5 @@ lib
 lib_esnext/
 dist/
 .idea/dictionaries/
+
+\.idea/codeStyles/codeStyleConfig\.xml
