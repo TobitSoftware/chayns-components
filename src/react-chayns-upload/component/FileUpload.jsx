@@ -2,9 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import {
-    faFile, faImage, faMusic, faFilm
-} from '@fortawesome/pro-regular-svg-icons';
+import { faUpload } from '@fortawesome/pro-solid-svg-icons';
 
 import selectFile from '../../utils/selectFile';
 import getCompareFunction from '../utils/getCompareFunction';
@@ -86,29 +84,32 @@ export default class FileUpload extends Component {
         }
 
         if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
-            return chayns.uploadCloudImage().then((data) => {
-                if (!data.response || data.response.statusCode !== 200 || !data.response.data) {
-                    return null;
-                }
+            return chayns.uploadCloudImage()
+                .then((data) => {
+                    if (!data.response || data.response.statusCode !== 200 || !data.response.data) {
+                        return null;
+                    }
 
-                try {
-                    const responseData = JSON.parse(data.response.data);
-                    return normalizeUploadResponse(responseData);
-                } catch (ex) {
-                    return null;
-                }
-            }).then((uploadData) => {
-                onUpload(uploadData);
-            });
+                    try {
+                        const responseData = JSON.parse(data.response.data);
+                        return normalizeUploadResponse(responseData);
+                    } catch (ex) {
+                        return null;
+                    }
+                })
+                .then((uploadData) => {
+                    onUpload(uploadData);
+                });
         }
 
         return selectFile({
             type: getMimeTypes(type),
             multiple,
-        }).then((files) => {
-            const fileList = !multiple ? [files] : files;
-            this.checkFiles(fileList);
-        });
+        })
+            .then((files) => {
+                const fileList = !multiple ? [files] : files;
+                this.checkFiles(fileList);
+            });
     }
 
     onDrop(event) {
@@ -138,10 +139,11 @@ export default class FileUpload extends Component {
         const { files } = event.dataTransfer;
 
         if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
-            return uploadCloudImages(files).then((data) => {
-                const uploadData = normalizeUploadResponse(data);
-                onUpload(uploadData);
-            });
+            return uploadCloudImages(files)
+                .then((data) => {
+                    const uploadData = normalizeUploadResponse(data);
+                    onUpload(uploadData);
+                });
         }
 
         if (onChange) {
@@ -229,20 +231,7 @@ export default class FileUpload extends Component {
         if (customIcon) {
             icon = customIcon;
         } else {
-            switch (type) {
-                case 'image':
-                    icon = faImage;
-                    break;
-                case 'video':
-                    icon = faFilm;
-                    break;
-                case 'audio':
-                    icon = faMusic;
-                    break;
-                default:
-                    icon = faFile;
-                    break;
-            }
+            icon = faUpload;
         }
 
         return (
@@ -250,7 +239,7 @@ export default class FileUpload extends Component {
                 className={classNames}
             >
                 <span className="cc__file-upload__icon">
-                    <Icon icon={icon} scale={1}/>
+                    <Icon icon={icon}/>
                 </span>
                 <div
                     className="cc__file-upload__message"
