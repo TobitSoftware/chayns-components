@@ -20,7 +20,7 @@ export default class ProgressCalendar extends Component {
     static defaultProps = {
         columns: {
             names: ['Mo.','Di.','Mi.','Do.','Fr.','Sa.','So.'],
-            highlightedColor: chayns.getSchemeColor(),
+            highlightedColor: chayns.env.site.color,
         },
         groups: [],
         focus: new Date(),

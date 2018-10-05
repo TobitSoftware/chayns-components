@@ -37,7 +37,7 @@ export default class Week extends Component {
 
     constructor(){
         super();
-        this.schemeColor = Week.hexToRgb(chayns.getSchemeColor());
+        this.schemeColor = Week.hexToRgb(chayns.env.site.color);
     }
 
     renderDays(){
