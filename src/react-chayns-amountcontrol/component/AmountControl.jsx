@@ -161,6 +161,7 @@ export default class AmountControl extends Component {
         } = this.props;
         const { tempAmount, showInput } = this.state;
         if (window.debugLevel >= 3) {
+            // eslint-disable-next-line no-console
             console.debug('render amount-control component', this.props, this.state);
         }
 

@@ -105,6 +105,7 @@ export function reloadCache(reload) {
                 }
             }
         }).catch((error) => {
+            // eslint-disable-next-line no-console
             console.warn(error);
             window.chayns.dialog.alert(window.chayns.utils.lang.get('txt_shopMashup_reloadCache'), window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'));
             reject();

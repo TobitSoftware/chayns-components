@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as equalizer from '../../utils/equalizer';
@@ -45,7 +45,7 @@ export default class AmountInput extends PureComponent {
     }
 
     componentDidMount() {
-        const {equalize} = this.props;
+        const { equalize } = this.props;
 
         if (equalize) {
             equalizer.init();
@@ -53,7 +53,7 @@ export default class AmountInput extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const {equalize} = this.props;
+        const { equalize } = this.props;
 
         if (nextProps.equalize !== equalize) {
             equalizer.init();
@@ -61,7 +61,7 @@ export default class AmountInput extends PureComponent {
     }
 
     onButtonClick = () => {
-        const {amount, onAdd, setInput} = this.props;
+        const { amount, onAdd, setInput } = this.props;
         if (amount > 0) {
             setInput(true);
         } else {
@@ -77,7 +77,7 @@ export default class AmountInput extends PureComponent {
             inputValue = null;
         }
 
-        const {onInput} = this.props;
+        const { onInput } = this.props;
 
         if (onInput) {
             onInput(inputValue);
@@ -85,8 +85,8 @@ export default class AmountInput extends PureComponent {
     };
 
     onInputBlur = () => {
-        const {setInput, onChange} = this.props;
-        let {tempAmount} = this.props;
+        const { setInput, onChange } = this.props;
+        let { tempAmount } = this.props;
         tempAmount = tempAmount === null ? 0 : tempAmount;
         setInput(false);
         onChange(tempAmount);
@@ -99,10 +99,10 @@ export default class AmountInput extends PureComponent {
     };
 
     getButtonValue() {
-        const {amount, buttonText, buttonFormatHandler} = this.props;
+        const { amount, buttonText, buttonFormatHandler } = this.props;
 
         if (buttonFormatHandler) {
-            return buttonFormatHandler({amount, buttonText});
+            return buttonFormatHandler({ amount, buttonText });
         }
 
         if (amount > 0) {
@@ -128,7 +128,7 @@ export default class AmountInput extends PureComponent {
         const renderInput = !disabled && !disableInput && ((autoInput && amount > AUTO_HIDE_INPUT_MAX_AMOUNT) || showInput);
 
         return (
-            <div data-cc-equalize-width={equalize} style={(contentWidth) ? {width: `${contentWidth}px`} : undefined}>
+            <div data-cc-equalize-width={equalize} style={(contentWidth) ? { width: `${contentWidth}px` } : undefined}>
                 {
                     renderInput
                         ? (
@@ -142,7 +142,7 @@ export default class AmountInput extends PureComponent {
                                 autoFocus={focusOnClick}
                                 onFocus={this.moveCaretAtEnd}
                                 onKeyUp={this.onKeyUp}
-                                style={{width: '100%', display: 'inline-block'}}
+                                style={{ width: '100%', display: 'inline-block' }}
                             />
                         )
                         : (
@@ -153,7 +153,7 @@ export default class AmountInput extends PureComponent {
                                     'cc__amount-control__button--amount': amount,
                                     disabled,
                                 })}
-                                style={{width: '100%'}}
+                                style={{ width: '100%' }}
                             >
                                 {this.getButtonValue()}
                             </div>
