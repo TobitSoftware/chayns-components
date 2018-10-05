@@ -9,13 +9,21 @@ The Input is part of the *chayns-components* package. It can be installed via np
 The input has to be imported:
 
 ```js
+
 import { Input } from 'chayns-components';
+
+import { DynamicInput } from 'chayns-components';
+
 ```
 
 
 You can use the input like this:
 ```jsx
 <Input placeholder="this is a placeholder" />
+```
+or
+```jsx
+<DynamicInput placeholder="this is a placeholder" />
 ```
 
 ## Props
