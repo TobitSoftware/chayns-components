@@ -26,14 +26,14 @@ export default class Icon extends PureComponent {
     constructor(props) {
         super(props);
         const { icon } = props;
-        if (!chayns.utils.isString(icon)) {
+        if (!chayns.utils.isString(icon) && icon && icon.prefix && icon.iconName) {
             library.add(icon);
         }
     }
 
     componentWillReceiveProps(nextProps) {
         const { icon } = this.props;
-        if(icon !== nextProps.icon && !chayns.utils.isString(nextProps.icon)) {
+        if (icon !== nextProps.icon && !chayns.utils.isString(nextProps.icon) && icon && icon.prefix && icon.iconName) {
             library.add(nextProps.icon);
         }
     }
@@ -47,7 +47,9 @@ export default class Icon extends PureComponent {
             });
             return <i className={classes} {...rest}/>;
         }
-
+        if (!icon) {
+            return null;
+        }
         return (
             <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
         );

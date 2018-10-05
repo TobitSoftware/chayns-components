@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 const CLOSE = 1;
 
@@ -23,13 +24,13 @@ export default class Accordion extends Component {
         styleBody: PropTypes.object,
         onOpen: PropTypes.func,
         onClose: PropTypes.func,
-        ellipsis: PropTypes.bool,
         defaultOpened: PropTypes.bool,
         reference: PropTypes.func,
         autogrow: PropTypes.bool,
         badgeStyle: PropTypes.object,
         open: PropTypes.bool,
-        plusStyle: PropTypes.bool,
+        icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
+        noRotate: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -40,7 +41,6 @@ export default class Accordion extends Component {
         styleBody: null,
         onOpen: null,
         onClose: null,
-        ellipsis: false,
         defaultOpened: null,
         reference: null,
         isWrapped: false,
@@ -50,7 +50,8 @@ export default class Accordion extends Component {
         autogrow: false,
         badgeStyle: null,
         open: undefined,
-        plusStyle: false,
+        icon: 'ts-angle-right',
+        noRotate: false,
     };
 
     constructor(props) {
@@ -133,47 +134,6 @@ export default class Accordion extends Component {
         }
     };
 
-    _renderHead() {
-        const {
-            badge,
-            badgeStyle,
-            right,
-            head,
-        } = this.props;
-
-        if (!badge && !right) {
-            return head;
-        }
-
-        return [
-            <span
-                key="head"
-                className="accordion--trigger"
-            >
-                {head}
-            </span>,
-            <div
-                key="right"
-                className="right"
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row'
-                }}
-            >
-                {right}
-                {badge && (
-                    <div
-                        key="badge"
-                        className="badge accordion--trigger"
-                        style={badgeStyle}
-                    >
-                        {badge}
-                    </div>
-                )}
-            </div>
-        ];
-    }
-
     _getBody() {
         const { renderClosed, children } = this.props;
         const { currentState } = this.state;
@@ -224,10 +184,14 @@ export default class Accordion extends Component {
             style,
             isWrapped,
             className,
-            ellipsis,
             styleBody,
             reference,
-            plusStyle,
+            icon,
+            badge,
+            badgeStyle,
+            head,
+            right,
+            noRotate,
         } = this.props;
 
         const { currentState } = this.state;
@@ -238,7 +202,6 @@ export default class Accordion extends Component {
                     accordion: true,
                     'accordion--wrapped': (isWrapped === true),
                     'accordion--open': currentState === OPEN,
-                    'accordion--add': plusStyle,
                     [className]: className
                 })}
                 data-group={dataGroup}
@@ -249,14 +212,34 @@ export default class Accordion extends Component {
                 id={id}
                 style={style}
             >
-                <div
-                    className={classNames({
-                        accordion__head: true,
-                        ellipsis
-                    })}
-                    onClick={this.handleAccordionClick}
-                >
-                    {this._renderHead()}
+                <div className="accordion__head" onClick={this.handleAccordionClick}>
+                    <div className={classNames('accordion__head__icon', { 'accordion__head__icon--no-rotate': noRotate })}>
+                        {
+                            chayns.utils.isString(icon) || icon.iconName
+                                ? <Icon icon={icon}/>
+                                : icon
+                        }
+                    </div>
+                    <div className="accordion__head__title">
+                        {head}
+                    </div>
+                    {
+                        right || badge
+                            ? (
+                                <div className="accordion__right">
+                                    {
+                                        badge
+                                            ? (
+                                                <div className="badge" style={badgeStyle}>
+                                                    {badge}
+                                                </div>
+                                            )
+                                            : right
+                                    }
+                                </div>
+                            )
+                            : null
+                    }
                 </div>
                 <div
                     className="accordion__body"

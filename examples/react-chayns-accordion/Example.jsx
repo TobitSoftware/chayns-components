@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
@@ -21,7 +22,6 @@ export default class Example extends Component {
             <ExampleContainer headline="Accordion">
                 <Accordion head="Test" badge="2" open={this.state.open}>
                     <Accordion
-                        plusStyle
                         head={(
                             <span style={{ color: '#FF0000' }} className="accordion--trigger">
                                 Test
@@ -34,14 +34,17 @@ export default class Example extends Component {
                             Hello World 1
                         </div>
                     </Accordion>
-                    <Accordion head="Test" isWrapped>
+                    <Accordion head="Test" isWrapped icon={faRocket} dataGroup="abc">
                         <div className="accordion__content">
                             Hello World 2
                         </div>
                     </Accordion>
                     <Accordion
+                        dataGroup="abc"
+                        icon="ts-tobit"
+                        noRotate
                         head="Test"
-                        badge={<i className="fa fa-warning"/>}
+                        badge={1}
                         badgeStyle={{ backgroundColor: 'red' }}
                         isWrapped
                     >

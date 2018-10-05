@@ -38,6 +38,7 @@ The following properties can be set
 | dataGroup    | Accordion group. Accordions of one group close each other on opening   | String                     |               |
 | classNames   | CSS classes for the accordion                                          | String                     |               |
 | id           | The accordions Id                                                      | String                     |               |
+| icon         | The accordion icon                                                     | String/object              | 'ts-angle-right' |
 | style        | Accordion styles                                                       | Object                     |               |
 | styleBody    | Accordion body styles                                                  | Function                   |               |
 | onOpen       | onOpened-Event                                                         | Function                   |               |
@@ -47,7 +48,7 @@ The following properties can be set
 | defaultOpened| The accordion is default opened                                        | bool                       |               |
 | autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
 | reference    | A reference for the accordion                                          | Function                   |               |
-| *            | Props that should be set on the accordion-div                          | any                        |               |
+| noRotate     | Disable rotating of the icon                                           | Function                   |               |
 
 
 ### Examples
