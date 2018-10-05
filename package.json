@@ -9,7 +9,7 @@
     "start": "webpack-dev-server --config ./webpack/dev.babel.js --mode=development",
     "prepublishOnly": "npm run eslint & npm run build",
     "clean": "",
-    "build": "npm run build:es && npm run build:cjs && npm run build:lib:es && npm run build:sass",
+    "build": "npm run build:es && npm run build:cjs && npm run build:lib:es",
     "build:es": "cross-env NODE_ENV=es rollup -c",
     "build:cjs": "cross-env NODE_ENV=cjs rollup -c",
     "build:lib:es": "cross-env BABEL_ENV=es babel src -d lib",
