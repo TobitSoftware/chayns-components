@@ -226,7 +226,7 @@ export default class Accordion extends Component {
                     {
                         right || badge
                             ? (
-                                <div className="accordion__right">
+                                <div className="accordion__head__right">
                                     {
                                         badge
                                             ? (
