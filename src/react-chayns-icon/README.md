@@ -12,7 +12,17 @@ The icon component has to be imported:
 import { Icon } from 'chayns-components';
 ```
 
-If you want to use a [Font Awesome Icon](https://fontawesome.com/icons), you also have to import the icon from the corresponding font awesome library.
+# Font Awesome
+
+If you want to use a [Font Awesome Icon](https://fontawesome.com/icons), you also have to install the icon packages and import the icon from the corresponding font awesome library.
+
+    npm i --save @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-brands-svg-icon
+    
+or
+    
+    npm i --save @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icon
+    
+
 
 ```jsx
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'; /**Brands Style*/
