@@ -140,18 +140,33 @@ New Component
 
 ###Input/DynamicInput
 
-###ModeSwitch
+###ModeSwitch/Mode
+Props changed:
+group/groups/mode/modes => modes
 
-###PersonFinder
-
-###SelectList
+Removed ModeSwitch Functions:
+- hide
+- show
+- isUserInGroup
+- isChaynsManager
 
 ###SmallWaitCursor
+Removed Props:
+- absolute (you can use the style tag instead)
+
+New Props:
+- showBackground
 
 ###Tooltip
+New Props:
+- content: content of the tooltip (see Readme)
+- removeIcon: Show X icon in the upper right corner
+- width: Width of the tooltip
+- position: Position of the tooltip
 
 ###Upload
-
+New Props:
+- customIcon: Icon shown in the component
 
 
 
