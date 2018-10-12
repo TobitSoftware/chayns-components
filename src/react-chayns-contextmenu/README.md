@@ -17,8 +17,7 @@ I would recommend to import this component to a high level component of your pro
 You can init your **ContextMenu** like this:
 ```jsx
 <ContextMenu
-    x={100}
-    y={100}
+    coordinates={{x: 100, y: 100}}
     hide={false}
     items={[{
         className: 'fa fa-plus',
@@ -35,8 +34,7 @@ The component got the following properties:
 
 | Property   | Description                                                                                        | Type   | Default | Required
 |------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
-| x | The x-Position of the **ContextMenu**                                     | number |        | true |
-| y | The y-Position of the **ContextMenu**                                     | bool   |        | true |
+| coordinates           | Coordinates of the place to which the ContextMenu is rendered. Example: {x: 100, y: 100}                                  | object    |       | true |
 | hide | Defines wether the Component is hidden or not   | bool | true| |
 | onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page | func | ||
 | position | The position the ContextMenu (top right, bottom right, bottom left, top left) | number | 0 ||
@@ -45,6 +43,7 @@ The component got the following properties:
 | item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||
 | item.text | The text displayed in an item of the **ContextMenu** | string | |
 | item.text | The icon displayed in an item of the **ContextMenu** | object | |
+| parent | DOM Node into which the **ContextMenu** will be rendered | node | tapp |
 
 
 #### Example ####

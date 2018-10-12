@@ -133,7 +133,14 @@ New Props:
 New Component
 
 ###Contextmenu
-New Component
+New Props:
+- position: Position of the contextMenu
+- coordinates: Coordinates of the contextMenu
+- parent: DOM Node into which the contextMenu will be rendered
+
+Removed Props:
+- x
+- y
 
 ###Icon
 New Component
@@ -163,11 +170,12 @@ New Props:
 - removeIcon: Show X icon in the upper right corner
 - width: Width of the tooltip
 - position: Position of the tooltip
+- coordinates: Coordinates of the tooltip
+- parent: DOM Node into which the tooltip will be rendered
 
 ###Upload
 New Props:
 - customIcon: Icon shown in the component
-
 
 
 # Migrating from v1 to v2

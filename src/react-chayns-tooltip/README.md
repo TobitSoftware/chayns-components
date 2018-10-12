@@ -40,6 +40,8 @@ The component got the following properties:
 | content.buttonText    | Text of the button shown in the tooltip.                                                                              | string    |       | false |
 | content.buttonOnClick | Function which will be set as onClick for the button shown in the tooltip.                                            | func      |       | false |
 | content.html          | React Node which will be rendered in the tooltip. It's required if you don't use the text property                    | node      |       | true  |
+| parent                | DOM Node into which the tooltip will be rendered                                                                      | node      | tapp  | false |
+| coordinates           | Coordinates of the place to which the tooltip is rendered. Example: {x: 100, y: 100}                                  | object    |       | false |
 
 Also, you can call the methods show() and hide() on the reference of the tooltip.
 

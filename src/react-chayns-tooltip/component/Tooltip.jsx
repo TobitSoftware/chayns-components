@@ -176,9 +176,7 @@ export default class Tooltip extends Component {
         const {
             active, removed
         } = this.state;
-        console.log(this.getCoordinates());
         const { x, y } = this.getCoordinates();
-        console.log('tooltip', x, y);
 
         return (
             <div
@@ -224,6 +222,7 @@ export default class Tooltip extends Component {
                 ref={(node) => {
                     this.childrenNode = node;
                 }}
+                key="cc__tooltip__children"
             >
                 {children}
             </div>

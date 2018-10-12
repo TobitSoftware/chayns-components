@@ -74,8 +74,7 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="ContextMenu">
                 <ContextMenu
-                    x={x}
-                    y={y}
+                    coordinates={{x,y}}
                     hide={hideContextMenu}
                     items={items}
                     onLayerClick={this.removeContextMenu}
@@ -85,8 +84,6 @@ export default class Example extends Component {
                     this.setState({ position: (position + 1) % 4 });
                 }}
                 >
-
-
                     Position ändern
                 </Button>
                 <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>

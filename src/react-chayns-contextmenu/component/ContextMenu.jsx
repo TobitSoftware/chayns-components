@@ -2,14 +2,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import * as ReactDOM from 'react-dom';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ContextMenu extends Component {
     static propTypes = {
         hide: PropTypes.bool,
         onLayerClick: PropTypes.func,
-        x: PropTypes.number,
-        y: PropTypes.number,
+        coordinates: PropTypes.shape({
+            x: PropTypes.number.isRequired,
+            y: PropTypes.number.isRequired,
+        }).isRequired,
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
@@ -17,32 +20,36 @@ export default class ContextMenu extends Component {
             icon: PropTypes.object,
         })),
         position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+        parent: PropTypes.node,
     };
 
     static defaultProps = {
         hide: true,
         onLayerClick: null,
-        x: 0,
-        y: 0,
         items: [],
         position: 0,
+        parent: document.getElementsByClassName('tapp')[0],
     };
 
     constructor() {
         super();
-        this.state = { displayNone: true };
+        this.state = { displayNone: true, hide: true };
     }
 
     componentWillReceiveProps(nextProps) {
         const { hide } = this.props;
         if (nextProps.hide && !hide) {
+            this.setState({ hide: true });
             clearTimeout(this.timeout);
             this.timeout = setTimeout(() => {
                 this.setState({ displayNone: true });
             }, 350);
         } else if (!nextProps.hide && hide) {
-            clearTimeout(this.timeout);
             this.setState({ displayNone: false });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ hide: false });
+            }, 50);
         }
     }
 
@@ -52,42 +59,45 @@ export default class ContextMenu extends Component {
 
     render() {
         const {
-            hide, onLayerClick, x, y, items, position
+            onLayerClick, coordinates, items, position, parent
         } = this.props;
 
-        const { displayNone } = this.state;
+        const { displayNone, hide } = this.state;
 
         return (
-            <div
-                className={classNames('context-menu-overlay', {
-                    'context-menu-overlay--hide': hide && displayNone,
-                    'context-menu-overlay--active': !hide,
-                })}
-                onClick={onLayerClick}
-            >
-                <ul
-                    style={{
-                        left: x,
-                        top: y,
-                    }}
-                    className={classNames('context-menu', `context-menu--position${position}`, { 'context-menu--active': !hide })}
+            ReactDOM.createPortal(
+                <div
+                    className={classNames('context-menu-overlay', {
+                        'context-menu-overlay--hide': hide && displayNone,
+                        'context-menu-overlay--active': !hide,
+                    })}
+                    onClick={onLayerClick}
                 >
-                    {items.map(item => (
-                        <li
-                            className={classNames('context-menu__item', item.className)}
-                            onClick={item.onClick}
-                            key={item.text}
-                        >
-                            {
-                                item.icon
-                                    ? <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
-                                    : null
-                            }
-                            {item.text}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                    <ul
+                        style={{
+                            left: coordinates.x,
+                            top: coordinates.y,
+                        }}
+                        className={classNames('context-menu', `context-menu--position${position}`, { 'context-menu--active': !hide })}
+                    >
+                        {items.map(item => (
+                            <li
+                                className={classNames('context-menu__item', item.className)}
+                                onClick={item.onClick}
+                                key={item.text}
+                            >
+                                {
+                                    item.icon
+                                        ? <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                                        : null
+                                }
+                                {item.text}
+                            </li>
+                        ))}
+                    </ul>
+                </div>,
+                parent
+            )
         );
     }
 }

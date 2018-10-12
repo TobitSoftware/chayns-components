@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { faShoppingCart } from '@fortawesome/free-regular-svg-icons';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { AmountControl } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';

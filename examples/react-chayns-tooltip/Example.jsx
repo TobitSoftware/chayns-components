@@ -11,22 +11,19 @@ export default class Example extends Component {
 
     render() {
         const { x, y } = this.state;
-        console.log(x, y);
         return (
             <ExampleContainer headline="Tooltip">
                 <div style={{ marginBottom: '20px' }}>
-
-
                     Simple&nbsp;
-<Tooltip
+                    <Tooltip
                         bindListeners
                         position={3}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
                         minWidth={150}
                         maxWidth={150}
->
+                    >
                         <a>Tooltip</a>
-</Tooltip>
+                    </Tooltip>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
@@ -100,8 +97,7 @@ export default class Example extends Component {
                         this.clickTooltip.show();
                         this.setState({ x: e.clientX, y: e.clientY });
                     }}
-                >
-                </div>
+                />
                 <Tooltip
                     minWidth={100}
                     removeIcon
