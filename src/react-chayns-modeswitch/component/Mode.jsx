@@ -16,11 +16,11 @@ export default class Mode extends Component {
     constructor() {
         super();
         this.state = { modeId: null };
-        ModeSwitch.registerOnChangeListener(this.updatedMode);
+        ModeSwitch.addChangeListener(this.updatedMode);
     }
 
     componentWillUnmount() {
-        ModeSwitch.unregisterOnChangeListener(this.updatedMode);
+        ModeSwitch.removeChangeListener(this.updatedMode);
     }
 
     updatedMode = (mode) => {

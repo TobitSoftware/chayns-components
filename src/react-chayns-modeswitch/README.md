@@ -93,5 +93,5 @@ The ModeSwitch-Component has some functions, which are static:
 | Function | Description  | Parameter |
 | -------- | ------------- | --------- |
 | getCurrentMode | Returns the current mode. |  |
-| registerOnChangeListener | Sets a callback for the mode switch. | Function |
-| unregisterOnChangeListener | Removes a callback. The callback function has to be provided as parameter. | Function |
+| addChangeListener | Sets a callback for the mode switch. | Function |
+| removeChangeListener | Removes a callback. The callback function has to be provided as parameter. | Function |

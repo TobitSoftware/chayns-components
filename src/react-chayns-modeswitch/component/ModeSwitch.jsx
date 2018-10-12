@@ -12,14 +12,13 @@ const onChangeListener = [];
 
 export default class ModeSwitch extends Component {
     static propTypes = {
-        modes: PropTypes.arrayOf(PropTypes.oneOf([
-            PropTypes.shape({ id: PropTypes.number, name: PropTypes.string }),
+        modes: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number,
                 name: PropTypes.string,
-                uacIds: PropTypes.arrayOf(PropTypes.number)
+                uacIds: PropTypes.arrayOf(PropTypes.number),
             })
-        ])),
+        ),
         save: PropTypes.bool,
         onChange: PropTypes.func,
         defaultMode: PropTypes.number,
@@ -39,7 +38,7 @@ export default class ModeSwitch extends Component {
         return modes.find(mode => mode.id === activeModeId || null);
     }
 
-    static registerOnChangeListener(callback) {
+    static addChangeListener(callback) {
         onChangeListener.push(callback);
         if (globalState.modes.length > 0) {
             const mode = globalState.modes.find(m => m.id === globalState.activeModeId);
@@ -47,7 +46,7 @@ export default class ModeSwitch extends Component {
         }
     }
 
-    static unregisterOnChangeListener(callback) {
+    static removeChangeListener(callback) {
         onChangeListener.splice(onChangeListener.indexOf(callback), 1);
     }
 
