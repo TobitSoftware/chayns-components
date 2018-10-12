@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import share from './sharingActions';
 import Icon from '../../react-chayns-icon/component/Icon';
+import Button from '../../react-chayns-button/component/Button';
 
 export default class SharingBarItem extends Component {
     static propTypes ={
@@ -21,14 +22,13 @@ export default class SharingBarItem extends Component {
         const { name, icon } = this.props;
 
         return (
-            <button
-                type="button"
-                className="sharing-bar__item button"
+            <Button
+                className="sharing-bar__item"
                 title={name}
                 onClick={this.onClick}
             >
                 <Icon icon={icon}/>
-            </button>
+            </Button>
         );
     }
 }

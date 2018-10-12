@@ -2,7 +2,7 @@
 import { shareProvider, shareActions } from './sharingProvider';
 
 export function getAvailableShareProviders() {
-    if (chayns.env.isApp) {
+    if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
         return chayns.getAvailableSharingServices().then((response) => {
             const sharingApps = response.availableSharingApps;
             shareProvider.forEach((curProvider) => {
@@ -42,14 +42,17 @@ export function getAvailableShareProviders() {
             }
 
             if ((chayns.env.isIOS && chayns.env.appVersion >= 5182) || (chayns.env.isAndroid && chayns.env.appVersion >= 5205)) {
-                shareProvider[shareProvider.length - 1].available = true;
+                shareProvider.find(app => app.id === 10).available = true;
             }
 
             return Promise.resolve(shareProvider);
-        });
+        })
     } else {
         if (!chayns.env.isIOS) {
             shareProvider[0].available = true;
+        }
+        if (navigator.share && !shareProvider.find(app => app.id === 10).available) {
+            shareProvider.find(app => app.id === 11).available = true;
         }
         return Promise.resolve(shareProvider);
     }
