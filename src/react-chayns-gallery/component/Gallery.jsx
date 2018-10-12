@@ -45,7 +45,7 @@ export default class Gallery extends Component {
         const bigUrls = [];
         urls.forEach((url) => {
             // eslint-disable-next-line no-restricted-globals
-            bigUrls.push(Gallery.getScaledImageUrl(url, screen.availHeight * 0.9));
+            bigUrls.push(Gallery.getScaledImageUrl(url, Math.floor(screen.availHeight > screen.availWidth ? screen.availWidth : screen.availHeight)));
         });
         return bigUrls;
     }
