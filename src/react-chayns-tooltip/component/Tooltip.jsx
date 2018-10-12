@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import * as ReactDOM from 'react-dom';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 
@@ -19,18 +20,28 @@ export default class Tooltip extends Component {
                 html: PropTypes.node.isRequired,
             }),
         ]).isRequired,
-        children: PropTypes.node.isRequired,
+        children: PropTypes.node,
         bindListeners: PropTypes.bool,
         position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
-        width: PropTypes.number,
+        minWidth: PropTypes.number,
+        maxWidth: PropTypes.number,
         removeIcon: PropTypes.bool,
+        parent: PropTypes.node,
+        coordinates: PropTypes.shape({
+            x: PropTypes.number.isRequired,
+            y: PropTypes.number.isRequired,
+        }),
     };
 
     static defaultProps = {
+        children: null,
         bindListeners: false,
         position: 0,
-        width: 250,
+        minWidth: 250,
+        maxWidth: 250,
         removeIcon: false,
+        parent: document.getElementsByClassName('tapp')[0],
+        coordinates: null,
     };
 
     constructor() {
@@ -44,20 +55,41 @@ export default class Tooltip extends Component {
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
         this.getContent = this.getContent.bind(this);
+        this.getCoordinates = this.getCoordinates.bind(this);
+        this.renderTooltip = this.renderTooltip.bind(this);
+
+        this.firstRender = true;
     }
 
     componentDidMount() {
         const { bindListeners } = this.props;
 
         if (bindListeners) {
-            this.node.addEventListener('mouseover', this.show, false);
-            this.node.addEventListener('mouseleave', this.hide, false);
+            this.childrenNode.addEventListener('mouseover', this.show, false);
+            this.childrenNode.addEventListener('mouseleave', this.hide, false);
+            this.tooltipNode.addEventListener('mouseover', this.show, false);
+            this.tooltipNode.addEventListener('mouseleave', this.hide, false);
+        }
+
+        if (this.firstRender) {
+            this.firstRender = false;
+            this.getCoordinates();
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { coordinates, children } = this.props;
+
+        if (nextProps.coordinates !== coordinates || nextProps.children !== children) {
+            this.getCoordinates();
         }
     }
 
     componentWillUnmount() {
-        this.node.removeEventListener('mouseover', this.show, false);
-        this.node.removeEventListener('mouseleave', this.hide, false);
+        this.childrenNode.removeEventListener('mouseover', this.show, false);
+        this.childrenNode.removeEventListener('mouseleave', this.hide, false);
+        this.tooltipNode.removeEventListener('mouseover', this.show, false);
+        this.tooltipNode.removeEventListener('mouseleave', this.hide, false);
     }
 
     getContent() {
@@ -87,6 +119,24 @@ export default class Tooltip extends Component {
             );
         }
         return nodeArray;
+    }
+
+    getCoordinates() {
+        const { coordinates, position } = this.props;
+
+        if (coordinates) {
+            return {
+                x: coordinates.x,
+                y: coordinates.y,
+            };
+        } if (this.childrenNode) {
+            const rect = this.childrenNode.getBoundingClientRect();
+            return {
+                x: rect.x + (rect.width / 2),
+                y: (position === 1 || position === 2) ? rect.y + rect.height : rect.y,
+            };
+        }
+        return { x: 0, y: 0 };
     }
 
     show() {
@@ -119,36 +169,64 @@ export default class Tooltip extends Component {
         }, 500);
     }
 
-    render() {
+    renderTooltip() {
         const {
-            children, width, removeIcon, position
+            minWidth, maxWidth, removeIcon, position
         } = this.props;
-        const { active, removed } = this.state;
-
+        const {
+            active, removed
+        } = this.state;
+        console.log(this.getCoordinates());
+        const { x, y } = this.getCoordinates();
+        console.log('tooltip', x, y);
 
         return (
             <div
                 className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
                     'cc__tooltip--active': active,
                 })}
+                style={{ left: `${x}px`, top: `${y}px` }}
                 ref={(node) => {
-                    this.node = node;
+                    this.tooltipNode = node;
                 }}
             >
                 {!removed && (
-                    <div className="cc__tooltip__backLayer">
-                        <div className="cc__tooltip__overlay" style={{ width: `${width}px` }}>
-                            {
-                                removeIcon
-                                    ? <div className="cc__tooltip__icon" onClick={this.hide}><Icon icon="ts-wrong"/></div>
-                                    : null
-                            }
-                            {this.getContent()}
-                        </div>
+                    <div
+                        className="cc__tooltip__overlay"
+                        style={{ minWidth: `${minWidth}px`, maxWidth: `${maxWidth}px` }}
+                    >
+                        {
+                            removeIcon
+                                ? (
+                                    <div className="cc__tooltip__icon" onClick={this.hide}>
+                                        <Icon icon="ts-wrong"/>
+                                    </div>
+                                )
+                                : null
+                        }
+                        {this.getContent()}
                     </div>
                 )}
-                {children}
             </div>
         );
+    }
+
+    render() {
+        const { children, parent } = this.props;
+
+        return [
+            ReactDOM.createPortal(
+                this.renderTooltip(),
+                parent
+            ),
+            <div
+                className="cc__tooltip__children"
+                ref={(node) => {
+                    this.childrenNode = node;
+                }}
+            >
+                {children}
+            </div>
+        ];
     }
 }
