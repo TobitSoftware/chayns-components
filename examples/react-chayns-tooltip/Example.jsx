@@ -4,19 +4,29 @@ import ExampleContainer from '../ExampleContainer';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
 export default class Example extends Component {
+    constructor() {
+        super();
+        this.state = { x: 0, y: 0 };
+    }
+
     render() {
+        const { x, y } = this.state;
+        console.log(x, y);
         return (
             <ExampleContainer headline="Tooltip">
                 <div style={{ marginBottom: '20px' }}>
+
+
                     Simple&nbsp;
-                    <Tooltip
+<Tooltip
                         bindListeners
                         position={3}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
-                        width={150}
-                    >
+                        minWidth={150}
+                        maxWidth={150}
+>
                         <a>Tooltip</a>
-                    </Tooltip>
+</Tooltip>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
@@ -65,8 +75,10 @@ export default class Example extends Component {
                         position={2}
                         content={{
                             html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
+
+
                                 This is a static Tooltip with custom html content.
-                            </div>
+                                  </div>
                         }}
                         removeIcon
                         ref={ref => this.staticTooltip = ref}
@@ -76,10 +88,28 @@ export default class Example extends Component {
                                 this.staticTooltip.show();
                             }}
                         >
+
+
                             Static Tooltip
                         </a>
                     </Tooltip>
                 </div>
+                <div
+                    style={{ height: '100px', width: '100px', backgroundColor: 'black' }}
+                    onClick={(e) => {
+                        this.clickTooltip.show();
+                        this.setState({ x: e.clientX, y: e.clientY });
+                    }}
+                >
+                </div>
+                <Tooltip
+                    minWidth={100}
+                    removeIcon
+                    content={{ text: 'Test' }}
+                    coordinates={{ x, y }}
+                    ref={ref => this.clickTooltip = ref}
+                />
+
             </ExampleContainer>
         );
     }
