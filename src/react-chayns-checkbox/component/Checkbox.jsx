@@ -7,6 +7,8 @@ export default class Checkbox extends Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
+        labelStyle: PropTypes.object,
+        labelClassName: PropTypes.string,
         label: PropTypes.oneOfType([
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node)
@@ -27,6 +29,8 @@ export default class Checkbox extends Component {
         style: null,
         className: null,
         label: null,
+        labelClassName: null,
+        labelStyle: null,
         children: null,
         onChange: null,
         toggleButton: false,
@@ -58,32 +62,33 @@ export default class Checkbox extends Component {
             checked,
             defaultChecked,
             dangerouslySetLabel,
+            labelStyle,
+            labelClassName,
         } = this.props;
 
-        return(
-            <div
+        return [
+            <input
+                type="checkbox"
+                className={`checkbox${classNames}`}
+                ref={(ref) => {
+                    this._node = ref;
+                }}
+                onChange={this.onChange}
+                id={this.id}
+                disabled={disabled}
+                checked={checked}
+                defaultChecked={defaultChecked}
                 style={style}
-                className={classNames}
-                ref={(ref) => { this._container = ref; }}
+            />,
+            <label
+                style={labelStyle}
+                className={labelClassName}
+                htmlFor={this.id}
+                dangerouslySetInnerHTML={dangerouslySetLabel}
             >
-                <input
-                    type="checkbox"
-                    className="checkbox"
-                    ref={(ref) => { this._node = ref; }}
-                    onChange={this.onChange}
-                    id={this.id}
-                    disabled={disabled}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                />
-                <label
-                    htmlFor={this.id}
-                    dangerouslySetInnerHTML={dangerouslySetLabel}
-                >
-                    {!dangerouslySetLabel ? (children || label || '') : null}
-                </label>
-            </div>
-        );
+                {!dangerouslySetLabel ? (children || label || '') : null}
+            </label>
+        ];
     }
 
     renderToggleButton(classNames) {
@@ -94,31 +99,33 @@ export default class Checkbox extends Component {
             label,
             checked,
             defaultChecked,
+            dangerouslySetLabel,
+            labelStyle,
+            labelClassName,
         } = this.props;
 
-        return(
-            <div
+        return [
+            <input
+                type={`checkbox${classNames}`}
+                className="switch"
+                ref={(ref) => {
+                    this._node = ref;
+                }}
+                onChange={this.onChange}
+                id={this.id}
+                disabled={disabled}
+                checked={checked}
+                defaultChecked={defaultChecked}
                 style={style}
-                className={classNames}
-                ref={(ref) => { this._container = ref; }}
-            >
-                <input
-                    type="checkbox"
-                    className="switch"
-                    ref={(ref) => { this._node = ref; }}
-                    onChange={this.onChange}
-                    id={this.id}
-                    disabled={disabled}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                />
-                <label
-                    htmlFor={this.id}
-                    style={label ? { marginRight: '10px' } : null}
-                />
-                {children || label || ''}
-            </div>
-        );
+            />,
+            <label
+                className={labelClassName}
+                htmlFor={this.id}
+                dangerouslySetInnerHTML={dangerouslySetLabel}
+                style={label ? { ...labelStyle, ...{ marginRight: '10px' } } : labelStyle}
+            />,
+            !dangerouslySetLabel ? (children || label || '') : null
+        ];
     }
 
     render() {

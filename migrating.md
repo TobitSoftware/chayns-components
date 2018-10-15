@@ -129,6 +129,12 @@ New Props:
 - icon: Icon shown in the button.
 - secondary: Renders Button as a secondary button.
 
+### Checkbox
+Removed Props
+- tooltip
+
+You can set a tooltip around the checkbox instead.
+
 ### Combobox
 New Component
 
@@ -146,6 +152,8 @@ Removed Props:
 New Component
 
 ### Input/DynamicInput
+- Added dynamic input
+- Removed responsive input
 
 ### ModeSwitch/Mode
 Props changed:
