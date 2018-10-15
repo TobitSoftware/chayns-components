@@ -117,3 +117,9 @@ dist/
 .idea/dictionaries/
 
 \.idea/codeStyles/codeStyleConfig\.xml
+
+\.idea/chayns-components\.iml
+
+\.idea/inspectionProfiles/
+
+\.idea/jsLibraryMappings\.xml
