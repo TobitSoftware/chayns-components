@@ -63,6 +63,10 @@ API v3 classes:
 - .chayns__border-color--[0;100]
 
 API v3 classes:
+- .chayns__background-color
+- .chayns__color
+- .chayns__border-color
+
 - .chayns__background-color--white-[0;6]
 - .chayns__color--white-[0;6]
 - .chayns__border-color--white-[0;6]
