@@ -8,6 +8,7 @@ import isDescendant from '../../utils/isDescendant';
 export default class PersonFinder extends Component {
     static propTypes = {
         className: PropTypes.string,
+        style: PropTypes.object,
         placeholder: PropTypes.string,
         defaultValue: PropTypes.string,
         onChange: PropTypes.func,
@@ -17,6 +18,7 @@ export default class PersonFinder extends Component {
 
     static defaultProps = {
         className: null,
+        style: null,
         placeholder: '',
         defaultValue: '',
         onChange: null,
@@ -32,7 +34,7 @@ export default class PersonFinder extends Component {
             persons: [],
             sites: [],
             showPopup: false,
-            value: defaultValue
+            value: defaultValue,
         };
 
         if (defaultValue.length === 0) {
@@ -57,6 +59,15 @@ export default class PersonFinder extends Component {
     componentWillUnmount() {
         document.removeEventListener('click', this.handleBlur);
     }
+
+    clear = () => {
+        this.setState({
+            persons: [],
+            sites: [],
+            showPopup: false,
+            value: '',
+        });
+    };
 
     handleOnChange = (event) => {
         const { value } = event.target;
@@ -111,7 +122,7 @@ export default class PersonFinder extends Component {
 
     render() {
         const {
-            className, showPersons, showSites, ...props
+            className, showPersons, showSites, style, ...props
         } = this.props;
         const {
             persons, sites, showPopup, value
@@ -130,6 +141,7 @@ export default class PersonFinder extends Component {
                     onChange={this.handleOnChange}
                     onFocus={this.handleFocus}
                     defaultValue={undefined}
+                    style={style}
                 />
                 {showPopup && (persons.length > 0 || sites.length > 0) ? (
                     <div
