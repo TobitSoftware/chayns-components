@@ -197,8 +197,8 @@ export default class SetupWizard extends Component {
                                 >
                                     <div
                                         className={classNames('number', {
-                                            'chayns__background-color--white-4 chayns__color--white-1': completedSteps.indexOf(index) >= 0,
-                                            'chayns__background-color--white-1 chayns__color--white-4': completedSteps.indexOf(index) === -1
+                                            'wizard_step--ready': completedSteps.indexOf(index) >= 0,
+                                            'wizard_step--notReady': completedSteps.indexOf(index) === -1
                                         })}
                                     >
                                         {index + 1}
