@@ -31,7 +31,8 @@ The component got the following properties:
 | children              | React Node, that the tooltip should refer to. It will always be rendered to your page.                                | node      |       |true   |
 | bindListeners         | Binds mouseover and mouseleave listeners to children. The tooltip will automatically be opened and closed on hover.   | bool      | false |       |
 | position              | Position of the tooltip (0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left).                             | number    | 0     |       |
-| width                 | Width of the tooltip.                                                                                                 | number    | 250   |       |
+| minWidth              | minWidth of the tooltip.                                                                                              | number    | 250   |       |
+| maxWidth              | maxWidth of the tooltip.                                                                                              | number    | 250   |       |
 | removeIcon            | Determines if the remove icon in the upper right corner will be shown.                                                | bool      | false |       |
 | content               | Content of the tooltip. You can use the properties listed below.                                                      | object    |       | true  |
 | content.text          | Text of the tooltip. It's required if you don't use html content.                                                     | string    |       | true  |

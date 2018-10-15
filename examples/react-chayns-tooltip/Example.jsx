@@ -14,16 +14,17 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="Tooltip">
                 <div style={{ marginBottom: '20px' }}>
+
                     Simple&nbsp;
-                    <Tooltip
+<Tooltip
                         bindListeners
                         position={3}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
                         minWidth={150}
                         maxWidth={150}
-                    >
+>
                         <a>Tooltip</a>
-                    </Tooltip>
+</Tooltip>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
@@ -92,14 +93,16 @@ export default class Example extends Component {
                     </Tooltip>
                 </div>
                 <div
-                    style={{ height: '100px', width: '100px', backgroundColor: 'black' }}
+                    style={{ height: '100px', width: '100%' }}
                     onClick={(e) => {
                         this.clickTooltip.show();
                         this.setState({ x: e.clientX, y: e.clientY });
                     }}
+                    className="chayns__background-color--white-4"
                 />
                 <Tooltip
                     minWidth={100}
+                    maxWidth={200}
                     removeIcon
                     content={{ text: 'Test' }}
                     coordinates={{ x, y }}
