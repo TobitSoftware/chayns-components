@@ -22,7 +22,7 @@ npm install chayns-components@latest -S
 
 <!-- chaynsTime -->
 <!--<script src="https://chayns-res.tobit.com/API/v3/intern/chaynsTime/js/chaynsTime.min.js"></script>-->
-<!--Use moment.js instead-->
+<!--Use date-fns instead-->
 ```
 
 3. Remove your Font Awesome css and install instead fortawesome library packages
