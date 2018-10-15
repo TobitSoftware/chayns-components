@@ -15,6 +15,7 @@ window.chayns.ready.then(() => {
                 }}
                 defaultValue="Test"
                 autogrow
+                style={{ width: '100%' }}
             />
         </ExampleContainer>,
         document.querySelector('#react-chayns-textarea')
