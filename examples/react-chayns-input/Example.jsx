@@ -4,19 +4,19 @@ import { Input, DynamicInput } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends PureComponent {
-    static onBlur(value) {
+    onBlur(value) {
         console.log('onBlur', value);
     }
 
-    static onChange(value) {
+    onChange(value) {
         console.log('onChange', value);
     }
 
-    static onEnter(value) {
+    onEnter(value) {
         console.log('onEnter', value);
     }
 
-    static onKeyUp(e) {
+    onKeyUp(e) {
         console.log('onKeyUp', e);
     }
 
@@ -24,6 +24,7 @@ export default class Example extends PureComponent {
         return (
             <ExampleContainer headline="Input">
                 <Input
+                    defaultValue="Input"
                     placeholder="input"
                     onBlur={this.onBlur}
                     onChange={this.onChange}
@@ -59,7 +60,6 @@ export default class Example extends PureComponent {
                     }}
                 />
                 <Input
-                    defaultValue="invalid value"
                     placeholder='type "eee"'
                     regExp={new RegExp('.*e{3}.*')}
                     onBlur={this.onBlur}
@@ -74,6 +74,41 @@ export default class Example extends PureComponent {
 
                 <DynamicInput
                     placeholder="Dynamic Input Placeholder"
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
+                    }}
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                />
+                <DynamicInput
+                    placeholder="Icon"
+                    icon="ts-tobit2016"
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
+                    }}
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    onIconClick={console.log}
+                />
+                <DynamicInput
+                    placeholder='type "eee"'
+                    regExp={new RegExp('.*e{3}.*')}
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    onKeyUp={this.onKeyUp}
+                    onEnter={this.onEnter}
+                    icon="ts-tobit2016"
+                    style={{
+                        width: '100%',
+                        marginBottom: '20px'
+                    }}
+                    onIconClick={console.log}
                 />
             </ExampleContainer>
         );

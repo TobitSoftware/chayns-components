@@ -45,7 +45,8 @@ The following properties can be set on the Input-Component
 | regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string, RegExp |               |
 | inputRef     | Exposes the input DOM Ref to the parent component                                 | func           |               |
 | invalid      | Marks the input as invalid                                                        | bool           | false         |
-
+| icon         | Icon shown on the right side (only dynamic input)                                 | string/object  |               |
+| onIconClick  | Icon onClick Event (only dynamic input)                                           | func           | clear value   |
 
 ### Examples
 #### Regex Input

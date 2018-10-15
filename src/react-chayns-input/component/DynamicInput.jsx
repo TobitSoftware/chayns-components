@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class DynamicInput extends Component {
     static propTypes = {
@@ -18,11 +19,14 @@ export default class DynamicInput extends Component {
         placeholder: PropTypes.string,
         onKeyUp: PropTypes.func,
         onChange: PropTypes.func,
+        onEnter: PropTypes.func,
         onBlur: PropTypes.func,
         regExp: PropTypes.string,
         inputRef: PropTypes.func,
         type: PropTypes.string,
         invalid: PropTypes.bool,
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        onIconClick: PropTypes.func,
     };
 
     static defaultProps = {
@@ -32,12 +36,15 @@ export default class DynamicInput extends Component {
         defaultValue: undefined,
         placeholder: null,
         onKeyUp: null,
+        onEnter: null,
         onChange: null,
         onBlur: null,
         regExp: null,
         inputRef: null,
         type: 'text',
         invalid: false,
+        icon: null,
+        onIconClick: null,
     };
 
     constructor(props) {
@@ -48,45 +55,57 @@ export default class DynamicInput extends Component {
         const testValue = value;
 
         this.state = {
-            isValid: !regExp || !testValue || testValue.match(new RegExp(regExp))
+            isValid: !regExp || !testValue || testValue.match(new RegExp(regExp)),
+            showIcon: false,
         };
+
+        this.onKeyUp = this.onKeyUp.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.callIfValid = this.callIfValid.bind(this);
+        this.onIconClick = this.onIconClick.bind(this);
     }
 
-    // eslint-disable-next-line react/destructuring-assignment
-    onBlur = () => this.handleEvent(this.props.onBlur, true);
-
-    /**
-     * @deprecated
-     */
-        // eslint-disable-next-line react/destructuring-assignment
-    onKeyUp = () => this.handleEvent(this.props.onKeyUp);
-
-    // eslint-disable-next-line react/destructuring-assignment
-    onChange = () => this.handleEvent(this.props.onChange);
-
-    handleEvent = (callback, doInvalidate = false) => {
-        const isValid = this.validateInput(doInvalidate);
-
-        if (callback) {
-            if (isValid) {
-                callback(this._node.value);
-            } else {
-                callback(null);
-            }
+    onKeyUp(e) {
+        const { onKeyUp, onEnter } = this.props;
+        if (onKeyUp) {
+            onKeyUp(e);
         }
-    };
-
-    validateInput(doInvalidate = true) {
-        const { regExp } = this.props;
-        const isValid = !regExp || (regExp && this._node.value.match(new RegExp(regExp)));
-
-        if (isValid || doInvalidate) {
-            this.setState({
-                isValid
-            });
+        if (e.keyCode === 13) {
+            this.callIfValid(e.target.value, onEnter);
         }
+    }
 
-        return isValid;
+    onBlur(e) {
+        const { onBlur } = this.props;
+        this.callIfValid(e.target.value, onBlur);
+    }
+
+    onChange(e) {
+        const { onChange } = this.props;
+        this.callIfValid(e.target.value, onChange);
+        this.setState({ showIcon: e.target.value.length > 0 });
+    }
+
+    onIconClick(e) {
+        const { onIconClick } = this.props;
+        const { showIcon } = this.state;
+        if (onIconClick) {
+            onIconClick(e);
+        } else if (showIcon) {
+            this._node.value = '';
+            this.setState({ showIcon: false });
+        }
+    }
+
+    callIfValid(value, callback) {
+        const { regExp, invalid } = this.props;
+        const isValid = !invalid && (!regExp || value.match(regExp));
+
+        if (isValid && callback) {
+            callback(value);
+        }
+        this.setState({ isValid });
     }
 
     render() {
@@ -99,9 +118,10 @@ export default class DynamicInput extends Component {
             style,
             regExp,
             inputRef,
-            invalid
+            invalid,
+            icon,
         } = this.props;
-        const { isValid } = this.state;
+        const { isValid, showIcon } = this.state;
 
         const classNames = classnames('input-group', {
             [className]: className
@@ -120,7 +140,7 @@ export default class DynamicInput extends Component {
                 <input
                     style={inputStyles}
                     ref={(ref) => {
-                        if(inputRef) inputRef(ref);
+                        if (inputRef) inputRef(ref);
                         this._node = ref;
                     }}
                     value={value}
@@ -132,9 +152,18 @@ export default class DynamicInput extends Component {
                     type={type || 'text'}
                     required
                 />
-                <label>
+                <label
+                    style={{ opacity: !showIcon ? '1' : '0' }}
+                    className={icon || showIcon ? 'labelIcon' : null}
+                >
                     {placeholder}
                 </label>
+                <Icon
+                    icon={icon || 'ts-wrong'}
+                    className="input-group__icon"
+                    style={showIcon || icon ? { opacity: '.3', pointerEvents: 'all' } : { opacity: '0' }}
+                    onClick={this.onIconClick}
+                />
             </div>
         );
     }
