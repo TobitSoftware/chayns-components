@@ -46,7 +46,7 @@ export function getAvailableShareProviders() {
             }
 
             return Promise.resolve(shareProvider);
-        })
+        });
     } else {
         if (!chayns.env.isIOS) {
             shareProvider[0].available = true;

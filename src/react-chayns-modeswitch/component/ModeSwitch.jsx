@@ -59,7 +59,7 @@ export default class ModeSwitch extends Component {
         this.onChange = this.onChange.bind(this);
         this.init = this.init.bind(this);
 
-        window.chayns.ready.then(async () => {
+        window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(true, this.init);
             this.init();
         });
@@ -108,7 +108,7 @@ export default class ModeSwitch extends Component {
         return newModes;
     }
 
-    async init() {
+    init() {
         const { defaultMode, save, modes } = this.props;
         if (chayns.env.user.isAuthenticated) {
             globalState = { modes: this.setModes(modes), activeModeId: defaultMode || 0 };
@@ -126,14 +126,20 @@ export default class ModeSwitch extends Component {
                 }
             }
             if (save) {
-                const storage = await window.chayns.storage.get('react__modeSwitch--currentMode');
-                if (storage.object) {
-                    globalState.activeModeId = storage.object;
-                    this.setState({ activeModeId: storage.object });
-                }
+                const storage = window.chayns.storage.get('react__modeSwitch--currentMode').then(() => {
+                    if (storage.object) {
+                        globalState.activeModeId = storage.object;
+                        this.setState({ activeModeId: storage.object });
+                        this.onChange(storage.object);
+                    } else {
+                        const { activeModeId } = this.state;
+                        this.onChange(activeModeId);
+                    }
+                });
+            } else {
+                const { activeModeId } = this.state;
+                this.onChange(activeModeId);
             }
-            const { activeModeId } = this.state;
-            this.onChange(activeModeId);
         } else {
             this.setState({ modes: [], activeModeId: null, open: false });
         }

@@ -68,6 +68,7 @@ export default class Checkbox extends Component {
 
         return [
             <input
+                key="input"
                 type="checkbox"
                 className={`checkbox${classNames}`}
                 ref={(ref) => {
@@ -81,6 +82,7 @@ export default class Checkbox extends Component {
                 style={style}
             />,
             <label
+                key="label"
                 style={labelStyle}
                 className={labelClassName}
                 htmlFor={this.id}
@@ -106,6 +108,7 @@ export default class Checkbox extends Component {
 
         return [
             <input
+                key="input"
                 type={`checkbox${classNames}`}
                 className="switch"
                 ref={(ref) => {
@@ -119,6 +122,7 @@ export default class Checkbox extends Component {
                 style={style}
             />,
             <label
+                key="label"
                 className={labelClassName}
                 htmlFor={this.id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
