@@ -85,6 +85,10 @@ export default class Accordion extends Component {
                 this._body.style.setProperty('max-height', 'initial', 'important');
             }
         }
+
+        this.accordion.querySelectorAll('.accordion--trigger').forEach((node) => {
+            node.addEventListener('click', this.handleAccordionClick);
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -127,7 +131,9 @@ export default class Accordion extends Component {
 
     handleAccordionClick = (event) => {
         const { currentState } = this.state;
-        if (currentState === OPEN) {
+        const { dataGroup } = this.props;
+
+        if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
             this.accordionCloseListener(event);
         } else {
             this.accordionOpenListener(event);
@@ -166,7 +172,16 @@ export default class Accordion extends Component {
     }
 
     accordionOpenListener(event) {
-        const { onOpen } = this.props;
+        const { onOpen, dataGroup } = this.props;
+
+        // console.log(document.querySelectorAll(`[data-group=${dataGroup}]`))
+        if (dataGroup) {
+            document.querySelectorAll(`[data-group=${dataGroup}]`).forEach((node) => {
+                node.classList.remove('accordion--open');
+            });
+
+            this.accordion.classList.add('accordion--open');
+        }
 
         this.setState({
             currentState: OPEN
@@ -212,15 +227,17 @@ export default class Accordion extends Component {
                 id={id}
                 style={style}
             >
-                <div className="accordion__head" onClick={this.handleAccordionClick}>
-                    <div className={classNames('accordion__head__icon', { 'accordion__head__icon--no-rotate': noRotate })}>
+                <div className="accordion__head accordion--trigger">
+                    <div
+                        className={classNames('accordion__head__icon', { 'accordion__head__icon--no-rotate': noRotate })}
+                    >
                         {
                             chayns.utils.isString(icon) || icon.iconName
                                 ? <Icon icon={icon}/>
                                 : icon
                         }
                     </div>
-                    <div className="accordion__head__title">
+                    <div className="accordion__head__title accordion--trigger">
                         {head}
                     </div>
                     {

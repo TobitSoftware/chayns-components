@@ -5,22 +5,10 @@ import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends Component {
-    state = {
-        open: true
-    };
-
-    componentDidMount() {
-        window.setTimeout(() => {
-            this.setState({
-                open: false
-            });
-        }, 5000);
-    }
-
     render() {
         return (
             <ExampleContainer headline="Accordion">
-                <Accordion head="Test" badge="2" open={this.state.open}>
+                <Accordion head="Test" badge="2">
                     <Accordion
                         head={(
                             <span style={{ color: '#FF0000' }} className="accordion--trigger">
