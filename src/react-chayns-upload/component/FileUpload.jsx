@@ -219,10 +219,6 @@ export default class FileUpload extends Component {
 
         const classNames = classnames('cc__file-upload--placeholder', {
             'chayns__color--70': chayns.env.site.colorMode !== 1,
-            'cc__file-upload--image': (type === 'image'),
-            'cc__file-upload--audio': (type === 'audio'),
-            'cc__file-upload--video': (type === 'video'),
-            'cc__file-upload--documents': (!type || type === 'all'),
             'cc__file-upload--hover': hover,
             [className]: className,
         });
