@@ -174,9 +174,8 @@ export default class Accordion extends Component {
     accordionOpenListener(event) {
         const { onOpen, dataGroup } = this.props;
 
-        // console.log(document.querySelectorAll(`[data-group=${dataGroup}]`))
         if (dataGroup) {
-            document.querySelectorAll(`[data-group=${dataGroup}]`).forEach((node) => {
+            document.querySelectorAll(`.accordion[data-group="${dataGroup}"].accordion--open`).forEach((node) => {
                 node.classList.remove('accordion--open');
             });
 
