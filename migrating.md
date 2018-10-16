@@ -35,13 +35,13 @@ If you have a Font Awesome pro token, you can use the pro version:
 **Notice:** You need to [set the pro token in your npm config](https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers#installing-pro) to install pro packages.
 
 ```bash
-npm i --save @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-brands-svg-icon
+npm i --save @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-brands-svg-icons
 ```
 
 Otherwise, you can install the free version:
 
 ```bash
-npm i --save @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icon
+npm i --save @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
 ```
 
 4. Replace your icons with the new Icon-Component
@@ -62,7 +62,7 @@ API v3 classes:
 - .chayns__color--[0;100]
 - .chayns__border-color--[0;100]
 
-API v3 classes:
+API v4 classes:
 - .chayns__background-color
 - .chayns__color
 - .chayns__border-color
