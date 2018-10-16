@@ -109,7 +109,7 @@ export default class Checkbox extends Component {
         return [
             <input
                 key="input"
-                type={`checkbox${classNames}`}
+                type={`checkbox ${classNames}`}
                 className="switch"
                 ref={(ref) => {
                     this._node = ref;

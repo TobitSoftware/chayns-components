@@ -12,7 +12,7 @@ export default class ContextMenu extends Component {
         coordinates: PropTypes.shape({
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired,
-        }).isRequired,
+        }),
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
@@ -21,6 +21,8 @@ export default class ContextMenu extends Component {
         })),
         position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
         parent: PropTypes.node,
+        children: PropTypes.node,
+        onChildrenClick: PropTypes.func,
     };
 
     static defaultProps = {
@@ -29,11 +31,15 @@ export default class ContextMenu extends Component {
         items: [],
         position: 0,
         parent: document.getElementsByClassName('tapp')[0],
+        children: null,
+        coordinates: null,
+        onChildrenClick: null,
     };
 
     constructor() {
         super();
         this.state = { displayNone: true, hide: true };
+        this.getCoordinates = this.getCoordinates.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -57,14 +63,30 @@ export default class ContextMenu extends Component {
         clearTimeout(this.timeout);
     }
 
+    getCoordinates() {
+        const { coordinates, position } = this.props;
+
+        if (coordinates) {
+            return coordinates;
+        } if (this.childrenNode) {
+            const rect = this.childrenNode.getBoundingClientRect();
+            return {
+                x: rect.x + (rect.width / 2),
+                y: (position === 1 || position === 2) ? rect.y + rect.height : rect.y,
+            };
+        }
+        return { x: 0, y: 0 };
+    }
+
     render() {
         const {
-            onLayerClick, coordinates, items, position, parent
+            onLayerClick, items, position, parent, children, onChildrenClick
         } = this.props;
 
         const { displayNone, hide } = this.state;
+        const { x, y } = this.getCoordinates();
 
-        return (
+        return [
             ReactDOM.createPortal(
                 <div
                     className={classNames('context-menu-overlay', {
@@ -75,8 +97,8 @@ export default class ContextMenu extends Component {
                 >
                     <ul
                         style={{
-                            left: coordinates.x,
-                            top: coordinates.y,
+                            left: x,
+                            top: y,
                         }}
                         className={classNames('context-menu', `context-menu--position${position}`, { 'context-menu--active': !hide })}
                     >
@@ -97,7 +119,10 @@ export default class ContextMenu extends Component {
                     </ul>
                 </div>,
                 parent
-            )
-        );
+            ),
+            <div key="cc__contextMenu__children" ref={ref => this.childrenNode = ref} onClick={onChildrenClick}>
+                {children}
+            </div>
+        ];
     }
 }

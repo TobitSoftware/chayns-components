@@ -49,6 +49,7 @@ The following properties can be set
 | autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
 | reference    | A reference for the accordion                                          | Function                   |               |
 | noRotate     | Disable rotating of the icon                                           | Function                   |               |
+| fixed        | Disable open/close logic                                               | bool                       |               |
 
 
 ### Examples

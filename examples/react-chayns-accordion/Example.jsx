@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class Example extends Component {
     render() {
@@ -41,9 +42,14 @@ export default class Example extends Component {
                         </div>
                     </Accordion>
                 </Accordion>
-
                 <Accordion head="Autogrow" autogrow>
                     <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
+                </Accordion>
+                <Accordion head="Accordion with Button" right={<Button>Test</Button>}>
+                    <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
+                </Accordion>
+                <Accordion head="Fixed Accordion" fixed defaultOpened>
+                    <div style={{ height: '200px', background: 'linear-gradient(0deg, blue, green)' }}/>
                 </Accordion>
             </ExampleContainer>
         );

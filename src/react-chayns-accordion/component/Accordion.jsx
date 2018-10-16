@@ -31,6 +31,7 @@ export default class Accordion extends Component {
         open: PropTypes.bool,
         icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
         noRotate: PropTypes.bool,
+        fixed: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -52,6 +53,7 @@ export default class Accordion extends Component {
         open: undefined,
         icon: 'ts-angle-right',
         noRotate: false,
+        fixed: false,
     };
 
     constructor(props) {
@@ -206,6 +208,7 @@ export default class Accordion extends Component {
             head,
             right,
             noRotate,
+            fixed,
         } = this.props;
 
         const { currentState } = this.state;
@@ -226,9 +229,14 @@ export default class Accordion extends Component {
                 id={id}
                 style={style}
             >
-                <div className="accordion__head accordion--trigger">
+                <div
+                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right })}
+                >
                     <div
-                        className={classNames('accordion__head__icon', { 'accordion__head__icon--no-rotate': noRotate })}
+                        className={classNames('accordion__head__icon', {
+                            'accordion__head__icon--no-rotate': noRotate,
+                            'accordion--trigger': !fixed && right
+                        })}
                     >
                         {
                             chayns.utils.isString(icon) || icon.iconName
@@ -236,7 +244,7 @@ export default class Accordion extends Component {
                                 : icon
                         }
                     </div>
-                    <div className="accordion__head__title accordion--trigger">
+                    <div className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && right })}>
                         {head}
                     </div>
                     {

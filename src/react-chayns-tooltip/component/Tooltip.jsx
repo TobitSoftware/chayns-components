@@ -125,10 +125,7 @@ export default class Tooltip extends Component {
         const { coordinates, position } = this.props;
 
         if (coordinates) {
-            return {
-                x: coordinates.x,
-                y: coordinates.y,
-            };
+            return coordinates;
         } if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
