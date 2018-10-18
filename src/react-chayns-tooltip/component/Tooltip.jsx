@@ -31,6 +31,7 @@ export default class Tooltip extends Component {
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired,
         }),
+        childrenStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -42,6 +43,7 @@ export default class Tooltip extends Component {
         removeIcon: false,
         parent: document.getElementsByClassName('tapp')[0],
         coordinates: null,
+        childrenStyle: null,
     };
 
     constructor() {
@@ -207,7 +209,7 @@ export default class Tooltip extends Component {
     }
 
     render() {
-        const { children, parent } = this.props;
+        const { children, parent, childrenStyle } = this.props;
 
         return [
             ReactDOM.createPortal(
@@ -220,6 +222,7 @@ export default class Tooltip extends Component {
                     this.childrenNode = node;
                 }}
                 key="cc__tooltip__children"
+                style={childrenStyle}
             >
                 {children}
             </div>

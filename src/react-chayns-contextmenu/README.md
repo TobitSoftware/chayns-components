@@ -45,7 +45,7 @@ The component got the following properties:
 | item.text | The icon displayed in an item of the **ContextMenu** | object | |
 | parent | DOM Node into which the **ContextMenu** will be rendered | node | tapp |
 | children | React Node, that the tooltip should refer to. It will always be rendered to your page. | node | 
-
+| childrenStyle | Style for the children node | object | 
 
 #### Example ####
 

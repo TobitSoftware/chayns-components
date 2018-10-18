@@ -23,6 +23,7 @@ export default class ContextMenu extends Component {
         parent: PropTypes.node,
         children: PropTypes.node,
         onChildrenClick: PropTypes.func,
+        childrenStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -34,6 +35,7 @@ export default class ContextMenu extends Component {
         children: null,
         coordinates: null,
         onChildrenClick: null,
+        childrenStyle: null,
     };
 
     constructor() {
@@ -68,7 +70,8 @@ export default class ContextMenu extends Component {
 
         if (coordinates) {
             return coordinates;
-        } if (this.childrenNode) {
+        }
+        if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
                 x: rect.x + (rect.width / 2),
@@ -80,7 +83,7 @@ export default class ContextMenu extends Component {
 
     render() {
         const {
-            onLayerClick, items, position, parent, children, onChildrenClick
+            onLayerClick, items, position, parent, children, onChildrenClick, childrenStyle
         } = this.props;
 
         const { displayNone, hide } = this.state;
@@ -120,7 +123,12 @@ export default class ContextMenu extends Component {
                 </div>,
                 parent
             ),
-            <div key="cc__contextMenu__children" ref={ref => this.childrenNode = ref} onClick={onChildrenClick}>
+            <div
+                key="cc__contextMenu__children"
+                ref={ref => this.childrenNode = ref}
+                onClick={onChildrenClick}
+                style={childrenStyle}
+            >
                 {children}
             </div>
         ];
