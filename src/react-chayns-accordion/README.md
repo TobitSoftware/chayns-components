@@ -50,6 +50,8 @@ The following properties can be set
 | reference    | A reference for the accordion                                          | Function                   |               |
 | noRotate     | Disable rotating of the icon                                           | Function                   |               |
 | fixed        | Disable open/close logic                                               | bool                       |               |
+| noTitleTrigger | Disable trigger for title                                            | bool                       | false         |
+| noIcon       | Remove Icon from the left                                              | bool                       | false         |
 
 
 ### Examples

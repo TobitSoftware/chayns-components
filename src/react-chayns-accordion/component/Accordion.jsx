@@ -32,6 +32,8 @@ export default class Accordion extends Component {
         icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
         noRotate: PropTypes.bool,
         fixed: PropTypes.bool,
+        noIcon: PropTypes.bool,
+        noTitleTrigger: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -54,6 +56,8 @@ export default class Accordion extends Component {
         icon: 'ts-angle-right',
         noRotate: false,
         fixed: false,
+        noIcon: false,
+        noTitleTrigger: false,
     };
 
     constructor(props) {
@@ -209,6 +213,8 @@ export default class Accordion extends Component {
             right,
             noRotate,
             fixed,
+            noIcon,
+            noTitleTrigger,
         } = this.props;
 
         const { currentState } = this.state;
@@ -230,21 +236,29 @@ export default class Accordion extends Component {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right })}
+                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger })}
                 >
+                    {
+                        noIcon
+                            ? null
+                            : (
+                                <div
+                                    className={classNames('accordion__head__icon', {
+                                        'accordion__head__icon--no-rotate': noRotate,
+                                        'accordion--trigger': (!fixed && right) || noTitleTrigger
+                                    })}
+                                >
+                                    {
+                                        chayns.utils.isString(icon) || icon.iconName
+                                            ? <Icon icon={icon}/>
+                                            : icon
+                                    }
+                                </div>
+                            )
+                    }
                     <div
-                        className={classNames('accordion__head__icon', {
-                            'accordion__head__icon--no-rotate': noRotate,
-                            'accordion--trigger': !fixed && right
-                        })}
+                        className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && right && !noTitleTrigger })}
                     >
-                        {
-                            chayns.utils.isString(icon) || icon.iconName
-                                ? <Icon icon={icon}/>
-                                : icon
-                        }
-                    </div>
-                    <div className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && right })}>
                         {head}
                     </div>
                     {

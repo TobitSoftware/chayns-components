@@ -4,6 +4,7 @@ import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
+import Input from '../../src/react-chayns-input/component/Input';
 
 export default class Example extends Component {
     render() {
@@ -23,7 +24,13 @@ export default class Example extends Component {
                             Hello World 1
                         </div>
                     </Accordion>
-                    <Accordion head="Test" isWrapped icon={faRocket} dataGroup="abc">
+                    <Accordion
+                        head={<Input placeholder="Accordion title input" style={{ width: '100%' }}/>}
+                        isWrapped
+                        icon={faRocket}
+                        dataGroup="abc"
+                        noTitleTrigger
+                    >
                         <div className="accordion__content">
                             Hello World 2
                         </div>
@@ -32,9 +39,9 @@ export default class Example extends Component {
                         dataGroup="abc"
                         icon="ts-tobit"
                         noRotate
-                        head="Test"
+                        head="noRotate"
                         badge={1}
-                        badgeStyle={{ backgroundColor: 'red' }}
+                        badgeStyle={{ fontWeight: 'bold' }}
                         isWrapped
                     >
                         <div className="accordion__content">
@@ -48,7 +55,7 @@ export default class Example extends Component {
                 <Accordion head="Accordion with Button" right={<Button>Test</Button>}>
                     <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
                 </Accordion>
-                <Accordion head="Fixed Accordion" fixed defaultOpened>
+                <Accordion head="Fixed Accordion without icon" fixed defaultOpened noIcon>
                     <div style={{ height: '200px', background: 'linear-gradient(0deg, blue, green)' }}/>
                 </Accordion>
             </ExampleContainer>
