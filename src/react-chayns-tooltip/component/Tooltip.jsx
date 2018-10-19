@@ -38,7 +38,7 @@ export default class Tooltip extends Component {
         children: null,
         bindListeners: false,
         position: 0,
-        minWidth: 250,
+        minWidth: 100,
         maxWidth: 250,
         removeIcon: false,
         parent: document.getElementsByClassName('tapp')[0],

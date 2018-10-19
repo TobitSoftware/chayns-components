@@ -14,17 +14,16 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="Tooltip">
                 <div style={{ marginBottom: '20px' }}>
-
                     Simple&nbsp;
-<Tooltip
+                    <Tooltip
                         bindListeners
                         position={3}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
                         minWidth={150}
                         maxWidth={150}
->
-                        <a>Tooltip</a>
-</Tooltip>
+                    >
+                        <p>Tooltip</p>
+                    </Tooltip>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
@@ -35,7 +34,7 @@ export default class Example extends Component {
                             headline: 'Headline',
                         }}
                     >
-                        <a>Tooltip with headline</a>
+                        <p>Tooltip with headline</p>
                     </Tooltip>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
@@ -50,7 +49,7 @@ export default class Example extends Component {
                                     imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
                                 }}
                             >
-                                <a>Tooltip with headline and image</a>
+                                <p>Tooltip with headline and image</p>
                             </Tooltip>
                         </div>
                         <div style={{ marginBottom: '20px' }}>
@@ -63,7 +62,7 @@ export default class Example extends Component {
                                     buttonOnClick: console.log,
                                 }}
                             >
-                                <a>Tooltip with button</a>
+                                <p>Tooltip with button</p>
                             </Tooltip>
                         </div>
                     </div>
@@ -81,7 +80,7 @@ export default class Example extends Component {
                         removeIcon
                         ref={ref => this.staticTooltip = ref}
                     >
-                        <a
+                        <p
                             onClick={() => {
                                 this.staticTooltip.show();
                             }}
@@ -89,7 +88,7 @@ export default class Example extends Component {
 
 
                             Static Tooltip
-                        </a>
+                        </p>
                     </Tooltip>
                 </div>
                 <div
