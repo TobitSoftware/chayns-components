@@ -37,6 +37,7 @@ export default class Accordion extends Component {
         noTitleTrigger: PropTypes.bool,
         onSearch: PropTypes.func,
         searchPlaceholder: PropTypes.string,
+        removeContentClosed: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -63,6 +64,7 @@ export default class Accordion extends Component {
         noTitleTrigger: false,
         onSearch: null,
         searchPlaceholder: '',
+        removeContentClosed: false,
     };
 
     constructor(props) {
@@ -152,10 +154,11 @@ export default class Accordion extends Component {
     };
 
     _getBody() {
-        const { renderClosed, children } = this.props;
+        const { renderClosed, children, removeContentClosed } = this.props;
         const { currentState } = this.state;
 
-        if (currentState === OPEN || renderClosed) {
+        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed)) {
+            this.rendered = true;
             return children;
         }
 

@@ -54,7 +54,7 @@ The following properties can be set
 | noIcon       | Remove Icon from the left                                              | bool                       | false         |
 | onSearch     | Accordion search onChange callback                                     | func                       |               |
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
-
+| removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
 
 ### Examples
 #### Accordion-Badge
