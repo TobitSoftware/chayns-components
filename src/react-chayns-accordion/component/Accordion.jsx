@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
+import AccordionSearch from './AccordionSearch';
 
 const CLOSE = 1;
 
@@ -34,6 +35,8 @@ export default class Accordion extends Component {
         fixed: PropTypes.bool,
         noIcon: PropTypes.bool,
         noTitleTrigger: PropTypes.bool,
+        onSearch: PropTypes.func,
+        searchPlaceholder: PropTypes.string,
     };
 
     static defaultProps = {
@@ -58,6 +61,8 @@ export default class Accordion extends Component {
         fixed: false,
         noIcon: false,
         noTitleTrigger: false,
+        onSearch: null,
+        searchPlaceholder: '',
     };
 
     constructor(props) {
@@ -215,6 +220,8 @@ export default class Accordion extends Component {
             fixed,
             noIcon,
             noTitleTrigger,
+            onSearch,
+            searchPlaceholder,
         } = this.props;
 
         const { currentState } = this.state;
@@ -236,7 +243,7 @@ export default class Accordion extends Component {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger })}
+                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger && !onSearch })}
                 >
                     {
                         noIcon
@@ -245,7 +252,7 @@ export default class Accordion extends Component {
                                 <div
                                     className={classNames('accordion__head__icon', {
                                         'accordion__head__icon--no-rotate': noRotate,
-                                        'accordion--trigger': (!fixed && right) || noTitleTrigger
+                                        'accordion--trigger': (!fixed && (right || onSearch || noTitleTrigger))
                                     })}
                                 >
                                     {
@@ -257,12 +264,12 @@ export default class Accordion extends Component {
                             )
                     }
                     <div
-                        className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && right && !noTitleTrigger })}
+                        className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && (right || onSearch) && !noTitleTrigger })}
                     >
                         {head}
                     </div>
                     {
-                        right || badge
+                        right || badge || onSearch
                             ? (
                                 <div className="accordion__head__right">
                                     {
@@ -273,6 +280,17 @@ export default class Accordion extends Component {
                                                 </div>
                                             )
                                             : right
+                                    }
+                                    {
+                                        onSearch
+                                            ? (
+                                                <AccordionSearch
+                                                    onSearch={onSearch}
+                                                    currentState={currentState}
+                                                    searchPlaceholder={searchPlaceholder}
+                                                />
+                                            )
+                                            : null
                                     }
                                 </div>
                             )

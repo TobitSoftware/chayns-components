@@ -10,10 +10,21 @@ export default class Example extends Component {
     render() {
         return (
             <ExampleContainer headline="Accordion">
+                <Accordion
+                    head="Accordion mit Suche"
+                    onSearch={console.log}
+                    searchPlaceholder={"Suche"}
+                >
+                    <div className="accordion__content">
+
+                        Hello World
+                    </div>
+                </Accordion>
                 <Accordion head="Test" badge="2">
                     <Accordion
                         head={(
                             <span style={{ color: '#FF0000' }} className="accordion--trigger">
+
                                 Test
                             </span>
                         )}
@@ -21,6 +32,7 @@ export default class Example extends Component {
                         open
                     >
                         <div className="accordion__content">
+
                             Hello World 1
                         </div>
                     </Accordion>
@@ -32,6 +44,7 @@ export default class Example extends Component {
                         noTitleTrigger
                     >
                         <div className="accordion__content">
+
                             Hello World 2
                         </div>
                     </Accordion>
@@ -45,6 +58,7 @@ export default class Example extends Component {
                         isWrapped
                     >
                         <div className="accordion__content">
+
                             Hello World 2
                         </div>
                     </Accordion>

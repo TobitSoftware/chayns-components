@@ -52,6 +52,8 @@ The following properties can be set
 | fixed        | Disable open/close logic                                               | bool                       |               |
 | noTitleTrigger | Disable trigger for title                                            | bool                       | false         |
 | noIcon       | Remove Icon from the left                                              | bool                       | false         |
+| onSearch     | Accordion search onChange callback                                     | func                       |               |
+| searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
 
 
 ### Examples
