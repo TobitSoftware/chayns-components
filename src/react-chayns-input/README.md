@@ -46,6 +46,7 @@ The following properties can be set on the Input-Component
 | icon         | Icon shown on the right side (only dynamic input)                                 | string/object  |               |
 | onIconClick  | Icon onClick Event (only dynamic input)                                           | func           | clear value   |
 | dynamic      | Use dynamic input                                                                 | bool           | false         |
+| customProps  | CustomProps for the html input element                                            | bool           | false         |
 
 ### Examples
 #### Regex Input

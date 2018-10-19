@@ -53,6 +53,7 @@ The following properties can be set
 | noTitleTrigger | Disable trigger for title                                            | bool                       | false         |
 | noIcon       | Remove Icon from the left                                              | bool                       | false         |
 | onSearch     | Accordion search onChange callback                                     | func                       |               |
+| onSearchEnter | Accordion search onEnter callback                                     | func                       |               |
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
 | removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
 

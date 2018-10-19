@@ -23,6 +23,7 @@ export default class Input extends Component {
         noDeleteIcon: PropTypes.bool,
         wrapperRef: PropTypes.func,
         dynamic: PropTypes.bool,
+        customProps: PropTypes.object,
     };
 
     static defaultProps = {
@@ -44,6 +45,7 @@ export default class Input extends Component {
         noDeleteIcon: false,
         wrapperRef: null,
         dynamic: false,
+        customProps: null,
     };
 
     constructor(props) {
@@ -106,7 +108,7 @@ export default class Input extends Component {
 
     render() {
         const {
-            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef
+            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef, customProps
         } = this.props;
         const { valid, showIcon } = this.state;
         if (dynamic) {
@@ -129,6 +131,7 @@ export default class Input extends Component {
                         onChange={this.onChange}
                         type={type || 'text'}
                         required
+                        {...customProps}
                     />
                     <label
                         style={{ opacity: !showIcon ? '1' : '0' }}
@@ -160,6 +163,7 @@ export default class Input extends Component {
                 defaultValue={defaultValue}
                 type={type}
                 ref={inputRef}
+                {...customProps}
             />
         );
     }

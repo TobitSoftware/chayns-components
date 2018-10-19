@@ -10,12 +10,15 @@ const OPEN = 2;
 
 export default class AccordionSearch extends Component {
     static propTypes = {
-        onSearch: PropTypes.func.isRequired,
+        onSearch: PropTypes.func,
+        onSearchEnter: PropTypes.func,
         currentState: PropTypes.number.isRequired,
         searchPlaceholder: PropTypes.string,
     };
 
     static defaultProps = {
+        onSearch: null,
+        onSearchEnter: null,
         searchPlaceholder: '',
     };
 
@@ -34,13 +37,15 @@ export default class AccordionSearch extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { currentState } = this.props;
-        if(nextProps.currentState === OPEN && currentState === CLOSE) {
+        if (nextProps.currentState === OPEN && currentState === CLOSE) {
             this.setState({ noWidth: false });
         }
     }
 
     render() {
-        const { onSearch, currentState, searchPlaceholder } = this.props;
+        const {
+            onSearch, currentState, searchPlaceholder, onSearchEnter
+        } = this.props;
         const { noWidth } = this.state;
 
         return (
@@ -50,6 +55,7 @@ export default class AccordionSearch extends Component {
                 })}
                 placeholder={searchPlaceholder}
                 onChange={onSearch}
+                onEnter={onSearchEnter}
                 icon={faSearch}
                 style={{ width: noWidth ? '0' : 'auto' }}
                 wrapperRef={ref => this.ref = ref}

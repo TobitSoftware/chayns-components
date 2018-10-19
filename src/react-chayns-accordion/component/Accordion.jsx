@@ -36,6 +36,7 @@ export default class Accordion extends Component {
         noIcon: PropTypes.bool,
         noTitleTrigger: PropTypes.bool,
         onSearch: PropTypes.func,
+        onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
         removeContentClosed: PropTypes.bool,
     };
@@ -63,6 +64,7 @@ export default class Accordion extends Component {
         noIcon: false,
         noTitleTrigger: false,
         onSearch: null,
+        onSearchEnter: null,
         searchPlaceholder: '',
         removeContentClosed: false,
     };
@@ -224,6 +226,7 @@ export default class Accordion extends Component {
             noIcon,
             noTitleTrigger,
             onSearch,
+            onSearchEnter,
             searchPlaceholder,
         } = this.props;
 
@@ -272,7 +275,7 @@ export default class Accordion extends Component {
                         {head}
                     </div>
                     {
-                        right || badge || onSearch
+                        right || badge || onSearch || onSearchEnter
                             ? (
                                 <div className="accordion__head__right">
                                     {
@@ -285,10 +288,11 @@ export default class Accordion extends Component {
                                             : right
                                     }
                                     {
-                                        onSearch
+                                        onSearch || onSearchEnter
                                             ? (
                                                 <AccordionSearch
                                                     onSearch={onSearch}
+                                                    onSearchEnter={onSearchEnter}
                                                     currentState={currentState}
                                                     searchPlaceholder={searchPlaceholder}
                                                 />

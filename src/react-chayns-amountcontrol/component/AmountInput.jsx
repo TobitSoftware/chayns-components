@@ -92,12 +92,6 @@ export default class AmountInput extends PureComponent {
         onChange(tempAmount);
     };
 
-    onKeyUp = (e) => {
-        if (e.keyCode === 13) {
-            this.onInputBlur();
-        }
-    };
-
     getButtonValue() {
         const { amount, buttonText, buttonFormatHandler } = this.props;
 
@@ -141,7 +135,7 @@ export default class AmountInput extends PureComponent {
                                 disabled={disabled}
                                 autoFocus={focusOnClick}
                                 onFocus={this.moveCaretAtEnd}
-                                onKeyUp={this.onKeyUp}
+                                onEnter={this.onInputBlur}
                                 style={{ width: '100%', display: 'inline-block' }}
                             />
                         )
