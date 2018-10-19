@@ -155,7 +155,7 @@ Removed Props:
 ### Icon
 New Component
 
-### Input/DynamicInput
+### Input
 - Added dynamic input
 - Removed responsive input
 

@@ -12,8 +12,6 @@ The input has to be imported:
 
 import { Input } from 'chayns-components';
 
-import { DynamicInput } from 'chayns-components';
-
 ```
 
 
@@ -47,6 +45,7 @@ The following properties can be set on the Input-Component
 | invalid      | Marks the input as invalid                                                        | bool           | false         |
 | icon         | Icon shown on the right side (only dynamic input)                                 | string/object  |               |
 | onIconClick  | Icon onClick Event (only dynamic input)                                           | func           | clear value   |
+| dynamic      | Use dynamic input                                                                 | bool           | false         |
 
 ### Examples
 #### Regex Input

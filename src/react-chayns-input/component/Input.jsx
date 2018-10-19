@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Input extends Component {
     static propTypes = {
@@ -16,6 +17,12 @@ export default class Input extends Component {
         defaultValue: PropTypes.string,
         invalid: PropTypes.bool,
         type: PropTypes.string,
+        inputRef: PropTypes.func,
+        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        onIconClick: PropTypes.func,
+        noDeleteIcon: PropTypes.bool,
+        wrapperRef: PropTypes.func,
+        dynamic: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -31,17 +38,39 @@ export default class Input extends Component {
         defaultValue: undefined,
         invalid: false,
         type: 'text',
+        inputRef: null,
+        icon: null,
+        onIconClick: null,
+        noDeleteIcon: false,
+        wrapperRef: null,
+        dynamic: false,
     };
 
     constructor(props) {
         super(props);
 
-        this.state = { valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) };
+        this.state = {
+            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
+            showIcon: false,
+        };
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
         this.callIfValid = this.callIfValid.bind(this);
+        this.onIconClick = this.onIconClick.bind(this);
+    }
+
+    onIconClick(e) {
+        const { onIconClick } = this.props;
+        const { showIcon } = this.state;
+
+        if (onIconClick) {
+            onIconClick(e);
+        } else if (showIcon) {
+            this._node.value = '';
+            this.setState({ showIcon: false });
+        }
     }
 
     onKeyUp(e) {
@@ -62,6 +91,7 @@ export default class Input extends Component {
     onChange(e) {
         const { onChange } = this.props;
         this.callIfValid(e.target.value, onChange);
+        this.setState({ showIcon: e.target.value.length > 0 });
     }
 
     callIfValid(value, callback) {
@@ -76,10 +106,48 @@ export default class Input extends Component {
 
     render() {
         const {
-            className, defaultValue, value, style, placeholder, type,
+            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef
         } = this.props;
-        const { valid } = this.state;
-
+        const { valid, showIcon } = this.state;
+        if (dynamic) {
+            return (
+                <div
+                    className={`input-group ${className}`}
+                    ref={wrapperRef}
+                >
+                    <input
+                        style={style}
+                        ref={(ref) => {
+                            if (inputRef) inputRef(ref);
+                            this._node = ref;
+                        }}
+                        className={classNames('input', className, { 'input--invalid': !valid })}
+                        value={value}
+                        defaultValue={defaultValue}
+                        onKeyUp={this.onKeyUp}
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        type={type || 'text'}
+                        required
+                    />
+                    <label
+                        style={{ opacity: !showIcon ? '1' : '0' }}
+                        className={icon || showIcon ? 'labelIcon' : null}
+                    >
+                        {placeholder}
+                    </label>
+                    <Icon
+                        icon={(icon && (noDeleteIcon || !showIcon)) ? icon : 'ts-wrong'}
+                        className="input-group__icon"
+                        style={(showIcon && !noDeleteIcon) || icon ? {
+                            opacity: '.3',
+                            pointerEvents: 'all'
+                        } : { opacity: '0' }}
+                        onClick={this.onIconClick}
+                    />
+                </div>
+            );
+        }
         return (
             <input
                 className={classNames('input', className, { 'input--invalid': !valid })}
@@ -91,6 +159,7 @@ export default class Input extends Component {
                 value={value}
                 defaultValue={defaultValue}
                 type={type}
+                ref={inputRef}
             />
         );
     }

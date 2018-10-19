@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import { Input, DynamicInput } from '../../src/index';
+import { Input } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends PureComponent {
@@ -72,7 +72,7 @@ export default class Example extends PureComponent {
                     }}
                 />
 
-                <DynamicInput
+                <Input
                     placeholder="Dynamic Input Placeholder"
                     style={{
                         width: '100%',
@@ -82,8 +82,9 @@ export default class Example extends PureComponent {
                     onChange={this.onChange}
                     onKeyUp={this.onKeyUp}
                     onEnter={this.onEnter}
+                    dynamic
                 />
-                <DynamicInput
+                <Input
                     placeholder="Icon"
                     icon="ts-tobit2016"
                     style={{
@@ -94,9 +95,9 @@ export default class Example extends PureComponent {
                     onChange={this.onChange}
                     onKeyUp={this.onKeyUp}
                     onEnter={this.onEnter}
-                    onIconClick={console.log}
+                    dynamic
                 />
-                <DynamicInput
+                <Input
                     placeholder='type "eee"'
                     regExp={new RegExp('.*e{3}.*')}
                     onBlur={this.onBlur}
@@ -108,7 +109,9 @@ export default class Example extends PureComponent {
                         width: '100%',
                         marginBottom: '20px'
                     }}
+                    noDeleteIcon
                     onIconClick={console.log}
+                    dynamic
                 />
             </ExampleContainer>
         );

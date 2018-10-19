@@ -17,7 +17,6 @@ import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
 import Icon from './react-chayns-icon/component/Icon';
 import Input from './react-chayns-input/component/Input';
-import DynamicInput from './react-chayns-input/component/DynamicInput';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
@@ -61,7 +60,6 @@ export {
     GridCalendar,
     Icon,
     Input,
-    DynamicInput,
     ModeSwitch,
     Mode,
     OrientationHelper,
