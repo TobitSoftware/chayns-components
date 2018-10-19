@@ -56,6 +56,8 @@ export default class Button extends Component {
                     choosebutton: chooseButton,
                     'button--disabled': disabled,
                     'button--secondary': secondary,
+                    'button--icon': icon && !chooseButton,
+                    'choosebutton--icon': icon && chooseButton,
                     [className]: className
                 })}
                 onClick={this.handleClick}
