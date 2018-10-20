@@ -192,7 +192,14 @@ export default class Accordion extends Component {
 
         if (dataGroup) {
             document.querySelectorAll(`.accordion[data-group="${dataGroup}"].accordion--open`).forEach((node) => {
-                node.classList.remove('accordion--open');
+                if(node.classList.contains('accordion--trigger')) {
+                    node.click();
+                } else {
+                    const trigger = node.querySelectorAll('.accordion--trigger');
+                    if(trigger.length > 0) {
+                        trigger[0].click();
+                    }
+                }
             });
 
             this.accordion.classList.add('accordion--open');
