@@ -83,7 +83,7 @@ export default class Checkbox extends Component {
             />,
             <label
                 key="label"
-                style={labelStyle}
+                style={{ ...labelStyle, ...(!label && !dangerouslySetLabel && !children ? { display: 'inline' } : null) }}
                 className={labelClassName}
                 htmlFor={this.id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
