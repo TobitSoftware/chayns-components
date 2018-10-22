@@ -29,6 +29,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         SharingBar: 'react-chayns-sharingbar/component/SharingBar.js',
         SmallWaitCursor: 'react-chayns-smallwaitcursor/component/SmallWaitCursor.js',
         TextArea: 'react-chayns-textarea/component/TextArea.js',
+        TextString: 'react-chayns-textarea/component/TextString.jsx',
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
         FileUpload: 'react-chayns-upload/component/FileUpload.js',
     };

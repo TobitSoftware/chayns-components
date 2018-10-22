@@ -37,6 +37,7 @@ import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
 import TextArea from './react-chayns-textarea/component/TextArea';
+import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
@@ -75,6 +76,7 @@ export {
     SharingBar,
     SmallWaitCursor,
     TextArea,
+    TextString,
     Tooltip,
     FileUpload,
     resolveAbsoluteImport,

@@ -42,3 +42,9 @@ The following components are part of this package:
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
 | [react-chayns-upload](/src/react-chayns-upload/)                   | FileUpload Component                            | [Readme](/src/react-chayns-upload/README.md)          |
+
+## Internal Components
+
+| Component                                                          | Description                                     | Readme File                                           |
+|--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
+| [react-chayns-textstring](/src/react-chayns-textstring/)           | TextString Component                            | [Readme](/src/react-chayns-textstring/README.md)      |
