@@ -53,7 +53,7 @@ export default class Input extends Component {
 
         this.state = {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
-            showIcon: false,
+            showIcon: !!props.defaultValue,
         };
 
         this.onKeyUp = this.onKeyUp.bind(this);

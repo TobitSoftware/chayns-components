@@ -73,6 +73,7 @@ export default class Example extends PureComponent {
                 />
 
                 <Input
+                    defaultValue="Dynamic Input"
                     placeholder="Dynamic Input Placeholder"
                     style={{
                         width: '100%',
