@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { TextString } from '../../src/index';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class Example extends PureComponent {
     constructor(props) {
@@ -15,15 +16,43 @@ export default class Example extends PureComponent {
         return (
             <ExampleContainer headline="TextString">
                 <TextString
+                    stringName="fallbackTest"
+                    fallback="Test ##REPLACE## Fallback"
+                    replacements={{ '##REPLACE##': chayns.env.user.name }}
+                >
+                    <p />
+                </TextString>
+                <TextString
                     stringName="txt_chayns_textStringTest"
+                    fallback="Test ##REPLACE## Fallback"
                 >
                     <p />
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
+                    fallback="Test ##REPLACE## Fallback"
                 >
                     <p style={{ color: 'red' }} />
+                </TextString>
+                <TextString
+                    stringName="txt_chayns_textStringTest"
+                    replacements={{ '##REPLACE##': chayns.env.user.name }}
+                    fallback="Test ##REPLACE## Fallback"
+                >
+                    <Button />
+                </TextString>
+                <TextString
+                    stringName="txt_chayns_textStringTest_html"
+                    useDangerouslySetInnerHTML
+                >
+                    <div />
+                </TextString>
+                <TextString
+                    stringName="txt_chayns_textStringTest"
+                    language="nl"
+                >
+                    <p />
                 </TextString>
             </ExampleContainer>
         );

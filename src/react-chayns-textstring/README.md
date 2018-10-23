@@ -26,6 +26,7 @@ Then it can be used like in the following example:
     <TextString
         stringName="txt_chayns_textStringTest"
         replacements={{ '##REPLACE##': chayns.env.user.name }}
+        fallback={"Test ##REPLACE##"}
     >
         <p style={{ color: 'red' }} />
     </TextString>
@@ -40,3 +41,6 @@ If you need the textString as a string, e.g. for a dialog, you can use the stati
 | stringName  | Name of the string.                                                                   | String   |
 | replacements | Replacements in an object                                                            | object   |
 | children    | Children where the textString will be rendered into.                                  | node     |
+| fallback    | Fallback string.                                                                      | string   |
+| useDangerouslySetInnerHTML | Use dangerouslySetInnerHTML (for strings with HTML content).           | bool     |
+| language | Language of the string (language need to be loaded before usage)                         | string   |
