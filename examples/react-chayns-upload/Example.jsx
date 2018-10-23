@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ExampleContainer from '../ExampleContainer';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import ExampleContainer from '../ExampleContainer';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
 
@@ -12,6 +12,7 @@ export default class Example extends Component {
         this.selectImages = this.selectImages.bind(this);
         this.selectAudio = this.selectAudio.bind(this);
         this.selectVideo = this.selectVideo.bind(this);
+        this.state = { data: '' };
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -35,40 +36,50 @@ export default class Example extends Component {
     }
 
     render() {
-        return(
+        return (
             <ExampleContainer headline="FileUpload">
                 <FileUpload
                     className="file-upload--files"
                     onChange={this.selectFiles}
                 />
-                <br />
+                <br/>
                 <FileUpload
                     type={FileUpload.TYPE_IMAGE}
-                    onChange={this.selectImages}
+                    onUpload={(data) => {
+                        this.setState({ data });
+                    }}
                 />
-                <br />
+                {this.state.data}
+                <br/>
                 <FileUpload
                     type={FileUpload.TYPE_AUDIO}
                     onChange={this.selectAudio}
                 />
-                <br />
+                <br/>
                 <FileUpload
                     type={FileUpload.TYPE_VIDEO}
                     onChange={this.selectVideo}
                 />
-                <br />
+                <br/>
                 <FileUpload
                     onChange={this.selectFiles}
                     uploadText="Upload trash"
                     customIcon={faTrash}
                 />
-                <br />
+                <br/>
                 <FileUpload
                     onChange={this.selectFiles}
                 >
-                    Test
+                    <div
+                        className="chayns__background-color--white-4 chayns__color--shade-1"
+                        style={{
+                            padding: '10px', margin: '5px', textAlign: 'center', borderRadius: '2px'
+                        }}
+                    >
+                        Test
+                    </div>
                 </FileUpload>
-                <br />
+                <br/>
                 <FileUpload
                     onChange={this.selectFiles}
                     disableListeners

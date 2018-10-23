@@ -29,7 +29,6 @@ export default class FileUpload extends Component {
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node),
         ]),
-        upload: PropTypes.bool,
         uploadText: PropTypes.string,
         onUpload: PropTypes.func,
         disableListeners: PropTypes.bool,
@@ -43,7 +42,6 @@ export default class FileUpload extends Component {
         multiple: true,
         onChange: null,
         className: '',
-        upload: false,
         children: null,
         uploadText: null,
         onUpload: null,
@@ -70,7 +68,6 @@ export default class FileUpload extends Component {
         const {
             type,
             multiple,
-            upload,
             onUpload,
             onClick
         } = this.props;
@@ -83,23 +80,14 @@ export default class FileUpload extends Component {
             return false;
         }
 
-        if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
-            return chayns.uploadCloudImage()
-                .then((data) => {
-                    if (!data.response || data.response.statusCode !== 200 || !data.response.data) {
-                        return null;
-                    }
-
-                    try {
-                        const responseData = JSON.parse(data.response.data);
-                        return normalizeUploadResponse(responseData);
-                    } catch (ex) {
-                        return null;
-                    }
-                })
-                .then((uploadData) => {
-                    onUpload(uploadData);
-                });
+        if (onUpload && type === FileUpload.TYPE_IMAGE) {
+            if (chayns.env.user.isAuthenticated) {
+                return chayns.uploadCloudImage()
+                    .then((uploadData) => {
+                        onUpload(uploadData.url);
+                    });
+            }
+            return chayns.login();
         }
 
         return selectFile({
@@ -115,7 +103,6 @@ export default class FileUpload extends Component {
     onDrop(event) {
         const {
             onChange,
-            upload,
             onUpload,
             type,
             onDrop
@@ -138,12 +125,15 @@ export default class FileUpload extends Component {
 
         const { files } = event.dataTransfer;
 
-        if (upload && onUpload && type === FileUpload.TYPE_IMAGE) {
-            return uploadCloudImages(files)
-                .then((data) => {
-                    const uploadData = normalizeUploadResponse(data);
-                    onUpload(uploadData);
-                });
+        if (onUpload && type === FileUpload.TYPE_IMAGE) {
+            if (chayns.env.user.isAuthenticated) {
+                return uploadCloudImages(files)
+                    .then((data) => {
+                        const uploadData = normalizeUploadResponse(data);
+                        onUpload(uploadData[0].url);
+                    });
+            }
+            return chayns.login();
         }
 
         if (onChange) {
