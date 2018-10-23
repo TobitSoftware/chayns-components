@@ -191,8 +191,12 @@ export default class TextString extends Component {
                 }]
             }).then((data2) => {
                 if (data2.buttonType === 1 && data2.text) {
-                    TextString.changeTextString(stringName, data2.text, lang.value).then(() => {
-                        chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
+                    TextString.changeTextString(stringName, data2.text, lang.value).then((result) => {
+                        if(result.ResultCode === 0) {
+                            chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
+                        } else {
+                            chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
+                        }
                     }).catch(() => {
                         chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
                     });
