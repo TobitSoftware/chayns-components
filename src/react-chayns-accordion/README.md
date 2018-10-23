@@ -6,16 +6,18 @@ The Accordion-Component is part of the *chayns-components* package. It can be in
 
 The Accordion-Component hides(actually removes) all child elements when it gets closed and makes the webpage faster. This gets very useful if many elements are stored in the accordion or if there are even wrapped accordions.
 
-## Usage of the Accordions ##
+
+## Usage ##
+
 At first the component has to be imported:
 
-```jsx
+```jsx harmony
 import { Accordion } from 'chayns-components';
 ```
 
-
 Then it can be used like in the following:
-```jsx
+
+```jsx harmony
 <Accordion head="Hallo">
     <div className="accordion__content">
         Hello World!
@@ -23,7 +25,9 @@ Then it can be used like in the following:
 </Accordion>
 ```
 
-### Props ###
+
+## Props ##
+
 The following properties can be set
 
 | Property     | Description                                                            | Type                       | Default Value |
@@ -57,10 +61,15 @@ The following properties can be set
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
 | removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
 
-### Examples
-#### Accordion-Badge
+
+## Examples ##
+
+
+### Accordion-Badge ###
+
 The Accordion-Component allows you to create badges using a prop. The badge wont be created it the props are falsely.
-```jsx
+
+```jsx harmony
 <Accordion head="No JSX" badge="15.02.">
     <div className="accordion__content">
         <Calendar />
@@ -68,10 +77,13 @@ The Accordion-Component allows you to create badges using a prop. The badge wont
 </Accordion>
 ```
 
-#### Multiple wrapped accordions
+
+### Multiple wrapped accordions ###
+
 The Accordion-Component allows you to wrap accordions (like the normal chayns API).
 You can do so by specify multiple children. Do not wrap the Accordions in an other element (e.g. accordion__content).
-```jsx
+
+```jsx harmony
 <Accordion head="JavaScript" badge="1997">
     <Accordion head="ES5" isWrapped>
         <div className="accordion__content">
@@ -86,13 +98,21 @@ You can do so by specify multiple children. Do not wrap the Accordions in an oth
 </Accordion>
 ```
 
-#### Always render content
+
+### Always render content ###
+
 The content of an accordion can be rendered anytime instead of just when opening it. This function is set to false by default, since it is rarely used.
 I.e. it is useful if it is necessary to execute JavaScript-Code that is stored inside this accordion.
-```jsx
+
+```jsx harmony
 <Accordion head="No JSX" renderClosed={true}>
     <div className="accordion__content">
         <MyAwesomeES5Script />
     </div>
 </Accordion>
 ```
+
+
+### More Examples ###
+
+You can take a look at the **examples** folder in the **react-chayns-accordion** repository. There you can find an appropriate way of implementing the **Accordion** to your chayns-Tapp.

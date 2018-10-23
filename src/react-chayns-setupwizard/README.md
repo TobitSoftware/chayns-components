@@ -1,22 +1,21 @@
-# Tapp - Setup Wizard #
+# SetupWizard #
 
-The **Tapp - Setup Wizard** - Component is part of the **chayns-components** package. You can install the whole package with the following statement:
+The **SetupWizard** - Component is part of the **chayns-components** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
-## Use ##
 
+## Usage ##
 
-The **Setup Wizard** is usually used for setting up Tapps for the first time. My suggestion would be to create the Setup Wizard in the first component, which get rendered into the DOM. This allows you to difference between a normal site view and a setup and also allows you to render the normal view after finishing the setup.
-For rendering the **Setup Wizard** you have to import *SetupWizard* as well as *SetupWizardItem*.
+The **SetupWizard** is usually used for setting up Tapps for the first time. My suggestion would be to create the Setup Wizard in the first component, which get rendered into the DOM. This allows you to difference between a normal site view and a setup and also allows you to render the normal view after finishing the setup.
+For rendering the **SetupWizard** you have to import *SetupWizard* as well as *SetupWizardItem*.
 
-```jsx
+```jsx harmony
 import {SetupWizardItem, SetupWizard} from 'chayns-components';
-import 'chayns-components/lib/react-chayns-setupwizard/index.css';
 ```
 
 The basic structure of the component will be the following:
-```jsx
+```jsx harmony
 <SetupWizard ready={()=>{}}>
     <SetupWizardItem title="First">
         <FirstSetup/>
@@ -31,7 +30,7 @@ The basic structure of the component will be the following:
 ```
 
 There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
-```jsx
+```jsx harmony
  static contextTypes = {
      stepComplete: PropTypes.func,
      nextStep: PropTypes.func,
@@ -43,17 +42,13 @@ There are 3 different methods for changing the current step, one method for comp
  **Important:** `previousStep` and `toStep` are deprecated according to the design guide.
 
  **Note:** You have to call stepComplete with a boolean parameter for completing/not completing the current step.
-
- **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
-
-
+ 
 
 ## Props ##
 The components got the following properties:
 
 
 **SetupWizard**:
-
 
 | Property     | Description                                                                | Type   | Required |
 |--------------|----------------------------------------------------------------------------|--------|----------|
@@ -64,8 +59,8 @@ The components got the following properties:
 | title        | title of the wizard                                                        | object | false    |
 | description  | description of the wizard                                                  | object | false    |
 
-**SetupWizardItem**:
 
+**SetupWizardItem**:
 
 | Property   | Description                                                                                        | Type   | Required |
 |------------|----------------------------------------------------------------------------------------------------|--------|----------|
@@ -76,14 +71,3 @@ The components got the following properties:
 ## Example ##
 
 You may take a look at the **examples** folder in the **react-chayns-setupwizard** repository. There you can find an appropriate way of implementing the **SetupWizard** to your chayns®-Tapp
-
-For starting the example you have to first install all dependencies...
-```
-npm i
-```
-... and the start the webpack-dev-server with the following command:
-```
-npm start
-```
-
-[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

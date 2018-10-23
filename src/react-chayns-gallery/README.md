@@ -1,21 +1,20 @@
-# Gallery
+# Gallery #
 
 The Gallery is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Gallery
+## Usage ##
+
 The gallery has to be imported:
 
-```jsx
+```jsx harmony
 import { Gallery } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-gallery/index.css';
 ```
 
-
 You can use the gallery like this:
-```jsx
+```jsx harmony
 <Gallery
     urls={['https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
         'https://tsimg.space/v1/images/c9a8d7ad-ee72-e811-80d6-0025905a8161.jpg',
@@ -25,7 +24,8 @@ You can use the gallery like this:
 ```
 
 
-## Props
+## Props ##
+
 The following properties can be set on the Gallery-Component
 
 | **Property** | **Description**                                      | **Type** | **Default Value** | **Required** |

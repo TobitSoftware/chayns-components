@@ -1,24 +1,26 @@
-# Checkbox
+# Checkbox #
 
 The Checkbox is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Checkbox
+## Usage ##
+
 The checkbox has to be imported:
 
-```jsx
+```jsx harmony
 import { Checkbox } from 'chayns-components';
 ```
 
-
 You can use the checkbox like this:
-```jsx
-<Checkbox onChange={ (value) => { console.log(value); }} />
+```jsx harmony
+<Checkbox onChange={console.log} />
 ```
 
-## Props
+
+## Props ##
+
 The following properties can be set on the Checkbox-Component
 
 | Property            | Description                                                                                         | Type          | Default Value |
@@ -37,22 +39,6 @@ The following properties can be set on the Checkbox-Component
 | labelStyle          | Styles for the label                                                                                | string        |               |
 
 
+## Example ##
 
-### Examples
-#### ToggleButton
-```jsx
-<Checkbox
-    label="This is a toggle button"
-    toggleButton={true}
-    onChange={ (value) => { console.log(value); }}
-/>
-```
-#### Checkbox
-```jsx
-<Checkbox
-    onChange={ (value) => { console.log(value); }}
-    disabled={true}
->
-    This is a normal checkbox
-</Checkbox>
-```
+You can take a look at the **examples** folder in the **react-chayns-checkbox** repository. There you can find an appropriate way of implementing the **CheckBox** to your chayns-Tapp.

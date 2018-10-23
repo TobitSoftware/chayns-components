@@ -1,4 +1,4 @@
-# ComboBox-Component #
+# ComboBox #
 
 The ComboBox-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
@@ -6,15 +6,16 @@ The ComboBox-Component is part of the *chayns-components*-Package. You can insta
 
 
 ## Usage ##
+
 You have to import the component first:
 
-```jsx
+```jsx harmony
 import { ComboBox } from 'chayns-components';
 ```
 
-
 You can now use the component as follows:
-```jsx
+
+```jsx harmony
 <ComboBox
     label="ComboBox"
     list={list}
@@ -24,7 +25,9 @@ You can now use the component as follows:
 />
 ```
 
-### Props (ComboBox) ###
+
+## Props ##
+
 You can set the following props on a ComboBox element:
 
 | Property   | Description                                                                                        | Type    | Default |
@@ -37,10 +40,11 @@ You can set the following props on a ComboBox element:
 | listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
 | className | Add additional classes to the button.                                                          | string   | |
 
-### Example ###
+
+## Example ##
 
 The following example will implement a chayns® ComboBox using the defined array:
-```jsx
+```jsx harmony
 let pizza = [
     {
         id: '0', //this is the listKey

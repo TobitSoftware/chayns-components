@@ -1,4 +1,4 @@
-# SmallWaitCursor-Component #
+# SmallWaitCursor #
 
 The SmallWaitCursor-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
@@ -6,23 +6,25 @@ The SmallWaitCursor-Component is part of the *chayns-components*-Package. You ca
 
 
 ## Usage ##
+
 You have to import the components and styles first:
 
-```jsx
+```jsx harmony
 import { SmallWaitCursor } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-smallwaitcursor/index.css';
 ```
 
 
 You can now use the components as followed:
-```jsx
+
+```jsx harmony
 <SmallWaitCursor
     show
 />
 ```
 
 
-### Props ###
+## Props ##
+
 You can set the following props on a AmountControl element:
 
 | Property     | Description                                                                                                  | Type     | Default |

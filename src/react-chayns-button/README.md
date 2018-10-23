@@ -1,32 +1,27 @@
-# Button / ChooseButton
+# Button / ChooseButton #
 
 The Button/ChooseButton is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Button
+## Usage ##
+
 At least one of the components has to be imported:
 
-```jsx
+```jsx harmony
 import { Button, ChooseButton } from 'chayns-components';
 ```
 
-
 You can use the button like this:
-```jsx
+
+```jsx harmony
 <Button>Test</Button>
 ```
 
-If you want to use a font awesome icon, you need to declare it first like this:
-```css
-.fa-rocket:before {
-    content: "\f135";
-}
-```
-The unicode characters are available under [https://fontawesome.com/v4.7.0/icons/](https://fontawesome.com/v4.7.0/icons/). TS icons can be used without special declaration.
 
-## Props
+## Props ##
+
 The following properties can be set on the Button and the ChooseButton-Component
 
 | Property   | Description                                                                                        | Type    | Default Value |
@@ -42,35 +37,6 @@ The following properties can be set on the Button and the ChooseButton-Component
 | secondary | Renders Button as a secondary button | string |  |
 
 
-### Examples
-#### Disabled Button
-```jsx
-<Button
-    disabled={true}
-    onClick={function(event) {
-        console.log(event);
-    }}
->
-	Hello World!
-</Button>
-```
-#### Icon Button
-```jsx
-<Button
-    icon="fa-rocket"
->
-    IconButton
-</Button>
-```
-#### ChooseButton
-```jsx
-<ChooseButton>
-    Hello World!
-</ChooseButton>
-```
-Is the same as:
-```jsx
-<Button chooseButton >
-    Hello World!
-</Button>
-```
+## Example ##
+
+You can take a look at the **examples** folder in the **react-chayns-button** repository. There you can find an appropriate way of implementing the **Button** to your chayns-Tapp.

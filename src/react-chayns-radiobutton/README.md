@@ -1,4 +1,4 @@
-# RadioButton-Component #
+# RadioButton #
 
 The RadioButton-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
@@ -6,21 +6,25 @@ The RadioButton-Component is part of the *chayns-components*-Package. You can in
 
 
 ## Usage ##
+
 You have to import the component first:
 
-```jsx
+```jsx harmony
 import { RadioButton } from 'chayns-components';
 ```
 
 
 You can now use the components as followed:
-```jsx
+
+```jsx harmony
 <RadioButton>
     Hello World
 </RadioButton>
 ```
 
-### Props (RadioButton) ###
+
+## Props ##
+
 You can set the following props on a RadioButton element:
 
 | Property   | Description                                                                                         | Type    | Default |
@@ -33,10 +37,15 @@ You can set the following props on a RadioButton element:
 | children   | Content of the label                                                                                | any |  |
 | value      | Value that should be send to onChange-function                                                      | string, number, boolean | "on" |
 
-### Beispiele ###
-#### RadioButton-group ####
+
+## Example ##
+
+
+### RadioButton-group ###
+
 You can set the same name-prop on multiple elements to group them.
-```jsx
+
+```jsx harmony
 <div>
     <RadioButton name="group1">
     	Group 1, Entry 1
@@ -51,3 +60,8 @@ You can set the same name-prop on multiple elements to group them.
     </RadioButton>
 </div>
 ```
+
+
+### More Examples ###
+
+You can take a look at the **examples** folder in the **react-chayns-radiobutton** repository. There you can find an appropriate way of implementing the **RadioButton** to your chayns-Tapp.

@@ -5,14 +5,14 @@
 [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls?q=is%3Apr+is%3Aclosed)
 [![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/graphs/contributors) 
 
-# chayns-components
+# chayns-components #
 
 The ChaynsComponents can be installed directly from npm by using the following package:
 
     npm install -S chayns-components@latest
 
 
-## Chayns Components
+## Chayns Components ##
 The following components are part of this package:
 
 | Component                                                          | Description                                     | Readme File                                           |
@@ -43,8 +43,21 @@ The following components are part of this package:
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
 | [react-chayns-upload](/src/react-chayns-upload/)                   | FileUpload Component                            | [Readme](/src/react-chayns-upload/README.md)          |
 
-## Internal Components
+
+## Internal Components ##
 
 | Component                                                          | Description                                     | Readme File                                           |
 |--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
 | [react-chayns-textstring](/src/react-chayns-textstring/)           | TextString Component                            | [Readme](/src/react-chayns-textstring/README.md)      |
+
+
+### Examples ###
+
+For starting the examples you have to first install all dependencies...
+```
+npm i
+```
+... and the start the webpack-dev-server with the following command:
+```
+npm start
+```

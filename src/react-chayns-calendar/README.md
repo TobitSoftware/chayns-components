@@ -1,29 +1,26 @@
-# Calendar - Component #
+# Calendar #
 
 The **Calendar** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
-## Use ##
+
+## Usage ##
 
 First of all import the component to a component of your own project.
 
-```jsx
+```jsx harmony
 import { Calendar } from 'chayns-components';
 import 'chayns-components/lib/react-chayns-calendar/index.css';
 ```
 
-
 You can init the **Calendar** like this:
-```jsx
+```jsx harmony
 <Calendar/>
 ```
 
+## Props ##
 
- **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
-
-
-### Props ###
 The component got the following properties:
 
 | Property   | Description                                                                                        | Type   | Default | Required
@@ -42,14 +39,3 @@ The component got the following properties:
 #### Example ####
 
 You can take a look at the **examples** folder in the **react-chayns-calendar** repository. There you can find 2 appropriate ways of implementing the **Calendar** to your chayns-Tapp
-
-For starting the example you have to first install all dependencies...
-```
-npm i
-```
-... and the start the webpack-dev-server with the following command:
-```
-npm start
-```
-
-[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

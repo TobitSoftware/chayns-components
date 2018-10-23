@@ -1,30 +1,27 @@
-# Input
+# Input #
 
 The Input is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the Input
+## Usage ##
+
 The input has to be imported:
 
-```js
-
+```jsx harmony
 import { Input } from 'chayns-components';
-
 ```
-
 
 You can use the input like this:
-```jsx
+
+```jsx harmony
 <Input placeholder="this is a placeholder" />
 ```
-or
-```jsx
-<DynamicInput placeholder="this is a placeholder" />
-```
 
-## Props
+
+## Props ##
+
 The following properties can be set on the Input-Component
 
 | Property     | Description                                                                       | Type           | Default Value |
@@ -39,7 +36,6 @@ The following properties can be set on the Input-Component
 | onEnter      | returns the value if user clicks enter | function  |  |
 | onKeyUp      | returns the onKeyUp event | function  |  |
 | onBlur       | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function  |  |
-| responsive   | Renders input as responsive input (see [chayns-css wiki](https://github.com/TobitSoftware/chayns-css/wiki/form-elements#responsive-input)) | bool  | false  |
 | regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string, RegExp |               |
 | inputRef     | Exposes the input DOM Ref to the parent component                                 | func           |               |
 | invalid      | Marks the input as invalid                                                        | bool           | false         |
@@ -48,13 +44,7 @@ The following properties can be set on the Input-Component
 | dynamic      | Use dynamic input                                                                 | bool           | false         |
 | customProps  | CustomProps for the html input element                                            | bool           | false         |
 
-### Examples
-#### Regex Input
-```jsx
-<Input
-    placeholder="Looking for 3 lowercase e's"
-    regExp="^e{3}$" 
-    onInput={ (text) => { console.log('There is some new input. Check the new text: ', text); }}
-    onBlur={ (text) => { console.log('The input losted its focus, the final input is: ', text); }}
-/>
-```
+
+## Example ##
+
+You can take a look at the **examples** folder in the **react-chayns-input** repository. There you can find an appropriate way of implementing the **Input** to your chayns-Tapp.

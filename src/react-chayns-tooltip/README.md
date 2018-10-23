@@ -1,19 +1,20 @@
-# Tooltip - Component #
+# Tooltip #
 
 The **Tooltip** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
-## Use ##
+
+## Usage ##
 
 First of all import the component to a component of your own project.
 
-```jsx
+```jsx harmony
 import { Tooltip } from 'chayns-components';
 ```
 
 You can use your **Tooltip** like this:
-```jsx
+```jsx harmony
 <Tooltip
     bindListeners
     position={3}
@@ -23,7 +24,9 @@ You can use your **Tooltip** like this:
 </Tooltip>
 ```
 
-### Props ###
+
+## Props ##
+
 The component got the following properties:
 
 | Property              | Description                                                                                                           | Type      | Default | Required|
@@ -49,6 +52,7 @@ Also, you can call the methods show() and hide() on the reference of the tooltip
 
 **Tip:** Use a p- or span-tag for your children text. You will get the dotted tooltip-indicator-underline.
 
-#### Example ####
+
+## Example ##
 
 You can take a look at the **examples** folder in the **react-chayns-tooltip** repository. There you can find an appropriate way of implementing the **Tooltip** to your chayns-Tapp.

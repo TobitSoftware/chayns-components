@@ -1,21 +1,23 @@
-# RfidInput
+# RfidInput #
 
 The RfidInput is part of the *chayns-components* package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
 
-## Usage of the RfidInput
+## Usage ##
+
 The input has to be imported:
 
-```jsx
+```jsx harmony
 import { RfidInput } from 'chayns-components';
 import 'chayns-components/lib/react-chayns-rfid_input/index.css';
 ```
 
 
 You can use the input like this:
-```jsx
+
+```jsx harmony
 <RfidInput 
     placeholder="Cardnumber"
     confirmNode="OK"
@@ -26,13 +28,19 @@ You can use the input like this:
 />
 ```
 
-## RfidInput.pretifyRfid
+
+## RfidInput.pretifyRfid ##
+
 A static function to set a space after every second character. 
 
-## RfidInput.isNfcAvailable
+
+## RfidInput.isNfcAvailable ##
+
 A static function which checks with a whitelist, whether the current app could support nfc-scans. 
 
-## Props
+
+## Props ##
+
 The following properties can be set on the RfidInput-Component
 
 | **Property** | **Description**                                           | **Type**       | **Default Value** | **Required** |

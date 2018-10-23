@@ -1,10 +1,12 @@
-# TextString-Component #
+# TextString #
+
 The TextString-Component loads, renders and changes your textString. It can also replace your replacements.
 
 If you are a Tobit.Software worker in the tobit.ag network, you are able to change textStrings using CTRL+Click on a textString.
 
 
-## Usage of the TextString-Component ##
+## Usage ##
+
 At first the component has to be imported:
 
 ```jsx harmony
@@ -34,6 +36,7 @@ Then it can be used like in the following example:
 
 If you need the textString as a string, e.g. for a dialog, you can use the static method `TextString.getTextString(stringName)`.
 
+
 ## Props ##
 
 | Property   | Description                                                                            | Type     |
@@ -44,3 +47,8 @@ If you need the textString as a string, e.g. for a dialog, you can use the stati
 | fallback    | Fallback string.                                                                      | string   |
 | useDangerouslySetInnerHTML | Use dangerouslySetInnerHTML (for strings with HTML content).           | bool     |
 | language | Language of the string (language need to be loaded before usage)                         | string   |
+
+
+## Example ##
+
+You can take a look at the **examples** folder in the **react-chayns-textstring** repository. There you can find an appropriate way of implementing the **TextString** to your chayns-Tapp.

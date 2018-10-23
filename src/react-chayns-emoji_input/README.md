@@ -1,4 +1,4 @@
-# EmojiInput
+# EmojiInput #
 
 > :warning: **WARNING:** The EmojiInput does not work correctly in **Internet Explorer**. 
 Please use [react-chayns-input](/src/react-chayns-input/) or [react-chayns-textarea](/src/react-chayns-textarea/) there!
@@ -8,17 +8,18 @@ The EmojiInput is part of the *chayns-components* package. It can be installed v
     npm install -S chayns-components@latest
 
 
-## Usage of the EmojiInput
+## Usage ##
+
 The input has to be imported:
 
-```jsx
+```jsx harmony
 import { EmojiInput } from 'chayns-components';
 import 'chayns-components/lib/react-chayns-emojiInput/index.css';
 ```
 
-
 You can use the input like this:
-```jsx
+
+```jsx harmony
 <EmojiInput 
     placeholder="Test me!"
     onInput={ (event) => {console.log(event)} }
@@ -28,12 +29,14 @@ You can use the input like this:
 ```
 
 ## Handling Text from onInput function
+
 The `event` value in the function given to onInput of EmojiInput has an additional value at `target`
 property. The value `pureInnerText` at `event.target` has the full text (clean from any elements for emojis), which is in the input.
 
 Just use `event.target.pureInnerText` to save the text in your component and to give it back to the input.
 
 ## Props
+
 The following properties can be set on the EmojiInput-Component
 
 | **Property**   | **Description**                                     | **Type** | **Default Value** | **Required** |

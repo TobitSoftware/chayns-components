@@ -1,4 +1,4 @@
-# SelectButton-Component #
+# SelectButton #
 
 The SelectButton-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
@@ -6,15 +6,16 @@ The SelectButton-Component is part of the *chayns-components*-Package. You can i
 
 
 ## Usage ##
+
 You have to import the component first:
 
-```jsx
+```jsx harmony
 import { SelectButton } from 'chayns-components';
 ```
 
-
 You can now use the component as follows:
-```jsx
+
+```jsx harmony
 <SelectButton
     label="Select-Button"
     list={list}
@@ -24,7 +25,9 @@ You can now use the component as follows:
 />
 ```
 
-### Props (SelectButton) ###
+
+## Props ##
+
 You can set the following props on a SelectButton element:
 
 | Property   | Description                                                                                        | Type    | Default |
@@ -45,7 +48,7 @@ You can set the following props on a SelectButton element:
 ### Examples ###
 
 The following example will implement a chayns® chooseButton which onClick opens a selectDialog using the defined array:
-```jsx
+```jsx harmony
 let pizza = [
     {
         id: '0', //this is the listKey
@@ -70,7 +73,7 @@ return (
     <SelectButton
         label="Select Pizza"
         list={pizza}
-        onSelect={(value) => { console.log(value) }}
+        onSelect={console.log}
         listKey="id"
         listValue="name"
     />

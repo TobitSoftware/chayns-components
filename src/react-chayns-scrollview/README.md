@@ -1,4 +1,4 @@
-# ScrollView-Component #
+# ScrollView #
 
 The ScrollView-Component is part of the *chayns-components* package. It can be installed via npm:
 
@@ -7,17 +7,18 @@ The ScrollView-Component is part of the *chayns-components* package. It can be i
 The ScrollView-Component adds a ScrollBar on the side of an element, when the content is bigger
 than max-height or height
 
-## Usage of the ScrollView ##
+
+## Usage ##
+
 At first the component has to be imported:
 
-```jsx
+```jsx harmony
 import { ScrollView } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-scrollview/index.css';
 ```
 
-
 Then it can be used like in the following:
-```jsx
+
+```jsx harmony
 <ScrollView style={{ maxHeight: '50px' }}>
     Hello World<br />
     Hello World<br />
@@ -29,7 +30,9 @@ Then it can be used like in the following:
 </Accordion>
 ```
 
-### Props ###
+
+## Props ##
+
 The following properties can be set
 
 | Property      | Description                                                            | Type                       | Default Value |

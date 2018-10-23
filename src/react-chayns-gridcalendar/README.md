@@ -1,29 +1,24 @@
-# GridCalendar - Component #
+# GridCalendar #
 
 The **GridCalendar** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
-## Use ##
+
+## Usage ##
 
 First of all import the component to a component of your own project.
 
-```jsx
+```jsx harmony
 import { GridCalendar } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-gridcalendar/index.css';
 ```
 
-
 You can init the **GridCalendar** like this:
-```jsx
+```jsx harmony
 <GridCalendar/>
 ```
 
-
- **Important:** You will need a bundler for the component styles. If you are not familiar with things like webpack or gulp take a look at our [chayns-React-ES6 Template ][1]. The bundler **must** include the node modules, otherwise you will get an compatibility error.
-
-
-### Props ###
+## Props ##
 The component got the following properties:
 
 | Property   | Description                                                                                        | Type   | Default
@@ -44,17 +39,6 @@ The component got the following properties:
 | data.entries | The entries of a row (an entry is limited for the time of one day) | array of object | |
 | data.entries.id | Id of an entry | int | |
 
-#### Example ####
+## Example ##
 
 You can take a look at the **examples** folder in the **react-chayns-gridcalendar** repository. There you can find 2 appropriate ways of implementing the **GridCalendar** to your chayns-Tapp
-
-For starting the example you have to first install all dependencies...
-```
-npm i
-```
-... and the start the webpack-dev-server with the following command:
-```
-npm start
-```
-
-[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

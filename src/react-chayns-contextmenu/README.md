@@ -1,21 +1,21 @@
-# ContextMenu - Component #
+# ContextMenu #
 
 The **ContextMenu** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
-## Use ##
+
+## Usage ##
 
 First of all import the component to a component of your own project.
 
-```jsx
+```jsx harmony
 import { ContextMenu } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-contextmenu/index.css';
 ```
-I would recommend to import this component to a high level component of your project, because with that you can use one **ContextMenu** component for your whole project and you can store the properties for the **ContextMenu** at one place.
 
 You can init your **ContextMenu** like this:
-```jsx
+
+```jsx harmony
 <ContextMenu
     coordinates={{x: 100, y: 100}}
     hide={false}
@@ -29,7 +29,9 @@ You can init your **ContextMenu** like this:
 />
 ```
 
-### Props ###
+
+## Props ##
+
 The component got the following properties:
 
 | Property   | Description                                                                                        | Type   | Default | Required
@@ -47,17 +49,7 @@ The component got the following properties:
 | children | React Node, that the tooltip should refer to. It will always be rendered to your page. | node | 
 | childrenStyle | Style for the children node | object | 
 
-#### Example ####
+
+## Example ##
 
 You can take a look at the **examples** folder in the **react-chayns-contextmenu** repository. There you can find an appropriate way of implementing the **ContextMenu** to your chayns-Tapp
-
-For starting the example you have to first install all dependencies...
-```
-npm i
-```
-... and the start the webpack-dev-server with the following command:
-```
-npm start
-```
-
-[1]:  https://github.com/TobitSoftware/chayns-template-es6-react

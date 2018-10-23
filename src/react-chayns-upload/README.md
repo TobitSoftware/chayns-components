@@ -1,4 +1,4 @@
-# FileUpload-Component #
+# FileUpload #
 
 The FileUpload-Component is part of the *chayns-components* package. It can be installed via npm:
 
@@ -6,16 +6,17 @@ The FileUpload-Component is part of the *chayns-components* package. It can be i
 
 
 ## Usage ##
+
 At first the component needs to be imported:
 
-```jsx
+```jsx harmony
 import { FileUpload } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-upload/index.css';
 ```
 
 The component can be used in JSX like in the following example:
-```jsx
-<FileUpload onChange={(files) => console.log(files)} />
+
+```jsx harmony
+<FileUpload onUpload={(url) => console.log(url)} />
 ```
 
 
@@ -30,18 +31,11 @@ The component can be used in JSX like in the following example:
 | disableListeners  | Disables all event listeners                                               | Bool          | false         |
 | onDrop            | Registers a custom onDrop-Listener (prevents default handling)             | Function      |               |
 | onClick           | Registers a custom onClick-Listener (prevents default handling)            | Function      |               |
+| onUpload          | Uploads file and return the url. Only for images.                          | Function      |               |
 | children          | Component(s) that should be rendered inside component                      | ReactElements |               |
 | customIcon        | CustomIcon that should be rendered inside component                        | string/object |               |
 
 
 ## Example ##
-### single image upload ###
-```jsx
-<FileUpload
-    multiple={false}
-    type="image"
-    onChange={(files, validFiles) => {
-        console.log(`You have selected ${files.length} files of which ${validFiles.length} are valid`);
-    }}
-/>
-```
+
+You can take a look at the **examples** folder in the **react-chayns-upload** repository. There you can find an appropriate way of implementing the **FileUpload** to your chayns-Tapp.
