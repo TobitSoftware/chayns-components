@@ -88,7 +88,7 @@ export default class Accordion extends Component {
     }
 
     componentDidMount() {
-        const { className, autogrow } = this.props;
+        const { className, autogrow, defaultOpened } = this.props;
         const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
@@ -101,9 +101,18 @@ export default class Accordion extends Component {
             }
         }
 
-        this.accordion.querySelectorAll('.accordion--trigger').forEach((node) => {
-            node.addEventListener('click', this.handleAccordionClick);
-        });
+        if (defaultOpened) {
+            if (this.accordionHead.classList.contains('accordion--trigger')) {
+                this.accordionHead.addEventListener('click', this.handleAccordionClick);
+            }
+            this.accordionHead.querySelectorAll('.accordion--trigger').forEach((node) => {
+                node.addEventListener('click', this.handleAccordionClick);
+            });
+        } else {
+            this.accordion.querySelectorAll('.accordion--trigger').forEach((node) => {
+                node.addEventListener('click', this.handleAccordionClick);
+            });
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -192,11 +201,11 @@ export default class Accordion extends Component {
 
         if (dataGroup) {
             document.querySelectorAll(`.accordion[data-group="${dataGroup}"].accordion--open`).forEach((node) => {
-                if(node.classList.contains('accordion--trigger')) {
+                if (node.classList.contains('accordion--trigger')) {
                     node.click();
                 } else {
                     const trigger = node.querySelectorAll('.accordion--trigger');
-                    if(trigger.length > 0) {
+                    if (trigger.length > 0) {
                         trigger[0].click();
                     }
                 }
@@ -257,6 +266,9 @@ export default class Accordion extends Component {
             >
                 <div
                     className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger && !onSearch })}
+                    ref={(ref) => {
+                        this.accordionHead = ref;
+                    }}
                 >
                     {
                         noIcon

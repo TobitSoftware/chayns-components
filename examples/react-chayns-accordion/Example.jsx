@@ -20,7 +20,7 @@ export default class Example extends Component {
                         Hello World
                     </div>
                 </Accordion>
-                <Accordion head="Test" badge="2">
+                <Accordion head="Test" badge="2" defaultOpened>
                     <Accordion
                         head={(
                             <span style={{ color: '#FF0000' }} className="accordion--trigger">
