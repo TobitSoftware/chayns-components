@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { Input } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
@@ -71,49 +72,51 @@ export default class Example extends PureComponent {
                         marginBottom: '20px'
                     }}
                 />
-
-                <Input
-                    defaultValue="Dynamic Input"
-                    placeholder="Dynamic Input Placeholder"
-                    style={{
-                        width: '100%',
-                        marginBottom: '20px'
-                    }}
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
-                    dynamic
-                />
-                <Input
-                    placeholder="Icon"
-                    icon="ts-tobit2016"
-                    style={{
-                        width: '100%',
-                        marginBottom: '20px'
-                    }}
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
-                    dynamic
-                />
-                <Input
-                    placeholder='type "eee"'
-                    regExp={new RegExp('.*e{3}.*')}
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
-                    icon="ts-tobit2016"
-                    style={{
-                        width: '100%',
-                        marginBottom: '20px'
-                    }}
-                    noDeleteIcon
-                    onIconClick={console.log}
-                    dynamic
-                />
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        defaultValue="Dynamic Input"
+                        placeholder="Dynamic Input Placeholder"
+                        style={{
+                            width: '100%'
+                        }}
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        onKeyUp={this.onKeyUp}
+                        onEnter={this.onEnter}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Icon"
+                        icon="ts-tobit2016"
+                        style={{
+                            width: '100%'
+                        }}
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        onKeyUp={this.onKeyUp}
+                        onEnter={this.onEnter}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder='type "eee"'
+                        regExp={new RegExp('.*e{3}.*')}
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        onKeyUp={this.onKeyUp}
+                        onEnter={this.onEnter}
+                        icon={faCoffee}
+                        style={{
+                            width: '100%'
+                        }}
+                        noDeleteIcon
+                        onIconClick={console.log}
+                        dynamic
+                    />
+                </div>
             </ExampleContainer>
         );
     }

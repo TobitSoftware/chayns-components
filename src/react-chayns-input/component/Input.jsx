@@ -64,7 +64,7 @@ export default class Input extends Component {
     }
 
     onIconClick(e) {
-        const { onIconClick } = this.props;
+        const { onIconClick, onChange } = this.props;
         const { showIcon } = this.state;
 
         if (onIconClick) {
@@ -72,6 +72,9 @@ export default class Input extends Component {
         } else if (showIcon) {
             this._node.value = '';
             this.setState({ showIcon: false });
+            if(onChange) {
+                onChange('');
+            }
         }
     }
 
@@ -97,8 +100,8 @@ export default class Input extends Component {
     }
 
     callIfValid(value, callback) {
-        const { regExp, invalid } = this.props;
-        const valid = !invalid && (!regExp || value.match(regExp));
+        const { regExp } = this.props;
+        const valid = (!regExp || value.match(regExp));
 
         if (valid && callback) {
             callback(value);
@@ -108,7 +111,7 @@ export default class Input extends Component {
 
     render() {
         const {
-            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef, customProps
+            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef, customProps, invalid
         } = this.props;
         const { valid, showIcon } = this.state;
         if (dynamic) {
@@ -123,7 +126,7 @@ export default class Input extends Component {
                             if (inputRef) inputRef(ref);
                             this._node = ref;
                         }}
-                        className={classNames('input', className, { 'input--invalid': !valid })}
+                        className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
@@ -135,7 +138,7 @@ export default class Input extends Component {
                     />
                     <label
                         style={{ opacity: !showIcon ? '1' : '0' }}
-                        className={icon || showIcon ? 'labelIcon' : null}
+                        className={classNames({ 'input--invalid': !valid || invalid, labelIcon: icon || showIcon })}
                     >
                         {placeholder}
                     </label>
@@ -153,7 +156,7 @@ export default class Input extends Component {
         }
         return (
             <input
-                className={classNames('input', className, { 'input--invalid': !valid })}
+                className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                 style={style}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
