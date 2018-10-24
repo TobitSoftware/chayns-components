@@ -38,6 +38,9 @@ export default class Calendar extends Component {
             }))
         ]),
         activateAll: PropTypes.bool,
+        style: PropTypes.shape({
+            minHeight: PropTypes.string
+        })
     };
 
     static defaultProps = {
@@ -45,6 +48,9 @@ export default class Calendar extends Component {
         activateAll: true,
         activated: null,
         highlighted: null,
+        style:{
+            minHeight:"180px"
+        }
     };
 
     constructor() {
@@ -356,7 +362,7 @@ export default class Calendar extends Component {
     render() {
         const _navigateLeft = !(this.getNavigateLeft());
         const _navigateRight = !(this.getNavigateRight());
-
+        const {style} = this.props;
         const _months = this.renderMonths();
 
         return (
@@ -365,6 +371,7 @@ export default class Calendar extends Component {
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
+                style={style}
             >
                 <div className="absolute">
                     <div className="calendar__navigation">
