@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Button from '../../../src/react-chayns-button/component/Button';
 
 export default class Step4 extends Component {
     static contextTypes = {
@@ -41,19 +42,17 @@ export default class Step4 extends Component {
                         }
                     }
                 >
-                    <div
-                        className="button"
+                    <Button
                         onClick={this.next}
                         style={{ marginRight: '10px' }}
                     >
                         Finish
-                    </div>
-                    <div
-                        className="button"
+                    </Button>
+                    <Button
                         onClick={this.reset}
                     >
                         Reset
-                    </div>
+                    </Button>
                 </div>
             </div>
         );

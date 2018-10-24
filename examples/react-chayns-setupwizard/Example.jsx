@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import ExampleContainer from '../ExampleContainer';
 
 import { SetupWizard, SetupWizardItem } from '../../src/index';
-import './style.scss';
 
 import Step1 from './setup/Step1';
 import Step2 from './setup/Step2';
@@ -14,7 +13,8 @@ export default class Example extends Component {
     constructor() {
         super();
         this.state = {
-            ready: false
+            ready: false,
+            notComplete: false,
         };
         this.ready = this.ready.bind(this);
         this.notComplete = this.notComplete.bind(this);
@@ -22,19 +22,20 @@ export default class Example extends Component {
 
     ready() {
         this.setState({
-            ready: true
+            ready: true,
         });
     }
 
     notComplete() {
-        document.querySelector('#requiredInput').classList.remove('wrong');
+        this.setState({ notComplete: true });
         setTimeout(() => {
-            document.querySelector('#requiredInput').classList.add('wrong');
-        }, 10);
+            this.setState({ notComplete: false });
+        }, 500);
     }
 
     render() {
-        if (!this.state.ready) {
+        const { ready, notComplete } = this.state;
+        if (!ready) {
             return (
                 <ExampleContainer headline="SetupWizard">
                     <SetupWizard
@@ -43,10 +44,10 @@ export default class Example extends Component {
                         // contentStyle={{ fontWeight: 'bold' }}
                         style={{ border: '1px solid gray', padding: '10px' }}
                         title="Wizard"
-                        description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n' +
-                        '                    labore\n' +
-                        '                    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n' +
-                        '                    rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
+                        description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n'
+                        + 'labore\n'
+                        + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'
+                        + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
                         <SetupWizardItem title="Intro">
                             <Step1/>
@@ -55,7 +56,7 @@ export default class Example extends Component {
                             <Step2/>
                         </SetupWizardItem>
                         <SetupWizardItem title="Input required" required>
-                            <Step3/>
+                            <Step3 notComplete={notComplete}/>
                         </SetupWizardItem>
                         <SetupWizardItem title="Finish">
                             <Step4/>
@@ -68,6 +69,8 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="SetupWizard">
                 <h1>
+
+
                     Ready
                 </h1>
             </ExampleContainer>
