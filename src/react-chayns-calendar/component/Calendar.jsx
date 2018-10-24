@@ -38,9 +38,7 @@ export default class Calendar extends Component {
             }))
         ]),
         activateAll: PropTypes.bool,
-        style: PropTypes.shape({
-            minHeight: PropTypes.string
-        })
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -48,9 +46,7 @@ export default class Calendar extends Component {
         activateAll: true,
         activated: null,
         highlighted: null,
-        style:{
-            minHeight:"180px"
-        }
+        style: null,
     };
 
     constructor() {
@@ -127,12 +123,8 @@ export default class Calendar extends Component {
             return true;
         }
 
-        if (startDate.getFullYear() === focus.getFullYear()
-            && startDate.getMonth() < focus.getMonth()) {
-            return true;
-        }
-
-        return false;
+        return startDate.getFullYear() === focus.getFullYear()
+            && startDate.getMonth() < focus.getMonth();
     }
 
     getNavigateRight() {
@@ -149,12 +141,8 @@ export default class Calendar extends Component {
             return true;
         }
 
-        if (endDate.getFullYear() === focus.getFullYear()
-            && endDate.getMonth() - FOCUS_FACTOR > focus.getMonth()) {
-            return true;
-        }
-
-        return false;
+        return endDate.getFullYear() === focus.getFullYear()
+            && endDate.getMonth() - FOCUS_FACTOR > focus.getMonth();
     }
 
     navigateRightOnClick() {
@@ -362,7 +350,7 @@ export default class Calendar extends Component {
     render() {
         const _navigateLeft = !(this.getNavigateLeft());
         const _navigateRight = !(this.getNavigateRight());
-        const {style} = this.props;
+        const { style } = this.props;
         const _months = this.renderMonths();
 
         return (
@@ -371,7 +359,7 @@ export default class Calendar extends Component {
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
-                style={style}
+                style={{ ...style, ...{ minHeight: '180px', overflow: 'hidden' } }}
             >
                 <div className="absolute">
                     <div className="calendar__navigation">
