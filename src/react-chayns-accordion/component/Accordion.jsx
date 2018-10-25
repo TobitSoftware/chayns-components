@@ -88,7 +88,7 @@ export default class Accordion extends Component {
     }
 
     componentDidMount() {
-        const { className, autogrow, defaultOpened } = this.props;
+        const { className, autogrow } = this.props;
         const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
@@ -101,18 +101,12 @@ export default class Accordion extends Component {
             }
         }
 
-        if (defaultOpened) {
-            if (this.accordionHead.classList.contains('accordion--trigger')) {
-                this.accordionHead.addEventListener('click', this.handleAccordionClick);
-            }
-            this.accordionHead.querySelectorAll('.accordion--trigger').forEach((node) => {
-                node.addEventListener('click', this.handleAccordionClick);
-            });
-        } else {
-            this.accordion.querySelectorAll('.accordion--trigger').forEach((node) => {
-                node.addEventListener('click', this.handleAccordionClick);
-            });
+        if (this.accordionHead.classList.contains('accordion--trigger')) {
+            this.accordionHead.addEventListener('click', this.handleAccordionClick);
         }
+        this.accordionHead.querySelectorAll('.accordion--trigger').forEach((node) => {
+            node.addEventListener('click', this.handleAccordionClick);
+        });
     }
 
     componentWillReceiveProps(nextProps) {
