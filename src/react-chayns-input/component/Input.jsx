@@ -20,10 +20,10 @@ export default class Input extends Component {
         inputRef: PropTypes.func,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         onIconClick: PropTypes.func,
-        noDeleteIcon: PropTypes.bool,
         wrapperRef: PropTypes.func,
         dynamic: PropTypes.bool,
         customProps: PropTypes.object,
+        id: PropTypes.string,
     };
 
     static defaultProps = {
@@ -42,10 +42,10 @@ export default class Input extends Component {
         inputRef: null,
         icon: null,
         onIconClick: null,
-        noDeleteIcon: false,
         wrapperRef: null,
         dynamic: false,
         customProps: null,
+        id: null,
     };
 
     constructor(props) {
@@ -53,29 +53,14 @@ export default class Input extends Component {
 
         this.state = {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
-            showIcon: !!props.defaultValue,
         };
+
+        this.id = Math.random().toString();
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
         this.callIfValid = this.callIfValid.bind(this);
-        this.onIconClick = this.onIconClick.bind(this);
-    }
-
-    onIconClick(e) {
-        const { onIconClick, onChange } = this.props;
-        const { showIcon } = this.state;
-
-        if (onIconClick) {
-            onIconClick(e);
-        } else if (showIcon) {
-            this._node.value = '';
-            this.setState({ showIcon: false });
-            if(onChange) {
-                onChange('');
-            }
-        }
     }
 
     onKeyUp(e) {
@@ -96,7 +81,6 @@ export default class Input extends Component {
     onChange(e) {
         const { onChange } = this.props;
         this.callIfValid(e.target.value, onChange);
-        this.setState({ showIcon: e.target.value.length > 0 });
     }
 
     callIfValid(value, callback) {
@@ -111,9 +95,23 @@ export default class Input extends Component {
 
     render() {
         const {
-            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef, customProps, invalid
+            className,
+            defaultValue,
+            value,
+            style,
+            placeholder,
+            type,
+            inputRef,
+            dynamic,
+            icon,
+            wrapperRef,
+            customProps,
+            invalid,
+            onIconClick,
+            id,
         } = this.props;
-        const { valid, showIcon } = this.state;
+        const { valid } = this.state;
+
         if (dynamic) {
             return (
                 <div
@@ -121,11 +119,8 @@ export default class Input extends Component {
                     ref={wrapperRef}
                 >
                     <input
-                        style={style}
-                        ref={(ref) => {
-                            if (inputRef) inputRef(ref);
-                            this._node = ref;
-                        }}
+                        style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
+                        ref={inputRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
@@ -133,24 +128,31 @@ export default class Input extends Component {
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         type={type || 'text'}
+                        id={id || this.id}
                         required
                         {...customProps}
                     />
                     <label
-                        style={{ opacity: !showIcon ? '1' : '0' }}
-                        className={classNames({ 'input--invalid': !valid || invalid, labelIcon: icon || showIcon })}
+                        htmlFor={id || this.id}
+                        className={classNames({ 'input--invalid': !valid || invalid, labelIcon: icon })}
                     >
                         {placeholder}
                     </label>
-                    <Icon
-                        icon={(icon && (noDeleteIcon || !showIcon)) ? icon : 'ts-wrong'}
-                        className="input-group__icon"
-                        style={(showIcon && !noDeleteIcon) || icon ? {
-                            opacity: '.3',
-                            pointerEvents: 'all'
-                        } : { opacity: '0' }}
-                        onClick={this.onIconClick}
-                    />
+                    {
+                        icon
+                            ? (
+                                <Icon
+                                    icon={icon}
+                                    className="input-group__icon"
+                                    style={icon ? {
+                                        opacity: '.3',
+                                        pointerEvents: 'all'
+                                    } : { opacity: '0' }}
+                                    onClick={onIconClick}
+                                />
+                            )
+                            : null
+                    }
                 </div>
             );
         }
@@ -166,6 +168,7 @@ export default class Input extends Component {
                 defaultValue={defaultValue}
                 type={type}
                 ref={inputRef}
+                id={id || this.id}
                 {...customProps}
             />
         );
