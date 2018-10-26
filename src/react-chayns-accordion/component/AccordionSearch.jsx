@@ -56,8 +56,10 @@ export default class AccordionSearch extends Component {
                 placeholder={searchPlaceholder}
                 onChange={onSearch}
                 onEnter={onSearchEnter}
+                onIconClick={onSearchEnter}
                 icon={faSearch}
                 style={{ width: noWidth ? '0' : 'auto' }}
+                // eslint-disable-next-line no-return-assign
                 wrapperRef={ref => this.ref = ref}
                 dynamic
             />

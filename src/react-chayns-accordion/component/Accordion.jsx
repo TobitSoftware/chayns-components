@@ -294,7 +294,10 @@ export default class Accordion extends Component {
                                     {
                                         badge
                                             ? (
-                                                <div className="badge" style={badgeStyle}>
+                                                <div
+                                                    className={classNames('badge', { 'accordion--trigger': !fixed && (onSearch || onSearchEnter || noTitleTrigger), 'badge--search': onSearch || onSearchEnter })}
+                                                    style={{ ...badgeStyle, ...{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 } }}
+                                                >
                                                     {badge}
                                                 </div>
                                             )

@@ -14,6 +14,7 @@ export default class Example extends Component {
                     head="Accordion mit Suche"
                     onSearch={console.log}
                     searchPlaceholder={"Suche"}
+                    badge={12}
                 >
                     <div className="accordion__content">
 
