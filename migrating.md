@@ -13,12 +13,12 @@ npm install chayns-components@latest -S
 
 <!-- JS-API -->
 <!--<script src="https://chayns-res.tobit.com/API/V3.1/js/chayns.min.js"></script>-->
-<script src="https://api.chayns-static.space/js/chayns.min.js"></script>
+<script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
 
 <!-- chaynsLangRes -->
 <!--<script src="//chayns-res.tobit.com/API/v3/intern/chaynsLangRes/js/chaynsLangRes.js"></script>-->
-<script src="https://api.chayns-static.space/lang/js/chaynsLangRes.min.js"></script>
-<script src="https://api.chayns-static.space/translate/js/chaynsTranslate.min.js"></script>
+<script src="https://api.chayns-static.space/lang/v4.0/js/chaynsLangRes.min.js"></script>
+<script src="https://api.chayns-static.space/translate/v4.0/js/chaynsTranslate.min.js"></script>
 
 <!-- chaynsTime -->
 <!--<script src="https://chayns-res.tobit.com/API/v3/intern/chaynsTime/js/chaynsTime.min.js"></script>-->
