@@ -12,7 +12,13 @@ const OPEN = 2;
 
 export default class Accordion extends Component {
     static propTypes = {
-        head: PropTypes.node.isRequired,
+        head: PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.shape({
+                open: PropTypes.node.isRequired,
+                close: PropTypes.node.isRequired
+            }).isRequired
+        ]).isRequired,
         children: PropTypes.node.isRequired,
         badge: PropTypes.node,
         right: PropTypes.node,
@@ -34,7 +40,6 @@ export default class Accordion extends Component {
         noRotate: PropTypes.bool,
         fixed: PropTypes.bool,
         noIcon: PropTypes.bool,
-        noTitleTrigger: PropTypes.bool,
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
@@ -62,12 +67,13 @@ export default class Accordion extends Component {
         noRotate: false,
         fixed: false,
         noIcon: false,
-        noTitleTrigger: false,
         onSearch: null,
         onSearchEnter: null,
         searchPlaceholder: '',
         removeContentClosed: false,
     };
+
+    static dataGroups = {};
 
     constructor(props) {
         super();
@@ -88,7 +94,7 @@ export default class Accordion extends Component {
     }
 
     componentDidMount() {
-        const { className, autogrow } = this.props;
+        const { className, autogrow, dataGroup } = this.props;
         const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
@@ -101,12 +107,13 @@ export default class Accordion extends Component {
             }
         }
 
-        if (this.accordionHead.classList.contains('accordion--trigger')) {
-            this.accordionHead.addEventListener('click', this.handleAccordionClick);
+        if(dataGroup) {
+            if(!Accordion.dataGroups[dataGroup]) {
+                Accordion.dataGroups[dataGroup] = [];
+            }
+
+            Accordion.dataGroups[dataGroup].push(this);
         }
-        this.accordionHead.querySelectorAll('.accordion--trigger').forEach((node) => {
-            node.addEventListener('click', this.handleAccordionClick);
-        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -120,13 +127,13 @@ export default class Accordion extends Component {
                 });
             }
 
-            if (nextProps.open && !currentState === OPEN) {
+            if (nextProps.open && !currentState === !!OPEN) {
                 this.setState({
                     currentState: OPEN
                 });
             }
 
-            if (!nextProps.open && !currentState === CLOSE) {
+            if (!nextProps.open && !currentState === !!CLOSE) {
                 this.setState({
                     currentState: CLOSE
                 });
@@ -148,13 +155,39 @@ export default class Accordion extends Component {
     }
 
     handleAccordionClick = (event) => {
-        const { currentState } = this.state;
-        const { dataGroup } = this.props;
+        const { fixed } = this.props;
 
-        if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
-            this.accordionCloseListener(event);
-        } else {
-            this.accordionOpenListener(event);
+        if (!fixed) {
+            let trigger = true;
+            let node = event.target;
+            for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
+                if(node.classList) {
+                    if (node.classList.contains('accordion--no-trigger')) {
+                        trigger = false;
+                        break;
+                    }
+                    if (node.classList.contains('accordion__head')) {
+                        break;
+                    }
+                }
+                if(node.parentNode) {
+                    node = node.parentNode;
+                } else {
+                    trigger = false; // no parent node and no break at accordion__head -> portal (e.g. contextMenu) -> no trigger
+                    break;
+                }
+            }
+
+            if(trigger) {
+                const { currentState } = this.state;
+                const { dataGroup } = this.props;
+
+                if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
+                    this.accordionCloseListener(event);
+                } else {
+                    this.accordionOpenListener(event);
+                }
+            }
         }
     };
 
@@ -193,19 +226,12 @@ export default class Accordion extends Component {
     accordionOpenListener(event) {
         const { onOpen, dataGroup } = this.props;
 
-        if (dataGroup) {
-            document.querySelectorAll(`.accordion[data-group="${dataGroup}"].accordion--open`).forEach((node) => {
-                if (node.classList.contains('accordion--trigger')) {
-                    node.click();
-                } else {
-                    const trigger = node.querySelectorAll('.accordion--trigger');
-                    if (trigger.length > 0) {
-                        trigger[0].click();
-                    }
+        if (dataGroup && Accordion.dataGroups[dataGroup]) {
+            Accordion.dataGroups[dataGroup].forEach((accordion) => {
+                if(accordion !== this) {
+                    accordion.accordionCloseListener();
                 }
             });
-
-            this.accordion.classList.add('accordion--open');
         }
 
         this.setState({
@@ -219,7 +245,6 @@ export default class Accordion extends Component {
 
     render() {
         const {
-            dataGroup,
             id,
             style,
             isWrapped,
@@ -232,9 +257,7 @@ export default class Accordion extends Component {
             head,
             right,
             noRotate,
-            fixed,
             noIcon,
-            noTitleTrigger,
             onSearch,
             onSearchEnter,
             searchPlaceholder,
@@ -250,7 +273,6 @@ export default class Accordion extends Component {
                     'accordion--open': currentState === OPEN,
                     [className]: className
                 })}
-                data-group={dataGroup}
                 ref={(ref) => {
                     this.accordion = ref;
                     if (reference) reference(ref);
@@ -259,10 +281,8 @@ export default class Accordion extends Component {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger && !onSearch })}
-                    ref={(ref) => {
-                        this.accordionHead = ref;
-                    }}
+                    className="accordion__head"
+                    onClick={this.handleAccordionClick}
                 >
                     {
                         noIcon
@@ -271,7 +291,6 @@ export default class Accordion extends Component {
                                 <div
                                     className={classNames('accordion__head__icon', {
                                         'accordion__head__icon--no-rotate': noRotate,
-                                        'accordion--trigger': (!fixed && (right || onSearch || noTitleTrigger))
                                     })}
                                 >
                                     {
@@ -283,26 +302,23 @@ export default class Accordion extends Component {
                             )
                     }
                     <div
-                        className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && (right || onSearch) && !noTitleTrigger })}
+                        className="accordion__head__title"
                     >
-                        {head}
+                        {head.open ? (currentState === OPEN ? head.open : head.close) : head}
                     </div>
                     {
                         right || badge || onSearch || onSearchEnter
                             ? (
                                 <div className="accordion__head__right">
-                                    {
-                                        badge
-                                            ? (
-                                                <div
-                                                    className={classNames('badge', { 'accordion--trigger': !fixed && (onSearch || onSearchEnter || noTitleTrigger), 'badge--search': onSearch || onSearchEnter })}
-                                                    style={{ ...badgeStyle, ...{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 } }}
-                                                >
-                                                    {badge}
-                                                </div>
-                                            )
-                                            : right
-                                    }
+                                    <div
+                                        className={classNames({
+                                            badge,
+                                            'badge--search': onSearch || onSearchEnter
+                                        })}
+                                        style={{ ...badgeStyle, ...{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 } }}
+                                    >
+                                        {badge || right}
+                                    </div>
                                     {
                                         onSearch || onSearchEnter
                                             ? (

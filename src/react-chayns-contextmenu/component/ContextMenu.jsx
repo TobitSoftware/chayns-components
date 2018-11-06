@@ -42,6 +42,8 @@ export default class ContextMenu extends Component {
         super();
         this.state = { displayNone: true, hide: true };
         this.getCoordinates = this.getCoordinates.bind(this);
+        this.onChildrenClick = this.onChildrenClick.bind(this);
+        this.onLayerClick = this.onLayerClick.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -65,6 +67,32 @@ export default class ContextMenu extends Component {
         clearTimeout(this.timeout);
     }
 
+    onChildrenClick(e) {
+        const { onChildrenClick } = this.props;
+        if (onChildrenClick) {
+            onChildrenClick(e);
+        } else {
+            this.setState({ displayNone: false });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ hide: false });
+            }, 50);
+        }
+    }
+
+    onLayerClick(e) {
+        const { onLayerClick } = this.props;
+        if (onLayerClick) {
+            onLayerClick(e);
+        } else {
+            this.setState({ hide: true });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ displayNone: true });
+            }, 350);
+        }
+    }
+
     getCoordinates() {
         const { coordinates, position } = this.props;
 
@@ -83,7 +111,7 @@ export default class ContextMenu extends Component {
 
     render() {
         const {
-            onLayerClick, items, position, parent, children, onChildrenClick, childrenStyle
+            items, position, parent, children, childrenStyle
         } = this.props;
 
         const { displayNone, hide } = this.state;
@@ -96,7 +124,7 @@ export default class ContextMenu extends Component {
                         'context-menu-overlay--hide': hide && displayNone,
                         'context-menu-overlay--active': !hide,
                     })}
-                    onClick={onLayerClick}
+                    onClick={this.onLayerClick}
                 >
                     <ul
                         style={{
@@ -125,8 +153,9 @@ export default class ContextMenu extends Component {
             ),
             <div
                 key="cc__contextMenu__children"
+                // eslint-disable-next-line no-return-assign
                 ref={ref => this.childrenNode = ref}
-                onClick={onChildrenClick}
+                onClick={this.onChildrenClick}
                 style={childrenStyle}
             >
                 {children}

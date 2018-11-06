@@ -50,7 +50,7 @@ export default class AccordionSearch extends Component {
 
         return (
             <Input
-                className={classNames('accordion__head__right__search', {
+                className={classNames('accordion__head__right__search', 'accordion--no-trigger', {
                     'accordion__head__right__search--active': currentState === OPEN,
                 })}
                 placeholder={searchPlaceholder}
