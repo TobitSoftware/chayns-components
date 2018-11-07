@@ -19,7 +19,7 @@ export default class Icon extends PureComponent {
     };
 
     static defaultProps = {
-        className: undefined,
+        className: '',
         style: undefined
     };
 
