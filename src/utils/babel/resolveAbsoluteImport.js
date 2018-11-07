@@ -12,7 +12,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
-        Icon: 'react-chayns-icon/component/Icon.jsx',
+        Icon: 'react-chayns-icon/component/Icon.js',
         Input: 'react-chayns-input/component/Input.js',
         ModeSwitch: 'react-chayns-modeswitch/component/ModeSwitch.js',
         Mode: 'react-chayns-modeswitch/component/Mode.js',
@@ -29,7 +29,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         SharingBar: 'react-chayns-sharingbar/component/SharingBar.js',
         SmallWaitCursor: 'react-chayns-smallwaitcursor/component/SmallWaitCursor.js',
         TextArea: 'react-chayns-textarea/component/TextArea.js',
-        TextString: 'react-chayns-textarea/component/TextString.jsx',
+        TextString: 'react-chayns-textarea/component/TextString.js',
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
         FileUpload: 'react-chayns-upload/component/FileUpload.js',
     };
