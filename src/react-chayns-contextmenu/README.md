@@ -25,7 +25,7 @@ You can init your **ContextMenu** like this:
         text: 'Hinzufügen'
     }]}
     onLayerClick={()=>console.log('hide')}
-    position=0
+    position={0}
 />
 ```
 
@@ -44,7 +44,7 @@ The component got the following properties:
 | item.className | The className of an item of the **ContextMenu** | string | |
 | item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||
 | item.text | The text displayed in an item of the **ContextMenu** | string | |
-| item.text | The icon displayed in an item of the **ContextMenu** | object | |
+| item.icon | The icon displayed in an item of the **ContextMenu** | object/string | |
 | parent | DOM Node into which the **ContextMenu** will be rendered | node | tapp |
 | children | React Node, that the tooltip should refer to. It will always be rendered to your page. | node | 
 | childrenStyle | Style for the children node | object | 
