@@ -42,8 +42,9 @@ export default class Icon extends PureComponent {
     }
 
     render() {
-        // eslint-disable-next-line object-curly-newline
-        const { icon, className, onClick, disabled, ...rest } = this.props;
+        const {
+            icon, className, onClick, disabled, ...rest
+        } = this.props;
 
         if (chayns.utils.isString(icon)) {
             const classes = classNames(icon, {
