@@ -47,10 +47,10 @@ export default class Icon extends PureComponent {
         } = this.props;
 
         if (chayns.utils.isString(icon)) {
-            const classes = classNames(icon, {
+            const classes = classNames(`react-chayns-icon ${icon}`, {
                 [className]: !!className,
-                'is-clickable': typeof onClick === 'function',
-                'is-disabled': disabled === true
+                'react-chayns-icon--clickable': typeof onClick === 'function',
+                'react-chayns-icon--disabled': disabled === true
             });
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             return <i className={classes} onClick={disabled !== true && typeof onClick === 'function' ? onClick : () => {}} {...rest}/>;
@@ -61,7 +61,7 @@ export default class Icon extends PureComponent {
         if (typeof onClick === 'function') {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                <span className={`is-clickable${disabled === true ? ' is-disabled' : ''}`} onClick={disabled !== true ? onClick : () => {}}>
+                <span className={`react-chayns-icon react-chayns-icon--clickable${disabled === true ? ' react-chayns-icon--disabled' : ''}`} onClick={disabled !== true ? onClick : () => {}}>
                     <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
                 </span>
             );
