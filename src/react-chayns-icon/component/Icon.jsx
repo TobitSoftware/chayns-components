@@ -4,7 +4,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 export default class Icon extends PureComponent {
     static propTypes = {
         icon: PropTypes.oneOfType([
@@ -15,12 +14,14 @@ export default class Icon extends PureComponent {
             }).isRequired,
         ]).isRequired,
         className: PropTypes.string,
-        style: PropTypes.object()
+        style: PropTypes.object(),
+        onClick: PropTypes.func
     };
 
     static defaultProps = {
         className: '',
-        style: undefined
+        style: undefined,
+        onClick: undefined
     };
 
     constructor(props) {
@@ -39,19 +40,28 @@ export default class Icon extends PureComponent {
     }
 
     render() {
-        const { icon, className, ...rest } = this.props;
+        // eslint-disable-next-line object-curly-newline
+        const { icon, className, onClick, ...rest } = this.props;
 
         if (chayns.utils.isString(icon)) {
             const classes = classNames(icon, {
-                [className]: !!className
+                [className]: !!className,
+                'is-clickable': typeof onClick === 'function'
             });
-            return <i className={classes} {...rest}/>;
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+            return <i className={classes} onClick={onClick} {...rest}/>;
         }
         if (!icon) {
             return null;
         }
-        return (
-            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
-        );
+        if (typeof onClick === 'function') {
+            return (
+                // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                <span className="is-clickable" onClick={onClick}>
+                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
+                </span>
+            );
+        }
+        return <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>;
     }
 }
