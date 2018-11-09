@@ -111,7 +111,7 @@ export default class ContextMenu extends Component {
 
     render() {
         const {
-            items, position, parent, children, childrenStyle
+            items, position, parent, children, childrenStyle, coordinates
         } = this.props;
 
         const { displayNone, hide } = this.state;
@@ -151,15 +151,19 @@ export default class ContextMenu extends Component {
                 </div>,
                 parent
             ),
-            <div
-                key="cc__contextMenu__children"
-                // eslint-disable-next-line no-return-assign
-                ref={ref => this.childrenNode = ref}
-                onClick={this.onChildrenClick}
-                style={childrenStyle}
-            >
-                {children}
-            </div>
+            coordinates
+                ? null
+                : (
+                    <div
+                        key="cc__contextMenu__children"
+                        // eslint-disable-next-line no-return-assign
+                        ref={ref => this.childrenNode = ref}
+                        onClick={this.onChildrenClick}
+                        style={childrenStyle}
+                    >
+                        {children}
+                    </div>
+                )
         ];
     }
 }
