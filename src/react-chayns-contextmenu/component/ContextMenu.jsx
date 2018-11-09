@@ -46,6 +46,23 @@ export default class ContextMenu extends Component {
         this.onLayerClick = this.onLayerClick.bind(this);
     }
 
+    componentDidMount() {
+        const { hide } = this.props;
+        if (hide) {
+            this.setState({ hide: true });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ displayNone: true });
+            }, 350);
+        } else {
+            this.setState({ displayNone: false });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ hide: false });
+            }, 50);
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         const { hide } = this.props;
         if (nextProps.hide && !hide) {
