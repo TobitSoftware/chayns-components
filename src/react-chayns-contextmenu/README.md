@@ -39,7 +39,7 @@ The component got the following properties:
 | coordinates           | Coordinates of the place to which the ContextMenu is rendered. Example: {x: 100, y: 100}                                  | object    |       |  |
 | hide | Defines wether the Component is hidden or not   | bool | true| |
 | onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page | func | ||
-| position | The position the ContextMenu (top right, bottom right, bottom left, top left) | number | 0 ||
+| position | The position the ContextMenu (0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right) | number | 0 ||
 | items | The Items which are displayed in the **ContextMenu** | array | |
 | item.className | The className of an item of the **ContextMenu** | string | |
 | item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||

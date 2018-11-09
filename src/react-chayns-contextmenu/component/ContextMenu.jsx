@@ -19,7 +19,7 @@ export default class ContextMenu extends Component {
             text: PropTypes.string.isRequired,
             icon: PropTypes.object,
         })),
-        position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+        position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         parent: PropTypes.node,
         children: PropTypes.node,
         onChildrenClick: PropTypes.func,

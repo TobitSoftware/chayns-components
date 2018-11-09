@@ -22,7 +22,7 @@ export default class Tooltip extends Component {
         ]).isRequired,
         children: PropTypes.node,
         bindListeners: PropTypes.bool,
-        position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+        position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
         removeIcon: PropTypes.bool,
