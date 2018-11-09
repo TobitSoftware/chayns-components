@@ -20,7 +20,6 @@ export default class Accordion extends Component {
             }).isRequired
         ]).isRequired,
         children: PropTypes.node.isRequired,
-        badge: PropTypes.node,
         right: PropTypes.node,
         renderClosed: PropTypes.bool,
         isWrapped: PropTypes.bool,
@@ -34,7 +33,6 @@ export default class Accordion extends Component {
         defaultOpened: PropTypes.bool,
         reference: PropTypes.func,
         autogrow: PropTypes.bool,
-        badgeStyle: PropTypes.object,
         open: PropTypes.bool,
         icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
         noRotate: PropTypes.bool,
@@ -58,10 +56,8 @@ export default class Accordion extends Component {
         reference: null,
         isWrapped: false,
         renderClosed: false,
-        badge: null,
         right: null,
         autogrow: false,
-        badgeStyle: null,
         open: undefined,
         icon: 'ts-angle-right',
         noRotate: false,
@@ -252,8 +248,6 @@ export default class Accordion extends Component {
             styleBody,
             reference,
             icon,
-            badge,
-            badgeStyle,
             head,
             right,
             noRotate,
@@ -308,17 +302,16 @@ export default class Accordion extends Component {
                         {head.open ? (currentState === OPEN ? head.open : head.close) : head}
                     </div>
                     {
-                        right || badge || onSearch || onSearchEnter
+                        right || onSearch || onSearchEnter
                             ? (
                                 <div className="accordion__head__right">
                                     <div
                                         className={classNames({
-                                            badge,
-                                            'badge--search': onSearch || onSearchEnter
+                                            'right--search': onSearch || onSearchEnter
                                         })}
-                                        style={{ ...badgeStyle, ...{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 } }}
+                                        style={{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 }}
                                     >
-                                        {badge || right}
+                                        {right}
                                     </div>
                                     {
                                         onSearch || onSearchEnter

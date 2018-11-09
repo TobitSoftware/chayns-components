@@ -35,8 +35,6 @@ The following properties can be set
 |--------------|------------------------------------------------------------------------|----------------------------|---------------|
 | head         | Headline of the accordion                                              | String, node or object [1] | *required*    |
 | children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
-| badge        | Content of the Badge                                                   | React-Element              |               |
-| badgeStyle   | Style of the Badge                                                     | Object                     |               |
 | right        | Node that get rendered in the right side of the accordion head         | React-Element              |               |
 | renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
 | isWrapped    | Makes this accordion a wrapped accordion                               | bool                       | false         |

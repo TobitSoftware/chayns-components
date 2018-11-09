@@ -9,6 +9,8 @@ export default class Example extends PureComponent {
         super(props);
         // Take a look in index.jsx
         console.log('TextString.getTextString', TextString.getTextString('txt_chayns_textStringTest'));
+
+        chayns.register({ apiDialogs: true });
     }
 
     render() {

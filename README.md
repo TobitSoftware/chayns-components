@@ -19,6 +19,7 @@ The following components are part of this package:
 |--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
 | [react-chayns-accordion](/src/react-chayns-accordion/)             | Accordion Component                             | [Readme](/src/react-chayns-accordion/README.md)       |
 | [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/)     | AmountControl Component                         | [Readme](/src/react-chayns-amountcontrol/README.md)   |
+| [react-chayns-badge](/src/react-chayns-badge/)                     | Badge Component                                 | [Readme](/src/react-chayns-badge/README.md)          |
 | [react-chayns-button](/src/react-chayns-button/)                   | Button Component                                | [Readme](/src/react-chayns-button/README.md)          |
 | [react-chayns-calendar](/src/react-chayns-calendar/)               | Calendar Component                              | [Readme](/src/react-chayns-calendar/README.md)        |
 | [react-chayns-checkbox](/src/react-chayns-checkbox/)               | Checkbox Component                              | [Readme](/src/react-chayns-checkbox/README.md)        |

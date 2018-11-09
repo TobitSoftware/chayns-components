@@ -118,6 +118,10 @@ New Props:
 - icon: The icon shown on the left of accordion head.
 - noRotate: Disable rotating of the icon.
 
+Removed Props: 
+- badge: You can use the Badge-Component instead
+- badgeStyle
+
 ### AmountControl
 Removed shopStyle.
 
@@ -127,6 +131,9 @@ New Props:
 - addColor: Color of the add-icon.
 - removeColor: Color of the remove-icon.
 - focusOnClick: Enables the input autoFocus.
+
+### Badge
+New Component
 
 ### Button
 New Props:

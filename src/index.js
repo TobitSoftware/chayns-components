@@ -2,6 +2,7 @@ import Accordion from './react-chayns-accordion/component/Accordion';
 import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
 import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
 
+import Badge from './react-chayns-badge/component/Badge';
 import Button from './react-chayns-button/component/Button';
 import ChooseButton from './react-chayns-button/component/ChooseButton';
 
@@ -50,6 +51,7 @@ export {
     Accordion,
     AccordionIntro,
     AmountControl,
+    Badge,
     Button,
     ChooseButton,
     Calendar,

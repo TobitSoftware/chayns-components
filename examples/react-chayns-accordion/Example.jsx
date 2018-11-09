@@ -8,6 +8,7 @@ import Button from '../../src/react-chayns-button/component/Button';
 import Input from '../../src/react-chayns-input/component/Input';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
+import Badge from "../../src/react-chayns-badge/component/Badge";
 
 export default class Example extends Component {
     render() {
@@ -32,7 +33,7 @@ export default class Example extends Component {
                     head="Accordion with nice search"
                     onSearch={console.log}
                     searchPlaceholder="Search"
-                    badge={12}
+                    right={<Badge>12</Badge>}
                     dataGroup="chayns"
                 >
                     <div className="accordion__content">
@@ -57,7 +58,7 @@ export default class Example extends Component {
                         Hello World
                     </div>
                 </Accordion>
-                <Accordion head="Test" badge="2" defaultOpened>
+                <Accordion head="Test" right={<Badge>2</Badge>} defaultOpened>
                     <Accordion
                         head={(
                             <span style={{ color: '#FF0000' }}>
@@ -90,8 +91,7 @@ export default class Example extends Component {
                         icon="ts-tobit"
                         noRotate
                         head="noRotate"
-                        badge={1}
-                        badgeStyle={{ fontWeight: 'bold' }}
+                        right={<Badge>1</Badge>}
                         isWrapped
                     >
                         <div className="accordion__content">
