@@ -126,6 +126,7 @@ export default class TextString extends Component {
         this.childrenOnClick = this.childrenOnClick.bind(this);
         this.replace = this.replace.bind(this);
         this.changeStringDialog = this.changeStringDialog.bind(this);
+        this.changeStringResult = this.changeStringResult.bind(this);
     }
 
     componentDidMount() {
@@ -171,7 +172,9 @@ export default class TextString extends Component {
                                 middle = TextString.textStrings[globalLang][lib].middle;
                             }
                         });
-                        TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => { this.changeStringDialog(lang); });
+                        TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => {
+                            this.changeStringDialog(lang);
+                        });
                     }
                 }
             });
@@ -179,33 +182,58 @@ export default class TextString extends Component {
     }
 
     changeStringDialog(lang) {
-        const { stringName } = this.props;
+        const { stringName, useDangerouslySetInnerHTML } = this.props;
         TextString.getTextString(stringName, TextString.languages.find(l => l.value === lang.value).code).then((textString) => {
-            chayns.dialog.input({
-                title: `TextString bearbeiten: ${stringName}`,
-                message: `Sprache: ${lang.name}`,
-                text: textString,
-                buttons: [{
-                    text: 'Speichern',
-                    buttonType: 1
-                }, {
-                    text: 'Abbrechen',
-                    buttonType: -1
-                }]
-            }).then((data2) => {
-                if (data2.buttonType === 1 && data2.text) {
-                    TextString.changeTextString(stringName, data2.text, lang.value).then((result) => {
-                        if(result.ResultCode === 0) {
-                            chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
-                        } else {
-                            chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
-                        }
-                    }).catch(() => {
-                        chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
-                    });
-                }
-            });
+            if (useDangerouslySetInnerHTML) {
+                chayns.register({ apiDialogs: true });
+                chayns.dialog.iFrame({
+                    url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
+                    // url: 'https://w-jg.tobit.ag:8082/',
+                    input: textString,
+                    title: `TextString bearbeiten: ${stringName}`,
+                    message: `Sprache: ${lang.name}`,
+                    buttons: [{
+                        text: 'Speichern',
+                        buttonType: 1
+                    }, {
+                        text: 'Abbrechen',
+                        buttonType: -1
+                    }]
+                }).then((result) => {
+                    this.changeStringResult(result, lang);
+                });
+            } else {
+                chayns.dialog.input({
+                    title: `TextString bearbeiten: ${stringName}`,
+                    message: `Sprache: ${lang.name}`,
+                    text: textString,
+                    buttons: [{
+                        text: 'Speichern',
+                        buttonType: 1
+                    }, {
+                        text: 'Abbrechen',
+                        buttonType: -1
+                    }]
+                }).then((result) => {
+                    this.changeStringResult(result, lang);
+                });
+            }
         });
+    }
+
+    changeStringResult(data2, lang) {
+        const { stringName, useDangerouslySetInnerHTML } = this.props;
+        if (data2.buttonType === 1 && (data2.text || data2.value)) {
+            TextString.changeTextString(stringName, useDangerouslySetInnerHTML ? data2.value : data2.text, lang.value).then((result) => {
+                if (result.ResultCode === 0) {
+                    chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
+                } else {
+                    chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
+                }
+            }).catch(() => {
+                chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
+            });
+        }
     }
 
     render() {
