@@ -139,12 +139,12 @@ export default class ContextMenu extends Component {
                                 onClick={item.onClick}
                                 key={item.text}
                             >
-                                {
-                                    item.icon
-                                        ? <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
-                                        : null
-                                }
-                                {item.text}
+                                {item.icon ? (
+                                    <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                                ) : null}
+                                <div className="context-menu__item__text">
+                                    {item.text}
+                                </div>
                             </li>
                         ))}
                     </ul>
