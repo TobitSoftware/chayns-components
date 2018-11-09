@@ -40,7 +40,9 @@ export default class Example extends PureComponent {
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
                     fallback="Test ##REPLACE## Fallback"
                 >
-                    <Button />
+                    <Button icon="ts-chayns" onClick={(e) => { console.log('Button clicked', e); }} >
+                        {'Required children'}
+                    </Button>
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest_html"

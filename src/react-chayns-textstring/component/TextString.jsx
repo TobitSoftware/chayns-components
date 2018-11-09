@@ -82,6 +82,46 @@ export default class TextString extends Component {
         });
     }
 
+    static tobitEmployee = null;
+
+    static isTobitEmployee() {
+        return new Promise((resolve, reject) => {
+            if (TextString.tobitEmployee === true) {
+                resolve();
+            } else if (TextString.tobitEmployee === false || !chayns.env.user.isAuthenticated) {
+                reject();
+            } else {
+                fetch(`https://chaynssvc.tobit.com/v0.5/${chayns.env.site.locationId}/user/UAC/8255`, {
+                    headers: {
+                        Authorization: `bearer ${chayns.env.user.tobitAccessToken}`
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        response.json().then((json) => {
+                            if (json.data) {
+                                json.data.forEach((item) => {
+                                    if (item.locationId === 1214) {
+                                        TextString.tobitEmployee = true;
+                                        resolve();
+                                    }
+                                });
+                            }
+                            if(!TextString.tobitEmployee) {
+                                TextString.tobitEmployee = false;
+                                reject();
+                            }
+                        }).catch((e) => {
+                            reject(e);
+                        });
+                    } else {
+                        TextString.tobitEmployee = false;
+                        reject(response.statusText);
+                    }
+                }).catch(reject);
+            }
+        });
+    }
+
     static setLanguage(language) {
         TextString.language = language.substring(0, 2).toLowerCase();
     }
@@ -148,35 +188,38 @@ export default class TextString extends Component {
 
     childrenOnClick(e) {
         const { stringName, language } = this.props;
-        if (e.ctrlKey) { // TODO Check if user is manufacturer
-            chayns.dialog.select({
-                title: `TextString bearbeiten: ${stringName}`,
-                message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
-                quickfind: 0,
-                multiselect: 0,
-                list: TextString.languages
-            }).then((data1) => {
-                if (data1.buttonType === 1 && data1.selection && data1.selection.length > 0) {
-                    const lang = data1.selection[0];
-                    if (lang.value === TextString.languages.find(l => l.code === (language || TextString.language)).value) { // language is already selected
-                        this.changeStringDialog(lang);
-                    } else {
-                        // Get lib
-                        let library = null;
-                        let middle = 'langRes';
-                        const globalLang = TextString.languages.find(l => l.code === TextString.language).value;
-                        Object.keys(TextString.textStrings[globalLang]).forEach((lib) => {
-                            if (TextString.textStrings[globalLang][lib][stringName]) {
-                                library = lib;
-                                // eslint-disable-next-line prefer-destructuring
-                                middle = TextString.textStrings[globalLang][lib].middle;
-                            }
-                        });
-                        TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => {
+        if (e.ctrlKey) {
+            TextString.isTobitEmployee().then(() => {
+                chayns.dialog.select({
+                    title: `TextString bearbeiten: ${stringName}`,
+                    message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
+                    quickfind: 0,
+                    multiselect: 0,
+                    list: TextString.languages
+                }).then((data1) => {
+                    if (data1.buttonType === 1 && data1.selection && data1.selection.length > 0) {
+                        const lang = data1.selection[0];
+                        if (lang.value === TextString.languages.find(l => l.code === (language || TextString.language)).value) { // language is already selected
                             this.changeStringDialog(lang);
-                        });
+                        } else {
+                            // Get lib
+                            let library = null;
+                            let middle = 'langRes';
+                            const globalLang = TextString.languages.find(l => l.code === TextString.language).value;
+                            Object.keys(TextString.textStrings[globalLang]).forEach((lib) => {
+                                if (TextString.textStrings[globalLang][lib][stringName]) {
+                                    library = lib;
+                                    // eslint-disable-next-line prefer-destructuring
+                                    middle = TextString.textStrings[globalLang][lib].middle;
+                                }
+                            });
+                            TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => {
+                                this.changeStringDialog(lang);
+                            });
+                        }
                     }
-                }
+                });
+            }).catch(() => {
             });
         }
     }
@@ -241,7 +284,14 @@ export default class TextString extends Component {
         const { children, useDangerouslySetInnerHTML } = this.props;
 
         const childrenProps = {
-            ...{ onClick: this.childrenOnClick },
+            ...{
+                onClick: (e) => {
+                    if (children.props.onClick && !e.ctrlKey) {
+                        children.props.onClick(e);
+                    }
+                    this.childrenOnClick(e);
+                }
+            },
             ...(
                 useDangerouslySetInnerHTML
                     ? { dangerouslySetInnerHTML: { __html: textString } }
