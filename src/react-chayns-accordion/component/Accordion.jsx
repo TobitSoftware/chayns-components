@@ -103,8 +103,8 @@ export default class Accordion extends Component {
             }
         }
 
-        if(dataGroup) {
-            if(!Accordion.dataGroups[dataGroup]) {
+        if (dataGroup) {
+            if (!Accordion.dataGroups[dataGroup]) {
                 Accordion.dataGroups[dataGroup] = [];
             }
 
@@ -157,7 +157,7 @@ export default class Accordion extends Component {
             let trigger = true;
             let node = event.target;
             for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
-                if(node.classList) {
+                if (node.classList) {
                     if (node.classList.contains('accordion--no-trigger')) {
                         trigger = false;
                         break;
@@ -166,7 +166,7 @@ export default class Accordion extends Component {
                         break;
                     }
                 }
-                if(node.parentNode) {
+                if (node.parentNode) {
                     node = node.parentNode;
                 } else {
                     trigger = false; // no parent node and no break at accordion__head -> portal (e.g. contextMenu) -> no trigger
@@ -174,7 +174,7 @@ export default class Accordion extends Component {
                 }
             }
 
-            if(trigger) {
+            if (trigger) {
                 const { currentState } = this.state;
                 const { dataGroup } = this.props;
 
@@ -224,7 +224,7 @@ export default class Accordion extends Component {
 
         if (dataGroup && Accordion.dataGroups[dataGroup]) {
             Accordion.dataGroups[dataGroup].forEach((accordion) => {
-                if(accordion !== this) {
+                if (accordion !== this) {
                     accordion.accordionCloseListener();
                 }
             });
@@ -297,6 +297,10 @@ export default class Accordion extends Component {
                     }
                     <div
                         className="accordion__head__title"
+                        style={{
+                            ...(noIcon ? { paddingLeft: '10px' } : null),
+                            ...(!chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null)
+                        }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {head.open ? (currentState === OPEN ? head.open : head.close) : head}
