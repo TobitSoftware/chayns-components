@@ -61,6 +61,7 @@ export default class AmountControl extends Component {
 
         this.state = {
             tempAmount: props.amount,
+            tempValue: props.amount,
             showInput: false,
         };
 
@@ -69,19 +70,26 @@ export default class AmountControl extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            tempAmount: nextProps.amount
+            tempAmount: nextProps.amount,
+            tempValue: nextProps.amount
         });
     }
 
     onInput = (value) => {
+        const { onInput } = this.props;
+        let numberValue = 0;
+
+        if (chayns.utils.isNumber(value)) {
+            numberValue = value;
+        }
+
         this.setState({
-            tempAmount: value
+            tempAmount: numberValue,
+            tempValue: value
         });
 
-        const { onInput } = this.props;
-
-        if (onInput && (value || value >= 0)) {
-            onInput(value);
+        if (onInput && (numberValue || numberValue >= 0)) {
+            onInput(numberValue);
         }
     };
 
@@ -125,9 +133,7 @@ export default class AmountControl extends Component {
 
         if (onChange) {
             onChange(amount);
-            this.setState({
-                showInput: false,
-            });
+            this.setInput(false);
         }
 
         if (onInput) {
@@ -159,19 +165,17 @@ export default class AmountControl extends Component {
             focusOnClick,
             contentWidth,
         } = this.props;
-        const { tempAmount, showInput } = this.state;
+        const { tempAmount, tempValue, showInput } = this.state;
         if (window.debugLevel >= 3) {
             // eslint-disable-next-line no-console
             console.debug('render amount-control component', this.props, this.state);
         }
 
-        const classnames = classNames('cc__amount-control', {
-            'cc__amount-control--active': amount > 0,
-            [className]: className
-        });
-
         return (
-            <ChooseButton className={classnames}>
+            <ChooseButton className={classNames('cc__amount-control', className, {
+                'cc__amount-control--active': amount > 0
+            })}
+            >
                 <ControlButton
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
@@ -193,6 +197,7 @@ export default class AmountControl extends Component {
                     buttonFormatHandler={buttonFormatHandler}
                     showInput={showInput || showInputProp}
                     tempAmount={tempAmount}
+                    tempValue={tempValue}
                     setInput={this.setInput}
                     focusOnClick={focusOnClick}
                 />
