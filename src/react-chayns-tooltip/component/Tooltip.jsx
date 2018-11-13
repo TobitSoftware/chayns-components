@@ -186,7 +186,7 @@ export default class Tooltip extends Component {
                 className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
                     'cc__tooltip--active': active,
                 })}
-                style={{ left: `${x}px`, top: `${y}px` }}
+                style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px`, }) }}
                 ref={(node) => {
                     this.tooltipNode = node;
                 }}
