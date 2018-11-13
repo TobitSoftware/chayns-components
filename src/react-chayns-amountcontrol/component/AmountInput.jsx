@@ -128,6 +128,7 @@ export default class AmountInput extends PureComponent {
 
         return [
             <Input
+                key="amountInput"
                 type="number"
                 value={tempValue}
                 onChange={this.onInputChange}
@@ -140,6 +141,7 @@ export default class AmountInput extends PureComponent {
                 style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(renderInput ? null : { display: 'none' }) }}
             />,
             <div
+                key="amountDiv"
                 onClick={this.onButtonClick}
                 className={classNames('cc__amount-control__button', {
                     'cc__amount-control__button--price': !amount,

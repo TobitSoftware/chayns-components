@@ -6,7 +6,6 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 export default class AmountControl extends Component {
     static propTypes = {
