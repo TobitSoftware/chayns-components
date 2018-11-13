@@ -359,7 +359,7 @@ export default class Calendar extends Component {
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
-                style={{ ...style, ...{ minHeight: '180px', overflow: 'hidden' } }}
+                style={{ ...{ minHeight: '205px', overflow: 'hidden' }, ...style }}
             >
                 <div className="absolute">
                     <div className="calendar__navigation">
