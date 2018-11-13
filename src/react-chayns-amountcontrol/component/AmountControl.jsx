@@ -172,7 +172,7 @@ export default class AmountControl extends Component {
         }
 
         return (
-            <ChooseButton className={classNames('cc__amount-control', className, {
+            <div className={classNames('cc__amount-control choosebutton', className, {
                 'cc__amount-control--active': amount > 0
             })}
             >
@@ -208,7 +208,7 @@ export default class AmountControl extends Component {
                     className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}
                     color={addColor}
                 />
-            </ChooseButton>
+            </div>
         );
     }
 }

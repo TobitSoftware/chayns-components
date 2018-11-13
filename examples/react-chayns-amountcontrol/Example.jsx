@@ -68,6 +68,7 @@ export default class Example extends Component {
                 <Accordion
                     right={(
                         <AmountControl
+                            className="accordion--no-trigger"
                             icon="ts-bamboo"
                             disabled={false}
                             amount={amount}
