@@ -44,10 +44,24 @@ export default class ContextMenu extends Component {
         this.getCoordinates = this.getCoordinates.bind(this);
         this.onChildrenClick = this.onChildrenClick.bind(this);
         this.onLayerClick = this.onLayerClick.bind(this);
+        this.updateHidden = this.updateHidden.bind(this);
     }
 
     componentDidMount() {
-        const { hide } = this.props;
+        this.updateHidden(this.props.hidden);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.hide !== this.props.hide) {
+            this.updateHidden(nextProps.hide);
+        }
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
+    }
+
+    updateHidden(hide) {
         if (hide) {
             this.setState({ hide: true });
             clearTimeout(this.timeout);
@@ -61,27 +75,6 @@ export default class ContextMenu extends Component {
                 this.setState({ hide: false });
             }, 50);
         }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { hide } = this.props;
-        if (nextProps.hide && !hide) {
-            this.setState({ hide: true });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ displayNone: true });
-            }, 350);
-        } else if (!nextProps.hide && hide) {
-            this.setState({ displayNone: false });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ hide: false });
-            }, 50);
-        }
-    }
-
-    componentWillUnmount() {
-        clearTimeout(this.timeout);
     }
 
     onChildrenClick(e) {
