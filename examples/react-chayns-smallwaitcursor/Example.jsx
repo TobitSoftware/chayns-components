@@ -1,14 +1,21 @@
-import React, { PureComponent } from 'react';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { Component } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 
-export default class Example extends PureComponent {
+export default class Example extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { show: true };
+    }
+
     render() {
+        const { show } = this.state;
         return (
             <ExampleContainer headline="SmallWaitCursor">
                 <SmallWaitCursor
-                    show
+                    show={show}
                 />
                 <div
                     style={{
@@ -20,9 +27,12 @@ export default class Example extends PureComponent {
                         alignItems: 'center',
                     }}
                     className="chayns__background-color--white-4"
+                    onClick={() => {
+                        this.setState({ show: !show });
+                    }}
                 >
                     <SmallWaitCursor
-                        show
+                        show={show}
                     />
                 </div>
                 <div
@@ -36,7 +46,7 @@ export default class Example extends PureComponent {
                     }}
                 >
                     <SmallWaitCursor
-                        show
+                        show={show}
                         showBackground={false}
                     />
                 </div>
