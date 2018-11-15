@@ -28,6 +28,7 @@ The following properties can be set on the Badge:
 | children   | Value of the badge                                                                                  | node   | *required*    |
 | className  | ClassName added to the badge                                                                        | string |               |
 | badgeRef   | Reference to the badge div                                                                          | func   |               |
+| style      | Extra styles for badge element                                                                      | object |               |
 
 
 ## Example ##
