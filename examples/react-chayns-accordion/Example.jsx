@@ -8,7 +8,7 @@ import Button from '../../src/react-chayns-button/component/Button';
 import Input from '../../src/react-chayns-input/component/Input';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
-import Badge from "../../src/react-chayns-badge/component/Badge";
+import Badge from '../../src/react-chayns-badge/component/Badge';
 
 export default class Example extends Component {
     render() {
@@ -74,7 +74,13 @@ export default class Example extends Component {
                     </Accordion>
                     <Accordion
                         head={{
-                            open: <Input placeholder="Accordion title input" className="accordion--no-trigger" style={{ width: '100%' }}/>,
+                            open: (
+                                <Input
+                                    placeholder="Accordion title input"
+                                    className="accordion--no-trigger"
+                                    style={{ width: '100%' }}
+                                />
+                            ),
                             close: 'Accordion Title Input'
                         }}
                         isWrapped
@@ -100,13 +106,19 @@ export default class Example extends Component {
                     </Accordion>
                 </Accordion>
                 <Accordion head="Autogrow" autogrow>
-                    <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
+                    <div className="accordion__content">
+                        <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
+                    </div>
                 </Accordion>
                 <Accordion head="Accordion with Button" right={<Button className="accordion--no-trigger">Test</Button>}>
-                    <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
+                    <div className="accordion__content">
+                        <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
+                    </div>
                 </Accordion>
                 <Accordion head="Fixed Accordion without icon" fixed defaultOpened noIcon>
-                    <div style={{ height: '200px', background: 'linear-gradient(0deg, blue, green)' }}/>
+                    <div className="accordion__content">
+                        <div style={{ height: '200px', background: 'linear-gradient(0deg, blue, green)' }}/>
+                    </div>
                 </Accordion>
             </ExampleContainer>
         );

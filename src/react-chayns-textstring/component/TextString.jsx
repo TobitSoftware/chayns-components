@@ -106,7 +106,7 @@ export default class TextString extends Component {
                                     }
                                 });
                             }
-                            if(!TextString.tobitEmployee) {
+                            if (!TextString.tobitEmployee) {
                                 TextString.tobitEmployee = false;
                                 reject();
                             }
@@ -230,10 +230,10 @@ export default class TextString extends Component {
             if (useDangerouslySetInnerHTML) {
                 chayns.register({ apiDialogs: true });
                 chayns.dialog.iFrame({
-                    url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
-                    // url: 'https://w-jg.tobit.ag:8082/',
+                    // url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
+                    url: 'https://w-jg.tobit.ag:8082',
                     input: textString,
-                    title: `TextString bearbeiten: ${stringName}`,
+                    title: stringName,
                     message: `Sprache: ${lang.name}`,
                     buttons: [{
                         text: 'Speichern',
@@ -247,7 +247,7 @@ export default class TextString extends Component {
                 });
             } else {
                 chayns.dialog.input({
-                    title: `TextString bearbeiten: ${stringName}`,
+                    title: stringName,
                     message: `Sprache: ${lang.name}`,
                     text: textString,
                     buttons: [{

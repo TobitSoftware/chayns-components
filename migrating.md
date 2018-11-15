@@ -1,4 +1,4 @@
-# Migrating from v2 to v4
+# Upgrading from v2 to v4
 
 1. Update the package `chayns-components` to its latest version
 ```bash
