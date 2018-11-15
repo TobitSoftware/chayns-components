@@ -303,7 +303,7 @@ export default class Accordion extends Component {
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}
-                        {head.open ? (currentState === OPEN ? head.open : head.close) : head}
+                        {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
                     </div>
                     {
                         right || onSearch || onSearchEnter
