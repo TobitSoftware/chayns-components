@@ -1,27 +1,28 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { SelectButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class Example extends PureComponent {
     render() {
         const pizza = [
             {
                 id: '0',
                 name: 'Margherita',
-                price: '4.00'
+                price: '4.00',
             }, {
                 id: '1',
                 name: 'Salami',
-                price: '4.50'
+                price: '4.50',
+                isMyPizza: true,
             }, {
                 id: '2',
                 name: 'Prosciutto',
-                price: '4.50'
+                price: '4.50',
             }, {
                 id: '3',
                 name: 'Funghi',
-                price: '5.00'
+                price: '5.00',
             }
         ];
 
@@ -40,6 +41,7 @@ export default class Example extends Component {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
+                        description="Select one or more pizza"
                         label="Select one or more pizza"
                         list={pizza}
                         onSelect={(value) => {
@@ -52,6 +54,8 @@ export default class Example extends Component {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
+                        showLabel
+                        title="Find your pizza"
                         label="Find your pizza"
                         list={pizza}
                         onSelect={(value) => {
@@ -59,6 +63,7 @@ export default class Example extends Component {
                         }}
                         listKey="id"
                         listValue="name"
+                        selectedFlag="isMyPizza"
                         quickFind
                     />
                 </div>

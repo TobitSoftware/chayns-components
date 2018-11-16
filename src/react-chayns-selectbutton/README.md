@@ -38,12 +38,13 @@ You can set the following props on a SelectButton element:
 | disabled | If true, the button will be disabled. | bool | false |
 | label | The text shown inside the button.                                                                  | string   | 'Select' |
 | list | An array containing elements to select from.                                                        | array | |
-| listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | |
-| listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
+| listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | name |
+| listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | value |
 | multiSelect | If true, more than one item can be selected.                                               | bool  | false |
 | quickFind | If true, a search input is shown above the list.                                               | bool  | false |
 | className | Add additional classes to the button.                                                          | string   | |
 | showSelection | Shows selection in button. | bool | true |
+| selectedFlag | The name of the flag which sets an item selected | string | isSelected |
 
 ### Examples ###
 

@@ -11,12 +11,13 @@ export default class SelectButton extends Component {
         disabled: PropTypes.bool,
         label: PropTypes.string,
         list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-        listKey: PropTypes.string.isRequired,
-        listValue: PropTypes.string.isRequired,
+        listKey: PropTypes.string,
+        listValue: PropTypes.string,
         multiSelect: PropTypes.bool,
         quickFind: PropTypes.bool,
         className: PropTypes.string,
         showSelection: PropTypes.bool,
+        selectedFlag: PropTypes.string,
     };
 
     static defaultProps = {
@@ -29,16 +30,28 @@ export default class SelectButton extends Component {
         className: null,
         onSelect: null,
         disabled: false,
+        listKey: 'name',
+        listValue: 'value',
+        selectedFlag: 'isSelected',
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            selected: []
+            selected: props.list.filter(item => item[props.selectedFlag]),
         };
 
         this.onClick = this.onClick.bind(this);
         this.getDialogList = this.getDialogList.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {
+            list, listKey, listValue, selectedFlag
+        } = this.props;
+        if (list !== nextProps.list || listKey !== nextProps.listKey || listValue !== nextProps.listValue || selectedFlag !== nextProps.selectedFlag) {
+            this.setState({ selected: nextProps.list.filter(item => item[nextProps.selectedFlag]) });
+        }
     }
 
     onClick() {
@@ -48,11 +61,9 @@ export default class SelectButton extends Component {
             title,
             description,
             list,
-            listKey,
-            listValue,
             onSelect,
         } = this.props;
-        const _list = this.getDialogList(list, listKey, listValue);
+        const _list = this.getDialogList(list);
 
         chayns.dialog.select({
             title,
@@ -70,9 +81,9 @@ export default class SelectButton extends Component {
         });
     }
 
-    getDialogList(_list, listKey, listValue) {
+    getDialogList(_list) {
         const { selected } = this.state;
-        const { showSelection } = this.props;
+        const { showSelection, listKey, listValue } = this.props;
         const list = [];
 
         if (_list) {
@@ -103,14 +114,6 @@ export default class SelectButton extends Component {
         });
         this.setState({ selected: result });
         return { buttonType, selection: result };
-    }
-
-    setLabel(text) {
-        const { showSelection } = this.props;
-
-        if (showSelection) {
-            this._btn.innerText = text;
-        }
     }
 
     render() {
