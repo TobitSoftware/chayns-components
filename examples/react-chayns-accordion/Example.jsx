@@ -9,6 +9,7 @@ import Input from '../../src/react-chayns-input/component/Input';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';
+import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
 export default class Example extends Component {
     render() {
@@ -110,7 +111,7 @@ export default class Example extends Component {
                         <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
                     </div>
                 </Accordion>
-                <Accordion head="Accordion with Button" right={<Button className="accordion--no-trigger">Test</Button>}>
+                <Accordion head="Accordion with Button" right={<Checkbox toggleButton className="accordion--no-trigger" labelClassName="accordion--no-trigger" />}>
                     <div className="accordion__content">
                         <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
                     </div>

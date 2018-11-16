@@ -42,6 +42,7 @@ export default class Accordion extends Component {
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
         removeContentClosed: PropTypes.bool,
+        onClick: PropTypes.func,
     };
 
     static defaultProps = {
@@ -67,6 +68,7 @@ export default class Accordion extends Component {
         onSearchEnter: null,
         searchPlaceholder: '',
         removeContentClosed: false,
+        onClick: null,
     };
 
     static dataGroups = {};
@@ -151,7 +153,7 @@ export default class Accordion extends Component {
     }
 
     handleAccordionClick = (event) => {
-        const { fixed } = this.props;
+        const { fixed, onClick } = this.props;
 
         if (!fixed) {
             let trigger = true;
@@ -184,6 +186,10 @@ export default class Accordion extends Component {
                     this.accordionOpenListener(event);
                 }
             }
+        }
+
+        if(onClick) {
+            onClick(event);
         }
     };
 
@@ -299,7 +305,7 @@ export default class Accordion extends Component {
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(!chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null)
+                            ...(head && !chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null)
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}

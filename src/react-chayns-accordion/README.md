@@ -58,6 +58,7 @@ The following properties can be set
 | onSearchEnter | Accordion search onEnter callback (makes the search input visible)    | func                       |               |
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
 | removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
+| onClick      | Click listener for head                                                | bool                       | false         |
 
 [1]: You can set an head for an open and a close accordion: ``head={{open: <Input/>, close: 'Text'}}``.
 
