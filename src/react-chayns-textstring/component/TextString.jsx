@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import isTobitEmployee from '../../utils/tobitEmployee';
+import getTappWidth from '../../utils/tappWidth';
 
 export default class TextString extends Component {
     static propTypes = {
@@ -9,6 +13,8 @@ export default class TextString extends Component {
         useDangerouslySetInnerHTML: PropTypes.bool,
         language: PropTypes.string,
         fallback: PropTypes.string,
+        setProps: PropTypes.arrayOf(PropTypes.object),
+        preventNoTranslate: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -16,6 +22,8 @@ export default class TextString extends Component {
         useDangerouslySetInnerHTML: false,
         language: null,
         fallback: '',
+        setProps: {},
+        preventNoTranslate: false,
     };
 
     static textStrings = {};
@@ -34,7 +42,7 @@ export default class TextString extends Component {
         });
     }
 
-    static loadLibrary(projectName, middle = 'langRes', language) { // TODO is textstring in right language?
+    static loadLibrary(projectName, middle = 'langRes', language) {
         return new Promise((resolve, reject) => {
             const lang = TextString.languages.find(l => l.code === (language || TextString.language)).value;
             if (!(TextString.textStrings[lang] && TextString.textStrings[lang][projectName])) {
@@ -82,46 +90,6 @@ export default class TextString extends Component {
         });
     }
 
-    static tobitEmployee = null;
-
-    static isTobitEmployee() {
-        return new Promise((resolve, reject) => {
-            if (TextString.tobitEmployee === true) {
-                resolve();
-            } else if (TextString.tobitEmployee === false || !chayns.env.user.isAuthenticated) {
-                reject();
-            } else {
-                fetch(`https://chaynssvc.tobit.com/v0.5/${chayns.env.site.locationId}/user/UAC/8255`, {
-                    headers: {
-                        Authorization: `bearer ${chayns.env.user.tobitAccessToken}`
-                    }
-                }).then((response) => {
-                    if (response.status === 200) {
-                        response.json().then((json) => {
-                            if (json.data) {
-                                json.data.forEach((item) => {
-                                    if (item.locationId === 1214) {
-                                        TextString.tobitEmployee = true;
-                                        resolve();
-                                    }
-                                });
-                            }
-                            if (!TextString.tobitEmployee) {
-                                TextString.tobitEmployee = false;
-                                reject();
-                            }
-                        }).catch((e) => {
-                            reject(e);
-                        });
-                    } else {
-                        TextString.tobitEmployee = false;
-                        reject(response.statusText);
-                    }
-                }).catch(reject);
-            }
-        });
-    }
-
     static setLanguage(language) {
         TextString.language = language.substring(0, 2).toLowerCase();
     }
@@ -162,17 +130,48 @@ export default class TextString extends Component {
 
     constructor() {
         super();
-        this.state = { textString: null };
+        this.state = { textString: null, textStringProps: {} };
         this.childrenOnClick = this.childrenOnClick.bind(this);
         this.replace = this.replace.bind(this);
         this.changeStringDialog = this.changeStringDialog.bind(this);
         this.changeStringResult = this.changeStringResult.bind(this);
+        this.selectStringToChange = this.selectStringToChange.bind(this);
+        this.setTextStrings = this.setTextStrings.bind(this);
+        this.selectLanguageToChange = this.selectLanguageToChange.bind(this);
     }
 
     componentDidMount() {
-        const { stringName, language, fallback } = this.props;
-        TextString.getTextString(stringName, language).then(this.replace, () => {
-            this.replace(fallback);
+        this.setTextStrings();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { replacements, stringName } = this.props;
+        if (replacements !== nextProps.replacements || stringName !== nextProps.stringName) {
+            this.setTextStrings();
+        }
+    }
+
+    setTextStrings() {
+        const {
+            stringName, language, fallback, setProps
+        } = this.props;
+        TextString.getTextString(stringName, language).then((string) => {
+            this.setState({ textString: this.replace(string) });
+        }, () => {
+            this.setState({ textString: this.replace(fallback) });
+        });
+        Object.keys(setProps).forEach((prop) => {
+            if (prop !== 'fallback') {
+                TextString.getTextString(setProps[prop]).then((string) => {
+                    const { textStringProps } = this.state;
+                    this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(string) } } });
+                }, () => {
+                    if (setProps.fallback && setProps.fallback[prop]) {
+                        const { textStringProps } = this.state;
+                        this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(setProps.fallback[prop]) } } });
+                    }
+                });
+            }
         });
     }
 
@@ -183,45 +182,71 @@ export default class TextString extends Component {
         Object.keys(replacements).forEach((replacement) => {
             textString = textString.replace(replacement, replacements[replacement]);
         });
-        this.setState({ textString });
+        return textString;
     }
 
     childrenOnClick(e) {
-        const { stringName, language } = this.props;
         if (e.ctrlKey) {
-            TextString.isTobitEmployee().then(() => {
-                chayns.dialog.select({
-                    title: `TextString bearbeiten: ${stringName}`,
-                    message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
-                    quickfind: 0,
-                    multiselect: 0,
-                    list: TextString.languages
-                }).then((data1) => {
-                    if (data1.buttonType === 1 && data1.selection && data1.selection.length > 0) {
-                        const lang = data1.selection[0];
-                        if (lang.value === TextString.languages.find(l => l.code === (language || TextString.language)).value) { // language is already selected
-                            this.changeStringDialog(lang);
-                        } else {
-                            // Get lib
-                            let library = null;
-                            let middle = 'langRes';
-                            const globalLang = TextString.languages.find(l => l.code === TextString.language).value;
-                            Object.keys(TextString.textStrings[globalLang]).forEach((lib) => {
-                                if (TextString.textStrings[globalLang][lib][stringName]) {
-                                    library = lib;
-                                    // eslint-disable-next-line prefer-destructuring
-                                    middle = TextString.textStrings[globalLang][lib].middle;
-                                }
-                            });
-                            TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => {
-                                this.changeStringDialog(lang);
-                            });
-                        }
-                    }
-                });
-            }).catch(() => {
+            isTobitEmployee().then(this.selectStringToChange).catch(() => {
             });
         }
+    }
+
+    selectStringToChange() {
+        const { stringName, setProps } = this.props;
+
+        if (Object.keys(setProps).length > 1) {
+            const stringList = [{ name: `children: ${stringName}`, value: stringName }];
+            Object.keys(setProps).forEach((key) => {
+                if (key !== 'fallback') stringList.push({ name: `${key}: ${setProps[key]}`, value: setProps[key] });
+            });
+            chayns.dialog.select({
+                title: 'TextString wählen',
+                message: 'Wähle den TextString, den du ändern möchtest:',
+                quickfind: 0,
+                multiselect: 0,
+                list: stringList
+            }).then((data) => {
+                if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
+                    this.selectLanguageToChange(data.selection[0].value);
+                }
+            });
+        } else {
+            this.selectLanguageToChange(stringName);
+        }
+    }
+
+    selectLanguageToChange(stringName) {
+        const { language } = this.props;
+        chayns.dialog.select({
+            title: `TextString bearbeiten: ${stringName}`,
+            message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
+            quickfind: 0,
+            multiselect: 0,
+            list: TextString.languages
+        }).then((data) => {
+            if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
+                const lang = data.selection[0];
+                if (lang.value === TextString.languages.find(l => l.code === (language || TextString.language)).value) { // language is already selected
+                    this.changeStringDialog(lang);
+                } else {
+                    // Get lib
+                    let library = null;
+                    let middle = 'langRes';
+                    const globalLang = TextString.languages.find(l => l.code === TextString.language).value;
+                    Object.keys(TextString.textStrings[globalLang]).forEach((lib) => {
+                        if (TextString.textStrings[globalLang][lib][stringName]) {
+                            library = lib;
+                            // eslint-disable-next-line prefer-destructuring
+                            middle = TextString.textStrings[globalLang][lib].middle;
+                        }
+                    });
+                    TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code).then(() => {
+                        this.changeStringDialog(lang);
+                    });
+                }
+            }
+        });
     }
 
     changeStringDialog(lang) {
@@ -230,8 +255,8 @@ export default class TextString extends Component {
             if (useDangerouslySetInnerHTML) {
                 chayns.register({ apiDialogs: true });
                 chayns.dialog.iFrame({
-                    // url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
-                    url: 'https://w-jg.tobit.ag:8082',
+                    width: getTappWidth() + 76,
+                    url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
                     input: textString,
                     title: stringName,
                     message: `Sprache: ${lang.name}`,
@@ -264,10 +289,10 @@ export default class TextString extends Component {
         });
     }
 
-    changeStringResult(data2, lang) {
+    changeStringResult(data, lang) {
         const { stringName, useDangerouslySetInnerHTML } = this.props;
-        if (data2.buttonType === 1 && (data2.text || data2.value)) {
-            TextString.changeTextString(stringName, useDangerouslySetInnerHTML ? data2.value : data2.text, lang.value).then((result) => {
+        if (data.buttonType === 1 && (data.text || data.value)) {
+            TextString.changeTextString(stringName, useDangerouslySetInnerHTML ? data.value : data.text, lang.value).then((result) => {
                 if (result.ResultCode === 0) {
                     chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
                 } else {
@@ -280,8 +305,10 @@ export default class TextString extends Component {
     }
 
     render() {
-        const { textString } = this.state;
-        const { children, useDangerouslySetInnerHTML } = this.props;
+        const { textString, textStringProps } = this.state;
+        const {
+            children, useDangerouslySetInnerHTML, language, preventNoTranslate
+        } = this.props;
 
         const childrenProps = {
             ...{
@@ -297,9 +324,11 @@ export default class TextString extends Component {
                     ? { dangerouslySetInnerHTML: { __html: textString } }
                     : null
             ),
+            ...textStringProps,
+            ...(!preventNoTranslate && (!language || language === TextString.language) ? { className: classNames('no-translate', children.props.className) } : null),
         };
 
-        return React.cloneElement(// TODO Add no-translate if language is right
+        return React.cloneElement(
             children,
             childrenProps,
             useDangerouslySetInnerHTML ? null : textString
