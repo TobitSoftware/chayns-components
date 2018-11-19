@@ -115,12 +115,17 @@ export default class Input extends Component {
         if (dynamic) {
             return (
                 <div
-                    className={`input-group ${className}`}
+                    className={classNames('input-group', className, { labelRight: (this.ref && this.ref.value) || (!this.ref && (value || defaultValue)) })}
                     ref={wrapperRef}
                 >
                     <input
                         style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
-                        ref={inputRef}
+                        ref={(ref) => {
+                            if (inputRef) {
+                                inputRef(ref);
+                            }
+                            this.ref = ref;
+                        }}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
@@ -134,7 +139,10 @@ export default class Input extends Component {
                     />
                     <label
                         htmlFor={id || this.id}
-                        className={classNames({ 'input--invalid': !valid || invalid, labelIcon: icon })}
+                        className={classNames({
+                            'input--invalid': !valid || invalid,
+                            labelIcon: icon
+                        })}
                     >
                         {placeholder}
                     </label>

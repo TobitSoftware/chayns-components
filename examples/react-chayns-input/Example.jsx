@@ -5,16 +5,16 @@ import { Input } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
 export default class Example extends PureComponent {
-    onBlur(value) {
-        console.log('onBlur', value);
+    onBlur(value, valid) {
+        console.log('onBlur', value, valid);
     }
 
-    onChange(value) {
-        console.log('onChange', value);
+    onChange(value, valid) {
+        console.log('onChange', value, valid);
     }
 
-    onEnter(value) {
-        console.log('onEnter', value);
+    onEnter(value, valid) {
+        console.log('onEnter', value, valid);
     }
 
     onKeyUp(e) {
