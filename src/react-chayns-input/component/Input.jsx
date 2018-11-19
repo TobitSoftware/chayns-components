@@ -60,7 +60,7 @@ export default class Input extends Component {
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.callIfValid = this.callIfValid.bind(this);
+        this.callValidated = this.callValidated.bind(this);
     }
 
     onKeyUp(e) {
@@ -69,26 +69,26 @@ export default class Input extends Component {
             onKeyUp(e);
         }
         if (e.keyCode === 13) {
-            this.callIfValid(e.target.value, onEnter);
+            this.callValidated(e.target.value, onEnter);
         }
     }
 
     onBlur(e) {
         const { onBlur } = this.props;
-        this.callIfValid(e.target.value, onBlur);
+        this.callValidated(e.target.value, onBlur);
     }
 
     onChange(e) {
         const { onChange } = this.props;
-        this.callIfValid(e.target.value, onChange);
+        this.callValidated(e.target.value, onChange);
     }
 
-    callIfValid(value, callback) {
+    callValidated(value, callback) {
         const { regExp } = this.props;
-        const valid = (!regExp || value.match(regExp));
+        const valid = !(regExp && !value.match(regExp));
 
-        if (valid && callback) {
-            callback(value);
+        if (callback) {
+            callback(value, valid);
         }
         this.setState({ valid });
     }
