@@ -32,7 +32,7 @@ export default class ContextMenu extends Component {
         items: [],
         position: 0,
         parent: document.getElementsByClassName('tapp')[0],
-        children: null,
+        children: <Icon icon="ts-ellipsis_v"/>,
         coordinates: null,
         onChildrenClick: null,
         childrenStyle: null,
@@ -160,6 +160,7 @@ export default class ContextMenu extends Component {
                         ref={ref => this.childrenNode = ref}
                         onClick={this.onChildrenClick}
                         style={childrenStyle}
+                        className="accordion--no-trigger context-menu__children"
                     >
                         {children}
                     </div>
