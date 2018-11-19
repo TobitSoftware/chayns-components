@@ -48,33 +48,19 @@ export default class ContextMenu extends Component {
     }
 
     componentDidMount() {
-        this.updateHidden(this.props.hidden);
+        const { hide } = this.props;
+        this.updateHidden(hide);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.hide !== this.props.hide) {
+        const { hide } = this.props;
+        if (nextProps.hide !== hide) {
             this.updateHidden(nextProps.hide);
         }
     }
 
     componentWillUnmount() {
         clearTimeout(this.timeout);
-    }
-
-    updateHidden(hide) {
-        if (hide) {
-            this.setState({ hide: true });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ displayNone: true });
-            }, 350);
-        } else {
-            this.setState({ displayNone: false });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ hide: false });
-            }, 50);
-        }
     }
 
     onChildrenClick(e) {
@@ -117,6 +103,22 @@ export default class ContextMenu extends Component {
             };
         }
         return { x: 0, y: 0 };
+    }
+
+    updateHidden(hide) {
+        if (hide) {
+            this.setState({ hide: true });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ displayNone: true });
+            }, 350);
+        } else {
+            this.setState({ displayNone: false });
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.setState({ hide: false });
+            }, 50);
+        }
     }
 
     render() {
