@@ -8,7 +8,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ChooseButton: 'react-chayns-button/component/ChooseButton.js',
         Calendar: 'react-chayns-calendar/component/Calendar.js',
         Checkbox: 'react-chayns-checkbox/component/Checkbox.js',
-        Combobox: 'react-chayns-checkbox/component/Combobox.js',
+        ComboBox: 'react-chayns-combobox/component/ComboBox.js',
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
