@@ -27,15 +27,17 @@ export default class Gallery extends Component {
     }
 
     static getScaledImageUrl(url, shortEdgeSize) {
+        const scale = Math.floor(shortEdgeSize * window.devicePixelRatio);
+
         if (url.indexOf('tsimg.space') >= 0) {
             if (url.indexOf('jpg') >= 0) {
-                return url.replace('.jpg', `_s${shortEdgeSize * window.devicePixelRatio}-mshortedgescale.jpg`);
+                return url.replace('.jpg', `_s${scale}-mshortedgescale.jpg`);
             }
             if (url.indexOf('jpeg') >= 0) {
-                return url.replace('.jpeg', `_s${shortEdgeSize * window.devicePixelRatio}-mshortedgescale.jpeg`);
+                return url.replace('.jpeg', `_s${scale}-mshortedgescale.jpeg`);
             }
             if (url.indexOf('png') >= 0) {
-                return url.replace('.png', `_s${shortEdgeSize * window.devicePixelRatio}-mshortedgescale.png`);
+                return url.replace('.png', `_s${scale}-mshortedgescale.png`);
             }
         }
         return url;
