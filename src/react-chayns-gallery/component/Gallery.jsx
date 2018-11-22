@@ -29,7 +29,7 @@ export default class Gallery extends Component {
     static getScaledImageUrl(url, shortEdgeSize) {
         const scale = Math.floor(shortEdgeSize * window.devicePixelRatio);
 
-        if (url.indexOf('tsimg.space') >= 0) {
+        if (url.indexOf('tsimg.space') || url.indexOf('tsimg.cloud') >= 0) {
             if (url.indexOf('jpg') >= 0) {
                 return url.replace('.jpg', `_s${scale}-mshortedgescale.jpg`);
             }
