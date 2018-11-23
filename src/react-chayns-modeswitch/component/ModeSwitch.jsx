@@ -7,7 +7,10 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-let globalState = { modes: [], activeModeId: 0 };
+let globalState = {
+    modes: [],
+    activeModeId: 0
+};
 const onChangeListener = [];
 
 export default class ModeSwitch extends Component {
@@ -60,7 +63,7 @@ export default class ModeSwitch extends Component {
         this.init = this.init.bind(this);
 
         window.chayns.ready.then(() => {
-            window.chayns.addAccessTokenChangeListener(true, this.init);
+            window.chayns.addAccessTokenChangeListener(this.init);
             this.init();
         });
     }
@@ -99,10 +102,17 @@ export default class ModeSwitch extends Component {
         const user = newModes.filter(mode => mode.id === 0);
         const admin = newModes.filter(mode => mode.id === 1);
         if (admin.length === 0) {
-            newModes.unshift({ id: 1, name: 'chayns® Manager', uacIds: [1] });
+            newModes.unshift({
+                id: 1,
+                name: 'chayns® Manager',
+                uacIds: [1]
+            });
         }
         if (user.length === 0) {
-            newModes.unshift({ id: 0, name: window.chayns.env.user.name });
+            newModes.unshift({
+                id: 0,
+                name: window.chayns.env.user.name
+            });
         }
         newModes = newModes.filter(mode => !mode.uacIds || this.isUserInGroup(mode.uacIds));
         return newModes;
@@ -111,8 +121,14 @@ export default class ModeSwitch extends Component {
     init() {
         const { defaultMode, save, modes } = this.props;
         if (chayns.env.user.isAuthenticated) {
-            globalState = { modes: this.setModes(modes), activeModeId: defaultMode || 0 };
-            this.setState({ ...globalState, open: false });
+            globalState = {
+                modes: this.setModes(modes),
+                activeModeId: defaultMode || 0
+            };
+            this.setState({
+                ...globalState,
+                open: false
+            });
 
             chayns.removeAdminSwitchListener(this.switchMode);
             chayns.addAdminSwitchListener(this.switchMode);
@@ -126,22 +142,27 @@ export default class ModeSwitch extends Component {
                 }
             }
             if (save) {
-                const storage = window.chayns.storage.get('react__modeSwitch--currentMode').then(() => {
-                    if (storage.object) {
-                        globalState.activeModeId = storage.object;
-                        this.setState({ activeModeId: storage.object });
-                        this.onChange(storage.object);
-                    } else {
-                        const { activeModeId } = this.state;
-                        this.onChange(activeModeId);
-                    }
-                });
+                const storage = window.chayns.storage.get('react__modeSwitch--currentMode')
+                    .then(() => {
+                        if (storage.object) {
+                            globalState.activeModeId = storage.object;
+                            this.setState({ activeModeId: storage.object });
+                            this.onChange(storage.object);
+                        } else {
+                            const { activeModeId } = this.state;
+                            this.onChange(activeModeId);
+                        }
+                    });
             } else {
                 const { activeModeId } = this.state;
                 this.onChange(activeModeId);
             }
         } else {
-            this.setState({ modes: [], activeModeId: null, open: false });
+            this.setState({
+                modes: [],
+                activeModeId: null,
+                open: false
+            });
         }
     }
 
