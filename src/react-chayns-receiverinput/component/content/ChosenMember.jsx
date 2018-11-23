@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
-import Icon from 'tobit-intercom-icon';
-
-import 'tobit-intercom-icon/lib/icon.css';
+import Icon from './Icon';
 
 export default class ChosenMember extends Component {
     static propTypes = {
@@ -61,7 +59,7 @@ export default class ChosenMember extends Component {
 
         const isDarkMode = chayns.env.site.colorMode === 1;
 
-        const chosenMemberContentClasses = classnames('chosen-member__content chayns__background-color--25', {
+        const chosenMemberContentClasses = classNames('chosen-member__content chayns__background-color--25', {
             'chosen-member__content--dark': isDarkMode
         });
 

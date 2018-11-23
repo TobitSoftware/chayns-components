@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
 
-import { getGroupImage, getTextstring, handleImageError } from 'tobit-intercom-helper';
+import { getGroupImage, handleImageError } from '../../utils/image';
+import { getTextstring } from '../../utils/textstring';
 
 export default class Receiver extends Component {
     static propTypes = {

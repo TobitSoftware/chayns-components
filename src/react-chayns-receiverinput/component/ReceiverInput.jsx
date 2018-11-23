@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
-import { getMemberCount } from 'tobit-intercom-helper';
+import { getMemberCount } from '../utils/member';
 
 import ReceiverSearchPopup from './content/ReceiverSearchPopup';
 import ChosenMember from './content/ChosenMember';
