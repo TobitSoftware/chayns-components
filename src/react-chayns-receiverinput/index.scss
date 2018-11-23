@@ -1,0 +1,64 @@
+@import "./component/content/receiverSearchPopup";
+@import "./component/content/chosenMember";
+@import "./component/content/receiver";
+
+.receiver-input-box {
+    .receiver-input {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        padding-bottom: 2px;
+        width: 100%;
+
+        &--dark {
+            border-bottom-color: #5c646c;
+        }
+
+        &--pure {
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .input-box {
+            overflow: hidden;
+            min-width: 200px;
+            padding-bottom: 2px;
+
+            &.hide {
+                height: 0 !important;
+            }
+        }
+
+        input {
+            transition: opacity .3s ease;
+            display: inline-block;
+            border: none;
+            width: 100%;
+
+            &[disabled] {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .group-name-input {
+        transition: all .3s ease;
+        padding-top: 4px;
+        max-height: 40px;
+        opacity: 1;
+
+        &.hide {
+            padding-top: 0 !important;
+            max-height: 0 !important;
+            opacity: 0 !important;
+        }
+
+        input {
+            transition: opacity .3s ease;
+            width: 100%;
+
+            &[disabled] {
+                opacity: 0.5;
+            }
+        }
+    }
+}
