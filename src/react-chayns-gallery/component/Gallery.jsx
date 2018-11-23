@@ -28,18 +28,15 @@ export default class Gallery extends Component {
 
     static getScaledImageUrl(url, shortEdgeSize) {
         const scale = Math.floor(shortEdgeSize * window.devicePixelRatio);
+        const regexImgType = /[.](jpg|jpeg|png)/;
+        const regexImgService = /(tsimg.space|tsimg.cloud)/;
+        const imgType = url.match(regexImgType);
+        const imgService = url.match(regexImgService);
 
-        if (url.indexOf('tsimg.space') || url.indexOf('tsimg.cloud') >= 0) {
-            if (url.indexOf('jpg') >= 0) {
-                return url.replace('.jpg', `_s${scale}-mshortedgescale.jpg`);
-            }
-            if (url.indexOf('jpeg') >= 0) {
-                return url.replace('.jpeg', `_s${scale}-mshortedgescale.jpeg`);
-            }
-            if (url.indexOf('png') >= 0) {
-                return url.replace('.png', `_s${scale}-mshortedgescale.png`);
-            }
+        if (imgService && imgType) {
+            return url.replace(imgType[0], `_s${scale}-mshortedgescale${imgType[0]}`);
         }
+
         return url;
     }
 
