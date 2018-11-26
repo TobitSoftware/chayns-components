@@ -1,0 +1,19 @@
+.chosen-member {
+    border-color: transparent;
+    border-width: 2px 0;
+    border-style: solid;
+    margin-right: 5px;
+    float: left;
+
+    &__content {
+        padding: 0 8px;
+
+        &--dark {
+            background-color: rgba(125, 125, 125, 0.5) !important;
+        }
+
+        i {
+            margin-left: 5px;
+        }
+    }
+}

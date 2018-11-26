@@ -1,0 +1,89 @@
+.receiver-wrapper {
+    transition: background-color .3s ease;
+    height: 38px;
+
+    &:hover {
+        background-color: transparent !important;
+    }
+
+    .receiver {
+        transition: background-color .3s ease;
+        cursor: pointer;
+        padding: 4px;
+
+        &:not(:hover) {
+            background-color: transparent !important;
+        }
+
+        .pic {
+            vertical-align: middle;
+            display: inline-block;
+            margin-right: 10px;
+            height: 30px;
+            width: 30px;
+
+            img {
+                object-fit: cover;
+                height: 100%;
+                width: 100%;
+            }
+
+            .multi-image {
+                height: 100%;
+                width: 100%;
+
+                .full-left {
+                    float: left;
+                    width: 60%;
+                    height: 100%;
+                    background-position: center;
+                    background-size: cover;
+                    border-right: 2px solid white;
+                }
+
+                .half-left {
+                    float: left;
+                    width: 50%;
+                    height: 100%;
+                    background-position: center;
+                    background-size: cover;
+                    border-right: 2px solid white;
+                }
+
+                .half-right {
+                    float: right;
+                    width: 50%;
+                    height: 100%;
+                    background-position: center;
+                    background-size: cover;
+                }
+
+                .right-wrapper {
+                    float: right;
+                    width: 40%;
+                    height: 100%;
+
+                    .top-right {
+                        background-position: center;
+                        background-size: cover;
+                        height: 50%;
+                        width: 100%;
+                        border-bottom: 2px solid white;
+                    }
+
+                    .bottom-right {
+                        background-position: center;
+                        background-size: cover;
+                        height: 50%;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+
+        .receiver-name {
+            vertical-align: middle;
+            display: inline-block;
+        }
+    }
+}

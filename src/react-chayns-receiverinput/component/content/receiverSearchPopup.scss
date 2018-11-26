@@ -1,0 +1,34 @@
+.receiver-popup {
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, .3);
+    position: absolute !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    border-style: solid;
+    border-width: 1px;
+    max-height: 250px;
+    max-width: 650px;
+    overflow-y: auto;
+    z-index: 99999;
+
+    &.hide {
+        display: none !important;
+    }
+
+    &.dark {
+        border-color: rgba(125, 125, 125, .5) !important;
+        color: white !important;
+    }
+
+    .group-headline {
+        padding: 2px 10px;
+    }
+
+    .group-headline.dark {
+        background-color: rgba(125, 125, 125, .4) !important;
+    }
+
+    .error-message {
+        padding: 2px 10px;
+        font-size: 85%;
+    }
+}

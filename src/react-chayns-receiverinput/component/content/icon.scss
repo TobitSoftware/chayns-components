@@ -1,0 +1,268 @@
+.icon {
+    font-family: FontAwesome, serif !important;
+    transition: all .3s ease;
+    display: inline-block;
+    cursor: pointer;
+    opacity: .8;
+
+    &:not(&--static):not(&--mobile):hover {
+        opacity: 1 !important;
+    }
+
+    &--active {
+        opacity: 1 !important;
+    }
+
+    &--disabled {
+        pointer-events: none !important;
+        cursor: default !important;
+        opacity: .4 !important;
+    }
+
+    &--highlight {
+        &-pulse {
+            animation: pulse 2500ms infinite;
+        }
+
+        &-shake {
+            animation: shake 2500ms infinite;
+        }
+    }
+
+    &--hidden {
+        display: none !important;
+    }
+
+    &--no-pointer {
+        cursor: default !important;
+    }
+
+    &--bright {
+        color: white !important;
+    }
+
+    &--float-right {
+        float: right !important;
+    }
+
+    &--float-left {
+        float: left !important;
+    }
+
+    // FontAwesome icon contents
+    &-smile-o:before {
+        content: '\f118';
+    }
+
+    &-thumbs-up:before {
+        content: '\f164';
+    }
+
+    &-check:before {
+        content: '\f00c';
+    }
+
+    &-paper-plane:before {
+        content: '\f1d8';
+    }
+
+    &-eur:before {
+        content: '\f153';
+    }
+
+    &-times:before {
+        content: '\f00d';
+    }
+
+    &-pencil-square-o:before {
+        content: '\f044';
+    }
+
+    &-exclamation:before {
+        content: '\f12a';
+    }
+
+    &-exclamation-triangle:before {
+        content: '\f071';
+    }
+
+    &-chevron-left:before {
+        content: '\f053';
+    }
+
+    &-user:before {
+        content: '\f007';
+    }
+
+    &-pencil:before {
+        content: '\f040';
+    }
+
+    &-trash:before {
+        content: '\f1f8';
+    }
+
+    &-plus:before {
+        content: '\f067';
+    }
+
+    &-angle-down:before {
+        content: '\f107';
+    }
+
+    &-search:before {
+        content: '\f002';
+    }
+
+    &-info-circle:before {
+        content: '\f05a';
+    }
+
+    &-envelope:before {
+        content: '\f0e0';
+    }
+
+    &-paperclip:before {
+        content: '\f0c6';
+    }
+
+    &-clock-o:before {
+        content: '\f017';
+    }
+
+    &-camera:before {
+        content: '\f030';
+    }
+
+    &-caret-down:before {
+        content: '\f0d7';
+    }
+
+    &-puzzle-piece:before {
+        content: '\f12e';
+    }
+
+    &-share:before {
+        content: '\f064';
+    }
+
+    &-reply:before {
+        content: '\f112';
+    }
+
+    &-chrome:before {
+        content: '\f268';
+    }
+
+    &-opera:before {
+        content: '\f26a';
+    }
+
+    &-firefox:before {
+        content: '\f269';
+    }
+
+    &-edge:before {
+        content: '\f282';
+    }
+
+    &-arrow-left:before {
+        content: '\f060';
+    }
+
+    &-phone:before {
+        content: '\f095';
+    }
+
+    &-volume-control-phone:before {
+        content: '\f2a0';
+    }
+
+    &-video:before {
+        content: '\f03d';
+    }
+
+    &-video-slash:before {
+        content: '\f4e2';
+    }
+
+    &-microphone:before {
+        content: '\f130';
+    }
+
+    &-microphone-slash:before {
+        content: '\f131';
+    }
+
+    &-refresh:before {
+        content: '\f021';
+    }
+
+    &-long-arrow-right:before {
+        content: '\f178';
+    }
+
+    // TobitSoftware icon contents
+    &-ts {
+        font-family: FontTS, serif !important;
+
+        &-wrong:before {
+            content: '\e901';
+        }
+
+        &-check:before {
+            content: '\e900';
+        }
+
+        &-ellipsis-v:before {
+            content: '\e91b';
+        }
+
+        &-chayns:before {
+            content: '\e601';
+        }
+    }
+}
+
+@mixin pulse($n) {
+    0% {
+        transform: scaleX(1) scaleY(1);
+    }
+    @for $i from 1 through 9 {
+        $m: 1;
+        @if $i % 2 !=0 {
+            $m: $n;
+        }
+        #{$i*5.5%} {
+            transform: scaleX($m) scaleY($m);
+        }
+    }
+    55%, 100% {
+        transform: scaleX(1) scaleY(1);
+    }
+}
+
+@mixin shake($n) {
+    0% {
+        transform: rotate(0);
+    }
+    $pos: 1;
+    @for $i from 1 through 9 {
+        $pos: $pos * -1;
+        $m: ($n / $i) * $pos;
+        #{$i*5.5%} {
+            transform: rotate($m * 1deg);
+        }
+    }
+    55%, 100% {
+        transform: rotate(0);
+    }
+}
+
+@keyframes pulse {
+    @include pulse(0.85);
+}
+
+@keyframes shake {
+    @include shake(30);
+}
