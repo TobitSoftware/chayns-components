@@ -20,6 +20,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         OrientationHelper: 'utils/OrientationHelper.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
         RadioButton: 'react-chayns-radiobutton/component/RadioButton.js',
+        ReceiverInput: 'react-chayns-receiverinput/component/ReceiverInput.js',
         RfidInput: 'react-chayns-rfid_input/component/RfidInput.js',
         ScrollView: 'react-chayns-scrollview/component/ScrollView.js',
         SelectButton: 'react-chayns-selectbutton/component/SelectButton.js',
