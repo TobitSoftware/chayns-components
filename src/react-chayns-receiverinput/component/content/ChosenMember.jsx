@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Icon from '../../../react-chayns-icon/component/Icon';
@@ -57,16 +56,9 @@ export default class ChosenMember extends Component {
         const memberId = siteId !== null ? siteId : (personId !== null ? personId : null);
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
-        const isDarkMode = chayns.env.site.colorMode === 1;
-
-        const chosenMemberContentClasses = classNames('chosen-member__content', {
-            'chayns__background-color--white-2': !isDarkMode,
-            'chosen-member__content--dark': isDarkMode
-        });
-
         return (
             <div className="chosen-member">
-                <div className={chosenMemberContentClasses}>
+                <div className="chosen-member__content">
                     <span className="chosen-member__content__name notranslate">
                         {memberName}
                     </span>

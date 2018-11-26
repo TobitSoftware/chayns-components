@@ -461,8 +461,6 @@ export default class ReceiverInput extends Component {
 
         const { chosenReceivers, groupName, receiverSearchString } = this.state;
 
-        const isDarkMode = chayns.env.site.colorMode === 1;
-
         const knownPersonsSelected = chosenReceivers.filter(cr => cr.groupId === 0).length > 0;
 
         const memberCount = getMemberCount(chosenReceivers);
@@ -475,8 +473,6 @@ export default class ReceiverInput extends Component {
         });
 
         const receiverInputClasses = classNames('receiver-input', {
-            'chayns__border-color--white-3': !isDarkMode,
-            'receiver-input--dark': isDarkMode,
             'receiver-input--pure': pureMode
         });
 

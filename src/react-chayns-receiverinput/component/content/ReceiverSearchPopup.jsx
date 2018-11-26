@@ -2,7 +2,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Receiver from './Receiver';
@@ -67,21 +66,9 @@ export default class ReceiverSearchPopup extends Component {
             show
         } = this.props;
 
-        const isDarkMode = chayns.env.site.colorMode === 1;
-
         const locationResultState = foundReceivers.locations.state;
         const groupResultState = foundReceivers.groups.state;
         const userResultState = foundReceivers.users.state;
-
-        const headlineClasses = classNames('group-headline popup-item', {
-            'chayns__background-color--white-3': !isDarkMode,
-            'group-headline--dark': isDarkMode
-        });
-
-        const receiverPopupClasses = classNames('receiver-popup', {
-            'chayns__border-color--dark-3 receiver-popup--dark': isDarkMode,
-            'chayns__border-color--white-3': !isDarkMode
-        });
 
         const tooManyResultsError = <div className="error-message popup-item">Zu viele Ergebnisse gefunden</div>;
         const noMatchError = <div className="error-message popup-item">Keine passenden Ergebnisse gefunden</div>;
@@ -90,7 +77,7 @@ export default class ReceiverSearchPopup extends Component {
         const groups = [];
         const users = [];
 
-        foundReceivers.locations.values.forEach((l, i) => {
+        foundReceivers.locations.values.forEach((l) => {
             locations.push(<Receiver
                 imgUrl={`https://sub60.tobit.com/l/${l.locationID}?size=30`}
                 name={l.appstoreName !== '' ? l.appstoreName : l.showName}
@@ -101,11 +88,10 @@ export default class ReceiverSearchPopup extends Component {
                 showIdInPopup={showIdInPopup}
                 locationId={l.locationID}
                 siteId={l.siteID}
-                index={i}
             />);
         });
 
-        foundReceivers.users.values.forEach((u, i) => {
+        foundReceivers.users.values.forEach((u) => {
             users.push(<Receiver
                 imgUrl={`https://sub60.tobit.com/u/${u.userId}?size=30`}
                 updateReceiverSearchString={updateReceiverSearchString}
@@ -116,12 +102,11 @@ export default class ReceiverSearchPopup extends Component {
                 personId={u.personId}
                 userId={u.userId}
                 name={u.name}
-                index={i}
             />);
         });
 
         if (isLocation) {
-            foundReceivers.groups.values.forEach((g, i) => {
+            foundReceivers.groups.values.forEach((g) => {
                 groups.push(<Receiver
                     updateReceiverSearchString={updateReceiverSearchString}
                     updateChosenReceivers={updateChosenReceivers}
@@ -130,7 +115,6 @@ export default class ReceiverSearchPopup extends Component {
                     includedUsers={g.userIds}
                     groupId={g.groupId}
                     name={g.showName}
-                    index={i}
                 />);
             });
         }
@@ -157,26 +141,50 @@ export default class ReceiverSearchPopup extends Component {
             <TransitionGroup>
                 <CSSTransition key={showPopup} timeout={300} classNames="swipe-up">
                     {showPopup ? (
-                        <div className={receiverPopupClasses} style={receiverPopupStyles}>
+                        <div className="receiver-popup" style={receiverPopupStyles}>
                             {onlyPersons ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Sites</div>
+                                    <div className="group-headline popup-item">Sites</div>
                                     {locations}
-                                    {locationResultState > 0 ? (locationResultState === 2 ? tooManyResultsError : noMatchError) : <div className="popup-item"/>}
+                                    {locationResultState > 0 ? (
+                                        locationResultState === 2 ? (
+                                            tooManyResultsError
+                                        ) : (
+                                            noMatchError
+                                        )
+                                    ) : (
+                                            <div className="popup-item"/>
+                                    )}
                                 </Fragment>
                             )}
                             {onlySites ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Personen</div>
+                                    <div className="group-headline popup-item">Personen</div>
                                     {users}
-                                    {userResultState > 0 ? (userResultState === 2 ? tooManyResultsError : noMatchError) : <div className="popup-item"/>}
+                                    {userResultState > 0 ? (
+                                        userResultState === 2 ? (
+                                            tooManyResultsError
+                                        ) : (
+                                            noMatchError
+                                        )
+                                    ) : (
+                                        <div className="popup-item"/>
+                                    )}
                                 </Fragment>
                             )}
                             {!isLocation ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Gruppen</div>
+                                    <div className="group-headline popup-item">Gruppen</div>
                                     {groups}
-                                    {groupResultState > 0 ? (groupResultState === 2 ? tooManyResultsError : noMatchError) : <div className="popup-item"/>}
+                                    {groupResultState > 0 ? (
+                                        groupResultState === 2 ? (
+                                            tooManyResultsError
+                                        ) : (
+                                            noMatchError
+                                        )
+                                    ) : (
+                                        <div className="popup-item"/>
+                                    )}
                                 </Fragment>
                             )}
                         </div>

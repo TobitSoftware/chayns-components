@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { getGroupImage, handleImageError } from '../../utils/image';
@@ -12,7 +11,6 @@ export default class Receiver extends Component {
         updateReceiverSearchString: PropTypes.func.isRequired,
         updateChosenReceivers: PropTypes.func.isRequired,
         chosenReceivers: PropTypes.array.isRequired,
-        index: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         includedUsers: PropTypes.array,
         showIdInPopup: PropTypes.bool,
@@ -46,7 +44,6 @@ export default class Receiver extends Component {
             userId,
             siteId,
             imgUrl,
-            index,
             name
         } = this.props;
 
@@ -59,7 +56,6 @@ export default class Receiver extends Component {
             || siteId !== nextProps.siteId
             || userId !== nextProps.userId
             || imgUrl !== nextProps.imgUrl
-            || index !== nextProps.index
             || name !== nextProps.name;
     }
 
@@ -78,7 +74,7 @@ export default class Receiver extends Component {
             newReceiver = { name, locationId, siteId };
             receivers = chosenReceivers.filter(r => r.locationId !== locationId);
         } else if (userId) {
-            newReceiver = { name, userId, personId};
+            newReceiver = { name, userId, personId };
             receivers = chosenReceivers.filter(r => r.userId !== userId);
         } else {
             newReceiver = { name, groupId, includedUsers };
@@ -109,7 +105,6 @@ export default class Receiver extends Component {
             userId,
             siteId,
             imgUrl,
-            index,
             name
         } = this.props;
 
@@ -120,27 +115,13 @@ export default class Receiver extends Component {
         const receiverWrapperStyles = {};
         const receiverStyles = {};
 
-        const isDarkMode = chayns.env.site.colorMode === 1;
-
-        const receiverWrapperClasses = classNames('receiver-wrapper popup-item', {
-            'chayns__background-color--white-1': !isDarkMode && index % 2 > 0
-        });
-
-        const receiverClasses = classNames('receiver popup-item', {
-            'chayns__background-color--white-2': !isDarkMode
-        });
-
-        if (isDarkMode) {
-            receiverStyles.backgroundColor = 'rgba(125, 125, 125, 0.30)';
-
-            if (index % 2 > 0) {
-                receiverWrapperStyles.backgroundColor = 'rgba(125, 125, 125, 0.1)';
-            }
-        }
-
         return (
-            <div className={receiverWrapperClasses} style={receiverWrapperStyles} onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)}>
-                <div className={receiverClasses} style={receiverStyles}>
+            <div
+                onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)}
+                className="receiver-wrapper popup-item"
+                style={receiverWrapperStyles}
+            >
+                <div className="receiver popup-item" style={receiverStyles}>
                     <div className="pic popup-item">
                         {groupId !== null ? (
                             getGroupImage(groupId, includedUsers.map(id => ({ userId: id })))
