@@ -282,23 +282,27 @@ export default class ReceiverInput extends Component {
         this.setState({ groupName });
     };
 
-    showReceiverPopup = async (event) => {
+    showReceiverPopup = (event) => {
         const { addPageOffset } = this.props;
 
         const target = event.target.parentNode.parentNode;
 
         const inputOffsets = target.getBoundingClientRect();
 
-        let pageOffset = 0;
-
         if (addPageOffset) {
             if (chayns.env.isApp) {
-                pageOffset = window.pageYOffset;
+                this.setPosition(inputOffsets, window.pageYOffset);
             } else {
-                pageOffset = (await chayns.getWindowMetrics()).pageYOffset;
+                chayns.getWindowMetrics().then((metrics) => {
+                    this.setPosition(inputOffsets, metrics.pageYOffset);
+                });
             }
+        } else {
+            this.setPosition(inputOffsets, 0);
         }
+    };
 
+    setPosition = (inputOffsets, pageOffset) => {
         const top = inputOffsets.top + inputOffsets.height + pageOffset;
         const { width, left } = inputOffsets;
 
@@ -332,7 +336,11 @@ export default class ReceiverInput extends Component {
             this.hideReceiverPopup();
 
             this.setState({
-                foundReceivers: { locations: { state: 3, values: [] }, users: { state: 3, values: [] }, groups: { state: 3, values: [] } }
+                foundReceivers: {
+                    locations: { state: 3, values: [] },
+                    users: { state: 3, values: [] },
+                    groups: { state: 3, values: [] }
+                }
             });
         }
 

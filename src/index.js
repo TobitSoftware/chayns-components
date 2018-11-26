@@ -34,6 +34,7 @@ import connectToModeSwitch from './react-chayns-modeswitch/component/connectToMo
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 import Portal from './react-chayns-portal/component/Portal';
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
+import ReceiverInput from './react-chayns-receiverinput/component/ReceiverInput';
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
@@ -97,6 +98,7 @@ export {
     PersonFinder,
     Portal,
     RadioButton,
+    ReceiverInput,
     RfidInput,
     ScrollView,
     SelectButton,

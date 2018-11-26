@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import Fragment from 'react-dot-fragment';
 
 import Receiver from './Receiver';
 

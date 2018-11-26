@@ -8,7 +8,7 @@ You have to import the component first:
 
 ```jsx harmony
 import { ReceiverInput } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-emojiInput/index.css';
+import 'chayns-components/lib/react-chayns-receiverinput/index.css';
 ```
 
 You can now use the components as followed:
