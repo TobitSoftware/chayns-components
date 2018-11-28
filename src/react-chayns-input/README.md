@@ -32,7 +32,7 @@ The following properties can be set on the Input-Component
 | placeholder  | Animated placeholder that will be shown inside the input                          | string         |               |
 | defaultValue | the value does not update if this prop updates                                    | string/number  |               |
 | value        | the value updates if this prop updates                                            | string/number  |               |
-| onChange     | returns the value as an result of the onInput-event (if a RegExp is given but it does not match the input the return value is null) | function  |  |
+| onChange     | returns the value as an result of the onInput-event (if a RegExp is given a second value is returned indicating if the input is valid or not) | function  |  |
 | onEnter      | returns the value if user clicks enter | function  |  |
 | onKeyUp      | returns the onKeyUp event | function  |  |
 | onBlur       | returns the value if the input lost its focus (if a RegExp is given but it does not match the input the return value is null) | function  |  |
