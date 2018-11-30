@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import '../../src/react-chayns-gallery/index.scss';
 import ExampleContainer from '../ExampleContainer';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
+import Button from '../../src/react-chayns-button/component/Button';
 
 
 export default class Example extends Component {
@@ -10,8 +11,8 @@ export default class Example extends Component {
         super();
         this.state = {
             editableUrls: [
+                'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
                 'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
-                'https://tsimg.space/v1/images/c9a8d7ad-ee72-e811-80d6-0025905a8161.jpg',
                 'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg'
             ]
         };
@@ -55,6 +56,16 @@ export default class Example extends Component {
                         onClick={console.log}
                     />
                 </div>
+
+                <Button onClick={() => {
+                    chayns.uploadCloudImage().then((data) => {
+                        editableUrls.push(data.url);
+                        this.setState(editableUrls);
+                    });
+                }}
+                >
+                    Upload
+                </Button>
 
                 <div style={{ marginTop: '30px' }}>
                     <Gallery
