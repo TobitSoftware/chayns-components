@@ -27,7 +27,9 @@ export default {
         babel({
             exclude: 'node_modules/**',
             // if external helpers true then use global babel object
-            externalHelpers: true
+            externalHelpers: true,
+            runtimeHelpers: true,
+            plugins: [['babel-plugin-transform-runtime', { regenerator: false }]],
         }),
         commonjs(),
         filesize()
