@@ -115,3 +115,7 @@ lib
 lib_esnext/
 dist/
 .idea/dictionaries/
+
+\.idea/encodings\.xml
+
+\.idea/codeStyles/

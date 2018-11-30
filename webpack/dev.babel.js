@@ -3,6 +3,8 @@ import path from 'path';
 
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
+const fs = require('fs');
+
 const ROOT_PATH = path.resolve('.');
 
 export default {
@@ -24,7 +26,10 @@ export default {
         port: 9009,
         historyApiFallback: true,
         compress: true,
-        hot: true
+        hot: true,
+        https: true,
+        cert: fs.readFileSync(path.join(__dirname, 'ssl', 'tobitag.crt')),
+        key: fs.readFileSync(path.join(__dirname, 'ssl', 'tobitag.key'))
     },
     module: {
         rules: [
