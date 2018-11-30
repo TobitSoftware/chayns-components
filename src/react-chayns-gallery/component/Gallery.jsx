@@ -85,6 +85,9 @@ export default class Gallery extends Component {
                     imgHeight = imgHeight * 2 / 3;
                 } else {
                     imgHeight /= 3;
+                    if(deleteMode) {
+                        imgWidth = imgHeight;
+                    }
                 }
             }
             bigUrls.push(await Gallery.getScaledImageUrl(url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp))));
@@ -97,6 +100,9 @@ export default class Gallery extends Component {
                 this.setState({ bigUrls, smallImages });
             }
         }
+        if(urls.length === 0) {
+            this.setState({ bigUrls: [], smallImages: [] });
+        }
     }
 
     openGallery(start) {
@@ -108,6 +114,10 @@ export default class Gallery extends Component {
     }
 
     componentDidMount() {
+        this.getImageUrls();
+    }
+
+    componentWillReceiveProps() {
         this.getImageUrls();
     }
 
