@@ -6,6 +6,8 @@
     flex-flow: row;
     flex-wrap: wrap;
     height: 100%;
+    margin: -1px;
+    margin-top: 0;
     &.delete-mode {
       height: unset !important;
       position: relative;
@@ -57,6 +59,7 @@
       }
       &:not(.delete-mode &) {
         &:nth-child(1) {
+          padding-top: 0;
           &:nth-last-child(1) {
             //Image 1 of 1
             width: 100%;
@@ -83,6 +86,7 @@
             //Image 2 of 2
             width: 50%;
             height: 100%;
+            padding-top: 0;
           }
           &:nth-last-child(2) {
             //Image 3 of 3

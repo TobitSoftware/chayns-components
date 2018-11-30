@@ -26,16 +26,14 @@ export default function browserSupportsWebp() {
                             webpSupport = supportCounter;
                             resolve(supportCounter);
                         }
-                    } else if (index === testImages.length - 1) {
+                    } else {
                         webpSupport = supportCounter;
                         reject(supportCounter);
                     }
                 };
                 img.onerror = () => {
-                    if (index === testImages.length - 1) {
-                        webpSupport = supportCounter;
-                        reject(supportCounter);
-                    }
+                    webpSupport = supportCounter;
+                    reject(supportCounter);
                 };
                 img.src = `data:image/webp;base64,${image}`;
             });

@@ -30,7 +30,7 @@ export default class Gallery extends Component {
         this.state = { smallImages: [], bigUrls: [] };
     }
 
-    static async getScaledImageUrl(url, height, width) {
+    static async getScaledImageUrl(url, height, width, preventWebp) {
         height = height ? Math.floor(height * window.devicePixelRatio) : null;
         width = width ? Math.floor(width * window.devicePixelRatio) : null;
         const shortEdgeSize = height > width ? height : width;
@@ -43,7 +43,14 @@ export default class Gallery extends Component {
             return url.replace(imgType[0], `_s${shortEdgeSize}-mshortedgescale${imgType[0]}`);
         }
         if (imgService && imgService[0] === 'tsimg.cloud' && imgType) {
-            const support = await browserSupportsWebp();
+            let support;
+            try {
+                support = !preventWebp && await browserSupportsWebp();
+            } catch (err) {
+                if(window.debugLevel >= 3) {
+                    console.debug('no webp support', err);
+                }
+            }
             if (height && width) {
                 url = url.replace(imgType[0], `_h${height}-w${width}${imgType[0]}`);
                 if (support) {
@@ -80,7 +87,7 @@ export default class Gallery extends Component {
                     imgHeight /= 3;
                 }
             }
-            bigUrls.push(await Gallery.getScaledImageUrl(url, null, null));
+            bigUrls.push(await Gallery.getScaledImageUrl(url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp))));
             smallImages.push({
                 url: await Gallery.getScaledImageUrl(url, imgHeight, imgWidth),
                 height: imgHeight,
