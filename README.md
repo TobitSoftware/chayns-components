@@ -9,7 +9,7 @@
 
 The ChaynsComponents can be installed directly from npm by using the following package:
 
-    npm install -S chayns-components@latest
+    npm install -S chayns-components@api-v3
 
 
 ## Chayns Components
