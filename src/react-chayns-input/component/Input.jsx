@@ -63,6 +63,12 @@ export default class Input extends Component {
         this.callValidated = this.callValidated.bind(this);
     }
 
+    componentWillReceiveProps({ value }) {
+        if (value && value !== this.props.value) {
+            this.callValidated(value);
+        }
+    }
+
     onKeyUp(e) {
         const { onKeyUp, onEnter } = this.props;
         if (onKeyUp) {
