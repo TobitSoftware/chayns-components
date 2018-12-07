@@ -64,31 +64,38 @@ export default class Gallery extends Component {
         const bigUrls = [];
         const smallImages = [];
         const numberOfImages = urls.length;
-        for (let index = 0; index < urls.length; index += 1) {
-            const url = urls[index];
+
+        const imageUrls = await Promise.all(urls.map(async (url, i) => {
             let imgWidth = width || getTappWidth();
             let imgHeight = height;
-            if (!deleteMode && (numberOfImages === 2 || (numberOfImages === 3 && index > 0))) {
+            if (!deleteMode && (numberOfImages === 2 || (numberOfImages === 3 && i > 0))) {
                 imgWidth /= 2;
-            } else if (index > 0) {
+            } else if (i > 0) {
                 imgWidth /= 3;
             }
             if (numberOfImages > 2 || deleteMode) {
-                if (index === 0 && !deleteMode) {
+                if (i === 0 && !deleteMode) {
                     imgHeight = imgHeight * 2 / 3;
                 } else {
                     imgHeight /= 3;
                 }
             }
-            bigUrls.push(await Gallery.getScaledImageUrl(url, null, null));
-            smallImages.push({
+            const bigUrl = await Gallery.getScaledImageUrl(url, null, null);
+            const smallImage = {
                 url: await Gallery.getScaledImageUrl(url, imgHeight, imgWidth),
                 height: imgHeight,
                 width: imgWidth
-            });
-            if (bigUrls.length === urls.length && smallImages.length === urls.length) {
-                this.setState({ bigUrls, smallImages });
-            }
+            };
+            return { bigUrl, smallImage };
+        }));
+
+        imageUrls.forEach((image) => {
+            bigUrls.push(image.bigUrl);
+            smallImages.push(image.smallImage);
+        });
+
+        if (bigUrls.length === numberOfImages && smallImages.length === numberOfImages) {
+            this.setState({ bigUrls, smallImages });
         }
     }
 
