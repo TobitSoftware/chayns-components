@@ -446,6 +446,7 @@ export default class ReceiverInput extends Component {
 
                 return null;
             })
+            // eslint-disable-next-line no-console
             .catch(error => console.error(error));
     }, 250, { leading: false });
 

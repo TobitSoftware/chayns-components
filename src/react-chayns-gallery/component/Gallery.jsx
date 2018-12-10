@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -42,7 +43,12 @@ export default class Gallery extends Component {
             return url.replace(imgType[0], `_s${shortEdgeSize}-mshortedgescale${imgType[0]}`);
         }
         if (imgService && imgService[0] === 'tsimg.cloud' && imgType) {
-            const webpSupport = !preventWebp && supportsWebP;
+            let webpSupport;
+            try {
+                webpSupport = !preventWebp && supportsWebP;
+            } catch (err) {
+                webpSupport = false;
+            }
             if (height && width) {
                 url = url.replace(imgType[0], `_h${height}-w${width}${imgType[0]}`);
                 if (webpSupport) {
@@ -111,7 +117,7 @@ export default class Gallery extends Component {
                                     imgHeight = imgHeight * 2 / 3;
                                 } else {
                                     imgHeight /= 3;
-                                    if(deleteMode) {
+                                    if (deleteMode) {
                                         imgWidth = imgHeight;
                                     }
                                 }

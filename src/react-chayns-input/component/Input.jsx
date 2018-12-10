@@ -55,7 +55,8 @@ export default class Input extends Component {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
         };
 
-        this.id = Math.random().toString();
+        this.id = Math.random()
+            .toString();
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
@@ -64,7 +65,8 @@ export default class Input extends Component {
     }
 
     componentWillReceiveProps({ value }) {
-        if (value && value !== this.props.value) {
+        const { oldValue = value } = this.props;
+        if (value && value !== oldValue) {
             this.callValidated(value);
         }
     }

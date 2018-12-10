@@ -27,7 +27,8 @@ export default {
         babel({
             exclude: 'node_modules/**',
             // if external helpers true then use global babel object
-            externalHelpers: true
+            externalHelpers: true,
+            runtimeHelpers: true
         }),
         commonjs(),
         filesize()
