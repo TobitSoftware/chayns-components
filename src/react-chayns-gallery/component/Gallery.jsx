@@ -43,7 +43,12 @@ export default class Gallery extends Component {
             return url.replace(imgType[0], `_s${shortEdgeSize}-mshortedgescale${imgType[0]}`);
         }
         if (imgService && imgService[0] === 'tsimg.cloud' && imgType) {
-            const support = await browserSupportsWebp();
+            let support;
+            try {
+                support = await browserSupportsWebp();
+            } catch (e) {
+                support = false;
+            }
             if (height && width) {
                 url = url.replace(imgType[0], `_h${height}-w${width}${imgType[0]}`);
                 if (support) {
