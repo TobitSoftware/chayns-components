@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
@@ -10,7 +10,9 @@ const CLOSE = 1;
 
 const OPEN = 2;
 
-export default class Accordion extends Component {
+let rqAnimationFrame;
+
+export default class Accordion extends PureComponent {
     static propTypes = {
         head: PropTypes.oneOfType([
             PropTypes.node.isRequired,
@@ -152,6 +154,10 @@ export default class Accordion extends Component {
         }
     }
 
+    componentWillUnmount() {
+        cancelAnimationFrame(rqAnimationFrame);
+    }
+
     handleAccordionClick = (event) => {
         const { fixed, onClick } = this.props;
 
@@ -188,10 +194,11 @@ export default class Accordion extends Component {
             }
         }
 
-        if(onClick) {
+        if (onClick) {
             onClick(event);
         }
     };
+
 
     _getBody() {
         const { renderClosed, children, removeContentClosed } = this.props;
@@ -212,7 +219,7 @@ export default class Accordion extends Component {
             this._body.style.setProperty('max-height', '9999px', 'important');
         }
 
-        requestAnimationFrame(() => {
+        rqAnimationFrame = requestAnimationFrame(() => {
             this.setState({
                 currentState: CLOSE
             });
