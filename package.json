@@ -71,7 +71,8 @@
     "style-loader": "0.22.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.9",
+    "why-did-you-update": "^1.0.6"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
