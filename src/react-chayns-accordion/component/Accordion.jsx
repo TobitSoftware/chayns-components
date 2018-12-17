@@ -76,21 +76,12 @@ export default class Accordion extends PureComponent {
     static dataGroups = {};
 
     constructor(props) {
+        const { defaultOpened, open, className } = props;
         super();
 
         this.state = {
-            currentState: (props && props.defaultOpened) ? OPEN : CLOSE,
+            currentState: (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE,
         };
-    }
-
-    componentWillMount() {
-        const { open, className } = this.props;
-
-        if (open || (className && className.indexOf('accordion--open') !== -1)) {
-            this.setState({
-                currentState: OPEN
-            });
-        }
     }
 
     componentDidMount() {
