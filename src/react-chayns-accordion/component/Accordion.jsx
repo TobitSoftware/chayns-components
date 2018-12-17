@@ -113,15 +113,17 @@ export default class Accordion extends PureComponent {
             const { currentState } = this.state;
 
             if (open !== nextProps.open) {
-                this.setState({
-                    currentState: nextProps.open ? OPEN : CLOSE
-                });
+                if (nextProps.open) {
+                    this.accordionOpenListener();
+                } else {
+                    this.setState({
+                        currentState: CLOSE
+                    });
+                }
             }
 
             if (nextProps.open && !currentState === !!OPEN) {
-                this.setState({
-                    currentState: OPEN
-                });
+                this.accordionOpenListener();
             }
 
             if (!nextProps.open && !currentState === !!CLOSE) {
