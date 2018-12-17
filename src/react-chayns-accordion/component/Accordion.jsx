@@ -137,12 +137,13 @@ export default class Accordion extends PureComponent {
     componentDidUpdate() {
         const { autogrow } = this.props;
         const { currentState } = this.state;
+        const { _body } = this;
 
-        if (autogrow && this._body) {
+        if (autogrow && _body) {
             if (currentState === OPEN) {
-                this._body.style.setProperty('max-height', 'initial', 'important');
+                _body.style.setProperty('max-height', 'initial', 'important');
             } else if (currentState === CLOSE) {
-                this._body.style.maxHeight = null;
+                _body.style.maxHeight = null;
             }
         }
     }
@@ -157,7 +158,7 @@ export default class Accordion extends PureComponent {
     handleAccordionClick = (event) => {
         const { fixed, onClick } = this.props;
 
-        if (!fixed) {
+        if (!fixed && event !== null) {
             let trigger = true;
             let node = event.target;
             for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
@@ -210,9 +211,10 @@ export default class Accordion extends PureComponent {
 
     accordionCloseListener(event) {
         const { onClose, autogrow } = this.props;
+        const { _body } = this;
 
-        if (autogrow && this._body) {
-            this._body.style.setProperty('max-height', '9999px', 'important');
+        if (autogrow && _body) {
+            _body.style.setProperty('max-height', '9999px', 'important');
         }
 
         rqAnimationFrame = requestAnimationFrame(() => {
@@ -220,8 +222,8 @@ export default class Accordion extends PureComponent {
                 currentState: CLOSE
             });
 
-            if (autogrow && this._body) {
-                this._body.style.removeProperty('max-height');
+            if (autogrow && _body) {
+                _body.style.removeProperty('max-height');
             }
         });
 
@@ -232,7 +234,6 @@ export default class Accordion extends PureComponent {
 
     accordionOpenListener(event) {
         const { onOpen, dataGroup } = this.props;
-
         if (dataGroup && Accordion.dataGroups[dataGroup]) {
             Accordion.dataGroups[dataGroup].forEach((accordion) => {
                 if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
@@ -240,7 +241,6 @@ export default class Accordion extends PureComponent {
                 }
             });
         }
-
         this.setState({
             currentState: OPEN
         });
@@ -265,11 +265,10 @@ export default class Accordion extends PureComponent {
             noIcon,
             onSearch,
             onSearchEnter,
-            searchPlaceholder,
+            searchPlaceholder
         } = this.props;
 
         const { currentState } = this.state;
-
         return (
             <div
                 className={classNames({
