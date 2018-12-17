@@ -55,12 +55,20 @@ export default class Input extends Component {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
         };
 
-        this.id = Math.random().toString();
+        this.id = Math.random()
+            .toString();
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
         this.callValidated = this.callValidated.bind(this);
+    }
+
+    componentWillReceiveProps({ value }) {
+        const { oldValue = value } = this.props;
+        if (value && value !== oldValue) {
+            this.callValidated(value);
+        }
     }
 
     onKeyUp(e) {
