@@ -224,7 +224,9 @@ export default class Accordion extends PureComponent {
                 currentState: CLOSE
             });
 
-            this._body.style.removeProperty('max-height');
+            if (autogrow && this._body) {
+                this._body.style.removeProperty('max-height');
+            }
         });
 
         if (onClose) {
@@ -237,7 +239,7 @@ export default class Accordion extends PureComponent {
 
         if (dataGroup && Accordion.dataGroups[dataGroup]) {
             Accordion.dataGroups[dataGroup].forEach((accordion) => {
-                if (accordion !== this) {
+                if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
                     accordion.accordionCloseListener();
                 }
             });
