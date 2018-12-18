@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -8,7 +8,7 @@ const CLOSE = 1;
 
 const OPEN = 2;
 
-export default class AccordionSearch extends Component {
+export default class AccordionSearch extends PureComponent {
     static propTypes = {
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
