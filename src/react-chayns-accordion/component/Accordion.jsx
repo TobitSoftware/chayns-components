@@ -150,8 +150,14 @@ export default class Accordion extends PureComponent {
 
     componentWillUnmount() {
         const { dataGroup } = this.props;
-        const elementIndex = Accordion.dataGroups[dataGroup].indexOf(this);
-        Accordion.dataGroups[dataGroup].splice(elementIndex, 1);
+
+        if (dataGroup && Accordion.dataGroups[dataGroup]) {
+            const elementIndex = Accordion.dataGroups[dataGroup].indexOf(this);
+            if (elementIndex !== -1) {
+                Accordion.dataGroups[dataGroup].splice(elementIndex, 1);
+            }
+        }
+
         cancelAnimationFrame(rqAnimationFrame);
     }
 
