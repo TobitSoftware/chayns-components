@@ -22,7 +22,7 @@ export default {
     devServer: {
         host: '0.0.0.0',
         disableHostCheck: true,
-        port: 8080,
+        port: 9009,
         historyApiFallback: true,
         compress: true,
         hot: true,
