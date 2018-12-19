@@ -12,6 +12,7 @@ import './react-chayns-gridcalendar/index';
 import './react-chayns-icon/index';
 import './react-chayns-input/index';
 import './react-chayns-modeswitch/index';
+import './react-chayns-openingTimes/index';
 import './react-chayns-personfinder/index';
 import './react-chayns-radiobutton/index';
 import './react-chayns-receiverinput/index';
