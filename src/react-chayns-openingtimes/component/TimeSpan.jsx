@@ -62,8 +62,8 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.startTime}
-                        placeholder={TimeSpan.defaultStart}
                         value={start}
+                        defaultValue={TimeSpan.defaultStart}
                         onChange={this.onChange}
                     />
                 </div>
@@ -71,8 +71,8 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.endTime}
-                        placeholder={TimeSpan.defaultEnd}
                         value={end}
+                        defaultValue={TimeSpan.defaultEnd}
                         onChange={this.onChange}
                     />
                 </div>

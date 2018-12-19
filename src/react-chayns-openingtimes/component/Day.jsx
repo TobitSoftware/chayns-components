@@ -47,7 +47,7 @@ class Day extends Component {
         const isDisabled = !times.some(t => !t.disabled);
 
         return (
-            <div className={`flex times ${timeSpans.length > 1 ? 'multiple' : ''}`}>
+            <div className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}>
                 <div className="flex__left">
                     <Checkbox
                         label={weekday.name}

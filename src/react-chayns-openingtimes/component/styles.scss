@@ -50,6 +50,12 @@
     &.multiple {
         margin: 15px 0;
     }
+    &--disabled {
+        .flex__right {
+            opacity: .2;
+            pointer-events: none;
+        }
+    }
     transition: all .2s;
     .flex__right {
         span {
