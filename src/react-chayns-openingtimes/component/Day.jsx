@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Checkbox } from '../../index';
 
+import OpeningTimes from './OpeningTimes';
 import TimeSpan from './TimeSpan';
 
 const Day = ({ weekday, times, onDayActivation, onAdd, onRemove, onChange }) => {
@@ -50,6 +52,18 @@ const Day = ({ weekday, times, onDayActivation, onAdd, onRemove, onChange }) => 
             </div>
         </div>
     );
+};
+
+Day.propTypes = {
+    weekday: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        number: PropTypes.number.isRequired
+    }).isRequired,
+    ...OpeningTimes.propTypes
+};
+
+Day.defaultProps = {
+    ...OpeningTimes.defaultProps
 };
 
 export default Day;

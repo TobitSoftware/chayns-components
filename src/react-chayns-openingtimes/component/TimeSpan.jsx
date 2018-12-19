@@ -4,10 +4,41 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, Icon, Input } from '../../index';
 
 class TimeSpan extends Component {
+    static propTypes = {
+        start: PropTypes.string.isRequired,
+        end: PropTypes.string.isRequired,
+        disabled: PropTypes.bool,
+        buttonType: PropTypes.number.isRequired,
+        onAdd: PropTypes.func,
+        onRemove: PropTypes.func,
+        onChange: PropTypes.func
+    }
+
+    static defaultProps = {
+        disabled: false,
+        onAdd: null,
+        onRemove: null,
+        onChange: null
+    }
+
     constructor(props) {
         super(props);
         this.startTime = createRef();
         this.endTime = createRef();
+
+        this.onChange = this.onChange.bind(this);
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick() {
+        if (this.props.buttonType === 1 && this.props.onAdd) this.props.onAdd('08:00', '18:00');
+        if (this.props.buttonType === 2 && this.props.onRemove) this.props.onRemove();
+    }
+
+    onChange(_, valid) {
+        if (this.props.onChange && valid) {
+            this.props.onChange(this.startTime.current.value, this.endTime.current.value);
+        }
     }
 
     render() {
@@ -15,10 +46,7 @@ class TimeSpan extends Component {
             start,
             end,
             disabled,
-            buttonType,
-            onAdd,
-            onRemove,
-            onChange
+            buttonType
         } = this.props;
 
         return (
@@ -28,9 +56,7 @@ class TimeSpan extends Component {
                         inputRef={this.startTime}
                         placeholder="08:00"
                         value={start}
-                        onChange={(val, valid) => {
-                            onChange(val, this.endTime.current.value);
-                        }}
+                        onChange={this.onChange}
                     />
                 </div>
                 <span>-</span>
@@ -39,9 +65,7 @@ class TimeSpan extends Component {
                         inputRef={this.endTime}
                         placeholder="18:00"
                         value={end}
-                        onChange={(val, valid) => {
-                            onChange(this.startTime.current.value, val);
-                        }}
+                        onChange={this.onChange}
                     />
                 </div>
                 <div className="time__span--button">
@@ -49,10 +73,7 @@ class TimeSpan extends Component {
                         buttonType !== 0 && (
                             <Button
                                 className="choosebutton"
-                                onClick={() => {
-                                    if (buttonType === 1) onAdd('08:00', '18:00');
-                                    if (buttonType === 2) onRemove();
-                                }}
+                                onClick={this.onClick}
                             >
                                 <Icon icon={faPlus} className={`fa-xs openingTimesIcon ${buttonType === 1 ? 'add' : 'remove'}`}/>
                             </Button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Day from './Day';
 import './styles.scss';
 
@@ -37,5 +38,21 @@ const OpeningTimes = ({ times, onDayActivation, onAdd, onRemove, onChange }) => 
     </div>
 );
 
+OpeningTimes.propTypes = {
+    times: PropTypes.arrayOf(PropTypes.shape({
+        start: PropTypes.string.isRequired,
+        end: PropTypes.string.isRequired
+    })).isRequired,
+    onDayActivation: PropTypes.func.isRequired,
+    onAdd: PropTypes.func,
+    onRemove: PropTypes.func,
+    onChange: PropTypes.func
+};
+
+OpeningTimes.defaultProps = {
+    onAdd: null,
+    onRemove: null,
+    onChange: null
+};
 
 export default OpeningTimes;
