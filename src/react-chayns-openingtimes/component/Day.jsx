@@ -11,11 +11,32 @@ class Day extends Component {
 
     static REMOVE = 2
 
+    constructor(props) {
+        super(props);
+
+        this.onDayActivation = this.onDayActivation.bind(this);
+    }
+
+    onDayActivation(status) {
+        const {
+            onDayActivation,
+            onAdd,
+            times,
+            weekday
+        } = this.props;
+
+        if (onDayActivation) {
+            if (status && times.length === 0 && onAdd) {
+                onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+            }
+            onDayActivation(weekday.number, status);
+        }
+    }
+
     render() {
         const {
             weekday,
             times,
-            onDayActivation,
             onAdd,
             onRemove,
             onChange
@@ -30,9 +51,7 @@ class Day extends Component {
                 <div className="flex__left">
                     <Checkbox
                         label={weekday.name}
-                        onChange={(val) => {
-                            onDayActivation(weekday.number, val);
-                        }}
+                        onChange={this.onDayActivation}
                         checked={!isDisabled}
                     />
                 </div>

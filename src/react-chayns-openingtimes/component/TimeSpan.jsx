@@ -23,6 +23,10 @@ class TimeSpan extends Component {
         onChange: null
     }
 
+    static defaultStart = '08:00'
+
+    static defaultEnd = '18:00'
+
     constructor(props) {
         super(props);
         this.startTime = createRef();
@@ -34,7 +38,7 @@ class TimeSpan extends Component {
 
     onClick() {
         const { buttonType, onAdd, onRemove } = this.props;
-        if (buttonType === Day.ADD && onAdd) onAdd('08:00', '18:00');
+        if (buttonType === Day.ADD && onAdd) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
         if (buttonType === Day.REMOVE && onRemove) onRemove();
     }
 
@@ -58,7 +62,7 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.startTime}
-                        placeholder="08:00"
+                        placeholder={TimeSpan.defaultStart}
                         value={start}
                         onChange={this.onChange}
                     />
@@ -67,7 +71,7 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.endTime}
-                        placeholder="18:00"
+                        placeholder={TimeSpan.defaultEnd}
                         value={end}
                         onChange={this.onChange}
                     />
