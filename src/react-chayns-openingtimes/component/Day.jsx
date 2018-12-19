@@ -28,8 +28,9 @@ class Day extends Component {
         if (onDayActivation) {
             if (status && times.length === 0 && onAdd) {
                 onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+            } else {
+                onDayActivation(weekday.number, status);
             }
-            onDayActivation(weekday.number, status);
         }
     }
 
@@ -60,7 +61,7 @@ class Day extends Component {
                         timeSpans.length === 0 ? (
                             <TimeSpan
                                 active={false}
-                                buttonType={0}
+                                buttonType={Day.ADD}
                             />
                         ) : timeSpans.map((t, index) => (
                                 <TimeSpan
