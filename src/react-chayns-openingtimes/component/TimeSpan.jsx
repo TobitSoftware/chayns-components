@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, Icon, Input } from '../../index';
 
+import Day from './Day';
+
 class TimeSpan extends Component {
     static propTypes = {
         start: PropTypes.string.isRequired,
@@ -31,8 +33,8 @@ class TimeSpan extends Component {
     }
 
     onClick() {
-        if (this.props.buttonType === 1 && this.props.onAdd) this.props.onAdd('08:00', '18:00');
-        if (this.props.buttonType === 2 && this.props.onRemove) this.props.onRemove();
+        if (this.props.buttonType === Day.ADD && this.props.onAdd) this.props.onAdd('08:00', '18:00');
+        if (this.props.buttonType === Day.REMOVE && this.props.onRemove) this.props.onRemove();
     }
 
     onChange(_, valid) {
@@ -70,12 +72,12 @@ class TimeSpan extends Component {
                 </div>
                 <div className="time__span--button">
                     {
-                        buttonType !== 0 && (
+                        buttonType !== Day.OFF && (
                             <Button
                                 className="choosebutton"
                                 onClick={this.onClick}
                             >
-                                <Icon icon={faPlus} className={`fa-xs openingTimesIcon ${buttonType === 1 ? 'add' : 'remove'}`}/>
+                                <Icon icon={faPlus} className={`fa-xs openingTimesIcon ${buttonType === Day.ADD ? 'add' : 'remove'}`}/>
                             </Button>
                         )
                     }
