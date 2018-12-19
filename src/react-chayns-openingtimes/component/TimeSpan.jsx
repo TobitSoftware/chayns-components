@@ -33,13 +33,15 @@ class TimeSpan extends Component {
     }
 
     onClick() {
-        if (this.props.buttonType === Day.ADD && this.props.onAdd) this.props.onAdd('08:00', '18:00');
-        if (this.props.buttonType === Day.REMOVE && this.props.onRemove) this.props.onRemove();
+        const { buttonType, onAdd, onRemove } = this.props;
+        if (buttonType === Day.ADD && onAdd) onAdd('08:00', '18:00');
+        if (buttonType === Day.REMOVE && onRemove) onRemove();
     }
 
     onChange(_, valid) {
-        if (this.props.onChange && valid) {
-            this.props.onChange(this.startTime.current.value, this.endTime.current.value);
+        const { onChange } = this.props;
+        if (onChange && valid) {
+            onChange(this.startTime.current.value, this.endTime.current.value);
         }
     }
 

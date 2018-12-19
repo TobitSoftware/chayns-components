@@ -21,6 +21,7 @@ class Day extends Component {
             onChange
         } = this.props;
 
+        // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
         const isDisabled = !times.some(t => !t.disabled);
 
