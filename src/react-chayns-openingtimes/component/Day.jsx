@@ -5,12 +5,6 @@ import { Checkbox } from '../../index';
 import TimeSpan from './TimeSpan';
 
 class Day extends Component {
-    static OFF = 0
-
-    static ADD = 1
-
-    static REMOVE = 2
-
     constructor(props) {
         super(props);
 
@@ -61,7 +55,7 @@ class Day extends Component {
                         timeSpans.length === 0 ? (
                             <TimeSpan
                                 active={false}
-                                buttonType={Day.ADD}
+                                buttonType={TimeSpan.ADD}
                             />
                         ) : timeSpans.map((t, index) => (
                                 <TimeSpan
@@ -70,7 +64,7 @@ class Day extends Component {
                                     end={t.end}
                                     disabled={isDisabled}
                                     // eslint-disable-next-line no-nested-ternary
-                                    buttonType={timeSpans.length === 1 ? Day.ADD : index === 0 ? Day.OFF : Day.REMOVE}
+                                    buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
                                     onAdd={(start, end) => onAdd(weekday.number, start, end)}
                                     onRemove={() => onRemove(weekday.number, index)}
                                     onChange={(start, end) => onChange(weekday.number, index, start, end)}

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Day from './Day';
-import './styles.scss';
 
+import './styles.scss';
 
 class OpeningTimes extends Component {
     static propTypes = {
@@ -39,7 +39,6 @@ class OpeningTimes extends Component {
     }
 
     onAdd(weekDay, start, end) {
-        console.log('add', weekDay, start, end);
         const { times, onChange } = this.props;
         if (onChange) {
             onChange(times.concat({
@@ -52,7 +51,6 @@ class OpeningTimes extends Component {
     }
 
     onRemove(day, span) {
-        console.log('remove', day, span);
         const { times, onChange } = this.props;
         if (onChange) {
             const timesOfDay = times.filter(t => t.weekDay === day);
@@ -65,7 +63,6 @@ class OpeningTimes extends Component {
     }
 
     onChange(day, span, start, end) {
-        console.log('change', day, span, start, end);
         // eslint-disable-next-line no-nested-ternary
         const { times, onChange } = this.props;
         if (onChange) {
@@ -86,7 +83,6 @@ class OpeningTimes extends Component {
     }
 
     onDayActivation(day, status) {
-        console.log('dayActivation', day, status);
         const { times, onChange } = this.props;
         if (onChange) {
             const newTimes = times.slice();
