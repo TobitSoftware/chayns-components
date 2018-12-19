@@ -3,7 +3,7 @@ import { Checkbox } from '../../index';
 
 import TimeSpan from './TimeSpan';
 
-const Day = ({ weekday, times }) => {
+const Day = ({ weekday, times, onDayActivation, onAdd, onRemove, onChange }) => {
     const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
     const isDisabled = !times.some(t => !t.disabled);
     return (
@@ -12,12 +12,12 @@ const Day = ({ weekday, times }) => {
                 <Checkbox
                     label={weekday.name}
                     onChange={(val) => {
-                        console.log(weekday.number, val);
+                        onDayActivation(weekday.number, val);
                     }}
                     checked={!isDisabled}
                 />
             </div>
-            <div className="flex__right flex--2">
+            <div className="flex__right">
                 {
                     timeSpans.length === 0 ? (
                         <TimeSpan
@@ -40,6 +40,9 @@ const Day = ({ weekday, times }) => {
                                     end={t.end}
                                     disabled={isDisabled}
                                     buttonType={buttonType}
+                                    onAdd={(start, end) => onAdd(weekday.number, start, end)}
+                                    onRemove={() => onRemove(weekday.number, index)}
+                                    onChange={(start, end) => onChange(weekday.number, index, start, end)}
                                 />
                             );
                         })

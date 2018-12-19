@@ -12,7 +12,7 @@ const weekdays = [
     'Sonntag',
 ];
 
-const OpeningTimes = ({ times }) => (
+const OpeningTimes = ({ times, onDayActivation, onAdd, onRemove, onChange }) => (
     <div style={{
         margin: '10px 25px 15px 25px'
     }}
@@ -27,6 +27,10 @@ const OpeningTimes = ({ times }) => (
                         number: index
                     }}
                     times={times.filter(t => t.weekDay === index)}
+                    onDayActivation={onDayActivation}
+                    onAdd={onAdd}
+                    onRemove={onRemove}
+                    onChange={onChange}
                 />
             ))
         }
