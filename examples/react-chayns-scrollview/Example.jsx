@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import { ScrollView } from '../../src/index';
+import Button from '../../src/react-chayns-button/component/Button';
 
 
 export default class Example extends PureComponent {
@@ -16,9 +17,17 @@ export default class Example extends PureComponent {
                         width: '100%',
                     }}
                     showScrollbar
+                    scrollElementRef={ref => this.ref = ref}
                 >
                     {this.text}
                 </ScrollView>
+                <Button onClick={() => {
+                    this.ref.scrollTo(0, 0);
+                }}
+                >
+
+                    Nach oben scrollen
+                </Button>
                 <ScrollView
                     style={{
                         maxHeight: '500px',
