@@ -17,7 +17,7 @@ class OpeningTimes extends Component {
 
     static defaultProps = {
         onChange: null
-    }
+    };
 
     static weekdays = [
         'Montag',
@@ -27,7 +27,7 @@ class OpeningTimes extends Component {
         'Freitag',
         'Samstag',
         'Sonntag',
-    ]
+    ];
 
     constructor(props) {
         super(props);

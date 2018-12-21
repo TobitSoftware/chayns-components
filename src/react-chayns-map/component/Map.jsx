@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../react-chayns-input/component/Input';
 import MapMarker from './MapMarkerComp';
 import './admin.scss';
 
-export default class Map extends React.Component {
+export default class Map extends Component {
     static propTypes = {
         defaultPosition: PropTypes.shape({
             lat: PropTypes.number.isRequired,
@@ -77,11 +77,11 @@ export default class Map extends React.Component {
     }
 
     componentDidMount() {
-        this.getAddress(this.state.pos);
+        const { pos } = this.state;
+        this.getAddress(pos);
         this.loadScript().then(() => {
             this.initMap().then(() => {
                 this.concatMapStyles();
-
             }).catch((err) => {
                 // Logger.error('Count not init Map', { er: err }, 'Map componentDidMount', 67, err.message);
             });
@@ -91,7 +91,7 @@ export default class Map extends React.Component {
     getAddress(geopoint) {
         // eslint-disable-next-line no-undef
         const address = new google.maps.Geocoder();
-        address.geocode({location: geopoint}, (result, status) => {
+        address.geocode({ location: geopoint }, (result, status) => {
             if (status === 'OK') {
                 let adrs = result[0].formatted_address.split(/(.+),/)[1];
                 adrs = adrs.substring(0, adrs.indexOf(','));
@@ -103,6 +103,8 @@ export default class Map extends React.Component {
     }
 
     concatMapStyles() {
+        const { mapOptions } = this.props;
+
         const defaultStyles = [{
             featureType: 'administrative',
             elementType: 'labels',
@@ -128,11 +130,10 @@ export default class Map extends React.Component {
                 visibility: 'off'
             }]
         }];
-        if (!this.props.mapOptions.disableDefaultStyles) {
-            this.mapStyles = defaultStyles.concat(this.props.mapOptions.mapStyles);
+        if (!mapOptions.disableDefaultStyles) {
+            this.mapStyles = defaultStyles.concat(mapOptions.mapStyles);
         } else {
-            this.mapStyles = this.props.mapOptions.mapStyles;
-
+            this.mapStyles = mapOptions.mapStyles;
         }
     }
 
@@ -155,7 +156,6 @@ export default class Map extends React.Component {
     initMap() {
         const {
             mapOptions,
-            onPositionChange,
             defaultPosition
         } = this.props;
         const {
@@ -168,16 +168,16 @@ export default class Map extends React.Component {
                 this.mapRef = new google.maps.Map(this.map, {
                     zoom: defaultZoom,
                     center: defaultPosition,
-                    disableDefaultUI: disableDefaultUI,
+                    disableDefaultUI,
                     styles: this.mapStyles
                 });
                 this.mapRef.addListener('center_changed', () => {
                     clearTimeout(this.timeout);
                     this.timeout = setTimeout(() => {
                         const center = this.mapRef.getCenter();
-                        const currentPos = {lat: center.lat(), lng: center.lng()};
+                        const currentPos = { lat: center.lat(), lng: center.lng() };
                         this.getAddress(currentPos);
-                        onPositionChange(currentPos);
+                        mapOptions.onPositionChange(currentPos);
                     }, 500);
                 });
             } catch (err) {
@@ -196,7 +196,7 @@ export default class Map extends React.Component {
                 });
                 return;
             }
-            this.props.mapOptions.reference(this.mapRef);
+            mapOptions.reference(this.mapRef);
 
             resolve();
         });
@@ -204,10 +204,9 @@ export default class Map extends React.Component {
 
     render() {
         const {
-            onIconClick,
-            icon,
-            bgImg
-        } = this.props.markerOptions;
+            markerOptions, mapId, inputOptions
+        } = this.props;
+        const { adr } = this.state;
         return (
             <div id="map_comp">
                 <div
@@ -219,11 +218,11 @@ export default class Map extends React.Component {
                     >
                         <MapMarker
                             onClick={() => {
-                                onIconClick();
+                                markerOptions.onIconClick();
                             }}
-                            icon={icon}
-                            bgImg={bgImg}
-                            style={{transform: 'scale(1.5)'}}
+                            icon={markerOptions.icon}
+                            bgImg={markerOptions.bgImg}
+                            style={{ transform: 'scale(1.5)' }}
 
                         />
                     </div>
@@ -232,7 +231,7 @@ export default class Map extends React.Component {
                         ref={(el) => {
                             this.map = el;
                         }}
-                        id={`map${this.props.mapId}`}
+                        id={`map${mapId}`}
 
                     />
                 </div>
@@ -242,25 +241,25 @@ export default class Map extends React.Component {
                 >
                     <MapMarker
                         onClick={() => {
-                            onIconClick();
+                            markerOptions.onIconClick();
                         }}
-                        icon={icon}
-                        bgImg={bgImg}
-                        style={{transform: 'scale(1.3)'}}
+                        icon={markerOptions.icon}
+                        bgImg={markerOptions.bgImg}
+                        style={{ transform: 'scale(1.3)' }}
 
                     />
                     <Input
-                        placeholder={this.props.inputOptions.placeholder}
-                        value={this.state.adr}
+                        placeholder={inputOptions.placeholder}
+                        value={adr}
                         key="adr"
                         inputRef={(obj) => {
-                            this.props.inputOptions.inputRef(obj);
+                            inputOptions.inputRef(obj);
                         }}
-                        onChange={(adr) => {
+                        onChange={(address) => {
                             this.setState({
-                                adr
+                                adr: address
                             });
-                            this.props.inputOptions.onInputChange(adr);
+                            inputOptions.onInputChange(address);
                         }}
                     />
                 </div>

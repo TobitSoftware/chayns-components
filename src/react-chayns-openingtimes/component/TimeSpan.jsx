@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Button, Icon, Input } from '../../index';
+import { ChooseButton, Icon, Input } from '../../index';
 
 class TimeSpan extends Component {
     static propTypes = {
@@ -12,25 +12,24 @@ class TimeSpan extends Component {
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         onChange: PropTypes.func
-    }
+    };
 
     static defaultProps = {
         disabled: false,
         onAdd: null,
         onRemove: null,
         onChange: null
-    }
+    };
 
-    static OFF = 0
+    static OFF = 0;
 
-    static ADD = 1
+    static ADD = 1;
 
-    static REMOVE = 2
+    static REMOVE = 2;
 
+    static defaultStart = '08:00';
 
-    static defaultStart = '08:00'
-
-    static defaultEnd = '18:00'
+    static defaultEnd = '18:00';
 
     constructor(props) {
         super(props);
@@ -84,12 +83,11 @@ class TimeSpan extends Component {
                 <div className="time__span--button">
                     {
                         buttonType !== TimeSpan.OFF && (
-                            <Button
-                                className="choosebutton"
+                            <ChooseButton
                                 onClick={this.onClick}
                             >
                                 <Icon icon={faPlus} className={`fa-xs openingTimesIcon ${buttonType === TimeSpan.ADD ? 'add' : 'remove'}`}/>
-                            </Button>
+                            </ChooseButton>
                         )
                     }
                 </div>

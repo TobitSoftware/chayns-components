@@ -4,8 +4,8 @@ import ReactDom from 'react-dom';
 import Example from './Example';
 
 window.chayns.ready.then(() => {
-    ReactDom.render(
-        <Example />,
-        document.querySelector('#react-chayns-openingtimes')
-    );
+    // ReactDom.render(
+    //     <Example />,
+    //     document.querySelector('#react-chayns-map')
+    // );
 });

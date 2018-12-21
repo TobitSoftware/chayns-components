@@ -1,9 +1,10 @@
-import React from 'react';
-import Icon from '../../react-chayns-icon/component/Icon';
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../react-chayns-icon/component/Icon';
 import './admin.scss';
 
-export default class MapMarkerComp extends React.Component {
+export default class MapMarkerComp extends PureComponent {
     static propTypes = {
         onClick: PropTypes.func,
         className: PropTypes.string,
@@ -20,38 +21,29 @@ export default class MapMarkerComp extends React.Component {
     };
 
     static defaultProps = {
-        onClick: () => {
-        },
+        onClick: null,
         className: '',
         style: {},
-        icon: '',
     };
 
-    constructor(props) {
-        super(props);
-        if (props.onClick) {
-            this.onClick = props.onClick.bind(this);
-        }
-    }
-
     render() {
-        // TODO: this.props
         const {
             style,
             className,
             bgImg,
-            icon
+            icon,
+            onClick
         } = this.props;
+
         return (
             <div
                 style={style}
                 className={`${className} markerDiv`}
                 id="mapMarkerC"
-                onClick={this.onClick}
-                onKeyPress={undefined}
+                onClick={onClick}
             >
                 <img
-                    style={{height: '25px'}}
+                    style={{ height: '25px' }}
                     src={bgImg}
                     alt=""
                 />

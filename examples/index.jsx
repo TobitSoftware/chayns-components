@@ -11,6 +11,7 @@ import './react-chayns-gallery/index';
 import './react-chayns-gridcalendar/index';
 import './react-chayns-icon/index';
 import './react-chayns-input/index';
+import './react-chayns-map/index';
 import './react-chayns-modeswitch/index';
 import './react-chayns-openingTimes/index';
 import './react-chayns-personfinder/index';

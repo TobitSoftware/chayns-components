@@ -13,7 +13,7 @@ The OpeningTimes component has to be imported:
 import { OpeningTimes } from 'chayns-components';
 ```
 
-You can use the gallery like this:
+You can use the OpeningTimes like this:
 ```jsx harmony
 <OpeningTimes
     times={[
@@ -35,7 +35,7 @@ You can use the gallery like this:
 
 ## Props ##
 
-The following properties can be set on the Gallery-Component
+The following properties can be set on the OpeningTimes-Component
 
 | **Property**  | **Description**                                        | **Type**                          | **Default Value** | **Required** |
 | ------------  | ----------------------------------------------------   | --------------------------------- | ----------------- | ------------ |

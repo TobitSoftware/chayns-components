@@ -16,7 +16,7 @@ import { Map } from 'chayns-components';
 You can use your **Map** like this:
 ```jsx harmony
 <Map 
-    apiKey="INSERTYOURAPIKEHERE"
+    apiKey="INSERT_YOUR_API_KEY_HERE"
     mapId="adminmap"
 />
 ```
