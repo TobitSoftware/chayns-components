@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Day from './Day';
 
-import './styles.scss';
-
 class OpeningTimes extends Component {
     static propTypes = {
         times: PropTypes.arrayOf(PropTypes.shape({
@@ -99,11 +97,7 @@ class OpeningTimes extends Component {
     render() {
         const { times } = this.props;
         return (
-            <div
-                style={{
-                    margin: '10px 25px 15px 25px'
-                }}
-            >
+            <div className="cc__opening-times" >
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day

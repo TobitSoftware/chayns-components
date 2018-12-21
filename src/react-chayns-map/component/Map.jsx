@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../react-chayns-input/component/Input';
 import MapMarker from './MapMarkerComp';
-import './admin.scss';
 
 export default class Map extends Component {
     static propTypes = {
@@ -79,13 +78,16 @@ export default class Map extends Component {
     componentDidMount() {
         const { pos } = this.state;
         this.getAddress(pos);
-        this.loadScript().then(() => {
-            this.initMap().then(() => {
-                this.concatMapStyles();
-            }).catch((err) => {
-                // Logger.error('Count not init Map', { er: err }, 'Map componentDidMount', 67, err.message);
+        this.loadScript()
+            .then(() => {
+                this.initMap()
+                    .then(() => {
+                        this.concatMapStyles();
+                    })
+                    .catch((err) => {
+                        // Logger.error('Count not init Map', { er: err }, 'Map componentDidMount', 67, err.message);
+                    });
             });
-        });
     }
 
     getAddress(geopoint) {
@@ -175,7 +177,10 @@ export default class Map extends Component {
                     clearTimeout(this.timeout);
                     this.timeout = setTimeout(() => {
                         const center = this.mapRef.getCenter();
-                        const currentPos = { lat: center.lat(), lng: center.lng() };
+                        const currentPos = {
+                            lat: center.lat(),
+                            lng: center.lng()
+                        };
                         this.getAddress(currentPos);
                         mapOptions.onPositionChange(currentPos);
                     }, 500);
@@ -208,7 +213,7 @@ export default class Map extends Component {
         } = this.props;
         const { adr } = this.state;
         return (
-            <div id="map_comp">
+            <div className="cc__map" id="map_comp">
                 <div
                     className="mapBorder"
                 >
