@@ -1,0 +1,88 @@
+.flex {
+    flex-flow: row wrap;
+    display: flex;
+    .flex__left {
+        flex: 1;
+        padding: 3px 0 0;
+    }
+    .flex__right {
+        flex: 1;
+        text-align: right;
+        max-width: 200px;
+        .inline__block {
+            display: inline-block;
+        }
+    }
+}
+
+.time__span {
+    width: 170px; 
+    max-height: 29px; 
+    display: flex;
+    transition-duration: 1500;
+    span { 
+        width: 30px; 
+        text-align: center; 
+    } 
+    &--input {
+        float: right;
+        width: 100px;
+        text-align: center; 
+        input {
+            text-align: center;
+            width: 100%;
+        }
+    }
+    &--button {
+        min-width: 25px;
+    }
+    .add {
+        transform: rotate(0deg);
+    }
+    .remove {
+        transform: rotate(45deg);
+    }
+}
+
+    
+    
+.times {
+    &.multiple {
+        margin: 15px 0;
+    }
+    &--disabled {
+        .flex__right {
+            opacity: .2;
+            pointer-events: none;
+        }
+    }
+    transition: all .2s;
+    .flex__right {
+        span {
+            float: right;
+            width: 30px;
+            text-align: center;
+        }
+        .choosebutton {
+            float: right;
+            width: 20px;
+            height: 20px;
+            padding: 1.5px 0 0 1px;
+            font-size: 11px;
+            margin: 4px 0 0;
+        }
+    }
+}
+
+@media screen and(max-width: 340px) {
+    .flex__right .time .time__input {
+        width: 55px;
+    }
+}
+.openingTimesIcon {
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+}
+.choosebutton {
+    min-height: 1px;
+}

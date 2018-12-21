@@ -22,6 +22,8 @@ import Input from './react-chayns-input/component/Input';
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
 
+import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
+
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
@@ -65,6 +67,7 @@ export {
     Input,
     ModeSwitch,
     Mode,
+    OpeningTimes,
     OrientationHelper,
     PersonFinder,
     RadioButton,
