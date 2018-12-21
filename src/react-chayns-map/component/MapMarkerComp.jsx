@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../react-chayns-icon/component/Icon';
-import './admin.scss';
 
 export default class MapMarkerComp extends PureComponent {
     static propTypes = {
