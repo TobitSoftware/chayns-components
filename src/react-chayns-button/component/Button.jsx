@@ -35,7 +35,8 @@ export default class Button extends Component {
             disabled,
             chooseButton,
             icon,
-            secondary
+            secondary,
+            children
         } = this.props;
 
         return (buttonRef !== nextProps.buttonRef
@@ -45,6 +46,7 @@ export default class Button extends Component {
             || chooseButton !== nextProps.chooseButton
             || icon !== nextProps.icon
             || secondary !== nextProps.secondary
+            || children !== nextProps.children
         );
     }
 
