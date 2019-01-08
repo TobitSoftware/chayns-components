@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import share from './sharingActions';
@@ -30,8 +31,8 @@ export default class SharingBarItem extends Component {
                         onClick={() => {
                             this.onClick();
                             this.tooltip.show();
-                            clearTimeout(this.timeout)
-                            this.timeout=setTimeout(()=>{
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => {
                                 this.tooltip.hide();
                             }, 3000);
                         }}

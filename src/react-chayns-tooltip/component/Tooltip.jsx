@@ -22,7 +22,7 @@ export default class Tooltip extends Component {
         ]).isRequired,
         children: PropTypes.node,
         bindListeners: PropTypes.bool,
-        position: PropTypes.number, /** 0 = top right, 1 = bottom right, 2 = bottom left, 3 = top left */
+        position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
         removeIcon: PropTypes.bool,
@@ -61,6 +61,8 @@ export default class Tooltip extends Component {
         this.renderTooltip = this.renderTooltip.bind(this);
 
         this.firstRender = true;
+
+        this.tooltipKey = Math.random().toString();
     }
 
     componentDidMount() {
@@ -99,19 +101,20 @@ export default class Tooltip extends Component {
         if (content.html) {
             return content.html;
         }
-        const nodeArray = [<p>{content.text}</p>];
+        const nodeArray = [<p key={`p${this.tooltipKey}`}>{content.text}</p>];
         if (content.imageUrl) {
             nodeArray.unshift(<div
+                key={`divImg${this.tooltipKey}`}
                 className="cc__tooltip__image"
                 style={{ backgroundImage: `url(${content.imageUrl})` }}
             />);
         }
         if (content.headline) {
-            nodeArray.unshift(<h5>{content.headline}</h5>);
+            nodeArray.unshift(<h5 key={`h5${this.tooltipKey}`}>{content.headline}</h5>);
         }
         if (content.buttonText && content.buttonOnClick) {
             nodeArray.push(
-                <div className="cc__tooltip__button">
+                <div className="cc__tooltip__button" key={`divBtn${this.tooltipKey}`}>
                     <Button
                         onClick={content.buttonOnClick}
                     >
@@ -128,7 +131,8 @@ export default class Tooltip extends Component {
 
         if (coordinates) {
             return coordinates;
-        } if (this.childrenNode) {
+        }
+        if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
                 x: rect.x + (rect.width / 2),
@@ -182,10 +186,11 @@ export default class Tooltip extends Component {
                 className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
                     'cc__tooltip--active': active,
                 })}
-                style={{ left: `${x}px`, top: `${y}px` }}
+                style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px`, }) }}
                 ref={(node) => {
                     this.tooltipNode = node;
                 }}
+                key={`cc__tooltip${this.tooltipKey}`}
             >
                 {!removed && (
                     <div
@@ -221,7 +226,7 @@ export default class Tooltip extends Component {
                 ref={(node) => {
                     this.childrenNode = node;
                 }}
-                key="cc__tooltip__children"
+                key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
             >
                 {children}

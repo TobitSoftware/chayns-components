@@ -123,3 +123,7 @@ dist/
 \.idea/inspectionProfiles/
 
 \.idea/jsLibraryMappings\.xml
+
+\.vs/
+
+\.idea/

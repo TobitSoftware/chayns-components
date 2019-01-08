@@ -19,6 +19,7 @@ The following components are part of this package:
 |--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
 | [react-chayns-accordion](/src/react-chayns-accordion/)             | Accordion Component                             | [Readme](/src/react-chayns-accordion/README.md)       |
 | [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/)     | AmountControl Component                         | [Readme](/src/react-chayns-amountcontrol/README.md)   |
+| [react-chayns-badge](/src/react-chayns-badge/)                     | Badge Component                                 | [Readme](/src/react-chayns-badge/README.md)          |
 | [react-chayns-button](/src/react-chayns-button/)                   | Button Component                                | [Readme](/src/react-chayns-button/README.md)          |
 | [react-chayns-calendar](/src/react-chayns-calendar/)               | Calendar Component                              | [Readme](/src/react-chayns-calendar/README.md)        |
 | [react-chayns-checkbox](/src/react-chayns-checkbox/)               | Checkbox Component                              | [Readme](/src/react-chayns-checkbox/README.md)        |
@@ -32,6 +33,7 @@ The following components are part of this package:
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component                            | [Readme](/src/react-chayns-modeswitch/README.md)      |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)       | PersonFinder Component                          | [Readme](/src/react-chayns-personfinder/README.md)    |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)         | RadioButton Component                           | [Readme](/src/react-chayns-radiobutton/README.md)     |
+| [react-chayns-receiverinput](/src/react-chayns-receiverinput/)     | ReceiverInput Component                         | [Readme](/src/react-chayns-receiverinput/README.md)     |
 | [react-chayns-rfid_input](/src/react-chayns-rfid_input/)           | RfidInput Component                             | [Readme](/src/react-chayns-rfid_input/README.md)      |
 | [react-chayns-scrollview](/src/react-chayns-scrollview/)           | ScrollView Component                            | [Readme](/src/react-chayns-scrollview/README.md)      |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/)       | SelectButton Component                          | [Readme](/src/react-chayns-selectbutton/README.md)    |

@@ -27,6 +27,29 @@ export default class Button extends Component {
         secondary: false,
     };
 
+    shouldComponentUpdate(nextProps) {
+        const {
+            buttonRef,
+            style,
+            className,
+            disabled,
+            chooseButton,
+            icon,
+            secondary,
+            children
+        } = this.props;
+
+        return (buttonRef !== nextProps.buttonRef
+            || style !== nextProps.style
+            || className !== nextProps.className
+            || disabled !== nextProps.disabled
+            || chooseButton !== nextProps.chooseButton
+            || icon !== nextProps.icon
+            || secondary !== nextProps.secondary
+            || children !== nextProps.children
+        );
+    }
+
     handleClick = (event) => {
         const { onClick, disabled } = this.props;
 

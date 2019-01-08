@@ -20,10 +20,10 @@ export default class Input extends Component {
         inputRef: PropTypes.func,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         onIconClick: PropTypes.func,
-        noDeleteIcon: PropTypes.bool,
         wrapperRef: PropTypes.func,
         dynamic: PropTypes.bool,
         customProps: PropTypes.object,
+        id: PropTypes.string,
     };
 
     static defaultProps = {
@@ -42,10 +42,10 @@ export default class Input extends Component {
         inputRef: null,
         icon: null,
         onIconClick: null,
-        noDeleteIcon: false,
         wrapperRef: null,
         dynamic: false,
         customProps: null,
+        id: null,
     };
 
     constructor(props) {
@@ -53,25 +53,21 @@ export default class Input extends Component {
 
         this.state = {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
-            showIcon: !!props.defaultValue,
         };
+
+        this.id = Math.random()
+            .toString();
 
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.callIfValid = this.callIfValid.bind(this);
-        this.onIconClick = this.onIconClick.bind(this);
+        this.callValidated = this.callValidated.bind(this);
     }
 
-    onIconClick(e) {
-        const { onIconClick } = this.props;
-        const { showIcon } = this.state;
-
-        if (onIconClick) {
-            onIconClick(e);
-        } else if (showIcon) {
-            this._node.value = '';
-            this.setState({ showIcon: false });
+    componentWillReceiveProps({ value }) {
+        const { oldValue = value } = this.props;
+        if (value && value !== oldValue) {
+            this.callValidated(value);
         }
     }
 
@@ -81,79 +77,104 @@ export default class Input extends Component {
             onKeyUp(e);
         }
         if (e.keyCode === 13) {
-            this.callIfValid(e.target.value, onEnter);
+            this.callValidated(e.target.value, onEnter);
         }
     }
 
     onBlur(e) {
         const { onBlur } = this.props;
-        this.callIfValid(e.target.value, onBlur);
+        this.callValidated(e.target.value, onBlur);
     }
 
     onChange(e) {
         const { onChange } = this.props;
-        this.callIfValid(e.target.value, onChange);
-        this.setState({ showIcon: e.target.value.length > 0 });
+        this.callValidated(e.target.value, onChange);
     }
 
-    callIfValid(value, callback) {
-        const { regExp, invalid } = this.props;
-        const valid = !invalid && (!regExp || value.match(regExp));
+    callValidated(value, callback) {
+        const { regExp } = this.props;
+        const valid = !(regExp && !value.match(regExp));
 
-        if (valid && callback) {
-            callback(value);
+        if (callback) {
+            callback(value, valid);
         }
         this.setState({ valid });
     }
 
     render() {
         const {
-            className, defaultValue, value, style, placeholder, type, inputRef, dynamic, icon, noDeleteIcon, wrapperRef, customProps
+            className,
+            defaultValue,
+            value,
+            style,
+            placeholder,
+            type,
+            inputRef,
+            dynamic,
+            icon,
+            wrapperRef,
+            customProps,
+            invalid,
+            onIconClick,
+            id,
         } = this.props;
-        const { valid, showIcon } = this.state;
+        const { valid } = this.state;
+
         if (dynamic) {
             return (
                 <div
-                    className={`input-group ${className}`}
+                    className={classNames('input-group', className, { labelRight: (this.ref && this.ref.value) || (!this.ref && (value || defaultValue)) })}
                     ref={wrapperRef}
                 >
                     <input
-                        style={style}
+                        style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
                         ref={(ref) => {
-                            if (inputRef) inputRef(ref);
-                            this._node = ref;
+                            if (inputRef) {
+                                inputRef(ref);
+                            }
+                            this.ref = ref;
                         }}
-                        className={classNames('input', className, { 'input--invalid': !valid })}
+                        className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         type={type || 'text'}
+                        id={id || this.id}
                         required
                         {...customProps}
                     />
                     <label
-                        style={{ opacity: !showIcon ? '1' : '0' }}
-                        className={icon || showIcon ? 'labelIcon' : null}
+                        htmlFor={id || this.id}
+                        className={classNames({
+                            'input--invalid': !valid || invalid,
+                            labelIcon: icon
+                        })}
                     >
                         {placeholder}
                     </label>
-                    <Icon
-                        icon={(icon && (noDeleteIcon || !showIcon)) ? icon : 'ts-wrong'}
-                        className="input-group__icon"
-                        style={(showIcon && !noDeleteIcon) || icon ? {
-                            opacity: '.3',
-                            pointerEvents: 'all'
-                        } : { opacity: '0' }}
-                        onClick={this.onIconClick}
-                    />
+                    {
+                        icon
+                            ? (
+                                <Icon
+                                    icon={icon}
+                                    className="input-group__icon"
+                                    style={icon ? {
+                                        opacity: '.3',
+                                        pointerEvents: 'all'
+                                    } : { opacity: '0' }}
+                                    onClick={onIconClick}
+                                />
+                            )
+                            : null
+                    }
                 </div>
             );
         }
         return (
             <input
-                className={classNames('input', className, { 'input--invalid': !valid })}
+                className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                 style={style}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
@@ -163,6 +184,7 @@ export default class Input extends Component {
                 defaultValue={defaultValue}
                 type={type}
                 ref={inputRef}
+                id={id || this.id}
                 {...customProps}
             />
         );

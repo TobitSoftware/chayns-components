@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 
@@ -52,7 +53,7 @@ export default class SharingBar extends Component {
         const { sharingProvider } = this.state;
 
         return (
-            <div className={`sharing-bar__item-list ${className}`}>
+            <div className={classNames('sharing-bar__item-list', className)}>
                 {sharingProvider}
             </div>
         );

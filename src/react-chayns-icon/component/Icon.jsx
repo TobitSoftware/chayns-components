@@ -4,7 +4,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 export default class Icon extends PureComponent {
     static propTypes = {
         icon: PropTypes.oneOfType([
@@ -15,12 +14,16 @@ export default class Icon extends PureComponent {
             }).isRequired,
         ]).isRequired,
         className: PropTypes.string,
-        style: PropTypes.object()
+        style: PropTypes.object(),
+        onClick: PropTypes.func,
+        disabled: PropTypes.bool
     };
 
     static defaultProps = {
-        className: undefined,
-        style: undefined
+        className: '',
+        style: undefined,
+        onClick: undefined,
+        disabled: false
     };
 
     constructor(props) {
@@ -39,19 +42,30 @@ export default class Icon extends PureComponent {
     }
 
     render() {
-        const { icon, className, ...rest } = this.props;
+        const {
+            icon, className, onClick, disabled, ...rest
+        } = this.props;
 
         if (chayns.utils.isString(icon)) {
-            const classes = classNames(icon, {
-                [className]: !!className
+            const classes = classNames(`react-chayns-icon ${icon}`, {
+                [className]: !!className,
+                'react-chayns-icon--clickable': typeof onClick === 'function',
+                'react-chayns-icon--disabled': disabled === true
             });
-            return <i className={classes} {...rest}/>;
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+            return <i className={classes} onClick={disabled !== true && typeof onClick === 'function' ? onClick : () => {}} {...rest}/>;
         }
         if (!icon) {
             return null;
         }
-        return (
-            <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
-        );
+        if (typeof onClick === 'function') {
+            return (
+                // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                <span className={`react-chayns-icon react-chayns-icon--clickable${disabled === true ? ' react-chayns-icon--disabled' : ''}`} onClick={disabled !== true ? onClick : () => {}}>
+                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
+                </span>
+            );
+        }
+        return <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>;
     }
 }

@@ -44,4 +44,6 @@ The following properties can be set on the icon component
 |--------------|-----------------------------------------------------------------------------------|-----------------|----------|---------------|
 | icon         | The icon (TS-icon: string, FA-icon: object)                                       | string / object | true     |               |
 | style        | Additional styles that should be set to the icon                                  | string          | false    | undefined     |
-| className    | Additional CSS-Classes that should be set to the icon                             | string / object | false    | undefined     |
+| className    | Additional CSS-Classes that should be set to the icon                             | string / object | false    | ''            |
+| onClick      | OnClick listener to make icon clickable                                           | function        | false    | undefined     |
+| disabled     | Disables clickable icons                                                          | boolean         | false    | false         |

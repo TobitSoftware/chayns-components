@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -8,7 +8,7 @@ const CLOSE = 1;
 
 const OPEN = 2;
 
-export default class AccordionSearch extends Component {
+export default class AccordionSearch extends PureComponent {
     static propTypes = {
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
@@ -50,14 +50,16 @@ export default class AccordionSearch extends Component {
 
         return (
             <Input
-                className={classNames('accordion__head__right__search', {
+                className={classNames('accordion__head__right__search', 'accordion--no-trigger', {
                     'accordion__head__right__search--active': currentState === OPEN,
                 })}
                 placeholder={searchPlaceholder}
                 onChange={onSearch}
                 onEnter={onSearchEnter}
+                onIconClick={onSearchEnter}
                 icon={faSearch}
                 style={{ width: noWidth ? '0' : 'auto' }}
+                // eslint-disable-next-line no-return-assign
                 wrapperRef={ref => this.ref = ref}
                 dynamic
             />

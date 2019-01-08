@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
 import ExampleContainer from '../ExampleContainer';
 
@@ -72,8 +73,6 @@ export default class Example extends Component {
                         position={2}
                         content={{
                             html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
-
-
                                 This is a static Tooltip with custom html content.
                                   </div>
                         }}
@@ -85,8 +84,6 @@ export default class Example extends Component {
                                 this.staticTooltip.show();
                             }}
                         >
-
-
                             Static Tooltip
                         </p>
                     </Tooltip>

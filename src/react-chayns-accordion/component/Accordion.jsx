@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
@@ -10,11 +10,18 @@ const CLOSE = 1;
 
 const OPEN = 2;
 
-export default class Accordion extends Component {
+let rqAnimationFrame;
+
+export default class Accordion extends PureComponent {
     static propTypes = {
-        head: PropTypes.node.isRequired,
+        head: PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.shape({
+                open: PropTypes.node.isRequired,
+                close: PropTypes.node.isRequired
+            }).isRequired
+        ]).isRequired,
         children: PropTypes.node.isRequired,
-        badge: PropTypes.node,
         right: PropTypes.node,
         renderClosed: PropTypes.bool,
         isWrapped: PropTypes.bool,
@@ -28,17 +35,16 @@ export default class Accordion extends Component {
         defaultOpened: PropTypes.bool,
         reference: PropTypes.func,
         autogrow: PropTypes.bool,
-        badgeStyle: PropTypes.object,
         open: PropTypes.bool,
         icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
         noRotate: PropTypes.bool,
         fixed: PropTypes.bool,
         noIcon: PropTypes.bool,
-        noTitleTrigger: PropTypes.bool,
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
         removeContentClosed: PropTypes.bool,
+        onClick: PropTypes.func,
     };
 
     static defaultProps = {
@@ -53,42 +59,33 @@ export default class Accordion extends Component {
         reference: null,
         isWrapped: false,
         renderClosed: false,
-        badge: null,
         right: null,
         autogrow: false,
-        badgeStyle: null,
         open: undefined,
         icon: 'ts-angle-right',
         noRotate: false,
         fixed: false,
         noIcon: false,
-        noTitleTrigger: false,
         onSearch: null,
         onSearchEnter: null,
         searchPlaceholder: '',
         removeContentClosed: false,
+        onClick: null,
     };
 
+    static dataGroups = {};
+
     constructor(props) {
+        const { defaultOpened, open, className } = props;
         super();
 
         this.state = {
-            currentState: (props && props.defaultOpened) ? OPEN : CLOSE,
+            currentState: (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE,
         };
     }
 
-    componentWillMount() {
-        const { open, className } = this.props;
-
-        if (open || (className && className.indexOf('accordion--open') !== -1)) {
-            this.setState({
-                currentState: OPEN
-            });
-        }
-    }
-
     componentDidMount() {
-        const { className, autogrow, defaultOpened } = this.props;
+        const { className, autogrow, dataGroup } = this.props;
         const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
@@ -101,17 +98,12 @@ export default class Accordion extends Component {
             }
         }
 
-        if (defaultOpened) {
-            if (this.accordionHead.classList.contains('accordion--trigger')) {
-                this.accordionHead.addEventListener('click', this.handleAccordionClick);
+        if (dataGroup) {
+            if (!Accordion.dataGroups[dataGroup]) {
+                Accordion.dataGroups[dataGroup] = [];
             }
-            this.accordionHead.querySelectorAll('.accordion--trigger').forEach((node) => {
-                node.addEventListener('click', this.handleAccordionClick);
-            });
-        } else {
-            this.accordion.querySelectorAll('.accordion--trigger').forEach((node) => {
-                node.addEventListener('click', this.handleAccordionClick);
-            });
+
+            Accordion.dataGroups[dataGroup].push(this);
         }
     }
 
@@ -121,18 +113,20 @@ export default class Accordion extends Component {
             const { currentState } = this.state;
 
             if (open !== nextProps.open) {
-                this.setState({
-                    currentState: nextProps.open ? OPEN : CLOSE
-                });
+                if (nextProps.open) {
+                    this.accordionOpenListener();
+                } else {
+                    this.setState({
+                        currentState: CLOSE
+                    });
+                }
             }
 
-            if (nextProps.open && !currentState === OPEN) {
-                this.setState({
-                    currentState: OPEN
-                });
+            if (nextProps.open && !currentState === !!OPEN) {
+                this.accordionOpenListener();
             }
 
-            if (!nextProps.open && !currentState === CLOSE) {
+            if (!nextProps.open && !currentState === !!CLOSE) {
                 this.setState({
                     currentState: CLOSE
                 });
@@ -143,26 +137,71 @@ export default class Accordion extends Component {
     componentDidUpdate() {
         const { autogrow } = this.props;
         const { currentState } = this.state;
+        const { _body } = this;
 
-        if (autogrow && this._body) {
+        if (autogrow && _body) {
             if (currentState === OPEN) {
-                this._body.style.setProperty('max-height', 'initial', 'important');
+                _body.style.setProperty('max-height', 'initial', 'important');
             } else if (currentState === CLOSE) {
-                this._body.style.maxHeight = null;
+                _body.style.maxHeight = null;
             }
         }
     }
 
-    handleAccordionClick = (event) => {
-        const { currentState } = this.state;
+    componentWillUnmount() {
         const { dataGroup } = this.props;
 
-        if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
-            this.accordionCloseListener(event);
-        } else {
-            this.accordionOpenListener(event);
+        if (dataGroup && Accordion.dataGroups[dataGroup]) {
+            const elementIndex = Accordion.dataGroups[dataGroup].indexOf(this);
+            if (elementIndex !== -1) {
+                Accordion.dataGroups[dataGroup].splice(elementIndex, 1);
+            }
+        }
+
+        cancelAnimationFrame(rqAnimationFrame);
+    }
+
+    handleAccordionClick = (event) => {
+        const { fixed, onClick } = this.props;
+
+        if (!fixed && event !== null) {
+            let trigger = true;
+            let node = event.target;
+            for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
+                if (node.classList) {
+                    if (node.classList.contains('accordion--no-trigger')) {
+                        trigger = false;
+                        break;
+                    }
+                    if (node.classList.contains('accordion__head')) {
+                        break;
+                    }
+                }
+                if (node.parentNode) {
+                    node = node.parentNode;
+                } else {
+                    trigger = false; // no parent node and no break at accordion__head -> portal (e.g. contextMenu) -> no trigger
+                    break;
+                }
+            }
+
+            if (trigger) {
+                const { currentState } = this.state;
+                const { dataGroup } = this.props;
+
+                if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
+                    this.accordionCloseListener(event);
+                } else {
+                    this.accordionOpenListener(event);
+                }
+            }
+        }
+
+        if (onClick) {
+            onClick(event);
         }
     };
+
 
     _getBody() {
         const { renderClosed, children, removeContentClosed } = this.props;
@@ -178,17 +217,20 @@ export default class Accordion extends Component {
 
     accordionCloseListener(event) {
         const { onClose, autogrow } = this.props;
+        const { _body } = this;
 
-        if (autogrow && this._body) {
-            this._body.style.setProperty('max-height', '9999px', 'important');
+        if (autogrow && _body) {
+            _body.style.setProperty('max-height', '9999px', 'important');
         }
 
-        requestAnimationFrame(() => {
+        rqAnimationFrame = requestAnimationFrame(() => {
             this.setState({
                 currentState: CLOSE
             });
 
-            this._body.style.removeProperty('max-height');
+            if (autogrow && _body) {
+                _body.style.removeProperty('max-height');
+            }
         });
 
         if (onClose) {
@@ -198,22 +240,13 @@ export default class Accordion extends Component {
 
     accordionOpenListener(event) {
         const { onOpen, dataGroup } = this.props;
-
-        if (dataGroup) {
-            document.querySelectorAll(`.accordion[data-group="${dataGroup}"].accordion--open`).forEach((node) => {
-                if (node.classList.contains('accordion--trigger')) {
-                    node.click();
-                } else {
-                    const trigger = node.querySelectorAll('.accordion--trigger');
-                    if (trigger.length > 0) {
-                        trigger[0].click();
-                    }
+        if (dataGroup && Accordion.dataGroups[dataGroup]) {
+            Accordion.dataGroups[dataGroup].forEach((accordion) => {
+                if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
+                    accordion.accordionCloseListener();
                 }
             });
-
-            this.accordion.classList.add('accordion--open');
         }
-
         this.setState({
             currentState: OPEN
         });
@@ -225,7 +258,6 @@ export default class Accordion extends Component {
 
     render() {
         const {
-            dataGroup,
             id,
             style,
             isWrapped,
@@ -233,21 +265,16 @@ export default class Accordion extends Component {
             styleBody,
             reference,
             icon,
-            badge,
-            badgeStyle,
             head,
             right,
             noRotate,
-            fixed,
             noIcon,
-            noTitleTrigger,
             onSearch,
             onSearchEnter,
-            searchPlaceholder,
+            searchPlaceholder
         } = this.props;
 
         const { currentState } = this.state;
-
         return (
             <div
                 className={classNames({
@@ -256,7 +283,6 @@ export default class Accordion extends Component {
                     'accordion--open': currentState === OPEN,
                     [className]: className
                 })}
-                data-group={dataGroup}
                 ref={(ref) => {
                     this.accordion = ref;
                     if (reference) reference(ref);
@@ -265,10 +291,8 @@ export default class Accordion extends Component {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', { 'accordion--trigger': !fixed && !right && !noTitleTrigger && !onSearch })}
-                    ref={(ref) => {
-                        this.accordionHead = ref;
-                    }}
+                    className="accordion__head"
+                    onClick={this.handleAccordionClick}
                 >
                     {
                         noIcon
@@ -277,7 +301,6 @@ export default class Accordion extends Component {
                                 <div
                                     className={classNames('accordion__head__icon', {
                                         'accordion__head__icon--no-rotate': noRotate,
-                                        'accordion--trigger': (!fixed && (right || onSearch || noTitleTrigger))
                                     })}
                                 >
                                     {
@@ -289,23 +312,27 @@ export default class Accordion extends Component {
                             )
                     }
                     <div
-                        className={classNames('accordion__head__title', { 'accordion--trigger': !fixed && (right || onSearch) && !noTitleTrigger })}
+                        className="accordion__head__title"
+                        style={{
+                            ...(noIcon ? { paddingLeft: '10px' } : null),
+                            ...(head && !chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null)
+                        }}
                     >
-                        {head}
+                        {/* eslint-disable-next-line no-nested-ternary */}
+                        {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
                     </div>
                     {
-                        right || badge || onSearch || onSearchEnter
+                        right || onSearch || onSearchEnter
                             ? (
                                 <div className="accordion__head__right">
-                                    {
-                                        badge
-                                            ? (
-                                                <div className="badge" style={badgeStyle}>
-                                                    {badge}
-                                                </div>
-                                            )
-                                            : right
-                                    }
+                                    <div
+                                        className={classNames({
+                                            'right--search': onSearch || onSearchEnter
+                                        })}
+                                        style={{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 }}
+                                    >
+                                        {right}
+                                    </div>
                                     {
                                         onSearch || onSearchEnter
                                             ? (

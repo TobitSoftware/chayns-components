@@ -10,12 +10,12 @@ If you are a Tobit.Software worker in the tobit.ag network, you are able to chan
 At first the component has to be imported:
 
 ```jsx harmony
-import { TextString } from 'chayns-components';
+    import { TextString } from 'chayns-components';
 ```
 
 Then, you need to load your lib before your components are rendered:
 ```jsx harmony
-TextString.loadLibrary('TextStringTest').then(() => {
+    TextString.loadLibrary('TextStringTest').then(() => {
         ReactDom.render(
             <App />,
             document.querySelector('#tapp')
@@ -47,6 +47,9 @@ If you need the textString as a string, e.g. for a dialog, you can use the stati
 | fallback    | Fallback string.                                                                      | string   |
 | useDangerouslySetInnerHTML | Use dangerouslySetInnerHTML (for strings with HTML content).           | bool     |
 | language | Language of the string (language need to be loaded before usage)                         | string   |
+| setProps | StringNames for children Props e.g. placeholder or accordion head                        | object   |
+| setProps.fallback | Fallback strings for setProps                                                   | object   |
+| preventNoTranslate | Prevents setting no-translate class to children if textString language is the same as tapp language | bool |
 
 
 ## Example ##

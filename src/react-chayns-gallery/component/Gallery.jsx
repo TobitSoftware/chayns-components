@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import supportsWebP from 'supports-webp';
 import ImageContainer from './ImageContainer';
+import getTappWidth from '../../utils/tappWidth';
 
 export default class Gallery extends Component {
     static propTypes = {
@@ -17,43 +20,59 @@ export default class Gallery extends Component {
         onClick: chayns.openImage,
         onDelete: null,
         deleteMode: false,
-        height: null,
+        height: chayns.env.mobile ? 256 : 428,
         width: null
     };
 
     constructor() {
         super();
         this.openGallery = this.openGallery.bind(this);
+        this.getBigImageUrls = this.getBigImageUrls.bind(this);
     }
 
-    static getScaledImageUrl(url, shortEdgeSize) {
-        if (url.indexOf('tsimg.space') >= 0) {
-            if (url.indexOf('jpg') >= 0) {
-                return url.replace('.jpg', `_s${shortEdgeSize}-mshortedgescale.jpg`);
+    static getScaledImageUrl(url, height, width, preventWebp) {
+        height = height ? Math.floor(height * window.devicePixelRatio) : null;
+        width = width ? Math.floor(width * window.devicePixelRatio) : null;
+        const shortEdgeSize = height > width ? height : width;
+        const regexImgType = /[.](jpg|jpeg|png)/;
+        const regexImgService = /(tsimg.space|tsimg.cloud)/;
+        const imgType = url.match(regexImgType);
+        const imgService = url.match(regexImgService);
+
+        if (height && width && imgService && imgService[0] === 'tsimg.space' && imgType) {
+            return url.replace(imgType[0], `_s${shortEdgeSize}-mshortedgescale${imgType[0]}`);
+        }
+        if (imgService && imgService[0] === 'tsimg.cloud' && imgType) {
+            let webpSupport;
+            try {
+                webpSupport = !preventWebp && supportsWebP;
+            } catch (err) {
+                webpSupport = false;
             }
-            if (url.indexOf('jpeg') >= 0) {
-                return url.replace('.jpeg', `_s${shortEdgeSize}-mshortedgescale.jpeg`);
+            if (height && width) {
+                url = url.replace(imgType[0], `_h${height}-w${width}${imgType[0]}`);
+                if (webpSupport) {
+                    return url.replace(imgType[0], `-fwebp${imgType[0]}`);
+                }
             }
-            if (url.indexOf('png') >= 0) {
-                return url.replace('.png', `_s${shortEdgeSize}-mshortedgescale.png`);
+            if (webpSupport) {
+                return url.replace(imgType[0], `_fwebp${imgType[0]}`);
             }
         }
         return url;
     }
 
-    static getBigImages(urls) {
-        const bigUrls = [];
-        urls.forEach((url) => {
-            // eslint-disable-next-line no-restricted-globals
-            bigUrls.push(Gallery.getScaledImageUrl(url, Math.floor(screen.availHeight > screen.availWidth ? screen.availWidth : screen.availHeight)));
+    getBigImageUrls() {
+        const { urls } = this.props;
+        return urls.map((url) => {
+            return Gallery.getScaledImageUrl(url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp)));
         });
-        return bigUrls;
     }
 
     openGallery(start) {
-        const { onClick, urls, deleteMode } = this.props;
+        const { onClick, deleteMode } = this.props;
         if (!deleteMode) {
-            onClick(Gallery.getBigImages(urls), start);
+            onClick(this.getBigImageUrls(), start);
         }
     }
 
@@ -86,22 +105,29 @@ export default class Gallery extends Component {
                 <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })}>
                     {
                         urls.map((url, index) => {
-                            if (index <= 3 || deleteMode) {
-                                let shortEdge = window.innerWidth;
-                                if (!deleteMode) {
-                                    if (index <= 2 && numberOfImages <= 2) {
-                                        shortEdge = styleHeight;
-                                    } else if (index === 0) {
-                                        shortEdge = parseInt((styleHeight * 2) / 3, 10);
-                                    } else if (index < 4) {
-                                        shortEdge = parseInt(styleHeight / 3, 10);
+                            let imgWidth = width || getTappWidth();
+                            let imgHeight = height;
+                            if (!deleteMode && (numberOfImages === 2 || (numberOfImages === 3 && index > 0))) {
+                                imgWidth /= 2;
+                            } else if (index > 0) {
+                                imgWidth /= 3;
+                            }
+                            if (numberOfImages > 2 || deleteMode) {
+                                if (index === 0 && !deleteMode) {
+                                    imgHeight = imgHeight * 2 / 3;
+                                } else {
+                                    imgHeight /= 3;
+                                    if (deleteMode) {
+                                        imgWidth = imgHeight;
                                     }
                                 }
+                            }
 
+                            if (index <= 3 || deleteMode) {
                                 return (
                                     <ImageContainer
                                         key={url}
-                                        url={Gallery.getScaledImageUrl(url, shortEdge)}
+                                        url={Gallery.getScaledImageUrl(url, imgHeight, imgWidth)}
                                         index={index}
                                         openImage={this.openGallery}
                                         onDelete={onDelete}

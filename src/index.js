@@ -2,6 +2,7 @@ import Accordion from './react-chayns-accordion/component/Accordion';
 import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
 import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
 
+import Badge from './react-chayns-badge/component/Badge';
 import Button from './react-chayns-button/component/Button';
 import ChooseButton from './react-chayns-button/component/ChooseButton';
 
@@ -20,6 +21,8 @@ import Input from './react-chayns-input/component/Input';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
+
+import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 
@@ -50,6 +53,7 @@ export {
     Accordion,
     AccordionIntro,
     AmountControl,
+    Badge,
     Button,
     ChooseButton,
     Calendar,
@@ -63,6 +67,7 @@ export {
     Input,
     ModeSwitch,
     Mode,
+    OpeningTimes,
     OrientationHelper,
     PersonFinder,
     RadioButton,
