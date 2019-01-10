@@ -1,6 +1,6 @@
 {
   "name": "chayns-components",
-  "version": "2.9.8",
+  "version": "2.9.9",
   "description": "Some react components for chayns®",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
