@@ -1,13 +1,33 @@
 {
   "presets": [
-    ["es2015", {
-      "modules": false
-    }],
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ],
     "stage-0",
     "react"
   ],
   "plugins": [
     "transform-decorators-legacy",
-    "transform-react-remove-prop-types"
+    "transform-react-remove-prop-types",
+    [
+      "transform-imports",
+      {
+        "@fortawesome/free-solid-svg-icons": {
+          "transform": "@fortawesome/free-solid-svg-icons/${member}",
+          "preventFullImport": true
+        },
+        "@fortawesome/free-regular-svg-icons": {
+          "transform": "@fortawesome/free-regular-svg-icons/${member}",
+          "preventFullImport": true
+        },
+        "@fortawesome/free-brands-svg-icons": {
+          "transform": "@fortawesome/free-brands-svg-icons/${member}",
+          "preventFullImport": true
+        }
+      }
+    ]
   ]
 }
