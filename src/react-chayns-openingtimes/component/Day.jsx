@@ -19,12 +19,10 @@ class Day extends Component {
             weekday
         } = this.props;
 
-        if (onDayActivation) {
-            if (status && times.length === 0 && onAdd) {
-                onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
-            } else {
-                onDayActivation(weekday.number, status);
-            }
+        if (status && times.length === 0 && onAdd) {
+            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+        } else {
+            onDayActivation(weekday.number, status);
         }
     }
 
@@ -87,15 +85,9 @@ Day.propTypes = {
         end: PropTypes.string.isRequired
     })).isRequired,
     onDayActivation: PropTypes.func.isRequired,
-    onAdd: PropTypes.func,
-    onRemove: PropTypes.func,
-    onChange: PropTypes.func
-};
-
-Day.defaultProps = {
-    onAdd: null,
-    onRemove: null,
-    onChange: null
+    onAdd: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired
 };
 
 export default Day;
