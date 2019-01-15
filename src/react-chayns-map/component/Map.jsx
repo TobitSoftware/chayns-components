@@ -85,7 +85,6 @@ export default class Map extends Component {
                         this.concatMapStyles();
                     })
                     .catch((err) => {
-                        // Logger.error('Count not init Map', { er: err }, 'Map componentDidMount', 67, err.message);
                     });
             });
     }
@@ -145,7 +144,7 @@ export default class Map extends Component {
             if (!document.querySelector('#googleMapsScript')) {
                 const script = document.createElement('script');
                 script.id = 'googleMapsScript';
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${this.props.apiKey}`;
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${this.props.apiKey}&libraries=places`;
                 script.async = true;
                 document.body.appendChild(script);
                 resolve();
@@ -184,6 +183,19 @@ export default class Map extends Component {
                         this.getAddress(currentPos);
                         mapOptions.onPositionChange(currentPos);
                     }, 500);
+                });
+                const options = {
+                    componentRestrictions: { country: 'de' },
+                };
+                // eslint-disable-next-line no-undef
+                const autocomplete = new google.maps.places.Autocomplete(this.input, options);
+                autocomplete.addListener('place_changed', () => {
+                    const place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        return;
+                    }
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
                 });
             } catch (err) {
                 // eslint-disable-next-line prefer-promise-reject-errors
@@ -258,6 +270,7 @@ export default class Map extends Component {
                         value={adr}
                         key="adr"
                         inputRef={(obj) => {
+                            this.inputRef = obj;
                             inputOptions.inputRef(obj);
                         }}
                         onChange={(address) => {
