@@ -53,6 +53,7 @@ class Day extends Component {
                         timeSpans.length === 0 ? (
                             <TimeSpan
                                 active={false}
+                                disabled
                                 buttonType={TimeSpan.ADD}
                             />
                         ) : timeSpans.map((t, index) => (
