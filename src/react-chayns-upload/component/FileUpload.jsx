@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 
 import selectFile from '../../utils/selectFile';
 import getCompareFunction from '../utils/getCompareFunction';
