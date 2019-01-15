@@ -44,6 +44,7 @@ import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
+import Map from './react-chayns-map/component/Map';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
@@ -84,5 +85,6 @@ export {
     TextString,
     Tooltip,
     FileUpload,
+    Map,
     resolveAbsoluteImport,
 };
