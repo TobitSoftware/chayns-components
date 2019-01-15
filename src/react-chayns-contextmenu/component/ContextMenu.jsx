@@ -95,11 +95,12 @@ export default class ContextMenu extends Component {
         if (coordinates) {
             return coordinates;
         }
+
         if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
-                x: rect.x + (rect.width / 2),
-                y: (position === 1 || position === 2) ? rect.y + rect.height : rect.y,
+                x: rect.left + (rect.width / 2),
+                y: (position === 1 || position === 2) ? rect.bottom : rect.top
             };
         }
         return { x: 0, y: 0 };
