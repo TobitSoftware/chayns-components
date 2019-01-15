@@ -5,7 +5,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import Input from '../../react-chayns-input/component/Input';
 
 import MapMarker from './MapMarkerComp';
-import './Map.scss';
+
 export default class Map extends Component {
     static propTypes = {
         defaultPosition: PropTypes.shape({
@@ -88,6 +88,10 @@ export default class Map extends Component {
                         this.concatMapStyles();
                     })
                     .catch((err) => {
+                        if (window.debugLevel >= 3) {
+                            // eslint-disable-next-line no-console
+                            console.debug(err);
+                        }
                     });
             });
     }
@@ -142,11 +146,12 @@ export default class Map extends Component {
     }
 
     loadScript() {
+        const { apiKey } = this.props;
         return new Promise((resolve) => {
             if (!document.querySelector('#googleMapsScript')) {
                 const script = document.createElement('script');
                 script.id = 'googleMapsScript';
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${this.props.apiKey}&libraries=places`;
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
                 script.async = true;
                 document.body.appendChild(script);
                 resolve();
