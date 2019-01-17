@@ -18,6 +18,10 @@ You can use your **Map** like this:
 <Map 
     apiKey="INSERT_YOUR_API_KEY_HERE"
     mapId="adminmap"
+    defaultPosition={{
+        lat: 0,
+        lng: 0,
+    }}
 />
 ```
 

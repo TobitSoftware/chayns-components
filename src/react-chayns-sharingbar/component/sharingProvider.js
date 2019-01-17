@@ -1,8 +1,12 @@
-import {
-    faFacebookF, faWhatsapp, faTwitter, faTumblr, faTelegram, faSkype
-} from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import { faLink, faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
+import { faTumblr } from '@fortawesome/free-brands-svg-icons/faTumblr';
+import { faTelegram } from '@fortawesome/free-brands-svg-icons/faTelegram';
+import { faSkype } from '@fortawesome/free-brands-svg-icons/faSkype';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 
 export const shareProvider = [
     {
