@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 
 import { Icon } from '../../src/index';
 
