@@ -27,7 +27,7 @@ Then it can be used like in the following example:
 | Property   | Description                                                                                        | Type    |
 |------------|-----------------------------------------------------------------------------------------------------|--------|
 | placeholder | Placeholder of the input field                                                 | String |
-| onChange    | Callback that will be executed when a person gets selected                                                   | Function |
+| onChange    | Callback that will be executed when a person gets selected or input/personfinder gets cleared             | Function |
 | className | CSS classes for the input field                             | String   |
 | style    | Styles for the input field                                                   | Object |
 | required    | Makes the input required                                                   | bool |

@@ -67,6 +67,11 @@ export default class PersonFinder extends Component {
             showPopup: false,
             value: '',
         });
+
+        const { onChange } = this.props;
+        if (onChange) {
+            onChange(null);
+        }
     };
 
     handleOnChange = (event) => {
@@ -75,6 +80,11 @@ export default class PersonFinder extends Component {
         this.setState({
             value
         });
+
+        if(value.length === 0) {
+            this.clear();
+            return;
+        }
 
         if (value.length < 3) {
             return;
