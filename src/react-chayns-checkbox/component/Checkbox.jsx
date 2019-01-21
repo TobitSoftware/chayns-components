@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Checkbox extends Component {
+export default class Checkbox extends PureComponent {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
@@ -21,7 +21,8 @@ export default class Checkbox extends Component {
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
         tooltip: PropTypes.string,
-        dangerouslySetLabel: PropTypes.object
+        dangerouslySetLabel: PropTypes.object,
+        stopPropagation: PropTypes.bool
     };
 
     static defaultProps = {
@@ -35,7 +36,8 @@ export default class Checkbox extends Component {
         defaultChecked: undefined,
         disabled: false,
         tooltip: null,
-        dangerouslySetLabel: null
+        dangerouslySetLabel: null,
+        stopPropagation: false
     };
 
     constructor() {
@@ -69,6 +71,7 @@ export default class Checkbox extends Component {
             checked,
             defaultChecked,
             dangerouslySetLabel,
+            stopPropagation
         } = this.props;
 
         return(
@@ -81,6 +84,7 @@ export default class Checkbox extends Component {
                     type="checkbox"
                     className="checkbox"
                     ref={(ref) => { this._node = ref; }}
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
                     onChange={this.onChange}
                     id={this.id}
                     disabled={disabled}
@@ -89,6 +93,7 @@ export default class Checkbox extends Component {
                 />
                 <label
                     htmlFor={this.id}
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
                     dangerouslySetInnerHTML={dangerouslySetLabel}
                 >
                     {!dangerouslySetLabel ? (children || label || '') : null}
