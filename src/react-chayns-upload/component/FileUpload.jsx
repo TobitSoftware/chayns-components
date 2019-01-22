@@ -208,7 +208,7 @@ export default class FileUpload extends Component {
         const { hover } = this.state;
 
         const classNames = classnames('cc__file-upload--placeholder', {
-            'chayns__color--70': chayns.env.site.colorMode !== 1,
+            chayns__color: chayns.env.site.colorMode !== 1,
             'cc__file-upload--hover': hover,
             [className]: className,
         });
@@ -242,7 +242,7 @@ export default class FileUpload extends Component {
             disableListeners,
         } = this.props;
 
-        const wrapperClassNames = classnames('cc__file-upload', {
+        const wrapperClassNames = classnames('cc__file-upload chayns__border-color', {
             'cc__file-upload--custom': children,
         });
 
