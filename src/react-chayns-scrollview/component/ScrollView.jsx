@@ -13,7 +13,6 @@ export default class ScrollView extends Component {
         ]),
         style: PropTypes.object,
         className: PropTypes.string,
-        showScrollbar: PropTypes.bool,
         scrollElementRef: PropTypes.func,
     };
 
@@ -21,7 +20,6 @@ export default class ScrollView extends Component {
         children: null,
         style: undefined,
         className: undefined,
-        showScrollbar: false,
         scrollElementRef: null,
     };
 
@@ -56,7 +54,6 @@ export default class ScrollView extends Component {
     render() {
         const {
             style,
-            showScrollbar,
             className,
             children,
             scrollElementRef
@@ -65,7 +62,6 @@ export default class ScrollView extends Component {
         const { contentWidth } = this.state;
 
         const classNames = classnames('cc__scroll-view', {
-            'cc__scroll-view--hide': !showScrollbar,
             'cc__scroll-view--mobile': chayns.env.isMobile,
             [className]: className,
         });
