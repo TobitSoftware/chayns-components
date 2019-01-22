@@ -17,14 +17,11 @@ You can init your **ContextMenu** like this:
 
 ```jsx harmony
 <ContextMenu
-    coordinates={{x: 100, y: 100}}
-    hide={false}
     items={[{
         icon: 'ts-tobit',
         onClick: this.addOnClick,
         text: 'Hinzufügen'
     }]}
-    onLayerClick={()=>console.log('hide')}
     position={0}
 />
 ```
