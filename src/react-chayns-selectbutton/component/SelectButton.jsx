@@ -78,9 +78,9 @@ export default class SelectButton extends Component {
             if (onSelect && result.buttonType > 0) {
                 onSelect(this.getReturnList(result));
             }
-        }).catch((e) => {
+        }).catch((err) => {
             // eslint-disable-next-line no-console
-            console.error(e);
+            console.error(err);
         });
 
         if(stopPropagation) e.stopPropagation();
