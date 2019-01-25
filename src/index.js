@@ -21,7 +21,6 @@ import Input from './react-chayns-input/component/Input';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
-import Map from './react-chayns-map/component/Map';
 
 import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
@@ -36,7 +35,7 @@ import SelectList from './react-chayns-selectlist/component/SelectList';
 import SelectListItem from './react-chayns-selectlist/component/SelectItem';
 import SetupWizard from './react-chayns-setupwizard/component/SetupWizard';
 import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
-import Slider from './react-chayns-slider/component/Slider'
+
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
@@ -45,6 +44,7 @@ import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
+import Map from './react-chayns-map/component/Map';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
@@ -68,7 +68,6 @@ export {
     Input,
     ModeSwitch,
     Mode,
-    Map,
     OpeningTimes,
     OrientationHelper,
     PersonFinder,
@@ -81,11 +80,11 @@ export {
     SetupWizard,
     SetupWizardItem,
     SharingBar,
-    Slider,
     SmallWaitCursor,
     TextArea,
     TextString,
     Tooltip,
     FileUpload,
+    Map,
     resolveAbsoluteImport,
 };
