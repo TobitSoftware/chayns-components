@@ -198,13 +198,11 @@ export default class TextString extends Component {
         return textString;
     }
 
-    childrenOnClick(e) {
-        if (e.ctrlKey) {
-            isTobitEmployee()
-                .then(this.selectStringToChange)
-                .catch(() => {
-                });
-        }
+    childrenOnClick() {
+        isTobitEmployee()
+            .then(this.selectStringToChange)
+            .catch(() => {
+            });
     }
 
     selectStringToChange() {
@@ -351,10 +349,12 @@ export default class TextString extends Component {
         const childrenProps = {
             ...{
                 onClick: (e) => {
-                    if (children.props.onClick && !e.ctrlKey) {
+                    if (e.ctrlKey) {
+                        this.childrenOnClick(e);
+                        e.stopPropagation();
+                    } else if (children.props.onClick) {
                         children.props.onClick(e);
                     }
-                    this.childrenOnClick(e);
                 }
             },
             ...(

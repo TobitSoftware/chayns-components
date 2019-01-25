@@ -109,6 +109,7 @@ export default class Checkbox extends PureComponent {
             dangerouslySetLabel,
             labelStyle,
             labelClassName,
+            stopPropagation
         } = this.props;
 
         return [
@@ -125,6 +126,7 @@ export default class Checkbox extends PureComponent {
                 checked={checked}
                 defaultChecked={defaultChecked}
                 style={style}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
             />,
             <label
                 key="label"
@@ -132,6 +134,7 @@ export default class Checkbox extends PureComponent {
                 htmlFor={this.id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
                 style={label ? { ...labelStyle, ...{ marginRight: '10px' } } : labelStyle}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
             />,
             !dangerouslySetLabel ? (children || label || '') : null
         ];

@@ -11,13 +11,16 @@ export default class SharingBarItem extends Component {
         icon: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.object.isRequired]).isRequired,
         name: PropTypes.string.isRequired,
         provider: PropTypes.object.isRequired,
-        link: PropTypes.string.isRequired
+        link: PropTypes.string.isRequired,
+        stopPropagation: PropTypes.bool.isRequired,
     };
 
-    onClick = () => {
-        const { provider, link } = this.props;
+    onClick = (e) => {
+        const { provider, link, stopPropagation } = this.props;
 
         share(provider, link);
+
+        if(stopPropagation) e.stopPropagation();
     };
 
     render() {
@@ -28,8 +31,8 @@ export default class SharingBarItem extends Component {
                     <Button
                         className="sharing-bar__item"
                         title={name}
-                        onClick={() => {
-                            this.onClick();
+                        onClick={(e) => {
+                            this.onClick(e);
                             this.tooltip.show();
                             clearTimeout(this.timeout);
                             this.timeout = setTimeout(() => {

@@ -34,6 +34,7 @@ The component can be used in JSX like in the following example:
 | onUpload          | Uploads file and return the url. Only for images.                          | Function      |               |
 | children          | Component(s) that should be rendered inside component                      | ReactElements |               |
 | customIcon        | CustomIcon that should be rendered inside component                        | string/object |               |
+| stopPropagation     | Stops the click propagation to parent elements                           | bool          | false         |
 
 
 ## Example ##

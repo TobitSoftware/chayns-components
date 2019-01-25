@@ -14,6 +14,7 @@ export default class PersonFinder extends Component {
         onChange: PropTypes.func,
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -24,6 +25,7 @@ export default class PersonFinder extends Component {
         onChange: null,
         showPersons: true,
         showSites: false,
+        stopPropagation: false,
     };
 
     constructor(props) {
@@ -44,12 +46,13 @@ export default class PersonFinder extends Component {
         Promise.all([
             showPersons ? chayns.findPerson(defaultValue) : Promise.resolve({ Value: [] }),
             showSites ? chayns.findSite(defaultValue) : Promise.resolve({ Value: [] })
-        ]).then(([persons, sites]) => {
-            this.setState({
-                persons: persons.Value || [],
-                sites: sites.Value || []
+        ])
+            .then(([persons, sites]) => {
+                this.setState({
+                    persons: persons.Value || [],
+                    sites: sites.Value || []
+                });
             });
-        });
     }
 
     componentDidMount() {
@@ -81,7 +84,7 @@ export default class PersonFinder extends Component {
             value
         });
 
-        if(value.length === 0) {
+        if (value.length === 0) {
             this.clear();
             return;
         }
@@ -94,12 +97,13 @@ export default class PersonFinder extends Component {
         Promise.all([
             showPersons ? chayns.findPerson(value) : Promise.resolve({ Value: [] }),
             showSites ? chayns.findSite(value) : Promise.resolve({ Value: [] })
-        ]).then(([persons, sites]) => {
-            this.setState({
-                persons: persons.Value || [],
-                sites: sites.Value || []
+        ])
+            .then(([persons, sites]) => {
+                this.setState({
+                    persons: persons.Value || [],
+                    sites: sites.Value || []
+                });
             });
-        });
     };
 
     handleFocus = () => {
@@ -118,21 +122,21 @@ export default class PersonFinder extends Component {
         });
     };
 
-    handleItemClick = (r) => {
+    handleItemClick = (r, e) => {
+        const { onChange, stopPropagation } = this.props;
+
         this.setState({
             showPopup: false,
             value: r.name || r.appstoreName
         });
 
-        const { onChange } = this.props;
-        if (onChange) {
-            onChange(r);
-        }
+        if (onChange) onChange(r);
+        if (stopPropagation) e.stopPropagation();
     };
 
     render() {
         const {
-            className, showPersons, showSites, style, ...props
+            className, showPersons, showSites, style, stopPropagation, ...props
         } = this.props;
         const {
             persons, sites, showPopup, value
@@ -152,6 +156,7 @@ export default class PersonFinder extends Component {
                     onFocus={this.handleFocus}
                     defaultValue={undefined}
                     style={style}
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
                 />
                 {showPopup && (persons.length > 0 || sites.length > 0) ? (
                     <div
@@ -160,7 +165,7 @@ export default class PersonFinder extends Component {
                         ref={ref => this.ref = ref}
                     >
                         {showPersons && persons.map(r => (
-                            <div key={r.personId} className="result" onClick={() => this.handleItemClick(r)}>
+                            <div key={r.personId} className="result" onClick={e => this.handleItemClick(r, e)}>
                                 <div className="img">
                                     <img
                                         src={`https://sub60.tobit.com/u/${r.personId}?size=40`}
@@ -183,7 +188,7 @@ export default class PersonFinder extends Component {
                             </div>
                         ))}
                         {showSites && sites.map(r => (
-                            <div key={r.siteId} className="result" onClick={() => this.handleItemClick(r)}>
+                            <div key={r.siteId} className="result" onClick={e => this.handleItemClick(r, e)}>
                                 <div className="img">
                                     <img
                                         src={`https://sub60.tobit.com/l/${r.siteId}?size=40`}

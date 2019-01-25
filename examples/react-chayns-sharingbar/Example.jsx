@@ -7,7 +7,7 @@ export default class Example extends Component {
     render() {
         return(
             <ExampleContainer headline="SharingBar">
-                <SharingBar />
+                <SharingBar stopPropagation />
             </ExampleContainer>
         );
     }

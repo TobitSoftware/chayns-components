@@ -30,6 +30,7 @@ export default class Example extends PureComponent {
             <ExampleContainer headline="SelectButton">
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
+                        stopPropagation
                         label="Select Pizza"
                         list={pizza}
                         onSelect={(value) => {

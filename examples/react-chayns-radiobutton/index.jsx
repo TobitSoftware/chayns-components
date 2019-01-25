@@ -8,6 +8,7 @@ window.chayns.ready.then(() => {
     ReactDom.render(
         <ExampleContainer headline="RadioButton">
             <RadioButton
+                stopPropagation
                 onChange={(data) => {
                     console.log(data);
                 }}

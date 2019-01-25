@@ -36,6 +36,7 @@ You can set the following props on a RadioButton element:
 | disabled   | Disables the RadioButton                                                                            | bool | false |
 | children   | Content of the label                                                                                | any |  |
 | value      | Value that should be send to onChange-function                                                      | string, number, boolean | "on" |
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
 
 ## Example ##

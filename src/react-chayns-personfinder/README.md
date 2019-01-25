@@ -31,3 +31,4 @@ Then it can be used like in the following example:
 | className | CSS classes for the input field                             | String   |
 | style    | Styles for the input field                                                   | Object |
 | required    | Makes the input required                                                   | bool |
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |

@@ -3,6 +3,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ExampleContainer from '../ExampleContainer';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
+import { AmountControl } from '../../src';
 
 export default class Example extends Component {
     constructor() {
@@ -39,6 +40,7 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="FileUpload">
                 <FileUpload
+                    stopPropagation
                     className="file-upload--files"
                     onChange={this.selectFiles}
                 />

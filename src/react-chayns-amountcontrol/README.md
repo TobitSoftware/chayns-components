@@ -42,11 +42,12 @@ You can set the following props on a AmountControl element:
 | autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
 | showInput     | Shows the input as long the buttons are not disabled                                    | bool     | false   |
 | buttonFormatHandler | A function that should return the button-content                                  | func     |         |
-| icon          | The icon shown on the left side of the button                                           | string/object   |         |
+| icon          | The icon shown on the left side of the button                                           | string/object |    |
 | iconColor     | Color of the icon                                                                       | string   |         |
 | addColor      | Color of the add-icon                                                                   | string   |         |
 | removeColor   | Color of the remove-icon                                                                | string   |         |
 | focusOnClick  | Enables the input autoFocus                                                             | bool     | true    |
+| stopPropagation | Stops the click propagation to parent elements                                        | bool     | false   |
 
 The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
 icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 

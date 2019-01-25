@@ -35,6 +35,7 @@ export default class FileUpload extends Component {
         onClick: PropTypes.func,
         onDrop: PropTypes.func,
         customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -49,6 +50,7 @@ export default class FileUpload extends Component {
         onClick: null,
         onDrop: null,
         customIcon: null,
+        stopPropagation: false,
     };
 
     constructor() {
@@ -69,35 +71,42 @@ export default class FileUpload extends Component {
             type,
             multiple,
             onUpload,
-            onClick
+            onClick,
+            disableListeners,
+            stopPropagation,
         } = this.props;
 
-        if (onClick) {
-            return onClick(event);
-        }
+        if(stopPropagation) event.stopPropagation();
 
-        if (onClick === false) {
-            return false;
-        }
-
-        if (onUpload && type === FileUpload.TYPE_IMAGE) {
-            if (chayns.env.user.isAuthenticated) {
-                return chayns.uploadCloudImage()
-                    .then((uploadData) => {
-                        onUpload(uploadData.url);
-                    });
+        if(!disableListeners) {
+            if (onClick) {
+                return onClick(event);
             }
-            return chayns.login();
-        }
 
-        return selectFile({
-            type: getMimeTypes(type),
-            multiple,
-        })
-            .then((files) => {
-                const fileList = !multiple ? [files] : files;
-                this.checkFiles(fileList);
-            });
+            if (onClick === false) {
+                return false;
+            }
+
+            if (onUpload && type === FileUpload.TYPE_IMAGE) {
+                if (chayns.env.user.isAuthenticated) {
+                    return chayns.uploadCloudImage()
+                        .then((uploadData) => {
+                            onUpload(uploadData.url);
+                        });
+                }
+                return chayns.login();
+            }
+
+            return selectFile({
+                type: getMimeTypes(type),
+                multiple,
+            })
+                .then((files) => {
+                    const fileList = !multiple ? [files] : files;
+                    this.checkFiles(fileList);
+                });
+        }
+        return false;
     }
 
     onDrop(event) {
@@ -249,7 +258,7 @@ export default class FileUpload extends Component {
         return (
             <div
                 className={wrapperClassNames}
-                onClick={!disableListeners ? this.onClick : null}
+                onClick={this.onClick}
                 onDrop={!disableListeners ? this.onDrop : null}
                 onDragOver={!disableListeners ? this.onDragOver : null}
                 onDragLeave={!disableListeners ? this.onDragLeave : null}

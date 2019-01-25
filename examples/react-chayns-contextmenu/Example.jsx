@@ -91,6 +91,7 @@ export default class Example extends Component {
                     items={items}
                     onLayerClick={this.removeContextMenu}
                     position={position % 4}
+                    stopPropagation
                 />
                 <Button onClick={this.buttonClick}>
                     Position ändern
