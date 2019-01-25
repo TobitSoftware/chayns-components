@@ -40,5 +40,4 @@ The following properties can be set
 | style         | Sets the style of the element                                          | object                     | *required*    |
 | children      | Sets the children of the ScrollView                                    | node(s)                    |               |
 | className     | Sets the classname of the wrapper                                      | string                     |               |
-| showScrollbar | Show the scrollbar when necessary (do not hide when not in focus)      | boolean                    | false         |
 | scrollElementRef | Ref to the html scroll element                                      | func                       |               |
