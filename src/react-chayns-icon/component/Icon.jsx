@@ -52,7 +52,7 @@ export default class Icon extends PureComponent {
 
     render() {
         const {
-            icon, className, onClick, disabled, ...other
+            icon, className, onClick, disabled, stopPropagation, ...other
         } = this.props;
 
         const classes = classNames('react-chayns-icon', className, {
