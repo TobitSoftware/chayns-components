@@ -69,6 +69,7 @@ export default class Button extends Component {
             buttonRef,
             icon,
             secondary,
+            stopPropagation,
             ...other
         } = this.props;
 
