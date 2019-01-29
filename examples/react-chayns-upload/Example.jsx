@@ -87,6 +87,24 @@ export default class Example extends Component {
                     disableListeners
                     uploadText="Upload File (disabled listeners)"
                 />
+                <br/>
+                <FileUpload
+                    onUpload={(data) => {
+                        this.setState({ data });
+                    }}
+                    onChange={(files, validFiles, invalidFiles) => { this.selectFiles(files, validFiles, invalidFiles); }}
+                    types={[{
+                        type: 'image',
+                        onUpload: (data) => {
+                            console.log(data, 'image');
+                        }
+                    }, {
+                        type: 'video',
+                        onUpload: (data) => {
+                            console.log(data, 'video');
+                        }
+                    }]}
+                />
             </ExampleContainer>
         );
     }
