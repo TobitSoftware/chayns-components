@@ -85,16 +85,14 @@ export default class FileUpload extends Component {
             type,
             multiple,
             onUpload,
-            onClick
-        } = { ...this.props, ...config };
             onClick,
             disableListeners,
             stopPropagation,
-        } = this.props;
+        } = { ...this.props, ...config };
 
-        if(stopPropagation) event.stopPropagation();
+        if (stopPropagation) event.stopPropagation();
 
-        if(!disableListeners) {
+        if (!disableListeners) {
             if (onClick) {
                 return onClick(event);
             }
@@ -296,7 +294,7 @@ export default class FileUpload extends Component {
                 if (index + 1 < types.length) {
                     uploadItems.push(
                         <div
-                            {/* eslint-disable-next-line react/no-array-index-key */}
+                            /* eslint-disable-next-line react/no-array-index-key */
                             key={`upload_separator_${index}`}
                             className="cc__file-upload__separator"
                         />
