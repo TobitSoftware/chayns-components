@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -276,8 +276,7 @@ export default class FileUpload extends Component {
                         onDragLeave={!disableListeners ? this.onDragLeave : null}
                         // eslint-disable-next-line react/no-array-index-key
                         key={`upload_${index}`}
-                        className="cc__file-upload-split"
-                        style={{ flex: 1 }}
+                        className="cc__file-upload__split"
                     >
                         {config.children || this.renderPlaceholder(config)}
                     </div>
@@ -286,8 +285,9 @@ export default class FileUpload extends Component {
                 if (index + 1 < types.length) {
                     uploadItems.push(
                         <div
+                            {/* eslint-disable-next-line react/no-array-index-key */}
                             key={`upload_separator_${index}`}
-                            className="cc_file-upload-separator"
+                            className="cc__file-upload__separator"
                         />
                     );
                 }
