@@ -40,6 +40,7 @@ export default class Example extends Component {
                     iconColor="#20C65A"
                     focusOnClick={false}
                     icon={faShoppingCart}
+                    stopPropagation
                 />
 
                 <br/>

@@ -26,6 +26,7 @@ export default class AmountInput extends PureComponent {
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
         contentWidth: PropTypes.number,
+        stopPropagation: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -66,13 +67,16 @@ export default class AmountInput extends PureComponent {
         }
     }
 
-    onButtonClick = () => {
-        const { amount, onAdd, setInput } = this.props;
+    onButtonClick = (e) => {
+        const {
+            amount, onAdd, setInput, stopPropagation
+        } = this.props;
         if (amount > 0) {
             setInput(true);
         } else {
             onAdd();
         }
+        if (stopPropagation) e.stopPropagation();
     };
 
     onInputChange = (value) => {
@@ -102,7 +106,10 @@ export default class AmountInput extends PureComponent {
         const { amount, buttonText, buttonFormatHandler } = this.props;
 
         if (buttonFormatHandler) {
-            return buttonFormatHandler({ amount, buttonText });
+            return buttonFormatHandler({
+                amount,
+                buttonText
+            });
         }
 
         if (amount > 0) {
@@ -122,12 +129,14 @@ export default class AmountInput extends PureComponent {
             equalize,
             tempValue,
             contentWidth,
+            stopPropagation,
         } = this.props;
 
         const renderInput = !disabled && !disableInput && ((autoInput && amount > AUTO_HIDE_INPUT_MAX_AMOUNT) || showInput);
 
         return [
             <Input
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
                 key="amountInput"
                 type="number"
                 value={tempValue}

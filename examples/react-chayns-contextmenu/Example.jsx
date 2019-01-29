@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { faInfoCircle, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
@@ -69,13 +70,13 @@ export default class Example extends Component {
                 className: null,
                 onClick: this.addOnClick,
                 text: 'Hinzufügen',
-                icon: faPlus,
+                icon: faCoffee,
             },
             {
                 className: null,
                 onClick: this.deleteOnClick,
                 text: 'Löschen',
-                icon: faTrash,
+                icon: 'ts-tobit',
             }
         ];
 
@@ -90,6 +91,7 @@ export default class Example extends Component {
                     items={items}
                     onLayerClick={this.removeContextMenu}
                     position={position % 4}
+                    stopPropagation
                 />
                 <Button onClick={this.buttonClick}>
                     Position ändern
@@ -98,8 +100,11 @@ export default class Example extends Component {
                     <Icon icon={faInfoCircle} style={{ transform: 'scale(5)' }}/>
                 </div>
                 <ContextMenu items={items} position={position % 4}/>
-                <Accordion head="Accordion mit ContextMenu"
-                           right={<ContextMenu items={items} position={position % 4}/>}>TEST</Accordion>
+                <Accordion
+                    head="Accordion mit ContextMenu"
+                    right={<ContextMenu items={items} position={position % 4}/>}
+                >TEST
+                </Accordion>
             </ExampleContainer>
         );
     }

@@ -31,7 +31,7 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="Gallery">
                 <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0]]} height={180} width={320}/>
+                    <Gallery urls={[urls[0]]} height={180} width={320} stopPropagation/>
                 </div>
 
                 <div style={{ marginTop: '30px' }}>

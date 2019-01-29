@@ -16,7 +16,6 @@ export default class Map extends Component {
             PropTypes.string,
             PropTypes.number,
         ]).isRequired,
-        apiKey: PropTypes.string.isRequired,
         mapOptions: PropTypes.shape({
             defaultZoom: PropTypes.number,
             onPositionChange: PropTypes.func,
@@ -81,18 +80,16 @@ export default class Map extends Component {
     componentDidMount() {
         const { pos } = this.state;
         this.getAddress(pos);
-        this.loadScript()
+
+        this.initMap()
             .then(() => {
-                this.initMap()
-                    .then(() => {
-                        this.concatMapStyles();
-                    })
-                    .catch((err) => {
-                        if (window.debugLevel >= 3) {
-                            // eslint-disable-next-line no-console
-                            console.debug(err);
-                        }
-                    });
+                this.concatMapStyles();
+            })
+            .catch((err) => {
+                if (window.debugLevel >= 3) {
+                    // eslint-disable-next-line no-console
+                    console.debug(err);
+                }
             });
     }
 
@@ -143,21 +140,6 @@ export default class Map extends Component {
         } else {
             this.mapStyles = mapOptions.mapStyles;
         }
-    }
-
-    loadScript() {
-        const { apiKey } = this.props;
-        return new Promise((resolve) => {
-            if (!document.querySelector('#googleMapsScript')) {
-                const script = document.createElement('script');
-                script.id = 'googleMapsScript';
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-                script.async = true;
-                document.body.appendChild(script);
-                resolve();
-            }
-            resolve();
-        });
     }
 
     initMap() {
@@ -235,7 +217,7 @@ export default class Map extends Component {
                 <div
                     className="mapBorder"
                     style={{
-                        minHeight: '226px'
+                        minHeight: '226px',
                     }}
                 >
                     <div

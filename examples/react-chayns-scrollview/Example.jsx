@@ -16,7 +16,6 @@ export default class Example extends PureComponent {
                         maxHeight: '500px',
                         width: '100%',
                     }}
-                    showScrollbar
                     scrollElementRef={ref => this.ref = ref}
                 >
                     {this.text}
@@ -25,7 +24,6 @@ export default class Example extends PureComponent {
                     this.ref.scrollTo(0, 0);
                 }}
                 >
-
                     Nach oben scrollen
                 </Button>
                 <ScrollView
@@ -33,7 +31,6 @@ export default class Example extends PureComponent {
                         maxHeight: '500px',
                         width: '100%',
                     }}
-                    showScrollbar
                 >
                     {'Not scrollable'}
                     <br/>

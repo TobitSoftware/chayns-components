@@ -43,6 +43,7 @@ The following properties can be set on the Input-Component
 | onIconClick  | Icon onClick Event (only dynamic input)                                           | func           | clear value   |
 | dynamic      | Use dynamic input                                                                 | bool           | false         |
 | customProps  | CustomProps for the html input element                                            | object         |               |
+| stopPropagation | Stops the click propagation to parent elements                                 | bool           | false         |
 
 
 ## Example ##

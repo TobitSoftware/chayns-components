@@ -14,6 +14,7 @@ export default class Button extends Component {
         buttonRef: PropTypes.func,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         secondary: PropTypes.bool,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -25,6 +26,7 @@ export default class Button extends Component {
         chooseButton: false,
         icon: null,
         secondary: false,
+        stopPropagation: false,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -36,7 +38,7 @@ export default class Button extends Component {
             chooseButton,
             icon,
             secondary,
-            children
+            children,
         } = this.props;
 
         return (buttonRef !== nextProps.buttonRef
@@ -51,11 +53,10 @@ export default class Button extends Component {
     }
 
     handleClick = (event) => {
-        const { onClick, disabled } = this.props;
+        const { onClick, disabled, stopPropagation } = this.props;
 
-        if (onClick && !disabled) {
-            onClick(event);
-        }
+        if (onClick && !disabled) onClick(event);
+        if (stopPropagation) event.stopPropagation();
     };
 
     render() {
@@ -68,6 +69,7 @@ export default class Button extends Component {
             buttonRef,
             icon,
             secondary,
+            stopPropagation,
             ...other
         } = this.props;
 

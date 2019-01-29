@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class Checkbox extends Component {
+export default class Checkbox extends PureComponent {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
@@ -22,7 +22,8 @@ export default class Checkbox extends Component {
         checked: PropTypes.bool,
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
-        dangerouslySetLabel: PropTypes.object
+        dangerouslySetLabel: PropTypes.object,
+        stopPropagation: PropTypes.bool
     };
 
     static defaultProps = {
@@ -37,7 +38,8 @@ export default class Checkbox extends Component {
         checked: undefined,
         defaultChecked: undefined,
         disabled: false,
-        dangerouslySetLabel: null
+        dangerouslySetLabel: null,
+        stopPropagation: false
     };
 
     constructor() {
@@ -64,6 +66,7 @@ export default class Checkbox extends Component {
             dangerouslySetLabel,
             labelStyle,
             labelClassName,
+            stopPropagation
         } = this.props;
 
         return [
@@ -74,6 +77,7 @@ export default class Checkbox extends Component {
                 ref={(ref) => {
                     this._node = ref;
                 }}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
                 onChange={this.onChange}
                 id={this.id}
                 disabled={disabled}
@@ -85,6 +89,7 @@ export default class Checkbox extends Component {
                 key="label"
                 style={{ ...labelStyle, ...(!label && !dangerouslySetLabel && !children ? { display: 'inline' } : null) }}
                 className={labelClassName}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
                 htmlFor={this.id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
             >
@@ -104,6 +109,7 @@ export default class Checkbox extends Component {
             dangerouslySetLabel,
             labelStyle,
             labelClassName,
+            stopPropagation
         } = this.props;
 
         return [
@@ -120,6 +126,7 @@ export default class Checkbox extends Component {
                 checked={checked}
                 defaultChecked={defaultChecked}
                 style={style}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
             />,
             <label
                 key="label"
@@ -127,6 +134,7 @@ export default class Checkbox extends Component {
                 htmlFor={this.id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
                 style={label ? { ...labelStyle, ...{ marginRight: '10px' } } : labelStyle}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
             />,
             !dangerouslySetLabel ? (children || label || '') : null
         ];

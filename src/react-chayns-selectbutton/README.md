@@ -45,6 +45,7 @@ You can set the following props on a SelectButton element:
 | className | Add additional classes to the button.                                                          | string   | |
 | showSelection | Shows selection in button. | bool | true |
 | selectedFlag | The name of the flag which sets an item selected | string | isSelected |
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
 ### Examples ###
 

@@ -18,6 +18,7 @@ export default class SelectButton extends Component {
         className: PropTypes.string,
         showSelection: PropTypes.bool,
         selectedFlag: PropTypes.string,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -33,6 +34,7 @@ export default class SelectButton extends Component {
         listKey: 'name',
         listValue: 'value',
         selectedFlag: 'isSelected',
+        stopPropagation: false,
     };
 
     constructor(props) {
@@ -54,7 +56,7 @@ export default class SelectButton extends Component {
         }
     }
 
-    onClick() {
+    onClick(e) {
         const {
             quickFind,
             multiSelect,
@@ -62,6 +64,7 @@ export default class SelectButton extends Component {
             description,
             list,
             onSelect,
+            stopPropagation,
         } = this.props;
         const _list = this.getDialogList(list);
 
@@ -75,10 +78,12 @@ export default class SelectButton extends Component {
             if (onSelect && result.buttonType > 0) {
                 onSelect(this.getReturnList(result));
             }
-        }).catch((e) => {
+        }).catch((err) => {
             // eslint-disable-next-line no-console
-            console.error(e);
+            console.error(err);
         });
+
+        if(stopPropagation) e.stopPropagation();
     }
 
     getDialogList(_list) {

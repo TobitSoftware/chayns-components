@@ -47,3 +47,4 @@ The following properties can be set on the icon component
 | className    | Additional CSS-Classes that should be set to the icon                             | string / object | false    | ''            |
 | onClick      | OnClick listener to make icon clickable                                           | function        | false    | undefined     |
 | disabled     | Disables clickable icons                                                          | boolean         | false    | false         |
+| stopPropagation | Stops the click propagation to parent elements                                 | bool            | false    |               |

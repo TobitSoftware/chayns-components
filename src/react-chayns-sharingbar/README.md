@@ -27,6 +27,7 @@ The following properties can be set on the SharingBar-Component
 |------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
 | link | The link shared by the SharingBar                                                           | String | Link to the current Tapp |
 | className | Additional CSS-Classes that should be set to the button                                                        | String |
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
 
 ## Examples ##

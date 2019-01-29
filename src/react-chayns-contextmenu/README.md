@@ -17,14 +17,11 @@ You can init your **ContextMenu** like this:
 
 ```jsx harmony
 <ContextMenu
-    coordinates={{x: 100, y: 100}}
-    hide={false}
     items={[{
         icon: 'ts-tobit',
         onClick: this.addOnClick,
         text: 'Hinzufügen'
     }]}
-    onLayerClick={()=>console.log('hide')}
     position={0}
 />
 ```
@@ -48,6 +45,7 @@ The component got the following properties:
 | parent | DOM Node into which the **ContextMenu** will be rendered | node | tapp |
 | children | React Node, that the tooltip should refer to. It will always be rendered to your page. | node | ts-ellipsis_v-icon
 | childrenStyle | Style for the children node | object | 
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
 If you don't set coordinates or a children, the **ContextMenu** will render the `ts-ellipsis-v` icon as a trigger.
 

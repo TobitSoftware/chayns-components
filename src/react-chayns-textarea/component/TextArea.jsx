@@ -21,7 +21,8 @@ export default class TextArea extends Component {
         onKeyUp: PropTypes.func,
         onKeyDown: PropTypes.func,
         autogrow: PropTypes.bool,
-        reference: PropTypes.func
+        reference: PropTypes.func,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -37,6 +38,7 @@ export default class TextArea extends Component {
         onKeyDown: null,
         autogrow: null,
         reference: null,
+        stopPropagation: false,
     };
 
     componentDidMount() {
@@ -114,6 +116,7 @@ export default class TextArea extends Component {
             onKeyUp,
             onKeyDown,
             value,
+            stopPropagation,
         } = this.props;
 
         const style = assign({}, this.defaultStyle, styleProp);
@@ -132,6 +135,7 @@ export default class TextArea extends Component {
                 onKeyUp={onKeyUp}
                 onKeyDown={onKeyDown}
                 value={value}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
             />
         );
     }

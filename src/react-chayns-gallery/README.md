@@ -36,4 +36,5 @@ The following properties can be set on the Gallery-Component
 | onDelete     | Called when clicked on a delete icon                 | func     |                   |              |
 | height       | Height of the gallery in px, not used in deleteMode  | number   | 428 (mobile 256)  |              |
 | width        | Width of the gallery in px                           | number   | 100%              |              |
+| stopPropagation | Stops the click propagation to parent elements    | bool     | false             |              |
 

@@ -9,6 +9,7 @@ export default class ControlButton extends PureComponent {
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
         onClick: PropTypes.func.isRequired,
         className: PropTypes.string.isRequired,
+        stopPropagation: PropTypes.bool.isRequired,
         disabled: PropTypes.bool,
         color: PropTypes.string,
     };
@@ -25,11 +26,15 @@ export default class ControlButton extends PureComponent {
             className,
             disabled,
             color,
+            stopPropagation
         } = this.props;
 
         return (
             <div
-                onClick={disabled ? null : onClick}
+                onClick={(e) => {
+                    if(!disabled) onClick(e);
+                    if(stopPropagation) e.stopPropagation();
+                }}
                 className={classNames(className, { disabled })}
                 style={color ? { color } : null}
             >

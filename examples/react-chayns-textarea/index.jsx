@@ -9,6 +9,7 @@ window.chayns.ready.then(() => {
     ReactDom.render(
         <ExampleContainer headline="TextArea">
             <TextArea
+                stopPropagation
                 placeholder="Input"
                 onChange={(data) => {
                     console.log(data);

@@ -17,7 +17,8 @@ export default class RadioButton extends Component {
             PropTypes.number,
             PropTypes.bool
         ]),
-        className: PropTypes.string
+        className: PropTypes.string,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -28,7 +29,8 @@ export default class RadioButton extends Component {
         disabled: false,
         children: null,
         value: undefined,
-        className: null
+        className: null,
+        stopPropagation: false,
     };
 
     constructor() {
@@ -45,7 +47,7 @@ export default class RadioButton extends Component {
     handleChange = (event) => {
         const { disabled, onChange, value } = this.props;
         if (!disabled && onChange) {
-            if(value !== undefined) {
+            if (value !== undefined) {
                 onChange(value);
             } else {
                 onChange(event.target.value);
@@ -65,7 +67,7 @@ export default class RadioButton extends Component {
             disabled,
             name,
             className,
-            onChange,
+            stopPropagation,
             ...props
         } = this.props;
 
@@ -80,8 +82,12 @@ export default class RadioButton extends Component {
                     onChange={this.handleChange}
                     name={name}
                     disabled={disabled}
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
                 />
-                <label htmlFor={id || this._id}>
+                <label
+                    htmlFor={id || this._id}
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                >
                     {children}
                 </label>
             </div>

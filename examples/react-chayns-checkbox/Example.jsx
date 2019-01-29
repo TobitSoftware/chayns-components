@@ -23,6 +23,7 @@ export default class Example extends Component {
                         }}
                         toggleButton
                         defaultChecked={false}
+                        stopPropagation
                     />
                 </div>
 

@@ -33,16 +33,15 @@ export default class TextString extends Component {
         .toLowerCase();
 
     static getTextString(stringName, language) {
-        return new Promise((resolve, reject) => {
-            const lang = TextString.languages.find(l => l.code === (language || TextString.language)).value;
-            Object.keys(TextString.textStrings[lang])
-                .forEach((lib) => {
-                    if (TextString.textStrings[lang][lib][stringName]) {
-                        resolve(TextString.textStrings[lang][lib][stringName]);
-                    }
-                });
-            reject(new Error(`TextString ${stringName} could not be found in loaded libraries.`));
-        });
+        const lang = TextString.languages.find(l => l.code === (language || TextString.language)).value;
+        const { textStrings } = TextString;
+        const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
+        const result = Object.keys(strings)
+            .map((lib) => {
+                return strings[lib][stringName] || null;
+            })
+            .filter(x => x !== null)[0];
+        return result;
     }
 
     static loadLibrary(projectName, middle = 'langRes', language) {
@@ -167,25 +166,23 @@ export default class TextString extends Component {
         const {
             stringName, language, fallback, setProps
         } = this.props;
-        TextString.getTextString(stringName, language)
-            .then((string) => {
-                this.setState({ textString: this.replace(string) });
-            }, () => {
-                this.setState({ textString: this.replace(fallback) });
-            });
+        let string = TextString.getTextString(stringName, language);
+        if (string) {
+            this.setState({ textString: this.replace(string) });
+        } else {
+            this.setState({ textString: this.replace(fallback) });
+        }
         Object.keys(setProps)
             .forEach((prop) => {
                 if (prop !== 'fallback') {
-                    TextString.getTextString(setProps[prop])
-                        .then((string) => {
-                            const { textStringProps } = this.state;
-                            this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(string) } } });
-                        }, () => {
-                            if (setProps.fallback && setProps.fallback[prop]) {
-                                const { textStringProps } = this.state;
-                                this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(setProps.fallback[prop]) } } });
-                            }
-                        });
+                    string = TextString.getTextString(setProps[prop]);
+                    if (string) {
+                        const { textStringProps } = this.state;
+                        this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(string) } } });
+                    } else if (setProps.fallback && setProps.fallback[prop]) {
+                        const { textStringProps } = this.state;
+                        this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(setProps.fallback[prop]) } } });
+                    }
                 }
             });
     }
@@ -201,13 +198,11 @@ export default class TextString extends Component {
         return textString;
     }
 
-    childrenOnClick(e) {
-        if (e.ctrlKey) {
-            isTobitEmployee()
-                .then(this.selectStringToChange)
-                .catch(() => {
-                });
-        }
+    childrenOnClick() {
+        isTobitEmployee()
+            .then(this.selectStringToChange)
+            .catch(() => {
+            });
     }
 
     selectStringToChange() {
@@ -285,45 +280,47 @@ export default class TextString extends Component {
 
     changeStringDialog(stringName, lang) {
         const { useDangerouslySetInnerHTML } = this.props;
-        TextString.getTextString(stringName, TextString.languages.find(l => l.value === lang.value).code)
-            .then((textString) => {
-                if (useDangerouslySetInnerHTML) {
-                    chayns.register({ apiDialogs: true });
-                    chayns.dialog.iFrame({
-                        width: getTappWidth() + 76,
-                        url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
-                        input: textString,
-                        title: stringName,
-                        message: `Sprache: ${lang.name}`,
-                        buttons: [{
-                            text: 'Speichern',
-                            buttonType: 1
-                        }, {
-                            text: 'Abbrechen',
-                            buttonType: -1
-                        }]
-                    })
-                        .then((result) => {
-                            this.changeStringResult(result, lang);
-                        });
-                } else {
-                    chayns.dialog.input({
-                        title: stringName,
-                        message: `Sprache: ${lang.name}`,
-                        text: textString,
-                        buttons: [{
-                            text: 'Speichern',
-                            buttonType: 1
-                        }, {
-                            text: 'Abbrechen',
-                            buttonType: -1
-                        }]
-                    })
-                        .then((result) => {
-                            this.changeStringResult(result, lang);
-                        });
-                }
-            });
+        const string = TextString.getTextString(stringName, TextString.languages.find(l => l.value === lang.value).code);
+        if (string) {
+            if (useDangerouslySetInnerHTML) {
+                chayns.register({ apiDialogs: true });
+                chayns.dialog.iFrame({
+                    width: getTappWidth() + 76,
+                    url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
+                    input: string,
+                    title: stringName,
+                    message: `Sprache: ${lang.name}`,
+                    buttons: [{
+                        text: 'Speichern',
+                        buttonType: 1
+                    }, {
+                        text: 'Abbrechen',
+                        buttonType: -1
+                    }]
+                })
+                    .then((result) => {
+                        this.changeStringResult(result, lang);
+                    });
+            } else {
+                chayns.dialog.input({
+                    title: stringName,
+                    message: `Sprache: ${lang.name}`,
+                    text: string,
+                    buttons: [{
+                        text: 'Speichern',
+                        buttonType: 1
+                    }, {
+                        text: 'Abbrechen',
+                        buttonType: -1
+                    }]
+                })
+                    .then((result) => {
+                        this.changeStringResult(result, lang);
+                    });
+            }
+        } else {
+            chayns.dialog.alert(stringName, 'Der TextString existiert nicht.');
+        }
     }
 
     changeStringResult(data, lang) {
@@ -352,10 +349,12 @@ export default class TextString extends Component {
         const childrenProps = {
             ...{
                 onClick: (e) => {
-                    if (children.props.onClick && !e.ctrlKey) {
+                    if (e.ctrlKey) {
+                        this.childrenOnClick(e);
+                        e.stopPropagation();
+                    } else if (children.props.onClick) {
                         children.props.onClick(e);
                     }
-                    this.childrenOnClick(e);
                 }
             },
             ...(

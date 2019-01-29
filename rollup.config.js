@@ -17,7 +17,7 @@ export default {
         }[env],
         format: env
     },
-    external: ['react', 'classnames', 'prop-types', 'react-dom', 'react-transition-group', 'emojione','lodash.isequal', 'lodash.throttle', 'supports-webp'],
+    external: ['react', 'classnames', 'prop-types', 'react-dom', 'react-transition-group', 'emojione', 'lodash.isequal', 'lodash.throttle'],
     plugins: [
         external(),
         autoExternal(),
