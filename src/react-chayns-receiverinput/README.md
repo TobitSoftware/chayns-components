@@ -10,8 +10,8 @@ You have to import the component first:
 import { ReceiverInput } from 'chayns-components';
 ```
 
-You can now use the components as followed:
-```jsx
+You can use the ReceiverInput as followed:
+```jsx harmony
 <ReceiverInput/>
 ```
 
@@ -73,7 +73,7 @@ functions can be used:
 | window.clearReceiverInput | Clears chosen receivers and values for search and group name input |
 
 ## Example
-```jsx
+```jsx harmony
 <ReceiverInput
     onChosenReceiverChange={(chosenReceivers) => { console.log(chosenReceivers); }}
     onGroupNameChange={(groupName) => { console.log(groupName); }}
