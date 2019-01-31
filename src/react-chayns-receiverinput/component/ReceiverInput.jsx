@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import throttle from 'lodash.throttle';
 import isEqual from 'lodash.isequal';
@@ -462,6 +463,8 @@ export default class ReceiverInput extends Component {
 
         const { chosenReceivers, groupName, receiverSearchString } = this.state;
 
+        const isDarkMode = chayns.env.site.colorMode === 1;
+
         const knownPersonsSelected = chosenReceivers.filter(cr => cr.groupId === 0).length > 0;
 
         const memberCount = getMemberCount(chosenReceivers);
@@ -474,6 +477,8 @@ export default class ReceiverInput extends Component {
         });
 
         const receiverInputClasses = classNames('receiver-input', {
+            'chayns__border-color--white-3': !isDarkMode,
+            'chayns__border-color--dark-3': isDarkMode,
             'receiver-input--pure': pureMode
         });
 
@@ -483,16 +488,16 @@ export default class ReceiverInput extends Component {
 
         const receivers = [];
 
-        chosenReceivers.forEach((r) => {
+        chosenReceivers.forEach((r, i) => {
             receivers.push(<ChosenMember
                 personId={showIdInSelection && r.personId ? r.personId : null}
                 siteId={showIdInSelection && r.siteId ? r.siteId : null}
-                key={`key_${r.locationId || r.groupId || r.userId}`}
                 removeMember={this.removeReceiver}
                 locationId={r.locationId}
                 groupId={r.groupId}
                 userId={r.userId}
                 name={r.name}
+                key={i}
             />);
         });
 
