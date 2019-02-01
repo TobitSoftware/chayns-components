@@ -2,7 +2,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Receiver from './Receiver';
@@ -67,35 +66,18 @@ export default class ReceiverSearchPopup extends Component {
             show
         } = this.props;
 
-        const isDarkMode = chayns.env.site.colorMode === 1;
-
         const locationResultState = foundReceivers.locations.state;
         const groupResultState = foundReceivers.groups.state;
         const userResultState = foundReceivers.users.state;
 
-        const headlineClasses = classNames('group-headline popup-item', {
-            'chayns__background-color--white-3': !isDarkMode,
-            'chayns__background-color-dark-3': isDarkMode
-        });
-
-        const receiverPopupClasses = classNames('receiver-popup', {
-            'chayns__border-color--white-3 chayns__border-color--white-2': !isDarkMode,
-            'chayns__border-color--dark-3 chayns__border-color--dark-2': isDarkMode
-        });
-
-        const popupItemClasses = classNames('popup-item error-message', {
-            'chayns__background-color--white-2': !isDarkMode,
-            'chayns__background-color--dark-2': isDarkMode,
-        });
-
-        const tooManyResultsError = <div className={popupItemClasses}>Zu viele Ergebnisse gefunden</div>;
-        const noMatchError = <div className={popupItemClasses}>Keine passenden Ergebnisse gefunden</div>;
+        const tooManyResultsError = <div className="popup-item error-message">Zu viele Ergebnisse gefunden</div>;
+        const noMatchError = <div className="popup-item error-message">Keine passenden Ergebnisse gefunden</div>;
 
         const locations = [];
         const groups = [];
         const users = [];
 
-        foundReceivers.locations.values.forEach((l, i) => {
+        foundReceivers.locations.values.forEach((l) => {
             locations.push(<Receiver
                 imgUrl={`https://sub60.tobit.com/l/${l.locationID}?size=30`}
                 name={l.appstoreName !== '' ? l.appstoreName : l.showName}
@@ -106,11 +88,10 @@ export default class ReceiverSearchPopup extends Component {
                 showIdInPopup={showIdInPopup}
                 locationId={l.locationID}
                 siteId={l.siteID}
-                index={i}
             />);
         });
 
-        foundReceivers.users.values.forEach((u, i) => {
+        foundReceivers.users.values.forEach((u) => {
             users.push(<Receiver
                 imgUrl={`https://sub60.tobit.com/u/${u.userId}?size=30`}
                 updateReceiverSearchString={updateReceiverSearchString}
@@ -121,12 +102,11 @@ export default class ReceiverSearchPopup extends Component {
                 personId={u.personId}
                 userId={u.userId}
                 name={u.name}
-                index={i}
             />);
         });
 
         if (isLocation) {
-            foundReceivers.groups.values.forEach((g, i) => {
+            foundReceivers.groups.values.forEach((g) => {
                 groups.push(<Receiver
                     updateReceiverSearchString={updateReceiverSearchString}
                     updateChosenReceivers={updateChosenReceivers}
@@ -135,7 +115,6 @@ export default class ReceiverSearchPopup extends Component {
                     includedUsers={g.userIds}
                     groupId={g.groupId}
                     name={g.showName}
-                    index={i}
                 />);
             });
         }
@@ -162,10 +141,10 @@ export default class ReceiverSearchPopup extends Component {
             <TransitionGroup>
                 <CSSTransition key={showPopup} timeout={300} classNames="swipe-up">
                     {showPopup ? (
-                        <div className={receiverPopupClasses} style={receiverPopupStyles}>
+                        <div className="receiver-popup" style={receiverPopupStyles}>
                             {onlyPersons ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Sites</div>
+                                    <div className="group-headline popup-item">Sites</div>
                                     {locations}
                                     {locationResultState > 0 ? (
                                         locationResultState === 2 ? (
@@ -180,7 +159,7 @@ export default class ReceiverSearchPopup extends Component {
                             )}
                             {onlySites ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Personen</div>
+                                    <div className="group-headline popup-item">Personen</div>
                                     {users}
                                     {userResultState > 0 ? (
                                         userResultState === 2 ? (
@@ -195,7 +174,7 @@ export default class ReceiverSearchPopup extends Component {
                             )}
                             {!isLocation ? false : (
                                 <Fragment>
-                                    <div className={headlineClasses}>Gruppen</div>
+                                    <div className="group-headline popup-item">Gruppen</div>
                                     {groups}
                                     {groupResultState > 0 ? (
                                         groupResultState === 2 ? (
