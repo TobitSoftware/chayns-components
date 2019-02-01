@@ -24,11 +24,12 @@ Then it can be used like in the following example:
 
 ## Props ##
 
-| Property   | Description                                                                                        | Type    |
-|------------|-----------------------------------------------------------------------------------------------------|--------|
-| placeholder | Placeholder of the input field                                                 | String |
-| onChange    | Callback that will be executed when a person gets selected or input/personfinder gets cleared             | Function |
-| className | CSS classes for the input field                             | String   |
-| style    | Styles for the input field                                                   | Object |
-| required    | Makes the input required                                                   | bool |
-| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
+| Property   | Description                                                                                        | Type     |
+|------------|----------------------------------------------------------------------------------------------------|----------|
+| placeholder | Placeholder of the input field                                                                    | String   |
+| onChange    | Callback that will be executed when a person gets selected or input/personfinder gets cleared     | Function |
+| className | CSS classes for the input field                                                                     | String   |
+| style    | Styles for the input field                                                                           | Object   |
+| required    | Makes the input required                                                                          | bool     |
+| stopPropagation     | Stops the click propagation to parent elements                                            | bool     | 
+| parent | DOM Node into which the **PersonFinder** will be rendered. On default, it's the tapp div.              | node     |
