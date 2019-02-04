@@ -4,7 +4,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Zwischenablage',
         androidIdentifier: null,
-        icon: 'fa-files-o',
+        icon: 'fa-link',
         action: 0,
         url: null,
         available: false
@@ -37,16 +37,6 @@ export const shareProvider = [
         icon: 'fa-facebook',
         action: 1,
         url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
-        available: true
-    },
-    {
-        id: 4,
-        providerId: 4,
-        name: 'GooglePlus',
-        androidIdentifier: 'com.google.android.apps.plus',
-        icon: 'fa-google-plus',
-        action: 1,
-        url: 'http://plus.google.com/share?url={url}',
         available: true
     },
     {
@@ -108,6 +98,16 @@ export const shareProvider = [
         action: 2,
         url: null,
         available: false
+    },
+    {
+        id: 11,
+        providerId: -1,
+        name: 'Share',
+        androidIdentifier: null,
+        icon: 'fa-share-alt',
+        action: 3,
+        url: null,
+        available: false
     }
 
 ];
@@ -115,5 +115,6 @@ export const shareProvider = [
 export const shareActions = {
     copyToClipboard: 0,
     shareWithUrl: 1,
-    shareWithApp: 2
+    shareWithApp: 2,
+    webShareApi: 3
 };
