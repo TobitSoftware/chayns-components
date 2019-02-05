@@ -1,8 +1,8 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-return-assign, jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { createPortal } from 'react-dom';
 import isDescendant from '../../utils/isDescendant';
 
 export default class PersonFinder extends Component {
@@ -15,6 +15,7 @@ export default class PersonFinder extends Component {
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
         stopPropagation: PropTypes.bool,
+        parent: PropTypes.node,
     };
 
     static defaultProps = {
@@ -26,6 +27,7 @@ export default class PersonFinder extends Component {
         showPersons: true,
         showSites: false,
         stopPropagation: false,
+        parent: document.getElementsByClassName('tapp')[0],
     };
 
     constructor(props) {
@@ -136,32 +138,24 @@ export default class PersonFinder extends Component {
 
     render() {
         const {
-            className, showPersons, showSites, style, stopPropagation, ...props
+            className, showPersons, showSites, style, stopPropagation, parent, ...props
         } = this.props;
         const {
             persons, sites, showPopup, value
         } = this.state;
 
-        const classNames = classnames('input', className);
+        const rect = this.input && this.input.getBoundingClientRect();
 
-        return (
-            <div className="person-finder">
-                <input
-                    type="text"
-                    className={classNames}
-                    value={value}
-                    {...props}
-                    ref={ref => this.input = ref}
-                    onChange={this.handleOnChange}
-                    onFocus={this.handleFocus}
-                    defaultValue={undefined}
-                    style={style}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
-                />
-                {showPopup && (persons.length > 0 || sites.length > 0) ? (
+        return [
+            createPortal(showPopup && (persons.length > 0 || sites.length > 0) && rect
+                ? (
                     <div
                         className="person-finder__results scrollbar"
-                        style={this.input ? { width: `${this.input.offsetWidth}px` } : undefined}
+                        style={this.input ? {
+                            width: `${rect.width}px`,
+                            top: `${rect.bottom}px`,
+                            left: `${rect.left}px`
+                        } : null}
                         ref={ref => this.ref = ref}
                     >
                         {showPersons && persons.map(r => (
@@ -208,8 +202,21 @@ export default class PersonFinder extends Component {
                             </div>
                         ))}
                     </div>
-                ) : false}
-            </div>
-        );
+                )
+                : null,
+                parent),
+            <input
+                type="text"
+                className={classNames('input', className)}
+                value={value}
+                {...props}
+                ref={ref => this.input = ref}
+                onChange={this.handleOnChange}
+                onFocus={this.handleFocus}
+                defaultValue={undefined}
+                style={style}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
+            />
+        ];
     }
 }

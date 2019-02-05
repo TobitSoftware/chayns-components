@@ -64,7 +64,7 @@ export default class ChosenMember extends Component {
                     </span>
                     {!fixed ? (
                         <Icon
-                            className="chayns__color--white-6 chosen-member__content__icon"
+                            className="chosen-member__content__icon"
                             onClick={this.remove}
                             icon="ts-wrong"
                         />

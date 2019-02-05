@@ -70,8 +70,8 @@ export default class ReceiverSearchPopup extends Component {
         const groupResultState = foundReceivers.groups.state;
         const userResultState = foundReceivers.users.state;
 
-        const tooManyResultsError = <div className="error-message popup-item">Zu viele Ergebnisse gefunden</div>;
-        const noMatchError = <div className="error-message popup-item">Keine passenden Ergebnisse gefunden</div>;
+        const tooManyResultsError = <div className="popup-item error-message">Zu viele Ergebnisse gefunden</div>;
+        const noMatchError = <div className="popup-item error-message">Keine passenden Ergebnisse gefunden</div>;
 
         const locations = [];
         const groups = [];
@@ -153,7 +153,7 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                            <div className="popup-item"/>
+                                        <div className="popup-item"/>
                                     )}
                                 </Fragment>
                             )}
