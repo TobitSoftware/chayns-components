@@ -22,7 +22,7 @@ export default class SharingBarItem extends Component {
         return (
             <button
                 type="button"
-                className="sharing-bar__iten button"
+                className="sharing-bar__item button"
                 title={name}
                 onClick={this.onClick}
             >
