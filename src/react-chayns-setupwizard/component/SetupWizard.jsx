@@ -70,14 +70,16 @@ export default class SetupWizard extends Component {
         const { currentStep, completedSteps } = this.state;
         if (value === true) {
             if (completedSteps.indexOf(currentStep) === -1) {
-                completedSteps.push(currentStep);
-                this.setState({ completedSteps });
+                this.setState(prevState => ({
+                    completedSteps: prevState.completedSteps.concat(currentStep)
+                }));
             }
         } else if (completedSteps.indexOf(currentStep) >= 0) {
             const { children } = this.props;
 
-            completedSteps.splice(completedSteps.indexOf(currentStep));
-            this.setState({ completedSteps });
+            this.setState(prevState => ({
+                completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep))
+            }));
 
             if(children[currentStep].props.required === true) {
                 this.setState({ maxProgress: currentStep });
@@ -114,13 +116,11 @@ export default class SetupWizard extends Component {
     }
 
     resetToStep(step) {
-        const { completedSteps, maxProgress } = this.state;
-        for(let i = step; i < maxProgress; i += 1) {
-            if (completedSteps.indexOf(i) >= 0) {
-                completedSteps.splice(completedSteps.indexOf(i));
-            }
-        }
-        this.setState({ maxProgress: step, currentStep: step, completedSteps });
+        this.setState(prevState => ({
+            maxProgress: step,
+            currentStep: step,
+            completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress))
+        }));
     }
 
     ready() {
@@ -144,13 +144,12 @@ export default class SetupWizard extends Component {
 
     updateContent(newCurrentStep) {
         const { children } = this.props;
-        let { maxProgress } = this.state;
+        const { maxProgress } = this.state;
         const { completedSteps, currentStep } = this.state;
         if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
-            maxProgress = (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress;
             this.setState({
                 currentStep: newCurrentStep,
-                maxProgress
+                maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress
             });
         } else {
             this.notComplete();
