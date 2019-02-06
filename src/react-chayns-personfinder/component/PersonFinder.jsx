@@ -210,7 +210,6 @@ export default class PersonFinder extends Component {
                                         onError={(e) => {
                                             e.target.onError = () => {
                                             };
-                                            e.target.src = `//graph.facebook.com/${r.facebookId}/picture`;
                                         }}
                                         alt=""
                                     />
