@@ -39,6 +39,8 @@ export default class PersonFinder extends Component {
             sites: [],
             showPopup: false,
             value: defaultValue,
+            personsStatusCode: 0,
+            sitesStatusCode: 0,
         };
 
         if (defaultValue.length === 0) {
@@ -71,6 +73,8 @@ export default class PersonFinder extends Component {
             sites: [],
             showPopup: false,
             value: '',
+            personsStatusCode: 0,
+            sitesStatusCode: 0,
         });
 
         const { onChange } = this.props;
@@ -97,13 +101,22 @@ export default class PersonFinder extends Component {
 
         const { showPersons, showSites } = this.props;
         Promise.all([
-            showPersons ? chayns.findPerson(value) : Promise.resolve({ Value: [] }),
-            showSites ? chayns.findSite(value) : Promise.resolve({ Value: [] })
+            showPersons ? chayns.findPerson(value) : Promise.resolve({
+                Value: [],
+                Status: {}
+            }),
+            showSites ? chayns.findSite(value) : Promise.resolve({
+                Value: [],
+                Status: {}
+            })
         ])
             .then(([persons, sites]) => {
                 this.setState({
                     persons: persons.Value || [],
-                    sites: sites.Value || []
+                    sites: sites.Value || [],
+                    personsStatusCode: persons.Status.ResultCode,
+                    sitesStatusCode: sites.Status.ResultCode,
+                    showPopup: true,
                 });
             });
     };
@@ -118,7 +131,6 @@ export default class PersonFinder extends Component {
         if (isDescendant(this.ref, e.target) || e.target === this.input) {
             return;
         }
-
         this.setState({
             showPopup: false
         });
@@ -141,13 +153,12 @@ export default class PersonFinder extends Component {
             className, showPersons, showSites, style, stopPropagation, parent, ...props
         } = this.props;
         const {
-            persons, sites, showPopup, value
+            persons, sites, showPopup, value, personsStatusCode, sitesStatusCode,
         } = this.state;
-
         const rect = this.input && this.input.getBoundingClientRect();
 
         return [
-            createPortal(showPopup && (persons.length > 0 || sites.length > 0) && rect
+            createPortal(showPopup && (persons.length > 0 || sites.length > 0 || personsStatusCode > 0 || sitesStatusCode > 0) && rect && value
                 ? (
                     <div
                         className="person-finder__results scrollbar"
@@ -158,6 +169,16 @@ export default class PersonFinder extends Component {
                         } : null}
                         ref={ref => this.ref = ref}
                     >
+                        {
+                            personsStatusCode === 2 || sitesStatusCode === 2
+                                ? <div className="person-finder__message">Zu viele Ergebnisse gefunden</div>
+                                : null
+                        }
+                        {
+                            personsStatusCode === 1 || sitesStatusCode === 1
+                                ? <div className="person-finder__message">Keine passenden Ergebnisse gefunden</div>
+                                : null
+                        }
                         {showPersons && persons.map(r => (
                             <div key={r.personId} className="result" onClick={e => this.handleItemClick(r, e)}>
                                 <div className="img">
@@ -189,7 +210,6 @@ export default class PersonFinder extends Component {
                                         onError={(e) => {
                                             e.target.onError = () => {
                                             };
-                                            e.target.src = `//graph.facebook.com/${r.facebookId}/picture`;
                                         }}
                                         alt=""
                                     />

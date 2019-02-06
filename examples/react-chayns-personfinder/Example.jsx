@@ -25,8 +25,20 @@ export default class Example extends PureComponent {
                     style={{ marginTop: '10px' }}
                 >
 
+
                     Clear
                 </Button>
+                <PersonFinder
+                    stopPropagation
+                    placeholder="Seite finden"
+                    onChange={(data) => {
+                        console.log(data);
+                    }}
+                    defaultValue="tobit"
+                    style={{ width: '100%' }}
+                    showSites
+                    showPersons={false}
+                />
             </ExampleContainer>
         );
     }
