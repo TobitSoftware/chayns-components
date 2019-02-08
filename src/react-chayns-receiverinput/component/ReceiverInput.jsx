@@ -54,7 +54,7 @@ export default class ReceiverInput extends Component {
         fontSize: null
     };
 
-    defaultState = {
+    static defaultState = {
         foundReceivers: {
             locations: { state: 3, values: [] },
             groups: { state: 3, values: [] },
@@ -76,13 +76,12 @@ export default class ReceiverInput extends Component {
 
         const { preselectedReceivers } = this.props;
 
-        const firstState = this.defaultState;
+        this.state = { ...ReceiverInput.defaultState };
 
         if (Array.isArray(preselectedReceivers) && preselectedReceivers.length > 0) {
-            firstState.chosenReceivers = preselectedReceivers;
+            this.state.chosenReceivers = preselectedReceivers;
         }
 
-        this.state = this.defaultState;
 
         this.addPopupRootDiv();
     }
@@ -97,7 +96,7 @@ export default class ReceiverInput extends Component {
         window.getGroupName = () => (groupName || '');
 
         window.clearReceiverInput = () => {
-            this.setState(this.defaultState);
+            this.setState(ReceiverInput.defaultState);
         };
     }
 
