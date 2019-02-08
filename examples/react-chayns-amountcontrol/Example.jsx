@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
@@ -52,6 +53,9 @@ export default class Example extends Component {
                     contentWidth={200}
                     buttonText="mtl. 15,95 €"
                     icon="ts-tobit"
+                    plusIcon="ts-tobit"
+                    minusIcon="ts-tobit"
+                    removeIcon="ts-tobit"
                 />
 
                 <br/>
@@ -71,7 +75,6 @@ export default class Example extends Component {
                         <AmountControl
                             className="accordion--no-trigger"
                             icon="ts-bamboo"
-                            disabled={false}
                             amount={amount}
                             onChange={this.onChange}
                             equalize="group-1"
@@ -81,8 +84,6 @@ export default class Example extends Component {
                     )}
                     head="Afri Cola"
                 >
-
-
                     Test
                 </Accordion>
 
