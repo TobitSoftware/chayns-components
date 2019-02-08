@@ -48,6 +48,9 @@ You can set the following props on a AmountControl element:
 | removeColor   | Color of the remove-icon                                                                | string   |         |
 | focusOnClick  | Enables the input autoFocus                                                             | bool     | true    |
 | stopPropagation | Stops the click propagation to parent elements                                        | bool     | false   |
+| plusIcon      | The icon to increase the amount                                                         | string/object |    |
+| minusIcon     | The icon to decrease the amount                                                         | string/object |    |
+| removeIcon    | The icon to set the amount to 0                                                         | string/object |    |
 
 The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
 icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 

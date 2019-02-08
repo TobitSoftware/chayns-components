@@ -25,6 +25,9 @@ export default class AmountControl extends Component {
         buttonFormatHandler: PropTypes.func,
         showInput: PropTypes.bool,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        plusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        minusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        removeIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         removeColor: PropTypes.string,
         addColor: PropTypes.string,
         iconColor: PropTypes.string,
@@ -56,6 +59,9 @@ export default class AmountControl extends Component {
         focusOnClick: true,
         contentWidth: null,
         stopPropagation: false,
+        plusIcon: faPlus,
+        minusIcon: faMinus,
+        removeIcon: faTrashAlt,
     };
 
     constructor(props) {
@@ -66,6 +72,8 @@ export default class AmountControl extends Component {
             tempValue: props.amount,
             showInput: false,
         };
+
+        console.log(props.plusIcon);
 
         this.setInput = this.setInput.bind(this);
     }
@@ -96,18 +104,20 @@ export default class AmountControl extends Component {
     };
 
     getRemoveIcon() {
-        const { amount, icon } = this.props;
+        const {
+            amount, icon, removeIcon, minusIcon
+        } = this.props;
         const { tempAmount } = this.state;
 
-        if (icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) {
+        if (icon && !tempAmount) {
             return icon;
         }
 
-        if (tempAmount > 1 || (amount > 1 && !tempAmount)) {
-            return faMinus;
+        if (tempAmount > 1 || amount > 1) {
+            return minusIcon;
         }
 
-        return faTrashAlt;
+        return removeIcon;
     }
 
     addItem = () => {
@@ -167,6 +177,7 @@ export default class AmountControl extends Component {
             focusOnClick,
             contentWidth,
             stopPropagation,
+            plusIcon,
         } = this.props;
         const { tempAmount, tempValue, showInput } = this.state;
         if (window.debugLevel >= 3) {
@@ -185,7 +196,7 @@ export default class AmountControl extends Component {
                     onClick={this.removeItem}
                     disabled={disabled || disableRemove}
                     className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon })}
-                    color={(icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) ? iconColor : removeColor}
+                    color={(icon && !tempAmount) ? iconColor : removeColor}
                 />
                 <AmountInput
                     stopPropagation={stopPropagation}
@@ -208,7 +219,7 @@ export default class AmountControl extends Component {
                 />
                 <ControlButton
                     stopPropagation={stopPropagation}
-                    icon={faPlus}
+                    icon={plusIcon}
                     onClick={this.addItem}
                     disabled={disabled || disableAdd}
                     className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}
