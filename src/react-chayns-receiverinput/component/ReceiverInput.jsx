@@ -95,9 +95,14 @@ export default class ReceiverInput extends Component {
 
         window.getGroupName = () => (groupName || '');
 
-        window.clearReceiverInput = () => {
-            this.setState(ReceiverInput.defaultState);
-        };
+        ReceiverInput.clearInputFunctions = [
+            ...(ReceiverInput.clearInputFunctions || []),
+            () => {
+                this.setState(ReceiverInput.defaultState);
+            }
+        ];
+
+        window.clearReceiverInput = () => ReceiverInput.clearInputFunctions.forEach(f => f());
     }
 
     shouldComponentUpdate(nextProps, nextState) {
