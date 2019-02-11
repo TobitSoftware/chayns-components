@@ -71,9 +71,9 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.22.1",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.9",
+    "webpack": "4.29.3",
+    "webpack-cli": "3.2.3",
+    "webpack-dev-server": "3.1.14",
     "why-did-you-update": "^1.0.6"
   },
   "dependencies": {
