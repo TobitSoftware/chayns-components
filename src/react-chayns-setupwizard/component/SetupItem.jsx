@@ -21,7 +21,6 @@ const SetupItem = ({
         <div
             className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: !disabled })}
             onClick={onClick}
-            onKeyUp={(e) => { if (e.keyCode === 13) onClick(e); }}
         >
             <div
                 className={classNames('number', {
