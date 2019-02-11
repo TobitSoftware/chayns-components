@@ -67,7 +67,7 @@ export default class Input extends Component {
     }
 
     componentWillReceiveProps({ value }) {
-        const { oldValue = value } = this.props;
+        const { value: oldValue } = this.props;
         if (value && value !== oldValue) {
             this.callValidated(value);
         }
