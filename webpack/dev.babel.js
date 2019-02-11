@@ -9,6 +9,7 @@ const { SSL_CERT, SSL_KEY } = process.env;
 export default {
     entry: {
         template: [
+            'babel-polyfill',
             path.resolve(ROOT_PATH, 'examples', 'index')
         ]
     },
