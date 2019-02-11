@@ -2,7 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-const SetupItem = ({ step, title, open, ready, disabled, onClick, contentStyle, children }) => (
+const SetupItem = ({
+    step,
+    title,
+    open,
+    ready,
+    disabled,
+    onClick,
+    contentStyle,
+    children,
+}) => (
     <div
         className={classNames('accordion', 'accordion--fixed', {
             'accordion--open': open,
