@@ -1,18 +1,20 @@
 {
   "presets": [
     [
-      "es2015",
+      "@babel/preset-env",
       {
-        "modules": false
+        "modules": false,
+        "targets": {
+          "chrome": "58",
+          "ie": "11"
+        }
       }
     ],
-    "stage-0",
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": [
-    "transform-decorators-legacy",
     "transform-react-remove-prop-types",
-    "transform-runtime",
+    "@babel/plugin-proposal-class-properties",
     [
       "transform-imports",
       {
