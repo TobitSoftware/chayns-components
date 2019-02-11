@@ -61,7 +61,7 @@ For starting the examples you have to first install all dependencies...
 ```
 npm i
 ```
-... and the start the webpack-dev-server with the following command:
+... and then start the webpack-dev-server with the following command:
 ```
 npm start
 ```
