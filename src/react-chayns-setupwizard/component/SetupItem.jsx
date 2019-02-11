@@ -41,7 +41,7 @@ SetupItem.propTypes = {
     onClick: PropTypes.func,
     contentStyle: PropTypes.object,
     children: PropTypes.element,
-    required: PropTypes.bool
+    required: PropTypes.bool,  /* eslint-disable-line react/no-unused-prop-types */
 };
 
 SetupItem.defaultProps = {
