@@ -1,7 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-import filesize from 'rollup-plugin-filesize';
 import external from 'rollup-plugin-peer-deps-external';
 import autoExternal from 'rollup-plugin-auto-external';
 
@@ -30,7 +29,6 @@ export default {
             externalHelpers: true,
             runtimeHelpers: true
         }),
-        commonjs(),
-        filesize()
+        commonjs()
     ]
 };
