@@ -33,7 +33,7 @@ export default class ComboBox extends PureComponent {
         const { onSelect, list, listKey } = this.props;
         const selection = e.target.value;
         if (onSelect && list && list.length > 0 && listKey && selection) {
-            onSelect(list.find(item => item[listKey] === selection));
+            onSelect(list.find(item => String(item[listKey]) === selection));
         }
     }
 
