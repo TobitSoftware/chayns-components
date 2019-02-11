@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+
+import { SetupWizardItem } from '../..';
 
 /**
  * ############################
@@ -175,42 +176,27 @@ export default class SetupWizard extends Component {
                 {
                     children.map((child, index) => {
                         return (
-                            <div
-                                className={classNames('accordion', 'accordion--fixed', {
-                                    'accordion--open': (index === currentStep),
-                                    'accordion--disabled': (index > maxProgress)
-                                })}
+                            <SetupWizardItem
                                 // eslint-disable-next-line react/no-array-index-key
                                 key={index}
-                            >
-                                <div
-                                    className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: (index <= maxProgress) })}
-                                    onClick={() => {
-                                        if (maxProgress >= index) {
-                                            if (currentStep === index) {
-                                                this.setState({ currentStep: -1 });
-                                            } else {
-                                                this.setState({ currentStep: index });
-                                            }
+                                title={child.props.title}
+                                step={index + 1}
+                                ready={completedSteps.indexOf(index) >= 0}
+                                open={index === currentStep}
+                                disabled={index > maxProgress}
+                                onClick={() => {
+                                    if (maxProgress >= index) {
+                                        if (currentStep === index) {
+                                            this.setState({ currentStep: -1 });
+                                        } else {
+                                            this.setState({ currentStep: index });
                                         }
-                                    }}
-                                >
-                                    <div
-                                        className={classNames('number', {
-                                            'wizard_step--ready': completedSteps.indexOf(index) >= 0,
-                                            'wizard_step--notReady': completedSteps.indexOf(index) === -1
-                                        })}
-                                    >
-                                        {index + 1}
-                                    </div>
-                                    <div className="title">
-                                        {child.props.title}
-                                    </div>
-                                </div>
-                                <div className="accordion__body" style={contentStyle}>
-                                    {child}
-                                </div>
-                            </div>
+                                    }
+                                }}
+                                contentStyle={contentStyle}
+                            >
+                                {child.props.children}
+                            </SetupWizardItem>
                         );
                     })
                 }
