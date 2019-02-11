@@ -4,6 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import fs from 'fs';
 
 const ROOT_PATH = path.resolve('.');
+const { SSL_CERT, SSL_KEY } = process.env;
 
 export default {
     entry: {
@@ -26,9 +27,9 @@ export default {
         historyApiFallback: true,
         compress: true,
         hot: true,
-        https: true,
-        cert: fs.readFileSync(path.join(__dirname, 'ssl', 'tobitag.crt')),
-        key: fs.readFileSync(path.join(__dirname, 'ssl', 'tobitag.key'))
+        https: !!(SSL_CERT && SSL_KEY),
+        cert: SSL_CERT ? fs.readFileSync(path.join(__dirname, SSL_CERT)) : undefined,
+        key: SSL_KEY ? fs.readFileSync(path.join(__dirname, SSL_KEY)) : undefined,
     },
     module: {
         rules: [
