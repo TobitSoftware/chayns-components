@@ -73,8 +73,6 @@ export default class AmountControl extends Component {
             showInput: false,
         };
 
-        console.log(props.plusIcon);
-
         this.setInput = this.setInput.bind(this);
     }
 
