@@ -1,6 +1,6 @@
 {
   "name": "chayns-components",
-  "version": "4.2.0",
+  "version": "4.2.15",
   "description": "Some react components for chayns®",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -40,7 +40,9 @@
     "babel-minify": "^0.4.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-plugin-transform-imports": "^1.5.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.14",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
@@ -85,8 +87,7 @@
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.6.2",
-    "react-transition-group": "2.4.0",
-    "supports-webp": "^1.0.5"
+    "react-transition-group": "2.4.0"
   },
   "peerDependencies": {
     "react": "^15.3.0 || ^16.0.0",

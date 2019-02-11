@@ -12,6 +12,7 @@ export default class ComboBox extends PureComponent {
         listKey: PropTypes.string.isRequired,
         listValue: PropTypes.string.isRequired,
         className: PropTypes.string,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -19,6 +20,7 @@ export default class ComboBox extends PureComponent {
         className: null,
         onSelect: null,
         disabled: false,
+        stopPropagation: false,
     };
 
     constructor() {
@@ -37,11 +39,16 @@ export default class ComboBox extends PureComponent {
 
     render() {
         const {
-            className, label, list, disabled, listValue, listKey
+            className, label, list, disabled, listValue, listKey, stopPropagation
         } = this.props;
         return (
             <div className={classNames('select', className, { 'select--disabled': disabled })}>
-                <select disabled={disabled} onChange={this.onSelect} defaultValue="ComboBoxLabel">
+                <select
+                    disabled={disabled}
+                    onChange={this.onSelect}
+                    defaultValue="ComboBoxLabel"
+                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                >
                     {
                         label
                             ? <option value="ComboBoxLabel" disabled>{label}</option>

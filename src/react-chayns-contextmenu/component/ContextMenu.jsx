@@ -24,6 +24,7 @@ export default class ContextMenu extends Component {
         children: PropTypes.node,
         onChildrenClick: PropTypes.func,
         childrenStyle: PropTypes.object,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -36,6 +37,7 @@ export default class ContextMenu extends Component {
         coordinates: null,
         onChildrenClick: null,
         childrenStyle: null,
+        stopPropagation: false,
     };
 
     constructor() {
@@ -64,7 +66,7 @@ export default class ContextMenu extends Component {
     }
 
     onChildrenClick(e) {
-        const { onChildrenClick } = this.props;
+        const { onChildrenClick, stopPropagation } = this.props;
         if (onChildrenClick) {
             onChildrenClick(e);
         } else {
@@ -74,10 +76,11 @@ export default class ContextMenu extends Component {
                 this.setState({ hide: false });
             }, 50);
         }
+        if(stopPropagation) e.stopPropagation();
     }
 
     onLayerClick(e) {
-        const { onLayerClick } = this.props;
+        const { onLayerClick, stopPropagation } = this.props;
         if (onLayerClick) {
             onLayerClick(e);
         } else {
@@ -87,6 +90,7 @@ export default class ContextMenu extends Component {
                 this.setState({ displayNone: true });
             }, 350);
         }
+        if(stopPropagation) e.stopPropagation();
     }
 
     getCoordinates() {
@@ -95,11 +99,12 @@ export default class ContextMenu extends Component {
         if (coordinates) {
             return coordinates;
         }
+
         if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
-                x: rect.x + (rect.width / 2),
-                y: (position === 1 || position === 2) ? rect.y + rect.height : rect.y,
+                x: rect.left + (rect.width / 2),
+                y: (position === 1 || position === 2) ? rect.bottom : rect.top
             };
         }
         return { x: 0, y: 0 };

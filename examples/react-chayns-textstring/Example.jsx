@@ -22,6 +22,7 @@ export default class Example extends Component {
         return (
             <ExampleContainer headline="TextString">
                 <TextString
+                    stopPropagation
                     stringName="fallbackTest"
                     fallback="Test ##REPLACE## Fallback"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}

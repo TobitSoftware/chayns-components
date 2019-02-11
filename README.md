@@ -44,6 +44,8 @@ The following components are part of this package:
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
 | [react-chayns-upload](/src/react-chayns-upload/)                   | FileUpload Component                            | [Readme](/src/react-chayns-upload/README.md)          |
+| [react-chayns-map](/src/react-chayns-map/)                         | Map Component                                   | [Readme](/src/react-chayns-map/README.md)          |
+| [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)          |
 
 
 ## Internal Components ##

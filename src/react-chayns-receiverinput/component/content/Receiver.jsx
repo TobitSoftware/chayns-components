@@ -112,16 +112,9 @@ export default class Receiver extends Component {
         const memberId = showIdInPopup && siteId !== null ? siteId : (showIdInPopup && personId !== null ? personId : null);
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
-        const receiverWrapperStyles = {};
-        const receiverStyles = {};
-
         return (
-            <div
-                onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)}
-                className="receiver-wrapper popup-item"
-                style={receiverWrapperStyles}
-            >
-                <div className="receiver popup-item" style={receiverStyles}>
+            <div onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)} className="receiver-wrapper popup-item">
+                <div className="receiver popup-item">
                     <div className="pic popup-item">
                         {groupId !== null ? (
                             getGroupImage(groupId, includedUsers.map(id => ({ userId: id })))

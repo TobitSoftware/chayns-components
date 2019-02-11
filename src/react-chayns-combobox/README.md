@@ -39,6 +39,7 @@ You can set the following props on a ComboBox element:
 | listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | |
 | listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
 | className | Add additional classes to the button.                                                          | string   | |
+| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
 
 ## Example ##

@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ImageContainer extends PureComponent {
@@ -13,6 +13,7 @@ export default class ImageContainer extends PureComponent {
         moreImages: PropTypes.number,
         deleteMode: PropTypes.bool,
         onDelete: PropTypes.func,
+        stopPropagation: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
@@ -29,11 +30,12 @@ export default class ImageContainer extends PureComponent {
     }
 
 
-    deleteOnClick() {
-        const { onDelete, index, url } = this.props;
-        if (onDelete) {
-            onDelete(url, index);
-        }
+    deleteOnClick(e) {
+        const {
+            onDelete, index, url, stopPropagation
+        } = this.props;
+        if (onDelete) onDelete(url, index);
+        if (stopPropagation) e.stopPropagation();
     }
 
     openImage() {

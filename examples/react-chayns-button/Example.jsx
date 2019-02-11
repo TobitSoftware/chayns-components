@@ -12,6 +12,7 @@ export default class Example extends PureComponent {
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         onClick={console.log}
+                        stopPropagation
                     >
                         Button
                     </Button>

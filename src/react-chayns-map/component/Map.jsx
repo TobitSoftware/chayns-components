@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+
 import Input from '../../react-chayns-input/component/Input';
+
 import MapMarker from './MapMarkerComp';
 
 export default class Map extends Component {
     static propTypes = {
         defaultPosition: PropTypes.shape({
             lat: PropTypes.number.isRequired,
-            lng: PropTypes.number.isRequired
+            lng: PropTypes.number.isRequired,
         }).isRequired,
         mapId: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
         ]).isRequired,
-        apiKey: PropTypes.string.isRequired,
         mapOptions: PropTypes.shape({
             defaultZoom: PropTypes.number,
             onPositionChange: PropTypes.func,
@@ -30,7 +32,7 @@ export default class Map extends Component {
         inputOptions: PropTypes.shape({
             onInputChange: PropTypes.func,
             inputRef: PropTypes.func,
-            placeholder: PropTypes.string
+            placeholder: PropTypes.string,
         }),
         markerOptions: PropTypes.shape({
             icon: PropTypes.object,
@@ -56,10 +58,10 @@ export default class Map extends Component {
             },
             inputRef: () => {
             },
-            placeholder: ''
+            placeholder: '',
         },
         markerOptions: {
-            icon: null,
+            icon: faLink,
             bgImg: '',
             onIconClick: () => {
             },
@@ -70,7 +72,7 @@ export default class Map extends Component {
         super(props);
         this.state = {
             adr: '',
-            pos: props.defaultPosition
+            pos: props.defaultPosition,
         };
         this.mapRef = null;
     }
@@ -78,15 +80,16 @@ export default class Map extends Component {
     componentDidMount() {
         const { pos } = this.state;
         this.getAddress(pos);
-        this.loadScript()
+
+        this.initMap()
             .then(() => {
-                this.initMap()
-                    .then(() => {
-                        this.concatMapStyles();
-                    })
-                    .catch((err) => {
-                        // Logger.error('Count not init Map', { er: err }, 'Map componentDidMount', 67, err.message);
-                    });
+                this.concatMapStyles();
+            })
+            .catch((err) => {
+                if (window.debugLevel >= 3) {
+                    // eslint-disable-next-line no-console
+                    console.debug(err);
+                }
             });
     }
 
@@ -98,7 +101,7 @@ export default class Map extends Component {
                 let adrs = result[0].formatted_address.split(/(.+),/)[1];
                 adrs = adrs.substring(0, adrs.indexOf(','));
                 this.setState({
-                    adr: adrs
+                    adr: adrs,
                 });
             }
         });
@@ -111,26 +114,26 @@ export default class Map extends Component {
             featureType: 'administrative',
             elementType: 'labels',
             stylers: [{
-                visibility: 'on'
-            }]
+                visibility: 'on',
+            }],
         }, {
             featureType: 'landscape',
             elementType: 'labels',
             stylers: [{
-                visibility: 'off'
-            }]
+                visibility: 'off',
+            }],
         }, {
             featureType: 'poi',
             elementType: 'labels',
             stylers: [{
-                visibility: 'off'
-            }]
+                visibility: 'off',
+            }],
         }, {
             featureType: 'water',
             elementType: 'labels',
             stylers: [{
-                visibility: 'off'
-            }]
+                visibility: 'off',
+            }],
         }];
         if (!mapOptions.disableDefaultStyles) {
             this.mapStyles = defaultStyles.concat(mapOptions.mapStyles);
@@ -139,26 +142,10 @@ export default class Map extends Component {
         }
     }
 
-
-    loadScript() {
-        return new Promise((resolve) => {
-            if (!document.querySelector('#googleMapsScript')) {
-                const script = document.createElement('script');
-                script.id = 'googleMapsScript';
-                script.src = `https://maps.googleapis.com/maps/api/js?key=${this.props.apiKey}`;
-                script.async = true;
-                document.body.appendChild(script);
-                resolve();
-            }
-            resolve();
-        });
-    }
-
-
     initMap() {
         const {
             mapOptions,
-            defaultPosition
+            defaultPosition,
         } = this.props;
         const {
             defaultZoom,
@@ -171,7 +158,7 @@ export default class Map extends Component {
                     zoom: defaultZoom,
                     center: defaultPosition,
                     disableDefaultUI,
-                    styles: this.mapStyles
+                    styles: this.mapStyles,
                 });
                 this.mapRef.addListener('center_changed', () => {
                     clearTimeout(this.timeout);
@@ -179,17 +166,30 @@ export default class Map extends Component {
                         const center = this.mapRef.getCenter();
                         const currentPos = {
                             lat: center.lat(),
-                            lng: center.lng()
+                            lng: center.lng(),
                         };
                         this.getAddress(currentPos);
                         mapOptions.onPositionChange(currentPos);
                     }, 500);
                 });
+                const options = {
+                    componentRestrictions: { country: 'de' },
+                };
+                // eslint-disable-next-line no-undef
+                const autocomplete = new google.maps.places.Autocomplete(this.inputRef, options);
+                autocomplete.addListener('place_changed', () => {
+                    const place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        return;
+                    }
+                    this.mapRef.setCenter(place.geometry.location);
+                    this.mapRef.setZoom(17);
+                });
             } catch (err) {
                 // eslint-disable-next-line prefer-promise-reject-errors
                 reject({
                     message: 'Error in google.maps',
-                    error: err
+                    error: err,
                 });
                 return;
             }
@@ -197,7 +197,7 @@ export default class Map extends Component {
             if (this.mapRef === null) {
                 // eslint-disable-next-line prefer-promise-reject-errors
                 reject({
-                    message: 'Map is null'
+                    message: 'Map is null',
                 });
                 return;
             }
@@ -209,13 +209,16 @@ export default class Map extends Component {
 
     render() {
         const {
-            markerOptions, mapId, inputOptions
+            markerOptions, mapId, inputOptions,
         } = this.props;
         const { adr } = this.state;
         return (
             <div className="cc__map" id="map_comp">
                 <div
                     className="mapBorder"
+                    style={{
+                        minHeight: '226px',
+                    }}
                 >
                     <div
                         className="centerMarker"
@@ -258,11 +261,12 @@ export default class Map extends Component {
                         value={adr}
                         key="adr"
                         inputRef={(obj) => {
+                            this.inputRef = obj;
                             inputOptions.inputRef(obj);
                         }}
                         onChange={(address) => {
                             this.setState({
-                                adr: address
+                                adr: address,
                             });
                             inputOptions.onInputChange(address);
                         }}

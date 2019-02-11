@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 
 import selectFile from '../../utils/selectFile';
 import getCompareFunction from '../utils/getCompareFunction';
@@ -35,6 +35,20 @@ export default class FileUpload extends Component {
         onClick: PropTypes.func,
         onDrop: PropTypes.func,
         customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+        types: PropTypes.arrayOf(PropTypes.shape({
+            type: PropTypes.oneOf(['image', 'video', 'audio', 'all']),
+            uploadText: PropTypes.string,
+            customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+            onUpload: PropTypes.func,
+            className: PropTypes.string,
+            onClick: PropTypes.func,
+            onDrop: PropTypes.func,
+            children: PropTypes.oneOfType([
+                PropTypes.node,
+                PropTypes.arrayOf(PropTypes.node),
+            ]),
+        })),
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -49,6 +63,8 @@ export default class FileUpload extends Component {
         onClick: null,
         onDrop: null,
         customIcon: null,
+        types: null,
+        stopPropagation: false,
     };
 
     constructor() {
@@ -64,49 +80,56 @@ export default class FileUpload extends Component {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(event) {
+    onClick(event, config) {
         const {
             type,
             multiple,
             onUpload,
-            onClick
-        } = this.props;
+            onClick,
+            disableListeners,
+            stopPropagation,
+        } = { ...this.props, ...config };
 
-        if (onClick) {
-            return onClick(event);
-        }
+        if (stopPropagation) event.stopPropagation();
 
-        if (onClick === false) {
-            return false;
-        }
-
-        if (onUpload && type === FileUpload.TYPE_IMAGE) {
-            if (chayns.env.user.isAuthenticated) {
-                return chayns.uploadCloudImage()
-                    .then((uploadData) => {
-                        onUpload(uploadData.url);
-                    });
+        if (!disableListeners) {
+            if (onClick) {
+                return onClick(event);
             }
-            return chayns.login();
-        }
 
-        return selectFile({
-            type: getMimeTypes(type),
-            multiple,
-        })
-            .then((files) => {
-                const fileList = !multiple ? [files] : files;
-                this.checkFiles(fileList);
-            });
+            if (onClick === false) {
+                return false;
+            }
+
+            if (onUpload && type === FileUpload.TYPE_IMAGE) {
+                if (chayns.env.user.isAuthenticated) {
+                    return chayns.uploadCloudImage()
+                        .then((uploadData) => {
+                            onUpload(uploadData.url);
+                        });
+                }
+                return chayns.login();
+            }
+
+            return selectFile({
+                type: getMimeTypes(type),
+                multiple,
+            })
+                .then((files) => {
+                    const fileList = !multiple ? [files] : files;
+                    this.checkFiles(fileList);
+                });
+        }
+        return false;
     }
 
-    onDrop(event) {
+    onDrop(event, config) {
         const {
             onChange,
             onUpload,
             type,
             onDrop
-        } = this.props;
+        } = { ...this.props, ...config };
 
         if (onDrop) {
             return onDrop(event);
@@ -198,17 +221,18 @@ export default class FileUpload extends Component {
         }
     }
 
-    renderPlaceholder() {
+    renderPlaceholder(config) {
         const {
             type,
             className,
             uploadText,
             customIcon,
-        } = this.props;
+        } = { ...this.props, ...config };
+
         const { hover } = this.state;
 
         const classNames = classnames('cc__file-upload--placeholder', {
-            'chayns__color--70': chayns.env.site.colorMode !== 1,
+            chayns__color: chayns.env.site.colorMode !== 1,
             'cc__file-upload--hover': hover,
             [className]: className,
         });
@@ -240,16 +264,58 @@ export default class FileUpload extends Component {
         const {
             children,
             disableListeners,
+            types,
         } = this.props;
 
-        const wrapperClassNames = classnames('cc__file-upload', {
+        const wrapperClassNames = classnames('cc__file-upload chayns__border-color', {
             'cc__file-upload--custom': children,
+            flex: types
         });
+
+        if (types) {
+            const uploadItems = [];
+            types.forEach((config, index) => {
+                const item = (
+                    <div
+                        onClick={!disableListeners ? (event) => {
+                            this.onClick(event, config);
+                        } : null}
+                        onDrop={!disableListeners ? this.onDrop : null}
+                        onDragOver={!disableListeners ? this.onDragOver : null}
+                        onDragLeave={!disableListeners ? this.onDragLeave : null}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={`upload_${index}`}
+                        className="cc__file-upload__split"
+                    >
+                        {config.children || this.renderPlaceholder(config)}
+                    </div>
+                );
+                uploadItems.push(item);
+                if (index + 1 < types.length) {
+                    uploadItems.push(
+                        <div
+                            /* eslint-disable-next-line react/no-array-index-key */
+                            key={`upload_separator_${index}`}
+                            className="cc__file-upload__separator"
+                        />
+                    );
+                }
+            });
+
+            return (
+                <div
+                    style={{ display: 'flex', position: 'relative' }}
+                    className={wrapperClassNames}
+                >
+                    {uploadItems}
+                </div>
+            );
+        }
 
         return (
             <div
                 className={wrapperClassNames}
-                onClick={!disableListeners ? this.onClick : null}
+                onClick={this.onClick}
                 onDrop={!disableListeners ? this.onDrop : null}
                 onDragOver={!disableListeners ? this.onDragOver : null}
                 onDragLeave={!disableListeners ? this.onDragLeave : null}

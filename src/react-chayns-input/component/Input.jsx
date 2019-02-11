@@ -24,6 +24,7 @@ export default class Input extends Component {
         dynamic: PropTypes.bool,
         customProps: PropTypes.object,
         id: PropTypes.string,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -46,6 +47,7 @@ export default class Input extends Component {
         dynamic: false,
         customProps: null,
         id: null,
+        stopPropagation: false,
     };
 
     constructor(props) {
@@ -117,6 +119,7 @@ export default class Input extends Component {
             invalid,
             onIconClick,
             id,
+            stopPropagation,
         } = this.props;
         const { valid } = this.state;
 
@@ -143,6 +146,7 @@ export default class Input extends Component {
                         type={type || 'text'}
                         id={id || this.id}
                         required
+                        onClick={stopPropagation ? event => event.stopPropagation() : null}
                         {...customProps}
                     />
                     <label
@@ -185,6 +189,7 @@ export default class Input extends Component {
                 type={type}
                 ref={inputRef}
                 id={id || this.id}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
                 {...customProps}
             />
         );

@@ -1,8 +1,8 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-return-assign, jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { createPortal } from 'react-dom';
 import isDescendant from '../../utils/isDescendant';
 
 export default class PersonFinder extends Component {
@@ -14,6 +14,8 @@ export default class PersonFinder extends Component {
         onChange: PropTypes.func,
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
+        stopPropagation: PropTypes.bool,
+        parent: PropTypes.node,
     };
 
     static defaultProps = {
@@ -24,6 +26,8 @@ export default class PersonFinder extends Component {
         onChange: null,
         showPersons: true,
         showSites: false,
+        stopPropagation: false,
+        parent: document.getElementsByClassName('tapp')[0],
     };
 
     constructor(props) {
@@ -35,6 +39,8 @@ export default class PersonFinder extends Component {
             sites: [],
             showPopup: false,
             value: defaultValue,
+            personsStatusCode: 0,
+            sitesStatusCode: 0,
         };
 
         if (defaultValue.length === 0) {
@@ -44,12 +50,13 @@ export default class PersonFinder extends Component {
         Promise.all([
             showPersons ? chayns.findPerson(defaultValue) : Promise.resolve({ Value: [] }),
             showSites ? chayns.findSite(defaultValue) : Promise.resolve({ Value: [] })
-        ]).then(([persons, sites]) => {
-            this.setState({
-                persons: persons.Value || [],
-                sites: sites.Value || []
+        ])
+            .then(([persons, sites]) => {
+                this.setState({
+                    persons: persons.Value || [],
+                    sites: sites.Value || []
+                });
             });
-        });
     }
 
     componentDidMount() {
@@ -66,7 +73,14 @@ export default class PersonFinder extends Component {
             sites: [],
             showPopup: false,
             value: '',
+            personsStatusCode: 0,
+            sitesStatusCode: 0,
         });
+
+        const { onChange } = this.props;
+        if (onChange) {
+            onChange(null);
+        }
     };
 
     handleOnChange = (event) => {
@@ -76,20 +90,35 @@ export default class PersonFinder extends Component {
             value
         });
 
+        if (value.length === 0) {
+            this.clear();
+            return;
+        }
+
         if (value.length < 3) {
             return;
         }
 
         const { showPersons, showSites } = this.props;
         Promise.all([
-            showPersons ? chayns.findPerson(value) : Promise.resolve({ Value: [] }),
-            showSites ? chayns.findSite(value) : Promise.resolve({ Value: [] })
-        ]).then(([persons, sites]) => {
-            this.setState({
-                persons: persons.Value || [],
-                sites: sites.Value || []
+            showPersons ? chayns.findPerson(value) : Promise.resolve({
+                Value: [],
+                Status: {}
+            }),
+            showSites ? chayns.findSite(value) : Promise.resolve({
+                Value: [],
+                Status: {}
+            })
+        ])
+            .then(([persons, sites]) => {
+                this.setState({
+                    persons: persons.Value || [],
+                    sites: sites.Value || [],
+                    personsStatusCode: persons.Status.ResultCode,
+                    sitesStatusCode: sites.Status.ResultCode,
+                    showPopup: true,
+                });
             });
-        });
     };
 
     handleFocus = () => {
@@ -102,55 +131,56 @@ export default class PersonFinder extends Component {
         if (isDescendant(this.ref, e.target) || e.target === this.input) {
             return;
         }
-
         this.setState({
             showPopup: false
         });
     };
 
-    handleItemClick = (r) => {
+    handleItemClick = (r, e) => {
+        const { onChange, stopPropagation } = this.props;
+
         this.setState({
             showPopup: false,
             value: r.name || r.appstoreName
         });
 
-        const { onChange } = this.props;
-        if (onChange) {
-            onChange(r);
-        }
+        if (onChange) onChange(r);
+        if (stopPropagation) e.stopPropagation();
     };
 
     render() {
         const {
-            className, showPersons, showSites, style, ...props
+            className, showPersons, showSites, style, stopPropagation, parent, ...props
         } = this.props;
         const {
-            persons, sites, showPopup, value
+            persons, sites, showPopup, value, personsStatusCode, sitesStatusCode,
         } = this.state;
+        const rect = this.input && this.input.getBoundingClientRect();
 
-        const classNames = classnames('input', className);
-
-        return (
-            <div className="person-finder">
-                <input
-                    type="text"
-                    className={classNames}
-                    value={value}
-                    {...props}
-                    ref={ref => this.input = ref}
-                    onChange={this.handleOnChange}
-                    onFocus={this.handleFocus}
-                    defaultValue={undefined}
-                    style={style}
-                />
-                {showPopup && (persons.length > 0 || sites.length > 0) ? (
+        return [
+            createPortal(showPopup && (persons.length > 0 || sites.length > 0 || personsStatusCode > 0 || sitesStatusCode > 0) && rect && value
+                ? (
                     <div
                         className="person-finder__results scrollbar"
-                        style={this.input ? { width: `${this.input.offsetWidth}px` } : undefined}
+                        style={this.input ? {
+                            width: `${rect.width}px`,
+                            top: `${rect.bottom}px`,
+                            left: `${rect.left}px`
+                        } : null}
                         ref={ref => this.ref = ref}
                     >
+                        {
+                            personsStatusCode === 2 || sitesStatusCode === 2
+                                ? <div className="person-finder__message">Zu viele Ergebnisse gefunden</div>
+                                : null
+                        }
+                        {
+                            personsStatusCode === 1 || sitesStatusCode === 1
+                                ? <div className="person-finder__message">Keine passenden Ergebnisse gefunden</div>
+                                : null
+                        }
                         {showPersons && persons.map(r => (
-                            <div key={r.personId} className="result" onClick={() => this.handleItemClick(r)}>
+                            <div key={r.personId} className="result" onClick={e => this.handleItemClick(r, e)}>
                                 <div className="img">
                                     <img
                                         src={`https://sub60.tobit.com/u/${r.personId}?size=40`}
@@ -173,14 +203,13 @@ export default class PersonFinder extends Component {
                             </div>
                         ))}
                         {showSites && sites.map(r => (
-                            <div key={r.siteId} className="result" onClick={() => this.handleItemClick(r)}>
+                            <div key={r.siteId} className="result" onClick={e => this.handleItemClick(r, e)}>
                                 <div className="img">
                                     <img
                                         src={`https://sub60.tobit.com/l/${r.siteId}?size=40`}
                                         onError={(e) => {
                                             e.target.onError = () => {
                                             };
-                                            e.target.src = `//graph.facebook.com/${r.facebookId}/picture`;
                                         }}
                                         alt=""
                                     />
@@ -193,8 +222,21 @@ export default class PersonFinder extends Component {
                             </div>
                         ))}
                     </div>
-                ) : false}
-            </div>
-        );
+                )
+                : null,
+                parent),
+            <input
+                type="text"
+                className={classNames('input', className)}
+                value={value}
+                {...props}
+                ref={ref => this.input = ref}
+                onChange={this.handleOnChange}
+                onFocus={this.handleFocus}
+                defaultValue={undefined}
+                style={style}
+                onClick={stopPropagation ? event => event.stopPropagation() : null}
+            />
+        ];
     }
 }

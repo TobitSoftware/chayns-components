@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
-import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
@@ -24,12 +25,16 @@ export default class AmountControl extends Component {
         buttonFormatHandler: PropTypes.func,
         showInput: PropTypes.bool,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        plusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        minusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        removeIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         removeColor: PropTypes.string,
         addColor: PropTypes.string,
         iconColor: PropTypes.string,
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
         contentWidth: PropTypes.number,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -53,6 +58,10 @@ export default class AmountControl extends Component {
         equalize: null,
         focusOnClick: true,
         contentWidth: null,
+        stopPropagation: false,
+        plusIcon: faPlus,
+        minusIcon: faMinus,
+        removeIcon: faTrashAlt,
     };
 
     constructor(props) {
@@ -93,18 +102,20 @@ export default class AmountControl extends Component {
     };
 
     getRemoveIcon() {
-        const { amount, icon } = this.props;
+        const {
+            amount, icon, removeIcon, minusIcon
+        } = this.props;
         const { tempAmount } = this.state;
 
-        if (icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) {
+        if (icon && !tempAmount) {
             return icon;
         }
 
-        if (tempAmount > 1 || (amount > 1 && !tempAmount)) {
-            return faMinus;
+        if (tempAmount > 1 || amount > 1) {
+            return minusIcon;
         }
 
-        return faTrashAlt;
+        return removeIcon;
     }
 
     addItem = () => {
@@ -163,6 +174,8 @@ export default class AmountControl extends Component {
             equalize,
             focusOnClick,
             contentWidth,
+            stopPropagation,
+            plusIcon,
         } = this.props;
         const { tempAmount, tempValue, showInput } = this.state;
         if (window.debugLevel >= 3) {
@@ -176,13 +189,15 @@ export default class AmountControl extends Component {
             })}
             >
                 <ControlButton
+                    stopPropagation={stopPropagation}
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
                     disabled={disabled || disableRemove}
                     className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon })}
-                    color={(icon && ((tempAmount && tempAmount < 1) || (amount < 1 && !tempAmount))) ? iconColor : removeColor}
+                    color={(icon && !tempAmount) ? iconColor : removeColor}
                 />
                 <AmountInput
+                    stopPropagation={stopPropagation}
                     contentWidth={contentWidth}
                     equalize={equalize}
                     autoInput={autoInput}
@@ -201,7 +216,8 @@ export default class AmountControl extends Component {
                     focusOnClick={focusOnClick}
                 />
                 <ControlButton
-                    icon={faPlus}
+                    stopPropagation={stopPropagation}
+                    icon={plusIcon}
                     onClick={this.addItem}
                     disabled={disabled || disableAdd}
                     className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}

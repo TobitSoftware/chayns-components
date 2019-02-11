@@ -16,11 +16,17 @@ import { Map } from 'chayns-components';
 You can use your **Map** like this:
 ```jsx harmony
 <Map 
-    apiKey="INSERT_YOUR_API_KEY_HERE"
     mapId="adminmap"
+    defaultPosition={{
+        lat: 0,
+        lng: 0,
+    }}
 />
 ```
-
+You will need to integrate this script tag into your index.html file:
+```jsx harmony
+    <script id="googleMapsScript" src="https://maps.googleapis.com/maps/api/js?key=##INSERAPIKEYHERE##&libraries=places"></script>
+```
 
 ## Props ##
 
@@ -30,7 +36,6 @@ The component has the following properties:
 |-----------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------|-------|-------|
 | defaultPosition                   | Object with positionprops as starting point for the map.                                                              | object       |       |true   |
 | mapId                             | Id for the map in case there are multiple maps on one tapp                                                            | string/number|       |true   |
-| apiKey                            | Google Maps ApiKey for mapfunctions                                                                                   | string       |       |true   |
 | mapOptions                        | object with options for different preferences of the map                                                              | object       | true  |false  |
 | mapOptions.defaultZoom            | Integer for default zoom value of the map                                                                             | number       | 13    |false  |
 | mapOptions.onPositionChange       | Callback function which returns an object of coordinates                                                              | func         | null  |false  |

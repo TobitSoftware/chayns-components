@@ -25,6 +25,7 @@ export default class Example extends PureComponent {
         return (
             <ExampleContainer headline="Input">
                 <Input
+                    stopPropagation
                     defaultValue="Input"
                     placeholder="input"
                     onBlur={this.onBlur}

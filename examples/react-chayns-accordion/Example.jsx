@@ -12,35 +12,58 @@ import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
 export default class Example extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { show: true };
+    }
+
     render() {
         const items = [
             {
                 className: null,
-                onClick: this.addOnClick,
+                onClick: () => {
+                    this.setState({ show: true });
+                },
                 text: 'Hinzufügen',
                 icon: faPlus,
             },
             {
                 className: null,
-                onClick: this.deleteOnClick,
+                onClick: () => {
+                    this.setState({ show: false });
+                },
                 text: 'Löschen',
                 icon: faTrash,
             }
         ];
 
+        const { show } = this.state;
+
         return (
             <ExampleContainer headline="Accordion">
-                <Accordion
-                    head="Accordion with nice search"
-                    onSearch={console.log}
-                    searchPlaceholder="Search"
-                    right={<Badge>12</Badge>}
-                    dataGroup="chayns"
-                >
-                    <div className="accordion__content">
-                        Hello World
-                    </div>
-                </Accordion>
+                {
+                    show
+                        ? (
+                            <Accordion
+                                head="Accordion with nice search"
+                                onSearch={console.log}
+                                searchPlaceholder="Search"
+                                right={<Badge>12</Badge>}
+                                dataGroup="chayns"
+                            >
+                                <div className="accordion__item">
+                                    Hello World
+                                </div>
+                                <div className="accordion__item">
+                                    Hello World<br/>blabla
+                                </div>
+                                <div className="accordion__item">
+                                    Hello World
+                                </div>
+                            </Accordion>
+                        )
+                        : null
+                }
                 <Accordion
                     head="Accordion with animated search input, nice dots and a very long title"
                     onSearch={console.log}
@@ -50,9 +73,7 @@ export default class Example extends Component {
                         <ContextMenu
                             items={items}
                             position={1}
-                        >
-                            <Icon className="accordion--no-trigger" icon="ts-ellipsis_v"/>
-                        </ContextMenu>
+                        />
                     )}
                 >
                     <div className="accordion__content">
@@ -93,6 +114,15 @@ export default class Example extends Component {
                             Hello World 2
                         </div>
                     </Accordion>
+                    <div className="accordion__item">
+                        Hello World
+                    </div>
+                    <div className="accordion__item">
+                        Hello World<br/>blabla
+                    </div>
+                    <div className="accordion__item">
+                        Hello World
+                    </div>
                     <Accordion
                         dataGroup="abc"
                         icon="ts-tobit"
@@ -108,17 +138,38 @@ export default class Example extends Component {
                 </Accordion>
                 <Accordion head="Autogrow" autogrow>
                     <div className="accordion__content">
-                        <div style={{ height: '20000px', background: 'linear-gradient(0deg, red, yellow)' }}/>
+                        <div style={{
+                            height: '20000px',
+                            background: 'linear-gradient(0deg, red, yellow)'
+                        }}
+                        />
                     </div>
                 </Accordion>
-                <Accordion head="Accordion with Button" right={<Checkbox toggleButton className="accordion--no-trigger" labelClassName="accordion--no-trigger" />}>
+                <Accordion
+                    head="Accordion with Button"
+                    right={(
+                        <Checkbox
+                            toggleButton
+                            className="accordion--no-trigger"
+                            labelClassName="accordion--no-trigger"
+                        />
+                    )}
+                >
                     <div className="accordion__content">
-                        <div style={{ height: '200px', background: 'linear-gradient(0deg, purple, orange)' }}/>
+                        <div style={{
+                            height: '200px',
+                            background: 'linear-gradient(0deg, purple, orange)'
+                        }}
+                        />
                     </div>
                 </Accordion>
                 <Accordion head="Fixed Accordion without icon" fixed defaultOpened noIcon>
                     <div className="accordion__content">
-                        <div style={{ height: '200px', background: 'linear-gradient(0deg, blue, green)' }}/>
+                        <div style={{
+                            height: '200px',
+                            background: 'linear-gradient(0deg, blue, green)'
+                        }}
+                        />
                     </div>
                 </Accordion>
             </ExampleContainer>

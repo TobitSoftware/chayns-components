@@ -35,6 +35,7 @@ export default class Example extends PureComponent {
                     listKey="id"
                     listValue="name"
                     htmlSelect
+                    stopPropagation
                 />
                 </div>
                 <ComboBox

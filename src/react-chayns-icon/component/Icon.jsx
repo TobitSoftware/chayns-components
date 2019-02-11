@@ -16,14 +16,16 @@ export default class Icon extends PureComponent {
         className: PropTypes.string,
         style: PropTypes.object(),
         onClick: PropTypes.func,
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
         className: '',
         style: undefined,
         onClick: undefined,
-        disabled: false
+        disabled: false,
+        stopPropagation: false,
     };
 
     constructor(props) {
@@ -32,6 +34,7 @@ export default class Icon extends PureComponent {
         if (!chayns.utils.isString(icon) && icon && icon.prefix && icon.iconName) {
             library.add(icon);
         }
+        this.onClick = this.onClick.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -41,19 +44,26 @@ export default class Icon extends PureComponent {
         }
     }
 
+    onClick(e) {
+        const { onClick, disabled, stopPropagation } = this.props;
+        if(onClick && !disabled) onClick(e);
+        if(stopPropagation) e.stopPropagation();
+    }
+
     render() {
         const {
-            icon, className, onClick, disabled, ...rest
+            icon, className, onClick, disabled, stopPropagation, ...other
         } = this.props;
 
+        const classes = classNames('react-chayns-icon', className, {
+            [icon]: chayns.utils.isString(icon),
+            'react-chayns-icon--clickable': onClick,
+            'react-chayns-icon--disabled': disabled
+        });
+
         if (chayns.utils.isString(icon)) {
-            const classes = classNames(`react-chayns-icon ${icon}`, {
-                [className]: !!className,
-                'react-chayns-icon--clickable': typeof onClick === 'function',
-                'react-chayns-icon--disabled': disabled === true
-            });
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            return <i className={classes} onClick={disabled !== true && typeof onClick === 'function' ? onClick : () => {}} {...rest}/>;
+            return <i className={classes} onClick={this.onClick} {...other}/>;
         }
         if (!icon) {
             return null;
@@ -61,11 +71,11 @@ export default class Icon extends PureComponent {
         if (typeof onClick === 'function') {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                <span className={`react-chayns-icon react-chayns-icon--clickable${disabled === true ? ' react-chayns-icon--disabled' : ''}`} onClick={disabled !== true ? onClick : () => {}}>
-                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>
+                <span className={classes} onClick={this.onClick}>
+                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other}/>
                 </span>
             );
         }
-        return <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={className} {...rest}/>;
+        return <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={classes} {...other}/>;
     }
 }

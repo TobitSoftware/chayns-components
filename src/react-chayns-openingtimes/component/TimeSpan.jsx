@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { ChooseButton, Icon, Input } from '../../index';
 
 class TimeSpan extends Component {
@@ -9,16 +9,13 @@ class TimeSpan extends Component {
         end: PropTypes.string.isRequired,
         disabled: PropTypes.bool,
         buttonType: PropTypes.number.isRequired,
-        onAdd: PropTypes.func,
-        onRemove: PropTypes.func,
-        onChange: PropTypes.func
+        onAdd: PropTypes.func.isRequired,
+        onRemove: PropTypes.func.isRequired,
+        onChange: PropTypes.func.isRequired
     };
 
     static defaultProps = {
-        disabled: false,
-        onAdd: null,
-        onRemove: null,
-        onChange: null
+        disabled: false
     };
 
     static OFF = 0;
@@ -42,13 +39,13 @@ class TimeSpan extends Component {
 
     onClick() {
         const { buttonType, onAdd, onRemove } = this.props;
-        if (buttonType === TimeSpan.ADD && onAdd) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
-        if (buttonType === TimeSpan.REMOVE && onRemove) onRemove();
+        if (buttonType === TimeSpan.ADD) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
+        if (buttonType === TimeSpan.REMOVE) onRemove();
     }
 
     onChange(_, valid) {
         const { onChange } = this.props;
-        if (onChange && valid) {
+        if (valid) {
             onChange(this.startTime.current.value, this.endTime.current.value);
         }
     }
@@ -66,8 +63,7 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.startTime}
-                        value={start}
-                        defaultValue={TimeSpan.defaultStart}
+                        value={disabled ? TimeSpan.defaultStart : start}
                         onChange={this.onChange}
                     />
                 </div>
@@ -75,8 +71,7 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.endTime}
-                        value={end}
-                        defaultValue={TimeSpan.defaultEnd}
+                        value={disabled ? TimeSpan.defaultEnd : end}
                         onChange={this.onChange}
                     />
                 </div>

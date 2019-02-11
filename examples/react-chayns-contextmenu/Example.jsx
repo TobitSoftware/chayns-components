@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { faInfoCircle, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
@@ -23,6 +24,7 @@ export default class Example extends Component {
         this.removeContextMenu = this.removeContextMenu.bind(this);
         this.deleteOnClick = this.deleteOnClick.bind(this);
         this.addOnClick = this.addOnClick.bind(this);
+        this.buttonClick = this.buttonClick.bind(this);
     }
 
     setContextMenu(event) {
@@ -53,6 +55,11 @@ export default class Example extends Component {
         });
     }
 
+    buttonClick() {
+        const { position } = this.state;
+        this.setState({ position: position + 1 });
+    }
+
     render() {
         const {
             x, y, hideContextMenu, position
@@ -63,36 +70,41 @@ export default class Example extends Component {
                 className: null,
                 onClick: this.addOnClick,
                 text: 'Hinzufügen',
-                icon: faPlus,
+                icon: faCoffee,
             },
             {
                 className: null,
                 onClick: this.deleteOnClick,
                 text: 'Löschen',
-                icon: faTrash,
+                icon: 'ts-tobit',
             }
         ];
 
         return (
             <ExampleContainer headline="ContextMenu">
                 <ContextMenu
-                    coordinates={{ x, y }}
+                    coordinates={{
+                        x,
+                        y
+                    }}
                     hide={hideContextMenu}
                     items={items}
                     onLayerClick={this.removeContextMenu}
-                    position={position}
+                    position={position % 4}
+                    stopPropagation
                 />
-                <Button onClick={() => {
-                    this.setState({ position: (position + 1) % 4 });
-                }}
-                >
+                <Button onClick={this.buttonClick}>
                     Position ändern
                 </Button>
                 <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>
                     <Icon icon={faInfoCircle} style={{ transform: 'scale(5)' }}/>
                 </div>
-                <ContextMenu items={items} position={position}/>
-                <Accordion head="Accordion mit ContextMenu" right={<ContextMenu items={items} position={position}/>}>TEST</Accordion>
+                <ContextMenu items={items} position={position % 4}/>
+                <Accordion
+                    head="Accordion mit ContextMenu"
+                    right={<ContextMenu items={items} position={position % 4}/>}
+                >TEST
+                </Accordion>
             </ExampleContainer>
         );
     }

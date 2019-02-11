@@ -35,6 +35,7 @@ The following properties can be set on the Button and the ChooseButton-Component
 | style        | Additional styles that should be set to the button                                   | Object        |                                      |
 | buttonRef    | Exposes the button DOM Ref to the parent component                                   | func          |                                      |
 | icon         | Renders Button as IconButton (fa- or ts-icon)                                        | string/object |                                      |
+| stopPropagation | Stops the click propagation to parent elements                                    | bool          | false                                |
 
 
 ## Example ##

@@ -27,6 +27,7 @@ import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
+import ReceiverInput from './react-chayns-receiverinput/component/ReceiverInput';
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
@@ -44,6 +45,7 @@ import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileUpload from './react-chayns-upload/component/FileUpload';
+import Map from './react-chayns-map/component/Map';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
@@ -71,6 +73,7 @@ export {
     OrientationHelper,
     PersonFinder,
     RadioButton,
+    ReceiverInput,
     RfidInput,
     ScrollView,
     SelectButton,
@@ -84,5 +87,6 @@ export {
     TextString,
     Tooltip,
     FileUpload,
+    Map,
     resolveAbsoluteImport,
 };
