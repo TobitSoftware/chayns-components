@@ -142,3 +142,4 @@ fabric.properties
 /dist
 
 /webpack/ssl
+/build
