@@ -1,0 +1,45 @@
+.list-item {
+  &__header {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__image {
+    width: 40px;
+    height: 40px;
+
+    background-size: cover;
+    background-position: center;
+
+    outline: 1px solid rgba(0,0,0,.08);
+
+    margin-right: 10px;
+
+    flex-shrink: 0;
+  }
+
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    min-width: 0;
+  }
+
+  &__subtitle {
+    font-size: 85%;
+  }
+
+  &__spacer {
+    flex-grow: 1;
+  }
+
+  &__right {
+    min-width: 0;
+  }
+
+  &--expanded {
+    .list-item__titles {
+      font-weight: bolder;
+    }
+  }
+}
