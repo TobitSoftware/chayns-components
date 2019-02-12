@@ -1,9 +1,9 @@
 # ExpandableContent
 
 The ExpandableContent is part of the *chayns-components* package. It can be installed via npm:
-
-    npm install -S chayns-components@latest
-
+```
+npm install -S chayns-components@latest
+```
 
 ## Usage
 
