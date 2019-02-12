@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import assign from 'object-assign';
 
 import ExpandableContext from './ExpandableContext';
 
@@ -52,9 +51,10 @@ export default class ExpandableList extends Component {
     }
 
     changeOpen(id) {
-        this.providerState = assign({}, this.providerState, {
+        this.providerState = {
+            ...this.providerState,
             open: id,
-        });
+        };
 
         this.setState({
             open: id,
