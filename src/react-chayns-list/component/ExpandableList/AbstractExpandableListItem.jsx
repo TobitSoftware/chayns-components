@@ -12,7 +12,7 @@ function getId() {
     return id;
 }
 
-class ExpandableListItem extends PureComponent {
+class AbstractExpandableListItem extends PureComponent {
     static propTypes = {
         onToggle: PropTypes.func.isRequired,
         open: PropTypes.bool,
@@ -101,4 +101,4 @@ class ExpandableListItem extends PureComponent {
     }
 }
 
-export default connectExpandableContext(ExpandableListItem);
+export default connectExpandableContext(AbstractExpandableListItem);
