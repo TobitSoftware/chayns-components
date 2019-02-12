@@ -23,7 +23,6 @@ class ExpandableListItem extends PureComponent {
         header: PropTypes.node.isRequired,
         onOpen: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired,
-        onTrigger: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
