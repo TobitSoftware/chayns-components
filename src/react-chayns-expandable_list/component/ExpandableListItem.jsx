@@ -30,8 +30,8 @@ class ExpandableListItem extends PureComponent {
         children: null,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.id = getId();
         this.onToggle = this.onToggle.bind(this);
@@ -77,18 +77,20 @@ class ExpandableListItem extends PureComponent {
         const {
             header,
             children,
-            open,
+            open: openIds,
         } = this.props;
+
+        const open = (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
 
         return (
             <div onClick={this.onToggle}>
                 <ExpandableContext.Provider
-                    value={this.precreated[open === this.id]}
+                    value={this.precreated[open]}
                 >
                     {header}
                     {children && (
                         <ExpandableContent
-                            open={open === this.id}
+                            open={open}
                         >
                             {children}
                         </ExpandableContent>

@@ -14,7 +14,7 @@ export default class ExpandableList extends Component {
     static Context = ExpandableContext;
 
     state = {
-        open: null,
+        open: [],
     };
 
     constructor() {
@@ -34,7 +34,7 @@ export default class ExpandableList extends Component {
     onClose(id) {
         const { open } = this.state;
 
-        if (id !== open) {
+        if (open.indexOf(id) === -1) {
             return;
         }
 
@@ -45,7 +45,7 @@ export default class ExpandableList extends Component {
         let openId = null;
         const { open } = this.state;
 
-        if (id !== open) {
+        if (open.indexOf(id) === -1) {
             openId = id;
         }
 
@@ -55,11 +55,11 @@ export default class ExpandableList extends Component {
     changeOpen(id) {
         this.providerState = {
             ...this.providerState,
-            open: id,
+            open: [id],
         };
 
         this.setState({
-            open: id,
+            open: [id],
         });
     }
 
