@@ -23,13 +23,29 @@ const DEFAULT_CLASSNAMES = {
     closing: 'animation__accordion--close',
 };
 
+const DEFAULT_TIMEOUTS = {
+    opening: DEFAULT_OPEN_TIMEOUT,
+    closing: DEFAULT_CLOSE_TIMEOUT,
+};
+
 export default class ExpandableContent extends Component {
     static propTypes = {
-        classNames: PropTypes.object,
+        classNames: PropTypes.shape({
+            opening: PropTypes.string,
+            opened: PropTypes.string,
+            closing: PropTypes.string,
+            closed: PropTypes.string,
+        }),
+        timeout: PropTypes.shape({
+            opening: PropTypes.number,
+            closing: PropTypes.number,
+        }),
+        open: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         classNames: DEFAULT_CLASSNAMES,
+        timeout: DEFAULT_TIMEOUTS,
     };
 
     static getMaxHeight(state, style) {
@@ -96,9 +112,9 @@ export default class ExpandableContent extends Component {
         }
 
         if (open) {
-            this.open(timeout && timeout.open);
+            this.open(timeout && timeout.opening);
         } else {
-            this.close(timeout && timeout.close);
+            this.close(timeout && timeout.closing);
         }
     }
 
@@ -144,6 +160,7 @@ export default class ExpandableContent extends Component {
             className,
             classNames,
             open,
+            timeout,
             children,
             ...props
         } = this.props;
