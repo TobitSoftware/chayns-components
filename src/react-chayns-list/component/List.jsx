@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 const List = ({ className, children }) => (
-    <div className={classnames('list', className)}>
+    <div className={classnames('component-list', className)}>
         {children}
     </div>
 );
