@@ -1,66 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import ListItemHeader from './ListItemHeader';
 
-export default class ExpandableListHeader extends Component {
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        subtitle: PropTypes.string,
-        image: PropTypes.string,
-        onClick: PropTypes.func,
-        hideIndicator: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        image: null,
-        subtitle: null,
-        onClick: null,
-        hideIndicator: false,
-    };
-
-    render() {
-        const {
-            title,
-            subtitle,
-            image,
-            onClick,
-            hideIndicator,
-        } = this.props;
-
-        return (
-            <div
-                className={classnames('list-item__header', {
-                    'list-item__header--clickable': onClick,
-                })}
-                onClick={onClick}
-            >
-                {!hideIndicator && (
-                    <div className="list-item__indicator">
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </div>
-                )}
-                {image && (
-                    <div
-                        className="list-item__image"
-                        style={{
-                            backgroundImage: `url(${image})`
-                        }}
-                    />
-                )}
-                <div className="list-item__titles">
-                    <div className="list-item__title ellipsis">
-                        {title}
-                    </div>
-                    <div className="list-item__subtitle ellipsis">
-                        {subtitle}
-                    </div>
+const ExpandableListHeader = ({
+    title,
+    subtitle,
+    image,
+    onClick,
+    hideIndicator,
+    right,
+}) => {
+    return (
+        <ListItemHeader
+            title={title}
+            subtitle={subtitle}
+            onClick={onClick}
+            image={image}
+            right={right}
+            left={!hideIndicator && (
+                <div className="list-item__indicator">
+                    <FontAwesomeIcon icon={faChevronRight} />
                 </div>
-                <div className="list-item__spacer" />
-                <div className="list-item__right">Test</div>
-            </div>
-        );
-    }
-}
+            )}
+        />
+    );
+};
+
+ExpandableListHeader.propTypes = {
+    title: PropTypes.string.isRequired,
+    subtitle: PropTypes.string,
+    image: PropTypes.string,
+    onClick: PropTypes.func,
+    hideIndicator: PropTypes.bool,
+    right: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+};
+
+ExpandableListHeader.defaultProps = {
+    image: null,
+    subtitle: null,
+    onClick: null,
+    hideIndicator: false,
+    right: null,
+};
+
+export default ExpandableListHeader;
