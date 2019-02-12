@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+
 export default class ExpandableListHeader extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
@@ -22,6 +25,9 @@ export default class ExpandableListHeader extends Component {
 
         return (
             <div className="list-item__header">
+                <div className="list-item__indicator">
+                    <FontAwesomeIcon icon={faChevronRight} />
+                </div>
                 <div
                     className="list-item__image"
                     style={{

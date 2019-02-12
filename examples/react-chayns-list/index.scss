@@ -35,11 +35,31 @@
 
   &__right {
     min-width: 0;
+    flex-shrink: 0;
+  }
+
+  &__indicator {
+    flex-shrink: 0;
   }
 
   &--expanded {
     .list-item__titles {
       font-weight: bolder;
+    }
+
+    .list-item__indicator {
+      width: 30px;
+      height: 20px;
+
+      padding-right: 5px;
+      padding-left: 5px;
+
+      align-self: center;
+
+      .svg-inline--fa {
+        transition: transform .3s;
+        transform: rotate(90deg);
+      }
     }
   }
 }
