@@ -11,6 +11,8 @@ export default class ExpandableList extends Component {
         ]).isRequired,
     };
 
+    static Context = ExpandableContext;
+
     state = {
         open: null,
     };
