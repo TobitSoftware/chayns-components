@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import ExpandableContext from './ExpandableContext';
+import List from '../List';
 
 export default class ExpandableList extends Component {
     static propTypes = {
@@ -17,8 +18,8 @@ export default class ExpandableList extends Component {
         open: [],
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.providerState = {
             onOpen: this.onOpen.bind(this),
@@ -67,11 +68,11 @@ export default class ExpandableList extends Component {
         const { children } = this.props;
 
         return (
-            <div className="expandable-list">
+            <List className="list--expandable">
                 <ExpandableContext.Provider value={this.providerState}>
                     {children}
                 </ExpandableContext.Provider>
-            </div>
+            </List>
         );
     }
 }
