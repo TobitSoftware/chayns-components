@@ -11,7 +11,14 @@ function getId() {
 }
 
 class ExpandableListItem extends PureComponent {
-    static propTypes = {};
+    static propTypes = {
+        onToggle: PropTypes.func.isRequired,
+        open: PropTypes.number,
+    };
+
+    static defaultProps = {
+        open: null,
+    };
 
     constructor() {
         super();

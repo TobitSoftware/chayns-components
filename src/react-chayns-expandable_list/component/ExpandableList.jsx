@@ -5,7 +5,12 @@ import assign from 'object-assign';
 import ExpandableContext from './ExpandableContext';
 
 export default class ExpandableList extends Component {
-    static propTypes = {};
+    static propTypes = {
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node),
+        ]).isRequired,
+    };
 
     state = {
         open: null,
@@ -61,7 +66,6 @@ export default class ExpandableList extends Component {
 
         return (
             <div className="expandable-list">
-                {'ExpandableList'}
                 <ExpandableContext.Provider value={this.providerState}>
                     {children}
                 </ExpandableContext.Provider>
