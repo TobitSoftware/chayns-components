@@ -13,6 +13,8 @@ import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
+import ExpandableList from './react-chayns-expandable_list/component/ExpandableList';
+
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
@@ -63,6 +65,7 @@ export {
     ComboBox,
     ContextMenu,
     EmojiInput,
+    ExpandableList,
     Gallery,
     GridCalendar,
     Icon,
