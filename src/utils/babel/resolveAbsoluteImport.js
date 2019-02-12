@@ -12,7 +12,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         ExpandableContent: 'react-chayns-expandable_content/component/ExpandableContent.js',
-        ExpandableList: 'react-chayns-expandable_list/component/ExpandableList.js',
+        ExpandableList: 'react-chayns-list/component/ExpandableList.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
         Icon: 'react-chayns-icon/component/Icon.js',

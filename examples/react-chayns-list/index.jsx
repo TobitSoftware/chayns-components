@@ -6,6 +6,6 @@ import Example from './Example';
 window.chayns.ready.then(() => {
     ReactDom.render(
         <Example />,
-        document.querySelector('#react-chayns-expandable_list')
+        document.querySelector('#react-chayns-list')
     );
 });

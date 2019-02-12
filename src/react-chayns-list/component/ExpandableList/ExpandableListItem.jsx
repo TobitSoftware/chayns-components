@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import connectExpandableContext from './connectExpandableContext';
-import ExpandableContent from '../../react-chayns-expandable_content/component/ExpandableContent';
+import ExpandableContent from '../../../react-chayns-expandable_content/component/ExpandableContent';
 import ExpandableContext from './ExpandableContext';
 
 let maxId = 1;
