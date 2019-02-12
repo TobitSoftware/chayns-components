@@ -105,7 +105,9 @@ class AbstractExpandableListItem extends PureComponent {
                         <ExpandableContent
                             open={open}
                         >
-                            {children}
+                            <div className="list-item__content">
+                                {children}
+                            </div>
                         </ExpandableContent>
                     )}
                 </ExpandableContext.Provider>
