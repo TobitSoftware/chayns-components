@@ -1,7 +1,19 @@
 .list-item {
+  padding: 0 9px;
+
+  &--clickable:hover, &--expanded {
+    background-color: #FFFFFF;
+  }
+
+  &--clickable .list-item__header {
+    cursor: pointer;
+  }
+
   &__header {
     display: flex;
     flex-direction: row;
+    height: 64px;
+    padding: 12px 0;
   }
 
   &__image {
@@ -23,6 +35,7 @@
     flex-direction: column;
     font-size: 14px;
     min-width: 0;
+    justify-content: center;
   }
 
   &__subtitle {
@@ -40,6 +53,18 @@
 
   &__indicator {
     flex-shrink: 0;
+
+    width: 30px;
+    height: 20px;
+
+    padding-right: 5px;
+    padding-left: 5px;
+
+    align-self: center;
+
+    .svg-inline--fa {
+      transition: transform .3s;
+    }
   }
 
   &--expanded {
@@ -48,16 +73,7 @@
     }
 
     .list-item__indicator {
-      width: 30px;
-      height: 20px;
-
-      padding-right: 5px;
-      padding-left: 5px;
-
-      align-self: center;
-
       .svg-inline--fa {
-        transition: transform .3s;
         transform: rotate(90deg);
       }
     }

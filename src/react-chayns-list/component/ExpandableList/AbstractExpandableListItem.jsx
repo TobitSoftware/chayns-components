@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
 import connectExpandableContext from './connectExpandableContext';
 import ExpandableContent from '../../../react-chayns-expandable_content/component/ExpandableContent';
 import ExpandableContext from './ExpandableContext';
@@ -23,11 +25,15 @@ class AbstractExpandableListItem extends PureComponent {
         header: PropTypes.node.isRequired,
         onOpen: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired,
+        className: PropTypes.string,
+        clickable: PropTypes.bool,
     };
 
     static defaultProps = {
         open: false,
         children: null,
+        className: '',
+        clickable: false,
     };
 
     constructor(props) {
@@ -43,13 +49,13 @@ class AbstractExpandableListItem extends PureComponent {
             true: {
                 onOpen: this.onOpen,
                 onClose: this.onClose,
-                onTrigger: this.onToggle,
+                onToggle: this.onToggle,
                 open: true,
             },
             false: {
                 onOpen: this.onOpen,
                 onClose: this.onClose,
-                onTrigger: this.onToggle,
+                onToggle: this.onToggle,
                 open: false,
             },
         };
@@ -77,13 +83,20 @@ class AbstractExpandableListItem extends PureComponent {
         const {
             header,
             children,
+            className,
+            clickable,
             open: openIds,
         } = this.props;
 
         const open = (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
 
         return (
-            <div onClick={this.onToggle}>
+            <div
+                className={classnames('list-item', className, {
+                    'list-item--expanded': open,
+                    'list-item--clickable': clickable,
+                })}
+            >
                 <ExpandableContext.Provider
                     value={this.precreated[open]}
                 >
