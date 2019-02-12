@@ -11,6 +11,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ComboBox: 'react-chayns-combobox/component/ComboBox.js',
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
+        ExpandableContent: 'react-chayns-expandable_content/component/ExpandableContent.js',
         ExpandableList: 'react-chayns-expandable_list/component/ExpandableList.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
