@@ -4,7 +4,16 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import fs from 'fs';
 
 const ROOT_PATH = path.resolve('.');
-const { SSL_CERT, SSL_KEY } = process.env;
+
+let sslCert;
+let sslKey;
+try {
+    sslCert = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.crt'));
+    sslKey = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.key'));
+} catch (err) {
+    sslCert = null;
+    sslKey = null;
+}
 
 export default (env) => {
     const production = !!(env && env.prod);
@@ -21,19 +30,19 @@ export default (env) => {
         },
         output: {
             path: path.resolve(ROOT_PATH, 'build'),
-                filename: '[name].bundle.js'
+            filename: '[name].bundle.js'
         },
         mode: (production ? 'production' : 'development'),
         devServer: {
             host: '0.0.0.0',
-                disableHostCheck: true,
-                port: 9009,
-                historyApiFallback: true,
-                compress: true,
-                hot: true,
-                https: !!(SSL_CERT && SSL_KEY),
-                cert: SSL_CERT ? fs.readFileSync(path.join(__dirname, SSL_CERT)) : undefined,
-                key: SSL_KEY ? fs.readFileSync(path.join(__dirname, SSL_KEY)) : undefined,
+            disableHostCheck: true,
+            port: 9009,
+            historyApiFallback: true,
+            compress: true,
+            hot: true,
+            https: !!(sslCert && sslKey),
+            cert: sslCert,
+            key: sslKey,
         },
         module: {
             rules: [
@@ -68,7 +77,7 @@ export default (env) => {
             ]
         },
         devtool: 'inline-source-map',
-            plugins: [
+        plugins: [
             new HtmlWebpackPlugin({
                 template: path.resolve(ROOT_PATH, 'examples', 'index.html')
             }),
