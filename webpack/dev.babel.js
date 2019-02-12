@@ -76,7 +76,7 @@ export default (env) => {
             new webpack.NamedModulesPlugin(),
             new webpack.NoEmitOnErrorsPlugin(),
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
+                'process.env.NODE_ENV': JSON.stringify((production || process.env.NODE_ENV === 'production') ? 'production' : 'development'),
                 __DEV__: !production,
                 __QA__: false,
                 __LIVE__: production,
