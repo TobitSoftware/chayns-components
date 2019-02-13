@@ -1,12 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import AbstractList from './AbstractList';
+import ExpandableList from './ExpandableList/ExpandableList';
 
-const List = ({ className, children }) => (
-    <div className={classnames('component-list', className)}>
-        {children}
-    </div>
-);
+const List = ({ className, children, notExpandable }) => {
+    if (notExpandable) {
+        return (
+            <AbstractList
+                className={className}
+            >
+                {children}
+            </AbstractList>
+        );
+    }
+
+    return (
+        <ExpandableList
+            className={className}
+        >
+            {children}
+        </ExpandableList>
+    );
+};
 
 List.propTypes = {
     className: PropTypes.string,
@@ -14,11 +29,13 @@ List.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node)
     ]),
+    notExpandable: PropTypes.bool,
 };
 
 List.defaultProps = {
     className: null,
     children: null,
+    notExpandable: false,
 };
 
 export default List;

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import ExpandableContext from './ExpandableContext';
-import List from '../List';
+import AbstractList from '../AbstractList';
 
 export default class ExpandableList extends Component {
     static propTypes = {
@@ -10,6 +11,11 @@ export default class ExpandableList extends Component {
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node),
         ]).isRequired,
+        className: PropTypes.string,
+    };
+
+    static defaultProps = {
+        className: null,
     };
 
     static Context = ExpandableContext;
@@ -65,14 +71,14 @@ export default class ExpandableList extends Component {
     }
 
     render() {
-        const { children } = this.props;
+        const { children, className } = this.props;
 
         return (
-            <List className="list--expandable">
+            <AbstractList className={classnames('list--expandable', className)}>
                 <ExpandableContext.Provider value={this.providerState}>
                     {children}
                 </ExpandableContext.Provider>
-            </List>
+            </AbstractList>
         );
     }
 }
