@@ -9,7 +9,7 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
 
-export default class Example extends Component {
+export default class SetupWizardExample extends Component {
     constructor() {
         super();
         this.state = {

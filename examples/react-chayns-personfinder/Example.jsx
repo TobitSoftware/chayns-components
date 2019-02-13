@@ -4,7 +4,7 @@ import { PersonFinder } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 
-export default class Example extends PureComponent {
+export default class PersonFinderExample extends PureComponent {
     render() {
         return (
             <ExampleContainer headline="PersonFinder">
@@ -24,9 +24,7 @@ export default class Example extends PureComponent {
                     }}
                     style={{ marginTop: '10px' }}
                 >
-
-
-                    Clear
+                    {'Clear'}
                 </Button>
                 <PersonFinder
                     stopPropagation

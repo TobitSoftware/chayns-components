@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
-import { faInfoCircle, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
@@ -9,7 +9,7 @@ import Button from '../../src/react-chayns-button/component/Button';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class ContextMenuExample extends Component {
     constructor() {
         super();
 

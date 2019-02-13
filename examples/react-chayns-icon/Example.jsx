@@ -6,7 +6,7 @@ import { Icon } from '../../src/index';
 
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class IconExample extends PureComponent {
     render() {
         return (
             <ExampleContainer headline="Icon">

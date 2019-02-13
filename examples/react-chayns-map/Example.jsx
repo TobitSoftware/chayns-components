@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import ExampleContainer from '../ExampleContainer';
 import Map from '../../src/react-chayns-map/component/Map';
 
-export default class Example extends PureComponent {
+export default class MapExample extends PureComponent {
     render() {
         return (
             <ExampleContainer headline="Map">

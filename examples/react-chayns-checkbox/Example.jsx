@@ -4,7 +4,7 @@ import { Checkbox } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
-export default class Example extends Component {
+export default class CheckboxExample extends Component {
     constructor() {
         super();
         this.state = {

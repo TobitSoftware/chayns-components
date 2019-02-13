@@ -5,7 +5,7 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { Badge, Icon } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class BadgeExample extends PureComponent {
     render() {
         return (
             <ExampleContainer

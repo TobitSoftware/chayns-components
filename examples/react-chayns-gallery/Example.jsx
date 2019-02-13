@@ -4,7 +4,7 @@ import ExampleContainer from '../ExampleContainer';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 
-export default class Example extends Component {
+export default class GalleryExample extends Component {
     constructor(props) {
         super(props);
         this.state = {

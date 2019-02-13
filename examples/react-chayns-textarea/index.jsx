@@ -1,24 +1,11 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import ExampleContainer from '../ExampleContainer';
-
-import { TextArea } from '../../src/index';
+import Example from './Example';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
-        <ExampleContainer headline="TextArea">
-            <TextArea
-                stopPropagation
-                placeholder="Input"
-                onChange={(data) => {
-                    console.log(data);
-                }}
-                defaultValue="Test"
-                autogrow
-                style={{ width: '100%' }}
-            />
-        </ExampleContainer>,
+        <Example />,
         document.querySelector('#react-chayns-textarea')
     );
 });

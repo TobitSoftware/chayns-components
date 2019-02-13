@@ -5,7 +5,7 @@ import { Button, ChooseButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import './example.scss';
 
-export default class Example extends PureComponent {
+export default class ButtonExample extends PureComponent {
     render() {
         return (
             <ExampleContainer headline="Button">

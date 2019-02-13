@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 
-export default class Example extends Component {
+export default class SmallWaitCursorExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true };

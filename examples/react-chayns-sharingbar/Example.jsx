@@ -3,7 +3,7 @@ import { SharingBar } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
 
-export default class Example extends Component {
+export default class SharingBarExample extends Component {
     render() {
         return(
             <ExampleContainer headline="SharingBar">
