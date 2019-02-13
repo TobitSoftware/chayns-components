@@ -1,34 +1,81 @@
-import './react-chayns-accordion/index';
-import './react-chayns-amountcontrol/index';
-import './react-chayns-badge/index';
-import './react-chayns-button/index';
-import './react-chayns-calendar/index';
-import './react-chayns-checkbox/index';
-import './react-chayns-combobox/index';
-import './react-chayns-contextmenu/index';
-import './react-chayns-emoji_input/index';
-import './react-chayns-gallery/index';
-import './react-chayns-gridcalendar/index';
-import './react-chayns-icon/index';
-import './react-chayns-input/index';
-import './react-chayns-map/index';
-import './react-chayns-modeswitch/index';
-import './react-chayns-openingTimes/index';
-import './react-chayns-personfinder/index';
-import './react-chayns-radiobutton/index';
-import './react-chayns-receiverinput/index';
-import './react-chayns-rfid_input/index';
-import './react-chayns-scrollview/index';
-import './react-chayns-selectbutton/index';
-import './react-chayns-selectlist/index';
-import './react-chayns-setupwizard/index';
-import './react-chayns-sharingbar/index';
-import './react-chayns-smallwaitcursor/index';
-import './react-chayns-textarea/index';
-import './react-chayns-textstring/index';
-import './react-chayns-tooltip/index';
-import './react-chayns-upload/index';
 import React from 'react';
+import ReactDom from 'react-dom';
+
+import AccordionExample from './react-chayns-accordion/Example';
+import AmountControlExample from './react-chayns-amountcontrol/Example';
+import BadgeExample from './react-chayns-badge/Example';
+import ButtonExample from './react-chayns-button/Example';
+import CalendarExample from './react-chayns-calendar/Example';
+import CheckboxExample from './react-chayns-checkbox/Example';
+import ComboBoxExample from './react-chayns-combobox/Example';
+import ContextMenuExample from './react-chayns-contextmenu/Example';
+import EmojiInputExample from './react-chayns-emoji_input/Example';
+import GalleryExample from './react-chayns-gallery/Example';
+import GridCalendarExample from './react-chayns-gridcalendar/Example';
+import IconExample from './react-chayns-icon/Example';
+import InputExample from './react-chayns-input/Example';
+import ModeSwitchExample from './react-chayns-modeswitch/Example';
+import OpeningTimesExample from './react-chayns-openingTimes/Example';
+import PersonFinderExample from './react-chayns-personfinder/Example';
+import RadioButtonExample from './react-chayns-radiobutton/Example';
+import ReceiverInputExample from './react-chayns-receiverinput/Example';
+import RfidInputExample from './react-chayns-rfid_input/Example';
+import ScrollViewExample from './react-chayns-scrollview/Example';
+import SelectButtonExample from './react-chayns-selectbutton/Example';
+import SelectListExample from './react-chayns-selectlist/Example';
+import SetupWizardExample from './react-chayns-setupwizard/Example';
+import SharingBarExample from './react-chayns-sharingbar/Example';
+import SmallWaitCursorExample from './react-chayns-smallwaitcursor/Example';
+import TextAreaExample from './react-chayns-textarea/Example';
+import TextStringExample from './react-chayns-textstring/Example';
+import TooltipExample from './react-chayns-tooltip/Example';
+import FileUploadExample from './react-chayns-upload/Example';
+import TextString from '../src/react-chayns-textstring/component/TextString';
+
+async function bootstrap() {
+    await window.chayns.ready;
+
+    await TextString.loadLibrary('TextStringTest');
+    await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
+
+    ReactDom.render(
+        <div className="examples">
+            <AccordionExample />
+            <AmountControlExample />
+            <BadgeExample />
+            <ButtonExample />
+            <CalendarExample />
+            <CheckboxExample />
+            <ComboBoxExample />
+            <ContextMenuExample />
+            <EmojiInputExample />
+            <GalleryExample />
+            <GridCalendarExample />
+            <IconExample />
+            <InputExample />
+            {/* <MapExample /> */}
+            <ModeSwitchExample />
+            <OpeningTimesExample />
+            <PersonFinderExample />
+            <RadioButtonExample />
+            <ReceiverInputExample />
+            <RfidInputExample />
+            <ScrollViewExample />
+            <SelectButtonExample />
+            <SelectListExample />
+            <SetupWizardExample />
+            <SharingBarExample />
+            <SmallWaitCursorExample />
+            <TextAreaExample />
+            <TextStringExample />
+            <TooltipExample />
+            <FileUploadExample />
+        </div>,
+        document.querySelector('#app')
+    );
+}
+
+bootstrap();
 
 if (process.env.NODE_ENV !== 'production') {
     const { whyDidYouUpdate } = require('why-did-you-update');
