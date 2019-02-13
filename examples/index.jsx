@@ -19,6 +19,7 @@ import MapExample from './react-chayns-map/Example';
 import ModeSwitchExample from './react-chayns-modeswitch/Example';
 import OpeningTimesExample from './react-chayns-openingTimes/Example';
 import PersonFinderExample from './react-chayns-personfinder/Example';
+import PersonFinder2Example from './react-chayns-personfinder_2/Example';
 import RadioButtonExample from './react-chayns-radiobutton/Example';
 import ReceiverInputExample from './react-chayns-receiverinput/Example';
 import RfidInputExample from './react-chayns-rfid_input/Example';
@@ -62,6 +63,7 @@ async function bootstrap() {
             <ModeSwitchExample />
             <OpeningTimesExample />
             <PersonFinderExample />
+            <PersonFinder2Example />
             <RadioButtonExample />
             <ReceiverInputExample />
             <RfidInputExample />
