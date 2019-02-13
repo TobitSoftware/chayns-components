@@ -41,11 +41,19 @@ export default class ExpandableContent extends Component {
             closing: PropTypes.number,
         }),
         open: PropTypes.bool.isRequired,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.arrayOf(PropTypes.node)
+        ]).isRequired,
     };
 
     static defaultProps = {
         classNames: DEFAULT_CLASSNAMES,
         timeout: DEFAULT_TIMEOUTS,
+        style: null,
+        className: null,
     };
 
     static getMaxHeight(state, style) {
