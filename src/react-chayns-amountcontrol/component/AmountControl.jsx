@@ -178,10 +178,6 @@ export default class AmountControl extends Component {
             plusIcon,
         } = this.props;
         const { tempAmount, tempValue, showInput } = this.state;
-        if (window.debugLevel >= 3) {
-            // eslint-disable-next-line no-console
-            console.debug('render amount-control component', this.props, this.state);
-        }
 
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
