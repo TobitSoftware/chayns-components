@@ -14,6 +14,7 @@ import GalleryExample from './react-chayns-gallery/Example';
 import GridCalendarExample from './react-chayns-gridcalendar/Example';
 import IconExample from './react-chayns-icon/Example';
 import InputExample from './react-chayns-input/Example';
+import MapExample from './react-chayns-map/Example';
 import ModeSwitchExample from './react-chayns-modeswitch/Example';
 import OpeningTimesExample from './react-chayns-openingTimes/Example';
 import PersonFinderExample from './react-chayns-personfinder/Example';
@@ -53,7 +54,7 @@ async function bootstrap() {
             <GridCalendarExample />
             <IconExample />
             <InputExample />
-            {/* <MapExample /> */}
+             <MapExample />
             <ModeSwitchExample />
             <OpeningTimesExample />
             <PersonFinderExample />
@@ -78,6 +79,7 @@ async function bootstrap() {
 bootstrap();
 
 if (process.env.NODE_ENV !== 'production') {
+    /* eslint-disable-next-line global-require */
     const { whyDidYouUpdate } = require('why-did-you-update');
     whyDidYouUpdate(React);
 }
