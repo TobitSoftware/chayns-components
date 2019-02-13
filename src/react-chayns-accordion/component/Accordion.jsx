@@ -45,6 +45,7 @@ export default class Accordion extends PureComponent {
         searchPlaceholder: PropTypes.string,
         removeContentClosed: PropTypes.bool,
         onClick: PropTypes.func,
+        disabled: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -71,6 +72,7 @@ export default class Accordion extends PureComponent {
         searchPlaceholder: '',
         removeContentClosed: false,
         onClick: null,
+        disabled: false,
     };
 
     static dataGroups = {};
@@ -162,43 +164,45 @@ export default class Accordion extends PureComponent {
     }
 
     handleAccordionClick = (event) => {
-        const { fixed, onClick } = this.props;
-
-        if (!fixed && event !== null) {
-            let trigger = true;
-            let node = event.target;
-            for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
-                if (node.classList) {
-                    if (node.classList.contains('accordion--no-trigger')) {
-                        trigger = false;
-                        break;
-                    }
-                    if (node.classList.contains('accordion__head')) {
-                        break;
-                    }
-                }
-                if (node.parentNode) {
-                    node = node.parentNode;
-                } else {
-                    trigger = false; // no parent node and no break at accordion__head -> portal (e.g. contextMenu) -> no trigger
-                    break;
-                }
-            }
-
-            if (trigger) {
-                const { currentState } = this.state;
-                const { dataGroup } = this.props;
-
-                if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
-                    this.accordionCloseListener(event);
-                } else {
-                    this.accordionOpenListener(event);
-                }
-            }
-        }
+        const { fixed, onClick, disabled } = this.props;
 
         if (onClick) {
             onClick(event);
+        }
+
+        if (fixed || disabled || event === null) {
+            return;
+        }
+
+        let trigger = true;
+        let node = event.target;
+        for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
+            if (node.classList) {
+                if (node.classList.contains('accordion--no-trigger')) {
+                    trigger = false;
+                    break;
+                }
+                if (node.classList.contains('accordion__head')) {
+                    break;
+                }
+            }
+            if (node.parentNode) {
+                node = node.parentNode;
+            } else {
+                trigger = false; // no parent node and no break at accordion__head -> portal (e.g. contextMenu) -> no trigger
+                break;
+            }
+        }
+
+        if (trigger) {
+            const { currentState } = this.state;
+            const { dataGroup } = this.props;
+
+            if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
+                this.accordionCloseListener(event);
+            } else {
+                this.accordionOpenListener(event);
+            }
         }
     };
 
@@ -271,7 +275,8 @@ export default class Accordion extends PureComponent {
             noIcon,
             onSearch,
             onSearchEnter,
-            searchPlaceholder
+            searchPlaceholder,
+            disabled,
         } = this.props;
 
         const { currentState } = this.state;
@@ -281,6 +286,7 @@ export default class Accordion extends PureComponent {
                     accordion: true,
                     'accordion--wrapped': (isWrapped === true),
                     'accordion--open': currentState === OPEN,
+                    'accordion--disabled': disabled,
                     [className]: className
                 })}
                 ref={(ref) => {

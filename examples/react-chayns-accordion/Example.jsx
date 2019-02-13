@@ -172,6 +172,13 @@ export default class Example extends Component {
                         />
                     </div>
                 </Accordion>
+                <Accordion
+                    head="Accordion (disabled)"
+                    onClick={() => console.log('Disabled accordion clicked.')}
+                    disabled
+                >
+                    Content
+                </Accordion>
             </ExampleContainer>
         );
     }
