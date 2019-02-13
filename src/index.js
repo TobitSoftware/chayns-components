@@ -13,11 +13,16 @@ import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
+import ExpandableContent from './react-chayns-expandable_content/component/ExpandableContent';
+
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
 import Icon from './react-chayns-icon/component/Icon';
 import Input from './react-chayns-input/component/Input';
+
+import List from './react-chayns-list/component/List';
+import ListItem from './react-chayns-list/component/ListItem';
 
 import ModeSwitch from './react-chayns-modeswitch/component/ModeSwitch';
 import Mode from './react-chayns-modeswitch/component/Mode';
@@ -63,10 +68,13 @@ export {
     ComboBox,
     ContextMenu,
     EmojiInput,
+    ExpandableContent,
     Gallery,
     GridCalendar,
     Icon,
     Input,
+    List,
+    ListItem,
     ModeSwitch,
     Mode,
     OpeningTimes,
