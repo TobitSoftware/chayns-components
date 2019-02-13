@@ -30,12 +30,12 @@ ListItem.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node)
     ]),
-    notExpandable: PropTypes.bool,
+    hideIndicator: PropTypes.bool,
 };
 
 ListItem.defaultProps = {
     children: null,
-    notExpandable: false,
+    hideIndicator: false,
 };
 
 export default ListItem;
