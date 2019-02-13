@@ -2,24 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import classnames from 'classnames';
+
 import isDescendant from '../../utils/isDescendant';
 
 export default class InputBox extends Component {
     static propTypes = {
         inputComponent: PropTypes.node.isRequired,
         parent: PropTypes.node,
-        handleFocus: PropTypes.func,
+        onFocus: PropTypes.func,
         children: PropTypes.oneOfType([
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node),
         ]),
+        className: PropTypes.string,
         boxClassName: PropTypes.string,
     };
 
     static defaultProps = {
         parent: document.getElementsByClassName('tapp')[0],
-        handleFocus: null,
+        onFocus: null,
         children: null,
+        className: null,
         boxClassName: null,
     };
 
@@ -76,14 +79,14 @@ export default class InputBox extends Component {
     }
 
     handleFocus(e) {
-        const { handleFocus } = this.props;
+        const { onFocus } = this.props;
 
         this.setState({
             hidden: false,
         });
 
-        if (handleFocus) {
-            return handleFocus(e);
+        if (onFocus) {
+            return onFocus(e);
         }
 
         return null;
@@ -94,7 +97,8 @@ export default class InputBox extends Component {
             inputComponent: InputComponent,
             children,
             parent,
-            handleFocus,
+            onFocus,
+            className,
             boxClassName,
             ...props
         } = this.props;
@@ -111,7 +115,7 @@ export default class InputBox extends Component {
                 style={{
                     display: 'inline-block'
                 }}
-                className="cc__input-box"
+                className={classnames('cc__input-box', className)}
                 ref={this.setWrapperRef}
             >
                 <InputComponent
