@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Icon from '../../react-chayns-icon/component/Icon';
@@ -61,6 +60,11 @@ export default class ModeSwitch extends Component {
         this.setMode = this.setMode.bind(this);
         this.onChange = this.onChange.bind(this);
         this.init = this.init.bind(this);
+        this.state = {
+            modes: [],
+            activeModeId: null,
+            open: false
+        };
 
         window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(this.init);
@@ -118,52 +122,39 @@ export default class ModeSwitch extends Component {
         return newModes;
     }
 
-    init() {
+    async init() {
         const { defaultMode, save, modes } = this.props;
         if (chayns.env.user.isAuthenticated) {
             globalState = {
                 modes: this.setModes(modes),
-                activeModeId: defaultMode || 0
-            };
-            this.setState({
-                ...globalState,
+                activeModeId: defaultMode || 0,
                 open: false
-            });
+            };
 
             chayns.removeAdminSwitchListener(this.switchMode);
             chayns.addAdminSwitchListener(this.switchMode);
-            if (!save && !defaultMode) {
-                if (chayns.env.user.adminMode) {
-                    globalState.activeModeId = 1;
-                    this.state.activeModeId = 1;
-                } else {
-                    globalState.activeModeId = 0;
-                    this.state.activeModeId = 0;
-                }
+            if (defaultMode) {
+                globalState.activeModeId = defaultMode;
             }
             if (save) {
-                const storage = window.chayns.storage.get('react__modeSwitch--currentMode')
-                    .then(() => {
-                        if (storage.object) {
-                            globalState.activeModeId = storage.object;
-                            this.setState({ activeModeId: storage.object });
-                            this.onChange(storage.object);
-                        } else {
-                            const { activeModeId } = this.state;
-                            this.onChange(activeModeId);
-                        }
-                    });
-            } else {
-                const { activeModeId } = this.state;
-                this.onChange(activeModeId);
+                const storage = await window.chayns.storage.get('react__modeSwitch--currentMode');
+                if (chayns.utils.isNumber(storage.object)) {
+                    globalState.activeModeId = storage.object;
+                }
+            }
+            if (globalState.activeModeId === 0 || globalState.activeModeId === 1) {
+                globalState.activeModeId = chayns.env.user.adminMode ? 1 : 0;
             }
         } else {
-            this.setState({
+            globalState = {
                 modes: [],
                 activeModeId: null,
                 open: false
-            });
+            };
         }
+
+        this.setState(globalState);
+        this.onChange(globalState.activeModeId);
     }
 
     switchMode(id) {
@@ -219,7 +210,7 @@ export default class ModeSwitch extends Component {
                         className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId !== 0 })}
                         onClick={this.toggleModeSwitch}
                     >
-                        <Icon icon={faCog}/>
+                        <Icon icon="ts-cog"/>
                     </div>
                 </div>
             );
