@@ -127,12 +127,9 @@ export default class InputBox extends Component {
                         onClick={e => e.preventDefault()}
                         className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
                         style={rect ? {
-                            position: 'absolute',
                             width: `${rect.width}px`,
                             top: `${rect.bottom}px`,
                             left: `${rect.left}px`,
-                            overflowX: 'hidden',
-                            overflowY: 'auto',
                         } : null}
                         ref={this.setBoxRef}
                     >
