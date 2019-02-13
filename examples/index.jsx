@@ -33,6 +33,7 @@ import TextStringExample from './react-chayns-textstring/Example';
 import TooltipExample from './react-chayns-tooltip/Example';
 import FileUploadExample from './react-chayns-upload/Example';
 import TextString from '../src/react-chayns-textstring/component/TextString';
+import InputBoxExample from './react-chayns-input_box/Example';
 
 async function bootstrap() {
     await window.chayns.ready;
@@ -55,6 +56,7 @@ async function bootstrap() {
             <GridCalendarExample />
             <IconExample />
             <InputExample />
+            <InputBoxExample />
             <ListExample />
             <MapExample />
             <ModeSwitchExample />
