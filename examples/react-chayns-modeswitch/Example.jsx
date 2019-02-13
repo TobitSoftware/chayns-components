@@ -6,7 +6,7 @@ import Mode from '../../src/react-chayns-modeswitch/component/Mode';
 
 import './example.scss';
 
-export default class Example extends Component {
+export default class ModeSwitchExample extends Component {
     constructor() {
         super();
         this.state = { mode: null };

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { EmojiInput } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class EmojiInputExample extends Component {
     constructor() {
         super();
 

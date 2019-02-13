@@ -4,7 +4,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { Input } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class InputExample extends PureComponent {
     onBlur(value, valid) {
         console.log('onBlur', value, valid);
     }

@@ -6,7 +6,7 @@ import { AmountControl } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class AmountControlExample extends Component {
     constructor() {
         super();
 

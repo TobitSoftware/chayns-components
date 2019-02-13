@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { GridCalendar } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class GridCalendarExample extends Component {
     constructor() {
         super();
         this.state = {

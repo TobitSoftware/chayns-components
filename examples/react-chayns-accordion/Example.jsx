@@ -4,14 +4,12 @@ import React, { Component } from 'react';
 import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
-import Button from '../../src/react-chayns-button/component/Button';
 import Input from '../../src/react-chayns-input/component/Input';
-import Icon from '../../src/react-chayns-icon/component/Icon';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
-export default class Example extends Component {
+export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true };

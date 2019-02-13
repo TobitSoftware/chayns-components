@@ -4,7 +4,7 @@ import { OpeningTimes } from '../../src/index';
 
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class OpeningTimesExample extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

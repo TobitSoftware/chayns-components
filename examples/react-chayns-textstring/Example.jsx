@@ -5,7 +5,7 @@ import { TextString } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class TextStringExample extends Component {
     constructor(props) {
         super(props);
         // Take a look in index.jsx

@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import ExampleContainer from '../ExampleContainer';
 import ReceiverInput from '../../src/react-chayns-receiverinput/component/ReceiverInput';
 
-export default class Example extends PureComponent {
+export default class ReceiverInputExample extends PureComponent {
     render() {
         return (
             <ExampleContainer headline="ReceiverInput">

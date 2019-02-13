@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { SelectButton } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class SelectButtonExample extends PureComponent {
     render() {
         const pizza = [
             {

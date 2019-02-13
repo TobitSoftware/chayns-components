@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Calendar } from '../../src/index';
 import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class CalendarExample extends Component {
     constructor(props) {
         super(props);
         this.state = { selected: new Date('2018-12-04T00:00:00') };
