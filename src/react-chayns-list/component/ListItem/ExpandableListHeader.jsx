@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import ListItemHeader from './ListItemHeader';
 
 const ExpandableListHeader = ({
@@ -22,7 +20,9 @@ const ExpandableListHeader = ({
             right={right}
             left={!hideIndicator && (
                 <div className="list-item__indicator">
-                    <FontAwesomeIcon icon={faChevronRight} />
+                    <div className="icon-wrapper">
+                        <i className="ts-icon ts-angle-right" />
+                    </div>
                 </div>
             )}
         />
