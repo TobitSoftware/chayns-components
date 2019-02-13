@@ -32,6 +32,8 @@ export default class Tooltip extends Component {
             y: PropTypes.number.isRequired,
         }),
         childrenStyle: PropTypes.object,
+        childrenClassNames: PropTypes.string,
+        preventTriggerStyle: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -44,6 +46,8 @@ export default class Tooltip extends Component {
         parent: document.getElementsByClassName('tapp')[0],
         coordinates: null,
         childrenStyle: null,
+        childrenClassNames: null,
+        preventTriggerStyle: false,
     };
 
     constructor() {
@@ -214,7 +218,9 @@ export default class Tooltip extends Component {
     }
 
     render() {
-        const { children, parent, childrenStyle } = this.props;
+        const {
+            children, parent, childrenStyle, preventTriggerStyle, childrenClassNames
+        } = this.props;
 
         return [
             ReactDOM.createPortal(
@@ -222,7 +228,7 @@ export default class Tooltip extends Component {
                 parent
             ),
             <div
-                className="cc__tooltip__children"
+                className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
                 ref={(node) => {
                     this.childrenNode = node;
                 }}

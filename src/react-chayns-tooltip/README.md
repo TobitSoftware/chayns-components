@@ -47,6 +47,8 @@ The component got the following properties:
 | parent                | DOM Node into which the tooltip will be rendered                                                                      | node      | tapp  | false |
 | coordinates           | Coordinates of the place to which the tooltip is rendered. Example: {x: 100, y: 100}                                  | object    |       | false |
 | childrenStyle         | Style for the children node.                                                                                          | object    |       | false |
+| childrenClassNames    | ClassNames for the children node.                                                                                     | string    |       | false |
+| preventTriggerStyle   | Prevent underline for children node.                                                                                  | bool      | false | false |
 
 Also, you can call the methods show() and hide() on the reference of the tooltip.
 
