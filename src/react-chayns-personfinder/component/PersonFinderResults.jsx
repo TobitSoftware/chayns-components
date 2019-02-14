@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import findRelations from '../utils/findRelations';
+import PersonFinderResultItem from './PersonFinderResultItem';
 
 export default class PersonFinderResults extends Component {
     static propTypes = {
@@ -56,6 +57,10 @@ export default class PersonFinderResults extends Component {
         });
 
         this.fetchData(value);
+    }
+
+    onClick(value) {
+        console.log(value);
     }
 
     async fetchData(value, clear = true) {
@@ -115,14 +120,60 @@ export default class PersonFinderResults extends Component {
         return findRelations(type, value, this.skip[type], take);
     }
 
+    renderSites(relations) {
+        if (relations.length === 0) {
+            return null;
+        }
+
+        return relations.map(relation => (
+            <PersonFinderResultItem
+                key={relation.siteId}
+                relation={{
+                    siteId: relation.siteId,
+                    locationId: relation.locationId,
+                    score: relation.score,
+                    name: relation.name,
+                    relations: relation.relations,
+                    image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
+                }}
+                type={SITE_RELATION}
+                onClick={this.onClick}
+            />
+        ));
+    }
+
+    renderPersons(relations) {
+        if (relations.length === 0) {
+            return null;
+        }
+
+        return relations.map(relation => (
+            <PersonFinderResultItem
+                key={relation.personId}
+                relation={{
+                    personId: relation.personId,
+                    userId: relation.userId,
+                    firstName: relation.firstName,
+                    lastName: relation.lastName,
+                    score: relation.score,
+                    image: `https://sub60.tobit.com/u/${relation.personId}?size=40`,
+                    relations: relation.relations,
+                }}
+                type={PERSON_RELATION}
+                onClick={this.onClick}
+            />
+        ));
+    }
+
     render() {
         const { persons, sites } = this.state;
 
-        console.log(persons, sites);
-
         return (
             <div className="cc__person-finder__results">
-                {'Test'}
+                {this.renderPersons(persons.related)}
+                {this.renderSites(sites.related)}
+                {this.renderPersons(persons.unrelated)}
+                {this.renderSites(sites.unrelated)}
             </div>
         );
     }
