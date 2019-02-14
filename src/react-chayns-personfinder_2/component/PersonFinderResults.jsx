@@ -48,10 +48,10 @@ export default class PersonFinderResults extends Component {
     }
 
     componentDidUpdate() {
-        const { value } = this.props;
+        const { value, hide } = this.props;
         const { value: stateValue } = this.state;
 
-        if (stateValue !== value) {
+        if (!hide && stateValue !== value) {
             this.setValue(value);
         }
     }
@@ -110,7 +110,6 @@ export default class PersonFinderResults extends Component {
             }
 
             if (siteResults) {
-                console.log(siteResults);
                 this.skip[SITE_RELATION] += (siteResults.related.length + siteResults.unrelated.length);
 
                 sites.related.push(...siteResults.related);
@@ -187,7 +186,12 @@ export default class PersonFinderResults extends Component {
     }
 
     render() {
+        const { hide } = this.props;
         const { persons, sites } = this.state;
+
+        if (hide) {
+            return null;
+        }
 
         const relatedPersons = this.renderPersons(persons.related);
         const relatedSites = this.renderSites(sites.related);
