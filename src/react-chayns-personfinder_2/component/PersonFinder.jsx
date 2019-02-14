@@ -31,20 +31,22 @@ export default class PersonFinder extends Component {
     }
 
     render() {
+        const { person, site, ...props } = this.props;
         const { value } = this.state;
 
         return (
-            <div>
+            <div className="cc__person-finder">
                 <InputBox
                     inputComponent={Input}
                     value={value}
                     onChange={this.handleOnChange}
+                    {...props}
                 >
                     <PersonFinderResults
                         value={value}
                         onSelect={this.handleSelect}
-                        person
-                        site
+                        person={person}
+                        site={site}
                     />
                 </InputBox>
             </div>

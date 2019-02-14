@@ -126,6 +126,8 @@ export default class Input extends Component {
         } = this.props;
         const { valid } = this.state;
 
+        console.log(this.props);
+
         if (dynamic) {
             return (
                 <div

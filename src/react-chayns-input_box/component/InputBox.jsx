@@ -110,6 +110,8 @@ export default class InputBox extends Component {
 
         const rect = this.getCurrentRect();
 
+        console.log(this.props);
+
         return (
             <div
                 style={{

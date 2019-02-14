@@ -10,11 +10,11 @@ export default class PersonFinderResultItem extends Component {
     static propTypes = {};
 
     static getRelations(data, type) {
-        const length = data.length;
+        const { length } = data;
         const show = Math.min(length, SHOW_RELATIONS_COUNT);
         let relationString = '';
 
-        for (let i = 0; i < show; i++) {
+        for (let i = 0; i < show; i += 1) {
             if(type === PERSON_RELATION) {
                 relationString += data[i].type === 'LIVING_IN' ? `${getText(data[i].type, data[i].name)}, ` : `${data[i].name}, `;
             } else {
@@ -47,7 +47,7 @@ export default class PersonFinderResultItem extends Component {
         const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(relation.relations);
 
         return(
-            <div className="result" onClick={this.handleClick}>
+            <div className="result-item" onClick={this.handleClick}>
                 <div className="img">
                     <img src={relation.image}/>
                 </div>

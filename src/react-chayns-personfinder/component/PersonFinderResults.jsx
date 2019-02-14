@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import findRelations from '../utils/findRelations';
 import PersonFinderResultItem from './PersonFinderResultItem';
+import makeCancelable from '../utils/makeCancelable';
 
 export default class PersonFinderResults extends Component {
     static propTypes = {
@@ -42,7 +43,7 @@ export default class PersonFinderResults extends Component {
         this.fetchSiteRelations = this.fetchRelations.bind(this, SITE_RELATION);
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         const { value } = this.props;
         const { value: stateValue } = this.state;
 
@@ -51,16 +52,16 @@ export default class PersonFinderResults extends Component {
         }
     }
 
+    onClick(value) {
+        console.log(value);
+    }
+
     setValue(value) {
         this.setState({
             value,
         });
 
         this.fetchData(value);
-    }
-
-    onClick(value) {
-        console.log(value);
     }
 
     async fetchData(value, clear = true) {
@@ -117,7 +118,9 @@ export default class PersonFinderResults extends Component {
             this.promises[type].cancel();
         }
 
-        return findRelations(type, value, this.skip[type], take);
+        this.promises[type] = makeCancelable(findRelations(type, value, this.skip[type], take));
+
+        return this.promises[type].promise;
     }
 
     renderSites(relations) {
@@ -153,6 +156,7 @@ export default class PersonFinderResults extends Component {
                 relation={{
                     personId: relation.personId,
                     userId: relation.userId,
+                    name: `${relation.firstName} ${relation.lastName}`,
                     firstName: relation.firstName,
                     lastName: relation.lastName,
                     score: relation.score,
