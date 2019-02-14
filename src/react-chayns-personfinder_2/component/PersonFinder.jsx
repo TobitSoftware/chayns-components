@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
-import PersonFinderResults from './PersonFinderResults';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
+import PersonFinderData from './PersonFinderData';
 
 export default class PersonFinder extends Component {
     static propTypes = {
@@ -92,9 +93,12 @@ export default class PersonFinder extends Component {
                     inputComponent={Input}
                     value={value}
                     onChange={this.handleOnChange}
+                    className={classnames('cc__person-finder__overlay', {
+                        'cc__person-finder__overlay--hidden': selectedValue,
+                    })}
                     {...props}
                 >
-                    <PersonFinderResults
+                    <PersonFinderData
                         value={value}
                         hide={selectedValue}
                         onSelect={this.handleSelect}
