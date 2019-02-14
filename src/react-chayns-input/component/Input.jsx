@@ -74,6 +74,14 @@ export default class Input extends Component {
         }
     }
 
+    componentDidUpdate({ regExp: oldRegExp }) {
+        const { regExp, onChange } = this.props;
+
+        if (String(oldRegExp) !== String(regExp) && this.ref) {
+            this.callValidated(this.ref.value, onChange);
+        }
+    }
+
     onKeyUp(e) {
         const { onKeyUp, onEnter } = this.props;
         if (onKeyUp) {
