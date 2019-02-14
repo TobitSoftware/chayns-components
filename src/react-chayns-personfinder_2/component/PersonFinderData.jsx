@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import classnames from 'classnames';
+
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import makeCancelable from '../utils/makeCancelable';
 import findRelations from '../utils/findRelations';
 import PersonFinderResults from './PersonFinderResults';
+import Input from '../../react-chayns-input/component/Input';
+import InputBox from '../../react-chayns-input_box/component/InputBox';
 
 export default class PersonFinderData extends Component {
     static propTypes = {
@@ -13,6 +17,7 @@ export default class PersonFinderData extends Component {
         sites: PropTypes.bool,
         onSelect: PropTypes.func.isRequired,
         value: PropTypes.func,
+        selectedValue: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -20,6 +25,7 @@ export default class PersonFinderData extends Component {
         persons: true,
         sites: true,
         value: '',
+        selectedValue: false,
     };
 
     state = {
@@ -47,10 +53,11 @@ export default class PersonFinderData extends Component {
     }
 
     componentDidUpdate() {
-        const { value, hide } = this.props;
+        const { value, selectedValue } = this.props;
         const { value: stateValue } = this.state;
 
-        if (!hide && stateValue !== value) {
+        if (!selectedValue && stateValue !== value) {
+            this.setValue('');
             this.setValue(value);
         }
     }
@@ -137,19 +144,34 @@ export default class PersonFinderData extends Component {
     }
 
     render() {
-        const { hide, onSelect } = this.props;
+        const {
+            onSelect,
+            selectedValue,
+            value,
+            persons: enablePersons,
+            sites: enableSites,
+            ...props
+        } = this.props;
         const { persons, sites } = this.state;
 
-        if (hide || !this.hasEntries()) {
-            return null;
-        }
+        const hasEntries = this.hasEntries();
 
         return (
-            <PersonFinderResults
-                persons={persons}
-                sites={sites}
-                onSelect={onSelect}
-            />
+            <InputBox
+                inputComponent={Input}
+                value={value}
+                onChange={this.handleOnChange}
+                boxClassName={classnames('cc__person-finder__overlay')}
+                {...props}
+            >
+                {!selectedValue && hasEntries && (
+                    <PersonFinderResults
+                        persons={persons}
+                        sites={sites}
+                        onSelect={onSelect}
+                    />
+                )}
+            </InputBox>
         );
     }
 }
