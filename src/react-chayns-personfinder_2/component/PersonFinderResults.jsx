@@ -172,12 +172,21 @@ export default class PersonFinderResults extends Component {
     render() {
         const { persons, sites } = this.state;
 
+        const relatedPersons = this.renderPersons(persons.related);
+        const relatedSites = this.renderSites(sites.related);
+        const unrelatedPersons = this.renderPersons(persons.unrelated);
+        const unrelatedSites = this.renderSites(sites.unrelated);
+
+        if (!relatedPersons && !relatedSites && !unrelatedPersons && !unrelatedSites) {
+            return null;
+        }
+
         return (
             <div className="cc__person-finder__results">
-                {this.renderPersons(persons.related)}
-                {this.renderSites(sites.related)}
-                {this.renderPersons(persons.unrelated)}
-                {this.renderSites(sites.unrelated)}
+                {relatedPersons}
+                {relatedSites}
+                {unrelatedPersons}
+                {unrelatedSites}
             </div>
         );
     }
