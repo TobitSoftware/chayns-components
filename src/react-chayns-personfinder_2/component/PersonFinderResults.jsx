@@ -11,12 +11,15 @@ export default class PersonFinderResults extends Component {
         take: PropTypes.number,
         persons: PropTypes.bool,
         sites: PropTypes.bool,
+        onSelect: PropTypes.func.isRequired,
+        value: PropTypes.func,
     };
 
     static defaultProps = {
         take: 20,
         persons: true,
         sites: true,
+        value: '',
     };
 
     state = {
@@ -38,6 +41,7 @@ export default class PersonFinderResults extends Component {
     constructor(props) {
         super(props);
 
+        this.handleClick = this.handleClick.bind(this);
         this.setValue = debounce(this.setValue.bind(this), 500);
         this.fetchPersonRelations = this.fetchRelations.bind(this, PERSON_RELATION);
         this.fetchSiteRelations = this.fetchRelations.bind(this, SITE_RELATION);
@@ -52,20 +56,33 @@ export default class PersonFinderResults extends Component {
         }
     }
 
-    onClick(value) {
-        console.log(value);
-    }
-
     setValue(value) {
         this.setState({
             value,
         });
 
+        if (value === '') {
+            this.setState({
+                persons: { related: [], unrelated: [] },
+                sites: { related: [], unrelated: [] },
+            });
+
+            return;
+        }
+
         this.fetchData(value);
     }
 
+    handleClick(value) {
+        const { onSelect } = this.props;
+
+        if (onSelect) {
+            onSelect(value.type, value.relation);
+        }
+    }
+
     async fetchData(value, clear = true) {
-        if (clear) {
+        if (clear || value === '') {
             this.skip[SITE_RELATION] = 0;
             this.skip[PERSON_RELATION] = 0;
         }
@@ -140,7 +157,7 @@ export default class PersonFinderResults extends Component {
                     image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
                 }}
                 type={SITE_RELATION}
-                onClick={this.onClick}
+                onClick={this.handleClick}
             />
         ));
     }
@@ -164,7 +181,7 @@ export default class PersonFinderResults extends Component {
                     relations: relation.relations,
                 }}
                 type={PERSON_RELATION}
-                onClick={this.onClick}
+                onClick={this.handleClick}
             />
         ));
     }
