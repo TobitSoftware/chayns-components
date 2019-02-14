@@ -7,11 +7,13 @@ export default class PersonFinderResults extends Component {
     static propTypes = {
         persons: PropTypes.object,
         sites: PropTypes.object,
+        onSelect: PropTypes.func,
     };
 
     static defaultProps = {
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
+        onSelect: null,
     };
 
     constructor(props) {
