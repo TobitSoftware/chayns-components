@@ -1,5 +1,5 @@
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
-import { fetchPersonRelations, fetchSiteRelations } from './fetchRelations';
+import { fetchPersonRelations } from './fetchRelations';
 import processRelations from './processRelations';
 
 export default async function findRelations(type, value, skip, take) {
@@ -10,9 +10,17 @@ export default async function findRelations(type, value, skip, take) {
     }
 
     if (type === SITE_RELATION) {
-        const relationsRaw = await fetchSiteRelations(value, skip, take);
+        const sites = await chayns.findSite(value);
 
-        return processRelations(SITE_RELATION, relationsRaw);
+        if (sites.Value && sites.Value.length) {
+            return {
+                related: [],
+                unrelated: sites.Value.map(({ appstoreName, ...s }) => ({
+                    name: appstoreName,
+                    ...s
+                })),
+            };
+        }
     }
 
     return { related: [], unrelated: [] };

@@ -23,6 +23,10 @@ export default class PersonFinderResultItem extends Component {
     };
 
     static getRelations(data, type) {
+        if (!data) {
+            return null;
+        }
+
         const { length } = data;
         const show = Math.min(length, SHOW_RELATIONS_COUNT);
         let relationString = '';
@@ -40,6 +44,10 @@ export default class PersonFinderResultItem extends Component {
     }
 
     static getFurtherRelations(data) {
+        if (!data) {
+            return null;
+        }
+
         const { length } = data;
         const show = Math.min(length, SHOW_RELATIONS_COUNT);
 
@@ -91,12 +99,16 @@ export default class PersonFinderResultItem extends Component {
                             {`(${type === PERSON_RELATION ? relation.personId : relation.siteId})`}
                         </div>
                     </div>
-                    <span className="relation">
-                        {relationString}
-                        <span style={{ fontWeight: 'bold' }}>
-                            {furtherRelationsString}
+                    {relationString && furtherRelationsString && (
+                        <span className="relation">
+                            {relationString}
+                            {furtherRelationsString && (
+                                <span style={{ fontWeight: 'bold' }}>
+                                    {furtherRelationsString}
+                                </span>
+                            )}
                         </span>
-                    </span>
+                    )}
                 </div>
             </div>
         );

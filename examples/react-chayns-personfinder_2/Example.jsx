@@ -17,6 +17,16 @@ export default class PersonFinder2Example extends PureComponent {
                     placeholder="User"
                     onSelect={PersonFinder2Example.handleSelect}
                 />
+                <PersonFinder2
+                    style={{ width: '100%' }}
+                    dynamic
+                    placeholder="User"
+                    defaultValue={{
+                        name: 'Tobit.Software',
+                        siteId: '67231-11058'
+                    }}
+                    onSelect={PersonFinder2Example.handleSelect}
+                />
             </ExampleContainer>
         );
     }

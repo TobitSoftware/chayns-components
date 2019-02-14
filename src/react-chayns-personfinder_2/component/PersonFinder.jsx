@@ -5,31 +5,43 @@ import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import PersonFinderResults from './PersonFinderResults';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 
 export default class PersonFinder extends Component {
     static propTypes = {
         onSelect: PropTypes.func,
         persons: PropTypes.bool,
         sites: PropTypes.bool,
+        defaultValue: PropTypes.oneOfType([
+            PropTypes.shape({
+                name: PropTypes.string,
+                firstName: PropTypes.string,
+                lastName: PropTypes.string,
+                siteId: PropTypes.string,
+                personId: PropTypes.string,
+            }),
+            PropTypes.string,
+        ]),
     };
 
     static defaultProps = {
         onSelect: null,
         persons: true,
         sites: true,
+        defaultValue: null,
     };
 
     static PERSON = PERSON_RELATION;
 
     static SITE = SITE_RELATION;
 
-    state = {
-        value: '',
-        selectedValue: false,
-    };
-
     constructor(props) {
         super(props);
+
+        this.state = {
+            value: createInputValue(props.defaultValue) || '',
+            selectedValue: !!props.defaultValue,
+        };
 
         this.handleSelect = this.handleSelect.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
@@ -44,7 +56,7 @@ export default class PersonFinder extends Component {
 
     handleSelect(type, value) {
         const { onSelect } = this.props;
-        const name = `${value.name} (${type === PERSON_RELATION ? value.personId : value.siteId})`;
+        const name = convertToInputValue(value);
 
         this.setState({
             value: name,
@@ -65,7 +77,13 @@ export default class PersonFinder extends Component {
     }
 
     render() {
-        const { persons, sites, ...props } = this.props;
+        const {
+            persons,
+            sites,
+            value: propValue, /* eslint-disable-line react/prop-types */
+            defaultValue,
+            ...props
+        } = this.props;
         const { value, selectedValue } = this.state;
 
         return (
