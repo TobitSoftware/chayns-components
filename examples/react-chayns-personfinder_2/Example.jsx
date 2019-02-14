@@ -10,22 +10,30 @@ export default class PersonFinder2Example extends PureComponent {
 
     render() {
         return (
-            <ExampleContainer headline="PersonFinder2 (using chayns-Relations)">
+            <ExampleContainer headline="PersonFinder (using chayns-Relations)">
                 <PersonFinder2
                     style={{ width: '100%' }}
                     dynamic
-                    placeholder="User"
+                    placeholder="User/Site"
                     onSelect={PersonFinder2Example.handleSelect}
                 />
                 <PersonFinder2
                     style={{ width: '100%' }}
                     dynamic
-                    placeholder="User"
+                    placeholder="Sites"
                     defaultValue={{
                         name: 'Tobit.Software',
                         siteId: '67231-11058'
                     }}
                     onSelect={PersonFinder2Example.handleSelect}
+                    persons={false}
+                />
+                <PersonFinder2
+                    style={{ width: '100%' }}
+                    dynamic
+                    placeholder="Users"
+                    onSelect={PersonFinder2Example.handleSelect}
+                    sites={false}
                 />
             </ExampleContainer>
         );
