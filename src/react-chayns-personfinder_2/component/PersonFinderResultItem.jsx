@@ -101,7 +101,7 @@ export default class PersonFinderResultItem extends Component {
                             {`(${type === PERSON_RELATION ? relation.personId : relation.siteId})`}
                         </div>
                     </div>
-                    {relationString && furtherRelationsString && (
+                    {relationString && (
                         <span className="relation">
                             {relationString}
                             {furtherRelationsString && (
