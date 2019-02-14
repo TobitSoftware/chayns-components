@@ -2,12 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import getText from '../utils/getText';
-import { PERSON_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 
 const SHOW_RELATIONS_COUNT = 5;
 
 export default class PersonFinderResultItem extends Component {
-    static propTypes = {};
+    static propTypes = {
+        onClick: PropTypes.func.isRequired,
+        relation: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            relations: PropTypes.string.isRequired,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            siteId: PropTypes.string,
+            locationId: PropTypes.string,
+            personId: PropTypes.string,
+            userId: PropTypes.string,
+        }).isRequired,
+        type: PropTypes.oneOf([PERSON_RELATION, SITE_RELATION]).isRequired,
+    };
 
     static getRelations(data, type) {
         const { length } = data;
@@ -35,6 +48,21 @@ export default class PersonFinderResultItem extends Component {
         }
 
         return ` +${String((length - show) || 0)}`;
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        const { onClick, relation, type } = this.props;
+
+        onClick({
+            type,
+            relation,
+        });
     }
 
     render() {
