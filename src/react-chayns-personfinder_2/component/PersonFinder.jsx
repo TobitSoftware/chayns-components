@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce';
 
 import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
-import PersonFinderResults from '../../react-chayns-personfinder/component/PersonFinderResults';
+import PersonFinderResults from './PersonFinderResults';
 
 export default class PersonFinder extends Component {
     static propTypes = {};
