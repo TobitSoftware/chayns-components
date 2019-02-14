@@ -139,6 +139,12 @@ export default class PersonFinderResults extends Component {
         return this.promises[type].promise;
     }
 
+    hasEntries() {
+        const { persons, sites } = this.state;
+
+        return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated > 0;
+    }
+
     renderSites(relations) {
         if (relations.length === 0) {
             return null;
@@ -189,7 +195,7 @@ export default class PersonFinderResults extends Component {
         const { hide } = this.props;
         const { persons, sites } = this.state;
 
-        if (hide) {
+        if (hide || !this.hasEntries()) {
             return null;
         }
 
@@ -197,10 +203,6 @@ export default class PersonFinderResults extends Component {
         const relatedSites = this.renderSites(sites.related);
         const unrelatedPersons = this.renderPersons(persons.unrelated);
         const unrelatedSites = this.renderSites(sites.unrelated);
-
-        if (!relatedPersons && !relatedSites && !unrelatedPersons && !unrelatedSites) {
-            return null;
-        }
 
         return (
             <div className="cc__person-finder__results">
