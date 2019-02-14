@@ -97,10 +97,17 @@ export default class PersonFinderResultItem extends PureComponent {
                         }}
                     >
                         <div className="name">{relation.name}</div>
-                        <div className="identifier">
-                            {`(${type === PERSON_RELATION ? relation.personId : relation.siteId})`}
-                        </div>
+                        {relationString && (
+                            <div className="identifier">
+                                {`(${type === PERSON_RELATION ? relation.personId : relation.siteId})`}
+                            </div>
+                        )}
                     </div>
+                    {!relationString && (
+                        <div className="identifier">
+                            {type === PERSON_RELATION ? relation.personId : relation.siteId}
+                        </div>
+                    )}
                     {relationString && (
                         <span className="relation">
                             {relationString}
