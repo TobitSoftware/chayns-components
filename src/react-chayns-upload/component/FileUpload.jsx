@@ -1,326 +1,198 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
-
-import selectFile from '../../utils/selectFile';
-import getCompareFunction from '../utils/getCompareFunction';
-import getMimeTypes from '../utils/getMimeTypes';
-import uploadCloudImages from '../utils/uploadCloudImage';
-import normalizeUploadResponse from '../utils/normalizeUploadResponse';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class FileUpload extends Component {
-    static TYPE_IMAGE = 'image';
-
-    static TYPE_VIDEO = 'video';
-
-    static TYPE_AUDIO = 'audio';
-
-    static TYPE_ALL = 'all';
+    static types = {
+        IMAGE: 'image/*',
+        VIDEO: 'video/*',
+        AUDIO: 'audio/*',
+        ALL: '*',
+    };
 
     static propTypes = {
-        type: PropTypes.oneOf(['image', 'video', 'audio', 'all']),
-        multiple: PropTypes.bool,
-        onChange: PropTypes.func,
         className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        uploadText: PropTypes.string,
-        onUpload: PropTypes.func,
-        disableListeners: PropTypes.bool,
-        onClick: PropTypes.func,
-        onDrop: PropTypes.func,
-        customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-        types: PropTypes.arrayOf(PropTypes.shape({
-            type: PropTypes.oneOf(['image', 'video', 'audio', 'all']),
-            uploadText: PropTypes.string,
-            customIcon: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-            onUpload: PropTypes.func,
-            className: PropTypes.string,
-            onClick: PropTypes.func,
-            onDrop: PropTypes.func,
-            children: PropTypes.oneOfType([
-                PropTypes.node,
-                PropTypes.arrayOf(PropTypes.node),
-            ]),
-        })),
+        style: PropTypes.object,
         stopPropagation: PropTypes.bool,
+        disabled: PropTypes.bool,
+        errorMessages: PropTypes.shape({
+            tooMuchFiles: PropTypes.string,
+            fileTooBig: PropTypes.string,
+            wrongFileType: PropTypes.string,
+        }),
+        items: PropTypes.arrayOf(PropTypes.shape({
+            types: PropTypes.arrayOf(PropTypes.string),
+            maxFileSize: PropTypes.number,
+            maxNumberOfFiles: PropTypes.number,
+            onClick: PropTypes.func,
+            onChange: PropTypes.func,
+            className: PropTypes.string,
+            style: PropTypes.object,
+            disabled: PropTypes.bool,
+            content: PropTypes.oneOfType([PropTypes.shape({
+                text: PropTypes.string,
+                icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object)
+            }), PropTypes.shape({
+                children: PropTypes.oneOfType([
+                    PropTypes.node,
+                    PropTypes.arrayOf(PropTypes.node),
+                ])
+            })]),
+        })),
     };
 
     static defaultProps = {
-        type: 'all',
-        multiple: true,
-        onChange: null,
-        className: '',
-        children: null,
-        uploadText: null,
-        onUpload: null,
-        disableListeners: false,
-        onClick: null,
-        onDrop: null,
-        customIcon: null,
-        types: null,
+        className: null,
+        style: null,
         stopPropagation: false,
+        disabled: false,
+        errorMessages: {
+            tooMuchFiles: 'Du kannst nur ##NUMBER## Dateien hochladen.',
+            fileTooBig: 'Es sind nur Dateien bis ##SIZE## erlaubt.',
+            wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
+        },
+        items: [{
+            types: [FileUpload.types.ALL],
+            maxFileSize: 4194304, // 4 MB
+            maxNumberOfFiles: 0, // 0=infinity
+            onClick: null,
+            onChange: null,
+            className: null,
+            style: null,
+            disabled: false,
+            content: null,
+        }],
     };
 
-    constructor() {
-        super();
-
-        this.state = {
-            hover: false,
-        };
-
-        this.onDrop = this.onDrop.bind(this);
-        this.onDragOver = this.onDragOver.bind(this);
-        this.onDragLeave = this.onDragLeave.bind(this);
-        this.onClick = this.onClick.bind(this);
+    constructor(props) {
+        super(props);
+        this.uploadRefs = [];
     }
 
-    onClick(event, config) {
-        const {
-            type,
-            multiple,
-            onUpload,
-            onClick,
-            disableListeners,
-            stopPropagation,
-        } = { ...this.props, ...config };
+    onDragEnter = (event, item, index) => {
+        if (this.checkFileType(event.dataTransfer.items[0].type, item.types)) {
+            this.uploadRefs[index].classList.add('cc__file-upload--hover');
+        }
+    };
 
-        if (stopPropagation) event.stopPropagation();
+    onDragLeave = (index) => {
+        this.uploadRefs[index].classList.remove('cc__file-upload--hover');
+    };
 
-        if (!disableListeners) {
-            if (onClick) {
-                return onClick(event);
-            }
-
-            if (onClick === false) {
-                return false;
-            }
-
-            if (onUpload && type === FileUpload.TYPE_IMAGE) {
-                if (chayns.env.user.isAuthenticated) {
-                    return chayns.uploadCloudImage()
-                        .then((uploadData) => {
-                            onUpload(uploadData.url);
-                        });
+    onChange = (event, item, index) => {
+        const { errorMessages } = this.props;
+        this.onDragLeave(index);
+        if (event.target.files && event.target.files.length > 0) {
+            const invalidFiles = [];
+            const validFiles = [];
+            Object.keys(event.target.files).forEach((fileIndex) => {
+                const file = event.target.files[fileIndex];
+                if(!this.checkFileType(file.type, item.types)) {
+                    invalidFiles.push(file);
+                    chayns.dialog.alert('', errorMessages.wrongFileType);
+                }else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
+                    invalidFiles.push(file);
+                    chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
+                } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
+                    chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / 1000000)} MB`));
+                    invalidFiles.push(file);
+                } else {
+                    validFiles.push(file);
                 }
-                return chayns.login();
-            }
+            });
+            item.onChange(validFiles, invalidFiles);
+        }
+    };
 
-            return selectFile({
-                type: getMimeTypes(type),
-                multiple,
-            })
-                .then((files) => {
-                    const fileList = !multiple ? [files] : files;
-                    this.checkFiles(fileList);
-                });
+    onClick = (event, item) => {
+        const { stopPropagation } = this.props;
+        if (stopPropagation) event.stopPropagation();
+        if (typeof item.onClick === 'function') item.onClick(event);
+    };
+
+    checkFileType = (fileType, supportedTypes) => {
+        for (let i = 0; i < supportedTypes.length; i += 1) {
+            const type = supportedTypes[i];
+            if (type === fileType || (type.match(/\/\*/g) && fileType.match(/(.)+\//g)[0] === type.match(/(.)+\//g)[0])) {
+                return true;
+            }
         }
         return false;
-    }
-
-    onDrop(event, config) {
-        const {
-            onChange,
-            onUpload,
-            type,
-            onDrop
-        } = { ...this.props, ...config };
-
-        if (onDrop) {
-            return onDrop(event);
-        }
-
-        if (onDrop === false) {
-            return false;
-        }
-
-        event.stopPropagation();
-        event.preventDefault();
-
-        this.setState({
-            hover: false,
-        });
-
-        const { files } = event.dataTransfer;
-
-        if (onUpload && type === FileUpload.TYPE_IMAGE) {
-            if (chayns.env.user.isAuthenticated) {
-                return uploadCloudImages(files)
-                    .then((data) => {
-                        const uploadData = normalizeUploadResponse(data);
-                        onUpload(uploadData[0].url);
-                    });
-            }
-            return chayns.login();
-        }
-
-        if (onChange) {
-            return this.checkFiles(files);
-        }
-
-        return null;
-    }
-
-    onDragOver(event) {
-        event.stopPropagation();
-        event.preventDefault();
-
-        this.setState({
-            hover: true,
-        });
-
-        // eslint-disable-next-line no-param-reassign
-        event.dataTransfer.dropEffect = 'copy';
-    }
-
-    onDragLeave() {
-        this.setState({
-            hover: false,
-        });
-    }
-
-    static getText(type) {
-        switch (type) {
-            case 'image':
-                return 'Bild hochladen';
-            case 'video':
-                return 'Video hochladen';
-            case 'audio':
-                return 'Song hochladen';
-            default:
-                return 'Datei hochladen';
-        }
-    }
-
-    checkFiles(files) {
-        const { type, multiple, onChange } = this.props;
-        const { length } = files;
-
-        const compareFunction = getCompareFunction(type);
-
-        const invalidFiles = [];
-        const validFiles = [];
-
-        for (let i = 0; i < length; i += 1) {
-            if (!multiple && i > 0) {
-                invalidFiles.push(files[i]);
-            } else if (!compareFunction(files[i])) {
-                invalidFiles.push(files[i]);
-            } else {
-                validFiles.push(files[i]);
-            }
-        }
-
-        if (onChange) {
-            onChange(files, validFiles, invalidFiles);
-        }
-    }
-
-    renderPlaceholder(config) {
-        const {
-            type,
-            className,
-            uploadText,
-            customIcon,
-        } = { ...this.props, ...config };
-
-        const { hover } = this.state;
-
-        const classNames = classnames('cc__file-upload--placeholder', {
-            chayns__color: chayns.env.site.colorMode !== 1,
-            'cc__file-upload--hover': hover,
-            [className]: className,
-        });
-
-        let icon;
-        if (customIcon) {
-            icon = customIcon;
-        } else {
-            icon = faUpload;
-        }
-
-        return (
-            <div
-                className={classNames}
-            >
-                <span className="cc__file-upload__icon">
-                    <Icon icon={icon}/>
-                </span>
-                <div
-                    className="cc__file-upload__message"
-                >
-                    {uploadText || FileUpload.getText(type)}
-                </div>
-            </div>
-        );
-    }
+    };
 
     render() {
         const {
-            children,
-            disableListeners,
-            types,
+            items, className, style, disabled
         } = this.props;
-
-        const wrapperClassNames = classnames('cc__file-upload chayns__border-color', {
-            'cc__file-upload--custom': children,
-            flex: types
-        });
-
-        if (types) {
-            const uploadItems = [];
-            types.forEach((config, index) => {
-                const item = (
-                    <div
-                        onClick={!disableListeners ? (event) => {
-                            this.onClick(event, config);
-                        } : null}
-                        onDrop={!disableListeners ? this.onDrop : null}
-                        onDragOver={!disableListeners ? this.onDragOver : null}
-                        onDragLeave={!disableListeners ? this.onDragLeave : null}
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={`upload_${index}`}
-                        className="cc__file-upload__split"
-                    >
-                        {config.children || this.renderPlaceholder(config)}
-                    </div>
-                );
-                uploadItems.push(item);
-                if (index + 1 < types.length) {
-                    uploadItems.push(
-                        <div
-                            /* eslint-disable-next-line react/no-array-index-key */
-                            key={`upload_separator_${index}`}
-                            className="cc__file-upload__separator"
-                        />
-                    );
-                }
-            });
-
-            return (
-                <div
-                    style={{ display: 'flex', position: 'relative' }}
-                    className={wrapperClassNames}
-                >
-                    {uploadItems}
-                </div>
-            );
-        }
 
         return (
             <div
-                className={wrapperClassNames}
-                onClick={this.onClick}
-                onDrop={!disableListeners ? this.onDrop : null}
-                onDragOver={!disableListeners ? this.onDragOver : null}
-                onDragLeave={!disableListeners ? this.onDragLeave : null}
+                className={classNames('cc__file-upload', 'cc__file-upload--custom', className, { 'cc__file-upload--disabled': disabled })}
+                style={style}
             >
-                {children || this.renderPlaceholder()}
+                {
+                    items.map((item, index) => {
+                        const nodeArray = [
+                            <div
+                                className={classNames('cc__file-upload__split', item.className, { 'cc__file-upload__split--disabled': item.disabled })}
+                                style={item.style}
+                            >
+                                {
+                                    item.content && item.content.children
+                                        ? item.content.children
+                                        : (
+                                            <div
+                                                className="cc__file-upload--placeholder"
+                                                ref={ref => this.uploadRefs[index] = ref}
+                                                onClick={event => this.onClick(event, item)}
+                                            >
+                                                {
+                                                    item.onChange
+                                                        ? (
+                                                            <input
+                                                                multiple={item.maxNumberOfFiles !== 1}
+                                                                className="cc__file-upload__input"
+                                                                type="file"
+                                                                onChange={event => this.onChange(event, item, index)}
+                                                                accept={item.types}
+                                                                onDragEnter={event => this.onDragEnter(event, item, index)}
+                                                                onDragLeave={() => this.onDragLeave(index)}
+                                                            />
+                                                        )
+                                                        : null
+                                                }
+                                                <span className="cc__file-upload__icon">
+                                                    <Icon
+                                                        icon={
+                                                            item.content && item.content.icon
+                                                                ? item.content.icon
+                                                                : faUpload
+                                                        }
+                                                    />
+                                                </span>
+                                                <div
+                                                    className="cc__file-upload__message"
+                                                >
+                                                    {
+                                                        item.content && item.content.text
+                                                            ? item.content.text
+                                                            : 'Datei hochladen'
+                                                    }
+                                                </div>
+                                            </div>
+                                        )
+                                }
+                            </div>
+                        ];
+                        if (index !== 0) {
+                            nodeArray.unshift(<div className="cc__file-upload__separator"/>);
+                        }
+                        return nodeArray;
+                    })
+                }
             </div>
         );
     }

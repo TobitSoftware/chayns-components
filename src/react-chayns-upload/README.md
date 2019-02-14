@@ -16,26 +16,41 @@ import { FileUpload } from 'chayns-components';
 The component can be used in JSX like in the following example:
 
 ```jsx harmony
-<FileUpload onUpload={(url) => console.log(url)} />
+<FileUpload/>
 ```
-
 
 ## Props ##
 | Property          | Description                                                                | Type          | Default Value |
 |-------------------|----------------------------------------------------------------------------|---------------|---------------|
-| onChange          | Callback-function (parameter: files, validFiles, invalidFiles)             | Function      |               |
-| type              | Allowed types (currently supported: all, image, audio, video)              | String        | all           |
-| multiple          | Enables/Disables upload of multiple files                                  | Bool          | true          |
 | className         | CSS-classes that should be set on root-element                             | String        |               |
-| uploadText        | Text that should be shown on button                                        | String        |               |
-| disableListeners  | Disables all event listeners                                               | Bool          | false         |
-| onDrop            | Registers a custom onDrop-Listener (prevents default handling)             | Function      |               |
-| onClick           | Registers a custom onClick-Listener (prevents default handling)            | Function      |               |
-| onUpload          | Uploads file and return the url. Only for images.                          | Function      |               |
-| children          | Component(s) that should be rendered inside component                      | ReactElements |               |
-| customIcon        | CustomIcon that should be rendered inside component                        | string/object |               |
-| stopPropagation     | Stops the click propagation to parent elements                           | bool          | false         |
-| types             | Array for different upload types. Overwrites existing props for each type. | Array         |               |
+| style             | Styles that should be set on root-element                                  | Object        |               |
+| stopPropagation   | Stops the click propagation to parent elements                             | bool          | false         |
+| disabled          | Disables the FileUpload                                                    | bool          | false         |
+| items             | Items of the FileUpload                                                    | array         | false         |
+| errorMessages     | Error message strings.                                                     | object        | false         |
+
+### Items ###
+| Property          | Description                                                                | Type          | Default Value |
+|-------------------|----------------------------------------------------------------------------|---------------|---------------|
+| className         | CSS-classes that should be set on the item                                 | String        |               |
+| style             | Styles that should be set on the item                                      | Object        |               |
+| disabled          | Disables the item                                                          | bool          | false         |
+| onChange          | Callback-function (parameter: validFiles, invalidFiles)                    | Function      |               |
+| onClick           | Callback-function                                                          | Function      |               |
+| types             | Array of allowed mime-types (FileUpload.types)                             | array         | [*]           |
+| maxNumberOfFiles  | Maximum number of files that can be uploaded at once. (0=infinity)         | number        | 0             |
+| maxFileSize       | Maximum size per file. (0=infinity, in bytes)                              | number        | 0          |
+| content.text      | Text that should be shown on button                                        | String        |               |
+| content.icon      | Icon that should be shown on button                                        | String/object |               |
+| content.children  | JSX that should be shown on button                                         | node          |               |
+
+### ErrorMessages ###
+| Property          | Description                                                                | Type          | Default Value |
+|-------------------|----------------------------------------------------------------------------|---------------|---------------|
+| tooMuchFiles      | User has chosen too much files                                             | String        |               |
+| fileTooBig        | User has chosen a file which is bigger than maxFileSize                    | String        |               |
+| wrongFileType     | User has chosen a file with wrong file type                                | String        |               |
+
 
 ## Example ##
 
