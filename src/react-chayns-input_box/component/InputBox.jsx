@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import classnames from 'classnames';
+import { CSSTransition } from 'react-transition-group';
 
 import isDescendant from '../../utils/isDescendant';
 
@@ -127,19 +128,26 @@ export default class InputBox extends Component {
                     {...props}
                     onFocus={this.handleFocus}
                 />
-                {createPortal(rect && !hidden && children && (
-                    <div
-                        onClick={e => e.preventDefault()}
-                        className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
-                        style={rect ? {
-                            width: `${rect.width}px`,
-                            top: `${rect.bottom}px`,
-                            left: `${rect.left}px`,
-                        } : null}
-                        ref={this.setBoxRef}
+                {createPortal((
+                    <CSSTransition
+                        in={!!(rect && !hidden && children)}
+                        timeout={200}
+                        unmountOnExit
+                        classNames="fade"
                     >
-                        {children}
-                    </div>
+                        <div
+                            onClick={e => e.preventDefault()}
+                            className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
+                            style={rect ? {
+                                width: `${rect.width}px`,
+                                top: `${rect.bottom}px`,
+                                left: `${rect.left}px`,
+                            } : null}
+                            ref={this.setBoxRef}
+                        >
+                            {children}
+                        </div>
+                    </CSSTransition>
                 ), parent)}
             </div>
         );
