@@ -7,14 +7,20 @@ import findRelations from '../utils/findRelations';
 export default class PersonFinderResults extends Component {
     static propTypes = {
         take: PropTypes.number,
+        persons: PropTypes.bool,
+        sites: PropTypes.bool,
     };
 
     static defaultProps = {
         take: 20,
+        persons: true,
+        sites: true,
     };
 
     state = {
         value: null,
+        persons: { related: [], unrelated: [] },
+        sites: { related: [], unrelated: [] },
     };
 
     promises = {
@@ -49,7 +55,7 @@ export default class PersonFinderResults extends Component {
             value,
         });
 
-        this.fetchData(value, false);
+        this.fetchData(value);
     }
 
     async fetchData(value, clear = true) {
@@ -58,19 +64,45 @@ export default class PersonFinderResults extends Component {
             this.skip[PERSON_RELATION] = 0;
         }
 
-        const { person, site } = this.props;
+        const { persons: enablePersons, sites: enableSites } = this.props;
 
         const promises = [];
 
-        if (person) {
-            promises.push(this.fetchPersonRelations(value));
-        }
+        promises.push(enablePersons ? this.fetchPersonRelations(value) : Promise.resolve(false));
+        promises.push(enableSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
-        if (site) {
-            promises.push(this.fetchSiteRelations(value));
-        }
+        try {
+            const [personResults, siteResults] = await Promise.all(promises);
 
-        console.log(await Promise.all(promises));
+            const { persons: personsState, sites: sitesState } = this.state;
+
+            const persons = clear ? { related: [], unrelated: [] } : personsState;
+            const sites = clear ? { related: [], unrelated: [] } : sitesState;
+
+            if (personResults) {
+                this.skip[PERSON_RELATION] += (personResults.related.length + personResults.unrelated.length);
+
+                persons.related.push(...personResults.related);
+                persons.unrelated.push(...personResults.unrelated);
+            }
+
+            if (siteResults) {
+                console.log(siteResults);
+                this.skip[SITE_RELATION] += (siteResults.related.length + siteResults.unrelated.length);
+
+                sites.related.push(...siteResults.related);
+                sites.unrelated.push(...siteResults.unrelated);
+            }
+
+            this.setState({
+                persons,
+                sites,
+            });
+        } catch (ex) {
+            if (!ex || !ex.isCanceled) {
+                throw ex;
+            }
+        }
     }
 
     async fetchRelations(type, value) {
@@ -84,6 +116,10 @@ export default class PersonFinderResults extends Component {
     }
 
     render() {
+        const { persons, sites } = this.state;
+
+        console.log(persons, sites);
+
         return (
             <div className="cc__person-finder__results">
                 {'Test'}
