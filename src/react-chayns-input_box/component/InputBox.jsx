@@ -65,6 +65,11 @@ export default class InputBox extends Component {
     }
 
     handleBlur(e) {
+        const { hidden } = this.state;
+        if (hidden) {
+            return;
+        }
+
         if (e.target === this.references.wrapper || e.target === this.references.box) {
             return;
         }
