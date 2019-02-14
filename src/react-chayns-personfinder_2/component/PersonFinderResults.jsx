@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
 
-export default class PersonFinderResults extends Component {
+export default class PersonFinderResults extends PureComponent {
     static propTypes = {
         persons: PropTypes.object,
         sites: PropTypes.object,

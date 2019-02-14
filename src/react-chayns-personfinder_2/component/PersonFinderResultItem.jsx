@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import getText from '../utils/getText';
@@ -8,7 +8,7 @@ import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 
 const SHOW_RELATIONS_COUNT = 5;
 
-export default class PersonFinderResultItem extends Component {
+export default class PersonFinderResultItem extends PureComponent {
     static propTypes = {
         onClick: PropTypes.func.isRequired,
         relation: PropTypes.shape({
