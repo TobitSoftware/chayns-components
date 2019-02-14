@@ -14,8 +14,8 @@ export default async function findRelations(type, value, skip, take) {
 
         if (sites.Value && sites.Value.length) {
             return {
-                related: [],
-                unrelated: sites.Value.map(({ appstoreName, ...s }) => ({
+                unrelated: [],
+                related: sites.Value.map(({ appstoreName, ...s }) => ({
                     name: appstoreName,
                     ...s
                 })),

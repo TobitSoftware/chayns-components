@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
+import getText from '../utils/getText';
+import Divider from './Divider';
 
 export default class PersonFinderResults extends Component {
     static propTypes = {
@@ -88,7 +90,17 @@ export default class PersonFinderResults extends Component {
             <div className="cc__person-finder__results">
                 {relatedPersons}
                 {relatedSites}
+                {unrelatedPersons && unrelatedPersons.length > 0 && (
+                    <Divider
+                        name={getText('DIVIDER_PERSON')}
+                    />
+                )}
                 {unrelatedPersons}
+                {unrelatedSites && unrelatedSites.length > 0 && (
+                    <Divider
+                        name={getText('DIVIDER_SITE')}
+                    />
+                )}
                 {unrelatedSites}
             </div>
         );
