@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
@@ -48,7 +48,7 @@ export default class PersonFinderResults extends PureComponent {
                     relations: relation.relations,
                     image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
                 }}
-                type={SITE_RELATION}
+                type={LOCATION_RELATION}
                 onClick={this.handleClick}
             />
         ));

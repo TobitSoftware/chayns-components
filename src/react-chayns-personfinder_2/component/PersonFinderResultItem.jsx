@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import getText from '../utils/getText';
-import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 
 const SHOW_RELATIONS_COUNT = 5;
 
@@ -21,7 +21,7 @@ export default class PersonFinderResultItem extends PureComponent {
             personId: PropTypes.string,
             userId: PropTypes.string,
         }).isRequired,
-        type: PropTypes.oneOf([PERSON_RELATION, SITE_RELATION]).isRequired,
+        type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION]).isRequired,
     };
 
     static getRelations(data, type) {

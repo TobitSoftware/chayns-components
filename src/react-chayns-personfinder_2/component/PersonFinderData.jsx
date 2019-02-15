@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import classnames from 'classnames';
 
-import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import makeCancelable from '../utils/makeCancelable';
 import findRelations from '../utils/findRelations';
 import PersonFinderResults from './PersonFinderResults';
@@ -36,12 +36,12 @@ export default class PersonFinderData extends Component {
 
     promises = {
         [PERSON_RELATION]: null,
-        [SITE_RELATION]: null,
+        [LOCATION_RELATION]: null,
     };
 
     skip = {
         [PERSON_RELATION]: 0,
-        [SITE_RELATION]: 0,
+        [LOCATION_RELATION]: 0,
     };
 
     constructor(props) {
@@ -49,7 +49,7 @@ export default class PersonFinderData extends Component {
 
         this.setValue = debounce(this.setValue.bind(this), 500);
         this.fetchPersonRelations = this.fetchRelations.bind(this, PERSON_RELATION);
-        this.fetchSiteRelations = this.fetchRelations.bind(this, SITE_RELATION);
+        this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
     }
 
     componentDidUpdate() {
@@ -81,7 +81,7 @@ export default class PersonFinderData extends Component {
 
     async fetchData(value, clear = true) {
         if (clear || value === '') {
-            this.skip[SITE_RELATION] = 0;
+            this.skip[LOCATION_RELATION] = 0;
             this.skip[PERSON_RELATION] = 0;
         }
 
@@ -108,7 +108,7 @@ export default class PersonFinderData extends Component {
             }
 
             if (siteResults) {
-                this.skip[SITE_RELATION] += (siteResults.related.length + siteResults.unrelated.length);
+                this.skip[LOCATION_RELATION] += (siteResults.related.length + siteResults.unrelated.length);
 
                 sites.related.push(...siteResults.related);
                 sites.unrelated.push(...siteResults.unrelated);

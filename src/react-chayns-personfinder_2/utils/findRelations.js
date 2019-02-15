@@ -1,4 +1,4 @@
-import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { fetchPersonRelations } from './fetchRelations';
 import processRelations from './processRelations';
 
@@ -15,7 +15,7 @@ export default async function findRelations(type, value, skip, take) {
         return processRelations(PERSON_RELATION, relationsRaw);
     }
 
-    if (type === SITE_RELATION) {
+    if (type === LOCATION_RELATION) {
         const sites = await chayns.findSite(value);
 
         if (sites.Value && sites.Value.length) {

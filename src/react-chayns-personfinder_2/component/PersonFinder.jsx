@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import PersonFinderData from './PersonFinderData';
 
@@ -31,7 +31,7 @@ export default class PersonFinder extends Component {
 
     static PERSON = PERSON_RELATION;
 
-    static SITE = SITE_RELATION;
+    static LOCATION = LOCATION_RELATION;
 
     constructor(props) {
         super(props);
