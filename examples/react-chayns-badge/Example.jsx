@@ -10,6 +10,7 @@ export default class BadgeExample extends PureComponent {
         return (
             <ExampleContainer
                 headline="Badge"
+                id="react-chayns-badge"
             >
                 <Badge>
                     <Icon icon={faCog}/>

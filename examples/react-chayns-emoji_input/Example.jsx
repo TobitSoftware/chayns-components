@@ -22,7 +22,10 @@ export default class EmojiInputExample extends Component {
         const { text } = this.state;
 
         return(
-            <ExampleContainer headline="EmojiInput">
+            <ExampleContainer
+                headline="EmojiInput"
+                id="react-chayns-emoji_input"
+            >
                 <EmojiInput
                     onInput={this.handleInput}
                     placeholder="Test me!"

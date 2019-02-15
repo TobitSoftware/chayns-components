@@ -37,7 +37,10 @@ export default class FileUploadExample extends Component {
 
     render() {
         return (
-            <ExampleContainer headline="FileUpload">
+            <ExampleContainer
+                headline="FileUpload"
+                id="react-chayns-upload"
+            >
                 <FileUpload
                     stopPropagation
                     className="file-upload--files"

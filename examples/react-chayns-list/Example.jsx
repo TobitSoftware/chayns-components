@@ -6,7 +6,10 @@ import ExampleContainer from '../ExampleContainer';
 export default class ListExample extends Component {
     render() {
         return(
-            <ExampleContainer headline="List">
+            <ExampleContainer
+                headline="List"
+                id="react-chayns-list"
+            >
                 <List>
                     <ListItem
                         title="ListItem"

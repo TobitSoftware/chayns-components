@@ -6,7 +6,10 @@ import ReceiverInput from '../../src/react-chayns-receiverinput/component/Receiv
 export default class ReceiverInputExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="ReceiverInput">
+            <ExampleContainer
+                headline="ReceiverInput"
+                id="react-chayns-receiverinput"
+            >
                 <ReceiverInput
                     onChosenReceiverChange={(chosenReceivers) => {
                         console.log(chosenReceivers);

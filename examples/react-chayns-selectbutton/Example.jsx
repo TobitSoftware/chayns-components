@@ -27,7 +27,10 @@ export default class SelectButtonExample extends PureComponent {
         ];
 
         return (
-            <ExampleContainer headline="SelectButton">
+            <ExampleContainer
+                headline="SelectButton"
+                id="react-chayns-selectbutton"
+            >
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
                         stopPropagation

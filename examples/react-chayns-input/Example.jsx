@@ -23,7 +23,10 @@ export default class InputExample extends PureComponent {
 
     render() {
         return (
-            <ExampleContainer headline="Input">
+            <ExampleContainer
+                headline="Input"
+                id="react-chayns-input"
+            >
                 <Input
                     stopPropagation
                     defaultValue="Input"

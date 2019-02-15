@@ -36,6 +36,8 @@ import FileUploadExample from './react-chayns-upload/Example';
 import TextString from '../src/react-chayns-textstring/component/TextString';
 import InputBoxExample from './react-chayns-input_box/Example';
 
+import ExampleList from './ExampleList';
+
 async function bootstrap() {
     await window.chayns.ready;
 
@@ -43,7 +45,7 @@ async function bootstrap() {
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
     ReactDom.render(
-        <div className="examples">
+        <ExampleList>
             <AccordionExample />
             <AmountControlExample />
             <BadgeExample />
@@ -77,7 +79,7 @@ async function bootstrap() {
             <TextStringExample />
             <TooltipExample />
             <FileUploadExample />
-        </div>,
+        </ExampleList>,
         document.querySelector('#app')
     );
 }

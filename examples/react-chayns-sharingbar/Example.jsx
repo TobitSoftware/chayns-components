@@ -6,7 +6,10 @@ import ExampleContainer from '../ExampleContainer';
 export default class SharingBarExample extends Component {
     render() {
         return(
-            <ExampleContainer headline="SharingBar">
+            <ExampleContainer
+                headline="SharingBar"
+                id="react-chayns-sharingbar"
+            >
                 <SharingBar stopPropagation />
             </ExampleContainer>
         );

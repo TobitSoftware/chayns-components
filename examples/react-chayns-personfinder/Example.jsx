@@ -7,7 +7,10 @@ import Button from '../../src/react-chayns-button/component/Button';
 export default class PersonFinderExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="PersonFinder">
+            <ExampleContainer
+                headline="PersonFinder"
+                id="react-chayns-personfinder"
+            >
                 <PersonFinder
                     stopPropagation
                     placeholder="Person finden"

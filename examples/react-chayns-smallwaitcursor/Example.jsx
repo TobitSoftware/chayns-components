@@ -13,7 +13,10 @@ export default class SmallWaitCursorExample extends Component {
     render() {
         const { show } = this.state;
         return (
-            <ExampleContainer headline="SmallWaitCursor">
+            <ExampleContainer
+                headline="SmallWaitCursor"
+                id="react-chayns-smallwaitcursor"
+            >
                 <SmallWaitCursor
                     show={show}
                 />
@@ -37,18 +40,16 @@ export default class SmallWaitCursorExample extends Component {
                 </div>
                 <div
                     style={{
-                        width: '100%',
-                        padding: '10px',
-                        marginTop: '10px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
+                        textAlign: 'right',
+                        lineHeight: '20px',
                     }}
                 >
                     <SmallWaitCursor
                         show={show}
                         showBackground={false}
+                        inline
                     />
+                    {' Loading Data'}
                 </div>
             </ExampleContainer>
         );

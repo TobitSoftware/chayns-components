@@ -10,7 +10,10 @@ export default class ScrollViewExample extends PureComponent {
 
     render() {
         return (
-            <ExampleContainer headline="ScrollView">
+            <ExampleContainer
+                headline="ScrollView"
+                id="react-chayns-scrollview"
+            >
                 <ScrollView
                     style={{
                         maxHeight: '500px',

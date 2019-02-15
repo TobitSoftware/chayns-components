@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 
 import { Accordion, Icon } from '../src';
+import connectExpandableContext from '../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
+import ListItem from '../src/react-chayns-list/component/ListItem';
+
+let maxId = 1;
 
 class ExampleContainer extends PureComponent {
     state = {
@@ -10,6 +14,16 @@ class ExampleContainer extends PureComponent {
         error: null,
         info: null,
     };
+
+    constructor(props) {
+        super(props);
+
+        const { id } = props;
+        this.id = id || maxId++; /* eslint-disable-line no-plusplus */
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
 
     static getMultilineText(text) {
         const componentArray = [];
@@ -30,9 +44,40 @@ class ExampleContainer extends PureComponent {
         });
     }
 
+    handleClick() {
+        const { onOpen, id } = this.props;
+
+        if (onOpen) {
+            chayns.appendUrlParameter({
+                component: String(id),
+            });
+
+            onOpen(id || this.id);
+        }
+    }
+
     render() {
-        const { headline, children, ...props } = this.props;
+        const {
+            headline,
+            children,
+            open,
+            onOpen,
+            ...props
+        } = this.props;
         const { hasError, error, info } = this.state;
+
+        if (!open) {
+            return (
+                <ListItem
+                    title={headline}
+                    onClick={this.handleClick}
+                />
+            );
+        }
+
+        if (open && open !== String(this.id).toLowerCase()) {
+            return null;
+        }
 
         if (hasError) {
             return (
@@ -71,8 +116,22 @@ class ExampleContainer extends PureComponent {
 }
 
 ExampleContainer.propTypes = {
+    id: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]),
     headline: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    open: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]),
+    onOpen: PropTypes.func.isRequired,
 };
 
-export default ExampleContainer;
+ExampleContainer.defaultProps = {
+    id: null,
+    open: null,
+};
+
+export default connectExpandableContext(ExampleContainer);

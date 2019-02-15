@@ -62,6 +62,7 @@ export default class Input extends Component {
         this.id = Math.random()
             .toString();
 
+        this.setRef = this.setRef.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -72,6 +73,14 @@ export default class Input extends Component {
         const { value: oldValue } = this.props;
         if (value && value !== oldValue) {
             this.callValidated(value);
+        }
+    }
+
+    componentDidUpdate({ regExp: oldRegExp }) {
+        const { regExp, onChange } = this.props;
+
+        if (String(oldRegExp) !== String(regExp) && this.ref) {
+            this.callValidated(this.ref.value, onChange);
         }
     }
 
@@ -95,6 +104,15 @@ export default class Input extends Component {
         this.callValidated(e.target.value, onChange);
     }
 
+    setRef(ref) {
+        const { inputRef } = this.props;
+
+        if (inputRef) {
+            inputRef(ref);
+        }
+        this.ref = ref;
+    }
+
     callValidated(value, callback) {
         const { regExp } = this.props;
         const valid = !(regExp && !value.match(regExp));
@@ -113,7 +131,6 @@ export default class Input extends Component {
             style,
             placeholder,
             type,
-            inputRef,
             dynamic,
             icon,
             wrapperRef,
@@ -134,12 +151,7 @@ export default class Input extends Component {
                 >
                     <input
                         style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
-                        ref={(ref) => {
-                            if (inputRef) {
-                                inputRef(ref);
-                            }
-                            this.ref = ref;
-                        }}
+                        ref={this.setRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
@@ -192,7 +204,7 @@ export default class Input extends Component {
                 value={value}
                 defaultValue={defaultValue}
                 type={type}
-                ref={inputRef}
+                ref={this.setRef}
                 id={id || this.id}
                 onClick={stopPropagation ? event => event.stopPropagation() : null}
                 {...customProps}

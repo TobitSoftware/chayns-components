@@ -25,7 +25,10 @@ export default class RfidInputExample extends Component {
         const { rfid, rfidInput } = this.state;
 
         return (
-            <ExampleContainer headline="RFID Input">
+            <ExampleContainer
+                headline="RFID Input"
+                id="react-chayns-rfid_input"
+            >
                 <h3>RFID-Live</h3>
                 <p>{rfidInput || '-'}</p>
                 <h3>RFID</h3>

@@ -41,11 +41,6 @@ export default class AmountInput extends PureComponent {
         contentWidth: null,
     };
 
-    constructor(props) {
-        super(props);
-        this.inputRef = React.createRef();
-    }
-
     componentDidMount() {
         const { equalize } = this.props;
 
@@ -62,7 +57,9 @@ export default class AmountInput extends PureComponent {
         }
         if (nextProps.showInput && !showInput && focusOnClick) {
             setTimeout(() => {
-                this.inputRef.current.focus();
+                if (this.inputRef) {
+                    this.inputRef.focus();
+                }
             }, 20);
         }
     }
@@ -100,6 +97,10 @@ export default class AmountInput extends PureComponent {
         tempAmount = tempAmount === null ? 0 : tempAmount;
         setInput(false);
         onChange(tempAmount);
+    };
+
+    setRef = (ref) => {
+        this.inputRef = ref;
     };
 
     getButtonValue() {
@@ -146,7 +147,7 @@ export default class AmountInput extends PureComponent {
                 disabled={disabled}
                 onEnter={this.onInputBlur}
                 customProps={{ 'data-cc-equalize-width': equalize }}
-                inputRef={this.inputRef}
+                inputRef={this.setRef}
                 style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(renderInput ? null : { display: 'none' }) }}
             />,
             <div

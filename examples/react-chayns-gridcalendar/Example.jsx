@@ -24,7 +24,10 @@ export default class GridCalendarExample extends Component {
         const TODAY = new Date();
 
         return(
-            <ExampleContainer headline="Grid-Calendar">
+            <ExampleContainer
+                headline="Grid-Calendar"
+                id="react-chayns-gridcalendar"
+            >
                 <div className="content">
                     <div className="accordion accordion--open">
                         <div className="accordion__head">

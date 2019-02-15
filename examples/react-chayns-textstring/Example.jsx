@@ -20,7 +20,10 @@ export default class TextStringExample extends Component {
         const { number } = this.state;
         // Take a look in index.jsx
         return (
-            <ExampleContainer headline="TextString">
+            <ExampleContainer
+                headline="TextString"
+                id="react-chayns-textstring"
+            >
                 <TextString
                     stopPropagation
                     stringName="fallbackTest"
