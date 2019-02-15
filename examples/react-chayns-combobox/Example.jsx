@@ -26,7 +26,10 @@ export default class ComboBoxExample extends PureComponent {
         ];
 
         return(
-            <ExampleContainer headline="ComboBox">
+            <ExampleContainer
+                headline="ComboBox"
+                id="react-chayns-combobox"
+            >
                 <div style={{ marginBottom: '20px' }}>
                 <ComboBox
                     label="Select Pizza"

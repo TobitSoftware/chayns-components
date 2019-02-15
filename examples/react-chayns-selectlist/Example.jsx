@@ -34,7 +34,10 @@ export default class SelectListExample extends Component {
         elements.push(null);
 
         return(
-            <ExampleContainer headline="SelectList">
+            <ExampleContainer
+                headline="SelectList"
+                id="react-chayns-selectlist"
+            >
                 <SelectList
                     selectFirst
                     // value={this.state.selectedId}

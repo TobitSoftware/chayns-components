@@ -6,7 +6,10 @@ import ExampleContainer from '../ExampleContainer';
 export default class RadioButtonExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="RadioButton">
+            <ExampleContainer
+                headline="RadioButton"
+                id="react-chayns-radiobutton"
+            >
                 <RadioButton
                     stopPropagation
                     onChange={(data) => {

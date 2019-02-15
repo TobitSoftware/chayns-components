@@ -29,7 +29,10 @@ export default class GalleryExample extends Component {
             'https://tsimg.space/v1/images/545a343f-57a4-e811-80d6-0025905a8161.jpg'
         ];
         return (
-            <ExampleContainer headline="Gallery">
+            <ExampleContainer
+                headline="Gallery"
+                id="react-chayns-gallery"
+            >
                 <div style={{ marginTop: '30px' }}>
                     <Gallery urls={[urls[0]]} height={180} width={320} stopPropagation/>
                 </div>

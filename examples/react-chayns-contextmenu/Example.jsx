@@ -81,7 +81,10 @@ export default class ContextMenuExample extends Component {
         ];
 
         return (
-            <ExampleContainer headline="ContextMenu">
+            <ExampleContainer
+                headline="ContextMenu"
+                id="react-chayns-contextmenu"
+            >
                 <ContextMenu
                     coordinates={{
                         x,

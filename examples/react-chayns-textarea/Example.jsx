@@ -5,7 +5,10 @@ import ExampleContainer from '../ExampleContainer';
 export default class TextAreaExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="TextArea">
+            <ExampleContainer
+                headline="TextArea"
+                id="react-chayns-textarea"
+            >
                 <TextArea
                     stopPropagation
                     placeholder="Input"

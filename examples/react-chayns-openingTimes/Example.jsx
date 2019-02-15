@@ -41,7 +41,10 @@ export default class OpeningTimesExample extends PureComponent {
     render() {
         const { times } = this.state;
         return (
-            <ExampleContainer headline="OpeningTimes">
+            <ExampleContainer
+                headline="OpeningTimes"
+                id="react-chayns-openingTimes"
+            >
                 <OpeningTimes
                     times={times}
                     onChange={(newTimes) => {

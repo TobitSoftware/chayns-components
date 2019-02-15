@@ -27,6 +27,7 @@ export default class AmountControlExample extends Component {
         return (
             <ExampleContainer
                 headline="AmountControl"
+                id="react-chayns-amountcontrol"
                 data-equalize="group-1"
             >
                 <AmountControl

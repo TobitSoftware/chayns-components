@@ -9,7 +9,10 @@ import ExampleContainer from '../ExampleContainer';
 export default class IconExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="Icon">
+            <ExampleContainer
+                headline="Icon"
+                id="react-chayns-icon"
+            >
                 <a href="https://fontawesome.com/icons?d=gallery" target="_blank" rel="noopener noreferrer">Font Awesome Icons</a>
                 <br/>
                 <Icon icon={faCoffee} style={{ fontSize: '3rem' }} stopPropagation/>

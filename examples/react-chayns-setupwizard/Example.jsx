@@ -37,7 +37,10 @@ export default class SetupWizardExample extends Component {
         const { ready, notComplete } = this.state;
         if (!ready) {
             return (
-                <ExampleContainer headline="SetupWizard">
+                <ExampleContainer
+                    headline="SetupWizard"
+                    id="react-chayns-setupwizard"
+                >
                     <SetupWizard
                         ready={this.ready}
                         notComplete={this.notComplete}

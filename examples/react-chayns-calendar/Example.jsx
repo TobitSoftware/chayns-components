@@ -12,7 +12,10 @@ export default class CalendarExample extends Component {
     render() {
         const { selected } = this.state;
         return (
-            <ExampleContainer headline="Calendar">
+            <ExampleContainer
+                headline="Calendar"
+                id="react-chayns-calendar"
+            >
                 <Calendar
                     style={{ margin: '20px 0' }}
                     onDateSelect={(date) => {

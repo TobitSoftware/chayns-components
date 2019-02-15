@@ -38,7 +38,10 @@ export default class AccordionExample extends Component {
         const { show } = this.state;
 
         return (
-            <ExampleContainer headline="Accordion">
+            <ExampleContainer
+                headline="Accordion"
+                id="react-chayns-accordion"
+            >
                 {
                     show
                         ? (

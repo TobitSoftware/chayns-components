@@ -33,7 +33,10 @@ export default class Example extends Component {
         const { open } = this.state;
 
         return(
-            <ExampleContainer headline="ExpandableContent">
+            <ExampleContainer
+                headline="ExpandableContent"
+                id="react-chayns-expandable_content"
+            >
                 <div>
                     <Button onClick={this.toggle}>Toggle</Button>
                     {' '}

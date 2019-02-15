@@ -13,7 +13,10 @@ export default class TooltipExample extends Component {
     render() {
         const { x, y } = this.state;
         return (
-            <ExampleContainer headline="Tooltip">
+            <ExampleContainer
+                headline="Tooltip"
+                id="react-chayns-tooltip"
+            >
                 <div style={{ marginBottom: '20px' }}>
                     Simple&nbsp;
                     <Tooltip

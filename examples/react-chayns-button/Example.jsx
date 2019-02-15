@@ -8,7 +8,10 @@ import './example.scss';
 export default class ButtonExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer headline="Button">
+            <ExampleContainer
+                headline="Button"
+                id="react-chayns-button"
+            >
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         onClick={console.log}

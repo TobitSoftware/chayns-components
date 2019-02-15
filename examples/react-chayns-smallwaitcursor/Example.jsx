@@ -13,7 +13,10 @@ export default class SmallWaitCursorExample extends Component {
     render() {
         const { show } = this.state;
         return (
-            <ExampleContainer headline="SmallWaitCursor">
+            <ExampleContainer
+                headline="SmallWaitCursor"
+                id="react-chayns-smallwaitcursor"
+            >
                 <SmallWaitCursor
                     show={show}
                 />

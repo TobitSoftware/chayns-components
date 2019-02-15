@@ -14,7 +14,10 @@ export default class CheckboxExample extends Component {
 
     render() {
         return (
-            <ExampleContainer headline="Checkbox">
+            <ExampleContainer
+                headline="Checkbox"
+                id="react-chayns-checkbox"
+            >
                 <div>
                     <Checkbox
                         label="testlabel"

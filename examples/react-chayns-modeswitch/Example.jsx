@@ -15,7 +15,10 @@ export default class ModeSwitchExample extends Component {
     render() {
         const { mode } = this.state;
         return (
-            <ExampleContainer headline="ModeSwitch">
+            <ExampleContainer
+                headline="ModeSwitch"
+                id="react-chayns-modeswitch"
+            >
                 <ModeSwitch
                     modes={[{
                         id: 1,
