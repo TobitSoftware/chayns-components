@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { ChooseButton, Icon, Input } from '../../index';
@@ -30,11 +30,11 @@ class TimeSpan extends Component {
 
     constructor(props) {
         super(props);
-        this.startTime = createRef();
-        this.endTime = createRef();
 
         this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.setStartTimeRef = this.setRef.bind(this, 'startTime');
+        this.setEndTimeRef = this.setRef.bind(this, 'endTime');
     }
 
     onClick() {
@@ -45,10 +45,14 @@ class TimeSpan extends Component {
 
     onChange(_, valid) {
         const { onChange } = this.props;
-        if (valid) {
-            onChange(this.startTime.current.value, this.endTime.current.value);
+        if (valid && this.startTime && this.endTime) {
+            onChange(this.startTime.value, this.endTime.value);
         }
     }
+
+    setRef = (name, ref) => {
+        this[name] = ref;
+    };
 
     render() {
         const {
@@ -62,7 +66,7 @@ class TimeSpan extends Component {
             <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`}>
                 <div className="time__span--input">
                     <Input
-                        inputRef={this.startTime}
+                        inputRef={this.setStartTimeRef}
                         value={disabled ? TimeSpan.defaultStart : start}
                         onChange={this.onChange}
                     />
@@ -70,7 +74,7 @@ class TimeSpan extends Component {
                 <span>-</span>
                 <div className="time__span--input">
                     <Input
-                        inputRef={this.endTime}
+                        inputRef={this.setEndTimeRef}
                         value={disabled ? TimeSpan.defaultEnd : end}
                         onChange={this.onChange}
                     />
