@@ -10,7 +10,10 @@ export default class PersonFinder2Example extends PureComponent {
 
     render() {
         return (
-            <ExampleContainer headline="PersonFinder (using chayns-Relations)">
+            <ExampleContainer
+                headline="PersonFinder (using chayns-Relations)"
+                style={{ marginBottom: '300px' }}
+            >
                 <PersonFinder2
                     style={{ width: '100%' }}
                     dynamic
