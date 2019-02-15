@@ -9,6 +9,9 @@ import findRelations from '../utils/findRelations';
 import PersonFinderResults from './PersonFinderResults';
 import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
+import WaitCursor from './WaitCursor';
+
+const WAIT_CURSOR_TIMEOUT = 500;
 
 export default class PersonFinderData extends Component {
     static propTypes = {
@@ -32,6 +35,7 @@ export default class PersonFinderData extends Component {
         value: null,
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
+        showWaitCursor: false,
     };
 
     promises = {
@@ -79,6 +83,24 @@ export default class PersonFinderData extends Component {
         this.fetchData(value);
     }
 
+    showWaitCursor() {
+        clearTimeout(this.waitCursorTimeout);
+
+        this.waitCursorTimeout = window.setTimeout(() => {
+            this.setState({
+                showWaitCursor: true,
+            });
+        }, WAIT_CURSOR_TIMEOUT);
+    }
+
+    hideWaitCursor() {
+        clearTimeout(this.waitCursorTimeout);
+
+        this.setState({
+            showWaitCursor: false,
+        });
+    }
+
     async fetchData(value, clear = true) {
         if (clear || value === '') {
             this.skip[LOCATION_RELATION] = 0;
@@ -93,7 +115,9 @@ export default class PersonFinderData extends Component {
         promises.push(enableSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
+            this.showWaitCursor();
             const [personResults, siteResults] = await Promise.all(promises);
+            this.hideWaitCursor();
 
             const { persons: personsState, sites: sitesState } = this.state;
 
@@ -143,6 +167,36 @@ export default class PersonFinderData extends Component {
         return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated > 0;
     }
 
+    renderChildren() {
+        const {
+            onSelect,
+            selectedValue,
+        } = this.props;
+
+        const { persons, sites, showWaitCursor } = this.state;
+
+        const hasEntries = this.hasEntries();
+
+        if (!selectedValue && hasEntries) {
+            return [
+                showWaitCursor && (<WaitCursor />),
+                <PersonFinderResults
+                    persons={persons}
+                    sites={sites}
+                    onSelect={onSelect}
+                />
+            ];
+        }
+
+        if (showWaitCursor) {
+            return (
+                <WaitCursor />
+            );
+        }
+
+        return null;
+    }
+
     render() {
         const {
             onSelect,
@@ -152,9 +206,6 @@ export default class PersonFinderData extends Component {
             sites: enableSites,
             ...props
         } = this.props;
-        const { persons, sites } = this.state;
-
-        const hasEntries = this.hasEntries();
 
         return (
             <InputBox
@@ -164,13 +215,7 @@ export default class PersonFinderData extends Component {
                 boxClassName={classnames('cc__person-finder__overlay')}
                 {...props}
             >
-                {!selectedValue && hasEntries && (
-                    <PersonFinderResults
-                        persons={persons}
-                        sites={sites}
-                        onSelect={onSelect}
-                    />
-                )}
+                {this.renderChildren()}
             </InputBox>
         );
     }
