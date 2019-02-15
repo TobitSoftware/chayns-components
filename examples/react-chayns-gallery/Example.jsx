@@ -5,77 +5,34 @@ import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 
 export default class GalleryExample extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            editableUrls: [
-                'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
-                'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
-                'https://tsimg.space/v1/images/c9a8d7ad-ee72-e811-80d6-0025905a8161.jpg',
-                'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg'
-            ]
-        };
-    }
-
     render() {
-        const { editableUrls } = this.state;
-        const urls = [
-            'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
-            'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/c9a8d7ad-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/416b53f0-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/6860fec5-ee72-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg',
-            'https://tsimg.space/v1/images/545a343f-57a4-e811-80d6-0025905a8161.jpg'
+        const images = [
+            {
+                url: 'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
+                preview: '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoADwDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAgABAwT/xAAjEAEAAwABBQABBQAAAAAAAAABAAIRIQMSMUFRgSJCYWKx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAABEBMVH/2gAMAwEAAhEDEQA/APN2JVc4mViOo9oewyb0qi8+DlgOleQzl+zerRDN9h4iAd4y3khFbnd6fEjXAek+mFMvzPStV7ahv+Tj1acNh3PMUnira1Hh5Zyva1rKvMlcyGVlpOlDZzBDfUdHIM674mBZ5++oba2NR/tFU7jfnr7Le67hmASNIUM7T8MzqNu12mGRGVWr5/awdS36f5eJBxSGJMhmmSrxXfktV3dlKTDXSt3znP2bXqZZsvuUpYUep1C3g/MDbXXllKIWsXXmGUoH/9k=',
+                width: 640,
+                height: 426,
+            },
+            {
+                url: 'https://tsimg.cloud/127-89061/2b83dfa29f2f88bcb35372cbfbefe04a3f899d00.jpg',
+                preview: '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoABsDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAECAwT/xAAgEAEAAwABBQADAAAAAAAAAAABAAIRIRIxQVFhAzKh/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERIf/aAAwDAQACEQMRAD8A06V9Qy3qD0j+5KpYHuQqqCHJHueIFyxw6SFdgcoJyYx7YrnSb88ydfMuhtjiZ0KtUrm/2GfYrKWfUW/YuQOVOebepf41bdT3yEJQrZrWz3eH1MksOdLCED//2Q==',
+            },
+            {
+                url: 'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
+            },
+            {
+                url: 'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
+            },
+            {
+                url: 'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg',
+                width: 500,
+                height: 300,
+            }
         ];
+
         return (
             <ExampleContainer headline="Gallery">
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0]]} height={180} width={320} stopPropagation/>
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0], urls[1]]}/>
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0], urls[1], urls[2]]}/>
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0], urls[1], urls[2], urls[3]]}/>
-                </div>
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery urls={[urls[0], urls[1], urls[2], urls[3], urls[4]]}/>
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery
-                        urls={urls}
-                        onClick={console.log}
-                    />
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery
-                        urls={editableUrls}
-                        deleteMode
-                        onDelete={(url, index) => {
-                            editableUrls.splice(index, 1);
-                            this.setState({ editableUrls });
-                        }}
-                    />
-                </div>
-
-                <div style={{ marginTop: '30px' }}>
-                    <Gallery
-                        urls={urls}
-                        deleteMode
-                        onDelete={(url, index) => {
-                            console.log('onDelete', url, index);
-                        }}
-                    />
-                </div>
+                <Gallery images={images}/>
             </ExampleContainer>
         );
     }

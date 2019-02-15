@@ -61,7 +61,7 @@ export default class FileInputExample extends Component {
                 <Button
                     disabled={!stateFile}
                     onClick={async () => {
-                        const result = await imageUpload(stateFile, 'componentsTest', chayns.env.user.personId);
+                        const result = await imageUpload(stateFile, 'componentsTest', null, chayns.env.site.siteId);
                         chayns.dialog.alert('Uploaded', JSON.stringify(result));
                     }}
                 >
