@@ -28,6 +28,7 @@ import SelectListExample from './react-chayns-selectlist/Example';
 import SetupWizardExample from './react-chayns-setupwizard/Example';
 import SharingBarExample from './react-chayns-sharingbar/Example';
 import SmallWaitCursorExample from './react-chayns-smallwaitcursor/Example';
+import TagInputExample from './react-chayns-tag_input/Example';
 import TextAreaExample from './react-chayns-textarea/Example';
 import TextStringExample from './react-chayns-textstring/Example';
 import TooltipExample from './react-chayns-tooltip/Example';
@@ -71,6 +72,7 @@ async function bootstrap() {
             <SetupWizardExample />
             <SharingBarExample />
             <SmallWaitCursorExample />
+            <TagInputExample />
             <TextAreaExample />
             <TextStringExample />
             <TooltipExample />
