@@ -15,7 +15,7 @@ export default class PersonFinder2Example extends PureComponent {
                     style={{ width: '100%' }}
                     dynamic
                     placeholder="User/Site"
-                    onSelect={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinder2Example.handleSelect}
                 />
                 <PersonFinder2
                     style={{ width: '100%' }}
@@ -25,14 +25,14 @@ export default class PersonFinder2Example extends PureComponent {
                         name: 'Tobit.Software',
                         siteId: '67231-11058'
                     }}
-                    onSelect={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinder2Example.handleSelect}
                     persons={false}
                 />
                 <PersonFinder2
                     style={{ width: '100%' }}
                     dynamic
                     placeholder="Users"
-                    onSelect={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinder2Example.handleSelect}
                     sites={false}
                 />
             </ExampleContainer>

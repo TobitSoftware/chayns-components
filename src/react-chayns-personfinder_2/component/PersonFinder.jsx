@@ -7,9 +7,9 @@ import PersonFinderData from './PersonFinderData';
 
 export default class PersonFinder extends Component {
     static propTypes = {
-        onSelect: PropTypes.func,
-        persons: PropTypes.bool,
-        sites: PropTypes.bool,
+        onChange: PropTypes.func,
+        showPersons: PropTypes.bool,
+        showSites: PropTypes.bool,
         defaultValue: PropTypes.oneOfType([
             PropTypes.shape({
                 name: PropTypes.string,
@@ -23,9 +23,9 @@ export default class PersonFinder extends Component {
     };
 
     static defaultProps = {
-        onSelect: null,
-        persons: true,
-        sites: true,
+        onChange: null,
+        showPersons: true,
+        showSites: true,
         defaultValue: null,
     };
 
@@ -53,7 +53,7 @@ export default class PersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onSelect } = this.props;
+        const { onChange } = this.props;
         const name = convertToInputValue(value);
 
         this.setState({
@@ -61,8 +61,9 @@ export default class PersonFinder extends Component {
             selectedValue: true
         });
 
-        if (onSelect) {
-            onSelect({
+        if (onChange) {
+            onChange({
+                type,
                 name: value.name,
                 firstName: value.firstName,
                 lastName: value.lastName,
@@ -76,8 +77,8 @@ export default class PersonFinder extends Component {
 
     render() {
         const {
-            persons,
-            sites,
+            showPersons,
+            showSites,
             value: propValue, /* eslint-disable-line react/prop-types */
             defaultValue,
             ...props
@@ -92,8 +93,8 @@ export default class PersonFinder extends Component {
                     selectedValue={selectedValue}
                     onChange={this.handleOnChange}
                     onSelect={this.handleSelect}
-                    persons={persons}
-                    sites={sites}
+                    persons={showPersons}
+                    sites={showSites}
                 />
             </div>
         );
