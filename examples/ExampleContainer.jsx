@@ -75,7 +75,7 @@ class ExampleContainer extends PureComponent {
             );
         }
 
-        if (open && open !== String(this.id)) {
+        if (open && open !== String(this.id).toLowerCase()) {
             return null;
         }
 

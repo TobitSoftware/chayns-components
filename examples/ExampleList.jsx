@@ -31,7 +31,7 @@ export default class ExampleList extends Component {
 
     handleOpen(id) {
         this.setState({
-            open: String(id),
+            open: String(id).toLowerCase(),
         });
     }
 
