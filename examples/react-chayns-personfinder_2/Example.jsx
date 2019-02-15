@@ -12,6 +12,7 @@ export default class PersonFinder2Example extends PureComponent {
         return (
             <ExampleContainer
                 headline="PersonFinder (using chayns-Relations)"
+                id="react-person-finder2"
                 style={{ marginBottom: '300px' }}
             >
                 <PersonFinder2
