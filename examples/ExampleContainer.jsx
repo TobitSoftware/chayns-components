@@ -19,7 +19,7 @@ class ExampleContainer extends PureComponent {
         super(props);
 
         const { id } = props;
-        this.id = id;
+        this.id = id || maxId++; /* eslint-disable-line no-plusplus */
 
         this.handleClick = this.handleClick.bind(this);
     }
@@ -130,7 +130,7 @@ ExampleContainer.propTypes = {
 };
 
 ExampleContainer.defaultProps = {
-    id: maxId++, /* eslint-disable-line no-plusplus */
+    id: null,
     open: null,
 };
 
