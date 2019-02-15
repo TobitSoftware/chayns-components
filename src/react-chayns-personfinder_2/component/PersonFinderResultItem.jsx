@@ -76,6 +76,32 @@ export default class PersonFinderResultItem extends PureComponent {
         });
     }
 
+    renderSubtitle(relationString, furtherRelationsString) {
+        const {
+            relation,
+            type,
+        } = this.props;
+
+        if (!relationString) {
+            return (
+                <div className="identifier">
+                    {type === PERSON_RELATION ? relation.personId : relation.siteId}
+                </div>
+            );
+        }
+
+        return (
+            <span className="relation">
+                {relationString}
+                {furtherRelationsString && (
+                    <span style={{ fontWeight: 'bold' }}>
+                        {furtherRelationsString}
+                    </span>
+                )}
+            </span>
+        );
+    }
+
     render() {
         const {
             relation,
@@ -87,15 +113,10 @@ export default class PersonFinderResultItem extends PureComponent {
 
         return(
             <div className="result-item" onClick={this.handleClick}>
-                <div className="img">
-                    <img src={relation.image}/>
-                </div>
+                <div className="img" style={{ backgroundImage: `url(${relation.image})` }}/>
                 <div className="text">
                     <div
-                        style={{
-                            display: 'flex',
-                            flexWrap: 'wrap'
-                        }}
+                        className="title"
                     >
                         <div className="name">{relation.name}</div>
                         {relationString && (
@@ -104,21 +125,7 @@ export default class PersonFinderResultItem extends PureComponent {
                             </div>
                         )}
                     </div>
-                    {!relationString && (
-                        <div className="identifier">
-                            {type === PERSON_RELATION ? relation.personId : relation.siteId}
-                        </div>
-                    )}
-                    {relationString && (
-                        <span className="relation">
-                            {relationString}
-                            {furtherRelationsString && (
-                                <span style={{ fontWeight: 'bold' }}>
-                                    {furtherRelationsString}
-                                </span>
-                            )}
-                        </span>
-                    )}
+                    {this.renderSubtitle(relationString, furtherRelationsString)}
                 </div>
             </div>
         );
