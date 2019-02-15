@@ -2,7 +2,13 @@ import { PERSON_RELATION, SITE_RELATION } from '../constants/relationTypes';
 import { fetchPersonRelations } from './fetchRelations';
 import processRelations from './processRelations';
 
+const MIN_FETCH_LENGTH = 3;
+
 export default async function findRelations(type, value, skip, take) {
+    if (value && value.length < MIN_FETCH_LENGTH) {
+        return { related: [], unrelated: [] };
+    }
+
     if (type === PERSON_RELATION) {
         const relationsRaw = await fetchPersonRelations(value, skip, take);
 
