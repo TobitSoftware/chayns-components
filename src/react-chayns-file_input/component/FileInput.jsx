@@ -71,6 +71,7 @@ export default class FileInput extends PureComponent {
     constructor(props) {
         super(props);
         this.uploadRefs = [];
+        this.needAppCall = (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.isAndroid && chayns.env.appVersion < 6000;// TODO replace with right appVersion
     }
 
     onDragEnter = (event, item, index) => {
@@ -85,16 +86,17 @@ export default class FileInput extends PureComponent {
 
     onChange = (event, item, index) => {
         const { errorMessages } = this.props;
+        const { files } = event.target;
         this.onDragLeave(index);
-        if (event.target.files && event.target.files.length > 0) {
+        if (files && files.length > 0) {
             const invalidFiles = [];
             const validFiles = [];
-            Object.keys(event.target.files).forEach((fileIndex) => {
-                const file = event.target.files[fileIndex];
-                if(!this.checkFileType(file.type, item.types)) {
+            Object.keys(files).forEach((fileIndex) => {
+                const file = files[fileIndex];
+                if (!this.checkFileType(file.type, item.types)) {
                     invalidFiles.push(file);
                     chayns.dialog.alert('', errorMessages.wrongFileType);
-                }else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
+                } else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
                     invalidFiles.push(file);
                     chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
                 } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
@@ -108,10 +110,22 @@ export default class FileInput extends PureComponent {
         }
     };
 
-    onClick = (event, item) => {
+    onClick = async (event, item, index) => {
         const { stopPropagation } = this.props;
         if (stopPropagation) event.stopPropagation();
         if (typeof item.onClick === 'function') item.onClick(event);
+        if (this.needAppCall && item.onChange) {
+            const uploadResult = await chayns.uploadCloudImage();
+            const type = uploadResult.url.match(/(\.[a-z]+)/g)[0];
+            const response = await fetch(uploadResult.url);
+            const data = await response.blob();
+            const metadata = {
+                type: `image/${type}`
+            };
+            const file = new File([data], `androidCompatibilityUpload${type}`, metadata);
+            const compatibilityEvent = { target: { files: [file] } };
+            this.onChange(compatibilityEvent, item, index);
+        }
     };
 
     checkFileType = (fileType, supportedTypes) => {
@@ -148,10 +162,10 @@ export default class FileInput extends PureComponent {
                                             <div
                                                 className="cc__file-upload--placeholder"
                                                 ref={ref => this.uploadRefs[index] = ref}
-                                                onClick={event => this.onClick(event, item)}
+                                                onClick={event => this.onClick(event, item, index)}
                                             >
                                                 {
-                                                    item.onChange
+                                                    item.onChange && !this.needAppCall
                                                         ? (
                                                             <input
                                                                 multiple={item.maxNumberOfFiles !== 1}
