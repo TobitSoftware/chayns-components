@@ -7,16 +7,23 @@ export default class SmallWaitCursor extends PureComponent {
         show: PropTypes.bool,
         style: PropTypes.object,
         showBackground: PropTypes.bool,
+        inline: PropTypes.bool,
     };
 
     static defaultProps = {
         show: false,
         style: null,
         showBackground: true,
+        inline: false,
     };
 
     render() {
-        const { show, style, showBackground } = this.props;
+        const {
+            show,
+            style,
+            showBackground,
+            inline,
+        } = this.props;
 
         if (showBackground) {
             return (
@@ -33,7 +40,8 @@ export default class SmallWaitCursor extends PureComponent {
         return (
             <div
                 className={classNames('wait-cursor__spinner', {
-                    hidden: !show
+                    'wait-cursor__spinner--inline': inline,
+                    hidden: !show,
                 })}
             />
         );
