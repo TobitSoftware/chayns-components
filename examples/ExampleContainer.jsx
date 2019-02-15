@@ -106,7 +106,7 @@ class ExampleContainer extends PureComponent {
             <div
                 className="content__card dark"
                 {...props}
-                style={{ margin: '20px 0' }}
+                style={{ margin: '20px 0', ...props.style }}
             >
                 <h1>{headline}</h1>
                 {children}
