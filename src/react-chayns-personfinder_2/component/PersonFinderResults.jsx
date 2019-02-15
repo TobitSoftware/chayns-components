@@ -46,6 +46,7 @@ export default class PersonFinderResults extends PureComponent {
                     score: relation.score,
                     name: relation.name,
                     relations: relation.relations,
+                    relationCount: relation.relationCount,
                     image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
                 }}
                 type={LOCATION_RELATION}
@@ -69,6 +70,7 @@ export default class PersonFinderResults extends PureComponent {
                     firstName: relation.firstName,
                     lastName: relation.lastName,
                     score: relation.score,
+                    relationCount: relation.relationCount,
                     image: `https://sub60.tobit.com/u/${relation.personId}?size=40`,
                     relations: relation.relations,
                 }}

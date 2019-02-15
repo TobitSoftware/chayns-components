@@ -13,6 +13,7 @@ export default class PersonFinderResultItem extends PureComponent {
         onClick: PropTypes.func.isRequired,
         relation: PropTypes.shape({
             name: PropTypes.string.isRequired,
+            relationCount: PropTypes.number.isRequired,
             relations: PropTypes.string.isRequired,
             firstName: PropTypes.string,
             lastName: PropTypes.string,
@@ -45,19 +46,19 @@ export default class PersonFinderResultItem extends PureComponent {
         return relationString;
     }
 
-    static getFurtherRelations(data) {
-        if (!data) {
+    static getFurtherRelations(relation) {
+        if (!relation || !relation.relations) {
             return null;
         }
 
-        const { length } = data;
-        const show = Math.min(length, SHOW_RELATIONS_COUNT);
+        const { length } = relation.relations;
+        const furtherRelationCount = Math.max(relation.relationCount - SHOW_RELATIONS_COUNT, length - SHOW_RELATIONS_COUNT, 0) || 0;
 
-        if (length - show <= 0) {
+        if (furtherRelationCount <= 0) {
             return '';
         }
 
-        return ` +${String((length - show) || 0)}`;
+        return ` +${String((furtherRelationCount) || 0)}`;
     }
 
     constructor(props) {
@@ -82,7 +83,7 @@ export default class PersonFinderResultItem extends PureComponent {
         } = this.props;
 
         const relationString = PersonFinderResultItem.getRelations(relation.relations, type);
-        const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(relation.relations);
+        const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(relation);
 
         return(
             <div className="result-item" onClick={this.handleClick}>
