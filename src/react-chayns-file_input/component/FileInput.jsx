@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-export default class FileUpload extends Component {
+export default class FileInput extends PureComponent {
     static types = {
         IMAGE: 'image/*',
         VIDEO: 'video/*',
@@ -32,6 +32,7 @@ export default class FileUpload extends Component {
             className: PropTypes.string,
             style: PropTypes.object,
             disabled: PropTypes.bool,
+            fileInputRef: PropTypes.func,
             content: PropTypes.oneOfType([PropTypes.shape({
                 text: PropTypes.string,
                 icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object)
@@ -55,7 +56,7 @@ export default class FileUpload extends Component {
             wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
         },
         items: [{
-            types: [FileUpload.types.ALL],
+            types: [FileInput.types.ALL],
             maxFileSize: 4194304, // 4 MB
             maxNumberOfFiles: 0, // 0=infinity
             onClick: null,
@@ -160,6 +161,7 @@ export default class FileUpload extends Component {
                                                                 accept={item.types}
                                                                 onDragEnter={event => this.onDragEnter(event, item, index)}
                                                                 onDragLeave={() => this.onDragLeave(index)}
+                                                                ref={item.fileInputRef}
                                                             />
                                                         )
                                                         : null

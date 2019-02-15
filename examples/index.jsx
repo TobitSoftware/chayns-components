@@ -31,7 +31,7 @@ import SmallWaitCursorExample from './react-chayns-smallwaitcursor/Example';
 import TextAreaExample from './react-chayns-textarea/Example';
 import TextStringExample from './react-chayns-textstring/Example';
 import TooltipExample from './react-chayns-tooltip/Example';
-import FileUploadExample from './react-chayns-upload/Example';
+import FileInputExample from './react-chayns-file_input/Example';
 import TextString from '../src/react-chayns-textstring/component/TextString';
 
 async function bootstrap() {
@@ -42,6 +42,7 @@ async function bootstrap() {
 
     ReactDom.render(
         <div className="examples">
+            <FileInputExample />
             <AccordionExample />
             <AmountControlExample />
             <BadgeExample />
@@ -72,7 +73,6 @@ async function bootstrap() {
             <TextAreaExample />
             <TextStringExample />
             <TooltipExample />
-            <FileUploadExample />
         </div>,
         document.querySelector('#app')
     );
