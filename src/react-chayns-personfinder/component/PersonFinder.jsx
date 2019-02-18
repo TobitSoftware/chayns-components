@@ -40,7 +40,7 @@ export default class PersonFinder extends Component {
         super(props);
 
         this.state = {
-            value: createInputValue(props.defaultValue) || '',
+            inputValue: createInputValue(props.defaultValue) || '',
             selectedValue: !!props.defaultValue,
         };
 
@@ -49,9 +49,9 @@ export default class PersonFinder extends Component {
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    handleOnChange(value) {
+    handleOnChange(inputValue) {
         this.setState({
-            value,
+            inputValue,
             selectedValue: false,
         });
     }
@@ -61,7 +61,7 @@ export default class PersonFinder extends Component {
         const name = convertToInputValue(value);
 
         this.setState({
-            value: name,
+            inputValue: name,
             selectedValue: true
         });
 
@@ -83,7 +83,7 @@ export default class PersonFinder extends Component {
         const { onChange } = this.props;
 
         this.setState({
-            value: '',
+            inputValue: '',
         });
 
         if (onChange) {
@@ -100,13 +100,13 @@ export default class PersonFinder extends Component {
             defaultValue,
             ...props
         } = this.props;
-        const { value, selectedValue } = this.state;
+        const { inputValue, selectedValue } = this.state;
 
         return (
             <div className={classnames('cc__person-finder', className)}>
                 <PersonFinderData
                     {...props}
-                    value={value}
+                    value={inputValue}
                     selectedValue={selectedValue}
                     onChange={this.handleOnChange}
                     onSelect={this.handleSelect}
