@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Tag from './Tag';
 import Input from '../../react-chayns-input/component/Input';
 
+const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
 
 export default class TagInput extends Component {
@@ -21,6 +22,7 @@ export default class TagInput extends Component {
 
     state = {
         inputValue: '',
+        selectedIndex: null,
     };
 
     constructor(props) {
@@ -45,6 +47,11 @@ export default class TagInput extends Component {
 
     handleKeyUp(event) {
         const { inputValue } = this.state;
+
+        if (event.keyCode === KEY_BACKSPACE && !inputValue) {
+            this.handleRemoveLast();
+            return;
+        }
 
         if (event.keyCode !== KEY_ENTER || !inputValue) {
             return;
@@ -77,6 +84,26 @@ export default class TagInput extends Component {
         }
     }
 
+    handleRemoveLast() {
+        const { tags } = this.props;
+        const { selectedIndex } = this.state;
+
+        const lastTagIndex = tags.length - 1;
+
+        if (selectedIndex !== lastTagIndex) {
+            this.setState({
+                selectedIndex: lastTagIndex,
+            });
+            return;
+        }
+
+        this.setState({
+            selectedIndex: null,
+        });
+
+        this.handleTagRemove(tags[lastTagIndex]);
+    }
+
     handleClick() {
         if (this.input) {
             this.input.focus();
@@ -85,15 +112,19 @@ export default class TagInput extends Component {
 
     render() {
         const { tags } = this.props;
-        const { inputValue } = this.state;
+        const { inputValue, selectedIndex } = this.state;
 
         return (
             <div
                 onClick={this.handleClick}
                 className="cc__tag-input input"
             >
-                {tags && tags.map(tag => (
-                    <Tag value={tag} onDelete={this.handleTagRemove}>
+                {tags && tags.map((tag, index) => (
+                    <Tag
+                        value={tag}
+                        onDelete={this.handleTagRemove}
+                        selected={selectedIndex === index}
+                    >
                         {tag.text}
                     </Tag>
                 ))}
