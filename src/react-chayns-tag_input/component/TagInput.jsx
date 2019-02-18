@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Tag from './Tag';
 import Input from '../../react-chayns-input/component/Input';
+import getInputSize from '../utils/getInputSize';
 
 const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
+
+const BIGGEST_LETTER = 'm';
 
 export default class TagInput extends Component {
     static propTypes = {
@@ -44,6 +47,8 @@ export default class TagInput extends Component {
     handleChange(value) {
         this.setState({
             inputValue: value,
+            width: getInputSize(`${value}${BIGGEST_LETTER}`).width,
+            selectedIndex: null,
         });
     }
 
@@ -114,7 +119,7 @@ export default class TagInput extends Component {
 
     render() {
         const { tags, placeholder } = this.props;
-        const { inputValue, selectedIndex } = this.state;
+        const { inputValue, selectedIndex, width } = this.state;
 
         return (
             <div
@@ -137,6 +142,9 @@ export default class TagInput extends Component {
                     onChange={this.handleChange}
                     onKeyUp={this.handleKeyUp}
                     placeholder={(!tags || !tags.length) ? placeholder : null}
+                    style={{
+                        width,
+                    }}
                 />
             </div>
         );
