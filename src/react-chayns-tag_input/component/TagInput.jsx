@@ -13,11 +13,13 @@ export default class TagInput extends Component {
         })).isRequired,
         onAddTag: PropTypes.func,
         onRemoveTag: PropTypes.func,
+        placeholder: PropTypes.string,
     };
 
     static defaultProps = {
         onAddTag: null,
         onRemoveTag: null,
+        placeholder: null,
     };
 
     state = {
@@ -111,7 +113,7 @@ export default class TagInput extends Component {
     }
 
     render() {
-        const { tags } = this.props;
+        const { tags, placeholder } = this.props;
         const { inputValue, selectedIndex } = this.state;
 
         return (
@@ -134,6 +136,7 @@ export default class TagInput extends Component {
                     value={inputValue}
                     onChange={this.handleChange}
                     onKeyUp={this.handleKeyUp}
+                    placeholder={(!tags || !tags.length) ? placeholder : null}
                 />
             </div>
         );

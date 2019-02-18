@@ -38,6 +38,7 @@ export default class TagInputExample extends PureComponent {
                     tags={tags}
                     onAddTag={this.handleTagAdd}
                     onRemoveTag={this.handleTagRemove}
+                    placeholder="Input tag and hit ENTER"
                 />
             </ExampleContainer>
         );
