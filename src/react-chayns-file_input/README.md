@@ -40,7 +40,6 @@ The component can be used in JSX like in the following example:
 | types             | Array of allowed mime-types (FileInput.types)                              | array         | [*]           |
 | maxNumberOfFiles  | Maximum number of files that can be uploaded at once. (0=infinity)         | number        | 0             |
 | maxFileSize       | Maximum size per file. (0=infinity, in bytes)                              | number        | 0             |
-| fileInputRef      | Reference to file input. Allows you to clear the input.                    | function      |               |
 | content.text      | Text that should be shown on button                                        | string        |               |
 | content.icon      | Icon that should be shown on button                                        | string/object |               |
 | content.children  | JSX that should be shown on button                                         | node          |               |

@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign,react/no-array-index-key */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -32,7 +32,6 @@ export default class FileInput extends PureComponent {
             className: PropTypes.string,
             style: PropTypes.object,
             disabled: PropTypes.bool,
-            fileInputRef: PropTypes.func,
             content: PropTypes.oneOfType([PropTypes.shape({
                 text: PropTypes.string,
                 icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object)
@@ -108,6 +107,7 @@ export default class FileInput extends PureComponent {
             });
             item.onChange(validFiles, invalidFiles);
         }
+        this.fileInputRef.value = null;
     };
 
     onClick = async (event, item, index) => {
@@ -154,6 +154,7 @@ export default class FileInput extends PureComponent {
                             <div
                                 className={classNames('cc__file-upload__split', item.className, { 'cc__file-upload__split--disabled': item.disabled })}
                                 style={item.style}
+                                key={`item${index}`}
                             >
                                 {
                                     item.content && item.content.children
@@ -168,6 +169,7 @@ export default class FileInput extends PureComponent {
                                                     item.onChange && !this.needAppCall
                                                         ? (
                                                             <input
+                                                                title=""
                                                                 multiple={item.maxNumberOfFiles !== 1}
                                                                 className="cc__file-upload__input"
                                                                 type="file"
@@ -175,7 +177,7 @@ export default class FileInput extends PureComponent {
                                                                 accept={item.types}
                                                                 onDragEnter={event => this.onDragEnter(event, item, index)}
                                                                 onDragLeave={() => this.onDragLeave(index)}
-                                                                ref={item.fileInputRef}
+                                                                ref={ref => this.fileInputRef = ref}
                                                             />
                                                         )
                                                         : null
@@ -204,7 +206,7 @@ export default class FileInput extends PureComponent {
                             </div>
                         ];
                         if (index !== 0) {
-                            nodeArray.unshift(<div className="cc__file-upload__separator"/>);
+                            nodeArray.unshift(<div className="cc__file-upload__separator" key={`separator${index}`}/>);
                         }
                         return nodeArray;
                     })

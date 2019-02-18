@@ -5,31 +5,47 @@ import ExampleContainer from '../ExampleContainer';
 import FileInput from '../../src/react-chayns-file_input/component/FileInput';
 import imageUpload from '../../src/utils/imageUpload';
 import Button from '../../src/react-chayns-button/component/Button';
+import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 export default class FileInputExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { file: null };
+        this.state = { images: [] };
+        chayns.register({ apiDialogs: true });
     }
 
-    previewFile = (image) => {
-        const reader = new FileReader();
+    onChange =(validFiles) => {
+        const { images } = this.state;
+        this.setState({ images: images.concat(validFiles.map(f => ({ file: f }))) });
+    };
 
-        reader.addEventListener('load', (e) => {
-            this.imgRef.src = e.target.result;
-        }, false);
+    onClick = async () => {
+        const { images } = this.state;
+        const data = await chayns.dialog.mediaSelect({ multiselect: true });
+        this.setState({ images: images.concat(data.selection.map(url => ({ url }))) });
+    };
 
-        if (image) {
-            reader.readAsDataURL(image);
-        }
+    onDelete = (image, index) => {
+        const { images } = this.state;
+        const img = images.slice();
+        img.splice(index, 1);
+        this.setState({ images: img });
+    };
+
+    upload = () => {
+        const { images } = this.state;
+        images.forEach(async (image) => {
+            const result = await imageUpload(image.file, 'componentsTestUpload', chayns.env.site.personId, chayns.env.site.siteId);
+            // eslint-disable-next-line no-console
+            console.log('Uploaded image', result);
+            this.logRef.innerText = `${this.logRef.innerText}${result.base}/${result.key}\n`;
+        });
     };
 
     render() {
-        const { file: stateFile } = this.state;
-
+        const { images } = this.state;
         return (
             <ExampleContainer headline="FileInput">
-                <FileInput style={{ marginBottom: '20px' }}/>
                 <FileInput
                     style={{ marginBottom: '20px' }}
                     stopPropagation
@@ -37,36 +53,25 @@ export default class FileInputExample extends Component {
                         types: [FileInput.types.IMAGE], // only images are allowed
                         maxFileSize: 4194304, // max file size is 4 MB
                         maxNumberOfFiles: 0, // no limit for number of files
-                        onChange: async (validFiles) => {
-                            if (validFiles.length > 0) {
-                                const file = validFiles[0];
-                                this.previewFile(file);
-                                this.setState({ file });
-                            }
-                        },
+                        onChange: this.onChange,
                         content: { text: 'Upload image' },
                     }, {
-                        onClick: async () => {
-                            const data = await chayns.dialog.mediaSelect({});
-                            if (data.selection.length > 0) {
-                                const url = data.selection[0];
-                                this.imgRef.src = url;
-                                this.setState({ file: url });
-                            }
-                        },
+                        onClick: this.onClick,
                         content: { text: 'Choose image from pixabay', icon: 'ts-image' },
                     }]}
                 />
-                <img ref={ref => this.imgRef = ref} style={{ width: '100%' }}/>
+                <Gallery
+                    images={images}
+                    deleteMode
+                    onDelete={this.onDelete}
+                />
                 <Button
-                    disabled={!stateFile}
-                    onClick={async () => {
-                        const result = await imageUpload(stateFile, 'componentsTest', null, chayns.env.site.siteId);
-                        chayns.dialog.alert('Uploaded', JSON.stringify(result));
-                    }}
+                    disabled={!images}
+                    onClick={this.upload}
                 >
                     {'Upload'}
                 </Button>
+                <p ref={ref => this.logRef = ref}/>
             </ExampleContainer>
         );
     }
