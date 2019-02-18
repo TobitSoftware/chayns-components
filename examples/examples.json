@@ -1,0 +1,9 @@
+[{
+  "id": "react-chayns-accordion",
+  "title": "Accordion",
+  "example": "react-chayns-accordion/Example.jsx"
+},{
+  "id": "react-chayns-amountcontrol",
+  "title": "AmountControl",
+  "example": "react-chayns-amountcontrol/Example.jsx"
+}]

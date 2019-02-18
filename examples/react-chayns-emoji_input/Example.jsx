@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { EmojiInput } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class EmojiInputExample extends Component {
     constructor() {

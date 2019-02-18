@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import { SelectList, SelectListItem } from '../../src/index';
 
 export default class SelectListExample extends Component {

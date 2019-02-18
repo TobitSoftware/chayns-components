@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import { ScrollView } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 

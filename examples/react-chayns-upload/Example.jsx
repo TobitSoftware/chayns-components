@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { Input } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class InputExample extends PureComponent {
     onBlur(value, valid) {

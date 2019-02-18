@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 

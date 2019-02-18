@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Checkbox } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
 export default class CheckboxExample extends Component {

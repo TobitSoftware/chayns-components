@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SharingBar } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 
 export default class SharingBarExample extends Component {

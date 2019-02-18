@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Input from '../../src/react-chayns-input/component/Input';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';

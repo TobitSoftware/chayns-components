@@ -4,7 +4,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 
 import { Icon } from '../../src/index';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class IconExample extends PureComponent {
     render() {

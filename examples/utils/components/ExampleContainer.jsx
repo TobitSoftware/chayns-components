@@ -2,10 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 
-import { Accordion, Icon } from '../src';
-import connectExpandableContext from '../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
-import ListItem from '../src/react-chayns-list/component/ListItem';
-import { connectSearchContext } from './utils/SearchContext';
+import { Accordion, Icon } from '../../../src';
+import connectExpandableContext from '../../../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
+import ListItem from '../../../src/react-chayns-list/component/ListItem';
+import { connectSearchContext } from '../SearchContext';
 
 let maxId = 1;
 

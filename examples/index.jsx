@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
+import Examples from './examples.json';
+
 import AccordionExample from './react-chayns-accordion/Example';
 import AmountControlExample from './react-chayns-amountcontrol/Example';
 import BadgeExample from './react-chayns-badge/Example';
@@ -34,13 +36,15 @@ import TooltipExample from './react-chayns-tooltip/Example';
 import FileUploadExample from './react-chayns-upload/Example';
 import TextString from '../src/react-chayns-textstring/component/TextString';
 
-import ExampleList from './ExampleList';
+import ExampleList from './utils/components/ExampleList';
 
 async function bootstrap() {
     await window.chayns.ready;
 
     await TextString.loadLibrary('TextStringTest');
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
+
+    console.log(Examples);
 
     ReactDom.render(
         <div>

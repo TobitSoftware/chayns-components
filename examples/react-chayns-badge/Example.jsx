@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import { Badge, Icon } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class BadgeExample extends PureComponent {
     render() {

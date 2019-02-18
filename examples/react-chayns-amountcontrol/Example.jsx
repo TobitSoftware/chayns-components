@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { AmountControl } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
 export default class AmountControlExample extends Component {

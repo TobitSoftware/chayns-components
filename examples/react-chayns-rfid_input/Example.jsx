@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { RfidInput } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class RfidInputExample extends Component {
     constructor() {

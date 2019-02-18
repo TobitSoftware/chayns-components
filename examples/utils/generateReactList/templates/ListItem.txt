@@ -1,0 +1,6 @@
+        <ExampleContainer
+            headline="##headline##"
+            id="##id##"
+        >
+            <##importName## />
+        </ExampleContainer>

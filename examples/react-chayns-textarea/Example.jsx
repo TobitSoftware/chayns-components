@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { TextArea } from '../../src';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class TextAreaExample extends PureComponent {
     render() {

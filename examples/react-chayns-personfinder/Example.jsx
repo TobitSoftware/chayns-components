@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { PersonFinder } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 
 export default class PersonFinderExample extends PureComponent {

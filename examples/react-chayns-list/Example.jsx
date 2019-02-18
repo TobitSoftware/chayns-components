@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ContextMenu, List, ListItem } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class ListExample extends Component {
     render() {

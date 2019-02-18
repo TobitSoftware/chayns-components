@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 
-import SearchContext from './utils/SearchContext';
-import ExpandableList from '../src/react-chayns-list/component/ExpandableList/ExpandableList';
-import List from '../src/react-chayns-list/component/List';
-import { Input } from '../src';
+import SearchContext from '../SearchContext';
+import ExpandableList from '../../../src/react-chayns-list/component/ExpandableList/ExpandableList';
+import List from '../../../src/react-chayns-list/component/List';
+import { Input } from '../../../src';
 
 export default class ExampleList extends Component {
     static propTypes = {

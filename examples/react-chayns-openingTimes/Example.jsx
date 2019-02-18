@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { OpeningTimes } from '../../src/index';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class OpeningTimesExample extends PureComponent {
     constructor(props) {

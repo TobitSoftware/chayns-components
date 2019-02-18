@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { faRocket } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, ChooseButton } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import './example.scss';
 
 export default class ButtonExample extends PureComponent {

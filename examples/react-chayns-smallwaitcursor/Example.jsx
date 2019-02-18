@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 
 export default class SmallWaitCursorExample extends Component {

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import ReceiverInput from '../../src/react-chayns-receiverinput/component/ReceiverInput';
 
 export default class ReceiverInputExample extends PureComponent {

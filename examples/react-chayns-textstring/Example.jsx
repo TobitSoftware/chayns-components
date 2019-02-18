@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import { TextString } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';

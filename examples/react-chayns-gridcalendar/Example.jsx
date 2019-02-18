@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { GridCalendar } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class GridCalendarExample extends Component {
     constructor() {

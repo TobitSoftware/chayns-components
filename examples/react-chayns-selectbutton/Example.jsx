@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { SelectButton } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class SelectButtonExample extends PureComponent {
     render() {

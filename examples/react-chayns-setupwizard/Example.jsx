@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 import { SetupWizard, SetupWizardItem } from '../../src/index';
 

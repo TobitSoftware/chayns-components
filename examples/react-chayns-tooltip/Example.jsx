@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 

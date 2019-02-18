@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { RadioButton } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class RadioButtonExample extends PureComponent {
     render() {

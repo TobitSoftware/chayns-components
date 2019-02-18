@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import ExpandableContent from '../../src/react-chayns-expandable_content/component/ExpandableContent';
 import { Button } from '../../src';
 

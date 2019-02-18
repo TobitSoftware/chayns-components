@@ -1,0 +1,12 @@
+import React from 'react';
+import ExampleList from './utils/components/ExampleList';
+
+##imports##
+
+const List = () => (
+    <ExampleList>
+##children##
+    </ExampleList>
+);
+
+export default List;

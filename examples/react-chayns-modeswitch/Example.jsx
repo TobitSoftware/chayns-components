@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ModeSwitch } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 import Mode from '../../src/react-chayns-modeswitch/component/Mode';
 

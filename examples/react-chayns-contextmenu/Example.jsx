@@ -4,7 +4,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
+import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
