@@ -7,6 +7,14 @@ export default class PersonFinder2Example extends PureComponent {
         chayns.dialog.alert(JSON.stringify(user, null, 2));
     }
 
+    static handleAdd(user) {
+        console.log('added', user);
+    }
+
+    static handleRemove(user) {
+        console.log('removed', user);
+    }
+
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
@@ -53,6 +61,16 @@ export default class PersonFinder2Example extends PureComponent {
                     onChange={PersonFinder2Example.handleSelect}
                     sites={false}
                     includeOwn
+                />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    dynamic
+                    placeholder="Users (multiple)"
+                    onAdd={PersonFinder2Example.handleAdd}
+                    onRemove={PersonFinder2Example.handleRemove}
+                    onChange={PersonFinder2Example.handleSelect}
+                    multiple
                 />
                 <Button
                     onClick={this.clear}
