@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-export default class Input extends Component {
+export default class Input extends PureComponent {
     static propTypes = {
         className: PropTypes.string,
         onKeyUp: PropTypes.func,
@@ -120,7 +120,12 @@ export default class Input extends Component {
         if (callback) {
             callback(value, valid);
         }
-        this.setState({ valid });
+
+        const { valid: validState } = this.state;
+
+        if (validState !== valid) {
+            this.setState({ valid });
+        }
     }
 
     render() {
