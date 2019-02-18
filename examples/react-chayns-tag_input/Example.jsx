@@ -11,7 +11,7 @@ export default class TagInputExample extends PureComponent {
     handleTagAdd = (tag) => {
         const { tags } = this.state;
 
-        if (tags.indexOf(tag) === -1) {
+        if (!tags.find(t => t.text === tag.text)) {
             this.setState({
                 tags: [...tags, tag],
             });
