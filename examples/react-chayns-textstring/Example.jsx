@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
 import { TextString } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
@@ -20,10 +19,7 @@ export default class TextStringExample extends Component {
         const { number } = this.state;
         // Take a look in index.jsx
         return (
-            <ExampleContainer
-                headline="TextString"
-                id="react-chayns-textstring"
-            >
+            <div>
                 <TextString
                     stopPropagation
                     stringName="fallbackTest"
@@ -88,7 +84,7 @@ export default class TextStringExample extends Component {
                 >
                     <Accordion/>
                 </TextString>
-            </ExampleContainer>
+            </div>
         );
     }
 }

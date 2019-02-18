@@ -2,39 +2,35 @@ import React, { PureComponent } from 'react';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { Input } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class InputExample extends PureComponent {
-    onBlur(value, valid) {
+    static onBlur(value, valid) {
         console.log('onBlur', value, valid);
     }
 
-    onChange(value, valid) {
+    static onChange(value, valid) {
         console.log('onChange', value, valid);
     }
 
-    onEnter(value, valid) {
+    static onEnter(value, valid) {
         console.log('onEnter', value, valid);
     }
 
-    onKeyUp(e) {
+    static onKeyUp(e) {
         console.log('onKeyUp', e);
     }
 
     render() {
         return (
-            <ExampleContainer
-                headline="Input"
-                id="react-chayns-input"
-            >
+            <div>
                 <Input
                     stopPropagation
                     defaultValue="Input"
                     placeholder="input"
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
                     style={{
                         width: '100%',
                         marginBottom: '20px'
@@ -43,10 +39,10 @@ export default class InputExample extends PureComponent {
                 <Input
                     placeholder="password"
                     type="password"
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
                     style={{
                         width: '100%',
                         marginBottom: '20px'
@@ -55,10 +51,10 @@ export default class InputExample extends PureComponent {
                 <Input
                     placeholder="invalid input"
                     invalid
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
                     style={{
                         width: '100%',
                         marginBottom: '20px'
@@ -67,10 +63,10 @@ export default class InputExample extends PureComponent {
                 <Input
                     placeholder='type "eee"'
                     regExp={new RegExp('.*e{3}.*')}
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyUp={this.onKeyUp}
-                    onEnter={this.onEnter}
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
                     style={{
                         width: '100%',
                         marginBottom: '20px'
@@ -83,10 +79,10 @@ export default class InputExample extends PureComponent {
                         style={{
                             width: '100%'
                         }}
-                        onBlur={this.onBlur}
-                        onChange={this.onChange}
-                        onKeyUp={this.onKeyUp}
-                        onEnter={this.onEnter}
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
                         dynamic
                     />
                 </div>
@@ -97,10 +93,10 @@ export default class InputExample extends PureComponent {
                         style={{
                             width: '100%'
                         }}
-                        onBlur={this.onBlur}
-                        onChange={this.onChange}
-                        onKeyUp={this.onKeyUp}
-                        onEnter={this.onEnter}
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
                         dynamic
                     />
                 </div>
@@ -108,10 +104,10 @@ export default class InputExample extends PureComponent {
                     <Input
                         placeholder='type "eee"'
                         regExp={new RegExp('.*e{3}.*')}
-                        onBlur={this.onBlur}
-                        onChange={this.onChange}
-                        onKeyUp={this.onKeyUp}
-                        onEnter={this.onEnter}
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
                         icon={faCoffee}
                         style={{
                             width: '100%'
@@ -121,7 +117,7 @@ export default class InputExample extends PureComponent {
                         dynamic
                     />
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

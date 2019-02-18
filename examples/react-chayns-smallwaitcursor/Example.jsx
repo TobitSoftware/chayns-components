@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 
 export default class SmallWaitCursorExample extends Component {
@@ -13,10 +12,7 @@ export default class SmallWaitCursorExample extends Component {
     render() {
         const { show } = this.state;
         return (
-            <ExampleContainer
-                headline="SmallWaitCursor"
-                id="react-chayns-smallwaitcursor"
-            >
+            <div>
                 <SmallWaitCursor
                     show={show}
                 />
@@ -51,7 +47,7 @@ export default class SmallWaitCursorExample extends Component {
                     />
                     {' Loading Data'}
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

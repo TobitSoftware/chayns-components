@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Calendar } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class CalendarExample extends Component {
     constructor(props) {
@@ -12,10 +11,7 @@ export default class CalendarExample extends Component {
     render() {
         const { selected } = this.state;
         return (
-            <ExampleContainer
-                headline="Calendar"
-                id="react-chayns-calendar"
-            >
+            <div>
                 <Calendar
                     style={{ margin: '20px 0' }}
                     onDateSelect={(date) => {
@@ -35,7 +31,7 @@ export default class CalendarExample extends Component {
                         color: '#E71E28'
                     }]}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

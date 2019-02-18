@@ -2,29 +2,25 @@ import React, { PureComponent } from 'react';
 import { faRocket } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, ChooseButton } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 import './example.scss';
 
 export default class ButtonExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer
-                headline="Button"
-                id="react-chayns-button"
-            >
+            <div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         onClick={console.log}
                         stopPropagation
                     >
-                        Button
+                        {'Button'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         disabled
                     >
-                        Disabled Button
+                        {'Disabled Button'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
@@ -32,7 +28,7 @@ export default class ButtonExample extends PureComponent {
                         style={{ backgroundColor: '#4c993d' }}
                     >
 
-                        Green Button
+                        {'Green Button'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
@@ -40,14 +36,14 @@ export default class ButtonExample extends PureComponent {
                         disabled
                         style={{ backgroundColor: '#4c993d' }}
                     >
-                        Green disabled Button
+                        {'Green disabled Button'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
                     <Button
                         secondary
                     >
-                        SecondaryButton
+                        {'SecondaryButton'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
@@ -55,7 +51,7 @@ export default class ButtonExample extends PureComponent {
                         disabled
                         secondary
                     >
-                        Disabled SecondaryButton
+                        {'Disabled SecondaryButton'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
@@ -63,7 +59,7 @@ export default class ButtonExample extends PureComponent {
                         icon={faRocket}
                         onClick={console.log}
                     >
-                        IconButton
+                        {'IconButton'}
                     </Button>
                 </div>
                 <div style={{ textAlign: 'center', margin: '5px' }}>
@@ -71,7 +67,7 @@ export default class ButtonExample extends PureComponent {
                         disabled
                         icon={faRocket}
                     >
-                        Disabled IconButton
+                        {'Disabled IconButton'}
                     </Button>
                 </div>
 
@@ -81,7 +77,7 @@ export default class ButtonExample extends PureComponent {
                             console.log(event);
                         }}
                     >
-                        ChooseButton
+                        {'ChooseButton'}
                     </ChooseButton>
                 </div>
 
@@ -89,7 +85,7 @@ export default class ButtonExample extends PureComponent {
                     <ChooseButton
                         className="button--disabled"
                     >
-                        Disabled ChooseButton
+                        {'Disabled ChooseButton'}
                     </ChooseButton>
                 </div>
 
@@ -98,7 +94,7 @@ export default class ButtonExample extends PureComponent {
                         icon="ts-chayns"
                         onClick={console.log}
                     >
-                        ChooseButton with icon
+                        {'ChooseButton with icon'}
                     </ChooseButton>
                 </div>
 
@@ -107,10 +103,10 @@ export default class ButtonExample extends PureComponent {
                         disabled
                         icon="ts-chayns"
                     >
-                        Disabled ChooseButton with icon
+                        {'Disabled ChooseButton with icon'}
                     </ChooseButton>
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

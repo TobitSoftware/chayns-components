@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
 import { SelectList, SelectListItem } from '../../src/index';
 
 export default class SelectListExample extends Component {
@@ -34,10 +33,7 @@ export default class SelectListExample extends Component {
         elements.push(null);
 
         return(
-            <ExampleContainer
-                headline="SelectList"
-                id="react-chayns-selectlist"
-            >
+            <div>
                 <SelectList
                     selectFirst
                     // value={this.state.selectedId}
@@ -69,7 +65,7 @@ export default class SelectListExample extends Component {
                         })
                     }
                 </SelectList>
-            </ExampleContainer>
+            </div>
         );
     }
 }

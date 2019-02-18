@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { ModeSwitch } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 import Mode from '../../src/react-chayns-modeswitch/component/Mode';
 
@@ -15,10 +14,7 @@ export default class ModeSwitchExample extends Component {
     render() {
         const { mode } = this.state;
         return (
-            <ExampleContainer
-                headline="ModeSwitch"
-                id="react-chayns-modeswitch"
-            >
+            <div>
                 <ModeSwitch
                     modes={[{
                         id: 1,
@@ -56,8 +52,7 @@ export default class ModeSwitchExample extends Component {
                     console.log(ModeSwitch.getCurrentMode());
                 }}
                 >
-
-                    console.log(ModeSwitch.getCurrentMode());
+                    {'console.log(ModeSwitch.getCurrentMode());'}
                 </Button>
                 <h3>Mode</h3>
                 <Mode modes={[1]}>Admin</Mode>
@@ -65,7 +60,7 @@ export default class ModeSwitchExample extends Component {
                 <Mode className="mode2" modes={[5]}>No uacIds set</Mode>
                 <Mode modes={[-1]}>Not authorized</Mode>
                 <Mode modes={[-1, 0]}>Not authorized or mode 0</Mode>
-            </ExampleContainer>
+            </div>
         );
     }
 }

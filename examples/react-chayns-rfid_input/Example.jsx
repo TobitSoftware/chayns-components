@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { RfidInput } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class RfidInputExample extends Component {
     constructor() {
@@ -25,10 +24,7 @@ export default class RfidInputExample extends Component {
         const { rfid, rfidInput } = this.state;
 
         return (
-            <ExampleContainer
-                headline="RFID Input"
-                id="react-chayns-rfid_input"
-            >
+            <div>
                 <h3>RFID-Live</h3>
                 <p>{rfidInput || '-'}</p>
                 <h3>RFID</h3>
@@ -47,7 +43,7 @@ export default class RfidInputExample extends Component {
                     value={rfidInput}
                     enableScan
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 
 import { ContextMenu, List, ListItem } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class ListExample extends Component {
     render() {
         return(
-            <ExampleContainer
-                headline="List"
-                id="react-chayns-list"
-            >
+            <div>
                 <List>
                     <ListItem
                         title="ListItem"
@@ -88,7 +84,7 @@ export default class ListExample extends Component {
                         `}
                     </ListItem>
                 </List>
-            </ExampleContainer>
+            </div>
         );
     }
 }

@@ -4,7 +4,6 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 import Icon from '../../src/react-chayns-icon/component/Icon';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
@@ -81,10 +80,7 @@ export default class ContextMenuExample extends Component {
         ];
 
         return (
-            <ExampleContainer
-                headline="ContextMenu"
-                id="react-chayns-contextmenu"
-            >
+            <div>
                 <ContextMenu
                     coordinates={{
                         x,
@@ -108,7 +104,7 @@ export default class ContextMenuExample extends Component {
                     right={<ContextMenu items={items} position={position % 4}/>}
                 >TEST
                 </Accordion>
-            </ExampleContainer>
+            </div>
         );
     }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { GridCalendar } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class GridCalendarExample extends Component {
     constructor() {
@@ -21,17 +20,15 @@ export default class GridCalendarExample extends Component {
     }
 
     render() {
+        const { date } = this.state;
         const TODAY = new Date();
 
         return(
-            <ExampleContainer
-                headline="Grid-Calendar"
-                id="react-chayns-gridcalendar"
-            >
+            <div>
                 <div className="content">
                     <div className="accordion accordion--open">
                         <div className="accordion__head">
-                            Calendar
+                            {'Calendar'}
                         </div>
                         <div className="accordion__body">
                             <div className="accordion__content">
@@ -39,7 +36,7 @@ export default class GridCalendarExample extends Component {
                                     onClick={this.onClick}
                                     startTime={new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, TODAY.getDate())}
                                     endTime={new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, TODAY.getDate())}
-                                    focus={this.state.date}
+                                    focus={date}
                                     data={[{
                                         id: 0,
                                         name: chayns.env.user.name ? chayns.env.user.name : 'chayns',
@@ -66,7 +63,7 @@ export default class GridCalendarExample extends Component {
                         </div>
                     </div>
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

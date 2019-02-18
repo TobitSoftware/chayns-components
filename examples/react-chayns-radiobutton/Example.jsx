@@ -1,15 +1,11 @@
 import React, { PureComponent } from 'react';
 
 import { RadioButton } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class RadioButtonExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer
-                headline="RadioButton"
-                id="react-chayns-radiobutton"
-            >
+            <div>
                 <RadioButton
                     stopPropagation
                     onChange={(data) => {
@@ -60,7 +56,7 @@ export default class RadioButtonExample extends PureComponent {
                 >
                     {'Name: group1'}
                 </RadioButton>
-            </ExampleContainer>
+            </div>
         );
     }
 }

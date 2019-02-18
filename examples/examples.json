@@ -6,4 +6,124 @@
   "id": "react-chayns-amountcontrol",
   "title": "AmountControl",
   "example": "react-chayns-amountcontrol/Example.jsx"
+},{
+  "id": "react-chayns-badge",
+  "title": "Badge",
+  "example": "react-chayns-badge/Example.jsx"
+},{
+  "id": "react-chayns-button",
+  "title": "Button",
+  "example": "react-chayns-button/Example.jsx"
+},{
+  "id": "react-chayns-calendar",
+  "title": "Calendar",
+  "example": "react-chayns-calendar/Example.jsx"
+},{
+  "id": "react-chayns-checkbox",
+  "title": "Checkbox",
+  "example": "react-chayns-checkbox/Example.jsx"
+},{
+  "id": "react-chayns-combobox",
+  "title": "ComboBox",
+  "example": "react-chayns-checkbox/Example.jsx"
+},{
+  "id": "react-chayns-contextmenu",
+  "title": "ContextMenu",
+  "example": "react-chayns-contextmenu/Example.jsx"
+},{
+  "id": "react-chayns-emoji_input",
+  "title": "EmojiInput",
+  "example": "react-chayns-emoji_input/Example.jsx"
+},{
+  "id": "react-chayns-expandable_content",
+  "title": "ExpandableContent",
+  "example": "react-chayns-expandable_content/Example.jsx"
+},{
+  "id": "react-chayns-gallery",
+  "title": "Gallery",
+  "example": "react-chayns-gallery/Example.jsx"
+},{
+  "id": "react-chayns-gridcalendar",
+  "title": "Grid-Calendar",
+  "example": "react-chayns-gridcalendar/Example.jsx"
+},{
+  "id": "react-chayns-icon",
+  "title": "Icon",
+  "example": "react-chayns-icon/Example.jsx"
+},{
+  "id": "react-chayns-input",
+  "title": "Input",
+  "example": "react-chayns-input/Example.jsx"
+},{
+  "id": "react-chayns-list",
+  "title": "List",
+  "example": "react-chayns-list/Example.jsx"
+},{
+  "id": "react-chayns-map",
+  "title": "Map",
+  "example": "react-chayns-map/Example.jsx"
+},{
+  "id": "react-chayns-modeswitch",
+  "title": "ModeSwitch",
+  "example": "react-chayns-modeswitch/Example.jsx"
+},{
+  "id": "react-chayns-openingTimes",
+  "title": "OpeningTimes",
+  "example": "react-chayns-openingTimes/Example.jsx"
+},{
+  "id": "react-chayns-personfinder",
+  "title": "PersonFinder",
+  "example": "react-chayns-personfinder/Example.jsx"
+},{
+  "id": "react-chayns-radiobutton",
+  "title": "RadioButton",
+  "example": "react-chayns-radiobutton/Example.jsx"
+},{
+  "id": "react-chayns-receiverinput",
+  "title": "ReceiverInput",
+  "example": "react-chayns-receiverinput/Example.jsx"
+},{
+  "id": "react-chayns-rfid_input",
+  "title": "RFID Input",
+  "example": "react-chayns-rfid_input/Example.jsx"
+},{
+  "id": "react-chayns-scrollview",
+  "title": "ScrollView",
+  "example": "react-chayns-scrollview/Example.jsx"
+},{
+  "id": "react-chayns-selectbutton",
+  "title": "SelectButton",
+  "example": "react-chayns-selectbutton/Example.jsx"
+},{
+  "id": "react-chayns-selectlist",
+  "title": "SelectList",
+  "example": "react-chayns-selectlist/Example.jsx"
+},{
+  "id": "react-chayns-setupwizard",
+  "title": "SetupWizard",
+  "example": "react-chayns-setupwizard/Example.jsx"
+},{
+  "id": "react-chayns-sharingbar",
+  "title": "SharingBar",
+  "example": "react-chayns-sharingbar/Example.jsx"
+},{
+  "id": "react-chayns-smallwaitcursor",
+  "title": "SmallWaitCursor",
+  "example": "react-chayns-smallwaitcursor/Example.jsx"
+},{
+  "id": "react-chayns-textarea",
+  "title": "TextArea",
+  "example": "react-chayns-textarea/Example.jsx"
+},{
+  "id": "react-chayns-textstring",
+  "title": "TextString",
+  "example": "react-chayns-textstring/Example.jsx"
+},{
+  "id": "react-chayns-tooltip",
+  "title": "Tooltip",
+  "example": "react-chayns-tooltip/Example.jsx"
+},{
+  "id": "react-chayns-upload",
+  "title": "FileUpload",
+  "example": "react-chayns-upload/Example.jsx"
 }]

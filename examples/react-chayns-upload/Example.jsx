@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 import FileUpload from '../../src/react-chayns-upload/component/FileUpload';
 
@@ -36,11 +35,10 @@ export default class FileUploadExample extends Component {
     }
 
     render() {
+        const { data } = this.state;
+
         return (
-            <ExampleContainer
-                headline="FileUpload"
-                id="react-chayns-upload"
-            >
+            <div>
                 <FileUpload
                     stopPropagation
                     className="file-upload--files"
@@ -49,11 +47,11 @@ export default class FileUploadExample extends Component {
                 <br/>
                 <FileUpload
                     type={FileUpload.TYPE_IMAGE}
-                    onUpload={(data) => {
-                        this.setState({ data });
+                    onUpload={(d) => {
+                        this.setState({ data: d });
                     }}
                 />
-                {this.state.data}
+                {data}
                 <br/>
                 <FileUpload
                     type={FileUpload.TYPE_AUDIO}
@@ -80,7 +78,7 @@ export default class FileUploadExample extends Component {
                             padding: '10px', margin: '5px', textAlign: 'center', borderRadius: '2px'
                         }}
                     >
-                        Test
+                        {'Test'}
                     </div>
                 </FileUpload>
                 <br/>
@@ -107,7 +105,7 @@ export default class FileUploadExample extends Component {
                         }
                     }]}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

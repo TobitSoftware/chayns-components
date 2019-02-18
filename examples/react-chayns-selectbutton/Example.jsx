@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 import { SelectButton } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class SelectButtonExample extends PureComponent {
     render() {
@@ -27,10 +26,7 @@ export default class SelectButtonExample extends PureComponent {
         ];
 
         return (
-            <ExampleContainer
-                headline="SelectButton"
-                id="react-chayns-selectbutton"
-            >
+            <div>
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
                         stopPropagation
@@ -83,7 +79,7 @@ export default class SelectButtonExample extends PureComponent {
                         disabled
                     />
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

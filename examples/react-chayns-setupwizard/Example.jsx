@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
-
 import { SetupWizard, SetupWizardItem } from '../../src/index';
 
 import Step1 from './setup/Step1';
@@ -37,10 +35,7 @@ export default class SetupWizardExample extends Component {
         const { ready, notComplete } = this.state;
         if (!ready) {
             return (
-                <ExampleContainer
-                    headline="SetupWizard"
-                    id="react-chayns-setupwizard"
-                >
+                <div>
                     <SetupWizard
                         ready={this.ready}
                         notComplete={this.notComplete}
@@ -65,18 +60,14 @@ export default class SetupWizardExample extends Component {
                             <Step4/>
                         </SetupWizardItem>
                     </SetupWizard>
-                </ExampleContainer>
+                </div>
             );
         }
 
         return (
-            <ExampleContainer headline="SetupWizard">
-                <h1>
-
-
-                    Ready
-                </h1>
-            </ExampleContainer>
+            <h1>
+                {'Ready'}
+            </h1>
         );
     }
 }

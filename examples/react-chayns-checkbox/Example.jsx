@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Checkbox } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
 export default class CheckboxExample extends Component {
@@ -14,10 +13,7 @@ export default class CheckboxExample extends Component {
 
     render() {
         return (
-            <ExampleContainer
-                headline="Checkbox"
-                id="react-chayns-checkbox"
-            >
+            <div>
                 <div>
                     <Checkbox
                         label="testlabel"
@@ -51,7 +47,7 @@ export default class CheckboxExample extends Component {
                         dangerouslySetLabel={{ __html: '<b>Test</b>' }}
                     />
                 </Tooltip>
-            </ExampleContainer>
+            </div>
         );
     }
 }

@@ -1,16 +1,12 @@
 import React, { PureComponent } from 'react';
 
 import { PersonFinder } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 import Button from '../../src/react-chayns-button/component/Button';
 
 export default class PersonFinderExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer
-                headline="PersonFinder"
-                id="react-chayns-personfinder"
-            >
+            <div>
                 <PersonFinder
                     stopPropagation
                     placeholder="Person finden"
@@ -19,7 +15,7 @@ export default class PersonFinderExample extends PureComponent {
                     }}
                     defaultValue="michael braun"
                     style={{ width: '100%' }}
-                    ref={ref => this.personfinder = ref}
+                    ref={(ref) => { this.personfinder = ref; }}
                 />
                 <Button
                     onClick={() => {
@@ -40,7 +36,7 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                     showPersons={false}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

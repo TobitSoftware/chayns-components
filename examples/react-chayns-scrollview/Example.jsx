@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
 import { ScrollView } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 
@@ -10,16 +9,13 @@ export default class ScrollViewExample extends PureComponent {
 
     render() {
         return (
-            <ExampleContainer
-                headline="ScrollView"
-                id="react-chayns-scrollview"
-            >
+            <div>
                 <ScrollView
                     style={{
                         maxHeight: '500px',
                         width: '100%',
                     }}
-                    scrollElementRef={ref => this.ref = ref}
+                    scrollElementRef={(ref) => { this.ref = ref; }}
                 >
                     {this.text}
                 </ScrollView>
@@ -27,7 +23,7 @@ export default class ScrollViewExample extends PureComponent {
                     this.ref.scrollTo(0, 0);
                 }}
                 >
-                    Nach oben scrollen
+                    {'Scroll to top'}
                 </Button>
                 <ScrollView
                     style={{
@@ -39,7 +35,7 @@ export default class ScrollViewExample extends PureComponent {
                     <br/>
                     {'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirm'}
                 </ScrollView>
-            </ExampleContainer>
+            </div>
         );
     }
 }

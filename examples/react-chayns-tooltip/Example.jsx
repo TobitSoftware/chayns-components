@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
@@ -13,10 +12,7 @@ export default class TooltipExample extends Component {
     render() {
         const { x, y } = this.state;
         return (
-            <ExampleContainer
-                headline="Tooltip"
-                id="react-chayns-tooltip"
-            >
+            <div>
                 <div style={{ marginBottom: '20px' }}>
                     Simple&nbsp;
                     <Tooltip
@@ -108,7 +104,7 @@ export default class TooltipExample extends Component {
                     ref={ref => this.clickTooltip = ref}
                 />
 
-            </ExampleContainer>
+            </div>
         );
     }
 }

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 import { ComboBox } from '../../src/index';
-import ExampleContainer from '../utils/components/ExampleContainer';
 
 export default class ComboBoxExample extends PureComponent {
     render() {
@@ -26,10 +25,7 @@ export default class ComboBoxExample extends PureComponent {
         ];
 
         return(
-            <ExampleContainer
-                headline="ComboBox"
-                id="react-chayns-combobox"
-            >
+            <div>
                 <div style={{ marginBottom: '20px' }}>
                 <ComboBox
                     label="Select Pizza"
@@ -50,7 +46,7 @@ export default class ComboBoxExample extends PureComponent {
                     htmlSelect
                     disabled
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

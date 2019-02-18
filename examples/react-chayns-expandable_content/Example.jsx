@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../utils/components/ExampleContainer';
 import ExpandableContent from '../../src/react-chayns-expandable_content/component/ExpandableContent';
 import { Button } from '../../src';
 
@@ -33,10 +32,7 @@ export default class Example extends Component {
         const { open } = this.state;
 
         return(
-            <ExampleContainer
-                headline="ExpandableContent"
-                id="react-chayns-expandable_content"
-            >
+            <div>
                 <div>
                     <Button onClick={this.toggle}>Toggle</Button>
                     {' '}
@@ -49,7 +45,7 @@ export default class Example extends Component {
                 >
                     {'Test opened'}
                 </ExpandableContent>
-            </ExampleContainer>
+            </div>
         );
     }
 }
