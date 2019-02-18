@@ -13,6 +13,7 @@ export default class PersonFinder2Example extends PureComponent {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
         if (this.relationFinder) this.relationFinder.clear();
+        if (this.personFinderOwn) this.personFinderOwn.clear();
     };
 
     render() {
@@ -48,6 +49,15 @@ export default class PersonFinder2Example extends PureComponent {
                     placeholder="Users"
                     onChange={PersonFinder2Example.handleSelect}
                     sites={false}
+                />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    dynamic
+                    placeholder="Users (including own)"
+                    onChange={PersonFinder2Example.handleSelect}
+                    sites={false}
+                    canFindOwn
                 />
                 <Button
                     onClick={this.clear}

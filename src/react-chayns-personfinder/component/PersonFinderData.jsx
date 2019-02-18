@@ -10,6 +10,7 @@ import PersonFinderResults from './PersonFinderResults';
 import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
+import getCurrentUserInformation from '../utils/getCurrentUserInformation';
 
 const WAIT_CURSOR_TIMEOUT = 500;
 
@@ -21,6 +22,7 @@ export default class PersonFinderData extends Component {
         onSelect: PropTypes.func.isRequired,
         value: PropTypes.func,
         selectedValue: PropTypes.bool,
+        includeOwn: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -29,6 +31,7 @@ export default class PersonFinderData extends Component {
         sites: true,
         value: '',
         selectedValue: false,
+        includeOwn: false,
     };
 
     state = {
@@ -52,7 +55,7 @@ export default class PersonFinderData extends Component {
         super(props);
 
         this.setValue = debounce(this.setValue.bind(this), 500);
-        this.fetchPersonRelations = this.fetchRelations.bind(this, PERSON_RELATION);
+        this.fetchPersonRelations = this.fetchPersonRelations.bind(this);
         this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
     }
 
@@ -107,11 +110,11 @@ export default class PersonFinderData extends Component {
             this.skip[PERSON_RELATION] = 0;
         }
 
-        const { persons: enablePersons, sites: enableSites } = this.props;
+        const { persons: enablePersons, sites: enableSites, includeOwn } = this.props;
 
         const promises = [];
 
-        promises.push(enablePersons ? this.fetchPersonRelations(value) : Promise.resolve(false));
+        promises.push(enablePersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
         promises.push(enableSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
@@ -147,6 +150,22 @@ export default class PersonFinderData extends Component {
                 throw ex;
             }
         }
+    }
+
+    async fetchPersonRelations(value, canFindOwn = false) {
+        const fetchPromise = this.fetchRelations(PERSON_RELATION, value);
+
+        if (canFindOwn && (chayns.env.user.name).toLowerCase().indexOf(value.toLowerCase()) === 0) {
+            const user = await getCurrentUserInformation();
+
+            const data = await fetchPromise;
+
+            data.related.unshift(user);
+
+            return data;
+        }
+
+        return fetchPromise;
     }
 
     async fetchRelations(type, value) {
