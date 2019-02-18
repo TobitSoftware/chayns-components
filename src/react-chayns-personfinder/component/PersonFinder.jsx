@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import Input from '../../react-chayns-input/component/Input';
+import PersonFinderData from './PersonFinderData';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
-import PersonFinderData from './PersonFinderData';
 
 export default class PersonFinder extends Component {
     static propTypes = {
@@ -106,6 +107,7 @@ export default class PersonFinder extends Component {
             <div className={classnames('cc__person-finder', className)}>
                 <PersonFinderData
                     {...props}
+                    inputComponent={Input}
                     value={inputValue}
                     selectedValue={selectedValue}
                     onChange={this.handleOnChange}

@@ -7,7 +7,6 @@ import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import makeCancelable from '../utils/makeCancelable';
 import findRelations from '../utils/findRelations';
 import PersonFinderResults from './PersonFinderResults';
-import Input from '../../react-chayns-input/component/Input';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 import getCurrentUserInformation from '../utils/getCurrentUserInformation';
@@ -23,6 +22,7 @@ export default class PersonFinderData extends Component {
         value: PropTypes.func,
         selectedValue: PropTypes.bool,
         includeOwn: PropTypes.bool,
+        inputComponent: PropTypes.node.isRequired,
     };
 
     static defaultProps = {
@@ -223,12 +223,14 @@ export default class PersonFinderData extends Component {
             value,
             persons: enablePersons,
             sites: enableSites,
+            inputComponent,
             ...props
         } = this.props;
 
         return (
             <InputBox
-                inputComponent={Input}
+                key="single"
+                inputComponent={inputComponent}
                 value={value}
                 onChange={this.handleOnChange}
                 boxClassName={classnames('cc__person-finder__overlay')}
