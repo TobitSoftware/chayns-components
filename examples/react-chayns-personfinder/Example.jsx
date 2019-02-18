@@ -1,41 +1,64 @@
 import React, { PureComponent } from 'react';
 
-import { PersonFinder } from '../../src/index';
-import Button from '../../src/react-chayns-button/component/Button';
+import { Button, PersonFinder } from '../../src';
 
-export default class PersonFinderExample extends PureComponent {
+export default class PersonFinder2Example extends PureComponent {
+    static handleSelect(user) {
+        chayns.dialog.alert(JSON.stringify(user, null, 2));
+    }
+
+    clear = () => {
+        if (this.siteFinder) this.siteFinder.clear();
+        if (this.personFinder) this.personFinder.clear();
+        if (this.relationFinder) this.relationFinder.clear();
+        if (this.personFinderOwn) this.personFinderOwn.clear();
+    };
+
     render() {
         return (
-            <div>
+            <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
-                    stopPropagation
-                    placeholder="Person finden"
-                    onChange={(data) => {
-                        console.log(data);
-                    }}
-                    defaultValue="michael braun"
+                    defaultValue="Smith"
                     style={{ width: '100%' }}
-                    ref={(ref) => { this.personfinder = ref; }}
+                    ref={(ref) => { this.relationFinder = ref; }}
+                    dynamic
+                    placeholder="User/Site"
+                    onChange={PersonFinder2Example.handleSelect}
+                />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.siteFinder = ref; }}
+                    dynamic
+                    placeholder="Sites"
+                    defaultValue={{
+                        name: 'Tobit.Software',
+                        siteId: '67231-11058'
+                    }}
+                    onChange={PersonFinder2Example.handleSelect}
+                    persons={false}
+                />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.personFinder = ref; }}
+                    dynamic
+                    placeholder="Users"
+                    onChange={PersonFinder2Example.handleSelect}
+                    sites={false}
+                />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    dynamic
+                    placeholder="Users (including own)"
+                    onChange={PersonFinder2Example.handleSelect}
+                    sites={false}
+                    includeOwn
                 />
                 <Button
-                    onClick={() => {
-                        this.personfinder.clear();
-                    }}
-                    style={{ marginTop: '10px' }}
+                    onClick={this.clear}
                 >
-                    {'Clear'}
+                    {'Clear all'}
                 </Button>
-                <PersonFinder
-                    stopPropagation
-                    placeholder="Seite finden"
-                    onChange={(data) => {
-                        console.log(data);
-                    }}
-                    defaultValue="tobit"
-                    style={{ width: '100%' }}
-                    showSites
-                    showPersons={false}
-                />
             </div>
         );
     }

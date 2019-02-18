@@ -1,9 +1,9 @@
 # PersonFinder # 
 
 The PersonFinder-Component is part of the *chayns-components* package. It can be installed via npm:
-
-    npm install -S chayns-components@latest
-
+```
+npm install -S chayns-components@latest
+```
 
 ## Usage ##
 
@@ -28,8 +28,8 @@ Then it can be used like in the following example:
 |------------|----------------------------------------------------------------------------------------------------|----------|
 | placeholder | Placeholder of the input field                                                                    | String   |
 | onChange    | Callback that will be executed when a person gets selected or input/personfinder gets cleared     | Function |
-| className | CSS classes for the input field                                                                     | String   |
+| className | CSS classes for the wrapper-div                                                                     | String   |
 | style    | Styles for the input field                                                                           | Object   |
 | required    | Makes the input required                                                                          | bool     |
-| stopPropagation     | Stops the click propagation to parent elements                                            | bool     | 
+| includeOwn    | Allows the user to search for his own account                                                   | bool     |
 | parent | DOM Node into which the **PersonFinder** will be rendered. On default, it's the tapp div.              | node     |
