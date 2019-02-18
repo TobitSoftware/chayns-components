@@ -57,7 +57,7 @@ export default class PersonFinder2Example extends PureComponent {
                     placeholder="Users (including own)"
                     onChange={PersonFinder2Example.handleSelect}
                     sites={false}
-                    canFindOwn
+                    includeOwn
                 />
                 <Button
                     onClick={this.clear}
