@@ -55,6 +55,10 @@
   "title": "Input",
   "example": "react-chayns-input/Example.jsx"
 },{
+  "id": "react-chayns-input_box",
+  "title": "InputBox",
+  "example": "react-chayns-input_box/Example.jsx"
+},{
   "id": "react-chayns-list",
   "title": "List",
   "example": "react-chayns-list/Example.jsx"
