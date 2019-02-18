@@ -5,6 +5,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExcla
 import { Accordion, Icon } from '../src';
 import connectExpandableContext from '../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
 import ListItem from '../src/react-chayns-list/component/ListItem';
+import { connectSearchContext } from './utils/SearchContext';
 
 let maxId = 1;
 
@@ -58,11 +59,16 @@ class ExampleContainer extends PureComponent {
             children,
             open,
             onOpen,
+            search,
             ...props
         } = this.props;
         const { hasError, error, info } = this.state;
 
         if (!open) {
+            if (search && String(headline).toLowerCase().indexOf(String(search).toLowerCase()) === -1) {
+                return null;
+            }
+
             return (
                 <ListItem
                     title={headline}
@@ -130,4 +136,4 @@ ExampleContainer.defaultProps = {
     open: null,
 };
 
-export default connectExpandableContext(ExampleContainer);
+export default connectSearchContext(connectExpandableContext(ExampleContainer));

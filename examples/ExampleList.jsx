@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+
+import SearchContext from './utils/SearchContext';
 import ExpandableList from '../src/react-chayns-list/component/ExpandableList/ExpandableList';
 import List from '../src/react-chayns-list/component/List';
+import { Input } from '../src';
 
 export default class ExampleList extends Component {
     static propTypes = {
@@ -13,12 +17,14 @@ export default class ExampleList extends Component {
 
     state = {
         open: null,
+        searchValue: '',
     };
 
     constructor(props) {
         super(props);
 
         this.handleOpen = this.handleOpen.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
     componentDidMount() {
@@ -42,24 +48,46 @@ export default class ExampleList extends Component {
 
         this.setState({
             open: String(id).toLowerCase(),
+            searchValue: '',
+        });
+    }
+
+    handleSearchChange(value) {
+        this.setState({
+            searchValue: value,
         });
     }
 
     render() {
         const { children } = this.props;
-        const { open } = this.state;
+        const { open, searchValue } = this.state;
 
         return (
             <List className="examples">
-                <ExpandableList.Context.Provider
+                <Input
+                    icon={faSearch}
+                    value={searchValue}
+                    onChange={this.handleSearchChange}
+                    placeholder="Search component"
+                    dynamic
+                />
+                <SearchContext.Provider
                     value={{
-                        open,
-                        onOpen: this.handleOpen,
+                        search: searchValue,
                     }}
                 >
-                    {children}
-                </ExpandableList.Context.Provider>
+                    <ExpandableList.Context.Provider
+                        value={{
+                            open,
+                            onOpen: this.handleOpen,
+                        }}
+                    >
+                        {children}
+                    </ExpandableList.Context.Provider>
+                </SearchContext.Provider>
             </List>
         );
     }
 }
+
+
