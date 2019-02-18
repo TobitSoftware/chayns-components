@@ -129,11 +129,13 @@ ExampleContainer.propTypes = {
         PropTypes.string
     ]),
     onOpen: PropTypes.func.isRequired,
+    search: PropTypes.string,
 };
 
 ExampleContainer.defaultProps = {
     id: null,
     open: null,
+    search: null,
 };
 
 export default connectSearchContext(connectExpandableContext(ExampleContainer));
