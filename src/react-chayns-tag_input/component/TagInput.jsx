@@ -126,7 +126,7 @@ export default class TagInput extends Component {
     }
 
     render() {
-        const { tags, placeholder } = this.props;
+        const { tags, placeholder, ...props } = this.props;
         const { inputValue, selectedIndex, width } = this.state;
 
         return (
@@ -153,6 +153,7 @@ export default class TagInput extends Component {
                     style={{
                         width,
                     }}
+                    {...props}
                 />
             </div>
         );
