@@ -44,6 +44,7 @@ export default class PersonFinder extends Component {
             selectedValue: !!props.defaultValue,
         };
 
+        this.clear = this.clear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
     }
@@ -79,9 +80,15 @@ export default class PersonFinder extends Component {
     }
 
     clear() {
+        const { onChange } = this.props;
+
         this.setState({
             value: '',
         });
+
+        if (onChange) {
+            onChange(null);
+        }
     }
 
     render() {
