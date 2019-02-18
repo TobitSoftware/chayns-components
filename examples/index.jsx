@@ -36,7 +36,8 @@ import TooltipExample from './react-chayns-tooltip/Example';
 import FileUploadExample from './react-chayns-upload/Example';
 import TextString from '../src/react-chayns-textstring/component/TextString';
 
-import ExampleList from './utils/components/ExampleList';
+/* eslint-disable-next-line import/no-unresolved */
+import ExampleList from './ExampleList';
 
 async function bootstrap() {
     await window.chayns.ready;
@@ -49,39 +50,7 @@ async function bootstrap() {
     ReactDom.render(
         <div>
             <h1>ChaynsComponents</h1>
-            <ExampleList>
-                <AccordionExample />
-                <AmountControlExample />
-                <BadgeExample />
-                <ButtonExample />
-                <CalendarExample />
-                <CheckboxExample />
-                <ComboBoxExample />
-                <ContextMenuExample />
-                <EmojiInputExample />
-                <GalleryExample />
-                <GridCalendarExample />
-                <IconExample />
-                <InputExample />
-                <ListExample />
-                <MapExample />
-                <ModeSwitchExample />
-                <OpeningTimesExample />
-                <PersonFinderExample />
-                <RadioButtonExample />
-                <ReceiverInputExample />
-                <RfidInputExample />
-                <ScrollViewExample />
-                <SelectButtonExample />
-                <SelectListExample />
-                <SetupWizardExample />
-                <SharingBarExample />
-                <SmallWaitCursorExample />
-                <TextAreaExample />
-                <TextStringExample />
-                <TooltipExample />
-                <FileUploadExample />
-            </ExampleList>
+            <ExampleList />
         </div>,
         document.querySelector('#app')
     );

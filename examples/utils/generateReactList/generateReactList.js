@@ -22,7 +22,7 @@ async function bootstrap() {
     examples.forEach((data, index) => {
         const importName = `Example${index}`;
 
-        imports.push(`import ${importName} from './${data.example}'`);
+        imports.push(`import ${importName} from './${data.example}';`);
 
         usages.push(ITEM_TEMPLATE
             .replace('##id##', data.id)
