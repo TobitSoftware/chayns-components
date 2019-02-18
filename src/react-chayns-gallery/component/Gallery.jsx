@@ -1,9 +1,8 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,no-await-in-loop */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ImageContainer from './ImageContainer';
-import getTappWidth from '../../utils/tappWidth';
 
 export default class Gallery extends Component {
     static propTypes = {
@@ -57,7 +56,7 @@ export default class Gallery extends Component {
                 const width = parseInt(response.headers.get('x-amz-meta-width'), 10);
                 if (height && width) {
                     resolve({ height, width });
-                }else{
+                } else {
                     reject();
                 }
             } catch (err) {
@@ -76,7 +75,7 @@ export default class Gallery extends Component {
                     const width = image.naturalWidth;
                     if (height && width) {
                         resolve({ height, width });
-                    }else{
+                    } else {
                         reject();
                     }
                 };
@@ -91,7 +90,7 @@ export default class Gallery extends Component {
         this.openGallery = this.openGallery.bind(this);
         this.getBigImageUrls = this.getBigImageUrls.bind(this);
         this.updateImages = this.updateImages.bind(this);
-        this.state = { images: [] };
+        this.state = { images: [], height: 0 };
     }
 
     componentWillMount() {
@@ -99,12 +98,15 @@ export default class Gallery extends Component {
         this.updateImages([], images);
     }
 
-    shouldComponentUpdate(nextProps) {
-        const { images: propImages } = this.props;
-        const { images: stateImages } = this.state;
+    componentDidMount() {
+        this.setState({ height: this.galleryRef.clientWidth });
+    }
 
-        if (nextProps.images !== propImages) {
-            this.updateImages(stateImages, nextProps.images);
+    componentDidUpdate(prevProps, prevState) {
+        const { images: propImages } = this.props;
+        const { images: stateImages } = prevState;
+        if (prevProps.images !== propImages) {
+            this.updateImages(stateImages, propImages);
         }
     }
 
@@ -116,30 +118,32 @@ export default class Gallery extends Component {
         });
     }
 
-    updateImages(stateImages, newImages) {
-        let newStateImages = [];
-        newImages.forEach(async (image, index) => {
+    async updateImages(stateImages, newImages) {
+        const newStateImages = [];
+        for (let index = 0; index < newImages.length; index += 1) {
+            const image = newImages[index];
             if (image.url) {
                 const result = stateImages.find(img => !img.isDataUrl && img.url === image.url);
                 if (result) {
                     newStateImages.push(result);
+                    stateImages.shift(result);
                 } else {
                     let newImage = image;
-                    if (newImage.preview) {
+                    if (newImage.preview && !newImage.preview.startsWith('data:image/*;base64,')) {
                         newImage.preview = `data:image/*;base64,${newImage.preview}`;
                     }
                     if (!newImage.width || !newImage.height) {
                         let meta;
-                        if(newImage.preview) {
+                        if (newImage.preview) {
                             meta = await Gallery.getImageMetaDataFromPreview(newImage.preview);// In this case, the size is not the real size. Size can only be used to calculate the image orientation
-                        } else if(newImage.url.indexOf('tsimg.cloud') >= 0) {
+                        } else if (newImage.url.indexOf('tsimg.cloud') >= 0) {
                             meta = await Gallery.getImageMetaDataFromApi(newImage.url);
                         } else {
                             meta = await Gallery.getImageMetaDataFromPreview(chayns.utils.getScaledImageUrl(newImage.url, 10)); // In this case, the size is not the real size. Size can only be used to calculate the image orientation
                         }
-                        newImage = { ...meta, ...newImage, ...{ index } };
+                        newImage = { ...meta, ...newImage };
                     }
-                    newStateImages.push(newImage);
+                    newStateImages.push({ ...newImage, ...{ index, key: Math.random() } });
                 }
             } else {
                 const result = stateImages.find(img => img.isDataUrl && img.file === image.file);
@@ -151,13 +155,12 @@ export default class Gallery extends Component {
                     newImage = { ...newImage, ...{ url: dataUrl, isDataUrl: true } };
                     if (!newImage.width || !newImage.height) {
                         const meta = await Gallery.getImageMetaDataFromPreview(newImage.url);
-                        newImage = { ...meta, ...newImage, ...{ index } };
+                        newImage = { ...meta, ...newImage };
                     }
-                    newStateImages.push(newImage);
+                    newStateImages.push({ ...newImage, ...{ index, key: Math.random() } });
                 }
             }
-        });
-        newStateImages = newStateImages.sort((a, b) => a.index > b.index);
+        }
         this.setState({ images: newStateImages });
     }
 
@@ -170,7 +173,6 @@ export default class Gallery extends Component {
 
     render() {
         const {
-            images,
             height,
             width,
             onDelete,
@@ -178,15 +180,16 @@ export default class Gallery extends Component {
             className,
             stopPropagation,
         } = this.props;
-        const { style } = this.props;
+        const { style: propStyle } = this.props;
+        const { images, height: stateHeight } = this.state;
+        const style = { ...propStyle };
+
         let styleHeight;
         if (!deleteMode) {
             if (height) {
                 styleHeight = height;
-            } else if (chayns.env.mobile) {
-                styleHeight = 256;
             } else {
-                styleHeight = 428;
+                styleHeight = stateHeight;
             }
             style.height = `${styleHeight}px`;
         }
@@ -195,34 +198,16 @@ export default class Gallery extends Component {
         }
         const numberOfImages = images.length;
         return (
-            <div className={classNames('chayns-gallery', className)} style={style}>
-                <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })}>
+            <div className={classNames('chayns-gallery', className)} style={style} ref={ref => this.galleryRef = ref} key="gallery">
+                <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })} key="grid">
                     {
                         images.map((image, index) => {
-                            let imgWidth = width || getTappWidth();
-                            let imgHeight = height;
-                            if (!deleteMode && (numberOfImages === 2 || (numberOfImages === 3 && index > 0))) {
-                                imgWidth /= 2;
-                            } else if (index > 0) {
-                                imgWidth /= 3;
-                            }
-                            if (numberOfImages > 2 || deleteMode) {
-                                if (index === 0 && !deleteMode) {
-                                    imgHeight = imgHeight * 2 / 3;
-                                } else {
-                                    imgHeight /= 3;
-                                    if (deleteMode) {
-                                        imgWidth = imgHeight;
-                                    }
-                                }
-                            }
-
                             if (index <= 3 || deleteMode) {
                                 return (
                                     <ImageContainer
                                         stopPropagation={stopPropagation}
-                                        key={image.url.substring(0, 50)}
-                                        url={image.isDataUrl ? image.url : chayns.utils.getScaledImageUrl(image.url, imgHeight, imgWidth)}
+                                        key={`image${image.key}`}
+                                        image={image}
                                         index={index}
                                         openImage={this.openGallery}
                                         onDelete={onDelete}

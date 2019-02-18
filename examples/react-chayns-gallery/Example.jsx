@@ -32,7 +32,18 @@ export default class GalleryExample extends Component {
 
         return (
             <ExampleContainer headline="Gallery">
-                <Gallery images={images}/>
+                <h3>5 images, different imageServices, 2 with preview</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={images}/>
+                <h3>4 images, different imageServices, 2 with preview, height 300px</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={[images[1], images[2], images[3], images[4]]} height={300}/>
+                <h3>3 images, 2 with preview, width 200px</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={[images[1], images[2], images[3]]} width={200}/>
+                <h3>2 images with preview</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={[images[2], images[4]]}/>
+                <h3>1 image with preview</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={[images[1]]}/>
+                <h3>1 image with preview, height 300px</h3>
+                <Gallery style={{ marginBottom: '30px' }} images={[images[4]]} height={300}/>
             </ExampleContainer>
         );
     }
