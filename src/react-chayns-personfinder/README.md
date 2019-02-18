@@ -31,4 +31,5 @@ Then it can be used like in the following example:
 | className | CSS classes for the wrapper-div                                                                     | String   |
 | style    | Styles for the input field                                                                           | Object   |
 | required    | Makes the input required                                                                          | bool     |
+| includeOwn    | Allows the user to search for his own account                                                   | bool     |
 | parent | DOM Node into which the **PersonFinder** will be rendered. On default, it's the tapp div.              | node     |
