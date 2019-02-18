@@ -12,8 +12,6 @@ async function bootstrap() {
     await TextString.loadLibrary('TextStringTest');
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
-    console.log(Examples);
-
     ReactDom.render(
         <ExampleList />,
         document.querySelector('#app')
