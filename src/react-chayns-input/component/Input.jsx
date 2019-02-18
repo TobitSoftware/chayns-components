@@ -10,6 +10,7 @@ export default class Input extends Component {
         onEnter: PropTypes.func,
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
+        onFocus: PropTypes.func,
         regExp: PropTypes.instanceOf(RegExp),
         style: PropTypes.object,
         placeholder: PropTypes.string,
@@ -33,6 +34,7 @@ export default class Input extends Component {
         onEnter: null,
         onChange: null,
         onBlur: null,
+        onFocus: null,
         regExp: null,
         style: {},
         placeholder: '',
@@ -136,6 +138,7 @@ export default class Input extends Component {
             invalid,
             onIconClick,
             id,
+            onFocus,
             stopPropagation,
         } = this.props;
         const { valid } = this.state;
@@ -155,6 +158,7 @@ export default class Input extends Component {
                         onKeyUp={this.onKeyUp}
                         onBlur={this.onBlur}
                         onChange={this.onChange}
+                        onFocus={onFocus}
                         type={type || 'text'}
                         id={id || this.id}
                         required
@@ -196,6 +200,7 @@ export default class Input extends Component {
                 onKeyUp={this.onKeyUp}
                 onBlur={this.onBlur}
                 onChange={this.onChange}
+                onFocus={onFocus}
                 value={value}
                 defaultValue={defaultValue}
                 type={type}

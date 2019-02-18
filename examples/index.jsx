@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import Examples from './examples.json';
-
 import TextString from '../src/react-chayns-textstring/component/TextString';
 
 /* eslint-disable-next-line import/no-unresolved */
