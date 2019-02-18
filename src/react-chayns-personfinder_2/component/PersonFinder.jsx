@@ -75,6 +75,12 @@ export default class PersonFinder extends Component {
         }
     }
 
+    clear() {
+        this.setState({
+            value: '',
+        });
+    }
+
     render() {
         const {
             showPersons,
