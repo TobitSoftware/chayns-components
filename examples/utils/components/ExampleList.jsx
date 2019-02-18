@@ -64,16 +64,19 @@ export default class ExampleList extends Component {
 
         return (
             <List className="examples">
-                <Input
-                    icon={faSearch}
-                    value={searchValue}
-                    onChange={this.handleSearchChange}
-                    placeholder="Search component"
-                    customProps={{
-                        autoFocus: true,
-                    }}
-                    dynamic
-                />
+                {!open && (<h1>ChaynsComponents</h1>)}
+                {!open && (
+                    <Input
+                        icon={faSearch}
+                        value={searchValue}
+                        onChange={this.handleSearchChange}
+                        placeholder="Search component"
+                        customProps={{
+                            autoFocus: true,
+                        }}
+                        dynamic
+                    />
+                )}
                 <SearchContext.Provider
                     value={{
                         search: searchValue,

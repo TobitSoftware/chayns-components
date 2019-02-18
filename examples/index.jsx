@@ -48,10 +48,7 @@ async function bootstrap() {
     console.log(Examples);
 
     ReactDom.render(
-        <div>
-            <h1>ChaynsComponents</h1>
-            <ExampleList />
-        </div>,
+        <ExampleList />,
         document.querySelector('#app')
     );
 }
