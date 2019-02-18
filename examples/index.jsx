@@ -43,39 +43,42 @@ async function bootstrap() {
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
     ReactDom.render(
-        <ExampleList>
-            <AccordionExample />
-            <AmountControlExample />
-            <BadgeExample />
-            <ButtonExample />
-            <CalendarExample />
-            <CheckboxExample />
-            <ComboBoxExample />
-            <ContextMenuExample />
-            <EmojiInputExample />
-            <GalleryExample />
-            <GridCalendarExample />
-            <IconExample />
-            <InputExample />
-            <ListExample />
-            <MapExample />
-            <ModeSwitchExample />
-            <OpeningTimesExample />
-            <PersonFinderExample />
-            <RadioButtonExample />
-            <ReceiverInputExample />
-            <RfidInputExample />
-            <ScrollViewExample />
-            <SelectButtonExample />
-            <SelectListExample />
-            <SetupWizardExample />
-            <SharingBarExample />
-            <SmallWaitCursorExample />
-            <TextAreaExample />
-            <TextStringExample />
-            <TooltipExample />
-            <FileUploadExample />
-        </ExampleList>,
+        <div>
+            <h1>ChaynsComponents</h1>
+            <ExampleList>
+                <AccordionExample />
+                <AmountControlExample />
+                <BadgeExample />
+                <ButtonExample />
+                <CalendarExample />
+                <CheckboxExample />
+                <ComboBoxExample />
+                <ContextMenuExample />
+                <EmojiInputExample />
+                <GalleryExample />
+                <GridCalendarExample />
+                <IconExample />
+                <InputExample />
+                <ListExample />
+                <MapExample />
+                <ModeSwitchExample />
+                <OpeningTimesExample />
+                <PersonFinderExample />
+                <RadioButtonExample />
+                <ReceiverInputExample />
+                <RfidInputExample />
+                <ScrollViewExample />
+                <SelectButtonExample />
+                <SelectListExample />
+                <SetupWizardExample />
+                <SharingBarExample />
+                <SmallWaitCursorExample />
+                <TextAreaExample />
+                <TextStringExample />
+                <TooltipExample />
+                <FileUploadExample />
+            </ExampleList>
+        </div>,
         document.querySelector('#app')
     );
 }
