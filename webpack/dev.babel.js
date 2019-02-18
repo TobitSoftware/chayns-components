@@ -79,7 +79,10 @@ export default (env) => {
         devtool: 'inline-source-map',
         plugins: [
             new HtmlWebpackPlugin({
-                template: path.resolve(ROOT_PATH, 'examples', 'index.html')
+                template: path.resolve(ROOT_PATH, 'examples', 'index.html'),
+                templateParameters: {
+                    chaynsCssUrl: (process.env.CHAYNS_CSS_URL || 'https://api.chayns.net/css/'),
+                },
             }),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NamedModulesPlugin(),
