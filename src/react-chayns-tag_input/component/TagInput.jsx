@@ -93,7 +93,7 @@ export default class TagInput extends Component {
                 className="cc__tag-input input"
             >
                 {tags && tags.map(tag => (
-                    <Tag value={tag} onDelete={this.handleDelete}>
+                    <Tag value={tag} onDelete={this.handleTagRemove}>
                         {tag.text}
                     </Tag>
                 ))}

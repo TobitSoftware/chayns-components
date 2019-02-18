@@ -22,7 +22,7 @@ export default class TagInputExample extends PureComponent {
         const { tags } = this.state;
 
         this.setState({
-            tags: tags.filter(t => tag.text === t.text),
+            tags: tags.filter(t => tag.text !== t.text),
         });
     };
 
