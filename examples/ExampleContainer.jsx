@@ -48,10 +48,6 @@ class ExampleContainer extends PureComponent {
         const { onOpen, id } = this.props;
 
         if (onOpen) {
-            chayns.appendUrlParameter({
-                component: String(id),
-            });
-
             onOpen(id || this.id);
         }
     }

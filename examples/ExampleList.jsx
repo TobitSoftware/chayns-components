@@ -30,6 +30,16 @@ export default class ExampleList extends Component {
     }
 
     handleOpen(id) {
+        chayns.appendUrlParameter({
+            component: String(id),
+        });
+
+        chayns.showBackButton(() => {
+            this.setState({
+                open: null,
+            });
+        });
+
         this.setState({
             open: String(id).toLowerCase(),
         });
