@@ -16,6 +16,7 @@ export default class TagInput extends Component {
         })).isRequired,
         onAddTag: PropTypes.func,
         onRemoveTag: PropTypes.func,
+        onChange: PropTypes.func,
         placeholder: PropTypes.string,
     };
 
@@ -23,6 +24,7 @@ export default class TagInput extends Component {
         onAddTag: null,
         onRemoveTag: null,
         placeholder: null,
+        onChange: null,
     };
 
     state = {
@@ -45,11 +47,17 @@ export default class TagInput extends Component {
     }
 
     handleChange(value) {
+        const { onChange } = this.props;
+
         this.setState({
             inputValue: value,
             width: getInputSize(`${value}${BIGGEST_LETTER}`).width,
             selectedIndex: null,
         });
+
+        if (onChange) {
+            onChange(value);
+        }
     }
 
     handleKeyUp(event) {
