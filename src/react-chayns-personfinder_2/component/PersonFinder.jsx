@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
@@ -10,6 +11,7 @@ export default class PersonFinder extends Component {
         onChange: PropTypes.func,
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
+        className: PropTypes.string,
         defaultValue: PropTypes.oneOfType([
             PropTypes.shape({
                 name: PropTypes.string,
@@ -27,6 +29,7 @@ export default class PersonFinder extends Component {
         showPersons: true,
         showSites: true,
         defaultValue: null,
+        className: null,
     };
 
     static PERSON = PERSON_RELATION;
@@ -85,6 +88,7 @@ export default class PersonFinder extends Component {
         const {
             showPersons,
             showSites,
+            className,
             value: propValue, /* eslint-disable-line react/prop-types */
             defaultValue,
             ...props
@@ -92,7 +96,7 @@ export default class PersonFinder extends Component {
         const { value, selectedValue } = this.state;
 
         return (
-            <div className="cc__person-finder">
+            <div className={classnames('cc__person-finder', className)}>
                 <PersonFinderData
                     {...props}
                     value={value}
