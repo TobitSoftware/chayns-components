@@ -69,6 +69,9 @@ export default class ExampleList extends Component {
                     value={searchValue}
                     onChange={this.handleSearchChange}
                     placeholder="Search component"
+                    customProps={{
+                        autoFocus: true,
+                    }}
                     dynamic
                 />
                 <SearchContext.Provider
