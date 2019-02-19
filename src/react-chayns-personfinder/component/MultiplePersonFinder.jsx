@@ -23,6 +23,8 @@ export default class MultiplePersonFinder extends Component {
             }),
             PropTypes.string,
         ]),
+        onAdd: PropTypes.func,
+        onRemove: PropTypes.func,
     };
 
     static defaultProps = {
@@ -31,6 +33,8 @@ export default class MultiplePersonFinder extends Component {
         showSites: true,
         defaultValue: null,
         className: null,
+        onAdd: null,
+        onRemove: null,
     };
 
     static PERSON = PERSON_RELATION;
