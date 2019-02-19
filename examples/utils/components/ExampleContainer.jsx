@@ -112,6 +112,19 @@ class ExampleContainer extends PureComponent {
                 <ListItem
                     title={headline}
                     onClick={this.handleClick}
+                    right={(
+                        <ContextMenu
+                            childrenStyle={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                height: '100%',
+                            }}
+                            items={this.items}
+                            position={1}
+                            stopPropagation
+                        />
+                    )}
                 />
             );
         }
