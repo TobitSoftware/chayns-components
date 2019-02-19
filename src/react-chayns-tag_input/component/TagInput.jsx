@@ -120,6 +120,15 @@ export default class TagInput extends Component {
         }
     }
 
+    focus() {
+        if (!this.input) {
+            return false;
+        }
+
+        this.input.focus();
+        return true;
+    }
+
     render() {
         const {
             tags,
