@@ -155,18 +155,20 @@ export default class TagInput extends Component {
                         {tag.text}
                     </Tag>
                 ))}
-                <Input
-                    {...props}
-                    inputRef={this.setInputRef}
-                    className="cc__tag-input__input"
-                    value={value}
-                    onChange={this.handleChange}
-                    onKeyUp={this.handleKeyUp}
-                    placeholder={(!tags || !tags.length) ? placeholder : null}
-                    style={{
-                        width,
-                    }}
-                />
+                <div className="cc__tag-input__input">
+                    <Input
+                        {...props}
+                        inputRef={this.setInputRef}
+                        className="cc__tag-input__input"
+                        value={value}
+                        onChange={this.handleChange}
+                        onKeyUp={this.handleKeyUp}
+                        placeholder={(!tags || !tags.length) ? placeholder : null}
+                        style={{
+                            width,
+                        }}
+                    />
+                </div>
             </div>
         );
     }
