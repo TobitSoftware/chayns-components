@@ -32,7 +32,7 @@ export default class ContextMenu extends Component {
         onLayerClick: null,
         items: [],
         position: 0,
-        parent: document.getElementsByClassName('tapp')[0],
+        parent: null,
         children: <Icon icon="ts-ellipsis_v"/>,
         coordinates: null,
         onChildrenClick: null,
