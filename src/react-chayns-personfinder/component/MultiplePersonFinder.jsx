@@ -77,7 +77,7 @@ export default class MultiplePersonFinder extends Component {
         });
 
         if (onRemove) {
-            onRemove(value.value);
+            onRemove(value);
         }
     }
 
