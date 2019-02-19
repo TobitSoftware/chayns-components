@@ -45,6 +45,10 @@ export default class TagInputExample extends PureComponent {
         this.setState({ tags: [] });
     };
 
+    focus = () => {
+        if (this.input) this.input.focus();
+    };
+
     render() {
         const { tags, value } = this.state;
 
@@ -54,6 +58,7 @@ export default class TagInputExample extends PureComponent {
                 id="react-chayns-tag_input"
             >
                 <TagInput
+                    ref={(ref) => { this.input = ref; }}
                     tags={tags}
                     onAddTag={this.handleTagAdd}
                     onRemoveTag={this.handleTagRemove}
@@ -70,6 +75,11 @@ export default class TagInputExample extends PureComponent {
                     onClick={this.clearTags}
                 >
                     {'Clear tags'}
+                </Button>
+                <Button
+                    onClick={this.focus}
+                >
+                    {'Focus()'}
                 </Button>
             </ExampleContainer>
         );
