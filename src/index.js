@@ -54,6 +54,7 @@ import Map from './react-chayns-map/component/Map';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
+import imageUpload from './utils/imageUpload';
 
 const CHAYNS_CSS_VERSION = '4.1';
 
@@ -98,5 +99,6 @@ export {
     FileInput,
     Map,
     resolveAbsoluteImport,
+    imageUpload,
     CHAYNS_CSS_VERSION,
 };

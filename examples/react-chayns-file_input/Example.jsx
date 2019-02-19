@@ -1,6 +1,5 @@
 /* eslint-disable no-return-assign,jsx-a11y/alt-text */
 import React, { Component } from 'react';
-import ExampleContainer from '../ExampleContainer';
 
 import FileInput from '../../src/react-chayns-file_input/component/FileInput';
 import imageUpload from '../../src/utils/imageUpload';
@@ -14,7 +13,7 @@ export default class FileInputExample extends Component {
         chayns.register({ apiDialogs: true });
     }
 
-    onChange =(validFiles) => {
+    onChange = (validFiles) => {
         const { images } = this.state;
         this.setState({ images: images.concat(validFiles.map(f => ({ file: f }))) });
     };
@@ -45,7 +44,7 @@ export default class FileInputExample extends Component {
     render() {
         const { images } = this.state;
         return (
-            <ExampleContainer headline="FileInput">
+            <div>
                 <FileInput
                     style={{ marginBottom: '20px' }}
                     stopPropagation
@@ -72,7 +71,7 @@ export default class FileInputExample extends Component {
                     {'Upload'}
                 </Button>
                 <p ref={ref => this.logRef = ref}/>
-            </ExampleContainer>
+            </div>
         );
     }
 }

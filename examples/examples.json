@@ -127,7 +127,7 @@
   "title": "Tooltip",
   "example": "react-chayns-tooltip/Example.jsx"
 },{
-  "id": "react-chayns-upload",
-  "title": "FileUpload",
-  "example": "react-chayns-upload/Example.jsx"
+  "id": "react-chayns-file_input",
+  "title": "FileInput",
+  "example": "react-chayns-file_input/Example.jsx"
 }]
