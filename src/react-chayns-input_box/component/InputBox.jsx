@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { createPortal } from 'react-dom';
 import classnames from 'classnames';
 import { CSSTransition } from 'react-transition-group';
 
 import isDescendant from '../../utils/isDescendant';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class InputBox extends Component {
     static propTypes = {
@@ -20,7 +20,7 @@ export default class InputBox extends Component {
     };
 
     static defaultProps = {
-        parent: document.getElementsByClassName('tapp')[0],
+        parent: null,
         onFocus: null,
         children: null,
         className: null,
@@ -128,7 +128,7 @@ export default class InputBox extends Component {
                     {...props}
                     onFocus={this.handleFocus}
                 />
-                {createPortal((
+                <TappPortal parent={parent}>
                     <CSSTransition
                         in={!!(rect && !hidden && children)}
                         timeout={200}
@@ -148,7 +148,7 @@ export default class InputBox extends Component {
                             {children}
                         </div>
                     </CSSTransition>
-                ), parent)}
+                </TappPortal>
             </div>
         );
     }

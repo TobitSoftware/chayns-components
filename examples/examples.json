@@ -115,6 +115,10 @@
   "title": "SmallWaitCursor",
   "example": "react-chayns-smallwaitcursor/Example.jsx"
 },{
+  "id": "react-chayns-tapp_portal",
+  "title": "TappPortal",
+  "example": "react-chayns-tapp_portal/Example.jsx"
+},{
   "id": "react-chayns-textarea",
   "title": "TextArea",
   "example": "react-chayns-textarea/Example.jsx"

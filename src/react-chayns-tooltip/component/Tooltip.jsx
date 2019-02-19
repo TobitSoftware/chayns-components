@@ -2,9 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as ReactDOM from 'react-dom';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class Tooltip extends Component {
     static propTypes = {
@@ -43,15 +43,15 @@ export default class Tooltip extends Component {
         minWidth: 100,
         maxWidth: 250,
         removeIcon: false,
-        parent: document.getElementsByClassName('tapp')[0],
+        parent: null,
         coordinates: null,
         childrenStyle: null,
         childrenClassNames: null,
         preventTriggerStyle: false,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             active: false,
@@ -223,10 +223,9 @@ export default class Tooltip extends Component {
         } = this.props;
 
         return [
-            ReactDOM.createPortal(
-                this.renderTooltip(),
-                parent
-            ),
+            <TappPortal parent={parent}>
+                {this.renderTooltip()}
+            </TappPortal>,
             <div
                 className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
                 ref={(node) => {
