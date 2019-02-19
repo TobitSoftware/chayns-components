@@ -12,6 +12,7 @@ export default class SimplePersonFinder extends Component {
         onChange: PropTypes.func,
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
+        showId: PropTypes.bool,
         className: PropTypes.string,
         defaultValue: PropTypes.oneOfType([
             PropTypes.shape({
@@ -31,6 +32,7 @@ export default class SimplePersonFinder extends Component {
         showSites: true,
         defaultValue: null,
         className: null,
+        showId: false,
     };
 
     static PERSON = PERSON_RELATION;
@@ -41,7 +43,7 @@ export default class SimplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: createInputValue(props.defaultValue) || '',
+            inputValue: createInputValue(props.defaultValue, props.showId) || '',
             selectedValue: !!props.defaultValue,
         };
 
@@ -58,8 +60,8 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onChange } = this.props;
-        const name = convertToInputValue(value);
+        const { onChange, showId } = this.props;
+        const name = convertToInputValue(value, showId);
 
         this.setState({
             inputValue: name,
@@ -97,6 +99,7 @@ export default class SimplePersonFinder extends Component {
             showPersons,
             showSites,
             className,
+            showId,
             value: propValue, /* eslint-disable-line react/prop-types */
             defaultValue,
             ...props

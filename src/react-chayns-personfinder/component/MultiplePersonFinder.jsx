@@ -25,6 +25,7 @@ export default class MultiplePersonFinder extends Component {
         ]),
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
+        showId: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -35,6 +36,7 @@ export default class MultiplePersonFinder extends Component {
         className: null,
         onAdd: null,
         onRemove: null,
+        showId: false,
     };
 
     static PERSON = PERSON_RELATION;
@@ -86,9 +88,9 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onAdd } = this.props;
+        const { onAdd, showId } = this.props;
         const { values } = this.state;
-        const name = convertToInputValue(value);
+        const name = convertToInputValue(value, showId);
 
         if (values.find(v => (v.value.type === type
             && v.value.siteId === value.siteId
@@ -140,6 +142,7 @@ export default class MultiplePersonFinder extends Component {
             className,
             value: propValue, /* eslint-disable-line react/prop-types */
             defaultValue,
+            showId,
             ...props
         } = this.props;
         const { inputValue, selectedValue, values } = this.state;

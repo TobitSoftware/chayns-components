@@ -23,6 +23,7 @@ export default class PersonFinderData extends Component {
         selectedValue: PropTypes.bool,
         includeOwn: PropTypes.bool,
         inputComponent: PropTypes.node.isRequired,
+        showId: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -32,6 +33,7 @@ export default class PersonFinderData extends Component {
         value: '',
         selectedValue: false,
         includeOwn: false,
+        showId: false,
     };
 
     state = {
@@ -190,6 +192,7 @@ export default class PersonFinderData extends Component {
         const {
             onSelect,
             selectedValue,
+            showId,
         } = this.props;
 
         const { persons, sites, showWaitCursor } = this.state;
@@ -201,6 +204,7 @@ export default class PersonFinderData extends Component {
                 showWaitCursor && (<WaitCursor key="wait-cursor" />),
                 <PersonFinderResults
                     key="results"
+                    showId={showId}
                     persons={persons}
                     sites={sites}
                     onSelect={onSelect}

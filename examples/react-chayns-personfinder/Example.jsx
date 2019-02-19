@@ -57,16 +57,17 @@ export default class PersonFinderExample extends PureComponent {
                     style={{ width: '100%' }}
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
-                    placeholder="Users (including own)"
+                    placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
                     sites={false}
                     includeOwn
+                    showId
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
-                    placeholder="Users (multiple)"
+                    placeholder="Users/Sites (multiple)"
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}

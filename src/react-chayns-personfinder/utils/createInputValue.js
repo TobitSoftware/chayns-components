@@ -1,4 +1,4 @@
-export function convertToInputValue(data) {
+export function convertToInputValue(data, showId) {
     let value = '';
 
     if (data.name) {
@@ -15,7 +15,7 @@ export function convertToInputValue(data) {
         }
     }
 
-    if (data.siteId || data.personId) {
+    if (showId && (data.siteId || data.personId)) {
         const addBrackets = !!value;
 
         if (addBrackets) value += ' (';
