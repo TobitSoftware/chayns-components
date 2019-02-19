@@ -1,8 +1,10 @@
-/* eslint-disable no-param-reassign,no-await-in-loop */
+/* eslint-disable no-param-reassign,no-await-in-loop,no-return-assign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ImageContainer from './ImageContainer';
+import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
+import getDataUrl from '../utils/getDataUrl';
 
 export default class Gallery extends Component {
     static propTypes = {
@@ -37,58 +39,16 @@ export default class Gallery extends Component {
         stopPropagation: false,
     };
 
-    static getDataUrl(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
-
-    static getImageMetaDataFromApi(url) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const response = await fetch(url, {
-                    method: 'HEAD'
-                });
-                const height = parseInt(response.headers.get('x-amz-meta-height'), 10);
-                const width = parseInt(response.headers.get('x-amz-meta-width'), 10);
-                if (height && width) {
-                    resolve({ height, width });
-                } else {
-                    reject();
-                }
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
-
-    static getImageMetaDataFromPreview(url) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const image = new Image();
-                image.src = url;
-                image.onload = () => {
-                    const height = image.naturalHeight;
-                    const width = image.naturalWidth;
-                    if (height && width) {
-                        resolve({ height, width });
-                    } else {
-                        reject();
-                    }
-                };
-            } catch (err) {
-                reject(err);
-            }
+    static getBigImageUrls(images) {
+        return images.map((image) => {
+            if (image.isDataUrl) return image.url;
+            return chayns.utils.getScaledImageUrl(image.url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp)));
         });
     }
 
     constructor() {
         super();
         this.openGallery = this.openGallery.bind(this);
-        this.getBigImageUrls = this.getBigImageUrls.bind(this);
         this.updateImages = this.updateImages.bind(this);
         this.state = { images: [], height: 0 };
     }
@@ -110,14 +70,6 @@ export default class Gallery extends Component {
         }
     }
 
-    getBigImageUrls() {
-        const { images } = this.state;
-        return images.map((image) => {
-            if (image.isDataUrl) return image.url;
-            return chayns.utils.getScaledImageUrl(image.url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp)));
-        });
-    }
-
     async updateImages(stateImages, newImages) {
         const newStateImages = [];
         for (let index = 0; index < newImages.length; index += 1) {
@@ -135,11 +87,11 @@ export default class Gallery extends Component {
                     if (!newImage.width || !newImage.height) {
                         let meta;
                         if (newImage.preview) {
-                            meta = await Gallery.getImageMetaDataFromPreview(newImage.preview);// In this case, the size is not the real size. Size can only be used to calculate the image orientation
+                            meta = await getImageMetaDataFromPreview(newImage.preview);// In this case, the size is not the real size. Size can only be used to calculate the image orientation
                         } else if (newImage.url.indexOf('tsimg.cloud') >= 0) {
-                            meta = await Gallery.getImageMetaDataFromApi(newImage.url);
+                            meta = await getImageMetaDataFromApi(newImage.url);
                         } else {
-                            meta = await Gallery.getImageMetaDataFromPreview(chayns.utils.getScaledImageUrl(newImage.url, 10)); // In this case, the size is not the real size. Size can only be used to calculate the image orientation
+                            meta = await getImageMetaDataFromPreview(chayns.utils.getScaledImageUrl(newImage.url, 10)); // In this case, the size is not the real size. Size can only be used to calculate the image orientation
                         }
                         newImage = { ...meta, ...newImage };
                     }
@@ -151,10 +103,10 @@ export default class Gallery extends Component {
                     newStateImages.push(result);
                 } else {
                     let newImage = image;
-                    const dataUrl = await Gallery.getDataUrl(newImage.file);
+                    const dataUrl = await getDataUrl(newImage.file);
                     newImage = { ...newImage, ...{ url: dataUrl, isDataUrl: true } };
                     if (!newImage.width || !newImage.height) {
-                        const meta = await Gallery.getImageMetaDataFromPreview(newImage.url);
+                        const meta = await getImageMetaDataFromPreview(newImage.url);
                         newImage = { ...meta, ...newImage };
                     }
                     newStateImages.push({ ...newImage, ...{ index, key: Math.random() } });
@@ -166,8 +118,9 @@ export default class Gallery extends Component {
 
     openGallery(start) {
         const { onClick, deleteMode } = this.props;
+        const { images } = this.state;
         if (!deleteMode) {
-            onClick(this.getBigImageUrls(), start);
+            onClick(Gallery.getBigImageUrls(images), start);
         }
     }
 
@@ -198,7 +151,12 @@ export default class Gallery extends Component {
         }
         const numberOfImages = images.length;
         return (
-            <div className={classNames('chayns-gallery', className)} style={style} ref={ref => this.galleryRef = ref} key="gallery">
+            <div
+                className={classNames('chayns-gallery', className)}
+                style={style}
+                ref={ref => this.galleryRef = ref}
+                key="gallery"
+            >
                 <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })} key="grid">
                     {
                         images.map((image, index) => {

@@ -30,7 +30,18 @@ The following properties can be set on the Gallery-Component
 | onClick      | Called when clicked on a image                       | func     | chayns.openImage  |              |
 | deleteMode   | Enables the delete mode                              | bool     | false             |              |
 | onDelete     | Called when clicked on a delete icon                 | func     |                   |              |
-| height       | Height of the gallery in px, not used in deleteMode  | number   | width of the gallery |              |
+| height       | Height of the gallery in px, not used in deleteMode  | number   | width of the gallery |           |
 | width        | Width of the gallery in px                           | number   | 100%              |              |
 | stopPropagation | Stops the click propagation to parent elements    | bool     | false             |              |
 
+### Image object ###
+
+| **Property** | **Description**                                      | **Type** | **Default Value** | **Required** |
+| ------------ | ---------------------------------------------------- | -------- | ----------------- | ------------ |
+| url          | Image URL that will be displayed in the gallery      | string   |                   | true *       |
+| preview      | Base64-encoded image preview                         | object   |                   |              |
+| file         | Image File that will be displayed in the gallery     | array    |                   | true *       |
+| width        | Width of the image (used for aspect ratio)           | number   |                   |              |
+| height       | Height of the image (used for aspect ratio)          | number   |                   |              |
+
+*url or file are required

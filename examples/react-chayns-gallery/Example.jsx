@@ -42,7 +42,7 @@ export default class GalleryExample extends Component {
                 <Gallery style={{ marginBottom: '30px' }} images={[images[2], images[4]]}/>
                 <h3>1 image with preview</h3>
                 <Gallery style={{ marginBottom: '30px' }} images={[images[1]]}/>
-                <h3>1 image with preview, height 300px</h3>
+                <h3>1 image, height 300px</h3>
                 <Gallery style={{ marginBottom: '30px' }} images={[images[4]]} height={300}/>
             </ExampleContainer>
         );
