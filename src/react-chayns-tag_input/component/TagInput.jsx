@@ -159,7 +159,6 @@ export default class TagInput extends Component {
                     <Input
                         {...props}
                         inputRef={this.setInputRef}
-                        className="cc__tag-input__input"
                         value={value}
                         onChange={this.handleChange}
                         onKeyUp={this.handleKeyUp}
