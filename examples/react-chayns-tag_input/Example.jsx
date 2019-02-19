@@ -2,18 +2,29 @@ import React, { PureComponent } from 'react';
 
 import ExampleContainer from '../ExampleContainer';
 import TagInput from '../../src/react-chayns-tag_input/component/TagInput';
+import { Button } from '../../src';
 
 export default class TagInputExample extends PureComponent {
     state = {
         tags: [],
+        value: '',
+    };
+
+    handleChange = (value) => {
+        this.setState({
+            value,
+        });
     };
 
     handleTagAdd = (tag) => {
         const { tags } = this.state;
 
+        console.log('add tag', tag);
+
         if (!tags.find(t => t.text === tag.text)) {
             this.setState({
                 tags: [...tags, tag],
+                value: '',
             });
         }
     };
@@ -26,8 +37,16 @@ export default class TagInputExample extends PureComponent {
         });
     };
 
+    clearValue = () => {
+        this.handleChange('');
+    };
+
+    clearTags = () => {
+        this.setState({ tags: [] });
+    };
+
     render() {
-        const { tags } = this.state;
+        const { tags, value } = this.state;
 
         return (
             <ExampleContainer
@@ -38,8 +57,20 @@ export default class TagInputExample extends PureComponent {
                     tags={tags}
                     onAddTag={this.handleTagAdd}
                     onRemoveTag={this.handleTagRemove}
+                    onChange={this.handleChange}
                     placeholder="Input tag and hit ENTER"
+                    value={value}
                 />
+                <Button
+                    onClick={this.clearValue}
+                >
+                    {'Clear input'}
+                </Button>
+                <Button
+                    onClick={this.clearTags}
+                >
+                    {'Clear tags'}
+                </Button>
             </ExampleContainer>
         );
     }

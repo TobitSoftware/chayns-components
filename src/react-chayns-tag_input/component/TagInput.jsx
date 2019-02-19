@@ -14,6 +14,7 @@ export default class TagInput extends Component {
         tags: PropTypes.arrayOf(PropTypes.shape({
             text: PropTypes.string,
         })).isRequired,
+        value: PropTypes.string,
         onAddTag: PropTypes.func,
         onRemoveTag: PropTypes.func,
         onChange: PropTypes.func,
@@ -25,10 +26,10 @@ export default class TagInput extends Component {
         onRemoveTag: null,
         placeholder: null,
         onChange: null,
+        value: '',
     };
 
     state = {
-        inputValue: '',
         selectedIndex: null,
     };
 
@@ -50,8 +51,6 @@ export default class TagInput extends Component {
         const { onChange } = this.props;
 
         this.setState({
-            inputValue: value,
-            width: getInputSize(`${value}${BIGGEST_LETTER}`).width,
             selectedIndex: null,
         });
 
@@ -61,24 +60,20 @@ export default class TagInput extends Component {
     }
 
     handleKeyUp(event) {
-        const { inputValue } = this.state;
+        const { value } = this.props;
 
-        if (event.keyCode === KEY_BACKSPACE && !inputValue) {
+        if (event.keyCode === KEY_BACKSPACE && !value) {
             this.handleRemoveLast();
             return;
         }
 
-        if (event.keyCode !== KEY_ENTER || !inputValue) {
+        if (event.keyCode !== KEY_ENTER || !value) {
             return;
         }
 
         const tag = {
-            text: inputValue,
+            text: value,
         };
-
-        this.setState({
-            inputValue: '',
-        });
 
         this.handleTagAdd(tag);
     }
@@ -126,8 +121,15 @@ export default class TagInput extends Component {
     }
 
     render() {
-        const { tags, placeholder, ...props } = this.props;
-        const { inputValue, selectedIndex, width } = this.state;
+        const {
+            tags,
+            placeholder,
+            value,
+            ...props
+        } = this.props;
+        const { selectedIndex } = this.state;
+
+        const { width } = getInputSize(`${value}${BIGGEST_LETTER}`);
 
         return (
             <div
@@ -136,6 +138,7 @@ export default class TagInput extends Component {
             >
                 {tags && tags.map((tag, index) => (
                     <Tag
+                        key={tag.id || index}
                         value={tag}
                         onDelete={this.handleTagRemove}
                         selected={selectedIndex === index}
@@ -144,16 +147,16 @@ export default class TagInput extends Component {
                     </Tag>
                 ))}
                 <Input
+                    {...props}
                     inputRef={this.setInputRef}
                     className="cc__tag-input__input"
-                    value={inputValue}
+                    value={value}
                     onChange={this.handleChange}
                     onKeyUp={this.handleKeyUp}
                     placeholder={(!tags || !tags.length) ? placeholder : null}
                     style={{
                         width,
                     }}
-                    {...props}
                 />
             </div>
         );
