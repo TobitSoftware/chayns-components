@@ -28,7 +28,7 @@ export default class PersonFinderData extends Component {
     static defaultProps = {
         take: 20,
         persons: true,
-        sites: true,
+        sites: false,
         value: '',
         selectedValue: false,
         includeOwn: false,
