@@ -100,7 +100,7 @@ export default class ModeSwitch extends Component {
         this.setState({ activeModeId: id });
         ModeSwitch.activeModeId = id;
         if (save) {
-            window.chayns.storage.set('react__modeSwitch--currentMode', id);
+            window.chayns.utils.ls.set('react__modeSwitch--currentMode', id);
         }
     }
 
@@ -138,7 +138,7 @@ export default class ModeSwitch extends Component {
                 ModeSwitch.activeModeId = defaultMode;
             }
             if (save) {
-                const storage = await window.chayns.storage.get('react__modeSwitch--currentMode');
+                const storage = window.chayns.utils.ls.get('react__modeSwitch--currentMode');
                 if (chayns.utils.isNumber(storage.object)) {
                     ModeSwitch.activeModeId = storage.object;
                 }
