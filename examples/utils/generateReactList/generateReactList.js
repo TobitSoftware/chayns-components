@@ -1,9 +1,5 @@
 import fs from 'fs';
 import { resolve, dirname } from 'path';
-import util from 'util';
-
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
 
 const ROOT_PATH = dirname(dirname(dirname(__dirname)));
 const EXAMPLE_DEFINITION_PATH = resolve(ROOT_PATH, 'examples', 'examples.json');
@@ -12,8 +8,8 @@ const EXAMPLE_OUTPUT_PATH = resolve(ROOT_PATH, 'examples', 'ExampleList.jsx');
 const ITEM_TEMPLATE = fs.readFileSync(resolve(__dirname, 'templates', 'ListItem.txt')).toString();
 const LIST_TEMPLATE = fs.readFileSync(resolve(__dirname, 'templates', 'List.txt')).toString();
 
-async function bootstrap() {
-    const examplesData = await readFile(EXAMPLE_DEFINITION_PATH);
+function bootstrap() {
+    const examplesData = fs.readFileSync(EXAMPLE_DEFINITION_PATH);
     const examples = JSON.parse(examplesData);
 
     const imports = [];
@@ -34,7 +30,7 @@ async function bootstrap() {
         .replace('##imports##', imports.join('\n'))
         .replace('##children##', usages.join('\n'));
 
-    await writeFile(EXAMPLE_OUTPUT_PATH, outputData);
+    fs.writeFileSync(EXAMPLE_OUTPUT_PATH, outputData);
 
     console.log('Generated example files');
 }
