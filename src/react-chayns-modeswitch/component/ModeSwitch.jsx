@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Icon from '../../react-chayns-icon/component/Icon';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 let globalState = {
     modes: [],
@@ -188,31 +189,33 @@ export default class ModeSwitch extends Component {
         if (show && this.state && chayns.env.user.isAuthenticated) {
             const { modes, open, activeModeId } = this.state;
             return (
-                <div className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}>
-                    <div className="cc__modeswitch__content">
-                        <h2>Diese Seite verwenden als:</h2>
-                        {
-                            modes.map(mode => (
-                                <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
-                                    <RadioButton
-                                        name="modeSwitchRadioButtons"
-                                        value={mode.id}
-                                        onChange={this.switchMode}
-                                        checked={mode.id === activeModeId}
-                                    >
-                                        {mode.name}
-                                    </RadioButton>
-                                </div>
-                            ))
-                        }
+                <TappPortal>
+                    <div className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}>
+                        <div className="cc__modeswitch__content">
+                            <h2>Diese Seite verwenden als:</h2>
+                            {
+                                modes.map(mode => (
+                                    <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
+                                        <RadioButton
+                                            name="modeSwitchRadioButtons"
+                                            value={mode.id}
+                                            onChange={this.switchMode}
+                                            checked={mode.id === activeModeId}
+                                        >
+                                            {mode.name}
+                                        </RadioButton>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div
+                            className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId !== 0 })}
+                            onClick={this.toggleModeSwitch}
+                        >
+                            <Icon icon="ts-cog"/>
+                        </div>
                     </div>
-                    <div
-                        className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId !== 0 })}
-                        onClick={this.toggleModeSwitch}
-                    >
-                        <Icon icon="ts-cog"/>
-                    </div>
-                </div>
+                </TappPortal>
             );
         }
         return null;
