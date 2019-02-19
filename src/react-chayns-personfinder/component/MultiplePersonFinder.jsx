@@ -52,6 +52,14 @@ export default class MultiplePersonFinder extends Component {
         this.handleTagRemove = this.handleTagRemove.bind(this);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const { value } = this.state;
+
+        if (!value && prevState.inputValue) {
+            this.input.focus();
+        }
+    }
+
     handleOnChange(inputValue) {
         this.setState({
             inputValue,
@@ -97,7 +105,7 @@ export default class MultiplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
-            selectedValue: true,
+            selectedValue: false,
             values: [...values, {
                 text: name,
                 value: outValue,
@@ -137,6 +145,7 @@ export default class MultiplePersonFinder extends Component {
                 <PersonFinderData
                     {...props}
                     inputComponent={TagInput}
+                    inputRef={(ref) => { this.input = ref; }}
                     value={inputValue}
                     tags={values}
                     selectedValue={selectedValue}
