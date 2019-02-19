@@ -55,6 +55,7 @@ import Map from './react-chayns-map/component/Map';
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
 
+const CHAYNS_CSS_VERSION = '4.1';
 
 export {
     Accordion,
@@ -97,4 +98,5 @@ export {
     FileUpload,
     Map,
     resolveAbsoluteImport,
+    CHAYNS_CSS_VERSION,
 };
