@@ -1,13 +1,17 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen';
 
-import { Accordion, Icon } from '../../../src';
+import { Accordion, ContextMenu, Icon } from '../../../src';
 import connectExpandableContext from '../../../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
 import ListItem from '../../../src/react-chayns-list/component/ListItem';
 import { connectSearchContext } from '../SearchContext';
 
 let maxId = 1;
+
+const BASE_GITHUB_URL = 'https://github.com/TobitSoftware/chayns-components/tree/master';
 
 class ExampleContainer extends PureComponent {
     state = {
@@ -21,6 +25,22 @@ class ExampleContainer extends PureComponent {
 
         const { id } = props;
         this.id = id || maxId++; /* eslint-disable-line no-plusplus */
+
+        this.items = [{
+            className: null,
+            onClick: this.handleExampleClick.bind(this),
+            text: 'Sourcecode (GitHub)',
+            icon: faCode,
+        }];
+
+        if (props.readme) {
+            this.items.push({
+                className: null,
+                onClick: this.handleReadmeClick.bind(this),
+                text: 'Readme (GitHub)',
+                icon: faBookOpen,
+            });
+        }
 
         this.handleClick = this.handleClick.bind(this);
     }
@@ -37,14 +57,6 @@ class ExampleContainer extends PureComponent {
         return componentArray;
     }
 
-    componentDidCatch(error, info) {
-        this.setState({
-            hasError: true,
-            error,
-            info,
-        });
-    }
-
     handleClick() {
         const { onOpen, id } = this.props;
 
@@ -53,12 +65,39 @@ class ExampleContainer extends PureComponent {
         }
     }
 
+    handleExampleClick() {
+        const { examplePath } = this.props;
+        const url = `${BASE_GITHUB_URL}/examples/${examplePath}`;
+        chayns.openUrlInBrowser(url);
+    }
+
+    handleReadmeClick() {
+        const { readme, id } = this.props;
+
+        if (!readme) {
+            return;
+        }
+
+        const url = `${BASE_GITHUB_URL}/src/${id}/README.md`;
+        chayns.openUrlInBrowser(url);
+    }
+
+    componentDidCatch(error, info) {
+        this.setState({
+            hasError: true,
+            error,
+            info,
+        });
+    }
+
     render() {
         const {
             headline,
             children,
             open,
             onOpen,
+            examplePath,
+            readme,
             search,
             ...props
         } = this.props;
@@ -110,7 +149,23 @@ class ExampleContainer extends PureComponent {
                 {...props}
                 style={{ margin: '20px 0', ...props.style }}
             >
-                <h1>{headline}</h1>
+                <div
+                    style={{
+                        display: 'flex',
+                    }}
+                >
+                    <h1
+                        style={{
+                            flexGrow: 1,
+                        }}
+                    >
+                        {headline}
+                    </h1>
+                    <ContextMenu
+                        items={this.items}
+                        position={1}
+                    />
+                </div>
                 {children}
             </div>
         );
@@ -130,12 +185,16 @@ ExampleContainer.propTypes = {
     ]),
     onOpen: PropTypes.func.isRequired,
     search: PropTypes.string,
+    examplePath: PropTypes.string,
+    readme: PropTypes.bool,
 };
 
 ExampleContainer.defaultProps = {
     id: null,
     open: null,
     search: null,
+    examplePath: null,
+    readme: false,
 };
 
 export default connectSearchContext(connectExpandableContext(ExampleContainer));

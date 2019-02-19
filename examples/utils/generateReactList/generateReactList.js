@@ -23,6 +23,8 @@ function bootstrap() {
         usages.push(ITEM_TEMPLATE
             .replace('##id##', data.id)
             .replace('##headline##', data.title)
+            .replace('##examplePath##', data.example)
+            .replace('##readme##', data.readme ? 'true' : 'false')
             .replace('##importName##', importName));
     });
 

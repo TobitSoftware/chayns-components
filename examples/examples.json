@@ -1,119 +1,148 @@
 [{
   "id": "react-chayns-accordion",
   "title": "Accordion",
-  "example": "react-chayns-accordion/Example.jsx"
+  "example": "react-chayns-accordion/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-amountcontrol",
   "title": "AmountControl",
-  "example": "react-chayns-amountcontrol/Example.jsx"
+  "example": "react-chayns-amountcontrol/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-badge",
   "title": "Badge",
-  "example": "react-chayns-badge/Example.jsx"
+  "example": "react-chayns-badge/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-button",
   "title": "Button",
-  "example": "react-chayns-button/Example.jsx"
+  "example": "react-chayns-button/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-calendar",
   "title": "Calendar",
-  "example": "react-chayns-calendar/Example.jsx"
+  "example": "react-chayns-calendar/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-checkbox",
   "title": "Checkbox",
-  "example": "react-chayns-checkbox/Example.jsx"
+  "example": "react-chayns-checkbox/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-combobox",
   "title": "ComboBox",
-  "example": "react-chayns-checkbox/Example.jsx"
+  "example": "react-chayns-combobox/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-contextmenu",
   "title": "ContextMenu",
-  "example": "react-chayns-contextmenu/Example.jsx"
+  "example": "react-chayns-contextmenu/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-emoji_input",
   "title": "EmojiInput",
-  "example": "react-chayns-emoji_input/Example.jsx"
+  "example": "react-chayns-emoji_input/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-expandable_content",
   "title": "ExpandableContent",
-  "example": "react-chayns-expandable_content/Example.jsx"
+  "example": "react-chayns-expandable_content/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-gallery",
   "title": "Gallery",
-  "example": "react-chayns-gallery/Example.jsx"
+  "example": "react-chayns-gallery/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-gridcalendar",
   "title": "Grid-Calendar",
-  "example": "react-chayns-gridcalendar/Example.jsx"
+  "example": "react-chayns-gridcalendar/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-icon",
   "title": "Icon",
-  "example": "react-chayns-icon/Example.jsx"
+  "example": "react-chayns-icon/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-input",
   "title": "Input",
-  "example": "react-chayns-input/Example.jsx"
+  "example": "react-chayns-input/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-input_box",
   "title": "InputBox",
-  "example": "react-chayns-input_box/Example.jsx"
+  "example": "react-chayns-input_box/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-list",
   "title": "List",
-  "example": "react-chayns-list/Example.jsx"
+  "example": "react-chayns-list/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-map",
   "title": "Map",
-  "example": "react-chayns-map/Example.jsx"
+  "example": "react-chayns-map/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-modeswitch",
   "title": "ModeSwitch",
-  "example": "react-chayns-modeswitch/Example.jsx"
+  "example": "react-chayns-modeswitch/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-openingTimes",
   "title": "OpeningTimes",
-  "example": "react-chayns-openingTimes/Example.jsx"
+  "example": "react-chayns-openingTimes/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-personfinder",
   "title": "PersonFinder",
-  "example": "react-chayns-personfinder/Example.jsx"
+  "example": "react-chayns-personfinder/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-radiobutton",
   "title": "RadioButton",
-  "example": "react-chayns-radiobutton/Example.jsx"
+  "example": "react-chayns-radiobutton/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-receiverinput",
   "title": "ReceiverInput",
-  "example": "react-chayns-receiverinput/Example.jsx"
+  "example": "react-chayns-receiverinput/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-rfid_input",
   "title": "RFID Input",
-  "example": "react-chayns-rfid_input/Example.jsx"
+  "example": "react-chayns-rfid_input/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-scrollview",
   "title": "ScrollView",
-  "example": "react-chayns-scrollview/Example.jsx"
+  "example": "react-chayns-scrollview/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-selectbutton",
   "title": "SelectButton",
-  "example": "react-chayns-selectbutton/Example.jsx"
+  "example": "react-chayns-selectbutton/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-selectlist",
   "title": "SelectList",
-  "example": "react-chayns-selectlist/Example.jsx"
+  "example": "react-chayns-selectlist/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-setupwizard",
   "title": "SetupWizard",
-  "example": "react-chayns-setupwizard/Example.jsx"
+  "example": "react-chayns-setupwizard/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-sharingbar",
   "title": "SharingBar",
-  "example": "react-chayns-sharingbar/Example.jsx"
+  "example": "react-chayns-sharingbar/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-smallwaitcursor",
   "title": "SmallWaitCursor",
-  "example": "react-chayns-smallwaitcursor/Example.jsx"
+  "example": "react-chayns-smallwaitcursor/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-tapp_portal",
   "title": "TappPortal",
@@ -121,17 +150,21 @@
 },{
   "id": "react-chayns-textarea",
   "title": "TextArea",
-  "example": "react-chayns-textarea/Example.jsx"
+  "example": "react-chayns-textarea/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-textstring",
   "title": "TextString",
-  "example": "react-chayns-textstring/Example.jsx"
+  "example": "react-chayns-textstring/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-tooltip",
   "title": "Tooltip",
-  "example": "react-chayns-tooltip/Example.jsx"
+  "example": "react-chayns-tooltip/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-file_input",
   "title": "FileInput",
-  "example": "react-chayns-file_input/Example.jsx"
+  "example": "react-chayns-file_input/Example.jsx",
+  "readme": true
 }]
