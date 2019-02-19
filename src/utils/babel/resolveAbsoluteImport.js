@@ -36,7 +36,8 @@ module.exports = function resolveAbsoluteImport(importName) {
         TextArea: 'react-chayns-textarea/component/TextArea.js',
         TextString: 'react-chayns-textstring/component/TextString.js',
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
-        FileUpload: 'react-chayns-upload/component/FileUpload.js',
+        FileInput: 'react-chayns-file_input/component/FileInput.js',
+        ImageUpload: 'utils/imageUpload.js',
     };
 
     if(!values[importName]) {

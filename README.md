@@ -33,7 +33,7 @@ The following components are part of this package:
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component                            | [Readme](/src/react-chayns-modeswitch/README.md)      |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)       | PersonFinder Component                          | [Readme](/src/react-chayns-personfinder/README.md)    |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)         | RadioButton Component                           | [Readme](/src/react-chayns-radiobutton/README.md)     |
-| [react-chayns-receiverinput](/src/react-chayns-receiverinput/)     | ReceiverInput Component                         | [Readme](/src/react-chayns-receiverinput/README.md)     |
+| [react-chayns-receiverinput](/src/react-chayns-receiverinput/)     | ReceiverInput Component                         | [Readme](/src/react-chayns-receiverinput/README.md)   |
 | [react-chayns-rfid_input](/src/react-chayns-rfid_input/)           | RfidInput Component                             | [Readme](/src/react-chayns-rfid_input/README.md)      |
 | [react-chayns-scrollview](/src/react-chayns-scrollview/)           | ScrollView Component                            | [Readme](/src/react-chayns-scrollview/README.md)      |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/)       | SelectButton Component                          | [Readme](/src/react-chayns-selectbutton/README.md)    |
@@ -43,9 +43,9 @@ The following components are part of this package:
 | [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/) | SmallWaitCursor Component                       | [Readme](/src/react-chayns-smallwaitcursor/README.md) |
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
-| [react-chayns-upload](/src/react-chayns-upload/)                   | FileUpload Component                            | [Readme](/src/react-chayns-upload/README.md)          |
-| [react-chayns-map](/src/react-chayns-map/)                         | Map Component                                   | [Readme](/src/react-chayns-map/README.md)          |
-| [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)          |
+| [react-chayns-file_input](/src/react-chayns-file_input/)           | FileInput Component                             | [Readme](/src/react-chayns-file_input/README.md)      |
+| [react-chayns-map](/src/react-chayns-map/)                         | Map Component                                   | [Readme](/src/react-chayns-map/README.md)             |
+| [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)    |
 
 
 ## Internal Components ##

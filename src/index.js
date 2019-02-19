@@ -49,7 +49,7 @@ import TextArea from './react-chayns-textarea/component/TextArea';
 import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
-import FileUpload from './react-chayns-upload/component/FileUpload';
+import FileInput from './react-chayns-file_input/component/FileInput';
 import Map from './react-chayns-map/component/Map';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
@@ -95,7 +95,7 @@ export {
     TextArea,
     TextString,
     Tooltip,
-    FileUpload,
+    FileInput,
     Map,
     resolveAbsoluteImport,
     CHAYNS_CSS_VERSION,
