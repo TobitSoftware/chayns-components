@@ -7,12 +7,6 @@ import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
-let globalState = {
-    modes: [],
-    activeModeId: 0
-};
-const onChangeListener = [];
-
 export default class ModeSwitch extends Component {
     static propTypes = {
         modes: PropTypes.arrayOf(
@@ -36,21 +30,29 @@ export default class ModeSwitch extends Component {
         show: false,
     };
 
+    static modes = [];
+
+    static activeModeId = 0;
+
+    static open = false;
+
+    static onChangeListener = [];
+
     static getCurrentMode() {
-        const { modes, activeModeId } = globalState;
+        const { modes, activeModeId } = ModeSwitch;
         return modes.find(mode => mode.id === activeModeId || null);
     }
 
     static addChangeListener(callback) {
-        onChangeListener.push(callback);
-        if (globalState.modes.length > 0) {
-            const mode = globalState.modes.find(m => m.id === globalState.activeModeId);
+        ModeSwitch.onChangeListener.push(callback);
+        if (ModeSwitch.modes.length > 0) {
+            const mode = ModeSwitch.modes.find(m => m.id === ModeSwitch.activeModeId);
             callback(mode);
         }
     }
 
     static removeChangeListener(callback) {
-        onChangeListener.splice(onChangeListener.indexOf(callback), 1);
+        ModeSwitch.onChangeListener.splice(ModeSwitch.onChangeListener.indexOf(callback), 1);
     }
 
     constructor(props) {
@@ -76,8 +78,8 @@ export default class ModeSwitch extends Component {
     componentWillReceiveProps(nextProps) {
         const { modes } = this.props;
         if (chayns.env.user.isAuthenticated && nextProps.modes !== modes) {
-            globalState.modes = this.setModes(nextProps.modes);
-            this.setState({ modes: globalState.modes });
+            ModeSwitch.modes = this.setModes(nextProps.modes);
+            this.setState({ modes: ModeSwitch.modes });
         }
     }
 
@@ -88,7 +90,7 @@ export default class ModeSwitch extends Component {
         if (onChange) {
             onChange(mode);
         }
-        onChangeListener.forEach((listener) => {
+        ModeSwitch.onChangeListener.forEach((listener) => {
             listener(mode);
         });
     }
@@ -96,7 +98,7 @@ export default class ModeSwitch extends Component {
     setMode(id) {
         const { save } = this.props;
         this.setState({ activeModeId: id });
-        globalState.activeModeId = id;
+        ModeSwitch.activeModeId = id;
         if (save) {
             window.chayns.storage.set('react__modeSwitch--currentMode', id);
         }
@@ -126,36 +128,36 @@ export default class ModeSwitch extends Component {
     async init() {
         const { defaultMode, save, modes } = this.props;
         if (chayns.env.user.isAuthenticated) {
-            globalState = {
-                modes: this.setModes(modes),
-                activeModeId: defaultMode || 0,
-                open: false
-            };
+            ModeSwitch.modes = this.setModes(modes);
+            ModeSwitch.activeModeId = defaultMode || 0;
+            ModeSwitch.open = false;
 
             chayns.removeAdminSwitchListener(this.switchMode);
             chayns.addAdminSwitchListener(this.switchMode);
             if (defaultMode) {
-                globalState.activeModeId = defaultMode;
+                ModeSwitch.activeModeId = defaultMode;
             }
             if (save) {
                 const storage = await window.chayns.storage.get('react__modeSwitch--currentMode');
                 if (chayns.utils.isNumber(storage.object)) {
-                    globalState.activeModeId = storage.object;
+                    ModeSwitch.activeModeId = storage.object;
                 }
             }
-            if (globalState.activeModeId === 0 || globalState.activeModeId === 1) {
-                globalState.activeModeId = chayns.env.user.adminMode ? 1 : 0;
+            if (ModeSwitch.activeModeId === 0 || ModeSwitch.activeModeId === 1) {
+                ModeSwitch.activeModeId = chayns.env.user.adminMode ? 1 : 0;
             }
         } else {
-            globalState = {
-                modes: [],
-                activeModeId: null,
-                open: false
-            };
+            ModeSwitch.modes = [];
+            ModeSwitch.activeModeId = null;
+            ModeSwitch.open = false;
         }
 
-        this.setState(globalState);
-        this.onChange(globalState.activeModeId);
+        this.setState({
+            modes: ModeSwitch.modes,
+            activeModeId: ModeSwitch.activeModeId,
+            open: ModeSwitch.open,
+        });
+        this.onChange(ModeSwitch.activeModeId);
     }
 
     switchMode(id) {
