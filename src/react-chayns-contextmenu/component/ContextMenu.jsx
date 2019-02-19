@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as ReactDOM from 'react-dom';
 import Icon from '../../react-chayns-icon/component/Icon';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class ContextMenu extends Component {
     static propTypes = {
@@ -40,9 +40,14 @@ export default class ContextMenu extends Component {
         stopPropagation: false,
     };
 
-    constructor() {
-        super();
-        this.state = { displayNone: true, hide: true };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            displayNone: true,
+            hide: true
+        };
+
         this.getCoordinates = this.getCoordinates.bind(this);
         this.onChildrenClick = this.onChildrenClick.bind(this);
         this.onLayerClick = this.onLayerClick.bind(this);
@@ -135,7 +140,7 @@ export default class ContextMenu extends Component {
         const { x, y } = this.getCoordinates();
 
         return [
-            ReactDOM.createPortal(
+            <TappPortal parent={parent}>
                 <div
                     className={classNames('context-menu-overlay', {
                         'context-menu-overlay--hide': hide && displayNone,
@@ -165,9 +170,8 @@ export default class ContextMenu extends Component {
                             </li>
                         ))}
                     </ul>
-                </div>,
-                parent
-            ),
+                </div>
+            </TappPortal>,
             coordinates
                 ? null
                 : (
