@@ -140,7 +140,10 @@ export default class ContextMenu extends Component {
         const { x, y } = this.getCoordinates();
 
         return [
-            <TappPortal parent={parent}>
+            <TappPortal
+                parent={parent}
+                key="portal"
+            >
                 <div
                     className={classNames('context-menu-overlay', {
                         'context-menu-overlay--hide': hide && displayNone,
