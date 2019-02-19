@@ -43,11 +43,13 @@ export default class MultiplePersonFinder extends Component {
         this.state = {
             inputValue: createInputValue(props.defaultValue) || '',
             selectedValue: !!props.defaultValue,
+            values: [],
         };
 
         this.clear = this.clear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.handleOnChange = this.handleOnChange.bind(this);
+        this.handleTagRemove = this.handleTagRemove.bind(this);
     }
 
     handleOnChange(inputValue) {
@@ -57,26 +59,53 @@ export default class MultiplePersonFinder extends Component {
         });
     }
 
+    handleTagRemove(tag) {
+        const { onRemove } = this.props;
+        const { values } = this.state;
+        const { value } = tag;
+
+        this.setState({
+            values: values.filter(r => r.value.type !== value.type || r.value.personId !== value.personId || r.value.siteId !== value.siteId),
+        });
+
+        if (onRemove) {
+            onRemove(value.value);
+        }
+    }
+
     handleSelect(type, value) {
-        const { onChange } = this.props;
+        const { onAdd } = this.props;
+        const { values } = this.state;
         const name = convertToInputValue(value);
+
+        if (values.find(v => (v.value.type === type
+            && v.value.siteId === value.siteId
+            && v.value.personId === value.personId))) {
+            return;
+        }
+
+        const outValue = {
+            type,
+            name: value.name,
+            firstName: value.firstName,
+            lastName: value.lastName,
+            personId: value.personId,
+            userId: value.userId,
+            siteId: value.siteId,
+            locationId: value.locationId,
+        };
 
         this.setState({
             inputValue: name,
-            selectedValue: true
+            selectedValue: true,
+            values: [...values, {
+                text: name,
+                value: outValue,
+            }],
         });
 
-        if (onChange) {
-            onChange({
-                type,
-                name: value.name,
-                firstName: value.firstName,
-                lastName: value.lastName,
-                personId: value.personId,
-                userId: value.userId,
-                siteId: value.siteId,
-                locationId: value.locationId,
-            });
+        if (onAdd) {
+            onAdd(outValue);
         }
     }
 
@@ -101,7 +130,7 @@ export default class MultiplePersonFinder extends Component {
             defaultValue,
             ...props
         } = this.props;
-        const { inputValue, selectedValue } = this.state;
+        const { inputValue, selectedValue, values } = this.state;
 
         return (
             <div className={classnames('cc__person-finder', className)}>
@@ -109,9 +138,11 @@ export default class MultiplePersonFinder extends Component {
                     {...props}
                     inputComponent={TagInput}
                     value={inputValue}
+                    tags={values}
                     selectedValue={selectedValue}
                     onChange={this.handleOnChange}
                     onSelect={this.handleSelect}
+                    onRemoveTag={this.handleTagRemove}
                     persons={showPersons}
                     sites={showSites}
                 />
