@@ -1,7 +1,7 @@
-import * as ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
-const TappPortal = ({ children, parent }) => ReactDOM.createPortal(
+const TappPortal = ({ children, parent }) => createPortal(
     children,
     parent || document.getElementsByClassName('tapp')[0] || document.body
 );
