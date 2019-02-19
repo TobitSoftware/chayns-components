@@ -69,18 +69,19 @@ export default class FileInput extends PureComponent {
 
     constructor(props) {
         super(props);
-        this.uploadRefs = [];
+        this.itemRefs = [];
+        this.fileInputRefs = [];
         this.needAppCall = (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.isAndroid && chayns.env.appVersion < 6000;// TODO replace with right appVersion
     }
 
     onDragEnter = (event, item, index) => {
         if (this.checkFileType(event.dataTransfer.items[0].type, item.types)) {
-            this.uploadRefs[index].classList.add('cc__file-upload--hover');
+            this.itemRefs[index].classList.add('cc__file-upload--hover');
         }
     };
 
     onDragLeave = (index) => {
-        this.uploadRefs[index].classList.remove('cc__file-upload--hover');
+        this.itemRefs[index].classList.remove('cc__file-upload--hover');
     };
 
     onChange = (event, item, index) => {
@@ -107,7 +108,7 @@ export default class FileInput extends PureComponent {
             });
             item.onChange(validFiles, invalidFiles);
         }
-        this.fileInputRef.value = null;
+        this.fileInputRefs[index].value = null;
     };
 
     onClick = async (event, item, index) => {
@@ -145,14 +146,14 @@ export default class FileInput extends PureComponent {
 
         return (
             <div
-                className={classNames('cc__file-upload', 'cc__file-upload--custom', className, { 'cc__file-upload--disabled': disabled })}
+                className={classNames('cc__file-input', 'cc__file-input--custom', className, { 'cc__file-input--disabled': disabled })}
                 style={style}
             >
                 {
                     items.map((item, index) => {
                         const nodeArray = [
                             <div
-                                className={classNames('cc__file-upload__split', item.className, { 'cc__file-upload__split--disabled': item.disabled })}
+                                className={classNames('cc__file-input__split', item.className, { 'cc__file-input__split--disabled': item.disabled })}
                                 style={item.style}
                                 key={`item${index}`}
                             >
@@ -161,8 +162,8 @@ export default class FileInput extends PureComponent {
                                         ? item.content.children
                                         : (
                                             <div
-                                                className="cc__file-upload--placeholder"
-                                                ref={ref => this.uploadRefs[index] = ref}
+                                                className="cc__file-input--placeholder"
+                                                ref={ref => this.itemRefs[index] = ref}
                                                 onClick={event => this.onClick(event, item, index)}
                                             >
                                                 {
@@ -171,18 +172,18 @@ export default class FileInput extends PureComponent {
                                                             <input
                                                                 title=""
                                                                 multiple={item.maxNumberOfFiles !== 1}
-                                                                className="cc__file-upload__input"
+                                                                className="cc__file-input__input"
                                                                 type="file"
                                                                 onChange={event => this.onChange(event, item, index)}
                                                                 accept={item.types}
                                                                 onDragEnter={event => this.onDragEnter(event, item, index)}
                                                                 onDragLeave={() => this.onDragLeave(index)}
-                                                                ref={ref => this.fileInputRef = ref}
+                                                                ref={ref => this.fileInputRefs[index] = ref}
                                                             />
                                                         )
                                                         : null
                                                 }
-                                                <span className="cc__file-upload__icon">
+                                                <span className="cc__file-input__icon">
                                                     <Icon
                                                         icon={
                                                             item.content && item.content.icon
@@ -192,7 +193,7 @@ export default class FileInput extends PureComponent {
                                                     />
                                                 </span>
                                                 <div
-                                                    className="cc__file-upload__message"
+                                                    className="cc__file-input__message"
                                                 >
                                                     {
                                                         item.content && item.content.text
@@ -206,7 +207,7 @@ export default class FileInput extends PureComponent {
                             </div>
                         ];
                         if (index !== 0) {
-                            nodeArray.unshift(<div className="cc__file-upload__separator" key={`separator${index}`}/>);
+                            nodeArray.unshift(<div className="cc__file-input__separator" key={`separator${index}`}/>);
                         }
                         return nodeArray;
                     })
