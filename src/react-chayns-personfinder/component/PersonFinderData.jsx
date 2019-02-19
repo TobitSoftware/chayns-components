@@ -198,8 +198,9 @@ export default class PersonFinderData extends Component {
 
         if (!selectedValue && hasEntries) {
             return [
-                showWaitCursor && (<WaitCursor />),
+                showWaitCursor && (<WaitCursor key="wait-cursor" />),
                 <PersonFinderResults
+                    key="results"
                     persons={persons}
                     sites={sites}
                     onSelect={onSelect}
@@ -209,7 +210,7 @@ export default class PersonFinderData extends Component {
 
         if (showWaitCursor) {
             return (
-                <WaitCursor />
+                <WaitCursor key="wait-cursor" />
             );
         }
 
