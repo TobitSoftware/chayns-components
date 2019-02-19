@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox } from '../../index';
 
 import TimeSpan from './TimeSpan';
+import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
 class Day extends Component {
     constructor(props) {

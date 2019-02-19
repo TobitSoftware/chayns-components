@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
-import { ChooseButton, Icon, Input } from '../../index';
+import Input from '../../react-chayns-input/component/Input';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 class TimeSpan extends Component {
     static propTypes = {
