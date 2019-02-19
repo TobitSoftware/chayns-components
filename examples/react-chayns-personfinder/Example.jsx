@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 
-export default class PersonFinder2Example extends PureComponent {
+export default class PersonFinderExample extends PureComponent {
     static handleSelect(user) {
         chayns.dialog.alert(JSON.stringify(user, null, 2));
     }
@@ -31,7 +31,7 @@ export default class PersonFinder2Example extends PureComponent {
                     ref={(ref) => { this.relationFinder = ref; }}
                     dynamic
                     placeholder="User/Site"
-                    onChange={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
@@ -42,7 +42,7 @@ export default class PersonFinder2Example extends PureComponent {
                         name: 'Tobit.Software',
                         siteId: '67231-11058'
                     }}
-                    onChange={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinderExample.handleSelect}
                     persons={false}
                 />
                 <PersonFinder
@@ -50,7 +50,7 @@ export default class PersonFinder2Example extends PureComponent {
                     ref={(ref) => { this.personFinder = ref; }}
                     dynamic
                     placeholder="Users"
-                    onChange={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinderExample.handleSelect}
                     sites={false}
                 />
                 <PersonFinder
@@ -58,7 +58,7 @@ export default class PersonFinder2Example extends PureComponent {
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
                     placeholder="Users (including own)"
-                    onChange={PersonFinder2Example.handleSelect}
+                    onChange={PersonFinderExample.handleSelect}
                     sites={false}
                     includeOwn
                 />
@@ -67,9 +67,9 @@ export default class PersonFinder2Example extends PureComponent {
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
                     placeholder="Users (multiple)"
-                    onAdd={PersonFinder2Example.handleAdd}
-                    onRemove={PersonFinder2Example.handleRemove}
-                    onChange={PersonFinder2Example.handleSelect}
+                    onAdd={PersonFinderExample.handleAdd}
+                    onRemove={PersonFinderExample.handleRemove}
+                    onChange={PersonFinderExample.handleSelect}
                     multiple
                 />
                 <Button
