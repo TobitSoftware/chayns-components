@@ -144,6 +144,10 @@
   "example": "react-chayns-smallwaitcursor/Example.jsx",
   "readme": true
 },{
+  "id": "react-chayns-tag_input",
+  "title": "TagInput",
+  "example": "react-chayns-tag_input/Example.jsx"
+},{
   "id": "react-chayns-tapp_portal",
   "title": "TappPortal",
   "example": "react-chayns-tapp_portal/Example.jsx"
