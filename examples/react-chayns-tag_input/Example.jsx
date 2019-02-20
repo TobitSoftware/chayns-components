@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
 import TagInput from '../../src/react-chayns-tag_input/component/TagInput';
 import { Button } from '../../src';
 
@@ -53,10 +52,7 @@ export default class TagInputExample extends PureComponent {
         const { tags, value } = this.state;
 
         return (
-            <ExampleContainer
-                headline="TagInput"
-                id="react-chayns-tag_input"
-            >
+            <div>
                 <TagInput
                     ref={(ref) => { this.input = ref; }}
                     tags={tags}
@@ -81,7 +77,7 @@ export default class TagInputExample extends PureComponent {
                 >
                     {'Focus()'}
                 </Button>
-            </ExampleContainer>
+            </div>
         );
     }
 }
