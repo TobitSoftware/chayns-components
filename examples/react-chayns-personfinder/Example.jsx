@@ -43,7 +43,7 @@ export default class PersonFinderExample extends PureComponent {
                         siteId: '67231-11058'
                     }}
                     onChange={PersonFinderExample.handleSelect}
-                    persons={false}
+                    showPersons={false}
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
@@ -51,7 +51,6 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users"
                     onChange={PersonFinderExample.handleSelect}
-                    sites={false}
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
@@ -59,7 +58,6 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
-                    sites={false}
                     includeOwn
                     showId
                 />
@@ -71,6 +69,7 @@ export default class PersonFinderExample extends PureComponent {
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
+                    showSites
                     multiple
                 />
                 <Button
