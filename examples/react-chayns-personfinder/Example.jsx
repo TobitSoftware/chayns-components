@@ -44,6 +44,7 @@ export default class PersonFinderExample extends PureComponent {
                     }}
                     onChange={PersonFinderExample.handleSelect}
                     showPersons={false}
+                    showSites
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
