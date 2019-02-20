@@ -32,49 +32,16 @@ export default class PersonFinderResults extends PureComponent {
         }
     }
 
-    renderSites(relations) {
+    renderResults(relations, type) {
         if (relations.length === 0) {
             return null;
         }
 
         return relations.map(relation => (
             <PersonFinderResultItem
-                key={relation.siteId}
-                relation={{
-                    siteId: relation.siteId,
-                    locationId: relation.locationId,
-                    score: relation.score,
-                    name: relation.name,
-                    relations: relation.relations,
-                    relationCount: relation.relationCount,
-                    image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
-                }}
-                type={LOCATION_RELATION}
-                onClick={this.handleClick}
-            />
-        ));
-    }
-
-    renderPersons(relations) {
-        if (relations.length === 0) {
-            return null;
-        }
-
-        return relations.map(relation => (
-            <PersonFinderResultItem
-                key={relation.personId}
-                relation={{
-                    personId: relation.personId,
-                    userId: relation.userId,
-                    name: `${relation.firstName} ${relation.lastName}`,
-                    firstName: relation.firstName,
-                    lastName: relation.lastName,
-                    score: relation.score,
-                    relationCount: relation.relationCount,
-                    image: `https://sub60.tobit.com/u/${relation.personId}?size=40`,
-                    relations: relation.relations,
-                }}
-                type={PERSON_RELATION}
+                key={relation.personId || relation.siteId}
+                relation={relation}
+                type={type}
                 onClick={this.handleClick}
             />
         ));
@@ -83,10 +50,10 @@ export default class PersonFinderResults extends PureComponent {
     render() {
         const { persons, sites } = this.props;
 
-        const relatedPersons = this.renderPersons(persons.related);
-        const relatedSites = this.renderSites(sites.related);
-        const unrelatedPersons = this.renderPersons(persons.unrelated);
-        const unrelatedSites = this.renderSites(sites.unrelated);
+        const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
+        const relatedSites = this.renderResults(sites.related, LOCATION_RELATION);
+        const unrelatedPersons = this.renderResults(persons.unrelated, PERSON_RELATION);
+        const unrelatedSites = this.renderResults(sites.unrelated, LOCATION_RELATION);
 
         return (
             <div className="cc__person-finder__results">
