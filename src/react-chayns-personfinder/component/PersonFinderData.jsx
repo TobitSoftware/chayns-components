@@ -140,6 +140,10 @@ export default class PersonFinderData extends Component {
             this.skip[PERSON_RELATION] = 0;
             this.loadMore[LOCATION_RELATION] = true;
             this.loadMore[PERSON_RELATION] = true;
+
+            if (this.resultList.current) {
+                this.resultList.current.scrollTop = 0;
+            }
         }
 
         const { persons: enablePersons, sites: enableSites, includeOwn } = this.props;
@@ -154,7 +158,7 @@ export default class PersonFinderData extends Component {
             const [personResults, siteResults] = await Promise.all(promises);
             this.hideWaitCursor();
 
-            const { persons: personsState, sites: sitesState } = this.state;
+            const { persons: personsState, sites: sitesState, lazyLoading } = this.state;
 
             let persons = clear ? { related: [], unrelated: [] } : personsState;
             let sites = clear ? { related: [], unrelated: [] } : sitesState;
@@ -188,6 +192,7 @@ export default class PersonFinderData extends Component {
             this.setState({
                 persons,
                 sites,
+                lazyLoading: clear ? false : lazyLoading,
             });
         } catch (ex) {
             if (!ex || !ex.isCanceled) {
