@@ -32,7 +32,7 @@ export function convertToInputValue(data, showId) {
     return value;
 }
 
-export function createInputValue(data) {
+export function createInputValue(data, showId = false) {
     if (chayns.utils.isString(data)) {
         return data;
     }
@@ -45,5 +45,5 @@ export function createInputValue(data) {
         return '';
     }
 
-    return convertToInputValue(data);
+    return convertToInputValue(data, showId);
 }
