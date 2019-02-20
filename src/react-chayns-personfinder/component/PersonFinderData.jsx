@@ -39,7 +39,7 @@ export default class PersonFinderData extends Component {
         autoLoading: true,
     };
 
-    resultList = React.createRef();
+    resultList = null;
 
     state = {
         value: null,
@@ -101,11 +101,11 @@ export default class PersonFinderData extends Component {
     }
 
     async handleLazyLoad() {
-        if (!this.resultList.current) return;
+        if (!this.resultList) return;
 
         const { autoLoading } = this.props;
         const { value, lazyLoading } = this.state;
-        const { scrollTop, offsetHeight, scrollHeight } = this.resultList.current;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
 
         if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
             this.setState({
@@ -144,8 +144,8 @@ export default class PersonFinderData extends Component {
             this.loadMore[LOCATION_RELATION] = true;
             this.loadMore[PERSON_RELATION] = true;
 
-            if (this.resultList.current) {
-                this.resultList.current.scrollTop = 0;
+            if (this.resultList) {
+                this.resultList.scrollTop = 0;
             }
         }
 
@@ -313,7 +313,7 @@ export default class PersonFinderData extends Component {
                 onChange={this.handleOnChange}
                 boxClassName={classnames('cc__person-finder__overlay')}
                 overlayProps={{
-                    ref: this.resultList,
+                    ref: (ref) => { this.resultList = ref; },
                     onScroll: this.handleLazyLoad,
                 }}
                 {...props}
