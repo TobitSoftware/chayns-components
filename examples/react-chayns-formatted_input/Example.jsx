@@ -1,18 +1,23 @@
 import React, { PureComponent } from 'react';
 
 import FormattedInput from '../../src/react-chayns-formatted_input/FormattedInput';
+import NumericFormatter from '../../src/react-chayns-formatted_input/utils/NumericFormatter';
 
 export default class InputExample extends PureComponent {
+    static formatter = new NumericFormatter();
+
     state = {
-        value: '',
+        value: 1000000.44646,
     };
 
     onChange = (value, valid) => {
         console.log('onChange', value, valid);
 
-        this.setState({
-            value,
-        });
+        if (value !== false) {
+            this.setState({
+                value,
+            });
+        }
     };
 
     render() {
@@ -25,6 +30,7 @@ export default class InputExample extends PureComponent {
                 </div>
                 <FormattedInput
                     value={value}
+                    formatter={InputExample.formatter}
                     placeholder="input"
                     onChange={this.onChange}
                     style={{
