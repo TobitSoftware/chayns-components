@@ -17,6 +17,7 @@ export default class InputBox extends Component {
         ]),
         className: PropTypes.string,
         boxClassName: PropTypes.string,
+        inputRef: PropTypes.func,
     };
 
     static defaultProps = {
@@ -25,6 +26,7 @@ export default class InputBox extends Component {
         children: null,
         className: null,
         boxClassName: null,
+        inputRef: null,
     };
 
     state = {
@@ -103,6 +105,7 @@ export default class InputBox extends Component {
             inputComponent: InputComponent,
             children,
             parent,
+            inputRef,
             onFocus,
             className,
             boxClassName,
@@ -126,6 +129,7 @@ export default class InputBox extends Component {
             >
                 <InputComponent
                     {...props}
+                    ref={inputRef}
                     onFocus={this.handleFocus}
                 />
                 <TappPortal parent={parent}>

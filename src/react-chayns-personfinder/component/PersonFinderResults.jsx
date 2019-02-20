@@ -94,12 +94,14 @@ export default class PersonFinderResults extends PureComponent {
                 {relatedSites}
                 {unrelatedPersons && unrelatedPersons.length > 0 && (
                     <Divider
+                        key="unrelated-persons"
                         name={getText('DIVIDER_PERSON')}
                     />
                 )}
                 {unrelatedPersons}
                 {unrelatedSites && unrelatedSites.length > 0 && (
                     <Divider
+                        key="unrelated-sites"
                         name={getText('DIVIDER_SITE')}
                     />
                 )}
