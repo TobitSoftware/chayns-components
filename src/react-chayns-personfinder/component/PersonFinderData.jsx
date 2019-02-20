@@ -12,6 +12,7 @@ import WaitCursor from './WaitCursor';
 import getCurrentUserInformation from '../utils/getCurrentUserInformation';
 
 const WAIT_CURSOR_TIMEOUT = 500;
+const LAZY_LOADING_SPACE = 100;
 
 export default class PersonFinderData extends Component {
     static propTypes = {
@@ -43,6 +44,7 @@ export default class PersonFinderData extends Component {
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         showWaitCursor: false,
+        lazyLoading: false,
     };
 
     promises = {
@@ -99,24 +101,29 @@ export default class PersonFinderData extends Component {
     async handleLazyLoad() {
         if (!this.resultList.current) return;
 
-        const { value } = this.state;
+        const { value, lazyLoading } = this.state;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList.current;
 
-        if (!this.isLazyLoading && (scrollHeight - scrollTop - offsetHeight) <= 0) {
-            this.isLazyLoading = true;
+        if (!lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+            this.setState({
+                lazyLoading: true,
+            });
             await this.fetchData(value, false);
-            this.isLazyLoading = false;
+            this.setState({
+                lazyLoading: false,
+            });
         }
     }
 
     showWaitCursor() {
+        const { lazyLoading } = this.state;
         clearTimeout(this.waitCursorTimeout);
 
         this.waitCursorTimeout = window.setTimeout(() => {
             this.setState({
                 showWaitCursor: true,
             });
-        }, WAIT_CURSOR_TIMEOUT);
+        }, lazyLoading ? WAIT_CURSOR_TIMEOUT : 0);
     }
 
     hideWaitCursor() {
@@ -230,11 +237,29 @@ export default class PersonFinderData extends Component {
             showId,
         } = this.props;
 
-        const { persons, sites, showWaitCursor } = this.state;
+        const {
+            persons,
+            sites,
+            showWaitCursor,
+            lazyLoading
+        } = this.state;
 
         const hasEntries = this.hasEntries();
 
         if (!selectedValue && hasEntries) {
+            if (lazyLoading) {
+                return [
+                    <PersonFinderResults
+                        key="results"
+                        showId={showId}
+                        persons={persons}
+                        sites={sites}
+                        onSelect={onSelect}
+                    />,
+                    showWaitCursor && (<WaitCursor key="wait-cursor" />)
+                ];
+            }
+
             return [
                 showWaitCursor && (<WaitCursor key="wait-cursor" />),
                 <PersonFinderResults
