@@ -268,6 +268,8 @@ export default class PersonFinderData extends Component {
         const showSeparators = showPersons && showSites;
 
         if (!selectedValue && hasEntries) {
+            const hasUnrelated = !!(persons && persons.unrelated && persons.unrelated.length);
+
             const results = (
                 <PersonFinderResults
                     key="results"
@@ -277,8 +279,9 @@ export default class PersonFinderData extends Component {
                     onSelect={onSelect}
                     showSeparators={showSeparators}
                     onLoadMore={this.handleLoadMore}
-                    moreRelatedPersons={this.loadMore[PERSON_RELATION]}
+                    moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
                     moreRelatedSites={this.loadMore[LOCATION_RELATION]}
+                    moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
                 />
             );
 

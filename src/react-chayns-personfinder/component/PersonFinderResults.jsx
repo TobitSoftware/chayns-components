@@ -6,6 +6,8 @@ import getText from '../utils/getText';
 import Divider from './Divider';
 import LoadMore from './LoadMore';
 
+const PERSON_UNRELATED = 'PERSON_UNRELATED';
+
 export default class PersonFinderResults extends PureComponent {
     static propTypes = {
         persons: PropTypes.object,
@@ -15,6 +17,7 @@ export default class PersonFinderResults extends PureComponent {
         onLoadMore: PropTypes.func.isRequired,
         moreRelatedSites: PropTypes.bool,
         moreRelatedPersons: PropTypes.bool,
+        moreUnrelatedPersons: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -24,6 +27,7 @@ export default class PersonFinderResults extends PureComponent {
         showSeparators: false,
         moreRelatedSites: false,
         moreRelatedPersons: false,
+        moreUnrelatedPersons: false,
     };
 
     constructor(props) {
@@ -55,6 +59,50 @@ export default class PersonFinderResults extends PureComponent {
         ));
     }
 
+    static getDividerText(type) {
+        switch (type) {
+            case PERSON_RELATION:
+                return getText('DIVIDER_PERSON');
+            case PERSON_UNRELATED:
+                return getText('DIVIDER_MORE_PERSON');
+            case LOCATION_RELATION:
+                return getText('DIVIDER_SITE');
+            default:
+                return null;
+        }
+    }
+
+    static renderRelated(type, children, hasMore, showSeparators, onLoadMore) {
+        const retVal = [];
+
+        if (!children || children.length === 0) {
+            return null;
+        }
+
+        if (showSeparators) {
+            retVal.push((
+                <Divider
+                    key={`${type}-divider`}
+                    name={PersonFinderResults.getDividerText(type)}
+                />
+            ));
+        }
+
+        retVal.push(children);
+
+        if (hasMore) {
+            retVal.push((
+                <LoadMore
+                    key={`${type}-more`}
+                    type={(type === PERSON_RELATION || type === PERSON_UNRELATED) ? PERSON_RELATION : LOCATION_RELATION}
+                    onClick={onLoadMore}
+                />
+            ));
+        }
+
+        return retVal;
+    }
+
     render() {
         const {
             persons,
@@ -63,6 +111,7 @@ export default class PersonFinderResults extends PureComponent {
             onLoadMore,
             moreRelatedPersons,
             moreRelatedSites,
+            moreUnrelatedPersons,
         } = this.props;
 
         const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
@@ -70,38 +119,11 @@ export default class PersonFinderResults extends PureComponent {
         const unrelatedPersons = this.renderResults(persons.unrelated, PERSON_RELATION);
         const unrelatedSites = this.renderResults(sites.unrelated, LOCATION_RELATION);
 
-        const hasRelatedPersons = relatedPersons && relatedPersons.length > 0;
-        const hasRelatedSites = relatedSites && relatedSites.length > 0;
-
         return (
             <div className="cc__person-finder__results">
-                {showSeparators && hasRelatedPersons && (
-                    <Divider
-                        key="related-persons"
-                        name={getText('DIVIDER_PERSON')}
-                    />
-                )}
-                {relatedPersons}
-                {hasRelatedPersons && moreRelatedPersons && (
-                    <LoadMore type={PERSON_RELATION} onClick={onLoadMore} />
-                )}
-                {showSeparators && hasRelatedSites && (
-                    <Divider
-                        key="related-sites"
-                        name={getText('DIVIDER_SITE')}
-                    />
-                )}
-                {relatedSites}
-                {hasRelatedSites && moreRelatedSites && (
-                    <LoadMore type={LOCATION_RELATION} onClick={onLoadMore} />
-                )}
-                {unrelatedPersons && unrelatedPersons.length > 0 && (
-                    <Divider
-                        key="unrelated-persons"
-                        name={getText('DIVIDER_MORE_PERSON')}
-                    />
-                )}
-                {unrelatedPersons}
+                {PersonFinderResults.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons, showSeparators, onLoadMore)}
+                {PersonFinderResults.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites, showSeparators, onLoadMore)}
+                {PersonFinderResults.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons, showSeparators, onLoadMore)}
                 {unrelatedSites && unrelatedSites.length > 0 && (
                     <Divider
                         key="unrelated-sites"
