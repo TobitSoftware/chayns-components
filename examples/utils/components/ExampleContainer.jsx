@@ -156,12 +156,7 @@ class ExampleContainer extends PureComponent {
             );
         }
 
-        return (
-            <div
-                className="content__card dark"
-                {...props}
-                style={{ margin: '20px 0', ...props.style }}
-            >
+        return [
                 <div
                     style={{
                         display: 'flex',
@@ -178,10 +173,9 @@ class ExampleContainer extends PureComponent {
                         items={this.items}
                         position={1}
                     />
-                </div>
-                {children}
-            </div>
-        );
+                </div>,
+                children
+        ];
     }
 }
 
