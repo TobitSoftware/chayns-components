@@ -34,7 +34,7 @@ export default class FileInputExample extends Component {
     upload = () => {
         const { images } = this.state;
         images.forEach(async (image) => {
-            const result = await imageUpload(image.file, 'componentsTestUpload', chayns.env.site.personId, chayns.env.site.siteId);
+            const result = await imageUpload(image.file, 'componentsTestUpload', chayns.env.user.personId, chayns.env.site.id);
             // eslint-disable-next-line no-console
             console.log('Uploaded image', result);
             this.logRef.innerText = `${this.logRef.innerText}${result.base}/${result.key}\n`;
