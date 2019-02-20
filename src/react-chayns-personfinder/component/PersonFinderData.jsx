@@ -14,6 +14,8 @@ import getCurrentUserInformation from '../utils/getCurrentUserInformation';
 const WAIT_CURSOR_TIMEOUT = 500;
 const LAZY_LOADING_SPACE = 100;
 
+const ALL_RELATIONS = 'ALL';
+
 export default class PersonFinderData extends Component {
     static propTypes = {
         take: PropTypes.number,
@@ -137,7 +139,12 @@ export default class PersonFinderData extends Component {
         });
     }
 
-    async fetchData(value, clear = true) {
+    handleLoadMore = (type) => {
+        const { value } = this.state;
+        this.fetchData(value, false, type);
+    };
+
+    async fetchData(value, clear = true, type = ALL_RELATIONS) {
         if (clear || value === '') {
             this.skip[LOCATION_RELATION] = 0;
             this.skip[PERSON_RELATION] = 0;
@@ -153,8 +160,11 @@ export default class PersonFinderData extends Component {
 
         const promises = [];
 
-        promises.push((enablePersons && this.loadMore[PERSON_RELATION]) ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
-        promises.push((enableSites && this.loadMore[LOCATION_RELATION]) ? this.fetchSiteRelations(value) : Promise.resolve(false));
+        const loadPersons = enablePersons && this.loadMore[PERSON_RELATION] && (type === ALL_RELATIONS || type === PERSON_RELATION);
+        const loadSites = enableSites && this.loadMore[LOCATION_RELATION] && (type === ALL_RELATIONS || type === LOCATION_RELATION);
+
+        promises.push(loadPersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
+        promises.push(loadSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
             this.showWaitCursor();
@@ -258,30 +268,30 @@ export default class PersonFinderData extends Component {
         const showSeparators = showPersons && showSites;
 
         if (!selectedValue && hasEntries) {
+            const results = (
+                <PersonFinderResults
+                    key="results"
+                    showId={showId}
+                    persons={persons}
+                    sites={sites}
+                    onSelect={onSelect}
+                    showSeparators={showSeparators}
+                    onLoadMore={this.handleLoadMore}
+                    moreRelatedPersons={this.loadMore[PERSON_RELATION]}
+                    moreRelatedSites={this.loadMore[LOCATION_RELATION]}
+                />
+            );
+
             if (lazyLoading) {
                 return [
-                    <PersonFinderResults
-                        key="results"
-                        showId={showId}
-                        persons={persons}
-                        sites={sites}
-                        onSelect={onSelect}
-                        showSeparators={showSeparators}
-                    />,
+                    results,
                     showWaitCursor && (<WaitCursor key="wait-cursor" />)
                 ];
             }
 
             return [
                 showWaitCursor && (<WaitCursor key="wait-cursor" />),
-                <PersonFinderResults
-                    key="results"
-                    showId={showId}
-                    persons={persons}
-                    sites={sites}
-                    showSeparators={showSeparators}
-                    onSelect={onSelect}
-                />
+                results
             ];
         }
 

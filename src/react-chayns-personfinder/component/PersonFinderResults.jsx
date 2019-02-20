@@ -4,6 +4,7 @@ import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
+import LoadMore from './LoadMore';
 
 export default class PersonFinderResults extends PureComponent {
     static propTypes = {
@@ -11,6 +12,9 @@ export default class PersonFinderResults extends PureComponent {
         sites: PropTypes.object,
         onSelect: PropTypes.func,
         showSeparators: PropTypes.bool,
+        onLoadMore: PropTypes.func.isRequired,
+        moreRelatedSites: PropTypes.bool,
+        moreRelatedPersons: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -18,6 +22,8 @@ export default class PersonFinderResults extends PureComponent {
         sites: { related: [], unrelated: [] },
         onSelect: null,
         showSeparators: false,
+        moreRelatedSites: false,
+        moreRelatedPersons: false,
     };
 
     constructor(props) {
@@ -50,29 +56,45 @@ export default class PersonFinderResults extends PureComponent {
     }
 
     render() {
-        const { persons, sites, showSeparators } = this.props;
+        const {
+            persons,
+            sites,
+            showSeparators,
+            onLoadMore,
+            moreRelatedPersons,
+            moreRelatedSites,
+        } = this.props;
 
         const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
         const relatedSites = this.renderResults(sites.related, LOCATION_RELATION);
         const unrelatedPersons = this.renderResults(persons.unrelated, PERSON_RELATION);
         const unrelatedSites = this.renderResults(sites.unrelated, LOCATION_RELATION);
 
+        const hasRelatedPersons = relatedPersons && relatedPersons.length > 0;
+        const hasRelatedSites = relatedSites && relatedSites.length > 0;
+
         return (
             <div className="cc__person-finder__results">
-                {showSeparators && relatedPersons && relatedPersons.length > 0 && (
+                {showSeparators && hasRelatedPersons && (
                     <Divider
                         key="related-persons"
                         name={getText('DIVIDER_PERSON')}
                     />
                 )}
                 {relatedPersons}
-                {showSeparators && relatedSites && relatedSites.length > 0 && (
+                {hasRelatedPersons && moreRelatedPersons && (
+                    <LoadMore type={PERSON_RELATION} onClick={onLoadMore} />
+                )}
+                {showSeparators && hasRelatedSites && (
                     <Divider
                         key="related-sites"
                         name={getText('DIVIDER_SITE')}
                     />
                 )}
                 {relatedSites}
+                {hasRelatedSites && moreRelatedSites && (
+                    <LoadMore type={LOCATION_RELATION} onClick={onLoadMore} />
+                )}
                 {unrelatedPersons && unrelatedPersons.length > 0 && (
                     <Divider
                         key="unrelated-persons"
