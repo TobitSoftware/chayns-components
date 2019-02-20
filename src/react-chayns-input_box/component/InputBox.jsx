@@ -18,6 +18,7 @@ export default class InputBox extends Component {
         className: PropTypes.string,
         boxClassName: PropTypes.string,
         inputRef: PropTypes.func,
+        overlayProps: PropTypes.object,
     };
 
     static defaultProps = {
@@ -27,6 +28,7 @@ export default class InputBox extends Component {
         className: null,
         boxClassName: null,
         inputRef: null,
+        overlayProps: null,
     };
 
     state = {
@@ -108,6 +110,7 @@ export default class InputBox extends Component {
             inputRef,
             onFocus,
             className,
+            overlayProps,
             boxClassName,
             ...props
         } = this.props;
@@ -148,6 +151,7 @@ export default class InputBox extends Component {
                                 left: `${rect.left}px`,
                             } : null}
                             ref={this.setBoxRef}
+                            {...overlayProps}
                         >
                             {children}
                         </div>
