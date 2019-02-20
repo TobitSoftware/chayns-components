@@ -7,10 +7,14 @@ import MultiplePersonFinder from './MultiplePersonFinder';
 export default class PersonFinder extends Component {
     static propTypes = {
         multiple: PropTypes.bool,
+        showPersons: PropTypes.bool,
+        showSites: PropTypes.bool,
     };
 
     static defaultProps = {
         multiple: false,
+        showPersons: true,
+        showSites: false,
     };
 
     personFinder = React.createRef();
@@ -22,12 +26,13 @@ export default class PersonFinder extends Component {
     };
 
     render() {
-        const { multiple } = this.props;
+        const { multiple, showPersons, showSites } = this.props;
 
         if (multiple) {
             return (
                 <MultiplePersonFinder
                     {...this.props}
+                    autoLoading={!showPersons || !showSites}
                 />
             );
         }
@@ -36,6 +41,7 @@ export default class PersonFinder extends Component {
             <SimplePersonFinder
                 ref={this.personFinder}
                 {...this.props}
+                autoLoading={!showPersons || !showSites}
             />
         );
     }

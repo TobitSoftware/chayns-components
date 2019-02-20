@@ -25,6 +25,7 @@ export default class PersonFinderData extends Component {
         includeOwn: PropTypes.bool,
         inputComponent: PropTypes.node.isRequired,
         showId: PropTypes.bool,
+        autoLoading: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -35,6 +36,7 @@ export default class PersonFinderData extends Component {
         selectedValue: false,
         includeOwn: false,
         showId: false,
+        autoLoading: true,
     };
 
     resultList = React.createRef();
@@ -101,10 +103,11 @@ export default class PersonFinderData extends Component {
     async handleLazyLoad() {
         if (!this.resultList.current) return;
 
+        const { autoLoading } = this.props;
         const { value, lazyLoading } = this.state;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList.current;
 
-        if (!lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+        if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
             this.setState({
                 lazyLoading: true,
             });
@@ -240,6 +243,8 @@ export default class PersonFinderData extends Component {
             onSelect,
             selectedValue,
             showId,
+            persons: showPersons,
+            sites: showSites,
         } = this.props;
 
         const {
@@ -250,6 +255,7 @@ export default class PersonFinderData extends Component {
         } = this.state;
 
         const hasEntries = this.hasEntries();
+        const showSeparators = showPersons && showSites;
 
         if (!selectedValue && hasEntries) {
             if (lazyLoading) {
@@ -260,6 +266,7 @@ export default class PersonFinderData extends Component {
                         persons={persons}
                         sites={sites}
                         onSelect={onSelect}
+                        showSeparators={showSeparators}
                     />,
                     showWaitCursor && (<WaitCursor key="wait-cursor" />)
                 ];
@@ -272,6 +279,7 @@ export default class PersonFinderData extends Component {
                     showId={showId}
                     persons={persons}
                     sites={sites}
+                    showSeparators={showSeparators}
                     onSelect={onSelect}
                 />
             ];

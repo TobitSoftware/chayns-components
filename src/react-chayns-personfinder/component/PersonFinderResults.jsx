@@ -10,12 +10,14 @@ export default class PersonFinderResults extends PureComponent {
         persons: PropTypes.object,
         sites: PropTypes.object,
         onSelect: PropTypes.func,
+        showSeparators: PropTypes.bool,
     };
 
     static defaultProps = {
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         onSelect: null,
+        showSeparators: false,
     };
 
     constructor(props) {
@@ -48,7 +50,7 @@ export default class PersonFinderResults extends PureComponent {
     }
 
     render() {
-        const { persons, sites } = this.props;
+        const { persons, sites, showSeparators } = this.props;
 
         const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
         const relatedSites = this.renderResults(sites.related, LOCATION_RELATION);
@@ -57,19 +59,31 @@ export default class PersonFinderResults extends PureComponent {
 
         return (
             <div className="cc__person-finder__results">
+                {showSeparators && relatedPersons && relatedPersons.length > 0 && (
+                    <Divider
+                        key="related-persons"
+                        name={getText('DIVIDER_PERSON')}
+                    />
+                )}
                 {relatedPersons}
+                {showSeparators && relatedSites && relatedSites.length > 0 && (
+                    <Divider
+                        key="related-sites"
+                        name={getText('DIVIDER_SITE')}
+                    />
+                )}
                 {relatedSites}
                 {unrelatedPersons && unrelatedPersons.length > 0 && (
                     <Divider
                         key="unrelated-persons"
-                        name={getText('DIVIDER_PERSON')}
+                        name={getText('DIVIDER_MORE_PERSON')}
                     />
                 )}
                 {unrelatedPersons}
                 {unrelatedSites && unrelatedSites.length > 0 && (
                     <Divider
                         key="unrelated-sites"
-                        name={getText('DIVIDER_SITE')}
+                        name={getText('DIVIDER_MORE_SITE')}
                     />
                 )}
                 {unrelatedSites}
