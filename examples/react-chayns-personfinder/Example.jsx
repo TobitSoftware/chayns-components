@@ -32,6 +32,7 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="User/Site"
                     onChange={PersonFinderExample.handleSelect}
+                    showSites
                 />
                 <PersonFinder
                     style={{ width: '100%' }}
