@@ -182,7 +182,7 @@ export default class PersonFinderData extends Component {
                 sites.related.push(...siteResults.related);
                 sites.unrelated.push(...siteResults.unrelated);
 
-                if (personResults.related.length + personResults.unrelated.length === 0) {
+                if (siteResults.related.length + siteResults.unrelated.length === 0) {
                     this.loadMore[LOCATION_RELATION] = false;
                 }
 
