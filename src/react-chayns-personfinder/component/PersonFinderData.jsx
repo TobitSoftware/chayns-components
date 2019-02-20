@@ -36,6 +36,8 @@ export default class PersonFinderData extends Component {
         showId: false,
     };
 
+    resultList = React.createRef();
+
     state = {
         value: null,
         persons: { related: [], unrelated: [] },
@@ -53,12 +55,18 @@ export default class PersonFinderData extends Component {
         [LOCATION_RELATION]: 0,
     };
 
+    loadMore = {
+        [PERSON_RELATION]: true,
+        [LOCATION_RELATION]: true,
+    };
+
     constructor(props) {
         super(props);
 
         this.setValue = debounce(this.setValue.bind(this), 500);
         this.fetchPersonRelations = this.fetchPersonRelations.bind(this);
         this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
+        this.handleLazyLoad = this.handleLazyLoad.bind(this);
     }
 
     componentDidUpdate() {
@@ -88,6 +96,19 @@ export default class PersonFinderData extends Component {
         this.fetchData(value);
     }
 
+    async handleLazyLoad() {
+        if (!this.resultList.current) return;
+
+        const { value } = this.state;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList.current;
+
+        if (!this.isLazyLoading && (scrollHeight - scrollTop - offsetHeight) <= 0) {
+            this.isLazyLoading = true;
+            await this.fetchData(value, false);
+            this.isLazyLoading = false;
+        }
+    }
+
     showWaitCursor() {
         clearTimeout(this.waitCursorTimeout);
 
@@ -110,14 +131,16 @@ export default class PersonFinderData extends Component {
         if (clear || value === '') {
             this.skip[LOCATION_RELATION] = 0;
             this.skip[PERSON_RELATION] = 0;
+            this.loadMore[LOCATION_RELATION] = true;
+            this.loadMore[PERSON_RELATION] = true;
         }
 
         const { persons: enablePersons, sites: enableSites, includeOwn } = this.props;
 
         const promises = [];
 
-        promises.push(enablePersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
-        promises.push(enableSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
+        promises.push((enablePersons && this.loadMore[PERSON_RELATION]) ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
+        promises.push((enableSites && this.loadMore[LOCATION_RELATION]) ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
             this.showWaitCursor();
@@ -126,14 +149,20 @@ export default class PersonFinderData extends Component {
 
             const { persons: personsState, sites: sitesState } = this.state;
 
-            const persons = clear ? { related: [], unrelated: [] } : personsState;
-            const sites = clear ? { related: [], unrelated: [] } : sitesState;
+            let persons = clear ? { related: [], unrelated: [] } : personsState;
+            let sites = clear ? { related: [], unrelated: [] } : sitesState;
 
             if (personResults) {
                 this.skip[PERSON_RELATION] += (personResults.related.length + personResults.unrelated.length);
 
                 persons.related.push(...personResults.related);
                 persons.unrelated.push(...personResults.unrelated);
+
+                if (personResults.related.length + personResults.unrelated.length === 0) {
+                    this.loadMore[PERSON_RELATION] = false;
+                }
+
+                persons = { ...persons }; // Forces rerendering
             }
 
             if (siteResults) {
@@ -141,6 +170,12 @@ export default class PersonFinderData extends Component {
 
                 sites.related.push(...siteResults.related);
                 sites.unrelated.push(...siteResults.unrelated);
+
+                if (personResults.related.length + personResults.unrelated.length === 0) {
+                    this.loadMore[LOCATION_RELATION] = false;
+                }
+
+                sites = { ...sites }; // Forces rerendering
             }
 
             this.setState({
@@ -239,6 +274,10 @@ export default class PersonFinderData extends Component {
                 value={value}
                 onChange={this.handleOnChange}
                 boxClassName={classnames('cc__person-finder__overlay')}
+                overlayProps={{
+                    ref: this.resultList,
+                    onScroll: this.handleLazyLoad,
+                }}
                 {...props}
             >
                 {this.renderChildren()}
