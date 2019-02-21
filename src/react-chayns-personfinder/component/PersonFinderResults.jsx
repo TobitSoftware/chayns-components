@@ -95,7 +95,7 @@ export default class PersonFinderResults extends PureComponent {
 
         retVal.push(children);
 
-        if (hasMore) {
+        if (showSeparators && hasMore) {
             if (showWaitCursor) {
                 retVal.push((
                     <WaitCursor
