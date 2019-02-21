@@ -33,6 +33,19 @@ export default class PersonFinderResults extends PureComponent {
         showWaitCursor: false,
     };
 
+    static getDividerText(type) {
+        switch (type) {
+            case PERSON_RELATION:
+                return getText('DIVIDER_PERSON');
+            case PERSON_UNRELATED:
+                return getText('DIVIDER_MORE_PERSON');
+            case LOCATION_RELATION:
+                return getText('DIVIDER_SITE');
+            default:
+                return null;
+        }
+    }
+
     constructor(props) {
         super(props);
 
@@ -60,19 +73,6 @@ export default class PersonFinderResults extends PureComponent {
                 onClick={this.handleClick}
             />
         ));
-    }
-
-    static getDividerText(type) {
-        switch (type) {
-            case PERSON_RELATION:
-                return getText('DIVIDER_PERSON');
-            case PERSON_UNRELATED:
-                return getText('DIVIDER_MORE_PERSON');
-            case LOCATION_RELATION:
-                return getText('DIVIDER_SITE');
-            default:
-                return null;
-        }
     }
 
     renderRelated(type, children, hasMore) {
