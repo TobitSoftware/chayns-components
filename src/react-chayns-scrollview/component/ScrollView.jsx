@@ -14,6 +14,7 @@ export default class ScrollView extends Component {
         style: PropTypes.object,
         className: PropTypes.string,
         scrollElementRef: PropTypes.func,
+        onScroll: PropTypes.func,
     };
 
     static defaultProps = {
@@ -21,10 +22,12 @@ export default class ScrollView extends Component {
         style: undefined,
         className: undefined,
         scrollElementRef: null,
+        onScroll: null,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = { contentWidth: 0 };
         this.setContentWidth = this.setContentWidth.bind(this);
     }
@@ -56,7 +59,8 @@ export default class ScrollView extends Component {
             style,
             className,
             children,
-            scrollElementRef
+            scrollElementRef,
+            onScroll,
         } = this.props;
 
         const { contentWidth } = this.state;
@@ -73,6 +77,7 @@ export default class ScrollView extends Component {
                 }}
                 style={style}
                 className={classNames}
+                onScroll={onScroll}
             >
                 <div
                     className="cc__scroll-view__wrapper"

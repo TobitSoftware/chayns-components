@@ -35,9 +35,10 @@ Then it can be used like in the following:
 
 The following properties can be set
 
-| Property      | Description                                                            | Type                       | Default Value |
-|---------------|------------------------------------------------------------------------|----------------------------|---------------|
-| style         | Sets the style of the element                                          | object                     | *required*    |
-| children      | Sets the children of the ScrollView                                    | node(s)                    |               |
-| className     | Sets the classname of the wrapper                                      | string                     |               |
-| scrollElementRef | Ref to the html scroll element                                      | func                       |               |
+| Property         | Description                                                            | Type                       | Default Value |
+|------------------|------------------------------------------------------------------------|----------------------------|---------------|
+| style            | Sets the style of the element                                          | object                     | *required*    |
+| children         | Sets the children of the ScrollView                                    | node(s)                    |               |
+| className        | Sets the classname of the wrapper                                      | string                     |               |
+| scrollElementRef | Ref to the html scroll element                                         | func                       |               |
+| onScroll         | Sets the onScroll listener                                             | func                       |               |

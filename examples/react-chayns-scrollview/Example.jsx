@@ -15,13 +15,15 @@ export default class ScrollViewExample extends PureComponent {
                         maxHeight: '500px',
                         width: '100%',
                     }}
+                    onScroll={console.log}
                     scrollElementRef={(ref) => { this.ref = ref; }}
                 >
                     {this.text}
                 </ScrollView>
-                <Button onClick={() => {
-                    this.ref.scrollTo(0, 0);
-                }}
+                <Button
+                    onClick={() => {
+                        this.ref.scrollTo(0, 0);
+                    }}
                 >
                     {'Scroll to top'}
                 </Button>
@@ -30,6 +32,7 @@ export default class ScrollViewExample extends PureComponent {
                         maxHeight: '500px',
                         width: '100%',
                     }}
+                    onScroll={console.log}
                 >
                     {'Not scrollable'}
                     <br/>
