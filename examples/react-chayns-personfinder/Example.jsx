@@ -80,12 +80,15 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Sites (multiple, default)"
                     defaultValues={[{
+                        type: 'LOCATION',
                         name: 'BamBoo!',
                         siteId: '77891-25316',
                     }]}
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
+                    showPersons={false}
+                    showSites
                     multiple
                 />
                 <Button
