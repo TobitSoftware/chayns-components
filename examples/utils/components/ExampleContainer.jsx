@@ -161,6 +161,7 @@ class ExampleContainer extends PureComponent {
                     style={{
                         display: 'flex',
                     }}
+                    key="exampleHeader"
                 >
                     <h1
                         style={{
