@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
-import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class Tooltip extends Component {
     static propTypes = {
@@ -39,7 +39,7 @@ export default class Tooltip extends Component {
     static defaultProps = {
         children: null,
         bindListeners: false,
-        position: 0,
+        position: null,
         minWidth: 100,
         maxWidth: 250,
         removeIcon: false,
@@ -53,16 +53,13 @@ export default class Tooltip extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            active: false,
-            removed: true,
-        };
+        this.state = { position: 0 };
 
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
         this.getContent = this.getContent.bind(this);
         this.getCoordinates = this.getCoordinates.bind(this);
-        this.renderTooltip = this.renderTooltip.bind(this);
+        this.getPosition = this.getPosition.bind(this);
 
         this.firstRender = true;
 
@@ -70,15 +67,6 @@ export default class Tooltip extends Component {
     }
 
     componentDidMount() {
-        const { bindListeners } = this.props;
-
-        if (bindListeners) {
-            this.childrenNode.addEventListener('mouseover', this.show, false);
-            this.childrenNode.addEventListener('mouseleave', this.hide, false);
-            this.tooltipNode.addEventListener('mouseover', this.show, false);
-            this.tooltipNode.addEventListener('mouseleave', this.hide, false);
-        }
-
         if (this.firstRender) {
             this.firstRender = false;
             this.getCoordinates();
@@ -91,13 +79,6 @@ export default class Tooltip extends Component {
         if (nextProps.coordinates !== coordinates || nextProps.children !== children) {
             this.getCoordinates();
         }
-    }
-
-    componentWillUnmount() {
-        this.childrenNode.removeEventListener('mouseover', this.show, false);
-        this.childrenNode.removeEventListener('mouseleave', this.hide, false);
-        this.tooltipNode.removeEventListener('mouseover', this.show, false);
-        this.tooltipNode.removeEventListener('mouseleave', this.hide, false);
     }
 
     getContent() {
@@ -132,7 +113,6 @@ export default class Tooltip extends Component {
 
     getCoordinates() {
         const { coordinates, position } = this.props;
-
         if (coordinates) {
             return coordinates;
         }
@@ -146,86 +126,59 @@ export default class Tooltip extends Component {
         return { x: 0, y: 0 };
     }
 
+    getPosition() {
+        const { position } = this.props;
+        const { position: statePosition } = this.state;
+        if (typeof position === 'number') {
+            this.setState({ position });
+        } else {
+            const { x, y } = this.getCoordinates();
+            let pos = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
+            pos = (y > window.innerHeight / 2) ? pos[0] : pos[1];
+            if (statePosition !== pos) {
+                this.setState({ position: pos });
+            }
+        }
+    }
+
     show() {
-        window.clearTimeout(this.timeout);
-
-        this.setState({
-            active: false,
-            removed: false,
-        });
-
-        this.timeout = window.setTimeout(() => {
-            this.setState({
-                active: true,
-                removed: false,
-            });
-        });
+        this.getPosition();
+        this.bubble.show();
     }
 
     hide() {
-        this.setState({
-            active: false,
-            removed: false,
-        });
-
-        this.timeout = window.setTimeout(() => {
-            this.setState({
-                active: false,
-                removed: true,
-            });
-        }, 500);
-    }
-
-    renderTooltip() {
-        const {
-            minWidth, maxWidth, removeIcon, position
-        } = this.props;
-        const {
-            active, removed
-        } = this.state;
-        const { x, y } = this.getCoordinates();
-
-        return (
-            <div
-                className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
-                    'cc__tooltip--active': active,
-                })}
-                style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px`, }) }}
-                ref={(node) => {
-                    this.tooltipNode = node;
-                }}
-                key={`cc__tooltip${this.tooltipKey}`}
-            >
-                {!removed && (
-                    <div
-                        className="cc__tooltip__overlay"
-                        style={{ minWidth: `${minWidth}px`, maxWidth: `${maxWidth}px` }}
-                    >
-                        {
-                            removeIcon
-                                ? (
-                                    <div className="cc__tooltip__icon" onClick={this.hide}>
-                                        <Icon icon="ts-wrong"/>
-                                    </div>
-                                )
-                                : null
-                        }
-                        {this.getContent()}
-                    </div>
-                )}
-            </div>
-        );
+        this.bubble.hide();
     }
 
     render() {
         const {
-            children, parent, childrenStyle, preventTriggerStyle, childrenClassNames
+            children, parent, childrenStyle, preventTriggerStyle, childrenClassNames, removeIcon, bindListeners, minWidth, maxWidth
         } = this.props;
 
+        const { position } = this.state;
+
         return [
-            <TappPortal parent={parent}>
-                {this.renderTooltip()}
-            </TappPortal>,
+            <Bubble
+                coordinates={this.getCoordinates()}
+                parent={parent}
+                position={position}
+                onMouseEnter={bindListeners ? this.show : null}
+                onMouseLeave={bindListeners ? this.hide : null}
+                style={{ minWidth, maxWidth, padding: '12px' }}
+                key="bubble"
+                ref={ref => this.bubble = ref}
+            >
+                {
+                    removeIcon
+                        ? (
+                            <div className="cc__tooltip__icon" onClick={this.hide}>
+                                <Icon icon="ts-wrong"/>
+                            </div>
+                        )
+                        : null
+                }
+                {this.getContent()}
+            </Bubble>,
             <div
                 className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
                 ref={(node) => {
@@ -233,6 +186,8 @@ export default class Tooltip extends Component {
                 }}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
+                onMouseOver={bindListeners ? this.show : null}
+                onMouseLeave={bindListeners ? this.hide : null}
             >
                 {children}
             </div>

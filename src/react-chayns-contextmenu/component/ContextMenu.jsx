@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
-import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class ContextMenu extends Component {
     static propTypes = {
-        hide: PropTypes.bool,
         onLayerClick: PropTypes.func,
         coordinates: PropTypes.shape({
             x: PropTypes.number.isRequired,
@@ -25,49 +24,49 @@ export default class ContextMenu extends Component {
         onChildrenClick: PropTypes.func,
         childrenStyle: PropTypes.object,
         stopPropagation: PropTypes.bool,
+        minWidth: PropTypes.number,
+        maxWidth: PropTypes.number,
     };
 
     static defaultProps = {
-        hide: true,
         onLayerClick: null,
         items: [],
-        position: 0,
+        position: null,
         parent: null,
         children: <Icon icon="ts-ellipsis_v"/>,
         coordinates: null,
         onChildrenClick: null,
         childrenStyle: null,
         stopPropagation: false,
+        minWidth: null,
+        maxWidth: null,
     };
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            displayNone: true,
-            hide: true
-        };
+        this.state = { position: 0 };
 
         this.getCoordinates = this.getCoordinates.bind(this);
         this.onChildrenClick = this.onChildrenClick.bind(this);
         this.onLayerClick = this.onLayerClick.bind(this);
-        this.updateHidden = this.updateHidden.bind(this);
+        this.show = this.show.bind(this);
+        this.hide = this.hide.bind(this);
     }
 
-    componentDidMount() {
-        const { hide } = this.props;
-        this.updateHidden(hide);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { hide } = this.props;
-        if (nextProps.hide !== hide) {
-            this.updateHidden(nextProps.hide);
+    componentDidUpdate(prevProps) {
+        const { coordinates } = this.props;
+        if(prevProps.coordinates && coordinates) {
+            const { x, y } = prevProps.coordinates;
+            if(coordinates.x !== x || coordinates.y !== y) {
+                this.getPosition();
+            }
         }
     }
 
     componentWillUnmount() {
         clearTimeout(this.timeout);
+        document.removeEventListener('click', this.onLayerClick);
     }
 
     onChildrenClick(e) {
@@ -75,106 +74,98 @@ export default class ContextMenu extends Component {
         if (onChildrenClick) {
             onChildrenClick(e);
         } else {
-            this.setState({ displayNone: false });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ hide: false });
-            }, 50);
+            this.show();
         }
-        if(stopPropagation) e.stopPropagation();
+        if (stopPropagation) e.stopPropagation();
     }
 
     onLayerClick(e) {
-        const { onLayerClick, stopPropagation } = this.props;
-        if (onLayerClick) {
-            onLayerClick(e);
-        } else {
-            this.setState({ hide: true });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ displayNone: true });
-            }, 350);
+        if (this.bubbleShown) {
+            const { onLayerClick } = this.props;
+            if (onLayerClick) {
+                onLayerClick(e);
+            } else {
+                this.hide();
+            }
         }
-        if(stopPropagation) e.stopPropagation();
     }
 
     getCoordinates() {
         const { coordinates, position } = this.props;
-
         if (coordinates) {
             return coordinates;
         }
-
         if (this.childrenNode) {
             const rect = this.childrenNode.getBoundingClientRect();
             return {
                 x: rect.left + (rect.width / 2),
-                y: (position === 1 || position === 2) ? rect.bottom : rect.top
+                y: (position === 1 || position === 2) ? rect.bottom : rect.top,
             };
         }
         return { x: 0, y: 0 };
     }
 
-    updateHidden(hide) {
-        if (hide) {
-            this.setState({ hide: true });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ displayNone: true });
-            }, 350);
+    getPosition() {
+        const { position } = this.props;
+        const { position: statePosition } = this.state;
+        if (typeof position === 'number') {
+            this.setState({ position });
         } else {
-            this.setState({ displayNone: false });
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(() => {
-                this.setState({ hide: false });
-            }, 50);
+            const { x, y } = this.getCoordinates();
+            let pos = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
+            pos = (y > window.innerHeight / 2) ? pos[0] : pos[1];
+            if (statePosition !== pos) {
+                this.setState({ position: pos });
+            }
         }
+    }
+
+    show() {
+        this.getPosition();
+        this.bubble.show();
+        this.bubbleShown = true;
+        document.addEventListener('click', this.onLayerClick);
+    }
+
+    hide() {
+        this.bubble.hide();
+        this.bubbleShown = false,
+        document.removeEventListener('click', this.onLayerClick);
     }
 
     render() {
         const {
-            items, position, parent, children, childrenStyle, coordinates
+            items, parent, children, childrenStyle, coordinates, minWidth, maxWidth
         } = this.props;
 
-        const { displayNone, hide } = this.state;
-        const { x, y } = this.getCoordinates();
+        const { position } = this.state;
 
         return [
-            <TappPortal
+            <Bubble
+                coordinates={this.getCoordinates()}
                 parent={parent}
-                key="portal"
+                position={position}
+                style={{ minWidth, maxWidth }}
+                key="bubble"
+                ref={ref => this.bubble = ref}
             >
-                <div
-                    className={classNames('context-menu-overlay', {
-                        'context-menu-overlay--hide': hide && displayNone,
-                        'context-menu-overlay--active': !hide,
-                    })}
-                    onClick={this.onLayerClick}
-                >
-                    <ul
-                        style={{
-                            left: x,
-                            top: y,
-                        }}
-                        className={classNames('context-menu', `context-menu--position${position}`, { 'context-menu--active': !hide })}
-                    >
-                        {items.map(item => (
-                            <li
-                                className={classNames('context-menu__item', item.className)}
-                                onClick={item.onClick}
-                                key={item.text}
-                            >
-                                {item.icon ? (
-                                    <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
-                                ) : null}
-                                <div className="context-menu__item__text">
-                                    {item.text}
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </TappPortal>,
+                <ul>
+                    {items.map(item => (
+                        <li
+                            className={classNames('context-menu__item', item.className)}
+                            onClick={item.onClick}
+                            key={item.text}
+                        >
+                            {item.icon ? (
+                                <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                            ) : null}
+                            <div className="context-menu__item__text">
+                                {item.text}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </Bubble>,
             coordinates
                 ? null
                 : (
@@ -182,7 +173,7 @@ export default class ContextMenu extends Component {
                         key="cc__contextMenu__children"
                         // eslint-disable-next-line no-return-assign
                         ref={ref => this.childrenNode = ref}
-                        onClick={this.onChildrenClick}
+                        onClick={this.show}
                         style={childrenStyle}
                         className="accordion--no-trigger context-menu__children"
                     >
