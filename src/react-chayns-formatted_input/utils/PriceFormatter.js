@@ -10,6 +10,7 @@ export default class PriceFormatter extends NumericFormatter {
         super({
             decimalSeparator,
             thousandSeparator,
+            decimals: 2,
         });
 
         this.config.currencySign = currencySign;
@@ -50,11 +51,6 @@ export default class PriceFormatter extends NumericFormatter {
 
         if (newValue.endsWith(' ')) {
             newValue = newValue.slice(0, -1);
-        }
-
-        const parts = newValue.split(',');
-        if (parts[1] && parts[1].length > 2) {
-            return false;
         }
 
         return super.validate(newValue);

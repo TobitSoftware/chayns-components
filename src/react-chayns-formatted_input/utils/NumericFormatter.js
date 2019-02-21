@@ -6,20 +6,24 @@ export default class NumericFormatter extends Formatter {
         seperators: {
             thousand: false,
             decimal: '.',
-        }
+        },
+        decimals: null,
     };
 
     constructor({
         decimalSeparator = ',',
         thousandSeparator = '.',
+        decimals = null,
     } = {}) {
         super();
 
         this.config.seperators.thousand = thousandSeparator;
         this.config.seperators.decimal = decimalSeparator;
+        this.config.decimals = decimals;
     }
 
     format(value) {
+        const { decimals } = this.config;
         const { thousand: thousandSeparator, decimal: decimalSeparator } = this.config.seperators;
 
         if (value === null) {
@@ -28,6 +32,18 @@ export default class NumericFormatter extends Formatter {
 
         const valueParts = String(value).split('.');
         valueParts[0] = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+        if (valueParts[1] && valueParts[1].length > decimals) {
+            valueParts[1] = valueParts[1].slice(0, decimals);
+        } else if (!valueParts[1] || valueParts[1].length < decimals) {
+            const length = valueParts[1] ? valueParts[1].length : 0;
+
+            let padding = '';
+            for (let i = length; i < decimals; i += 1) {
+                padding += '0';
+            }
+
+            valueParts[1] = (valueParts[1] || '') + padding;
+        }
 
         return valueParts.join(decimalSeparator);
     }
@@ -64,9 +80,16 @@ export default class NumericFormatter extends Formatter {
     }
 
     validate(value) {
+        const { decimals } = this.config;
         const { decimal: decimalSeparator } = this.config.seperators;
 
-        if (value.split(decimalSeparator).length > 2) {
+        const valueParts = value.split(decimalSeparator);
+
+        if (valueParts.length > 2) {
+            return false;
+        }
+
+        if (valueParts[1] && valueParts[1].length > decimals) {
             return false;
         }
 
