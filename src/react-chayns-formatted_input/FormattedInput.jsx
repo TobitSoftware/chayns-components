@@ -14,7 +14,7 @@ export default class FormattedInput extends Component {
     };
 
     static defaultProps = {
-        debounce: 500,
+        debounce: 750,
         onChange: null,
         defaultValue: null,
     };
