@@ -19,6 +19,10 @@ const DICTIONARY = {
         de: 'Weitere Sites',
         en: 'furher sites'
     },
+    LOAD_MORE: {
+        de: 'weitere laden',
+        en: ' load more'
+    },
     LIVING_IN: {
         de: 'wohnt in',
         en: ' living in'
