@@ -104,23 +104,10 @@ export default class PersonFinderData extends Component {
         this.fetchData(value);
     }
 
-    async handleLazyLoad() {
-        if (!this.resultList) return;
-
-        const { autoLoading } = this.props;
-        const { value, lazyLoading } = this.state;
-        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
-
-        if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
-            this.setState({
-                lazyLoading: true,
-            });
-            await this.fetchData(value, false);
-            this.setState({
-                lazyLoading: false,
-            });
-        }
-    }
+    handleLoadMore = (type) => {
+        const { value } = this.state;
+        this.fetchData(value, false, type);
+    };
 
     showWaitCursor() {
         const { lazyLoading } = this.state;
@@ -141,10 +128,23 @@ export default class PersonFinderData extends Component {
         });
     }
 
-    handleLoadMore = (type) => {
-        const { value } = this.state;
-        this.fetchData(value, false, type);
-    };
+    async handleLazyLoad() {
+        if (!this.resultList) return;
+
+        const { autoLoading } = this.props;
+        const { value, lazyLoading } = this.state;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
+
+        if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+            this.setState({
+                lazyLoading: true,
+            });
+            await this.fetchData(value, false);
+            this.setState({
+                lazyLoading: false,
+            });
+        }
+    }
 
     async fetchData(value, clear = true, type = ALL_RELATIONS) {
         if (clear || value === '') {
