@@ -74,6 +74,20 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                     multiple
                 />
+                <PersonFinder
+                    style={{ width: '100%' }}
+                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    dynamic
+                    placeholder="Sites (multiple, default)"
+                    defaultValues={[{
+                        name: 'BamBoo!',
+                        siteId: '77891-25316',
+                    }]}
+                    onAdd={PersonFinderExample.handleAdd}
+                    onRemove={PersonFinderExample.handleRemove}
+                    onChange={PersonFinderExample.handleSelect}
+                    multiple
+                />
                 <Button
                     onClick={this.clear}
                 >

@@ -23,6 +23,13 @@ export default class MultiplePersonFinder extends Component {
             }),
             PropTypes.string,
         ]),
+        defaultValues: PropTypes.arrayOf(PropTypes.shape({
+            name: PropTypes.string,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            siteId: PropTypes.string,
+            personId: PropTypes.string,
+        })),
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         showId: PropTypes.bool,
@@ -37,6 +44,7 @@ export default class MultiplePersonFinder extends Component {
         onAdd: null,
         onRemove: null,
         showId: false,
+        defaultValues: [],
     };
 
     static PERSON = PERSON_RELATION;
@@ -47,9 +55,12 @@ export default class MultiplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: createInputValue(props.defaultValue) || '',
+            inputValue: createInputValue(props.defaultValue, props.showId) || '',
             selectedValue: !!props.defaultValue,
-            values: [],
+            values: props.defaultValues.map(v => ({
+                text: createInputValue(v, props.showId) || '',
+                value: v,
+            })),
         };
 
         this.clear = this.clear.bind(this);
