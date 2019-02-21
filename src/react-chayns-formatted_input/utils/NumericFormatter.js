@@ -32,17 +32,20 @@ export default class NumericFormatter extends Formatter {
 
         const valueParts = String(value).split('.');
         valueParts[0] = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
-        if (valueParts[1] && valueParts[1].length > decimals) {
-            valueParts[1] = valueParts[1].slice(0, decimals);
-        } else if (!valueParts[1] || valueParts[1].length < decimals) {
-            const length = valueParts[1] ? valueParts[1].length : 0;
 
-            let padding = '';
-            for (let i = length; i < decimals; i += 1) {
-                padding += '0';
+        if (decimals) {
+            if (valueParts[1] && valueParts[1].length > decimals) {
+                valueParts[1] = valueParts[1].slice(0, decimals);
+            } else if (!valueParts[1] || valueParts[1].length < decimals) {
+                const length = valueParts[1] ? valueParts[1].length : 0;
+
+                let padding = '';
+                for (let i = length; i < decimals; i += 1) {
+                    padding += '0';
+                }
+
+                valueParts[1] = (valueParts[1] || '') + padding;
             }
-
-            valueParts[1] = (valueParts[1] || '') + padding;
         }
 
         return valueParts.join(decimalSeparator);
