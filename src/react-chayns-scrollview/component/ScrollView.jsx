@@ -77,7 +77,6 @@ export default class ScrollView extends Component {
                 }}
                 style={style}
                 className={classNames}
-                onScroll={onScroll}
             >
                 <div
                     className="cc__scroll-view__wrapper"
@@ -99,6 +98,7 @@ export default class ScrollView extends Component {
                                 scrollElementRef(ref);
                             }
                         }}
+                        onScroll={onScroll}
                     >
                         <div className="cc__scroll-view__children" ref={ref => this.children = ref}>
                             {children}
