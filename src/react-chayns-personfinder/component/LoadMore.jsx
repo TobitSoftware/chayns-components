@@ -21,7 +21,10 @@ export default class LoadMore extends Component {
 
     render() {
         return (
-            <div onClick={this.handleOnClick} >
+            <div
+                className="load-more"
+                onClick={this.handleOnClick}
+            >
                 <Icon icon={faPlus} />
                 <div className="load-more__text">
                     {getText('LOAD_MORE')}
