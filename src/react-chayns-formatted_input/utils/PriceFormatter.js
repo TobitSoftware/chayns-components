@@ -1,11 +1,16 @@
 import NumericFormatter from './NumericFormatter';
+import endsWith from '../../utils/endsWith';
+import startsWith from '../../utils/startsWith';
 
 export default class PriceFormatter extends NumericFormatter {
-    currencySign = '€';
+    currency = {
+        sign: '€',
+    };
 
     constructor(currencySign = '€', {
         decimalSeparator = ',',
         thousandSeparator = '',
+        currencyBefore = null,
     } = {}) {
         super({
             decimalSeparator,
@@ -13,7 +18,8 @@ export default class PriceFormatter extends NumericFormatter {
             decimals: 2,
         });
 
-        this.config.currencySign = currencySign;
+        this.currency.sign = currencySign;
+        this.currency.before = (currencyBefore === null) ? (currencySign !== '€') : !!currencyBefore;
     }
 
     format(value) {
@@ -21,7 +27,35 @@ export default class PriceFormatter extends NumericFormatter {
             return '';
         }
 
-        return `${super.format(value)} ${this.config.currencySign}`;
+        if (this.currency.before) {
+            return `${this.currency.sign} ${super.format(value)}`;
+        }
+
+        return `${super.format(value)} ${this.currency.sign}`;
+    }
+
+    removeCurrencySign(value) {
+        let newValue = value;
+
+        if (this.currency.before) {
+            if (startsWith(newValue, this.currency.sign)) {
+                newValue = newValue.slice(1);
+            }
+
+            if (startsWith(newValue, ' ')) {
+                newValue = newValue.slice(1);
+            }
+        } else {
+            if (endsWith(newValue, this.currency.sign)) {
+                newValue = newValue.slice(0, -this.currency.sign.length);
+            }
+
+            if (endsWith(newValue, ' ')) {
+                newValue = newValue.slice(0, -1);
+            }
+        }
+
+        return newValue;
     }
 
     parse(value) {
@@ -29,29 +63,13 @@ export default class PriceFormatter extends NumericFormatter {
             return null;
         }
 
-        let newValue = value;
-
-        if (newValue.endsWith(this.config.currencySign)) {
-            newValue = newValue.slice(0, -this.config.currencySign.length);
-        }
-
-        if (newValue.endsWith(' ')) {
-            newValue = newValue.slice(0, -1);
-        }
+        const newValue = this.removeCurrencySign(value);
 
         return super.parse(newValue);
     }
 
     validate(value) {
-        let newValue = value;
-
-        if (newValue.endsWith(this.config.currencySign)) {
-            newValue = newValue.slice(0, -this.config.currencySign.length);
-        }
-
-        if (newValue.endsWith(' ')) {
-            newValue = newValue.slice(0, -1);
-        }
+        const newValue = this.removeCurrencySign(value);
 
         return super.validate(newValue);
     }
