@@ -5,6 +5,7 @@ import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
 import LoadMore from './LoadMore';
+import WaitCursor from './WaitCursor';
 
 const PERSON_UNRELATED = 'PERSON_UNRELATED';
 
@@ -18,6 +19,7 @@ export default class PersonFinderResults extends PureComponent {
         moreRelatedSites: PropTypes.bool,
         moreRelatedPersons: PropTypes.bool,
         moreUnrelatedPersons: PropTypes.bool,
+        showWaitCursor: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -28,6 +30,7 @@ export default class PersonFinderResults extends PureComponent {
         moreRelatedSites: false,
         moreRelatedPersons: false,
         moreUnrelatedPersons: false,
+        showWaitCursor: false,
     };
 
     constructor(props) {
@@ -72,7 +75,9 @@ export default class PersonFinderResults extends PureComponent {
         }
     }
 
-    static renderRelated(type, children, hasMore, showSeparators, onLoadMore) {
+    renderRelated(type, children, hasMore) {
+        const { showSeparators, onLoadMore, showWaitCursor } = this.props;
+
         const retVal = [];
 
         if (!children || children.length === 0) {
@@ -91,13 +96,21 @@ export default class PersonFinderResults extends PureComponent {
         retVal.push(children);
 
         if (hasMore) {
-            retVal.push((
-                <LoadMore
-                    key={`${type}-more`}
-                    type={(type === PERSON_RELATION || type === PERSON_UNRELATED) ? PERSON_RELATION : LOCATION_RELATION}
-                    onClick={onLoadMore}
-                />
-            ));
+            if (showWaitCursor) {
+                retVal.push((
+                    <WaitCursor
+                        key={`${type}-wait`}
+                    />
+                ));
+            } else {
+                retVal.push((
+                    <LoadMore
+                        key={`${type}-more`}
+                        type={(type === PERSON_RELATION || type === PERSON_UNRELATED) ? PERSON_RELATION : LOCATION_RELATION}
+                        onClick={onLoadMore}
+                    />
+                ));
+            }
         }
 
         return retVal;
@@ -107,8 +120,6 @@ export default class PersonFinderResults extends PureComponent {
         const {
             persons,
             sites,
-            showSeparators,
-            onLoadMore,
             moreRelatedPersons,
             moreRelatedSites,
             moreUnrelatedPersons,
@@ -121,9 +132,9 @@ export default class PersonFinderResults extends PureComponent {
 
         return (
             <div className="cc__person-finder__results">
-                {PersonFinderResults.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons, showSeparators, onLoadMore)}
-                {PersonFinderResults.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites, showSeparators, onLoadMore)}
-                {PersonFinderResults.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons, showSeparators, onLoadMore)}
+                {this.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons)}
+                {this.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites)}
+                {this.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons)}
                 {unrelatedSites && unrelatedSites.length > 0 && (
                     <Divider
                         key="unrelated-sites"

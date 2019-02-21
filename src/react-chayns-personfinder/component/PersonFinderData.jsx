@@ -279,6 +279,7 @@ export default class PersonFinderData extends Component {
                     onSelect={onSelect}
                     showSeparators={showSeparators}
                     onLoadMore={this.handleLoadMore}
+                    showWaitCursor={showWaitCursor}
                     moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
                     moreRelatedSites={this.loadMore[LOCATION_RELATION]}
                     moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
