@@ -29,6 +29,7 @@ export default class ScrollView extends Component {
         super(props);
 
         this.state = { contentWidth: 0 };
+        this.scrollTo = this.scrollTo.bind(this);
         this.setContentWidth = this.setContentWidth.bind(this);
     }
 
@@ -52,6 +53,12 @@ export default class ScrollView extends Component {
 
     setContentWidth() {
         this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width });
+    }
+
+    scrollTo(...args) {
+        if (this.content) {
+            this.content.scrollTo(...args);
+        }
     }
 
     render() {

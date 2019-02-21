@@ -16,7 +16,7 @@ export default class ScrollViewExample extends PureComponent {
                         width: '100%',
                     }}
                     onScroll={e => console.log(e.target.scrollTop)}
-                    scrollElementRef={(ref) => { this.ref = ref; }}
+                    ref={(ref) => { this.ref = ref; }}
                 >
                     {this.text}
                 </ScrollView>
