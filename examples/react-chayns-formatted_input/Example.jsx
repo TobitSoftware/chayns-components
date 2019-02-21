@@ -29,8 +29,8 @@ export default class InputExample extends PureComponent {
                     {`Value: ${value}`}
                 </div>
                 <FormattedInput
-                    value={value}
-                    formatter={InputExample.formatter}
+                    defaultValue={value}
+                    initialFormatter={InputExample.formatter}
                     placeholder="input"
                     onChange={this.onChange}
                     style={{

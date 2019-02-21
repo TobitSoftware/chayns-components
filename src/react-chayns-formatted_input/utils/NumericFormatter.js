@@ -10,12 +10,22 @@ export default class NumericFormatter extends Formatter {
 
     constructor({
         decimalSeparator = ',',
-        thousandSeparator = '',
+        thousandSeparator = '.',
     } = {}) {
         super();
 
         this.config.seperators.thousand = thousandSeparator;
         this.config.seperators.decimal = decimalSeparator;
+
+        this.allowedChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        if (thousandSeparator) {
+            this.allowedChars.push(thousandSeparator);
+        }
+
+        if (decimalSeparator) {
+            this.allowedChars.push(decimalSeparator);
+        }
     }
 
     format(value) {
@@ -28,9 +38,7 @@ export default class NumericFormatter extends Formatter {
         const valueParts = String(value).split('.');
         valueParts[0] = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
 
-        return {
-            value: valueParts.join(decimalSeparator),
-        };
+        return valueParts.join(decimalSeparator);
     }
 
     parse(value) {
@@ -42,8 +50,30 @@ export default class NumericFormatter extends Formatter {
 
         const parsedValue = parseFloat(value.split(thousandSeparator).join('').replace(decimalSeparator, '.'));
 
-        return {
-            value: (isNaN(parsedValue) || !isFinite(parsedValue)) ? false : parsedValue,
-        };
+        return (isNaN(parsedValue) || !isFinite(parsedValue)) ? false : parsedValue;
+    }
+
+    validateChars(value) {
+        for (let i = 0; i < value.length; i += 1) {
+            if (this.allowedChars.indexOf(value[i]) === -1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    validate(value) {
+        const { decimal: decimalSeparator } = this.config.seperators;
+
+        if (value.split(decimalSeparator).length > 2) {
+            return false;
+        }
+
+        if (!this.validateChars(value)) {
+            return false;
+        }
+
+        return true;
     }
 }
