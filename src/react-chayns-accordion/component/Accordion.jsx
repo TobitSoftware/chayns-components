@@ -277,6 +277,7 @@ export default class Accordion extends PureComponent {
             onSearchEnter,
             searchPlaceholder,
             disabled,
+            fixed,
         } = this.props;
 
         const { currentState } = this.state;
@@ -287,6 +288,7 @@ export default class Accordion extends PureComponent {
                     'accordion--wrapped': (isWrapped === true),
                     'accordion--open': currentState === OPEN,
                     'accordion--disabled': disabled,
+                    'accordion--fixed': fixed,
                     [className]: className
                 })}
                 ref={(ref) => {
