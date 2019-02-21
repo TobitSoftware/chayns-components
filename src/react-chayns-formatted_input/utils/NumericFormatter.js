@@ -1,4 +1,5 @@
 import Formatter from './Formatter';
+import IntegerFormatter from './IntegerFormatter';
 
 export default class NumericFormatter extends Formatter {
     config = {
@@ -16,16 +17,6 @@ export default class NumericFormatter extends Formatter {
 
         this.config.seperators.thousand = thousandSeparator;
         this.config.seperators.decimal = decimalSeparator;
-
-        this.allowedChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-        if (thousandSeparator) {
-            this.allowedChars.push(thousandSeparator);
-        }
-
-        if (decimalSeparator) {
-            this.allowedChars.push(decimalSeparator);
-        }
     }
 
     format(value) {
@@ -50,12 +41,21 @@ export default class NumericFormatter extends Formatter {
 
         const parsedValue = parseFloat(value.split(thousandSeparator).join('').replace(decimalSeparator, '.'));
 
+        /* eslint-disable-next-line no-restricted-globals */
         return (isNaN(parsedValue) || !isFinite(parsedValue)) ? false : parsedValue;
     }
 
     validateChars(value) {
+        const { thousand: thousandSeparator, decimal: decimalSeparator } = this.config.seperators;
+
         for (let i = 0; i < value.length; i += 1) {
-            if (this.allowedChars.indexOf(value[i]) === -1) {
+            if (IntegerFormatter.ALLOWED_CHARS.indexOf(value[i]) === -1
+                && value[i] !== thousandSeparator
+                && value[i] !== decimalSeparator) {
+                if (i === 0 && value[i] === '-') {
+                    return true;
+                }
+
                 return false;
             }
         }
