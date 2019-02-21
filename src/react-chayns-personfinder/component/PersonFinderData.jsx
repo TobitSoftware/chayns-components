@@ -69,6 +69,8 @@ export default class PersonFinderData extends Component {
     constructor(props) {
         super(props);
 
+        this.take = props.take;
+
         this.setValue = debounce(this.setValue.bind(this), 500);
         this.fetchPersonRelations = this.fetchPersonRelations.bind(this);
         this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
@@ -182,7 +184,8 @@ export default class PersonFinderData extends Component {
                 persons.related.push(...personResults.related);
                 persons.unrelated.push(...personResults.unrelated);
 
-                if (personResults.related.length + personResults.unrelated.length === 0) {
+                if (personResults.related.length + personResults.unrelated.length === 0
+                    || personResults.related.length + personResults.unrelated.length < this.take) {
                     this.loadMore[PERSON_RELATION] = false;
                 }
 
@@ -195,7 +198,8 @@ export default class PersonFinderData extends Component {
                 sites.related.push(...siteResults.related);
                 sites.unrelated.push(...siteResults.unrelated);
 
-                if (siteResults.related.length + siteResults.unrelated.length === 0) {
+                if (siteResults.related.length + siteResults.unrelated.length === 0
+                    || siteResults.related.length + siteResults.unrelated.length < this.take) {
                     this.loadMore[LOCATION_RELATION] = false;
                 }
 
@@ -231,13 +235,11 @@ export default class PersonFinderData extends Component {
     }
 
     async fetchRelations(type, value) {
-        const { take } = this.props;
-
         if (this.promises[type]) {
             this.promises[type].cancel();
         }
 
-        this.promises[type] = makeCancelable(findRelations(type, value, this.skip[type], take));
+        this.promises[type] = makeCancelable(findRelations(type, value, this.skip[type], this.take));
 
         return this.promises[type].promise;
     }
