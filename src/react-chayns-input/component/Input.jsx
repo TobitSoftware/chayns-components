@@ -124,6 +124,10 @@ export default class Input extends PureComponent {
 
         const { valid: validState, initial } = this.state;
 
+        if (initial && value === '') {
+            return;
+        }
+
         if (validState !== valid || !initial) {
             this.setState({
                 valid,
