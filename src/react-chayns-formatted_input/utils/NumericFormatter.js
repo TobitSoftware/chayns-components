@@ -92,7 +92,7 @@ export default class NumericFormatter extends Formatter {
             return false;
         }
 
-        if (valueParts[1] && valueParts[1].length > decimals) {
+        if (decimals !== null && valueParts[1] && valueParts[1].length > decimals) {
             return false;
         }
 
