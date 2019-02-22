@@ -62,6 +62,9 @@ export default class Tooltip extends Component {
         this.getPosition = this.getPosition.bind(this);
 
         this.tooltipKey = Math.random().toString();
+
+        this.bubble = React.createRef();
+        this.childrenWrapper = React.createRef();
     }
 
     componentDidMount() {
@@ -113,8 +116,8 @@ export default class Tooltip extends Component {
         if (coordinates) {
             return coordinates;
         }
-        if (this.childrenNode) {
-            const rect = this.childrenNode.getBoundingClientRect();
+        if (this.childrenWrapper.current) {
+            const rect = this.childrenWrapper.current.getBoundingClientRect();
             return {
                 x: rect.left + (rect.width / 2),
                 y: (position === 1 || position === 2) ? rect.bottom : rect.top,
@@ -139,11 +142,15 @@ export default class Tooltip extends Component {
     }
 
     show() {
-        this.bubble.show();
+        if (this.bubble.current) {
+            this.bubble.current.show();
+        }
     }
 
     hide() {
-        this.bubble.hide();
+        if (this.bubble.current) {
+            this.bubble.current.hide();
+        }
     }
 
     render() {
@@ -164,7 +171,7 @@ export default class Tooltip extends Component {
                         onMouseLeave={bindListeners ? this.hide : null}
                         style={{ minWidth, maxWidth, padding: '12px' }}
                         key="bubble"
-                        ref={ref => this.bubble = ref}
+                        ref={this.bubble}
                     >
                         {
                             removeIcon
@@ -181,9 +188,7 @@ export default class Tooltip extends Component {
                 : null,
             <div
                 className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
-                ref={(node) => {
-                    this.childrenNode = node;
-                }}
+                ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
                 onMouseOver={bindListeners ? this.show : null}
