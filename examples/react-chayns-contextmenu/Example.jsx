@@ -1,12 +1,11 @@
 /* eslint-disable react/jsx-one-expression-per-line,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
-import Icon from '../../src/react-chayns-icon/component/Icon';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
+import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
 export default class ContextMenuExample extends Component {
     constructor() {
@@ -15,43 +14,10 @@ export default class ContextMenuExample extends Component {
         this.state = {
             x: 0,
             y: 0,
-            hideContextMenu: true,
             position: 0,
         };
 
-        this.setContextMenu = this.setContextMenu.bind(this);
-        this.removeContextMenu = this.removeContextMenu.bind(this);
-        this.deleteOnClick = this.deleteOnClick.bind(this);
-        this.addOnClick = this.addOnClick.bind(this);
         this.buttonClick = this.buttonClick.bind(this);
-    }
-
-    setContextMenu(event) {
-        this.setState({
-            x: event.pageX,
-            y: event.pageY,
-            hideContextMenu: false,
-        });
-    }
-
-    removeContextMenu() {
-        this.setState({
-            hideContextMenu: true,
-        });
-    }
-
-    deleteOnClick() {
-        console.log('Löschen');
-        this.setState({
-            hideContextMenu: true
-        });
-    }
-
-    addOnClick() {
-        console.log('Hinzufügen');
-        this.setState({
-            hideContextMenu: true
-        });
     }
 
     buttonClick() {
@@ -61,49 +27,72 @@ export default class ContextMenuExample extends Component {
 
     render() {
         const {
-            x, y, hideContextMenu, position
+            x, y, position
         } = this.state;
 
         const items = [
             {
                 className: null,
-                onClick: this.addOnClick,
-                text: 'Hinzufügen',
+                onClick: console.log,
+                text: 'Coffee',
                 icon: faCoffee,
             },
             {
                 className: null,
-                onClick: this.deleteOnClick,
-                text: 'Löschen',
+                onClick: console.log,
+                text: 'Tobit',
                 icon: 'ts-tobit',
             }
         ];
 
         return (
             <div>
-                <ContextMenu
-                    coordinates={{
-                        x,
-                        y
-                    }}
-                    hide={hideContextMenu}
-                    items={items}
-                    onLayerClick={this.removeContextMenu}
-                    position={position % 4}
-                    stopPropagation
-                />
                 <Button onClick={this.buttonClick}>
                     Position ändern
                 </Button>
-                <div style={{ margin: '15% 45%' }} onClick={this.setContextMenu}>
-                    <Icon icon={faInfoCircle} style={{ transform: 'scale(5)' }}/>
-                </div>
-                <ContextMenu items={items} position={position % 4}/>
                 <Accordion
                     head="Accordion mit ContextMenu"
                     right={<ContextMenu items={items} position={position % 4}/>}
-                >TEST
+                >
+                    <div className="accordion__content">
+                        Hello World
+                    </div>
                 </Accordion>
+                <div
+                    style={{ height: '100px', width: '100%', margin: '20px 0' }}
+                    onClick={(e) => {
+                        this.setState({ x: e.clientX, y: e.clientY });
+                        this.clickContextMenu.show();
+                    }}
+                    id="clickZone"
+                    className="chayns__background-color--white-4"
+                />
+                <ContextMenu
+                    items={items}
+                    coordinates={{ x, y }}
+                    ref={ref => this.clickContextMenu = ref}
+                    onLayerClick={(e) => {
+                        console.log(e);
+                        if (e.srcElement.id !== 'clickZone') this.clickContextMenu.hide();
+                    }}
+                />
+                <div style={{ position: 'relative' }}>
+                    <Gallery
+                        height={300}
+                        images={[{
+                            url: 'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
+                            preview: '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoADwDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAgABAwT/xAAjEAEAAwABBQABBQAAAAAAAAABAAIRIQMSMUFRgSJCYWKx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAABEBMVH/2gAMAwEAAhEDEQA/APN2JVc4mViOo9oewyb0qi8+DlgOleQzl+zerRDN9h4iAd4y3khFbnd6fEjXAek+mFMvzPStV7ahv+Tj1acNh3PMUnira1Hh5Zyva1rKvMlcyGVlpOlDZzBDfUdHIM674mBZ5++oba2NR/tFU7jfnr7Le67hmASNIUM7T8MzqNu12mGRGVWr5/awdS36f5eJBxSGJMhmmSrxXfktV3dlKTDXSt3znP2bXqZZsvuUpYUep1C3g/MDbXXllKIWsXXmGUoH/9k=',
+                            width: 640,
+                            height: 426,
+                        }]}
+                    />
+                    <ContextMenu
+                        items={items}
+                        position={position % 4}
+                        showTriggerBackground
+                        childrenStyle={{ position: 'absolute', top: '1px', right: '1px' }}
+                    />
+                </div>
             </div>
         );
     }

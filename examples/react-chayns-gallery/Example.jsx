@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
-export default class GalleryExample extends Component {
+export default class GalleryExample extends PureComponent {
     render() {
         const images = [
             {
@@ -33,7 +33,11 @@ export default class GalleryExample extends Component {
                 <h3>5 images, different imageServices, 2 with preview</h3>
                 <Gallery style={{ marginBottom: '30px' }} images={images}/>
                 <h3>4 images, different imageServices, 2 with preview, height 300px</h3>
-                <Gallery style={{ marginBottom: '30px' }} images={[images[1], images[2], images[3], images[4]]} height={300}/>
+                <Gallery
+                    style={{ marginBottom: '30px' }}
+                    images={[images[1], images[2], images[3], images[4]]}
+                    height={300}
+                />
                 <h3>3 images, 2 with preview, width 200px</h3>
                 <Gallery style={{ marginBottom: '30px' }} images={[images[1], images[2], images[3]]} width={200}/>
                 <h3>2 images with preview</h3>

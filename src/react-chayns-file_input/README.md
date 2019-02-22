@@ -13,11 +13,8 @@ At first the component needs to be imported:
 import { FileInput } from 'chayns-components';
 ```
 
-The component can be used in JSX like in the following example:
+You can use the gallery like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-file_input/Example.jsx).
 
-```jsx harmony
-<FileInput/>
-```
 
 ## Props ##
 | Property          | Description                                                                | Type          | Default Value |
@@ -54,7 +51,3 @@ The component can be used in JSX like in the following example:
 ## Uploading images ##
 To Upload images to our new ImageService, you can use the imageUpload-function from the utils folder. It accepts image URLs and files with a maximum size of 4 MB.
 To avoid accidentally removal of an image, you may add a reference. When an image gets deleted, you can also add a reference. The file will only be deleted, if no other references are left.
-
-## Example ##
-
-You can take a look at the **examples** folder in the **react-chayns-file_input** repository. There you can find an appropriate way of implementing the **FileInput** to your chayns-Tapp.
