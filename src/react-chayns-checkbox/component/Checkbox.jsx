@@ -57,83 +57,39 @@ export default class Checkbox extends PureComponent {
         }
     };
 
-    renderCheckbox() {
-        const {
-            style,
-            disabled,
-            children,
-            label,
-            checked,
-            defaultChecked,
-            dangerouslySetLabel,
-            labelStyle,
-            labelClassName,
-            className,
-            stopPropagation
-        } = this.props;
-
+    renderCheckbox(props) {
         return (
             <CheckboxView
+                {...props}
                 id={this.id}
                 ref={(ref) => { this._node = ref; }}
                 onChange={this.onChange}
-                style={style}
-                disabled={disabled}
-                label={label}
-                checked={checked}
-                className={className}
-                defaultChecked={defaultChecked}
-                dangerouslySetLabel={dangerouslySetLabel}
-                labelStyle={labelStyle}
-                labelClassName={labelClassName}
-                stopPropagation={stopPropagation}
-            >
-                {children}
-            </CheckboxView>
+            />
         );
     }
 
-    renderToggleButton() {
-        const {
-            style,
-            disabled,
-            children,
-            label,
-            checked,
-            defaultChecked,
-            dangerouslySetLabel,
-            labelStyle,
-            labelClassName,
-            className,
-            stopPropagation
-        } = this.props;
-
+    renderToggleButton(props) {
         return (
             <ToggleButton
+                {...props}
                 id={this.id}
                 ref={(ref) => { this._node = ref; }}
                 onChange={this.onChange}
-                style={style}
-                disabled={disabled}
-                label={label}
-                checked={checked}
-                className={className}
-                defaultChecked={defaultChecked}
-                dangerouslySetLabel={dangerouslySetLabel}
-                labelStyle={labelStyle}
-                labelClassName={labelClassName}
-                stopPropagation={stopPropagation}
-            >
-                {children}
-            </ToggleButton>
+            />
         );
     }
 
     render() {
         const {
             toggleButton,
+            onChange,
+            ...props
         } = this.props;
 
-        return toggleButton ? this.renderToggleButton() : this.renderCheckbox();
+        if (toggleButton) {
+            return this.renderToggleButton(props);
+        }
+
+        return this.renderCheckbox(props);
     }
 }
