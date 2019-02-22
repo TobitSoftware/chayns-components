@@ -57,6 +57,7 @@ export default class Input extends PureComponent {
 
         this.state = {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
+            initial: true,
         };
 
         this.id = Math.random()
@@ -121,10 +122,13 @@ export default class Input extends PureComponent {
             callback(value, valid);
         }
 
-        const { valid: validState } = this.state;
+        const { valid: validState, initial } = this.state;
 
-        if (validState !== valid) {
-            this.setState({ valid });
+        if (validState !== valid || !initial) {
+            this.setState({
+                valid,
+                initial: false,
+            });
         }
     }
 
@@ -146,7 +150,7 @@ export default class Input extends PureComponent {
             onFocus,
             stopPropagation,
         } = this.props;
-        const { valid } = this.state;
+        const { valid, initial } = this.state;
 
         if (dynamic) {
             return (
@@ -173,7 +177,7 @@ export default class Input extends PureComponent {
                     <label
                         htmlFor={id || this.id}
                         className={classNames({
-                            'input--invalid': !valid || invalid,
+                            'input--invalid': (!valid || invalid),
                             labelIcon: icon
                         })}
                     >
@@ -197,9 +201,10 @@ export default class Input extends PureComponent {
                 </div>
             );
         }
+
         return (
             <input
-                className={classNames('input', className, { 'input--invalid': !valid || invalid })}
+                className={classNames('input', className, { 'input--invalid': !initial && (!valid || invalid) })}
                 style={style}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
@@ -212,6 +217,7 @@ export default class Input extends PureComponent {
                 ref={this.setRef}
                 id={id || this.id}
                 onClick={stopPropagation ? event => event.stopPropagation() : null}
+                required
                 {...customProps}
             />
         );
