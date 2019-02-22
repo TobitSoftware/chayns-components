@@ -16,7 +16,7 @@ export default async function findRelations(type, value, skip, take) {
     }
 
     if (type === LOCATION_RELATION) {
-        const sites = await chayns.findSite(value);
+        const sites = await chayns.findSite(value, skip, take);
 
         if (sites.Value && sites.Value.length) {
             return {

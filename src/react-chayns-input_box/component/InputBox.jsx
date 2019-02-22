@@ -18,6 +18,7 @@ export default class InputBox extends Component {
         className: PropTypes.string,
         boxClassName: PropTypes.string,
         inputRef: PropTypes.func,
+        overlayProps: PropTypes.object,
     };
 
     static defaultProps = {
@@ -27,6 +28,7 @@ export default class InputBox extends Component {
         className: null,
         boxClassName: null,
         inputRef: null,
+        overlayProps: null,
     };
 
     state = {
@@ -42,7 +44,7 @@ export default class InputBox extends Component {
         super(props);
 
         this.setWrapperRef = this.setRef.bind(this, 'wrapper');
-        this.setBoxRef = this.setRef.bind(this, 'box');
+        this.setBoxRef = this.setBoxRef.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
     }
@@ -57,6 +59,16 @@ export default class InputBox extends Component {
 
     setRef(name, ref) {
         this.references[name] = ref;
+    }
+
+    setBoxRef(ref) {
+        const { overlayProps } = this.props;
+
+        this.references.box = ref;
+
+        if (overlayProps && overlayProps.ref) {
+            overlayProps.ref(ref);
+        }
     }
 
     getCurrentRect() {
@@ -108,6 +120,7 @@ export default class InputBox extends Component {
             inputRef,
             onFocus,
             className,
+            overlayProps,
             boxClassName,
             ...props
         } = this.props;
@@ -147,6 +160,7 @@ export default class InputBox extends Component {
                                 top: `${rect.bottom}px`,
                                 left: `${rect.left}px`,
                             } : null}
+                            {...overlayProps}
                             ref={this.setBoxRef}
                         >
                             {children}

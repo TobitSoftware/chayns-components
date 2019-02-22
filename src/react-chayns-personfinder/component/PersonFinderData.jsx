@@ -12,6 +12,9 @@ import WaitCursor from './WaitCursor';
 import getCurrentUserInformation from '../utils/getCurrentUserInformation';
 
 const WAIT_CURSOR_TIMEOUT = 500;
+const LAZY_LOADING_SPACE = 100;
+
+const ALL_RELATIONS = 'ALL';
 
 export default class PersonFinderData extends Component {
     static propTypes = {
@@ -24,6 +27,7 @@ export default class PersonFinderData extends Component {
         includeOwn: PropTypes.bool,
         inputComponent: PropTypes.node.isRequired,
         showId: PropTypes.bool,
+        autoLoading: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -34,13 +38,17 @@ export default class PersonFinderData extends Component {
         selectedValue: false,
         includeOwn: false,
         showId: false,
+        autoLoading: true,
     };
+
+    resultList = null;
 
     state = {
         value: null,
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         showWaitCursor: false,
+        lazyLoading: false,
     };
 
     promises = {
@@ -53,12 +61,20 @@ export default class PersonFinderData extends Component {
         [LOCATION_RELATION]: 0,
     };
 
+    loadMore = {
+        [PERSON_RELATION]: true,
+        [LOCATION_RELATION]: true,
+    };
+
     constructor(props) {
         super(props);
+
+        this.take = props.take;
 
         this.setValue = debounce(this.setValue.bind(this), 500);
         this.fetchPersonRelations = this.fetchPersonRelations.bind(this);
         this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
+        this.handleLazyLoad = this.handleLazyLoad.bind(this);
     }
 
     componentDidUpdate() {
@@ -88,14 +104,20 @@ export default class PersonFinderData extends Component {
         this.fetchData(value);
     }
 
+    handleLoadMore = (type) => {
+        const { value } = this.state;
+        this.fetchData(value, false, type);
+    };
+
     showWaitCursor() {
+        const { lazyLoading } = this.state;
         clearTimeout(this.waitCursorTimeout);
 
         this.waitCursorTimeout = window.setTimeout(() => {
             this.setState({
                 showWaitCursor: true,
             });
-        }, WAIT_CURSOR_TIMEOUT);
+        }, lazyLoading ? WAIT_CURSOR_TIMEOUT : 0);
     }
 
     hideWaitCursor() {
@@ -106,34 +128,68 @@ export default class PersonFinderData extends Component {
         });
     }
 
-    async fetchData(value, clear = true) {
+    async handleLazyLoad() {
+        if (!this.resultList) return;
+
+        const { autoLoading } = this.props;
+        const { value, lazyLoading } = this.state;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
+
+        if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+            this.setState({
+                lazyLoading: true,
+            });
+            await this.fetchData(value, false);
+            this.setState({
+                lazyLoading: false,
+            });
+        }
+    }
+
+    async fetchData(value, clear = true, type = ALL_RELATIONS) {
         if (clear || value === '') {
             this.skip[LOCATION_RELATION] = 0;
             this.skip[PERSON_RELATION] = 0;
+            this.loadMore[LOCATION_RELATION] = true;
+            this.loadMore[PERSON_RELATION] = true;
+
+            if (this.resultList) {
+                this.resultList.scrollTop = 0;
+            }
         }
 
         const { persons: enablePersons, sites: enableSites, includeOwn } = this.props;
 
         const promises = [];
 
-        promises.push(enablePersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
-        promises.push(enableSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
+        const loadPersons = enablePersons && this.loadMore[PERSON_RELATION] && (type === ALL_RELATIONS || type === PERSON_RELATION);
+        const loadSites = enableSites && this.loadMore[LOCATION_RELATION] && (type === ALL_RELATIONS || type === LOCATION_RELATION);
+
+        promises.push(loadPersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
+        promises.push(loadSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
             this.showWaitCursor();
             const [personResults, siteResults] = await Promise.all(promises);
             this.hideWaitCursor();
 
-            const { persons: personsState, sites: sitesState } = this.state;
+            const { persons: personsState, sites: sitesState, lazyLoading } = this.state;
 
-            const persons = clear ? { related: [], unrelated: [] } : personsState;
-            const sites = clear ? { related: [], unrelated: [] } : sitesState;
+            let persons = clear ? { related: [], unrelated: [] } : personsState;
+            let sites = clear ? { related: [], unrelated: [] } : sitesState;
 
             if (personResults) {
                 this.skip[PERSON_RELATION] += (personResults.related.length + personResults.unrelated.length);
 
                 persons.related.push(...personResults.related);
                 persons.unrelated.push(...personResults.unrelated);
+
+                if (personResults.related.length + personResults.unrelated.length === 0
+                    || personResults.related.length + personResults.unrelated.length < this.take) {
+                    this.loadMore[PERSON_RELATION] = false;
+                }
+
+                persons = { ...persons }; // Forces rerendering
             }
 
             if (siteResults) {
@@ -141,11 +197,19 @@ export default class PersonFinderData extends Component {
 
                 sites.related.push(...siteResults.related);
                 sites.unrelated.push(...siteResults.unrelated);
+
+                if (siteResults.related.length + siteResults.unrelated.length === 0
+                    || siteResults.related.length + siteResults.unrelated.length < this.take) {
+                    this.loadMore[LOCATION_RELATION] = false;
+                }
+
+                sites = { ...sites }; // Forces rerendering
             }
 
             this.setState({
                 persons,
                 sites,
+                lazyLoading: clear ? false : lazyLoading,
             });
         } catch (ex) {
             if (!ex || !ex.isCanceled) {
@@ -171,13 +235,11 @@ export default class PersonFinderData extends Component {
     }
 
     async fetchRelations(type, value) {
-        const { take } = this.props;
-
         if (this.promises[type]) {
             this.promises[type].cancel();
         }
 
-        this.promises[type] = makeCancelable(findRelations(type, value, this.skip[type], take));
+        this.promises[type] = makeCancelable(findRelations(type, value, this.skip[type], this.take));
 
         return this.promises[type].promise;
     }
@@ -193,22 +255,49 @@ export default class PersonFinderData extends Component {
             onSelect,
             selectedValue,
             showId,
+            persons: showPersons,
+            sites: showSites,
         } = this.props;
 
-        const { persons, sites, showWaitCursor } = this.state;
+        const {
+            persons,
+            sites,
+            showWaitCursor,
+            lazyLoading
+        } = this.state;
 
         const hasEntries = this.hasEntries();
+        const showSeparators = showPersons && showSites;
 
         if (!selectedValue && hasEntries) {
-            return [
-                showWaitCursor && (<WaitCursor key="wait-cursor" />),
+            const hasUnrelated = !!(persons && persons.unrelated && persons.unrelated.length);
+
+            const results = (
                 <PersonFinderResults
                     key="results"
                     showId={showId}
                     persons={persons}
                     sites={sites}
                     onSelect={onSelect}
+                    showSeparators={showSeparators}
+                    onLoadMore={this.handleLoadMore}
+                    showWaitCursor={showWaitCursor}
+                    moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
+                    moreRelatedSites={this.loadMore[LOCATION_RELATION]}
+                    moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
                 />
+            );
+
+            if (lazyLoading) {
+                return [
+                    results,
+                    showWaitCursor && (<WaitCursor key="wait-cursor" />)
+                ];
+            }
+
+            return [
+                showWaitCursor && (<WaitCursor key="wait-cursor" />),
+                results
             ];
         }
 
@@ -239,6 +328,10 @@ export default class PersonFinderData extends Component {
                 value={value}
                 onChange={this.handleOnChange}
                 boxClassName={classnames('cc__person-finder__overlay')}
+                overlayProps={{
+                    ref: (ref) => { this.resultList = ref; },
+                    onScroll: this.handleLazyLoad,
+                }}
                 {...props}
             >
                 {this.renderChildren()}

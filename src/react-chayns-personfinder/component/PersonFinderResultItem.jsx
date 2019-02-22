@@ -61,6 +61,36 @@ export default class PersonFinderResultItem extends PureComponent {
         return ` +${String((furtherRelationCount) || 0)}`;
     }
 
+    static convertRelation(type, relation) {
+        if (type === LOCATION_RELATION) {
+            return {
+                siteId: relation.siteId,
+                locationId: relation.locationId,
+                score: relation.score,
+                name: relation.name,
+                relations: relation.relations,
+                relationCount: relation.relationCount,
+                image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
+            };
+        }
+
+        if (type === PERSON_RELATION) {
+            return {
+                personId: relation.personId,
+                userId: relation.userId,
+                name: `${relation.firstName} ${relation.lastName}`,
+                firstName: relation.firstName,
+                lastName: relation.lastName,
+                score: relation.score,
+                relationCount: relation.relationCount,
+                image: `https://sub60.tobit.com/u/${relation.personId}?size=40`,
+                relations: relation.relations,
+            };
+        }
+
+        return null;
+    }
+
     constructor(props) {
         super(props);
 
@@ -108,20 +138,22 @@ export default class PersonFinderResultItem extends PureComponent {
             type,
         } = this.props;
 
-        const relationString = PersonFinderResultItem.getRelations(relation.relations, type);
-        const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(relation);
+        const convertedRelation = PersonFinderResultItem.convertRelation(type, relation);
+
+        const relationString = PersonFinderResultItem.getRelations(convertedRelation.relations, type);
+        const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(convertedRelation);
 
         return(
             <div className="result-item" onClick={this.handleClick}>
-                <div className="img" style={{ backgroundImage: `url(${relation.image})` }}/>
+                <div className="img" style={{ backgroundImage: `url(${convertedRelation.image})` }}/>
                 <div className="text">
                     <div
                         className="title"
                     >
-                        <div className="name">{relation.name}</div>
+                        <div className="name">{convertedRelation.name}</div>
                         {relationString && (
                             <div className="identifier">
-                                {`(${type === PERSON_RELATION ? relation.personId : relation.siteId})`}
+                                {`(${type === PERSON_RELATION ? convertedRelation.personId : convertedRelation.siteId})`}
                             </div>
                         )}
                     </div>

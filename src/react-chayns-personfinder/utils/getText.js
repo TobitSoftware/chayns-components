@@ -4,12 +4,24 @@ const DICTIONARY = {
         en: 'logged in'
     },
     DIVIDER_PERSON: {
+        de: 'Personen',
+        en: ' persons'
+    },
+    DIVIDER_SITE: {
+        de: 'Sites',
+        en: 'sites'
+    },
+    DIVIDER_MORE_PERSON: {
         de: 'Weitere Personen',
         en: ' further persons'
     },
-    DIVIDER_SITE: {
+    DIVIDER_MORE_SITE: {
         de: 'Weitere Sites',
         en: 'furher sites'
+    },
+    LOAD_MORE: {
+        de: 'Mehr anzeigen',
+        en: ' load more'
     },
     LIVING_IN: {
         de: 'wohnt in',
