@@ -155,37 +155,42 @@ export default class Tooltip extends Component {
 
     render() {
         const {
-            children, parent, childrenStyle, preventTriggerStyle, childrenClassNames, removeIcon, bindListeners, minWidth, maxWidth
+            children,
+            parent,
+            childrenStyle,
+            preventTriggerStyle,
+            childrenClassNames,
+            removeIcon,
+            bindListeners,
+            minWidth,
+            maxWidth,
         } = this.props;
-
         const { position } = this.state;
 
         return [
-            typeof position === 'number'
-                ? (
-                    <Bubble
-                        coordinates={this.getCoordinates()}
-                        parent={parent}
-                        position={position}
-                        onMouseEnter={bindListeners ? this.show : null}
-                        onMouseLeave={bindListeners ? this.hide : null}
-                        style={{ minWidth, maxWidth, padding: '12px' }}
-                        key="bubble"
-                        ref={this.bubble}
-                    >
-                        {
-                            removeIcon
-                                ? (
-                                    <div className="cc__tooltip__icon" onClick={this.hide}>
-                                        <Icon icon="ts-wrong"/>
-                                    </div>
-                                )
-                                : null
-                        }
-                        {this.getContent()}
-                    </Bubble>
-                )
-                : null,
+            position !== null ? (
+                <Bubble
+                    coordinates={this.getCoordinates()}
+                    parent={parent}
+                    position={position}
+                    onMouseEnter={bindListeners ? this.show : null}
+                    onMouseLeave={bindListeners ? this.hide : null}
+                    style={{
+                        minWidth,
+                        maxWidth,
+                        padding: '12px',
+                    }}
+                    key="bubble"
+                    ref={this.bubble}
+                >
+                    {removeIcon ? (
+                        <div className="cc__tooltip__icon" onClick={this.hide}>
+                            <Icon icon="ts-wrong"/>
+                        </div>
+                    ) : null}
+                    {this.getContent()}
+                </Bubble>
+            ) : null,
             <div
                 className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
                 ref={this.childrenWrapper}
