@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, react/no-array-index-key */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 
 import Icon from '../../../react-chayns-icon/component/Icon';
 
@@ -36,10 +34,10 @@ export default class Navigator extends PureComponent {
         return (
             <div className="calendar__navigator no_select">
                 <div className="calendar__navigator_wrapper">
-                    <div className="calendar__navigator_icon">
+                    <div className="calendar__navigator_icon" style={{ transform: 'rotate(180deg)' }}>
                         {hidden.left ? '' : (
                             <span onClick={onClick.left}>
-                            <Icon icon={faChevronLeft}/>
+                                <Icon icon="ts-angle-right"/>
                             </span>
                         )}
                     </div>
@@ -47,7 +45,7 @@ export default class Navigator extends PureComponent {
                     <div className="calendar__navigator_icon">
                         {hidden.right ? '' : (
                             <span onClick={onClick.right}>
-                            <Icon icon={faChevronRight}/>
+                                <Icon icon="ts-angle-right"/>
                             </span>
                         )}
                     </div>
