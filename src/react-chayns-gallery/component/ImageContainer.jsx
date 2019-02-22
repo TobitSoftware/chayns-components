@@ -133,7 +133,7 @@ export default class ImageContainer extends PureComponent {
                         : null
                 }
                 {deleteMode && (
-                    <div className="delete-icon" onClick={this.deleteOnClick} key="icon">
+                    <div className="delete-icon image-tool" onClick={this.deleteOnClick} key="icon">
                         <Icon icon="ts-wrong"/>
                     </div>
                 )}

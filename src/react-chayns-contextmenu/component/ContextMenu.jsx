@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -26,6 +26,7 @@ export default class ContextMenu extends Component {
         stopPropagation: PropTypes.bool,
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
+        showTriggerBackground: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -40,6 +41,7 @@ export default class ContextMenu extends Component {
         stopPropagation: false,
         minWidth: null,
         maxWidth: null,
+        showTriggerBackground: false,
     };
 
     constructor(props) {
@@ -56,9 +58,9 @@ export default class ContextMenu extends Component {
 
     componentDidUpdate(prevProps) {
         const { coordinates } = this.props;
-        if(prevProps.coordinates && coordinates) {
+        if (prevProps.coordinates && coordinates) {
             const { x, y } = prevProps.coordinates;
-            if(coordinates.x !== x || coordinates.y !== y) {
+            if (coordinates.x !== x || coordinates.y !== y) {
                 this.getPosition();
             }
         }
@@ -112,8 +114,8 @@ export default class ContextMenu extends Component {
             this.setState({ position });
         } else {
             const { x, y } = this.getCoordinates();
-            let pos = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
-            pos = (y > window.innerHeight / 2) ? pos[0] : pos[1];
+            const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
+            const pos = (y > window.innerHeight / 2) ? posArray[0] : posArray[1];
             if (statePosition !== pos) {
                 this.setState({ position: pos });
             }
@@ -129,13 +131,13 @@ export default class ContextMenu extends Component {
 
     hide() {
         this.bubble.hide();
-        this.bubbleShown = false,
+        this.bubbleShown = false;
         document.removeEventListener('click', this.onLayerClick);
     }
 
     render() {
         const {
-            items, parent, children, childrenStyle, coordinates, minWidth, maxWidth
+            items, parent, children, childrenStyle, coordinates, minWidth, maxWidth, showTriggerBackground
         } = this.props;
 
         const { position } = this.state;
@@ -171,11 +173,10 @@ export default class ContextMenu extends Component {
                 : (
                     <div
                         key="cc__contextMenu__children"
-                        // eslint-disable-next-line no-return-assign
                         ref={ref => this.childrenNode = ref}
-                        onClick={this.show}
+                        onClick={this.onChildrenClick}
                         style={childrenStyle}
-                        className="accordion--no-trigger context-menu__children"
+                        className={classNames('accordion--no-trigger', 'context-menu__children', { 'image-tool': showTriggerBackground })}
                     >
                         {children}
                     </div>

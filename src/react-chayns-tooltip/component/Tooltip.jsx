@@ -53,7 +53,7 @@ export default class Tooltip extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { position: 0 };
+        this.state = { position: null };
 
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
@@ -61,23 +61,20 @@ export default class Tooltip extends Component {
         this.getCoordinates = this.getCoordinates.bind(this);
         this.getPosition = this.getPosition.bind(this);
 
-        this.firstRender = true;
-
         this.tooltipKey = Math.random().toString();
     }
 
     componentDidMount() {
-        if (this.firstRender) {
-            this.firstRender = false;
-            this.getCoordinates();
-        }
+        this.getCoordinates();
+        this.getPosition();
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { coordinates, children } = this.props;
+    componentDidUpdate(prevProps) {
+        const { coordinates } = this.props;
 
-        if (nextProps.coordinates !== coordinates || nextProps.children !== children) {
+        if (prevProps.coordinates !== coordinates) {
             this.getCoordinates();
+            this.getPosition();
         }
     }
 
@@ -133,8 +130,8 @@ export default class Tooltip extends Component {
             this.setState({ position });
         } else {
             const { x, y } = this.getCoordinates();
-            let pos = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
-            pos = (y > window.innerHeight / 2) ? pos[0] : pos[1];
+            const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
+            const pos = (y > window.innerHeight / 2) ? posArray[0] : posArray[1];
             if (statePosition !== pos) {
                 this.setState({ position: pos });
             }
@@ -142,7 +139,6 @@ export default class Tooltip extends Component {
     }
 
     show() {
-        this.getPosition();
         this.bubble.show();
     }
 
@@ -158,27 +154,31 @@ export default class Tooltip extends Component {
         const { position } = this.state;
 
         return [
-            <Bubble
-                coordinates={this.getCoordinates()}
-                parent={parent}
-                position={position}
-                onMouseEnter={bindListeners ? this.show : null}
-                onMouseLeave={bindListeners ? this.hide : null}
-                style={{ minWidth, maxWidth, padding: '12px' }}
-                key="bubble"
-                ref={ref => this.bubble = ref}
-            >
-                {
-                    removeIcon
-                        ? (
-                            <div className="cc__tooltip__icon" onClick={this.hide}>
-                                <Icon icon="ts-wrong"/>
-                            </div>
-                        )
-                        : null
-                }
-                {this.getContent()}
-            </Bubble>,
+            typeof position === 'number'
+                ? (
+                    <Bubble
+                        coordinates={this.getCoordinates()}
+                        parent={parent}
+                        position={position}
+                        onMouseEnter={bindListeners ? this.show : null}
+                        onMouseLeave={bindListeners ? this.hide : null}
+                        style={{ minWidth, maxWidth, padding: '12px' }}
+                        key="bubble"
+                        ref={ref => this.bubble = ref}
+                    >
+                        {
+                            removeIcon
+                                ? (
+                                    <div className="cc__tooltip__icon" onClick={this.hide}>
+                                        <Icon icon="ts-wrong"/>
+                                    </div>
+                                )
+                                : null
+                        }
+                        {this.getContent()}
+                    </Bubble>
+                )
+                : null,
             <div
                 className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
                 ref={(node) => {
