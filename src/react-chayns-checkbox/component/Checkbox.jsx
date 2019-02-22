@@ -3,9 +3,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import stopPropagationListener from '../../utils/stopPropagationListener';
+import ToggleButton from '../views/ToggleButton';
 
 const CHECKBOX_LABEL_STYLE = { display: 'inline' };
-const SWITCH_LABEL_STYLE = { marginRight: '10px' };
 
 export default class Checkbox extends PureComponent {
     static propTypes = {
@@ -59,7 +59,7 @@ export default class Checkbox extends PureComponent {
         }
     };
 
-    renderCheckbox(classNames) {
+    renderCheckbox() {
         const {
             style,
             disabled,
@@ -70,6 +70,7 @@ export default class Checkbox extends PureComponent {
             dangerouslySetLabel,
             labelStyle,
             labelClassName,
+            className,
             stopPropagation
         } = this.props;
 
@@ -86,7 +87,7 @@ export default class Checkbox extends PureComponent {
                 <input
                     key="input"
                     type="checkbox"
-                    className={classnames('checkbox', classNames)}
+                    className={classnames('checkbox', className)}
                     ref={(ref) => {
                         this._node = ref;
                     }}
@@ -112,7 +113,7 @@ export default class Checkbox extends PureComponent {
         );
     }
 
-    renderToggleButton(classNames) {
+    renderToggleButton() {
         const {
             style,
             disabled,
@@ -123,53 +124,36 @@ export default class Checkbox extends PureComponent {
             dangerouslySetLabel,
             labelStyle,
             labelClassName,
+            className,
             stopPropagation
         } = this.props;
 
-        let modifiedLabelStyle = labelStyle;
-        if (label) {
-            modifiedLabelStyle = {
-                ...labelStyle,
-                ...SWITCH_LABEL_STYLE
-            };
-        }
-
         return (
-            <div className="cc__switch">
-                <input
-                    key="input"
-                    type="checkbox"
-                    className={classnames('switch', classNames)}
-                    ref={(ref) => {
-                        this._node = ref;
-                    }}
-                    onChange={this.onChange}
-                    id={this.id}
-                    disabled={disabled}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                    style={style}
-                    onClick={stopPropagation ? stopPropagationListener : null}
-                />
-                <label
-                    key="label"
-                    className={labelClassName}
-                    htmlFor={this.id}
-                    dangerouslySetInnerHTML={dangerouslySetLabel}
-                    style={modifiedLabelStyle}
-                    onClick={stopPropagation ? stopPropagationListener : null}
-                />
-                {!dangerouslySetLabel ? (children || label || '') : null}
-            </div>
+            <ToggleButton
+                id={this.id}
+                ref={(ref) => { this._node = ref; }}
+                onChange={this.onChange}
+                style={style}
+                disabled={disabled}
+                label={label}
+                checked={checked}
+                className={className}
+                defaultChecked={defaultChecked}
+                dangerouslySetLabel={dangerouslySetLabel}
+                labelStyle={labelStyle}
+                labelClassName={labelClassName}
+                stopPropagation={stopPropagation}
+            >
+                {children}
+            </ToggleButton>
         );
     }
 
     render() {
         const {
-            className,
             toggleButton,
         } = this.props;
 
-        return toggleButton ? this.renderToggleButton(className) : this.renderCheckbox(className);
+        return toggleButton ? this.renderToggleButton() : this.renderCheckbox();
     }
 }
