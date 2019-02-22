@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import stopPropagationListener from '../../utils/stopPropagationListener';
 
+const CHECKBOX_LABEL_STYLE = { display: 'inline' };
+const SWITCH_LABEL_STYLE = { marginRight: '10px' };
+
 export default class Checkbox extends PureComponent {
     static propTypes = {
         style: PropTypes.object,
@@ -70,6 +73,14 @@ export default class Checkbox extends PureComponent {
             stopPropagation
         } = this.props;
 
+        let modifiedLabelStyle = labelStyle;
+        if ((!label && !dangerouslySetLabel && !children)) {
+            modifiedLabelStyle = {
+                ...labelStyle,
+                ...CHECKBOX_LABEL_STYLE
+            };
+        }
+
         return (
             <div className="cc__checkbox">
                 <input
@@ -89,7 +100,7 @@ export default class Checkbox extends PureComponent {
                 />
                 <label
                     key="label"
-                    style={{ ...labelStyle, ...(!label && !dangerouslySetLabel && !children ? { display: 'inline' } : null) }}
+                    style={modifiedLabelStyle}
                     className={labelClassName}
                     onClick={stopPropagation ? stopPropagationListener : null}
                     htmlFor={this.id}
@@ -115,6 +126,14 @@ export default class Checkbox extends PureComponent {
             stopPropagation
         } = this.props;
 
+        let modifiedLabelStyle = labelStyle;
+        if (label) {
+            modifiedLabelStyle = {
+                ...labelStyle,
+                ...SWITCH_LABEL_STYLE
+            };
+        }
+
         return (
             <div className="cc__switch">
                 <input
@@ -137,7 +156,7 @@ export default class Checkbox extends PureComponent {
                     className={labelClassName}
                     htmlFor={this.id}
                     dangerouslySetInnerHTML={dangerouslySetLabel}
-                    style={label ? { ...labelStyle, ...{ marginRight: '10px' } } : labelStyle}
+                    style={modifiedLabelStyle}
                     onClick={stopPropagation ? stopPropagationListener : null}
                 />
                 {!dangerouslySetLabel ? (children || label || '') : null}
