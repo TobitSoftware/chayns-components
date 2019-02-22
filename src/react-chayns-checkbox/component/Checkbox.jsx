@@ -74,7 +74,7 @@ export default class Checkbox extends PureComponent {
                 <input
                     key="input"
                     type="checkbox"
-                    className={`checkbox ${classNames}`}
+                    className={classnames('checkbox', classNames)}
                     ref={(ref) => {
                         this._node = ref;
                     }}
@@ -119,7 +119,7 @@ export default class Checkbox extends PureComponent {
                 <input
                     key="input"
                     type="checkbox"
-                    className={`switch ${classNames}`}
+                    className={classnames('switch', classNames)}
                     ref={(ref) => {
                         this._node = ref;
                     }}
@@ -149,10 +149,7 @@ export default class Checkbox extends PureComponent {
             className,
             toggleButton,
         } = this.props;
-        const classNames = classnames({
-            [className]: className
-        });
 
-        return toggleButton ? this.renderToggleButton(classNames) : this.renderCheckbox(classNames);
+        return toggleButton ? this.renderToggleButton(className) : this.renderCheckbox(className);
     }
 }
