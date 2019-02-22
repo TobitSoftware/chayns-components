@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import stopPropagationListener from '../../utils/stopPropagationListener';
-import ToggleButton from '../views/ToggleButton';
 
-const CHECKBOX_LABEL_STYLE = { display: 'inline' };
+import ToggleButton from '../views/ToggleButton';
+import CheckboxView from '../views/Checkbox';
 
 export default class Checkbox extends PureComponent {
     static propTypes = {
@@ -74,42 +72,24 @@ export default class Checkbox extends PureComponent {
             stopPropagation
         } = this.props;
 
-        let modifiedLabelStyle = labelStyle;
-        if ((!label && !dangerouslySetLabel && !children)) {
-            modifiedLabelStyle = {
-                ...labelStyle,
-                ...CHECKBOX_LABEL_STYLE
-            };
-        }
-
         return (
-            <div className="cc__checkbox">
-                <input
-                    key="input"
-                    type="checkbox"
-                    className={classnames('checkbox', className)}
-                    ref={(ref) => {
-                        this._node = ref;
-                    }}
-                    onClick={stopPropagation ? stopPropagationListener : null}
-                    onChange={this.onChange}
-                    id={this.id}
-                    disabled={disabled}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                    style={style}
-                />
-                <label
-                    key="label"
-                    style={modifiedLabelStyle}
-                    className={labelClassName}
-                    onClick={stopPropagation ? stopPropagationListener : null}
-                    htmlFor={this.id}
-                    dangerouslySetInnerHTML={dangerouslySetLabel}
-                >
-                    {!dangerouslySetLabel ? (children || label || '') : null}
-                </label>
-            </div>
+            <CheckboxView
+                id={this.id}
+                ref={(ref) => { this._node = ref; }}
+                onChange={this.onChange}
+                style={style}
+                disabled={disabled}
+                label={label}
+                checked={checked}
+                className={className}
+                defaultChecked={defaultChecked}
+                dangerouslySetLabel={dangerouslySetLabel}
+                labelStyle={labelStyle}
+                labelClassName={labelClassName}
+                stopPropagation={stopPropagation}
+            >
+                {children}
+            </CheckboxView>
         );
     }
 
