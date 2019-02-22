@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import stopPropagationListener from '../../utils/stopPropagationListener';
 
 export default class Checkbox extends PureComponent {
     static propTypes = {
@@ -78,7 +79,7 @@ export default class Checkbox extends PureComponent {
                     ref={(ref) => {
                         this._node = ref;
                     }}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                    onClick={stopPropagation ? stopPropagationListener : null}
                     onChange={this.onChange}
                     id={this.id}
                     disabled={disabled}
@@ -90,7 +91,7 @@ export default class Checkbox extends PureComponent {
                     key="label"
                     style={{ ...labelStyle, ...(!label && !dangerouslySetLabel && !children ? { display: 'inline' } : null) }}
                     className={labelClassName}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                    onClick={stopPropagation ? stopPropagationListener : null}
                     htmlFor={this.id}
                     dangerouslySetInnerHTML={dangerouslySetLabel}
                 >
@@ -129,7 +130,7 @@ export default class Checkbox extends PureComponent {
                     checked={checked}
                     defaultChecked={defaultChecked}
                     style={style}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                    onClick={stopPropagation ? stopPropagationListener : null}
                 />
                 <label
                     key="label"
@@ -137,7 +138,7 @@ export default class Checkbox extends PureComponent {
                     htmlFor={this.id}
                     dangerouslySetInnerHTML={dangerouslySetLabel}
                     style={label ? { ...labelStyle, ...{ marginRight: '10px' } } : labelStyle}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                    onClick={stopPropagation ? stopPropagationListener : null}
                 />
                 {!dangerouslySetLabel ? (children || label || '') : null}
             </div>
