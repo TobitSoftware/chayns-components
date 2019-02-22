@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
-import Icon from '../../react-chayns-icon/component/Icon';
 import getText from '../utils/getText';
+import Button from '../../react-chayns-button/component/Button';
 
 export default class LoadMore extends Component {
     static propTypes = {
@@ -23,12 +22,17 @@ export default class LoadMore extends Component {
         return (
             <div
                 className="load-more"
-                onClick={this.handleOnClick}
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    padding: '20px 0',
+                }}
             >
-                <Icon icon={faPlus} />
-                <div className="load-more__text">
+                <Button
+                    onClick={this.handleOnClick}
+                >
                     {getText('LOAD_MORE')}
-                </div>
+                </Button>
             </div>
         );
     }

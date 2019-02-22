@@ -20,7 +20,7 @@ const DICTIONARY = {
         en: 'furher sites'
     },
     LOAD_MORE: {
-        de: 'weitere laden',
+        de: 'Mehr anzeigen',
         en: ' load more'
     },
     LIVING_IN: {

@@ -99,6 +99,9 @@ export default class PersonFinderResults extends PureComponent {
             if (showWaitCursor) {
                 retVal.push((
                     <WaitCursor
+                        style={{
+                            padding: '24px 0'
+                        }}
                         key={`${type}-wait`}
                     />
                 ));
