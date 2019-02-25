@@ -38,10 +38,13 @@ export default class Bubble extends PureComponent {
         this.hide = this.hide.bind(this);
 
         this.key = Math.random().toString();
+        this.tooltipNode = React.createRef();
     }
 
     componentDidMount() {
-        this.tooltipNode.classList.add('cc__tooltip--hide');
+        if (this.tooltipNode.current) {
+            this.tooltipNode.current.classList.add('cc__tooltip--hide');
+        }
     }
 
     // componentDidUpdate(prevProps) {
@@ -54,18 +57,26 @@ export default class Bubble extends PureComponent {
     // }
 
     show() {
+        if (!this.tooltipNode.current) {
+            return;
+        }
+
         clearTimeout(this.timeout);
-        this.tooltipNode.classList.remove('cc__tooltip--hide');
+        this.tooltipNode.current.classList.remove('cc__tooltip--hide');
         this.timeout = setTimeout(() => {
-            this.tooltipNode.classList.add('cc__tooltip--active');
+            this.tooltipNode.current.classList.add('cc__tooltip--active');
         });
     }
 
     hide() {
+        if (!this.tooltipNode.current) {
+            return;
+        }
+
         clearTimeout(this.timeout);
-        this.tooltipNode.classList.remove('cc__tooltip--active');
+        this.tooltipNode.current.classList.remove('cc__tooltip--active');
         this.timeout = setTimeout(() => {
-            this.tooltipNode.classList.add('cc__tooltip--hide');
+            this.tooltipNode.current.classList.add('cc__tooltip--hide');
         }, 500);
     }
 
@@ -81,9 +92,7 @@ export default class Bubble extends PureComponent {
                 <div
                     className={`cc__tooltip cc__tooltip--position${position}`}
                     style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px` }) }}
-                    ref={(node) => {
-                        this.tooltipNode = node;
-                    }}
+                    ref={this.tooltipNode}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     key={`cc__tooltip${this.key}`}
