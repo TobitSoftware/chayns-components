@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-export default class Button extends Component {
+export default class Button extends PureComponent {
     static propTypes = {
         children: PropTypes.node.isRequired,
         chooseButton: PropTypes.bool,
@@ -28,29 +28,6 @@ export default class Button extends Component {
         secondary: false,
         stopPropagation: false,
     };
-
-    shouldComponentUpdate(nextProps) {
-        const {
-            buttonRef,
-            style,
-            className,
-            disabled,
-            chooseButton,
-            icon,
-            secondary,
-            children,
-        } = this.props;
-
-        return (buttonRef !== nextProps.buttonRef
-            || style !== nextProps.style
-            || className !== nextProps.className
-            || disabled !== nextProps.disabled
-            || chooseButton !== nextProps.chooseButton
-            || icon !== nextProps.icon
-            || secondary !== nextProps.secondary
-            || children !== nextProps.children
-        );
-    }
 
     handleClick = (event) => {
         const { onClick, disabled, stopPropagation } = this.props;
@@ -91,19 +68,16 @@ export default class Button extends Component {
                 ref={buttonRef}
                 {...other}
             >
-                {
-                    icon
-                        ? (
-                            <span className={classNames({
-                                button__icon: !chooseButton,
-                                choosebutton__icon: chooseButton
-                            })}
-                            >
-                                <Icon icon={icon}/>
-                            </span>
-                        )
-                        : null
-                }
+                {icon ? (
+                    <span
+                        className={classNames({
+                            button__icon: !chooseButton,
+                            choosebutton__icon: chooseButton
+                        })}
+                    >
+                        <Icon icon={icon}/>
+                    </span>
+                ) : null}
                 {children}
             </button>
         );
