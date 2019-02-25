@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -8,7 +8,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 
-export default class AmountControl extends Component {
+export default class AmountControl extends PureComponent {
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
         amount: PropTypes.number,
