@@ -16,16 +16,20 @@ export default class FormattedInput extends Component {
         defaultValue: null,
     };
 
+    lastSend = null;
+
     constructor(props) {
         super(props);
 
         this.formatter = props.initialFormatter;
 
+        this.lastSend = props.defaultValue;
         this.state = {
             value: this.formatter.format(props.defaultValue) || '',
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeEvent = this.handleChangeEvent.bind(this);
     }
 
     componentDidUpdate() {
@@ -69,7 +73,8 @@ export default class FormattedInput extends Component {
     handleChangeEvent = (value, ...args) => {
         const { onChange } = this.props;
 
-        if (onChange) {
+        if (onChange && value !== this.lastSend) {
+            this.lastSend = value;
             onChange(value, ...args);
         }
     };
