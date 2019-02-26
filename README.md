@@ -26,6 +26,7 @@ The following components are part of this package:
 | [react-chayns-combobox](/src/react-chayns-combobox/)               | Combobox Component                              | [Readme](/src/react-chayns-combobox/README.md)        |
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/)         | ContextMenu Component                           | [Readme](/src/react-chayns-contextmenu/README.md)     |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)         | EmojiInput Component                            | [Readme](/src/react-chayns-emoji_input/README.md)     |
+| [react-chayns-formatted_input](/src/react-chayns-formatted_input/) | FormattedInput Component                        | [Readme](/src/react-chayns-formatted_input/README.md) |
 | [react-chayns-gallery](/src/react-chayns-gallery/)                 | Gallery Component                               | [Readme](/src/react-chayns-gallery/README.md)         |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)       | GridCalendar Component                          | [Readme](/src/react-chayns-gridcalendar/README.md)    |
 | [react-chayns-icon](/src/react-chayns-icon/)                       | Icon Component                                  | [Readme](/src/react-chayns-icon/README.md)            |
