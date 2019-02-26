@@ -22,6 +22,8 @@ export default class IntegerFormatter extends Formatter {
 
     /* eslint-disable-next-line class-methods-use-this */
     validate(value) {
-        return value === String(parseInt(value, 10));
+        return {
+            valid: (value === String(parseInt(value, 10))),
+        };
     }
 }

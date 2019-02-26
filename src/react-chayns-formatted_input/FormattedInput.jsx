@@ -39,7 +39,8 @@ export default class FormattedInput extends Component {
             return;
         }
 
-        const newValue = formatter.validate(value) ? value : oldValue;
+        const validationInfo = formatter.validate(value);
+        const newValue = validationInfo.valid ? value : oldValue;
 
         this.setState({
             value: newValue,

@@ -88,18 +88,17 @@ export default class NumericFormatter extends Formatter {
 
         const valueParts = value.split(decimalSeparator);
 
-        if (valueParts.length > 2) {
-            return false;
+        if (valueParts.length > 2
+            || (decimals !== null && valueParts[1] && valueParts[1].length > decimals)
+            || !this.validateChars(value)
+        ) {
+            return {
+                valid: false,
+            };
         }
 
-        if (decimals !== null && valueParts[1] && valueParts[1].length > decimals) {
-            return false;
-        }
-
-        if (!this.validateChars(value)) {
-            return false;
-        }
-
-        return true;
+        return {
+            valid: true,
+        };
     }
 }

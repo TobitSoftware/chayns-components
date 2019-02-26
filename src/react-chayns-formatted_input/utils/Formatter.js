@@ -11,6 +11,8 @@ export default class Formatter {
 
     /* eslint-disable-next-line class-methods-use-this */
     validate() {
-        return true;
+        return {
+            valid: false,
+        };
     }
 }
