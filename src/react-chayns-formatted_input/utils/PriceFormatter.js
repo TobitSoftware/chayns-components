@@ -28,7 +28,6 @@ export default class PriceFormatter extends NumericFormatter {
         }
 
         if (!this.currency.sign) {
-            console.log('value', value);
             return super.format(value);
         }
 

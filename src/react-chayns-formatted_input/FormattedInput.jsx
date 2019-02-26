@@ -56,7 +56,6 @@ export default class FormattedInput extends Component {
         const newValue = validationInfo.valid ? value : oldValue;
 
         if (!validationInfo.valid) {
-            console.log('setSelection', validationInfo);
             this.selection = validationInfo.selection || null;
         }
 
