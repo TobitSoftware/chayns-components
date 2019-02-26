@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import FormattedInput from '../../src/react-chayns-formatted_input/FormattedInput';
+import FormattedInput from '../../src/react-chayns-formatted_input/component/FormattedInput';
 import NumericFormatter from '../../src/react-chayns-formatted_input/utils/NumericFormatter';
 import IntegerFormatter from '../../src/react-chayns-formatted_input/utils/IntegerFormatter';
 import PriceFormatter from '../../src/react-chayns-formatted_input/utils/PriceFormatter';
