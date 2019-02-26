@@ -15,6 +15,14 @@ import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
 import ExpandableContent from './react-chayns-expandable_content/component/ExpandableContent';
 
+import FormattedInput from './react-chayns-formatted_input/component/FormattedInput';
+import {
+    Formatter,
+    IntegerFormatter,
+    NumericFormatter,
+    PriceFormatter,
+} from './react-chayns-formatted_input/utils/index';
+
 import Gallery from './react-chayns-gallery/component/Gallery';
 import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
@@ -71,6 +79,11 @@ export {
     ContextMenu,
     EmojiInput,
     ExpandableContent,
+    FormattedInput,
+    Formatter,
+    IntegerFormatter,
+    NumericFormatter,
+    PriceFormatter,
     Gallery,
     GridCalendar,
     Icon,
