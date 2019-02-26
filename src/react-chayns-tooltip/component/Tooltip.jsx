@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,prefer-destructuring */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -42,7 +42,7 @@ export default class Tooltip extends Component {
         position: null,
         minWidth: 100,
         maxWidth: 250,
-        removeIcon: false,
+        removeIcon: chayns.env.isIOS,
         parent: null,
         coordinates: null,
         childrenStyle: null,
@@ -53,12 +53,11 @@ export default class Tooltip extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { position: null };
+        this.state = { position: null, x: 0, y: 0 };
 
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
         this.getContent = this.getContent.bind(this);
-        this.getCoordinates = this.getCoordinates.bind(this);
         this.getPosition = this.getPosition.bind(this);
 
         this.tooltipKey = Math.random().toString();
@@ -68,7 +67,6 @@ export default class Tooltip extends Component {
     }
 
     componentDidMount() {
-        this.getCoordinates();
         this.getPosition();
     }
 
@@ -76,7 +74,6 @@ export default class Tooltip extends Component {
         const { coordinates } = this.props;
 
         if (prevProps.coordinates !== coordinates) {
-            this.getCoordinates();
             this.getPosition();
         }
     }
@@ -111,37 +108,35 @@ export default class Tooltip extends Component {
         return nodeArray;
     }
 
-    getCoordinates() {
-        const { coordinates, position } = this.props;
-        if (coordinates) {
-            return coordinates;
-        }
-        if (this.childrenWrapper.current) {
+    async getPosition() {
+        const { position, coordinates } = this.props;
+        const { position: statePosition, x: stateX, y: stateY } = this.state;
+        let x = coordinates ? coordinates.x : 0;
+        let top = coordinates ? coordinates.y : 0;
+        let bottom = coordinates ? coordinates.y : 0;
+        if (this.childrenWrapper && !coordinates) {
             const rect = this.childrenWrapper.current.getBoundingClientRect();
-            return {
-                x: rect.left + (rect.width / 2),
-                y: (position === 1 || position === 2) ? rect.bottom : rect.top,
-            };
+            x = rect.left + (rect.width / 2);
+            top = rect.top;
+            bottom = rect.bottom;
         }
-        return { x: 0, y: 0 };
-    }
-
-    getPosition() {
-        const { position } = this.props;
-        const { position: statePosition } = this.state;
-        if (typeof position === 'number') {
-            this.setState({ position });
-        } else {
-            const { x, y } = this.getCoordinates();
+        let pos = position;
+        if (position === null) {
             const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
-            const pos = (y > window.innerHeight / 2) ? posArray[0] : posArray[1];
-            if (statePosition !== pos) {
-                this.setState({ position: pos });
-            }
+            pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
+        }
+        let y = (pos === 1 || pos === 2) ? bottom : top;
+        if (chayns.env.isApp) {
+            const { pageYOffset } = await chayns.getWindowMetrics();
+            y += pageYOffset;
+        }
+        if (statePosition !== pos || x !== stateX || y !== stateY) {
+            this.setState({ position: pos, x, y });
         }
     }
 
     show() {
+        this.getPosition();
         if (this.bubble.current) {
             this.bubble.current.show();
         }
@@ -165,12 +160,13 @@ export default class Tooltip extends Component {
             minWidth,
             maxWidth,
         } = this.props;
-        const { position } = this.state;
+
+        const { position, x, y } = this.state;
 
         return [
             position !== null ? (
                 <Bubble
-                    coordinates={this.getCoordinates()}
+                    coordinates={{ x, y }}
                     parent={parent}
                     position={position}
                     onMouseEnter={bindListeners ? this.show : null}
@@ -196,8 +192,9 @@ export default class Tooltip extends Component {
                 ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
-                onMouseOver={bindListeners ? this.show : null}
+                onMouseEnter={!chayns.env.isIOS && bindListeners ? this.show : null}
                 onMouseLeave={bindListeners ? this.hide : null}
+                onClick={chayns.env.isIOS && bindListeners ? this.show : null}
             >
                 {children}
             </div>

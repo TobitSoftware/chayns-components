@@ -6,6 +6,7 @@ import { ContextMenu } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
+import Icon from '../../src/react-chayns-icon/component/Icon';
 
 export default class ContextMenuExample extends Component {
     constructor() {
@@ -55,7 +56,10 @@ export default class ContextMenuExample extends Component {
                     right={<ContextMenu items={items} position={position % 4}/>}
                 >
                     <div className="accordion__content">
-                        Hello World
+                        <p>Hello World</p>
+                        <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
+                            <Icon icon={faCoffee}/>
+                        </ContextMenu>
                     </div>
                 </Accordion>
                 <div
