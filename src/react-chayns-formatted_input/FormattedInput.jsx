@@ -60,8 +60,10 @@ export default class FormattedInput extends Component {
             value: newValue,
         });
 
-        const parsedValue = formatter.parse(newValue);
-        this.handleChangeEvent(parsedValue, ...args);
+        if (validationInfo.valid) {
+            const parsedValue = formatter.parse(newValue);
+            this.handleChangeEvent(parsedValue, ...args);
+        }
     };
 
     handleChangeEvent = (value, ...args) => {
