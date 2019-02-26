@@ -4,12 +4,12 @@ import startsWith from '../../utils/startsWith';
 
 export default class PriceFormatter extends NumericFormatter {
     currency = {
-        sign: '€',
+        sign: '',
     };
 
-    constructor(currencySign = '€', {
+    constructor(currencySign = '', {
         decimalSeparator = ',',
-        thousandSeparator = '',
+        thousandSeparator = '.',
         currencyBefore = null,
     } = {}) {
         super({

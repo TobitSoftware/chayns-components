@@ -12,8 +12,6 @@ export default class InputExample extends PureComponent {
 
     static priceFormatter = new PriceFormatter();
 
-    static priceFormatterGbp = new PriceFormatter('£');
-
     onChange = (value, valid) => {
         console.log('onChange', value, valid);
     };
@@ -43,27 +41,17 @@ export default class InputExample extends PureComponent {
                         marginBottom: '20px'
                     }}
                 />
-                <h3>PriceFormatter</h3>
+                <h3>PriceFormatter (NumericFormatter)</h3>
                 <FormattedInput
                     defaultValue={100456.784}
                     initialFormatter={InputExample.priceFormatter}
-                    placeholder="input"
                     onChange={this.onChange}
                     style={{
                         width: '100%',
                         marginBottom: '20px'
                     }}
-                />
-                <h3>PriceFormatter (GBP)</h3>
-                <FormattedInput
-                    defaultValue={100456.784}
-                    initialFormatter={InputExample.priceFormatterGbp}
-                    placeholder="input"
-                    onChange={this.onChange}
-                    style={{
-                        width: '100%',
-                        marginBottom: '20px'
-                    }}
+                    dynamic
+                    placeholder="price"
                 />
             </div>
         );
