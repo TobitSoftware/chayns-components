@@ -82,7 +82,7 @@ export default class NumericFormatter extends Formatter {
         return true;
     }
 
-    validate(value) {
+    validate(value, selection) {
         const { decimals } = this.config;
         const { decimal: decimalSeparator } = this.config.seperators;
 
@@ -94,6 +94,10 @@ export default class NumericFormatter extends Formatter {
         ) {
             return {
                 valid: false,
+                selection: {
+                    start: Math.max(0, selection.start - 1),
+                    end: Math.min(value.length, selection.end),
+                },
             };
         }
 

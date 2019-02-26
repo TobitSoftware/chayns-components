@@ -21,9 +21,13 @@ export default class IntegerFormatter extends Formatter {
     }
 
     /* eslint-disable-next-line class-methods-use-this */
-    validate(value) {
+    validate(value, selection) {
         return {
             valid: (value === String(parseInt(value, 10))),
+            selection: {
+                start: Math.max(0, selection.start - 1),
+                end: Math.min(value.length, selection.end),
+            },
         };
     }
 }

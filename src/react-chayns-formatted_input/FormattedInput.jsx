@@ -31,6 +31,14 @@ export default class FormattedInput extends Component {
         this.handleChange = debounce(this.handleChange.bind(this), props.debounce);
     }
 
+    componentDidUpdate() {
+        if (this.selection && this.input) {
+            this.input.setSelectionRange(this.selection.start, this.selection.start);
+        }
+
+        this.selection = null;
+    }
+
     handleInputChange = (value, ...args) => {
         const { formatter } = this;
         const { value: oldValue } = this.state;
@@ -39,8 +47,18 @@ export default class FormattedInput extends Component {
             return;
         }
 
-        const validationInfo = formatter.validate(value);
+        const { selectionStart, selectionEnd } = this.input;
+        const selection = {
+            start: selectionStart,
+            end: selectionEnd,
+        };
+        const validationInfo = formatter.validate(value, selection);
         const newValue = validationInfo.valid ? value : oldValue;
+
+        if (!validationInfo.valid) {
+            console.log('setSelection', validationInfo);
+            this.selection = validationInfo.selection || null;
+        }
 
         this.setState({
             value: newValue,
@@ -84,6 +102,7 @@ export default class FormattedInput extends Component {
         return (
             <Input
                 {...props}
+                inputRef={(ref) => { this.input = ref; }}
                 value={value}
                 onChange={this.handleInputChange}
             />

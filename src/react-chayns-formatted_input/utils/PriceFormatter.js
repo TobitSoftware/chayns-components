@@ -27,6 +27,11 @@ export default class PriceFormatter extends NumericFormatter {
             return '';
         }
 
+        if (!this.currency.sign) {
+            console.log('value', value);
+            return super.format(value);
+        }
+
         if (this.currency.before) {
             return `${this.currency.sign} ${super.format(value)}`;
         }
@@ -34,28 +39,43 @@ export default class PriceFormatter extends NumericFormatter {
         return `${super.format(value)} ${this.currency.sign}`;
     }
 
-    removeCurrencySign(value) {
+    removeCurrencySign(value, selection = null) {
         let newValue = value;
+        const newSelection = { ...selection };
 
-        if (this.currency.before) {
-            if (startsWith(newValue, this.currency.sign)) {
-                newValue = newValue.slice(1);
-            }
+        if (this.currency.sign) {
+            if (this.currency.before) {
+                if (startsWith(newValue, this.currency.sign)) {
+                    newValue = newValue.slice(1);
 
-            if (startsWith(newValue, ' ')) {
-                newValue = newValue.slice(1);
-            }
-        } else {
-            if (endsWith(newValue, this.currency.sign)) {
-                newValue = newValue.slice(0, -this.currency.sign.length);
-            }
+                    newSelection.start = Math.max(0, newSelection.start - 1);
+                    newSelection.end = Math.max(0, newSelection.end - 1);
+                }
 
-            if (endsWith(newValue, ' ')) {
-                newValue = newValue.slice(0, -1);
+                if (startsWith(newValue, ' ')) {
+                    newValue = newValue.slice(1);
+
+                    newSelection.start = Math.max(0, newSelection.start - 1);
+                    newSelection.end = Math.max(0, newSelection.end - 1);
+                }
+            } else {
+                if (endsWith(newValue, this.currency.sign)) {
+                    newValue = newValue.slice(0, -this.currency.sign.length);
+                }
+
+                if (endsWith(newValue, ' ')) {
+                    newValue = newValue.slice(0, -1);
+                }
+
+                newSelection.start = Math.min(newSelection.start, newValue.length);
+                newSelection.end = Math.min(newSelection.end, newValue.length);
             }
         }
 
-        return newValue;
+        return {
+            value: newValue,
+            selection: newSelection,
+        };
     }
 
     parse(value) {
@@ -65,12 +85,12 @@ export default class PriceFormatter extends NumericFormatter {
 
         const newValue = this.removeCurrencySign(value);
 
-        return super.parse(newValue);
+        return super.parse(newValue.value);
     }
 
-    validate(value) {
-        const newValue = this.removeCurrencySign(value);
+    validate(value, selection) {
+        const { value: newValue, selection: newSelection } = this.removeCurrencySign(value, selection);
 
-        return super.validate(newValue);
+        return super.validate(newValue, newSelection);
     }
 }
