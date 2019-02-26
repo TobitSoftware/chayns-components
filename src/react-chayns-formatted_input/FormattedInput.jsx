@@ -14,7 +14,7 @@ export default class FormattedInput extends Component {
     };
 
     static defaultProps = {
-        debounce: 2000,
+        debounce: 5000,
         onChange: null,
         defaultValue: null,
     };
@@ -28,7 +28,8 @@ export default class FormattedInput extends Component {
             value: this.formatter.format(props.defaultValue) || '',
         };
 
-        this.handleChange = debounce(this.handleChange.bind(this), props.debounce);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleTimeChange = debounce(this.handleChange, props.debounce);
     }
 
     componentDidUpdate() {
@@ -63,10 +64,12 @@ export default class FormattedInput extends Component {
             value: newValue,
         });
 
-        this.handleChange(newValue, ...args);
+        this.handleTimeChange(newValue, ...args);
     };
 
     handleChange = (value, ...args) => {
+        this.handleTimeChange.cancel();
+
         const { onChange } = this.props;
         const { formatter } = this;
 
@@ -104,6 +107,7 @@ export default class FormattedInput extends Component {
                 inputRef={(ref) => { this.input = ref; }}
                 value={value}
                 onChange={this.handleInputChange}
+                onBlur={this.handleChange}
             />
         );
     }
