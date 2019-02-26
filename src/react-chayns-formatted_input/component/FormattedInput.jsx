@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Input from '../react-chayns-input/component/Input';
-import Formatter from './utils/Formatter';
+import Input from '../../react-chayns-input/component/Input';
+import Formatter from '../utils/Formatter';
 
 export default class FormattedInput extends Component {
     static propTypes = {
