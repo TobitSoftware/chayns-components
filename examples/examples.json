@@ -171,4 +171,9 @@
   "title": "FileInput",
   "example": "react-chayns-file_input/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-slider",
+  "title": "Slider",
+  "example": "react-chayns-slider/Example.jsx",
+  "readme": true
 }]
