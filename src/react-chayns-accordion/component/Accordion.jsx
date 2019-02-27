@@ -6,6 +6,7 @@ import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
 import AccordionSearch from './AccordionSearch';
 import AccordionRightAnimate from './AccordionRightAnimate';
+import AccordionHeadRight from './AccordionHeadRight';
 
 const CLOSE = 1;
 
@@ -85,8 +86,8 @@ export default class Accordion extends PureComponent {
     static dataGroups = {};
 
     constructor(props) {
+        super(props);
         const { defaultOpened, open, className } = props;
-        super();
 
         this.state = {
             currentState: (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE,
@@ -267,51 +268,6 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    renderRight() {
-        const {
-            right,
-            onSearch,
-            onSearchEnter,
-            searchPlaceholder,
-        } = this.props;
-
-        if (!(right || onSearch || onSearchEnter)) {
-            return null;
-        }
-
-        const { currentState } = this.state;
-
-        const rightHasState = !!(right.open || right.close);
-        const openChildren = rightHasState ? right.open : null;
-        const closeChildren = rightHasState ? right.close : right;
-
-        return (
-            <div className="accordion__head__right">
-                <div
-                    className={classNames({
-                        'right--animate': onSearch || onSearchEnter || rightHasState
-                    })}
-                    style={{ opacity: (onSearch || onSearchEnter || rightHasState) && currentState === OPEN ? 0 : 1 }}
-                >
-                    {closeChildren}
-                </div>
-                {onSearch || onSearchEnter ? (
-                    <AccordionSearch
-                        onSearch={onSearch}
-                        onSearchEnter={onSearchEnter}
-                        currentState={currentState}
-                        searchPlaceholder={searchPlaceholder}
-                    />
-                ) : null}
-                {openChildren && (
-                    <AccordionRightAnimate currentState={currentState}>
-                        {openChildren}
-                    </AccordionRightAnimate>
-                )}
-            </div>
-        );
-    }
-
     render() {
         const {
             id,
@@ -326,6 +282,10 @@ export default class Accordion extends PureComponent {
             noIcon,
             disabled,
             fixed,
+            right,
+            onSearch,
+            onSearchEnter,
+            searchPlaceholder,
         } = this.props;
 
         const { currentState } = this.state;
@@ -377,7 +337,13 @@ export default class Accordion extends PureComponent {
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
                     </div>
-                    {this.renderRight()}
+                    <AccordionHeadRight
+                        right={right}
+                        onSearch={onSearch}
+                        onSearchEnter={onSearchEnter}
+                        searchPlaceholder={searchPlaceholder}
+                        state={currentState}
+                    />
                 </div>
                 <div
                     className="accordion__body"
