@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { CSSTransition } from 'react-transition-group';
 import AccordionSearch from './AccordionSearch';
-import AccordionRightAnimate from './AccordionRightAnimate';
 
 const OPEN = 2;
 const CLOSE = 1;
@@ -30,32 +29,6 @@ export default class AccordionHeadRight extends PureComponent {
         state: null,
     };
 
-    state = {
-        animateRight: false,
-    };
-
-    componentDidUpdate(prevProps) {
-        const { state } = this.props;
-
-        if (prevProps.state !== state) {
-            clearTimeout(this.timeout);
-
-            if (state === CLOSE) {
-                /* TODO: Use react-transition-group or getDerivedStateFromProps */
-                /* eslint-disable-next-line react/no-did-update-set-state */
-                this.setState({
-                    animateRight: true,
-                });
-            } else {
-                this.timeout = window.setTimeout(() => {
-                    this.setState({
-                        animateRight: false,
-                    });
-                }, 500);
-            }
-        }
-    }
-
     renderOpen(openChildren) {
         const {
             onSearch,
@@ -65,11 +38,7 @@ export default class AccordionHeadRight extends PureComponent {
         } = this.props;
 
         if (openChildren) {
-            return (
-                <AccordionRightAnimate currentState={state}>
-                    {openChildren}
-                </AccordionRightAnimate>
-            );
+            return openChildren;
         }
 
         if (onSearch || onSearchEnter) {
@@ -102,22 +71,36 @@ export default class AccordionHeadRight extends PureComponent {
         const openChildren = rightHasState ? right.open : null;
         const closeChildren = rightHasState ? right.close : right;
 
-        const { animateRight } = this.state;
+        if (!(onSearch || onSearchEnter || rightHasState)) {
+            return (
+                <div className="accordion__head__right">
+                    {closeChildren}
+                </div>
+            );
+        }
 
         return (
             <div className="accordion__head__right">
-                <div
-                    className={classNames({
-                        'right--animate': onSearch || onSearchEnter || rightHasState,
-                        'right--open': ((onSearch || onSearchEnter || rightHasState) && (state === OPEN || animateRight))
-                    })}
-                    style={{
-                        opacity: (onSearch || onSearchEnter || rightHasState) && state === OPEN ? 0 : 1,
-                    }}
+                <CSSTransition
+                    key="closed"
+                    classNames="right--background"
+                    timeout={520}
+                    in={state === CLOSE}
+                    unmountOnExit
                 >
-                    {closeChildren}
-                </div>
-                {this.renderOpen(openChildren)}
+                    <div>
+                        {closeChildren}
+                    </div>
+                </CSSTransition>
+                <CSSTransition
+                    key="open"
+                    classNames="right--foreground"
+                    timeout={500}
+                    in={state === OPEN}
+                    unmountOnExit
+                >
+                    <div>{this.renderOpen(openChildren)}</div>
+                </CSSTransition>
             </div>
         );
     }
