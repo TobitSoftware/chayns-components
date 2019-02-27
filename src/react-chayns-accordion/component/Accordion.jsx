@@ -22,7 +22,13 @@ export default class Accordion extends PureComponent {
             }).isRequired
         ]).isRequired,
         children: PropTypes.node.isRequired,
-        right: PropTypes.node,
+        right: PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.shape({
+                open: PropTypes.node.isRequired,
+                close: PropTypes.node.isRequired
+            }).isRequired
+        ]),
         renderClosed: PropTypes.bool,
         isWrapped: PropTypes.bool,
         dataGroup: PropTypes.string,
@@ -260,6 +266,51 @@ export default class Accordion extends PureComponent {
         }
     }
 
+    renderRight() {
+        const {
+            right,
+            onSearch,
+            onSearchEnter,
+            searchPlaceholder,
+        } = this.props;
+
+        if (!(right || onSearch || onSearchEnter)) {
+            return null;
+        }
+
+        const { currentState } = this.state;
+
+        const rightHasState = !!(right.open || right.close);
+        const openChildren = rightHasState ? right.open : null;
+        const closeChildren = rightHasState ? right.close : right;
+
+        return (
+            <div className="accordion__head__right">
+                <div
+                    className={classNames({
+                        'right--animate': onSearch || onSearchEnter || rightHasState
+                    })}
+                    style={{ opacity: (onSearch || onSearchEnter || rightHasState) && currentState === OPEN ? 0 : 1 }}
+                >
+                    {closeChildren}
+                </div>
+                {
+                    onSearch || onSearchEnter
+                        ? (
+                            <AccordionSearch
+                                onSearch={onSearch}
+                                onSearchEnter={onSearchEnter}
+                                currentState={currentState}
+                                searchPlaceholder={searchPlaceholder}
+                            />
+                        )
+                        : null
+                }
+                {openChildren}
+            </div>
+        );
+    }
+
     render() {
         const {
             id,
@@ -270,12 +321,8 @@ export default class Accordion extends PureComponent {
             reference,
             icon,
             head,
-            right,
             noRotate,
             noIcon,
-            onSearch,
-            onSearchEnter,
-            searchPlaceholder,
             disabled,
             fixed,
         } = this.props;
@@ -329,34 +376,7 @@ export default class Accordion extends PureComponent {
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
                     </div>
-                    {
-                        right || onSearch || onSearchEnter
-                            ? (
-                                <div className="accordion__head__right">
-                                    <div
-                                        className={classNames({
-                                            'right--search': onSearch || onSearchEnter
-                                        })}
-                                        style={{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 }}
-                                    >
-                                        {right}
-                                    </div>
-                                    {
-                                        onSearch || onSearchEnter
-                                            ? (
-                                                <AccordionSearch
-                                                    onSearch={onSearch}
-                                                    onSearchEnter={onSearchEnter}
-                                                    currentState={currentState}
-                                                    searchPlaceholder={searchPlaceholder}
-                                                />
-                                            )
-                                            : null
-                                    }
-                                </div>
-                            )
-                            : null
-                    }
+                    {this.renderRight()}
                 </div>
                 <div
                     className="accordion__body"

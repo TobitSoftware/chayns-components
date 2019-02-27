@@ -11,7 +11,7 @@ import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { show: true };
+        this.state = { show: true, showBadge: true };
     }
 
     render() {
@@ -173,6 +173,14 @@ export default class AccordionExample extends Component {
                     head="Accordion (disabled)"
                     onClick={() => console.log('Disabled accordion clicked.')}
                     disabled
+                >
+                    Content
+                </Accordion>
+                <Accordion
+                    head="Accordion (animated badge)"
+                    right={{
+                        close: <Badge>15</Badge>,
+                    }}
                 >
                     Content
                 </Accordion>
