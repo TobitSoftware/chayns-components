@@ -21,6 +21,9 @@ import {
     IntegerFormatter,
     DecimalFormatter,
     PriceFormatter,
+    FORMAT_INTEGER,
+    FORMAT_DECIMAL,
+    FORMAT_PRICE,
 } from './react-chayns-formatted_input/utils/index';
 
 import Gallery from './react-chayns-gallery/component/Gallery';
@@ -114,4 +117,7 @@ export {
     resolveAbsoluteImport,
     imageUpload,
     CHAYNS_CSS_VERSION,
+    FORMAT_INTEGER,
+    FORMAT_DECIMAL,
+    FORMAT_PRICE,
 };
