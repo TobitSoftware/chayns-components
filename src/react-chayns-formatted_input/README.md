@@ -23,6 +23,13 @@ const formatter = new DecimalFormatter();
 <FormattedInput initialFormatter={formatter} />
 ```
 
+There are already instantiated formatters exported by ChaynsComponents, which you could use:
+```jsx harmony
+import { FORMAT_DECIMAL } from 'chayns-components';
+
+<FormattedInput initialFormatter={FORMAT_DECIMAL} />
+```
+
 
 ## Props
 
@@ -35,11 +42,12 @@ This means, that currently you could not use this component as controlled compon
 | formatter    | Instance of a formatter (could also be a custom formatter, that extends the Formatter-class) | Formatter      | *required*    |
 
 ## Formatter
-ChaynsComponents comes with some default formatters that could be use and that respects the style
-that should be used for inputs:
-- IntegerFormatter
-- DecimalFormatter
-- PriceFormatter
+ChaynsComponents comes with some default formatters that could be used and that respects the style
+that should be used for inputs. ChaynsComponents exports instances of any default formatter,
+which should be used inside most projects:
+- IntegerFormatter (instance: FORMAT_INTEGER)
+- DecimalFormatter (instance: FORMAT_DECIMAL)
+- PriceFormatter (instance: FORMAT_PRICE)
 
 ### Custom
 You could also specify a custom formatter and use it with the FormattedInput-component.
