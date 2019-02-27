@@ -30,6 +30,32 @@ export default class AccordionHeadRight extends PureComponent {
         state: null,
     };
 
+    state = {
+        animateRight: false,
+    };
+
+    componentDidUpdate(prevProps) {
+        const { state } = this.props;
+
+        if (prevProps.state !== state) {
+            clearTimeout(this.timeout);
+
+            if (state === CLOSE) {
+                /* TODO: Use react-transition-group or getDerivedStateFromProps */
+                /* eslint-disable-next-line react/no-did-update-set-state */
+                this.setState({
+                    animateRight: true,
+                });
+            } else {
+                this.timeout = window.setTimeout(() => {
+                    this.setState({
+                        animateRight: false,
+                    });
+                }, 500);
+            }
+        }
+    }
+
     renderOpen(openChildren) {
         const {
             onSearch,
@@ -76,13 +102,18 @@ export default class AccordionHeadRight extends PureComponent {
         const openChildren = rightHasState ? right.open : null;
         const closeChildren = rightHasState ? right.close : right;
 
+        const { animateRight } = this.state;
+
         return (
             <div className="accordion__head__right">
                 <div
                     className={classNames({
-                        'right--animate': onSearch || onSearchEnter || rightHasState
+                        'right--animate': onSearch || onSearchEnter || rightHasState,
+                        'right--open': ((onSearch || onSearchEnter || rightHasState) && (state === OPEN || animateRight))
                     })}
-                    style={{ opacity: (onSearch || onSearchEnter || rightHasState) && state === OPEN ? 0 : 1 }}
+                    style={{
+                        opacity: (onSearch || onSearchEnter || rightHasState) && state === OPEN ? 0 : 1,
+                    }}
                 >
                     {closeChildren}
                 </div>
