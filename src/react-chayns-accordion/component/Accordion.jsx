@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
 import AccordionSearch from './AccordionSearch';
+import AccordionRightAnimate from './AccordionRightAnimate';
 
 const CLOSE = 1;
 
@@ -294,19 +295,19 @@ export default class Accordion extends PureComponent {
                 >
                     {closeChildren}
                 </div>
-                {
-                    onSearch || onSearchEnter
-                        ? (
-                            <AccordionSearch
-                                onSearch={onSearch}
-                                onSearchEnter={onSearchEnter}
-                                currentState={currentState}
-                                searchPlaceholder={searchPlaceholder}
-                            />
-                        )
-                        : null
-                }
-                {openChildren}
+                {onSearch || onSearchEnter ? (
+                    <AccordionSearch
+                        onSearch={onSearch}
+                        onSearchEnter={onSearchEnter}
+                        currentState={currentState}
+                        searchPlaceholder={searchPlaceholder}
+                    />
+                ) : null}
+                {openChildren && (
+                    <AccordionRightAnimate currentState={currentState}>
+                        {openChildren}
+                    </AccordionRightAnimate>
+                )}
             </div>
         );
     }
