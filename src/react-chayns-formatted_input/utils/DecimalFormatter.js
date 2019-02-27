@@ -1,7 +1,7 @@
 import Formatter from './Formatter';
 import IntegerFormatter from './IntegerFormatter';
 
-export default class NumericFormatter extends Formatter {
+export default class DecimalFormatter extends Formatter {
     config = {
         seperators: {
             thousand: false,

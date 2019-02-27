@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 
 import FormattedInput from '../../src/react-chayns-formatted_input/component/FormattedInput';
-import NumericFormatter from '../../src/react-chayns-formatted_input/utils/NumericFormatter';
+import DecimalFormatter from '../../src/react-chayns-formatted_input/utils/DecimalFormatter';
 import IntegerFormatter from '../../src/react-chayns-formatted_input/utils/IntegerFormatter';
 import PriceFormatter from '../../src/react-chayns-formatted_input/utils/PriceFormatter';
 
 export default class InputExample extends PureComponent {
     static integerFormatter = new IntegerFormatter();
 
-    static numericFormatter = new NumericFormatter();
+    static numericFormatter = new DecimalFormatter();
 
     static priceFormatter = new PriceFormatter();
 

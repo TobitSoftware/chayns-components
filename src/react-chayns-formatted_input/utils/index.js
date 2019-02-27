@@ -1,11 +1,11 @@
 import Formatter from './Formatter';
 import IntegerFormatter from './IntegerFormatter';
-import NumericFormatter from './NumericFormatter';
+import DecimalFormatter from './DecimalFormatter';
 import PriceFormatter from './PriceFormatter';
 
 export {
     Formatter,
     IntegerFormatter,
-    NumericFormatter,
+    DecimalFormatter,
     PriceFormatter,
 };

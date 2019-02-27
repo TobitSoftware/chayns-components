@@ -1,8 +1,8 @@
-import NumericFormatter from './NumericFormatter';
+import DecimalFormatter from './DecimalFormatter';
 import endsWith from '../../utils/endsWith';
 import startsWith from '../../utils/startsWith';
 
-export default class PriceFormatter extends NumericFormatter {
+export default class PriceFormatter extends DecimalFormatter {
     currency = {
         sign: '',
     };
