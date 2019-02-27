@@ -11,7 +11,7 @@ import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { show: true, showBadge: true };
+        this.state = { show: true };
     }
 
     render() {
