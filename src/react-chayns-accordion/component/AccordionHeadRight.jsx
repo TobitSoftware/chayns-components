@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AccordionSearch from './AccordionSearch';
@@ -7,7 +7,7 @@ import AccordionRightAnimate from './AccordionRightAnimate';
 const OPEN = 2;
 const CLOSE = 1;
 
-export default class AccordionHeadRight extends Component {
+export default class AccordionHeadRight extends PureComponent {
     static propTypes = {
         right: PropTypes.oneOfType([
             PropTypes.node.isRequired,
@@ -30,12 +30,41 @@ export default class AccordionHeadRight extends Component {
         state: null,
     };
 
+    renderOpen(openChildren) {
+        const {
+            onSearch,
+            onSearchEnter,
+            searchPlaceholder,
+            state,
+        } = this.props;
+
+        if (openChildren) {
+            return (
+                <AccordionRightAnimate currentState={state}>
+                    {openChildren}
+                </AccordionRightAnimate>
+            );
+        }
+
+        if (onSearch || onSearchEnter) {
+            return (
+                <AccordionSearch
+                    onSearch={onSearch}
+                    onSearchEnter={onSearchEnter}
+                    currentState={state}
+                    searchPlaceholder={searchPlaceholder}
+                />
+            );
+        }
+
+        return null;
+    }
+
     render() {
         const {
             right,
             onSearch,
             onSearchEnter,
-            searchPlaceholder,
             state,
         } = this.props;
 
@@ -57,19 +86,7 @@ export default class AccordionHeadRight extends Component {
                 >
                     {closeChildren}
                 </div>
-                {onSearch || onSearchEnter ? (
-                    <AccordionSearch
-                        onSearch={onSearch}
-                        onSearchEnter={onSearchEnter}
-                        currentState={state}
-                        searchPlaceholder={searchPlaceholder}
-                    />
-                ) : null}
-                {openChildren && (
-                    <AccordionRightAnimate currentState={state}>
-                        {openChildren}
-                    </AccordionRightAnimate>
-                )}
+                {this.renderOpen(openChildren)}
             </div>
         );
     }

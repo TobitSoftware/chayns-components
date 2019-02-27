@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
-import AccordionSearch from './AccordionSearch';
-import AccordionRightAnimate from './AccordionRightAnimate';
 import AccordionHeadRight from './AccordionHeadRight';
 
 const CLOSE = 1;
