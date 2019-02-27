@@ -23,7 +23,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ListItem: 'react-chayns-list/component/ListItem.js',
         ModeSwitch: 'react-chayns-modeswitch/component/ModeSwitch.js',
         Mode: 'react-chayns-modeswitch/component/Mode.js',
-        NumericFormatter: 'react-chayns-formatted_input/utils/NumericFormatter.js',
+        DecimalFormatter: 'react-chayns-formatted_input/utils/DecimalFormatter.js',
         OrientationHelper: 'utils/OrientationHelper.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
         PriceFormatter: 'react-chayns-formatted_input/utils/PriceFormatter.js',

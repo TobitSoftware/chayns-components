@@ -11,14 +11,14 @@ npm install -S chayns-components@latest
 The input and a formatter has to be imported:
 
 ```jsx harmony
-import { FormattedInput, NumericFormatter } from 'chayns-components';
+import { FormattedInput, DecimalFormatter } from 'chayns-components';
 ```
 
 You have to instantiate the formatter once
 (maybe inside the constructor, as static variable or constant variable inside the module):
 
 ```jsx harmony
-const formatter = new NumericFormatter();
+const formatter = new DecimalFormatter();
 
 <FormattedInput initialFormatter={formatter} />
 ```
@@ -38,7 +38,7 @@ This means, that currently you could not use this component as controlled compon
 ChaynsComponents comes with some default formatters that could be use and that respects the style
 that should be used for inputs:
 - IntegerFormatter
-- NumericFormatter
+- DecimalFormatter
 - PriceFormatter
 
 ### Custom

@@ -19,7 +19,7 @@ import FormattedInput from './react-chayns-formatted_input/component/FormattedIn
 import {
     Formatter,
     IntegerFormatter,
-    NumericFormatter,
+    DecimalFormatter,
     PriceFormatter,
 } from './react-chayns-formatted_input/utils/index';
 
@@ -82,7 +82,7 @@ export {
     FormattedInput,
     Formatter,
     IntegerFormatter,
-    NumericFormatter,
+    DecimalFormatter,
     PriceFormatter,
     Gallery,
     GridCalendar,
