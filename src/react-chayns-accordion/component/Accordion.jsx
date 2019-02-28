@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
-import AccordionSearch from './AccordionSearch';
+import AccordionHeadRight from './AccordionHeadRight';
 
 const CLOSE = 1;
 
@@ -22,7 +22,13 @@ export default class Accordion extends PureComponent {
             }).isRequired
         ]).isRequired,
         children: PropTypes.node.isRequired,
-        right: PropTypes.node,
+        right: PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.shape({
+                open: PropTypes.node.isRequired,
+                close: PropTypes.node.isRequired
+            }).isRequired
+        ]),
         renderClosed: PropTypes.bool,
         isWrapped: PropTypes.bool,
         dataGroup: PropTypes.string,
@@ -78,8 +84,8 @@ export default class Accordion extends PureComponent {
     static dataGroups = {};
 
     constructor(props) {
+        super(props);
         const { defaultOpened, open, className } = props;
-        super();
 
         this.state = {
             currentState: (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE,
@@ -270,14 +276,14 @@ export default class Accordion extends PureComponent {
             reference,
             icon,
             head,
-            right,
             noRotate,
             noIcon,
+            disabled,
+            fixed,
+            right,
             onSearch,
             onSearchEnter,
             searchPlaceholder,
-            disabled,
-            fixed,
         } = this.props;
 
         const { currentState } = this.state;
@@ -329,34 +335,13 @@ export default class Accordion extends PureComponent {
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
                     </div>
-                    {
-                        right || onSearch || onSearchEnter
-                            ? (
-                                <div className="accordion__head__right">
-                                    <div
-                                        className={classNames({
-                                            'right--search': onSearch || onSearchEnter
-                                        })}
-                                        style={{ opacity: (onSearch || onSearchEnter) && currentState === OPEN ? 0 : 1 }}
-                                    >
-                                        {right}
-                                    </div>
-                                    {
-                                        onSearch || onSearchEnter
-                                            ? (
-                                                <AccordionSearch
-                                                    onSearch={onSearch}
-                                                    onSearchEnter={onSearchEnter}
-                                                    currentState={currentState}
-                                                    searchPlaceholder={searchPlaceholder}
-                                                />
-                                            )
-                                            : null
-                                    }
-                                </div>
-                            )
-                            : null
-                    }
+                    <AccordionHeadRight
+                        right={right}
+                        onSearch={onSearch}
+                        onSearchEnter={onSearchEnter}
+                        searchPlaceholder={searchPlaceholder}
+                        state={currentState}
+                    />
                 </div>
                 <div
                     className="accordion__body"

@@ -176,6 +176,14 @@ export default class AccordionExample extends Component {
                 >
                     Content
                 </Accordion>
+                <Accordion
+                    head="Accordion (animated badge)"
+                    right={{
+                        close: <Badge>15</Badge>,
+                    }}
+                >
+                    Content
+                </Accordion>
             </div>
         );
     }
