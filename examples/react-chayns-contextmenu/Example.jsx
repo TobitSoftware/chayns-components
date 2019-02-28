@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 
 import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
-import { ContextMenu } from '../../src/index';
+import { ContextMenu, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 import Icon from '../../src/react-chayns-icon/component/Icon';
+import List from '../../src/react-chayns-list/component/List';
 
 export default class ContextMenuExample extends Component {
     constructor() {
@@ -16,6 +17,7 @@ export default class ContextMenuExample extends Component {
             x: 0,
             y: 0,
             position: 0,
+            listCoordinates: { x: 0, y: 0 },
         };
 
         this.buttonClick = this.buttonClick.bind(this);
@@ -28,7 +30,7 @@ export default class ContextMenuExample extends Component {
 
     render() {
         const {
-            x, y, position
+            x, y, position, listCoordinates
         } = this.state;
 
         const items = [
@@ -49,10 +51,10 @@ export default class ContextMenuExample extends Component {
         return (
             <div>
                 <Button onClick={this.buttonClick}>
-                    Position ändern
+                    Change position
                 </Button>
                 <Accordion
-                    head="Accordion mit ContextMenu"
+                    head="Accordion with ContextMenu"
                     right={<ContextMenu items={items} position={position % 4}/>}
                 >
                     <div className="accordion__content">
@@ -97,6 +99,45 @@ export default class ContextMenuExample extends Component {
                         childrenStyle={{ position: 'absolute', top: '1px', right: '1px' }}
                     />
                 </div>
+                <Accordion head="List with one contextMenu for all entries">
+                    <List>{
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(number => (
+                            <ListItem
+                                title={`Listentry ${number}`}
+                                subtitle="Description"
+                                right={(
+                                    <div
+                                        style={{
+                                            height: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Icon
+                                            className="listTrigger"
+                                            icon="ts-ellipsis_v"
+                                            onClick={(e) => {
+                                                const { top, left, width } = e.target.getBoundingClientRect();
+                                                this.setState({ listCoordinates: { x: left + (width / 2), y: top } });
+                                                this.listContextMenu.show();
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            />
+                        ))
+                    }
+                    </List>
+                </Accordion>
+                <ContextMenu
+                    items={items}
+                    coordinates={listCoordinates}
+                    position={0}
+                    ref={ref => this.listContextMenu = ref}
+                    onLayerClick={(e) => {
+                        if (!e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
+                    }}
+                />
             </div>
         );
     }
