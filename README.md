@@ -10,7 +10,16 @@
 The ChaynsComponents can be installed directly from npm by using the following package:
 
     npm install -S chayns-components@latest
+    
+The corresponding styles are included in our [chayns CSS API](https://github.com/TobitSoftware/chayns-css). Also, you have to load our [chayns JS API](https://github.com/TobitSoftware/chayns-js) to use the components.
 
+```HTML
+<!-- css styles -->
+<link rel="stylesheet" href="https://api.chayns.net/css/v4.1/">
+
+<!-- js api -->
+<script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
+``` 
 
 ## Chayns Components ##
 The following components are part of this package:
@@ -63,6 +72,7 @@ For starting the examples you have to first install all dependencies...
 npm i
 ```
 ... and then start the webpack-dev-server with the following command:
+
 ```
 npm start
 ```
