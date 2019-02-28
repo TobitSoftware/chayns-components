@@ -20,6 +20,7 @@ export default class ModeSwitch extends Component {
         onChange: PropTypes.func,
         defaultMode: PropTypes.number,
         show: PropTypes.bool,
+        parent: PropTypes.arrayOf(PropTypes.node),
     };
 
     static defaultProps = {
@@ -27,7 +28,8 @@ export default class ModeSwitch extends Component {
         save: false,
         onChange: null,
         defaultMode: null,
-        show: false,
+        show: null,
+        parent: null,
     };
 
     static modes = [];
@@ -37,6 +39,10 @@ export default class ModeSwitch extends Component {
     static open = false;
 
     static onChangeListener = [];
+
+    static adminSwitchSupport = false;
+
+    static adminSwitchStatus = 0;
 
     static getCurrentMode() {
         const { modes, activeModeId } = ModeSwitch;
@@ -68,6 +74,8 @@ export default class ModeSwitch extends Component {
             activeModeId: null,
             open: false
         };
+        ModeSwitch.adminSwitchStatus = chayns.env.user.adminMode ? 1 : 0;
+        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp);
 
         window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(this.init);
@@ -126,14 +134,19 @@ export default class ModeSwitch extends Component {
     }
 
     async init() {
-        const { defaultMode, save, modes } = this.props;
+        const {
+            defaultMode, save, modes, parent
+        } = this.props;
+        this.pageYOffset = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect().top;
         if (chayns.env.user.isAuthenticated) {
             ModeSwitch.modes = this.setModes(modes);
             ModeSwitch.activeModeId = defaultMode || 0;
             ModeSwitch.open = false;
 
-            chayns.removeAdminSwitchListener(this.switchMode);
-            chayns.addAdminSwitchListener(this.switchMode);
+            if (ModeSwitch.adminSwitchSupport) {
+                chayns.removeAdminSwitchListener(this.switchMode);
+                chayns.addAdminSwitchListener(this.switchMode);
+            }
             if (defaultMode) {
                 ModeSwitch.activeModeId = defaultMode;
             }
@@ -143,8 +156,8 @@ export default class ModeSwitch extends Component {
                     ModeSwitch.activeModeId = storage;
                 }
             }
-            if (ModeSwitch.activeModeId === 0 || ModeSwitch.activeModeId === 1) {
-                ModeSwitch.activeModeId = chayns.env.user.adminMode ? 1 : 0;
+            if (ModeSwitch.adminSwitchSupport && (ModeSwitch.activeModeId === 0 || ModeSwitch.activeModeId === 1)) {
+                ModeSwitch.activeModeId = ModeSwitch.adminSwitchStatus;
             }
         } else {
             ModeSwitch.modes = [];
@@ -162,13 +175,16 @@ export default class ModeSwitch extends Component {
 
     switchMode(id) {
         if (id.mode !== undefined) {
+            ModeSwitch.adminSwitchStatus = id.mode;
             this.setMode(id.mode);
             this.onChange(id.mode);
         } else {
-            if (id === 0) {
+            if (id === 0 && ModeSwitch.adminSwitchSupport) {
                 chayns.deactivateAdminMode();
-            } else if (id === 1) {
+                ModeSwitch.adminSwitchStatus = 0;
+            } else if (id === 1 && ModeSwitch.adminSwitchSupport) {
                 chayns.activateAdminMode();
+                ModeSwitch.adminSwitchStatus = 1;
             } else {
                 this.onChange(id);
             }
@@ -188,30 +204,37 @@ export default class ModeSwitch extends Component {
 
     render() {
         const { show } = this.props;
-        if (show && this.state && chayns.env.user.isAuthenticated) {
-            const { modes, open, activeModeId } = this.state;
+        const { modes, open, activeModeId } = this.state;
+        if ((show || (show === null && (!ModeSwitch.adminSwitchSupport || modes.length > 2))) && chayns.env.user.isAuthenticated) {
             return (
                 <TappPortal>
-                    <div className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}>
+                    <div
+                        className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}
+                        style={{ top: `${this.pageYOffset}px` }}
+                    >
                         <div className="cc__modeswitch__content">
                             <h2>Diese Seite verwenden als:</h2>
                             {
                                 modes.map(mode => (
-                                    <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
-                                        <RadioButton
-                                            name="modeSwitchRadioButtons"
-                                            value={mode.id}
-                                            onChange={this.switchMode}
-                                            checked={mode.id === activeModeId}
-                                        >
-                                            {mode.name}
-                                        </RadioButton>
-                                    </div>
+                                    !ModeSwitch.adminSwitchSupport || mode.id > 1 || mode.id === ModeSwitch.adminSwitchStatus
+                                        ? (
+                                            <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
+                                                <RadioButton
+                                                    name="modeSwitchRadioButtons"
+                                                    value={mode.id}
+                                                    onChange={this.switchMode}
+                                                    checked={mode.id === activeModeId}
+                                                >
+                                                    {mode.name}
+                                                </RadioButton>
+                                            </div>
+                                        )
+                                        : null
                                 ))
                             }
                         </div>
                         <div
-                            className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId !== 0 })}
+                            className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId > 1 })}
                             onClick={this.toggleModeSwitch}
                         >
                             <Icon icon="ts-cog"/>
