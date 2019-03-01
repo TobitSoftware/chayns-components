@@ -223,11 +223,11 @@ export default class Accordion extends PureComponent {
             _body.style.setProperty('max-height', '9999px', 'important');
         }
 
-        rqAnimationFrame = requestAnimationFrame(() => {
-            this.setState({
-                currentState: CLOSE
-            });
+        this.setState({
+            currentState: CLOSE
+        });
 
+        rqAnimationFrame = requestAnimationFrame(() => {
             if (autogrow && _body) {
                 _body.style.removeProperty('max-height');
             }
@@ -277,8 +277,7 @@ export default class Accordion extends PureComponent {
         const { currentState } = this.state;
         return (
             <div
-                className={classNames({
-                    accordion: true,
+                className={classNames('accordion', 'react-accordion', { // react-accordion prevents collision with ui-accordions
                     'accordion--wrapped': (isWrapped === true),
                     'accordion--open': currentState === OPEN,
                     [className]: className
