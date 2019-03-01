@@ -43,8 +43,8 @@ module.exports = function resolveAbsoluteImport(importName) {
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
         FileInput: 'react-chayns-file_input/component/FileInput.js',
         imageUpload: 'utils/imageUpload.js',
-        FORMAT_INTEGER: 'react-chayns-formatted_input/component/FormattedInput/instances/formatDecimal.js',
-        FORMAT_DECIMAL: 'react-chayns-formatted_input/component/FormattedInput/instances/formatInteger.js',
+        FORMAT_INTEGER: 'react-chayns-formatted_input/component/FormattedInput/instances/formatInteger.js',
+        FORMAT_DECIMAL: 'react-chayns-formatted_input/component/FormattedInput/instances/formatDecimal.js',
         FORMAT_PRICE: 'react-chayns-formatted_input/component/FormattedInput/instances/formatPrice.js',
     };
 
