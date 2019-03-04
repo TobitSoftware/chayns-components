@@ -39,8 +39,8 @@ The following properties can be set on the Gallery-Component
 | **Property** | **Description**                                      | **Type** | **Default Value** | **Required** |
 | ------------ | ---------------------------------------------------- | -------- | ----------------- | ------------ |
 | url          | Image URL that will be displayed in the gallery      | string   |                   | true *       |
-| preview      | Base64-encoded image preview                         | object   |                   |              |
-| file         | Image File that will be displayed in the gallery     | array    |                   | true *       |
+| preview      | Base64-encoded image preview                         | string   |                   |              |
+| file         | Image File that will be displayed in the gallery     | object    |                   | true *       |
 | width        | Width of the image (used for aspect ratio)           | number   |                   |              |
 | height       | Height of the image (used for aspect ratio)          | number   |                   |              |
 
