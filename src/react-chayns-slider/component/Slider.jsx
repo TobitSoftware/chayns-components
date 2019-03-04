@@ -45,8 +45,8 @@ export default class Slider extends Component {
         thumbStyle: null,
         disabled: false,
         vertical: false,
-        minRange: 0,
-        maxRange: 0,
+        minRange: 5,
+        maxRange: 50,
         defaultStartValue: 0,
         defaultEndValue: 100,
         startValue: null,
@@ -58,34 +58,123 @@ export default class Slider extends Component {
         this.target = null;
         this.bar = React.createRef();
         this.innerTrack = React.createRef();
+        this.leftThumb = React.createRef();
+        this.rightThumb = React.createRef();
+        this.leftPercent = 40;
+        this.rightPercent = 80;
     }
 
-    mouseDown = (e) => {
+    thumbMouseDown = (e) => {
         this.target = e.target;
-        document.addEventListener('mousemove', this.mouseMove);
-        document.addEventListener('mouseup', this.mouseUp);
-        document.addEventListener('mouseleave', this.mouseUp);
+        document.addEventListener('mousemove', this.thumbMouseMove);
+        document.addEventListener('mouseup', this.thumbMouseUp);
+        document.addEventListener('mouseleave', this.thumbMouseUp);
         e.stopPropagation();
     };
 
-    mouseMove = (e) => {
-        const leftPercent = parseFloat(this.target.style.left.replace('%', '')) || 0;
-        console.log(e.clientX, this.bar)
-        const newPercent = ((e.clientX - this.bar.current.clientX) / this.bar.current.clientWidth) * 100;
-        // const movementPercent = (e.movementX / this.bar.current.clientWidth) * 100;
-        // const newPercent = leftPercent + movementPercent;
-        if (newPercent >= 0 && newPercent <= 100) {
-            this.target.style.left = `${newPercent}%`;
-            this.innerTrack.current.style.left = `${newPercent}%`;
+    thumbMouseMove = (e) => {
+        const {
+            minRange, maxRange, min, max
+        } = this.props;
+
+        const width = max - min;
+        const minPercent = 0;
+        const maxPercent = 100;
+        const minRangePercent = (minRange / width) * 100;
+        const maxRangePercent = (maxRange / width) * 100;
+
+        const newPercent = (((e.clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
+        if (this.target.classList.contains('cc__slider__bar__thumb--range')) {
+            if (this.target.classList.contains('cc__slider__bar__thumb--range-left')) {
+                this.leftPercent = newPercent;
+                if (this.leftPercent + minRangePercent > this.rightPercent) {
+                    this.rightPercent = this.leftPercent + minRangePercent;
+                }
+                if (this.leftPercent + maxRangePercent < this.rightPercent) {
+                    this.rightPercent = this.leftPercent + maxRangePercent;
+                }
+            } else if (this.target.classList.contains('cc__slider__bar__thumb--range-right')) {
+                this.rightPercent = newPercent;
+                if (this.leftPercent + minRangePercent > this.rightPercent) {
+                    this.leftPercent = this.rightPercent - minRangePercent;
+                }
+                if (this.leftPercent + maxRangePercent < this.rightPercent) {
+                    this.leftPercent = this.rightPercent - maxRangePercent;
+                }
+            }
         }
 
+        // prevent out of range
+        if (this.leftPercent < minPercent) {
+            this.leftPercent = minPercent;
+        }
+        if (this.leftPercent > maxPercent - minRange) {
+            this.leftPercent = maxPercent - minRange;
+        }
+        if (this.rightPercent < minPercent + minRange) {
+            this.rightPercent = minPercent + minRange;
+        }
+        if (this.rightPercent > maxPercent) {
+            this.rightPercent = maxPercent;
+        }
+        this.setElements();
         e.stopPropagation();
     };
 
-    mouseUp = () => {
-        document.removeEventListener('mousemove', this.mouseMove);
-        document.removeEventListener('mouseleave', this.mouseMove);
+    thumbMouseUp = () => {
+        document.removeEventListener('mousemove', this.thumbMouseMove);
+        document.removeEventListener('mouseup', this.thumbMouseUp);
+        document.removeEventListener('mouseleave', this.thumbMouseUp);
         this.target = null;
+    };
+
+    innerTrackMouseDown = (e) => {
+        document.addEventListener('mousemove', this.innerTrackMouseMove);
+        document.addEventListener('mouseup', this.innerTrackMouseUp);
+        document.addEventListener('mouseleave', this.innerTrackMouseUp);
+        // this.cursorPosition = e.clientX - this.bar.current.offsetLeft - this.innerTrack.current.offsetLeft;
+
+        e.stopPropagation();
+    };
+
+    innerTrackMouseMove = (e) => {
+        const {
+            minRange, maxRange, min, max
+        } = this.props;
+
+        const width = max - min;
+        const minPercent = 0;
+        const maxPercent = 100;
+        const minRangePercent = (minRange / width) * 100;
+        const maxRangePercent = (maxRange / width) * 100;
+
+        let newPercent = this.leftPercent + ((e.movementX / this.bar.current.clientWidth) * 100);
+
+        if(newPercent < minPercent) {
+            newPercent = minPercent;
+        }
+        if(newPercent > maxPercent - (this.rightPercent - this.leftPercent)) {
+            newPercent = maxPercent - (this.rightPercent - this.leftPercent);
+        }
+        this.rightPercent = this.rightPercent - this.leftPercent + newPercent;
+        this.leftPercent = newPercent;
+
+
+        this.setElements();
+        e.stopPropagation();
+    };
+
+    innerTrackMouseUp = () => {
+        document.removeEventListener('mousemove', this.innerTrackMouseMove);
+        document.removeEventListener('mouseup', this.innerTrackMouseUp);
+        document.removeEventListener('mouseleave', this.innerTrackMouseUp);
+    };
+
+    setElements = () => {
+        this.leftThumb.current.style.left = `${this.leftPercent}%`;
+        this.rightThumb.current.style.left = `${this.rightPercent}%`;
+        this.innerTrack.current.style.left = `${this.leftPercent}%`;
+        this.innerTrack.current.style.width = `${this.rightPercent - this.leftPercent}%`;
     };
 
     render() {
@@ -98,24 +187,32 @@ export default class Slider extends Component {
 
                     33%
                 </div>
-                <div className="cc__slider__bar" ref={this.bar}>
+                <div
+                    className="cc__slider__bar"
+                    ref={this.bar}
+                    onMouseDown={this.barMouseDown}
+                >
                     <div className="cc__slider__bar__track">
                         <div
                             className="cc__slider__bar__track__inner"
                             style={{ left: '40%', width: '40%' }}
+                            onMouseDown={this.innerTrackMouseDown}
                             ref={this.innerTrack}
                         />
                     </div>
                     <div
-                        className="cc__slider__bar__thumb"
+                        className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-left"
                         style={{ left: '40%' }}
-                        onMouseDown={this.mouseDown}
+                        onMouseDown={this.thumbMouseDown}
+                        ref={this.leftThumb}
                     >
                         <div className="cc__slider__bar__thumb__dot"/>
                     </div>
                     <div
-                        className="cc__slider__bar__thumb"
+                        className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-right"
                         style={{ left: '80%' }}
+                        onMouseDown={this.thumbMouseDown}
+                        ref={this.rightThumb}
                     >
                         <div className="cc__slider__bar__thumb__dot"/>
                     </div>
