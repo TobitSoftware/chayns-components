@@ -79,22 +79,46 @@ export default class Slider extends Component {
     }
 
     componentDidMount() {
-        this.setElements();
+        const stepped = this.getSteppedPercents(this);
+        this.setElements(stepped);
     }
 
-    thumbMouseDown = (e) => {
+    componentDidUpdate() {
+        const {
+            value, startValue, endValue, interval, min, max
+        } = this.props;
+
+        if (value || (startValue && endValue)) {
+            if (interval) {
+                this.leftPercent = ((startValue - min) / (max - min)) * 100;
+                this.rightPercent = ((endValue - min) / (max - min)) * 100;
+            } else {
+                this.percent = ((value - min) / (max - min)) * 100;
+            }
+            const stepped = this.getSteppedPercents(this);
+            this.setElements(stepped);
+        }
+    }
+
+    thumbDown = (e) => {
         const { onChangeStart } = this.props;
         this.target = e.target;
-        document.addEventListener('mousemove', this.thumbMouseMove);
-        document.addEventListener('mouseup', this.thumbMouseUp);
-        document.addEventListener('mouseleave', this.thumbMouseUp);
-        this.onChange([onChangeStart]);
+        const stepped = this.getSteppedPercents(this);
+        this.onChange([onChangeStart], stepped);
+
+        document.addEventListener('mousemove', this.thumbMove);
+        document.addEventListener('mouseup', this.thumbUp);
+        document.addEventListener('mouseleave', this.thumbUp);
+        document.addEventListener('touchmove', this.thumbMove);
+        document.addEventListener('touchend', this.thumbUp);
+        document.addEventListener('touchcancel', this.thumbUp);
+
         e.stopPropagation();
     };
 
-    thumbMouseMove = (e) => {
+    thumbMove = (e) => {
         const {
-            minInterval, maxInterval, min, max, onChange, interval
+            minInterval, maxInterval, min, max, onChange, interval, value, startValue, endValue
         } = this.props;
 
         const width = max - min;
@@ -102,8 +126,9 @@ export default class Slider extends Component {
         const maxPercent = 100;
         const minIntervalPercent = (minInterval / width) * 100;
         const maxIntervalPercent = (maxInterval / width) * 100;
+        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
 
-        const newPercent = (((e.clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
+        const newPercent = (((clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
@@ -146,37 +171,49 @@ export default class Slider extends Component {
             }
         }
 
-        this.setElements();
-        this.onChange([onChange]);
+        const stepped = this.getSteppedPercents(this);
+
+        if (!(value || (startValue && endValue))) this.setElements(stepped);
+
+        this.onChange([onChange], stepped);
         e.stopPropagation();
     };
 
-    thumbMouseUp = () => {
+    thumbUp = () => {
         const { onChangeEnd } = this.props;
-        document.removeEventListener('mousemove', this.thumbMouseMove);
-        document.removeEventListener('mouseup', this.thumbMouseUp);
-        document.removeEventListener('mouseleave', this.thumbMouseUp);
+        document.removeEventListener('mousemove', this.thumbMove);
+        document.removeEventListener('mouseup', this.thumbUp);
+        document.removeEventListener('mouseleave', this.thumbUp);
+        document.removeEventListener('touchmove', this.thumbMove);
+        document.removeEventListener('touchend', this.thumbUp);
+        document.removeEventListener('touchcancel', this.thumbUp);
         this.target = null;
-        this.onChange([onChangeEnd]);
+        const stepped = this.getSteppedPercents(this);
+        this.onChange([onChangeEnd], stepped);
     };
 
-    innerTrackMouseDown = (e) => {
+    innerTrackDown = (e) => {
         const { onChangeStart, interval } = this.props;
 
         if (!interval) return;
 
-        document.addEventListener('mousemove', this.innerTrackMouseMove);
-        document.addEventListener('mouseup', this.innerTrackMouseUp);
-        document.addEventListener('mouseleave', this.innerTrackMouseUp);
-        // this.cursorPosition = e.clientX - this.bar.current.offsetLeft - this.innerTrack.current.offsetLeft;
+        document.addEventListener('mousemove', this.innerTrackMove);
+        document.addEventListener('mouseup', this.innerTrackUp);
+        document.addEventListener('mouseleave', this.innerTrackUp);
+        document.addEventListener('touchmove', this.innerTrackMove);
+        document.addEventListener('touchend', this.innerTrackUp);
+        document.addEventListener('touchcancel', this.innerTrackUp);
 
-        this.onChange([onChangeStart]);
+        const stepped = this.getSteppedPercents(this);
+        this.onChange([onChangeStart], stepped);
 
         e.stopPropagation();
     };
 
-    innerTrackMouseMove = (e) => {
-        const { onChange } = this.props;
+    innerTrackMove = (e) => {
+        const {
+            onChange, value, startValue, endValue
+        } = this.props;
 
         const minPercent = 0;
         const maxPercent = 100;
@@ -192,22 +229,32 @@ export default class Slider extends Component {
         this.rightPercent = this.rightPercent - this.leftPercent + newPercent;
         this.leftPercent = newPercent;
 
-        this.setElements();
-        this.onChange([onChange]);
+        const stepped = this.getSteppedPercents(this);
+
+        if (!(value || (startValue && endValue))) this.setElements(stepped);
+
+        this.onChange([onChange], stepped);
+        
         e.stopPropagation();
     };
 
-    innerTrackMouseUp = () => {
+    innerTrackUp = () => {
         const { onChangeEnd } = this.props;
-        document.removeEventListener('mousemove', this.innerTrackMouseMove);
-        document.removeEventListener('mouseup', this.innerTrackMouseUp);
-        document.removeEventListener('mouseleave', this.innerTrackMouseUp);
-        this.onChange([onChangeEnd]);
+        document.removeEventListener('mousemove', this.innerTrackMove);
+        document.removeEventListener('mouseup', this.innerTrackUp);
+        document.removeEventListener('mouseleave', this.innerTrackUp);
+        document.removeEventListener('touchmove', this.innerTrackMove);
+        document.removeEventListener('touchend', this.innerTrackUp);
+        document.removeEventListener('touchcancel', this.innerTrackUp);
+
+        const stepped = this.getSteppedPercents(this);
+
+        this.onChange([onChangeEnd], stepped);
     };
 
-    trackMouseDown = (e) => {
+    trackDown = (e) => {
         const {
-            maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval
+            maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval, value, startValue, endValue
         } = this.props;
 
         const clickPercent = ((e.clientX - this.bar.current.offsetLeft) / this.bar.current.clientWidth) * 100;
@@ -230,30 +277,20 @@ export default class Slider extends Component {
             this.percent = clickPercent;
         }
 
-        this.setElements();
-        this.onChange([onChange, onChangeStart, onChangeEnd]);
+        const stepped = this.getSteppedPercents(this);
+
+        if (!(value || (startValue && endValue))) this.setElements(stepped);
+
+        this.onChange([onChange, onChangeStart, onChangeEnd], stepped);
+
         e.stopPropagation();
     };
 
-    setElements = () => {
+    setElements = (percents) => {
         const {
-            valueFormatter, min, max, step, showLabel, interval
+            valueFormatter, min, max, showLabel, interval
         } = this.props;
-        let { leftPercent, rightPercent, percent } = this;
-        // set to steps
-        if (step) {
-            const width = max - min;
-            const stepPercent = 100 / (width / step);
-            if (interval) {
-                const left = leftPercent % stepPercent;
-                leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
-                const right = rightPercent % stepPercent;
-                rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
-            } else {
-                const thumb = percent % stepPercent;
-                percent -= (thumb < stepPercent / 2) ? thumb : thumb - stepPercent;
-            }
-        }
+        const { leftPercent, rightPercent, percent } = percents;
         // set elements
         if (interval) {
             this.leftThumb.current.style.left = `${leftPercent}%`;
@@ -278,9 +315,32 @@ export default class Slider extends Component {
         }
     };
 
-    onChange = (listeners) => {
+    getSteppedPercents = (percents) => {
+        const {
+            min, max, step, interval
+        } = this.props;
+        let { leftPercent, rightPercent, percent } = percents;
+        // set to steps
+        if (step) {
+            const width = max - min;
+            const stepPercent = 100 / (width / step);
+            if (interval) {
+                const left = leftPercent % stepPercent;
+                leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
+                const right = rightPercent % stepPercent;
+                rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
+                return { leftPercent, rightPercent };
+            }
+            const thumb = percent % stepPercent;
+            percent -= (thumb < stepPercent / 2) ? thumb : thumb - stepPercent;
+            return { percent };
+        }
+        return percents;
+    };
+
+    onChange = (listeners, percents) => {
         const { min, max, interval } = this.props;
-        const { leftPercent, rightPercent, percent } = this;
+        const { leftPercent, rightPercent, percent } = percents;
         const realInterval = max - min;
         if (interval) {
             const left = min + (realInterval * leftPercent / 100);
@@ -312,10 +372,11 @@ export default class Slider extends Component {
                     className="cc__slider__bar"
                     ref={this.bar}
                 >
-                    <div className="cc__slider__bar__track" onClick={this.trackMouseDown} style={trackStyle}>
+                    <div className="cc__slider__bar__track" onClick={this.trackDown} style={trackStyle}>
                         <div
                             className="cc__slider__bar__track__inner"
-                            onMouseDown={this.innerTrackMouseDown}
+                            onMouseDown={this.innerTrackDown}
+                            onTouchStart={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
                         />
@@ -324,16 +385,20 @@ export default class Slider extends Component {
                         interval
                             ? [
                                 <div
+                                    key="left"
                                     className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
-                                    onMouseDown={this.thumbMouseDown}
+                                    onMouseDown={this.thumbDown}
+                                    onTouchStart={this.thumbDown}
                                     ref={this.leftThumb}
                                     style={thumbStyle && thumbStyle.left}
                                 >
                                     <div className="cc__slider__bar__thumb__dot"/>
                                 </div>,
                                 <div
+                                    key="right"
                                     className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-right"
-                                    onMouseDown={this.thumbMouseDown}
+                                    onMouseDown={this.thumbDown}
+                                    onTouchStart={this.thumbDown}
                                     ref={this.rightThumb}
                                     style={thumbStyle && thumbStyle.right}
                                 >
@@ -343,7 +408,8 @@ export default class Slider extends Component {
                             : (
                                 <div
                                     className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
-                                    onMouseDown={this.thumbMouseDown}
+                                    onMouseDown={this.thumbDown}
+                                    onTouchStart={this.thumbDown}
                                     ref={this.thumb}
                                     style={thumbStyle}
                                 >
@@ -351,7 +417,6 @@ export default class Slider extends Component {
                                 </div>
                             )
                     }
-
                 </div>
             </div>
         );
