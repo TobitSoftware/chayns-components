@@ -14,7 +14,6 @@ export default class Slider extends Component {
         showLabel: PropTypes.bool,
         valueFormatter: PropTypes.func,
         labelStyle: PropTypes.object,
-        // sliderSize: PropTypes.number,
         onChangeStart: PropTypes.func,
         onChange: PropTypes.func,
         onChangeEnd: PropTypes.func,
@@ -40,7 +39,6 @@ export default class Slider extends Component {
         showLabel: false,
         valueFormatter: (value1, value2) => (value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)),
         labelStyle: { minWidth: '60px' },
-        // sliderSize: null,
         onChangeStart: null,
         onChange: null,
         onChangeEnd: null,
@@ -73,18 +71,19 @@ export default class Slider extends Component {
         this.setElements();
     }
 
-
     thumbMouseDown = (e) => {
+        const { onChangeStart } = this.props;
         this.target = e.target;
         document.addEventListener('mousemove', this.thumbMouseMove);
         document.addEventListener('mouseup', this.thumbMouseUp);
         document.addEventListener('mouseleave', this.thumbMouseUp);
+        this.onChange([onChangeStart]);
         e.stopPropagation();
     };
 
     thumbMouseMove = (e) => {
         const {
-            minRange, maxRange, min, max
+            minRange, maxRange, min, max, onChange
         } = this.props;
 
         const width = max - min;
@@ -130,26 +129,34 @@ export default class Slider extends Component {
             this.rightPercent = maxPercent;
         }
         this.setElements();
+        this.onChange([onChange]);
         e.stopPropagation();
     };
 
     thumbMouseUp = () => {
+        const { onChangeEnd } = this.props;
         document.removeEventListener('mousemove', this.thumbMouseMove);
         document.removeEventListener('mouseup', this.thumbMouseUp);
         document.removeEventListener('mouseleave', this.thumbMouseUp);
         this.target = null;
+        this.onChange([onChangeEnd]);
     };
 
     innerTrackMouseDown = (e) => {
+        const { onChangeStart } = this.props;
         document.addEventListener('mousemove', this.innerTrackMouseMove);
         document.addEventListener('mouseup', this.innerTrackMouseUp);
         document.addEventListener('mouseleave', this.innerTrackMouseUp);
         // this.cursorPosition = e.clientX - this.bar.current.offsetLeft - this.innerTrack.current.offsetLeft;
 
+        this.onChange([onChangeStart]);
+
         e.stopPropagation();
     };
 
     innerTrackMouseMove = (e) => {
+        const { onChange } = this.props;
+
         const minPercent = 0;
         const maxPercent = 100;
 
@@ -165,18 +172,21 @@ export default class Slider extends Component {
         this.leftPercent = newPercent;
 
         this.setElements();
+        this.onChange([onChange]);
         e.stopPropagation();
     };
 
     innerTrackMouseUp = () => {
+        const { onChangeEnd } = this.props;
         document.removeEventListener('mousemove', this.innerTrackMouseMove);
         document.removeEventListener('mouseup', this.innerTrackMouseUp);
         document.removeEventListener('mouseleave', this.innerTrackMouseUp);
+        this.onChange([onChangeEnd]);
     };
 
     trackMouseDown = (e) => {
         const {
-            maxRange, min, max
+            maxRange, min, max, onChange, onChangeStart, onChangeEnd
         } = this.props;
 
         const width = max - min;
@@ -194,11 +204,13 @@ export default class Slider extends Component {
             }
         }
         this.setElements();
+        this.onChange([onChange, onChangeStart, onChangeEnd]);
+        e.stopPropagation();
     };
 
     setElements = () => {
         const {
-            valueFormatter, min, max, step
+            valueFormatter, min, max, step, showLabel
         } = this.props;
         let { leftPercent, rightPercent } = this;
         // set to steps
@@ -215,10 +227,25 @@ export default class Slider extends Component {
         this.rightThumb.current.style.left = `${rightPercent}%`;
         this.innerTrack.current.style.left = `${leftPercent}%`;
         this.innerTrack.current.style.width = `${rightPercent - leftPercent}%`;
-        if (this.label && this.label.current) {
+        if (showLabel) {
             const realRange = max - min;
-            this.label.current.innerText = valueFormatter((min + (realRange * leftPercent / 100)), min + (realRange * rightPercent / 100));
+            const left = min + (realRange * leftPercent / 100);
+            const right = min + (realRange * rightPercent / 100);
+            if (showLabel) {
+                this.label.current.innerText = valueFormatter(left, right);
+            }
         }
+    };
+
+    onChange = (listener) => {
+        const { min, max } = this.props;
+        const { leftPercent, rightPercent } = this;
+        const realRange = max - min;
+        const left = min + (realRange * leftPercent / 100);
+        const right = min + (realRange * rightPercent / 100);
+        listener.forEach((l) => {
+            if (l) l(left, right);
+        });
     };
 
     render() {
