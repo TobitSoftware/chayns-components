@@ -4,7 +4,7 @@ import Slider from '../../src/react-chayns-slider/component/Slider';
 export default class SliderExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { value: 150, startValue: 40, endValue: 80 };
+        this.state = { value: 100, startValue: 30, endValue: 70 };
     }
 
 
@@ -20,6 +20,8 @@ export default class SliderExample extends Component {
                     interval
                     minInterval={10}
                     maxInterval={60}
+                    defaultStartValue={30}
+                    defaultEndValue={70}
                     onChange={(start, end) => {
                         this.setState({ startValue: start, endValue: end });
                     }}
@@ -28,6 +30,7 @@ export default class SliderExample extends Component {
                     showLabel
                     min={50}
                     max={150}
+                    defaultValue={100}
                     onChange={(newValue) => {
                         this.setState({ value: newValue });
                     }}

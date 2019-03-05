@@ -71,10 +71,10 @@ export default class Slider extends Component {
 
         this.target = null;
         if (props.interval) {
-            this.leftPercent = ((props.defaultStartValue - props.min) / (props.max - props.min)) * 100;
-            this.rightPercent = ((props.defaultEndValue - props.min) / (props.max - props.min)) * 100;
+            this.leftPercent = (((props.startValue || typeof props.startValue === 'number' ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
+            this.rightPercent = (((props.endValue || typeof props.endValue === 'number' ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
         } else {
-            this.percent = ((props.defaultValue - props.min) / (props.max - props.min)) * 100;
+            this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
         }
     }
 
