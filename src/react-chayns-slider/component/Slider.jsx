@@ -32,10 +32,10 @@ export default class Slider extends Component {
     };
 
     static defaultProps = {
-        min: 100,
-        max: 1000,
-        step: 20,
-        defaultValue: 100,
+        min: 0,
+        max: 100,
+        step: null,
+        defaultValue: 0,
         value: null,
         style: null,
         className: null,
@@ -49,10 +49,10 @@ export default class Slider extends Component {
         disabled: false,
         vertical: false,
         interval: false,
-        minInterval: 50,
-        maxInterval: 500,
-        defaultStartValue: 250,
-        defaultEndValue: 750,
+        minInterval: null,
+        maxInterval: null,
+        defaultStartValue: 0,
+        defaultEndValue: 0,
         startValue: null,
         endValue: null,
         trackStyle: null,
@@ -124,26 +124,26 @@ export default class Slider extends Component {
         const width = max - min;
         const minPercent = 0;
         const maxPercent = 100;
-        const minIntervalPercent = (minInterval / width) * 100;
-        const maxIntervalPercent = (maxInterval / width) * 100;
+        const minIntervalPercent = minInterval ? (minInterval / width) * 100 : 0;
+        const maxIntervalPercent = maxInterval ? (maxInterval / width) * 100 : 100;
         const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
 
         const newPercent = (((clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
-                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
+                if (minInterval && this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.rightPercent = this.leftPercent + minIntervalPercent;
                 }
-                if (this.leftPercent + maxIntervalPercent < this.rightPercent) {
+                if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
             } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
                 this.rightPercent = newPercent;
-                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
+                if (minInterval && this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.leftPercent = this.rightPercent - minIntervalPercent;
                 }
-                if (this.leftPercent + maxIntervalPercent < this.rightPercent) {
+                if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
                     this.leftPercent = this.rightPercent - maxIntervalPercent;
                 }
             }
@@ -200,9 +200,6 @@ export default class Slider extends Component {
         document.addEventListener('mousemove', this.innerTrackMove);
         document.addEventListener('mouseup', this.innerTrackUp);
         document.addEventListener('mouseleave', this.innerTrackUp);
-        document.addEventListener('touchmove', this.innerTrackMove);
-        document.addEventListener('touchend', this.innerTrackUp);
-        document.addEventListener('touchcancel', this.innerTrackUp);
 
         const stepped = this.getSteppedPercents(this);
         this.onChange([onChangeStart], stepped);
@@ -234,7 +231,7 @@ export default class Slider extends Component {
         if (!(value || (startValue && endValue))) this.setElements(stepped);
 
         this.onChange([onChange], stepped);
-        
+
         e.stopPropagation();
     };
 
@@ -243,9 +240,6 @@ export default class Slider extends Component {
         document.removeEventListener('mousemove', this.innerTrackMove);
         document.removeEventListener('mouseup', this.innerTrackUp);
         document.removeEventListener('mouseleave', this.innerTrackUp);
-        document.removeEventListener('touchmove', this.innerTrackMove);
-        document.removeEventListener('touchend', this.innerTrackUp);
-        document.removeEventListener('touchcancel', this.innerTrackUp);
 
         const stepped = this.getSteppedPercents(this);
 
@@ -264,12 +258,12 @@ export default class Slider extends Component {
             const maxIntervalPercent = (maxInterval / width) * 100;
             if (this.leftPercent > clickPercent) {
                 this.leftPercent = clickPercent;
-                if (this.rightPercent - this.leftPercent > maxIntervalPercent) {
+                if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
             } else if (this.rightPercent < clickPercent) {
                 this.rightPercent = clickPercent;
-                if (this.rightPercent - this.leftPercent > maxIntervalPercent) {
+                if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.leftPercent = this.rightPercent - maxIntervalPercent;
                 }
             }
@@ -376,7 +370,6 @@ export default class Slider extends Component {
                         <div
                             className="cc__slider__bar__track__inner"
                             onMouseDown={this.innerTrackDown}
-                            onTouchStart={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
                         />
