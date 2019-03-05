@@ -20,19 +20,22 @@ export default class Slider extends Component {
         thumbStyle: PropTypes.object,
         disabled: PropTypes.bool,
         vertical: PropTypes.bool,
-        minRange: PropTypes.number,
-        maxRange: PropTypes.number,
+        interval: PropTypes.bool,
+        minInterval: PropTypes.number,
+        maxInterval: PropTypes.number,
         defaultStartValue: PropTypes.number,
         defaultEndValue: PropTypes.number,
         startValue: PropTypes.number,
         endValue: PropTypes.number,
+        trackStyle: PropTypes.object,
+        innerTrackStyle: PropTypes.object,
     };
 
     static defaultProps = {
         min: 100,
         max: 1000,
         step: 20,
-        defaultValue: 0,
+        defaultValue: 100,
         value: null,
         style: null,
         className: null,
@@ -45,12 +48,15 @@ export default class Slider extends Component {
         thumbStyle: null,
         disabled: false,
         vertical: false,
-        minRange: 50,
-        maxRange: 500,
+        interval: false,
+        minInterval: 50,
+        maxInterval: 500,
         defaultStartValue: 250,
         defaultEndValue: 750,
         startValue: null,
         endValue: null,
+        trackStyle: null,
+        innerTrackStyle: null,
     };
 
     constructor(props) {
@@ -61,10 +67,15 @@ export default class Slider extends Component {
         this.leftThumb = React.createRef();
         this.rightThumb = React.createRef();
         this.label = React.createRef();
+        this.thumb = React.createRef();
 
         this.target = null;
-        this.leftPercent = ((props.defaultStartValue - props.min) / (props.max - props.min)) * 100;
-        this.rightPercent = ((props.defaultEndValue - props.min) / (props.max - props.min)) * 100;
+        if (props.interval) {
+            this.leftPercent = ((props.defaultStartValue - props.min) / (props.max - props.min)) * 100;
+            this.rightPercent = ((props.defaultEndValue - props.min) / (props.max - props.min)) * 100;
+        } else {
+            this.percent = ((props.defaultValue - props.min) / (props.max - props.min)) * 100;
+        }
     }
 
     componentDidMount() {
@@ -83,51 +94,58 @@ export default class Slider extends Component {
 
     thumbMouseMove = (e) => {
         const {
-            minRange, maxRange, min, max, onChange
+            minInterval, maxInterval, min, max, onChange, interval
         } = this.props;
 
         const width = max - min;
         const minPercent = 0;
         const maxPercent = 100;
-        const minRangePercent = (minRange / width) * 100;
-        const maxRangePercent = (maxRange / width) * 100;
+        const minIntervalPercent = (minInterval / width) * 100;
+        const maxIntervalPercent = (maxInterval / width) * 100;
 
         const newPercent = (((e.clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
-        if (this.target.classList.contains('cc__slider__bar__thumb--range')) {
-            if (this.target.classList.contains('cc__slider__bar__thumb--range-left')) {
+        if (interval) {
+            if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
-                if (this.leftPercent + minRangePercent > this.rightPercent) {
-                    this.rightPercent = this.leftPercent + minRangePercent;
+                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
+                    this.rightPercent = this.leftPercent + minIntervalPercent;
                 }
-                if (this.leftPercent + maxRangePercent < this.rightPercent) {
-                    this.rightPercent = this.leftPercent + maxRangePercent;
+                if (this.leftPercent + maxIntervalPercent < this.rightPercent) {
+                    this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
-            } else if (this.target.classList.contains('cc__slider__bar__thumb--range-right')) {
+            } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
                 this.rightPercent = newPercent;
-                if (this.leftPercent + minRangePercent > this.rightPercent) {
-                    this.leftPercent = this.rightPercent - minRangePercent;
+                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
+                    this.leftPercent = this.rightPercent - minIntervalPercent;
                 }
-                if (this.leftPercent + maxRangePercent < this.rightPercent) {
-                    this.leftPercent = this.rightPercent - maxRangePercent;
+                if (this.leftPercent + maxIntervalPercent < this.rightPercent) {
+                    this.leftPercent = this.rightPercent - maxIntervalPercent;
                 }
+            }
+            // prevent out of range
+            if (this.leftPercent < minPercent) {
+                // this.rightPercent = this.rightPercent + (minPercent - this.leftPercent); // TODO
+                this.leftPercent = minPercent;
+            }
+            if (this.leftPercent > maxPercent - minIntervalPercent) {
+                this.leftPercent = maxPercent - minIntervalPercent;
+            }
+            if (this.rightPercent < minPercent + minIntervalPercent) {
+                this.rightPercent = minPercent + minIntervalPercent;
+            }
+            if (this.rightPercent > maxPercent) {
+                // this.leftPercent = this.leftPercent - (this.rightPercent - maxPercent);// TODO
+                this.rightPercent = maxPercent;
+            }
+        } else {
+            this.percent = newPercent;
+            if (newPercent < minPercent) {
+                this.percent = minPercent;
+            } else if (newPercent > maxPercent) {
+                this.percent = maxPercent;
             }
         }
 
-        // prevent out of range
-        if (this.leftPercent < minPercent) {
-            // this.rightPercent = this.rightPercent + (minPercent - this.leftPercent); // TODO
-            this.leftPercent = minPercent;
-        }
-        if (this.leftPercent > maxPercent - minRangePercent) {
-            this.leftPercent = maxPercent - minRangePercent;
-        }
-        if (this.rightPercent < minPercent + minRangePercent) {
-            this.rightPercent = minPercent + minRangePercent;
-        }
-        if (this.rightPercent > maxPercent) {
-            // this.leftPercent = this.leftPercent - (this.rightPercent - maxPercent);// TODO
-            this.rightPercent = maxPercent;
-        }
         this.setElements();
         this.onChange([onChange]);
         e.stopPropagation();
@@ -143,7 +161,10 @@ export default class Slider extends Component {
     };
 
     innerTrackMouseDown = (e) => {
-        const { onChangeStart } = this.props;
+        const { onChangeStart, interval } = this.props;
+
+        if (!interval) return;
+
         document.addEventListener('mousemove', this.innerTrackMouseMove);
         document.addEventListener('mouseup', this.innerTrackMouseUp);
         document.addEventListener('mouseleave', this.innerTrackMouseUp);
@@ -186,23 +207,29 @@ export default class Slider extends Component {
 
     trackMouseDown = (e) => {
         const {
-            maxRange, min, max, onChange, onChangeStart, onChangeEnd
+            maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval
         } = this.props;
 
-        const width = max - min;
-        const maxRangePercent = (maxRange / width) * 100;
         const clickPercent = ((e.clientX - this.bar.current.offsetLeft) / this.bar.current.clientWidth) * 100;
-        if (this.leftPercent > clickPercent) {
-            this.leftPercent = clickPercent;
-            if (this.rightPercent - this.leftPercent > maxRangePercent) {
-                this.rightPercent = this.leftPercent + maxRangePercent;
+
+        if (interval) {
+            const width = max - min;
+            const maxIntervalPercent = (maxInterval / width) * 100;
+            if (this.leftPercent > clickPercent) {
+                this.leftPercent = clickPercent;
+                if (this.rightPercent - this.leftPercent > maxIntervalPercent) {
+                    this.rightPercent = this.leftPercent + maxIntervalPercent;
+                }
+            } else if (this.rightPercent < clickPercent) {
+                this.rightPercent = clickPercent;
+                if (this.rightPercent - this.leftPercent > maxIntervalPercent) {
+                    this.leftPercent = this.rightPercent - maxIntervalPercent;
+                }
             }
-        } else if (this.rightPercent < clickPercent) {
-            this.rightPercent = clickPercent;
-            if (this.rightPercent - this.leftPercent > maxRangePercent) {
-                this.leftPercent = this.rightPercent - maxRangePercent;
-            }
+        } else {
+            this.percent = clickPercent;
         }
+
         this.setElements();
         this.onChange([onChange, onChangeStart, onChangeEnd]);
         e.stopPropagation();
@@ -210,47 +237,68 @@ export default class Slider extends Component {
 
     setElements = () => {
         const {
-            valueFormatter, min, max, step, showLabel
+            valueFormatter, min, max, step, showLabel, interval
         } = this.props;
-        let { leftPercent, rightPercent } = this;
+        let { leftPercent, rightPercent, percent } = this;
         // set to steps
         if (step) {
             const width = max - min;
             const stepPercent = 100 / (width / step);
-            const left = this.leftPercent % stepPercent;
-            leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
-            const right = this.rightPercent % stepPercent;
-            rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
+            if (interval) {
+                const left = leftPercent % stepPercent;
+                leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
+                const right = rightPercent % stepPercent;
+                rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
+            } else {
+                const thumb = percent % stepPercent;
+                percent -= (thumb < stepPercent / 2) ? thumb : thumb - stepPercent;
+            }
         }
         // set elements
-        this.leftThumb.current.style.left = `${leftPercent}%`;
-        this.rightThumb.current.style.left = `${rightPercent}%`;
-        this.innerTrack.current.style.left = `${leftPercent}%`;
-        this.innerTrack.current.style.width = `${rightPercent - leftPercent}%`;
+        if (interval) {
+            this.leftThumb.current.style.left = `${leftPercent}%`;
+            this.rightThumb.current.style.left = `${rightPercent}%`;
+            this.innerTrack.current.style.left = `${leftPercent}%`;
+            this.innerTrack.current.style.width = `${rightPercent - leftPercent}%`;
+        } else {
+            this.thumb.current.style.left = `${percent}%`;
+            this.innerTrack.current.style.width = `${percent}%`;
+        }
+
         if (showLabel) {
-            const realRange = max - min;
-            const left = min + (realRange * leftPercent / 100);
-            const right = min + (realRange * rightPercent / 100);
-            if (showLabel) {
+            const realInterval = max - min;
+            if (interval) {
+                const left = min + (realInterval * leftPercent / 100);
+                const right = min + (realInterval * rightPercent / 100);
                 this.label.current.innerText = valueFormatter(left, right);
+            } else {
+                const value = min + (realInterval * percent / 100);
+                this.label.current.innerText = valueFormatter(value);
             }
         }
     };
 
-    onChange = (listener) => {
-        const { min, max } = this.props;
-        const { leftPercent, rightPercent } = this;
-        const realRange = max - min;
-        const left = min + (realRange * leftPercent / 100);
-        const right = min + (realRange * rightPercent / 100);
-        listener.forEach((l) => {
-            if (l) l(left, right);
-        });
+    onChange = (listeners) => {
+        const { min, max, interval } = this.props;
+        const { leftPercent, rightPercent, percent } = this;
+        const realInterval = max - min;
+        if (interval) {
+            const left = min + (realInterval * leftPercent / 100);
+            const right = min + (realInterval * rightPercent / 100);
+            listeners.forEach((l) => {
+                if (l) l(left, right);
+            });
+        } else {
+            const value = min + (realInterval * percent / 100);
+            listeners.forEach((l) => {
+                if (l) l(value);
+            });
+        }
     };
 
     render() {
         const {
-            className, style, disabled, labelStyle, thumbStyle, showLabel
+            className, style, disabled, labelStyle, thumbStyle, showLabel, interval, trackStyle, innerTrackStyle
         } = this.props;
 
         return (
@@ -264,29 +312,46 @@ export default class Slider extends Component {
                     className="cc__slider__bar"
                     ref={this.bar}
                 >
-                    <div className="cc__slider__bar__track" onClick={this.trackMouseDown}>
+                    <div className="cc__slider__bar__track" onClick={this.trackMouseDown} style={trackStyle}>
                         <div
                             className="cc__slider__bar__track__inner"
                             onMouseDown={this.innerTrackMouseDown}
                             ref={this.innerTrack}
+                            style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
                         />
                     </div>
-                    <div
-                        className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-left"
-                        onMouseDown={this.thumbMouseDown}
-                        ref={this.leftThumb}
-                        style={thumbStyle && thumbStyle.left}
-                    >
-                        <div className="cc__slider__bar__thumb__dot"/>
-                    </div>
-                    <div
-                        className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-right"
-                        onMouseDown={this.thumbMouseDown}
-                        ref={this.rightThumb}
-                        style={thumbStyle && thumbStyle.right}
-                    >
-                        <div className="cc__slider__bar__thumb__dot"/>
-                    </div>
+                    {
+                        interval
+                            ? [
+                                <div
+                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    onMouseDown={this.thumbMouseDown}
+                                    ref={this.leftThumb}
+                                    style={thumbStyle && thumbStyle.left}
+                                >
+                                    <div className="cc__slider__bar__thumb__dot"/>
+                                </div>,
+                                <div
+                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-right"
+                                    onMouseDown={this.thumbMouseDown}
+                                    ref={this.rightThumb}
+                                    style={thumbStyle && thumbStyle.right}
+                                >
+                                    <div className="cc__slider__bar__thumb__dot"/>
+                                </div>
+                            ]
+                            : (
+                                <div
+                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    onMouseDown={this.thumbMouseDown}
+                                    ref={this.thumb}
+                                    style={thumbStyle}
+                                >
+                                    <div className="cc__slider__bar__thumb__dot"/>
+                                </div>
+                            )
+                    }
+
                 </div>
             </div>
         );
