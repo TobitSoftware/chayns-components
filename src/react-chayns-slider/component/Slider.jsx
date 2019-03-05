@@ -11,9 +11,10 @@ export default class Slider extends Component {
         value: PropTypes.number,
         style: PropTypes.object,
         className: PropTypes.string,
-        showValue: PropTypes.bool,
+        showLabel: PropTypes.bool,
         valueFormatter: PropTypes.func,
-        sliderSize: PropTypes.number,
+        labelStyle: PropTypes.object,
+        // sliderSize: PropTypes.number,
         onChangeStart: PropTypes.func,
         onChange: PropTypes.func,
         onChangeEnd: PropTypes.func,
@@ -29,40 +30,49 @@ export default class Slider extends Component {
     };
 
     static defaultProps = {
-        min: 0,
-        max: 100,
-        step: 1,
+        min: 100,
+        max: 1000,
+        step: 20,
         defaultValue: 0,
         value: null,
         style: null,
         className: null,
-        showValue: false,
-        valueFormatter: value => value,
-        sliderSize: null,
+        showLabel: false,
+        valueFormatter: (value1, value2) => (value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)),
+        labelStyle: { minWidth: '60px' },
+        // sliderSize: null,
         onChangeStart: null,
         onChange: null,
         onChangeEnd: null,
         thumbStyle: null,
         disabled: false,
         vertical: false,
-        minRange: 5,
-        maxRange: 50,
-        defaultStartValue: 0,
-        defaultEndValue: 100,
+        minRange: 50,
+        maxRange: 500,
+        defaultStartValue: 250,
+        defaultEndValue: 750,
         startValue: null,
         endValue: null,
     };
 
     constructor(props) {
         super(props);
-        this.target = null;
+
         this.bar = React.createRef();
         this.innerTrack = React.createRef();
         this.leftThumb = React.createRef();
         this.rightThumb = React.createRef();
-        this.leftPercent = 40;
-        this.rightPercent = 80;
+        this.label = React.createRef();
+
+        this.target = null;
+        this.leftPercent = ((props.defaultStartValue - props.min) / (props.max - props.min)) * 100;
+        this.rightPercent = ((props.defaultEndValue - props.min) / (props.max - props.min)) * 100;
     }
+
+    componentDidMount() {
+        this.setElements();
+    }
+
 
     thumbMouseDown = (e) => {
         this.target = e.target;
@@ -106,15 +116,17 @@ export default class Slider extends Component {
 
         // prevent out of range
         if (this.leftPercent < minPercent) {
+            // this.rightPercent = this.rightPercent + (minPercent - this.leftPercent); // TODO
             this.leftPercent = minPercent;
         }
-        if (this.leftPercent > maxPercent - minRange) {
-            this.leftPercent = maxPercent - minRange;
+        if (this.leftPercent > maxPercent - minRangePercent) {
+            this.leftPercent = maxPercent - minRangePercent;
         }
-        if (this.rightPercent < minPercent + minRange) {
-            this.rightPercent = minPercent + minRange;
+        if (this.rightPercent < minPercent + minRangePercent) {
+            this.rightPercent = minPercent + minRangePercent;
         }
         if (this.rightPercent > maxPercent) {
+            // this.leftPercent = this.leftPercent - (this.rightPercent - maxPercent);// TODO
             this.rightPercent = maxPercent;
         }
         this.setElements();
@@ -138,27 +150,19 @@ export default class Slider extends Component {
     };
 
     innerTrackMouseMove = (e) => {
-        const {
-            minRange, maxRange, min, max
-        } = this.props;
-
-        const width = max - min;
         const minPercent = 0;
         const maxPercent = 100;
-        const minRangePercent = (minRange / width) * 100;
-        const maxRangePercent = (maxRange / width) * 100;
 
         let newPercent = this.leftPercent + ((e.movementX / this.bar.current.clientWidth) * 100);
 
-        if(newPercent < minPercent) {
+        if (newPercent < minPercent) {
             newPercent = minPercent;
         }
-        if(newPercent > maxPercent - (this.rightPercent - this.leftPercent)) {
+        if (newPercent > maxPercent - (this.rightPercent - this.leftPercent)) {
             newPercent = maxPercent - (this.rightPercent - this.leftPercent);
         }
         this.rightPercent = this.rightPercent - this.leftPercent + newPercent;
         this.leftPercent = newPercent;
-
 
         this.setElements();
         e.stopPropagation();
@@ -170,49 +174,89 @@ export default class Slider extends Component {
         document.removeEventListener('mouseleave', this.innerTrackMouseUp);
     };
 
+    trackMouseDown = (e) => {
+        const {
+            maxRange, min, max
+        } = this.props;
+
+        const width = max - min;
+        const maxRangePercent = (maxRange / width) * 100;
+        const clickPercent = ((e.clientX - this.bar.current.offsetLeft) / this.bar.current.clientWidth) * 100;
+        if (this.leftPercent > clickPercent) {
+            this.leftPercent = clickPercent;
+            if (this.rightPercent - this.leftPercent > maxRangePercent) {
+                this.rightPercent = this.leftPercent + maxRangePercent;
+            }
+        } else if (this.rightPercent < clickPercent) {
+            this.rightPercent = clickPercent;
+            if (this.rightPercent - this.leftPercent > maxRangePercent) {
+                this.leftPercent = this.rightPercent - maxRangePercent;
+            }
+        }
+        this.setElements();
+    };
+
     setElements = () => {
-        this.leftThumb.current.style.left = `${this.leftPercent}%`;
-        this.rightThumb.current.style.left = `${this.rightPercent}%`;
-        this.innerTrack.current.style.left = `${this.leftPercent}%`;
-        this.innerTrack.current.style.width = `${this.rightPercent - this.leftPercent}%`;
+        const {
+            valueFormatter, min, max, step
+        } = this.props;
+        let { leftPercent, rightPercent } = this;
+        // set to steps
+        if (step) {
+            const width = max - min;
+            const stepPercent = 100 / (width / step);
+            const left = this.leftPercent % stepPercent;
+            leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
+            const right = this.rightPercent % stepPercent;
+            rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
+        }
+        // set elements
+        this.leftThumb.current.style.left = `${leftPercent}%`;
+        this.rightThumb.current.style.left = `${rightPercent}%`;
+        this.innerTrack.current.style.left = `${leftPercent}%`;
+        this.innerTrack.current.style.width = `${rightPercent - leftPercent}%`;
+        if (this.label && this.label.current) {
+            const realRange = max - min;
+            this.label.current.innerText = valueFormatter((min + (realRange * leftPercent / 100)), min + (realRange * rightPercent / 100));
+        }
     };
 
     render() {
-        const { className, style, disabled } = this.props;
+        const {
+            className, style, disabled, labelStyle, thumbStyle, showLabel
+        } = this.props;
 
         return (
             <div className={classNames('cc__slider', { 'cc__slider--disabled': disabled }, className)} style={style}>
-                <div className="cc__slider__text">
-
-
-                    33%
-                </div>
+                {
+                    showLabel
+                        ? <div className="cc__slider__label" ref={this.label} style={labelStyle}/>
+                        : null
+                }
                 <div
                     className="cc__slider__bar"
                     ref={this.bar}
-                    onMouseDown={this.barMouseDown}
                 >
-                    <div className="cc__slider__bar__track">
+                    <div className="cc__slider__bar__track" onClick={this.trackMouseDown}>
                         <div
                             className="cc__slider__bar__track__inner"
-                            style={{ left: '40%', width: '40%' }}
                             onMouseDown={this.innerTrackMouseDown}
                             ref={this.innerTrack}
                         />
                     </div>
                     <div
                         className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-left"
-                        style={{ left: '40%' }}
                         onMouseDown={this.thumbMouseDown}
                         ref={this.leftThumb}
+                        style={thumbStyle && thumbStyle.left}
                     >
                         <div className="cc__slider__bar__thumb__dot"/>
                     </div>
                     <div
                         className="cc__slider__bar__thumb cc__slider__bar__thumb--range cc__slider__bar__thumb--range-right"
-                        style={{ left: '80%' }}
                         onMouseDown={this.thumbMouseDown}
                         ref={this.rightThumb}
+                        style={thumbStyle && thumbStyle.right}
                     >
                         <div className="cc__slider__bar__thumb__dot"/>
                     </div>
