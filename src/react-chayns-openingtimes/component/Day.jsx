@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
+import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
 import TimeSpan from './TimeSpan';
-import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
 class Day extends Component {
     constructor(props) {
@@ -13,16 +14,18 @@ class Day extends Component {
 
     onDayActivation(status) {
         const {
-            onDayActivation,
-            onAdd,
+            onDayRemove,
+            onDayAdd,
             times,
-            weekday
+            weekday,
+            defaultStart,
+            defaultEnd,
         } = this.props;
 
-        if (status && times.length === 0 && onAdd) {
-            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+        if (status && times.length === 0 && onDayAdd) {
+            onDayAdd(weekday.number, defaultStart, defaultEnd);
         } else {
-            onDayActivation(weekday.number, status);
+            onDayRemove(weekday.number);
         }
     }
 
@@ -32,20 +35,23 @@ class Day extends Component {
             times,
             onAdd,
             onRemove,
-            onChange
+            onChange,
+            disabled,
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
-        const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
-        const isDisabled = !times.some(t => !t.disabled);
+
+        const timeSpans = times.slice();
 
         return (
-            <div className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}>
+            <div
+                className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${disabled ? ' times--disabled' : ''}`}
+            >
                 <div className="flex__left">
                     <Checkbox
                         label={weekday.name}
                         onChange={this.onDayActivation}
-                        checked={!isDisabled}
+                        checked={!disabled}
                     />
                 </div>
                 <div className="flex__right">
@@ -57,18 +63,20 @@ class Day extends Component {
                                 buttonType={TimeSpan.ADD}
                             />
                         ) : timeSpans.map((t, index) => (
-                                <TimeSpan
-                                    key={t.start}
-                                    start={t.start}
-                                    end={t.end}
-                                    disabled={isDisabled}
-                                    // eslint-disable-next-line no-nested-ternary
-                                    buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
-                                    onAdd={(start, end) => onAdd(weekday.number, start, end)}
-                                    onRemove={() => onRemove(weekday.number, index)}
-                                    onChange={(start, end) => onChange(weekday.number, index, start, end)}
-                                />
-                            ))
+                            <TimeSpan
+                                invalid={index > 0 && ((t.start <= timeSpans[index - 1].end) || (t.start <= timeSpans[index - 1].start) || (timeSpans[index - 1].end <= timeSpans[index - 1].start))}
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={index}
+                                start={t.start}
+                                end={t.end}
+                                disabled={disabled}
+                                // eslint-disable-next-line no-nested-ternary
+                                buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
+                                onAdd={(start, end) => onAdd(weekday.number, start, end)}
+                                onRemove={() => onRemove(weekday.number, index)}
+                                onChange={(start, end) => onChange(weekday.number, index, start, end)}
+                            />
+                        ))
                     }
                 </div>
             </div>
@@ -79,16 +87,22 @@ class Day extends Component {
 Day.propTypes = {
     weekday: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        number: PropTypes.number.isRequired
+        number: PropTypes.number.isRequired,
     }).isRequired,
     times: PropTypes.arrayOf(PropTypes.shape({
         start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired
+        end: PropTypes.string.isRequired,
     })).isRequired,
-    onDayActivation: PropTypes.func.isRequired,
+    defaultStart: PropTypes.string.isRequired,
+    defaultEnd: PropTypes.string.isRequired,
     onAdd: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
     onRemove: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    onDayAdd: PropTypes.func.isRequired,
+    onDayRemove: PropTypes.func.isRequired,
 };
-
+Day.defaultProps = {
+    disabled: false,
+};
 export default Day;

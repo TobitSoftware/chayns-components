@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Day from './Day';
 
 class OpeningTimes extends Component {
     static propTypes = {
-        times: PropTypes.arrayOf(PropTypes.shape({
+        days: PropTypes.arrayOf(PropTypes.shape({
             weekDay: PropTypes.number.isRequired,
-            start: PropTypes.string.isRequired,
-            end: PropTypes.string.isRequired,
-            disabled: PropTypes.bool
+            times: PropTypes.arrayOf(PropTypes.shape({
+                start: PropTypes.string.isRequired,
+                end: PropTypes.string.isRequired,
+            })),
+            disabled: PropTypes.bool,
         })).isRequired,
-        onChange: PropTypes.func
-    };
-
-    static defaultProps = {
-        onChange: null
+        onChange: PropTypes.func.isRequired,
+        onAdd: PropTypes.func.isRequired,
+        onRemove: PropTypes.func.isRequired,
+        onDayAdd: PropTypes.func.isRequired,
+        onDayRemove: PropTypes.func.isRequired,
     };
 
     static weekdays = [
@@ -33,71 +35,100 @@ class OpeningTimes extends Component {
         this.onAdd = this.onAdd.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.onDayActivation = this.onDayActivation.bind(this);
     }
 
     onAdd(weekDay, start, end) {
-        const { times, onChange } = this.props;
-        if (onChange) {
-            onChange(times.concat({
-                weekDay,
+        const { days, onAdd } = this.props;
+        if (onAdd) {
+            const retVal = days;
+
+            const day = retVal.find(x => x.weekDay === weekDay);
+            let slots = day.times;
+            slots = slots.concat({
                 start,
                 end,
-                disabled: false
-            }));
+            });
+            day.times = slots;
+            onAdd(retVal, day);
         }
     }
 
-    onRemove(day, span) {
-        const { times, onChange } = this.props;
-        if (onChange) {
-            const timesOfDay = times.filter(t => t.weekDay === day);
-            // eslint-disable-next-line no-nested-ternary
-            const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
-            const newTimes = times.slice().filter(t => !(t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end));
+    onDayAdd = (weekDay, start, end) => {
+        const { days, onDayAdd } = this.props;
+        if (onDayAdd) {
+            const newDays = days;
+            newDays.sort((a, b) => a.weekDay - b.weekDay);
 
-            onChange(newTimes);
+            onDayAdd(newDays.concat({
+                weekDay,
+                day: OpeningTimes.weekdays[weekDay],
+                disabled: false,
+                times: [
+                    {
+                        start,
+                        end,
+                    },
+                ],
+            }), {
+                weekDay,
+                day: OpeningTimes.weekdays[weekDay],
+                disabled: false,
+                times: [
+                    {
+                        start,
+                        end,
+                    },
+                ],
+            });
+        }
+    };
+
+    onDayRemove = (weekDay) => {
+        const { days, onDayRemove } = this.props;
+        if (onDayRemove) {
+            const newTimes = days.slice();
+            const itemIndex = newTimes.findIndex(x => x.weekDay === weekDay);
+            newTimes.splice(itemIndex, 1);
+            onDayRemove(newTimes, days[itemIndex]);
+        }
+    };
+
+    onRemove(day, span) {
+        const { days, onRemove } = this.props;
+
+        if (onRemove) {
+            const dayIndex = days.findIndex(t => t.weekDay === day);
+            // eslint-disable-next-line no-nested-ternary
+            const elm = days[dayIndex].times[span];
+            const newTimes = days.slice()[dayIndex].times.filter(t => !(t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end));
+            const output = days;
+            output[dayIndex].times = newTimes;
+            onRemove(output, output[dayIndex]);
         }
     }
 
     onChange(day, span, start, end) {
         // eslint-disable-next-line no-nested-ternary
-        const { times, onChange } = this.props;
-        if (onChange) {
-            const timesOfDay = times.filter(t => t.weekDay === day);
-            // eslint-disable-next-line no-nested-ternary
-            const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
-            const newTimes = times.slice();
-            for (let i = 0; i < newTimes.length; i += 1) {
-                const t = newTimes[i];
-                if (t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end) {
-                    t.start = start;
-                    t.end = end;
-                    break;
-                }
-            }
-            onChange(newTimes);
-        }
-    }
 
-    onDayActivation(day, status) {
-        const { times, onChange } = this.props;
+        const { days, onChange } = this.props;
         if (onChange) {
-            const newTimes = times.slice();
-            newTimes.forEach((t) => {
-                if (t.weekDay === day) {
-                    // eslint-disable-next-line no-param-reassign
-                    t.disabled = !status;
-                }
-            });
-            onChange(newTimes);
+            const newTime = {
+                start,
+                end,
+            };
+            const dayObj = days[day];
+            dayObj.times[span] = newTime;
+            const newTimes = days.slice();
+            const objIndex = newTimes.findIndex(x => x.weekDay === day);
+            newTimes[objIndex] = dayObj;
+            onChange(newTimes, dayObj);
         }
     }
 
     render() {
-        const { times } = this.props;
+        const { days } = this.props;
         return (
-            <div className="cc__opening-times" >
+            <div className="cc__opening-times">
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day
@@ -105,10 +136,14 @@ class OpeningTimes extends Component {
                             key={index}
                             weekday={{
                                 name: day,
-                                number: index
+                                number: index,
                             }}
-                            times={times.filter(t => t.weekDay === index)}
-                            onDayActivation={this.onDayActivation}
+                            times={days && days.find(x => x.weekDay === index) && days.find(x => x.weekDay === index).times ? days.find(x => x.weekDay === index).times : []}
+                            defaultStart={days && days.length > 0 && days[0].times && days[0].times.length > 0 ? days[0].times[0].start : '08:00'}
+                            defaultEnd={days && days.length > 0 && days[0].times && days[0].times.length > 0 ? days[0].times[0].end : '18:00'}
+                            disabled={!((days && days.find(x => x.weekDay === index) && days.find(x => x.weekDay === index).length === 0) || (days && days.find(x => x.weekDay === index) && days.find(x => x.weekDay === index).disabled) === false)}
+                            onDayRemove={this.onDayRemove}
+                            onDayAdd={this.onDayAdd}
                             onAdd={this.onAdd}
                             onRemove={this.onRemove}
                             onChange={this.onChange}
