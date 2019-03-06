@@ -73,8 +73,16 @@ export default class Slider extends PureComponent {
         if (props.interval) {
             this.leftPercent = (((props.startValue || typeof props.startValue === 'number' ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
             this.rightPercent = (((props.endValue || typeof props.endValue === 'number' ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
+            if(props.vertical) {
+                const left = this.leftPercent;
+                this.leftPercent = 100 - this.rightPercent;
+                this.rightPercent = 100 - left;
+            }
         } else {
             this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
+            if(props.vertical) {
+                this.percent = 100 - this.percent;
+            }
         }
 
         this.setDirection();
@@ -87,15 +95,23 @@ export default class Slider extends PureComponent {
 
     componentDidUpdate() {
         const {
-            value, startValue, endValue, interval, min, max
+            interval, min, max, vertical, startValue, endValue, value
         } = this.props;
 
         if (value || (startValue && endValue)) {
             if (interval) {
                 this.leftPercent = ((startValue - min) / (max - min)) * 100;
                 this.rightPercent = ((endValue - min) / (max - min)) * 100;
+                if(vertical) {
+                    const left = this.leftPercent;
+                    this.leftPercent = 100 - this.rightPercent;
+                    this.rightPercent = 100 - left;
+                }
             } else {
                 this.percent = ((value - min) / (max - min)) * 100;
+                if(vertical) {
+                    this.percent = 100 - this.percent;
+                }
             }
             const stepped = this.getSteppedPercents(this);
             this.setElements(stepped);
@@ -346,8 +362,16 @@ export default class Slider extends PureComponent {
     };
 
     onChange = (listeners, percents) => {
-        const { min, max, interval, vertical } = this.props;
-        const { leftPercent, rightPercent, percent } = percents;
+        const {
+            min, max, interval, vertical
+        } = this.props;
+        let { leftPercent, rightPercent, percent } = percents;
+        if (vertical) {
+            const left = leftPercent;
+            leftPercent = 100 - rightPercent;
+            rightPercent = 100 - left;
+            percent = 100 - percent;
+        }
         const realInterval = max - min;
         if (interval) {
             const left = min + (realInterval * leftPercent / 100);
