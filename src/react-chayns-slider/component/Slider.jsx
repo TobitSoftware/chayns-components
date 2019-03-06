@@ -41,7 +41,7 @@ export default class Slider extends PureComponent {
         className: null,
         showLabel: false,
         valueFormatter: (value1, value2) => (value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)),
-        labelStyle: { minWidth: '60px' },
+        labelStyle: { minWidth: '50px' },
         onChangeStart: null,
         onChange: null,
         onChangeEnd: null,
