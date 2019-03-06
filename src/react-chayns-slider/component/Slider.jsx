@@ -73,14 +73,14 @@ export default class Slider extends PureComponent {
         if (props.interval) {
             this.leftPercent = (((props.startValue || typeof props.startValue === 'number' ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
             this.rightPercent = (((props.endValue || typeof props.endValue === 'number' ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
-            if(props.vertical) {
+            if (props.vertical) {
                 const left = this.leftPercent;
                 this.leftPercent = 100 - this.rightPercent;
                 this.rightPercent = 100 - left;
             }
         } else {
             this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
-            if(props.vertical) {
+            if (props.vertical) {
                 this.percent = 100 - this.percent;
             }
         }
@@ -102,14 +102,14 @@ export default class Slider extends PureComponent {
             if (interval) {
                 this.leftPercent = ((startValue - min) / (max - min)) * 100;
                 this.rightPercent = ((endValue - min) / (max - min)) * 100;
-                if(vertical) {
+                if (vertical) {
                     const left = this.leftPercent;
                     this.leftPercent = 100 - this.rightPercent;
                     this.rightPercent = 100 - left;
                 }
             } else {
                 this.percent = ((value - min) / (max - min)) * 100;
-                if(vertical) {
+                if (vertical) {
                     this.percent = 100 - this.percent;
                 }
             }
@@ -275,12 +275,12 @@ export default class Slider extends PureComponent {
         if (interval) {
             const width = max - min;
             const maxIntervalPercent = (maxInterval / width) * 100;
-            if (this.leftPercent > clickPercent) {
+            if (this.leftPercent > clickPercent || (chayns.env.isMobile && this.rightPercent > clickPercent && clickPercent - this.leftPercent < this.rightPercent - clickPercent)) {
                 this.leftPercent = clickPercent;
                 if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
-            } else if (this.rightPercent < clickPercent) {
+            } else if (this.rightPercent < clickPercent || (chayns.env.isMobile && this.leftPercent < clickPercent && clickPercent - this.leftPercent > this.rightPercent - clickPercent)) {
                 this.rightPercent = clickPercent;
                 if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.leftPercent = this.rightPercent - maxIntervalPercent;
