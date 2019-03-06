@@ -135,7 +135,7 @@ export default class Slider extends PureComponent {
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
-                if (minInterval && this.leftPercent + minIntervalPercent > this.rightPercent) {
+                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.rightPercent = this.leftPercent + minIntervalPercent;
                 }
                 if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
@@ -143,7 +143,7 @@ export default class Slider extends PureComponent {
                 }
             } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
                 this.rightPercent = newPercent;
-                if (minInterval && this.leftPercent + minIntervalPercent > this.rightPercent) {
+                if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.leftPercent = this.rightPercent - minIntervalPercent;
                 }
                 if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
@@ -218,7 +218,7 @@ export default class Slider extends PureComponent {
         const minPercent = 0;
         const maxPercent = 100;
 
-        let newPercent = this.leftPercent + ((e[this.movementX] / this.bar.current.clientWidth) * 100);
+        let newPercent = this.leftPercent + ((e[this.movementX] / this.bar.current[this.clientWidth]) * 100);
 
         if (newPercent < minPercent) {
             newPercent = minPercent;
@@ -309,7 +309,7 @@ export default class Slider extends PureComponent {
             this.innerTrack.current.style[this.width] = `${percent}%`;
         }
 
-        if (showLabel) {
+        if (showLabel && !vertical) {
             const realInterval = max - min;
             if (interval) {
                 const left = min + (realInterval * leftPercent / 100);
@@ -346,7 +346,7 @@ export default class Slider extends PureComponent {
     };
 
     onChange = (listeners, percents) => {
-        const { min, max, interval } = this.props;
+        const { min, max, interval, vertical } = this.props;
         const { leftPercent, rightPercent, percent } = percents;
         const realInterval = max - min;
         if (interval) {
@@ -398,7 +398,7 @@ export default class Slider extends PureComponent {
                 style={style}
             >
                 {
-                    showLabel
+                    showLabel && !vertical
                         ? <div className="cc__slider__label" ref={this.label} style={labelStyle}/>
                         : null
                 }
