@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default class Slider extends Component {
+export default class Slider extends PureComponent {
     static propTypes = {
         min: PropTypes.number,
         max: PropTypes.number,
@@ -76,6 +76,8 @@ export default class Slider extends Component {
         } else {
             this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
         }
+
+        this.setDirection();
     }
 
     componentDidMount() {
@@ -98,6 +100,7 @@ export default class Slider extends Component {
             const stepped = this.getSteppedPercents(this);
             this.setElements(stepped);
         }
+        this.setDirection();
     }
 
     thumbDown = (e) => {
@@ -126,9 +129,9 @@ export default class Slider extends Component {
         const maxPercent = 100;
         const minIntervalPercent = minInterval ? (minInterval / width) * 100 : 0;
         const maxIntervalPercent = maxInterval ? (maxInterval / width) * 100 : 100;
-        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        const clientX = e.changedTouches ? e.changedTouches[0][this.clientX] : e[this.clientX];
 
-        const newPercent = (((clientX - this.bar.current.offsetLeft) / this.bar.current.offsetWidth) * 100);
+        const newPercent = (((clientX - this.bar.current[this.offsetLeft]) / this.bar.current[this.offsetWidth]) * 100);
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
@@ -215,7 +218,7 @@ export default class Slider extends Component {
         const minPercent = 0;
         const maxPercent = 100;
 
-        let newPercent = this.leftPercent + ((e.movementX / this.bar.current.clientWidth) * 100);
+        let newPercent = this.leftPercent + ((e[this.movementX] / this.bar.current.clientWidth) * 100);
 
         if (newPercent < minPercent) {
             newPercent = minPercent;
@@ -251,7 +254,7 @@ export default class Slider extends Component {
             maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval, value, startValue, endValue
         } = this.props;
 
-        const clickPercent = ((e.clientX - this.bar.current.offsetLeft) / this.bar.current.clientWidth) * 100;
+        const clickPercent = ((e[this.clientX] - this.bar.current[this.offsetLeft]) / this.bar.current[this.clientWidth]) * 100;
 
         if (interval) {
             const width = max - min;
@@ -282,18 +285,28 @@ export default class Slider extends Component {
 
     setElements = (percents) => {
         const {
-            valueFormatter, min, max, showLabel, interval
+            valueFormatter, min, max, showLabel, interval, vertical
         } = this.props;
         const { leftPercent, rightPercent, percent } = percents;
         // set elements
-        if (interval) {
-            this.leftThumb.current.style.left = `${leftPercent}%`;
-            this.rightThumb.current.style.left = `${rightPercent}%`;
-            this.innerTrack.current.style.left = `${leftPercent}%`;
-            this.innerTrack.current.style.width = `${rightPercent - leftPercent}%`;
+        if (vertical) {
+            if (interval) {
+                this.leftThumb.current.style[this.left] = `${leftPercent}%`;
+                this.rightThumb.current.style[this.left] = `${rightPercent}%`;
+                this.innerTrack.current.style[this.left] = `${leftPercent}%`;
+                this.innerTrack.current.style[this.width] = `${rightPercent - leftPercent}%`;
+            } else {
+                this.thumb.current.style[this.left] = `${percent}%`;
+                this.innerTrack.current.style[this.width] = `${100 - percent}%`;
+            }
+        } else if (interval) {
+            this.leftThumb.current.style[this.left] = `${leftPercent}%`;
+            this.rightThumb.current.style[this.left] = `${rightPercent}%`;
+            this.innerTrack.current.style[this.left] = `${leftPercent}%`;
+            this.innerTrack.current.style[this.width] = `${rightPercent - leftPercent}%`;
         } else {
-            this.thumb.current.style.left = `${percent}%`;
-            this.innerTrack.current.style.width = `${percent}%`;
+            this.thumb.current.style[this.left] = `${percent}%`;
+            this.innerTrack.current.style[this.width] = `${percent}%`;
         }
 
         if (showLabel) {
@@ -350,13 +363,40 @@ export default class Slider extends Component {
         }
     };
 
+    setDirection = () => {
+        const { vertical } = this.props;
+        if (vertical) {
+            this.clientX = 'clientY';
+            this.clientWidth = 'clientHeight';
+            this.offsetLeft = 'offsetTop';
+            this.offsetWidth = 'offsetHeight';
+            this.movementX = 'movementY';
+            this.left = 'top';
+            this.width = 'height';
+        } else {
+            this.clientX = 'clientX';
+            this.clientWidth = 'clientWidth';
+            this.offsetLeft = 'offsetLeft';
+            this.offsetWidth = 'offsetWidth';
+            this.movementX = 'movementX';
+            this.left = 'left';
+            this.width = 'width';
+        }
+    };
+
     render() {
         const {
-            className, style, disabled, labelStyle, thumbStyle, showLabel, interval, trackStyle, innerTrackStyle
+            className, style, disabled, labelStyle, thumbStyle, showLabel, interval, trackStyle, innerTrackStyle, vertical
         } = this.props;
 
         return (
-            <div className={classNames('cc__slider', { 'cc__slider--disabled': disabled }, className)} style={style}>
+            <div
+                className={classNames('cc__slider', {
+                    'cc__slider--disabled': disabled,
+                    'cc__slider--vertical': vertical
+                }, className)}
+                style={style}
+            >
                 {
                     showLabel
                         ? <div className="cc__slider__label" ref={this.label} style={labelStyle}/>
