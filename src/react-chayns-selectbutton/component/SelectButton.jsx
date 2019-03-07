@@ -123,7 +123,7 @@ export default class SelectButton extends Component {
 
     render() {
         const {
-            className, label, disabled, listValue
+            className, label, disabled, listValue, showSelection
         } = this.props;
         const { selected } = this.state;
         return (
@@ -132,7 +132,7 @@ export default class SelectButton extends Component {
                 disabled={disabled}
                 onClick={this.onClick}
             >
-                {selected && selected.length > 0 ? selected.map((item, index) => {
+                {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
                     let str = (index === 1) ? ', ' : '';
                     str += (index < 2) ? item[listValue] : '';
                     str += (index === 2) ? '...' : '';
