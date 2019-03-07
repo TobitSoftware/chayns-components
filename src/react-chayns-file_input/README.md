@@ -50,4 +50,7 @@ You can use the gallery like in the [example](https://github.com/TobitSoftware/c
 
 ## Uploading images ##
 To Upload images to our new ImageService, you can use the imageUpload-function from the utils folder. It accepts image URLs and files with a maximum size of 4 MB.
+
 To avoid accidentally removal of an image, you may add a reference. When an image gets deleted, you can also add a reference. The file will only be deleted, if no other references are left.
+
+Images will always be stored in a person or site context. The person- or siteId will be part of the url. You can only use a site context, if you are admin on the site.
