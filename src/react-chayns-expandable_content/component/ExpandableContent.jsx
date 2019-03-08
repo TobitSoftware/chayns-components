@@ -47,6 +47,7 @@ export default class ExpandableContent extends Component {
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node)
         ]).isRequired,
+        removeContentClosed: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -54,6 +55,7 @@ export default class ExpandableContent extends Component {
         timeout: DEFAULT_TIMEOUTS,
         style: null,
         className: null,
+        removeContentClosed: false,
     };
 
     static getMaxHeight(state, style) {
@@ -106,6 +108,8 @@ export default class ExpandableContent extends Component {
         this.state = {
             currentState: (props.open ? OPENED : CLOSED),
         };
+
+        this.contentRendered = false;
     }
 
     componentDidMount() {
@@ -138,6 +142,8 @@ export default class ExpandableContent extends Component {
                 currentState: OPENED,
             });
         }, isInteger(timeout) ? timeout : DEFAULT_OPEN_TIMEOUT);
+
+        this.contentRendered = true;
     }
 
     close(timeout) {
@@ -170,6 +176,7 @@ export default class ExpandableContent extends Component {
             open,
             timeout,
             children,
+            removeContentClosed,
             ...props
         } = this.props;
         const { currentState } = this.state;
@@ -192,7 +199,7 @@ export default class ExpandableContent extends Component {
                 className={newClassNames}
                 {...props}
             >
-                {(currentState !== CLOSED) && children}
+                {(currentState !== CLOSED || (this.contentRendered && !removeContentClosed)) && children}
             </div>
         );
     }

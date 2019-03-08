@@ -30,6 +30,7 @@ The following properties can be set
 | open         | Whether the content should be visible                 | bool                       | false            |
 | classNames   | The classNames to use for animations                  | ClassNames                 | default-classes  |
 | timeouts     | The timeouts to use for animations (opening, closing) | Timeouts                   | default-timeouts |
+| removeContentClosed | Removes the content on every closing           | bool                       | false            |
 
 ### ClassNames
 
