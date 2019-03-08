@@ -16,7 +16,6 @@ export default class Bubble extends PureComponent {
         }),
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
-        // show: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -28,7 +27,6 @@ export default class Bubble extends PureComponent {
         coordinates: null,
         onMouseEnter: null,
         onMouseLeave: null,
-        // show: false,
     };
 
     constructor(props) {
@@ -38,45 +36,36 @@ export default class Bubble extends PureComponent {
         this.hide = this.hide.bind(this);
 
         this.key = Math.random().toString();
-        this.tooltipNode = React.createRef();
+        this.bubbleNode = React.createRef();
     }
 
     componentDidMount() {
-        if (this.tooltipNode.current) {
-            this.tooltipNode.current.classList.add('cc__tooltip--hide');
+        if (this.bubbleNode.current) {
+            this.bubbleNode.current.classList.add('cc__bubble--hide');
         }
     }
 
-    // componentDidUpdate(prevProps) {
-    //     const { show } = this.props;
-    //     if (show && !prevProps.show) {
-    //         this.show();
-    //     } else if (!show && prevProps.show) {
-    //         this.hide();
-    //     }
-    // }
-
     show() {
-        if (!this.tooltipNode.current) {
+        if (!this.bubbleNode.current) {
             return;
         }
 
         clearTimeout(this.timeout);
-        this.tooltipNode.current.classList.remove('cc__tooltip--hide');
+        this.bubbleNode.current.classList.remove('cc__bubble--hide');
         this.timeout = setTimeout(() => {
-            this.tooltipNode.current.classList.add('cc__tooltip--active');
+            this.bubbleNode.current.classList.add('cc__bubble--active');
         });
     }
 
     hide() {
-        if (!this.tooltipNode.current) {
+        if (!this.bubbleNode.current) {
             return;
         }
 
         clearTimeout(this.timeout);
-        this.tooltipNode.current.classList.remove('cc__tooltip--active');
+        this.bubbleNode.current.classList.remove('cc__bubble--active');
         this.timeout = setTimeout(() => {
-            this.tooltipNode.current.classList.add('cc__tooltip--hide');
+            this.bubbleNode.current.classList.add('cc__bubble--hide');
         }, 500);
     }
 
@@ -90,15 +79,15 @@ export default class Bubble extends PureComponent {
         return (
             <TappPortal parent={parent}>
                 <div
-                    className={`cc__tooltip cc__tooltip--position${position}`}
-                    style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px` }) }}
-                    ref={this.tooltipNode}
+                    className={`cc__bubble cc__bubble--position${position}`}
+                    style={{ top: `${y}px`, left: `${x}px` }}
+                    ref={this.bubbleNode}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    key={`cc__tooltip${this.key}`}
+                    key={`cc__bubble${this.key}`}
                 >
                     <div
-                        className={classNames('cc__tooltip__overlay', className)}
+                        className={classNames('cc__bubble__overlay', className)}
                         style={style}
                     >
                         {children}
