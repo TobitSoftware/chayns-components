@@ -96,7 +96,7 @@ export default class ContextMenuExample extends Component {
                         items={items}
                         position={position % 4}
                         showTriggerBackground
-                        childrenStyle={{ position: 'absolute', top: '1px', right: '1px' }}
+                        childrenStyle={{ position: 'absolute', top: 0, right: 0 }}
                     />
                 </div>
                 <Accordion head="List with one contextMenu for all entries">
