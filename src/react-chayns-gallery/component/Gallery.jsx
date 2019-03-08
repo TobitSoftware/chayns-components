@@ -33,7 +33,7 @@ export default class Gallery extends Component {
         onDelete: null,
         deleteMode: false,
         height: null,
-        width: '100%',
+        width: null,
         className: null,
         style: {},
         stopPropagation: false,
