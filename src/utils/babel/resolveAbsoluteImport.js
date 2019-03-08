@@ -42,6 +42,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         TextString: 'react-chayns-textstring/component/TextString.js',
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
         FileInput: 'react-chayns-file_input/component/FileInput.js',
+        Slider: 'react-chayns-slider/component/Slider.js',
         imageUpload: 'utils/imageUpload.js',
         FORMAT_INTEGER: 'react-chayns-formatted_input/component/FormattedInput/instances/formatInteger.js',
         FORMAT_DECIMAL: 'react-chayns-formatted_input/component/FormattedInput/instances/formatDecimal.js',
