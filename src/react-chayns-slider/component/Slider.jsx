@@ -132,6 +132,8 @@ export default class Slider extends PureComponent {
         document.addEventListener('touchend', this.thumbUp);
         document.addEventListener('touchcancel', this.thumbUp);
 
+        this.setScrolling(false);
+
         e.stopPropagation();
     };
 
@@ -208,6 +210,9 @@ export default class Slider extends PureComponent {
         document.removeEventListener('touchcancel', this.thumbUp);
         this.target = null;
         const stepped = this.getSteppedPercents(this);
+
+        this.setScrolling(true);
+
         this.onChange([onChangeEnd], stepped);
     };
 
@@ -221,6 +226,9 @@ export default class Slider extends PureComponent {
         document.addEventListener('mouseleave', this.innerTrackUp);
 
         const stepped = this.getSteppedPercents(this);
+
+        this.setScrolling(false);
+
         this.onChange([onChangeStart], stepped);
 
         e.stopPropagation();
@@ -261,6 +269,8 @@ export default class Slider extends PureComponent {
         document.removeEventListener('mouseleave', this.innerTrackUp);
 
         const stepped = this.getSteppedPercents(this);
+
+        this.setScrolling(true);
 
         this.onChange([onChangeEnd], stepped);
     };
@@ -405,6 +415,20 @@ export default class Slider extends PureComponent {
             this.movementX = 'movementX';
             this.left = 'left';
             this.width = 'width';
+        }
+    };
+
+    setScrolling = (enabled) => {
+        chayns.invokeCall({
+            action: 204,
+            value: {
+                enabled
+            }
+        });
+        if (enabled) {
+            chayns.allowRefreshScroll();
+        } else {
+            chayns.disallowRefreshScroll();
         }
     };
 
