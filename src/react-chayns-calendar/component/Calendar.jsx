@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 
@@ -11,7 +10,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 
 
 const TODAY = new Date();
-const TRANSITION_TIME = 300;
 const MONTH_NAMES = {
     de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
     en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -55,9 +53,7 @@ export default class Calendar extends Component {
 
         this.state = {
             focus: new Date(),
-            animationKey: 0.05,
             months: [],
-            animation: '',
         };
 
         this.navigateLeftOnClick = this.navigateLeftOnClick.bind(this);
@@ -87,25 +83,25 @@ export default class Calendar extends Component {
             months: [
                 {
                     title: monthNames[_leftHidden.getMonth()],
-                    className: 'left__hidden month',
+                    className: 'month',
                     startDate: _leftHidden,
                     endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
                 },
                 {
                     title: monthNames[_focus.getMonth()],
-                    className: 'left__shown month',
+                    className: 'month',
                     startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
                     endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
                 },
                 {
                     title: monthNames[_rightShown.getMonth()],
-                    className: 'right__shown month',
+                    className: 'month',
                     startDate: _rightShown,
                     endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
                 },
                 {
                     title: monthNames[_rightHidden.getMonth()],
-                    className: 'right__hidden month',
+                    className: 'month',
                     startDate: _rightHidden,
                     endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
                 }]
@@ -151,15 +147,11 @@ export default class Calendar extends Component {
             return;
         }
 
-        const { focus, animationKey } = this.state;
+        const { focus } = this.state;
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() + 1, 1);
 
         this.setMonths(newFocus);
-        this.setState({
-            animationKey: animationKey + 1,
-            animation: 'right'
-        });
     }
 
     navigateLeftOnClick() {
@@ -167,15 +159,11 @@ export default class Calendar extends Component {
             return;
         }
 
-        const { focus, animationKey } = this.state;
+        const { focus } = this.state;
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() - 1, 1);
 
         this.setMonths(newFocus);
-        this.setState({
-            animationKey: animationKey + 1,
-            animation: 'left'
-        });
     }
 
     /*
@@ -218,7 +206,7 @@ export default class Calendar extends Component {
             activateAll,
             onDateSelect,
         } = this.props;
-        const { months, animation } = this.state;
+        const { months } = this.state;
 
         /**
          * TODO
@@ -322,28 +310,18 @@ export default class Calendar extends Component {
             }
 
             return (
-                <CSSTransition
-                    classNames={animation}
-                    timeout={{
-                        enter: TRANSITION_TIME,
-                    }}
-                    appear
-                    exit={false}
+                <Month
+                    onDateSelect={onDateSelect}
+                    title={month.title}
+                    className={month.className}
+                    startDate={month.startDate}
+                    endDate={month.endDate}
+                    selected={_selected}
+                    activated={activated}
+                    highlighted={tempHighlighted}
+                    activateAll={activateAll}
                     key={month.startDate.getTime() * (index + 1)}
-                >
-                    <Month
-                        onDateSelect={onDateSelect}
-                        title={month.title}
-                        className={month.className}
-                        startDate={month.startDate}
-                        endDate={month.endDate}
-                        selected={_selected}
-                        activated={activated}
-                        highlighted={tempHighlighted}
-                        activateAll={activateAll}
-                        key={month.startDate.getTime() * (index + 1)}
-                    />
-                </CSSTransition>
+                />
             );
         });
     }
@@ -371,6 +349,7 @@ export default class Calendar extends Component {
                         >
                             <Icon icon={faChevronLeft}/>
                         </div>
+                        <div className="cc__calendar__navigate middle" />
                         <div
                             onClick={this.navigateRightOnClick}
                             className="cc__calendar__navigate right"
@@ -381,9 +360,9 @@ export default class Calendar extends Component {
                     </div>
                 </div>
                 <div className="cc__calendar__months">
-                    <TransitionGroup className="cc__calendar__months__wrapper">
+                    <div className="cc__calendar__months__wrapper">
                         {_months}
-                    </TransitionGroup>
+                    </div>
                 </div>
             </div>
         );
