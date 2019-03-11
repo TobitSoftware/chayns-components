@@ -381,7 +381,7 @@ export default class Calendar extends Component {
                     </div>
                 </div>
                 <div className="cc__calendar__months">
-                    <TransitionGroup>
+                    <TransitionGroup className="cc__calendar__months__wrapper">
                         {_months}
                     </TransitionGroup>
                 </div>
