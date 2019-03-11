@@ -60,14 +60,9 @@ class DayItem extends PureComponent {
         }
 
         if (activated) {
-            for (let i = 0; i < activated.length; i += 1) {
-                if (areDatesEqual(activated[i], date)) {
-                    _active = true;
-                    _marked = true;
-                    _onClick = true;
-                    break;
-                }
-            }
+            _active = true;
+            _marked = true;
+            _onClick = true;
         }
 
         if (selected && areDatesEqual(selected, date)) {

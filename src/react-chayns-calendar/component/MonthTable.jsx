@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DayItem from './DayItem';
 import DateStorage from '../utils/DateStorage';
+import areDatesEqual from '../utils/areDatesEqual';
 
 const DAYS = {
     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
@@ -29,6 +30,16 @@ export default class MonthTable extends PureComponent {
         highlighted: false,
         activateAll: null,
     };
+
+    static isActivated(activated, date) {
+        for (let i = 0; i < activated.length; i += 1) {
+            if (areDatesEqual(activated[i], date)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     createTable() {
         const { startDate } = this.props;
@@ -106,6 +117,8 @@ export default class MonthTable extends PureComponent {
 
         const daysList = getDayNames();
 
+        console.log('highlighted', highlighted);
+
         return(
             <div className="month__table noselect">
                 <div className="day__row">
@@ -130,7 +143,7 @@ export default class MonthTable extends PureComponent {
                                 date={day.date}
                                 inMonth={day.inMonth}
                                 activateAll={activateAll}
-                                activated={activated}
+                                activated={MonthTable.isActivated(activated, day.date)}
                                 selected={selected}
                                 highlighted={highlighted}
                                 onDateSelect={onDateSelect}
