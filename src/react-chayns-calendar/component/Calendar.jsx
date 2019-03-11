@@ -356,14 +356,14 @@ export default class Calendar extends Component {
 
         return (
             <div
-                className="buffer"
+                className="cc__calendar buffer"
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
                 style={{ ...{ minHeight: '205px', overflow: 'hidden' }, ...style }}
             >
                 <div className="absolute">
-                    <div className="calendar__navigation">
+                    <div className="cc__calendar__navigation">
                         <div
                             onClick={this.navigateLeftOnClick}
                             className="calendar__navigate left"
@@ -373,14 +373,14 @@ export default class Calendar extends Component {
                         </div>
                         <div
                             onClick={this.navigateRightOnClick}
-                            className="calendar__navigate right"
+                            className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
                             <Icon icon={faChevronRight}/>
                         </div>
                     </div>
                 </div>
-                <div className="calendar__months">
+                <div className="cc__calendar__months">
                     <TransitionGroup>
                         {_months}
                     </TransitionGroup>
