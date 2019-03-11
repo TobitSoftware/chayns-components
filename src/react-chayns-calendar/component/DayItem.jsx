@@ -115,7 +115,7 @@ class DayItem extends PureComponent {
                 <div
                     className={_className}
                     style={_style}
-                    onClick={_onClick && this.onClick}
+                    onClick={_onClick ? this.onClick : null}
                 >
                     {date.getDate()}
                 </div>
