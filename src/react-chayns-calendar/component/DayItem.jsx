@@ -84,19 +84,6 @@ class DayItem extends PureComponent {
                     }
                 }
             }
-        } else if (highlighted && highlighted.dates) {
-            for (let k = 0; k < highlighted.dates.length; k += 1) {
-                if (areDatesEqual(highlighted.dates[k], date)) {
-                    _active = true;
-                    _marked = true;
-                    _onClick = true;
-                    _highlighted = true;
-                    if (highlighted.color) {
-                        _style.backgroundColor = `${highlighted.color}`;
-                    }
-                    break;
-                }
-            }
         }
 
         if (inMonth) {

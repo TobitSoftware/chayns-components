@@ -137,18 +137,20 @@ export default class MonthTable extends PureComponent {
                         key={index}
                     >
                     {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
-                        {row.map(day => (
-                            <DayItem
-                                key={day.date.getTime()}
-                                date={day.date}
-                                inMonth={day.inMonth}
-                                activateAll={activateAll}
-                                activated={MonthTable.isActivated(activated, day.date)}
-                                selected={selected}
-                                highlighted={highlighted}
-                                onDateSelect={onDateSelect}
-                            />
-                        ))}
+                        {row.map((day) => {
+                            return (
+                                <DayItem
+                                    key={day.date.getTime()}
+                                    date={day.date}
+                                    inMonth={day.inMonth}
+                                    activateAll={activateAll}
+                                    activated={MonthTable.isActivated(activated, day.date)}
+                                    selected={selected}
+                                    highlighted={highlighted}
+                                    onDateSelect={onDateSelect}
+                                />
+                            );
+                        })}
                     </div>
                 ))}
             </div>

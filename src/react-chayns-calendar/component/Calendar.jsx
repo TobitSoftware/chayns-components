@@ -247,6 +247,7 @@ export default class Calendar extends Component {
                     }
                 }
             }
+            console.log('activated', activateAll);
 
             if (activateAll) {
                 if (_highlighted instanceof Array) {
@@ -267,7 +268,10 @@ export default class Calendar extends Component {
                         }
                     }
                 } else {
-                    // TODO
+                    tempDates.push({
+                        dates: _highlighted.dates,
+                        color: _highlighted.color,
+                    });
                 }
             } else if (activated) {
                 for (let i = 0; i < activated.length; i += 1) {
@@ -289,20 +293,16 @@ export default class Calendar extends Component {
                             }
                         }
                     } else if (_highlighted && _highlighted.dates) {
-                        for (let j = 0; _highlighted.dates.length < j; j += 1) {
-                            if (areDatesEqual(_highlighted.dates[j], activated[i])) {
-                                tempDates.push(_highlighted.dates[j]);
-                            }
-                        }
+                        tempDates.push({
+                            dates: _highlighted.dates,
+                            color: _highlighted.color,
+                        });
                     }
                 }
             }
 
             if (tempDates.length > 0) {
-                tempHighlighted = {
-                    dates: tempDates,
-                    color: _highlighted.color
-                };
+                tempHighlighted = tempDates;
             }
 
             if (tempObj.length > 0) {
