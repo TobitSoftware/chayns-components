@@ -48,6 +48,8 @@ export default class Calendar extends Component {
         style: null,
     };
 
+    static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
+
     constructor() {
         super();
 
@@ -71,41 +73,69 @@ export default class Calendar extends Component {
         this.setMonths(active);
     }
 
-    setMonths(_focus) {
-        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
-        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
-        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 2, 1);
+    setMonths(_focus, translate) {
+        const { setTimeout } = window;
+
+        const OFFSET = Calendar.IsMobile() ? -50 : -25;
+
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+
+            this.setState({
+                months: this.newMonths,
+                translate: `${OFFSET}%`,
+                animate: false,
+            });
+        }
+
+        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 2, 1);
+        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
+        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
 
         const monthNames = getMonthNames();
+        const months = [
+            {
+                title: monthNames[_leftHidden.getMonth()],
+                className: 'month',
+                startDate: _leftHidden,
+                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_rightShown.getMonth()],
+                className: 'month',
+                startDate: _rightShown,
+                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_focus.getMonth()],
+                className: 'month',
+                startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
+                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_rightHidden.getMonth()],
+                className: 'month',
+                startDate: _rightHidden,
+                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
+            }];
 
-        this.setState({
-            focus: _focus,
-            months: [
-                {
-                    title: monthNames[_leftHidden.getMonth()],
-                    className: 'month',
-                    startDate: _leftHidden,
-                    endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_focus.getMonth()],
-                    className: 'month',
-                    startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
-                    endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_rightShown.getMonth()],
-                    className: 'month',
-                    startDate: _rightShown,
-                    endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_rightHidden.getMonth()],
-                    className: 'month',
-                    startDate: _rightHidden,
-                    endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
-                }]
-        });
+        this.newMonths = months;
+
+        this.timeout = window.setTimeout(() => {
+            this.setState({
+                animate: true,
+                translate: `${OFFSET + translate}%`,
+                focus: _focus,
+            });
+
+            this.timeout = setTimeout(() => {
+                this.setState({
+                    translate: `${OFFSET}%`,
+                    animate: false,
+                    months
+                });
+            }, 300);
+        }, 25);
     }
 
     getNavigateLeft() {
@@ -128,7 +158,7 @@ export default class Calendar extends Component {
         const { activateAll, endDate } = this.props;
         const { focus } = this.state;
 
-        const FOCUS_FACTOR = window.screen.width < 450 ? 0 : 1;
+        const FOCUS_FACTOR = Calendar.IsMobile() ? 0 : 1;
 
         if (!endDate) {
             return !!activateAll;
@@ -151,7 +181,7 @@ export default class Calendar extends Component {
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() + 1, 1);
 
-        this.setMonths(newFocus);
+        this.setMonths(newFocus, -25);
     }
 
     navigateLeftOnClick() {
@@ -163,7 +193,7 @@ export default class Calendar extends Component {
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() - 1, 1);
 
-        this.setMonths(newFocus);
+        this.setMonths(newFocus, 25);
     }
 
     /*
@@ -222,7 +252,7 @@ export default class Calendar extends Component {
         const _activated = activatedProp && activatedProp.length > 0 ? activatedProp : null;
         const _highlighted = highlighted || null;
 
-        return months.map((month, index) => {
+        return months.map((month) => {
             const activated = [];
             const tempDates = [];
             const tempObj = [];
@@ -319,7 +349,7 @@ export default class Calendar extends Component {
                     activated={activated}
                     highlighted={tempHighlighted}
                     activateAll={activateAll}
-                    key={month.startDate.getTime() * (index + 1)}
+                    key={month.startDate.getTime()}
                 />
             );
         });
@@ -329,7 +359,10 @@ export default class Calendar extends Component {
         const _navigateLeft = !(this.getNavigateLeft());
         const _navigateRight = !(this.getNavigateRight());
         const { style } = this.props;
+        const { animate, translate } = this.state;
         const _months = this.renderMonths();
+
+        console.log('render', translate);
 
         return (
             <div
@@ -359,7 +392,12 @@ export default class Calendar extends Component {
                     </div>
                 </div>
                 <div className="cc__calendar__months">
-                    <div className="cc__calendar__months__wrapper">
+                    <div
+                        className={`cc__calendar__months__wrapper ${animate ? 'cc__calendar__months__wrapper--animate' : ''}`}
+                        style={{
+                            transform: `translateX(${translate})`
+                        }}
+                    >
                         {_months}
                     </div>
                 </div>

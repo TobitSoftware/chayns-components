@@ -36,7 +36,7 @@ export default class CalendarExample extends Component {
                 <Calendar
                     style={{ margin: '20px 0' }}
                     onDateSelect={this.handleDateSelect}
-                    startDate={new Date('2018-08-01T00:00:00')}
+                    startDate={new Date('2018-01-01T00:00:00')}
                     endDate={new Date('2018-12-31T00:00:00')}
                     selected={selected}
                     // activateAll={false}
