@@ -75,8 +75,7 @@ export default class ModeSwitch extends Component {
             open: false
         };
         ModeSwitch.adminSwitchStatus = chayns.env.user.adminMode ? 1 : 0;
-        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp);
-
+        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp) && !!chayns.env.user.groups.find(g => g.id === 1);
         window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(this.init);
             this.init();
