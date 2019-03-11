@@ -362,8 +362,6 @@ export default class Calendar extends Component {
         const { animate, translate } = this.state;
         const _months = this.renderMonths();
 
-        console.log('render', translate);
-
         return (
             <div
                 className="cc__calendar buffer"
