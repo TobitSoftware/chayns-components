@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 
@@ -11,7 +10,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 
 
 const TODAY = new Date();
-const TRANSITION_TIME = 300;
 const MONTH_NAMES = {
     de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
     en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -50,14 +48,14 @@ export default class Calendar extends Component {
         style: null,
     };
 
+    static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
+
     constructor() {
         super();
 
         this.state = {
             focus: new Date(),
-            animationKey: 0.05,
             months: [],
-            animation: '',
         };
 
         this.navigateLeftOnClick = this.navigateLeftOnClick.bind(this);
@@ -75,41 +73,69 @@ export default class Calendar extends Component {
         this.setMonths(active);
     }
 
-    setMonths(_focus) {
-        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
-        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
-        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 2, 1);
+    setMonths(_focus, translate) {
+        const { setTimeout } = window;
+
+        const OFFSET = Calendar.IsMobile() ? -50 : -25;
+
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+
+            this.setState({
+                months: this.newMonths,
+                translate: `${OFFSET}%`,
+                animate: false,
+            });
+        }
+
+        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 2, 1);
+        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
+        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
 
         const monthNames = getMonthNames();
+        const months = [
+            {
+                title: monthNames[_leftHidden.getMonth()],
+                className: 'month',
+                startDate: _leftHidden,
+                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_rightShown.getMonth()],
+                className: 'month',
+                startDate: _rightShown,
+                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_focus.getMonth()],
+                className: 'month',
+                startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
+                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
+            },
+            {
+                title: monthNames[_rightHidden.getMonth()],
+                className: 'month',
+                startDate: _rightHidden,
+                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
+            }];
 
-        this.setState({
-            focus: _focus,
-            months: [
-                {
-                    title: monthNames[_leftHidden.getMonth()],
-                    className: 'left__hidden month',
-                    startDate: _leftHidden,
-                    endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_focus.getMonth()],
-                    className: 'left__shown month',
-                    startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
-                    endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_rightShown.getMonth()],
-                    className: 'right__shown month',
-                    startDate: _rightShown,
-                    endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
-                },
-                {
-                    title: monthNames[_rightHidden.getMonth()],
-                    className: 'right__hidden month',
-                    startDate: _rightHidden,
-                    endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
-                }]
-        });
+        this.newMonths = months;
+
+        this.timeout = window.setTimeout(() => {
+            this.setState({
+                animate: true,
+                translate: `${OFFSET + translate}%`,
+                focus: _focus,
+            });
+
+            this.timeout = setTimeout(() => {
+                this.setState({
+                    translate: `${OFFSET}%`,
+                    animate: false,
+                    months
+                });
+            }, 300);
+        }, 25);
     }
 
     getNavigateLeft() {
@@ -124,15 +150,15 @@ export default class Calendar extends Component {
             return true;
         }
 
+        const FOCUS_FACTOR = Calendar.IsMobile() ? 0 : 1;
+
         return startDate.getFullYear() === focus.getFullYear()
-            && startDate.getMonth() < focus.getMonth();
+            && startDate.getMonth() + FOCUS_FACTOR < focus.getMonth();
     }
 
     getNavigateRight() {
         const { activateAll, endDate } = this.props;
         const { focus } = this.state;
-
-        const FOCUS_FACTOR = window.screen.width < 450 ? 0 : 1;
 
         if (!endDate) {
             return !!activateAll;
@@ -143,7 +169,7 @@ export default class Calendar extends Component {
         }
 
         return endDate.getFullYear() === focus.getFullYear()
-            && endDate.getMonth() - FOCUS_FACTOR > focus.getMonth();
+            && endDate.getMonth() > focus.getMonth();
     }
 
     navigateRightOnClick() {
@@ -151,15 +177,11 @@ export default class Calendar extends Component {
             return;
         }
 
-        const { focus, animationKey } = this.state;
+        const { focus } = this.state;
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() + 1, 1);
 
-        this.setMonths(newFocus);
-        this.setState({
-            animationKey: animationKey + 1,
-            animation: 'right'
-        });
+        this.setMonths(newFocus, -25);
     }
 
     navigateLeftOnClick() {
@@ -167,15 +189,11 @@ export default class Calendar extends Component {
             return;
         }
 
-        const { focus, animationKey } = this.state;
+        const { focus } = this.state;
 
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() - 1, 1);
 
-        this.setMonths(newFocus);
-        this.setState({
-            animationKey: animationKey + 1,
-            animation: 'left'
-        });
+        this.setMonths(newFocus, 25);
     }
 
     /*
@@ -218,7 +236,7 @@ export default class Calendar extends Component {
             activateAll,
             onDateSelect,
         } = this.props;
-        const { months, animation } = this.state;
+        const { months } = this.state;
 
         /**
          * TODO
@@ -234,7 +252,7 @@ export default class Calendar extends Component {
         const _activated = activatedProp && activatedProp.length > 0 ? activatedProp : null;
         const _highlighted = highlighted || null;
 
-        return months.map((month, index) => {
+        return months.map((month) => {
             const activated = [];
             const tempDates = [];
             const tempObj = [];
@@ -274,12 +292,15 @@ export default class Calendar extends Component {
                         if (dates.length > 0) {
                             tempObj.push({
                                 dates,
-                                color: _highlighted[j].color
+                                style: _highlighted[j].style
                             });
                         }
                     }
                 } else {
-                    // TODO
+                    tempDates.push({
+                        dates: _highlighted.dates,
+                        style: _highlighted.style,
+                    });
                 }
             } else if (activated) {
                 for (let i = 0; i < activated.length; i += 1) {
@@ -296,25 +317,21 @@ export default class Calendar extends Component {
                             if (dates.length > 0) {
                                 tempObj.push({
                                     dates,
-                                    color: _highlighted[j].color
+                                    style: _highlighted[j].style
                                 });
                             }
                         }
                     } else if (_highlighted && _highlighted.dates) {
-                        for (let j = 0; _highlighted.dates.length < j; j += 1) {
-                            if (areDatesEqual(_highlighted.dates[j], activated[i])) {
-                                tempDates.push(_highlighted.dates[j]);
-                            }
-                        }
+                        tempDates.push({
+                            dates: _highlighted.dates,
+                            style: _highlighted.style,
+                        });
                     }
                 }
             }
 
             if (tempDates.length > 0) {
-                tempHighlighted = {
-                    dates: tempDates,
-                    color: _highlighted.color
-                };
+                tempHighlighted = tempDates;
             }
 
             if (tempObj.length > 0) {
@@ -322,28 +339,18 @@ export default class Calendar extends Component {
             }
 
             return (
-                <CSSTransition
-                    classNames={animation}
-                    timeout={{
-                        enter: TRANSITION_TIME,
-                    }}
-                    appear
-                    exit={false}
-                    key={month.startDate.getTime() * (index + 1)}
-                >
-                    <Month
-                        onDateSelect={onDateSelect}
-                        title={month.title}
-                        className={month.className}
-                        startDate={month.startDate}
-                        endDate={month.endDate}
-                        selected={_selected}
-                        activated={activated}
-                        highlighted={tempHighlighted}
-                        activateAll={activateAll}
-                        key={month.startDate.getTime() * (index + 1)}
-                    />
-                </CSSTransition>
+                <Month
+                    onDateSelect={onDateSelect}
+                    title={month.title}
+                    className={month.className}
+                    startDate={month.startDate}
+                    endDate={month.endDate}
+                    selected={_selected}
+                    activated={activated}
+                    highlighted={tempHighlighted}
+                    activateAll={activateAll}
+                    key={month.startDate.getTime()}
+                />
             );
         });
     }
@@ -352,38 +359,45 @@ export default class Calendar extends Component {
         const _navigateLeft = !(this.getNavigateLeft());
         const _navigateRight = !(this.getNavigateRight());
         const { style } = this.props;
+        const { animate, translate } = this.state;
         const _months = this.renderMonths();
 
         return (
             <div
-                className="buffer"
+                className="cc__calendar"
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
                 style={{ ...{ minHeight: '205px', overflow: 'hidden' }, ...style }}
             >
                 <div className="absolute">
-                    <div className="calendar__navigation">
+                    <div className="cc__calendar__navigation">
                         <div
                             onClick={this.navigateLeftOnClick}
-                            className="calendar__navigate left"
+                            className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
                             <Icon icon={faChevronLeft}/>
                         </div>
+                        <div className="cc__calendar__navigate middle" />
                         <div
                             onClick={this.navigateRightOnClick}
-                            className="calendar__navigate right"
+                            className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
                             <Icon icon={faChevronRight}/>
                         </div>
                     </div>
                 </div>
-                <div className="calendar__months">
-                    <TransitionGroup>
+                <div className="cc__calendar__months">
+                    <div
+                        className={`cc__calendar__months__wrapper ${animate ? 'cc__calendar__months__wrapper--animate' : ''}`}
+                        style={{
+                            transform: `translateX(${translate})`
+                        }}
+                    >
                         {_months}
-                    </TransitionGroup>
+                    </div>
                 </div>
             </div>
         );

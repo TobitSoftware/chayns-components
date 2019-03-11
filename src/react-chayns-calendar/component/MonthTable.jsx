@@ -1,7 +1,9 @@
 /* eslint-disable react/no-array-index-key */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DayItem from './DayItem';
+import DateStorage from '../utils/DateStorage';
+import areDatesEqual from '../utils/areDatesEqual';
 
 const DAYS = {
     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
@@ -12,7 +14,7 @@ function getDayNames(language = chayns.env.language) {
     return DAYS[language] || DAYS.de;
 }
 
-export default class MonthTable extends Component {
+export default class MonthTable extends PureComponent {
     static propTypes = {
         onDateSelect: PropTypes.func.isRequired,
         activateAll: PropTypes.func,
@@ -29,6 +31,34 @@ export default class MonthTable extends Component {
         activateAll: null,
     };
 
+    static isActivated(activated, date) {
+        for (let i = 0; i < activated.length; i += 1) {
+            if (areDatesEqual(activated[i], date)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static getHighlightedData(highlighted, date) {
+        for (let k = 0; k < highlighted.length; k += 1) {
+            for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
+                if (areDatesEqual(highlighted[k].dates[l], date)) {
+                    return {
+                        highlighted: true,
+                        style: highlighted[k].style || null,
+                    };
+                }
+            }
+        }
+
+        return {
+            highlighted: false,
+            style: null,
+        };
+    }
+
     createTable() {
         const { startDate } = this.props;
 
@@ -36,9 +66,9 @@ export default class MonthTable extends Component {
         let normalWeekStart;
 
         if (startDate.getDay() > 0) {
-            normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
         } else {
-            normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
         }
 
         for (let i = 0; i < 6; i += 1) {
@@ -48,32 +78,32 @@ export default class MonthTable extends Component {
                 if (startDate.getDay() > 0) {
                     for (let j = 2; j <= startDate.getDay(); j += 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
+                            date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
                             inMonth: false
                         });
                     }
                     for (let k = 1; k <= (8 - startDate.getDay()); k += 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), k),
+                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), k),
                             inMonth: true
                         });
                     }
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
+                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
                             inMonth: false
                         });
                     }
 
                     _row.push({
-                        date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+                        date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
                         inMonth: true
                     });
                 }
             } else {
                 for(let j = 0; j < 7; j += 1) {
-                    const _date = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
+                    const _date = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
                     if (_date.getMonth() === startDate.getMonth()) {
                         _row.push({
                             date: _date,
@@ -86,7 +116,7 @@ export default class MonthTable extends Component {
                         });
                     }
                 }
-                normalWeekStart = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + 7);
+                normalWeekStart = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + 7);
             }
             _table.push(_row);
         }
@@ -98,7 +128,7 @@ export default class MonthTable extends Component {
             activateAll,
             activated,
             selected,
-            highlighted,
+            highlighted: highlightedList,
             onDateSelect,
         } = this.props;
         const _table = this.createTable();
@@ -110,7 +140,7 @@ export default class MonthTable extends Component {
                 <div className="day__row">
                     {daysList.map((day, index) => (
                         <div
-                            className="day__item day-text chayns__color--100"
+                            className="day__item--text chayns__color--100"
                             key={index}
                         >
                             {day}
@@ -123,17 +153,23 @@ export default class MonthTable extends Component {
                         key={index}
                     >
                     {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
-                        {row.map(day => (
-                            <DayItem
-                                key={day.date.getTime()}
-                                day={day}
-                                activateAll={activateAll}
-                                activated={activated}
-                                selected={selected}
-                                highlighted={highlighted}
-                                onDateSelect={onDateSelect}
-                            />
-                        ))}
+                        {row.map((day) => {
+                            const { style, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
+
+                            return (
+                                <DayItem
+                                    key={day.date.getTime()}
+                                    date={day.date}
+                                    inMonth={day.inMonth}
+                                    activateAll={activateAll}
+                                    activated={MonthTable.isActivated(activated, day.date)}
+                                    selected={selected}
+                                    highlightStyle={style}
+                                    highlighted={highlighted}
+                                    onDateSelect={onDateSelect}
+                                />
+                            );
+                        })}
                     </div>
                 ))}
             </div>
