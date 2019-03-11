@@ -8,16 +8,18 @@ export default class CalendarExample extends Component {
         this.state = { selected: new Date('2018-12-04T00:00:00') };
     }
 
+    handleDateSelect = (date) => {
+        this.setState({ selected: date });
+        console.log(date);
+    };
+
     render() {
         const { selected } = this.state;
         return (
             <div>
                 <Calendar
                     style={{ margin: '20px 0' }}
-                    onDateSelect={(date) => {
-                        this.setState({ selected: date });
-                        console.log(date);
-                    }}
+                    onDateSelect={this.handleDateSelect}
                     startDate={new Date('2018-08-01T00:00:00')}
                     endDate={new Date('2018-12-31T00:00:00')}
                     selected={selected}
