@@ -41,6 +41,24 @@ export default class MonthTable extends PureComponent {
         return false;
     }
 
+    static getHighlightedData(highlighted, date) {
+        for (let k = 0; k < highlighted.length; k += 1) {
+            for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
+                if (areDatesEqual(highlighted[k].dates[l], date)) {
+                    return {
+                        highlighted: true,
+                        color: highlighted[k].color || null,
+                    };
+                }
+            }
+        }
+
+        return {
+            highlighted: false,
+            color: null,
+        };
+    }
+
     createTable() {
         const { startDate } = this.props;
 
@@ -110,7 +128,7 @@ export default class MonthTable extends PureComponent {
             activateAll,
             activated,
             selected,
-            highlighted,
+            highlighted: highlightedList,
             onDateSelect,
         } = this.props;
         const _table = this.createTable();
@@ -136,6 +154,8 @@ export default class MonthTable extends PureComponent {
                     >
                     {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
                         {row.map((day) => {
+                            const { color, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
+
                             return (
                                 <DayItem
                                     key={day.date.getTime()}
@@ -144,6 +164,7 @@ export default class MonthTable extends PureComponent {
                                     activateAll={activateAll}
                                     activated={MonthTable.isActivated(activated, day.date)}
                                     selected={selected}
+                                    highlightColor={color}
                                     highlighted={highlighted}
                                     onDateSelect={onDateSelect}
                                 />

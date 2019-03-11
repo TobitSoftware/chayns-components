@@ -14,6 +14,7 @@ class DayItem extends PureComponent {
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.bool,
         highlighted: PropTypes.bool,
+        highlightColor: PropTypes.string,
     };
 
     static defaultProps = {
@@ -21,10 +22,11 @@ class DayItem extends PureComponent {
         activated: false,
         highlighted: false,
         activateAll: null,
+        highlightColor: null,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.onClick = this.onClick.bind(this);
     }
@@ -45,6 +47,7 @@ class DayItem extends PureComponent {
             activated,
             selected,
             highlighted,
+            highlightColor,
         } = this.props;
 
         let _active = activateAll;
@@ -70,19 +73,14 @@ class DayItem extends PureComponent {
             _selected = true; // `-is-active-is-selected${_marked} chayns__color--100`;
         }
 
-        if (highlighted instanceof Array) { // TODO: Merge data in MonthTable
-            for (let k = 0; k < highlighted.length; k += 1) {
-                for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
-                    if (areDatesEqual(highlighted[k].dates[l], date)) {
-                        _active = true;
-                        _marked = true;
-                        _onClick = true;
-                        _highlighted = true;
-                        if (highlighted[k].color) {
-                            _style.backgroundColor = `${highlighted[k].color}`;
-                        }
-                    }
-                }
+        if (highlighted) {
+            _active = true;
+            _marked = true;
+            _onClick = true;
+            _highlighted = true;
+
+            if (highlightColor) {
+                _style.backgroundColor = `${highlightColor}`;
             }
         }
 
