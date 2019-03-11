@@ -364,7 +364,7 @@ export default class Calendar extends Component {
 
         return (
             <div
-                className="cc__calendar buffer"
+                className="cc__calendar"
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
