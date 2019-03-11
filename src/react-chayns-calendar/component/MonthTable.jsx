@@ -47,7 +47,7 @@ export default class MonthTable extends PureComponent {
                 if (areDatesEqual(highlighted[k].dates[l], date)) {
                     return {
                         highlighted: true,
-                        color: highlighted[k].color || null,
+                        style: highlighted[k].style || null,
                     };
                 }
             }
@@ -55,7 +55,7 @@ export default class MonthTable extends PureComponent {
 
         return {
             highlighted: false,
-            color: null,
+            style: null,
         };
     }
 
@@ -154,7 +154,7 @@ export default class MonthTable extends PureComponent {
                     >
                     {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
                         {row.map((day) => {
-                            const { color, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
+                            const { style, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
 
                             return (
                                 <DayItem
@@ -164,7 +164,7 @@ export default class MonthTable extends PureComponent {
                                     activateAll={activateAll}
                                     activated={MonthTable.isActivated(activated, day.date)}
                                     selected={selected}
-                                    highlightColor={color}
+                                    highlightStyle={style}
                                     highlighted={highlighted}
                                     onDateSelect={onDateSelect}
                                 />

@@ -292,14 +292,14 @@ export default class Calendar extends Component {
                         if (dates.length > 0) {
                             tempObj.push({
                                 dates,
-                                color: _highlighted[j].color
+                                style: _highlighted[j].style
                             });
                         }
                     }
                 } else {
                     tempDates.push({
                         dates: _highlighted.dates,
-                        color: _highlighted.color,
+                        style: _highlighted.style,
                     });
                 }
             } else if (activated) {
@@ -317,14 +317,14 @@ export default class Calendar extends Component {
                             if (dates.length > 0) {
                                 tempObj.push({
                                     dates,
-                                    color: _highlighted[j].color
+                                    style: _highlighted[j].style
                                 });
                             }
                         }
                     } else if (_highlighted && _highlighted.dates) {
                         tempDates.push({
                             dates: _highlighted.dates,
-                            color: _highlighted.color,
+                            style: _highlighted.style,
                         });
                     }
                 }

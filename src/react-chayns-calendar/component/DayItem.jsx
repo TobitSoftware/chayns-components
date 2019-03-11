@@ -14,7 +14,7 @@ class DayItem extends PureComponent {
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.bool,
         highlighted: PropTypes.bool,
-        highlightColor: PropTypes.string,
+        highlightStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -22,7 +22,7 @@ class DayItem extends PureComponent {
         activated: false,
         highlighted: false,
         activateAll: null,
-        highlightColor: null,
+        highlightStyle: null,
     };
 
     constructor(props) {
@@ -47,7 +47,7 @@ class DayItem extends PureComponent {
             activated,
             selected,
             highlighted,
-            highlightColor,
+            highlightStyle,
         } = this.props;
 
         let _active = activateAll;
@@ -56,7 +56,7 @@ class DayItem extends PureComponent {
         let _highlighted = false;
         let _onClick = false;
         let _className = 'day__item day-in-month';
-        const _style = {};
+        let _style = null;
 
         if (_active) {
             _onClick = true;
@@ -79,8 +79,8 @@ class DayItem extends PureComponent {
             _onClick = true;
             _highlighted = true;
 
-            if (highlightColor) {
-                _style.backgroundColor = `${highlightColor}`;
+            if (highlightStyle) {
+                _style = highlightStyle;
             }
         }
 
