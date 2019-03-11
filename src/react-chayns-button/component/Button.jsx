@@ -29,12 +29,17 @@ export default class Button extends PureComponent {
         stopPropagation: false,
     };
 
-    handleClick = (event) => {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
         const { onClick, disabled, stopPropagation } = this.props;
 
         if (onClick && !disabled) onClick(event);
         if (stopPropagation) event.stopPropagation();
-    };
+    }
 
     render() {
         const {
@@ -46,7 +51,7 @@ export default class Button extends PureComponent {
             buttonRef,
             icon,
             secondary,
-            stopPropagation,
+            stopPropagation, // exclude this prop from ...other
             ...other
         } = this.props;
 
