@@ -53,4 +53,4 @@ To Upload images to our new ImageService, you can use the imageUpload-function f
 
 To avoid accidentally removal of an image, you may add a reference. When an image gets deleted, you can also add a reference. The file will only be deleted, if no other references are left.
 
-Images will always be stored in a person or site context. The person- or siteId will be part of the url. You can only use a site context, if you are admin on the site.
+Images will always be stored in a person or site context. The person- or siteId will be part of the url. You can only use a site context, if you are member of the admin-, publisher- or customer service group on the site.
