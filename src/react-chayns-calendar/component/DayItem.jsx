@@ -1,13 +1,14 @@
 /* eslint-disable react/no-array-index-key, jsx-a11y/click-events-have-key-events */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import areDatesEqual from '../utils/areDatesEqual';
 
-class DayItem extends Component {
+class DayItem extends PureComponent {
     static propTypes = {
-        day: PropTypes.instanceOf(Date).isRequired,
+        date: PropTypes.instanceOf(Date).isRequired,
+        inMonth: PropTypes.bool.isRequired,
         onDateSelect: PropTypes.func.isRequired,
         activateAll: PropTypes.func,
         selected: PropTypes.instanceOf(Date),
@@ -29,16 +30,17 @@ class DayItem extends Component {
     }
 
     onClick() {
-        const { onDateSelect, day } = this.props;
+        const { onDateSelect, date } = this.props;
 
         if (onDateSelect) {
-            onDateSelect(day.date);
+            onDateSelect(date);
         }
     }
 
     render() {
         const {
-            day,
+            date,
+            inMonth,
             activateAll,
             activated,
             selected,
@@ -59,7 +61,7 @@ class DayItem extends Component {
 
         if (activated) {
             for (let i = 0; i < activated.length; i += 1) {
-                if (areDatesEqual(activated[i], day.date)) {
+                if (areDatesEqual(activated[i], date)) {
                     _active = true;
                     _marked = true;
                     _onClick = true;
@@ -68,7 +70,7 @@ class DayItem extends Component {
             }
         }
 
-        if (selected && areDatesEqual(selected, day.date)) {
+        if (selected && areDatesEqual(selected, date)) {
             _active = true;
             _selected = true; // `-is-active-is-selected${_marked} chayns__color--100`;
         }
@@ -76,7 +78,7 @@ class DayItem extends Component {
         if (highlighted instanceof Array) { // TODO: Merge data in MonthTable
             for (let k = 0; k < highlighted.length; k += 1) {
                 for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
-                    if (areDatesEqual(highlighted[k].dates[l], day.date)) {
+                    if (areDatesEqual(highlighted[k].dates[l], date)) {
                         _active = true;
                         _marked = true;
                         _onClick = true;
@@ -89,7 +91,7 @@ class DayItem extends Component {
             }
         } else if (highlighted && highlighted.dates) {
             for (let k = 0; k < highlighted.dates.length; k += 1) {
-                if (areDatesEqual(highlighted.dates[k], day.date)) {
+                if (areDatesEqual(highlighted.dates[k], date)) {
                     _active = true;
                     _marked = true;
                     _onClick = true;
@@ -102,7 +104,7 @@ class DayItem extends Component {
             }
         }
 
-        if (day.inMonth) {
+        if (inMonth) {
             _className = classNames('day__item day-in-month', {
                 'is-active': _active,
                 'is-deactive': !_active,
@@ -120,7 +122,7 @@ class DayItem extends Component {
                     style={_style}
                     onClick={_onClick && this.onClick}
                 >
-                    {day.date.getDate()}
+                    {date.getDate()}
                 </div>
             );
         }
@@ -129,7 +131,7 @@ class DayItem extends Component {
             <div
                 className="day__item day-out-month"
             >
-                {day.date.getDate()}
+                {date.getDate()}
             </div>
         );
     }

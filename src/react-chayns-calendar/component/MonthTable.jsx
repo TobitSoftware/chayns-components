@@ -127,7 +127,8 @@ export default class MonthTable extends PureComponent {
                         {row.map(day => (
                             <DayItem
                                 key={day.date.getTime()}
-                                day={day}
+                                date={day.date}
+                                inMonth={day.inMonth}
                                 activateAll={activateAll}
                                 activated={activated}
                                 selected={selected}
