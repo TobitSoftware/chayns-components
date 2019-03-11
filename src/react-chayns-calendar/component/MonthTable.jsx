@@ -140,7 +140,7 @@ export default class MonthTable extends PureComponent {
                 <div className="day__row">
                     {daysList.map((day, index) => (
                         <div
-                            className="day__item day-text chayns__color--100"
+                            className="day__item--text chayns__color--100"
                             key={index}
                         >
                             {day}

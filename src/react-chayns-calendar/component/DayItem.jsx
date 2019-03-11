@@ -102,7 +102,9 @@ class DayItem extends PureComponent {
                     style={_style}
                     onClick={_onClick ? this.onClick : null}
                 >
-                    {date.getDate()}
+                    <div className="day__item__content">
+                        {date.getDate()}
+                    </div>
                 </div>
             );
         }
@@ -111,7 +113,9 @@ class DayItem extends PureComponent {
             <div
                 className="day__item day-out-month"
             >
-                {date.getDate()}
+                <div className="day__item__content">
+                    {date.getDate()}
+                </div>
             </div>
         );
     }
