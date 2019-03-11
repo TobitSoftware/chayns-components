@@ -247,7 +247,6 @@ export default class Calendar extends Component {
                     }
                 }
             }
-            console.log('activated', activateAll);
 
             if (activateAll) {
                 if (_highlighted instanceof Array) {

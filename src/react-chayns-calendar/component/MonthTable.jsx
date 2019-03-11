@@ -117,8 +117,6 @@ export default class MonthTable extends PureComponent {
 
         const daysList = getDayNames();
 
-        console.log('highlighted', highlighted);
-
         return(
             <div className="month__table noselect">
                 <div className="day__row">
