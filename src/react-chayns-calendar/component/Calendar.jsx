@@ -150,15 +150,15 @@ export default class Calendar extends Component {
             return true;
         }
 
+        const FOCUS_FACTOR = Calendar.IsMobile() ? 0 : 1;
+
         return startDate.getFullYear() === focus.getFullYear()
-            && startDate.getMonth() < focus.getMonth();
+            && startDate.getMonth() + FOCUS_FACTOR < focus.getMonth();
     }
 
     getNavigateRight() {
         const { activateAll, endDate } = this.props;
         const { focus } = this.state;
-
-        const FOCUS_FACTOR = Calendar.IsMobile() ? 0 : 1;
 
         if (!endDate) {
             return !!activateAll;
@@ -169,7 +169,7 @@ export default class Calendar extends Component {
         }
 
         return endDate.getFullYear() === focus.getFullYear()
-            && endDate.getMonth() - FOCUS_FACTOR > focus.getMonth();
+            && endDate.getMonth() > focus.getMonth();
     }
 
     navigateRightOnClick() {
