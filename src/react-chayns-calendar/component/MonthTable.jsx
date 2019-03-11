@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DayItem from './DayItem';
+import DateStorage from '../utils/DateStorage';
 
 const DAYS = {
     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
@@ -12,7 +13,7 @@ function getDayNames(language = chayns.env.language) {
     return DAYS[language] || DAYS.de;
 }
 
-export default class MonthTable extends Component {
+export default class MonthTable extends PureComponent {
     static propTypes = {
         onDateSelect: PropTypes.func.isRequired,
         activateAll: PropTypes.func,
@@ -36,9 +37,9 @@ export default class MonthTable extends Component {
         let normalWeekStart;
 
         if (startDate.getDay() > 0) {
-            normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
         } else {
-            normalWeekStart = new Date(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
         }
 
         for (let i = 0; i < 6; i += 1) {
@@ -48,32 +49,32 @@ export default class MonthTable extends Component {
                 if (startDate.getDay() > 0) {
                     for (let j = 2; j <= startDate.getDay(); j += 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
+                            date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
                             inMonth: false
                         });
                     }
                     for (let k = 1; k <= (8 - startDate.getDay()); k += 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), k),
+                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), k),
                             inMonth: true
                         });
                     }
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
-                            date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
+                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
                             inMonth: false
                         });
                     }
 
                     _row.push({
-                        date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+                        date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
                         inMonth: true
                     });
                 }
             } else {
                 for(let j = 0; j < 7; j += 1) {
-                    const _date = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
+                    const _date = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
                     if (_date.getMonth() === startDate.getMonth()) {
                         _row.push({
                             date: _date,
@@ -86,7 +87,7 @@ export default class MonthTable extends Component {
                         });
                     }
                 }
-                normalWeekStart = new Date(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + 7);
+                normalWeekStart = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + 7);
             }
             _table.push(_row);
         }
