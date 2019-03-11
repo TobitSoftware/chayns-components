@@ -376,7 +376,7 @@ export default class Calendar extends Component {
                     <div className="cc__calendar__navigation">
                         <div
                             onClick={this.navigateLeftOnClick}
-                            className="calendar__navigate left"
+                            className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
                             <Icon icon={faChevronLeft}/>
