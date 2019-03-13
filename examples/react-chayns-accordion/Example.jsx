@@ -77,6 +77,9 @@ export default class AccordionExample extends Component {
                         Hello World
                     </div>
                 </Accordion>
+                <Accordion head="Accordion with only search" onSearch={console.log}>
+                    Content
+                </Accordion>
                 <Accordion head="Test" right={<Badge>2</Badge>} defaultOpened>
                     <Accordion
                         head={(

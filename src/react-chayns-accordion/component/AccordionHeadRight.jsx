@@ -67,7 +67,7 @@ export default class AccordionHeadRight extends PureComponent {
             return null;
         }
 
-        const rightHasState = !!(right.open || right.close);
+        const rightHasState = right && !!(right.open || right.close);
         const openChildren = rightHasState ? right.open : null;
         const closeChildren = rightHasState ? right.close : right;
 
