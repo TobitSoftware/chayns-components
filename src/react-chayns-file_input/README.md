@@ -13,7 +13,7 @@ At first the component needs to be imported:
 import { FileInput } from 'chayns-components';
 ```
 
-You can use the gallery like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-file_input/Example.jsx).
+You can use the FileInput like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-file_input/Example.jsx).
 
 
 ## Props ##
