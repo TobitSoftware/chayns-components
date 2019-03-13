@@ -2,6 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
+function preventDefault(e) {
+    e.preventDefault();
+}
+
 export default class Slider extends PureComponent {
     static propTypes = {
         min: PropTypes.number,
@@ -321,9 +325,16 @@ export default class Slider extends PureComponent {
                 this.rightThumb.current.style[this.left] = `${rightPercent}%`;
                 this.innerTrack.current.style[this.left] = `${leftPercent}%`;
                 this.innerTrack.current.style[this.width] = `${rightPercent - leftPercent}%`;
+
+                // Prevent scrolling on touch-devices
+                this.leftThumb.current.addEventListener('touchstart', preventDefault);
+                this.rightThumb.current.addEventListener('touchstart', preventDefault);
             } else {
                 this.thumb.current.style[this.left] = `${percent}%`;
                 this.innerTrack.current.style[this.width] = `${100 - percent}%`;
+
+                // Prevent scrolling on touch-devices
+                this.thumb.current.addEventListener('touchstart', preventDefault);
             }
         } else if (interval) {
             this.leftThumb.current.style[this.left] = `${leftPercent}%`;
