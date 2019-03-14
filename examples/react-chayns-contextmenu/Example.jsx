@@ -55,7 +55,7 @@ export default class ContextMenuExample extends Component {
                 </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
-                    right={<ContextMenu items={items} position={position % 4}/>}
+                    right={<ContextMenu items={items} position={position % 6}/>}
                 >
                     <div className="accordion__content">
                         <p>Hello World</p>
@@ -132,7 +132,7 @@ export default class ContextMenuExample extends Component {
                 <ContextMenu
                     items={items}
                     coordinates={listCoordinates}
-                    position={0}
+                    position={ContextMenu.position.TOP_LEFT}
                     ref={ref => this.listContextMenu = ref}
                     onLayerClick={(e) => {
                         if (!e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
