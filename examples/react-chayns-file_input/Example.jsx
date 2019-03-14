@@ -71,6 +71,13 @@ export default class FileInputExample extends Component {
                     {'Upload'}
                 </Button>
                 <p ref={ref => this.logRef = ref}/>
+                <FileInput
+                    items={[{
+                        types: [FileInput.types.ALL],
+                        onChange: console.log,
+                        content: { text: 'Upload all' },
+                    }]}
+                />
             </div>
         );
     }

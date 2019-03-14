@@ -132,7 +132,15 @@ export default class FileInput extends PureComponent {
     checkFileType = (fileType, supportedTypes) => {
         for (let i = 0; i < supportedTypes.length; i += 1) {
             const type = supportedTypes[i];
-            if (type === fileType || (type.match(/\/\*/g) && fileType.match(/(.)+\//g)[0] === type.match(/(.)+\//g)[0])) {
+            if (type === FileInput.types.ALL) {
+                return true;
+            }
+
+            if (type === fileType) {
+                return true;
+            }
+
+            if (type.match(/\/\*/g) && fileType.match(/(.)+\//g)[0] === type.match(/(.)+\//g)[0]) {
                 return true;
             }
         }
