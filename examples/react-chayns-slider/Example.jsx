@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Slider from '../../src/react-chayns-slider/component/Slider';
+import { Tooltip } from '../../src';
 
 export default class SliderExample extends Component {
     constructor(props) {
@@ -13,6 +14,28 @@ export default class SliderExample extends Component {
         console.log(value, startValue, endValue);
         return (
             <div>
+                <div style={{ textAlign: 'center' }}>
+                    <Tooltip
+                        minWidth={150}
+                        content={{
+                            html: <Slider />
+                        }}
+                        bindListeners
+                    >
+                        <p>Tooltip with Slider</p>
+                    </Tooltip>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                    <Tooltip
+                        content={{
+                            html: <Slider vertical style={{ maxHeight: '100px' }} />
+                        }}
+                        minWidth="auto"
+                        bindListeners
+                    >
+                        <p>Tooltip with Slider (vertical)</p>
+                    </Tooltip>
+                </div>
                 <Slider interval/>
                 <Slider/>
                 <Slider

@@ -153,7 +153,8 @@ export default class Slider extends PureComponent {
         const maxIntervalPercent = maxInterval ? (maxInterval / width) * 100 : 100;
         const clientX = e.changedTouches ? e.changedTouches[0][this.clientX] : e[this.clientX];
 
-        const newPercent = (((clientX - this.bar.current[this.offsetLeft]) / this.bar.current[this.offsetWidth]) * 100);
+        const rect = this.bar.current.getBoundingClientRect();
+        const newPercent = (((clientX - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100);
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent;
@@ -246,7 +247,8 @@ export default class Slider extends PureComponent {
         const minPercent = 0;
         const maxPercent = 100;
 
-        let newPercent = this.leftPercent + ((e[this.movementX] / this.bar.current[this.clientWidth]) * 100);
+        const rect = this.bar.current.getBoundingClientRect();
+        let newPercent = this.leftPercent + ((e[this.movementX] / rect[this.clientWidth]) * 100);
 
         if (newPercent < minPercent) {
             newPercent = minPercent;
@@ -284,7 +286,8 @@ export default class Slider extends PureComponent {
             maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval, value, startValue, endValue
         } = this.props;
 
-        const clickPercent = ((e[this.clientX] - this.bar.current[this.offsetLeft]) / this.bar.current[this.clientWidth]) * 100;
+        const rect = this.bar.current.getBoundingClientRect();
+        const clickPercent = ((e[this.clientX] - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100;
 
         if (interval) {
             const width = max - min;
@@ -301,6 +304,7 @@ export default class Slider extends PureComponent {
                 }
             }
         } else {
+            console.log(clickPercent);
             this.percent = clickPercent;
         }
 
@@ -412,16 +416,16 @@ export default class Slider extends PureComponent {
         const { vertical } = this.props;
         if (vertical) {
             this.clientX = 'clientY';
-            this.clientWidth = 'clientHeight';
-            this.offsetLeft = 'offsetTop';
+            this.clientWidth = 'height';
+            this.offsetLeft = 'top';
             this.offsetWidth = 'offsetHeight';
             this.movementX = 'movementY';
             this.left = 'top';
             this.width = 'height';
         } else {
             this.clientX = 'clientX';
-            this.clientWidth = 'clientWidth';
-            this.offsetLeft = 'offsetLeft';
+            this.clientWidth = 'width';
+            this.offsetLeft = 'left';
             this.offsetWidth = 'offsetWidth';
             this.movementX = 'movementX';
             this.left = 'left';
@@ -430,12 +434,6 @@ export default class Slider extends PureComponent {
     };
 
     setScrolling = (enabled) => {
-        chayns.invokeCall({
-            action: 204,
-            value: {
-                enabled
-            }
-        });
         if (enabled) {
             chayns.allowRefreshScroll();
         } else {
