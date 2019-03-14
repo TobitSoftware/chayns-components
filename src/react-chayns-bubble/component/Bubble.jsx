@@ -41,7 +41,7 @@ export default class Bubble extends PureComponent {
     static isPositionBottom(position) {
         return position === Bubble.position.BOTTOM_LEFT
             || position === Bubble.position.BOTTOM_CENTER
-            || Bubble.position.BOTTOM_RIGHT;
+            || position === Bubble.position.BOTTOM_RIGHT;
     }
 
     constructor(props) {
