@@ -108,7 +108,9 @@ export default class ContextMenu extends Component {
             const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
-        let y = Bubble.isPositionBottom(pos) ? bottom : top;
+        let y = Bubble.isPositionBottom(pos)
+            ? [Bubble.position.TOP_LEFT, Bubble.position.BOTTOM_LEFT]
+            : [Bubble.position.TOP_RIGHT, Bubble.position.BOTTOM_RIGHT];
         if (chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;

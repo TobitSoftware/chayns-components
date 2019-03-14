@@ -122,7 +122,9 @@ export default class Tooltip extends Component {
         }
         let pos = position;
         if (position === null) {
-            const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
+            const posArray = (x > window.innerWidth / 2)
+                ? [Bubble.position.TOP_LEFT, Bubble.position.BOTTOM_LEFT]
+                : [Bubble.position.TOP_RIGHT, Bubble.position.BOTTOM_RIGHT];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
