@@ -304,7 +304,6 @@ export default class Slider extends PureComponent {
                 }
             }
         } else {
-            console.log(clickPercent);
             this.percent = clickPercent;
         }
 
