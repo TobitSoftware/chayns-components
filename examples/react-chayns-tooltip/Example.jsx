@@ -17,7 +17,7 @@ export default class TooltipExample extends Component {
                     Simple&nbsp;
                     <Tooltip
                         bindListeners
-                        position={2}
+                        position={Tooltip.position.BOTTOM_RIGHT}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
                         minWidth={150}
                         maxWidth={150}
@@ -28,7 +28,7 @@ export default class TooltipExample extends Component {
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
                         bindListeners
-                        position={3}
+                        position={Tooltip.position.TOP_RIGHT}
                         content={{
                             text: 'H5 will be used as headline inside of a tooltip.',
                             headline: 'Headline',
@@ -37,12 +37,23 @@ export default class TooltipExample extends Component {
                         <p>Tooltip with headline</p>
                     </Tooltip>
                 </div>
+                <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                    <Tooltip
+                        position={Tooltip.position.BOTTOM_CENTER}
+                        content={{
+                            text: 'Tooltip that has the arrow in the middle',
+                        }}
+                        bindListeners
+                    >
+                        <p>Tooltip (centered)</p>
+                    </Tooltip>
+                </div>
                 <div style={{ marginBottom: '20px' }}>
                     <div style={{ textAlign: 'right' }}>
                         <div style={{ marginBottom: '20px' }}>
                             <Tooltip
                                 bindListeners
-                                position={0}
+                                position={Tooltip.position.TOP_LEFT}
                                 content={{
                                     text: 'Buttons within tooltips can be used to show more informations.',
                                     buttonText: 'More informations',
@@ -55,7 +66,7 @@ export default class TooltipExample extends Component {
                         <div>
                             <Tooltip
                                 bindListeners
-                                position={1}
+                                position={Tooltip.position.BOTTOM_LEFT}
                                 content={{
                                     text: 'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
                                     headline: 'Headline',
@@ -69,7 +80,7 @@ export default class TooltipExample extends Component {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
-                        position={3}
+                        position={Tooltip.position.TOP_RIGHT}
                         content={{
                             html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
                                 This is a static Tooltip with custom html content.
