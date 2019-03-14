@@ -34,6 +34,8 @@ export default class Bubble extends PureComponent {
         BOTTOM_LEFT: 1,
         BOTTOM_RIGHT: 2,
         TOP_RIGHT: 3,
+        TOP_CENTER: 4,
+        BOTTOM_CENTER: 5,
     };
 
     constructor(props) {
