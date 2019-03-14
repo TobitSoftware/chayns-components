@@ -50,6 +50,8 @@ export default class Tooltip extends Component {
         preventTriggerStyle: false,
     };
 
+    static position = Bubble.position;
+
     constructor(props) {
         super(props);
 
@@ -123,8 +125,8 @@ export default class Tooltip extends Component {
         let pos = position;
         if (position === null) {
             const posArray = (x > window.innerWidth / 2)
-                ? [Bubble.position.TOP_LEFT, Bubble.position.BOTTOM_LEFT]
-                : [Bubble.position.TOP_RIGHT, Bubble.position.BOTTOM_RIGHT];
+                ? [Tooltip.position.TOP_LEFT, Tooltip.position.BOTTOM_LEFT]
+                : [Tooltip.position.TOP_RIGHT, Tooltip.position.BOTTOM_RIGHT];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;

@@ -44,6 +44,8 @@ export default class ContextMenu extends Component {
         showTriggerBackground: false,
     };
 
+    static position = Bubble.position;
+
     constructor(props) {
         super(props);
 
@@ -106,8 +108,8 @@ export default class ContextMenu extends Component {
         let pos = position;
         if (position === null) {
             const posArray = (x > window.innerWidth / 2)
-                ? [Bubble.position.TOP_LEFT, Bubble.position.BOTTOM_LEFT]
-                : [Bubble.position.TOP_RIGHT, Bubble.position.BOTTOM_RIGHT];
+                ? [ContextMenu.position.TOP_LEFT, ContextMenu.position.BOTTOM_LEFT]
+                : [ContextMenu.position.TOP_RIGHT, ContextMenu.position.BOTTOM_RIGHT];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
