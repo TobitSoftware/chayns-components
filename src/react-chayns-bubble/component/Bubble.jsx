@@ -29,6 +29,13 @@ export default class Bubble extends PureComponent {
         onMouseLeave: null,
     };
 
+    static position = {
+        TOP_LEFT: 0,
+        BOTTOM_LEFT: 1,
+        BOTTOM_RIGHT: 2,
+        TOP_RIGHT: 3,
+    };
+
     constructor(props) {
         super(props);
 
