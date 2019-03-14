@@ -125,7 +125,7 @@ export default class Tooltip extends Component {
             const posArray = (x > window.innerWidth / 2) ? [0, 1] : [3, 2];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
-        let y = (pos === 1 || pos === 2) ? bottom : top;
+        let y = Bubble.isPositionBottom(pos) ? bottom : top;
         if (chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
