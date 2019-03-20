@@ -76,12 +76,12 @@ export default class FileInput extends PureComponent {
 
     onDragEnter = (event, item, index) => {
         if (this.checkFileType(event.dataTransfer.items[0].type, item.types)) {
-            this.itemRefs[index].classList.add('cc__file-upload--hover');
+            this.itemRefs[index].classList.add('cc__file-input--hover');
         }
     };
 
     onDragLeave = (index) => {
-        this.itemRefs[index].classList.remove('cc__file-upload--hover');
+        this.itemRefs[index].classList.remove('cc__file-input--hover');
     };
 
     onChange = (event, item, index) => {
