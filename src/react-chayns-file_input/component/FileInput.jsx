@@ -140,7 +140,9 @@ export default class FileInput extends PureComponent {
                 return true;
             }
 
-            if (type.match(/\/\*/g) && fileType.match(/(.)+\//g)[0] === type.match(/(.)+\//g)[0]) {
+            const fileTypeMatch = fileType.match(/(.)+\//g);
+            const typeMatch = type.match(/(.)+\//g);
+            if (type.match(/\/\*/g) && fileTypeMatch && typeMatch && fileTypeMatch[0] === typeMatch[0]) {
                 return true;
             }
         }
