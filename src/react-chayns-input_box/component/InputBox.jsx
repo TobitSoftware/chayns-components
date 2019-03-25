@@ -33,6 +33,7 @@ export default class InputBox extends Component {
 
     state = {
         hidden: true,
+        position: null,
     };
 
     references = {
@@ -47,6 +48,7 @@ export default class InputBox extends Component {
         this.setBoxRef = this.setBoxRef.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
+        this.updatePosition = this.updatePosition.bind(this);
     }
 
     componentDidMount() {
@@ -71,14 +73,6 @@ export default class InputBox extends Component {
         }
     }
 
-    getCurrentRect() {
-        if (!this.references.wrapper) {
-            return null;
-        }
-
-        return this.references.wrapper.getBoundingClientRect();
-    }
-
     handleBlur(e) {
         const { hidden } = this.state;
         if (hidden) {
@@ -98,8 +92,10 @@ export default class InputBox extends Component {
         });
     }
 
-    handleFocus(e) {
+    async handleFocus(e) {
         const { onFocus } = this.props;
+
+        await this.updatePosition();
 
         this.setState({
             hidden: false,
@@ -110,6 +106,31 @@ export default class InputBox extends Component {
         }
 
         return null;
+    }
+
+    async updatePosition() {
+        if (!this.references.wrapper) {
+            this.setState({
+                position: null,
+            });
+            return;
+        }
+
+        const rect = this.references.wrapper.getBoundingClientRect();
+        let { bottom } = rect;
+
+        if (chayns.env.isApp) {
+            const { pageYOffset } = await chayns.getWindowMetrics();
+            bottom += pageYOffset;
+        }
+
+        this.setState({
+            position: {
+                width: rect.width,
+                left: rect.left,
+                bottom,
+            },
+        });
     }
 
     render() {
@@ -124,13 +145,11 @@ export default class InputBox extends Component {
             boxClassName,
             ...props
         } = this.props;
-        const { hidden } = this.state;
+        const { hidden, position } = this.state;
 
         if (!InputComponent) {
             return null;
         }
-
-        const rect = this.getCurrentRect();
 
         return (
             <div
@@ -147,7 +166,7 @@ export default class InputBox extends Component {
                 />
                 <TappPortal parent={parent}>
                     <CSSTransition
-                        in={!!(rect && !hidden && children)}
+                        in={!!(position && !hidden && children)}
                         timeout={200}
                         unmountOnExit
                         classNames="fade"
@@ -155,10 +174,10 @@ export default class InputBox extends Component {
                         <div
                             onClick={e => e.preventDefault()}
                             className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
-                            style={rect ? {
-                                width: `${rect.width}px`,
-                                top: `${rect.bottom}px`,
-                                left: `${rect.left}px`,
+                            style={position ? {
+                                width: `${position.width}px`,
+                                top: `${position.bottom}px`,
+                                left: `${position.left}px`,
                             } : null}
                             {...overlayProps}
                             ref={this.setBoxRef}
