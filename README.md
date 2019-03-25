@@ -40,6 +40,7 @@ The following components are part of this package:
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)       | GridCalendar Component                          | [Readme](/src/react-chayns-gridcalendar/README.md)    |
 | [react-chayns-icon](/src/react-chayns-icon/)                       | Icon Component                                  | [Readme](/src/react-chayns-icon/README.md)            |
 | [react-chayns-input](/src/react-chayns-input/)                     | Input Component                                 | [Readme](/src/react-chayns-input/README.md)           |
+| [react-chayns-list](/src/react-chayns-list/)                       | List Component                                  | [Readme](/src/react-chayns-list/README.md)           |
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component                            | [Readme](/src/react-chayns-modeswitch/README.md)      |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)       | PersonFinder Component                          | [Readme](/src/react-chayns-personfinder/README.md)    |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)         | RadioButton Component                           | [Readme](/src/react-chayns-radiobutton/README.md)     |
