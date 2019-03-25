@@ -25,6 +25,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         Mode: 'react-chayns-modeswitch/component/Mode.js',
         DecimalFormatter: 'react-chayns-formatted_input/utils/DecimalFormatter.js',
         OrientationHelper: 'utils/OrientationHelper.js',
+        OpeningTimes: 'react-chayns-openingtimes/component/OpeningTimes.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
         PriceFormatter: 'react-chayns-formatted_input/utils/PriceFormatter.js',
         RadioButton: 'react-chayns-radiobutton/component/RadioButton.js',
