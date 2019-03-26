@@ -38,3 +38,4 @@ Then it can be used like in the following example:
 | multiple      | Allows the input of multiple persons/sites using a TagInput                                        | bool           | false         |
 | defaultValue  | The default value of the input element                                                             | string, object |               |
 | defaultValues | Tags that should be added to the TagInput (multiple-prop) on initial rendering                     | array          |               |
+| boxClassName  | ClassName of the box-overlay                                                                       | string         |               |

@@ -91,6 +91,7 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                     multiple
                     parent={document.getElementById('portal-example')}
+                    boxClassName="custom-personfinder-overlay"
                 />
                 <Button
                     onClick={this.clear}

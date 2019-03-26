@@ -28,6 +28,7 @@ export default class PersonFinderData extends Component {
         inputComponent: PropTypes.node.isRequired,
         showId: PropTypes.bool,
         autoLoading: PropTypes.bool,
+        boxClassName: PropTypes.string,
     };
 
     static defaultProps = {
@@ -39,6 +40,7 @@ export default class PersonFinderData extends Component {
         includeOwn: false,
         showId: false,
         autoLoading: true,
+        boxClassName: null,
     };
 
     resultList = null;
@@ -318,6 +320,7 @@ export default class PersonFinderData extends Component {
             persons: enablePersons,
             sites: enableSites,
             inputComponent,
+            boxClassName,
             ...props
         } = this.props;
 
@@ -327,7 +330,7 @@ export default class PersonFinderData extends Component {
                 inputComponent={inputComponent}
                 value={value}
                 onChange={this.handleOnChange}
-                boxClassName={classnames('cc__person-finder__overlay')}
+                boxClassName={classnames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => { this.resultList = ref; },
                     onScroll: this.handleLazyLoad,
