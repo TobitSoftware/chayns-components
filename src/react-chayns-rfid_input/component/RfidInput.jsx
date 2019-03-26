@@ -12,7 +12,7 @@ export default class RfidInput extends Component {
     }
 
     static isNfcAvailable() {
-        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.appVersion >= 5764)))
+        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && ((chayns.env.appVersion || chayns.env.myChaynsAppVersion) >= 5764))))
             || (chayns.env.isApp && (chayns.env.isAndroid));
     }
 
