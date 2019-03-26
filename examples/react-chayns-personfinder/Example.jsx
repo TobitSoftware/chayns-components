@@ -90,6 +90,7 @@ export default class PersonFinderExample extends PureComponent {
                     showPersons={false}
                     showSites
                     multiple
+                    parent={document.getElementById('portal-example')}
                 />
                 <Button
                     onClick={this.clear}
