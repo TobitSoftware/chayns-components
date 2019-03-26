@@ -9,7 +9,7 @@ export default class Bubble extends PureComponent {
         className: PropTypes.string,
         style: PropTypes.object,
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
-        parent: PropTypes.node,
+        parent: PropTypes.instanceOf(Element),
         coordinates: PropTypes.shape({
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired,

@@ -19,7 +19,7 @@ export default class ContextMenu extends Component {
             icon: PropTypes.object,
         })),
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
-        parent: PropTypes.node,
+        parent: PropTypes.instanceOf(Element),
         children: PropTypes.node,
         onChildrenClick: PropTypes.func,
         childrenStyle: PropTypes.object,

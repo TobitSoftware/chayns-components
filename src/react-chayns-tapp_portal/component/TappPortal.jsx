@@ -11,7 +11,7 @@ TappPortal.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node)
     ]),
-    parent: PropTypes.node,
+    parent: PropTypes.instanceOf(Element),
 };
 
 export default TappPortal;

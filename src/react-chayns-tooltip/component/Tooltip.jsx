@@ -26,7 +26,7 @@ export default class Tooltip extends Component {
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
         removeIcon: PropTypes.bool,
-        parent: PropTypes.node,
+        parent: PropTypes.instanceOf(Element),
         coordinates: PropTypes.shape({
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired,
