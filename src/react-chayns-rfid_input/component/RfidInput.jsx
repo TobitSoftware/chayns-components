@@ -12,7 +12,7 @@ export default class RfidInput extends Component {
     }
 
     static isNfcAvailable() {
-        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && ((chayns.env.appVersion || chayns.env.myChaynsAppVersion) >= 5764))))
+        return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.myChaynsAppVersion >= 5764)))
             || (chayns.env.isApp && (chayns.env.isAndroid));
     }
 
@@ -100,6 +100,8 @@ export default class RfidInput extends Component {
             'cc__rfid-input--enable-scan': enableScan,
         });
         const disabled = !VALID_RFID.test(value);
+
+        chayns.dialog.alert(String(chayns.env.appVersion));
 
         return(
             <div className={classNames}>
