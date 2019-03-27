@@ -101,8 +101,6 @@ export default class RfidInput extends Component {
         });
         const disabled = !VALID_RFID.test(value);
 
-        chayns.dialog.alert(String(chayns.env.appVersion));
-
         return(
             <div className={classNames}>
                 <div className="cc__rfid-input__wrapper">
