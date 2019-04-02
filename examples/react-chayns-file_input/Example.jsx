@@ -53,10 +53,10 @@ export default class FileInputExample extends Component {
                         maxFileSize: 4194304, // max file size is 4 MB
                         maxNumberOfFiles: 0, // no limit for number of files
                         onChange: this.onChange,
-                        content: { text: 'Upload image' },
+                        content: { text: 'Bild hochladen' },
                     }, {
                         onClick: this.onClick,
-                        content: { text: 'Choose image from pixabay', icon: 'ts-image' },
+                        content: { text: 'Bild auswählen', icon: 'ts-image' },
                     }]}
                 />
                 <Gallery
