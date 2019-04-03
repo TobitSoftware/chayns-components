@@ -96,6 +96,7 @@ export default class ContextMenu extends Component {
     async getPosition() {
         const { position, coordinates } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
+
         let x = coordinates ? coordinates.x : 0;
         let top = coordinates ? coordinates.y : 0;
         let bottom = coordinates ? coordinates.y : 0;
@@ -105,6 +106,7 @@ export default class ContextMenu extends Component {
             top = rect.top;
             bottom = rect.bottom;
         }
+
         let pos = position;
         if (position === null) {
             const posArray = (x > window.innerWidth / 2)
@@ -112,11 +114,13 @@ export default class ContextMenu extends Component {
                 : [ContextMenu.position.TOP_RIGHT, ContextMenu.position.BOTTOM_RIGHT];
             pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
+
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
         if (chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
         }
+
         if (statePosition !== pos || x !== stateX || y !== stateY) {
             this.setState({ position: pos, x, y });
         }
