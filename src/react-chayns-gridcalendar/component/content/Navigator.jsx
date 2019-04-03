@@ -52,27 +52,25 @@ export default class Navigator extends PureComponent {
                 </div>
                 <div className="calendar__navigator_days">
                     {
-                        days.map((day, i) => {
-                            return (
-                                <div className="calendar__navigator_days_table" key={i}>
-                                    {day.map((value, j) => {
-                                        const selected = value.selected
-                                            ? 'bold'
-                                            : 'normal';
-                                        return (
-                                            <div
-                                                className="calendar__navigator_days_item ellipsis"
-                                                style={{ fontWeight: selected }}
-                                                key={j}
-                                                onClick={event => onClick.day(event, value)}
-                                            >
-                                                {value.name}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            );
-                        })
+                        days.map((day, i) => (
+                            <div className="calendar__navigator_days_table" key={i}>
+                                {day.map((value, j) => {
+                                    const selected = value.selected
+                                        ? 'bold'
+                                        : 'normal';
+                                    return (
+                                        <div
+                                            className="calendar__navigator_days_item ellipsis"
+                                            style={{ fontWeight: selected }}
+                                            key={j}
+                                            onClick={event => onClick.day(event, value)}
+                                        >
+                                            {value.name}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))
                     }
                 </div>
             </div>

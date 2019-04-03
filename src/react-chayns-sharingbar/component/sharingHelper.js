@@ -10,9 +10,7 @@ export function getAvailableShareProviders() {
                     return;
                 }
 
-                const shareApp = sharingApps.find((curApp) => {
-                    return curApp === curProvider.providerId;
-                });
+                const shareApp = sharingApps.find(curApp => (curApp === curProvider.providerId));
 
                 if (shareApp !== undefined) {
                     curProvider.available = true;
@@ -30,9 +28,7 @@ export function getAvailableShareProviders() {
                         return;
                     }
 
-                    const shareApp = androidApps.find((curApp) => {
-                        return curApp === curProvider.androidIdentifier;
-                    });
+                    const shareApp = androidApps.find(curApp => (curApp === curProvider.androidIdentifier));
 
                     if (shareApp) {
                         curProvider.available = true;
@@ -62,9 +58,7 @@ export function getDefaultShareLink() {
     if (chayns.env.isChaynsWeb) {
         return chayns.env.site.url;
     }
-    const tapp = chayns.env.site.tapps.find((element) => {
-        return element.id === chayns.env.site.tapp.id;
-    });
+    const tapp = chayns.env.site.tapps.find(element => (element.id === chayns.env.site.tapp.id));
 
     let shareLink = `http://${chayns.env.site.domain || `chayns.net/${chayns.env.site.id}`}/`;
 

@@ -10,24 +10,22 @@ const ExpandableListHeader = ({
     onClick,
     hideIndicator,
     right,
-}) => {
-    return (
-        <ListItemHeader
-            title={title}
-            subtitle={subtitle}
-            onClick={onClick}
-            image={image}
-            right={right}
-            left={!hideIndicator && (
-                <div className="list-item__indicator">
-                    <div className="icon-wrapper">
-                        <i className="ts-icon ts-angle-right" />
-                    </div>
+}) => (
+    <ListItemHeader
+        title={title}
+        subtitle={subtitle}
+        onClick={onClick}
+        image={image}
+        right={right}
+        left={!hideIndicator && (
+            <div className="list-item__indicator">
+                <div className="icon-wrapper">
+                    <i className="ts-icon ts-angle-right" />
                 </div>
-            )}
-        />
-    );
-};
+            </div>
+        )}
+    />
+);
 
 ExpandableListHeader.propTypes = {
     title: PropTypes.string.isRequired,

@@ -174,31 +174,29 @@ export default class SetupWizard extends Component {
                     <p dangerouslySetInnerHTML={{ __html: description }}/>
                 )}
                 {
-                    children.map((child, index) => {
-                        return (
-                            <SetupWizardItem
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
-                                title={child.props.title}
-                                step={index + 1}
-                                ready={completedSteps.indexOf(index) >= 0}
-                                open={index === currentStep}
-                                disabled={index > maxProgress}
-                                onClick={() => {
-                                    if (maxProgress >= index) {
-                                        if (currentStep === index) {
-                                            this.setState({ currentStep: -1 });
-                                        } else {
-                                            this.setState({ currentStep: index });
-                                        }
+                    children.map((child, index) => (
+                        <SetupWizardItem
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={index}
+                            title={child.props.title}
+                            step={index + 1}
+                            ready={completedSteps.indexOf(index) >= 0}
+                            open={index === currentStep}
+                            disabled={index > maxProgress}
+                            onClick={() => {
+                                if (maxProgress >= index) {
+                                    if (currentStep === index) {
+                                        this.setState({ currentStep: -1 });
+                                    } else {
+                                        this.setState({ currentStep: index });
                                     }
-                                }}
-                                contentStyle={contentStyle}
-                            >
-                                {child.props.children}
-                            </SetupWizardItem>
-                        );
-                    })
+                                }
+                            }}
+                            contentStyle={contentStyle}
+                        >
+                            {child.props.children}
+                        </SetupWizardItem>
+                    ))
                 }
             </div>
         );

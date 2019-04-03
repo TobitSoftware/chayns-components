@@ -37,9 +37,7 @@ export default class TextString extends Component {
         const { textStrings } = TextString;
         const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
         const result = Object.keys(strings)
-            .map((lib) => {
-                return strings[lib][stringName] || null;
-            })
+            .map(lib => (strings[lib][stringName] || null))
             .filter(x => x !== null)[0];
         return result;
     }

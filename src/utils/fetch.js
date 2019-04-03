@@ -77,13 +77,11 @@ export function fetchDataFromApi(url, method = 'GET', body, statusCodes) {
             });
         }
 
-        const BadStatusError = (message) => {
-            return ({
-                name: 'BadStatusError',
-                message: message || 'Unknown Status',
-                stack: (new Error()).stack
-            });
-        };
+        const BadStatusError = message => ({
+            name: 'BadStatusError',
+            message: message || 'Unknown Status',
+            stack: (new Error()).stack
+        });
 
         throw BadStatusError(`Bad Status Code: ${response.status}`); // send own error
     });
