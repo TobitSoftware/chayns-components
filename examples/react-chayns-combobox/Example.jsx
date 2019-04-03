@@ -38,6 +38,14 @@ export default class ComboBoxExample extends PureComponent {
                 />
                 </div>
                 <ComboBox
+                    list={pizza}
+                    onSelect={(value) => { console.log(value); }}
+                    listKey="id"
+                    listValue="name"
+                    defaultValue="2"
+                    htmlSelect
+                />
+                <ComboBox
                     label="Select Pizza"
                     list={pizza}
                     onSelect={(value) => { console.log(value); }}
