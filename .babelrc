@@ -1,17 +1,17 @@
 {
   "presets": [
     [
-      "es2015",
+      "@babel/preset-env",
       {
         "modules": false
       }
     ],
-    "stage-0",
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": [
     "transform-react-remove-prop-types",
-    "transform-runtime",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-class-properties",
     [
       "transform-imports",
       {

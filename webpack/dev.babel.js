@@ -21,7 +21,7 @@ export default (env) => {
     return {
         entry: {
             template: [
-                'babel-polyfill',
+                '@babel/polyfill',
                 path.resolve(ROOT_PATH, 'examples', 'index')
             ]
         },
