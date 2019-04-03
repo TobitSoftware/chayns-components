@@ -57,18 +57,18 @@ class Day extends Component {
                                 buttonType={TimeSpan.ADD}
                             />
                         ) : timeSpans.map((t, index) => (
-                                <TimeSpan
-                                    key={t.start}
-                                    start={t.start}
-                                    end={t.end}
-                                    disabled={isDisabled}
-                                    // eslint-disable-next-line no-nested-ternary
-                                    buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
-                                    onAdd={(start, end) => onAdd(weekday.number, start, end)}
-                                    onRemove={() => onRemove(weekday.number, index)}
-                                    onChange={(start, end) => onChange(weekday.number, index, start, end)}
-                                />
-                            ))
+                            <TimeSpan
+                                key={t.start}
+                                start={t.start}
+                                end={t.end}
+                                disabled={isDisabled}
+                                // eslint-disable-next-line no-nested-ternary
+                                buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
+                                onAdd={(start, end) => onAdd(weekday.number, start, end)}
+                                onRemove={() => onRemove(weekday.number, index)}
+                                onChange={(start, end) => onChange(weekday.number, index, start, end)}
+                            />
+                        ))
                     }
                 </div>
             </div>

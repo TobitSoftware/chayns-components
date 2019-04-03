@@ -248,17 +248,17 @@ export default class ReceiverInput extends Component {
         const { chosenReceivers } = this.state;
 
         switch (receiverType) {
-            case 0:
-                this.updateChosenReceivers(chosenReceivers.filter(r => r.locationId !== id));
-                break;
-            case 1:
-                this.updateChosenReceivers(chosenReceivers.filter(r => r.userId !== id));
-                break;
-            case 2:
-                this.updateChosenReceivers(chosenReceivers.filter(r => r.groupId !== id));
-                break;
-            default:
-                break;
+        case 0:
+            this.updateChosenReceivers(chosenReceivers.filter(r => r.locationId !== id));
+            break;
+        case 1:
+            this.updateChosenReceivers(chosenReceivers.filter(r => r.userId !== id));
+            break;
+        case 2:
+            this.updateChosenReceivers(chosenReceivers.filter(r => r.groupId !== id));
+            break;
+        default:
+            break;
         }
     };
 

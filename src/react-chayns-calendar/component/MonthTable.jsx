@@ -152,7 +152,7 @@ export default class MonthTable extends PureComponent {
                         className="day__row"
                         key={index}
                     >
-                    {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
+                        {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
                         {row.map((day) => {
                             const { style, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
 

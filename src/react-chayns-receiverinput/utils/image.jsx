@@ -35,13 +35,14 @@ export function getGroupImage(groupId, members) {
             </div>
         );
     }
-        return (
-            <div className="multi-image">
-                <div className="full-left" style={{ backgroundImage: `url("${imageUrls[0]}")` }}/>
-                <div className="right-wrapper">
-                    <div className="top-right" style={{ backgroundImage: `url("${imageUrls[1]}")` }}/>
-                    <div className="bottom-right" style={{ backgroundImage: `url("${imageUrls[2]}")` }}/>
-                </div>
+
+    return (
+        <div className="multi-image">
+            <div className="full-left" style={{ backgroundImage: `url("${imageUrls[0]}")` }}/>
+            <div className="right-wrapper">
+                <div className="top-right" style={{ backgroundImage: `url("${imageUrls[1]}")` }}/>
+                <div className="bottom-right" style={{ backgroundImage: `url("${imageUrls[2]}")` }}/>
             </div>
-        );
+        </div>
+    );
 }

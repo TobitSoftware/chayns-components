@@ -193,20 +193,20 @@ export default class EmojiInput extends Component {
         while (curChild !== null) {
             if (curChild.nodeType === 1) {
                 switch (curChild.tagName) {
-                    case 'IMG':
-                        textLines[lineIndex] += curChild.getAttribute('alt');
-                        break;
-                    case 'DIV':
-                        textLines.push('');
-                        lineIndex += 1;
-                        break;
-                    case 'BR':
-                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
-                            textLines[lineIndex] += '\n';
-                        }
-                        break;
-                    default:
-                        break;
+                case 'IMG':
+                    textLines[lineIndex] += curChild.getAttribute('alt');
+                    break;
+                case 'DIV':
+                    textLines.push('');
+                    lineIndex += 1;
+                    break;
+                case 'BR':
+                    if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
+                        textLines[lineIndex] += '\n';
+                    }
+                    break;
+                default:
+                    break;
                 }
             } else if (curChild.nodeType === 3) {
                 textLines[lineIndex] += curChild.nodeValue;

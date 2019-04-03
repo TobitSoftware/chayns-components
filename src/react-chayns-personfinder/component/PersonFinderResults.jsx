@@ -35,14 +35,14 @@ export default class PersonFinderResults extends PureComponent {
 
     static getDividerText(type) {
         switch (type) {
-            case PERSON_RELATION:
-                return getText('DIVIDER_PERSON');
-            case PERSON_UNRELATED:
-                return getText('DIVIDER_MORE_PERSON');
-            case LOCATION_RELATION:
-                return getText('DIVIDER_SITE');
-            default:
-                return null;
+        case PERSON_RELATION:
+            return getText('DIVIDER_PERSON');
+        case PERSON_UNRELATED:
+            return getText('DIVIDER_MORE_PERSON');
+        case LOCATION_RELATION:
+            return getText('DIVIDER_SITE');
+        default:
+            return null;
         }
     }
 
