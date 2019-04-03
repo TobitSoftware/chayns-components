@@ -16,7 +16,6 @@
     "linebreak-style": "off",
     "indent": ["error", 4],
     "strict": 0,
-    "comma-dangle": "off",
     "import/no-extraneous-dependencies": "off",
     "react/jsx-tag-spacing": "off",
     "react/jsx-indent": ["error", 4],
