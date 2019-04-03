@@ -14,7 +14,7 @@ export default class Icon extends PureComponent {
             }).isRequired,
         ]).isRequired,
         className: PropTypes.string,
-        style: PropTypes.object(),
+        style: PropTypes.object,
         onClick: PropTypes.func,
         disabled: PropTypes.bool,
         stopPropagation: PropTypes.bool,
