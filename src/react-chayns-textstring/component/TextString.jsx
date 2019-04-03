@@ -53,7 +53,7 @@ export default class TextString extends Component {
                         if (response.status === 200) {
                             response.json()
                                 .then((json) => {
-                                    TextString.textStrings[lang] = { [projectName]: { ...json, ...{ middle } } };
+                                    TextString.textStrings[lang] = { ...TextString.textStrings[lang], [projectName]: { ...json, ...{ middle } } };
                                     if (window.debugLevel >= 3) {
                                         // eslint-disable-next-line no-console
                                         console.debug('TextString Storage', TextString.textStrings);
