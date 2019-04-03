@@ -30,7 +30,7 @@ export default class ReceiverInput extends Component {
         fontSize: PropTypes.string,
         onlySites: PropTypes.bool,
         disabled: PropTypes.bool,
-        pureMode: PropTypes.bool
+        pureMode: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -51,14 +51,14 @@ export default class ReceiverInput extends Component {
         disabled: false,
         pureMode: false,
         placeholder: '',
-        fontSize: null
+        fontSize: null,
     };
 
     defaultState = {
         foundReceivers: {
             locations: { state: 3, values: [] },
             groups: { state: 3, values: [] },
-            users: { state: 3, values: [] }
+            users: { state: 3, values: [] },
         },
         popupPosition: { top: 0, left: 0 },
         receiverSearchString: '',
@@ -66,7 +66,7 @@ export default class ReceiverInput extends Component {
         chosenSender: null,
         showPopup: false,
         groupName: '',
-        popupWidth: 0
+        popupWidth: 0,
     };
 
     constructor(props) {
@@ -117,7 +117,7 @@ export default class ReceiverInput extends Component {
             onlySites,
             fontSize,
             disabled,
-            pureMode
+            pureMode,
         } = this.props;
 
         const {
@@ -128,7 +128,7 @@ export default class ReceiverInput extends Component {
             chosenSender,
             popupWidth,
             showPopup,
-            groupName
+            groupName,
         } = this.state;
 
         return includeIntercomDisabled !== nextProps.includeIntercomDisabled
@@ -201,7 +201,7 @@ export default class ReceiverInput extends Component {
             showIdInPopup,
             locationMode,
             onlyPersons,
-            onlySites
+            onlySites,
         } = this.props;
 
         const {
@@ -209,7 +209,7 @@ export default class ReceiverInput extends Component {
             foundReceivers,
             popupPosition,
             popupWidth,
-            showPopup
+            showPopup,
         } = this.state;
 
         ReactDOM.render(
@@ -226,7 +226,7 @@ export default class ReceiverInput extends Component {
                 width={popupWidth}
                 show={showPopup}
             />,
-            document.getElementById('receiverPopupRoot')
+            document.getElementById('receiverPopupRoot'),
         );
     };
 
@@ -307,21 +307,23 @@ export default class ReceiverInput extends Component {
         this.setState({
             popupPosition: { top, left },
             popupWidth: width,
-            showPopup: true
+            showPopup: true,
         });
     };
 
     hideReceiverPopup = () => this.setState({
         popupPosition: { top: 0, left: 0 },
         showPopup: false,
-        popupWidth: 0
+        popupWidth: 0,
     });
 
     handleClick = (event) => {
         const { target } = event;
 
         if (target) {
-            if (!target.classList.contains('popup-item') && !target.classList.contains('receiver-popup') && !target.classList.contains('receiver-input-field')) {
+            if (!target.classList.contains('popup-item')
+                && !target.classList.contains('receiver-popup')
+                && !target.classList.contains('receiver-input-field')) {
                 this.hideReceiverPopup();
             }
         } else {
@@ -337,8 +339,8 @@ export default class ReceiverInput extends Component {
                 foundReceivers: {
                     locations: { state: 3, values: [] },
                     groups: { state: 3, values: [] },
-                    users: { state: 3, values: [] }
-                }
+                    users: { state: 3, values: [] },
+                },
             });
         }
 
@@ -352,7 +354,7 @@ export default class ReceiverInput extends Component {
             locationMode,
             onlyPersons,
             canFindOwn,
-            onlySites
+            onlySites,
         } = this.props;
 
         const { chosenSender } = this.state;
@@ -369,8 +371,8 @@ export default class ReceiverInput extends Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`
-            }
+                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+            },
         })
             .then(response => response.json())
             .then((result) => {
@@ -383,17 +385,17 @@ export default class ReceiverInput extends Component {
 
                 const locationsResult = {
                     state: result.locations.Status.ResultCode,
-                    values: []
+                    values: [],
                 };
 
                 const usersResult = {
                     state: result.users.Status.ResultCode,
-                    values: []
+                    values: [],
                 };
 
                 const groupsResult = {
                     state: result.groups.Status.ResultCode,
-                    values: []
+                    values: [],
                 };
 
                 if (locationsResult.state === 0 && !onlyPersons) {
@@ -424,12 +426,13 @@ export default class ReceiverInput extends Component {
 
                     const knownPersonsString = 'Bekannte Personen';
 
-                    if (knownPersonsString.toLowerCase().indexOf(searchString.toLowerCase()) > -1 && (groupsResult.state < 2 || searchString.toLowerCase() === knownPersonsString.toLowerCase())) {
+                    if (knownPersonsString.toLowerCase().indexOf(searchString.toLowerCase()) > -1
+                        && (groupsResult.state < 2 || searchString.toLowerCase() === knownPersonsString.toLowerCase())) {
                         const knownPersonsGroup = {
                             groupId: 0,
                             userIds: [],
                             name: knownPersonsString,
-                            showName: knownPersonsString
+                            showName: knownPersonsString,
                         };
 
                         groupsResult.values.unshift(knownPersonsGroup);
@@ -440,7 +443,7 @@ export default class ReceiverInput extends Component {
                 const foundReceivers = {
                     locations: locationsResult,
                     groups: groupsResult,
-                    users: usersResult
+                    users: usersResult,
                 };
 
                 this.setState({ foundReceivers });
@@ -458,7 +461,7 @@ export default class ReceiverInput extends Component {
             maxReceiverCount,
             placeholder,
             disabled,
-            pureMode
+            pureMode,
         } = this.props;
 
         const { chosenReceivers, groupName, receiverSearchString } = this.state;
@@ -471,15 +474,15 @@ export default class ReceiverInput extends Component {
         const moreThanOneReceiverChosen = memberCount > 1 || knownPersonsSelected;
 
         const groupNameInputClasses = classNames('group-name-input', {
-            hide: !moreThanOneReceiverChosen || !groupNameEnabled
+            hide: !moreThanOneReceiverChosen || !groupNameEnabled,
         });
 
         const receiverInputClasses = classNames('receiver-input', {
-            'receiver-input--pure': pureMode
+            'receiver-input--pure': pureMode,
         });
 
         const inputBoxClasses = classNames('input-box', {
-            'input-box--hide': maxReceiverCountGiven
+            'input-box--hide': maxReceiverCountGiven,
         });
 
         const receivers = [];

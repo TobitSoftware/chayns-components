@@ -6,7 +6,7 @@ import assign from 'object-assign';
 export default class TextArea extends Component {
     static defaultStyle = {
         width: '100%',
-        paddingBottom: '12px'
+        paddingBottom: '12px',
     };
 
     static propTypes = {

@@ -60,7 +60,10 @@ export default class ImageContainer extends PureComponent {
 
     deleteOnClick(e) {
         const {
-            onDelete, index, image, stopPropagation
+            onDelete,
+            index,
+            image,
+            stopPropagation,
         } = this.props;
         if (onDelete) onDelete(image, index);
         if (stopPropagation) e.stopPropagation();
@@ -74,7 +77,9 @@ export default class ImageContainer extends PureComponent {
         } = this.props;
 
         const {
-            height, width, ready
+            height,
+            width,
+            ready,
         } = this.state;
 
         let url;
@@ -100,10 +105,16 @@ export default class ImageContainer extends PureComponent {
                     className="gallery_item_inner"
                     style={image.height / height > image.width / width
                         ? {
-                            width: '100%', height: 'auto', left: 0, right: 0
+                            width: '100%',
+                            height: 'auto',
+                            left: 0,
+                            right: 0,
                         }
                         : {
-                            width: 'auto', height: '100%', top: 0, bottom: 0
+                            width: 'auto',
+                            height: '100%',
+                            top: 0,
+                            bottom: 0,
                         }
                     }
                     onLoad={this.onReady}
@@ -118,23 +129,29 @@ export default class ImageContainer extends PureComponent {
                                 className={classNames('gallery_item_inner', 'gallery_item_inner--preview', { 'gallery_item_inner--preview-ready': ready })}
                                 style={image.height / height > image.width / width
                                     ? {
-                                        width: '100%', height: 'auto', left: 0, right: 0
+                                        width: '100%',
+                                        height: 'auto',
+                                        left: 0,
+                                        right: 0,
                                     }
                                     : {
-                                        width: 'auto', height: '100%', top: 0, bottom: 0
+                                        width: 'auto',
+                                        height: '100%',
+                                        top: 0,
+                                        bottom: 0,
                                     }
                                 }
                                 onLoad={this.onReady}
                             />,
                             <div className="gallery_item--wait_cursor" key="waitCursor">
-                                <SmallWaitCursor show={!ready} showBackground={false}/>
-                            </div>
+                                <SmallWaitCursor show={!ready} showBackground={false} />
+                            </div>,
                         ]
                         : null
                 }
                 {deleteMode && (
                     <div className="delete-icon image-tool" onClick={this.deleteOnClick} key="icon">
-                        <Icon icon="ts-wrong"/>
+                        <Icon icon="ts-wrong" />
                     </div>
                 )}
             </div>

@@ -87,7 +87,14 @@ export default class Bubble extends PureComponent {
 
     render() {
         const {
-            position, parent, children, coordinates, style, className, onMouseEnter, onMouseLeave
+            position,
+            parent,
+            children,
+            coordinates,
+            style,
+            className,
+            onMouseEnter,
+            onMouseLeave,
         } = this.props;
         const { x, y } = coordinates;
 

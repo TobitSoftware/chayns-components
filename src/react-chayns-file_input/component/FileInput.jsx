@@ -34,12 +34,12 @@ export default class FileInput extends PureComponent {
             disabled: PropTypes.bool,
             content: PropTypes.oneOfType([PropTypes.shape({
                 text: PropTypes.string,
-                icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object)
+                icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
             }), PropTypes.shape({
                 children: PropTypes.oneOfType([
                     PropTypes.node,
                     PropTypes.arrayOf(PropTypes.node),
-                ])
+                ]),
             })]),
         })),
     };
@@ -121,7 +121,7 @@ export default class FileInput extends PureComponent {
             const response = await fetch(uploadResult.url);
             const data = await response.blob();
             const metadata = {
-                type: `image/${type}`
+                type: `image/${type}`,
             };
             const file = new File([data], `androidCompatibilityUpload${type}`, metadata);
             const compatibilityEvent = { target: { files: [file] } };
@@ -151,7 +151,10 @@ export default class FileInput extends PureComponent {
 
     render() {
         const {
-            items, className, style, disabled
+            items,
+            className,
+            style,
+            disabled,
         } = this.props;
 
         return (
@@ -214,11 +217,13 @@ export default class FileInput extends PureComponent {
                                             </div>
                                         )
                                 }
-                            </div>
+                            </div>,
                         ];
+
                         if (index !== 0) {
-                            nodeArray.unshift(<div className="cc__file-input__separator" key={`separator${index}`}/>);
+                            nodeArray.unshift(<div className="cc__file-input__separator" key={`separator${index}`} />);
                         }
+
                         return nodeArray;
                     })
                 }

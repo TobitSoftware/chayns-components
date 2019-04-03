@@ -1,32 +1,32 @@
 const DICTIONARY = {
     LOGGED_IN: {
         de: 'eingelogged',
-        en: 'logged in'
+        en: 'logged in',
     },
     DIVIDER_PERSON: {
         de: 'Personen',
-        en: ' persons'
+        en: ' persons',
     },
     DIVIDER_SITE: {
         de: 'Sites',
-        en: 'sites'
+        en: 'sites',
     },
     DIVIDER_MORE_PERSON: {
         de: 'Weitere Personen',
-        en: ' further persons'
+        en: ' further persons',
     },
     DIVIDER_MORE_SITE: {
         de: 'Weitere Sites',
-        en: 'furher sites'
+        en: 'furher sites',
     },
     LOAD_MORE: {
         de: 'Mehr anzeigen',
-        en: ' load more'
+        en: ' load more',
     },
     LIVING_IN: {
         de: 'wohnt in',
-        en: ' living in'
-    }
+        en: ' living in',
+    },
 };
 
 const supportedLanguages = ['de', 'en'];

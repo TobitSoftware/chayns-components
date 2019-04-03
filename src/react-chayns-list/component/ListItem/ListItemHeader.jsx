@@ -20,7 +20,7 @@ const ListItemHeader = ({
             <div
                 className="list-item__image"
                 style={{
-                    backgroundImage: `url(${image})`
+                    backgroundImage: `url(${image})`,
                 }}
             />
         )}
@@ -55,11 +55,11 @@ ListItemHeader.propTypes = {
     onClick: PropTypes.func,
     left: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     right: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
 };
 

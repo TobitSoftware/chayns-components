@@ -9,7 +9,7 @@ const AccordionIntro = ({ children }) => (
 
 
 AccordionIntro.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
 };
 
 export default AccordionIntro;

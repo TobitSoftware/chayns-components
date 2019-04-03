@@ -34,7 +34,7 @@ export default class ContextMenu extends Component {
         items: [],
         position: null,
         parent: null,
-        children: <Icon icon="ts-ellipsis_v"/>,
+        children: <Icon icon="ts-ellipsis_v" />,
         coordinates: null,
         onChildrenClick: null,
         childrenStyle: null,
@@ -137,7 +137,14 @@ export default class ContextMenu extends Component {
 
     render() {
         const {
-            items, parent, children, childrenStyle, coordinates, minWidth, maxWidth, showTriggerBackground
+            items,
+            parent,
+            children,
+            childrenStyle,
+            coordinates,
+            minWidth,
+            maxWidth,
+            showTriggerBackground,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -159,7 +166,7 @@ export default class ContextMenu extends Component {
                             key={item.text}
                         >
                             {item.icon ? (
-                                <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                                <div className="context-menu__item__icon"><Icon icon={item.icon} /></div>
                             ) : null}
                             <div className="context-menu__item__text">
                                 {item.text}
@@ -180,7 +187,7 @@ export default class ContextMenu extends Component {
                     >
                         {children}
                     </div>
-                )
+                ),
         ];
     }
 }

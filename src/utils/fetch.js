@@ -1,7 +1,7 @@
 function extractDomain(url) {
     let domain;
     // find & remove protocol (http, ftp, etc.) and get domain
-    if(url.indexOf('://') > -1) {
+    if (url.indexOf('://') > -1) {
         // eslint-disable-next-line prefer-destructuring
         domain = url.split('/')[2];
     } else {
@@ -26,27 +26,27 @@ export function fetchDataFromApi(url, method = 'GET', body, statusCodes) {
         'tobit.com',
         'chayns.net',
         'tappqa.tobit.com',
-        'tapp01.tobit.com'
+        'tapp01.tobit.com',
     ];
 
     let allowedStatusCodes = statusCodes;
 
     /* Allow custom status codes (always allowed: 200) */
-    if(allowedStatusCodes === undefined || !Array.isArray(allowedStatusCodes)) {
+    if (allowedStatusCodes === undefined || !Array.isArray(allowedStatusCodes)) {
         allowedStatusCodes = [];
     }
 
     let request;
 
-    if(method === undefined || method === null || method === 'GET') {
+    if (method === undefined || method === null || method === 'GET') {
         request = {
             headers: {
                 Accept: 'application/json',
                 'Cache-Control': 'no-cache, no-store, must-revalidate',
                 Pragma: 'no-cache',
-                Expires: '0'
+                Expires: '0',
             },
-            method: 'GET'
+            method: 'GET',
         };
     } else {
         request = {
@@ -54,22 +54,22 @@ export function fetchDataFromApi(url, method = 'GET', body, statusCodes) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            method
+            method,
         };
 
-        if(body) {
+        if (body) {
             request.body = JSON.stringify(body);
         }
     }
 
-    if(window.chayns.env.user.isAuthenticated && allowedUrls.indexOf(extractDomain(url)) !== -1) {
+    if (window.chayns.env.user.isAuthenticated && allowedUrls.indexOf(extractDomain(url)) !== -1) {
         request.headers.authorization = `bearer ${window.chayns.env.user.tobitAccessToken}`;
     }
 
     return window.fetch(url, request).then((response) => {
-        if(response.status === 200 || allowedStatusCodes.indexOf(response.status) !== -1) {
+        if (response.status === 200 || allowedStatusCodes.indexOf(response.status) !== -1) {
             return response.text().then((data) => { // catch empty response
-                if(data !== undefined && data !== null && data !== '') {
+                if (data !== undefined && data !== null && data !== '') {
                     return JSON.parse(data);
                 }
 
@@ -80,7 +80,7 @@ export function fetchDataFromApi(url, method = 'GET', body, statusCodes) {
         const BadStatusError = message => ({
             name: 'BadStatusError',
             message: message || 'Unknown Status',
-            stack: (new Error()).stack
+            stack: (new Error()).stack,
         });
 
         throw BadStatusError(`Bad Status Code: ${response.status}`); // send own error
@@ -92,13 +92,13 @@ export function reloadCache(reload) {
 
     return new Promise((resolve, reject) => {
         fetchDataFromApi(`##server_url##/cache/${window.chayns.env.site.locationId}`, 'GET', null).then((data) => {
-            if(data !== true) {
+            if (data !== true) {
                 window.chayns.dialog.alert(window.chayns.utils.lang.get('txt_shopMashup_reloadCache'), window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'));
                 reject();
             } else {
                 resolve();
 
-                if(reload !== false) {
+                if (reload !== false) {
                     window.location.reload();
                 }
             }

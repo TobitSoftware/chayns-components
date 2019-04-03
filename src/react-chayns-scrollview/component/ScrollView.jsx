@@ -101,22 +101,20 @@ export default class ScrollView extends Component {
                         className="cc__scroll-view__content"
                         ref={(ref) => {
                             this.content = ref;
-                            if(scrollElementRef) {
+                            if (scrollElementRef) {
                                 scrollElementRef(ref);
                             }
                         }}
                         onScroll={onScroll}
                     >
-                        <div className="cc__scroll-view__children" ref={ref => this.children = ref}>
+                        <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
                         </div>
                     </div>
                 </div>
                 <div
                     className="cc__scroll-view__scrollbar"
-                    ref={(ref) => {
-                        this.bar = ref;
-                    }}
+                    ref={(ref) => { this.bar = ref; }}
                 />
             </div>
         );

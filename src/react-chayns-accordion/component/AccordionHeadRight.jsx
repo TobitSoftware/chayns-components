@@ -12,8 +12,8 @@ export default class AccordionHeadRight extends PureComponent {
             PropTypes.node.isRequired,
             PropTypes.shape({
                 open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired
-            }).isRequired
+                close: PropTypes.node.isRequired,
+            }).isRequired,
         ]),
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,

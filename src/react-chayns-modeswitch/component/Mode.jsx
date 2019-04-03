@@ -10,7 +10,7 @@ export default class Mode extends Component {
     };
 
     static defaultProps = {
-        className: null
+        className: null,
     };
 
     constructor() {
@@ -25,7 +25,7 @@ export default class Mode extends Component {
 
     updatedMode = (mode) => {
         this.setState({
-            modeId: mode.id
+            modeId: mode.id,
         });
     };
 

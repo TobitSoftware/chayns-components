@@ -16,7 +16,7 @@ class Day extends Component {
             onDayActivation,
             onAdd,
             times,
-            weekday
+            weekday,
         } = this.props;
 
         if (status && times.length === 0 && onAdd) {
@@ -32,7 +32,7 @@ class Day extends Component {
             times,
             onAdd,
             onRemove,
-            onChange
+            onChange,
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
@@ -79,16 +79,16 @@ class Day extends Component {
 Day.propTypes = {
     weekday: PropTypes.shape({
         name: PropTypes.string.isRequired,
-        number: PropTypes.number.isRequired
+        number: PropTypes.number.isRequired,
     }).isRequired,
     times: PropTypes.arrayOf(PropTypes.shape({
         start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired
+        end: PropTypes.string.isRequired,
     })).isRequired,
     onDayActivation: PropTypes.func.isRequired,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
 };
 
 export default Day;

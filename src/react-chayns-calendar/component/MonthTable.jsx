@@ -7,7 +7,7 @@ import areDatesEqual from '../utils/areDatesEqual';
 
 const DAYS = {
     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-    en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 };
 
 function getDayNames(language = chayns.env.language) {
@@ -79,40 +79,40 @@ export default class MonthTable extends PureComponent {
                     for (let j = 2; j <= startDate.getDay(); j += 1) {
                         _row.push({
                             date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
-                            inMonth: false
+                            inMonth: false,
                         });
                     }
                     for (let k = 1; k <= (8 - startDate.getDay()); k += 1) {
                         _row.push({
                             date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), k),
-                            inMonth: true
+                            inMonth: true,
                         });
                     }
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
                             date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
-                            inMonth: false
+                            inMonth: false,
                         });
                     }
 
                     _row.push({
                         date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
-                        inMonth: true
+                        inMonth: true,
                     });
                 }
             } else {
-                for(let j = 0; j < 7; j += 1) {
+                for (let j = 0; j < 7; j += 1) {
                     const _date = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
                     if (_date.getMonth() === startDate.getMonth()) {
                         _row.push({
                             date: _date,
-                            inMonth: true
+                            inMonth: true,
                         });
                     } else {
                         _row.push({
                             date: _date,
-                            inMonth: false
+                            inMonth: false,
                         });
                     }
                 }
@@ -135,7 +135,7 @@ export default class MonthTable extends PureComponent {
 
         const daysList = getDayNames();
 
-        return(
+        return (
             <div className="month__table noselect">
                 <div className="day__row">
                     {daysList.map((day, index) => (

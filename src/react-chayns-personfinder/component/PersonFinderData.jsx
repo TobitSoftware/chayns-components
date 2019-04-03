@@ -265,7 +265,7 @@ export default class PersonFinderData extends Component {
             persons,
             sites,
             showWaitCursor,
-            lazyLoading
+            lazyLoading,
         } = this.state;
 
         const hasEntries = this.hasEntries();
@@ -293,13 +293,13 @@ export default class PersonFinderData extends Component {
             if (lazyLoading) {
                 return [
                     results,
-                    showWaitCursor && (<WaitCursor key="wait-cursor" />)
+                    showWaitCursor && (<WaitCursor key="wait-cursor" />),
                 ];
             }
 
             return [
                 showWaitCursor && (<WaitCursor key="wait-cursor" />),
-                results
+                results,
             ];
         }
 

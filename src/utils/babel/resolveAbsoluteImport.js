@@ -50,7 +50,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         FORMAT_PRICE: 'react-chayns-formatted_input/component/FormattedInput/instances/formatPrice.js',
     };
 
-    if(!values[importName]) {
+    if (!values[importName]) {
         throw new Error(`Unable to resolve ${importName} from chayns-components. Please check the spelling. If it's not wrong please create an issue (https://github.com/TobitSoftware/chayns-components/issues).`);
     }
 

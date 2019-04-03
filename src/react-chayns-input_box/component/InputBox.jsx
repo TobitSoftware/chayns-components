@@ -154,7 +154,7 @@ export default class InputBox extends Component {
         return (
             <div
                 style={{
-                    display: 'inline-block'
+                    display: 'inline-block',
                 }}
                 className={classnames('cc__input-box', className)}
                 ref={this.setWrapperRef}

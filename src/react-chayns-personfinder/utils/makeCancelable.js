@@ -5,7 +5,7 @@ export default (promise) => {
     const wrappedPromise = new Promise((resolve, reject) => {
         promise.then(
             val => hasCanceled_ ? reject({ isCanceled: true }) : resolve(val),
-            error => hasCanceled_ ? reject({ isCanceled: true }) : reject(error)
+            error => hasCanceled_ ? reject({ isCanceled: true }) : reject(error),
         );
     });
 

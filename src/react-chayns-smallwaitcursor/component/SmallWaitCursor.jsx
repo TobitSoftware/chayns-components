@@ -29,11 +29,11 @@ export default class SmallWaitCursor extends PureComponent {
             return (
                 <div
                     className={classNames('wait-cursor', {
-                        hidden: !show
+                        hidden: !show,
                     })}
                     style={style}
                 >
-                    <div className="wait-cursor__spinner"/>
+                    <div className="wait-cursor__spinner" />
                 </div>
             );
         }

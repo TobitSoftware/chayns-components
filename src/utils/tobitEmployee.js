@@ -14,8 +14,8 @@ export default function isTobitEmployee() {
         } else {
             fetch(`https://chaynssvc.tobit.com/v0.5/${chayns.env.site.locationId}/user/UAC/8255`, {
                 headers: {
-                    Authorization: `bearer ${chayns.env.user.tobitAccessToken}`
-                }
+                    Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+                },
             }).then((response) => {
                 if (response.status === 200) {
                     response.json().then((json) => {

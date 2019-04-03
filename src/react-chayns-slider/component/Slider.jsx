@@ -99,7 +99,13 @@ export default class Slider extends PureComponent {
 
     componentDidUpdate() {
         const {
-            interval, min, max, vertical, startValue, endValue, value
+            interval,
+            min,
+            max,
+            vertical,
+            startValue,
+            endValue,
+            value,
         } = this.props;
 
         if (value || (startValue && endValue)) {
@@ -143,7 +149,15 @@ export default class Slider extends PureComponent {
 
     thumbMove = (e) => {
         const {
-            minInterval, maxInterval, min, max, onChange, interval, value, startValue, endValue
+            minInterval,
+            maxInterval,
+            min,
+            max,
+            onChange,
+            interval,
+            value,
+            startValue,
+            endValue,
         } = this.props;
 
         const width = max - min;
@@ -241,7 +255,10 @@ export default class Slider extends PureComponent {
 
     innerTrackMove = (e) => {
         const {
-            onChange, value, startValue, endValue
+            onChange,
+            value,
+            startValue,
+            endValue,
         } = this.props;
 
         const minPercent = 0;
@@ -283,7 +300,16 @@ export default class Slider extends PureComponent {
 
     trackDown = (e) => {
         const {
-            maxInterval, min, max, onChange, onChangeStart, onChangeEnd, interval, value, startValue, endValue
+            maxInterval,
+            min,
+            max,
+            onChange,
+            onChangeStart,
+            onChangeEnd,
+            interval,
+            value,
+            startValue,
+            endValue,
         } = this.props;
 
         const rect = this.bar.current.getBoundingClientRect();
@@ -318,7 +344,12 @@ export default class Slider extends PureComponent {
 
     setElements = (percents) => {
         const {
-            valueFormatter, min, max, showLabel, interval, vertical
+            valueFormatter,
+            min,
+            max,
+            showLabel,
+            interval,
+            vertical,
         } = this.props;
         const { leftPercent, rightPercent, percent } = percents;
         // set elements
@@ -364,9 +395,13 @@ export default class Slider extends PureComponent {
 
     getSteppedPercents = (percents) => {
         const {
-            min, max, step, interval
+            min,
+            max,
+            step,
+            interval,
         } = this.props;
         let { leftPercent, rightPercent, percent } = percents;
+
         // set to steps
         if (step) {
             const width = max - min;
@@ -387,9 +422,13 @@ export default class Slider extends PureComponent {
 
     onChange = (listeners, percents) => {
         const {
-            min, max, interval, vertical
+            min,
+            max,
+            interval,
+            vertical,
         } = this.props;
         let { leftPercent, rightPercent, percent } = percents;
+
         if (vertical) {
             const left = leftPercent;
             leftPercent = 100 - rightPercent;
@@ -442,27 +481,45 @@ export default class Slider extends PureComponent {
 
     render() {
         const {
-            className, style, disabled, labelStyle, thumbStyle, showLabel, interval, trackStyle, innerTrackStyle, vertical
+            className,
+            style,
+            disabled,
+            labelStyle,
+            thumbStyle,
+            showLabel,
+            interval,
+            trackStyle,
+            innerTrackStyle,
+            vertical,
         } = this.props;
 
         return (
             <div
                 className={classNames('cc__slider', {
                     'cc__slider--disabled': disabled,
-                    'cc__slider--vertical': vertical
+                    'cc__slider--vertical': vertical,
                 }, className)}
                 style={style}
             >
                 {
                     showLabel && !vertical
-                        ? <div className="cc__slider__label" ref={this.label} style={labelStyle}/>
-                        : null
+                        ? (
+                            <div
+                                className="cc__slider__label"
+                                ref={this.label}
+                                style={labelStyle}
+                            />
+                        ) : null
                 }
                 <div
                     className="cc__slider__bar"
                     ref={this.bar}
                 >
-                    <div className="cc__slider__bar__track" onClick={this.trackDown} style={trackStyle}>
+                    <div
+                        className="cc__slider__bar__track"
+                        onClick={this.trackDown}
+                        style={trackStyle}
+                    >
                         <div
                             className="cc__slider__bar__track__inner"
                             onMouseDown={this.innerTrackDown}
@@ -481,7 +538,7 @@ export default class Slider extends PureComponent {
                                     ref={this.leftThumb}
                                     style={thumbStyle && thumbStyle.left}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot"/>
+                                    <div className="cc__slider__bar__thumb__dot" />
                                 </div>,
                                 <div
                                     key="right"
@@ -491,8 +548,8 @@ export default class Slider extends PureComponent {
                                     ref={this.rightThumb}
                                     style={thumbStyle && thumbStyle.right}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot"/>
-                                </div>
+                                    <div className="cc__slider__bar__thumb__dot" />
+                                </div>,
                             ]
                             : (
                                 <div
@@ -502,7 +559,7 @@ export default class Slider extends PureComponent {
                                     ref={this.thumb}
                                     style={thumbStyle}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot"/>
+                                    <div className="cc__slider__bar__thumb__dot" />
                                 </div>
                             )
                     }

@@ -23,7 +23,7 @@ export default async function findRelations(type, value, skip, take) {
                 unrelated: [],
                 related: sites.Value.map(({ appstoreName, ...s }) => ({
                     name: appstoreName,
-                    ...s
+                    ...s,
                 })),
             };
         }

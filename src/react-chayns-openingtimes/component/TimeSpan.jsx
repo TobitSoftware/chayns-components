@@ -13,11 +13,11 @@ class TimeSpan extends Component {
         buttonType: PropTypes.number.isRequired,
         onAdd: PropTypes.func.isRequired,
         onRemove: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired
+        onChange: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
-        disabled: false
+        disabled: false,
     };
 
     static OFF = 0;
@@ -61,7 +61,7 @@ class TimeSpan extends Component {
             start,
             end,
             disabled,
-            buttonType
+            buttonType,
         } = this.props;
 
         return (
@@ -87,7 +87,10 @@ class TimeSpan extends Component {
                             <ChooseButton
                                 onClick={this.onClick}
                             >
-                                <Icon icon={faPlus} className={`fa-xs openingTimesIcon ${buttonType === TimeSpan.ADD ? 'add' : 'remove'}`}/>
+                                <Icon
+                                    icon={faPlus}
+                                    className={`fa-xs openingTimesIcon ${buttonType === TimeSpan.ADD ? 'add' : 'remove'}`}
+                                />
                             </ChooseButton>
                         )
                     }

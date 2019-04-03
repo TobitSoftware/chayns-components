@@ -7,7 +7,7 @@ import SimpleListItem from './ListItem/ListItem';
 const ListItem = ({
     hideIndicator,
     children,
-    ...props,
+    ...props
 }) => {
     if (children) {
         return (
@@ -28,7 +28,7 @@ const ListItem = ({
 ListItem.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     hideIndicator: PropTypes.bool,
 };

@@ -7,7 +7,7 @@ function shareWithApp(provider, link) {
     const value = {
         text: link,
         sharingApp: provider.providerId > -1 ? provider.providerId : -1,
-        sharingAndroidApp: provider.androidIdentifier || null
+        sharingAndroidApp: provider.androidIdentifier || null,
     };
     chayns.share(value);
 }

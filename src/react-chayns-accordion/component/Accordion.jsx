@@ -18,16 +18,16 @@ export default class Accordion extends PureComponent {
             PropTypes.node.isRequired,
             PropTypes.shape({
                 open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired
-            }).isRequired
+                close: PropTypes.node.isRequired,
+            }).isRequired,
         ]).isRequired,
         children: PropTypes.node.isRequired,
         right: PropTypes.oneOfType([
             PropTypes.node.isRequired,
             PropTypes.shape({
                 open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired
-            }).isRequired
+                close: PropTypes.node.isRequired,
+            }).isRequired,
         ]),
         renderClosed: PropTypes.bool,
         isWrapped: PropTypes.bool,
@@ -125,7 +125,7 @@ export default class Accordion extends PureComponent {
                     this.accordionOpenListener();
                 } else {
                     this.setState({
-                        currentState: CLOSE
+                        currentState: CLOSE,
                     });
                 }
             }
@@ -136,7 +136,7 @@ export default class Accordion extends PureComponent {
 
             if (!nextProps.open && !currentState === !!CLOSE) {
                 this.setState({
-                    currentState: CLOSE
+                    currentState: CLOSE,
                 });
             }
         }
@@ -234,7 +234,7 @@ export default class Accordion extends PureComponent {
         }
 
         this.setState({
-            currentState: CLOSE
+            currentState: CLOSE,
         });
 
         rqAnimationFrame = requestAnimationFrame(() => {
@@ -258,7 +258,7 @@ export default class Accordion extends PureComponent {
             });
         }
         this.setState({
-            currentState: OPEN
+            currentState: OPEN,
         });
 
         if (onOpen) {
@@ -294,7 +294,7 @@ export default class Accordion extends PureComponent {
                     'accordion--open': currentState === OPEN,
                     'accordion--disabled': disabled,
                     'accordion--fixed': fixed,
-                    [className]: className
+                    [className]: className,
                 })}
                 ref={(ref) => {
                     this.accordion = ref;
@@ -318,7 +318,7 @@ export default class Accordion extends PureComponent {
                                 >
                                     {
                                         chayns.utils.isString(icon) || icon.iconName
-                                            ? <Icon icon={icon}/>
+                                            ? <Icon icon={icon} />
                                             : icon
                                     }
                                 </div>
@@ -328,7 +328,7 @@ export default class Accordion extends PureComponent {
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(head && !chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null)
+                            ...(head && !chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null),
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}

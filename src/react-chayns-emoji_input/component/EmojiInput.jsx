@@ -5,9 +5,9 @@ import loadOptionalDependency from '../../utils/loadOptionalDependency';
 
 function requireEmojione(returnPromise) {
     return loadOptionalDependency('emojione', 'emojione', [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js',
     ], [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css'
+        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css',
     ], returnPromise);
 }
 
@@ -22,7 +22,7 @@ export default class EmojiInput extends Component {
         disabled: PropTypes.bool,
         style: PropTypes.object,
         onFocus: PropTypes.func,
-        onBlur: PropTypes.func
+        onBlur: PropTypes.func,
     };
 
     static defaultProps = {
@@ -31,7 +31,7 @@ export default class EmojiInput extends Component {
         disabled: false,
         onFocus: null,
         onBlur: null,
-        style: null
+        style: null,
     };
 
     lastKeyPressed = null;
@@ -369,7 +369,7 @@ export default class EmojiInput extends Component {
         const messageInputClasses = classNames('emoji-input__message-input', {
             'emoji-input__message-input--hide-border': hideBorder,
             'emoji-input__message-input--disabled': disabled,
-            input: !disabled
+            input: !disabled,
         });
 
         return (

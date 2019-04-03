@@ -92,7 +92,7 @@ class DayItem extends PureComponent {
                 'is-marked': _marked,
                 'is-marked-is-highlighted': _marked && _highlighted,
                 'chayns__background-color--80 chayns__color--5': _active && _marked,
-                'chayns__background-color--80': !_active && _marked && !_selected
+                'chayns__background-color--80': !_active && _marked && !_selected,
 
             });
 

@@ -3,7 +3,7 @@ async function fetchRelations(url, {
     skip,
     take,
 }) {
-    if(!chayns.env.user.isAuthenticated) {
+    if (!chayns.env.user.isAuthenticated) {
         chayns.login();
 
         return Promise.reject(new Error('Not authenticated'));
@@ -14,9 +14,9 @@ async function fetchRelations(url, {
     const config = {
         method: 'GET',
         headers: {
-            Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`
+            Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
         },
-        mode: 'cors'
+        mode: 'cors',
     };
 
     try {

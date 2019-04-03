@@ -6,7 +6,7 @@ const Divider = ({ name }) => (
 );
 
 Divider.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
 };
 
 export default Divider;

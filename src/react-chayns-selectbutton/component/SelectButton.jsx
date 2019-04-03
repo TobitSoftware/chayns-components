@@ -49,9 +49,16 @@ export default class SelectButton extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {
-            list, listKey, listValue, selectedFlag
+            list,
+            listKey,
+            listValue,
+            selectedFlag,
         } = this.props;
-        if (list !== nextProps.list || listKey !== nextProps.listKey || listValue !== nextProps.listValue || selectedFlag !== nextProps.selectedFlag) {
+
+        if (list !== nextProps.list
+            || listKey !== nextProps.listKey
+            || listValue !== nextProps.listValue
+            || selectedFlag !== nextProps.selectedFlag) {
             this.setState({ selected: nextProps.list.filter(item => item[nextProps.selectedFlag]) });
         }
     }
@@ -73,7 +80,7 @@ export default class SelectButton extends Component {
             message: description,
             quickfind: quickFind,
             multiselect: multiSelect,
-            list: _list
+            list: _list,
         }).then((result) => {
             if (onSelect && result.buttonType > 0) {
                 onSelect(this.getReturnList(result));
@@ -83,7 +90,7 @@ export default class SelectButton extends Component {
             console.error(err);
         });
 
-        if(stopPropagation) e.stopPropagation();
+        if (stopPropagation) e.stopPropagation();
     }
 
     getDialogList(_list) {
@@ -92,13 +99,13 @@ export default class SelectButton extends Component {
         const list = [];
 
         if (_list) {
-            _list.map((item, i) => {
+            _list.forEach((item, i) => {
                 const curListKey = listKey || i;
                 if (item[curListKey] && item[listValue]) {
                     list.push({
                         name: item[listValue],
                         value: item[curListKey],
-                        isSelected: selected.indexOf(item) >= 0 && showSelection
+                        isSelected: selected.indexOf(item) >= 0 && showSelection,
                     });
                 }
             });
@@ -112,20 +119,32 @@ export default class SelectButton extends Component {
         const { buttonType, selection: selectedItems } = selected;
         const result = [];
 
-        selectedItems.map((item) => {
-            list.map((listItem) => {
-                if (listItem[listKey] === item.value) result.push(listItem);
+        selectedItems.forEach((item) => {
+            list.forEach((listItem) => {
+                if (listItem[listKey] === item.value) {
+                    result.push(listItem);
+                }
             });
         });
+
         this.setState({ selected: result });
-        return { buttonType, selection: result };
+
+        return {
+            buttonType,
+            selection: result,
+        };
     }
 
     render() {
         const {
-            className, label, disabled, listValue, showSelection
+            className,
+            label,
+            disabled,
+            listValue,
+            showSelection,
         } = this.props;
         const { selected } = this.state;
+
         return (
             <ChooseButton
                 className={className}

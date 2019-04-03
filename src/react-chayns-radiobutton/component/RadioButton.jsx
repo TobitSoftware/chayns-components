@@ -15,7 +15,7 @@ export default class RadioButton extends Component {
         value: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
-            PropTypes.bool
+            PropTypes.bool,
         ]),
         className: PropTypes.string,
         stopPropagation: PropTypes.bool,

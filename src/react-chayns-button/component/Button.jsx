@@ -65,7 +65,7 @@ export default class Button extends PureComponent {
                     'button--secondary': secondary,
                     'button--icon': icon && !chooseButton,
                     'choosebutton--icon': icon && chooseButton,
-                    [className]: className
+                    [className]: className,
                 })}
                 onClick={this.handleClick}
                 style={style}
@@ -77,10 +77,10 @@ export default class Button extends PureComponent {
                     <span
                         className={classNames({
                             button__icon: !chooseButton,
-                            choosebutton__icon: chooseButton
+                            choosebutton__icon: chooseButton,
                         })}
                     >
-                        <Icon icon={icon}/>
+                        <Icon icon={icon} />
                     </span>
                 ) : null}
                 {children}

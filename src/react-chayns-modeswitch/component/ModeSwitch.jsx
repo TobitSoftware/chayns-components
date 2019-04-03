@@ -14,7 +14,7 @@ export default class ModeSwitch extends Component {
                 id: PropTypes.number,
                 name: PropTypes.string,
                 uacIds: PropTypes.arrayOf(PropTypes.number),
-            })
+            }),
         ),
         save: PropTypes.bool,
         onChange: PropTypes.func,
@@ -72,7 +72,7 @@ export default class ModeSwitch extends Component {
         this.state = {
             modes: [],
             activeModeId: null,
-            open: false
+            open: false,
         };
         ModeSwitch.adminSwitchStatus = chayns.env.user.adminMode ? 1 : 0;
         ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp) && !!chayns.env.user.groups.find(g => g.id === 1);
@@ -119,13 +119,13 @@ export default class ModeSwitch extends Component {
             newModes.unshift({
                 id: 1,
                 name: 'chayns® Manager',
-                uacIds: [1]
+                uacIds: [1],
             });
         }
         if (user.length === 0) {
             newModes.unshift({
                 id: 0,
-                name: window.chayns.env.user.name
+                name: window.chayns.env.user.name,
             });
         }
         newModes = newModes.filter(mode => !mode.uacIds || this.isUserInGroup(mode.uacIds));
@@ -134,8 +134,12 @@ export default class ModeSwitch extends Component {
 
     async init() {
         const {
-            defaultMode, save, modes, parent
+            defaultMode,
+            save,
+            modes,
+            parent,
         } = this.props;
+
         this.pageYOffset = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect().top;
         if (chayns.env.user.isAuthenticated) {
             ModeSwitch.modes = this.setModes(modes);
@@ -236,7 +240,7 @@ export default class ModeSwitch extends Component {
                             className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId > 1 })}
                             onClick={this.toggleModeSwitch}
                         >
-                            <Icon icon="ts-cog"/>
+                            <Icon icon="ts-cog" />
                         </div>
                     </div>
                 </TappPortal>

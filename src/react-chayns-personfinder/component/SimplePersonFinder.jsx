@@ -65,7 +65,7 @@ export default class SimplePersonFinder extends Component {
 
         this.setState({
             inputValue: name,
-            selectedValue: true
+            selectedValue: true,
         });
 
         if (onChange) {

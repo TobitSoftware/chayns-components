@@ -12,7 +12,7 @@ AbstractList.propTypes = {
     className: PropTypes.string,
     children: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
 };
 

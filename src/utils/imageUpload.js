@@ -2,7 +2,7 @@ export default async function imageUpload(file, referenceId, personId, siteId, u
     return new Promise(async (resolve, reject) => {
         try {
             const headers = {
-                Accept: 'application/json'
+                Accept: 'application/json',
             };
             if (referenceId) {
                 headers['X-Reference-Id'] = referenceId;

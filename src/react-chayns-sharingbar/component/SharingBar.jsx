@@ -19,8 +19,9 @@ export default class SharingBar extends Component {
 
     constructor() {
         super();
+
         this.state = {
-            sharingProvider: []
+            sharingProvider: [],
         };
     }
 
@@ -30,8 +31,8 @@ export default class SharingBar extends Component {
 
             const sharingItems = [];
 
-            provider.map((item) => {
-                if(item.available) {
+            provider.forEach((item) => {
+                if (item.available) {
                     sharingItems.push((
                         <SharingBarItem
                             icon={item.icon}
@@ -46,7 +47,7 @@ export default class SharingBar extends Component {
             });
 
             this.setState({
-                sharingProvider: sharingItems // TODO: save data in state and not components
+                sharingProvider: sharingItems, // TODO: save data in state and not components
             });
         });
     }

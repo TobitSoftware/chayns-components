@@ -20,7 +20,7 @@ class AbstractExpandableListItem extends PureComponent {
         open: PropTypes.bool,
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]),
         header: PropTypes.node.isRequired,
         onOpen: PropTypes.func.isRequired,

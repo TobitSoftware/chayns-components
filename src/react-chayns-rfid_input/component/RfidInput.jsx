@@ -21,7 +21,7 @@ export default class RfidInput extends Component {
         placeholder: PropTypes.string,
         confirmNode: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]),
         enableScan: PropTypes.bool,
         scanText: PropTypes.string,
@@ -51,7 +51,7 @@ export default class RfidInput extends Component {
         const { onInput } = this.props;
 
         const newValue = newRfid.toUpperCase().replace(/\s/g, '');
-        if(!RFID_CONTENT.test(newValue)) {
+        if (!RFID_CONTENT.test(newValue)) {
             return;
         }
 
@@ -60,7 +60,7 @@ export default class RfidInput extends Component {
 
     onScan = (rfid) => {
         this.endScan();
-        if(VALID_RFID.test(rfid)) {
+        if (VALID_RFID.test(rfid)) {
             const newRfid = rfid.toUpperCase();
             const { onConfirm, onInput } = this.props;
             onInput(newRfid);
@@ -77,9 +77,10 @@ export default class RfidInput extends Component {
     endScan = () => {
         const { isScanning } = this.state;
 
-        if(!isScanning) {
+        if (!isScanning) {
             return;
         }
+
         chayns.removeNfcListener();
         chayns.hideWaitCursor();
         this.setState({ isScanning: false });
@@ -101,7 +102,7 @@ export default class RfidInput extends Component {
         });
         const disabled = !VALID_RFID.test(value);
 
-        return(
+        return (
             <div className={classNames}>
                 <div className="cc__rfid-input__wrapper">
                     <Input

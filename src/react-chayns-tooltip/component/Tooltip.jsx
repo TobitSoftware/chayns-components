@@ -97,7 +97,7 @@ export default class Tooltip extends Component {
             nodeArray.unshift(<h5 key={`h5${this.tooltipKey}`}>{content.headline}</h5>);
         }
         if (content.buttonText && content.buttonOnClick) {
-            nodeArray.push(
+            nodeArray.push((
                 <div className="cc__tooltip__button" key={`divBtn${this.tooltipKey}`}>
                     <Button
                         onClick={content.buttonOnClick}
@@ -105,7 +105,7 @@ export default class Tooltip extends Component {
                         {content.buttonText}
                     </Button>
                 </div>
-            );
+            ));
         }
         return nodeArray;
     }
@@ -185,7 +185,7 @@ export default class Tooltip extends Component {
                 >
                     {removeIcon ? (
                         <div className="cc__tooltip__icon" onClick={this.hide}>
-                            <Icon icon="ts-wrong"/>
+                            <Icon icon="ts-wrong" />
                         </div>
                     ) : null}
                     {this.getContent()}
@@ -201,7 +201,7 @@ export default class Tooltip extends Component {
                 onClick={chayns.env.isIOS && bindListeners ? this.show : null}
             >
                 {children}
-            </div>
+            </div>,
         ];
     }
 }

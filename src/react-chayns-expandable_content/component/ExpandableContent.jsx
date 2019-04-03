@@ -45,7 +45,7 @@ export default class ExpandableContent extends Component {
         className: PropTypes.string,
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]).isRequired,
         removeContentClosed: PropTypes.bool,
     };
@@ -119,7 +119,7 @@ export default class ExpandableContent extends Component {
     componentDidUpdate(prevProps) {
         const { open, timeout } = this.props;
 
-        if(open === prevProps.open) {
+        if (open === prevProps.open) {
             return;
         }
 
@@ -190,7 +190,7 @@ export default class ExpandableContent extends Component {
         const newClassNames = classnames(
             className,
             (classNames === DEFAULT_CLASSNAMES) ? DEFAULT_CLASSNAME : null,
-            ExpandableContent.getClassNames(currentState, classNames)
+            ExpandableContent.getClassNames(currentState, classNames),
         );
 
         return (

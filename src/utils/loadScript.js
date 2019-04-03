@@ -3,7 +3,7 @@ const scriptMap = new Map();
 export default function loadScript(id, src) {
     return new Promise((resolve, reject) => {
         let scriptTag = scriptMap.get(id);
-        if(scriptTag) {
+        if (scriptTag) {
             return resolve();
         }
 

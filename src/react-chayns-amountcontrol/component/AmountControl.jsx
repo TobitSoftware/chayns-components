@@ -79,7 +79,7 @@ export default class AmountControl extends PureComponent {
     componentWillReceiveProps(nextProps) {
         this.setState({
             tempAmount: nextProps.amount,
-            tempValue: nextProps.amount
+            tempValue: nextProps.amount,
         });
     }
 
@@ -93,7 +93,7 @@ export default class AmountControl extends PureComponent {
 
         this.setState({
             tempAmount: numberValue,
-            tempValue: value
+            tempValue: value,
         });
 
         if (onInput && (numberValue || numberValue >= 0)) {
@@ -103,7 +103,7 @@ export default class AmountControl extends PureComponent {
 
     getRemoveIcon() {
         const {
-            amount, icon, removeIcon, minusIcon
+            amount, icon, removeIcon, minusIcon,
         } = this.props;
         const { tempAmount } = this.state;
 
@@ -181,7 +181,7 @@ export default class AmountControl extends PureComponent {
 
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
-                'cc__amount-control--active': amount > 0
+                'cc__amount-control--active': amount > 0,
             })}
             >
                 <ControlButton

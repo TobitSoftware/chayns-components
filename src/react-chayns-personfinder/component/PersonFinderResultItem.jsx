@@ -35,7 +35,7 @@ export default class PersonFinderResultItem extends PureComponent {
         let relationString = '';
 
         for (let i = 0; i < show; i += 1) {
-            if(type === PERSON_RELATION) {
+            if (type === PERSON_RELATION) {
                 relationString += data[i].type === 'LIVING_IN' ? `${getText(data[i].type, data[i].name)}, ` : `${data[i].name}, `;
             } else {
                 relationString += `${getText(data[i].type)}, `;
@@ -143,9 +143,9 @@ export default class PersonFinderResultItem extends PureComponent {
         const relationString = PersonFinderResultItem.getRelations(convertedRelation.relations, type);
         const furtherRelationsString = PersonFinderResultItem.getFurtherRelations(convertedRelation);
 
-        return(
+        return (
             <div className="result-item" onClick={this.handleClick}>
-                <div className="img" style={{ backgroundImage: `url(${convertedRelation.image})` }}/>
+                <div className="img" style={{ backgroundImage: `url(${convertedRelation.image})` }} />
                 <div className="text">
                     <div
                         className="title"

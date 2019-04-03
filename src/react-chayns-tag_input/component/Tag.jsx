@@ -10,7 +10,7 @@ export default class Tag extends PureComponent {
         value: PropTypes.object.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]).isRequired,
         onDelete: PropTypes.func,
         selected: PropTypes.bool,

@@ -2,7 +2,7 @@ export default function processRelations(type, relationsRaw) {
     const unrelated = [];
     const related = [];
 
-    if(relationsRaw) {
+    if (relationsRaw) {
         relationsRaw.forEach((relation) => {
             if (relation.score > 0) {
                 related.push(relation);

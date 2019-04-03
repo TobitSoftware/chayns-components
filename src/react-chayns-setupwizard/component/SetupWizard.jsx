@@ -13,14 +13,14 @@ export default class SetupWizard extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.element),
-            PropTypes.element
+            PropTypes.element,
         ]),
         ready: PropTypes.func,
         notComplete: PropTypes.func,
         style: PropTypes.object,
         contentStyle: PropTypes.object,
         title: PropTypes.string,
-        description: PropTypes.node
+        description: PropTypes.node,
     };
 
     static childContextTypes = {
@@ -28,7 +28,7 @@ export default class SetupWizard extends Component {
         previousStep: PropTypes.func,
         nextStep: PropTypes.func,
         toStep: PropTypes.func,
-        resetToStep: PropTypes.func
+        resetToStep: PropTypes.func,
     };
 
     static defaultProps = {
@@ -38,16 +38,18 @@ export default class SetupWizard extends Component {
         style: null,
         contentStyle: null,
         title: null,
-        description: null
+        description: null,
     };
 
     constructor() {
         super();
+
         this.state = {
             currentStep: 0,
             maxProgress: 0,
-            completedSteps: []
+            completedSteps: [],
         };
+
         this.stepComplete = this.stepComplete.bind(this);
         this.previousStep = this.previousStep.bind(this);
         this.nextStep = this.nextStep.bind(this);
@@ -63,12 +65,13 @@ export default class SetupWizard extends Component {
             previousStep: this.previousStep,
             nextStep: this.nextStep,
             toStep: this.toStep,
-            resetToStep: this.resetToStep
+            resetToStep: this.resetToStep,
         };
     }
 
     stepComplete(value) {
         const { currentStep, completedSteps } = this.state;
+
         if (value === true) {
             if (completedSteps.indexOf(currentStep) === -1) {
                 completedSteps.push(currentStep);
@@ -80,7 +83,7 @@ export default class SetupWizard extends Component {
             completedSteps.splice(completedSteps.indexOf(currentStep));
             this.setState({ completedSteps });
 
-            if(children[currentStep].props.required === true) {
+            if (children[currentStep].props.required === true) {
                 this.setState({ maxProgress: currentStep });
             }
         }
@@ -116,7 +119,7 @@ export default class SetupWizard extends Component {
 
     resetToStep(step) {
         const { completedSteps, maxProgress } = this.state;
-        for(let i = step; i < maxProgress; i += 1) {
+        for (let i = step; i < maxProgress; i += 1) {
             if (completedSteps.indexOf(i) >= 0) {
                 completedSteps.splice(completedSteps.indexOf(i));
             }
@@ -127,8 +130,8 @@ export default class SetupWizard extends Component {
     ready() {
         const { ready, children } = this.props;
         const { completedSteps, currentStep } = this.state;
-        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
-            if(ready) {
+        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+            if (ready) {
                 ready();
             }
         } else {
@@ -138,7 +141,7 @@ export default class SetupWizard extends Component {
 
     notComplete() {
         const { notComplete } = this.props;
-        if(notComplete) {
+        if (notComplete) {
             notComplete();
         }
     }
@@ -147,11 +150,12 @@ export default class SetupWizard extends Component {
         const { children } = this.props;
         let { maxProgress } = this.state;
         const { completedSteps, currentStep } = this.state;
-        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+
+        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
             maxProgress = (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress;
             this.setState({
                 currentStep: newCurrentStep,
-                maxProgress
+                maxProgress,
             });
         } else {
             this.notComplete();
@@ -160,9 +164,14 @@ export default class SetupWizard extends Component {
 
     render() {
         const {
-            style, contentStyle, title, description, children
+            style,
+            contentStyle,
+            title,
+            description,
+            children,
         } = this.props;
         const { maxProgress, currentStep, completedSteps } = this.state;
+
         return (
             <div style={style}>
                 {title && (
@@ -171,7 +180,7 @@ export default class SetupWizard extends Component {
                     </h1>
                 )}
                 {description && (
-                    <p dangerouslySetInnerHTML={{ __html: description }}/>
+                    <p dangerouslySetInnerHTML={{ __html: description }} />
                 )}
                 {
                     children.map((child, index) => (

@@ -20,14 +20,14 @@ const Checkbox = React.forwardRef((props, ref) => {
         dangerouslySetLabel,
         labelStyle,
         labelClassName,
-        stopPropagation
+        stopPropagation,
     } = props;
 
     let modifiedLabelStyle = labelStyle;
     if ((!label && !dangerouslySetLabel && !children)) {
         modifiedLabelStyle = {
             ...labelStyle,
-            ...CHECKBOX_LABEL_STYLE
+            ...CHECKBOX_LABEL_STYLE,
         };
     }
 
@@ -68,11 +68,11 @@ Checkbox.propTypes = {
     labelClassName: PropTypes.string,
     label: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     children: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     onChange: PropTypes.func,
     checked: PropTypes.bool,

@@ -29,12 +29,12 @@ export default class Calendar extends Component {
         highlighted: PropTypes.oneOfType([
             PropTypes.shape({
                 dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-                color: PropTypes.string
+                color: PropTypes.string,
             }),
             PropTypes.arrayOf(PropTypes.shape({
                 dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-                color: PropTypes.string
-            }))
+                color: PropTypes.string,
+            })),
         ]),
         activateAll: PropTypes.bool,
         style: PropTypes.object,
@@ -98,25 +98,25 @@ export default class Calendar extends Component {
                 title: monthNames[_leftHidden.getMonth()],
                 className: 'month',
                 startDate: _leftHidden,
-                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0)
+                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0),
             },
             {
                 title: monthNames[_rightShown.getMonth()],
                 className: 'month',
                 startDate: _rightShown,
-                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0)
+                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0),
             },
             {
                 title: monthNames[_focus.getMonth()],
                 className: 'month',
                 startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
-                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0)
+                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0),
             },
             {
                 title: monthNames[_rightHidden.getMonth()],
                 className: 'month',
                 startDate: _rightHidden,
-                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0)
+                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0),
             }];
 
         this.newMonths = months;
@@ -132,7 +132,7 @@ export default class Calendar extends Component {
                 this.setState({
                     translate: `${OFFSET}%`,
                     animate: false,
-                    months
+                    months,
                 });
             }, 300);
         }, 25);
@@ -292,7 +292,7 @@ export default class Calendar extends Component {
                         if (dates.length > 0) {
                             tempObj.push({
                                 dates,
-                                style: _highlighted[j].style
+                                style: _highlighted[j].style,
                             });
                         }
                     }
@@ -317,7 +317,7 @@ export default class Calendar extends Component {
                             if (dates.length > 0) {
                                 tempObj.push({
                                     dates,
-                                    style: _highlighted[j].style
+                                    style: _highlighted[j].style,
                                 });
                             }
                         }
@@ -377,7 +377,7 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
-                            <Icon icon={faChevronLeft}/>
+                            <Icon icon={faChevronLeft} />
                         </div>
                         <div className="cc__calendar__navigate middle" />
                         <div
@@ -385,7 +385,7 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
-                            <Icon icon={faChevronRight}/>
+                            <Icon icon={faChevronRight} />
                         </div>
                     </div>
                 </div>
@@ -393,7 +393,7 @@ export default class Calendar extends Component {
                     <div
                         className={`cc__calendar__months__wrapper ${animate ? 'cc__calendar__months__wrapper--animate' : ''}`}
                         style={{
-                            transform: `translateX(${translate})`
+                            transform: `translateX(${translate})`,
                         }}
                     >
                         {_months}

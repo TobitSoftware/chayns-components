@@ -10,15 +10,15 @@ export default class SelectList extends Component {
         onChange: PropTypes.func,
         defaultValue: PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.number
+            PropTypes.number,
         ]),
         value: PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.number
+            PropTypes.number,
         ]),
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]),
         selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
         className: PropTypes.string,
@@ -42,7 +42,7 @@ export default class SelectList extends Component {
             selectedId: preselectId || 0,
         };
 
-        if(props.defaultValue && props.onChange) {
+        if (props.defaultValue && props.onChange) {
             props.onChange(props.defaultValue);
         }
     }
@@ -70,17 +70,17 @@ export default class SelectList extends Component {
     _changeActiveItem = (id, value) => {
         const { selectedId } = this.state;
 
-        if(id === selectedId) return;
+        if (id === selectedId) return;
 
-        if(this.changing) return;
+        if (this.changing) return;
 
         const { onChange, value: propValue } = this.props;
 
-        if(onChange) {
+        if (onChange) {
             onChange(id, value);
         }
 
-        if(propValue) {
+        if (propValue) {
             return;
         }
 
@@ -91,7 +91,7 @@ export default class SelectList extends Component {
         }, ANIMATION_TIMEOUT);
 
         this.setState({
-            selectedId: id
+            selectedId: id,
         });
     };
 
@@ -121,8 +121,7 @@ export default class SelectList extends Component {
         const { className, children } = this.props;
         const { selectedId } = this.state;
 
-
-        if(children.length > 0) {
+        if (children.length > 0) {
             return (
                 <div className={className}>
                     {React.Children.map(children, (child) => {

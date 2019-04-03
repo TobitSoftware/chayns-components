@@ -66,7 +66,7 @@ export default class AmountInput extends PureComponent {
 
     onButtonClick = (e) => {
         const {
-            amount, onAdd, setInput, stopPropagation
+            amount, onAdd, setInput, stopPropagation,
         } = this.props;
         if (amount > 0) {
             setInput(true);
@@ -109,7 +109,7 @@ export default class AmountInput extends PureComponent {
         if (buttonFormatHandler) {
             return buttonFormatHandler({
                 amount,
-                buttonText
+                buttonText,
             });
         }
 
@@ -162,7 +162,7 @@ export default class AmountInput extends PureComponent {
                 style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(!renderInput ? null : { display: 'none' }) }}
             >
                 {this.getButtonValue()}
-            </div>
+            </div>,
         ];
     }
 }

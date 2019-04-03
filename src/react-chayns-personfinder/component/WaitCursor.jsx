@@ -8,7 +8,7 @@ const WaitCursor = ({ style }) => (
         style={{
             textAlign: 'center',
             padding: '5px 5px 0px 5px',
-            ...style
+            ...style,
         }}
     >
         <SmallWaitCursor

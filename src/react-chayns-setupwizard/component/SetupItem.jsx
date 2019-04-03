@@ -15,7 +15,7 @@ const SetupItem = ({
     <div
         className={classNames('accordion', 'accordion--fixed', {
             'accordion--open': open,
-            'accordion--disabled': disabled
+            'accordion--disabled': disabled,
         })}
     >
         <div
@@ -25,7 +25,7 @@ const SetupItem = ({
             <div
                 className={classNames('number', {
                     'wizard_step--ready': ready,
-                    'wizard_step--notReady': !ready
+                    'wizard_step--notReady': !ready,
                 })}
             >
                 {step}
@@ -56,10 +56,10 @@ SetupItem.defaultProps = {
     open: false,
     ready: false,
     disabled: false,
-    onClick: () => {},
+    onClick: null,
     contentStyle: {},
     children: null,
-    required: false
+    required: false,
 };
 
 export default SetupItem;

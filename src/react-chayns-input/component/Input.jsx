@@ -182,7 +182,7 @@ export default class Input extends PureComponent {
                         htmlFor={id || this.id}
                         className={classNames({
                             'input--invalid': (!valid || invalid),
-                            labelIcon: icon
+                            labelIcon: icon,
                         })}
                     >
                         {placeholder}
@@ -195,7 +195,7 @@ export default class Input extends PureComponent {
                                     className="input-group__icon"
                                     style={icon ? {
                                         opacity: '.3',
-                                        pointerEvents: 'all'
+                                        pointerEvents: 'all',
                                     } : { opacity: '0' }}
                                     onClick={onIconClick}
                                 />

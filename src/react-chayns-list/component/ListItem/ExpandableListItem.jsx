@@ -26,7 +26,7 @@ const ExpandableListItem = ({ children, ...props }) => (
 ExpandableListItem.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
 };
 

@@ -13,11 +13,11 @@ export default class Checkbox extends PureComponent {
         labelClassName: PropTypes.string,
         label: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]),
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]),
         onChange: PropTypes.func,
         toggleButton: PropTypes.bool,
@@ -25,7 +25,7 @@ export default class Checkbox extends PureComponent {
         defaultChecked: PropTypes.bool,
         disabled: PropTypes.bool,
         dangerouslySetLabel: PropTypes.object,
-        stopPropagation: PropTypes.bool
+        stopPropagation: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -41,7 +41,7 @@ export default class Checkbox extends PureComponent {
         defaultChecked: undefined,
         disabled: false,
         dangerouslySetLabel: null,
-        stopPropagation: false
+        stopPropagation: false,
     };
 
     constructor() {

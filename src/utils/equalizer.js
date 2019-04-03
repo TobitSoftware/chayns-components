@@ -2,7 +2,7 @@ const dimension = {
     WIDTH: 'width',
     MIN_WIDTH: 'minWidth',
     HEIGHT: 'height',
-    MIN_HEIGHT: 'minHeight'
+    MIN_HEIGHT: 'minHeight',
 };
 
 /**

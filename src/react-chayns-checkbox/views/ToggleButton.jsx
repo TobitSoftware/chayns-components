@@ -20,14 +20,14 @@ const ToggleButton = React.forwardRef((props, ref) => {
         dangerouslySetLabel,
         labelStyle,
         labelClassName,
-        stopPropagation
+        stopPropagation,
     } = props;
 
     let modifiedLabelStyle = labelStyle;
     if (label) {
         modifiedLabelStyle = {
             ...labelStyle,
-            ...SWITCH_LABEL_STYLE
+            ...SWITCH_LABEL_STYLE,
         };
     }
 
@@ -67,11 +67,11 @@ ToggleButton.propTypes = {
     labelClassName: PropTypes.string,
     label: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     children: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
     onChange: PropTypes.func,
     checked: PropTypes.bool,

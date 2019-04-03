@@ -35,7 +35,7 @@ ListItem.propTypes = {
     onClick: PropTypes.func,
     right: PropTypes.oneOfType([
         PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
+        PropTypes.arrayOf(PropTypes.node),
     ]),
 };
 

@@ -8,13 +8,13 @@ class OpeningTimes extends Component {
             weekDay: PropTypes.number.isRequired,
             start: PropTypes.string.isRequired,
             end: PropTypes.string.isRequired,
-            disabled: PropTypes.bool
+            disabled: PropTypes.bool,
         })).isRequired,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
     };
 
     static defaultProps = {
-        onChange: null
+        onChange: null,
     };
 
     static weekdays = [
@@ -43,7 +43,7 @@ class OpeningTimes extends Component {
                 weekDay,
                 start,
                 end,
-                disabled: false
+                disabled: false,
             }));
         }
     }
@@ -97,7 +97,7 @@ class OpeningTimes extends Component {
     render() {
         const { times } = this.props;
         return (
-            <div className="cc__opening-times" >
+            <div className="cc__opening-times">
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day
@@ -105,7 +105,7 @@ class OpeningTimes extends Component {
                             key={index}
                             weekday={{
                                 name: day,
-                                number: index
+                                number: index,
                             }}
                             times={times.filter(t => t.weekDay === index)}
                             onDayActivation={this.onDayActivation}

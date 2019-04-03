@@ -10,11 +10,11 @@ export default class Navigator extends PureComponent {
         onClick: PropTypes.shape({
             left: PropTypes.func.isRequired,
             right: PropTypes.func.isRequired,
-            day: PropTypes.func.isRequired
+            day: PropTypes.func.isRequired,
         }),
         hidden: PropTypes.shape({
             left: PropTypes.bool,
-            right: PropTypes.bool
+            right: PropTypes.bool,
         }),
         days: PropTypes.array,
     };
@@ -28,7 +28,10 @@ export default class Navigator extends PureComponent {
 
     render() {
         const {
-            text, onClick, hidden, days
+            text,
+            onClick,
+            hidden,
+            days,
         } = this.props;
 
         return (
@@ -37,7 +40,7 @@ export default class Navigator extends PureComponent {
                     <div className="calendar__navigator_icon" style={{ transform: 'rotate(180deg)' }}>
                         {hidden.left ? '' : (
                             <span onClick={onClick.left}>
-                                <Icon icon="ts-angle-right"/>
+                                <Icon icon="ts-angle-right" />
                             </span>
                         )}
                     </div>
@@ -45,7 +48,7 @@ export default class Navigator extends PureComponent {
                     <div className="calendar__navigator_icon">
                         {hidden.right ? '' : (
                             <span onClick={onClick.right}>
-                                <Icon icon="ts-angle-right"/>
+                                <Icon icon="ts-angle-right" />
                             </span>
                         )}
                     </div>
