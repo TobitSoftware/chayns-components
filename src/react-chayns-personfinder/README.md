@@ -17,8 +17,8 @@ Then it can be used like in the following example:
 
 ```jsx harmony
 <PersonFinder
-    placeholder="Person suchen"
-    onChange={this.personChanged}
+    placeholder="Search person"
+    onChange={this.handlePersonChange}
 />
 ```
 
@@ -39,3 +39,21 @@ Then it can be used like in the following example:
 | defaultValue  | The default value of the input element                                                             | string, object |               |
 | defaultValues | Tags that should be added to the TagInput (multiple-prop) on initial rendering                     | array          |               |
 | boxClassName  | ClassName of the box-overlay                                                                       | string         |               |
+
+## Clear the PersonFinder
+If you want to clear the PersonFinder, you need to have a reference to the ReactElement:
+```jsx harmony
+personFinder = React.createRef();
+
+<PersonFinder
+    placeholder="Search person"
+    onChange={this.handlePersonChange}
+    ref={this.personFinder}
+/>
+```
+On this reference you have to execute the clear()-Method to remove the content of the PersonFinder:
+```
+if (this.personFinder.current) {
+    this.personFinder.current.clear();
+}
+```
