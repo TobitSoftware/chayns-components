@@ -182,6 +182,7 @@ export default class AmountControl extends PureComponent {
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
                 'cc__amount-control--active': amount > 0,
+                'cc__amount-control--disabled': disabled,
             })}
             >
                 <ControlButton
