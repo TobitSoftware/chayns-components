@@ -23,6 +23,7 @@ export default class ContextMenu extends Component {
         children: PropTypes.node,
         onChildrenClick: PropTypes.func,
         childrenStyle: PropTypes.object,
+        childrenClassName: PropTypes.string,
         stopPropagation: PropTypes.bool,
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
@@ -38,6 +39,7 @@ export default class ContextMenu extends Component {
         coordinates: null,
         onChildrenClick: null,
         childrenStyle: null,
+        childrenClassName: null,
         stopPropagation: false,
         minWidth: null,
         maxWidth: null,
@@ -149,6 +151,7 @@ export default class ContextMenu extends Component {
             minWidth,
             maxWidth,
             showTriggerBackground,
+            childrenClassName,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -187,7 +190,7 @@ export default class ContextMenu extends Component {
                         ref={ref => this.childrenNode = ref}
                         onClick={this.onChildrenClick}
                         style={childrenStyle}
-                        className={classNames('accordion--no-trigger', 'context-menu__children', { 'image-tool': showTriggerBackground })}
+                        className={classNames(childrenClassName, 'accordion--no-trigger', 'context-menu__children', { 'image-tool': showTriggerBackground })}
                     >
                         {children}
                     </div>
