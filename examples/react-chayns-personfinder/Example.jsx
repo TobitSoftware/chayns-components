@@ -27,7 +27,6 @@ export default class PersonFinderExample extends PureComponent {
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
                     defaultValue="Smith"
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.relationFinder = ref; }}
                     dynamic
                     placeholder="User/Site"
@@ -35,7 +34,6 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                 />
                 <PersonFinder
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.siteFinder = ref; }}
                     dynamic
                     placeholder="Sites"
@@ -48,14 +46,12 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                 />
                 <PersonFinder
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.personFinder = ref; }}
                     dynamic
                     placeholder="Users"
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
                     placeholder="Users (including own, showId)"
@@ -64,7 +60,6 @@ export default class PersonFinderExample extends PureComponent {
                     showId
                 />
                 <PersonFinder
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
                     placeholder="Users/Sites (multiple)"
@@ -75,7 +70,6 @@ export default class PersonFinderExample extends PureComponent {
                     multiple
                 />
                 <PersonFinder
-                    style={{ width: '100%' }}
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
                     placeholder="Sites (multiple, default)"

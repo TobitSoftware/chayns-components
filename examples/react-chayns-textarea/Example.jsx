@@ -12,7 +12,6 @@ export default class TextAreaExample extends PureComponent {
                 }}
                 defaultValue="Test"
                 autogrow
-                style={{ width: '100%' }}
             />
         );
     }

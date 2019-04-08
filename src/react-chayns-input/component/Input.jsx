@@ -163,7 +163,7 @@ export default class Input extends PureComponent {
                     ref={wrapperRef}
                 >
                     <input
-                        style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
+                        style={{ ...{ width: '100%' }, ...style, ...(icon ? { paddingRight: '30px' } : null) }}
                         ref={this.setRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
@@ -209,7 +209,7 @@ export default class Input extends PureComponent {
         return (
             <input
                 className={classNames('input', className, { 'input--invalid': !initial && (!valid || invalid) })}
-                style={style}
+                style={{ ...{ width: '100%' }, ...style }}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
                 onBlur={this.onBlur}

@@ -119,7 +119,7 @@ export default class TextArea extends Component {
             stopPropagation,
         } = this.props;
 
-        const style = assign({}, this.defaultStyle, styleProp);
+        const style = assign({}, TextArea.defaultStyle, styleProp);
 
         const classNames = classnames('input', className);
 

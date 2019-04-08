@@ -32,7 +32,6 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        width: '100%',
                         marginBottom: '20px'
                     }}
                 />
@@ -44,7 +43,6 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        width: '100%',
                         marginBottom: '20px'
                     }}
                 />
@@ -56,7 +54,6 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        width: '100%',
                         marginBottom: '20px'
                     }}
                 />
@@ -68,7 +65,6 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        width: '100%',
                         marginBottom: '20px'
                     }}
                 />
@@ -76,9 +72,6 @@ export default class InputExample extends PureComponent {
                     <Input
                         defaultValue="Dynamic Input"
                         placeholder="Dynamic Input Placeholder"
-                        style={{
-                            width: '100%'
-                        }}
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
@@ -90,9 +83,6 @@ export default class InputExample extends PureComponent {
                     <Input
                         placeholder="Icon"
                         icon="ts-tobit2016"
-                        style={{
-                            width: '100%'
-                        }}
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
@@ -109,9 +99,6 @@ export default class InputExample extends PureComponent {
                         onKeyUp={InputExample.onKeyUp}
                         onEnter={InputExample.onEnter}
                         icon={faCoffee}
-                        style={{
-                            width: '100%'
-                        }}
                         noDeleteIcon
                         onIconClick={console.log}
                         dynamic
