@@ -4,6 +4,7 @@ import AmountControl from './react-chayns-amountcontrol/component/AmountControl'
 
 import Badge from './react-chayns-badge/component/Badge';
 import Button from './react-chayns-button/component/Button';
+import Bubble from './react-chayns-bubble/component/Bubble';
 import ChooseButton from './react-chayns-button/component/ChooseButton';
 
 import Calendar from './react-chayns-calendar/component/Calendar';
@@ -74,6 +75,7 @@ export {
     AccordionIntro,
     AmountControl,
     Badge,
+    Bubble,
     Button,
     ChooseButton,
     Calendar,
