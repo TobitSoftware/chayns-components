@@ -93,7 +93,7 @@ export default class ModeSwitch extends Component {
     onChange(id) {
         const { modes } = this.state;
         const { onChange } = this.props;
-        const mode = modes.find(m => m.id === id);
+        const mode = modes.find(m => m && m.id === id);
         if (onChange) {
             onChange(mode);
         }
