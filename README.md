@@ -69,10 +69,12 @@ The following components are part of this package:
 
 ## Utility Functions ##
 
-| Function                                                           | Description                                      |
-|--------------------------------------------------------------------|--------------------------------------------------|
-| [imageUpload](/src/utils/imageUpload.js)                           | Function to upload images to tsimg.cloud         |
-| [isTobitEmployee](/src/utils/tobitEmployee.js)                     | Get the information if user is an tobit employee |
+| Function                                                           | Description                                          |
+|--------------------------------------------------------------------|------------------------------------------------------|
+| [imageUpload](/src/utils/imageUpload.js)                           | Function to upload images to tsimg.cloud             |
+| [isTobitEmployee](/src/utils/tobitEmployee.js)                     | Get the information if user is an tobit employee     |
+| [createLinks](/src/utils/createLinks.js)                           | Creates a string with links from a string with URLs  |
+| [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                      |
 
 
 ### Examples ###

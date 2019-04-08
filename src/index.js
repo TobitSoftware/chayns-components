@@ -68,6 +68,8 @@ import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
 import isTobitEmployee from './utils/tobitEmployee';
+import createLinks from './utils/createLinks';
+import removeHtml from './utils/removeHtml';
 
 import { CHAYNS_CSS_VERSION } from './constants';
 
@@ -120,6 +122,8 @@ export {
     resolveAbsoluteImport,
     imageUpload,
     isTobitEmployee,
+    createLinks,
+    removeHtml,
     CHAYNS_CSS_VERSION,
     FORMAT_INTEGER,
     FORMAT_DECIMAL,
