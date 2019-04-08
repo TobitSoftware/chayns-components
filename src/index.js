@@ -67,6 +67,7 @@ import Map from './react-chayns-map/component/Map';
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
+import isTobitEmployee from './utils/tobitEmployee';
 
 import { CHAYNS_CSS_VERSION } from './constants';
 
@@ -118,6 +119,7 @@ export {
     Map,
     resolveAbsoluteImport,
     imageUpload,
+    isTobitEmployee,
     CHAYNS_CSS_VERSION,
     FORMAT_INTEGER,
     FORMAT_DECIMAL,
