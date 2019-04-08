@@ -67,6 +67,13 @@ The following components are part of this package:
 |--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
 | [react-chayns-textstring](/src/react-chayns-textstring/)           | TextString Component                            | [Readme](/src/react-chayns-textstring/README.md)      |
 
+## Utility Functions ##
+
+| Function                                                           | Description                                      |
+|--------------------------------------------------------------------|--------------------------------------------------|
+| [imageUpload](/src/utils/imageUpload.js)                           | Function to upload images to tsimg.cloud         |
+| [isTobitEmployee](/src/utils/tobitEmployee.js)                     | Get the information if user is an tobit employee |
+
 
 ### Examples ###
 
