@@ -28,6 +28,8 @@ export default class ContextMenu extends Component {
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
         showTriggerBackground: PropTypes.bool,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -44,6 +46,8 @@ export default class ContextMenu extends Component {
         minWidth: null,
         maxWidth: null,
         showTriggerBackground: false,
+        className: null,
+        style: null,
     };
 
     static position = Bubble.position;
@@ -152,6 +156,8 @@ export default class ContextMenu extends Component {
             maxWidth,
             showTriggerBackground,
             childrenClassName,
+            className,
+            style,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -161,9 +167,10 @@ export default class ContextMenu extends Component {
                 coordinates={{ x, y }}
                 parent={parent}
                 position={position}
-                style={{ minWidth, maxWidth }}
+                style={{ ...{ minWidth, maxWidth }, ...style }}
                 key="bubble"
                 ref={ref => this.bubble = ref}
+                className={className}
             >
                 <ul>
                     {items.map(item => (

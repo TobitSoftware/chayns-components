@@ -17,6 +17,7 @@ export default class SetupWizard extends Component {
         ]),
         ready: PropTypes.func,
         notComplete: PropTypes.func,
+        className: PropTypes.string,
         style: PropTypes.object,
         contentStyle: PropTypes.object,
         title: PropTypes.string,
@@ -39,6 +40,7 @@ export default class SetupWizard extends Component {
         contentStyle: null,
         title: null,
         description: null,
+        className: null,
     };
 
     constructor() {
@@ -169,11 +171,12 @@ export default class SetupWizard extends Component {
             title,
             description,
             children,
+            className,
         } = this.props;
         const { maxProgress, currentStep, completedSteps } = this.state;
 
         return (
-            <div style={style}>
+            <div style={style} className={className}>
                 {title && (
                     <h1>
                         {title}

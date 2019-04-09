@@ -16,6 +16,7 @@ export default class SelectButton extends Component {
         multiSelect: PropTypes.bool,
         quickFind: PropTypes.bool,
         className: PropTypes.string,
+        style: PropTypes.object,
         showSelection: PropTypes.bool,
         selectedFlag: PropTypes.string,
         stopPropagation: PropTypes.bool,
@@ -35,6 +36,7 @@ export default class SelectButton extends Component {
         listValue: 'value',
         selectedFlag: 'isSelected',
         stopPropagation: false,
+        style: null,
     };
 
     constructor(props) {
@@ -142,6 +144,7 @@ export default class SelectButton extends Component {
             disabled,
             listValue,
             showSelection,
+            style,
         } = this.props;
         const { selected } = this.state;
 
@@ -150,6 +153,7 @@ export default class SelectButton extends Component {
                 className={className}
                 disabled={disabled}
                 onClick={this.onClick}
+                style={style}
             >
                 {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
                     let str = (index === 1) ? ', ' : '';

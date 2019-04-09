@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Tag from './Tag';
 import Input from '../../react-chayns-input/component/Input';
 import getInputSize from '../utils/getInputSize';
@@ -19,6 +20,8 @@ export default class TagInput extends Component {
         onRemoveTag: PropTypes.func,
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -27,6 +30,8 @@ export default class TagInput extends Component {
         placeholder: null,
         onChange: null,
         value: '',
+        className: null,
+        style: null,
     };
 
     state = {
@@ -134,6 +139,8 @@ export default class TagInput extends Component {
             tags,
             placeholder,
             value,
+            className,
+            style,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -143,7 +150,8 @@ export default class TagInput extends Component {
         return (
             <div
                 onClick={this.handleClick}
-                className="cc__tag-input input"
+                className={classNames(className, 'cc__tag-input input')}
+                style={style}
             >
                 {tags && tags.map((tag, index) => (
                     <Tag

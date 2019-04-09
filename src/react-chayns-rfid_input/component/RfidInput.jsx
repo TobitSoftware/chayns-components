@@ -18,6 +18,7 @@ export default class RfidInput extends Component {
 
     static propTypes = {
         className: PropTypes.string,
+        style: PropTypes.object,
         placeholder: PropTypes.string,
         confirmNode: PropTypes.oneOfType([
             PropTypes.node,
@@ -32,6 +33,7 @@ export default class RfidInput extends Component {
 
     static defaultProps = {
         className: null,
+        style: null,
         placeholder: 'Kartennummer',
         confirmNode: 'OK',
         enableScan: false,
@@ -89,6 +91,7 @@ export default class RfidInput extends Component {
     render() {
         const {
             className,
+            style,
             placeholder,
             confirmNode,
             enableScan,
@@ -103,7 +106,7 @@ export default class RfidInput extends Component {
         const disabled = !VALID_RFID.test(value);
 
         return (
-            <div className={classNames}>
+            <div className={classNames} style={style}>
                 <div className="cc__rfid-input__wrapper">
                     <Input
                         className="cc__rfid-input__input"

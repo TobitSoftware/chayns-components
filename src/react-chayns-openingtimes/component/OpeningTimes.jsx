@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Day from './Day';
 
 class OpeningTimes extends Component {
@@ -11,10 +12,14 @@ class OpeningTimes extends Component {
             disabled: PropTypes.bool,
         })).isRequired,
         onChange: PropTypes.func,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
         onChange: null,
+        className: null,
+        style: null,
     };
 
     static weekdays = [
@@ -95,9 +100,9 @@ class OpeningTimes extends Component {
     }
 
     render() {
-        const { times } = this.props;
+        const { times, className, style } = this.props;
         return (
-            <div className="cc__opening-times">
+            <div className={classNames(className, 'cc__opening-times')} style={style}>
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day

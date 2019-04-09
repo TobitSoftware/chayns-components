@@ -19,6 +19,7 @@ export default class RadioButton extends Component {
         ]),
         className: PropTypes.string,
         stopPropagation: PropTypes.bool,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -31,6 +32,7 @@ export default class RadioButton extends Component {
         value: undefined,
         className: null,
         stopPropagation: false,
+        style: null,
     };
 
     constructor() {
@@ -68,11 +70,12 @@ export default class RadioButton extends Component {
             name,
             className,
             stopPropagation,
+            style,
             ...props
         } = this.props;
 
         return (
-            <div className={className}>
+            <div className={className} style={style}>
                 <input
                     {...props}
                     id={id || this._id}

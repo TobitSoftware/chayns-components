@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 
@@ -38,6 +39,7 @@ export default class Calendar extends Component {
         ]),
         activateAll: PropTypes.bool,
         style: PropTypes.object,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
@@ -46,6 +48,7 @@ export default class Calendar extends Component {
         activated: null,
         highlighted: null,
         style: null,
+        className: null,
     };
 
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
@@ -358,13 +361,13 @@ export default class Calendar extends Component {
     render() {
         const _navigateLeft = !(this.getNavigateLeft());
         const _navigateRight = !(this.getNavigateRight());
-        const { style } = this.props;
+        const { style, className } = this.props;
         const { animate, translate } = this.state;
         const _months = this.renderMonths();
 
         return (
             <div
-                className="cc__calendar"
+                className={classNames(className, 'cc__calendar')}
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}

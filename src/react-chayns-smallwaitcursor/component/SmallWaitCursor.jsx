@@ -8,6 +8,7 @@ export default class SmallWaitCursor extends PureComponent {
         style: PropTypes.object,
         showBackground: PropTypes.bool,
         inline: PropTypes.bool,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
@@ -15,6 +16,7 @@ export default class SmallWaitCursor extends PureComponent {
         style: null,
         showBackground: true,
         inline: false,
+        className: null,
     };
 
     render() {
@@ -23,12 +25,13 @@ export default class SmallWaitCursor extends PureComponent {
             style,
             showBackground,
             inline,
+            className,
         } = this.props;
 
         if (showBackground) {
             return (
                 <div
-                    className={classNames('wait-cursor', {
+                    className={classNames('wait-cursor', className, {
                         hidden: !show,
                     })}
                     style={style}

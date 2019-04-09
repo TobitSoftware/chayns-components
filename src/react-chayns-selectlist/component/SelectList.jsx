@@ -22,6 +22,7 @@ export default class SelectList extends Component {
         ]),
         selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
         className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -118,12 +119,12 @@ export default class SelectList extends Component {
     }
 
     render() {
-        const { className, children } = this.props;
+        const { className, children, style } = this.props;
         const { selectedId } = this.state;
 
         if (children.length > 0) {
             return (
-                <div className={className}>
+                <div className={className} style={style}>
                     {React.Children.map(children, (child) => {
                         if (!React.isValidElement(child)) {
                             return null;

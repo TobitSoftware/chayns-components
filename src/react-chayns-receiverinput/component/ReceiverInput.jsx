@@ -69,8 +69,13 @@ export default class ReceiverInput extends Component {
         popupWidth: 0,
     };
 
+    /**
+     * @deprecated
+     * */
     constructor(props) {
         super(props);
+
+        console.warn('[chayns components] ReceiverInput: The ReceiverInput is deprecated and will be removed in a future version. Use the personFinder instead.');
 
         this.lastResultDisplayedTime = 0;
 

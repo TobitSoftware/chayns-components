@@ -7,10 +7,12 @@ export default class Mode extends Component {
         modes: PropTypes.arrayOf(PropTypes.number).isRequired,
         children: PropTypes.node.isRequired,
         className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
         className: null,
+        style: null,
     };
 
     constructor() {
@@ -31,10 +33,15 @@ export default class Mode extends Component {
 
     render() {
         const { modeId } = this.state;
-        const { modes, children, className } = this.props;
+        const {
+            modes,
+            children,
+            className,
+            style,
+        } = this.props;
 
         if (window.chayns.utils.isArray(modes) && (modes.indexOf(modeId) !== -1 || (modes.indexOf(-1) !== -1 && !chayns.env.user.isAuthenticated))) {
-            return <div className={className}>{children}</div>;
+            return <div className={className} style={style}>{children}</div>;
         }
 
         return null;
