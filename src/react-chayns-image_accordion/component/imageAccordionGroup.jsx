@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 import { ExpandableContent } from '../..';
+import ImageAccordionHead from './imageAccordionHead';
 
 function listToMatrix(list, count) {
     const matrix = [];
@@ -127,7 +127,6 @@ export default class ImageAccordionGroup extends React.Component {
             ImageAccordionGroup.dataGroups[dataGroup] = this;
         }
         this.setState(state => ({
-            // currentState: children[children.findIndex(g => g.key === key)].props.children ? key : null,
             currentState: key,
             prevOpen: !sameRow && state.currentState,
         }));
@@ -162,7 +161,11 @@ export default class ImageAccordionGroup extends React.Component {
         let wrapperHeight = '150px';
         if (width < 200) wrapperHeight = '185px';
         else if (width < 300) wrapperHeight = '165px';
-        console.log(imageAccordionMatrix);
+
+        const timeouts = {
+            opening: 1.2,
+            closing: 0.5,
+        };
 
         return (
             <div
@@ -198,65 +201,12 @@ export default class ImageAccordionGroup extends React.Component {
                                     style={{ width: `${percent}%` }}
                                     key={item.props.originalKey}
                                 >
-                                    <div
-                                        className={classNames('wrapper', { itemDisabled: item.props.disabled })}
-                                        style={{ height: wrapperHeight }}
-                                    >
-                                        <div
-                                            className={classNames('image', { noImage: !item.props.image })}
-                                            style={{
-                                                backgroundImage: item.props.image ? `url(${item.props.image})` : undefined,
-                                                borderRadius: item.props.circle ? '50%' : '0%',
-                                            }}
-                                        />
-                                        {item.props.headLine && item.props.headLine.length > 12
-                                            ? (
-                                                <Tooltip
-                                                    bindListeners
-                                                    position={2}
-                                                    content={{ text: item.props.headLine }}
-                                                >
-                                                    <p
-                                                        className="head-line"
-                                                    >
-                                                        {`${item.props.headLine.slice(0, 12)}...`}
-                                                    </p>
-                                                </Tooltip>
-                                            )
-                                            : (
-                                                <p
-                                                    className="head-line"
-                                                >
-                                                    {item.props.headLine}
-                                                </p>
-                                            )
-                                        }
-
-                                        <h5
-                                            className="sub-head-line"
-                                        >
-                                            {item.props.subHeadLine && item.props.subHeadLine.length > 13 ? `${item.props.subHeadLine.slice(0, 13)}...` : item.props.subHeadLine}
-                                        </h5>
-                                        {item.props.itemIcon
-                                            && (
-                                                <div
-                                                    className="item-icon"
-                                                    style={{
-                                                        top:
-                                                                item.props.iconPosition === 2 || item.props.iconPosition === 1
-                                                                    ? '70px'
-                                                                    : '0px',
-                                                        left:
-                                                                item.props.iconPosition === 2 || item.props.iconPosition === 3
-                                                                    ? '10px'
-                                                                    : ((width * percent) / 100) - 20,
-                                                    }}
-                                                >
-                                                    {item.props.itemIcon}
-                                                </div>
-                                            )
-                                        }
-                                    </div>
+                                    <ImageAccordionHead
+                                        item={item}
+                                        wrapperHeight={wrapperHeight}
+                                        width={width}
+                                        percent={percent}
+                                    />
                                 </div>
                             ))
                             }
@@ -283,6 +233,7 @@ export default class ImageAccordionGroup extends React.Component {
                                 <ExpandableContent
                                     open={matrixRow.find(c => (c.props.originalKey === currentState)
                                     || (c.props.originalKey === prevOpen)) !== -1}
+                                    timeouts={timeouts}
                                 >
                                     {matrixRow}
                                 </ExpandableContent>

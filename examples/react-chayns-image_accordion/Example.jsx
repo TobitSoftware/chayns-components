@@ -8,8 +8,8 @@ export default class ImageAccordionExample extends PureComponent {
             {
                 id: '0',
                 name: 'Tobias Grotenxxx',
-                chaynsPersonId: '702-70831',
                 task: 'CEOsadsasadasdsads',
+                image: `https://sub60.tobit.com/u/702-70831?size=112`,
                 description: 'text',
                 position: 0
             }, {
@@ -49,7 +49,7 @@ export default class ImageAccordionExample extends PureComponent {
                                     disabled={person.isHidden}
                                     circle
                                     subHeadLine={person.task}
-                                    itemIcon={<p>x</p>}
+                                    // itemIcon={<p>x</p>}
                                     iconPosition={person.position}
                                 >
                                    {person.description}
