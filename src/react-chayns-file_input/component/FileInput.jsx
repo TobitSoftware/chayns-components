@@ -166,69 +166,61 @@ export default class FileInput extends PureComponent {
                 style={style}
             >
                 {
-                    items.map((item, index) => {
-                        const nodeArray = [
-                            <div
-                                className={classNames('cc__file-input__split', item.className, { 'cc__file-input__split--disabled': item.disabled })}
-                                style={item.style}
-                                key={`item${index}`}
-                            >
-                                {
-                                    item.content && item.content.children
-                                        ? item.content.children
-                                        : (
+                    items.map((item, index) => (
+                        <div
+                            className={classNames('cc__file-input__split', item.className, { 'cc__file-input__split--disabled': item.disabled })}
+                            style={item.style}
+                            key={`item${index}`}
+                        >
+                            {
+                                item.content && item.content.children
+                                    ? item.content.children
+                                    : (
+                                        <div
+                                            className="cc__file-input--placeholder"
+                                            ref={ref => this.itemRefs[index] = ref}
+                                            onClick={event => this.onClick(event, item, index)}
+                                        >
+                                            {
+                                                item.onChange && !this.needAppCall
+                                                    ? (
+                                                        <input
+                                                            title=""
+                                                            multiple={item.maxNumberOfFiles !== 1}
+                                                            className="cc__file-input__input"
+                                                            type="file"
+                                                            onChange={event => this.onChange(event, item, index)}
+                                                            accept={item.types}
+                                                            onDragEnter={event => this.onDragEnter(event, item, index)}
+                                                            onDragLeave={() => this.onDragLeave(index)}
+                                                            ref={ref => this.fileInputRefs[index] = ref}
+                                                        />
+                                                    )
+                                                    : null
+                                            }
+                                            <span className="cc__file-input__icon">
+                                                <Icon
+                                                    icon={
+                                                        item.content && item.content.icon
+                                                            ? item.content.icon
+                                                            : faUpload
+                                                    }
+                                                />
+                                            </span>
                                             <div
-                                                className="cc__file-input--placeholder"
-                                                ref={ref => this.itemRefs[index] = ref}
-                                                onClick={event => this.onClick(event, item, index)}
+                                                className="cc__file-input__message"
                                             >
                                                 {
-                                                    item.onChange && !this.needAppCall
-                                                        ? (
-                                                            <input
-                                                                title=""
-                                                                multiple={item.maxNumberOfFiles !== 1}
-                                                                className="cc__file-input__input"
-                                                                type="file"
-                                                                onChange={event => this.onChange(event, item, index)}
-                                                                accept={item.types}
-                                                                onDragEnter={event => this.onDragEnter(event, item, index)}
-                                                                onDragLeave={() => this.onDragLeave(index)}
-                                                                ref={ref => this.fileInputRefs[index] = ref}
-                                                            />
-                                                        )
-                                                        : null
+                                                    item.content && item.content.text
+                                                        ? item.content.text
+                                                        : 'Datei hochladen'
                                                 }
-                                                <span className="cc__file-input__icon">
-                                                    <Icon
-                                                        icon={
-                                                            item.content && item.content.icon
-                                                                ? item.content.icon
-                                                                : faUpload
-                                                        }
-                                                    />
-                                                </span>
-                                                <div
-                                                    className="cc__file-input__message"
-                                                >
-                                                    {
-                                                        item.content && item.content.text
-                                                            ? item.content.text
-                                                            : 'Datei hochladen'
-                                                    }
-                                                </div>
                                             </div>
-                                        )
-                                }
-                            </div>,
-                        ];
-
-                        if (index !== 0) {
-                            nodeArray.unshift(<div className="cc__file-input__separator" key={`separator${index}`} />);
-                        }
-
-                        return nodeArray;
-                    })
+                                        </div>
+                                    )
+                            }
+                        </div>
+                    ))
                 }
             </div>
         );
