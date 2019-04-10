@@ -109,6 +109,10 @@ export default class InputBox extends Component {
     }
 
     async updatePosition() {
+        let { parent } = this.props;
+        parent = parent || document.getElementsByClassName('tapp')[0] || document.body;
+        const parentRect = parent.getBoundingClientRect();
+
         if (!this.references.wrapper) {
             this.setState({
                 position: null,
@@ -122,12 +126,14 @@ export default class InputBox extends Component {
         if (chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             bottom += pageYOffset;
+        } else {
+            bottom -= parentRect.top;
         }
 
         this.setState({
             position: {
                 width: rect.width,
-                left: rect.left,
+                left: rect.left - parentRect.left,
                 bottom,
             },
         });
