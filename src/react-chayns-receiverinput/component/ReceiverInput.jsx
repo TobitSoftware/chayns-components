@@ -75,6 +75,7 @@ export default class ReceiverInput extends Component {
     constructor(props) {
         super(props);
 
+        // eslint-disable-next-line no-console
         console.warn('[chayns components] ReceiverInput: The ReceiverInput is deprecated and will be removed in a future version. Use the personFinder instead.');
 
         this.lastResultDisplayedTime = 0;

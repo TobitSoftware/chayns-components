@@ -32,11 +32,11 @@ const Checkbox = React.forwardRef((props, ref) => {
     }
 
     return (
-        <div className="cc__checkbox">
+        <div className={classnames('cc__checkbox', className)}>
             <input
                 key="input"
                 type="checkbox"
-                className={classnames('checkbox', className)}
+                className="checkbox"
                 ref={ref}
                 onClick={stopPropagation ? stopPropagationListener : null}
                 onChange={onChange}

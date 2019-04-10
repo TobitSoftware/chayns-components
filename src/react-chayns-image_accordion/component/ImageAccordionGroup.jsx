@@ -32,7 +32,7 @@ export default class ImageAccordionGroup extends React.Component {
         className: PropTypes.string,
         reference: PropTypes.string,
         onHeadOpen: PropTypes.func,
-    }
+    };
 
     static defaultProps = {
         children: [],
@@ -40,7 +40,7 @@ export default class ImageAccordionGroup extends React.Component {
         className: '',
         reference: null,
         onHeadOpen: null,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -95,6 +95,7 @@ export default class ImageAccordionGroup extends React.Component {
                 }
             }
         }
+
         if (onHeadOpen) {
             onHeadOpen(props);
         }
@@ -108,7 +109,9 @@ export default class ImageAccordionGroup extends React.Component {
                 this.accordionOpenListener(key, sameRow, onOpen);
             }
         }
-    }
+
+        return null;
+    };
 
     accordionCloseListener() {
         this.setState(state => ({

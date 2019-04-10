@@ -86,10 +86,6 @@ export default class Checkbox extends PureComponent {
             ...props
         } = this.props;
 
-        if (props.className) {
-            console.warn('[chayns components]: Checkbox/Togglebutton: The prop "className" will be set to the root element in next minor version.');
-        }
-
         if (toggleButton) {
             return this.renderToggleButton(props);
         }

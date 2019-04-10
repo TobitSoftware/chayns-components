@@ -32,11 +32,11 @@ const ToggleButton = React.forwardRef((props, ref) => {
     }
 
     return (
-        <div className="cc__switch">
+        <div className={classnames('cc__switch', className)}>
             <input
                 key="input"
                 type="checkbox"
-                className={classnames('switch', className)}
+                className="switch"
                 ref={ref}
                 onChange={onChange}
                 id={id}
