@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { ExpandableContent } from '../..';
-import ImageAccordionHead from './imageAccordionHead';
+import ImageAccordionHead from './ImageAccordionHead';
 
 function listToMatrix(list, count) {
     const matrix = [];
@@ -28,10 +28,10 @@ export default class ImageAccordionGroup extends React.Component {
 
     static propTypes = {
         children: PropTypes.instanceOf(Array),
-        dataGroup: PropTypes.number,
+        dataGroup: PropTypes.string,
         className: PropTypes.string,
         reference: PropTypes.string,
-        onitemChange: PropTypes.func,
+        onHeadOpen: PropTypes.func,
     }
 
     static defaultProps = {
@@ -39,7 +39,7 @@ export default class ImageAccordionGroup extends React.Component {
         dataGroup: null,
         className: '',
         reference: null,
-        onitemChange: null,
+        onHeadOpen: null,
     }
 
     constructor(props) {
@@ -84,7 +84,7 @@ export default class ImageAccordionGroup extends React.Component {
     };
 
     handleAccordionClick = (key, sameRow, props, event) => {
-        const { onitemChange } = this.props;
+        const { onHeadOpen } = this.props;
         let trigger = true;
         const node = event.target;
         for (let i = 0; i < 15; i += 1) {
@@ -95,8 +95,8 @@ export default class ImageAccordionGroup extends React.Component {
                 }
             }
         }
-        if (onitemChange) {
-            onitemChange(props);
+        if (onHeadOpen) {
+            onHeadOpen(props);
         }
 
         if (trigger) {
@@ -118,7 +118,7 @@ export default class ImageAccordionGroup extends React.Component {
     }
 
     accordionOpenListener(key, sameRow, onOpen) {
-        const { dataGroup } = this.props;
+        const { dataGroup, children } = this.props;
         if (dataGroup) {
             const openGroup = ImageAccordionGroup.dataGroups[dataGroup];
             if (openGroup && openGroup !== this) {
@@ -126,8 +126,10 @@ export default class ImageAccordionGroup extends React.Component {
             }
             ImageAccordionGroup.dataGroups[dataGroup] = this;
         }
+
+        const findChild = children.findIndex(g => g.key === key);
         this.setState(state => ({
-            currentState: key,
+            currentState: findChild !== -1 && children[findChild].props.children ? key : null,
             prevOpen: !sameRow && state.currentState,
         }));
         if (onOpen) onOpen();
@@ -162,20 +164,18 @@ export default class ImageAccordionGroup extends React.Component {
         if (width < 200) wrapperHeight = '185px';
         else if (width < 300) wrapperHeight = '165px';
 
-        const timeouts = {
-            opening: 1.2,
-            closing: 0.5,
-        };
-
         return (
+            // ImageAccordionGroup
             <div
                 ref={this.myRef}
                 className={classNames('cc__image-accordion', {
                     [className]: className,
                 })}
             >
+                {/* ImageAccordionGroup Row */}
                 {
                     imageAccordionMatrix.map(matrixRow => (
+                        // ImageAccordion Heads per row
                         <div
                             className={classNames('image-accordion-container', { open: matrixRow.some(row => row.props.open) })}
                             key={matrixRow[0].key}
@@ -210,13 +210,13 @@ export default class ImageAccordionGroup extends React.Component {
                                 </div>
                             ))
                             }
-
+                            {/* Body of Row */}
                             <div
                                 className="image-accordion-body"
                             >
                                 <div
                                     className={classNames('arrow', {
-                                        noArrow: matrixRow.findIndex(c => (
+                                        'no-arrow': matrixRow.findIndex(c => (
                                             !c.props.children && (c.props.originalKey === currentState || (c.props.originalKey === prevOpen))
                                         )) !== -1,
                                     })}
@@ -231,9 +231,8 @@ export default class ImageAccordionGroup extends React.Component {
                                     }}
                                 />
                                 <ExpandableContent
-                                    open={matrixRow.find(c => (c.props.originalKey === currentState)
-                                    || (c.props.originalKey === prevOpen)) !== -1}
-                                    timeouts={timeouts}
+                                    open={matrixRow.find(c => c.props.children && ((c.props.originalKey === currentState)
+                                    || (c.props.originalKey === prevOpen))) !== -1}
                                 >
                                     {matrixRow}
                                 </ExpandableContent>

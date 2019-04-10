@@ -32,8 +32,8 @@ import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
 import Icon from './react-chayns-icon/component/Icon';
 import Input from './react-chayns-input/component/Input';
-import ImageAccordionGroup from './react-chayns-image_accordion/component/imageAccordionGroup';
-import ImageAccordion from './react-chayns-image_accordion/component/imageAccordion';
+import ImageAccordionGroup from './react-chayns-image_accordion/component/ImageAccordionGroup';
+import ImageAccordion from './react-chayns-image_accordion/component/ImageAccordion';
 
 import List from './react-chayns-list/component/List';
 import ListItem from './react-chayns-list/component/ListItem';

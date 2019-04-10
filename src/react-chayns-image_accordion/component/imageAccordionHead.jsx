@@ -5,10 +5,17 @@ import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 
 export default class ImageAccordionHead extends React.PureComponent {
     static propTypes = {
-        item: PropTypes.instanceOf(Object).isRequired,
-        width: PropTypes.instanceOf(Object).isRequired,
-        percent: PropTypes.bool.isRequired,
-        wrapperHeight: PropTypes.bool.isRequired,
+        item: PropTypes.instanceOf(Object),
+        width: PropTypes.number,
+        percent: PropTypes.number,
+        wrapperHeight: PropTypes.string,
+    };
+
+    static defaultProps = {
+        item: null,
+        width: 0,
+        percent: 0,
+        wrapperHeight: 0,
     };
 
     render() {
@@ -18,50 +25,51 @@ export default class ImageAccordionHead extends React.PureComponent {
             percent,
             wrapperHeight,
         } = this.props;
+
         return (
             <div
-                className={classNames('wrapper', { itemDisabled: item.props.disabled })}
+                className={classNames('wrapper', { disabled: item.props.disabled })}
                 style={{ height: wrapperHeight }}
             >
                 <div
-                    className={classNames('image', { noImage: !item.props.image })}
+                    className={classNames('image', { 'no-image': !item.props.image })}
                     style={{
                         backgroundImage: item.props.image ? `url(${item.props.image})` : undefined,
                         borderRadius: item.props.circle ? '50%' : '0%',
                     }}
                 />
-                {item.props.headLine && item.props.headLine.length > 12
+                {item.props.headline && item.props.headline.length > 12
                     ? (
                         <Tooltip
                             bindListeners
                             position={2}
-                            content={{ text: item.props.headLine }}
+                            content={{ text: item.props.headline }}
                         >
                             <p
-                                className="head-line"
+                                className="headline"
                             >
-                                {`${item.props.headLine.slice(0, 12)}...`}
+                                {`${item.props.headline.slice(0, 12)}...`}
                             </p>
                         </Tooltip>
                     )
                     : (
                         <p
-                            className="head-line"
+                            className="headline"
                         >
-                            {item.props.headLine}
+                            {item.props.headline}
                         </p>
                     )
                 }
 
                 <h5
-                    className="sub-head-line"
+                    className="subheadline"
                 >
-                    {item.props.subHeadLine && item.props.subHeadLine.length > 13 ? `${item.props.subHeadLine.slice(0, 13)}...` : item.props.subHeadLine}
+                    {item.props.subheadline && item.props.subheadline.length > 13 ? `${item.props.subheadline.slice(0, 13)}...` : item.props.subheadline}
                 </h5>
-                {item.props.itemIcon
+                {item.props.icon
                     && (
                         <div
-                            className="item-icon"
+                            className="icon"
                             style={{
                                 top:
                                         item.props.iconPosition === 2 || item.props.iconPosition === 1
@@ -73,7 +81,7 @@ export default class ImageAccordionHead extends React.PureComponent {
                                             : ((width * percent) / 100) - 20,
                             }}
                         >
-                            {item.props.itemIcon}
+                            {item.props.icon}
                         </div>
                     )
                 }

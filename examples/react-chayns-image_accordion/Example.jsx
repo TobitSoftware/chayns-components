@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 import React, { PureComponent } from 'react';
 
 import { ImageAccordionGroup, ImageAccordion } from '../../src/index';
@@ -7,53 +8,95 @@ export default class ImageAccordionExample extends PureComponent {
         const persons = [
             {
                 id: '0',
-                name: 'Tobias Grotenxxx',
-                task: 'CEOsadsasadasdsads',
-                image: `https://sub60.tobit.com/u/702-70831?size=112`,
-                description: 'text',
-                position: 0
+                name: 'Rosie Santiago',
+                task: 'CEO',
+                image: 'https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg',
+                description: 'Ich bin CEO',
+                disabled: true,
+                position: 0,
             }, {
                 id: '1',
-                // name: 'Klaus',
-                chaynsPersonId: '702-80148',
+                name: 'Fatima Chalis',
                 task: 'CFO',
-                description: 'test',
-                position: 1
+                image: 'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg',
+                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate',
+                position: 1,
             },
             {
                 id: '2',
-                name: 'Tobias',
-                chaynsPersonId: '702-70831',
-                task: 'CEO',
-                description: 'textas d as sad dsfsd fds f dsa fa dsf ds af ads f d sfdsf  ds f ads f dsf ds fdsf sdf sd f sd f dsf sd fsdf ds fsd f dsf ds f sd fd sf sd f ds f dsf ds f ds fds f ds fds fsd f dsf ds f dsf sdf dsaf',
-                position: 2
+                name: 'Mark Peters',
+                task: 'Designer',
+                image: 'https://tsimg.space/v1/images/b2efd7e4-8c5b-e911-80d7-0025905a8161.jpg',
+                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et',
+                position: 2,
             }, {
                 id: '3',
-                // name: 'Klaus',
-                image: `https://sub60.tobit.com/u/702-80148?size=112`,
-                task: 'CFO',
-                // description: 'test',
-                position: 3
-            }
+                name: 'Leo Benz',
+                image: 'https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
+                task: 'IT-Berater',
+                position: 3,
+            }, {
+                id: '4',
+                name: 'Dragutin Leo',
+                image: 'https://tsimg.space/v1/images/6bc09b40-925b-e911-80d7-0025905a8161.jpg',
+                task: 'IT-Consulting',
+                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,',
+                position: 3,
+            },
         ];
 
+        const fruits = [
+            {
+                id: '0',
+                name: 'Apple',
+                image: 'https://tsimg.space/v1/images/e275caf2-8e5b-e911-80d7-0025905a8161.jpg',
+                description: 'Ich bin Apfel',
+            }, {
+                id: '1',
+                name: 'Strawberry',
+                task: 'CFO',
+                image: 'https://tsimg.space/v1/images/9e92be20-8f5b-e911-80d7-0025905a8161.jpg',
+                description: 'Ich bin Erdbeere',
+            },
+            {
+                id: '2',
+                name: 'Pear',
+                image: 'https://tsimg.space/v1/images/58c50735-8f5b-e911-80d7-0025905a8161.jpg',
+                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,',
+            },
+        ];
         return (
             <div>
                 <div style={{ marginBottom: '20px' }}>
+                    {/* Persons */}
+                    <ImageAccordionGroup
+                        dataGroup="1"
+                    >
+                        {persons.map(person => (
+                            <ImageAccordion
+                                key={person.id}
+                                headline={person.name}
+                                image={person.image}
+                                disabled={person.disabled}
+                                circle
+                                subheadline={person.task}
+                                iconPosition={person.position}
+                            >
+                                {person.description}
+                            </ImageAccordion>
+                        ))}
+                    </ImageAccordionGroup>
+
+                    {/* Fruits */}
                     <ImageAccordionGroup>
-                        {persons.map((person) => (
-                                <ImageAccordion
-                                    key={person.id}
-                                    headLine={person.name}
-                                    image={person.image}
-                                    disabled={person.isHidden}
-                                    circle
-                                    subHeadLine={person.task}
-                                    // itemIcon={<p>x</p>}
-                                    iconPosition={person.position}
-                                >
-                                   {person.description}
-                                </ImageAccordion>
+                        {fruits.map(fruit => (
+                            <ImageAccordion
+                                key={fruit.id}
+                                headline={fruit.name}
+                                image={fruit.image}
+                            >
+                                {fruit.description}
+                            </ImageAccordion>
                         ))}
                     </ImageAccordionGroup>
                 </div>

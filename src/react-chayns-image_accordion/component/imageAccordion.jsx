@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export default class ImageAccordion extends React.PureComponent {
     static propTypes = {
         prevOpen: PropTypes.bool,
-        children: PropTypes.instanceOf(Object),
+        children: PropTypes.string,
         disabled: PropTypes.bool,
         open: PropTypes.bool,
     };
@@ -26,7 +26,7 @@ export default class ImageAccordion extends React.PureComponent {
             <div
                 className={classNames('image-accordion-content', {
                     show: open || prevOpen,
-                    personDisabled: disabled,
+                    disabled,
                 })}
             >
                 {children}
