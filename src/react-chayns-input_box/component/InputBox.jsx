@@ -8,7 +8,7 @@ import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class InputBox extends Component {
     static propTypes = {
-        inputComponent: PropTypes.node.isRequired,
+        inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
         parent: PropTypes.instanceOf(Element),
         onFocus: PropTypes.func,
         children: PropTypes.oneOfType([

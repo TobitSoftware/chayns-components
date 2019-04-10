@@ -34,7 +34,7 @@ export default class FileInput extends PureComponent {
             disabled: PropTypes.bool,
             content: PropTypes.oneOfType([PropTypes.shape({
                 text: PropTypes.string,
-                icon: PropTypes.oneOfType(PropTypes.string, PropTypes.object),
+                icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
             }), PropTypes.shape({
                 children: PropTypes.oneOfType([
                     PropTypes.node,
