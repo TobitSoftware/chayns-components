@@ -32,6 +32,7 @@ export default class SelectList extends Component {
         onChange: null,
         selectFirst: null,
         children: null,
+        style: null,
     };
 
     constructor(props) {
