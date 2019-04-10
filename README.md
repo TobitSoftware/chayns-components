@@ -40,6 +40,7 @@ The following components are part of this package:
 | [react-chayns-gallery](/src/react-chayns-gallery/)                 | Gallery Component                               | [Readme](/src/react-chayns-gallery/README.md)         |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)       | GridCalendar Component                          | [Readme](/src/react-chayns-gridcalendar/README.md)    |
 | [react-chayns-icon](/src/react-chayns-icon/)                       | Icon Component                                  | [Readme](/src/react-chayns-icon/README.md)            |
+| [react-chayns-image_accordion](/src/react-chayns-image_accordion/) | ImageAccordion Component                        | [Readme](/src/react-chayns-image_accordion/README.md) |
 | [react-chayns-input](/src/react-chayns-input/)                     | Input Component                                 | [Readme](/src/react-chayns-input/README.md)           |
 | [react-chayns-list](/src/react-chayns-list/)                       | List Component                                  | [Readme](/src/react-chayns-list/README.md)            |
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)           | ModeSwitch Component                            | [Readme](/src/react-chayns-modeswitch/README.md)      |
