@@ -144,3 +144,5 @@ fabric.properties
 /webpack/ssl
 /build
 /examples/ExampleList.jsx
+
+\.idea/codeStyles/codeStyleConfig\.xml

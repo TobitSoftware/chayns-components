@@ -181,4 +181,9 @@
   "title": "Slider",
   "example": "react-chayns-slider/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-image_accordion",
+  "title": "ImageAccordion",
+  "example": "react-chayns-image_accordion/Example.jsx",
+  "readme": true
 }]
