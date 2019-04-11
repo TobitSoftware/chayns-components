@@ -208,7 +208,7 @@ export default class ImageAccordionGroup extends React.Component {
                                         item={item}
                                         wrapperHeight={wrapperHeight}
                                         width={width}
-                                        percent={percent}
+                                        itemsPerRow={itemsPerRow}
                                     />
                                 </div>
                             ))
