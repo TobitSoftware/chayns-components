@@ -26,6 +26,7 @@ export default class Input extends PureComponent {
         customProps: PropTypes.object,
         id: PropTypes.string,
         stopPropagation: PropTypes.bool,
+        required: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -50,15 +51,18 @@ export default class Input extends PureComponent {
         customProps: null,
         id: null,
         stopPropagation: false,
+        required: false,
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
+            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(!props.value && !props.defaultValue && props.required),
             initial: true,
         };
+
+        console.log(this.state);
 
         this.id = Math.random()
             .toString();
@@ -111,11 +115,12 @@ export default class Input extends PureComponent {
         if (inputRef) {
             inputRef(ref);
         }
+
         this.ref = ref;
     }
 
     callValidated(value, callback) {
-        const { regExp } = this.props;
+        const { regExp, required } = this.props;
         const valid = !(regExp && !value.match(regExp));
 
         if (callback) {
@@ -128,7 +133,7 @@ export default class Input extends PureComponent {
             return;
         }
 
-        if (validState !== valid || !initial) {
+        if (validState !== valid || !initial || (required && !value)) {
             this.setState({
                 valid,
                 initial: false,
@@ -147,12 +152,12 @@ export default class Input extends PureComponent {
             dynamic,
             icon,
             wrapperRef,
-            customProps,
             invalid,
             onIconClick,
             id,
             onFocus,
             stopPropagation,
+            customProps,
         } = this.props;
         const { valid, initial } = this.state;
 
@@ -208,7 +213,7 @@ export default class Input extends PureComponent {
 
         return (
             <input
-                className={classNames('input', className, { 'input--invalid': !initial && (!valid || invalid) })}
+                className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                 style={{ ...{ width: '100%' }, ...style }}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}

@@ -32,7 +32,19 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        marginBottom: '20px'
+                        marginBottom: '20px',
+                    }}
+                />
+                <Input
+                    stopPropagation
+                    placeholder="input"
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
+                    required
+                    style={{
+                        marginBottom: '20px',
                     }}
                 />
                 <Input
@@ -43,7 +55,7 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                 />
                 <Input
@@ -54,7 +66,7 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                 />
                 <Input
@@ -65,7 +77,7 @@ export default class InputExample extends PureComponent {
                     onKeyUp={InputExample.onKeyUp}
                     onEnter={InputExample.onEnter}
                     style={{
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                 />
                 <div style={{ marginBottom: '20px' }}>
@@ -92,6 +104,21 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
+                        placeholder='type "eee"'
+                        regExp={new RegExp('.*e{3}.*')}
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon={faCoffee}
+                        noDeleteIcon
+                        onIconClick={console.log}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        required
                         placeholder='type "eee"'
                         regExp={new RegExp('.*e{3}.*')}
                         onBlur={InputExample.onBlur}
