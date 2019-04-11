@@ -60,9 +60,8 @@ export default class Input extends PureComponent {
         this.state = {
             valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(!props.value && !props.defaultValue && props.required),
             initial: true,
+            right: false,
         };
-
-        console.log(this.state);
 
         this.id = Math.random()
             .toString();
@@ -129,13 +128,15 @@ export default class Input extends PureComponent {
 
         const { valid: validState, initial } = this.state;
 
-        if (initial && value === '') {
-            return;
-        }
-
         if (validState !== valid || !initial || (required && !value)) {
             this.setState({
                 valid,
+                initial: false,
+                right: !!value,
+            });
+        } else {
+            this.setState({
+                right: !!value,
                 initial: false,
             });
         }
@@ -159,12 +160,12 @@ export default class Input extends PureComponent {
             stopPropagation,
             customProps,
         } = this.props;
-        const { valid, initial } = this.state;
+        const { valid, right, initial } = this.state;
 
         if (dynamic) {
             return (
                 <div
-                    className={classNames('input-group', className, { labelRight: (this.ref && this.ref.value) || (!this.ref && (value || defaultValue)) })}
+                    className={classNames('input-group', className, { labelRight: right || value || (initial && defaultValue) })}
                     ref={wrapperRef}
                 >
                     <input
