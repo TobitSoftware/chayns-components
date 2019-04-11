@@ -8,7 +8,7 @@ import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class Tooltip extends Component {
     static propTypes = {
-        content: PropTypes.oneOf([
+        content: PropTypes.oneOfType([
             PropTypes.shape({
                 text: PropTypes.string.isRequired,
                 headline: PropTypes.string,
