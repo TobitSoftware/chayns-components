@@ -120,7 +120,7 @@ export default class Input extends PureComponent {
 
     callValidated(value, callback) {
         const { regExp, required } = this.props;
-        const { valid: validState, initial } = this.state;
+        const { initial } = this.state;
 
         const valid = !(required && !value) && !(regExp && !value.match(regExp));
 
