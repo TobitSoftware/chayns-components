@@ -14,11 +14,11 @@ export default class PersonFinderResultItem extends PureComponent {
         relation: PropTypes.shape({
             name: PropTypes.string.isRequired,
             relationCount: PropTypes.number,
-            relations: PropTypes.string.isRequired,
+            relations: PropTypes.string,
             firstName: PropTypes.string,
             lastName: PropTypes.string,
             siteId: PropTypes.string,
-            locationId: PropTypes.string,
+            locationId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             personId: PropTypes.string,
             userId: PropTypes.string,
         }).isRequired,
@@ -68,7 +68,7 @@ export default class PersonFinderResultItem extends PureComponent {
                 locationId: relation.locationId,
                 score: relation.score,
                 name: relation.name,
-                relations: relation.relations,
+                relations: relation && relation.relations ? relation.relations : [],
                 relationCount: relation.relationCount,
                 image: `https://sub60.tobit.com/l/${relation.siteId}?size=40`,
             };

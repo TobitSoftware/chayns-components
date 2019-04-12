@@ -16,13 +16,14 @@ export default async function findRelations(type, value, skip, take) {
     }
 
     if (type === LOCATION_RELATION) {
-        const sites = await chayns.findSite(value, skip, take);
+        const response = await fetch(`https://chayns2.tobit.com/SiteSearchApi/location/search/${value}/?skip=${skip}&take=${take}`, { method: 'GET' });
+        const sites = await response.json();
 
-        if (sites.Value && sites.Value.length) {
+        if (sites && sites.length) {
             return {
                 unrelated: [],
-                related: sites.Value.map(({ appstoreName, ...s }) => ({
-                    name: appstoreName,
+                related: sites.map(({ locationName, ...s }) => ({
+                    name: locationName,
                     ...s,
                 })),
             };
