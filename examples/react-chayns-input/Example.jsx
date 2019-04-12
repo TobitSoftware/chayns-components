@@ -37,7 +37,7 @@ export default class InputExample extends PureComponent {
                 />
                 <Input
                     stopPropagation
-                    placeholder="input"
+                    placeholder="required"
                     onBlur={InputExample.onBlur}
                     onChange={InputExample.onChange}
                     onKeyUp={InputExample.onKeyUp}
@@ -118,8 +118,20 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
+                        placeholder="required"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        onIconClick={console.log}
+                        dynamic
                         required
-                        placeholder='type "eee"'
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        required
+                        placeholder="regexp & required"
                         regExp={new RegExp('.*e{3}.*')}
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}

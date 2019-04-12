@@ -120,26 +120,19 @@ export default class Input extends PureComponent {
 
     callValidated(value, callback) {
         const { regExp, required } = this.props;
-        const valid = !(regExp && !value.match(regExp));
+        const { valid: validState, initial } = this.state;
 
-        if (callback) {
+        const valid = !(required && !value) && !(regExp && !value.match(regExp));
+
+        if (callback && !initial) {
             callback(value, valid);
         }
 
-        const { valid: validState, initial } = this.state;
-
-        if (validState !== valid || !initial || (required && !value)) {
-            this.setState({
-                valid,
-                initial: false,
-                right: !!value,
-            });
-        } else {
-            this.setState({
-                right: !!value,
-                initial: false,
-            });
-        }
+        this.setState({
+            valid,
+            initial: false,
+            right: !!value,
+        });
     }
 
     render() {
@@ -169,7 +162,7 @@ export default class Input extends PureComponent {
                     ref={wrapperRef}
                 >
                     <input
-                        style={{ ...{ width: '100%' }, ...style, ...(icon ? { paddingRight: '30px' } : null) }}
+                        style={{ ...{ width: '100%' }, ...(icon ? { paddingRight: '30px' } : null), ...style }}
                         ref={this.setRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
