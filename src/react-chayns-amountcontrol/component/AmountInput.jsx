@@ -148,7 +148,7 @@ export default class AmountInput extends PureComponent {
                 onEnter={this.onInputBlur}
                 customProps={{ 'data-cc-equalize-width': equalize }}
                 inputRef={this.setRef}
-                style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(renderInput ? null : { display: 'none' }) }}
+                style={{ ...{ width: `${contentWidth || 55}px` }, ...(renderInput ? null : { display: 'none' }) }}
             />,
             <div
                 key="amountDiv"
