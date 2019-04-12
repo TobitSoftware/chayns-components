@@ -16,7 +16,7 @@ export default class ContextMenu extends Component {
             className: PropTypes.string,
             onClick: PropTypes.func,
             text: PropTypes.string.isRequired,
-            icon: PropTypes.object,
+            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         })),
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         parent: PropTypes.instanceOf(Element),
