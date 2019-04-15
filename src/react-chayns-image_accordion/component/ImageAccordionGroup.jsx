@@ -132,7 +132,7 @@ export default class ImageAccordionGroup extends React.Component {
 
         let findChild = -1;
         if (children) {
-            findChild = children.findIndex(g => g.key === key);
+            findChild = children.findIndex(g => g && g.key === key);
         }
 
         this.setState(state => ({
