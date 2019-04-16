@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
+import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
+
 export default class SelectItem extends Component {
     static propTypes = {
         id: PropTypes.number,
@@ -32,12 +34,6 @@ export default class SelectItem extends Component {
         selectListSelectedId: null,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.radioId = this._getRadioId(props.id);
-    }
-
     _handleChange = () => {
         const { changeListItem, id, value } = this.props;
 
@@ -45,12 +41,6 @@ export default class SelectItem extends Component {
             changeListItem(id, value);
         }
     };
-
-    _getRadioId(id) {
-        const { selectListId } = this.props;
-
-        return `${selectListId}-${id}`;
-    }
 
     render() {
         const {
@@ -70,19 +60,14 @@ export default class SelectItem extends Component {
                 key={id}
                 className={className}
             >
-                <input
+                <RadioButton
                     name={selectListId}
-                    type="radio"
-                    className="radio"
-                    id={this.radioId}
                     checked={checked}
                     onChange={this._handleChange}
                     disabled={disabled}
-                />
-
-                <label htmlFor={this.radioId}>
+                >
                     {name}
-                </label>
+                </RadioButton>
 
                 {children && (
                     <TransitionGroup>

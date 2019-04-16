@@ -3,15 +3,12 @@ import React, { Component } from 'react';
 
 import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
-import Button from '../../src/react-chayns-button/component/Button';
 import Input from '../../src/react-chayns-input/component/Input';
-import Icon from '../../src/react-chayns-icon/component/Icon';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
-export default class Example extends Component {
+export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true };
@@ -40,7 +37,7 @@ export default class Example extends Component {
         const { show } = this.state;
 
         return (
-            <ExampleContainer headline="Accordion">
+            <div>
                 {
                     show
                         ? (
@@ -79,6 +76,9 @@ export default class Example extends Component {
                     <div className="accordion__content">
                         Hello World
                     </div>
+                </Accordion>
+                <Accordion head="Accordion with only search" onSearch={console.log}>
+                    Content
                 </Accordion>
                 <Accordion head="Test" right={<Badge>2</Badge>} defaultOpened>
                     <Accordion
@@ -172,7 +172,22 @@ export default class Example extends Component {
                         />
                     </div>
                 </Accordion>
-            </ExampleContainer>
+                <Accordion
+                    head="Accordion (disabled)"
+                    onClick={() => console.log('Disabled accordion clicked.')}
+                    disabled
+                >
+                    Content
+                </Accordion>
+                <Accordion
+                    head="Accordion (animated badge)"
+                    right={{
+                        close: <Badge>15</Badge>,
+                    }}
+                >
+                    Content
+                </Accordion>
+            </div>
         );
     }
 }

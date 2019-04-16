@@ -20,11 +20,16 @@ export default class SharingBarItem extends Component {
 
         share(provider, link);
 
-        if(stopPropagation) e.stopPropagation();
+        if (stopPropagation) e.stopPropagation();
     };
 
     render() {
-        const { name, icon, provider } = this.props;
+        const {
+            name,
+            icon,
+            provider,
+        } = this.props;
+
         if (provider.action === 0) {
             return (
                 <Tooltip content={{ text: 'Kopiert.' }} ref={ref => this.tooltip = ref} removeIcon>
@@ -40,7 +45,7 @@ export default class SharingBarItem extends Component {
                             }, 3000);
                         }}
                     >
-                        <Icon icon={icon}/>
+                        <Icon icon={icon} />
                     </Button>
                 </Tooltip>
             );
@@ -51,7 +56,7 @@ export default class SharingBarItem extends Component {
                 title={name}
                 onClick={this.onClick}
             >
-                <Icon icon={icon}/>
+                <Icon icon={icon} />
             </Button>
         );
     }

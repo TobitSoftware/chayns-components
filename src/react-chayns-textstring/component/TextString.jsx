@@ -37,9 +37,7 @@ export default class TextString extends Component {
         const { textStrings } = TextString;
         const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
         const result = Object.keys(strings)
-            .map((lib) => {
-                return strings[lib][stringName] || null;
-            })
+            .map(lib => (strings[lib][stringName] || null))
             .filter(x => x !== null)[0];
         return result;
     }
@@ -53,7 +51,7 @@ export default class TextString extends Component {
                         if (response.status === 200) {
                             response.json()
                                 .then((json) => {
-                                    TextString.textStrings[lang] = { [projectName]: { ...json, ...{ middle } } };
+                                    TextString.textStrings[lang] = { ...TextString.textStrings[lang], [projectName]: { ...json, ...{ middle } } };
                                     if (window.debugLevel >= 3) {
                                         // eslint-disable-next-line no-console
                                         console.debug('TextString Storage', TextString.textStrings);
@@ -83,9 +81,9 @@ export default class TextString extends Component {
                 method: 'post',
                 headers: {
                     Accept: 'application/x-www-form-urlencoded',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `StringName=${stringName}&Text=${encodeURIComponent(text)}&Language=${language}`
+                body: `StringName=${stringName}&Text=${encodeURIComponent(text)}&Language=${language}`,
             })
                 .then((response) => {
                     if (response.status === 200) {
@@ -138,10 +136,12 @@ export default class TextString extends Component {
 
     constructor() {
         super();
+
         this.state = {
             textString: null,
-            textStringProps: {}
+            textStringProps: {},
         };
+
         this.childrenOnClick = this.childrenOnClick.bind(this);
         this.replace = this.replace.bind(this);
         this.changeStringDialog = this.changeStringDialog.bind(this);
@@ -164,14 +164,19 @@ export default class TextString extends Component {
 
     setTextStrings() {
         const {
-            stringName, language, fallback, setProps
+            stringName,
+            language,
+            fallback,
+            setProps,
         } = this.props;
+
         let string = TextString.getTextString(stringName, language);
         if (string) {
             this.setState({ textString: this.replace(string) });
         } else {
             this.setState({ textString: this.replace(fallback) });
         }
+
         Object.keys(setProps)
             .forEach((prop) => {
                 if (prop !== 'fallback') {
@@ -213,24 +218,26 @@ export default class TextString extends Component {
             if (stringName) {
                 stringList.push({
                     name: `children: ${stringName}`,
-                    value: stringName
+                    value: stringName,
                 });
             }
+
             Object.keys(setProps)
                 .forEach((key) => {
                     if (key !== 'fallback') {
                         stringList.push({
                             name: `${key}: ${setProps[key]}`,
-                            value: setProps[key]
+                            value: setProps[key],
                         });
                     }
                 });
+
             chayns.dialog.select({
                 title: 'TextString wählen',
                 message: 'Wähle den TextString, den du ändern möchtest:',
                 quickfind: 0,
                 multiselect: 0,
-                list: stringList
+                list: stringList,
             })
                 .then((data) => {
                     if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
@@ -244,12 +251,13 @@ export default class TextString extends Component {
 
     selectLanguageToChange(stringName) {
         const { language } = this.props;
+
         chayns.dialog.select({
             title: `TextString bearbeiten: ${stringName}`,
             message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
             quickfind: 0,
             multiselect: 0,
-            list: TextString.languages
+            list: TextString.languages,
         })
             .then((data) => {
                 if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
@@ -280,6 +288,7 @@ export default class TextString extends Component {
 
     changeStringDialog(stringName, lang) {
         const { useDangerouslySetInnerHTML } = this.props;
+
         const string = TextString.getTextString(stringName, TextString.languages.find(l => l.value === lang.value).code);
         if (string) {
             if (useDangerouslySetInnerHTML) {
@@ -292,11 +301,11 @@ export default class TextString extends Component {
                     message: `Sprache: ${lang.name}`,
                     buttons: [{
                         text: 'Speichern',
-                        buttonType: 1
+                        buttonType: 1,
                     }, {
                         text: 'Abbrechen',
-                        buttonType: -1
-                    }]
+                        buttonType: -1,
+                    }],
                 })
                     .then((result) => {
                         this.changeStringResult(result, lang);
@@ -308,11 +317,11 @@ export default class TextString extends Component {
                     text: string,
                     buttons: [{
                         text: 'Speichern',
-                        buttonType: 1
+                        buttonType: 1,
                     }, {
                         text: 'Abbrechen',
-                        buttonType: -1
-                    }]
+                        buttonType: -1,
+                    }],
                 })
                     .then((result) => {
                         this.changeStringResult(result, lang);
@@ -341,10 +350,13 @@ export default class TextString extends Component {
     }
 
     render() {
-        const { textString, textStringProps } = this.state;
         const {
-            children, useDangerouslySetInnerHTML, language, preventNoTranslate
+            children,
+            useDangerouslySetInnerHTML,
+            language,
+            preventNoTranslate,
         } = this.props;
+        const { textString, textStringProps } = this.state;
 
         const childrenProps = {
             ...{
@@ -355,7 +367,7 @@ export default class TextString extends Component {
                     } else if (children.props.onClick) {
                         children.props.onClick(e);
                     }
-                }
+                },
             },
             ...(
                 useDangerouslySetInnerHTML
@@ -370,12 +382,12 @@ export default class TextString extends Component {
             return React.cloneElement(
                 children,
                 childrenProps,
-                useDangerouslySetInnerHTML ? null : textString
+                useDangerouslySetInnerHTML ? null : textString,
             );
         }
         return React.cloneElement(
             children,
-            childrenProps
+            childrenProps,
         );
     }
 }

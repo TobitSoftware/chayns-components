@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-export default class Input extends Component {
+export default class Input extends PureComponent {
     static propTypes = {
         className: PropTypes.string,
         onKeyUp: PropTypes.func,
         onEnter: PropTypes.func,
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
+        onFocus: PropTypes.func,
         regExp: PropTypes.instanceOf(RegExp),
         style: PropTypes.object,
         placeholder: PropTypes.string,
@@ -25,6 +26,7 @@ export default class Input extends Component {
         customProps: PropTypes.object,
         id: PropTypes.string,
         stopPropagation: PropTypes.bool,
+        required: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -33,6 +35,7 @@ export default class Input extends Component {
         onEnter: null,
         onChange: null,
         onBlur: null,
+        onFocus: null,
         regExp: null,
         style: {},
         placeholder: '',
@@ -48,18 +51,22 @@ export default class Input extends Component {
         customProps: null,
         id: null,
         stopPropagation: false,
+        required: false,
     };
 
     constructor(props) {
         super(props);
 
         this.state = {
-            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)),
+            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(!props.value && !props.defaultValue && props.required),
+            initial: true,
+            right: false,
         };
 
         this.id = Math.random()
             .toString();
 
+        this.setRef = this.setRef.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -67,9 +74,17 @@ export default class Input extends Component {
     }
 
     componentWillReceiveProps({ value }) {
-        const { oldValue = value } = this.props;
+        const { value: oldValue } = this.props;
         if (value && value !== oldValue) {
             this.callValidated(value);
+        }
+    }
+
+    componentDidUpdate({ regExp: oldRegExp }) {
+        const { regExp, onChange } = this.props;
+
+        if (String(oldRegExp) !== String(regExp) && this.ref) {
+            this.callValidated(this.ref.value, onChange);
         }
     }
 
@@ -93,14 +108,31 @@ export default class Input extends Component {
         this.callValidated(e.target.value, onChange);
     }
 
-    callValidated(value, callback) {
-        const { regExp } = this.props;
-        const valid = !(regExp && !value.match(regExp));
+    setRef(ref) {
+        const { inputRef } = this.props;
 
-        if (callback) {
+        if (inputRef) {
+            inputRef(ref);
+        }
+
+        this.ref = ref;
+    }
+
+    callValidated(value, callback) {
+        const { regExp, required } = this.props;
+        const { initial } = this.state;
+
+        const valid = !(required && !value) && !(regExp && !value.match(regExp));
+
+        if (callback && !initial) {
             callback(value, valid);
         }
-        this.setState({ valid });
+
+        this.setState({
+            valid,
+            initial: false,
+            right: !!value,
+        });
     }
 
     render() {
@@ -111,38 +143,34 @@ export default class Input extends Component {
             style,
             placeholder,
             type,
-            inputRef,
             dynamic,
             icon,
             wrapperRef,
-            customProps,
             invalid,
             onIconClick,
             id,
+            onFocus,
             stopPropagation,
+            customProps,
         } = this.props;
-        const { valid } = this.state;
+        const { valid, right, initial } = this.state;
 
         if (dynamic) {
             return (
                 <div
-                    className={classNames('input-group', className, { labelRight: (this.ref && this.ref.value) || (!this.ref && (value || defaultValue)) })}
+                    className={classNames('input-group', className, { labelRight: right || value || (initial && defaultValue) })}
                     ref={wrapperRef}
                 >
                     <input
-                        style={{ ...style, ...(icon ? { paddingRight: '30px' } : null) }}
-                        ref={(ref) => {
-                            if (inputRef) {
-                                inputRef(ref);
-                            }
-                            this.ref = ref;
-                        }}
+                        style={{ ...{ width: '100%' }, ...(icon ? { paddingRight: '30px' } : null), ...style }}
+                        ref={this.setRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
                         onBlur={this.onBlur}
                         onChange={this.onChange}
+                        onFocus={onFocus}
                         type={type || 'text'}
                         id={id || this.id}
                         required
@@ -152,8 +180,8 @@ export default class Input extends Component {
                     <label
                         htmlFor={id || this.id}
                         className={classNames({
-                            'input--invalid': !valid || invalid,
-                            labelIcon: icon
+                            'input--invalid': (!valid || invalid),
+                            labelIcon: icon,
                         })}
                     >
                         {placeholder}
@@ -166,7 +194,7 @@ export default class Input extends Component {
                                     className="input-group__icon"
                                     style={icon ? {
                                         opacity: '.3',
-                                        pointerEvents: 'all'
+                                        pointerEvents: 'all',
                                     } : { opacity: '0' }}
                                     onClick={onIconClick}
                                 />
@@ -176,20 +204,23 @@ export default class Input extends Component {
                 </div>
             );
         }
+
         return (
             <input
                 className={classNames('input', className, { 'input--invalid': !valid || invalid })}
-                style={style}
+                style={{ ...{ width: '100%' }, ...style }}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
                 onBlur={this.onBlur}
                 onChange={this.onChange}
+                onFocus={onFocus}
                 value={value}
                 defaultValue={defaultValue}
                 type={type}
-                ref={inputRef}
+                ref={this.setRef}
                 id={id || this.id}
                 onClick={stopPropagation ? event => event.stopPropagation() : null}
+                required
                 {...customProps}
             />
         );

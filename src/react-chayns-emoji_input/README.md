@@ -14,7 +14,6 @@ The input has to be imported:
 
 ```jsx harmony
 import { EmojiInput } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-emojiInput/index.css';
 ```
 
 You can use the input like this:

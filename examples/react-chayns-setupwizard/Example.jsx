@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
-
 import { SetupWizard, SetupWizardItem } from '../../src/index';
 
 import Step1 from './setup/Step1';
@@ -9,7 +7,7 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
 
-export default class Example extends Component {
+export default class SetupWizardExample extends Component {
     constructor() {
         super();
         this.state = {
@@ -37,7 +35,7 @@ export default class Example extends Component {
         const { ready, notComplete } = this.state;
         if (!ready) {
             return (
-                <ExampleContainer headline="SetupWizard">
+                <div>
                     <SetupWizard
                         ready={this.ready}
                         notComplete={this.notComplete}
@@ -62,18 +60,14 @@ export default class Example extends Component {
                             <Step4/>
                         </SetupWizardItem>
                     </SetupWizard>
-                </ExampleContainer>
+                </div>
             );
         }
 
         return (
-            <ExampleContainer headline="SetupWizard">
-                <h1>
-
-
-                    Ready
-                </h1>
-            </ExampleContainer>
+            <h1>
+                {'Ready'}
+            </h1>
         );
     }
 }

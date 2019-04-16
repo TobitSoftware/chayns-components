@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
 import { TextString } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class TextStringExample extends Component {
     constructor(props) {
         super(props);
         // Take a look in index.jsx
@@ -20,7 +19,7 @@ export default class Example extends Component {
         const { number } = this.state;
         // Take a look in index.jsx
         return (
-            <ExampleContainer headline="TextString">
+            <div>
                 <TextString
                     stopPropagation
                     stringName="fallbackTest"
@@ -85,7 +84,7 @@ export default class Example extends Component {
                 >
                     <Accordion/>
                 </TextString>
-            </ExampleContainer>
+            </div>
         );
     }
 }

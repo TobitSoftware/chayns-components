@@ -26,19 +26,19 @@ export default class ControlButton extends PureComponent {
             className,
             disabled,
             color,
-            stopPropagation
+            stopPropagation,
         } = this.props;
 
         return (
             <div
                 onClick={(e) => {
-                    if(!disabled) onClick(e);
-                    if(stopPropagation) e.stopPropagation();
+                    if (!disabled) onClick(e);
+                    if (stopPropagation) e.stopPropagation();
                 }}
                 className={classNames(className, { disabled })}
                 style={color ? { color } : null}
             >
-                <Icon icon={icon}/>
+                <Icon icon={icon} />
             </div>
         );
     }

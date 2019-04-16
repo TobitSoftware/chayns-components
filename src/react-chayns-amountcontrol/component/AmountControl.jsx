@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
@@ -8,7 +8,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 
-export default class AmountControl extends Component {
+export default class AmountControl extends PureComponent {
     static propTypes = {
         buttonText: PropTypes.string.isRequired,
         amount: PropTypes.number,
@@ -73,15 +73,13 @@ export default class AmountControl extends Component {
             showInput: false,
         };
 
-        console.log(props.plusIcon);
-
         this.setInput = this.setInput.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             tempAmount: nextProps.amount,
-            tempValue: nextProps.amount
+            tempValue: nextProps.amount,
         });
     }
 
@@ -95,7 +93,7 @@ export default class AmountControl extends Component {
 
         this.setState({
             tempAmount: numberValue,
-            tempValue: value
+            tempValue: value,
         });
 
         if (onInput && (numberValue || numberValue >= 0)) {
@@ -105,7 +103,7 @@ export default class AmountControl extends Component {
 
     getRemoveIcon() {
         const {
-            amount, icon, removeIcon, minusIcon
+            amount, icon, removeIcon, minusIcon,
         } = this.props;
         const { tempAmount } = this.state;
 
@@ -180,14 +178,11 @@ export default class AmountControl extends Component {
             plusIcon,
         } = this.props;
         const { tempAmount, tempValue, showInput } = this.state;
-        if (window.debugLevel >= 3) {
-            // eslint-disable-next-line no-console
-            console.debug('render amount-control component', this.props, this.state);
-        }
 
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
-                'cc__amount-control--active': amount > 0
+                'cc__amount-control--active': amount > 0,
+                'cc__amount-control--disabled': disabled,
             })}
             >
                 <ControlButton

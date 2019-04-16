@@ -19,7 +19,7 @@ export default class Receiver extends Component {
         groupId: PropTypes.number,
         userId: PropTypes.number,
         imgUrl: PropTypes.string,
-        siteId: PropTypes.string
+        siteId: PropTypes.string,
     };
 
     static defaultProps = {
@@ -30,7 +30,7 @@ export default class Receiver extends Component {
         groupId: null,
         userId: null,
         siteId: null,
-        imgUrl: ''
+        imgUrl: '',
     };
 
     shouldComponentUpdate(nextProps) {
@@ -44,7 +44,7 @@ export default class Receiver extends Component {
             userId,
             siteId,
             imgUrl,
-            name
+            name,
         } = this.props;
 
         return !isEqual(chosenReceivers, nextProps.chosenReceivers)
@@ -64,7 +64,7 @@ export default class Receiver extends Component {
             updateReceiverSearchString,
             updateChosenReceivers,
             chosenReceivers,
-            includedUsers
+            includedUsers,
         } = this.props;
 
         let newReceiver = {};
@@ -105,7 +105,7 @@ export default class Receiver extends Component {
             userId,
             siteId,
             imgUrl,
-            name
+            name,
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
@@ -113,13 +113,21 @@ export default class Receiver extends Component {
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
         return (
-            <div onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)} className="receiver-wrapper popup-item">
+            <div
+                onClick={this.chooseReceiver.bind(this, name, locationId, userId, groupId, personId, siteId)}
+                className="receiver-wrapper popup-item"
+            >
                 <div className="receiver popup-item">
                     <div className="pic popup-item">
                         {groupId !== null ? (
                             getGroupImage(groupId, includedUsers.map(id => ({ userId: id })))
                         ) : (
-                            <img className="popup-item" src={imgUrl} alt="" onError={handleImageError}/>
+                            <img
+                                className="popup-item"
+                                src={imgUrl}
+                                alt=""
+                                onError={handleImageError}
+                            />
                         )}
                     </div>
                     <div className="receiver-name popup-item notranslate">

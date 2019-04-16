@@ -41,11 +41,6 @@ export default class AmountInput extends PureComponent {
         contentWidth: null,
     };
 
-    constructor(props) {
-        super(props);
-        this.inputRef = React.createRef();
-    }
-
     componentDidMount() {
         const { equalize } = this.props;
 
@@ -62,14 +57,16 @@ export default class AmountInput extends PureComponent {
         }
         if (nextProps.showInput && !showInput && focusOnClick) {
             setTimeout(() => {
-                this.inputRef.current.focus();
+                if (this.inputRef) {
+                    this.inputRef.focus();
+                }
             }, 20);
         }
     }
 
     onButtonClick = (e) => {
         const {
-            amount, onAdd, setInput, stopPropagation
+            amount, onAdd, setInput, stopPropagation,
         } = this.props;
         if (amount > 0) {
             setInput(true);
@@ -102,13 +99,17 @@ export default class AmountInput extends PureComponent {
         onChange(tempAmount);
     };
 
+    setRef = (ref) => {
+        this.inputRef = ref;
+    };
+
     getButtonValue() {
         const { amount, buttonText, buttonFormatHandler } = this.props;
 
         if (buttonFormatHandler) {
             return buttonFormatHandler({
                 amount,
-                buttonText
+                buttonText,
             });
         }
 
@@ -146,8 +147,8 @@ export default class AmountInput extends PureComponent {
                 disabled={disabled}
                 onEnter={this.onInputBlur}
                 customProps={{ 'data-cc-equalize-width': equalize }}
-                inputRef={this.inputRef}
-                style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(renderInput ? null : { display: 'none' }) }}
+                inputRef={this.setRef}
+                style={{ ...{ width: `${contentWidth || 55}px` }, ...(renderInput ? null : { display: 'none' }) }}
             />,
             <div
                 key="amountDiv"
@@ -161,7 +162,7 @@ export default class AmountInput extends PureComponent {
                 style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(!renderInput ? null : { display: 'none' }) }}
             >
                 {this.getButtonValue()}
-            </div>
+            </div>,
         ];
     }
 }

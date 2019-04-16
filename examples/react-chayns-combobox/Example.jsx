@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 
 import { ComboBox } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class ComboBoxExample extends PureComponent {
     render() {
         const pizza = [
             {
@@ -26,7 +25,7 @@ export default class Example extends PureComponent {
         ];
 
         return(
-            <ExampleContainer headline="ComboBox">
+            <div>
                 <div style={{ marginBottom: '20px' }}>
                 <ComboBox
                     label="Select Pizza"
@@ -39,6 +38,14 @@ export default class Example extends PureComponent {
                 />
                 </div>
                 <ComboBox
+                    list={pizza}
+                    onSelect={(value) => { console.log(value); }}
+                    listKey="id"
+                    listValue="name"
+                    defaultValue="2"
+                    htmlSelect
+                />
+                <ComboBox
                     label="Select Pizza"
                     list={pizza}
                     onSelect={(value) => { console.log(value); }}
@@ -47,7 +54,7 @@ export default class Example extends PureComponent {
                     htmlSelect
                     disabled
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

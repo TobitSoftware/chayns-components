@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import ExampleContainer from '../ExampleContainer';
 
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
-export default class Example extends Component {
+export default class TooltipExample extends Component {
     constructor() {
         super();
         this.state = { x: 0, y: 0 };
@@ -13,12 +12,12 @@ export default class Example extends Component {
     render() {
         const { x, y } = this.state;
         return (
-            <ExampleContainer headline="Tooltip">
+            <div style={{ marginBottom: '500px' }}>
                 <div style={{ marginBottom: '20px' }}>
                     Simple&nbsp;
                     <Tooltip
                         bindListeners
-                        position={3}
+                        position={Tooltip.position.BOTTOM_RIGHT}
                         content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
                         minWidth={150}
                         maxWidth={150}
@@ -29,7 +28,7 @@ export default class Example extends Component {
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
                         bindListeners
-                        position={3}
+                        position={Tooltip.position.TOP_RIGHT}
                         content={{
                             text: 'H5 will be used as headline inside of a tooltip.',
                             headline: 'Headline',
@@ -38,25 +37,23 @@ export default class Example extends Component {
                         <p>Tooltip with headline</p>
                     </Tooltip>
                 </div>
+                <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                    <Tooltip
+                        position={Tooltip.position.BOTTOM_CENTER}
+                        content={{
+                            text: 'Tooltip that has the arrow in the middle',
+                        }}
+                        bindListeners
+                    >
+                        <p>Tooltip (centered)</p>
+                    </Tooltip>
+                </div>
                 <div style={{ marginBottom: '20px' }}>
                     <div style={{ textAlign: 'right' }}>
-                        <div>
-                            <Tooltip
-                                bindListeners
-                                position={0}
-                                content={{
-                                    text: 'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
-                                    headline: 'Headline',
-                                    imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
-                                }}
-                            >
-                                <p>Tooltip with headline and image</p>
-                            </Tooltip>
-                        </div>
                         <div style={{ marginBottom: '20px' }}>
                             <Tooltip
                                 bindListeners
-                                position={1}
+                                position={Tooltip.position.TOP_LEFT}
                                 content={{
                                     text: 'Buttons within tooltips can be used to show more informations.',
                                     buttonText: 'More informations',
@@ -66,11 +63,24 @@ export default class Example extends Component {
                                 <p>Tooltip with button</p>
                             </Tooltip>
                         </div>
+                        <div>
+                            <Tooltip
+                                bindListeners
+                                position={Tooltip.position.BOTTOM_LEFT}
+                                content={{
+                                    text: 'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
+                                    headline: 'Headline',
+                                    imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
+                                }}
+                            >
+                                <p>Tooltip with headline and image</p>
+                            </Tooltip>
+                        </div>
                     </div>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
-                        position={2}
+                        position={Tooltip.position.TOP_RIGHT}
                         content={{
                             html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
                                 This is a static Tooltip with custom html content.
@@ -104,8 +114,7 @@ export default class Example extends Component {
                     coordinates={{ x, y }}
                     ref={ref => this.clickTooltip = ref}
                 />
-
-            </ExampleContainer>
+            </div>
         );
     }
 }

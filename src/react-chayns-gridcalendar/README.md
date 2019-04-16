@@ -13,10 +13,8 @@ First of all import the component to a component of your own project.
 import { GridCalendar } from 'chayns-components';
 ```
 
-You can init the **GridCalendar** like this:
-```jsx harmony
-<GridCalendar/>
-```
+You can use the grid calendar like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-gridcalendar/Example.jsx).
+
 
 ## Props ##
 The component got the following properties:
@@ -38,7 +36,3 @@ The component got the following properties:
 | data.name | The name of a row | string | |
 | data.entries | The entries of a row (an entry is limited for the time of one day) | array of object | |
 | data.entries.id | Id of an entry | int | |
-
-## Example ##
-
-You can take a look at the **examples** folder in the **react-chayns-gridcalendar** repository. There you can find 2 appropriate ways of implementing the **GridCalendar** to your chayns-Tapp

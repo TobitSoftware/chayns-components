@@ -3,14 +3,11 @@ import React, { PureComponent } from 'react';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import { Badge, Icon } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class BadgeExample extends PureComponent {
     render() {
         return (
-            <ExampleContainer
-                headline="Badge"
-            >
+            <div>
                 <Badge>
                     <Icon icon={faCog}/>
                 </Badge>
@@ -20,7 +17,7 @@ export default class Example extends PureComponent {
                 <Badge style={{ color: 'white', backgroundColor: 'red' }}>
                     {'1'}
                 </Badge>
-            </ExampleContainer>
+            </div>
         );
     }
 }

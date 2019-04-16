@@ -18,13 +18,13 @@ export default class ReceiverSearchPopup extends Component {
         show: PropTypes.bool.isRequired,
         showIdInPopup: PropTypes.bool,
         onlyPersons: PropTypes.bool,
-        onlySites: PropTypes.bool
+        onlySites: PropTypes.bool,
     };
 
     static defaultProps = {
         showIdInPopup: false,
         onlyPersons: false,
-        onlySites: false
+        onlySites: false,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -37,7 +37,7 @@ export default class ReceiverSearchPopup extends Component {
             onlySites,
             position,
             width,
-            show
+            show,
         } = this.props;
 
         return !isEqual(chosenReceivers, nextProps.chosenReceivers)
@@ -63,7 +63,7 @@ export default class ReceiverSearchPopup extends Component {
             onlySites,
             position,
             width,
-            show
+            show,
         } = this.props;
 
         const locationResultState = foundReceivers.locations.state;
@@ -153,7 +153,7 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </Fragment>
                             )}
@@ -168,7 +168,7 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </Fragment>
                             )}
@@ -183,13 +183,13 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </Fragment>
                             )}
                         </div>
                     ) : (
-                        <div/>
+                        <div />
                     )}
                 </CSSTransition>
             </TransitionGroup>

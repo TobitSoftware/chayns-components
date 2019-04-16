@@ -16,6 +16,7 @@ export default class SelectButton extends Component {
         multiSelect: PropTypes.bool,
         quickFind: PropTypes.bool,
         className: PropTypes.string,
+        style: PropTypes.object,
         showSelection: PropTypes.bool,
         selectedFlag: PropTypes.string,
         stopPropagation: PropTypes.bool,
@@ -35,6 +36,7 @@ export default class SelectButton extends Component {
         listValue: 'value',
         selectedFlag: 'isSelected',
         stopPropagation: false,
+        style: null,
     };
 
     constructor(props) {
@@ -49,9 +51,16 @@ export default class SelectButton extends Component {
 
     componentWillReceiveProps(nextProps) {
         const {
-            list, listKey, listValue, selectedFlag
+            list,
+            listKey,
+            listValue,
+            selectedFlag,
         } = this.props;
-        if (list !== nextProps.list || listKey !== nextProps.listKey || listValue !== nextProps.listValue || selectedFlag !== nextProps.selectedFlag) {
+
+        if (list !== nextProps.list
+            || listKey !== nextProps.listKey
+            || listValue !== nextProps.listValue
+            || selectedFlag !== nextProps.selectedFlag) {
             this.setState({ selected: nextProps.list.filter(item => item[nextProps.selectedFlag]) });
         }
     }
@@ -73,7 +82,7 @@ export default class SelectButton extends Component {
             message: description,
             quickfind: quickFind,
             multiselect: multiSelect,
-            list: _list
+            list: _list,
         }).then((result) => {
             if (onSelect && result.buttonType > 0) {
                 onSelect(this.getReturnList(result));
@@ -83,7 +92,7 @@ export default class SelectButton extends Component {
             console.error(err);
         });
 
-        if(stopPropagation) e.stopPropagation();
+        if (stopPropagation) e.stopPropagation();
     }
 
     getDialogList(_list) {
@@ -92,13 +101,13 @@ export default class SelectButton extends Component {
         const list = [];
 
         if (_list) {
-            _list.map((item, i) => {
+            _list.forEach((item, i) => {
                 const curListKey = listKey || i;
                 if (item[curListKey] && item[listValue]) {
                     list.push({
                         name: item[listValue],
                         value: item[curListKey],
-                        isSelected: selected.indexOf(item) >= 0 && showSelection
+                        isSelected: selected.indexOf(item) >= 0 && showSelection,
                     });
                 }
             });
@@ -112,27 +121,41 @@ export default class SelectButton extends Component {
         const { buttonType, selection: selectedItems } = selected;
         const result = [];
 
-        selectedItems.map((item) => {
-            list.map((listItem) => {
-                if (listItem[listKey] === item.value) result.push(listItem);
+        selectedItems.forEach((item) => {
+            list.forEach((listItem) => {
+                if (listItem[listKey] === item.value) {
+                    result.push(listItem);
+                }
             });
         });
+
         this.setState({ selected: result });
-        return { buttonType, selection: result };
+
+        return {
+            buttonType,
+            selection: result,
+        };
     }
 
     render() {
         const {
-            className, label, disabled, listValue
+            className,
+            label,
+            disabled,
+            listValue,
+            showSelection,
+            style,
         } = this.props;
         const { selected } = this.state;
+
         return (
             <ChooseButton
                 className={className}
                 disabled={disabled}
                 onClick={this.onClick}
+                style={style}
             >
-                {selected && selected.length > 0 ? selected.map((item, index) => {
+                {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
                     let str = (index === 1) ? ', ' : '';
                     str += (index < 2) ? item[listValue] : '';
                     str += (index === 2) ? '...' : '';

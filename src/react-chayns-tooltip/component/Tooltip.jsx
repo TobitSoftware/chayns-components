@@ -1,14 +1,14 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,prefer-destructuring */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as ReactDOM from 'react-dom';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class Tooltip extends Component {
     static propTypes = {
-        content: PropTypes.oneOf([
+        content: PropTypes.oneOfType([
             PropTypes.shape({
                 text: PropTypes.string.isRequired,
                 headline: PropTypes.string,
@@ -26,74 +26,58 @@ export default class Tooltip extends Component {
         minWidth: PropTypes.number,
         maxWidth: PropTypes.number,
         removeIcon: PropTypes.bool,
-        parent: PropTypes.node,
+        parent: PropTypes.instanceOf(Element),
         coordinates: PropTypes.shape({
             x: PropTypes.number.isRequired,
             y: PropTypes.number.isRequired,
         }),
         childrenStyle: PropTypes.object,
+        childrenClassNames: PropTypes.string,
+        preventTriggerStyle: PropTypes.bool,
     };
 
     static defaultProps = {
         children: null,
         bindListeners: false,
-        position: 0,
+        position: null,
         minWidth: 100,
         maxWidth: 250,
-        removeIcon: false,
-        parent: document.getElementsByClassName('tapp')[0],
+        removeIcon: chayns.env.isIOS,
+        parent: null,
         coordinates: null,
         childrenStyle: null,
+        childrenClassNames: null,
+        preventTriggerStyle: false,
     };
 
-    constructor() {
-        super();
+    static position = Bubble.position;
 
-        this.state = {
-            active: false,
-            removed: true,
-        };
+    constructor(props) {
+        super(props);
+
+        this.state = { position: null, x: 0, y: 0 };
 
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
         this.getContent = this.getContent.bind(this);
-        this.getCoordinates = this.getCoordinates.bind(this);
-        this.renderTooltip = this.renderTooltip.bind(this);
-
-        this.firstRender = true;
+        this.getPosition = this.getPosition.bind(this);
 
         this.tooltipKey = Math.random().toString();
+
+        this.bubble = React.createRef();
+        this.childrenWrapper = React.createRef();
     }
 
     componentDidMount() {
-        const { bindListeners } = this.props;
-
-        if (bindListeners) {
-            this.childrenNode.addEventListener('mouseover', this.show, false);
-            this.childrenNode.addEventListener('mouseleave', this.hide, false);
-            this.tooltipNode.addEventListener('mouseover', this.show, false);
-            this.tooltipNode.addEventListener('mouseleave', this.hide, false);
-        }
-
-        if (this.firstRender) {
-            this.firstRender = false;
-            this.getCoordinates();
-        }
+        this.getPosition();
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { coordinates, children } = this.props;
+    componentDidUpdate(prevProps) {
+        const { coordinates } = this.props;
 
-        if (nextProps.coordinates !== coordinates || nextProps.children !== children) {
-            this.getCoordinates();
+        if (prevProps.coordinates !== coordinates) {
+            this.getPosition();
         }
-    }
-
-    componentWillUnmount() {
-        this.childrenNode.removeEventListener('mouseover', this.show, false);
-        this.childrenNode.removeEventListener('mouseleave', this.hide, false);
-        this.tooltipNode.removeEventListener('mouseover', this.show, false);
-        this.tooltipNode.removeEventListener('mouseleave', this.hide, false);
     }
 
     getContent() {
@@ -113,7 +97,7 @@ export default class Tooltip extends Component {
             nodeArray.unshift(<h5 key={`h5${this.tooltipKey}`}>{content.headline}</h5>);
         }
         if (content.buttonText && content.buttonOnClick) {
-            nodeArray.push(
+            nodeArray.push((
                 <div className="cc__tooltip__button" key={`divBtn${this.tooltipKey}`}>
                     <Button
                         onClick={content.buttonOnClick}
@@ -121,116 +105,103 @@ export default class Tooltip extends Component {
                         {content.buttonText}
                     </Button>
                 </div>
-            );
+            ));
         }
         return nodeArray;
     }
 
-    getCoordinates() {
-        const { coordinates, position } = this.props;
-
-        if (coordinates) {
-            return coordinates;
+    async getPosition() {
+        const { position, coordinates } = this.props;
+        const { position: statePosition, x: stateX, y: stateY } = this.state;
+        let x = coordinates ? coordinates.x : 0;
+        let top = coordinates ? coordinates.y : 0;
+        let bottom = coordinates ? coordinates.y : 0;
+        if (this.childrenWrapper && !coordinates) {
+            const rect = this.childrenWrapper.current.getBoundingClientRect();
+            x = rect.left + (rect.width / 2);
+            top = rect.top;
+            bottom = rect.bottom;
         }
-        if (this.childrenNode) {
-            const rect = this.childrenNode.getBoundingClientRect();
-            return {
-                x: rect.left + (rect.width / 2),
-                y: (position === 1 || position === 2) ? rect.bottom : rect.top,
-            };
+        let pos = position;
+        if (position === null) {
+            const posArray = (x > window.innerWidth / 2)
+                ? [Tooltip.position.TOP_LEFT, Tooltip.position.BOTTOM_LEFT]
+                : [Tooltip.position.TOP_RIGHT, Tooltip.position.BOTTOM_RIGHT];
+            pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
         }
-        return { x: 0, y: 0 };
+        let y = Bubble.isPositionBottom(pos) ? bottom : top;
+        if (chayns.env.isApp) {
+            const { pageYOffset } = await chayns.getWindowMetrics();
+            y += pageYOffset;
+        }
+        if (statePosition !== pos || x !== stateX || y !== stateY) {
+            this.setState({ position: pos, x, y });
+        }
     }
 
     show() {
-        window.clearTimeout(this.timeout);
-
-        this.setState({
-            active: false,
-            removed: false,
-        });
-
-        this.timeout = window.setTimeout(() => {
-            this.setState({
-                active: true,
-                removed: false,
-            });
-        });
+        this.getPosition();
+        if (this.bubble.current) {
+            this.bubble.current.show();
+        }
     }
 
     hide() {
-        this.setState({
-            active: false,
-            removed: false,
-        });
-
-        this.timeout = window.setTimeout(() => {
-            this.setState({
-                active: false,
-                removed: true,
-            });
-        }, 500);
-    }
-
-    renderTooltip() {
-        const {
-            minWidth, maxWidth, removeIcon, position
-        } = this.props;
-        const {
-            active, removed
-        } = this.state;
-        const { x, y } = this.getCoordinates();
-
-        return (
-            <div
-                className={classNames(`cc__tooltip cc__tooltip--position${position}`, {
-                    'cc__tooltip--active': active,
-                })}
-                style={{ ...{ top: `${y}px` }, ...(position < 2 ? { right: `-${x}px`, } : { left: `${x}px`, }) }}
-                ref={(node) => {
-                    this.tooltipNode = node;
-                }}
-                key={`cc__tooltip${this.tooltipKey}`}
-            >
-                {!removed && (
-                    <div
-                        className="cc__tooltip__overlay"
-                        style={{ minWidth: `${minWidth}px`, maxWidth: `${maxWidth}px` }}
-                    >
-                        {
-                            removeIcon
-                                ? (
-                                    <div className="cc__tooltip__icon" onClick={this.hide}>
-                                        <Icon icon="ts-wrong"/>
-                                    </div>
-                                )
-                                : null
-                        }
-                        {this.getContent()}
-                    </div>
-                )}
-            </div>
-        );
+        if (this.bubble.current) {
+            this.bubble.current.hide();
+        }
     }
 
     render() {
-        const { children, parent, childrenStyle } = this.props;
+        const {
+            children,
+            parent,
+            childrenStyle,
+            preventTriggerStyle,
+            childrenClassNames,
+            removeIcon,
+            bindListeners,
+            minWidth,
+            maxWidth,
+        } = this.props;
+
+        const { position, x, y } = this.state;
 
         return [
-            ReactDOM.createPortal(
-                this.renderTooltip(),
-                parent
-            ),
+            position !== null ? (
+                <Bubble
+                    coordinates={{ x, y }}
+                    parent={parent}
+                    position={position}
+                    onMouseEnter={bindListeners ? this.show : null}
+                    onMouseLeave={bindListeners ? this.hide : null}
+                    style={{
+                        minWidth,
+                        maxWidth,
+                        padding: '12px',
+                    }}
+                    key="bubble"
+                    ref={this.bubble}
+                >
+                    {removeIcon ? (
+                        <div className="cc__tooltip__icon" onClick={this.hide}>
+                            <Icon icon="ts-wrong" />
+                        </div>
+                    ) : null}
+                    {this.getContent()}
+                </Bubble>
+            ) : null,
             <div
-                className="cc__tooltip__children"
-                ref={(node) => {
-                    this.childrenNode = node;
-                }}
+                className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
+                ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
+                onMouseEnter={!chayns.env.isIOS && bindListeners ? this.show : null}
+                onMouseLeave={bindListeners ? this.hide : null}
+                onClick={chayns.env.isIOS && bindListeners ? this.show : null}
             >
                 {children}
-            </div>
+            </div>,
         ];
     }
 }

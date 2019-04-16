@@ -17,7 +17,7 @@ export const shareProvider = [
         icon: faLink,
         action: 0,
         url: null,
-        available: false
+        available: false,
     },
     {
         id: 1,
@@ -27,7 +27,7 @@ export const shareProvider = [
         icon: faEnvelope,
         action: 2,
         url: null,
-        available: false
+        available: false,
     },
     {
         id: 2,
@@ -37,7 +37,7 @@ export const shareProvider = [
         icon: faWhatsapp,
         action: 1,
         url: null,
-        available: false
+        available: false,
     },
     {
         id: 3,
@@ -47,7 +47,7 @@ export const shareProvider = [
         icon: faFacebookF,
         action: 1,
         url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
-        available: true
+        available: true,
     },
     {
         id: 5,
@@ -57,7 +57,7 @@ export const shareProvider = [
         icon: faTwitter,
         action: 1,
         url: 'http://twitter.com/intent/tweet?text=&url={url}&hashtags=chayns',
-        available: true
+        available: true,
     },
     {
         id: 6,
@@ -67,7 +67,7 @@ export const shareProvider = [
         icon: faTumblr,
         action: 1,
         url: '//tumblr.com/widgets/share/tool?canonicalUrl={url}',
-        available: false
+        available: false,
     },
     {
         id: 7,
@@ -77,7 +77,7 @@ export const shareProvider = [
         icon: faTelegram,
         action: 1,
         url: null,
-        available: false
+        available: false,
     },
     /*    {
             'id': 8,
@@ -87,7 +87,7 @@ export const shareProvider = [
             'icon': 'fa-snapchat-ghost',
             'action': 2,
             'url': null,
-            'available': false
+            'available': false,
         }, */
     {
         id: 9,
@@ -97,7 +97,7 @@ export const shareProvider = [
         icon: faSkype,
         action: 2,
         url: null,
-        available: false
+        available: false,
     },
     {
         id: 10,
@@ -107,7 +107,7 @@ export const shareProvider = [
         icon: faShareAlt,
         action: 2,
         url: null,
-        available: false
+        available: false,
     },
     {
         id: 11,
@@ -117,7 +117,7 @@ export const shareProvider = [
         icon: faShareAlt,
         action: 3,
         url: null,
-        available: false
+        available: false,
     },
 
 ];
