@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export default class ImageAccordion extends React.PureComponent {
     static propTypes = {
         prevOpen: PropTypes.bool,
-        children: PropTypes.string,
+        children: PropTypes.instanceOf(Object),
         disabled: PropTypes.bool,
         open: PropTypes.bool,
     };

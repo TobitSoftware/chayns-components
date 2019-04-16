@@ -7,14 +7,14 @@ export default class ImageAccordionHead extends React.PureComponent {
     static propTypes = {
         item: PropTypes.instanceOf(Object),
         width: PropTypes.number,
-        percent: PropTypes.number,
+        itemsPerRow: PropTypes.number,
         wrapperHeight: PropTypes.string,
     };
 
     static defaultProps = {
         item: null,
         width: 0,
-        percent: 0,
+        itemsPerRow: 0,
         wrapperHeight: 0,
     };
 
@@ -22,7 +22,7 @@ export default class ImageAccordionHead extends React.PureComponent {
         const {
             item,
             width,
-            percent,
+            itemsPerRow,
             wrapperHeight,
         } = this.props;
 
@@ -78,7 +78,7 @@ export default class ImageAccordionHead extends React.PureComponent {
                                 left:
                                         item.props.iconPosition === 2 || item.props.iconPosition === 3
                                             ? '10px'
-                                            : ((width * percent) / 100) - 20,
+                                            : (width / itemsPerRow) - 15,
                             }}
                         >
                             {item.props.icon}

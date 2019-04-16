@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { PureComponent } from 'react';
 
-import { ImageAccordionGroup, ImageAccordion } from '../../src/index';
+import { ImageAccordionGroup, ImageAccordion, Accordion } from '../../src/index';
 
 export default class ImageAccordionExample extends PureComponent {
     render() {
@@ -61,6 +61,7 @@ export default class ImageAccordionExample extends PureComponent {
             {
                 id: '2',
                 name: 'Pear',
+                disabled: true,
                 image: 'https://tsimg.space/v1/images/58c50735-8f5b-e911-80d7-0025905a8161.jpg',
                 description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,',
             },
@@ -68,24 +69,33 @@ export default class ImageAccordionExample extends PureComponent {
         return (
             <div>
                 <div style={{ marginBottom: '20px' }}>
-                    {/* Persons */}
-                    <ImageAccordionGroup
-                        dataGroup="1"
+                    <Accordion
+                        head="Personen"
                     >
-                        {persons.map(person => (
-                            <ImageAccordion
-                                key={person.id}
-                                headline={person.name}
-                                image={person.image}
-                                disabled={person.disabled}
-                                circle
-                                subheadline={person.task}
-                                iconPosition={person.position}
+                        <div
+                            className="accordion__content"
+                        >
+                            {/* Persons */}
+                            <ImageAccordionGroup
+                                dataGroup="1"
                             >
-                                {person.description}
-                            </ImageAccordion>
-                        ))}
-                    </ImageAccordionGroup>
+                                {persons.map(person => (
+                                    <ImageAccordion
+                                        key={person.id}
+                                        headline={person.name}
+                                        image={person.image}
+                                        disabled={person.disabled}
+                                        circle
+                                        icon={<p>x</p>}
+                                        subheadline={person.task}
+                                        iconPosition={person.position}
+                                    >
+                                        {person.description}
+                                    </ImageAccordion>
+                                ))}
+                            </ImageAccordionGroup>
+                        </div>
+                    </Accordion>
 
                     {/* Fruits */}
                     <ImageAccordionGroup>
@@ -94,6 +104,7 @@ export default class ImageAccordionExample extends PureComponent {
                                 key={fruit.id}
                                 headline={fruit.name}
                                 image={fruit.image}
+                                disabled={fruit.disabled}
                             >
                                 {fruit.description}
                             </ImageAccordion>

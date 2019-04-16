@@ -130,7 +130,11 @@ export default class ImageAccordionGroup extends React.Component {
             ImageAccordionGroup.dataGroups[dataGroup] = this;
         }
 
-        const findChild = children.findIndex(g => g.key === key);
+        let findChild = -1;
+        if (children) {
+            findChild = children.findIndex(g => g && g.key === key);
+        }
+
         this.setState(state => ({
             currentState: findChild !== -1 && children[findChild].props.children ? key : null,
             prevOpen: !sameRow && state.currentState,
@@ -208,7 +212,7 @@ export default class ImageAccordionGroup extends React.Component {
                                         item={item}
                                         wrapperHeight={wrapperHeight}
                                         width={width}
-                                        percent={percent}
+                                        itemsPerRow={itemsPerRow}
                                     />
                                 </div>
                             ))
