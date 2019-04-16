@@ -84,6 +84,7 @@ export default class Slider extends PureComponent {
             }
         } else {
             this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
+
             if (props.vertical) {
                 this.percent = 100 - this.percent;
             }
@@ -229,9 +230,7 @@ export default class Slider extends PureComponent {
         document.removeEventListener('touchcancel', this.thumbUp);
         this.target = null;
         const stepped = this.getSteppedPercents(this);
-
         this.setScrolling(true);
-
         this.onChange([onChangeEnd], stepped);
     };
 
@@ -428,7 +427,6 @@ export default class Slider extends PureComponent {
             vertical,
         } = this.props;
         let { leftPercent, rightPercent, percent } = percents;
-
         if (vertical) {
             const left = leftPercent;
             leftPercent = 100 - rightPercent;
@@ -443,7 +441,8 @@ export default class Slider extends PureComponent {
                 if (l) l(left, right);
             });
         } else {
-            const value = min + (realInterval * percent / 100);
+            const value = Math.round(1000 * (min + (realInterval * percent / 100))) / 1000;
+
             listeners.forEach((l) => {
                 if (l) l(value);
             });
@@ -538,7 +537,7 @@ export default class Slider extends PureComponent {
                                     ref={this.leftThumb}
                                     style={thumbStyle && thumbStyle.left}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>,
                                 <div
                                     key="right"
@@ -548,7 +547,7 @@ export default class Slider extends PureComponent {
                                     ref={this.rightThumb}
                                     style={thumbStyle && thumbStyle.right}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>,
                             ]
                             : (
@@ -559,7 +558,7 @@ export default class Slider extends PureComponent {
                                     ref={this.thumb}
                                     style={thumbStyle}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>
                             )
                     }
