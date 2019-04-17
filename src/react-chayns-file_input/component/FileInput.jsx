@@ -13,6 +13,10 @@ export default class FileInput extends PureComponent {
         ALL: '*',
     };
 
+    static typePresets = {
+        TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+    };
+
     static propTypes = {
         className: PropTypes.string,
         style: PropTypes.object,
@@ -56,7 +60,7 @@ export default class FileInput extends PureComponent {
         },
         items: [{
             types: [FileInput.types.ALL],
-            maxFileSize: 4194304, // 4 MB
+            maxFileSize: 4 * 1024 * 1024, // 4 MB
             maxNumberOfFiles: 0, // 0=infinity
             onClick: null,
             onChange: null,
@@ -71,7 +75,7 @@ export default class FileInput extends PureComponent {
         super(props);
         this.itemRefs = [];
         this.fileInputRefs = [];
-        this.needAppCall = (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.isAndroid && chayns.env.appVersion < 6000;// TODO replace with right appVersion
+        this.needAppCall = (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.isAndroid && chayns.env.appVersion < 6000;
     }
 
     onDragEnter = (event, item, index) => {
@@ -100,7 +104,7 @@ export default class FileInput extends PureComponent {
                     invalidFiles.push(file);
                     chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
                 } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
-                    chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / 1000000)} MB`));
+                    chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`));
                     invalidFiles.push(file);
                 } else {
                     validFiles.push(file);
