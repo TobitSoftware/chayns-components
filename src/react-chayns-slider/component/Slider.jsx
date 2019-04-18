@@ -471,10 +471,12 @@ export default class Slider extends PureComponent {
     };
 
     setScrolling = (enabled) => {
-        if (enabled) {
-            chayns.allowRefreshScroll();
-        } else {
-            chayns.disallowRefreshScroll();
+        if (chayns.env.isApp) {
+            if (enabled) {
+                chayns.allowRefreshScroll();
+            } else {
+                chayns.disallowRefreshScroll();
+            }
         }
     };
 
@@ -537,7 +539,7 @@ export default class Slider extends PureComponent {
                                     ref={this.leftThumb}
                                     style={thumbStyle && thumbStyle.left}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>,
                                 <div
                                     key="right"
@@ -547,7 +549,7 @@ export default class Slider extends PureComponent {
                                     ref={this.rightThumb}
                                     style={thumbStyle && thumbStyle.right}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>,
                             ]
                             : (
@@ -558,7 +560,7 @@ export default class Slider extends PureComponent {
                                     ref={this.thumb}
                                     style={thumbStyle}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div className="cc__slider__bar__thumb__dot"/>
                                 </div>
                             )
                     }
