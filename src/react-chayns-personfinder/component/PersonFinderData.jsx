@@ -228,6 +228,7 @@ export default class PersonFinderData extends Component {
         }
     }
 
+    // eslint-disable-next-line class-methods-use-this
     async fetchUacPersons(value, uacId) {
         const config = {
             method: 'GET',
