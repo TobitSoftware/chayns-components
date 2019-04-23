@@ -55,32 +55,36 @@ export default class Bubble extends PureComponent {
     }
 
     componentDidMount() {
-        if (this.bubbleNode.current) {
+        if (this.bubbleNode.current && this.bubbleNode.current.classList) {
             this.bubbleNode.current.classList.add('cc__bubble--hide');
         }
     }
 
     show() {
-        if (!this.bubbleNode.current) {
+        if (!this.bubbleNode.current || !this.bubbleNode.current.classList) {
             return;
         }
 
         clearTimeout(this.timeout);
         this.bubbleNode.current.classList.remove('cc__bubble--hide');
         this.timeout = setTimeout(() => {
-            this.bubbleNode.current.classList.add('cc__bubble--active');
+            if (this.bubbleNode.current && this.bubbleNode.current.classList) {
+                this.bubbleNode.current.classList.add('cc__bubble--active');
+            }
         });
     }
 
     hide() {
-        if (!this.bubbleNode.current) {
+        if (!this.bubbleNode.current || !this.bubbleNode.current.classList) {
             return;
         }
 
         clearTimeout(this.timeout);
         this.bubbleNode.current.classList.remove('cc__bubble--active');
         this.timeout = setTimeout(() => {
-            this.bubbleNode.current.classList.add('cc__bubble--hide');
+            if (this.bubbleNode.current && this.bubbleNode.current.classList) {
+                this.bubbleNode.current.classList.add('cc__bubble--hide');
+            }
         }, 500);
     }
 
