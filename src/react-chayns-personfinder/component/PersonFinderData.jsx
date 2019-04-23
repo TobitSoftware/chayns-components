@@ -29,6 +29,7 @@ export default class PersonFinderData extends Component {
         showId: PropTypes.bool,
         autoLoading: PropTypes.bool,
         boxClassName: PropTypes.string,
+        uacId: PropTypes.number,
     };
 
     static defaultProps = {
@@ -41,6 +42,7 @@ export default class PersonFinderData extends Component {
         showId: false,
         autoLoading: true,
         boxClassName: null,
+        uacId: null,
     };
 
     resultList = null;
@@ -160,14 +162,20 @@ export default class PersonFinderData extends Component {
             }
         }
 
-        const { persons: enablePersons, sites: enableSites, includeOwn } = this.props;
+        const {
+            persons: enablePersons, sites: enableSites, includeOwn, uacId,
+        } = this.props;
 
         const promises = [];
 
         const loadPersons = enablePersons && this.loadMore[PERSON_RELATION] && (type === ALL_RELATIONS || type === PERSON_RELATION);
         const loadSites = enableSites && this.loadMore[LOCATION_RELATION] && (type === ALL_RELATIONS || type === LOCATION_RELATION);
 
-        promises.push(loadPersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
+        if (uacId) {
+            promises.push(loadPersons ? this.fetchUacPersons(value, uacId) : Promise.resolve(false));
+        } else {
+            promises.push(loadPersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
+        }
         promises.push(loadSites ? this.fetchSiteRelations(value) : Promise.resolve(false));
 
         try {
@@ -220,6 +228,34 @@ export default class PersonFinderData extends Component {
         }
     }
 
+    async fetchUacPersons(value, uacId) {
+        const config = {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
+            },
+            mode: 'cors',
+        };
+
+        const response = await fetch(`https://sub50.tobit.com/backend/${uacId}/usergroup/1/users?filter=${value}`, config);
+        const json = await response.json();
+
+        const result = { related: [], unrelated: [], type: PERSON_RELATION };
+        json.forEach((item) => {
+            result.related.push({
+                firstName: item.firstname,
+                lastName: item.lastname,
+                personId: item.personId,
+                relationCount: 0,
+                relations: [],
+                score: 0,
+                userId: item.id,
+            });
+        });
+
+        return Promise.resolve(result);
+    }
+
     async fetchPersonRelations(value, canFindOwn = false) {
         const fetchPromise = this.fetchRelations(PERSON_RELATION, value);
 
@@ -232,7 +268,6 @@ export default class PersonFinderData extends Component {
 
             return data;
         }
-
         return fetchPromise;
     }
 
@@ -332,7 +367,9 @@ export default class PersonFinderData extends Component {
                 onChange={this.handleOnChange}
                 boxClassName={classnames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
-                    ref: (ref) => { this.resultList = ref; },
+                    ref: (ref) => {
+                        this.resultList = ref;
+                    },
                     onScroll: this.handleLazyLoad,
                 }}
                 {...props}
