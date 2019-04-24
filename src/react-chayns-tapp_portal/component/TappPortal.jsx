@@ -1,24 +1,33 @@
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
-const defaultParent = document.getElementsByClassName('tapp')[0] || document.body;
-let destroyed = false;
+let wasRendered = false;
+let isDestroyed = false;
+
+let lastParent = null;
 
 const TappPortal = ({ children, parent }) => {
-    const parentUsed = document.getElementsByClassName('tapp')[0] || document.body;
+    let parentToUse = document.getElementsByClassName('tapp')[0] || document.body;
 
-    if (!parent && parentUsed !== defaultParent) {
-        destroyed = true;
+    if (!parent && wasRendered && parentToUse !== lastParent) {
+        isDestroyed = true;
     }
 
-    if (!parent && destroyed) {
+    if (!parent && isDestroyed) {
         return null;
     }
 
-    return createPortal(
-        children,
-        parent || parentUsed,
-    );
+    if (parent) {
+        parentToUse = parent;
+    }
+
+    if (!wasRendered) {
+        wasRendered = true;
+    }
+
+    lastParent = parentToUse;
+
+    return createPortal(children, parentToUse);
 };
 
 TappPortal.propTypes = {
