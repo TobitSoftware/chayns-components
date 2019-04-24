@@ -36,7 +36,14 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     dynamic
                     placeholder="UAC 1"
-                    uacIds={[1]}
+                    uacId={1}
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
+                    dynamic
+                    placeholder="UAC 1 Location 1"
+                    uacId={1}
+                    locationId={1}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder

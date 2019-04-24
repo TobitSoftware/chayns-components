@@ -10,6 +10,7 @@ export default class PersonFinder extends Component {
         showPersons: PropTypes.bool,
         showSites: PropTypes.bool,
         uacId: PropTypes.number,
+        locationId: PropTypes.number,
     };
 
     static defaultProps = {
@@ -17,6 +18,7 @@ export default class PersonFinder extends Component {
         showPersons: true,
         showSites: false,
         uacId: null,
+        locationId: null,
     };
 
     personFinder = React.createRef();

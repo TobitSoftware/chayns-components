@@ -30,6 +30,7 @@ export default class PersonFinderData extends Component {
         autoLoading: PropTypes.bool,
         boxClassName: PropTypes.string,
         uacId: PropTypes.number,
+        locationId: PropTypes.number,
     };
 
     static defaultProps = {
@@ -43,6 +44,7 @@ export default class PersonFinderData extends Component {
         autoLoading: true,
         boxClassName: null,
         uacId: null,
+        locationId: null,
     };
 
     resultList = null;
@@ -163,7 +165,7 @@ export default class PersonFinderData extends Component {
         }
 
         const {
-            persons: enablePersons, sites: enableSites, includeOwn, uacId,
+            persons: enablePersons, sites: enableSites, includeOwn, uacId, locationId,
         } = this.props;
 
         const promises = [];
@@ -172,7 +174,7 @@ export default class PersonFinderData extends Component {
         const loadSites = enableSites && this.loadMore[LOCATION_RELATION] && (type === ALL_RELATIONS || type === LOCATION_RELATION);
 
         if (uacId) {
-            promises.push(loadPersons ? this.fetchUacPersons(value, uacId) : Promise.resolve(false));
+            promises.push(loadPersons ? this.fetchUacPersons(value, uacId, locationId) : Promise.resolve(false));
         } else {
             promises.push(loadPersons ? this.fetchPersonRelations(value, includeOwn) : Promise.resolve(false));
         }
@@ -229,7 +231,7 @@ export default class PersonFinderData extends Component {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    async fetchUacPersons(value, uacId) {
+    async fetchUacPersons(value, uacId, locationId) {
         const config = {
             method: 'GET',
             headers: {
@@ -238,23 +240,26 @@ export default class PersonFinderData extends Component {
             mode: 'cors',
         };
 
-        const response = await fetch(`https://sub50.tobit.com/backend/${uacId}/usergroup/1/users?filter=${value}`, config);
-        const json = await response.json();
+        const response = await fetch(`https://sub50.tobit.com/backend/${locationId || chayns.env.site.locationId}/usergroup/${uacId}/users?filter=${value}`, config);
+        if (response.status === 200) {
+            const json = await response.json();
 
-        const result = { related: [], unrelated: [], type: PERSON_RELATION };
-        json.forEach((item) => {
-            result.related.push({
-                firstName: item.firstname,
-                lastName: item.lastname,
-                personId: item.personId,
-                relationCount: 0,
-                relations: [],
-                score: 0,
-                userId: item.id,
+            const result = { related: [], unrelated: [], type: PERSON_RELATION };
+            json.forEach((item) => {
+                result.related.push({
+                    firstName: item.firstname,
+                    lastName: item.lastname,
+                    personId: item.personId,
+                    relationCount: 0,
+                    relations: [],
+                    score: 0,
+                    userId: item.id,
+                });
             });
-        });
 
-        return Promise.resolve(result);
+            return Promise.resolve(result);
+        }
+        return Promise.resolve(null);
     }
 
     async fetchPersonRelations(value, canFindOwn = false) {

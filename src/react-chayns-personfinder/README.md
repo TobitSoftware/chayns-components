@@ -40,6 +40,7 @@ Then it can be used like in the following example:
 | defaultValues | Tags that should be added to the TagInput (multiple-prop) on initial rendering                     | array          |               |
 | boxClassName  | ClassName of the box-overlay                                                                       | string         |               |
 | uacId         | ID of the UAC-Group to search in                                                                   | number         |               |
+| locationId    | LocationId of the UAC-Group to search in                                                           | number         |               |
 
 ## Clear the PersonFinder
 If you want to clear the PersonFinder, you need to have a reference to the ReactElement:
