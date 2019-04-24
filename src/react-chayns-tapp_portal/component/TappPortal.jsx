@@ -10,6 +10,7 @@ const TappPortal = ({ children, parent }) => {
     let parentToUse = document.getElementsByClassName('tapp')[0] || document.body;
 
     if (!parent && wasRendered && parentToUse !== lastParent) {
+        // destroy old tapp portals in tapp DIVs to prevent duplicates after switching tapp
         isDestroyed = true;
     }
 
