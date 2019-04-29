@@ -34,6 +34,7 @@ export default class Tooltip extends Component {
         childrenStyle: PropTypes.object,
         childrenClassNames: PropTypes.string,
         preventTriggerStyle: PropTypes.bool,
+        hideOnChildrenLeave: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -48,6 +49,7 @@ export default class Tooltip extends Component {
         childrenStyle: null,
         childrenClassNames: null,
         preventTriggerStyle: false,
+        hideOnChildrenLeave: false,
     };
 
     static position = Bubble.position;
@@ -163,6 +165,7 @@ export default class Tooltip extends Component {
             bindListeners,
             minWidth,
             maxWidth,
+            hideOnChildrenLeave,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -179,6 +182,10 @@ export default class Tooltip extends Component {
                         minWidth,
                         maxWidth,
                         padding: '12px',
+                        ...!hideOnChildrenLeave || {
+                            userSelect: 'none',
+                            pointerEvents: 'none',
+                        },
                     }}
                     key="bubble"
                     ref={this.bubble}

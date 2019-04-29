@@ -40,6 +40,7 @@ The component got the following properties:
 | childrenStyle         | Style for the children node.                                                                                          | object    |       | false |
 | childrenClassNames    | ClassNames for the children node.                                                                                     | string    |       | false |
 | preventTriggerStyle   | Prevent underline for children node.                                                                                  | bool      | false | false |
+| hideOnChildrenLeave   | Hide Tooltip on children leave, also if the cursor is over the bubble.                                                | bool      | false | false |
 
 Also, you can call the methods show() and hide() on the reference of the tooltip.
 
