@@ -21,7 +21,7 @@ export default class AmountInput extends PureComponent {
         autoInput: PropTypes.bool,
         buttonFormatHandler: PropTypes.func,
         tempAmount: PropTypes.number,
-        tempValue: PropTypes.string,
+        tempValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         setInput: PropTypes.func.isRequired,
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
@@ -140,7 +140,7 @@ export default class AmountInput extends PureComponent {
                 onClick={stopPropagation ? event => event.stopPropagation() : null}
                 key="amountInput"
                 type="number"
-                value={tempValue}
+                value={tempValue.toString()}
                 onChange={this.onInputChange}
                 className="cc__amount-control__input"
                 onBlur={this.onInputBlur}
