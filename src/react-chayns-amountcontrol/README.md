@@ -28,6 +28,7 @@ You can set the following props on a AmountControl element:
 
 | Property      | Description                                                                             | Type     | Default |
 |---------------|-----------------------------------------------------------------------------------------|----------|---------|
+| buttonText    | The button text                                                                         | string   |         |
 | amount        | The current amount (behaves like value, not like defaultValue)                          | number   | 0       |
 | className     | The css class of the AmountControl-wrapper                                              | string   |         |
 | onChange      | Function that is called when the user changes the amount                                | function |         |
@@ -51,6 +52,7 @@ You can set the following props on a AmountControl element:
 | plusIcon      | The icon to increase the amount                                                         | string/object |    |
 | minusIcon     | The icon to decrease the amount                                                         | string/object |    |
 | removeIcon    | The icon to set the amount to 0                                                         | string/object |    |
+| contentWidth  | The width of the amountControl content                                                  | number   |         |
 
 The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
 icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 

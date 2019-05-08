@@ -77,14 +77,14 @@ export default class SetupWizard extends Component {
         if (value === true) {
             if (completedSteps.indexOf(currentStep) === -1) {
                 this.setState(prevState => ({
-                    completedSteps: prevState.completedSteps.concat(currentStep)
+                    completedSteps: prevState.completedSteps.concat(currentStep),
                 }));
             }
         } else if (completedSteps.indexOf(currentStep) >= 0) {
             const { children } = this.props;
 
             this.setState(prevState => ({
-                completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep))
+                completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep)),
             }));
 
             if (children[currentStep].props.required === true) {
@@ -125,7 +125,7 @@ export default class SetupWizard extends Component {
         this.setState(prevState => ({
             maxProgress: step,
             currentStep: step,
-            completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress))
+            completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress)),
         }));
     }
 
@@ -152,10 +152,10 @@ export default class SetupWizard extends Component {
         const { children } = this.props;
         const { maxProgress } = this.state;
         const { completedSteps, currentStep } = this.state;
-        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
             this.setState({
                 currentStep: newCurrentStep,
-                maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress
+                maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress,
             });
         } else {
             this.notComplete();

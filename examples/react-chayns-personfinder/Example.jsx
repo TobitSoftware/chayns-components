@@ -34,12 +34,25 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                 />
                 <PersonFinder
+                    dynamic
+                    placeholder="UAC 1"
+                    uacId={1}
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
+                    dynamic
+                    placeholder="UAC 1 Location 1"
+                    uacId={1}
+                    locationId={1}
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
                     ref={(ref) => { this.siteFinder = ref; }}
                     dynamic
                     placeholder="Sites"
                     defaultValue={{
                         name: 'Tobit.Software',
-                        siteId: '67231-11058'
+                        siteId: '67231-11058',
                     }}
                     onChange={PersonFinderExample.handleSelect}
                     showPersons={false}

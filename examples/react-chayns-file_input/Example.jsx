@@ -49,7 +49,7 @@ export default class FileInputExample extends Component {
                     style={{ marginBottom: '20px' }}
                     stopPropagation
                     items={[{
-                        types: [FileInput.types.IMAGE], // only images are allowed
+                        types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
                         maxFileSize: 4194304, // max file size is 4 MB
                         maxNumberOfFiles: 0, // no limit for number of files
                         onChange: this.onChange,

@@ -27,6 +27,7 @@ class AbstractExpandableListItem extends PureComponent {
         onClose: PropTypes.func.isRequired,
         className: PropTypes.string,
         clickable: PropTypes.bool,
+        noContentClass: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -34,6 +35,7 @@ class AbstractExpandableListItem extends PureComponent {
         children: null,
         className: '',
         clickable: false,
+        noContentClass: false,
     };
 
     constructor(props) {
@@ -86,6 +88,7 @@ class AbstractExpandableListItem extends PureComponent {
             className,
             clickable,
             open: openIds,
+            noContentClass,
         } = this.props;
 
         const open = (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
@@ -105,7 +108,7 @@ class AbstractExpandableListItem extends PureComponent {
                         <ExpandableContent
                             open={open}
                         >
-                            <div className="list-item__content">
+                            <div className={classnames({ 'list-item__content': !noContentClass })}>
                                 {children}
                             </div>
                         </ExpandableContent>

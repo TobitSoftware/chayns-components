@@ -471,10 +471,12 @@ export default class Slider extends PureComponent {
     };
 
     setScrolling = (enabled) => {
-        if (enabled) {
-            chayns.allowRefreshScroll();
-        } else {
-            chayns.disallowRefreshScroll();
+        if (chayns.env.isApp) {
+            if (enabled) {
+                chayns.allowRefreshScroll();
+            } else {
+                chayns.disallowRefreshScroll();
+            }
         }
     };
 

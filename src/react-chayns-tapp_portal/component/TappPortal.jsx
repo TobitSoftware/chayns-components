@@ -1,10 +1,35 @@
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
-const TappPortal = ({ children, parent }) => createPortal(
-    children,
-    parent || document.getElementsByClassName('tapp')[0] || document.body,
-);
+let wasRendered = false;
+let isDestroyed = false;
+
+let lastParent = null;
+
+const TappPortal = ({ children, parent }) => {
+    let parentToUse = document.getElementsByClassName('tapp')[0] || document.body;
+
+    if (!parent && wasRendered && parentToUse !== lastParent) {
+        // destroy old tapp portals in tapp DIVs to prevent duplicates after switching tapp
+        isDestroyed = true;
+    }
+
+    if (!parent && isDestroyed) {
+        return null;
+    }
+
+    if (parent) {
+        parentToUse = parent;
+    }
+
+    if (!wasRendered) {
+        wasRendered = true;
+    }
+
+    lastParent = parentToUse;
+
+    return createPortal(children, parentToUse);
+};
 
 TappPortal.propTypes = {
     children: PropTypes.oneOfType([

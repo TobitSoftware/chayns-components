@@ -43,10 +43,6 @@ export default class SelectList extends Component {
         this.state = {
             selectedId: preselectId || 0,
         };
-
-        if (props.defaultValue && props.onChange) {
-            props.onChange(props.defaultValue);
-        }
     }
 
     componentWillMount() {

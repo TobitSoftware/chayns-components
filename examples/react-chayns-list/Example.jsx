@@ -30,6 +30,7 @@ export default class ListExample extends Component {
                         subtitle="Description"
                         image="https://chayns.tobit.com/storage/59140-09519/Images/icon-72.png"
                         hideIndicator
+                        noContentClass
                     >
                         {'Content'}
                     </ListItem>
