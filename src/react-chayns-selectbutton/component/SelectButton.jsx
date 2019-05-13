@@ -83,6 +83,7 @@ export default class SelectButton extends Component {
             quickfind: quickFind,
             multiselect: multiSelect,
             list: _list,
+            buttons: multiSelect || [],
         }).then((result) => {
             if (onSelect && result.buttonType > 0) {
                 onSelect(this.getReturnList(result));
