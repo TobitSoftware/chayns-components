@@ -1,19 +1,18 @@
 export async function getImageMetaDataFromApi(url) {
-    const response = await fetch(url, {
-        method: 'HEAD',
+    return new Promise(async (resolve, reject) => {
+        const response = await fetch(url, {
+            method: 'HEAD',
+        });
+        if (response.status === 200) {
+            resolve({
+                height: parseInt(response.headers.get('x-amz-meta-height'), 10),
+                width: parseInt(response.headers.get('x-amz-meta-width'), 10),
+                preview: response.headers.get('x-amz-meta-preview'),
+            });
+        } else {
+            reject(response.status);
+        }
     });
-
-    const height = parseInt(response.headers.get('x-amz-meta-height'), 10);
-    const width = parseInt(response.headers.get('x-amz-meta-width'), 10);
-
-    if (height && width) {
-        return {
-            height,
-            width,
-        };
-    }
-
-    throw new Error();
 }
 
 export function getImageMetaDataFromPreview(url) {

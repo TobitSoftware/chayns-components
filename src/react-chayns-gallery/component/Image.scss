@@ -1,0 +1,87 @@
+.cc__image {
+  position: relative;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+
+  &--landscape {
+    flex-direction: row;
+  }
+
+  &--portrait {
+    flex-direction: column;
+  }
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--more-images:after {
+    content: attr(data-more);
+    color: #fff;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.75);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    font-size: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img, &__preview {
+    .cc__image--landscape & {
+      width: auto;
+      height: 100%;
+    }
+
+    .cc__image--portrait & {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__img {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    .cc__image--ready & {
+      position: initial;
+      opacity: 1;
+    }
+  }
+
+  &__preview {
+    filter: blur(10px);
+    position: initial;
+    opacity: 1;
+    transition: opacity 0.3s;
+
+    .cc__image--ready & {
+      position: absolute;
+      opacity: 0;
+    }
+  }
+
+  &__wait-cursor {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+  }
+
+  &__tools {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+  }
+}
