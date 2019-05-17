@@ -101,7 +101,7 @@ class OpeningTimes extends Component {
     }
 
     applyPreviousTimes(startDay) {
-        console.log(this.getLatestPreviousWeekDay(startDay));
+        console.log(this.getWeekDayTimes(this.getLatestPreviousWeekDay(startDay)));
     }
 
     getLatestPreviousWeekDay(startDay) {
@@ -115,6 +115,12 @@ class OpeningTimes extends Component {
         }
 
         return latest;
+    }
+
+    getWeekDayTimes(weekDay) {
+        const { times } = this.props;
+        if (!times) return null;
+        return times.filter(item => item.weekDay === weekDay);
     }
 
     render() {
