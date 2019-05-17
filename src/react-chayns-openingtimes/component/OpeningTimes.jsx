@@ -88,6 +88,9 @@ class OpeningTimes extends Component {
 
     onDayActivation(day, status) {
         const { times, onChange } = this.props;
+
+        if (status) this.applyPreviousTimes(day); // TEMP
+
         if (onChange) {
             const newTimes = times.slice();
             newTimes.forEach((t) => {
