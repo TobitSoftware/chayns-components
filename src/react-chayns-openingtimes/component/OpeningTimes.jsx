@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Day from './Day';
 
+import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+
 class OpeningTimes extends Component {
     static propTypes = {
         times: PropTypes.arrayOf(PropTypes.shape({
@@ -42,8 +44,13 @@ class OpeningTimes extends Component {
     }
 
     onAdd(weekDay, start, end) {
-        const { onChange } = this.props;
-        const newTimes = this.applyPreviousTimes(weekDay);
+        const { times, onChange } = this.props;
+        const newTimes = times.concat({
+            weekDay,
+            start,
+            end,
+            disabled: false,
+        });
 
         if (onChange) {
             onChange(newTimes);
