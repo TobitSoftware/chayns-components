@@ -22,8 +22,6 @@ class Day extends Component {
 
         if (status && times.length === 0 && onAdd) {
             onDayActivation(weekday.number, status);
-        } else {
-            onDayActivation(weekday.number, status);
         }
     }
 

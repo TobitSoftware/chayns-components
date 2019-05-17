@@ -47,7 +47,7 @@ class TimeSpan extends Component {
 
     onChange(_, valid) {
         const { onChange } = this.props;
-        if (valid && this.startTime && this.endTime) {
+        if (this.checkValidInput(_) && this.startTime && this.endTime) {
             onChange(this.startTime.value, this.endTime.value);
         }
     }
@@ -55,6 +55,16 @@ class TimeSpan extends Component {
     setRef = (name, ref) => {
         this[name] = ref;
     };
+
+    // eslint-disable-next-line class-methods-use-this
+    checkValidInput(str) {
+        for (let i = 0; i < str.length; i += 1) {
+            const char = str.charCodeAt(i);
+            if (!(char > 47 && char < 59)) return false;
+        }
+   
+        return true;
+    }
 
     render() {
         const {
