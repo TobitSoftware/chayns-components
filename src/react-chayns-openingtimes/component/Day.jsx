@@ -58,7 +58,7 @@ class Day extends Component {
                             />
                         ) : timeSpans.map((t, index) => (
                             <TimeSpan
-                                key={index}
+                                key={t}
                                 start={t.start}
                                 end={t.end}
                                 disabled={isDisabled}
