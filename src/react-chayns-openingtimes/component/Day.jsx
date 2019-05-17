@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
+import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+
 class Day extends Component {
     constructor(props) {
         super(props);
@@ -39,6 +41,9 @@ class Day extends Component {
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
         const isDisabled = !times.some(t => !t.disabled);
+
+        const minutes = getTimeStringMinutes('13:45');
+        console.log(getTimeStringFromMinutes(minutes));
 
         return (
             <div className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}>
