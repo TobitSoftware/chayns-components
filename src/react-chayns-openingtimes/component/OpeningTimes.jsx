@@ -42,6 +42,7 @@ class OpeningTimes extends Component {
     }
 
     onAdd(weekDay, start, end) {
+        this.applyPreviousTimes(weekDay); // TEMP
         const { times, onChange } = this.props;
         if (onChange) {
             onChange(times.concat({
@@ -97,6 +98,23 @@ class OpeningTimes extends Component {
             });
             onChange(newTimes);
         }
+    }
+
+    applyPreviousTimes(startDay) {
+        console.log(this.getLatestPreviousWeekDay(startDay));
+    }
+
+    getLatestPreviousWeekDay(startDay) {
+        const { times } = this.props;
+        let latest = 0;
+
+        if (!times) return null;
+
+        for (let i = 0; i < times.length; i += 1) {
+            if (times[i].weekDay < startDay && times[i].weekDay > latest && !times[i].disabled) latest = times[i].weekDay;
+        }
+
+        return latest;
     }
 
     render() {
