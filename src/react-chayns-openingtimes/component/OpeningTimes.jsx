@@ -42,15 +42,11 @@ class OpeningTimes extends Component {
     }
 
     onAdd(weekDay, start, end) {
-        this.applyPreviousTimes(weekDay); // TEMP
-        const { times, onChange } = this.props;
+        const { onChange } = this.props;
+        const newTimes = this.applyPreviousTimes(weekDay);
+
         if (onChange) {
-            onChange(times.concat({
-                weekDay,
-                start,
-                end,
-                disabled: false,
-            }));
+            onChange(newTimes);
         }
     }
 
@@ -89,8 +85,6 @@ class OpeningTimes extends Component {
     onDayActivation(day, status) {
         const { times, onChange } = this.props;
 
-        if (status) this.applyPreviousTimes(day); // TEMP
-
         if (onChange) {
             const newTimes = times.slice();
             newTimes.forEach((t) => {
@@ -103,8 +97,27 @@ class OpeningTimes extends Component {
         }
     }
 
-    applyPreviousTimes(startDay) {
-        console.log(this.getWeekDayTimes(this.getLatestPreviousWeekDay(startDay)));
+    // eslint-disable-next-line react/sort-comp
+    applyPreviousTimes(addedWeekDay, status = true) {
+        const { times } = this.props;
+        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
+
+        if (foundTimes && times) {
+            const newTimes = times.slice();
+
+            for (let i = 0; i < foundTimes.length; i += 1) {
+                newTimes.push({
+                    weekDay: addedWeekDay,
+                    start: foundTimes[i].start,
+                    end: foundTimes[i].end,
+                    disabled: !status,
+                });
+            }
+
+            return newTimes;
+        }
+
+        return null;
     }
 
     getLatestPreviousWeekDay(startDay) {
@@ -122,8 +135,12 @@ class OpeningTimes extends Component {
 
     getWeekDayTimes(weekDay) {
         const { times } = this.props;
+        const foundTimes = times.filter(item => item.weekDay === weekDay);
+
         if (!times) return null;
-        return times.filter(item => item.weekDay === weekDay);
+        if (foundTimes.length === 0) return null;
+
+        return foundTimes;
     }
 
     render() {
