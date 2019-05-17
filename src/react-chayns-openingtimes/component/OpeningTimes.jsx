@@ -52,6 +52,13 @@ class OpeningTimes extends Component {
             disabled: false,
         });
 
+        const dayTimes = newTimes.filter(item => item.weekDay === weekDay);
+        const newStart = getTimeStringMinutes(dayTimes[0].end) + 60;
+        const diff = getTimeStringMinutes(dayTimes[0].end) - getTimeStringMinutes(dayTimes[0].start);
+
+        dayTimes[1].start = getTimeStringFromMinutes(newStart);
+        dayTimes[1].end = getTimeStringFromMinutes(newStart + diff);
+
         if (onChange) {
             onChange(newTimes);
         }
