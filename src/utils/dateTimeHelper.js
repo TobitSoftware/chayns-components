@@ -13,8 +13,10 @@ export const getTimeStringMinutes = (timeStr) => {
 export const getTimeStringFromMinutes = (totalMinutes) => {
     if (totalMinutes > 24 * 60) totalMinutes -= 24 * 60;
 
-    const hours = Math.floor(totalMinutes / 60);
+    let hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes - hours * 60;
+
+    if (hours === 24) hours = 0;
 
     return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
 };
