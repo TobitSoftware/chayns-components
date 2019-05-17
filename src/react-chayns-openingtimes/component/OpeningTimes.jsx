@@ -84,9 +84,13 @@ class OpeningTimes extends Component {
 
     onDayActivation(day, status) {
         const { times, onChange } = this.props;
+        let newTimes = null;
+
+        if (status) newTimes = this.applyPreviousTimes(day, status);
+        else newTimes = times.slice();
 
         if (onChange) {
-            const newTimes = times.slice();
+            if (!newTimes) newTimes = times.slice();
             newTimes.forEach((t) => {
                 if (t.weekDay === day) {
                     // eslint-disable-next-line no-param-reassign
@@ -103,7 +107,7 @@ class OpeningTimes extends Component {
         const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
 
         if (foundTimes && times) {
-            const newTimes = times.slice();
+            const newTimes = times.filter(item => item.weekDay !== addedWeekDay);
 
             for (let i = 0; i < foundTimes.length; i += 1) {
                 newTimes.push({
