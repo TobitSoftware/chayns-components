@@ -21,6 +21,9 @@ class Day extends Component {
         } = this.props;
 
         if (status && times.length === 0 && onAdd) {
+            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+            onDayActivation(weekday.number, status);
+        } else {
             onDayActivation(weekday.number, status);
         }
     }

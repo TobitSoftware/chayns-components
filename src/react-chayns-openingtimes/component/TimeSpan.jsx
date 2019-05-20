@@ -46,11 +46,11 @@ class TimeSpan extends Component {
     }
 
     onChange(_, valid) {
-        if (_.length > 5) return null;
-
-        const { onChange } = this.props;
-        if (this.checkValidInput(_) && this.startTime && this.endTime) {
-            onChange(this.startTime.value, this.endTime.value);
+        if (_.length <= 5) {
+            const { onChange } = this.props;
+            if (this.checkValidInput(_) && this.startTime && this.endTime) {
+                onChange(this.startTime.value, this.endTime.value);
+            }
         }
     }
 
@@ -64,7 +64,7 @@ class TimeSpan extends Component {
             const char = str.charCodeAt(i);
             if (!(char > 47 && char < 59)) return false;
         }
-   
+
         return true;
     }
 
