@@ -46,6 +46,8 @@ class TimeSpan extends Component {
     }
 
     onChange(_, valid) {
+        if (_.length > 5) return null;
+
         const { onChange } = this.props;
         if (this.checkValidInput(_) && this.startTime && this.endTime) {
             onChange(this.startTime.value, this.endTime.value);
