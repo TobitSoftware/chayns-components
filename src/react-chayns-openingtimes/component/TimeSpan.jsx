@@ -45,13 +45,65 @@ class TimeSpan extends Component {
         if (buttonType === TimeSpan.REMOVE) onRemove();
     }
 
-    onChange(_, valid) {
+    onChange(_) {
         if (_.length <= 5) {
             const { onChange } = this.props;
             if (this.checkValidInput(_) && this.startTime && this.endTime) {
                 onChange(this.startTime.value, this.endTime.value);
             }
         }
+    }
+
+    // eslint-disable-next-line react/sort-comp
+    autoFormat(inputField) {
+        const { onChange } = this.props;
+        let value = null;
+        let newVal = '';
+
+        switch (inputField) {
+        case 'start':
+            value = this.startTime.value;
+            break;
+        case 'end':
+            value = this.endTime.value;
+            break;
+        default:
+            break;
+        }
+
+        const digits = this.getDigits(value);
+        while (digits.length < 4) digits.push('0');
+
+        for (let i = 0; i < digits.length; i += 1) {
+            if (i === 2) newVal += ':';
+            newVal += digits[i];
+        }
+
+        switch (inputField) {
+        case 'start':
+            onChange(newVal, this.endTime.value);
+            break;
+        case 'end':
+            onChange(this.startTime.value, newVal);
+            break;
+        default:
+            break;
+        }
+    }
+
+    getDigits(str) {
+        const digits = [];
+        
+        for (let i = 0; i < str.length; i += 1) {
+            const charCode = str.charCodeAt(i);
+            const char = str.charAt(i);
+
+            if (charCode > 47 && charCode < 58) {
+                digits.push(char);
+            }
+        }
+
+        return digits.length > 0 ? digits : null;
     }
 
     setRef = (name, ref) => {
@@ -83,6 +135,7 @@ class TimeSpan extends Component {
                         inputRef={this.setStartTimeRef}
                         value={disabled ? TimeSpan.defaultStart : start}
                         onChange={this.onChange}
+                        onBlur={() => this.autoFormat('start')}
                     />
                 </div>
                 <span>-</span>
@@ -91,6 +144,7 @@ class TimeSpan extends Component {
                         inputRef={this.setEndTimeRef}
                         value={disabled ? TimeSpan.defaultEnd : end}
                         onChange={this.onChange}
+                        onBlur={() => this.autoFormat('end')}
                     />
                 </div>
                 <div className="time__span--button">
