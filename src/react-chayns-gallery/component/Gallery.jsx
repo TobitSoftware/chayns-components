@@ -2,22 +2,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Image from './Image';
+import { getDataUrlFromFile } from '../utils/getDataUrl';
+import './Gallery.scss';
 import ImageContainer from './ImageContainer';
-import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
-import getDataUrl from '../utils/getDataUrl';
+import Dropzone from './Dropzone';
 
 export default class Gallery extends Component {
     static propTypes = {
-        images: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.shape({
-            url: PropTypes.string.isRequired,
-            width: PropTypes.number,
-            height: PropTypes.number,
-            preview: PropTypes.string,
-        }), PropTypes.shape({
-            file: PropTypes.instanceOf(File).isRequired,
-            width: PropTypes.number,
-            height: PropTypes.number,
-        })])).isRequired,
+        images: PropTypes.arrayOf(PropTypes.oneOfType([
+            PropTypes.shape({
+                url: PropTypes.string.isRequired,
+            }),
+            PropTypes.shape({
+                file: PropTypes.instanceOf(File).isRequired,
+            }),
+            PropTypes.string,
+            PropTypes.instanceOf(File),
+        ]).isRequired).isRequired,
         onClick: PropTypes.func,
         onDelete: PropTypes.func,
         deleteMode: PropTypes.bool,
@@ -26,6 +28,7 @@ export default class Gallery extends Component {
         className: PropTypes.string,
         style: PropTypes.object,
         stopPropagation: PropTypes.bool,
+        dragMode: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -37,92 +40,51 @@ export default class Gallery extends Component {
         className: null,
         style: {},
         stopPropagation: false,
+        dragMode: false,
     };
 
     static getBigImageUrls(images) {
         return images.map((image) => {
-            if (image.isDataUrl) return image.url;
-            return chayns.utils.getScaledImageUrl(image.url, null, null, (chayns.env.isIOS && (chayns.env.isApp || chayns.env.isMyChaynsApp)));
+            const img = image.url || image.file || image;
+            return typeof img === 'string' ? img : getDataUrlFromFile(img);
         });
     }
 
-    constructor() {
-        super();
-        this.openGallery = this.openGallery.bind(this);
-        this.updateImages = this.updateImages.bind(this);
-        this.state = { images: [], height: 0 };
+    constructor(props) {
+        super(props);
+        this.galleryRef = React.createRef();
     }
 
-    componentWillMount() {
-        const { images } = this.props;
-        this.updateImages([], images);
-    }
+    onDown = (event) => {
+        this.clientXStart = event.clientX;
+        this.clientYStart = event.clientY;
+        this.selectedElement = event.target.parentElement.parentElement;
 
-    componentDidMount() {
-        this.setState({ height: this.galleryRef.clientWidth });
-    }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { images: propImages } = this.props;
-        const { images: stateImages } = prevState;
-        if (prevProps.images !== propImages) {
-            this.updateImages(stateImages, propImages);
-        }
-    }
+        document.addEventListener('mousemove', this.onMove);
+        document.addEventListener('touchmove', this.onMove);
+        document.addEventListener('mouseup', this.onUp);
+        document.addEventListener('touchend', this.onUp);
+        document.addEventListener('touchcancel', this.onUp);
+    };
 
-    async updateImages(stateImages, newImages) {
-        const newStateImages = [];
-        for (let index = 0; index < newImages.length; index += 1) {
-            const image = newImages[index];
-            if (image.url) {
-                const result = stateImages.find(img => !img.isDataUrl && img.url === image.url);
-                if (result) {
-                    newStateImages.push(result);
-                    stateImages.shift(result);
-                } else {
-                    let newImage = image;
-                    if (newImage.preview && !newImage.preview.startsWith('data:image/*;base64,')) {
-                        newImage.preview = `data:image/*;base64,${newImage.preview}`;
-                    }
-                    if (!newImage.width || !newImage.height) {
-                        let meta;
-                        if (newImage.preview) {
-                            meta = await getImageMetaDataFromPreview(newImage.preview);// In this case, the size is not the real size. Size can only be used to calculate the image orientation
-                        } else if (newImage.url.indexOf('tsimg.cloud') >= 0) {
-                            meta = await getImageMetaDataFromApi(newImage.url);
-                        } else {
-                            meta = await getImageMetaDataFromPreview(chayns.utils.getScaledImageUrl(newImage.url, 10)); // In this case, the size is not the real size. Size can only be used to calculate the image orientation
-                        }
-                        newImage = { ...meta, ...newImage };
-                    }
-                    newStateImages.push({ ...newImage, ...{ index, key: Math.random() } });
-                }
-            } else {
-                const result = stateImages.find(img => img.isDataUrl && img.file === image.file);
-                if (result) {
-                    newStateImages.push(result);
-                } else {
-                    let newImage = image;
-                    const dataUrl = await getDataUrl(newImage.file);
-                    newImage = { ...newImage, ...{ url: dataUrl, isDataUrl: true } };
-                    if (!newImage.width || !newImage.height) {
-                        const meta = await getImageMetaDataFromPreview(newImage.url);
-                        newImage = { ...meta, ...newImage };
-                    }
-                    newStateImages.push({ ...newImage, ...{ index, key: Math.random() } });
-                }
-            }
-        }
-        this.setState({ images: newStateImages });
-    }
+    onMove = (event) => {
+        console.log(event.clientX, this.clientXStart);
+        this.selectedElement.style.transform = `translate(${event.clientX - this.clientXStart}px,${event.clientY - this.clientYStart}px)`;
+    };
 
-    openGallery(start) {
-        const { onClick, deleteMode } = this.props;
-        const { images } = this.state;
-        if (!deleteMode) {
-            onClick(Gallery.getBigImageUrls(images), start);
-        }
-    }
+    onUp = (event) => {
+        this.clientXStart = null;
+        this.clientYStart = null;
+        this.selectedElement = null;
+
+
+        document.removeEventListener('mousemove', this.onMove);
+        document.removeEventListener('touchmove', this.onMove);
+        document.removeEventListener('mouseup', this.onUp);
+        document.removeEventListener('touchend', this.onUp);
+        document.removeEventListener('touchcancel', this.onUp);
+    };
 
     render() {
         const {
@@ -130,11 +92,13 @@ export default class Gallery extends Component {
             width,
             onDelete,
             deleteMode,
+            dragMode,
             className,
             stopPropagation,
+            onClick,
+            images,
         } = this.props;
         const { style: propStyle } = this.props;
-        const { images, height: stateHeight } = this.state;
         const style = { ...propStyle };
 
         let styleHeight;
@@ -142,7 +106,7 @@ export default class Gallery extends Component {
             if (height) {
                 styleHeight = height;
             } else {
-                styleHeight = stateHeight;
+                styleHeight = 420;
             }
             style.height = `${styleHeight}px`;
         }
@@ -150,33 +114,64 @@ export default class Gallery extends Component {
             style.width = width;
         }
         const numberOfImages = images.length;
+
+
         return (
             <div
-                className={classNames('chayns-gallery', className)}
+                className={classNames('cc__gallery', className, { 'cc__gallery--delete-mode': deleteMode })}
                 style={style}
-                ref={ref => this.galleryRef = ref}
+                ref={this.galleryRef}
                 key="gallery"
             >
-                <div className={classNames('gallery-grid', { 'delete-mode': deleteMode })} key="grid">
-                    {
-                        images.map((image, index) => {
-                            if (index <= 3 || deleteMode) {
-                                return (
-                                    <ImageContainer
-                                        stopPropagation={stopPropagation}
-                                        key={`image${image.key}`}
-                                        image={image}
-                                        index={index}
-                                        openImage={this.openGallery}
-                                        onDelete={onDelete}
-                                        deleteMode={deleteMode}
-                                        moreImages={(index === 3 && !deleteMode) ? numberOfImages - 1 - index : 0}
-                                    />
-                                );
+                {
+                    images.map((image, index) => {
+                        if (index < 4 || deleteMode) {
+                            const tools = [];
+                            if (dragMode) {
+                                tools.push({
+                                    icon: 'ts-bars',
+                                    onDown: this.onDown,
+                                });
                             }
-                            return null;
-                        })
-                    }
+                            if (deleteMode) {
+                                tools.push({
+                                    icon: 'ts-wrong',
+                                    onClick: () => {
+                                        onDelete(image, index);
+                                    },
+                                });
+                            }
+
+                            return (
+                                <div className="cc__gallery__image">
+                                    <ImageContainer
+                                        tools={tools}
+                                    >
+                                        <Image
+                                            key={index}
+                                            image={image.url || image.file || image}
+                                            moreImages={(index === 3 && !deleteMode) ? numberOfImages - 1 - index : 0}
+                                            onClick={
+                                                (!deleteMode && !dragMode)
+                                                    ? (event) => {
+                                                        if (stopPropagation) event.stopPropagation();
+                                                        onClick(Gallery.getBigImageUrls(images), index);
+                                                    }
+                                                    : null
+                                            }
+                                            className="cc__gallery__image--cover"
+                                        />
+                                    </ImageContainer>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })
+                }
+                <div className="cc__gallery__image">
+                    <ImageContainer>
+                        <Dropzone />
+                    </ImageContainer>
                 </div>
             </div>
         );

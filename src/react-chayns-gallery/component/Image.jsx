@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Icon from '../../react-chayns-icon/component/Icon';
 import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';
 import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
 import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
@@ -13,10 +12,6 @@ export default class Image extends PureComponent {
         image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]).isRequired,
         onClick: PropTypes.func,
         moreImages: PropTypes.number,
-        tools: PropTypes.arrayOf(PropTypes.shape({
-            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-            onClick: PropTypes.func.isRequired,
-        })),
         className: PropTypes.string,
         classNameLandscape: PropTypes.string,
         classNamePortrait: PropTypes.string,
@@ -28,7 +23,6 @@ export default class Image extends PureComponent {
     static defaultProps = {
         moreImages: 0,
         onClick: null,
-        tools: [],
         className: '',
         classNameLandscape: '',
         classNamePortrait: '',
@@ -107,7 +101,6 @@ export default class Image extends PureComponent {
     render() {
         const {
             moreImages,
-            tools,
             onClick,
             className,
             classNameLandscape,
@@ -175,17 +168,6 @@ export default class Image extends PureComponent {
                                 <SmallWaitCursor show={!ready} showBackground={false} />
                             </div>,
                         ]
-                        : null
-                }
-                {
-                    tools
-                        ? (
-                            <div className="cc__image__tools">
-                                {tools.map(tool => (
-                                    <Icon onClick={tool.onClick} icon={tool.icon} className="image-tool" />
-                                ))}
-                            </div>
-                        )
                         : null
                 }
             </div>
