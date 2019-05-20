@@ -35,7 +35,7 @@ The following properties can be set
 |--------------|------------------------------------------------------------------------|----------------------------|---------------|
 | head         | Headline of the accordion                                              | String, node or object [1] | *required*    |
 | children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
-| right        | Node that get rendered in the right side of the accordion head         | React-Element              |               |
+| right        | Node that get rendered in the right side of the accordion head         | String, node or object [2] |               |
 | renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
 | isWrapped    | Makes this accordion a wrapped accordion                               | bool                       | false         |
 | dataGroup    | Accordion group. Accordions of one group close each other on opening   | String                     |               |
@@ -62,6 +62,7 @@ The following properties can be set
 | disabled     | Disables the accordion                                                 | bool                       | false         |
 
 [1]: You can set an head for an open and a close accordion: ``head={{open: <Input/>, close: 'Text'}}``.
+[2]: You can set an right element for an open and a close accordion: ``right={{open: <Input/>, close: <Badge>10</Badge>}}``.
 
 ## Examples ##
 
