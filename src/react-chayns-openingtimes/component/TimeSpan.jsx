@@ -57,19 +57,8 @@ class TimeSpan extends Component {
     // eslint-disable-next-line react/sort-comp
     autoFormat(inputField) {
         const { onChange } = this.props;
-        let value = null;
+        const value = inputField === 'start' ? this.startTime.value : this.endTime.value;
         let newVal = '';
-
-        switch (inputField) {
-        case 'start':
-            value = this.startTime.value;
-            break;
-        case 'end':
-            value = this.endTime.value;
-            break;
-        default:
-            break;
-        }
 
         const digits = this.getDigits(value);
         while (digits.length < 4) digits.push('0');
@@ -79,16 +68,8 @@ class TimeSpan extends Component {
             newVal += digits[i];
         }
 
-        switch (inputField) {
-        case 'start':
-            onChange(newVal, this.endTime.value);
-            break;
-        case 'end':
-            onChange(this.startTime.value, newVal);
-            break;
-        default:
-            break;
-        }
+        if (inputField === 'start') onChange(newVal, this.endTime.value);
+        else onChange(this.startTime.value, newVal);
     }
 
     getDigits(str) {
