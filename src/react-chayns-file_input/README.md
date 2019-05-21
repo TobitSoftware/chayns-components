@@ -42,7 +42,7 @@ You can use the FileInput like in the [example](https://github.com/TobitSoftware
 | content.icon      | Icon that should be shown on button                                        | string/object |               |
 | content.children  | JSX that should be shown on button                                         | node          |               |
 
-<sup id="directory">1</sup>: limited browser support. No Support for IE, Safari or mobile browsers.
+<span id="directory">1</span>: limited browser support. No Support for IE, Safari or mobile browsers.
 
 ### ErrorMessages ###
 | Property          | Description                                                                | Type          | Default Value |
