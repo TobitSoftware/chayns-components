@@ -60,7 +60,7 @@ class TimeSpan extends Component {
         const value = inputField === 'start' ? this.startTime.value : this.endTime.value;
         let newVal = '';
 
-        const digits = this.getDigits(value);
+        const digits = this.getTimeDigits(value);
         while (digits.length < 4) digits.push('0');
 
         for (let i = 0; i < digits.length; i += 1) {
@@ -72,14 +72,14 @@ class TimeSpan extends Component {
         else onChange(this.startTime.value, newVal);
     }
 
-    getDigits(str) {
+    getTimeDigits(str) {
         const digits = [];
         
         for (let i = 0; i < str.length; i += 1) {
             const charCode = str.charCodeAt(i);
             const char = str.charAt(i);
 
-            if (charCode > 47 && charCode < 58) {
+            if (charCode > 47 && charCode < 58 && digits.length < 4) {
                 digits.push(char);
             }
         }
