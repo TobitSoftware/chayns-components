@@ -29,6 +29,7 @@ export default class Gallery extends Component {
         style: PropTypes.object,
         stopPropagation: PropTypes.bool,
         dragMode: PropTypes.bool,
+        onDragEnd: PropTypes.func,
     };
 
     static defaultProps = {
@@ -41,6 +42,7 @@ export default class Gallery extends Component {
         style: {},
         stopPropagation: false,
         dragMode: false,
+        onDragEnd: null,
     };
 
     static getBigImageUrls(images) {
@@ -55,12 +57,19 @@ export default class Gallery extends Component {
         this.galleryRef = React.createRef();
     }
 
-    onDown = (event) => {
-        this.clientXStart = event.clientX;
-        this.clientYStart = event.clientY;
-        this.selectedElement = event.target.parentElement.parentElement;
+    onDown = (event, index) => {
+        this.index = index;
+        this.pageXStart = event.pageX;
+        this.pageYStart = event.pageY;
+        this.selectedElement = event.target.parentElement.parentElement.parentElement;
+        this.selectedElementStartPosition = this.selectedElement.getBoundingClientRect();
+        this.galleryStartPosition = this.galleryRef.current.getBoundingClientRect();
+        this.galleryOffsetX = this.galleryStartPosition.left;
+        this.galleryOffsetY = this.galleryStartPosition.top;
+        this.offsetX = this.pageXStart - this.selectedElementStartPosition.left;
+        this.offsetY = this.pageYStart - this.selectedElementStartPosition.top;
 
-
+        this.selectedElement.classList.add('cc__gallery__image--active');
         document.addEventListener('mousemove', this.onMove);
         document.addEventListener('touchmove', this.onMove);
         document.addEventListener('mouseup', this.onUp);
@@ -69,21 +78,59 @@ export default class Gallery extends Component {
     };
 
     onMove = (event) => {
-        console.log(event.clientX, this.clientXStart);
-        this.selectedElement.style.transform = `translate(${event.clientX - this.clientXStart}px,${event.clientY - this.clientYStart}px)`;
+        const { pageX, pageY } = event;
+        const { clientWidth: galleryWidth } = this.galleryRef.current;
+        const { clientHeight: itemHeight, clientWidth: itemWidth } = event.target.parentElement.parentElement.parentElement;
+
+        // move item
+        this.selectedElement.style.left = `${pageX - this.galleryOffsetX - this.offsetX}px`;
+        this.selectedElement.style.top = `${pageY - this.galleryOffsetY - this.offsetY}px`;
+
+        // determine new position
+        const itemsPerRow = Math.floor(galleryWidth / itemWidth);
+        const middleX = pageX - this.galleryOffsetX - this.offsetX + (itemWidth / 2);
+        const middleY = pageY - this.galleryOffsetY - this.offsetY + (itemHeight / 2);
+        const row = Math.floor(middleY / itemHeight);
+        const column = Math.floor(middleX / itemWidth);
+        this.newPosition = (row * itemsPerRow) + column;
+
+        // show corresponding dropzone
+        let insertPosition = this.newPosition * 2; // dropzones and images are alternating
+        if (insertPosition > this.index) {
+            insertPosition += 2;
+        }
+        const dropzone = this.galleryRef.current.children[insertPosition];
+        dropzone.style.display = 'initial';
+        if (this.lastDropzone && this.lastDropzone !== dropzone) {
+            this.lastDropzone.style.display = 'none';
+        }
+        this.lastDropzone = dropzone;
     };
 
-    onUp = (event) => {
-        this.clientXStart = null;
-        this.clientYStart = null;
-        this.selectedElement = null;
-
-
+    onUp = () => {
         document.removeEventListener('mousemove', this.onMove);
         document.removeEventListener('touchmove', this.onMove);
         document.removeEventListener('mouseup', this.onUp);
         document.removeEventListener('touchend', this.onUp);
         document.removeEventListener('touchcancel', this.onUp);
+
+        const { onDragEnd } = this.props;
+        const rect = this.lastDropzone.getBoundingClientRect();
+        this.selectedElement.classList.add('cc__gallery__image--transition');
+        this.selectedElement.style.left = `${rect.left - this.galleryOffsetX}px`;
+        this.selectedElement.style.top = `${rect.top - this.galleryOffsetY}px`;
+        const onTransitionEnd = () => {
+            this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
+            this.selectedElement.classList.remove('cc__gallery__image--transition');
+            this.selectedElement.classList.remove('cc__gallery__image--active');
+            this.selectedElement = null;
+            if (onDragEnd) {
+                // TODO
+                onDragEnd();
+            }
+        };
+        this.selectedElement.addEventListener('transitionend', onTransitionEnd);
+        // TODO free()
     };
 
     render() {
@@ -115,6 +162,13 @@ export default class Gallery extends Component {
         }
         const numberOfImages = images.length;
 
+        const dropzone = (
+            <div className="cc__gallery__image cc__gallery__image--dropzone">
+                <ImageContainer>
+                    <Dropzone />
+                </ImageContainer>
+            </div>
+        );
 
         return (
             <div
@@ -124,13 +178,18 @@ export default class Gallery extends Component {
                 key="gallery"
             >
                 {
+                    dropzone
+                }
+                {
                     images.map((image, index) => {
                         if (index < 4 || deleteMode) {
                             const tools = [];
                             if (dragMode) {
                                 tools.push({
                                     icon: 'ts-bars',
-                                    onDown: this.onDown,
+                                    onDown: (event) => {
+                                        this.onDown(event, index);
+                                    },
                                 });
                             }
                             if (deleteMode) {
@@ -142,7 +201,7 @@ export default class Gallery extends Component {
                                 });
                             }
 
-                            return (
+                            return [
                                 <div className="cc__gallery__image">
                                     <ImageContainer
                                         tools={tools}
@@ -162,17 +221,13 @@ export default class Gallery extends Component {
                                             className="cc__gallery__image--cover"
                                         />
                                     </ImageContainer>
-                                </div>
-                            );
+                                </div>,
+                                dropzone,
+                            ];
                         }
                         return null;
                     })
                 }
-                <div className="cc__gallery__image">
-                    <ImageContainer>
-                        <Dropzone />
-                    </ImageContainer>
-                </div>
             </div>
         );
     }

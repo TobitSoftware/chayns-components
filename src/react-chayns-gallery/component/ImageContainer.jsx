@@ -11,17 +11,19 @@ export default class ImageContainer extends PureComponent {
             icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
             onClick: PropTypes.func.isRequired,
         })),
+        className: PropTypes.string,
     };
 
     static defaultProps = {
         tools: [],
+        className: null,
     };
 
     render() {
-        const { children, tools } = this.props;
+        const { children, tools, className } = this.props;
 
         return (
-            <div className="cc__image-container">
+            <div className={classNames('cc__image-container', className)}>
                 <div className="cc__image-container__content">
                     {children}
                 </div>

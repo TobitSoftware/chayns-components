@@ -89,3 +89,5 @@ npm i
 ```
 npm start
 ```
+
+Alternatively, you can link the components into another project using ``npm run dev``.

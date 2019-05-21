@@ -2,13 +2,27 @@
   display: flex;
   flex-wrap: wrap;
   user-select: none;
-
+  position: relative;
 
   &__image {
     width: 33.333%;
     display: inline-block;
     padding: 1px;
     margin: 0;
+
+    &--active {
+      z-index: 1;
+      position: absolute;
+    }
+
+    &--transition{
+      transition: top 250ms ease, left 250ms ease;
+    }
+
+    &--dropzone {
+      z-index: -1;
+      display: none;
+    }
 
     &--cover, img {
       width: 100%;
