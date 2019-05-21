@@ -39,7 +39,7 @@ class Day extends Component {
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
-        const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
+        const timeSpans = times.slice();
         const isDisabled = !times.some(t => !t.disabled);
 
         return (
