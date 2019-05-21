@@ -70,16 +70,17 @@ class TimeSpan extends Component {
 
         const parts = newVal.split(':');
 
-        if (parseInt(parts[0]) > 23) parts[0] = '23';
-        if (parseInt(parts[1]) > 59) parts[1] = '59';
+        if (parseInt(parts[0], 0) > 23) parts[0] = '23';
+        if (parseInt(parts[1], 0) > 59) parts[1] = '59';
 
         if (inputField === 'start') onChange(`${parts[0]}:${parts[1]}`, this.endTime.value);
         else onChange(this.startTime.value, `${parts[0]}:${parts[1]}`);
     }
 
+    // eslint-disable-next-line class-methods-use-this
     getTimeDigits(str) {
         const digits = [];
-        
+
         for (let i = 0; i < str.length; i += 1) {
             const charCode = str.charCodeAt(i);
             const char = str.charAt(i);
