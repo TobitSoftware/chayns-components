@@ -68,8 +68,13 @@ class TimeSpan extends Component {
             newVal += digits[i];
         }
 
-        if (inputField === 'start') onChange(newVal, this.endTime.value);
-        else onChange(this.startTime.value, newVal);
+        const parts = newVal.split(':');
+
+        if (parseInt(parts[0]) > 23) parts[0] = '23';
+        if (parseInt(parts[1]) > 59) parts[1] = '59';
+
+        if (inputField === 'start') onChange(`${parts[0]}:${parts[1]}`, this.endTime.value);
+        else onChange(this.startTime.value, `${parts[0]}:${parts[1]}`);
     }
 
     getTimeDigits(str) {
