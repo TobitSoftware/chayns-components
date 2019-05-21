@@ -9,7 +9,8 @@ class Day extends Component {
         super(props);
 
         this.onDayActivation = this.onDayActivation.bind(this);
-        this.key = Math.random().toString();
+        this.timeSpanKey1 = Math.random().toString();
+        this.timeSpanKey2 = Math.random().toString();
     }
 
     onDayActivation(status) {
@@ -60,7 +61,7 @@ class Day extends Component {
                             />
                         ) : timeSpans.map((t, index) => (
                             <TimeSpan
-                                key={this.key}
+                                key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
                                 start={t.start}
                                 end={t.end}
                                 disabled={isDisabled}
