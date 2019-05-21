@@ -1,15 +1,18 @@
+/* eslint-disable react/no-array-index-key */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ImageContainer.scss';
-import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ImageContainer extends PureComponent {
     static propTypes = {
         children: PropTypes.node.isRequired,
         tools: PropTypes.arrayOf(PropTypes.shape({
             icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-            onClick: PropTypes.func.isRequired,
+            onClick: PropTypes.func,
+            onDown: PropTypes.func,
+            onMove: PropTypes.func,
+            onUp: PropTypes.func,
         })),
         className: PropTypes.string,
     };
@@ -31,8 +34,9 @@ export default class ImageContainer extends PureComponent {
                     tools
                         ? (
                             <div className="cc__image__tools">
-                                {tools.map(tool => (
+                                {tools.map((tool, index) => (
                                     <div
+                                        key={`tool${index}`}
                                         onClick={tool.onClick}
                                         onMouseDown={tool.onDown}
                                         onTouchStart={tool.onDown}

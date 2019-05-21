@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign,no-await-in-loop,no-return-assign */
+/* eslint-disable no-param-reassign,no-await-in-loop,no-return-assign,react/no-array-index-key */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -57,8 +57,19 @@ export default class Gallery extends Component {
         this.galleryRef = React.createRef();
     }
 
-    onDown = (event, index) => {
+    // componentDidUpdate(prevProps) {
+    //     const { images } = this.props;
+    //     if (prevProps.images !== images) {
+    //         this.selectedElement.classList.remove('cc__gallery__image--active');
+    //         this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
+    //         this.selectedElement = null;
+    //     }
+    //     return true;
+    // }
+
+    onDown = (event, index, image) => {
         this.index = index;
+        this.image = image;
         this.pageXStart = event.pageX;
         this.pageYStart = event.pageY;
         this.selectedElement = event.target.parentElement.parentElement.parentElement;
@@ -69,7 +80,6 @@ export default class Gallery extends Component {
         this.offsetX = this.pageXStart - this.selectedElementStartPosition.left;
         this.offsetY = this.pageYStart - this.selectedElementStartPosition.top;
 
-        this.selectedElement.classList.add('cc__gallery__image--active');
         document.addEventListener('mousemove', this.onMove);
         document.addEventListener('touchmove', this.onMove);
         document.addEventListener('mouseup', this.onUp);
@@ -81,6 +91,11 @@ export default class Gallery extends Component {
         const { pageX, pageY } = event;
         const { clientWidth: galleryWidth } = this.galleryRef.current;
         const { clientHeight: itemHeight, clientWidth: itemWidth } = event.target.parentElement.parentElement.parentElement;
+
+        // set selected element active
+        if (!this.selectedElement.classList.contains('cc__gallery__image--active')) {
+            this.selectedElement.classList.add('cc__gallery__image--active');
+        }
 
         // move item
         this.selectedElement.style.left = `${pageX - this.galleryOffsetX - this.offsetX}px`;
@@ -100,9 +115,9 @@ export default class Gallery extends Component {
             insertPosition += 2;
         }
         const dropzone = this.galleryRef.current.children[insertPosition];
-        dropzone.style.display = 'initial';
+        dropzone.classList.add('cc__gallery__image--show_dropzone');
         if (this.lastDropzone && this.lastDropzone !== dropzone) {
-            this.lastDropzone.style.display = 'none';
+            this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
         }
         this.lastDropzone = dropzone;
     };
@@ -114,23 +129,32 @@ export default class Gallery extends Component {
         document.removeEventListener('touchend', this.onUp);
         document.removeEventListener('touchcancel', this.onUp);
 
-        const { onDragEnd } = this.props;
-        const rect = this.lastDropzone.getBoundingClientRect();
-        this.selectedElement.classList.add('cc__gallery__image--transition');
-        this.selectedElement.style.left = `${rect.left - this.galleryOffsetX}px`;
-        this.selectedElement.style.top = `${rect.top - this.galleryOffsetY}px`;
-        const onTransitionEnd = () => {
-            this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
-            this.selectedElement.classList.remove('cc__gallery__image--transition');
-            this.selectedElement.classList.remove('cc__gallery__image--active');
-            this.selectedElement = null;
-            if (onDragEnd) {
-                // TODO
-                onDragEnd();
-            }
-        };
-        this.selectedElement.addEventListener('transitionend', onTransitionEnd);
-        // TODO free()
+        if (this.lastDropzone) { // there's no lastDropzone if user hasn't moved
+            const { onDragEnd, images } = this.props;
+            const rect = this.lastDropzone.getBoundingClientRect();
+            this.selectedElement.classList.add('cc__gallery__image--transition');
+            this.selectedElement.style.left = `${rect.left - this.galleryOffsetX}px`;
+            this.selectedElement.style.top = `${rect.top - this.galleryOffsetY}px`;
+            const onTransitionEnd = () => {
+                this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
+                this.selectedElement.classList.remove('cc__gallery__image--transition');
+                this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
+                this.selectedElement.classList.remove('cc__gallery__image--active');
+                console.log(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);
+
+                this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + (this.index < this.newPosition ? 2 : 1)]);
+                this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);//TODO
+
+                if (onDragEnd) {
+                    const image = images[this.index];
+                    const newArray = images.slice();
+                    newArray.splice(this.index, 1);
+                    newArray.splice(this.newPosition, 0, image);
+                    onDragEnd(newArray);
+                }
+            };
+            this.selectedElement.addEventListener('transitionend', onTransitionEnd);
+        }
     };
 
     render() {
@@ -162,8 +186,8 @@ export default class Gallery extends Component {
         }
         const numberOfImages = images.length;
 
-        const dropzone = (
-            <div className="cc__gallery__image cc__gallery__image--dropzone">
+        const dropzone = key => (
+            <div key={key} className="cc__gallery__image cc__gallery__image--dropzone">
                 <ImageContainer>
                     <Dropzone />
                 </ImageContainer>
@@ -178,7 +202,7 @@ export default class Gallery extends Component {
                 key="gallery"
             >
                 {
-                    dropzone
+                    dropzone('dropzone')
                 }
                 {
                     images.map((image, index) => {
@@ -188,7 +212,7 @@ export default class Gallery extends Component {
                                 tools.push({
                                     icon: 'ts-bars',
                                     onDown: (event) => {
-                                        this.onDown(event, index);
+                                        this.onDown(event, index, image);
                                     },
                                 });
                             }
@@ -202,12 +226,12 @@ export default class Gallery extends Component {
                             }
 
                             return [
-                                <div className="cc__gallery__image">
+                                <div className="cc__gallery__image" key={`imageDiv${index}`}>
                                     <ImageContainer
                                         tools={tools}
                                     >
                                         <Image
-                                            key={index}
+                                            key={`image${index}`}
                                             image={image.url || image.file || image}
                                             moreImages={(index === 3 && !deleteMode) ? numberOfImages - 1 - index : 0}
                                             onClick={
@@ -222,7 +246,7 @@ export default class Gallery extends Component {
                                         />
                                     </ImageContainer>
                                 </div>,
-                                dropzone,
+                                dropzone(`dropzone${index}`),
                             ];
                         }
                         return null;
