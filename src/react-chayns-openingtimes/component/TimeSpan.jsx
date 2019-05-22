@@ -37,6 +37,11 @@ class TimeSpan extends Component {
         this.onClick = this.onClick.bind(this);
         this.setStartTimeRef = this.setRef.bind(this, 'startTime');
         this.setEndTimeRef = this.setRef.bind(this, 'endTime');
+
+        this.state = {
+            startTime: props.disabled ? TimeSpan.defaultStart : props.start,
+            endTime: props.disabled ? TimeSpan.defaultEnd : props.end,
+        };
     }
 
     onClick() {
@@ -45,11 +50,13 @@ class TimeSpan extends Component {
         if (buttonType === TimeSpan.REMOVE) onRemove();
     }
 
-    onChange(value) {
-        const { onChange } = this.props;
-        if (this.checkValidInput(value) && this.startTime && this.endTime) {
-            onChange(this.startTime.value, this.endTime.value);
-        }
+    onChange(value, inputField) {
+        const newState = Object.assign(this.state);
+
+        if (inputField === 'start' && this.startTime) newState.startTime = value;
+        else newState.endTime = value;
+
+        this.setState(newState);
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -125,19 +132,19 @@ class TimeSpan extends Component {
 
     render() {
         const {
-            start,
-            end,
             disabled,
             buttonType,
         } = this.props;
+
+        const { state } = this;
 
         return (
             <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`}>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setStartTimeRef}
-                        value={disabled ? TimeSpan.defaultStart : start}
-                        onChange={this.onChange}
+                        value={state.startTime}
+                        onChange={val => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
                     />
                 </div>
@@ -145,8 +152,8 @@ class TimeSpan extends Component {
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setEndTimeRef}
-                        value={disabled ? TimeSpan.defaultEnd : end}
-                        onChange={this.onChange}
+                        value={state.endTime}
+                        onChange={val => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
                     />
                 </div>
