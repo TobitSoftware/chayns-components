@@ -94,8 +94,9 @@
     &__tool{
       &--drag{
         cursor: grab;
-        .cc__gallery__image--active & {
+        &:active{
           cursor: grabbing;
+          touch-action: none; // no scrolling
         }
       }
     }

@@ -38,7 +38,7 @@ export default class ImageContainer extends PureComponent {
                 {
                     tools && tools.length > 0
                         ? (
-                            <div className="cc__image__tools">
+                            <div className="cc__image-container__tools">
                                 {tools.map((tool, index) => (
                                     <div
                                         key={`tool${index}`}

@@ -11,4 +11,12 @@
     bottom: 0;
     right: 0;
   }
+
+  &__tools{
+    touch-action: none; // no scrolling
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+  }
 }

@@ -67,10 +67,13 @@ export default class Gallery extends Component {
     }
 
     onDown = (event, index, image) => {
+        // deactivate refresh scroll in apps
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.disallowRefreshScroll();
+
         this.index = index;
         this.image = image;
-        this.pageXStart = event.pageX;
-        this.pageYStart = event.pageY;
+        this.pageXStart = event.changedTouches ? event.changedTouches[0].pageX : event.pageX;
+        this.pageYStart = event.changedTouches ? event.changedTouches[0].pageY : event.pageY;
         this.selectedElement = event.target.parentElement.parentElement.parentElement;
         this.selectedElementStartPosition = this.selectedElement.getBoundingClientRect();
         this.galleryStartPosition = this.galleryRef.current.getBoundingClientRect();
@@ -87,7 +90,8 @@ export default class Gallery extends Component {
     };
 
     onMove = (event) => {
-        const { pageX, pageY } = event;
+
+        const { pageX, pageY } = event.changedTouches ? event.changedTouches[0] : event;
         const { clientWidth: galleryWidth } = this.galleryRef.current;
         const { clientHeight: itemHeight, clientWidth: itemWidth } = event.target.parentElement.parentElement.parentElement;
 
@@ -124,6 +128,7 @@ export default class Gallery extends Component {
     };
 
     onUp = () => {
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.allowRefreshScroll();
         document.removeEventListener('mousemove', this.onMove);
         document.removeEventListener('touchmove', this.onMove);
         document.removeEventListener('mouseup', this.onUp);
@@ -218,7 +223,7 @@ export default class Gallery extends Component {
                     images.map((image, index) => {
                         if (index < 4 || deleteMode || dragMode) {
                             const tools = [];
-                            if (dragMode) {
+                            if (dragMode && images.length > 1) { // Show drag icon only if a reorder is possible
                                 tools.push({
                                     icon: 'ts-bars',
                                     className: 'cc__gallery__image__tool--drag',
