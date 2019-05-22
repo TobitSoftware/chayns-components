@@ -118,6 +118,7 @@ class OpeningTimes extends Component {
     onDayActivation(day, status) {
         const { times } = this.state;
         const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
 
         let newTimes = null;
 
@@ -132,6 +133,10 @@ class OpeningTimes extends Component {
                     t.disabled = !status;
                 }
             });
+
+            newState.times = newTimes;
+            this.setState(newState);
+
             onChange(newTimes);
         }
     }
