@@ -4,13 +4,101 @@
   user-select: none;
   position: relative;
 
+  &--default-mode {
+    .cc__gallery {
+      &__image {
+        margin: 1px;
+        .cc__image-container{
+          padding: 0;
+          height: 100%;
+        }
+        &:nth-child(1) {
+          &:nth-last-child(1) {
+            //Image 1 of 1
+            width: calc(100% - 2px);
+            height: calc(100% - 2px);
+          }
+
+          &:nth-last-child(2) {
+            //Image 1 of 2
+            width: calc(50% - 2px);
+            height: calc(100% - 2px);
+          }
+
+          &:nth-last-child(3) {
+            //Image 1 of 3
+            width: calc(100% - 2px);
+            height: calc(66.66% - 2px);
+          }
+
+          &:nth-last-child(4) {
+            //Image 1 of 4
+            width: calc(100% - 2px);
+            height: calc(66.66% - 2px);
+          }
+        }
+
+        &:nth-child(2) {
+          &:nth-last-child(1) {
+            //Image 2 of 2
+            width: calc(50% - 2px);
+            height: calc(100% - 2px);
+          }
+
+          &:nth-last-child(2) {
+            //Image 3 of 3
+            width: calc(50% - 2px);
+            height: calc(33.33% - 2px);
+          }
+
+          &:nth-last-child(3) {
+            //Image 2 of 4
+            width: calc(33.33% - 2px);
+            height: calc(33.33% - 2px);
+          }
+        }
+
+        &:nth-child(3) {
+          &:nth-last-child(1) {
+            //Image 2 of 3
+            width: calc(50% - 2px);
+            height: calc(33.33% - 2px);
+          }
+
+          &:nth-last-child(2) {
+            //Image 3 of 4
+            width: calc(33.33% - 2px);
+            height: calc(33.33% - 2px);
+          }
+        }
+
+        &:nth-child(4) {
+          &:nth-last-child(1) {
+            //Image 4 of 4
+            width: calc(33.33% - 2px);
+            height: calc(33.33% - 2px);
+          }
+        }
+      }
+    }
+  }
+
   &__image {
     width: 33.333%;
     display: inline-block;
     padding: 1px;
     margin: 0;
 
-    &__dropzone{
+    &__tool{
+      &--drag{
+        cursor: grab;
+        .cc__gallery__image--active & {
+          cursor: grabbing;
+        }
+      }
+    }
+
+    &__dropzone {
       width: 100%;
       height: 100%;
       border-width: 1px;

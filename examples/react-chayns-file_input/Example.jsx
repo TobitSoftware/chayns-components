@@ -31,6 +31,10 @@ export default class FileInputExample extends Component {
         this.setState({ images: img });
     };
 
+    onDragEnd = (images) => {
+        this.setState({ images });
+    };
+
     upload = () => {
         const { images } = this.state;
         images.forEach(async (image) => {
@@ -59,10 +63,28 @@ export default class FileInputExample extends Component {
                         content: { text: 'Bild auswählen', icon: 'ts-image' },
                     }]}
                 />
+                <h3>Gallery with dragMode and deleteMode</h3>
                 <Gallery
                     images={images}
                     deleteMode
                     onDelete={this.onDelete}
+                    dragMode
+                    onDragEnd={this.onDragEnd}
+                    style={{ marginBottom: '30px' }}
+                />
+                <h3>Gallery with dragMode</h3>
+                <Gallery
+                    images={images}
+                    dragMode
+                    onDragEnd={this.onDragEnd}
+                    style={{ marginBottom: '30px' }}
+                />
+                <h3>Gallery with deleteMode</h3>
+                <Gallery
+                    images={images}
+                    deleteMode
+                    onDelete={this.onDelete}
+                    style={{ marginBottom: '30px' }}
                 />
                 <Button
                     disabled={!images}
@@ -70,7 +92,7 @@ export default class FileInputExample extends Component {
                 >
                     {'Upload'}
                 </Button>
-                <p ref={ref => this.logRef = ref}/>
+                <p ref={ref => this.logRef = ref} />
                 <FileInput
                     items={[{
                         types: [FileInput.types.ALL],

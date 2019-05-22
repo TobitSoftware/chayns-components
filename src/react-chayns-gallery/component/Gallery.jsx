@@ -58,7 +58,7 @@ export default class Gallery extends Component {
 
     componentDidUpdate(prevProps) {
         const { images } = this.props;
-        if (prevProps.images !== images) {
+        if (prevProps.images !== images && this.selectedElement && this.lastDropzone) {
             this.selectedElement.classList.remove('cc__gallery__image--active');
             this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
             this.selectedElement = null;
@@ -138,17 +138,21 @@ export default class Gallery extends Component {
             this.selectedElement.style.left = `${rect.left - this.galleryOffsetX}px`;
             this.selectedElement.style.top = `${rect.top - this.galleryOffsetY}px`;
             const onTransitionEnd = () => {
-                this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
-                this.selectedElement.classList.remove('cc__gallery__image--transition');
+                if (this.selectedElement && !this.transitionEnded) {
+                    this.transitionEnded = true;
+                    this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
+                    this.selectedElement.classList.remove('cc__gallery__image--transition');
 
-                if (onDragEnd) {
-                    const image = images[this.index];
-                    const newArray = images.slice();
-                    newArray.splice(this.index, 1);
-                    newArray.splice(this.newPosition, 0, image);
-                    onDragEnd(newArray);
+                    if (onDragEnd) {
+                        const image = images[this.index];
+                        const newArray = images.slice();
+                        newArray.splice(this.index, 1);
+                        newArray.splice(this.newPosition, 0, image);
+                        onDragEnd(newArray);
+                    }
                 }
             };
+            this.transitionEnded = false;
             this.selectedElement.addEventListener('transitionend', onTransitionEnd);
         } else {
             this.selectedElement.classList.remove('cc__gallery__image--active');
@@ -169,9 +173,10 @@ export default class Gallery extends Component {
         } = this.props;
         const { style: propStyle } = this.props;
         const style = { ...propStyle };
+        const defaultMode = !dragMode && !deleteMode;
 
         let styleHeight;
-        if (!deleteMode) {
+        if (defaultMode) {
             if (height) {
                 styleHeight = height;
             } else {
@@ -187,28 +192,37 @@ export default class Gallery extends Component {
         const dropzone = key => (
             <div key={key} id={key} className="cc__gallery__image cc__gallery__image--dropzone">
                 <ImageContainer>
-                    <div className="cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300" />
+                    <div
+                        className="cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300"
+                    />
                 </ImageContainer>
             </div>
         );
 
         return (
             <div
-                className={classNames('cc__gallery', className, { 'cc__gallery--delete-mode': deleteMode })}
+                className={classNames('cc__gallery', className, {
+                    'cc__gallery--default-mode': defaultMode,
+                    'cc__gallery--delete-mode': deleteMode,
+                    'cc__gallery--drag-mode': dragMode,
+                })}
                 style={style}
                 ref={this.galleryRef}
                 key="gallery"
             >
                 {
-                    dropzone('dropzone')
+                    dragMode
+                        ? dropzone('dropzone')
+                        : null
                 }
                 {
                     images.map((image, index) => {
-                        if (index < 4 || deleteMode) {
+                        if (index < 4 || deleteMode || dragMode) {
                             const tools = [];
                             if (dragMode) {
                                 tools.push({
                                     icon: 'ts-bars',
+                                    className: 'cc__gallery__image__tool--drag',
                                     onDown: (event) => {
                                         this.onDown(event, index, image);
                                     },
@@ -231,9 +245,9 @@ export default class Gallery extends Component {
                                         <Image
                                             key={`image${index}`}
                                             image={image.url || image.file || image}
-                                            moreImages={(index === 3 && !deleteMode) ? numberOfImages - 1 - index : 0}
+                                            moreImages={(index === 3 && defaultMode) ? numberOfImages - 1 - index : 0}
                                             onClick={
-                                                (!deleteMode && !dragMode)
+                                                (defaultMode)
                                                     ? (event) => {
                                                         if (stopPropagation) event.stopPropagation();
                                                         onClick(Gallery.getBigImageUrls(images), index);
@@ -244,7 +258,9 @@ export default class Gallery extends Component {
                                         />
                                     </ImageContainer>
                                 </div>,
-                                dropzone(`dropzone${index}`),
+                                dragMode
+                                    ? dropzone(`dropzone${index}`)
+                                    : null,
                             ];
                         }
                         return null;
