@@ -45,10 +45,10 @@ class TimeSpan extends Component {
         if (buttonType === TimeSpan.REMOVE) onRemove();
     }
 
-    onChange(_) {
-        if (_.length <= 5) {
+    onChange(value) {
+         {
             const { onChange } = this.props;
-            if (this.checkValidInput(_) && this.startTime && this.endTime) {
+            if (this.checkValidInput(value) && this.startTime && this.endTime) {
                 onChange(this.startTime.value, this.endTime.value);
             }
         }
@@ -57,10 +57,9 @@ class TimeSpan extends Component {
     // eslint-disable-next-line react/sort-comp
     autoFormat(inputField) {
         const { onChange } = this.props;
-        const value = inputField === 'start' ? this.startTime.value : this.endTime.value;
-        let newVal = '';
+        let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
 
-        const digits = this.getTimeDigits(value);
+        const digits = this.getTimeDigits(newVal);
 
         switch (digits.length) {
         case 1:
@@ -75,10 +74,8 @@ class TimeSpan extends Component {
         case 4:
             newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
             break;
-        case 5:
-            newVal = value.replace(value.charAt(2), ':');
-            break;
         default:
+            newVal = '00:00';
             break;
         }
 
@@ -94,12 +91,12 @@ class TimeSpan extends Component {
             const charCode = str.charCodeAt(i);
             const char = str.charAt(i);
 
-            if (charCode > 47 && charCode < 58 && digits.length < 4) {
+            if (charCode > 47 && charCode < 58) {
                 digits.push(char);
             }
         }
 
-        return digits.length > 0 ? digits : null;
+        return digits;
     }
 
     setRef = (name, ref) => {
@@ -108,9 +105,16 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     checkValidInput(str) {
+        if (!(str.length < 5 || (str.length === 5 && str.search(':') !== -1))) return false;
+
+        let alreadyFoundColon = false;
+
         for (let i = 0; i < str.length; i += 1) {
             const char = str.charCodeAt(i);
-            if (!(char > 47 && char < 59)) return false;
+            if (char === 58) {
+                if (alreadyFoundColon) return false;
+                alreadyFoundColon = true;
+            } else if (!(char > 47 && char < 58)) return false;
         }
 
         return true;
