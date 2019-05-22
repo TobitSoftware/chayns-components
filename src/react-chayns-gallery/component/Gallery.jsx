@@ -6,7 +6,6 @@ import Image from './Image';
 import { getDataUrlFromFile } from '../utils/getDataUrl';
 import './Gallery.scss';
 import ImageContainer from './ImageContainer';
-import Dropzone from './Dropzone';
 
 export default class Gallery extends Component {
     static propTypes = {
@@ -57,15 +56,15 @@ export default class Gallery extends Component {
         this.galleryRef = React.createRef();
     }
 
-    // componentDidUpdate(prevProps) {
-    //     const { images } = this.props;
-    //     if (prevProps.images !== images) {
-    //         this.selectedElement.classList.remove('cc__gallery__image--active');
-    //         this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
-    //         this.selectedElement = null;
-    //     }
-    //     return true;
-    // }
+    componentDidUpdate(prevProps) {
+        const { images } = this.props;
+        if (prevProps.images !== images) {
+            this.selectedElement.classList.remove('cc__gallery__image--active');
+            this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
+            this.selectedElement = null;
+        }
+        return true;
+    }
 
     onDown = (event, index, image) => {
         this.index = index;
@@ -141,11 +140,6 @@ export default class Gallery extends Component {
             const onTransitionEnd = () => {
                 this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
                 this.selectedElement.classList.remove('cc__gallery__image--transition');
-                this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
-                this.selectedElement.classList.remove('cc__gallery__image--active');
-
-                // this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + (this.index < this.newPosition ? 2 : 1)]);
-                // this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);// TODO
 
                 if (onDragEnd) {
                     const image = images[this.index];
@@ -193,7 +187,7 @@ export default class Gallery extends Component {
         const dropzone = key => (
             <div key={key} id={key} className="cc__gallery__image cc__gallery__image--dropzone">
                 <ImageContainer>
-                    <Dropzone />
+                    <div className="cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300" />
                 </ImageContainer>
             </div>
         );

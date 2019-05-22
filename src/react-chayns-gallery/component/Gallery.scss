@@ -10,6 +10,13 @@
     padding: 1px;
     margin: 0;
 
+    &__dropzone{
+      width: 100%;
+      height: 100%;
+      border-width: 1px;
+      border-style: dashed;
+    }
+
     &--active {
       z-index: 1;
       position: absolute;
