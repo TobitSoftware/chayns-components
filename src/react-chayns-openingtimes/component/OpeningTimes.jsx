@@ -41,10 +41,16 @@ class OpeningTimes extends Component {
         this.onRemove = this.onRemove.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
+
+        this.state = {
+            times: props.times,
+        };
     }
 
     onAdd(weekDay, start, end) {
-        const { times, onChange } = this.props;
+        const { times } = this.state;
+        const { onChange } = this.props;
+
         const newTimes = times.concat({
             weekDay,
             start,
@@ -65,7 +71,9 @@ class OpeningTimes extends Component {
     }
 
     onRemove(day, span) {
-        const { times, onChange } = this.props;
+        const { times } = this.state;
+        const { onChange } = this.props;
+
         if (onChange) {
             const timesOfDay = times.filter(t => t.weekDay === day);
             // eslint-disable-next-line no-nested-ternary
@@ -78,7 +86,9 @@ class OpeningTimes extends Component {
 
     onChange(day, span, start, end) {
         // eslint-disable-next-line no-nested-ternary
-        const { times, onChange } = this.props;
+        const { times } = this.state;
+        const { onChange } = this.props;
+
         if (onChange) {
             const timesOfDay = times.filter(t => t.weekDay === day);
             // eslint-disable-next-line no-nested-ternary
@@ -97,7 +107,9 @@ class OpeningTimes extends Component {
     }
 
     onDayActivation(day, status) {
-        const { times, onChange } = this.props;
+        const { times } = this.state;
+        const { onChange } = this.props;
+
         let newTimes = null;
 
         if (status) newTimes = this.applyPreviousTimes(day, status);
@@ -117,7 +129,7 @@ class OpeningTimes extends Component {
 
     // eslint-disable-next-line react/sort-comp
     applyPreviousTimes(addedWeekDay, status = true) {
-        const { times } = this.props;
+        const { times } = this.state;
         const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
 
         if (foundTimes && times) {
@@ -139,7 +151,7 @@ class OpeningTimes extends Component {
     }
 
     getLatestPreviousWeekDay(startDay) {
-        const { times } = this.props;
+        const { times } = this.state;
         let latest = 0;
 
         if (!times) return null;
@@ -152,7 +164,7 @@ class OpeningTimes extends Component {
     }
 
     getWeekDayTimes(weekDay) {
-        const { times } = this.props;
+        const { times } = this.state;
         const foundTimes = times.filter(item => item.weekDay === weekDay);
 
         if (!times) return null;
@@ -162,7 +174,9 @@ class OpeningTimes extends Component {
     }
 
     render() {
-        const { times, className, style } = this.props;
+        const { className, style } = this.props;
+        const { state } = this;
+
         return (
             <div className={classNames(className, 'cc__opening-times')} style={style}>
                 {
@@ -174,7 +188,7 @@ class OpeningTimes extends Component {
                                 name: day,
                                 number: index,
                             }}
-                            times={times.filter(t => t.weekDay === index)}
+                            times={state.times.filter(t => t.weekDay === index)}
                             onDayActivation={this.onDayActivation}
                             onAdd={this.onAdd}
                             onRemove={this.onRemove}
