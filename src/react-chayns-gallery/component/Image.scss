@@ -41,18 +41,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
   }
 
   &__img, &__preview {
-    .cc__image--landscape & {
-      width: auto;
-      height: 100%;
-    }
-
-    .cc__image--portrait & {
-      width: 100%;
-      height: auto;
-    }
+    min-height: 100%;
+    min-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
   }
 
   &__img {
