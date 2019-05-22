@@ -101,7 +101,7 @@ export default class Gallery extends Component {
         this.selectedElement.style.top = `${pageY - this.galleryOffsetY - this.offsetY}px`;
 
         // determine new position
-        const itemsPerRow = Math.floor(galleryWidth / itemWidth);
+        const itemsPerRow = Math.round(galleryWidth / itemWidth);
         const middleX = pageX - this.galleryOffsetX - this.offsetX + (itemWidth / 2);
         const middleY = pageY - this.galleryOffsetY - this.offsetY + (itemHeight / 2);
         const row = Math.floor(middleY / itemHeight);
@@ -113,7 +113,6 @@ export default class Gallery extends Component {
         if (this.newPosition > this.index) {
             insertPosition += 2;
         }
-
         const dropzone = this.galleryRef.current.children[insertPosition];
         if (this.lastDropzone && this.lastDropzone !== dropzone) {
             this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');

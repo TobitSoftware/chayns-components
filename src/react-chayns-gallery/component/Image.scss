@@ -2,15 +2,25 @@
   position: relative;
   height: auto;
   display: flex;
+  flex: 1;
+  -ms-flex: 1;
   justify-content: center;
   overflow: hidden;
 
   &--landscape {
     flex-direction: row;
+    /* IE10+ CSS */
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      padding-right: 100%;
+    }
   }
 
   &--portrait {
     flex-direction: column;
+    /* IE10+ CSS */
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      padding-bottom: 100%;
+    }
   }
 
   &--clickable {

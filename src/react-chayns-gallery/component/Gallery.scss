@@ -3,6 +3,8 @@
   flex-wrap: wrap;
   user-select: none;
   position: relative;
+  width: calc(100% + 2px);
+  transform: translate(-1px, -1px);
 
   &--default-mode {
     .cc__gallery {
