@@ -16,17 +16,10 @@ class Day extends Component {
     onDayActivation(status) {
         const {
             onDayActivation,
-            onAdd,
-            times,
             weekday,
         } = this.props;
 
-        if (status && times.length === 0 && onAdd) {
-            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
-            onDayActivation(weekday.number, status);
-        } else {
-            onDayActivation(weekday.number, status);
-        }
+        onDayActivation(weekday.number, status);
     }
 
     render() {
