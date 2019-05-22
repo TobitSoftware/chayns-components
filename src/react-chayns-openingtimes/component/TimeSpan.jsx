@@ -45,16 +45,83 @@ class TimeSpan extends Component {
         if (buttonType === TimeSpan.REMOVE) onRemove();
     }
 
-    onChange(_, valid) {
+    onChange(value) {
         const { onChange } = this.props;
-        if (valid && this.startTime && this.endTime) {
+        if (this.checkValidInput(value) && this.startTime && this.endTime) {
             onChange(this.startTime.value, this.endTime.value);
         }
+    }
+
+    // eslint-disable-next-line react/sort-comp
+    autoFormat(inputField) {
+        const { onChange } = this.props;
+        let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
+
+        const digits = this.getTimeDigits(newVal);
+
+        switch (digits.length) {
+        case 1:
+            newVal = `0${digits[0]}:00`;
+            break;
+        case 2:
+            newVal = `${digits[0]}${digits[1]}:00`;
+            break;
+        case 3:
+            newVal = `${digits[0]}${digits[1]}:${digits[2]}0`;
+            break;
+        case 4:
+            newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
+            break;
+        default:
+            newVal = '00:00';
+            break;
+        }
+
+        const parts = newVal.split(':');
+        parts[0] = parseInt(parts[0], 0) > 23 ? '23' : parts[0];
+        parts[1] = parseInt(parts[1], 0) > 59 ? '59' : parts[1];
+        newVal = `${parts[0]}:${parts[1]}`;
+
+        if (inputField === 'start') onChange(newVal, this.endTime.value);
+        else onChange(this.startTime.value, newVal);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    getTimeDigits(str) {
+        const digits = [];
+
+        for (let i = 0; i < str.length; i += 1) {
+            const charCode = str.charCodeAt(i);
+            const char = str.charAt(i);
+
+            if (charCode > 47 && charCode < 58) {
+                digits.push(char);
+            }
+        }
+
+        return digits;
     }
 
     setRef = (name, ref) => {
         this[name] = ref;
     };
+
+    // eslint-disable-next-line class-methods-use-this
+    checkValidInput(str) {
+        if (!(str.length < 5 || (str.length === 5 && str.search(':') !== -1))) return false;
+
+        let alreadyFoundColon = false;
+
+        for (let i = 0; i < str.length; i += 1) {
+            const char = str.charCodeAt(i);
+            if (char === 58) {
+                if (alreadyFoundColon) return false;
+                alreadyFoundColon = true;
+            } else if (!(char > 47 && char < 58)) return false;
+        }
+
+        return true;
+    }
 
     render() {
         const {
@@ -71,6 +138,7 @@ class TimeSpan extends Component {
                         inputRef={this.setStartTimeRef}
                         value={disabled ? TimeSpan.defaultStart : start}
                         onChange={this.onChange}
+                        onBlur={() => this.autoFormat('start')}
                     />
                 </div>
                 <span>-</span>
@@ -79,6 +147,7 @@ class TimeSpan extends Component {
                         inputRef={this.setEndTimeRef}
                         value={disabled ? TimeSpan.defaultEnd : end}
                         onChange={this.onChange}
+                        onBlur={() => this.autoFormat('end')}
                     />
                 </div>
                 <div className="time__span--button">

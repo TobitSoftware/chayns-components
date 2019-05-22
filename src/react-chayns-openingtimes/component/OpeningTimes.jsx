@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Day from './Day';
 
+import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+
 class OpeningTimes extends Component {
     static propTypes = {
         times: PropTypes.arrayOf(PropTypes.shape({
@@ -43,13 +45,22 @@ class OpeningTimes extends Component {
 
     onAdd(weekDay, start, end) {
         const { times, onChange } = this.props;
+        const newTimes = times.concat({
+            weekDay,
+            start,
+            end,
+            disabled: false,
+        });
+
+        const dayTimes = newTimes.filter(item => item.weekDay === weekDay);
+        const newStart = getTimeStringMinutes(dayTimes[0].end) + 60;
+        const diff = getTimeStringMinutes(dayTimes[0].end) - getTimeStringMinutes(dayTimes[0].start);
+
+        dayTimes[1].start = getTimeStringFromMinutes(newStart);
+        dayTimes[1].end = getTimeStringFromMinutes(newStart + diff);
+
         if (onChange) {
-            onChange(times.concat({
-                weekDay,
-                start,
-                end,
-                disabled: false,
-            }));
+            onChange(newTimes);
         }
     }
 
@@ -87,8 +98,13 @@ class OpeningTimes extends Component {
 
     onDayActivation(day, status) {
         const { times, onChange } = this.props;
+        let newTimes = null;
+
+        if (status) newTimes = this.applyPreviousTimes(day, status);
+        else newTimes = times.slice();
+
         if (onChange) {
-            const newTimes = times.slice();
+            if (!newTimes) newTimes = times.slice();
             newTimes.forEach((t) => {
                 if (t.weekDay === day) {
                     // eslint-disable-next-line no-param-reassign
@@ -97,6 +113,52 @@ class OpeningTimes extends Component {
             });
             onChange(newTimes);
         }
+    }
+
+    // eslint-disable-next-line react/sort-comp
+    applyPreviousTimes(addedWeekDay, status = true) {
+        const { times } = this.props;
+        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
+
+        if (foundTimes && times) {
+            const newTimes = times.filter(item => item.weekDay !== addedWeekDay);
+
+            for (let i = 0; i < foundTimes.length; i += 1) {
+                newTimes.push({
+                    weekDay: addedWeekDay,
+                    start: foundTimes[i].start,
+                    end: foundTimes[i].end,
+                    disabled: !status,
+                });
+            }
+
+            return newTimes;
+        }
+
+        return null;
+    }
+
+    getLatestPreviousWeekDay(startDay) {
+        const { times } = this.props;
+        let latest = 0;
+
+        if (!times) return null;
+
+        for (let i = 0; i < times.length; i += 1) {
+            if (times[i].weekDay < startDay && times[i].weekDay > latest && !times[i].disabled) latest = times[i].weekDay;
+        }
+
+        return latest;
+    }
+
+    getWeekDayTimes(weekDay) {
+        const { times } = this.props;
+        const foundTimes = times.filter(item => item.weekDay === weekDay);
+
+        if (!times) return null;
+        if (foundTimes.length === 0) return null;
+
+        return foundTimes;
     }
 
     render() {
