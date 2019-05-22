@@ -51,10 +51,11 @@ You can use the List like this:
 | subtitle      | Second title (subtitle) that should be rendered on the item                                                                     | String         |               |
 | image         | Image that should be rendered to the left of the title                                                                          | String         |               |
 | className     | ClassName that should be set on the ListItem root element                                                                       | String         |               |
-| onClick       | onClick-Listener that should be set on the item (only when no children is specified)                                            | Function       |               |
+| onClick       | onClick-Listener that should be set on the item                                                                                 | Function       |               |
 | children      | Children that should be shown, when clicked on the item (works only inside Lists that does not have the notExpandable-prop set) | React-Elements |               |
 | right         | React-Elements that should be rendered on the right side of the ListItem                                                        | React-Elements |               |
 | noContentClass | Prevents adding the "list-item__content"-Class to the children wrapper.                                                        | bool           | false         |
+| open          | Opening state of the item. true=open, false=close, null=uncontrolled                                                            | bool           | false         |
 
 ## Example ##
 

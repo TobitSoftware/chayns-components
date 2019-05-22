@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 
 import { ContextMenu, List, ListItem } from '../../src/index';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class ListExample extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { open: false };
+    }
+
     render() {
-        return(
+        const { open } = this.state;
+        return (
             <div>
                 <List>
                     <ListItem
@@ -65,11 +72,49 @@ export default class ListExample extends Component {
                                     items={[{
                                         icon: 'ts-plus',
                                         onClick: () => chayns.dialog.alert('Create'),
-                                        text: 'Create'
+                                        text: 'Create',
                                     }, {
                                         icon: 'ts-trash',
                                         onClick: () => chayns.dialog.alert('Delete'),
-                                        text: 'Delete'
+                                        text: 'Delete',
+                                    }]}
+                                />
+                            </div>
+                        )}
+                    >
+                        {`
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        `}
+                    </ListItem>
+                    <ListItem
+                        onClick={() => { this.setState({ open: !open }); }}
+                        open={open}
+                        title="ListItem (button controlled)"
+                        subtitle="Description"
+                        image="https://chayns.tobit.com/storage/70231-10288/Images/icon-72.png"
+                        right={(
+                            <div
+                                style={{
+                                    height: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <ContextMenu
+                                    items={[{
+                                        icon: 'ts-plus',
+                                        onClick: () => chayns.dialog.alert('Create'),
+                                        text: 'Create',
+                                    }, {
+                                        icon: 'ts-trash',
+                                        onClick: () => chayns.dialog.alert('Delete'),
+                                        text: 'Delete',
                                     }]}
                                 />
                             </div>
@@ -85,6 +130,15 @@ export default class ListExample extends Component {
                         `}
                     </ListItem>
                 </List>
+                <Button
+                    onClick={() => {
+                        this.setState({ open: !open });
+                    }}
+                >
+
+
+                    Open/Close
+                </Button>
             </div>
         );
     }
