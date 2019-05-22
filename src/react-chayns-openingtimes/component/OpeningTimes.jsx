@@ -58,6 +58,8 @@ class OpeningTimes extends Component {
             disabled: false,
         });
 
+        const newState = Object.assign({}, this.state);
+
         const dayTimes = newTimes.filter(item => item.weekDay === weekDay);
         const newStart = getTimeStringMinutes(dayTimes[0].end) + 60;
         const diff = getTimeStringMinutes(dayTimes[0].end) - getTimeStringMinutes(dayTimes[0].start);
@@ -66,6 +68,8 @@ class OpeningTimes extends Component {
         dayTimes[1].end = getTimeStringFromMinutes(newStart + diff);
 
         if (onChange) {
+            newState.times = newTimes;
+            this.setState(newState);
             onChange(newTimes);
         }
     }
@@ -74,11 +78,16 @@ class OpeningTimes extends Component {
         const { times } = this.state;
         const { onChange } = this.props;
 
+        const newState = Object.assign({}, this.state);
+
         if (onChange) {
             const timesOfDay = times.filter(t => t.weekDay === day);
             // eslint-disable-next-line no-nested-ternary
             const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
             const newTimes = times.slice().filter(t => !(t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end));
+
+            newState.times = newTimes;
+            this.setState(newState);
 
             onChange(newTimes);
         }
