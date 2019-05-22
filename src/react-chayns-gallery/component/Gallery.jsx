@@ -111,13 +111,16 @@ export default class Gallery extends Component {
 
         // show corresponding dropzone
         let insertPosition = this.newPosition * 2; // dropzones and images are alternating
-        if (insertPosition > this.index) {
+        if (this.newPosition > this.index) {
             insertPosition += 2;
         }
+
         const dropzone = this.galleryRef.current.children[insertPosition];
-        dropzone.classList.add('cc__gallery__image--show_dropzone');
         if (this.lastDropzone && this.lastDropzone !== dropzone) {
             this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
+        }
+        if (dropzone) {
+            dropzone.classList.add('cc__gallery__image--show_dropzone');
         }
         this.lastDropzone = dropzone;
     };
@@ -140,10 +143,9 @@ export default class Gallery extends Component {
                 this.selectedElement.classList.remove('cc__gallery__image--transition');
                 this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
                 this.selectedElement.classList.remove('cc__gallery__image--active');
-                console.log(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);
 
-                this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + (this.index < this.newPosition ? 2 : 1)]);
-                this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);//TODO
+                // this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + (this.index < this.newPosition ? 2 : 1)]);
+                // this.galleryRef.current.insertBefore(this.galleryRef.current.children[this.index * 2 + 1], this.galleryRef.current.children[this.newPosition * 2 + 1]);// TODO
 
                 if (onDragEnd) {
                     const image = images[this.index];
@@ -154,6 +156,8 @@ export default class Gallery extends Component {
                 }
             };
             this.selectedElement.addEventListener('transitionend', onTransitionEnd);
+        } else {
+            this.selectedElement.classList.remove('cc__gallery__image--active');
         }
     };
 
@@ -187,7 +191,7 @@ export default class Gallery extends Component {
         const numberOfImages = images.length;
 
         const dropzone = key => (
-            <div key={key} className="cc__gallery__image cc__gallery__image--dropzone">
+            <div key={key} id={key} className="cc__gallery__image cc__gallery__image--dropzone">
                 <ImageContainer>
                     <Dropzone />
                 </ImageContainer>
@@ -226,7 +230,7 @@ export default class Gallery extends Component {
                             }
 
                             return [
-                                <div className="cc__gallery__image" key={`imageDiv${index}`}>
+                                <div className="cc__gallery__image" id={`image${index}`} key={`imageDiv${index}`}>
                                     <ImageContainer
                                         tools={tools}
                                     >

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ImageContainer.scss';
@@ -23,7 +23,7 @@ export default class ImageContainer extends PureComponent {
     };
 
     render() {
-        const { children, tools, className } = this.props;
+        const {children, tools, className} = this.props;
 
         return (
             <div className={classNames('cc__image-container', className)}>
@@ -31,7 +31,7 @@ export default class ImageContainer extends PureComponent {
                     {children}
                 </div>
                 {
-                    tools
+                    tools && tools.length > 0
                         ? (
                             <div className="cc__image__tools">
                                 {tools.map((tool, index) => (
