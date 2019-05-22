@@ -51,19 +51,24 @@ class TimeSpan extends Component {
     }
 
     onChange(value, inputField) {
+        const { onChange } = this.props;
         const newState = Object.assign(this.state);
 
         if (this.checkInputChars(value)) {
             if (inputField === 'start' && this.startTime) newState.startTime = value;
             else newState.endTime = value;
+
+            this.setState(newState);
         }
 
-        this.setState(newState);
+        if (this.isValidTime(value)) onChange(newState.start, newState.end);
     }
 
     // eslint-disable-next-line react/sort-comp
     autoFormat(inputField) {
         const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
+
         let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
 
         const digits = this.getTimeDigits(newVal);
@@ -86,13 +91,11 @@ class TimeSpan extends Component {
             break;
         }
 
-        const parts = newVal.split(':');
-        parts[0] = parseInt(parts[0], 0) > 23 ? '23' : parts[0];
-        parts[1] = parseInt(parts[1], 0) > 59 ? '59' : parts[1];
-        newVal = `${parts[0]}:${parts[1]}`;
+        if (inputField === 'start') newState.startTime = newVal;
+        else newState.endTime = newVal;
 
-        if (inputField === 'start') onChange(newVal, this.endTime.value);
-        else onChange(this.startTime.value, newVal);
+        this.setState(newState);
+        onChange(newState.startTime, newState.endTime);
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -130,6 +133,20 @@ class TimeSpan extends Component {
         }
 
         return true;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    isValidTime(str) {
+        if (str.length === 5 && str.search(':') === 2) {
+            const parts = str.split(':');
+
+            const hours = parseInt(parts[0], 0);
+            const minutes = parseInt(parts[1], 0);
+
+            if (hours > -1 && hours < 24 && minutes > -1 && minutes < 60) return true;
+        }
+
+        return false;
     }
 
     render() {
