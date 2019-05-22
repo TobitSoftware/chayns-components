@@ -77,6 +77,11 @@ class TimeSpan extends Component {
             break;
         }
 
+        const parts = newVal.split(':');
+        parts[0] = parseInt(parts[0], 0) > 23 ? '23' : parts[0];
+        parts[1] = parseInt(parts[1], 0) > 59 ? '59' : parts[1];
+        newVal = `${parts[0]}:${parts[1]}`;
+
         if (inputField === 'start') onChange(newVal, this.endTime.value);
         else onChange(this.startTime.value, newVal);
     }
