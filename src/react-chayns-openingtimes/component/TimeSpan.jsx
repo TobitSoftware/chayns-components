@@ -53,8 +53,10 @@ class TimeSpan extends Component {
     onChange(value, inputField) {
         const newState = Object.assign(this.state);
 
-        if (inputField === 'start' && this.startTime) newState.startTime = value;
-        else newState.endTime = value;
+        if (this.checkInputChars(value)) {
+            if (inputField === 'start' && this.startTime) newState.startTime = value;
+            else newState.endTime = value;
+        }
 
         this.setState(newState);
     }
@@ -114,8 +116,8 @@ class TimeSpan extends Component {
     };
 
     // eslint-disable-next-line class-methods-use-this
-    checkValidInput(str) {
-        if (!(str.length < 5 || (str.length === 5 && str.search(':') !== -1))) return false;
+    checkInputChars(str) {
+        if (str.length > 5) return false;
 
         let alreadyFoundColon = false;
 
