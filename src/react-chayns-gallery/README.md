@@ -45,7 +45,7 @@ The following properties can be set on the Gallery-Component
 
 ### Image Props ###
 
-THe image shows automatically an preview of the image while the image is loading (only for tsimg.cloud images).
+The image shows automatically an preview of the image while the image is loading (only for tsimg.cloud images).
 
 | **Property** | **Description**                                                          | **Type**    | **Default Value** | **Required** |
 | ------------ | ------------------------------------------------------------------------ | ----------- | ----------------- | ------------ |
@@ -58,3 +58,14 @@ THe image shows automatically an preview of the image while the image is loading
 | style        | Styles that should be set on root-element                                | object      |                   |              |
 | styleLandscape| Styles that should be set on root-element of landscape images           | object      |                   |              |
 | stylePortrait | Styles that should be set on root-element of portrait images            | object      |                   |              |
+
+### ImageContainer Props ###
+
+The imageContainer displays children in an 1:1 aspect ratio if height or padding-top are not given. It can also add a toolbar to the upper right corner.
+
+| **Property** | **Description**                                                          | **Type**    | **Default Value** | **Required** |
+| ------------ | ------------------------------------------------------------------------ | ----------- | ----------------- | ------------ |
+| children     | Children                                                                 | Node        |                   | true         |
+| tools        | Array of tools shown in the upper right corner                           | array       |                   |              |
+| className    | CSS-classes that should be set on root-element                           | string      |                   |              |
+| style        | Styles that should be set on root-element                                | object      |                   |              |
