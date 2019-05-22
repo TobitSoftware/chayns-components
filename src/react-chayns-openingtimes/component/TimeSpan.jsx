@@ -61,20 +61,29 @@ class TimeSpan extends Component {
         let newVal = '';
 
         const digits = this.getTimeDigits(value);
-        while (digits.length < 4) digits.push('0');
 
-        for (let i = 0; i < digits.length; i += 1) {
-            if (i === 2) newVal += ':';
-            newVal += digits[i];
+        switch (digits.length) {
+        case 1:
+            newVal = `0${digits[0]}:00`;
+            break;
+        case 2:
+            newVal = `${digits[0]}${digits[1]}:00`;
+            break;
+        case 3:
+            newVal = `${digits[0]}${digits[1]}:${digits[2]}0`;
+            break;
+        case 4:
+            newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
+            break;
+        case 5:
+            newVal = value.replace(value.charAt(2), ':');
+            break;
+        default:
+            break;
         }
 
-        const parts = newVal.split(':');
-
-        if (parseInt(parts[0], 0) > 23) parts[0] = '23';
-        if (parseInt(parts[1], 0) > 59) parts[1] = '59';
-
-        if (inputField === 'start') onChange(`${parts[0]}:${parts[1]}`, this.endTime.value);
-        else onChange(this.startTime.value, `${parts[0]}:${parts[1]}`);
+        if (inputField === 'start') onChange(newVal, this.endTime.value);
+        else onChange(this.startTime.value, newVal);
     }
 
     // eslint-disable-next-line class-methods-use-this
