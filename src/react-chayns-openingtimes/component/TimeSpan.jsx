@@ -72,7 +72,7 @@ class TimeSpan extends Component {
         let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
 
         const digits = this.getTimeDigits(newVal);
-
+        
         switch (digits.length) {
         case 1:
             newVal = `0${digits[0]}:00`;
@@ -84,6 +84,9 @@ class TimeSpan extends Component {
             newVal = `${digits[0]}${digits[1]}:${digits[2]}0`;
             break;
         case 4:
+            newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
+            break;
+        case 5:
             newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
             break;
         default:
