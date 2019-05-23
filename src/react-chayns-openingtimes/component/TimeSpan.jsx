@@ -91,6 +91,15 @@ class TimeSpan extends Component {
             break;
         }
 
+        const parts = newVal.split(':');
+        const hours = parseInt(parts[0], 0);
+        const minutes = parseInt(parts[1], 0);
+
+        if (hours > 24) parts[0] = '23';
+        if (minutes > 59) parts[1] = '59';
+
+        newVal = `${parts[0]}:${parts[1]}`;
+
         if (inputField === 'start') newState.startTime = newVal;
         else newState.endTime = newVal;
 
