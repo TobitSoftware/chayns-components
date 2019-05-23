@@ -173,7 +173,7 @@ class OpeningTimes extends Component {
 
     getWeekDayTimes(weekDay) {
         const { times } = this.state;
-        const foundTimes = times.filter(item => item.weekDay === weekDay);
+        const foundTimes = times.filter(item => item.weekDay === weekDay && !item.disabled);
 
         if (!times) return null;
         if (foundTimes.length === 0) return null;
