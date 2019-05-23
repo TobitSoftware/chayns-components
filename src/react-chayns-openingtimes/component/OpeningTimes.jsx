@@ -110,52 +110,46 @@ class OpeningTimes extends Component {
     }
 
     onDayActivation(day, status) {
-        const { times } = this.state;
         const { onChange } = this.props;
         const newState = Object.assign({}, this.state);
+        const timesOfDay = newState.times.filter(time => time.weekDay === day);
 
-        let newTimes = null;
-
-        if (status) newTimes = this.applyPreviousTimes(day, status);
-        else newTimes = times.slice();
-
-        if (onChange) {
-            if (!newTimes) newTimes = times.slice();
-            newTimes.forEach((t) => {
-                if (t.weekDay === day) {
-                    // eslint-disable-next-line no-param-reassign
-                    t.disabled = !status;
-                }
+        if (timesOfDay.length === 0) {
+            timesOfDay.push({
+                weekDay: day,
+                start: '08:00',
+                end: '18:00',
             });
-
-            newState.times = newTimes;
-            this.setState(newState);
-
-            onChange(newTimes);
         }
+
+        if (status) newState.times = this.applyPreviousTimes(day, status);
+        else {
+            for (let i = 0; i < timesOfDay.length; i += 1) {
+                const current = timesOfDay[i];
+                if (current.weekDay === day) current.disabled = !status;
+            }
+        }
+
+        this.setState(newState);
+        if (onChange) onChange(newState.times);
     }
 
     // eslint-disable-next-line react/sort-comp
     applyPreviousTimes(addedWeekDay, status = true) {
         const { times } = this.state;
         const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
+        const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
 
-        if (foundTimes && times) {
-            const newTimes = times.filter(item => item.weekDay !== addedWeekDay);
-
-            for (let i = 0; i < foundTimes.length; i += 1) {
-                newTimes.push({
-                    weekDay: addedWeekDay,
-                    start: foundTimes[i].start,
-                    end: foundTimes[i].end,
-                    disabled: !status,
-                });
-            }
-
-            return newTimes;
+        for (let i = 0; i < foundTimes.length; i += 1) {
+            newTimes.push({
+                weekDay: addedWeekDay,
+                start: foundTimes[i].start,
+                end: foundTimes[i].end,
+                disabled: !status,
+            });
         }
 
-        return null;
+        return newTimes;
     }
 
     getLatestPreviousWeekDay(startDay) {
