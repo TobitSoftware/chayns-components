@@ -113,17 +113,20 @@ class OpeningTimes extends Component {
         const { onChange } = this.props;
         const newState = Object.assign({}, this.state);
         const timesOfDay = newState.times.filter(time => time.weekDay === day);
+        const defaultTime = {
+            weekDay: day,
+            start: '08:00',
+            end: '18:00',
+        };
 
         if (timesOfDay.length === 0) {
-            timesOfDay.push({
-                weekDay: day,
-                start: '08:00',
-                end: '18:00',
-            });
+            timesOfDay.push(defaultTime);
         }
 
-        if (status) newState.times = this.applyPreviousTimes(day, status);
-        else {
+        if (status) {
+            newState.times = this.applyPreviousTimes(day, status);
+            if (newState.times.length === 0) newState.times.push(defaultTime);
+        } else {
             for (let i = 0; i < timesOfDay.length; i += 1) {
                 const current = timesOfDay[i];
                 if (current.weekDay === day) current.disabled = !status;
@@ -139,6 +142,8 @@ class OpeningTimes extends Component {
         const { times } = this.state;
         const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
         const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
+
+        if (foundTimes === null) return [];
 
         for (let i = 0; i < foundTimes.length; i += 1) {
             newTimes.push({
