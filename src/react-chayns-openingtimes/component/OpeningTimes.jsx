@@ -55,7 +55,6 @@ class OpeningTimes extends Component {
             weekDay,
             start,
             end,
-            disabled: false,
         });
 
         const newState = Object.assign({}, this.state);
@@ -93,7 +92,7 @@ class OpeningTimes extends Component {
         }
     }
 
-    onChange(day, span, start, end) {
+    onChange(day, index, start, end) {
         // eslint-disable-next-line no-nested-ternary
         const { times } = this.state;
         const { onChange } = this.props;
@@ -101,10 +100,11 @@ class OpeningTimes extends Component {
         const newState = Object.assign({}, this.state);
 
         if (onChange) {
-            // eslint-disable-next-line no-nested-ternary
-            newState.times = newState.times.map(time => (time.weekDay === day ? { weekDay: day, start, end } : time));
-            this.setState(newState.times);
+            const timesOfDay = newState.times.filter(time => time.weekDay === day);
+            timesOfDay[index].start = start;
+            timesOfDay[index].end = end;
 
+            this.setState(newState);
             onChange(times);
         }
     }

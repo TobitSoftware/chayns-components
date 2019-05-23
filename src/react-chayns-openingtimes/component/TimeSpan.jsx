@@ -61,7 +61,7 @@ class TimeSpan extends Component {
             this.setState(newState);
         }
 
-        if (this.isValidTime(value)) onChange(newState.start, newState.end);
+        if (this.isValidTime(value)) onChange(newState.startTime, newState.endTime);
     }
 
     // eslint-disable-next-line react/sort-comp
