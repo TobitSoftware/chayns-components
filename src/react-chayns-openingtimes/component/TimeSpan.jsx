@@ -44,6 +44,13 @@ class TimeSpan extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        const newState = Object.assign({}, this.state);
+        newState.startTime = nextProps.start;
+        newState.endTime = nextProps.end;
+        this.setState(newState);
+    }
+
     onClick() {
         const { buttonType, onAdd, onRemove } = this.props;
         if (buttonType === TimeSpan.ADD) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
@@ -72,7 +79,7 @@ class TimeSpan extends Component {
         let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
 
         const digits = this.getTimeDigits(newVal);
-        
+
         switch (digits.length) {
         case 1:
             newVal = `0${digits[0]}:00`;
