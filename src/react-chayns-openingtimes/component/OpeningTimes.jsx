@@ -47,30 +47,29 @@ class OpeningTimes extends Component {
         };
     }
 
-    onAdd(weekDay, start, end) {
-        const { times } = this.state;
+    onAdd(weekDay) {
         const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
+        const foundTimes = newState.times.filter(time => time.weekDay === weekDay);
 
-        const newTimes = times.concat({
+        const oldStart = getTimeStringMinutes(foundTimes[0].start);
+        const oldEnd = getTimeStringMinutes(foundTimes[0].end);
+        let diff = oldEnd - oldStart;
+
+        if (oldEnd < oldStart) diff += 24 * 60;
+
+        const newStart = oldEnd + 60;
+        const newEnd = newStart + diff;
+
+        newState.times.push({
             weekDay,
-            start,
-            end,
+            start: getTimeStringFromMinutes(newStart),
+            end: getTimeStringFromMinutes(newEnd),
+            disabled: false,
         });
 
-        const newState = Object.assign({}, this.state);
-
-        const dayTimes = newTimes.filter(item => item.weekDay === weekDay);
-        const newStart = getTimeStringMinutes(dayTimes[0].end) + 60;
-        const diff = getTimeStringMinutes(dayTimes[0].end) - getTimeStringMinutes(dayTimes[0].start);
-
-        dayTimes[1].start = getTimeStringFromMinutes(newStart);
-        dayTimes[1].end = getTimeStringFromMinutes(newStart + diff);
-
-        if (onChange) {
-            newState.times = newTimes;
-            this.setState(newState);
-            onChange(newTimes);
-        }
+        this.setState(newState);
+        if (onChange) onChange(newState.times);
     }
 
     onRemove(day, span) {
@@ -88,7 +87,7 @@ class OpeningTimes extends Component {
             newState.times = newTimes;
             this.setState(newState);
 
-            onChange(newTimes);
+            onChange(newState.times);
         }
     }
 
