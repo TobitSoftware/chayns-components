@@ -8,18 +8,18 @@ import getTappWidth from '../../utils/tappWidth';
 export default class TextString extends Component {
     static propTypes = {
         stringName: PropTypes.string,
-        replacements: PropTypes.objectOf(PropTypes.string),
+        replacements: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
         children: PropTypes.node.isRequired,
         useDangerouslySetInnerHTML: PropTypes.bool,
         language: PropTypes.string,
         fallback: PropTypes.string,
-        setProps: PropTypes.arrayOf(PropTypes.object),
+        setProps: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number])),
         preventNoTranslate: PropTypes.bool,
     };
 
     static defaultProps = {
         stringName: null,
-        replacements: [],
+        replacements: {},
         useDangerouslySetInnerHTML: false,
         language: null,
         fallback: '',
@@ -177,19 +177,19 @@ export default class TextString extends Component {
             this.setState({ textString: this.replace(fallback) });
         }
 
+        const { textStringProps } = this.state;
         Object.keys(setProps)
             .forEach((prop) => {
                 if (prop !== 'fallback') {
                     string = TextString.getTextString(setProps[prop]);
                     if (string) {
-                        const { textStringProps } = this.state;
-                        this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(string) } } });
+                        textStringProps[prop] = this.replace(string);
                     } else if (setProps.fallback && setProps.fallback[prop]) {
-                        const { textStringProps } = this.state;
-                        this.setState({ textStringProps: { ...textStringProps, ...{ [prop]: this.replace(setProps.fallback[prop]) } } });
+                        textStringProps[prop] = this.replace(setProps.fallback[prop]);
                     }
                 }
             });
+        this.setState({ textStringProps });
     }
 
     replace(text) {
