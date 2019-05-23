@@ -80,6 +80,18 @@ export default class InputExample extends PureComponent {
                         marginBottom: '20px',
                     }}
                 />
+                <Input
+                    disabled
+                    placeholder='type "eee"'
+                    regExp={new RegExp('.*e{3}.*')}
+                    onBlur={InputExample.onBlur}
+                    onChange={InputExample.onChange}
+                    onKeyUp={InputExample.onKeyUp}
+                    onEnter={InputExample.onEnter}
+                    style={{
+                        marginBottom: '20px',
+                    }}
+                />
                 <div style={{ marginBottom: '20px' }}>
                     <Input
                         defaultValue="Dynamic Input"
@@ -132,6 +144,22 @@ export default class InputExample extends PureComponent {
                     <Input
                         required
                         placeholder="regexp & required"
+                        regExp={new RegExp('.*e{3}.*')}
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon={faCoffee}
+                        noDeleteIcon
+                        onIconClick={console.log}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        disabled
+                        required
+                        placeholder="disabled input"
                         regExp={new RegExp('.*e{3}.*')}
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
