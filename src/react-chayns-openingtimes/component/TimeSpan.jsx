@@ -160,8 +160,10 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     isValidTime(str) {
-        if (str.length === 5 && str.search(':') === 2) {
-            const parts = str.split(':');
+        const regexRes = new RegExp('[0-9]{2}:[0-9]{2}').exec(str);
+
+        if (regexRes) {
+            const parts = regexRes[0].split(':');
 
             const hours = parseInt(parts[0], 0);
             const minutes = parseInt(parts[1], 0);
