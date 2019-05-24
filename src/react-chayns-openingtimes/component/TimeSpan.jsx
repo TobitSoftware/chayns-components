@@ -75,48 +75,34 @@ class TimeSpan extends Component {
     autoFormat(inputField) {
         const { onChange } = this.props;
         const newState = Object.assign({}, this.state);
+        const val = inputField === 'start' ? newState.startTime : newState.endTime;
+        const inspectResult = this.inspectTimeStr(val);
 
-        let newVal = inputField === 'start' ? newState.startTime : newState.endTime;
+        let minutePart = this.generateTimePart(inspectResult.right);
+        let hourPart = this.generateTimePart(inspectResult.left);
 
-        const digits = this.getTimeDigits(newVal);
+        console.log(inspectResult);
 
-        console.log(this.inspectTimeStr(newVal));
+        console.log('min: ', minutePart);
+        console.log('hour: ', hourPart);
 
-        switch (digits.length) {
-        case 1:
-            newVal = `0${digits[0]}:00`;
-            break;
-        case 2:
-            newVal = `${digits[0]}${digits[1]}:00`;
-            break;
-        case 3:
-            newVal = `${digits[0]}${digits[1]}:${digits[2]}0`;
-            break;
-        case 4:
-            newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
-            break;
-        case 5:
-            newVal = `${digits[0]}${digits[1]}:${digits[2]}${digits[3]}`;
-            break;
-        default:
-            newVal = '00:00';
-            break;
-        }
+        if (parseInt(minutePart, 0) > 59) minutePart = '59';
+        if (parseInt(hourPart, 0) > 23) hourPart = '23';
 
-        const parts = newVal.split(':');
-        const hours = parseInt(parts[0], 0);
-        const minutes = parseInt(parts[1], 0);
+        let timeStr = `${hourPart}:${minutePart}`;
 
-        if (hours > 24) parts[0] = '23';
-        if (minutes > 59) parts[1] = '59';
-
-        newVal = `${parts[0]}:${parts[1]}`;
-
-        if (inputField === 'start') newState.startTime = newVal;
-        else newState.endTime = newVal;
+        if (inputField === 'start') newState.startTime = timeStr;
+        else newState.endTime = timeStr;
 
         this.setState(newState);
         onChange(newState.startTime, newState.endTime);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    generateTimePart(digits) {
+        if (digits.length === 1) return `0${digits[0]}`;
+        if (digits.length === 2) return `${digits[0]}${digits[1]}`;
+        return '00';
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -142,22 +128,6 @@ class TimeSpan extends Component {
             right: rightDigits,
             colons: foundColons,
         };
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    getTimeDigits(str) {
-        const digits = [];
-
-        for (let i = 0; i < str.length; i += 1) {
-            const charCode = str.charCodeAt(i);
-            const char = str.charAt(i);
-
-            if (charCode > 47 && charCode < 58) {
-                digits.push(char);
-            }
-        }
-
-        return digits;
     }
 
     setRef = (name, ref) => {
