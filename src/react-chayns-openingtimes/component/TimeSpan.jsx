@@ -5,6 +5,8 @@ import Input from '../../react-chayns-input/component/Input';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import Icon from '../../react-chayns-icon/component/Icon';
 
+import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+
 class TimeSpan extends Component {
     static propTypes = {
         start: PropTypes.string.isRequired,
@@ -128,12 +130,18 @@ class TimeSpan extends Component {
         else newState.endTime = timeStr;
 
         this.setState(newState);
+
+        if (newState.startTime === newState.endTime) {
+            newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
+            this.setState(newState);
+        }
+
         onChange(newState.startTime, newState.endTime);
     }
 
     // eslint-disable-next-line class-methods-use-this
     checkInputChars(str) {
-        if (str.length > 6) return false;
+        if (str.length > 5) return false;
 
         let alreadyFoundColon = false;
 
