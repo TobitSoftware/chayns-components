@@ -45,6 +45,13 @@ class OpeningTimes extends Component {
         this.state = {
             times: props.times,
         };
+
+        const { times } = this.state;
+
+        for (let i = 0; i < times.length; i += 1) {
+            const current = times[i];
+            if (current && (current.disabled === null || current.disabled === undefined)) current.disabled = false;
+        }
     }
 
     onAdd(weekDay) {
