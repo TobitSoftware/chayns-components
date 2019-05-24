@@ -141,26 +141,6 @@ class OpeningTimes extends Component {
         if (onChange) onChange(newState.times);
     }
 
-    // eslint-disable-next-line react/sort-comp
-    applyPreviousTimes(addedWeekDay, status = true) {
-        const { times } = this.state;
-        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
-        const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
-
-        if (foundTimes === null) return [];
-
-        for (let i = 0; i < foundTimes.length; i += 1) {
-            newTimes.push({
-                weekDay: addedWeekDay,
-                start: foundTimes[i].start,
-                end: foundTimes[i].end,
-                disabled: !status,
-            });
-        }
-
-        return newTimes;
-    }
-
     getLatestPreviousWeekDay(startDay) {
         const { times } = this.state;
         let latest = 0;
@@ -182,6 +162,25 @@ class OpeningTimes extends Component {
         if (foundTimes.length === 0) return null;
 
         return foundTimes;
+    }
+
+    applyPreviousTimes(addedWeekDay, status = true) {
+        const { times } = this.state;
+        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
+        const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
+
+        if (foundTimes === null) return [];
+
+        for (let i = 0; i < foundTimes.length; i += 1) {
+            newTimes.push({
+                weekDay: addedWeekDay,
+                start: foundTimes[i].start,
+                end: foundTimes[i].end,
+                disabled: !status,
+            });
+        }
+
+        return newTimes;
     }
 
     render() {

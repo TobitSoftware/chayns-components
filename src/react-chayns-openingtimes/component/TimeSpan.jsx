@@ -71,37 +71,9 @@ class TimeSpan extends Component {
         if (this.isValidTime(value)) onChange(newState.startTime, newState.endTime);
     }
 
-    // eslint-disable-next-line react/sort-comp
-    autoFormat(inputField) {
-        const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
-        const val = inputField === 'start' ? newState.startTime : newState.endTime;
-        const inspectResult = this.inspectTimeStr(val);
-
-        let minutePart = this.generateTimePart(inspectResult.right, 'minutes');
-        let hourPart = this.generateTimePart(inspectResult.left, 'hours');
-
-        if (parseInt(minutePart, 0) > 59) minutePart = '59';
-        if (parseInt(hourPart, 0) > 23) hourPart = '23';
-
-        const timeStr = `${hourPart}:${minutePart}`;
-
-        if (inputField === 'start') newState.startTime = timeStr;
-        else newState.endTime = timeStr;
-
-        this.setState(newState);
-        onChange(newState.startTime, newState.endTime);
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    generateTimePart(digits, type) {
-        if (digits.length === 1) {
-            if (type === 'minutes') return `${digits[0]}0`;
-            return `0${digits[0]}`;
-        }
-        if (digits.length === 2) return `${digits[0]}${digits[1]}`;
-        return '00';
-    }
+    setRef = (name, ref) => {
+        this[name] = ref;
+    };
 
     // eslint-disable-next-line class-methods-use-this
     inspectTimeStr(str) {
@@ -128,9 +100,36 @@ class TimeSpan extends Component {
         };
     }
 
-    setRef = (name, ref) => {
-        this[name] = ref;
-    };
+    // eslint-disable-next-line class-methods-use-this
+    generateTimePart(digits, type) {
+        if (digits.length === 1) {
+            if (type === 'minutes') return `${digits[0]}0`;
+            return `0${digits[0]}`;
+        }
+        if (digits.length === 2) return `${digits[0]}${digits[1]}`;
+        return '00';
+    }
+
+    autoFormat(inputField) {
+        const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
+        const val = inputField === 'start' ? newState.startTime : newState.endTime;
+        const inspectResult = this.inspectTimeStr(val);
+
+        let minutePart = this.generateTimePart(inspectResult.right, 'minutes');
+        let hourPart = this.generateTimePart(inspectResult.left, 'hours');
+
+        if (parseInt(minutePart, 0) > 59) minutePart = '59';
+        if (parseInt(hourPart, 0) > 23) hourPart = '23';
+
+        const timeStr = `${hourPart}:${minutePart}`;
+
+        if (inputField === 'start') newState.startTime = timeStr;
+        else newState.endTime = timeStr;
+
+        this.setState(newState);
+        onChange(newState.startTime, newState.endTime);
+    }
 
     // eslint-disable-next-line class-methods-use-this
     checkInputChars(str) {
