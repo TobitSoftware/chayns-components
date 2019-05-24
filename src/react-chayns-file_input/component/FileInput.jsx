@@ -31,6 +31,7 @@ export default class FileInput extends PureComponent {
             types: PropTypes.arrayOf(PropTypes.string),
             maxFileSize: PropTypes.number,
             maxNumberOfFiles: PropTypes.number,
+            directory: PropTypes.bool,
             onClick: PropTypes.func,
             onChange: PropTypes.func,
             className: PropTypes.string,
@@ -62,6 +63,7 @@ export default class FileInput extends PureComponent {
             types: [FileInput.types.ALL],
             maxFileSize: 4 * 1024 * 1024, // 4 MB
             maxNumberOfFiles: 0, // 0=infinity
+            directory: false,
             onClick: null,
             onChange: null,
             className: null,
@@ -191,6 +193,8 @@ export default class FileInput extends PureComponent {
                                                         <input
                                                             title=""
                                                             multiple={item.maxNumberOfFiles !== 1}
+                                                            directory={item.directory ? '' : null}
+                                                            webkitdirectory={item.directory ? '' : null}
                                                             className="cc__file-input__input"
                                                             type="file"
                                                             onChange={event => this.onChange(event, item, index)}

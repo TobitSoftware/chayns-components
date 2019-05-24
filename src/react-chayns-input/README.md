@@ -40,3 +40,4 @@ The following properties can be set on the Input-Component
 | customProps  | CustomProps for the html input element                                            | object         |               |
 | stopPropagation | Stops the click propagation to parent elements                                 | bool           | false         |
 | required     | Input is invalid if there is no value                                             | bool           | false         |
+| disabled     | Disables the input                                                                | bool           | false         |
