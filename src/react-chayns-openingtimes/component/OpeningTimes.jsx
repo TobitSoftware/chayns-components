@@ -73,20 +73,16 @@ class OpeningTimes extends Component {
     }
 
     onRemove(day, span) {
-        const { times } = this.state;
         const { onChange } = this.props;
-
         const newState = Object.assign({}, this.state);
 
+        const timesOfDay = newState.times.filter(time => time.weekDay === day).filter((time, index) => index !== span);
+        const otherTimes = newState.times.filter(time => time.weekDay !== day);
+
+        newState.times = [...timesOfDay, ...otherTimes];
+
         if (onChange) {
-            const timesOfDay = times.filter(t => t.weekDay === day);
-            // eslint-disable-next-line no-nested-ternary
-            const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
-            const newTimes = times.slice().filter(t => !(t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end));
-
-            newState.times = newTimes;
             this.setState(newState);
-
             onChange(newState.times);
         }
     }
