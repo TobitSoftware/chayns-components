@@ -119,7 +119,16 @@ class OpeningTimes extends Component {
         }
 
         if (status) {
-            newState.times = this.applyPreviousTimes(day, status);
+            if (newState.times.length === newState.times.filter(time => time.disabled).length || newState.times.length === 0) {
+                if (newState.times.find(time => time.weekDay === day)) {
+                    newState.times = newState.times.map(time => (time.weekDay === day ? {
+                        weekDay: time.weekDay,
+                        start: time.start,
+                        end: time.end,
+                        disabed: !time.disabled,
+                    } : time));
+                } else newState.times.push(defaultTime);
+            } else newState.times = this.applyPreviousTimes(day, status);
             if (newState.times.length === 0) newState.times.push(defaultTime);
         } else {
             for (let i = 0; i < timesOfDay.length; i += 1) {
