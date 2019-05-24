@@ -131,16 +131,18 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     checkInputChars(str) {
-        if (str.length > 5) return false;
+        if (str.length > 6) return false;
 
         let alreadyFoundColon = false;
 
         for (let i = 0; i < str.length; i += 1) {
-            const char = str.charCodeAt(i);
-            if (char === 58) {
+            const charCode = str.charCodeAt(i);
+            if (charCode === 58) {
                 if (alreadyFoundColon) return false;
                 alreadyFoundColon = true;
-            } else if (!(char > 47 && char < 58)) return false;
+            }
+
+            if (charCode > 58 || charCode < 48) return false;
         }
 
         return true;
