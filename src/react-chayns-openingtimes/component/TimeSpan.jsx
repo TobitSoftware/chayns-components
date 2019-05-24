@@ -76,9 +76,11 @@ class TimeSpan extends Component {
         const { onChange } = this.props;
         const newState = Object.assign({}, this.state);
 
-        let newVal = inputField === 'start' ? this.startTime.value : this.endTime.value;
+        let newVal = inputField === 'start' ? newState.startTime : newState.endTime;
 
         const digits = this.getTimeDigits(newVal);
+
+        console.log(this.inspectTimeStr(newVal));
 
         switch (digits.length) {
         case 1:
@@ -115,6 +117,31 @@ class TimeSpan extends Component {
 
         this.setState(newState);
         onChange(newState.startTime, newState.endTime);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    inspectTimeStr(str) {
+        const leftDigits = [];
+        const rightDigits = [];
+
+        let foundColons = 0;
+
+        for (let i = 0; i < str.length; i += 1) {
+            const char = str.charAt(i);
+            const charCode = str.charCodeAt(i);
+
+            if (char === ':') foundColons += 1;
+            else if (charCode > 47 && charCode < 58) {
+                if (foundColons === 0 && leftDigits.length < 2) leftDigits.push(char);
+                else if (rightDigits.length < 2) rightDigits.push(char);
+            }
+        }
+
+        return {
+            left: leftDigits,
+            right: rightDigits,
+            colons: foundColons,
+        };
     }
 
     // eslint-disable-next-line class-methods-use-this
