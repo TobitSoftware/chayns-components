@@ -81,15 +81,10 @@ class TimeSpan extends Component {
         let minutePart = this.generateTimePart(inspectResult.right);
         let hourPart = this.generateTimePart(inspectResult.left);
 
-        console.log(inspectResult);
-
-        console.log('min: ', minutePart);
-        console.log('hour: ', hourPart);
-
         if (parseInt(minutePart, 0) > 59) minutePart = '59';
         if (parseInt(hourPart, 0) > 23) hourPart = '23';
 
-        let timeStr = `${hourPart}:${minutePart}`;
+        const timeStr = `${hourPart}:${minutePart}`;
 
         if (inputField === 'start') newState.startTime = timeStr;
         else newState.endTime = timeStr;
