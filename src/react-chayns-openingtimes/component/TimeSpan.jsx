@@ -78,8 +78,8 @@ class TimeSpan extends Component {
         const val = inputField === 'start' ? newState.startTime : newState.endTime;
         const inspectResult = this.inspectTimeStr(val);
 
-        let minutePart = this.generateTimePart(inspectResult.right);
-        let hourPart = this.generateTimePart(inspectResult.left);
+        let minutePart = this.generateTimePart(inspectResult.right, 'minutes');
+        let hourPart = this.generateTimePart(inspectResult.left, 'hours');
 
         if (parseInt(minutePart, 0) > 59) minutePart = '59';
         if (parseInt(hourPart, 0) > 23) hourPart = '23';
@@ -94,8 +94,11 @@ class TimeSpan extends Component {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    generateTimePart(digits) {
-        if (digits.length === 1) return `0${digits[0]}`;
+    generateTimePart(digits, type) {
+        if (digits.length === 1) {
+            if (type === 'minutes') return `${digits[0]}0`;
+            return `0${digits[0]}`;
+        }
         if (digits.length === 2) return `${digits[0]}${digits[1]}`;
         return '00';
     }
