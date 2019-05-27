@@ -63,6 +63,7 @@ class TimeSpan extends Component {
         const { onChange } = this.props;
         const newState = Object.assign(this.state);
 
+        // Apply input value only if chars are valid
         if (this.checkInputChars(value)) {
             if (inputField === 'start' && this.startTime) newState.startTime = value;
             else newState.endTime = value;
@@ -70,6 +71,7 @@ class TimeSpan extends Component {
             this.setState(newState);
         }
 
+        // Call onChange if time string is valid
         if (this.isValidTime(value)) onChange(newState.startTime, newState.endTime);
     }
 
@@ -148,10 +150,12 @@ class TimeSpan extends Component {
         for (let i = 0; i < str.length; i += 1) {
             const charCode = str.charCodeAt(i);
             if (charCode === 58) {
+                // If char is colon and amount colons < 1 add colon
                 if (alreadyFoundColon) return false;
                 alreadyFoundColon = true;
             }
 
+            // If not digit or colon return false
             if (charCode > 58 || charCode < 48) return false;
         }
 
@@ -168,6 +172,7 @@ class TimeSpan extends Component {
             const hours = parseInt(parts[0], 0);
             const minutes = parseInt(parts[1], 0);
 
+            // check time if its not like '24:60'
             if (hours > -1 && hours < 24 && minutes > -1 && minutes < 60) return true;
         }
 
