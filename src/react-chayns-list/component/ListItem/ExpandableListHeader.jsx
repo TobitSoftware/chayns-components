@@ -7,6 +7,7 @@ const ExpandableListHeader = ({
     title,
     subtitle,
     image,
+    icon,
     onClick,
     hideIndicator,
     right,
@@ -16,6 +17,7 @@ const ExpandableListHeader = ({
         subtitle={subtitle}
         onClick={onClick}
         image={image}
+        icon={icon}
         right={right}
         left={!hideIndicator && (
             <div className="list-item__indicator">
@@ -31,6 +33,7 @@ ExpandableListHeader.propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     image: PropTypes.string,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     onClick: PropTypes.func,
     hideIndicator: PropTypes.bool,
     right: PropTypes.oneOfType([
@@ -41,6 +44,7 @@ ExpandableListHeader.propTypes = {
 
 ExpandableListHeader.defaultProps = {
     image: null,
+    icon: null,
     subtitle: null,
     onClick: null,
     hideIndicator: false,

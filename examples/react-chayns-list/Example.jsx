@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { faRocket } from '@fortawesome/free-solid-svg-icons/faRocket';
 import { ContextMenu, List, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 
@@ -51,14 +52,16 @@ export default class ListExample extends Component {
                     <ListItem
                         title="ListItem (accordion-style, with image)"
                         subtitle="Description"
-                        image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
+                        // image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
+                        icon="ts-tobit"
                     >
                         {'Content'}
                     </ListItem>
                     <ListItem
                         title="ListItem (accordion-style, with image, with ContextMenu)"
                         subtitle="Description"
-                        image="https://chayns.tobit.com/storage/59143-10991/Images/icon-72.png"
+                        // image="https://chayns.tobit.com/storage/59143-10991/Images/icon-72.png"
+                        icon={faRocket}
                         right={(
                             <div
                                 style={{

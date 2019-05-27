@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Icon from "../../../react-chayns-icon/component/Icon";
 
 const ListItemHeader = ({
     title,
     subtitle,
     image,
+    icon,
     onClick,
     className,
     left,
@@ -22,6 +24,12 @@ const ListItemHeader = ({
                 style={{
                     backgroundImage: `url(${image})`,
                 }}
+            />
+        )}
+        {icon && (
+            <Icon
+                className="list-item__icon chayns__background-color--102 chayns__color--107"
+                icon={icon}
             />
         )}
         {(title || subtitle) && (
@@ -51,6 +59,7 @@ ListItemHeader.propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     image: PropTypes.string,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,
     onClick: PropTypes.func,
     left: PropTypes.oneOfType([
@@ -66,6 +75,7 @@ ListItemHeader.propTypes = {
 ListItemHeader.defaultProps = {
     subtitle: null,
     image: null,
+    icon: null,
     className: null,
     onClick: null,
     left: null,

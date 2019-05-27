@@ -50,6 +50,7 @@ You can use the List like this:
 | title         | Title that should be rendered on the item                                                                                       | String         | *required*    |
 | subtitle      | Second title (subtitle) that should be rendered on the item                                                                     | String         |               |
 | image         | Image that should be rendered to the left of the title                                                                          | String         |               |
+| icon          | Icon that should be rendered to the left of the title                                                                           | String/Object  |               |
 | className     | ClassName that should be set on the ListItem root element                                                                       | String         |               |
 | onClick       | onClick-Listener that should be set on the item                                                                                 | Function       |               |
 | children      | Children that should be shown, when clicked on the item (works only inside Lists that does not have the notExpandable-prop set) | React-Elements |               |
