@@ -28,7 +28,7 @@ const ListItemHeader = ({
         )}
         {icon && (
             <Icon
-                className="list-item__icon chayns__background-color--102 chayns__color--107"
+                className="list-item__icon chayns__background-color--102 chayns__color--headline"
                 icon={icon}
             />
         )}
