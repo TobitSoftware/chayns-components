@@ -1,5 +1,6 @@
 export const getTimeStringMinutes = (timeStr) => {
-    const parts = timeStr.split(':');
+    const regexRes = new RegExp('[0-9]{2}:[0-9]{2}').exec(timeStr)[0];
+    const parts = regexRes.split(':');
 
     const hours = parseInt(parts[0], 0);
     const minutes = parseInt(parts[1], 0);

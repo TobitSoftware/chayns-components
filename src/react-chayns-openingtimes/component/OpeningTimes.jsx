@@ -41,105 +41,115 @@ class OpeningTimes extends Component {
         this.onRemove = this.onRemove.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
+
+        this.state = {
+            times: props.times,
+        };
+
+        const { times } = this.state;
+
+        for (let i = 0; i < times.length; i += 1) {
+            const current = times[i];
+            if (current && (current.disabled === null || current.disabled === undefined)) current.disabled = false;
+        }
     }
 
-    onAdd(weekDay, start, end) {
-        const { times, onChange } = this.props;
-        const newTimes = times.concat({
+    onAdd(weekDay) {
+        const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
+        const foundTimes = newState.times.filter(time => time.weekDay === weekDay);
+
+        const oldStart = getTimeStringMinutes(foundTimes[0].start);
+        const oldEnd = getTimeStringMinutes(foundTimes[0].end);
+        let diff = oldEnd - oldStart;
+
+        if (oldEnd < oldStart) diff += 24 * 60;
+
+        const newStart = oldEnd + 60;
+        const newEnd = newStart + diff;
+
+        newState.times.push({
             weekDay,
-            start,
-            end,
+            start: getTimeStringFromMinutes(newStart),
+            end: getTimeStringFromMinutes(newEnd),
             disabled: false,
         });
 
-        const dayTimes = newTimes.filter(item => item.weekDay === weekDay);
-        const newStart = getTimeStringMinutes(dayTimes[0].end) + 60;
-        const diff = getTimeStringMinutes(dayTimes[0].end) - getTimeStringMinutes(dayTimes[0].start);
-
-        dayTimes[1].start = getTimeStringFromMinutes(newStart);
-        dayTimes[1].end = getTimeStringFromMinutes(newStart + diff);
-
-        if (onChange) {
-            onChange(newTimes);
-        }
+        this.setState(newState);
+        if (onChange) onChange(newState.times);
     }
 
     onRemove(day, span) {
-        const { times, onChange } = this.props;
-        if (onChange) {
-            const timesOfDay = times.filter(t => t.weekDay === day);
-            // eslint-disable-next-line no-nested-ternary
-            const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
-            const newTimes = times.slice().filter(t => !(t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end));
+        const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
 
-            onChange(newTimes);
+        const timesOfDay = newState.times.filter(time => time.weekDay === day).filter((time, index) => index !== span);
+        const otherTimes = newState.times.filter(time => time.weekDay !== day);
+
+        newState.times = [...timesOfDay, ...otherTimes];
+
+        if (onChange) {
+            this.setState(newState);
+            onChange(newState.times);
         }
     }
 
-    onChange(day, span, start, end) {
+    onChange(day, index, start, end) {
         // eslint-disable-next-line no-nested-ternary
-        const { times, onChange } = this.props;
+        const { times } = this.state;
+        const { onChange } = this.props;
+
+        const newState = Object.assign({}, this.state);
+
         if (onChange) {
-            const timesOfDay = times.filter(t => t.weekDay === day);
-            // eslint-disable-next-line no-nested-ternary
-            const elm = timesOfDay.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))[span];
-            const newTimes = times.slice();
-            for (let i = 0; i < newTimes.length; i += 1) {
-                const t = newTimes[i];
-                if (t.weekDay === elm.weekDay && t.start === elm.start && t.end === elm.end) {
-                    t.start = start;
-                    t.end = end;
-                    break;
-                }
-            }
-            onChange(newTimes);
+            const timesOfDay = newState.times.filter(time => time.weekDay === day);
+            timesOfDay[index].start = start;
+            timesOfDay[index].end = end;
+
+            this.setState(newState);
+            onChange(times);
         }
     }
 
     onDayActivation(day, status) {
-        const { times, onChange } = this.props;
-        let newTimes = null;
+        const { onChange } = this.props;
+        const newState = Object.assign({}, this.state);
+        const timesOfDay = newState.times.filter(time => time.weekDay === day);
+        const defaultTime = {
+            weekDay: day,
+            start: '08:00',
+            end: '18:00',
+        };
 
-        if (status) newTimes = this.applyPreviousTimes(day, status);
-        else newTimes = times.slice();
-
-        if (onChange) {
-            if (!newTimes) newTimes = times.slice();
-            newTimes.forEach((t) => {
-                if (t.weekDay === day) {
-                    // eslint-disable-next-line no-param-reassign
-                    t.disabled = !status;
-                }
-            });
-            onChange(newTimes);
+        if (timesOfDay.length === 0) {
+            timesOfDay.push(defaultTime);
         }
-    }
 
-    // eslint-disable-next-line react/sort-comp
-    applyPreviousTimes(addedWeekDay, status = true) {
-        const { times } = this.props;
-        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
-
-        if (foundTimes && times) {
-            const newTimes = times.filter(item => item.weekDay !== addedWeekDay);
-
-            for (let i = 0; i < foundTimes.length; i += 1) {
-                newTimes.push({
-                    weekDay: addedWeekDay,
-                    start: foundTimes[i].start,
-                    end: foundTimes[i].end,
-                    disabled: !status,
-                });
+        if (status) {
+            if (newState.times.length === newState.times.filter(time => time.disabled).length || newState.times.length === 0) {
+                if (newState.times.find(time => time.weekDay === day)) {
+                    newState.times = newState.times.map(time => (time.weekDay === day ? {
+                        weekDay: time.weekDay,
+                        start: time.start,
+                        end: time.end,
+                        disabed: !time.disabled,
+                    } : time));
+                } else newState.times.push(defaultTime);
+            } else newState.times = this.applyPreviousTimes(day, status);
+            if (newState.times.length === 0) newState.times.push(defaultTime);
+        } else {
+            for (let i = 0; i < timesOfDay.length; i += 1) {
+                const current = timesOfDay[i];
+                if (current.weekDay === day) current.disabled = !status;
             }
-
-            return newTimes;
         }
 
-        return null;
+        this.setState(newState);
+        if (onChange) onChange(newState.times);
     }
 
     getLatestPreviousWeekDay(startDay) {
-        const { times } = this.props;
+        const { times } = this.state;
         let latest = 0;
 
         if (!times) return null;
@@ -152,8 +162,8 @@ class OpeningTimes extends Component {
     }
 
     getWeekDayTimes(weekDay) {
-        const { times } = this.props;
-        const foundTimes = times.filter(item => item.weekDay === weekDay);
+        const { times } = this.state;
+        const foundTimes = times.filter(item => item.weekDay === weekDay && !item.disabled);
 
         if (!times) return null;
         if (foundTimes.length === 0) return null;
@@ -161,8 +171,29 @@ class OpeningTimes extends Component {
         return foundTimes;
     }
 
+    applyPreviousTimes(addedWeekDay, status = true) {
+        const { times } = this.state;
+        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
+        const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
+
+        if (foundTimes === null) return [];
+
+        for (let i = 0; i < foundTimes.length; i += 1) {
+            newTimes.push({
+                weekDay: addedWeekDay,
+                start: foundTimes[i].start,
+                end: foundTimes[i].end,
+                disabled: !status,
+            });
+        }
+
+        return newTimes;
+    }
+
     render() {
-        const { times, className, style } = this.props;
+        const { className, style } = this.props;
+        const { state } = this;
+
         return (
             <div className={classNames(className, 'cc__opening-times')} style={style}>
                 {
@@ -174,7 +205,7 @@ class OpeningTimes extends Component {
                                 name: day,
                                 number: index,
                             }}
-                            times={times.filter(t => t.weekDay === index)}
+                            times={state.times.filter(t => t.weekDay === index)}
                             onDayActivation={this.onDayActivation}
                             onAdd={this.onAdd}
                             onRemove={this.onRemove}
