@@ -9,22 +9,17 @@ class Day extends Component {
         super(props);
 
         this.onDayActivation = this.onDayActivation.bind(this);
-        this.key = Math.random().toString();
+        this.timeSpanKey1 = Math.random().toString();
+        this.timeSpanKey2 = Math.random().toString();
     }
 
     onDayActivation(status) {
         const {
             onDayActivation,
-            onAdd,
-            times,
             weekday,
         } = this.props;
 
-        if (status && times.length === 0 && onAdd) {
-            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
-        } else {
-            onDayActivation(weekday.number, status);
-        }
+        onDayActivation(weekday.number, status);
     }
 
     render() {
@@ -37,7 +32,7 @@ class Day extends Component {
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
-        const timeSpans = times.slice().sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
+        const timeSpans = times.slice();
         const isDisabled = !times.some(t => !t.disabled);
 
         return (
@@ -59,7 +54,7 @@ class Day extends Component {
                             />
                         ) : timeSpans.map((t, index) => (
                             <TimeSpan
-                                key={this.key}
+                                key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
                                 start={t.start}
                                 end={t.end}
                                 disabled={isDisabled}

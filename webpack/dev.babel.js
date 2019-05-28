@@ -22,15 +22,15 @@ export default (env) => {
         entry: {
             template: [
                 '@babel/polyfill',
-                path.resolve(ROOT_PATH, 'examples', 'index')
-            ]
+                path.resolve(ROOT_PATH, 'examples', 'index'),
+            ],
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.scss']
+            extensions: ['.js', '.jsx', '.scss'],
         },
         output: {
             path: path.resolve(ROOT_PATH, 'build'),
-            filename: '[name].bundle.js'
+            filename: '[name].bundle.js',
         },
         mode: (production ? 'production' : 'development'),
         devServer: {
@@ -49,7 +49,7 @@ export default (env) => {
                 {
                     test: /\.(js|jsx)$/,
                     use: ['babel-loader'],
-                    exclude: path.resolve(ROOT_PATH, 'node_modules')
+                    exclude: path.resolve(ROOT_PATH, 'node_modules'),
                 },
                 {
                     test: /\.scss$/,
@@ -57,24 +57,24 @@ export default (env) => {
                         {
                             loader: 'style-loader',
                             options: {
-                                sourceMap: true
-                            }
+                                sourceMap: true,
+                            },
                         },
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap: true
-                            }
+                                sourceMap: true,
+                            },
                         },
                         {
                             loader: 'sass-loader',
                             options: {
-                                sourceMap: true
-                            }
-                        }
-                    ]
-                }
-            ]
+                                sourceMap: true,
+                            },
+                        },
+                    ],
+                },
+            ],
         },
         devtool: 'inline-source-map',
         plugins: [
@@ -92,7 +92,7 @@ export default (env) => {
                 __DEV__: !production,
                 __QA__: false,
                 __LIVE__: production,
-            })
-        ]
+            }),
+        ],
     };
 };

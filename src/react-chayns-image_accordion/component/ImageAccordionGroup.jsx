@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { ExpandableContent } from '../..';
 import ImageAccordionHead from './ImageAccordionHead';
+import ExpandableContent from '../../react-chayns-expandable_content/component/ExpandableContent';
 
 function listToMatrix(list, count) {
     const matrix = [];

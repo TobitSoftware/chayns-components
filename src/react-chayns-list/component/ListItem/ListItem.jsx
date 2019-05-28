@@ -11,11 +11,13 @@ const ListItem = ({
     className,
     onClick,
     right,
+    style,
 }) => (
     <div
         className={classnames('list-item', className, {
             'list-item--clickable': onClick,
         })}
+        style={style}
     >
         <ListItemHeader
             title={title}
@@ -25,6 +27,7 @@ const ListItem = ({
             icon={icon}
             className={className}
             right={right}
+            style={style && style.head ? style.head : null}
         />
     </div>
 );
@@ -40,6 +43,7 @@ ListItem.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    style: PropTypes.object,
 };
 
 ListItem.defaultProps = {
@@ -49,6 +53,7 @@ ListItem.defaultProps = {
     className: null,
     onClick: null,
     right: null,
+    style: null,
 };
 
 export default ListItem;

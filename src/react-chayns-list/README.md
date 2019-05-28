@@ -57,6 +57,9 @@ You can use the List like this:
 | right         | React-Elements that should be rendered on the right side of the ListItem                                                        | React-Elements |               |
 | noContentClass | Prevents adding the "list-item__content"-Class to the children wrapper.                                                        | bool           | false         |
 | open          | Opening state of the item. true=open, false=close, null=uncontrolled                                                            | bool           | false         |
+| style         | ListItem styles.                                                                                                                | Object         |               |
+| style.head    | Styles only applied to the head of the ListItem                                                                                 | Object         |               |
+| style.body    | Styles only applied to the body of the ListItem                                                                                 | Object         |               |
 
 ## Example ##
 
