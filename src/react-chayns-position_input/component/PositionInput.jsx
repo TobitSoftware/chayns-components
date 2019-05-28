@@ -15,12 +15,10 @@ const toLiteral = value => JSON.parse(JSON.stringify(value));
 const ADDRESS = 1;
 const COORDS = 2;
 
-const autocomplete = new google.maps.places.AutocompleteService();
-const geocoder = new google.maps.Geocoder();
-
 const noop = () => {};
 
 export default class PositionInput extends PureComponent {
+
     static propTypes = {
         defaultPosition: PositionProps.isRequired,
         onPositionChange: PropTypes.func,
@@ -66,10 +64,14 @@ export default class PositionInput extends PureComponent {
         this.getAddresses = debounce(this.getAddresses, 500);
 
         this.setAddress(props.defaultPosition);
+
+        this.autocomplete = new google.maps.places.AutocompleteService();
+
+        this.geocoder = new google.maps.Geocoder();
     }
 
     setAddress = (position) => {
-        geocoder.geocode({ location: position }, (result, status) => {
+        this.geocoder.geocode({ location: position }, (result, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
                 this.setState({
                     value: result[0].formatted_address,
@@ -121,7 +123,7 @@ export default class PositionInput extends PureComponent {
     getAddresses = (value) => {
         const { defaultPosition: { lat, lng } } = this.props;
 
-        autocomplete.getPlacePredictions({
+        this.autocomplete.getPlacePredictions({
             location: new google.maps.LatLng(lat, lng),
             radius: 10000,
             input: value,
@@ -140,7 +142,7 @@ export default class PositionInput extends PureComponent {
             addresses: [],
         });
 
-        geocoder.geocode({ address: value }, (results, status) => {
+        this.geocoder.geocode({ address: value }, (results, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
                 const { onPositionChange } = this.props;
 
