@@ -7,7 +7,9 @@ import ExpandableList from '../ExpandableList/ExpandableList';
 
 const ExpandableListItem = ({ children, ...props }) => {
     const {
-        noContentClass, open,
+        noContentClass,
+        open,
+        style,
     } = props;
 
     return (
@@ -25,6 +27,7 @@ const ExpandableListItem = ({ children, ...props }) => {
             )}
             clickable
             openProp={open}
+            style={style}
         >
             {children}
         </AbstractExpandableListItem>
@@ -38,11 +41,13 @@ ExpandableListItem.propTypes = {
     ]).isRequired,
     noContentClass: PropTypes.bool,
     open: PropTypes.bool,
+    style: PropTypes.object,
 };
 
 ExpandableListItem.defaultProps = {
     noContentClass: false,
     open: null,
+    style: null,
 };
 
 export default ExpandableListItem;

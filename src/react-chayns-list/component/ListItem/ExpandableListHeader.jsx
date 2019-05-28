@@ -11,6 +11,7 @@ const ExpandableListHeader = ({
     onClick,
     hideIndicator,
     right,
+    style,
 }) => (
     <ListItemHeader
         title={title}
@@ -26,6 +27,7 @@ const ExpandableListHeader = ({
                 </div>
             </div>
         )}
+        style={style && style.head ? style.head : null}
     />
 );
 
@@ -40,6 +42,7 @@ ExpandableListHeader.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    style: PropTypes.object,
 };
 
 ExpandableListHeader.defaultProps = {
@@ -49,6 +52,7 @@ ExpandableListHeader.defaultProps = {
     onClick: null,
     hideIndicator: false,
     right: null,
+    style: null,
 };
 
 export default ExpandableListHeader;
