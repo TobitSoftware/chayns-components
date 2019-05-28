@@ -12,11 +12,13 @@ import './styles.scss';
 /** Uses the `toJSON()` method to return a human readable-object */
 const toLiteral = value => JSON.parse(JSON.stringify(value));
 
-const noop = () => {};
+const ADDRESS = 1;
+const COORDS = 2;
 
 const autocomplete = new google.maps.places.AutocompleteService();
 const geocoder = new google.maps.Geocoder();
 
+const noop = () => {};
 
 export default class PositionInput extends PureComponent {
     static propTypes = {
@@ -55,23 +57,41 @@ export default class PositionInput extends PureComponent {
         this.state = {
             value: '',
             addresses: [],
+            currentInputType: ADDRESS,
         };
 
         /** @type {React.RefObject<google.maps.Map>} */
         this.mapRef = createRef();
 
         this.getAddresses = debounce(this.getAddresses, 500);
+
+        this.setAddress(props.defaultPosition);
+    }
+
+    setAddress = (position) => {
+        geocoder.geocode({ location: position }, (result, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                this.setState({
+                    value: result[0].formatted_address,
+                });
+            }
+        });
     }
 
     handleUserPan = (map) => {
         const { onPositionChange } = this.props;
+        const { currentInputType } = this.state;
 
         const center = toLiteral(map.getCenter());
         onPositionChange(center);
 
-        this.setState({
-            value: `${center.lat.toFixed(4)}  ${center.lng.toFixed(4)}`,
-        });
+        if (currentInputType === COORDS) {
+            this.setState({
+                value: `${center.lat.toFixed(4)}  ${center.lng.toFixed(4)}`,
+            });
+        } else {
+            this.setAddress(center);
+        }
     }
 
     handleInputChange = (value) => {
@@ -83,9 +103,18 @@ export default class PositionInput extends PureComponent {
             const position = { lat, lng };
             this.mapRef.current.panTo(position);
             onPositionChange(position);
+
+            this.setState({
+                currentInputType: COORDS,
+                addresses: [],
+            });
         } catch (e) {
             // Invalid coordinates
             this.getAddresses(value);
+
+            this.setState({
+                currentInputType: ADDRESS,
+            });
         }
     }
 
@@ -132,6 +161,7 @@ export default class PositionInput extends PureComponent {
         const {
             value,
             addresses,
+            currentInputType,
         } = this.state;
 
         return (
@@ -158,7 +188,7 @@ export default class PositionInput extends PureComponent {
                             <div className="map--autocomplete_popup_root">
                                 <div className="map--autocomplete_popup">
                                     {
-                                        addresses.map((a, index) => (
+                                        currentInputType === ADDRESS && addresses.map((a, index) => (
                                             <AutocompleteItem
                                                 index={index}
                                                 address={a}
