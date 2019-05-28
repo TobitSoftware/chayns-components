@@ -66,6 +66,7 @@
     "rollup-plugin-commonjs": "9.3.0",
     "rollup-plugin-node-resolve": "4.0.1",
     "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-scss": "^1.0.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "webpack": "4.29.6",
