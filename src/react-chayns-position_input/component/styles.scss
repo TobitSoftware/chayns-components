@@ -36,4 +36,27 @@
         bottom: 0px;
         width: 100%;
     }
+
+    .map--autocomplete {
+        &_popup_root {
+            position: absolute;
+            left: 0px;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        &_popup {
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+        }
+
+        &_item {
+            padding: 5px 5px 5px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+        }
+    }
 }
