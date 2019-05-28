@@ -81,6 +81,7 @@
     "@fortawesome/react-fontawesome": "0.1.4",
     "babel-regenerator-runtime": "^6.5.0",
     "classnames": "^2.2.6",
+    "coordinate-parser": "^1.0.2",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",

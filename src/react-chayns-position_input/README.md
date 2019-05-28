@@ -37,4 +37,5 @@ The component has the following properties:
 | defaultPosition                   | Object with lat & lng as starting point for the map                                                                   | object       |         | true    |
 | onPositionChange                  | Callback for selection of positions                                                                                   | function     |         | false   |
 | mapOptions                        | Object with options for different preferences of the map  |      [google.maps.MapOptions](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions)  |  | false |
+| children                          | Render props for custom input overlay (pass null to only use the map)                                                        | (value, onChange) => JSX.Element |  ``` (value, onChange) => <Input placeholder="Position" value={value} onChange={onChange}/> ```  | false |
 
