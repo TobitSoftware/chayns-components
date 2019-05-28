@@ -12,10 +12,12 @@ const ListItemHeader = ({
     className,
     left,
     right,
+    style,
 }) => (
     <div
         className={classnames('list-item__header', className)}
         onClick={onClick}
+        style={style}
     >
         {left}
         {image && (
@@ -46,7 +48,7 @@ const ListItemHeader = ({
                 )}
             </div>
         )}
-        <div className="list-item__spacer" />
+        <div className="list-item__spacer"/>
         {right && (
             <div className="list-item__right">
                 {right}
@@ -70,6 +72,7 @@ ListItemHeader.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    style: PropTypes.object,
 };
 
 ListItemHeader.defaultProps = {
@@ -80,6 +83,7 @@ ListItemHeader.defaultProps = {
     onClick: null,
     left: null,
     right: null,
+    style: null,
 };
 
 export default ListItemHeader;

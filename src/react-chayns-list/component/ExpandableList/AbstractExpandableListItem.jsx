@@ -30,6 +30,7 @@ class AbstractExpandableListItem extends PureComponent {
         clickable: PropTypes.bool,
         noContentClass: PropTypes.bool,
         openProp: PropTypes.bool,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
@@ -39,6 +40,7 @@ class AbstractExpandableListItem extends PureComponent {
         clickable: false,
         noContentClass: false,
         openProp: null,
+        style: null,
     };
 
     constructor(props) {
@@ -93,6 +95,7 @@ class AbstractExpandableListItem extends PureComponent {
             open: openIds,
             noContentClass,
             openProp,
+            style,
         } = this.props;
 
         const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
@@ -103,6 +106,7 @@ class AbstractExpandableListItem extends PureComponent {
                     'list-item--expanded': open,
                     'list-item--clickable': clickable,
                 })}
+                style={style}
             >
                 <ExpandableContext.Provider
                     value={this.precreated[open]}
@@ -111,6 +115,7 @@ class AbstractExpandableListItem extends PureComponent {
                     {children && (
                         <ExpandableContent
                             open={open}
+                            style={style ? style.body : null}
                         >
                             <div className={classnames({ 'list-item__content': !noContentClass })}>
                                 {children}
