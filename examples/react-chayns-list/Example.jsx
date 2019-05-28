@@ -50,10 +50,35 @@ export default class ListExample extends Component {
                         {'Content'}
                     </ListItem>
                     <ListItem
-                        title="ListItem (accordion-style, with image)"
+                        title="ListItem (accordion-style, with Icon)"
                         subtitle="Description"
                         // image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
                         icon="ts-tobit"
+                    >
+                        {'Content'}
+                    </ListItem>
+                    <ListItem
+                        title="ListItem (accordion-style, without image or Icon)"
+                        subtitle="Description"
+                        style={{
+                            head: {
+                                backgroundColor: chayns.utils.colors.get(100, '#49516a'),
+                            },
+                            body: {
+                                backgroundColor: chayns.utils.colors.get(70, '#5b6c7f'),
+                            },
+                        }}
+                    >
+                        {'Content'}
+                    </ListItem>
+                    <ListItem
+                        title="ListItem (accordion-style, with Icon)"
+                        subtitle="Description"
+                        // image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
+                        icon="ts-tobit"
+                        style={{
+                            backgroundColor: chayns.env.site.color,
+                        }}
                     >
                         {'Content'}
                     </ListItem>
