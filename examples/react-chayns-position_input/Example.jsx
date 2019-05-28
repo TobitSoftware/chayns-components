@@ -6,8 +6,11 @@ export default class PositionInputExample extends PureComponent {
     render() {
         return (
             <PositionInput
-                apiKey="YOUR_API_KEY"
-                mapId="adminmap"
+                defaultPosition={{
+                    lat: 52.067,
+                    lng: 7.016
+                }}
+                onPositionChange={console.log}
             />
         );
     }
