@@ -31,7 +31,7 @@ export default class MapMarkerComp extends PureComponent {
             className,
             bgImg,
             icon,
-            onClick
+            onClick,
         } = this.props;
 
         return (

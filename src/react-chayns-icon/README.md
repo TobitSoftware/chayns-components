@@ -18,11 +18,14 @@ import { Icon } from 'chayns-components';
 
 If you want to use a [Font Awesome Icon](https://fontawesome.com/icons), you also have to install the icon packages and import the icon from the corresponding font awesome library.
 
+If you have a [Font Awesome Pro Subscription](https://fontawesome.com/pro), you can use the pro icon packages:
+
     npm i --save @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-brands-svg-icons
     
-or
+Otherwise, you have to install the free packages:
     
     npm i --save @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
+    
 
 
 ```jsx harmony

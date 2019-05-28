@@ -121,6 +121,7 @@ react-weather/.idea/
 
 # Exmple directories
 examples
+/build
 
 # Source directories
 src

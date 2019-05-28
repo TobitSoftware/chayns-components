@@ -13,12 +13,7 @@ The input has to be imported:
 import { Input } from 'chayns-components';
 ```
 
-You can use the input like this:
-
-```jsx harmony
-<Input placeholder="this is a placeholder" />
-```
-
+You can use the Input like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-input/Example.jsx).
 
 ## Props ##
 
@@ -44,8 +39,5 @@ The following properties can be set on the Input-Component
 | dynamic      | Use dynamic input                                                                 | bool           | false         |
 | customProps  | CustomProps for the html input element                                            | object         |               |
 | stopPropagation | Stops the click propagation to parent elements                                 | bool           | false         |
-
-
-## Example ##
-
-You can take a look at the **examples** folder in the **react-chayns-input** repository. There you can find an appropriate way of implementing the **Input** to your chayns-Tapp.
+| required     | Input is invalid if there is no value                                             | bool           | false         |
+| disabled     | Disables the input                                                                | bool           | false         |

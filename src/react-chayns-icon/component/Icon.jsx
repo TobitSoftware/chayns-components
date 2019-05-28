@@ -14,7 +14,7 @@ export default class Icon extends PureComponent {
             }).isRequired,
         ]).isRequired,
         className: PropTypes.string,
-        style: PropTypes.object(),
+        style: PropTypes.object,
         onClick: PropTypes.func,
         disabled: PropTypes.bool,
         stopPropagation: PropTypes.bool,
@@ -39,15 +39,20 @@ export default class Icon extends PureComponent {
 
     componentWillReceiveProps(nextProps) {
         const { icon } = this.props;
-        if (icon !== nextProps.icon && !chayns.utils.isString(nextProps.icon) && nextProps.icon && nextProps.icon.prefix && nextProps.icon.iconName) {
+        if (icon !== nextProps.icon
+            && nextProps.icon
+            && !chayns.utils.isString(nextProps.icon)
+            && nextProps.icon.prefix
+            && nextProps.icon.iconName) {
             library.add(nextProps.icon);
         }
     }
 
     onClick(e) {
         const { onClick, disabled, stopPropagation } = this.props;
-        if(onClick && !disabled) onClick(e);
-        if(stopPropagation) e.stopPropagation();
+
+        if (onClick && !disabled) onClick(e);
+        if (stopPropagation) e.stopPropagation();
     }
 
     render() {
@@ -58,24 +63,39 @@ export default class Icon extends PureComponent {
         const classes = classNames('react-chayns-icon', className, {
             [icon]: chayns.utils.isString(icon),
             'react-chayns-icon--clickable': onClick,
-            'react-chayns-icon--disabled': disabled
+            'react-chayns-icon--disabled': disabled,
         });
 
         if (chayns.utils.isString(icon)) {
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            return <i className={classes} onClick={this.onClick} {...other}/>;
+            return (
+                <i
+                    className={classes}
+                    onClick={this.onClick}
+                    {...other}
+                />
+            );
         }
+
         if (!icon) {
             return null;
         }
+
         if (typeof onClick === 'function') {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                 <span className={classes} onClick={this.onClick}>
-                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other}/>
+                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other} />
                 </span>
             );
         }
-        return <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} className={classes} {...other}/>;
+
+        return (
+            <FontAwesomeIcon
+                icon={[icon.prefix, icon.iconName]}
+                className={classes}
+                {...other}
+            />
+        );
     }
 }

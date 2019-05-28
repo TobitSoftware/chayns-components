@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { AmountControl } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class AmountControlExample extends Component {
     constructor() {
         super();
 
@@ -25,10 +24,7 @@ export default class Example extends Component {
         const { amount } = this.state;
 
         return (
-            <ExampleContainer
-                headline="AmountControl"
-                data-equalize="group-1"
-            >
+            <div data-equalize="group-1">
                 <AmountControl
                     autoInput
                     disabled={false}
@@ -158,7 +154,7 @@ export default class Example extends Component {
                     buttonText="0,10"
                     showInput={amount > 0}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

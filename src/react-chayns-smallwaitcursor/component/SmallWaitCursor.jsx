@@ -7,33 +7,44 @@ export default class SmallWaitCursor extends PureComponent {
         show: PropTypes.bool,
         style: PropTypes.object,
         showBackground: PropTypes.bool,
+        inline: PropTypes.bool,
+        className: PropTypes.string,
     };
 
     static defaultProps = {
         show: false,
         style: null,
         showBackground: true,
+        inline: false,
+        className: null,
     };
 
     render() {
-        const { show, style, showBackground } = this.props;
+        const {
+            show,
+            style,
+            showBackground,
+            inline,
+            className,
+        } = this.props;
 
         if (showBackground) {
             return (
                 <div
-                    className={classNames('wait-cursor', {
-                        hidden: !show
+                    className={classNames('wait-cursor', className, {
+                        hidden: !show,
                     })}
                     style={style}
                 >
-                    <div className="wait-cursor__spinner"/>
+                    <div className="wait-cursor__spinner" />
                 </div>
             );
         }
         return (
             <div
                 className={classNames('wait-cursor__spinner', {
-                    hidden: !show
+                    'wait-cursor__spinner--inline': inline,
+                    hidden: !show,
                 })}
             />
         );

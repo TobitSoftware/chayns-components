@@ -30,16 +30,17 @@ You can now use the component as follows:
 
 You can set the following props on a ComboBox element:
 
-| Property   | Description                                                                                        | Type    | Default |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| onSelect | Callback that will be triggered when items were selected.                                       | function | |
-| disabled | If true, the ComboBox will be disabled. | bool | false |
-| label | A non-chooseable text shown inside the ComboBox.                                                                 | string   | |
-| list | An array containing elements to select from.                                                        | array | |
-| listKey | The identifier of the list items. It is required for the dialog to work.                         | string   | |
-| listValue | The value of the list items. It is shown in the dialog for each item.                          | string   | |
-| className | Add additional classes to the button.                                                          | string   | |
-| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
+| Property        | Description                                                                                   | Type     | Default |
+|-----------------|-----------------------------------------------------------------------------------------------|----------|---------|
+| onSelect        | Callback that will be triggered when items were selected.                                     | function |         |
+| disabled        | If true, the ComboBox will be disabled.                                                       | bool     | false   |
+| label           | A non-chooseable text shown inside the ComboBox.                                              | string   |         |
+| list            | An array containing elements to select from.                                                  | array    |         |
+| listKey         | The identifier of the list items. It is required for the dialog to work.                      | string   |         |
+| listValue       | The value of the list items. It is shown in the dialog for each item.                         | string   |         |
+| className       | Add additional classes to the button.                                                         | string   |         |
+| stopPropagation | Stops the click propagation to parent elements                                                | bool     | false   |
+| defaultValue    | The defaultValue of the ComboBox (does not work in combination with label-prop)               | string   |         |
 
 
 ## Example ##

@@ -193,5 +193,4 @@ New Props:
 - parent: DOM Node into which the tooltip will be rendered
 
 ### Upload
-New Props:
-- customIcon: Icon shown in the component
+New Component: FileInput

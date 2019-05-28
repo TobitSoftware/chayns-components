@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Day from './Day';
 
 class OpeningTimes extends Component {
@@ -8,13 +9,17 @@ class OpeningTimes extends Component {
             weekDay: PropTypes.number.isRequired,
             start: PropTypes.string.isRequired,
             end: PropTypes.string.isRequired,
-            disabled: PropTypes.bool
+            disabled: PropTypes.bool,
         })).isRequired,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
-        onChange: null
+        onChange: null,
+        className: null,
+        style: null,
     };
 
     static weekdays = [
@@ -43,7 +48,7 @@ class OpeningTimes extends Component {
                 weekDay,
                 start,
                 end,
-                disabled: false
+                disabled: false,
             }));
         }
     }
@@ -95,9 +100,9 @@ class OpeningTimes extends Component {
     }
 
     render() {
-        const { times } = this.props;
+        const { times, className, style } = this.props;
         return (
-            <div className="cc__opening-times" >
+            <div className={classNames(className, 'cc__opening-times')} style={style}>
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day
@@ -105,7 +110,7 @@ class OpeningTimes extends Component {
                             key={index}
                             weekday={{
                                 name: day,
-                                number: index
+                                number: index,
                             }}
                             times={times.filter(t => t.weekDay === index)}
                             onDayActivation={this.onDayActivation}

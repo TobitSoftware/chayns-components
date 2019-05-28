@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
 import { SmallWaitCursor } from '../../src/index';
 
-export default class Example extends Component {
+export default class SmallWaitCursorExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true };
@@ -13,7 +12,7 @@ export default class Example extends Component {
     render() {
         const { show } = this.state;
         return (
-            <ExampleContainer headline="SmallWaitCursor">
+            <div>
                 <SmallWaitCursor
                     show={show}
                 />
@@ -37,20 +36,18 @@ export default class Example extends Component {
                 </div>
                 <div
                     style={{
-                        width: '100%',
-                        padding: '10px',
-                        marginTop: '10px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-end',
+                        textAlign: 'right',
+                        lineHeight: '20px',
                     }}
                 >
                     <SmallWaitCursor
                         show={show}
                         showBackground={false}
+                        inline
                     />
+                    {' Loading Data'}
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

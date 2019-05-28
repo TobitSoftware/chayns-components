@@ -6,7 +6,7 @@ import assign from 'object-assign';
 export default class TextArea extends Component {
     static defaultStyle = {
         width: '100%',
-        paddingBottom: '12px'
+        paddingBottom: '12px',
     };
 
     static propTypes = {
@@ -119,7 +119,7 @@ export default class TextArea extends Component {
             stopPropagation,
         } = this.props;
 
-        const style = assign({}, this.defaultStyle, styleProp);
+        const style = assign({}, TextArea.defaultStyle, styleProp);
 
         const classNames = classnames('input', className);
 

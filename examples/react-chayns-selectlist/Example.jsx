@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
-import ExampleContainer from '../ExampleContainer';
 import { SelectList, SelectListItem } from '../../src/index';
 
-export default class Example extends Component {
+export default class SelectListExample extends Component {
     state = {
         selectedId: 1
     };
@@ -34,7 +33,7 @@ export default class Example extends Component {
         elements.push(null);
 
         return(
-            <ExampleContainer headline="SelectList">
+            <div>
                 <SelectList
                     selectFirst
                     // value={this.state.selectedId}
@@ -66,7 +65,7 @@ export default class Example extends Component {
                         })
                     }
                 </SelectList>
-            </ExampleContainer>
+            </div>
         );
     }
 }

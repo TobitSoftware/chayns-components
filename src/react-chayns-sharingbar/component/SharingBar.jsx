@@ -9,18 +9,21 @@ export default class SharingBar extends Component {
         link: PropTypes.string,
         className: PropTypes.string,
         stopPropagation: PropTypes.bool,
+        style: PropTypes.string,
     };
 
     static defaultProps = {
         link: null,
         className: null,
         stopPropagation: false,
+        style: null,
     };
 
     constructor() {
         super();
+
         this.state = {
-            sharingProvider: []
+            sharingProvider: [],
         };
     }
 
@@ -30,8 +33,8 @@ export default class SharingBar extends Component {
 
             const sharingItems = [];
 
-            provider.map((item) => {
-                if(item.available) {
+            provider.forEach((item) => {
+                if (item.available) {
                     sharingItems.push((
                         <SharingBarItem
                             icon={item.icon}
@@ -46,17 +49,17 @@ export default class SharingBar extends Component {
             });
 
             this.setState({
-                sharingProvider: sharingItems // TODO: save data in state and not components
+                sharingProvider: sharingItems, // TODO: save data in state and not components
             });
         });
     }
 
     render() {
-        const { className } = this.props;
+        const { className, style } = this.props;
         const { sharingProvider } = this.state;
 
         return (
-            <div className={classNames('sharing-bar__item-list', className)}>
+            <div className={classNames('sharing-bar__item-list', className)} style={style}>
                 {sharingProvider}
             </div>
         );

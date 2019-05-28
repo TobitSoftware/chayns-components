@@ -27,8 +27,9 @@ You can now use the components as followed:
 
 You can set the following props on a AmountControl element:
 
-| Property     | Description                                                                                                  | Type     | Default |
-|--------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
-| show         | Renders the WaitCursor                                                                                       | bool     | false   |
-| style        | style-object of the wrapper                                                                                  | object   |         |
-| showBackground | style-object of the wrapper                                                                                | bool     | true    |
+| Property       | Description                                                                                                  | Type     | Default |
+|----------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
+| show           | Renders the WaitCursor                                                                                       | bool     | false   |
+| style          | style-object of the wrapper                                                                                  | object   |         |
+| showBackground | Renders the WaitCursor with a background                                                                     | bool     | true    |
+| inline         | Renders the WaitCursor as inline-block (only works with showBackground: false)                               | bool     | false   |

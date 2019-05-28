@@ -25,7 +25,9 @@ export default class ProgressCalendar extends Component {
         groups: [],
         focus: new Date(),
         onNavigateRight: ()=>{},
-        onNavigateLeft: ()=>{}
+        onNavigateLeft: ()=>{},
+        className: null,
+        style: null,
     };
 
     static propTypes = {
@@ -59,7 +61,9 @@ export default class ProgressCalendar extends Component {
         onNavigateRight: PropTypes.func,
         focus: PropTypes.objectOf(Date),
         startTime: PropTypes.objectOf(Date).isRequired,
-        endTime: PropTypes.objectOf(Date).isRequired
+        endTime: PropTypes.objectOf(Date).isRequired,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static dateInterval(dateStart,dateEnd){
@@ -437,6 +441,8 @@ export default class ProgressCalendar extends Component {
     }
 
     render(){
+        const {className, style}=this.props;
+
         let navText = '', [weekStart, weekEnd] = [new Date(),new Date()], days;
         if(this.weeks) {
             [weekStart, weekEnd] = this.weeks[focusWeek+this.state.week];
@@ -459,7 +465,7 @@ export default class ProgressCalendar extends Component {
 
 
         return(
-            <div className="calendar">
+            <div className={classNames("calendar", className)} style={style}>
                 <div className="calendar_header" onTouchMove={this.handleTouchMove} onTouchStart={this.handleTouchStart} onTouchEnd={()=>this.handleTouchEnd(leftHidden, rightHidden)}>
                     <Navigator
                         text={navText}
