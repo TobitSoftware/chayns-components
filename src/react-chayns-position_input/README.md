@@ -25,8 +25,10 @@ You can use your **PositionInput** like this:
 ```
 You will need to integrate this script tag into your index.html file:
 ```jsx harmony
-    <script src="https://maps.googleapis.com/maps/api/js?key=##INSERAPIKEYHERE##"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=##INSERAPIKEYHERE##&libraries=places"></script>
 ```
+
+The places library is required for autocompletion and geocoding. It can be left out if you don't use the input overlay.
 
 ## Props ##
 
