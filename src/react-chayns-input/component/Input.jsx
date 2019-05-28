@@ -27,6 +27,7 @@ export default class Input extends PureComponent {
         id: PropTypes.string,
         stopPropagation: PropTypes.bool,
         required: PropTypes.bool,
+        disabled: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -52,6 +53,7 @@ export default class Input extends PureComponent {
         id: null,
         stopPropagation: false,
         required: false,
+        disabled: false,
     };
 
     constructor(props) {
@@ -151,13 +153,17 @@ export default class Input extends PureComponent {
             onFocus,
             stopPropagation,
             customProps,
+            disabled,
         } = this.props;
         const { valid, right, initial } = this.state;
 
         if (dynamic) {
             return (
                 <div
-                    className={classNames('input-group', className, { labelRight: right || value || (initial && defaultValue) })}
+                    className={classNames('input-group', className, {
+                        labelRight: right || value || (initial && defaultValue),
+                        'input-group--disabled': disabled,
+                    })}
                     ref={wrapperRef}
                 >
                     <input
@@ -174,6 +180,7 @@ export default class Input extends PureComponent {
                         id={id || this.id}
                         required
                         onClick={stopPropagation ? event => event.stopPropagation() : null}
+                        disabled={disabled}
                         {...customProps}
                     />
                     <label
@@ -206,7 +213,10 @@ export default class Input extends PureComponent {
 
         return (
             <input
-                className={classNames('input', className, { 'input--invalid': !valid || invalid })}
+                className={classNames('input', className, {
+                    'input--invalid': !valid || invalid,
+                    'input--disabled': disabled,
+                })}
                 style={{ ...{ width: '100%' }, ...style }}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
@@ -220,6 +230,7 @@ export default class Input extends PureComponent {
                 id={id || this.id}
                 onClick={stopPropagation ? event => event.stopPropagation() : null}
                 required
+                disabled={disabled}
                 {...customProps}
             />
         );

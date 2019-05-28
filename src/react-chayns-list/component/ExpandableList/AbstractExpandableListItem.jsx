@@ -7,6 +7,7 @@ import ExpandableContent from '../../../react-chayns-expandable_content/componen
 import ExpandableContext from './ExpandableContext';
 
 let maxId = 1;
+
 function getId() {
     const id = maxId;
     maxId += 1;
@@ -28,6 +29,7 @@ class AbstractExpandableListItem extends PureComponent {
         className: PropTypes.string,
         clickable: PropTypes.bool,
         noContentClass: PropTypes.bool,
+        openProp: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -36,6 +38,7 @@ class AbstractExpandableListItem extends PureComponent {
         className: '',
         clickable: false,
         noContentClass: false,
+        openProp: null,
     };
 
     constructor(props) {
@@ -89,9 +92,10 @@ class AbstractExpandableListItem extends PureComponent {
             clickable,
             open: openIds,
             noContentClass,
+            openProp,
         } = this.props;
 
-        const open = (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
+        const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
 
         return (
             <div
