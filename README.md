@@ -58,7 +58,7 @@ The following components are part of this package:
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
 | [react-chayns-file_input](/src/react-chayns-file_input/)           | FileInput Component                             | [Readme](/src/react-chayns-file_input/README.md)      |
-| [react-chayns-map](/src/react-chayns-map/)                         | Map Component                                   | [Readme](/src/react-chayns-map/README.md)             |
+| [react-chayns-position_inpu](/src/react-chayns-position_input/)    | PositionInput Component                         | [Readme](/src/react-chayns-position_input/README.md)             |
 | [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)    |
 
 

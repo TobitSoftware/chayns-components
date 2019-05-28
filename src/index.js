@@ -64,7 +64,7 @@ import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
 
 import FileInput from './react-chayns-file_input/component/FileInput';
-import Map from './react-chayns-map/component/Map';
+import PositionInput from './react-chayns-position_input/component/PositionInput';
 
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
@@ -122,7 +122,7 @@ export {
     TextString,
     Tooltip,
     FileInput,
-    Map,
+    PositionInput,
     resolveAbsoluteImport,
     imageUpload,
     isTobitEmployee,
