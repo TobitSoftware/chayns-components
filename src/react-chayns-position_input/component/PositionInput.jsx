@@ -6,7 +6,7 @@ import Input from '../../react-chayns-input/component/Input';
 
 import MapMarker from './MapMarkerComp';
 
-export default class Map extends Component {
+export default class PositionInput extends Component {
     static propTypes = {
         defaultPosition: PropTypes.shape({
             lat: PropTypes.number.isRequired,

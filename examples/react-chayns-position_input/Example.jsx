@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 
-import Map from '../../src/react-chayns-map/component/Map';
+import PositionInput from '../../src/react-chayns-position_input/component/PositionInput';
 
-export default class MapExample extends PureComponent {
+export default class PositionInputExample extends PureComponent {
     render() {
         return (
-            <Map
+            <PositionInput
                 apiKey="YOUR_API_KEY"
                 mapId="adminmap"
             />

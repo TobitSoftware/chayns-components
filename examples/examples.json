@@ -84,9 +84,9 @@
   "example": "react-chayns-list/Example.jsx",
   "readme": true
 },{
-  "id": "react-chayns-map",
-  "title": "Map",
-  "example": "react-chayns-map/Example.jsx",
+  "id": "react-chayns-position_input",
+  "title": "PositionInput",
+  "example": "react-chayns-position_input/Example.jsx",
   "readme": true
 },{
   "id": "react-chayns-modeswitch",

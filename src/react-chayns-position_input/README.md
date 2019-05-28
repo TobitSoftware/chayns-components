@@ -1,6 +1,6 @@
-# Map #
+# PositionInput #
 
-The **Map** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
+The **PositionInput** - Component is part of the **chayns-component** package. You can install the whole package with the following statement:
 
     npm install -S chayns-components@latest
 
@@ -10,12 +10,12 @@ The **Map** - Component is part of the **chayns-component** package. You can ins
 First of all import the component to a component of your own project.
 
 ```jsx harmony
-import { Map } from 'chayns-components';
+import { PositionInput } from 'chayns-components';
 ```
 
-You can use your **Map** like this:
+You can use your **PositionInput** like this:
 ```jsx harmony
-<Map 
+<PositionInput 
     mapId="adminmap"
     defaultPosition={{
         lat: 0,
