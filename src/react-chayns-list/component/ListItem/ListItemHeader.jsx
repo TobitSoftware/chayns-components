@@ -48,7 +48,7 @@ const ListItemHeader = ({
                 )}
             </div>
         )}
-        <div className="list-item__spacer"/>
+        <div className="list-item__spacer" />
         {right && (
             <div className="list-item__right">
                 {right}

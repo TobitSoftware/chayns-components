@@ -18,7 +18,6 @@ const COORDS = 2;
 const noop = () => {};
 
 export default class PositionInput extends PureComponent {
-
     static propTypes = {
         defaultPosition: PositionProps.isRequired,
         onPositionChange: PropTypes.func,
@@ -169,7 +168,7 @@ export default class PositionInput extends PureComponent {
         return (
             <div className="cc__map">
                 <div className="map--crosshair">
-                    +
+                    {'+'}
                 </div>
                 <GoogleMap
                     mapRef={this.mapRef}
