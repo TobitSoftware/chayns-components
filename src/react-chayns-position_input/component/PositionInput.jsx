@@ -51,6 +51,10 @@ export default class PositionInput extends PureComponent {
     constructor(props) {
         super(props);
 
+        if (!window.google) {
+            throw new Error('The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.');
+        }
+
         this.state = {
             value: '',
             addresses: [],
