@@ -1,8 +1,4 @@
 .cc__map {
-    border: 1px solid #dbe2f1;
-    border-bottom-color: transparent;
-    border-radius: 2px;
-
     position: relative;
     height: 276px;
     
@@ -35,6 +31,8 @@
         z-Index: 10;
         bottom: 0px;
         width: 100%;
+
+        background-color: rgba(var(--chayns-bg-rgb), 1)
     }
 
     .map--autocomplete {

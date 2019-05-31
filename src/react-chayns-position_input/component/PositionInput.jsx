@@ -187,7 +187,7 @@ export default class PositionInput extends PureComponent {
                 />
                 {
                     children && (
-                        <div className="map--overlay chayns__background-color--shade-1">
+                        <div className="map--overlay">
                             {children(value, this.handleInputChange)}
                             <div className="map--autocomplete_popup_root">
                                 <div className="map--autocomplete_popup">
