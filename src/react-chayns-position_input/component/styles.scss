@@ -1,11 +1,7 @@
 .cc__map {
     position: relative;
     height: 276px;
-    
-    .gm-style div a[title='Klicken, um diese Region in Google Maps anzuzeigen'] {
-        display: none !important;
-    }
-  
+
     .map--crosshair {
         position: absolute;
         display: flex;
