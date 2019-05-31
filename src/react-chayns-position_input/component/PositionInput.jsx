@@ -55,6 +55,9 @@ export default class PositionInput extends PureComponent {
             throw new Error('The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.');
         }
 
+        this.autocomplete = new google.maps.places.AutocompleteService();
+        this.geocoder = new google.maps.Geocoder();
+
         this.state = {
             value: '',
             addresses: [],
@@ -67,10 +70,6 @@ export default class PositionInput extends PureComponent {
         this.getAddresses = debounce(this.getAddresses, 500);
 
         this.setAddress(props.defaultPosition);
-
-        this.autocomplete = new google.maps.places.AutocompleteService();
-
-        this.geocoder = new google.maps.Geocoder();
     }
 
     setAddress = (position) => {
