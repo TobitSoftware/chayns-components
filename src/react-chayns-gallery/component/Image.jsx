@@ -84,12 +84,19 @@ export default class Image extends PureComponent {
                 this.setState({ imageUrl: image });
             }
         } else { // file
-            const imageUrl = await getDataUrlFromFile(image);
-            if (styleLandscape || stylePortrait) { // get dimensions if needed
-                const metaData = await getImageMetaDataFromPreview(imageUrl);
-                this.setState({ metaData, imageUrl });
-            } else { // set only the image url
-                this.setState({ imageUrl });
+            const cacheId = `##FILE##${image.name}${image.lastModified}${image.size}`;
+            if (Image.imageMetaData[cacheId]) { // use cache
+                this.setState(Image.imageMetaData[cacheId]);
+            } else { // get dataUrl and metaData and set cache
+                const imageUrl = await getDataUrlFromFile(image);
+                if (styleLandscape || stylePortrait) { // get dimensions if needed
+                    const metaData = await getImageMetaDataFromPreview(imageUrl);
+                    Image.imageMetaData[cacheId] = { metaData, imageUrl };
+                    this.setState({ metaData, imageUrl });
+                } else { // set only the image url
+                    Image.imageMetaData[cacheId] = { imageUrl };
+                    this.setState({ imageUrl });
+                }
             }
         }
     };

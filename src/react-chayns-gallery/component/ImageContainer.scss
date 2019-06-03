@@ -12,11 +12,11 @@
     right: 0;
   }
 
-  &__tools{
-    touch-action: none; // no scrolling
+  &__tools {
     position: absolute;
     top: 0;
     right: 0;
     display: flex;
+    touch-action: none; // no scrolling
   }
 }

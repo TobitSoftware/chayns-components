@@ -96,7 +96,6 @@
         cursor: grab;
         &:active{
           cursor: grabbing;
-          touch-action: none; // no scrolling
         }
       }
     }
@@ -114,6 +113,7 @@
     }
 
     &--transition {
+      will-change: top, left;
       transition: top 250ms ease, left 250ms ease;
     }
 

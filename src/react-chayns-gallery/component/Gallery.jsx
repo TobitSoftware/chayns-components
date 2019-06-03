@@ -54,16 +54,14 @@ export default class Gallery extends Component {
     constructor(props) {
         super(props);
         this.galleryRef = React.createRef();
+        this.state = { active: null, images: props.images, dropzone: null };
     }
 
-    componentDidUpdate(prevProps) {
-        const { images } = this.props;
-        if (prevProps.images !== images && this.selectedElement && this.lastDropzone) {
-            this.selectedElement.classList.remove('cc__gallery__image--active');
-            this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
-            this.selectedElement = null;
+    componentWillUpdate(nextProps, nextState) {
+        if (nextProps.images !== nextState.images) {
+            // eslint-disable-next-line react/no-will-update-set-state
+            this.setState({ images: nextProps.images });
         }
-        return true;
     }
 
     onDown = (event, index, image) => {
@@ -83,22 +81,17 @@ export default class Gallery extends Component {
         this.offsetY = this.pageYStart - this.selectedElementStartPosition.top;
 
         document.addEventListener('mousemove', this.onMove);
-        document.addEventListener('touchmove', this.onMove);
+        document.addEventListener('touchmove', this.onMove, { passive: false });
         document.addEventListener('mouseup', this.onUp);
         document.addEventListener('touchend', this.onUp);
         document.addEventListener('touchcancel', this.onUp);
     };
 
     onMove = (event) => {
-
+        event.preventDefault();
         const { pageX, pageY } = event.changedTouches ? event.changedTouches[0] : event;
         const { clientWidth: galleryWidth } = this.galleryRef.current;
         const { clientHeight: itemHeight, clientWidth: itemWidth } = event.target.parentElement.parentElement.parentElement;
-
-        // set selected element active
-        if (!this.selectedElement.classList.contains('cc__gallery__image--active')) {
-            this.selectedElement.classList.add('cc__gallery__image--active');
-        }
 
         // move item
         this.selectedElement.style.left = `${pageX - this.galleryOffsetX - this.offsetX}px`;
@@ -111,6 +104,11 @@ export default class Gallery extends Component {
         const row = Math.floor(middleY / itemHeight);
         const column = Math.floor(middleX / itemWidth);
         this.newPosition = (row * itemsPerRow) + column;
+        const { dropzone: oldDropzone } = this.state;
+        const newDropzone = this.newPosition + (this.newPosition > this.index ? 1 : 0);
+        if (oldDropzone !== newDropzone) {
+            this.setState({ dropzone: newDropzone, active: this.index });
+        }
 
         // show corresponding dropzone
         let insertPosition = this.newPosition * 2; // dropzones and images are alternating
@@ -118,17 +116,12 @@ export default class Gallery extends Component {
             insertPosition += 2;
         }
         const dropzone = this.galleryRef.current.children[insertPosition];
-        if (this.lastDropzone && this.lastDropzone !== dropzone) {
-            this.lastDropzone.classList.remove('cc__gallery__image--show_dropzone');
-        }
-        if (dropzone) {
-            dropzone.classList.add('cc__gallery__image--show_dropzone');
-        }
         this.lastDropzone = dropzone;
     };
 
     onUp = () => {
         if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.allowRefreshScroll();
+
         document.removeEventListener('mousemove', this.onMove);
         document.removeEventListener('touchmove', this.onMove);
         document.removeEventListener('mouseup', this.onUp);
@@ -147,13 +140,16 @@ export default class Gallery extends Component {
                     this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
                     this.selectedElement.classList.remove('cc__gallery__image--transition');
 
+                    const image = images[this.index];
+                    const newArray = images.slice();
+                    newArray.splice(this.index, 1);
+                    newArray.splice(this.newPosition, 0, image);
+
                     if (onDragEnd) {
-                        const image = images[this.index];
-                        const newArray = images.slice();
-                        newArray.splice(this.index, 1);
-                        newArray.splice(this.newPosition, 0, image);
                         onDragEnd(newArray);
                     }
+
+                    this.setState({ dropzone: null, active: null, images: newArray });
                 }
             };
             this.transitionEnded = false;
@@ -161,6 +157,10 @@ export default class Gallery extends Component {
         } else {
             this.selectedElement.classList.remove('cc__gallery__image--active');
         }
+        // Enable scrolling.
+        document.ontouchmove = function (e) {
+            return true;
+        };
     };
 
     render() {
@@ -173,11 +173,11 @@ export default class Gallery extends Component {
             className,
             stopPropagation,
             onClick,
-            images,
         } = this.props;
         const { style: propStyle } = this.props;
         const style = { ...propStyle };
         const defaultMode = !dragMode && !deleteMode;
+        const { active, dropzone: dropzoneId, images } = this.state;
 
         let styleHeight;
         if (defaultMode) {
@@ -193,11 +193,15 @@ export default class Gallery extends Component {
         }
         const numberOfImages = images.length;
 
-        const dropzone = key => (
-            <div key={key} id={key} className="cc__gallery__image cc__gallery__image--dropzone">
+        const dropzone = (key, show) => (
+            <div
+                key={key}
+                id={key}
+                className={classNames('cc__gallery__image cc__gallery__image--dropzone', { 'cc__gallery__image--show_dropzone': show })}
+            >
                 <ImageContainer>
                     <div
-                        className="cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300"
+                        className={classNames('cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300')}
                     />
                 </ImageContainer>
             </div>
@@ -216,7 +220,7 @@ export default class Gallery extends Component {
             >
                 {
                     dragMode
-                        ? dropzone('dropzone')
+                        ? dropzone('dropzone', dropzoneId === 0)
                         : null
                 }
                 {
@@ -228,8 +232,10 @@ export default class Gallery extends Component {
                                     icon: 'ts-bars',
                                     className: 'cc__gallery__image__tool--drag',
                                     onDown: (event) => {
+                                        event.preventDefault();
                                         this.onDown(event, index, image);
                                     },
+                                    noScroll: true,
                                 });
                             }
                             if (deleteMode) {
@@ -242,7 +248,11 @@ export default class Gallery extends Component {
                             }
 
                             return [
-                                <div className="cc__gallery__image" id={`image${index}`} key={`imageDiv${index}`}>
+                                <div
+                                    className={classNames('cc__gallery__image', { 'cc__gallery__image--active': index === active })}
+                                    id={`image${index}`}
+                                    key={`imageDiv${index}`}
+                                >
                                     <ImageContainer
                                         tools={tools}
                                     >
@@ -263,7 +273,7 @@ export default class Gallery extends Component {
                                     </ImageContainer>
                                 </div>,
                                 dragMode
-                                    ? dropzone(`dropzone${index}`)
+                                    ? dropzone(`dropzone${index}`, dropzoneId === index + 1)
                                     : null,
                             ];
                         }
