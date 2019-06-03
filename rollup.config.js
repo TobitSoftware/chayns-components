@@ -3,7 +3,7 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import external from 'rollup-plugin-peer-deps-external';
 import autoExternal from 'rollup-plugin-auto-external';
-import scss from 'rollup-plugin-scss';
+import postcss from 'rollup-plugin-postcss';
 
 const env = process.env.NODE_ENV;
 const pkg = require('./package.json');
@@ -21,16 +21,18 @@ export default {
     plugins: [
         external(),
         autoExternal(),
-        resolve({
-            extensions: ['.js', '.jsx'],
-        }),
         babel({
             exclude: 'node_modules/**',
             // if external helpers true then use global babel object
             externalHelpers: true,
             runtimeHelpers: true,
         }),
+        resolve({
+            extensions: ['.js', '.jsx'],
+        }),
         commonjs(),
-        scss(),
+        postcss({
+            plugins: [],
+        }),
     ],
 };
