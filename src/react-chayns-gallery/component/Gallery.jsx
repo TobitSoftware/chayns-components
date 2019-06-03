@@ -158,9 +158,7 @@ export default class Gallery extends Component {
             this.selectedElement.classList.remove('cc__gallery__image--active');
         }
         // Enable scrolling.
-        document.ontouchmove = function (e) {
-            return true;
-        };
+        document.ontouchmove = () => true;
     };
 
     render() {
