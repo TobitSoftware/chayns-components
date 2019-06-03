@@ -183,6 +183,7 @@ export default class AccordionExample extends Component {
                     head="Accordion (animated badge)"
                     right={{
                         close: <Badge>15</Badge>,
+                        open: <Input/>
                     }}
                 >
                     Content

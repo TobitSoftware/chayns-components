@@ -1,0 +1,87 @@
+.cc__image {
+  position: relative;
+  height: auto;
+  display: flex;
+  flex: 1;
+  -ms-flex: 1;
+  justify-content: center;
+  overflow: hidden;
+
+  &--landscape {
+    flex-direction: row;
+    /* IE10+ CSS */
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      padding-right: 100%;
+    }
+  }
+
+  &--portrait {
+    flex-direction: column;
+    /* IE10+ CSS */
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      padding-bottom: 100%;
+    }
+  }
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--more-images:after {
+    content: attr(data-more);
+    color: #fff;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.75);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    font-size: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  &__img, &__preview {
+    min-height: 100%;
+    min-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+  }
+
+  &__img {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    .cc__image--ready & {
+      position: initial;
+      opacity: 1;
+    }
+  }
+
+  &__preview {
+    filter: blur(10px);
+    position: initial;
+    opacity: 1;
+    transition: opacity 0.3s;
+
+    .cc__image--ready & {
+      position: absolute;
+      opacity: 0;
+    }
+  }
+
+  &__wait-cursor {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+  }
+}
