@@ -32,6 +32,8 @@ import GridCalendar from './react-chayns-gridcalendar/component/GridCalendar';
 
 import Icon from './react-chayns-icon/component/Icon';
 import Input from './react-chayns-input/component/Input';
+import Image from './react-chayns-gallery/component/Image';
+import ImageContainer from './react-chayns-gallery/component/ImageContainer';
 import ImageAccordionGroup from './react-chayns-image_accordion/component/ImageAccordionGroup';
 import ImageAccordion from './react-chayns-image_accordion/component/ImageAccordion';
 
@@ -69,11 +71,13 @@ import PositionInput from './react-chayns-position_input/component/PositionInput
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
+import {getDataUrlFromFile, getDataUrlFromBase64} from './react-chayns-gallery/utils/getDataUrl';
+import {getImageMetaDataFromApi, getImageMetaDataFromPreview} from './react-chayns-gallery/utils/getImageMetaData';
 import isTobitEmployee from './utils/tobitEmployee';
 import createLinks from './utils/createLinks';
 import removeHtml from './utils/removeHtml';
 
-import { CHAYNS_CSS_VERSION } from './constants';
+import {CHAYNS_CSS_VERSION} from './constants';
 
 export {
     Accordion,
@@ -97,6 +101,8 @@ export {
     Gallery,
     GridCalendar,
     Icon,
+    Image,
+    ImageContainer,
     ImageAccordion,
     ImageAccordionGroup,
     Input,
@@ -128,6 +134,10 @@ export {
     isTobitEmployee,
     createLinks,
     removeHtml,
+    getImageMetaDataFromPreview,
+    getImageMetaDataFromApi,
+    getDataUrlFromBase64,
+    getDataUrlFromFile,
     CHAYNS_CSS_VERSION,
     FORMAT_INTEGER,
     FORMAT_DECIMAL,

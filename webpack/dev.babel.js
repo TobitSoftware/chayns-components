@@ -52,7 +52,7 @@ export default (env) => {
                     exclude: path.resolve(ROOT_PATH, 'node_modules'),
                 },
                 {
-                    test: /\.scss$/,
+                    test: /\.(scss|css)$/,
                     use: [
                         {
                             loader: 'style-loader',

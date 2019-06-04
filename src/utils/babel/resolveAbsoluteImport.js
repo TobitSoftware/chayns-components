@@ -18,6 +18,8 @@ module.exports = function resolveAbsoluteImport(importName) {
         Gallery: 'react-chayns-gallery/component/Gallery.js',
         GridCalendar: 'react-chayns-gridcalendar/component/GridCalendar.js',
         Icon: 'react-chayns-icon/component/Icon.js',
+        Image: 'react-chayns-gallery/component/Image.js',
+        ImageContainer: 'react-chayns-gallery/component/ImageContainer.js',
         ImageAccordion: 'react-chayns-image_accordion/component/ImageAccordion.js',
         ImageAccordionGroup: 'react-chayns-image_accordion/component/ImageAccordionGroup.js',
         Input: 'react-chayns-input/component/Input.js',
