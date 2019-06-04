@@ -51,6 +51,13 @@ export default class PositionInput extends PureComponent {
     constructor(props) {
         super(props);
 
+        if (!window.google) {
+            throw new Error('The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.');
+        }
+
+        this.autocomplete = new google.maps.places.AutocompleteService();
+        this.geocoder = new google.maps.Geocoder();
+
         this.state = {
             value: '',
             addresses: [],
@@ -63,10 +70,6 @@ export default class PositionInput extends PureComponent {
         this.getAddresses = debounce(this.getAddresses, 500);
 
         this.setAddress(props.defaultPosition);
-
-        this.autocomplete = new google.maps.places.AutocompleteService();
-
-        this.geocoder = new google.maps.Geocoder();
     }
 
     setAddress = (position) => {
@@ -184,7 +187,7 @@ export default class PositionInput extends PureComponent {
                 />
                 {
                     children && (
-                        <div className="map--overlay chayns__background-color--shade-1">
+                        <div className="map--overlay">
                             {children(value, this.handleInputChange)}
                             <div className="map--autocomplete_popup_root">
                                 <div className="map--autocomplete_popup">

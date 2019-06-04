@@ -1,15 +1,7 @@
 .cc__map {
-    border: 1px solid #dbe2f1;
-    border-bottom-color: transparent;
-    border-radius: 2px;
-
     position: relative;
     height: 276px;
-    
-    .gm-style div a[title='Klicken, um diese Region in Google Maps anzuzeigen'] {
-        display: none !important;
-    }
-  
+
     .map--crosshair {
         position: absolute;
         display: flex;
@@ -35,6 +27,8 @@
         z-Index: 10;
         bottom: 0px;
         width: 100%;
+
+        background-color: rgba(var(--chayns-bg-rgb), 1)
     }
 
     .map--autocomplete {
