@@ -8,6 +8,7 @@ import ExpandableList from '../ExpandableList/ExpandableList';
 const ExpandableListItem = ({ children, ...props }) => {
     const {
         noContentClass,
+        className,
         open,
         style,
     } = props;
@@ -15,6 +16,7 @@ const ExpandableListItem = ({ children, ...props }) => {
     return (
         <AbstractExpandableListItem
             noContentClass={noContentClass}
+            className={className}
             header={(
                 <ExpandableList.Context.Consumer>
                     {c => (
@@ -40,12 +42,14 @@ ExpandableListItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
     noContentClass: PropTypes.bool,
+    className: PropTypes.string,
     open: PropTypes.bool,
     style: PropTypes.object,
 };
 
 ExpandableListItem.defaultProps = {
     noContentClass: false,
+    className: null,
     open: null,
     style: null,
 };
