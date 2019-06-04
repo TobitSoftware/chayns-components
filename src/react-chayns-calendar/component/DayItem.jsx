@@ -9,8 +9,8 @@ class DayItem extends PureComponent {
     static propTypes = {
         date: PropTypes.instanceOf(Date).isRequired,
         inMonth: PropTypes.bool.isRequired,
-        onDateSelect: PropTypes.func.isRequired,
-        activateAll: PropTypes.func,
+        onDateSelect: PropTypes.func,
+        activateAll: PropTypes.bool,
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.bool,
         highlighted: PropTypes.bool,
@@ -23,6 +23,7 @@ class DayItem extends PureComponent {
         highlighted: false,
         activateAll: null,
         highlightStyle: null,
+        onDateSelect: null,
     };
 
     constructor(props) {

@@ -22,9 +22,9 @@ function getMonthNames(language = chayns.env.language) {
 
 export default class Calendar extends Component {
     static propTypes = {
-        startDate: PropTypes.instanceOf(Date).isRequired,
-        endDate: PropTypes.instanceOf(Date).isRequired,
-        onDateSelect: PropTypes.func.isRequired,
+        startDate: PropTypes.instanceOf(Date),
+        endDate: PropTypes.instanceOf(Date),
+        onDateSelect: PropTypes.func,
         selected: PropTypes.instanceOf(Date),
         activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
         highlighted: PropTypes.oneOfType([
@@ -44,6 +44,9 @@ export default class Calendar extends Component {
 
     static defaultProps = {
         selected: TODAY,
+        startDate: null,
+        endDate: null,
+        onDateSelect: null,
         activateAll: true,
         activated: null,
         highlighted: null,
