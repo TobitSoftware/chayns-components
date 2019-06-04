@@ -317,7 +317,7 @@ export default class Accordion extends PureComponent {
                                     })}
                                 >
                                     {
-                                        chayns.utils.isString(icon) || icon.iconName
+                                        typeof icon === 'string' || icon.iconName
                                             ? <Icon icon={icon} />
                                             : icon
                                     }
@@ -328,7 +328,7 @@ export default class Accordion extends PureComponent {
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(head && !chayns.utils.isString(head.open) && chayns.utils.isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null),
+                            ...(head && typeof head.open !== 'string' && typeof head.close === 'string' && isWrapped ? { fontWeight: 'inherit' } : null),
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}
