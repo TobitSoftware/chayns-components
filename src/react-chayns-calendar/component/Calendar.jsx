@@ -302,7 +302,7 @@ export default class Calendar extends Component {
                             });
                         }
                     }
-                } else {
+                } else if (_highlighted) {
                     tempDates.push({
                         dates: _highlighted.dates,
                         style: _highlighted.style,
