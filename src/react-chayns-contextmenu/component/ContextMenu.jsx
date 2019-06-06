@@ -63,6 +63,14 @@ export default class ContextMenu extends Component {
         this.hide = this.hide.bind(this);
     }
 
+    componentDidMount() {
+        const { coordinates } = this.props;
+
+        if (coordinates) {
+            this.getPosition();
+        }
+    }
+
     componentDidUpdate(prevProps) {
         const { coordinates } = this.props;
         if (prevProps.coordinates && coordinates) {
