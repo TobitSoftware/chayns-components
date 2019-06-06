@@ -31,7 +31,7 @@ export default class Icon extends PureComponent {
     constructor(props) {
         super(props);
         const { icon } = props;
-        if (!chayns.utils.isString(icon) && icon && icon.prefix && icon.iconName) {
+        if (typeof icon !== 'string' && icon && icon.prefix && icon.iconName) {
             library.add(icon);
         }
         this.onClick = this.onClick.bind(this);
@@ -41,7 +41,7 @@ export default class Icon extends PureComponent {
         const { icon } = this.props;
         if (icon !== nextProps.icon
             && nextProps.icon
-            && !chayns.utils.isString(nextProps.icon)
+            && typeof nextProps.icon !== 'string'
             && nextProps.icon.prefix
             && nextProps.icon.iconName) {
             library.add(nextProps.icon);
@@ -61,12 +61,12 @@ export default class Icon extends PureComponent {
         } = this.props;
 
         const classes = classNames('react-chayns-icon', className, {
-            [icon]: chayns.utils.isString(icon),
+            [icon]: typeof icon === 'string',
             'react-chayns-icon--clickable': onClick,
             'react-chayns-icon--disabled': disabled,
         });
 
-        if (chayns.utils.isString(icon)) {
+        if (typeof icon === 'string') {
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             return (
                 <i
