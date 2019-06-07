@@ -39,73 +39,66 @@ export default class Bubble extends PureComponent {
     };
 
     static isPositionBottom(position) {
-        return position === Bubble.position.BOTTOM_LEFT
-            || position === Bubble.position.BOTTOM_CENTER
-            || position === Bubble.position.BOTTOM_RIGHT;
+        const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;
+
+        return [BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT].indexOf(position) !== -1;
     }
 
     constructor(props) {
         super(props);
 
-        this.show = this.show.bind(this);
-        this.hide = this.hide.bind(this);
-
         this.key = Math.random().toString();
         this.bubbleNode = React.createRef();
+
+        this.state = {
+            isActive: false,
+            isHidden: true,
+        };
     }
 
-    componentDidMount() {
-        if (this.bubbleNode.current && this.bubbleNode.current.classList) {
-            this.bubbleNode.current.classList.add('cc__bubble--hide');
-        }
-    }
-
-    show() {
-        if (!this.bubbleNode.current || !this.bubbleNode.current.classList) {
-            return;
-        }
-
+    show = () => {
         clearTimeout(this.timeout);
-        this.bubbleNode.current.classList.remove('cc__bubble--hide');
+
+        this.setState({ isHidden: false });
+
         this.timeout = setTimeout(() => {
-            if (this.bubbleNode.current && this.bubbleNode.current.classList) {
-                this.bubbleNode.current.classList.add('cc__bubble--active');
-            }
+            this.setState({ isActive: true });
         });
-    }
+    };
 
-    hide() {
-        if (!this.bubbleNode.current || !this.bubbleNode.current.classList) {
-            return;
-        }
-
+    hide = () => {
         clearTimeout(this.timeout);
-        this.bubbleNode.current.classList.remove('cc__bubble--active');
-        this.timeout = setTimeout(() => {
-            if (this.bubbleNode.current && this.bubbleNode.current.classList) {
-                this.bubbleNode.current.classList.add('cc__bubble--hide');
-            }
-        }, 500);
-    }
 
+        this.setState({ isActive: false });
+
+        this.timeout = setTimeout(() => {
+            this.setState({ isHidden: true });
+        }, 500);
+    };
 
     render() {
         const {
             position,
             parent,
             children,
-            coordinates,
+            coordinates: { x, y },
             style,
             className,
             onMouseEnter,
             onMouseLeave,
         } = this.props;
-        const { x, y } = coordinates;
+
+        const { isActive, isHidden } = this.state;
+
+        const bubbleClasses = classNames(`cc__bubble cc__bubble--position${position}`, {
+            'cc__bubble--active': isActive,
+            'cc__bubble--hide': isHidden,
+        });
 
         return (
             <TappPortal parent={parent}>
                 <div
-                    className={`cc__bubble cc__bubble--position${position}`}
+                    className={bubbleClasses}
                     style={{ top: `${y}px`, left: `${x}px` }}
                     ref={this.bubbleNode}
                     onMouseEnter={onMouseEnter}
