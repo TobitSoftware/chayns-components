@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import getText from '../utils/getText';
-import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION } from '../constants/relationTypes';
 
 const SHOW_RELATIONS_COUNT = 5;
 
@@ -22,7 +22,7 @@ export default class PersonFinderResultItem extends PureComponent {
             personId: PropTypes.string,
             userId: PropTypes.string,
         }).isRequired,
-        type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION]).isRequired,
+        type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION]).isRequired,
     };
 
     static getRelations(data, type) {
@@ -35,7 +35,7 @@ export default class PersonFinderResultItem extends PureComponent {
         let relationString = '';
 
         for (let i = 0; i < show; i += 1) {
-            if (type === PERSON_RELATION) {
+            if (type === PERSON_RELATION || type === FRIEND_RELATION) {
                 relationString += data[i].type === 'LIVING_IN' ? `${getText(data[i].type, data[i].name)}, ` : `${data[i].name}, `;
             } else {
                 relationString += `${getText(data[i].type)}, `;
@@ -74,7 +74,7 @@ export default class PersonFinderResultItem extends PureComponent {
             };
         }
 
-        if (type === PERSON_RELATION) {
+        if (type === PERSON_RELATION || type === FRIEND_RELATION) {
             return {
                 personId: relation.personId,
                 userId: relation.userId,
@@ -115,7 +115,7 @@ export default class PersonFinderResultItem extends PureComponent {
         if (!relationString) {
             return (
                 <div className="identifier">
-                    {type === PERSON_RELATION ? relation.personId : relation.siteId}
+                    {type === PERSON_RELATION || type === FRIEND_RELATION ? relation.personId : relation.siteId}
                 </div>
             );
         }
@@ -153,7 +153,7 @@ export default class PersonFinderResultItem extends PureComponent {
                         <div className="name">{convertedRelation.name}</div>
                         {relationString && (
                             <div className="identifier">
-                                {`(${type === PERSON_RELATION ? convertedRelation.personId : convertedRelation.siteId})`}
+                                {`(${type === PERSON_RELATION || type === FRIEND_RELATION ? convertedRelation.personId : convertedRelation.siteId})`}
                             </div>
                         )}
                     </div>

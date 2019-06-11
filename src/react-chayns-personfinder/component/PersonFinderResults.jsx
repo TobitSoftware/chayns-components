@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
+import { PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
@@ -20,10 +20,11 @@ export default class PersonFinderResults extends PureComponent {
         moreRelatedPersons: PropTypes.bool,
         moreUnrelatedPersons: PropTypes.bool,
         showWaitCursor: PropTypes.bool,
+        showFriends: PropTypes.bool,
     };
 
     static defaultProps = {
-        persons: { related: [], unrelated: [] },
+        persons: { related: [], unrelated: [], friends: [] },
         sites: { related: [], unrelated: [] },
         onSelect: null,
         showSeparators: false,
@@ -31,10 +32,13 @@ export default class PersonFinderResults extends PureComponent {
         moreRelatedPersons: false,
         moreUnrelatedPersons: false,
         showWaitCursor: false,
+        showFriends: false,
     };
 
     static getDividerText(type) {
         switch (type) {
+        case FRIEND_RELATION:
+            return getText('DIVIDER_FRIEND');
         case PERSON_RELATION:
             return getText('DIVIDER_PERSON');
         case PERSON_UNRELATED:
@@ -61,7 +65,7 @@ export default class PersonFinderResults extends PureComponent {
     }
 
     renderResults(relations, type) {
-        if (relations.length === 0) {
+        if (!relations || relations.length === 0) {
             return null;
         }
 
@@ -126,15 +130,18 @@ export default class PersonFinderResults extends PureComponent {
             moreRelatedPersons,
             moreRelatedSites,
             moreUnrelatedPersons,
+            showFriends,
         } = this.props;
 
         const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
         const relatedSites = this.renderResults(sites.related, LOCATION_RELATION);
         const unrelatedPersons = this.renderResults(persons.unrelated, PERSON_RELATION);
         const unrelatedSites = this.renderResults(sites.unrelated, LOCATION_RELATION);
+        const friends = showFriends ? this.renderResults(persons.friends, FRIEND_RELATION) : null;
 
         return (
             <div className="cc__person-finder__results">
+                {friends ? this.renderRelated(FRIEND_RELATION, friends) : null}
                 {this.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons)}
                 {this.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites)}
                 {this.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons)}

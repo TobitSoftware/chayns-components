@@ -51,6 +51,7 @@ export default class PersonFinderData extends Component {
 
     state = {
         value: null,
+        friends: [],
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         showWaitCursor: false,
@@ -81,6 +82,7 @@ export default class PersonFinderData extends Component {
         this.fetchPersonRelations = this.fetchPersonRelations.bind(this);
         this.fetchSiteRelations = this.fetchRelations.bind(this, LOCATION_RELATION);
         this.handleLazyLoad = this.handleLazyLoad.bind(this);
+        this.handleOnFocus = this.handleOnFocus.bind(this);
     }
 
     componentDidUpdate() {
@@ -114,6 +116,17 @@ export default class PersonFinderData extends Component {
         const { value } = this.state;
         this.fetchData(value, false, type);
     };
+
+    handleOnFocus() {
+        const { friends } = this.state;
+        const { persons, uacId, value } = this.props;
+        if (friends.length === 0 && persons === true && !uacId && (!value || value.trim() === '')) {
+            this.setState({ showWaitCursor: true });
+            this.fetchFriends().then((result) => {
+                this.setState({ friends: result, showWaitCursor: false });
+            });
+        }
+    }
 
     showWaitCursor() {
         const { lazyLoading } = this.state;
@@ -287,10 +300,27 @@ export default class PersonFinderData extends Component {
         return this.promises[type].promise;
     }
 
-    hasEntries() {
-        const { persons, sites } = this.state;
+    async fetchFriends() {
+        const config = {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
+            },
+            mode: 'cors',
+        };
 
-        return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated > 0;
+        const response = await fetch('https://webapi.tobit.com/AccountService/v1.0/chayns/friends', config);
+        if (response.status === 200) {
+            const json = await response.json();
+            return Promise.resolve(json);
+        }
+        return Promise.resolve([]);
+    }
+
+    hasEntries() {
+        const { persons, sites, friends } = this.state;
+
+        return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated.length > 0 || friends.length > 0;
     }
 
     renderChildren() {
@@ -305,8 +335,10 @@ export default class PersonFinderData extends Component {
         const {
             persons,
             sites,
+            friends,
             showWaitCursor,
             lazyLoading,
+            value,
         } = this.state;
 
         const hasEntries = this.hasEntries();
@@ -314,12 +346,11 @@ export default class PersonFinderData extends Component {
 
         if (!selectedValue && hasEntries) {
             const hasUnrelated = !!(persons && persons.unrelated && persons.unrelated.length);
-
             const results = (
                 <PersonFinderResults
                     key="results"
                     showId={showId}
-                    persons={persons}
+                    persons={{ ...persons, friends }}
                     sites={sites}
                     onSelect={onSelect}
                     showSeparators={showSeparators}
@@ -328,6 +359,7 @@ export default class PersonFinderData extends Component {
                     moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
                     moreRelatedSites={this.loadMore[LOCATION_RELATION]}
                     moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
+                    showFriends={!value || value.trim() === ''}
                 />
             );
 
@@ -367,10 +399,12 @@ export default class PersonFinderData extends Component {
 
         return (
             <InputBox
+                parent={document.querySelector('.tapp')}
                 key="single"
                 inputComponent={inputComponent}
                 value={value}
                 onChange={this.handleOnChange}
+                onFocus={this.handleOnFocus}
                 boxClassName={classnames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => {

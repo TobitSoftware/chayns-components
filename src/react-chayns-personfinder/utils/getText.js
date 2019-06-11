@@ -3,6 +3,10 @@ const DICTIONARY = {
         de: 'eingelogged',
         en: 'logged in',
     },
+    DIVIDER_FRIEND: {
+        de: 'Freunde',
+        en: ' friends',
+    },
     DIVIDER_PERSON: {
         de: 'Personen',
         en: ' persons',
