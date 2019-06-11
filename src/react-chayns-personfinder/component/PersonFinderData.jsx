@@ -300,6 +300,7 @@ export default class PersonFinderData extends Component {
         return this.promises[type].promise;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     async fetchFriends() {
         const config = {
             method: 'GET',
