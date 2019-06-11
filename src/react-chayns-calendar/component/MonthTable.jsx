@@ -16,19 +16,24 @@ function getDayNames(language = chayns.env.language) {
 
 export default class MonthTable extends PureComponent {
     static propTypes = {
-        onDateSelect: PropTypes.func.isRequired,
-        activateAll: PropTypes.func,
-        startDate: PropTypes.instanceOf(Date).isRequired,
+        onDateSelect: PropTypes.func,
+        activateAll: PropTypes.bool,
+        startDate: PropTypes.instanceOf(Date),
         selected: PropTypes.instanceOf(Date),
-        activated: PropTypes.bool,
-        highlighted: PropTypes.bool,
+        activated: PropTypes.arrayOf(Date),
+        highlighted: PropTypes.arrayOf(PropTypes.shape({
+            dates: PropTypes.arrayOf(Date).isRequired,
+            style: PropTypes.object,
+        })),
     };
 
     static defaultProps = {
         selected: null,
-        activated: false,
-        highlighted: false,
-        activateAll: null,
+        activated: null,
+        highlighted: null,
+        startDate: null,
+        activateAll: true,
+        onDateSelect: null,
     };
 
     static isActivated(activated, date) {

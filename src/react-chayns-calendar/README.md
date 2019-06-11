@@ -26,7 +26,7 @@ The component got the following properties:
 | Property   | Description                                                                                        | Type   | Default | Required
 |------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
 | startDate | The *startDate* defines the first month which can be displayed.    | date |      | |
-| endDate | The *end* defines the last month which can be displayed.             | bool |      | |
+| endDate | The *end* defines the last month which can be displayed.             | date |      | |
 | selected | The current selected date   | date | today | |
 | activated | If activateAll is false this array defines the activated dates | array of date | |
 | highlighted | This is an array of special, highlighted dates | array of object | |

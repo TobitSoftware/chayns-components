@@ -33,22 +33,40 @@ const Month = ({
 Month.propTypes = {
     title: PropTypes.string,
     className: PropTypes.string,
-    onDateSelect: PropTypes.func.isRequired,
-    activateAll: PropTypes.func,
-    startDate: PropTypes.instanceOf(Date).isRequired,
-    endDate: PropTypes.instanceOf(Date).isRequired,
+    onDateSelect: PropTypes.func,
+    activateAll: PropTypes.bool,
+    startDate: PropTypes.instanceOf(Date),
+    endDate: PropTypes.instanceOf(Date),
     selected: PropTypes.instanceOf(Date),
-    activated: PropTypes.bool,
-    highlighted: PropTypes.bool,
+    activated: PropTypes.arrayOf(Date),
+    highlighted: PropTypes.oneOfType([
+        PropTypes.shape({
+            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+            style: PropTypes.shape({
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+        }),
+        PropTypes.arrayOf(PropTypes.shape({
+            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+            style: PropTypes.shape({
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+        })),
+    ]),
 };
 
 Month.defaultProps = {
     title: '',
     className: '',
     selected: null,
-    activated: false,
+    activated: null,
+    startDate: null,
+    endDate: null,
     highlighted: false,
-    activateAll: null,
+    activateAll: true,
+    onDateSelect: null,
 };
 
 export default Month;
