@@ -186,4 +186,9 @@
   "title": "ImageAccordion",
   "example": "react-chayns-image_accordion/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-date",
+  "title": "Date",
+  "example": "react-chayns-date/Example.jsx",
+  "readme": true
 }]
