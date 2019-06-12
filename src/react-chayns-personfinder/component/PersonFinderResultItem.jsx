@@ -12,7 +12,7 @@ export default class PersonFinderResultItem extends PureComponent {
     static propTypes = {
         onClick: PropTypes.func.isRequired,
         relation: PropTypes.shape({
-            name: PropTypes.string.isRequired,
+            name: PropTypes.string,
             relationCount: PropTypes.number,
             relations: PropTypes.string,
             firstName: PropTypes.string,

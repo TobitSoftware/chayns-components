@@ -31,6 +31,7 @@ export default class PersonFinderData extends Component {
         boxClassName: PropTypes.string,
         uacId: PropTypes.number,
         locationId: PropTypes.number,
+        parent: PropTypes.instanceOf(Element),
     };
 
     static defaultProps = {
@@ -45,6 +46,7 @@ export default class PersonFinderData extends Component {
         boxClassName: null,
         uacId: null,
         locationId: null,
+        parent: document.querySelector('.tapp'),
     };
 
     resultList = null;
@@ -395,12 +397,13 @@ export default class PersonFinderData extends Component {
             sites: enableSites,
             inputComponent,
             boxClassName,
+            parent,
             ...props
         } = this.props;
 
         return (
             <InputBox
-                parent={document.querySelector('.tapp')}
+                parent={parent}
                 key="single"
                 inputComponent={inputComponent}
                 value={value}
