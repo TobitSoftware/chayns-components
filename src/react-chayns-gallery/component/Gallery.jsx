@@ -57,8 +57,9 @@ export default class Gallery extends Component {
         this.state = { active: null, images: props.images, dropzone: null };
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if (nextProps.images !== nextState.images) {
+    componentWillUpdate(nextProps) {
+        const { images } = this.props;
+        if (nextProps.images !== images) {
             // eslint-disable-next-line react/no-will-update-set-state
             this.setState({ images: nextProps.images });
         }
