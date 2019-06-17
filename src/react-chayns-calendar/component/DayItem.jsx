@@ -71,7 +71,7 @@ class DayItem extends PureComponent {
 
         if (selected && areDatesEqual(selected, date)) {
             _active = true;
-            _selected = true; // `-is-active-is-selected${_marked} chayns__color--100`;
+            _selected = true;
         }
 
         if (highlighted) {
