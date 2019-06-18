@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import de from '../constants/text';
+import text from '../constants/text';
 
-export default class Date extends PureComponent {
+export default class FancyDate extends PureComponent {
     static propTypes = {
         children: PropTypes.node,
         language: PropTypes.string,
@@ -16,7 +16,7 @@ export default class Date extends PureComponent {
     };
 
     static defaultProps = {
-        children: <span />,
+        children: <div />,
         language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
         date2: null,
         showTime: null,
@@ -26,21 +26,20 @@ export default class Date extends PureComponent {
         noTitle: false,
     };
 
-    static getRelativeDateString = (date, language) => {
+    static getRelativeDateString = (date, options = { language: 'de' }) => {
         const dateObj = new Date(date);
         const now = new Date();
-
         let timeBetween = now.getTime() - dateObj.getTime();
         let tense;
-        if (timeBetween > 0) {
+        if (timeBetween < 0) {
             tense = 'future';
-        } else if (timeBetween < 0) {
-            tense = 'past';
             timeBetween *= -1;
+        } else if (timeBetween > 0) {
+            tense = 'past';
         } else {
             tense = 'now';
         }
-        let unit;
+        let unit = 'now';
         if (timeBetween < 1000 * 60) {
             unit = 'seconds';
         } else if (timeBetween < 1000 * 60 * 60) {
@@ -51,41 +50,97 @@ export default class Date extends PureComponent {
             unit = 'days';
         } else if (timeBetween < 1000 * 60 * 60 * 24 * 365) {
             unit = 'months';
-        } else {
+        } else if ((timeBetween >= 1000 * 60 * 60 * 24 * 365)) {
             unit = 'years';
         }
-        const values = {
-            seconds: Math.ceil((timeBetween /= 1000) % 60),
-            minutes: Math.ceil((timeBetween /= 60) % 60),
-            hours: Math.ceil((timeBetween /= 60) % 24),
-            days: Math.ceil((timeBetween /= 24) % 30),
-            months: Math.ceil(timeBetween / 30),
-            years: Math.ceil(timeBetween / 365),
+        const relativeValues = {
+            seconds: Math.floor((timeBetween /= 1000) % 60),
+            minutes: Math.floor((timeBetween /= 60) % 60),
+            hours: Math.floor((timeBetween /= 60) % 24),
+            days: Math.floor((timeBetween /= 24) % 30),
+            months: Math.floor(timeBetween / 30),
+            years: Math.floor(timeBetween / 365),
+        };
+        const absoluteValues = {
+            seconds: dateObj.getSeconds(),
+            minutes: dateObj.getMinutes(),
+            hours: dateObj.getHours(),
+            days: `${dateObj.getDate()}.`,
+            months: options.writeMonth ? ` ${text[options.language].MONTHS[dateObj.getMonth()]} ` : `${dateObj.getMonth()}.`,//TODO dateMW
+            years: dateObj.getFullYear(),
         };
 
-        if (values[unit] === 1) { // if value of unit is only 1...
-            unit = unit.substring(0, unit.length - 1); // ...use singular of unit
+        if (options.showTime === !!options.showTime && (unit === 'seconds' || unit === 'minutes' || unit === 'hours')) {
+            unit = 'days';
         }
+
+        if (relativeValues[unit] === 1) { // if value of unit is only 1...
+            unit = unit.substring(0, unit.length - 1); // ...use singular of unit
+        } else if (relativeValues[unit] === 0) {
+            unit += '0';
+        }
+
+        if (options.showDate === false && !(unit === 'seconds' || unit === 'now' || unit === 'minutes' || unit === 'hours') && options.showTime === null) {
+            unit = 'hours';
+        }
+
+        let txt = text[options.language].RELATIVE_TEXT[tense][unit];
+
+        if (options.showDate === false && options.showTime === true) {
+            txt = '';
+        } else if (options.showDate === true) {
+            txt = text[options.language].ABSOLUTE_TEXT.date;
+        }
+
+        if (options.showTime) {
+            if (txt) {
+                txt += ` ${text[options.language].ABSOLUTE_TEXT.at} `;
+            }
+            txt += `${text[options.language].ABSOLUTE_TEXT.time}`;
+        }
+
+        return FancyDate.replace(txt, relativeValues, absoluteValues);
     };
 
-    static getAbsoluteDateString = (date, language) => {
+    static getAbsoluteDateString = (date, options = { language: 'de' }) => {
         const dateObj = new Date(date);
+        const txt = text[options.language].ABSOLUTE_TEXT.datetime;
+        const absoluteValues = {
+            seconds: dateObj.getSeconds(),
+            minutes: dateObj.getMinutes(),
+            hours: dateObj.getHours(),
+            days: dateObj.getDate(),
+            months: dateObj.getMonth() + 1,
+            years: dateObj.getFullYear(),
+        };
+        return FancyDate.replace(txt, {}, absoluteValues);
     };
 
-    static getDateIntervalString = (date1, date2, language) => {
-        const dateObj1 = new Date(date1);
-        const dateObj2 = new Date(date2);
-    };
+    static replace = (string, relativeValues, absoluteValues) => string
+        .replace('##rMINUTES##', relativeValues.minutes)
+        .replace('##rHOURS##', relativeValues.hours)
+        .replace('##rDAYS##', relativeValues.days)
+        .replace('##rMONTHS##', relativeValues.months)
+        .replace('##rYEARS##', relativeValues.years)
+        .replace('##aSECONDS##', absoluteValues.seconds)
+        .replace('##aMINUTES##', absoluteValues.minutes)
+        .replace('##aHOURS##', absoluteValues.hours)
+        .replace('##aDAYS##', absoluteValues.days)
+        .replace('##aMONTHS##', absoluteValues.months)
+        .replace('##aYEARS##', absoluteValues.years)
+        .replace(/^\s*|\s*$/g, ''); // Matches whitespace at the start and end of the string
 
     render() {
         const {
-            date, language, noTitle, children,
+            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay,
         } = this.props;
 
         return React.cloneElement(
             children,
-            noTitle || { title: Date.getAbsoluteDateString(date, language) },
-            Date.getRelativeDateString(date, language),
+            noTitle || { title: FancyDate.getAbsoluteDateString(date, { language }) },
+            FancyDate.getRelativeDateString(date, {
+                language, showDate, showTime, writeDay, writeMonth,
+            }),
         );
     }
 }
