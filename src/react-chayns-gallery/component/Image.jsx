@@ -18,6 +18,10 @@ export default class Image extends PureComponent {
         style: PropTypes.object,
         stylePortrait: PropTypes.object,
         styleLandscape: PropTypes.object,
+        preventParams: PropTypes.shape({
+            width: PropTypes.bool,
+            height: PropTypes.bool,
+        }),
     };
 
     static defaultProps = {
@@ -29,6 +33,7 @@ export default class Image extends PureComponent {
         style: {},
         stylePortrait: {},
         styleLandscape: {},
+        preventParams: {},
     };
 
     static format = {
@@ -115,6 +120,7 @@ export default class Image extends PureComponent {
             style,
             styleLandscape,
             stylePortrait,
+            preventParams,
         } = this.props;
 
         const {
@@ -154,7 +160,7 @@ export default class Image extends PureComponent {
                                 onClick={onClick}
                                 key="image"
                                 alt=""
-                                src={chayns.utils.getScaledImageUrl(imageUrl, elementDimensions.height, elementDimensions.width)}
+                                src={chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height && elementDimensions.height, !preventParams.width && elementDimensions.width)}
                                 className={classNames('cc__image__img', { 'cc__image--clickable': onClick })}
                                 onLoad={this.onReady}
                             />
