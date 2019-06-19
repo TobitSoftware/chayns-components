@@ -65,8 +65,9 @@ export default class FancyDate extends PureComponent {
             seconds: dateObj.getSeconds(),
             minutes: dateObj.getMinutes(),
             hours: dateObj.getHours(),
-            days: `${dateObj.getDate()}.`,
-            months: options.writeMonth ? ` ${text[options.language].MONTHS[dateObj.getMonth()]} ` : `${dateObj.getMonth()}.`,//TODO dateMW
+            days: dateObj.getDate(),
+            month: dateObj.getMonth(),
+            monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
             years: dateObj.getFullYear(),
         };
 
@@ -88,8 +89,20 @@ export default class FancyDate extends PureComponent {
 
         if (options.showDate === false && options.showTime === true) {
             txt = '';
-        } else if (options.showDate === true) {
-            txt = text[options.language].ABSOLUTE_TEXT.date;
+        } else if (options.showDate || options.writeMonth) {
+            if (options.writeMonth) {
+                txt = text[options.language].ABSOLUTE_TEXT.dateMW;
+            } else {
+                txt = text[options.language].ABSOLUTE_TEXT.date;
+            }
+        }
+
+        if (options.writeDay) {
+            if (options.showDate || options.writeMonth) {
+                txt = `${text[options.language].WEEKDAYS[dateObj.getDay()]}, ${txt}`;
+            } else {
+                txt = `${text[options.language].WEEKDAYS[dateObj.getDay()]} `;
+            }
         }
 
         if (options.showTime) {
@@ -110,37 +123,60 @@ export default class FancyDate extends PureComponent {
             minutes: dateObj.getMinutes(),
             hours: dateObj.getHours(),
             days: dateObj.getDate(),
-            months: dateObj.getMonth() + 1,
+            month: dateObj.getMonth() + 1,
             years: dateObj.getFullYear(),
         };
         return FancyDate.replace(txt, {}, absoluteValues);
     };
 
-    static replace = (string, relativeValues, absoluteValues) => string
-        .replace('##rMINUTES##', relativeValues.minutes)
-        .replace('##rHOURS##', relativeValues.hours)
-        .replace('##rDAYS##', relativeValues.days)
-        .replace('##rMONTHS##', relativeValues.months)
-        .replace('##rYEARS##', relativeValues.years)
-        .replace('##aSECONDS##', absoluteValues.seconds)
-        .replace('##aMINUTES##', absoluteValues.minutes)
-        .replace('##aHOURS##', absoluteValues.hours)
-        .replace('##aDAYS##', absoluteValues.days)
-        .replace('##aMONTHS##', absoluteValues.months)
-        .replace('##aYEARS##', absoluteValues.years)
-        .replace(/^\s*|\s*$/g, ''); // Matches whitespace at the start and end of the string
+    static replace = (string, relativeValues, absoluteValues) => {
+        const localeConfig = { minimumIntegerDigits: 2, maximumFractionDigits: 0 };
+
+        return string
+            .replace('##rMINUTES##', relativeValues.minutes)
+            .replace('##rHOURS##', relativeValues.hours)
+            .replace('##rDAYS##', relativeValues.days)
+            .replace('##rMONTHS##', relativeValues.months)
+            .replace('##rYEARS##', relativeValues.years)
+            .replace('##aSECONDS##', absoluteValues.seconds)
+            .replace('##aMINUTES##', absoluteValues.minutes.toLocaleString(localeConfig))
+            .replace('##aHOURS##', absoluteValues.hours.toLocaleString(localeConfig))
+            .replace('##aDAYS##', absoluteValues.days)
+            .replace('##aMONTH##', absoluteValues.month)
+            .replace('##aMONTHw##', absoluteValues.monthWritten)
+            .replace('##aYEARS##', absoluteValues.years)
+            .replace(/^\s*|\s*$/g, '');// Matches whitespace at the start and end of the string
+    };
 
     render() {
         const {
-            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay,
+            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay, date2,
         } = this.props;
+
+        let txt = FancyDate.getRelativeDateString(date, {
+            language, showDate, showTime, writeDay, writeMonth,
+        });
+        if (date2) {
+            txt += ' - ';
+            if (new Date(date).toISOString().substring(0, 10) === new Date(date2).toISOString().substring(0, 10)) {
+                txt += FancyDate.getRelativeDateString(date2, {
+                    language, showDate: false, showTime, writeDay, writeMonth,
+                });
+            } else {
+                txt += FancyDate.getRelativeDateString(date2, {
+                    language, showDate, showTime, writeDay, writeMonth,
+                });
+            }
+        }
+        if (date2 && date > date2) {
+            // eslint-disable-next-line no-console
+            console.warn('[chayns components]: date2 is smaller than date');
+        }
 
         return React.cloneElement(
             children,
             noTitle || { title: FancyDate.getAbsoluteDateString(date, { language }) },
-            FancyDate.getRelativeDateString(date, {
-                language, showDate, showTime, writeDay, writeMonth,
-            }),
+            txt,
         );
     }
 }

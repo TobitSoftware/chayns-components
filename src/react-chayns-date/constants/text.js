@@ -79,11 +79,11 @@ const text = {
             },
         },
         ABSOLUTE_TEXT: {
-            date: '##aDAYS##.##aMONTHS##.##aYEARS##',
-            dateMW: '##aDAYS##. ##aMONTHSw## ##aYEARS##',
+            date: '##aDAYS##.##aMONTH##.##aYEARS##',
+            dateMW: '##aDAYS##. ##aMONTHw## ##aYEARS##',
             time: '##aHOURS##:##aMINUTES## Uhr',
-            datetime: '##aDAYS##.##aMONTHS##.##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
-            datetimeMW: '##aDAYS##. ##aMONTHSw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
+            datetime: '##aDAYS##.##aMONTH##.##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
+            datetimeMW: '##aDAYS##. ##aMONTHw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
             at: 'um',
         },
         INTERVAL: {
