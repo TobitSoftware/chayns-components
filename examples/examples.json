@@ -187,8 +187,8 @@
   "example": "react-chayns-image_accordion/Example.jsx",
   "readme": true
 },{
-  "id": "react-chayns-date",
-  "title": "Date",
-  "example": "react-chayns-date/Example.jsx",
+  "id": "react-chayns-dateinfo",
+  "title": "DateInfo",
+  "example": "react-chayns-dateinfo/Example.jsx",
   "readme": true
 }]

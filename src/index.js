@@ -12,7 +12,7 @@ import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 
-import Date from './react-chayns-date/component/Date';
+import DateInfo from './react-chayns-dateinfo/component/DateInfo';
 
 import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
@@ -93,7 +93,7 @@ export {
     Checkbox,
     ComboBox,
     ContextMenu,
-    Date,
+    DateInfo,
     EmojiInput,
     ExpandableContent,
     FormattedInput,

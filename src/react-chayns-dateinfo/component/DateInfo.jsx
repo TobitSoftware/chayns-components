@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import text from '../constants/text';
 
-export default class FancyDate extends PureComponent {
+export default class DateInfo extends PureComponent {
     static propTypes = {
         children: PropTypes.node,
         language: PropTypes.string,
@@ -112,7 +112,7 @@ export default class FancyDate extends PureComponent {
             txt += `${text[options.language].ABSOLUTE_TEXT.time}`;
         }
 
-        return FancyDate.replace(txt, relativeValues, absoluteValues);
+        return DateInfo.replace(txt, relativeValues, absoluteValues);
     };
 
     static getAbsoluteDateString = (date, options = { language: 'de' }) => {
@@ -126,7 +126,7 @@ export default class FancyDate extends PureComponent {
             month: dateObj.getMonth() + 1,
             years: dateObj.getFullYear(),
         };
-        return FancyDate.replace(txt, {}, absoluteValues);
+        return DateInfo.replace(txt, {}, absoluteValues);
     };
 
     static replace = (string, relativeValues, absoluteValues) => {
@@ -153,17 +153,17 @@ export default class FancyDate extends PureComponent {
             date, language, noTitle, children, showDate, showTime, writeMonth, writeDay, date2,
         } = this.props;
 
-        let txt = FancyDate.getRelativeDateString(date, {
+        let txt = DateInfo.getRelativeDateString(date, {
             language, showDate, showTime, writeDay, writeMonth,
         });
         if (date2) {
             txt += ' - ';
             if (new Date(date).toISOString().substring(0, 10) === new Date(date2).toISOString().substring(0, 10)) {
-                txt += FancyDate.getRelativeDateString(date2, {
+                txt += DateInfo.getRelativeDateString(date2, {
                     language, showDate: false, showTime, writeDay, writeMonth,
                 });
             } else {
-                txt += FancyDate.getRelativeDateString(date2, {
+                txt += DateInfo.getRelativeDateString(date2, {
                     language, showDate, showTime, writeDay, writeMonth,
                 });
             }
@@ -175,7 +175,7 @@ export default class FancyDate extends PureComponent {
 
         return React.cloneElement(
             children,
-            noTitle || { title: FancyDate.getAbsoluteDateString(date, { language }) },
+            noTitle || { title: DateInfo.getAbsoluteDateString(date, { language }) },
             txt,
         );
     }

@@ -11,7 +11,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         Checkbox: 'react-chayns-checkbox/component/Checkbox.js',
         ComboBox: 'react-chayns-combobox/component/ComboBox.js',
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
-        Date: 'react-chayns-date/component/Date.js',
+        DateInfo: 'react-chayns-dateinfo/component/DateInfo.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         ExpandableContent: 'react-chayns-expandable_content/component/ExpandableContent.js',
         FormattedInput: 'react-chayns-formatted_input/component/FormattedInput.js',
