@@ -11,7 +11,7 @@ export default class ExampleList extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node)
+            PropTypes.arrayOf(PropTypes.node),
         ]).isRequired,
     };
 
@@ -38,7 +38,7 @@ export default class ExampleList extends Component {
     handleOpen(id) {
         chayns.appendUrlParameter({
             component: String(id),
-        });
+        }, true);
 
         chayns.showBackButton(() => {
             this.setState({
