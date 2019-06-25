@@ -3,12 +3,19 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ImageContainer.scss';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ImageContainer extends PureComponent {
     static propTypes = {
         children: PropTypes.node.isRequired,
         tools: PropTypes.arrayOf(PropTypes.shape({
-            icon: PropTypes.string.isRequired,
+            icon: PropTypes.oneOfType([
+                PropTypes.string.isRequired,
+                PropTypes.shape({
+                    iconName: PropTypes.string.isRequired,
+                    prefix: PropTypes.string.isRequired,
+                }).isRequired,
+            ]).isRequired,
             onClick: PropTypes.func,
             onDown: PropTypes.func,
             onMove: PropTypes.func,
@@ -50,8 +57,20 @@ export default class ImageContainer extends PureComponent {
                                         onMouseUp={tool.onUp}
                                         onTouchEnd={tool.onUp}
                                         onTouchCancel={tool.onUp}
-                                        className={classNames('image-tool', tool.icon, tool.className)}
-                                    />
+                                        className={classNames('image-tool', tool.className, { [tool.icon]: typeof tool.icon === 'string' })}
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        {typeof tool.icon !== 'string' ? (
+                                            <Icon
+                                                icon={tool.icon}
+                                            />
+                                        ) : false}
+                                    </div>
                                 ))}
                             </div>
                         )

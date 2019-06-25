@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { faRocket } from '@fortawesome/free-solid-svg-icons/faRocket';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 import Image from '../../src/react-chayns-gallery/component/Image';
 import ImageContainer from '../../src/react-chayns-gallery/component/ImageContainer';
@@ -68,6 +68,7 @@ export default class GalleryExample extends Component {
                 <h3>ImageContainer-Component</h3>
                 <ImageContainer
                     tools={[
+                        { icon: faRocket, onClick: console.log },
                         { icon: 'ts-tobit', onClick: console.log },
                         { icon: 'ts-wrong', onClick: console.log },
                         { icon: 'ts-check', onClick: console.log },
