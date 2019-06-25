@@ -34,10 +34,10 @@ You can use the FileInput like in the [example](https://github.com/TobitSoftware
 | disabled          | Disables the item                                                          | bool          | false         |
 | onChange          | Callback-function (parameter: validFiles, invalidFiles)                    | function      |               |
 | onClick           | Callback-function                                                          | function      |               |
-| types             | Array of allowed mime-types (FileInput.types)                              | array         | [*]           |
+| types             | Array of allowed mime-types (FileInput.types, FileInput.typePresets)       | array         | FileInput.types.ALL |
 | maxNumberOfFiles  | Maximum number of files that can be uploaded at once. (0=infinity)         | number        | 0             |
 | maxFileSize       | Maximum size per file. (0=infinity, in bytes)                              | number        | 0             |
-| directory         | Select directories instead of files<a href="#directory"><sup>1</sup></a>                                    | bool          | false         |
+| directory         | Select directories instead of files<a href="#directory"><sup>1</sup></a>   | bool          | false         |
 | content.text      | Text that should be shown on button                                        | string        |               |
 | content.icon      | Icon that should be shown on button                                        | string/object |               |
 | content.children  | JSX that should be shown on button                                         | node          |               |

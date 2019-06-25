@@ -15,6 +15,7 @@ export default class FileInput extends PureComponent {
 
     static typePresets = {
         TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+        STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/mov'],
     };
 
     static propTypes = {
