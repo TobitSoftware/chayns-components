@@ -49,14 +49,17 @@ export default class InputBox extends Component {
         this.handleBlur = this.handleBlur.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.updatePosition = this.updatePosition.bind(this);
+        this.blur = this.blur.bind(this);
     }
 
     componentDidMount() {
         document.addEventListener('click', this.handleBlur);
+        window.addEventListener('blur', this.blur);
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleBlur);
+        window.removeEventListener('blur', this.blur);
     }
 
     setRef(name, ref) {
@@ -87,6 +90,12 @@ export default class InputBox extends Component {
             return;
         }
 
+        this.setState({
+            hidden: true,
+        });
+    }
+
+    blur() {
         this.setState({
             hidden: true,
         });

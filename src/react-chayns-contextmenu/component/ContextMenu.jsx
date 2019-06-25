@@ -69,6 +69,8 @@ export default class ContextMenu extends Component {
         if (coordinates) {
             this.getPosition();
         }
+
+        window.addEventListener('blur', this.hide);
     }
 
     componentDidUpdate(prevProps) {
@@ -84,6 +86,7 @@ export default class ContextMenu extends Component {
     componentWillUnmount() {
         clearTimeout(this.timeout);
         document.removeEventListener('click', this.onLayerClick);
+        window.removeEventListener('blur', this.hide);
     }
 
     onChildrenClick(e) {
