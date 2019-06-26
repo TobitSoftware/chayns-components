@@ -52,7 +52,6 @@ export default class Image extends PureComponent {
     }
 
     componentDidMount() {
-        this.getElementDimensions();
         this.init();
     }
 
@@ -72,6 +71,8 @@ export default class Image extends PureComponent {
     };
 
     init = async () => { // set url and metadata
+        this.getElementDimensions();
+
         const { image, styleLandscape, stylePortrait } = this.props;
 
         if (typeof image === 'string') { // url

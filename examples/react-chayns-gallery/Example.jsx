@@ -65,6 +65,9 @@ export default class GalleryExample extends Component {
                     styleLandscape={{ borderRadius: '10px' }}
                     stylePortrait={{ border: '3px solid black' }}
                 />
+                <Image
+                    image={images[0]}
+                />
                 <h3>ImageContainer-Component</h3>
                 <ImageContainer
                     tools={[
