@@ -64,6 +64,7 @@ export default class ModeSwitch extends Component {
     constructor(props) {
         super(props);
 
+        this.showModeSwitch = this.showModeSwitch.bind(this);
         this.toggleModeSwitch = this.toggleModeSwitch.bind(this);
         this.switchMode = this.switchMode.bind(this);
         this.setMode = this.setMode.bind(this);
@@ -205,10 +206,25 @@ export default class ModeSwitch extends Component {
         this.setState({ open: !open });
     }
 
-    render() {
+    showModeSwitch() {
         const { show } = this.props;
+        const { modes } = this.state;
+
+        let customModes = modes.length;
+        if (modes.find(mode => mode.uacIds && mode.uacIds.indexOf(1) >= 0)) {
+            customModes -= 1;
+        }
+        if (modes.find(mode => !mode.uacIds || (mode.uacIds && mode.uacIds.indexOf(0) >= 0))) {
+            customModes -= 1;
+        }
+
+        return (show || (show === null && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
+    }
+
+    render() {
         const { modes, open, activeModeId } = this.state;
-        if ((show || (show === null && (!ModeSwitch.adminSwitchSupport || modes.length > 2))) && chayns.env.user.isAuthenticated) {
+
+        if (this.showModeSwitch()) {
             return (
                 <TappPortal>
                     <div
