@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
+// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
@@ -61,7 +61,7 @@ export default class AmountControl extends PureComponent {
         stopPropagation: false,
         plusIcon: faPlus,
         minusIcon: faMinus,
-        removeIcon: faTrashAlt,
+        removeIcon: faMinus,
     };
 
     constructor(props) {
