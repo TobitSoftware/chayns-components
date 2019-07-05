@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+
+import SetupWizardItem from './SetupItem';
 
 /**
  * ############################
@@ -12,14 +13,15 @@ export default class SetupWizard extends Component {
     static propTypes = {
         children: PropTypes.oneOfType([
             PropTypes.arrayOf(PropTypes.element),
-            PropTypes.element
+            PropTypes.element,
         ]),
         ready: PropTypes.func,
         notComplete: PropTypes.func,
+        className: PropTypes.string,
         style: PropTypes.object,
         contentStyle: PropTypes.object,
         title: PropTypes.string,
-        description: PropTypes.node
+        description: PropTypes.node,
     };
 
     static childContextTypes = {
@@ -27,7 +29,7 @@ export default class SetupWizard extends Component {
         previousStep: PropTypes.func,
         nextStep: PropTypes.func,
         toStep: PropTypes.func,
-        resetToStep: PropTypes.func
+        resetToStep: PropTypes.func,
     };
 
     static defaultProps = {
@@ -37,16 +39,19 @@ export default class SetupWizard extends Component {
         style: null,
         contentStyle: null,
         title: null,
-        description: null
+        description: null,
+        className: null,
     };
 
     constructor() {
         super();
+
         this.state = {
             currentStep: 0,
             maxProgress: 0,
-            completedSteps: []
+            completedSteps: [],
         };
+
         this.stepComplete = this.stepComplete.bind(this);
         this.previousStep = this.previousStep.bind(this);
         this.nextStep = this.nextStep.bind(this);
@@ -62,24 +67,27 @@ export default class SetupWizard extends Component {
             previousStep: this.previousStep,
             nextStep: this.nextStep,
             toStep: this.toStep,
-            resetToStep: this.resetToStep
+            resetToStep: this.resetToStep,
         };
     }
 
     stepComplete(value) {
         const { currentStep, completedSteps } = this.state;
+
         if (value === true) {
             if (completedSteps.indexOf(currentStep) === -1) {
-                completedSteps.push(currentStep);
-                this.setState({ completedSteps });
+                this.setState(prevState => ({
+                    completedSteps: prevState.completedSteps.concat(currentStep),
+                }));
             }
         } else if (completedSteps.indexOf(currentStep) >= 0) {
             const { children } = this.props;
 
-            completedSteps.splice(completedSteps.indexOf(currentStep));
-            this.setState({ completedSteps });
+            this.setState(prevState => ({
+                completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep)),
+            }));
 
-            if(children[currentStep].props.required === true) {
+            if (children[currentStep].props.required === true) {
                 this.setState({ maxProgress: currentStep });
             }
         }
@@ -114,20 +122,18 @@ export default class SetupWizard extends Component {
     }
 
     resetToStep(step) {
-        const { completedSteps, maxProgress } = this.state;
-        for(let i = step; i < maxProgress; i += 1) {
-            if (completedSteps.indexOf(i) >= 0) {
-                completedSteps.splice(completedSteps.indexOf(i));
-            }
-        }
-        this.setState({ maxProgress: step, currentStep: step, completedSteps });
+        this.setState(prevState => ({
+            maxProgress: step,
+            currentStep: step,
+            completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress)),
+        }));
     }
 
     ready() {
         const { ready, children } = this.props;
         const { completedSteps, currentStep } = this.state;
-        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
-            if(ready) {
+        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+            if (ready) {
                 ready();
             }
         } else {
@@ -137,20 +143,19 @@ export default class SetupWizard extends Component {
 
     notComplete() {
         const { notComplete } = this.props;
-        if(notComplete) {
+        if (notComplete) {
             notComplete();
         }
     }
 
     updateContent(newCurrentStep) {
         const { children } = this.props;
-        let { maxProgress } = this.state;
+        const { maxProgress } = this.state;
         const { completedSteps, currentStep } = this.state;
-        if(!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
-            maxProgress = (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress;
+        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
             this.setState({
                 currentStep: newCurrentStep,
-                maxProgress
+                maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress,
             });
         } else {
             this.notComplete();
@@ -159,60 +164,49 @@ export default class SetupWizard extends Component {
 
     render() {
         const {
-            style, contentStyle, title, description, children
+            style,
+            contentStyle,
+            title,
+            description,
+            children,
+            className,
         } = this.props;
         const { maxProgress, currentStep, completedSteps } = this.state;
+
         return (
-            <div style={style}>
+            <div style={style} className={className}>
                 {title && (
                     <h1>
                         {title}
                     </h1>
                 )}
                 {description && (
-                    <p dangerouslySetInnerHTML={{ __html: description }}/>
+                    <p dangerouslySetInnerHTML={{ __html: description }} />
                 )}
                 {
-                    children.map((child, index) => {
-                        return (
-                            <div
-                                className={classNames('accordion', 'accordion--fixed', {
-                                    'accordion--open': (index === currentStep),
-                                    'accordion--disabled': (index > maxProgress)
-                                })}
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={index}
-                            >
-                                <div
-                                    className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: (index <= maxProgress) })}
-                                    onClick={() => {
-                                        if (maxProgress >= index) {
-                                            if (currentStep === index) {
-                                                this.setState({ currentStep: -1 });
-                                            } else {
-                                                this.setState({ currentStep: index });
-                                            }
-                                        }
-                                    }}
-                                >
-                                    <div
-                                        className={classNames('number', {
-                                            'wizard_step--ready': completedSteps.indexOf(index) >= 0,
-                                            'wizard_step--notReady': completedSteps.indexOf(index) === -1
-                                        })}
-                                    >
-                                        {index + 1}
-                                    </div>
-                                    <div className="title">
-                                        {child.props.title}
-                                    </div>
-                                </div>
-                                <div className="accordion__body" style={contentStyle}>
-                                    {child}
-                                </div>
-                            </div>
-                        );
-                    })
+                    children.map((child, index) => (
+                        <SetupWizardItem
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={index}
+                            title={child.props.title}
+                            step={index + 1}
+                            ready={completedSteps.indexOf(index) >= 0}
+                            open={index === currentStep}
+                            disabled={index > maxProgress}
+                            onClick={() => {
+                                if (maxProgress >= index) {
+                                    if (currentStep === index) {
+                                        this.setState({ currentStep: -1 });
+                                    } else {
+                                        this.setState({ currentStep: index });
+                                    }
+                                }
+                            }}
+                            contentStyle={contentStyle}
+                        >
+                            {child.props.children}
+                        </SetupWizardItem>
+                    ))
                 }
             </div>
         );

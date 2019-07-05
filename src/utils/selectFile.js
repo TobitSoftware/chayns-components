@@ -11,11 +11,11 @@ function selectFile({ type = '*/*', multiple = false } = {}) {
         const input = document.createElement('input');
         input.type = 'file';
 
-        if(type !== '*/*' && type) {
+        if (type !== '*/*' && type) {
             input.accept = type;
         }
 
-        if(multiple) {
+        if (multiple) {
             input.multiple = true;
         }
 
@@ -34,17 +34,17 @@ function selectFile({ type = '*/*', multiple = false } = {}) {
 
         input.click();
     }).then((event) => {
-        if(!event || !event.target || !event.target.files) {
+        if (!event || !event.target || !event.target.files) {
             return null;
         }
 
         const { files } = event.target;
 
-        if(!(files instanceof FileList) || files.length <= 0) {
+        if (!(files instanceof FileList) || files.length <= 0) {
             return null;
         }
 
-        if(!multiple) {
+        if (!multiple) {
             return files[0];
         }
 

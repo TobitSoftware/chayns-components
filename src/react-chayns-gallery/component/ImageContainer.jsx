@@ -1,71 +1,81 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/no-array-index-key */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import './ImageContainer.scss';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ImageContainer extends PureComponent {
     static propTypes = {
-        index: PropTypes.number,
-        url: PropTypes.string.isRequired,
-        openImage: PropTypes.func.isRequired,
-        moreImages: PropTypes.number,
-        deleteMode: PropTypes.bool,
-        onDelete: PropTypes.func,
-        stopPropagation: PropTypes.bool.isRequired,
+        children: PropTypes.node.isRequired,
+        tools: PropTypes.arrayOf(PropTypes.shape({
+            icon: PropTypes.oneOfType([
+                PropTypes.string.isRequired,
+                PropTypes.shape({
+                    iconName: PropTypes.string.isRequired,
+                    prefix: PropTypes.string.isRequired,
+                }).isRequired,
+            ]).isRequired,
+            onClick: PropTypes.func,
+            onDown: PropTypes.func,
+            onMove: PropTypes.func,
+            onUp: PropTypes.func,
+            className: PropTypes.string,
+        })),
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
-        index: 0,
-        moreImages: 0,
-        deleteMode: false,
-        onDelete: null,
+        tools: [],
+        className: null,
+        style: null,
     };
-
-    constructor(props) {
-        super(props);
-        this.deleteOnClick = this.deleteOnClick.bind(this);
-        this.openImage = this.openImage.bind(this);
-    }
-
-
-    deleteOnClick(e) {
-        const {
-            onDelete, index, url, stopPropagation
-        } = this.props;
-        if (onDelete) onDelete(url, index);
-        if (stopPropagation) e.stopPropagation();
-    }
-
-    openImage() {
-        const { index, openImage } = this.props;
-        if (openImage) {
-            openImage(index);
-        }
-    }
 
     render() {
         const {
-            url,
-            moreImages,
-            deleteMode,
+            children, tools, className, style,
         } = this.props;
 
         return (
-            <div className="gallery_item">
-                <div
-                    className={classNames('gallery_item_inner', { 'more-images': moreImages > 0 })}
-                    style={{ backgroundImage: `url(${url})` }}
-                    onClick={this.openImage}
-                    data-more={(moreImages > 0) ? `+${moreImages}` : undefined}
-                >
-                    {deleteMode && (
-                        <div className="delete-icon" onClick={this.deleteOnClick}>
-                            <Icon icon={faTimes}/>
-                        </div>
-                    )}
+            <div className={classNames('cc__image-container', className)} style={style}>
+                <div className="cc__image-container__content">
+                    {children}
                 </div>
+                {
+                    tools && tools.length > 0
+                        ? (
+                            <div className="cc__image-container__tools">
+                                {tools.map((tool, index) => (
+                                    <div
+                                        key={`tool${index}`}
+                                        onClick={tool.onClick}
+                                        onMouseDown={tool.onDown}
+                                        onTouchStart={tool.onDown}
+                                        onMouseMove={tool.onMove}
+                                        onTouchMove={tool.onMove}
+                                        onMouseUp={tool.onUp}
+                                        onTouchEnd={tool.onUp}
+                                        onTouchCancel={tool.onUp}
+                                        className={classNames('image-tool', tool.className, { [tool.icon]: typeof tool.icon === 'string' })}
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        {typeof tool.icon !== 'string' ? (
+                                            <Icon
+                                                icon={tool.icon}
+                                            />
+                                        ) : false}
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                        : null
+                }
             </div>
         );
     }

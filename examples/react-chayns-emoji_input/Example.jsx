@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 import { EmojiInput } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends Component {
+export default class EmojiInputExample extends Component {
     constructor() {
         super();
 
@@ -22,14 +21,14 @@ export default class Example extends Component {
         const { text } = this.state;
 
         return(
-            <ExampleContainer headline="EmojiInput">
+            <div>
                 <EmojiInput
                     onInput={this.handleInput}
                     placeholder="Test me!"
                     id="emojiInput_1"
                     value={text}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

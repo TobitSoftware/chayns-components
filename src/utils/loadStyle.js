@@ -3,11 +3,11 @@ const styleMap = new Map();
 export default function loadStyle(id, src) {
     return new Promise((resolve, reject) => {
         let styleTag = styleMap.get(id);
-        if(styleTag) {
+        if (styleTag) {
             return resolve();
         }
 
-        if(!styleTag) {
+        if (!styleTag) {
             styleTag = document.createElement('link');
             styleTag.rel = 'stylesheet';
             styleTag.type = 'text/css';

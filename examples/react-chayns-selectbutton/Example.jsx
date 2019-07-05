@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 
 import { SelectButton } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 
-export default class Example extends PureComponent {
+export default class SelectButtonExample extends PureComponent {
     render() {
         const pizza = [
             {
@@ -27,7 +26,7 @@ export default class Example extends PureComponent {
         ];
 
         return (
-            <ExampleContainer headline="SelectButton">
+            <div>
                 <div style={{ marginBottom: '20px' }}>
                     <SelectButton
                         stopPropagation
@@ -80,7 +79,7 @@ export default class Example extends PureComponent {
                         disabled
                     />
                 </div>
-            </ExampleContainer>
+            </div>
         );
     }
 }

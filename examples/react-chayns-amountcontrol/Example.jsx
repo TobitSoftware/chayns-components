@@ -1,11 +1,11 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { AmountControl } from '../../src/index';
-import ExampleContainer from '../ExampleContainer';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 
-export default class Example extends Component {
+export default class AmountControlExample extends Component {
     constructor() {
         super();
 
@@ -24,10 +24,7 @@ export default class Example extends Component {
         const { amount } = this.state;
 
         return (
-            <ExampleContainer
-                headline="AmountControl"
-                data-equalize="group-1"
-            >
+            <div data-equalize="group-1">
                 <AmountControl
                     autoInput
                     disabled={false}
@@ -52,6 +49,9 @@ export default class Example extends Component {
                     contentWidth={200}
                     buttonText="mtl. 15,95 €"
                     icon="ts-tobit"
+                    plusIcon="ts-tobit"
+                    minusIcon="ts-tobit"
+                    removeIcon="ts-tobit"
                 />
 
                 <br/>
@@ -71,7 +71,6 @@ export default class Example extends Component {
                         <AmountControl
                             className="accordion--no-trigger"
                             icon="ts-bamboo"
-                            disabled={false}
                             amount={amount}
                             onChange={this.onChange}
                             equalize="group-1"
@@ -81,8 +80,6 @@ export default class Example extends Component {
                     )}
                     head="Afri Cola"
                 >
-
-
                     Test
                 </Accordion>
 
@@ -157,7 +154,7 @@ export default class Example extends Component {
                     buttonText="0,10"
                     showInput={amount > 0}
                 />
-            </ExampleContainer>
+            </div>
         );
     }
 }

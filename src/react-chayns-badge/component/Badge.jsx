@@ -28,7 +28,7 @@ export default class Badge extends PureComponent {
                 className={classNames(className, 'badge')}
                 ref={(ref) => {
                     this.ref = ref;
-                    if(badgeRef) {
+                    if (badgeRef) {
                         badgeRef(ref);
                     }
                 }}

@@ -1,0 +1,39 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "transform-imports",
+      {
+        "@fortawesome/free-solid-svg-icons": {
+          "transform": "@fortawesome/free-solid-svg-icons/${member}",
+          "preventFullImport": true
+        },
+        "@fortawesome/free-regular-svg-icons": {
+          "transform": "@fortawesome/free-regular-svg-icons/${member}",
+          "preventFullImport": true
+        },
+        "@fortawesome/free-brands-svg-icons": {
+          "transform": "@fortawesome/free-brands-svg-icons/${member}",
+          "preventFullImport": true
+        }
+      }
+    ],
+    [
+      "transform-rename-import",
+      {
+        "original": "^(.+)\\.scss$",
+        "replacement": "$1.css"
+      }
+    ]
+  ]
+}

@@ -2,9 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { OpeningTimes } from '../../src/index';
 
-import ExampleContainer from '../ExampleContainer';
-
-export default class Example extends PureComponent {
+export default class OpeningTimesExample extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,17 +39,15 @@ export default class Example extends PureComponent {
     render() {
         const { times } = this.state;
         return (
-            <ExampleContainer headline="OpeningTimes">
-                <OpeningTimes
-                    times={times}
-                    onChange={(newTimes) => {
-                        console.log(times, newTimes);
-                        this.setState({
-                            times: newTimes
-                        });
-                    }}
-                />
-            </ExampleContainer>
+            <OpeningTimes
+                times={times}
+                onChange={(newTimes) => {
+                    console.log(times, newTimes);
+                    this.setState({
+                        times: newTimes
+                    });
+                }}
+            />
         );
     }
 }

@@ -14,6 +14,7 @@ export default class ScrollView extends Component {
         style: PropTypes.object,
         className: PropTypes.string,
         scrollElementRef: PropTypes.func,
+        onScroll: PropTypes.func,
     };
 
     static defaultProps = {
@@ -21,11 +22,14 @@ export default class ScrollView extends Component {
         style: undefined,
         className: undefined,
         scrollElementRef: null,
+        onScroll: null,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = { contentWidth: 0 };
+        this.scrollTo = this.scrollTo.bind(this);
         this.setContentWidth = this.setContentWidth.bind(this);
     }
 
@@ -51,12 +55,19 @@ export default class ScrollView extends Component {
         this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width });
     }
 
+    scrollTo(...args) {
+        if (this.content) {
+            this.content.scrollTo(...args);
+        }
+    }
+
     render() {
         const {
             style,
             className,
             children,
-            scrollElementRef
+            scrollElementRef,
+            onScroll,
         } = this.props;
 
         const { contentWidth } = this.state;
@@ -90,21 +101,20 @@ export default class ScrollView extends Component {
                         className="cc__scroll-view__content"
                         ref={(ref) => {
                             this.content = ref;
-                            if(scrollElementRef) {
+                            if (scrollElementRef) {
                                 scrollElementRef(ref);
                             }
                         }}
+                        onScroll={onScroll}
                     >
-                        <div className="cc__scroll-view__children" ref={ref => this.children = ref}>
+                        <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
                         </div>
                     </div>
                 </div>
                 <div
                     className="cc__scroll-view__scrollbar"
-                    ref={(ref) => {
-                        this.bar = ref;
-                    }}
+                    ref={(ref) => { this.bar = ref; }}
                 />
             </div>
         );

@@ -12,7 +12,7 @@ export default class ChosenMember extends Component {
         groupId: PropTypes.number,
         siteId: PropTypes.string,
         userId: PropTypes.number,
-        fixed: PropTypes.bool
+        fixed: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -21,7 +21,7 @@ export default class ChosenMember extends Component {
         groupId: null,
         siteId: null,
         userId: null,
-        fixed: false
+        fixed: false,
     };
 
     remove = () => {
@@ -30,7 +30,7 @@ export default class ChosenMember extends Component {
             locationId,
             groupId,
             userId,
-            fixed
+            fixed,
         } = this.props;
 
         if (!fixed) {
@@ -49,7 +49,7 @@ export default class ChosenMember extends Component {
             personId,
             siteId,
             fixed,
-            name
+            name,
         } = this.props;
 
         // eslint-disable-next-line no-nested-ternary

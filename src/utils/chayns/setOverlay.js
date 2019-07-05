@@ -7,7 +7,7 @@ export default function setOverlay(enabled, { color, transition, mode }) {
             transition,
             mode,
             callback: 'window._chaynsCallbacks.showOverlay',
-        }
+        },
     });
 
     return new Promise((resolve) => {
