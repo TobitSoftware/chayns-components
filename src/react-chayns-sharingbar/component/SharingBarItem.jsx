@@ -18,7 +18,12 @@ export default class SharingBarItem extends Component {
     onClick = (e) => {
         const { provider, link, stopPropagation } = this.props;
 
-        share(provider, link);
+        if (provider.id === 2 && provider.action === 1) {
+            const linkToShare = link ? link.replace('=', '%3D') : '';
+            share(provider, linkToShare);
+        } else {
+            share(provider, link);
+        }
 
         if (stopPropagation) e.stopPropagation();
     };
