@@ -218,7 +218,7 @@ export default class ModeSwitch extends Component {
             customModes -= 1;
         }
 
-        return (show || (show === null && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
+        return (show || (show === null && modes.length > 1 && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
     }
 
     render() {
