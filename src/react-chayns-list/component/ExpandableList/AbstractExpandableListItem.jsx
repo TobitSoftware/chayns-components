@@ -18,7 +18,7 @@ function getId() {
 class AbstractExpandableListItem extends PureComponent {
     static propTypes = {
         onToggle: PropTypes.func.isRequired,
-        open: PropTypes.bool,
+        open: PropTypes.arrayOf(PropTypes.number),
         children: PropTypes.oneOfType([
             PropTypes.node,
             PropTypes.arrayOf(PropTypes.node),
