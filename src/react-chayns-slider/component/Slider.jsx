@@ -109,7 +109,7 @@ export default class Slider extends PureComponent {
             value,
         } = this.props;
 
-        if (value || (startValue && endValue)) {
+        if (typeof value === 'number' || (startValue && endValue)) {
             if (interval) {
                 this.leftPercent = ((startValue - min) / (max - min)) * 100;
                 this.rightPercent = ((endValue - min) / (max - min)) * 100;
