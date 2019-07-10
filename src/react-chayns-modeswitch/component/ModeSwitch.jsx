@@ -20,7 +20,7 @@ export default class ModeSwitch extends Component {
         onChange: PropTypes.func,
         defaultMode: PropTypes.number,
         show: PropTypes.bool,
-        parent: PropTypes.arrayOf(PropTypes.node),
+        parent: PropTypes.instanceOf(Element),
     };
 
     static defaultProps = {
@@ -223,10 +223,11 @@ export default class ModeSwitch extends Component {
 
     render() {
         const { modes, open, activeModeId } = this.state;
+        const { parent } = this.props;
 
         if (this.showModeSwitch()) {
             return (
-                <TappPortal>
+                <TappPortal parent={parent}>
                     <div
                         className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}
                         style={{ top: `${this.pageYOffset}px` }}
