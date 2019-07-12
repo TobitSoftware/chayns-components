@@ -11,6 +11,7 @@ import Calendar from './react-chayns-calendar/component/Calendar';
 import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
+import ColorPicker from './react-chayns-color_picker/component/ColorPicker';
 
 import DateInfo from './react-chayns-dateinfo/component/DateInfo';
 
@@ -93,6 +94,7 @@ export {
     Checkbox,
     ComboBox,
     ContextMenu,
+    ColorPicker,
     DateInfo,
     EmojiInput,
     ExpandableContent,
