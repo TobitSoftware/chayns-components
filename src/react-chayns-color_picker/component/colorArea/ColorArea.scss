@@ -1,0 +1,27 @@
+.cc__colorArea {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  user-select: none;
+  overflow: hidden;
+  cursor: crosshair;
+
+  &__area {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+  }
+
+  &__selector {
+    position: absolute;
+    border-radius: 100%;
+    border: 2px solid white;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5), 0 0 3px 0 rgba(0, 0, 0, 0.5) inset;
+    pointer-events: none;
+    will-change: top, left;
+    user-select: none;
+  }
+}
