@@ -537,9 +537,11 @@ export default class Slider extends PureComponent {
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.leftThumb}
-                                    style={thumbStyle && thumbStyle.left}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div
+                                        style={thumbStyle && thumbStyle.left}
+                                        className="cc__slider__bar__thumb__dot"
+                                    />
                                 </div>,
                                 <div
                                     key="right"
@@ -547,9 +549,11 @@ export default class Slider extends PureComponent {
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.rightThumb}
-                                    style={thumbStyle && thumbStyle.right}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div
+                                        style={thumbStyle && thumbStyle.right}
+                                        className="cc__slider__bar__thumb__dot"
+                                    />
                                 </div>,
                             ]
                             : (
@@ -558,9 +562,11 @@ export default class Slider extends PureComponent {
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.thumb}
-                                    style={thumbStyle}
                                 >
-                                    <div className="cc__slider__bar__thumb__dot" />
+                                    <div
+                                        style={thumbStyle}
+                                        className="cc__slider__bar__thumb__dot"
+                                    />
                                 </div>
                             )
                     }
