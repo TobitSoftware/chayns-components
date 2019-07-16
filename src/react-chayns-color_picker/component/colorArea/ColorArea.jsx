@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './ColorArea.scss';
 import PropTypes from 'prop-types';
+import { toHex } from '../../utils/colorHelper';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -8,16 +9,17 @@ function preventDefault(e) {
 
 export default class ColorArea extends Component {
     static propTypes = {
-        color: PropTypes.string.isRequired, // TODO rename to baseColor?
+        color: PropTypes.string.isRequired, // TODO rename to hue and change type
         preselectedColor: PropTypes.shape({
             r: PropTypes.number.isRequired,
             b: PropTypes.number.isRequired,
             g: PropTypes.number.isRequired,
-        }).isRequired, // TODO search selected color in canvas
+        }).isRequired,
         height: PropTypes.number,
         width: PropTypes.number,
-        onMove: PropTypes.func, // TODO rename to onChange?
-        onUp: PropTypes.func,
+        onMove: PropTypes.func, // TODO rename to onChange
+        onUp: PropTypes.func, // TODO rename to onChangeEnd
+        // TODO add onChangeStart
     };
 
     static defaultProps = {
@@ -31,6 +33,7 @@ export default class ColorArea extends Component {
         super(props);
         this.state = { top: 0, left: 0 };
         this.canvas = React.createRef();
+        // TODO error handling
     }
 
     componentDidMount() {
@@ -52,6 +55,7 @@ export default class ColorArea extends Component {
                 this.setSelector();
             }
         }
+        // TODO error handling
     }
 
     setSelector() { // set selector to position of preselected color
@@ -74,7 +78,7 @@ export default class ColorArea extends Component {
         const ctx = this.canvas.current.getContext('2d');
         const gradient1 = ctx.createLinearGradient(0, 0, width - 1, 0);
         gradient1.addColorStop(0, '#fff');
-        gradient1.addColorStop(1, color);
+        gradient1.addColorStop(1, toHex(color));
         ctx.fillStyle = gradient1;
         ctx.fillRect(0, 0, width, height);
         const gradient2 = ctx.createLinearGradient(0, 0, 0, height - 1);
@@ -123,15 +127,17 @@ export default class ColorArea extends Component {
             left = (event.changedTouches ? event.changedTouches[0].clientX : event.clientX) - rect.left;
         }
         // user leaves area
-        if (top < 0) {
-            top = 0;
-        } else if (top >= rect.height) {
-            top = rect.height - 1;
-        }
-        if (left < 0) {
-            left = 0;
-        } else if (left >= rect.width) {
-            left = rect.width - 1;
+        if (rect) {
+            if (top < 0) {
+                top = 0;
+            } else if (top >= rect.height) {
+                top = rect.height - 1;
+            }
+            if (left < 0) {
+                left = 0;
+            } else if (left >= rect.width) {
+                left = rect.width - 1;
+            }
         }
         // move selector
         this.setState({ top, left });
