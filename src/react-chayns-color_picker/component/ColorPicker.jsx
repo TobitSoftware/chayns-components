@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './ColorPicker.scss';
 import ColorArea from './colorArea/ColorArea';
-import HueSelector from './colorSelector/HueSelector';
+import HueSlider from './hueSlider/HueSlider';
+import TransparencySlider from './transparencySlider/TransparencySlider';
 
 export default class ColorPicker extends Component {
     constructor(props) {
@@ -22,7 +23,18 @@ export default class ColorPicker extends Component {
                         r: 0, g: 0, b: 0, a: 255,
                     }}
                 />
-                <HueSelector onChange={(hue1) => { this.setState({ hue:hue1 }); }} hue={hue} />
+                <HueSlider
+                    onChange={(hue1) => {
+                        this.setState({ hue: hue1 });
+                    }}
+                    hue={hue}
+                />
+                <TransparencySlider
+                    color={hue}
+                    onChange={(hue1) => {
+                        this.setState({ hue: hue1 });
+                    }}
+                />
             </div>
         );
     }

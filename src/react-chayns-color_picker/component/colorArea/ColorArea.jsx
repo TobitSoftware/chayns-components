@@ -42,6 +42,11 @@ export default class ColorArea extends Component {
         this.setSelector();
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props !== nextProps // update if props changed (equal by reference)
+            || JSON.stringify(this.state) !== JSON.stringify(nextState); // update if state changed (equal by value)
+    }
+
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.drawCanvas();

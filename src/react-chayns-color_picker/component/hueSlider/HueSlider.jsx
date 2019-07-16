@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Slider from '../../../react-chayns-slider/component/Slider';
-import './HueSelector.scss';
 import { toHex } from '../../utils/colorHelper';
 
-export default class HueSelector extends Component {
+export default class HueSlider extends Component {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         hue: PropTypes.shape({

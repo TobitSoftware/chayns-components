@@ -1,0 +1,54 @@
+.cc__transparencySlider {
+  .cc__slider__bar__track {
+    // checkerboard
+    &:before {
+      content: "";
+      background-color: #FFFFFF;
+      background-image: linear-gradient(45deg, #A0A0A0 25%, transparent 25%), linear-gradient(-45deg, #A0A0A0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #A0A0A0 75%), linear-gradient(-45deg, transparent 75%, #A0A0A0 75%);
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+      background-size: 8px 8px;
+      background-repeat: repeat;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+    // color gradient
+    &:after{
+      content: "";
+      background: inherit;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+  }
+  .cc__slider__bar__thumb__dot{
+    // checkerboard
+    &:before {
+      content: "";
+      background-color: #FFFFFF;
+      background-image: linear-gradient(45deg, #A0A0A0 25%, transparent 25%), linear-gradient(-45deg, #A0A0A0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #A0A0A0 75%), linear-gradient(-45deg, transparent 75%, #A0A0A0 75%);
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+      background-size: 8px 8px;
+      background-repeat: repeat;
+      height: inherit;
+      width: inherit;
+      position: absolute;
+      overflow: hidden;
+      top: inherit;
+      left: inherit;
+      border-radius: inherit;
+    }
+    // color
+    &:after{
+      content: "";
+      background-color: inherit;
+      height: inherit;
+      width: inherit;
+      top: inherit;
+      left: inherit;
+      position: absolute;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+  }
+}
