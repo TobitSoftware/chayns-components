@@ -35,7 +35,8 @@ export default class PersonFinderExample extends PureComponent {
                         const newState = {
                             ...state,
                             persons: {
-                                related: state.persons.related.map((person) => {
+                                ...state.persons,
+                                related: state.persons.related.filter((person) => {
                                     console.log(person);
                                     return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
                                 }),

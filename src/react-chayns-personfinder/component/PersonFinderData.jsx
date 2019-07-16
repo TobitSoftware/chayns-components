@@ -238,7 +238,10 @@ export default class PersonFinderData extends Component {
             let newState = { persons, sites };
 
             if (reducerFunction) {
-                newState = await reducerFunction(newState);
+                newState = reducerFunction(newState);
+                if (newState instanceof Promise) {
+                    newState = await newState;
+                }
             }
 
             this.setState({
