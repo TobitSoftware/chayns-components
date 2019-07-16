@@ -32,6 +32,7 @@ export default class PersonFinderData extends Component {
         uacId: PropTypes.number,
         locationId: PropTypes.number,
         parent: PropTypes.instanceOf(Element),
+        reducerFunction: PropTypes.func,
     };
 
     static defaultProps = {
@@ -47,6 +48,7 @@ export default class PersonFinderData extends Component {
         uacId: null,
         locationId: null,
         parent: document.querySelector('.tapp'),
+        reducerFunction: null,
     };
 
     resultList = null;
@@ -180,7 +182,7 @@ export default class PersonFinderData extends Component {
         }
 
         const {
-            persons: enablePersons, sites: enableSites, includeOwn, uacId, locationId,
+            persons: enablePersons, sites: enableSites, includeOwn, uacId, locationId, reducerFunction,
         } = this.props;
 
         const promises = [];
@@ -233,9 +235,14 @@ export default class PersonFinderData extends Component {
                 sites = { ...sites }; // Forces rerendering
             }
 
+            let newState = { persons, sites };
+
+            if (reducerFunction) {
+                newState = await reducerFunction(newState);
+            }
+
             this.setState({
-                persons,
-                sites,
+                ...newState,
                 lazyLoading: clear ? false : lazyLoading,
             });
         } catch (ex) {
@@ -323,7 +330,11 @@ export default class PersonFinderData extends Component {
     hasEntries() {
         const { persons, sites, friends } = this.state;
 
-        return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated.length > 0 || friends.length > 0;
+        return (persons.related && persons.related.length > 0)
+            || (persons.unrelated && persons.unrelated.length > 0)
+            || (sites.related && sites.related.length > 0)
+            || (sites.unrelated && sites.unrelated.length > 0)
+            || (friends && friends.length > 0);
     }
 
     renderChildren() {
