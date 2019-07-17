@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Slider from '../../../react-chayns-slider/component/Slider';
-import { toHex } from '../../utils/colorHelper';
+import Slider from '../../../../react-chayns-slider/component/Slider';
+import {
+    hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
+} from '../../../utils/colorHelper';
 import './TransparencySlider.scss';
 
-export default class TransparencySlider extends Component {
+export default class TransparencySlider extends PureComponent {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         color: PropTypes.shape({
-            r: PropTypes.number.isRequired,
-            g: PropTypes.number.isRequired,
-            b: PropTypes.number.isRequired,
+            h: PropTypes.number.isRequired,
+            s: PropTypes.number.isRequired,
+            v: PropTypes.number.isRequired,
             a: PropTypes.number.isRequired,
         }).isRequired,
     };
@@ -19,7 +21,7 @@ export default class TransparencySlider extends Component {
         const { color, onChange } = this.props;
         onChange({
             ...color,
-            a: 255 - Math.round(value),
+            a: 1 - value,
         });
     };
 
@@ -31,13 +33,13 @@ export default class TransparencySlider extends Component {
                     className="cc__transparencySlider"
                     innerTrackStyle={{ backgroundColor: 'transparent' }}
                     trackStyle={{
-                        background: `linear-gradient(90deg, ${toHex(color)}, transparent)`,
+                        background: `linear-gradient(90deg, ${rgb255ToHex(rgb1ToRgb255(hsvToRgb1({ ...color, a: null })))}, transparent)`,
                     }}
-                    thumbStyle={{ backgroundColor: toHex(color, true) }}
+                    thumbStyle={{ backgroundColor: rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))) }}
                     onChange={this.onChange}
                     min={0}
-                    max={255}
-                    value={255 - color.a}
+                    max={1}
+                    value={1 - color.a}
                 />
             </div>
         );

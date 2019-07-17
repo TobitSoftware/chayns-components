@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './ColorArea.scss';
 import PropTypes from 'prop-types';
-import { toHex } from '../../utils/colorHelper';
+import {
+    hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
+} from '../../../utils/colorHelper';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -9,17 +11,15 @@ function preventDefault(e) {
 
 export default class ColorArea extends Component {
     static propTypes = {
-        color: PropTypes.string.isRequired, // TODO rename to hue and change type
-        preselectedColor: PropTypes.shape({
-            r: PropTypes.number.isRequired,
-            b: PropTypes.number.isRequired,
-            g: PropTypes.number.isRequired,
+        color: PropTypes.shape({
+            h: PropTypes.number.isRequired,
+            s: PropTypes.number.isRequired,
+            v: PropTypes.number.isRequired,
         }).isRequired,
         height: PropTypes.number,
         width: PropTypes.number,
         onMove: PropTypes.func, // TODO rename to onChange
         onUp: PropTypes.func, // TODO rename to onChangeEnd
-        // TODO add onChangeStart
     };
 
     static defaultProps = {
@@ -39,7 +39,6 @@ export default class ColorArea extends Component {
     componentDidMount() {
         // draw canvas and set selector after first mount
         this.drawCanvas();
-        this.setSelector();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -50,40 +49,19 @@ export default class ColorArea extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
             this.drawCanvas();
-            const { color, preselectedColor } = this.props;
-            // call onMove if color changed
-            if (prevProps.color !== color) {
-                this.move();
-            }
-            // move selector if preselected color changed
-            if (prevProps.preselectedColor !== preselectedColor) {
-                this.setSelector();
-            }
         }
         // TODO error handling
     }
 
-    setSelector() { // set selector to position of preselected color
-        const { preselectedColor, height: heightProp, width: widthProp } = this.props;
-        const ctx = this.canvas.current.getContext('2d');
-        const { data, height, width } = ctx.getImageData(0, 0, widthProp, heightProp);
-        for (let top = 0; top < height; top += 1) {
-            for (let left = 0; left < width; left += 1) {
-                const startIndex = (top * width + left) * 4;
-                if ((data[startIndex] === preselectedColor.r && data[startIndex + 1] === preselectedColor.g && data[startIndex + 2] === preselectedColor.b)) {
-                    this.setState({ top, left });
-                    return;
-                }
-            }
-        }
-    }
-
     drawCanvas = () => { // draw the canvas
         const { color, height, width } = this.props;
+        const hex = rgb255ToHex(rgb1ToRgb255(hsvToRgb1({
+            h: color.h, s: 1, v: 1, a: null,
+        })));
         const ctx = this.canvas.current.getContext('2d');
         const gradient1 = ctx.createLinearGradient(0, 0, width - 1, 0);
         gradient1.addColorStop(0, '#fff');
-        gradient1.addColorStop(1, toHex(color));
+        gradient1.addColorStop(1, hex);
         ctx.fillStyle = gradient1;
         ctx.fillRect(0, 0, width, height);
         const gradient2 = ctx.createLinearGradient(0, 0, 0, height - 1);
@@ -94,13 +72,12 @@ export default class ColorArea extends Component {
     };
 
     getColor = () => { // get selected color from canvas
+        const { color, height, width } = this.props;
         const { left, top } = this.state;
-        const imageData = this.canvas.current.getContext('2d').getImageData(left, top, 1, 1);
         return {
-            r: imageData.data[0],
-            g: imageData.data[1],
-            b: imageData.data[2],
-            a: imageData.data[3],
+            ...color,
+            s: left / width,
+            v: 1 - top / height,
         };
     };
 

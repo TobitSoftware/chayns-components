@@ -6,7 +6,7 @@ export default class ColorPickerExample extends Component {
     render() {
         return (
             <div>
-                <ColorPicker />
+                <ColorPicker color={chayns.env.site.color} />
             </div>
         );
     }
