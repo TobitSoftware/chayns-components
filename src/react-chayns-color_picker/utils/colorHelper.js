@@ -96,18 +96,18 @@ export function rgb255ToHex(rgb) {
     const r = Math.round(rgb.r);
     const g = Math.round(rgb.g);
     const b = Math.round(rgb.b);
-    const a = Math.round(rgb.a);
+    const a = Math.round(rgb.a * 255);
     return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}${typeof a === 'number' && !isNaN(a) ? componentToHex(a) : ''}`;
 }
 
 export function hexToRgb255(hex) {
     const components = hex.match(/(?:#)?((?:[0-9a-f]{2}){3,4})/i);
-    const a = parseInt(components[1].substring(6, 8), 16);
+    const a = parseInt(components[1].substring(6, 8), 16) / 255;
     return {
         r: parseInt(components[1].substring(0, 2), 16),
         g: parseInt(components[1].substring(2, 4), 16),
         b: parseInt(components[1].substring(4, 6), 16),
-        a: typeof a === 'number' && !isNaN(a) ? a : 255,
+        a: typeof a === 'number' && !isNaN(a) ? a : 1,
     };
 }
 
@@ -116,7 +116,7 @@ export function rgb255ToRgb1(rgb) {
         r: rgb.r / 255,
         g: rgb.g / 255,
         b: rgb.b / 255,
-        a: typeof rgb.a === 'number' && !isNaN(rgb.a) ? rgb.a / 255 : 1,
+        a: typeof rgb.a === 'number' && !isNaN(rgb.a) ? rgb.a : 1,
     };
 }
 
@@ -125,6 +125,6 @@ export function rgb1ToRgb255(rgb) {
         r: Math.round(rgb.r * 255),
         g: Math.round(rgb.g * 255),
         b: Math.round(rgb.b * 255),
-        a: typeof rgb.a === 'number' && !isNaN(rgb.a) ? Math.round(rgb.a * 255) : 255,
+        a: typeof rgb.a === 'number' && !isNaN(rgb.a) ? rgb.a : 1,
     };
 }

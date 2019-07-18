@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './ColorPicker.scss';
 import {
     hexToRgb255, hsvToRgb1, rgb1ToHsv, rgb1ToRgb255, rgb255ToHex, rgb255ToRgb1,
@@ -31,6 +32,10 @@ export default class ColorPicker extends Component {
         onChangeEnd: PropTypes.func,
         transparency: PropTypes.bool,
         parent: PropTypes.instanceOf(Element),
+        className: PropTypes.string,
+        style: PropTypes.object,
+        bubbleClassName: PropTypes.string,
+        bubbleStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -38,6 +43,10 @@ export default class ColorPicker extends Component {
         onChangeEnd: null,
         transparency: false,
         parent: null,
+        className: null,
+        style: null,
+        bubbleClassName: null,
+        bubbleStyle: null,
     };
 
     constructor(props) {
@@ -70,7 +79,7 @@ export default class ColorPicker extends Component {
             h: 0,
             s: 0,
             v: 0,
-            a: 0,
+            a: 1,
         };
     };
 
@@ -108,6 +117,10 @@ export default class ColorPicker extends Component {
             onChangeEnd,
             transparency,
             parent,
+            className,
+            style,
+            bubbleClassName,
+            bubbleStyle,
         } = this.props;
         const {
             color,
@@ -116,14 +129,21 @@ export default class ColorPicker extends Component {
         const rgb255 = rgb1ToRgb255(hsvToRgb1(color));
 
         return [
-            <div className="cc__color-picker" onClick={this.openBubble}>
+            <div
+                className={classNames('cc__color-picker', className)}
+                style={style}
+                onClick={this.openBubble}
+            >
                 <div className="cc__color-picker__color-circle" style={{ backgroundColor: rgb255ToHex(rgb255) }} />
                 <div
                     className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
                     ref={this.linkRef}
                 >
                     {
-                        `rgb${transparency ? 'a' : ''}(${rgb255.r},${rgb255.g},${rgb255.b}${transparency ? `,${rgb255.a}` : ''})`
+                        `rgb${transparency ? 'a' : ''}(${rgb255.r},${rgb255.g},${rgb255.b}${transparency ? `,${rgb255.a.toLocaleString({
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        })}` : ''})`
                     }
                 </div>
             </div>,
@@ -132,6 +152,8 @@ export default class ColorPicker extends Component {
                 coordinates={coordinates}
                 position={bubblePosition}
                 parent={parent}
+                className={bubbleClassName}
+                style={bubbleStyle}
             >
                 <div ref={this.bubbleContentRef} className="cc__color-picker__bubble-content">
                     <ColorArea
