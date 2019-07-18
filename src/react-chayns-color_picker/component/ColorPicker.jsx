@@ -96,8 +96,10 @@ export default class ColorPicker extends Component {
 
     onChange = (color) => {
         const { onChange } = this.props;
-        onChange(color);
         this.setState({ color });
+        if (onChange) {
+            onChange(color);
+        }
     };
 
     render() {
@@ -121,7 +123,7 @@ export default class ColorPicker extends Component {
                     ref={this.linkRef}
                 >
                     {
-                        `rgba(${rgb255.r},${rgb255.g},${rgb255.b}${transparency ? `,${rgb255.a}` : ''})`
+                        `rgb${transparency ? 'a' : ''}(${rgb255.r},${rgb255.g},${rgb255.b}${transparency ? `,${rgb255.a}` : ''})`
                     }
                 </div>
             </div>,
