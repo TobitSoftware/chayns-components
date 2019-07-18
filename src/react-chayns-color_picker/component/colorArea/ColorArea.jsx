@@ -87,8 +87,8 @@ export default class ColorArea extends Component {
         const { color, height, width } = this.props;
         return {
             ...color,
-            s: x / width,
-            v: 1 - y / height,
+            s: x / (width - 1), // width and height need to be decremented because either you are not able to choose black
+            v: 1 - y / (height - 1),
         };
     };
 
