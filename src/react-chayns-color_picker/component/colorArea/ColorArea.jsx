@@ -3,7 +3,7 @@ import './ColorArea.scss';
 import PropTypes from 'prop-types';
 import {
     hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
-} from '../../../utils/colorHelper';
+} from '../../utils/colorHelper';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -18,15 +18,15 @@ export default class ColorArea extends Component {
         }).isRequired,
         height: PropTypes.number,
         width: PropTypes.number,
-        onMove: PropTypes.func, // TODO rename to onChange
-        onUp: PropTypes.func, // TODO rename to onChangeEnd
+        onChange: PropTypes.func,
+        onChangeEnd: PropTypes.func,
     };
 
     static defaultProps = {
-        height: 200,
+        height: 150,
         width: 300,
-        onMove: null,
-        onUp: null,
+        onChange: null,
+        onChangeEnd: null,
     };
 
     constructor(props) {
@@ -100,7 +100,7 @@ export default class ColorArea extends Component {
     };
 
     move = (event) => {
-        const { onMove } = this.props;
+        const { onChange } = this.props;
         const { rect } = this;
         let { top, left } = this.state;
         // set the user's coordinates
@@ -123,9 +123,9 @@ export default class ColorArea extends Component {
         }
         // move selector
         this.setState({ top, left });
-        // call onMove
-        if (onMove) {
-            onMove(this.getColor());
+        // call onChange
+        if (onChange) {
+            onChange(this.getColor());
         }
     };
 
@@ -136,7 +136,7 @@ export default class ColorArea extends Component {
     };
 
     up = () => {
-        const { onUp } = this.props;
+        const { onChangeEnd } = this.props;
         // remove event listeners
         window.removeEventListener('mousemove', this.move);
         window.removeEventListener('touchmove', this.move);
@@ -145,9 +145,9 @@ export default class ColorArea extends Component {
         window.removeEventListener('touchcancel', this.up);
         window.removeEventListener('blur', this.up);
         document.removeEventListener('mouseenter', this.mouseenter);
-        // call onUp
-        if (onUp) {
-            onUp(this.getColor());
+        // call onChangeEnd
+        if (onChangeEnd) {
+            onChangeEnd(this.getColor());
         }
     };
 
@@ -156,7 +156,7 @@ export default class ColorArea extends Component {
         const { top, left } = this.state;
 
         return (
-            <div className="cc__colorArea" onMouseDown={this.down} onTouchStart={this.down}>
+            <div className="cc__colorArea" onMouseDown={this.down} onTouchStart={this.down} style={{ height: `${height}px` }}>
                 <canvas
                     className="cc__colorArea__area"
                     ref={this.canvas}

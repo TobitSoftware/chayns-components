@@ -85,9 +85,9 @@ export function hsvToRgb1(hsv) {
         break;
     }
     return {
-        r: Math.round(r),
-        g: Math.round(g),
-        b: Math.round(b),
+        r,
+        g,
+        b,
         a: typeof hsv.a === 'number' && !isNaN(hsv.a) ? hsv.a : 1,
     };
 }
