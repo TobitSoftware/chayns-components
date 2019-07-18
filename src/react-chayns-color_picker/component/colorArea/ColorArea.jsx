@@ -33,12 +33,14 @@ export default class ColorArea extends Component {
         super(props);
         this.state = { top: 0, left: 0 };
         this.canvas = React.createRef();
-        // TODO error handling
+        this.area = React.createRef();
     }
 
     componentDidMount() {
         // draw canvas and set selector after first mount
         this.drawCanvas();
+        // prevent scrolling on touch devices
+        this.area.current.addEventListener('touchstart', preventDefault);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -50,7 +52,6 @@ export default class ColorArea extends Component {
         if (prevProps !== this.props) {
             this.drawCanvas();
         }
-        // TODO error handling
     }
 
     drawCanvas = () => { // draw the canvas
@@ -156,15 +157,23 @@ export default class ColorArea extends Component {
         const { top, left } = this.state;
 
         return (
-            <div className="cc__colorArea" onMouseDown={this.down} onTouchStart={this.down} style={{ height: `${height}px` }}>
+            <div
+                className="cc__colorArea"
+                ref={this.area}
+                onMouseDown={this.down}
+                onTouchStart={this.down}
+                style={{ height: `${height}px` }}
+            >
                 <canvas
                     className="cc__colorArea__area"
                     ref={this.canvas}
                     height={height}
                     width={width}
-                    onTouchStart={preventDefault}
                 />
-                <div className="cc__colorArea__selector" style={{ top, left }} onTouchStart={preventDefault} />
+                <div
+                    className="cc__colorArea__selector"
+                    style={{ top, left }}
+                />
             </div>
         );
     }
