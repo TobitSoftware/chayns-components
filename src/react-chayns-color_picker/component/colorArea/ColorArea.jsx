@@ -39,6 +39,7 @@ export default class ColorArea extends Component {
     componentDidMount() {
         // draw canvas and set selector after first mount
         this.drawCanvas();
+        this.setSelectorPosition();
         // prevent scrolling on touch devices
         this.area.current.addEventListener('touchstart', preventDefault);
     }
@@ -50,9 +51,19 @@ export default class ColorArea extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
+            // redraw canvas and reset selector when props changed
             this.drawCanvas();
+            this.setSelectorPosition();
         }
     }
+
+    setSelectorPosition = () => {
+        const { color, height, width } = this.props;
+        this.setState({
+            top: (1 - color.v) * height,
+            left: color.s * width,
+        });
+    };
 
     drawCanvas = () => { // draw the canvas
         const { color, height, width } = this.props;
