@@ -28,7 +28,7 @@ export default class ColorPicker extends Component {
             }).isRequired,
         ]).isRequired,
         bubblePosition: PropTypes.number,
-        onChange: PropTypes.func.isRequired,
+        onChange: PropTypes.func,
         onChangeEnd: PropTypes.func,
         transparency: PropTypes.bool,
         parent: PropTypes.instanceOf(Element),
@@ -40,6 +40,7 @@ export default class ColorPicker extends Component {
 
     static defaultProps = {
         bubblePosition: Bubble.position.BOTTOM_CENTER,
+        onChange: null,
         onChangeEnd: null,
         transparency: false,
         parent: null,
@@ -133,15 +134,18 @@ export default class ColorPicker extends Component {
                 className={classNames('cc__color-picker', className)}
                 style={style}
                 onClick={this.openBubble}
+                key="div"
             >
-                <div className="cc__color-picker__color-circle" style={{ backgroundColor: rgb255ToHex(rgb255) }} />
+                <div
+                    className="cc__color-picker__color-circle"
+                    style={{ backgroundColor: rgb255ToHex(rgb255) }}
+                />
                 <div
                     className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
                     ref={this.linkRef}
                 >
                     {
-                        `rgb${transparency ? 'a' : ''}(${rgb255.r},${rgb255.g},${rgb255.b}${transparency ? `,${rgb255.a.toLocaleString({
-                            minimumFractionDigits: 2,
+                        `rgb${transparency ? 'a' : ''}(${rgb255.r}, ${rgb255.g}, ${rgb255.b}${transparency ? `, ${rgb255.a.toLocaleString('en-US', {
                             maximumFractionDigits: 2,
                         })}` : ''})`
                     }
@@ -154,6 +158,7 @@ export default class ColorPicker extends Component {
                 parent={parent}
                 className={bubbleClassName}
                 style={bubbleStyle}
+                key="bubble"
             >
                 <div ref={this.bubbleContentRef} className="cc__color-picker__bubble-content">
                     <ColorArea

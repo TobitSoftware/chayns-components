@@ -72,13 +72,12 @@ export default class ColorArea extends Component {
         ctx.fillRect(0, 0, width, height);
     };
 
-    getColor = () => { // get selected color from canvas
+    getColor = (x, y) => { // get selected color from canvas
         const { color, height, width } = this.props;
-        const { left, top } = this.state;
         return {
             ...color,
-            s: left / width,
-            v: 1 - top / height,
+            s: x / width,
+            v: 1 - y / height,
         };
     };
 
@@ -126,7 +125,7 @@ export default class ColorArea extends Component {
         this.setState({ top, left });
         // call onChange
         if (onChange) {
-            onChange(this.getColor());
+            onChange(this.getColor(left, top));
         }
     };
 
@@ -138,6 +137,7 @@ export default class ColorArea extends Component {
 
     up = () => {
         const { onChangeEnd } = this.props;
+        const { top, left } = this.state;
         // remove event listeners
         window.removeEventListener('mousemove', this.move);
         window.removeEventListener('touchmove', this.move);
@@ -148,7 +148,7 @@ export default class ColorArea extends Component {
         document.removeEventListener('mouseenter', this.mouseenter);
         // call onChangeEnd
         if (onChangeEnd) {
-            onChangeEnd(this.getColor());
+            onChangeEnd(this.getColor(left, top));
         }
     };
 
