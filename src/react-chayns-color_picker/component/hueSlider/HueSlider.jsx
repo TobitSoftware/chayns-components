@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Slider from '../../../react-chayns-slider/component/Slider';
 import {
     getRgb255String,
-    hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
+    hsvToRgb1,
+    rgb1ToRgb255,
 } from '../../utils/colorHelper';
 
 export default class HueSlider extends PureComponent {
