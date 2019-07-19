@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Slider from '../../../react-chayns-slider/component/Slider';
 import {
+    getRgb255String,
     hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
 } from '../../utils/colorHelper';
 
@@ -43,7 +44,7 @@ export default class HueSlider extends PureComponent {
 
     render() {
         const { color } = this.props;
-        const hex = rgb255ToHex(rgb1ToRgb255(hsvToRgb1({
+        const thumbColor = getRgb255String(rgb1ToRgb255(hsvToRgb1({
             h: color.h, s: 1, v: 1, a: null,
         })));
         return (
@@ -51,7 +52,7 @@ export default class HueSlider extends PureComponent {
                 <Slider
                     innerTrackStyle={{ background: 'transparent' }}
                     trackStyle={{ background: 'linear-gradient(90deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)' }}
-                    thumbStyle={{ background: hex }}
+                    thumbStyle={{ background: thumbColor }}
                     onChange={this.onChange}
                     onChangeEnd={this.onChangeEnd}
                     min={0}
