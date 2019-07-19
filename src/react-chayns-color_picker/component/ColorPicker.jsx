@@ -111,6 +111,9 @@ export default class ColorPicker extends Component {
         // Add event listeners to hide the bubble
         document.addEventListener('click', this.closeBubble);
         window.addEventListener('blur', this.closeBubble);
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
+            chayns.disallowRefreshScroll();
+        }
     };
 
 
@@ -121,6 +124,9 @@ export default class ColorPicker extends Component {
             document.removeEventListener('click', this.closeBubble);
             window.removeEventListener('blur', this.closeBubble);
             this.bubbleRef.current.hide();
+            if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
+                chayns.allowRefreshScroll();
+            }
         }
     };
 
@@ -165,7 +171,7 @@ export default class ColorPicker extends Component {
             >
                 <div
                     className="cc__color-picker__color-circle"
-                    style={{ backgroundColor: rgb255ToHex(rgb255) }}
+                    style={{ backgroundColor: getRgb255String(rgb255, true) }}
                 />
                 <div
                     className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"

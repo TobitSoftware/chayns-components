@@ -2,7 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Slider from '../../../react-chayns-slider/component/Slider';
 import {
-    hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
+    getRgb255String,
+    hsvToRgb1,
+    rgb1ToRgb255,
 } from '../../utils/colorHelper';
 import './TransparencySlider.scss';
 
@@ -51,9 +53,9 @@ export default class TransparencySlider extends PureComponent {
                     className="cc__transparency-slider"
                     innerTrackStyle={{ backgroundColor: 'transparent' }}
                     trackStyle={{
-                        background: `linear-gradient(90deg, ${rgb255ToHex(rgb1ToRgb255(hsvToRgb1({ ...color, a: null })))}, transparent)`,
+                        background: `linear-gradient(90deg, ${getRgb255String(rgb1ToRgb255(hsvToRgb1({ ...color, a: null })), true)}, transparent)`,
                     }}
-                    thumbStyle={{ backgroundColor: rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))) }}
+                    thumbStyle={{ backgroundColor: getRgb255String(rgb1ToRgb255(hsvToRgb1(color)), true) }}
                     onChange={this.onChange}
                     onChangeEnd={this.onChangeEnd}
                     min={0}
