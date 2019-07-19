@@ -1,4 +1,6 @@
 /* eslint-disable no-restricted-globals */
+import { HEX_REGEX } from './constants';
+
 function componentToHex(c) {
     const hex = Math.round(c).toString(16);
     return hex.length === 1 ? `0${hex}` : hex;
@@ -101,7 +103,7 @@ export function rgb255ToHex(rgb) {
 }
 
 export function hexToRgb255(hex) {
-    const components = hex.match(/(?:#)?((?:[0-9a-f]{2}){3,4})/i);
+    const components = hex.match(HEX_REGEX);
     const a = parseInt(components[1].substring(6, 8), 16) / 255;
     return {
         r: parseInt(components[1].substring(0, 2), 16),
@@ -127,4 +129,17 @@ export function rgb1ToRgb255(rgb) {
         b: Math.round(rgb.b * 255),
         a: typeof rgb.a === 'number' && !isNaN(rgb.a) ? rgb.a : 1,
     };
+}
+
+export function getRgb255String(rgb, transparency = false) {
+    return `rgb${transparency ? 'a' : ''}(${rgb.r}, ${rgb.g}, ${rgb.b}${transparency ? `, ${rgb.a.toLocaleString('en-US', {
+        maximumFractionDigits: 2,
+    })}` : ''})`;
+}
+
+export function getHexString(hex, transparency = false) {
+    if (transparency) {
+        return hex;
+    }
+    return hex.substring(0, 7);
 }

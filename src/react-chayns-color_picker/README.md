@@ -30,5 +30,7 @@ You can set the following props on a ColorPicker element:
 | onChange      | onChange - Callback                                                                     | function   |
 | onChangeEnd   | onChange - Callback                                                                     | function   |
 | transparency  | Adds the transparency slider                                                            | bool       |
+| input         | Adds an input to type colors                                                            | bool       |
+| defaultColorModel | Default used color model                                                            | number (from ColorPicker.colorModels) |
 
 **Note:** The color from the callback is in the hsva color model. You can convert it to the hex(a)- or rgb(a)-model using the [helper functions](https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-color_picker/utils/colorHelper.js).

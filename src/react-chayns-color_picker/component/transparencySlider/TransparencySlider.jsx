@@ -48,7 +48,7 @@ export default class TransparencySlider extends PureComponent {
         return (
             <div>
                 <Slider
-                    className="cc__transparencySlider"
+                    className="cc__transparency-slider"
                     innerTrackStyle={{ backgroundColor: 'transparent' }}
                     trackStyle={{
                         background: `linear-gradient(90deg, ${rgb255ToHex(rgb1ToRgb255(hsvToRgb1({ ...color, a: null })))}, transparent)`,

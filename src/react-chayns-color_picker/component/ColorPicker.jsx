@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ColorPicker.scss';
 import {
+    getHexString,
+    getRgb255String,
     hexToRgb255, hsvToRgb1, rgb1ToHsv, rgb1ToRgb255, rgb255ToHex, rgb255ToRgb1,
 } from '../utils/colorHelper';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import ColorArea from './colorArea/ColorArea';
 import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
+import ColorInput from './colorInput/ColorInput';
 
 export default class ColorPicker extends Component {
     static propTypes = {
@@ -36,6 +39,8 @@ export default class ColorPicker extends Component {
         style: PropTypes.object,
         bubbleClassName: PropTypes.string,
         bubbleStyle: PropTypes.object,
+        input: PropTypes.bool,
+        defaultColorModel: PropTypes.number, // TODO add to readme
     };
 
     static defaultProps = {
@@ -48,11 +53,26 @@ export default class ColorPicker extends Component {
         style: null,
         bubbleClassName: null,
         bubbleStyle: null,
+        input: false,
+        defaultColorModel: null,
+    };
+
+    static colorModels = {
+        HEX: 0,
+        RGB: 1,
     };
 
     constructor(props) {
         super(props);
-        this.state = { color: this.getHsvColor(props.color), coordinates: { x: 0, y: 0 } };
+        this.state = {
+            color: this.getHsvColor(props.color),
+            coordinates: { x: 0, y: 0 },
+            colorModel: props.defaultColorModel
+                || (props.transparency
+                    ? ColorPicker.colorModels.RGB
+                    : ColorPicker.colorModels.HEX
+                ),
+        };
         this.bubbleRef = React.createRef();
         this.bubbleContentRef = React.createRef();
         this.linkRef = React.createRef();
@@ -112,6 +132,11 @@ export default class ColorPicker extends Component {
         }
     };
 
+    onColorModelToggle = () => {
+        const { colorModel } = this.state;
+        this.setState({ colorModel: (colorModel + 1) % Object.keys(ColorPicker.colorModels).length });
+    };
+
     render() {
         const {
             bubblePosition,
@@ -122,10 +147,12 @@ export default class ColorPicker extends Component {
             style,
             bubbleClassName,
             bubbleStyle,
+            input,
         } = this.props;
         const {
             color,
             coordinates,
+            colorModel,
         } = this.state;
         const rgb255 = rgb1ToRgb255(hsvToRgb1(color));
 
@@ -145,9 +172,9 @@ export default class ColorPicker extends Component {
                     ref={this.linkRef}
                 >
                     {
-                        `rgb${transparency ? 'a' : ''}(${rgb255.r}, ${rgb255.g}, ${rgb255.b}${transparency ? `, ${rgb255.a.toLocaleString('en-US', {
-                            maximumFractionDigits: 2,
-                        })}` : ''})`
+                        colorModel === ColorPicker.colorModels.RGB
+                            ? getRgb255String(rgb255, transparency)
+                            : getHexString(rgb255ToHex(rgb255), transparency)
                     }
                 </div>
             </div>,
@@ -178,6 +205,18 @@ export default class ColorPicker extends Component {
                                 color={color}
                                 onChange={this.onChange}
                                 onChangeEnd={onChangeEnd}
+                            />
+                        )
+                    }
+                    {
+                        !input
+                        || (
+                            <ColorInput
+                                color={color}
+                                onChange={this.onChange}
+                                onModelToggle={this.onColorModelToggle}
+                                colorModel={colorModel}
+                                transparency={transparency}
                             />
                         )
                     }
