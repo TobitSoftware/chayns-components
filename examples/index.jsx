@@ -21,7 +21,7 @@ async function bootstrap() {
 bootstrap();
 
 if (process.env.NODE_ENV !== 'production') {
-    /* eslint-disable-next-line global-require */
-    const { whyDidYouUpdate } = require('why-did-you-update');
-    whyDidYouUpdate(React);
+    // /* eslint-disable-next-line global-require */
+    // const { whyDidYouUpdate } = require('why-did-you-update');
+    // whyDidYouUpdate(React);
 }

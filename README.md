@@ -33,6 +33,7 @@ The following components are part of this package:
 | [react-chayns-button](/src/react-chayns-button/)                   | Button Component                                | [Readme](/src/react-chayns-button/README.md)          |
 | [react-chayns-calendar](/src/react-chayns-calendar/)               | Calendar Component                              | [Readme](/src/react-chayns-calendar/README.md)        |
 | [react-chayns-checkbox](/src/react-chayns-checkbox/)               | Checkbox Component                              | [Readme](/src/react-chayns-checkbox/README.md)        |
+| [react-chayns-color_picker](/src/react-chayns-color_picker/)       | ColorPicker Component                           | [Readme](/src/react-chayns-color_picker/README.md)    |
 | [react-chayns-combobox](/src/react-chayns-combobox/)               | Combobox Component                              | [Readme](/src/react-chayns-combobox/README.md)        |
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/)         | ContextMenu Component                           | [Readme](/src/react-chayns-contextmenu/README.md)     |
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)         | EmojiInput Component                            | [Readme](/src/react-chayns-emoji_input/README.md)     |
@@ -58,7 +59,7 @@ The following components are part of this package:
 | [react-chayns-textarea](/src/react-chayns-textarea/)               | TextArea Component                              | [Readme](/src/react-chayns-textarea/README.md)        |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                 | Tooltip Component                               | [Readme](/src/react-chayns-tooltip/README.md)         |
 | [react-chayns-file_input](/src/react-chayns-file_input/)           | FileInput Component                             | [Readme](/src/react-chayns-file_input/README.md)      |
-| [react-chayns-position_input](/src/react-chayns-position_input/)   | PositionInput Component                         | [Readme](/src/react-chayns-position_input/README.md)             |
+| [react-chayns-position_input](/src/react-chayns-position_input/)   | PositionInput Component                         | [Readme](/src/react-chayns-position_input/README.md)  |
 | [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)    |
 
 
