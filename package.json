@@ -14,7 +14,7 @@
     "build:cjs": "cross-env NODE_ENV=cjs rollup -c",
     "build:lib:es": "cross-env BABEL_ENV=es babel src -d lib",
     "build:sass": "node-sass src/ -o ./src && node-sass src/ -o ./lib",
-    "build:examples": "node ./examples/utils/generateReactList && webpack --config ./webpack/dev.babel.js --env.prod",
+    "build:examples": "npm run build:sass && node ./examples/utils/generateReactList && webpack --config ./webpack/dev.babel.js --env.prod",
     "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js",
     "watch": "concurrently  \"npm run watch:js\"",
     "watch:js": "babel -w src/ --out-dir lib/",
