@@ -74,7 +74,7 @@ export default class ColorInput extends Component {
         } else { // hex(a)
             const matches = value.match(HEX_REGEX);
             if (matches) {
-                const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[i])));
+                const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
                 if (onChange) {
                     onChange(hsv);
                 }
