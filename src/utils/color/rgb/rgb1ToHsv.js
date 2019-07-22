@@ -1,6 +1,9 @@
 export default function rgb1ToHsv(rgb) {
     const {
-        r, g, b, a,
+        r,
+        g,
+        b,
+        a,
     } = rgb;
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
@@ -25,6 +28,9 @@ export default function rgb1ToHsv(rgb) {
     }
     const v = max;
     return {
-        h, s, v, a: typeof a === 'number' && !isNaN(a) ? a : 1,
+        h,
+        s,
+        v,
+        a: typeof a === 'number' && !isNaN(a) ? a : 1, /* eslint-disable-line no-restricted-globals */
     };
 }

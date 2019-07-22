@@ -51,6 +51,6 @@ export default function hsvToRgb1(hsv) {
         r,
         g,
         b,
-        a: typeof hsv.a === 'number' && !isNaN(hsv.a) ? hsv.a : 1,
+        a: typeof hsv.a === 'number' && !isNaN(hsv.a) ? hsv.a : 1, /* eslint-disable-line no-restricted-globals */
     };
 }
