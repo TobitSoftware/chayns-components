@@ -55,7 +55,7 @@ The following components are part of this package:
 | [react-chayns-input_box](/src/react-chayns-input_box/)                   | InputBox Component          | [Readme](/src/react-chayns-input_box/README.md)          |
 | [react-chayns-list](/src/react-chayns-list/)                             | List Component              | [Readme](/src/react-chayns-list/README.md)               |
 | [react-chayns-modeswitch](/src/react-chayns-modeswitch/)                 | ModeSwitch Component        | [Readme](/src/react-chayns-modeswitch/README.md)         |
-| [react-chayns-openingTimes](/src/react-chayns-openingTimes/)             | OpeningTimes Component      | [Readme](/src/react-chayns-openingTimes/README.md)       |
+| [react-chayns-openingtimes](/src/react-chayns-openingtimes/)             | OpeningTimes Component      | [Readme](/src/react-chayns-openingtimes/README.md)       |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)             | PersonFinder Component      | [Readme](/src/react-chayns-personfinder/README.md)       |
 | [react-chayns-position_input](/src/react-chayns-position_input/)         | PositionInput Component     | [Readme](/src/react-chayns-position_input/README.md)     |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)               | RadioButton Component       | [Readme](/src/react-chayns-radiobutton/README.md)        |
