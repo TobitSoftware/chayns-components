@@ -165,7 +165,8 @@
   "id": "react-chayns-textstring",
   "title": "TextString",
   "example": "react-chayns-textstring/Example.jsx",
-  "readme": true
+  "readme": true,
+  "group": "internal"
 },{
   "id": "react-chayns-tooltip",
   "title": "Tooltip",
@@ -195,5 +196,10 @@
   "id": "react-chayns-color_picker",
   "title": "ColorPicker",
   "example": "react-chayns-color_picker/Example.jsx",
+  "readme": true
+},{
+  "id": "react-chayns-bubble",
+  "title": "Bubble",
+  "example": false,
   "readme": true
 }]
