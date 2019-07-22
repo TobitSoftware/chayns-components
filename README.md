@@ -86,6 +86,7 @@ The following components are part of this package:
 | [isTobitEmployee](/src/utils/tobitEmployee.js)                     | Get the information if user is an tobit employee     |
 | [createLinks](/src/utils/createLinks.js)                           | Creates a string with links from a string with URLs  |
 | [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                      |
+| [ColorUtils](/src/utils/color/README.md)                           | Utils to convert color values (hex, rgb, hsv)        |
 
 
 ### Examples ###
