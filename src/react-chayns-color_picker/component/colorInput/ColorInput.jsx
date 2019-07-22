@@ -30,8 +30,10 @@ export default class ColorInput extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { inputValue: '' };
-        this.setColor();
+
+        this.state = {
+            inputValue: this.getInputValue(),
+        };
     }
 
     componentDidUpdate(prevProps) {
@@ -44,13 +46,21 @@ export default class ColorInput extends Component {
         this.setState({ inputValue: value });
     };
 
-    setColor=() => {
+    getInputValue = () => {
         const { color, transparency, colorModel } = this.props;
+
         if (colorModel) { // rgb(a)
-            this.setState({ inputValue: getRgb255String(rgb1ToRgb255(hsvToRgb1(color)), transparency) });
-        } else { // hex(a)
-            this.setState({ inputValue: getHexString(rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))), transparency) });
+            return getRgb255String(rgb1ToRgb255(hsvToRgb1(color)), transparency);
         }
+
+        // hex(a)
+        return getHexString(rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))), transparency);
+    };
+
+    setColor=() => {
+        this.setState({
+            inputValue: this.getInputValue(),
+        });
     };
 
     onBlur = (value) => {
