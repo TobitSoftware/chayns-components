@@ -18,6 +18,6 @@ export function hexStringToHsv(hex) {
     return rgbToHsv(hexStringToRgb(hex));
 }
 
-export function hexStringToRgbString(hex) {
-    return rgbToRgbString(hexStringToRgb(hex));
+export function hexStringToRgbString(hex, transparency = false) {
+    return rgbToRgbString(hexStringToRgb(hex), transparency);
 }
