@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './ColorArea.scss';
 import PropTypes from 'prop-types';
 import { hsvToHexString } from '../../../utils/color';
+import restrictInterval from '../../../utils/restrictInterval';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -88,8 +89,8 @@ export default class ColorArea extends Component {
         const { color, height, width } = this.props;
         return {
             ...color,
-            s: x / (width - 1), // width and height need to be decremented because either you are not able to choose black
-            v: 1 - y / (height - 1),
+            s: restrictInterval(x / (width - 1), 0, 1), // width and height need to be decremented because either you are not able to choose black
+            v: restrictInterval(1 - y / (height - 1), 0, 1),
         };
     };
 
