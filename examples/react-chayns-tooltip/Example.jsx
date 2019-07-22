@@ -82,9 +82,11 @@ export default class TooltipExample extends Component {
                     <Tooltip
                         position={Tooltip.position.TOP_RIGHT}
                         content={{
-                            html: <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
-                                This is a static Tooltip with custom html content.
-                                  </div>
+                            html: (
+                                <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
+                                    This is a static Tooltip with custom html content.
+                                </div>
+                            ),
                         }}
                         removeIcon
                         ref={ref => this.staticTooltip = ref}
@@ -114,6 +116,16 @@ export default class TooltipExample extends Component {
                     coordinates={{ x, y }}
                     ref={ref => this.clickTooltip = ref}
                 />
+                <Tooltip
+                    bindListeners
+                    position={Tooltip.position.BOTTOM_RIGHT}
+                    content={{ text: 'This is a tooltip with a custom width of 150px and a specified parent.' }}
+                    minWidth={150}
+                    maxWidth={150}
+                    parent={document.querySelector('.cc__list.list--expandable.examples')}
+                >
+                    <p>Tooltip</p>
+                </Tooltip>
             </div>
         );
     }
