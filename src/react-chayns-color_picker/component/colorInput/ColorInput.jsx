@@ -122,7 +122,7 @@ export default class ColorInput extends Component {
                     onChange={this.onChange}
                     onBlur={this.onBlur}
                     onEnter={this.onBlur}
-                    customProps={{ spellcheck: 'false' }}
+                    customProps={{ spellCheck: 'false' }}
                 />
                 <Icon
                     className="chayns__color--headline cc__color-input__exchange-icon"
