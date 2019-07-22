@@ -24,6 +24,12 @@ The corresponding styles are included in our [chayns CSS API](https://github.com
 ## Chayns Components ##
 The following components are part of this package:
 
+<!---
+    the component list is automatically generated using the entries
+    from the components.json-file. Do not change anything inside the
+    start and end tag.
+-->
+<!--- start component list -->
 | Component                                                          | Description                                     | Readme File                                           |
 |--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
 | [react-chayns-accordion](/src/react-chayns-accordion/)             | Accordion Component                             | [Readme](/src/react-chayns-accordion/README.md)       |
@@ -61,7 +67,7 @@ The following components are part of this package:
 | [react-chayns-file_input](/src/react-chayns-file_input/)           | FileInput Component                             | [Readme](/src/react-chayns-file_input/README.md)      |
 | [react-chayns-position_input](/src/react-chayns-position_input/)   | PositionInput Component                         | [Readme](/src/react-chayns-position_input/README.md)  |
 | [react-chayns-openingtimes](/src/react-chayns-openingtimes/)       | OpeningTimes Component                          | [Readme](/src/react-chayns-openingtimes/README.md)    |
-
+<!--- end component list -->
 
 ## Internal Components ##
 
