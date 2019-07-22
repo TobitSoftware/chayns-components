@@ -90,7 +90,7 @@
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.0.0",
-    "react-transition-group": "2.8.0"
+    "react-transition-group": "4.2.1"
   },
   "peerDependencies": {
     "react": "^16.3.0",
