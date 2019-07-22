@@ -1,11 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Slider from '../../../react-chayns-slider/component/Slider';
-import {
-    getRgb255String,
-    hsvToRgb1,
-    rgb1ToRgb255,
-} from '../../utils/colorHelper';
+import { hsvToRgbString } from '../../../utils/color';
 
 export default class HueSlider extends PureComponent {
     static propTypes = {
@@ -45,9 +41,12 @@ export default class HueSlider extends PureComponent {
 
     render() {
         const { color } = this.props;
-        const thumbColor = getRgb255String(rgb1ToRgb255(hsvToRgb1({
-            h: color.h, s: 1, v: 1, a: null,
-        })));
+        const thumbColor = hsvToRgbString({
+            h: color.h,
+            s: 1,
+            v: 1,
+            a: null,
+        });
         return (
             <div>
                 <Slider

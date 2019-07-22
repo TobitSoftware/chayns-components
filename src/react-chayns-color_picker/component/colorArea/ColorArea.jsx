@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import './ColorArea.scss';
 import PropTypes from 'prop-types';
-import {
-    getHexString,
-    hsvToRgb1, rgb1ToRgb255, rgb255ToHex,
-} from '../../utils/colorHelper';
+import { hsvToHexString } from '../../../utils/color';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -68,9 +65,12 @@ export default class ColorArea extends Component {
 
     drawCanvas = () => { // draw the canvas
         const { color, height, width } = this.props;
-        const hex = getHexString(rgb255ToHex(rgb1ToRgb255(hsvToRgb1({
-            h: color.h, s: 1, v: 1, a: null,
-        }))), false);
+        const hex = hsvToHexString({
+            h: color.h,
+            s: 1,
+            v: 1,
+            a: null,
+        }, false);
         const ctx = this.canvas.current.getContext('2d');
         const gradient1 = ctx.createLinearGradient(0, 0, width - 1, 0);
         gradient1.addColorStop(0, '#fff');

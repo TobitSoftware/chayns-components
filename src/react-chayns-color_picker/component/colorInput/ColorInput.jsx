@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import './ColorInput.scss';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
-import { HEX_REGEX, RGB_REGEX } from '../../utils/constants';
-import {
-    getHexString,
-    getRgb255String,
-    hexToRgb255,
-    hsvToRgb1,
-    rgb1ToHsv,
-    rgb1ToRgb255,
-    rgb255ToHex,
-    rgb255ToRgb1,
-} from '../../utils/colorHelper';
+import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
+import getRgb255String from '../../../utils/color/rgb/getRgb255String';
+import rgb1ToRgb255 from '../../../utils/color/rgb/rgb1ToRgb255';
+import hsvToRgb1 from '../../../utils/color/hsv/hsvToRgb1';
+import getHexString from '../../../utils/color/hex/getHexString';
+import rgb255ToHex from '../../../utils/color/rgb/rgb255ToHex';
+import rgb1ToHsv from '../../../utils/color/rgb/rgb1ToHsv';
+import rgb255ToRgb1 from '../../../utils/color/rgb/rgb255ToRgb1';
+import hexToRgb255 from '../../../utils/color/hex/hexToRgb255';
 
 export default class ColorInput extends Component {
     static propTypes = {

@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ColorPicker.scss';
-import {
-    getHexString,
-    getRgb255String,
-    hexToRgb255, hsvToRgb1, rgb1ToHsv, rgb1ToRgb255, rgb255ToHex, rgb255ToRgb1,
-} from '../utils/colorHelper';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import ColorArea from './colorArea/ColorArea';
 import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
 import ColorInput from './colorInput/ColorInput';
+
+import {
+    hexStringToHsv,
+    hsvToRgb,
+    rgbToHexString,
+    rgbToHsv,
+    rgbToRgbString,
+} from '../../utils/color';
 
 export default class ColorPicker extends Component {
     static propTypes = {
@@ -88,10 +91,10 @@ export default class ColorPicker extends Component {
 
     getHsvColor = (color) => {
         if (typeof color === 'string') { // HEX(A)
-            return rgb1ToHsv(rgb255ToRgb1(hexToRgb255(color)));
+            return hexStringToHsv(color);
         }
         if (color.r) { // RGB(A) (0-255)
-            return rgb1ToHsv(rgb255ToRgb1(color));
+            return rgbToHsv(color);
         }
         if (color.h) { // HSV(A)
             return color;
@@ -160,7 +163,7 @@ export default class ColorPicker extends Component {
             coordinates,
             colorModel,
         } = this.state;
-        const rgb255 = rgb1ToRgb255(hsvToRgb1(color));
+        const rgb255 = hsvToRgb(color);
 
         return [
             <div
@@ -171,7 +174,7 @@ export default class ColorPicker extends Component {
             >
                 <div
                     className="cc__color-picker__color-circle"
-                    style={{ backgroundColor: getRgb255String(rgb255, true) }}
+                    style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
                 />
                 <div
                     className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
@@ -179,8 +182,8 @@ export default class ColorPicker extends Component {
                 >
                     {
                         colorModel === ColorPicker.colorModels.RGB
-                            ? getRgb255String(rgb255, transparency)
-                            : getHexString(rgb255ToHex(rgb255), transparency)
+                            ? rgbToRgbString(rgb255, transparency)
+                            : rgbToHexString(rgb255, transparency)
                     }
                 </div>
             </div>,

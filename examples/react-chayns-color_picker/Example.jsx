@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { ColorPicker } from '../../src/index';
 import Bubble from '../../src/react-chayns-bubble/component/Bubble';
-import { hsvToRgb1, rgb1ToRgb255, rgb255ToHex } from '../../src/react-chayns-color_picker/utils/colorHelper';
+import { hsvToHexString, hsvToRgb } from '../../src/utils/color/hsv';
 
 export default class ColorPickerExample extends PureComponent {
     render() {
@@ -14,7 +14,7 @@ export default class ColorPickerExample extends PureComponent {
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={console.log}
                     onChangeEnd={(color) => {
-                        console.log(rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))));
+                        console.log(hsvToHexString(color));
                     }}
                     transparency
                     style={{ marginBottom: '30px', marginTop: '20px' }}
@@ -25,7 +25,7 @@ export default class ColorPickerExample extends PureComponent {
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={console.log}
                     onChangeEnd={(color) => {
-                        console.log(rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))));
+                        console.log(hsvToHexString(color));
                     }}
                     transparency
                     input
@@ -36,7 +36,7 @@ export default class ColorPickerExample extends PureComponent {
                     color={chayns.env.site.color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChangeEnd={(color) => {
-                        console.log(rgb1ToRgb255(hsvToRgb1(color)));
+                        console.log(hsvToRgb(color));
                     }}
                     style={{ marginBottom: '30px', marginTop: '20px' }}
                 />
@@ -45,7 +45,7 @@ export default class ColorPickerExample extends PureComponent {
                     color={chayns.env.site.color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChangeEnd={(color) => {
-                        console.log(rgb1ToRgb255(hsvToRgb1(color)));
+                        console.log(hsvToRgb(color));
                     }}
                     input
                     style={{ marginBottom: '30px', marginTop: '20px' }}
