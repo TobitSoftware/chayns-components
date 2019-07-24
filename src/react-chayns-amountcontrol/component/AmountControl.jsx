@@ -139,15 +139,30 @@ export default class AmountControl extends PureComponent {
     };
 
     changeAmount = (amount) => {
-        const { onChange, onInput } = this.props;
-
-        if (onChange) {
-            onChange(amount);
-            this.setInput(false);
-        }
+        const {
+            onChange,
+            onInput,
+            amount: oldAmount,
+            disableAdd,
+            disableRemove,
+        } = this.props;
 
         if (onInput) {
             onInput(amount);
+        }
+
+        if (onChange) {
+            if ((disableAdd && amount > oldAmount)
+                || (disableRemove && amount < oldAmount)) {
+                this.setState({
+                    tempValue: oldAmount,
+                });
+
+                return;
+            }
+
+            onChange(amount);
+            this.setInput(false);
         }
     };
 
