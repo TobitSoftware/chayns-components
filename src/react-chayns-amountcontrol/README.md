@@ -37,9 +37,9 @@ You can set the following props on a AmountControl element:
 | onRemove      | Function that is called when the user click on the remove button                        | function |         |
 | equalize      | Equalizes a set of AmountControls (see examples)                                        | string   |         |
 | disabled      | Disables all buttons and inputs                                                         | bool     |         |
-| disableAdd    | Disables the add button                                                                 | bool     |         |
+| disableAdd    | Disables the add button and prevents adding items using the input                       | bool     |         |
 | disableInput  | Disables the input field (forces the user to use the control-buttons)                   | bool     |         |
-| disableRemove | Disables the remove button                                                              | bool     |         |
+| disableRemove | Disables the remove button and prevents removing items using the input                  | bool     |         |
 | autoInput     | Shows an input at amount >= 10                                                          | bool     | false   |
 | showInput     | Shows the input as long the buttons are not disabled                                    | bool     | false   |
 | buttonFormatHandler | A function that should return the button-content                                  | func     |         |
