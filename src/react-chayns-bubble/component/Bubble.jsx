@@ -56,6 +56,10 @@ export default class Bubble extends PureComponent {
         };
     }
 
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
+    }
+
     show = () => {
         clearTimeout(this.timeout);
 
