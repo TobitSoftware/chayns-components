@@ -1,36 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProgressBarIndeterminate = ({ children }) => {
+const ProgressBarIndeterminate = () => {
     return (
         <div
-            style={{
-                borderRadius: 2,
-                height: 10,
-                display: 'block',
-                position: 'relative',
-            }}
+            className="cc__progress-bar__track chayns__background-color--headline"
         >
             <div
-                className="chayns__background-color--108"
-                style={{
-
-                }}
-            />
-            <div
-                className="chayns__background-color--headline"
-                style={{ flex: '1 1 auto' }}
+                className="cc__progress-bar__indicator chayns__background-color--108"
             />
         </div>
     );
 };
 
 ProgressBarIndeterminate.propTypes = {
-    children: PropTypes.node,
 };
 
 ProgressBarIndeterminate.defaultProps = {
-    children: null,
 };
 
 export default ProgressBarIndeterminate;

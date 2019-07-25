@@ -1,5 +1,71 @@
 .cc__progress-bar {
+  &--determinate {
+    .cc__progress-bar__track {
+      display: flex;
+      overflow: hidden;
+    }
+
+    .cc__progress-bar__indicator {
+      transition: flex-basis .3s;
+    }
+
+    .cc__progress-bar__spacer {
+      flex: 1 1 auto;
+    }
+  }
+
   &--indeterminate {
-    background-color: red;
+    .cc__progress-bar__track {
+      display: block;
+      position: relative;
+    }
+
+    .cc__progress-bar__indicator {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      right: 0;
+
+      &:before, &:after {
+        content: "";
+        width: 100%;
+        background: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,0) 25%,hsla(0,0%,100%,.8) 26%,hsla(0,0%,100%,.8) 75%,hsla(0,0%,100%,0) 76%,hsla(0,0%,100%,0));
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+      }
+
+      &:before {
+        animation: cc__progress-bar__indeterminate-1 1s infinite linear;
+      }
+
+      &:after {
+        animation: cc__progress-bar__indeterminate-2 1s infinite linear;
+      }
+    }
+  }
+
+  .cc__progress-bar__track {
+    border-radius: 2px;
+    height: 10px;
+    overflow: hidden;
+  }
+}
+
+@keyframes cc__progress-bar__indeterminate-1 {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes cc__progress-bar__indeterminate-2 {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
