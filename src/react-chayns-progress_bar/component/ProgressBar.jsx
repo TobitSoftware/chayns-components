@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import ProgressBarDeterminate from './ProgressBarDeterminate';
-import ProgressBarIndeterminate from './ProgressBarIndeterminate';
+import AutoProgressBar from './AutoProgressBar';
 
 const ProgressBar = ({ children, value }) => {
     const className = useMemo(() => classnames('cc__progress-bar', {
@@ -15,7 +14,7 @@ const ProgressBar = ({ children, value }) => {
         <div
             className={className}
         >
-            {chayns.utils.isNumber(value) ? (<ProgressBarDeterminate value={value} />) : (<ProgressBarIndeterminate />)}
+            <AutoProgressBar value={value} />
             <div
                 className="chayns__color--headline"
                 style={{ fontSize: '85%' }}

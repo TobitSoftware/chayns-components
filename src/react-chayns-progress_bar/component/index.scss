@@ -68,6 +68,62 @@ $track-indicator-color: #426aad;// chayns__background-color--108
   }
 }
 
+.cc__animated-progress-bar {
+  .cc__progress-bar--animation-1 {
+    &-enter {
+      opacity: 0;
+      transform: translate3d(0,-10px,0);
+      transition: opacity .3s, transform .3s;
+
+      &-active {
+        opacity: 1;
+        transform: translate3d(0,0,0);
+      }
+    }
+
+    &-exit {
+      opacity: 1;
+      transform: translate3d(0,0,0);
+      transition: opacity .3s, transform .3s;
+
+      &-active {
+        opacity: 0;
+        transform: translate3d(0,-10px,0);
+      }
+    }
+  }
+
+  .cc__progress-bar--animation-2 {
+    &-enter {
+      transform: translate3d(0,0,0);
+      transition: transform .3s;
+
+      &-active {
+        transform: translate3d(0, -10px, 0);
+      }
+    }
+
+    &-exit {
+      transform: translate3d(0, -10px, 0);
+      transition: transform .3s;
+
+      &-active {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+  }
+}
+
+.swipe-up-exit {
+  overflow: hidden;
+  transition: max-height .5s;
+  max-height: 20px;
+
+  &-active {
+    max-height: 0;
+  }
+}
+
 @keyframes cc__progress-bar__indeterminate-1 {
   0% {
     transform: translateX(-100%);
