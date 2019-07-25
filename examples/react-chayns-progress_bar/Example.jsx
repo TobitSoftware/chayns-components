@@ -6,19 +6,20 @@ import '../../src/react-chayns-progress_bar/component/index.scss';
 export default class PositionInputExample extends PureComponent {
     state = {
         value: 0,
-        value2: 0,
     };
 
     componentDidMount() {
-        this.int = window.setInterval(() => {
+        this.interval = window.setInterval(() => {
+            const { value } = this.state;
+
             this.setState({
-                value: ((this.state.value + 10) % 300),
+                value: ((value + 10) % 300),
             });
         }, 500);
     }
 
     componentWillUnmount() {
-        window.clearInterval(this.int);
+        window.clearInterval(this.interval);
     }
 
     render() {
