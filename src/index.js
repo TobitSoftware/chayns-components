@@ -50,6 +50,8 @@ import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 
+import ProgressBar from './react-chayns-progress_bar/component/ProgressBar';
+
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
 import ReceiverInput from './react-chayns-receiverinput/component/ReceiverInput';
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
@@ -118,6 +120,7 @@ export {
     OpeningTimes,
     OrientationHelper,
     PersonFinder,
+    ProgressBar,
     RadioButton,
     ReceiverInput,
     RfidInput,

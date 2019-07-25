@@ -202,4 +202,9 @@
   "title": "Bubble",
   "example": false,
   "readme": true
+},{
+  "id": "react-chayns-progress_bar",
+  "title": "ProgressBar",
+  "example": "react-chayns-progress_bar/Example.jsx",
+  "readme": true
 }]

@@ -58,6 +58,7 @@ The following components are part of this package:
 | [react-chayns-openingtimes](/src/react-chayns-openingtimes/)             | OpeningTimes Component      | [Readme](/src/react-chayns-openingtimes/README.md)       |
 | [react-chayns-personfinder](/src/react-chayns-personfinder/)             | PersonFinder Component      | [Readme](/src/react-chayns-personfinder/README.md)       |
 | [react-chayns-position_input](/src/react-chayns-position_input/)         | PositionInput Component     | [Readme](/src/react-chayns-position_input/README.md)     |
+| [react-chayns-progress_bar](/src/react-chayns-progress_bar/)             | ProgressBar Component       | [Readme](/src/react-chayns-progress_bar/README.md)       |
 | [react-chayns-radiobutton](/src/react-chayns-radiobutton/)               | RadioButton Component       | [Readme](/src/react-chayns-radiobutton/README.md)        |
 | [react-chayns-receiverinput](/src/react-chayns-receiverinput/)           | ReceiverInput Component     | [Readme](/src/react-chayns-receiverinput/README.md)      |
 | [react-chayns-rfid_input](/src/react-chayns-rfid_input/)                 | RFID Input Component        | [Readme](/src/react-chayns-rfid_input/README.md)         |

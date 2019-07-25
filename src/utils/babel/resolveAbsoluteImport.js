@@ -36,6 +36,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
         PositionInput: 'react-chayns-position_input/component/PositionInput.js',
         PriceFormatter: 'react-chayns-formatted_input/utils/PriceFormatter.js',
+        ProgressBar: 'react-chayns-progress_bar/component/ProgressBar.js',
         RadioButton: 'react-chayns-radiobutton/component/RadioButton.js',
         ReceiverInput: 'react-chayns-receiverinput/component/ReceiverInput.js',
         RfidInput: 'react-chayns-rfid_input/component/RfidInput.js',
