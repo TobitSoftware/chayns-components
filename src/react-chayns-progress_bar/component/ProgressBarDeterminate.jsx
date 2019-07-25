@@ -7,10 +7,7 @@ const ProgressBarDeterminate = ({ value }) => (
     >
         <div
             className="cc__progress-bar__indicator"
-            style={{ flexBasis: `${value}%` }}
-        />
-        <div
-            className="cc__progress-bar__spacer"
+            style={{ width: `${value}%` }}
         />
     </div>
 );

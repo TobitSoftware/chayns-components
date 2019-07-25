@@ -2,32 +2,34 @@ $track-color: #FFFFFF; // chayns__background-color--headline
 $track-indicator-color: #426aad;// chayns__background-color--108
 
 .cc__progress-bar {
+  .cc__progress-bar__track {
+    display: block;
+    position: relative;
+    border-radius: 2px;
+    height: 10px;
+    overflow: hidden;
+    background-color: $track-color;
+  }
+
+  .cc__progress-bar__indicator {
+    position: absolute;
+
+    background-color: $track-indicator-color;
+
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+
   &--determinate {
-    .cc__progress-bar__track {
-      display: flex;
-      overflow: hidden;
-    }
-
     .cc__progress-bar__indicator {
-      transition: flex-basis .3s;
-    }
-
-    .cc__progress-bar__spacer {
-      flex: 1 1 auto;
+      transition: width .3s;
     }
   }
 
   &--indeterminate {
-    .cc__progress-bar__track {
-      display: block;
-      position: relative;
-    }
-
     .cc__progress-bar__indicator {
-      position: relative;
       width: 100%;
-      height: 100%;
-      right: 0;
 
       &:before, &:after {
         content: "";
@@ -54,17 +56,6 @@ $track-indicator-color: #426aad;// chayns__background-color--108
         animation: cc__progress-bar__indeterminate-2 1s infinite linear;
       }
     }
-  }
-
-  .cc__progress-bar__track {
-    border-radius: 2px;
-    height: 10px;
-    overflow: hidden;
-    background-color: $track-color;
-  }
-
-  .cc__progress-bar__indicator {
-    background-color: $track-indicator-color
   }
 }
 
