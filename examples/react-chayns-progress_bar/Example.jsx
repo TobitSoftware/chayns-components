@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 
 import ProgressBar from '../../src/react-chayns-progress_bar/component/ProgressBar';
-import '../../src/react-chayns-progress_bar/component/index.scss';
 
 export default class PositionInputExample extends PureComponent {
     state = {
