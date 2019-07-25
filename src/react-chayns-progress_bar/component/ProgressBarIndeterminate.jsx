@@ -2,10 +2,10 @@ import React from 'react';
 
 const ProgressBarIndeterminate = () => (
     <div
-        className="cc__progress-bar__track chayns__background-color--headline"
+        className="cc__progress-bar__track"
     >
         <div
-            className="cc__progress-bar__indicator chayns__background-color--108"
+            className="cc__progress-bar__indicator"
         />
     </div>
 );

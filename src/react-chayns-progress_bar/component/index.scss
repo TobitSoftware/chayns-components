@@ -1,3 +1,6 @@
+$track-color: #FFFFFF; // chayns__background-color--headline
+$track-indicator-color: #426aad;// chayns__background-color--108
+
 .cc__progress-bar {
   &--determinate {
     .cc__progress-bar__track {
@@ -29,7 +32,15 @@
       &:before, &:after {
         content: "";
         width: 100%;
-        background: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,0) 25%,hsla(0,0%,100%,.8) 26%,hsla(0,0%,100%,.8) 75%,hsla(0,0%,100%,0) 76%,hsla(0,0%,100%,0));
+        background: linear-gradient(
+                90deg,
+                transparent 0,
+                transparent 25%,
+                rgba($track-color, 0.8) 26%,
+                rgba($track-color, 0.8) 75%,
+                transparent 76%,
+                transparent
+        );
         height: 100%;
         position: absolute;
         z-index: 2;
@@ -49,6 +60,11 @@
     border-radius: 2px;
     height: 10px;
     overflow: hidden;
+    background-color: $track-color;
+  }
+
+  .cc__progress-bar__indicator {
+    background-color: $track-indicator-color
   }
 }
 
