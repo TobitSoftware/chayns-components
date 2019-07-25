@@ -28,8 +28,7 @@ const ProgressBar = ({ children, value, ready }) => {
                 in={ready}
             >
                 <div
-                    className="chayns__color--headline"
-                    style={{ fontSize: '85%' }}
+                    className="cc__progress-bar__text"
                 >
                     {children}
                 </div>

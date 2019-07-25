@@ -21,6 +21,11 @@ $track-indicator-color: #426aad;// chayns__background-color--108
     top: 0;
   }
 
+  .cc__progress-bar__text {
+    color: $track-color;
+    font-size: 85%;
+  }
+
   &--determinate {
     .cc__progress-bar__indicator {
       transition: width .3s;
