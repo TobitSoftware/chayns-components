@@ -57,9 +57,7 @@ $track-indicator-color: #426aad;// chayns__background-color--108
       }
     }
   }
-}
 
-.cc__animated-progress-bar {
   .cc__progress-bar--animation-1 {
     &-enter {
       opacity: 0;
@@ -102,16 +100,6 @@ $track-indicator-color: #426aad;// chayns__background-color--108
         transform: translate3d(0, 0, 0);
       }
     }
-  }
-}
-
-.swipe-up-exit {
-  overflow: hidden;
-  transition: max-height .5s;
-  max-height: 20px;
-
-  &-active {
-    max-height: 0;
   }
 }
 

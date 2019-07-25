@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 
 import ProgressBar from '../../src/react-chayns-progress_bar/component/ProgressBar';
 import '../../src/react-chayns-progress_bar/component/index.scss';
-import AnimatedProgressBar from '../../src/react-chayns-progress_bar/component/AnimatedProgressBar';
 
 export default class PositionInputExample extends PureComponent {
     state = {
@@ -23,7 +22,7 @@ export default class PositionInputExample extends PureComponent {
     }
 
     render() {
-        const { value, value2 } = this.state;
+        const { value } = this.state;
 
         return (
             <div>
@@ -40,11 +39,11 @@ export default class PositionInputExample extends PureComponent {
                 <ProgressBar>
                     {'Converting ...'}
                 </ProgressBar>
-                <AnimatedProgressBar value={value < 100 ? value : null} ready={value > 200}>
+                <ProgressBar value={value < 100 ? value : null} ready={value > 200}>
                     {Math.floor(value / 100) === 0 && 'Uploading ...'}
                     {Math.floor(value / 100) === 1 && 'Converting ...'}
                     {Math.floor(value / 100) === 2 && 'Ready!'}
-                </AnimatedProgressBar>
+                </ProgressBar>
             </div>
         );
     }
