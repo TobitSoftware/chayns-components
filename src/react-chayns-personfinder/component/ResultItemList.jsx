@@ -5,6 +5,7 @@ import WaitCursor from './WaitCursor';
 import {
     FRIEND_RELATION,
     LOCATION_RELATION,
+    LOCATION_UNRELATED,
     PERSON_RELATION,
     PERSON_UNRELATED,
 } from '../constants/relationTypes';
@@ -21,6 +22,8 @@ function getDividerText(type) {
         return getText('DIVIDER_MORE_PERSON');
     case LOCATION_RELATION:
         return getText('DIVIDER_SITE');
+    case LOCATION_UNRELATED:
+        return getText('DIVIDER_MORE_SITE');
     default:
         return null;
     }
