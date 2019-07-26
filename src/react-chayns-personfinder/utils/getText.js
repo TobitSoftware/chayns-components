@@ -21,7 +21,7 @@ const DICTIONARY = {
     },
     DIVIDER_MORE_SITE: {
         de: 'Weitere Sites',
-        en: 'furher sites',
+        en: 'further sites',
     },
     LOAD_MORE: {
         de: 'Mehr anzeigen',
