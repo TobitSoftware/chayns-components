@@ -5,10 +5,9 @@ import {
     LOCATION_RELATION,
     FRIEND_RELATION,
     PERSON_UNRELATED,
+    LOCATION_UNRELATED,
 } from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
-import getText from '../utils/getText';
-import Divider from './Divider';
 import ResultItemList from './ResultItemList';
 
 export default class PersonFinderResults extends PureComponent {
@@ -104,13 +103,15 @@ export default class PersonFinderResults extends PureComponent {
                 {this.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons)}
                 {this.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites)}
                 {this.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons)}
-                {unrelatedSites && unrelatedSites.length > 0 && (
-                    <Divider
-                        key="unrelated-sites"
-                        name={getText('DIVIDER_MORE_SITE')}
-                    />
-                )}
-                {unrelatedSites}
+                <ResultItemList
+                    type={LOCATION_UNRELATED}
+                    hasMore={false}
+                    showSeparators
+                    onLoadMore={null}
+                    showWaitCursor={false}
+                >
+                    {unrelatedSites}
+                </ResultItemList>
             </div>
         );
     }
