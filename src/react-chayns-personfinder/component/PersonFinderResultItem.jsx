@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import getText from '../utils/getText';
 import { PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION } from '../constants/relationTypes';
+import Identifier from './result-item/Identifier';
 
 const SHOW_RELATIONS_COUNT = 5;
 
@@ -118,9 +119,7 @@ export default class PersonFinderResultItem extends PureComponent {
 
         if (!relationString) {
             return (
-                <div className="identifier">
-                    {type === PERSON_RELATION || type === FRIEND_RELATION ? relation.personId : relation.siteId}
-                </div>
+                <Identifier type={type} relation={relation} />
             );
         }
 
@@ -156,9 +155,7 @@ export default class PersonFinderResultItem extends PureComponent {
                     >
                         <div className="name">{convertedRelation.name}</div>
                         {relationString && (
-                            <div className="identifier">
-                                {`(${type === PERSON_RELATION || type === FRIEND_RELATION ? convertedRelation.personId : convertedRelation.siteId})`}
-                            </div>
+                            <Identifier type={type} relation={relation} />
                         )}
                     </div>
                     {this.renderSubtitle(relationString, furtherRelationsString)}
