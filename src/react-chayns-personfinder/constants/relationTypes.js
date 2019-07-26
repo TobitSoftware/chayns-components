@@ -1,3 +1,6 @@
 export const FRIEND_RELATION = 'FRIEND';
 export const PERSON_RELATION = 'PERSON';
 export const LOCATION_RELATION = 'LOCATION';
+
+export const PERSON_UNRELATED = 'PERSON_UNRELATED';
+export const SITE_UNRELATED = 'SITE_UNRELATED';

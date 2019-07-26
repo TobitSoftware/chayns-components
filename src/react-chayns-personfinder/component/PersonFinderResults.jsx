@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION } from '../constants/relationTypes';
+import {
+    PERSON_RELATION,
+    LOCATION_RELATION,
+    FRIEND_RELATION,
+    PERSON_UNRELATED,
+} from '../constants/relationTypes';
 import PersonFinderResultItem from './PersonFinderResultItem';
 import getText from '../utils/getText';
 import Divider from './Divider';
 import ResultItemList from './ResultItemList';
-
-const PERSON_UNRELATED = 'PERSON_UNRELATED';
 
 export default class PersonFinderResults extends PureComponent {
     static propTypes = {

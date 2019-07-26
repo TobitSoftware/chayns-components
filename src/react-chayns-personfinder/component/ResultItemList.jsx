@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Divider from './Divider';
 import WaitCursor from './WaitCursor';
-import { FRIEND_RELATION, LOCATION_RELATION, PERSON_RELATION } from '../constants/relationTypes';
+import {
+    FRIEND_RELATION,
+    LOCATION_RELATION,
+    PERSON_RELATION,
+    PERSON_UNRELATED,
+} from '../constants/relationTypes';
 import LoadMore from './LoadMore';
 import getText from '../utils/getText';
-
-const PERSON_UNRELATED = 'PERSON_UNRELATED';
 
 function getDividerText(type) {
     switch (type) {
