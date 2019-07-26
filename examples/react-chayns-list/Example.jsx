@@ -34,6 +34,11 @@ export default class ListExample extends Component {
                         notExpandable
                     />
                     <ListItem
+                        title={<b>bold title</b>}
+                        subtitle={<i>italic subtitle</i>}
+                        notExpandable
+                    />
+                    <ListItem
                         title="ListItem (accordion-style, with image, without indicator)"
                         subtitle="Description"
                         image="https://chayns.tobit.com/storage/59140-09519/Images/icon-72.png"
@@ -81,6 +86,12 @@ export default class ListExample extends Component {
                         }}
                     >
                         {'Content'}
+                    </ListItem>
+                    <ListItem
+                        title={<b>bold title</b>}
+                        subtitle={<i>italic subtitle</i>}
+                    >
+                        Content
                     </ListItem>
                     <ListItem
                         title="ListItem (accordion-style, with image, with ContextMenu)"
