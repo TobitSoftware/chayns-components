@@ -14,13 +14,17 @@ export default class PersonFinderResultItem extends PureComponent {
         relation: PropTypes.shape({
             name: PropTypes.string,
             relationCount: PropTypes.number,
-            relations: PropTypes.string,
+            relations: PropTypes.arrayOf(PropTypes.shape({
+                type: PropTypes.string.isRequired,
+                name: PropTypes.string.isRequired,
+                score: PropTypes.number,
+            })),
             firstName: PropTypes.string,
             lastName: PropTypes.string,
             siteId: PropTypes.string,
             locationId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             personId: PropTypes.string,
-            userId: PropTypes.string,
+            userId: PropTypes.number,
         }).isRequired,
         type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION]).isRequired,
     };
