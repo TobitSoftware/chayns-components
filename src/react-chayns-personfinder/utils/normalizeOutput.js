@@ -1,22 +1,25 @@
-import {
-    FRIEND_RELATION,
-    LOCATION_RELATION,
-    PERSON_RELATION,
-    PERSON_UNRELATED,
-} from '../constants/relationTypes';
+import normalizeOutputType from './normalizeOutputType';
+import { LOCATION_RELATION, PERSON_RELATION } from '../constants/relationTypes';
 
 export default function normalizeOutput(type, value) {
-    const newType = (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) ? PERSON_RELATION : LOCATION_RELATION;
+    const normalizedType = normalizeOutputType(type);
+
+    if (normalizedType === PERSON_RELATION) {
+        return {
+            type: PERSON_RELATION,
+            name: value.name,
+            firstName: value.firstName,
+            lastName: value.lastName,
+            personId: value.personId,
+            userId: value.userId,
+            isFriend: value.isFriend,
+        };
+    }
 
     return {
-        type: newType,
+        type: LOCATION_RELATION,
         name: value.name,
-        firstName: value.firstName,
-        lastName: value.lastName,
-        personId: value.personId,
-        userId: value.userId,
         siteId: value.siteId,
         locationId: value.locationId,
-        isFriend: value.isFriend,
     };
 }

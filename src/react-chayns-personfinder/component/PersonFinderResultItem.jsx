@@ -14,22 +14,15 @@ import Identifier from './result-item/Identifier';
 import Relation from './result-item/Relation';
 import getRelationName from '../utils/selectors/getRelationName';
 import getRelationImage from '../utils/selectors/getRelationImage';
+import normalizeOutputType from '../utils/normalizeOutputType';
 
 function hasRelations(data) {
     return !!(data && data.length > 0);
 }
 
-function getOutputType(type) {
-    if (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) {
-        return PERSON_RELATION;
-    }
-
-    return LOCATION_RELATION;
-}
-
 const PersonFinderResultItem = ({ onClick, relation, type }) => {
     const handleClick = useCallback(() => {
-        const newType = getOutputType(type);
+        const newType = normalizeOutputType(type);
         const newRelation = { ...relation };
 
         if (newType === PERSON_RELATION) {
