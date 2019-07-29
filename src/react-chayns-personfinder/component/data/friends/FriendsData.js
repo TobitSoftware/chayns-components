@@ -59,6 +59,25 @@ class FriendsData {
 
         return friendsList;
     }
+
+    async setFriend(personId, friendship = true) {
+        const config = {
+            method: friendship ? 'POST' : 'DELETE',
+            headers: {
+                Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
+            },
+            mode: 'cors',
+        };
+
+        const response = await fetch(`https://webapi.tobit.com/AccountService/v1.0/chayns/friends?friend=${personId}`, config);
+
+        if (response.status === 200) {
+            this.#lastFetchTime = Date.now();
+            return true;
+        }
+
+        return false;
+    }
 }
 
 export default new FriendsData();

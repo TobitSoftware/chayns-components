@@ -10,6 +10,7 @@ import {
     PERSON_UNRELATED,
 } from '../../constants/relationTypes';
 import FriendsContext from '../data/friends/FriendsContext';
+import FriendsIndicator from './FriendsIndicator';
 
 function hasRelations(data) {
     return !!(data && data.length > 0);
@@ -46,6 +47,9 @@ const PersonResultItem = ({ relation, onClick, type }) => {
                     <Identifier type={type} relation={relation} />
                 )}
             </div>
+            <FriendsIndicator
+                personId={relation.personId}
+            />
         </div>
     );
 };

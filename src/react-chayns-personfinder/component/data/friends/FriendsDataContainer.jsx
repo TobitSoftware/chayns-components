@@ -13,12 +13,19 @@ const FriendsDataContainer = ({ children }) => {
         return fetchedFriends;
     }, []);
 
+    const setFriend = useCallback(async (personId, friendship) => {
+        await FriendsData.setFriend(personId, friendship);
+
+        return fetchFriends(true);
+    }, [fetchFriends]);
+
     return (
         <FriendsContext.Provider
             value={{
                 isFriend: FriendsData.isFriend,
                 friends,
                 fetchFriends,
+                setFriend,
             }}
         >
             {children}
