@@ -7,7 +7,6 @@ import {
     PERSON_UNRELATED,
     LOCATION_UNRELATED,
 } from '../constants/relationTypes';
-import PersonFinderResultItem from './PersonFinderResultItem';
 import ResultItemList from './ResultItemList';
 
 export default class PersonFinderResults extends PureComponent {
@@ -50,21 +49,6 @@ export default class PersonFinderResults extends PureComponent {
         }
     }
 
-    renderResults(relations, type) {
-        if (!relations || relations.length === 0) {
-            return null;
-        }
-
-        return relations.map(relation => (
-            <PersonFinderResultItem
-                key={relation.personId || relation.siteId}
-                relation={relation}
-                type={type}
-                onClick={this.handleClick}
-            />
-        ));
-    }
-
     renderRelated(type, children, hasMore) {
         const { showSeparators, onLoadMore, showWaitCursor } = this.props;
 
@@ -75,6 +59,7 @@ export default class PersonFinderResults extends PureComponent {
                 showSeparators={showSeparators}
                 onLoadMore={onLoadMore}
                 showWaitCursor={showWaitCursor}
+                onClick={this.handleClick}
             >
                 {children}
             </ResultItemList>
@@ -91,26 +76,21 @@ export default class PersonFinderResults extends PureComponent {
             showFriends,
         } = this.props;
 
-        const friends = showFriends ? this.renderResults(persons.friends, FRIEND_RELATION) : null;
-        const relatedPersons = this.renderResults(persons.related, PERSON_RELATION);
-        const relatedSites = this.renderResults(sites.related, LOCATION_RELATION);
-        const unrelatedPersons = this.renderResults(persons.unrelated, PERSON_RELATION);
-        const unrelatedSites = this.renderResults(sites.unrelated, LOCATION_RELATION);
-
         return (
             <div className="cc__person-finder__results">
-                {friends ? this.renderRelated(FRIEND_RELATION, friends) : null}
-                {this.renderRelated(PERSON_RELATION, relatedPersons, moreRelatedPersons)}
-                {this.renderRelated(LOCATION_RELATION, relatedSites, moreRelatedSites)}
-                {this.renderRelated(PERSON_UNRELATED, unrelatedPersons, moreUnrelatedPersons)}
+                {(showFriends && persons.friends && persons.friends.length) ? this.renderRelated(FRIEND_RELATION, persons.friends) : null}
+                {this.renderRelated(PERSON_RELATION, persons.related, moreRelatedPersons)}
+                {this.renderRelated(LOCATION_RELATION, sites.related, moreRelatedSites)}
+                {this.renderRelated(PERSON_UNRELATED, persons.unrelated, moreUnrelatedPersons)}
                 <ResultItemList
                     type={LOCATION_UNRELATED}
                     hasMore={false}
                     showSeparators
                     onLoadMore={null}
                     showWaitCursor={false}
+                    onClick={this.handleClick}
                 >
-                    {unrelatedSites}
+                    {sites.unrelated}
                 </ResultItemList>
             </div>
         );

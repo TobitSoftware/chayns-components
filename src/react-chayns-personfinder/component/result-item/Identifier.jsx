@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FRIEND_RELATION, LOCATION_RELATION, PERSON_RELATION } from '../../constants/relationTypes';
+import {
+    FRIEND_RELATION,
+    LOCATION_RELATION,
+    PERSON_RELATION,
+    PERSON_UNRELATED,
+} from '../../constants/relationTypes';
 
 const Identifier = ({ type, relation }) => (
     <div className="identifier">
-        {`(${type === PERSON_RELATION || type === FRIEND_RELATION ? relation.personId : relation.siteId})`}
+        {`(${type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION ? relation.personId : relation.siteId})`}
     </div>
 );
 

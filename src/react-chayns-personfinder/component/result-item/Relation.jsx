@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FRIEND_RELATION, LOCATION_RELATION, PERSON_RELATION } from '../../constants/relationTypes';
+import {
+    FRIEND_RELATION,
+    LOCATION_RELATION,
+    LOCATION_UNRELATED,
+    PERSON_RELATION,
+    PERSON_UNRELATED
+} from '../../constants/relationTypes';
 import getText from '../../utils/getText';
 
 const SHOW_RELATIONS_COUNT = 5;
@@ -15,7 +21,7 @@ function getRelations(data, type) {
     let relationString = '';
 
     for (let i = 0; i < show; i += 1) {
-        if (type === PERSON_RELATION || type === FRIEND_RELATION) {
+        if (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) {
             relationString += data[i].type === 'LIVING_IN' ? `${getText(data[i].type, data[i].name)}, ` : `${data[i].name}, `;
         } else {
             relationString += `${getText(data[i].type)}, `;
@@ -42,7 +48,7 @@ function getFurtherRelations(relation) {
 }
 
 function convertRelation(type, relation) {
-    if (type === LOCATION_RELATION) {
+    if (type === LOCATION_RELATION || type === LOCATION_UNRELATED) {
         return {
             siteId: relation.siteId,
             locationId: relation.locationId,
@@ -54,7 +60,7 @@ function convertRelation(type, relation) {
         };
     }
 
-    if (type === PERSON_RELATION || type === FRIEND_RELATION) {
+    if (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) {
         return {
             personId: relation.personId,
             userId: relation.userId,

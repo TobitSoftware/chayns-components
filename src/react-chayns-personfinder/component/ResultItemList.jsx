@@ -11,6 +11,7 @@ import {
 } from '../constants/relationTypes';
 import LoadMore from './LoadMore';
 import getText from '../utils/getText';
+import PersonFinderResultItem from './PersonFinderResultItem';
 
 function getDividerText(type) {
     switch (type) {
@@ -36,6 +37,7 @@ const ResultItemList = ({
     hasMore,
     showWaitCursor,
     onLoadMore,
+    onClick,
 }) => {
     if (!children || children.length === 0) {
         return null;
@@ -49,7 +51,14 @@ const ResultItemList = ({
                     name={getDividerText(type)}
                 />
             )}
-            {children}
+            {children.map(relation => (
+                <PersonFinderResultItem
+                    key={relation.personId || relation.siteId}
+                    relation={relation}
+                    type={type}
+                    onClick={onClick}
+                />
+            ))}
             {showSeparators && hasMore && showWaitCursor && (
                 <WaitCursor
                     style={{
@@ -76,6 +85,7 @@ ResultItemList.propTypes = {
     showSeparators: PropTypes.bool,
     type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION, PERSON_UNRELATED]).isRequired,
     children: PropTypes.arrayOf(PropTypes.node),
+    onClick: PropTypes.func,
 };
 
 ResultItemList.defaultProps = {
@@ -83,6 +93,7 @@ ResultItemList.defaultProps = {
     hasMore: false,
     showSeparators: false,
     children: null,
+    onClick: null,
 };
 
 export default ResultItemList;
