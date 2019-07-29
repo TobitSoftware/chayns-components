@@ -8,21 +8,19 @@ import {
     LOCATION_UNRELATED,
 } from '../../constants/relationTypes';
 
-const SiteResultItem = ({ onClick, type, relation }) => {
-    return (
-        <div className="result-item" onClick={onClick}>
-            <div className="img" style={{ backgroundImage: `url(${getRelationImage(type, relation)})` }} />
-            <div className="text">
-                <div
-                    className="title"
-                >
-                    <div className="name">{getRelationName(type, relation)}</div>
-                </div>
-                <Identifier type={type} relation={relation} />
+const SiteResultItem = ({ onClick, type, relation }) => (
+    <div className="result-item" onClick={onClick}>
+        <div className="img" style={{ backgroundImage: `url(${getRelationImage(type, relation)})` }} />
+        <div className="text">
+            <div
+                className="title"
+            >
+                <div className="name">{getRelationName(type, relation)}</div>
             </div>
+            <Identifier type={type} relation={relation} />
         </div>
-    );
-};
+    </div>
+);
 
 SiteResultItem.propTypes = {
     relation: PropTypes.shape({
