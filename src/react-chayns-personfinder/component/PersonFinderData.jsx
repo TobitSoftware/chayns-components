@@ -90,17 +90,28 @@ export default class PersonFinderData extends Component {
     }
 
     componentDidMount() {
-        const { fetchFriends } = this.context;
-        fetchFriends();
+        const { persons } = this.props;
+
+        if (persons) {
+            const { fetchFriends } = this.context;
+            fetchFriends();
+        }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         const { value, selectedValue } = this.props;
         const { value: stateValue } = this.state;
 
         if (!selectedValue && stateValue !== value) {
             this.setValue('');
             this.setValue(value);
+        }
+
+        const { persons } = this.props;
+
+        if (persons && !prevProps.persons) {
+            const { fetchFriends } = this.context;
+            fetchFriends();
         }
     }
 
@@ -318,6 +329,12 @@ export default class PersonFinderData extends Component {
         return this.promises[type].promise;
     }
 
+    showFriends() {
+        const { persons, uacId } = this.props;
+
+        return persons && !uacId;
+    }
+
     hasEntries() {
         const { persons, sites } = this.state;
         const { friends } = this.context;
@@ -326,7 +343,7 @@ export default class PersonFinderData extends Component {
             || (persons.unrelated && persons.unrelated.length > 0)
             || (sites.related && sites.related.length > 0)
             || (sites.unrelated && sites.unrelated.length > 0)
-            || (friends && friends.length > 0);
+            || (this.showFriends() && friends && friends.length > 0);
     }
 
     renderChildren() {
@@ -366,7 +383,7 @@ export default class PersonFinderData extends Component {
                     moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
                     moreRelatedSites={this.loadMore[LOCATION_RELATION]}
                     moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
-                    showFriends={!value || value.trim() === ''}
+                    showFriends={this.showFriends() && (!value || value.trim() === '')}
                 />
             );
 
