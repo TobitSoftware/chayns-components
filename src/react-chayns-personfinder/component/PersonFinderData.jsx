@@ -89,6 +89,11 @@ export default class PersonFinderData extends Component {
         this.handleOnFocus = this.handleOnFocus.bind(this);
     }
 
+    componentDidMount() {
+        const { fetchFriends } = this.context;
+        fetchFriends();
+    }
+
     componentDidUpdate() {
         const { value, selectedValue } = this.props;
         const { value: stateValue } = this.state;

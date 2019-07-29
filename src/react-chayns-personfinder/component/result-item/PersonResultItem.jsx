@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import getRelationImage from '../../utils/selectors/getRelationImage';
 import getRelationName from '../../utils/selectors/getRelationName';
@@ -9,19 +9,21 @@ import {
     PERSON_RELATION,
     PERSON_UNRELATED,
 } from '../../constants/relationTypes';
+import FriendsContext from '../data/friends/FriendsContext';
 
 function hasRelations(data) {
     return !!(data && data.length > 0);
 }
 
 const PersonResultItem = ({ relation, onClick, type }) => {
+    const { isFriend } = useContext(FriendsContext);
     const handleClick = useCallback(() => {
         const additions = {
-            isFriend: type === FRIEND_RELATION,
+            isFriend: type === FRIEND_RELATION || !!isFriend(relation.personId),
         };
 
         onClick(additions);
-    }, [onClick, relation, type]);
+    }, [onClick, relation, type, isFriend]);
 
     const hRelations = hasRelations(relation && relation.relations ? relation.relations : []);
 
