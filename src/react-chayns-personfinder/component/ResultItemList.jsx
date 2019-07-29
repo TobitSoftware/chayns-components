@@ -31,7 +31,7 @@ function getDividerText(type) {
 }
 
 const ResultItemList = ({
-    children,
+    relations,
     type,
     showSeparators,
     hasMore,
@@ -39,7 +39,7 @@ const ResultItemList = ({
     onLoadMore,
     onClick,
 }) => {
-    if (!children || children.length === 0) {
+    if (!relations || relations.length === 0) {
         return null;
     }
 
@@ -51,7 +51,7 @@ const ResultItemList = ({
                     name={getDividerText(type)}
                 />
             )}
-            {children.map(relation => (
+            {relations.map(relation => (
                 <PersonFinderResultItem
                     key={relation.personId || relation.siteId}
                     relation={relation}
@@ -67,7 +67,7 @@ const ResultItemList = ({
                     key={`${type}-wait`}
                 />
             )}
-            {showSeparators && hasMore && !showWaitCursor && (
+            {showSeparators && onLoadMore && hasMore && !showWaitCursor && (
                 <LoadMore
                     key={`${type}-more`}
                     type={(type === PERSON_RELATION || type === PERSON_UNRELATED) ? PERSON_RELATION : LOCATION_RELATION}
@@ -79,12 +79,12 @@ const ResultItemList = ({
 };
 
 ResultItemList.propTypes = {
-    onLoadMore: PropTypes.func.isRequired,
+    onLoadMore: PropTypes.func,
     showWaitCursor: PropTypes.bool,
     hasMore: PropTypes.bool,
     showSeparators: PropTypes.bool,
-    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION, PERSON_UNRELATED]).isRequired,
-    children: PropTypes.arrayOf(PropTypes.node),
+    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION, PERSON_UNRELATED]).isRequired,
+    relations: PropTypes.array,
     onClick: PropTypes.func,
 };
 
@@ -92,8 +92,9 @@ ResultItemList.defaultProps = {
     showWaitCursor: false,
     hasMore: false,
     showSeparators: false,
-    children: null,
+    relations: null,
     onClick: null,
+    onLoadMore: null,
 };
 
 export default ResultItemList;

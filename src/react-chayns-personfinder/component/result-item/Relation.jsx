@@ -5,7 +5,7 @@ import {
     LOCATION_RELATION,
     LOCATION_UNRELATED,
     PERSON_RELATION,
-    PERSON_UNRELATED
+    PERSON_UNRELATED,
 } from '../../constants/relationTypes';
 import getText from '../../utils/getText';
 
@@ -95,7 +95,7 @@ const Relation = ({ type, relation }) => {
 };
 
 Relation.propTypes = {
-    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION]).isRequired,
+    type: PropTypes.oneOf([PERSON_RELATION, PERSON_UNRELATED, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION]).isRequired,
     relation: PropTypes.object.isRequired,
 };
 

@@ -3,7 +3,13 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION } from '../constants/relationTypes';
+import {
+    PERSON_RELATION,
+    LOCATION_RELATION,
+    FRIEND_RELATION,
+    PERSON_UNRELATED,
+    LOCATION_UNRELATED,
+} from '../constants/relationTypes';
 import Identifier from './result-item/Identifier';
 import Relation from './result-item/Relation';
 import getRelationName from '../utils/selectors/getRelationName';
@@ -63,7 +69,7 @@ PersonFinderResultItem.propTypes = {
         personId: PropTypes.string,
         userId: PropTypes.number,
     }).isRequired,
-    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION]).isRequired,
+    type: PropTypes.oneOf([PERSON_RELATION, PERSON_UNRELATED, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION]).isRequired,
 };
 
 export default PersonFinderResultItem;

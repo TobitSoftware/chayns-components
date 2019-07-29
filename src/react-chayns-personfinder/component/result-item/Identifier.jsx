@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
     FRIEND_RELATION,
     LOCATION_RELATION,
+    LOCATION_UNRELATED,
     PERSON_RELATION,
     PERSON_UNRELATED,
 } from '../../constants/relationTypes';
@@ -14,7 +15,7 @@ const Identifier = ({ type, relation }) => (
 );
 
 Identifier.propTypes = {
-    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, FRIEND_RELATION]).isRequired,
+    type: PropTypes.oneOf([PERSON_RELATION, PERSON_UNRELATED, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION]).isRequired,
     relation: PropTypes.object.isRequired,
 };
 

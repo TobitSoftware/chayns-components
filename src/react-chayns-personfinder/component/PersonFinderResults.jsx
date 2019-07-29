@@ -72,9 +72,8 @@ export default class PersonFinderResults extends PureComponent {
                         onLoadMore={onLoadMore}
                         showWaitCursor={showWaitCursor}
                         onClick={this.handleClick}
-                    >
-                        {persons.friends}
-                    </ResultItemList>
+                        relations={persons.friends}
+                    />
                 ) : null}
                 <ResultItemList
                     type={PERSON_RELATION}
@@ -83,9 +82,8 @@ export default class PersonFinderResults extends PureComponent {
                     onLoadMore={onLoadMore}
                     showWaitCursor={showWaitCursor}
                     onClick={this.handleClick}
-                >
-                    {persons.related}
-                </ResultItemList>
+                    relations={persons.related}
+                />
                 <ResultItemList
                     type={LOCATION_RELATION}
                     hasMore={moreRelatedSites}
@@ -93,9 +91,8 @@ export default class PersonFinderResults extends PureComponent {
                     onLoadMore={onLoadMore}
                     showWaitCursor={showWaitCursor}
                     onClick={this.handleClick}
-                >
-                    {sites.related}
-                </ResultItemList>
+                    relations={sites.related}
+                />
                 <ResultItemList
                     type={PERSON_UNRELATED}
                     hasMore={moreUnrelatedPersons}
@@ -103,9 +100,8 @@ export default class PersonFinderResults extends PureComponent {
                     onLoadMore={onLoadMore}
                     showWaitCursor={showWaitCursor}
                     onClick={this.handleClick}
-                >
-                    {persons.unrelated}
-                </ResultItemList>
+                    relations={persons.unrelated}
+                />
                 <ResultItemList
                     type={LOCATION_UNRELATED}
                     hasMore={false}
@@ -113,9 +109,8 @@ export default class PersonFinderResults extends PureComponent {
                     onLoadMore={null}
                     showWaitCursor={false}
                     onClick={this.handleClick}
-                >
-                    {sites.unrelated}
-                </ResultItemList>
+                    relations={sites.unrelated}
+                />
             </div>
         );
     }
