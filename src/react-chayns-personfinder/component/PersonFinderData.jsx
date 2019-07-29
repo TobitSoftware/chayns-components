@@ -10,6 +10,7 @@ import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 import getCurrentUserInformation from '../utils/getCurrentUserInformation';
+import FriendsContext from './data/friends/FriendsContext';
 
 const WAIT_CURSOR_TIMEOUT = 500;
 const LAZY_LOADING_SPACE = 100;
@@ -55,7 +56,6 @@ export default class PersonFinderData extends Component {
 
     state = {
         value: null,
-        friends: [],
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         showWaitCursor: false,
@@ -122,12 +122,13 @@ export default class PersonFinderData extends Component {
     };
 
     handleOnFocus() {
-        const { friends } = this.state;
         const { persons, uacId, value } = this.props;
+        const { fetchFriends, friends } = this.context;
+
         if (friends.length === 0 && persons === true && !uacId && (!value || value.trim() === '')) {
             this.setState({ showWaitCursor: true });
-            this.fetchFriends().then((result) => {
-                this.setState({ friends: result, showWaitCursor: false });
+            fetchFriends().then(() => {
+                this.setState({ showWaitCursor: false });
             });
         }
     }
@@ -312,26 +313,9 @@ export default class PersonFinderData extends Component {
         return this.promises[type].promise;
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    async fetchFriends() {
-        const config = {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
-            },
-            mode: 'cors',
-        };
-
-        const response = await fetch('https://webapi.tobit.com/AccountService/v1.0/chayns/friends', config);
-        if (response.status === 200) {
-            const json = await response.json();
-            return Promise.resolve(json);
-        }
-        return Promise.resolve([]);
-    }
-
     hasEntries() {
-        const { persons, sites, friends } = this.state;
+        const { persons, sites } = this.state;
+        const { friends } = this.context;
 
         return (persons.related && persons.related.length > 0)
             || (persons.unrelated && persons.unrelated.length > 0)
@@ -352,11 +336,12 @@ export default class PersonFinderData extends Component {
         const {
             persons,
             sites,
-            friends,
             showWaitCursor,
             lazyLoading,
             value,
         } = this.state;
+
+        const { friends } = this.context;
 
         const hasEntries = this.hasEntries();
         const showSeparators = showPersons && showSites;
@@ -437,3 +422,5 @@ export default class PersonFinderData extends Component {
         );
     }
 }
+
+PersonFinderData.contextType = FriendsContext;
