@@ -10,57 +10,35 @@ import {
     PERSON_UNRELATED,
     LOCATION_UNRELATED,
 } from '../constants/relationTypes';
-import Identifier from './result-item/Identifier';
-import Relation from './result-item/Relation';
-import getRelationName from '../utils/selectors/getRelationName';
-import getRelationImage from '../utils/selectors/getRelationImage';
-import normalizeOutputType from '../utils/normalizeOutputType';
-
-function hasRelations(data) {
-    return !!(data && data.length > 0);
-}
+import PersonResultItem from './result-item/PersonResultItem';
+import SiteResultItem from './result-item/SiteResultItem';
 
 const PersonFinderResultItem = ({ onClick, relation, type }) => {
-    const handleClick = useCallback(() => {
-        const newType = normalizeOutputType(type);
-        const newRelation = { ...relation };
-
-        if (newType === PERSON_RELATION) {
-            if (type === FRIEND_RELATION) {
-                newRelation.isFriend = true;
-            } else {
-                newRelation.isFriend = false;
-            }
-        }
+    const handleClick = useCallback((additions) => {
+        const newRelation = { ...relation, ...additions };
 
         onClick({
-            type: newType,
+            type,
             relation: newRelation,
         });
     }, [onClick, type, relation]);
 
-    const hRelations = hasRelations(relation && relation.relations ? relation.relations : []);
+    if (type === LOCATION_RELATION || type === LOCATION_UNRELATED) {
+        return (
+            <SiteResultItem
+                type={type}
+                onClick={handleClick}
+                relation={relation}
+            />
+        );
+    }
 
     return (
-        <div className="result-item" onClick={handleClick}>
-            <div className="img" style={{ backgroundImage: `url(${getRelationImage(type, relation)})` }} />
-            <div className="text">
-                <div
-                    className="title"
-                >
-                    <div className="name">{getRelationName(type, relation)}</div>
-                    {hRelations && (
-                        <Identifier type={type} relation={relation} />
-                    )}
-                </div>
-                {hRelations && (
-                    <Relation type={type} relation={relation} />
-                )}
-                {!hRelations && (
-                    <Identifier type={type} relation={relation} />
-                )}
-            </div>
-        </div>
+        <PersonResultItem
+            type={type}
+            onClick={handleClick}
+            relation={relation}
+        />
     );
 };
 
