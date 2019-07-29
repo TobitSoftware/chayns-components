@@ -49,23 +49,6 @@ export default class PersonFinderResults extends PureComponent {
         }
     }
 
-    renderRelated(type, children, hasMore) {
-        const { showSeparators, onLoadMore, showWaitCursor } = this.props;
-
-        return (
-            <ResultItemList
-                type={type}
-                hasMore={hasMore}
-                showSeparators={showSeparators}
-                onLoadMore={onLoadMore}
-                showWaitCursor={showWaitCursor}
-                onClick={this.handleClick}
-            >
-                {children}
-            </ResultItemList>
-        );
-    }
-
     render() {
         const {
             persons,
@@ -74,14 +57,55 @@ export default class PersonFinderResults extends PureComponent {
             moreRelatedSites,
             moreUnrelatedPersons,
             showFriends,
+            showSeparators,
+            onLoadMore,
+            showWaitCursor,
         } = this.props;
 
         return (
             <div className="cc__person-finder__results">
-                {(showFriends && persons.friends && persons.friends.length) ? this.renderRelated(FRIEND_RELATION, persons.friends) : null}
-                {this.renderRelated(PERSON_RELATION, persons.related, moreRelatedPersons)}
-                {this.renderRelated(LOCATION_RELATION, sites.related, moreRelatedSites)}
-                {this.renderRelated(PERSON_UNRELATED, persons.unrelated, moreUnrelatedPersons)}
+                {(showFriends && persons.friends && persons.friends.length) ? (
+                    <ResultItemList
+                        type={FRIEND_RELATION}
+                        hasMore={false}
+                        showSeparators={showSeparators}
+                        onLoadMore={onLoadMore}
+                        showWaitCursor={showWaitCursor}
+                        onClick={this.handleClick}
+                    >
+                        {persons.friends}
+                    </ResultItemList>
+                ) : null}
+                <ResultItemList
+                    type={PERSON_RELATION}
+                    hasMore={moreRelatedPersons}
+                    showSeparators={showSeparators}
+                    onLoadMore={onLoadMore}
+                    showWaitCursor={showWaitCursor}
+                    onClick={this.handleClick}
+                >
+                    {persons.related}
+                </ResultItemList>
+                <ResultItemList
+                    type={LOCATION_RELATION}
+                    hasMore={moreRelatedSites}
+                    showSeparators={showSeparators}
+                    onLoadMore={onLoadMore}
+                    showWaitCursor={showWaitCursor}
+                    onClick={this.handleClick}
+                >
+                    {sites.related}
+                </ResultItemList>
+                <ResultItemList
+                    type={PERSON_UNRELATED}
+                    hasMore={moreUnrelatedPersons}
+                    showSeparators={showSeparators}
+                    onLoadMore={onLoadMore}
+                    showWaitCursor={showWaitCursor}
+                    onClick={this.handleClick}
+                >
+                    {persons.unrelated}
+                </ResultItemList>
                 <ResultItemList
                     type={LOCATION_UNRELATED}
                     hasMore={false}
