@@ -6,6 +6,7 @@ import Input from '../../react-chayns-input/component/Input';
 import PersonFinderData from './PersonFinderData';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
+import normalizeOutput from '../utils/normalizeOutput';
 
 export default class SimplePersonFinder extends Component {
     static propTypes = {
@@ -69,16 +70,7 @@ export default class SimplePersonFinder extends Component {
         });
 
         if (onChange) {
-            onChange({
-                type,
-                name: value.name,
-                firstName: value.firstName,
-                lastName: value.lastName,
-                personId: value.personId,
-                userId: value.userId,
-                siteId: value.siteId,
-                locationId: value.locationId,
-            });
+            onChange(normalizeOutput(type, value));
         }
     }
 

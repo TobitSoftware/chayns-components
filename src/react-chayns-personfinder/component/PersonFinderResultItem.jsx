@@ -19,11 +19,30 @@ function hasRelations(data) {
     return !!(data && data.length > 0);
 }
 
+function getOutputType(type) {
+    if (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) {
+        return PERSON_RELATION;
+    }
+
+    return LOCATION_RELATION;
+}
+
 const PersonFinderResultItem = ({ onClick, relation, type }) => {
     const handleClick = useCallback(() => {
+        const newType = getOutputType(type);
+        const newRelation = { ...relation };
+
+        if (newType === PERSON_RELATION) {
+            if (type === FRIEND_RELATION) {
+                newRelation.isFriend = true;
+            } else {
+                newRelation.isFriend = false;
+            }
+        }
+
         onClick({
-            type,
-            relation,
+            type: newType,
+            relation: newRelation,
         });
     }, [onClick, type, relation]);
 

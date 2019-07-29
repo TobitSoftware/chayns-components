@@ -6,6 +6,7 @@ import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderData from './PersonFinderData';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
+import normalizeOutput from '../utils/normalizeOutput';
 
 export default class MultiplePersonFinder extends Component {
     static propTypes = {
@@ -109,16 +110,7 @@ export default class MultiplePersonFinder extends Component {
             return;
         }
 
-        const outValue = {
-            type,
-            name: value.name,
-            firstName: value.firstName,
-            lastName: value.lastName,
-            personId: value.personId,
-            userId: value.userId,
-            siteId: value.siteId,
-            locationId: value.locationId,
-        };
+        const outValue = normalizeOutput(type, value);
 
         this.setState({
             inputValue: '',
