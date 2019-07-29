@@ -1,3 +1,5 @@
+import EventEmitter from '../../../../utils/events/EventEmitter';
+
 const CACHE_TIME = 10 * 1000;
 
 class FriendsData {
@@ -8,6 +10,8 @@ class FriendsData {
     #lastFetchTime = null;
 
     #activeFetch = null;
+
+    #eventEmitter = new EventEmitter();
 
     constructor() {
         this.isFriend = this.isFriend.bind(this);
@@ -57,6 +61,8 @@ class FriendsData {
             this.#friendsObject[e.personId] = e;
         });
 
+        this.#eventEmitter.emit('update', friendsList);
+
         return friendsList;
     }
 
@@ -73,10 +79,19 @@ class FriendsData {
 
         if (response.status === 200) {
             this.#lastFetchTime = Date.now();
+
             return true;
         }
 
         return false;
+    }
+
+    addUpdateListener(listener) {
+        this.#eventEmitter.on('update', listener);
+    }
+
+    removeUpdateListener(listener) {
+        this.#eventEmitter.off('update', listener);
     }
 }
 

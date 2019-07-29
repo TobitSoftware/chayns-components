@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FriendsContext from './FriendsContext';
 import FriendsData from './FriendsData';
@@ -18,6 +18,18 @@ const FriendsDataContainer = ({ children }) => {
 
         return fetchFriends(true);
     }, [fetchFriends]);
+
+    const friendsUpdate = useCallback((friendsList) => {
+        setFriends(friendsList);
+    }, [setFriends]);
+
+    useEffect(() => {
+        FriendsData.addUpdateListener(friendsUpdate);
+
+        return () => {
+            FriendsData.removeUpdateListener(friendsUpdate);
+        };
+    }, [friendsUpdate]);
 
     return (
         <FriendsContext.Provider
