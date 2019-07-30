@@ -5,7 +5,7 @@ import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons/faStar'
 
 import Icon from '../../../react-chayns-icon/component/Icon';
 import FriendsContext from '../data/friends/FriendsContext';
-import { COLOR_YELLOW_3 } from '../../../constants/colors';
+import { COLOR_004, COLOR_YELLOW_3 } from '../../../constants/colors';
 
 const FriendsIndicator = ({ personId }) => {
     const { isFriend, setFriend } = useContext(FriendsContext);
@@ -21,7 +21,7 @@ const FriendsIndicator = ({ personId }) => {
             <Icon
                 icon={isFriend(personId) ? faStarSolid : faStar}
                 onClick={handleClick}
-                className={isFriend(personId) ? COLOR_YELLOW_3 : null}
+                className={isFriend(personId) ? COLOR_YELLOW_3 : COLOR_004}
             />
         </div>
     );
