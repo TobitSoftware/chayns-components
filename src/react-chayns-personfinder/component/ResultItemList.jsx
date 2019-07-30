@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
 import Divider from './Divider';
 import WaitCursor from './WaitCursor';
 import {
@@ -31,6 +33,7 @@ function getDividerText(type) {
 }
 
 const ResultItemList = ({
+    className,
     relations,
     type,
     showSeparators,
@@ -44,7 +47,7 @@ const ResultItemList = ({
     }
 
     return (
-        <div>
+        <div className={classnames('cc__person-finder__results-list', className)}>
             {showSeparators && (
                 <Divider
                     key={`${type}-divider`}
@@ -86,6 +89,7 @@ ResultItemList.propTypes = {
     type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION, PERSON_UNRELATED]).isRequired,
     relations: PropTypes.array,
     onClick: PropTypes.func,
+    className: PropTypes.string,
 };
 
 ResultItemList.defaultProps = {
@@ -95,6 +99,7 @@ ResultItemList.defaultProps = {
     relations: null,
     onClick: null,
     onLoadMore: null,
+    className: null,
 };
 
 export default ResultItemList;

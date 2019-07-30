@@ -31,6 +31,7 @@ const PersonFinderResults = ({
         <div className="cc__person-finder__results">
             {(showFriends && persons.friends && persons.friends.length) ? (
                 <ResultItemList
+                    className="cc__person-finder__results--friends"
                     type={FRIEND_RELATION}
                     hasMore={false}
                     showSeparators={showSeparators}
