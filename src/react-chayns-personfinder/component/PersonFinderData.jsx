@@ -171,8 +171,13 @@ export default class PersonFinderData extends Component {
     async handleLazyLoad() {
         if (!this.resultList) return;
 
-        const { autoLoading } = this.props;
         const { value, lazyLoading } = this.state;
+
+        if (this.showFriends() && (!value || value.trim() === '')) {
+            return;
+        }
+
+        const { autoLoading } = this.props;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
 
         if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
