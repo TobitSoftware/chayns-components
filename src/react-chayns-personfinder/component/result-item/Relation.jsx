@@ -22,7 +22,11 @@ function getRelations(data, type) {
 
     for (let i = 0; i < show; i += 1) {
         if (type === PERSON_RELATION || type === PERSON_UNRELATED || type === FRIEND_RELATION) {
-            relationString += data[i].type === 'LIVING_IN' ? `${getText(data[i].type, data[i].name)}, ` : `${data[i].name}, `;
+            if (data[i].type === 'LIVING_IN') {
+                relationString += `${getText(data[i].type, data[i].name)}, `;
+            } else if (data[i].name) {
+                relationString += `${data[i].name}, `;
+            }
         } else {
             relationString += `${getText(data[i].type)}, `;
         }
