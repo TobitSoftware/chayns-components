@@ -155,9 +155,10 @@ export default class TextString extends Component {
         this.setTextStrings();
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { replacements, stringName } = this.props;
-        if (replacements !== nextProps.replacements || stringName !== nextProps.stringName) {
+
+        if (replacements !== prevProps.replacements || stringName !== prevProps.stringName) {
             this.setTextStrings();
         }
     }
