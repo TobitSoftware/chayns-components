@@ -12,7 +12,7 @@ export default class TextString extends Component {
         children: PropTypes.node.isRequired,
         useDangerouslySetInnerHTML: PropTypes.bool,
         language: PropTypes.string,
-        fallback: PropTypes.string,
+        fallback: PropTypes.string, /* eslint-disable-line react/no-unused-prop-types */ // used by setTextStrings
         setProps: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number])),
         preventNoTranslate: PropTypes.bool,
     };
@@ -134,6 +134,15 @@ export default class TextString extends Component {
         code: 'tr',
     }];
 
+    static replace(text, replacements) {
+        let textString = text;
+        Object.keys(replacements)
+            .forEach((replacement) => {
+                textString = textString.replace(replacement, replacements[replacement]);
+            });
+        return textString;
+    }
+
     constructor() {
         super();
 
@@ -143,7 +152,6 @@ export default class TextString extends Component {
         };
 
         this.childrenOnClick = this.childrenOnClick.bind(this);
-        this.replace = this.replace.bind(this);
         this.changeStringDialog = this.changeStringDialog.bind(this);
         this.changeStringResult = this.changeStringResult.bind(this);
         this.selectStringToChange = this.selectStringToChange.bind(this);
@@ -152,29 +160,31 @@ export default class TextString extends Component {
     }
 
     componentDidMount() {
-        this.setTextStrings();
+        this.setTextStrings(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         const { replacements, stringName } = this.props;
+
         if (replacements !== nextProps.replacements || stringName !== nextProps.stringName) {
-            this.setTextStrings();
+            this.setTextStrings(nextProps);
         }
     }
 
-    setTextStrings() {
+    setTextStrings(props) {
         const {
             stringName,
             language,
             fallback,
             setProps,
-        } = this.props;
+            replacements,
+        } = props;
 
         let string = TextString.getTextString(stringName, language);
         if (string) {
-            this.setState({ textString: this.replace(string) });
+            this.setState({ textString: TextString.replace(string, replacements) });
         } else {
-            this.setState({ textString: this.replace(fallback) });
+            this.setState({ textString: TextString.replace(fallback, replacements) });
         }
 
         const { textStringProps } = this.state;
@@ -183,24 +193,13 @@ export default class TextString extends Component {
                 if (prop !== 'fallback') {
                     string = TextString.getTextString(setProps[prop]);
                     if (string) {
-                        textStringProps[prop] = this.replace(string);
+                        textStringProps[prop] = TextString.replace(string, replacements);
                     } else if (setProps.fallback && setProps.fallback[prop]) {
-                        textStringProps[prop] = this.replace(setProps.fallback[prop]);
+                        textStringProps[prop] = TextString.replace(setProps.fallback[prop], replacements);
                     }
                 }
             });
         this.setState({ textStringProps });
-    }
-
-    replace(text) {
-        const { replacements } = this.props;
-
-        let textString = text;
-        Object.keys(replacements)
-            .forEach((replacement) => {
-                textString = textString.replace(replacement, replacements[replacement]);
-            });
-        return textString;
     }
 
     childrenOnClick() {
