@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import Icon from '../../react-chayns-icon/component/Icon';
+import supportsFileInput from '../utils/supportsFileInput';
+import fileInputCall from '../utils/fileInputCall';
 
 export default class FileInput extends PureComponent {
     static types = {
@@ -78,7 +80,7 @@ export default class FileInput extends PureComponent {
         super(props);
         this.itemRefs = [];
         this.fileInputRefs = [];
-        this.needAppCall = (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.isAndroid && chayns.env.appVersion < 6000;
+        this.needAppCall = supportsFileInput();
     }
 
     onDragEnter = (event, item, index) => {
@@ -123,15 +125,7 @@ export default class FileInput extends PureComponent {
         if (stopPropagation) event.stopPropagation();
         if (typeof item.onClick === 'function') item.onClick(event);
         if (this.needAppCall && item.onChange) {
-            const uploadResult = await chayns.uploadCloudImage();
-            const type = uploadResult.url.match(/(\.[a-z]+)/g)[0];
-            const response = await fetch(uploadResult.url);
-            const data = await response.blob();
-            const metadata = {
-                type: `image/${type}`,
-            };
-            const file = new File([data], `androidCompatibilityUpload${type}`, metadata);
-            const compatibilityEvent = { target: { files: [file] } };
+            const compatibilityEvent = await fileInputCall();
             this.onChange(compatibilityEvent, item, index);
         }
     };
