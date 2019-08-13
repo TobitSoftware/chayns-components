@@ -53,6 +53,8 @@ You can set the following props on a AmountControl element:
 | minusIcon     | The icon to decrease the amount                                                         | string/object |    |
 | removeIcon    | The icon to set the amount to 0                                                         | string/object |    |
 | contentWidth  | The width of the amountControl content                                                  | number   |         |
+| min           | The minimal value of the AmountControl (onInput will not be validated)                  | number   |         |
+| max           | The maximal value of the AmountControl (onInput will not be validated)                  | number   |         |
 
 The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
 icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 
