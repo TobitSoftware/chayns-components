@@ -34,6 +34,8 @@ export default class AmountControl extends PureComponent {
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
         contentWidth: PropTypes.number,
+        min: PropTypes.number,
+        max: PropTypes.number,
         stopPropagation: PropTypes.bool,
     };
 
@@ -59,6 +61,8 @@ export default class AmountControl extends PureComponent {
         focusOnClick: true,
         contentWidth: null,
         stopPropagation: false,
+        min: null,
+        max: null,
         plusIcon: faPlus,
         minusIcon: faMinus,
         removeIcon: faMinus,
@@ -119,7 +123,11 @@ export default class AmountControl extends PureComponent {
     }
 
     addItem = () => {
-        const { amount, onAdd } = this.props;
+        const { amount, onAdd, max } = this.props;
+
+        if (max && amount + 1 > max) {
+            return;
+        }
 
         if (onAdd) onAdd();
 
@@ -127,7 +135,11 @@ export default class AmountControl extends PureComponent {
     };
 
     removeItem = () => {
-        const { amount, onRemove } = this.props;
+        const { amount, onRemove, min } = this.props;
+
+        if (min && amount - 1 < min) {
+            return;
+        }
 
         if (onRemove) onRemove();
 
@@ -145,6 +157,8 @@ export default class AmountControl extends PureComponent {
             amount: oldAmount,
             disableAdd,
             disableRemove,
+            min,
+            max,
         } = this.props;
 
         if (onInput) {
@@ -153,7 +167,9 @@ export default class AmountControl extends PureComponent {
 
         if (onChange) {
             if ((disableAdd && amount > oldAmount)
-                || (disableRemove && amount < oldAmount)) {
+                || (disableRemove && amount < oldAmount)
+                || (min && amount < min)
+                || (max && amount > max)) {
                 this.setState({
                     tempValue: oldAmount,
                 });
@@ -191,6 +207,8 @@ export default class AmountControl extends PureComponent {
             contentWidth,
             stopPropagation,
             plusIcon,
+            max,
+            min,
         } = this.props;
         const { tempAmount, tempValue, showInput } = this.state;
 
@@ -204,7 +222,7 @@ export default class AmountControl extends PureComponent {
                     stopPropagation={stopPropagation}
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
-                    disabled={disabled || disableRemove}
+                    disabled={disabled || disableRemove || (min && (amount <= min))}
                     className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon })}
                     color={(icon && !tempAmount) ? iconColor : removeColor}
                 />
@@ -231,7 +249,7 @@ export default class AmountControl extends PureComponent {
                     stopPropagation={stopPropagation}
                     icon={plusIcon}
                     onClick={this.addItem}
-                    disabled={disabled || disableAdd}
+                    disabled={disabled || disableAdd || (max && (amount >= max))}
                     className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}
                     color={addColor}
                 />
