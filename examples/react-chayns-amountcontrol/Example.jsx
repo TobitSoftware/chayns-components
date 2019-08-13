@@ -139,6 +139,35 @@ const AmountControlExample = () => {
                 buttonText="0,10"
                 showInput={amount > 0}
             />
+
+            <br />
+
+            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <AmountControl
+                    amount={amount}
+                    onChange={setAmount}
+                    buttonText="min 2"
+                    showInput={amount > 0}
+                    min={2}
+                />
+
+                <AmountControl
+                    amount={amount}
+                    onChange={setAmount}
+                    buttonText="max 5"
+                    showInput={amount > 0}
+                    max={5}
+                />
+
+                <AmountControl
+                    amount={amount}
+                    onChange={setAmount}
+                    buttonText="min 2, max 5"
+                    showInput={amount > 0}
+                    min={2}
+                    max={5}
+                />
+            </div>
         </div>
     );
 };
