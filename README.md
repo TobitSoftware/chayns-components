@@ -89,17 +89,6 @@ The following components are part of this package:
 | [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                           |
 | [ColorUtils](/src/utils/color/README.md)                           | Utility functions to convert color values (hex, rgb, hsv) |
 
+## Development ##
 
-### Examples ###
-
-For starting the examples you have to first install all dependencies...
-```
-npm i
-```
-... and then start the webpack-dev-server with the following command:
-
-```
-npm start
-```
-
-Alternatively, you can link the components into another project using ``npm run dev``.
+We moved the development section to the [CONTRIBUTING.md](/CONTRIBUTING.md) file.
