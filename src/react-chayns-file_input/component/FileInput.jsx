@@ -80,7 +80,7 @@ export default class FileInput extends PureComponent {
         super(props);
         this.itemRefs = [];
         this.fileInputRefs = [];
-        this.needAppCall = supportsFileInput();
+        this.needAppCall = !supportsFileInput();
     }
 
     onDragEnter = (event, item, index) => {
