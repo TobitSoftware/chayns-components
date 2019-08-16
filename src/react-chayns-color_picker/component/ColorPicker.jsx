@@ -43,7 +43,8 @@ export default class ColorPicker extends Component {
         bubbleClassName: PropTypes.string,
         bubbleStyle: PropTypes.object,
         input: PropTypes.bool,
-        defaultColorModel: PropTypes.number, // TODO add to readme
+        defaultColorModel: PropTypes.number,
+        children: PropTypes.node,
     };
 
     static defaultProps = {
@@ -58,6 +59,7 @@ export default class ColorPicker extends Component {
         bubbleStyle: null,
         input: false,
         defaultColorModel: null,
+        children: null,
     };
 
     static colorModels = {
@@ -79,6 +81,7 @@ export default class ColorPicker extends Component {
         this.bubbleRef = React.createRef();
         this.bubbleContentRef = React.createRef();
         this.linkRef = React.createRef();
+        this.childrenRef = React.createRef();
     }
 
     componentDidUpdate(prevProps) {
@@ -108,7 +111,9 @@ export default class ColorPicker extends Component {
     };
 
     openBubble = () => {
-        const rect = this.linkRef.current.getBoundingClientRect();
+        const { children } = this.props;
+        const ref = children ? this.childrenRef : this.linkRef;
+        const rect = ref.current.getBoundingClientRect();
         this.setState({ coordinates: { x: rect.left + (rect.width / 2), y: rect.bottom } });
         this.bubbleRef.current.show();
         // Add event listeners to hide the bubble
@@ -157,6 +162,7 @@ export default class ColorPicker extends Component {
             bubbleClassName,
             bubbleStyle,
             input,
+            children,
         } = this.props;
         const {
             color,
@@ -171,21 +177,28 @@ export default class ColorPicker extends Component {
                 style={style}
                 onClick={this.openBubble}
                 key="div"
+                ref={this.childrenRef}
             >
-                <div
-                    className="cc__color-picker__color-circle"
-                    style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
-                />
-                <div
-                    className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
-                    ref={this.linkRef}
-                >
-                    {
-                        colorModel === ColorPicker.colorModels.RGB
-                            ? rgbToRgbString(rgb255, transparency)
-                            : rgbToHexString(rgb255, transparency)
-                    }
-                </div>
+                {
+                    children || [
+                        <div
+                            key="circle"
+                            className="cc__color-picker__color-circle"
+                            style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
+                        />,
+                        <div
+                            key="link"
+                            className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
+                            ref={this.linkRef}
+                        >
+                            {
+                                colorModel === ColorPicker.colorModels.RGB
+                                    ? rgbToRgbString(rgb255, transparency)
+                                    : rgbToHexString(rgb255, transparency)
+                            }
+                        </div>]
+
+                }
             </div>,
             <Bubble
                 ref={this.bubbleRef}
