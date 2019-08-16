@@ -49,18 +49,16 @@ export default class AmountInput extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { equalize, showInput, focusOnClick } = this.props;
 
-        if (nextProps.equalize !== equalize) {
+        if (prevProps.equalize !== equalize) {
             equalizer.init();
         }
-        if (nextProps.showInput && !showInput && focusOnClick) {
-            setTimeout(() => {
-                if (this.inputRef) {
-                    this.inputRef.focus();
-                }
-            }, 20);
+        if (showInput && !prevProps.showInput && focusOnClick) {
+            if (this.inputRef) {
+                this.inputRef.focus();
+            }
         }
     }
 

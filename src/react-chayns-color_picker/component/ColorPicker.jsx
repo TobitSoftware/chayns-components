@@ -220,28 +220,22 @@ export default class ColorPicker extends Component {
                         onChange={this.onChange}
                         onChangeEnd={onChangeEnd}
                     />
-                    {
-                        !transparency
-                        || (
-                            <TransparencySlider
-                                color={color}
-                                onChange={this.onChange}
-                                onChangeEnd={onChangeEnd}
-                            />
-                        )
-                    }
-                    {
-                        !input
-                        || (
-                            <ColorInput
-                                color={color}
-                                onChange={this.onChange}
-                                onModelToggle={this.onColorModelToggle}
-                                colorModel={colorModel}
-                                transparency={transparency}
-                            />
-                        )
-                    }
+                    {transparency && (
+                        <TransparencySlider
+                            color={color}
+                            onChange={this.onChange}
+                            onChangeEnd={onChangeEnd}
+                        />
+                    )}
+                    {input && (
+                        <ColorInput
+                            color={color}
+                            onChange={this.onChange}
+                            onModelToggle={this.onColorModelToggle}
+                            colorModel={colorModel}
+                            transparency={transparency}
+                        />
+                    )}
                 </div>
             </Bubble>,
         ];

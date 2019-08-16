@@ -115,35 +115,8 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.open !== undefined) {
-            const { open } = this.props;
-            const { currentState } = this.state;
-
-            if (open !== nextProps.open) {
-                if (nextProps.open) {
-                    this.accordionOpenListener();
-                } else {
-                    this.setState({
-                        currentState: CLOSE,
-                    });
-                }
-            }
-
-            if (nextProps.open && !currentState === !!OPEN) {
-                this.accordionOpenListener();
-            }
-
-            if (!nextProps.open && !currentState === !!CLOSE) {
-                this.setState({
-                    currentState: CLOSE,
-                });
-            }
-        }
-    }
-
-    componentDidUpdate() {
-        const { autogrow } = this.props;
+    componentDidUpdate(prevProps, prevState) {
+        const { autogrow, open } = this.props;
         const { currentState } = this.state;
         const { _body } = this;
 
@@ -152,6 +125,24 @@ export default class Accordion extends PureComponent {
                 _body.style.setProperty('max-height', 'initial', 'important');
             } else if (currentState === CLOSE) {
                 _body.style.maxHeight = null;
+            }
+        }
+
+        if (open !== undefined) {
+            if (open !== prevState.open) {
+                if (open) {
+                    this.accordionOpenListener();
+                } else {
+                    this.accordionCloseListener();
+                }
+            }
+
+            if (open && !prevState.currentState === !!OPEN) {
+                this.accordionOpenListener();
+            }
+
+            if (!open && !prevState.currentState === !!CLOSE) {
+                this.accordionCloseListener();
             }
         }
     }
@@ -168,6 +159,18 @@ export default class Accordion extends PureComponent {
 
         cancelAnimationFrame(rqAnimationFrame);
     }
+
+    // open = () => {
+    //     this.setState({
+    //         currentState: OPEN,
+    //     });
+    // };
+    //
+    // close = () => {
+    //     this.setState({
+    //         currentState: CLOSE,
+    //     });
+    // };
 
     handleAccordionClick = (event) => {
         const { fixed, onClick, disabled } = this.props;
