@@ -124,6 +124,7 @@ export default class PersonFinderExample extends PureComponent {
                     parent={document.getElementById('portal-example')}
                     boxClassName="custom-personfinder-overlay"
                 />
+                <PersonFinder onInput={console.log} />
                 <Button
                     onClick={this.clear}
                 >

@@ -26,6 +26,7 @@ export default class SimplePersonFinder extends Component {
             }),
             PropTypes.string,
         ]),
+        onInput: PropTypes.func,
     };
 
     static defaultProps = {
@@ -35,6 +36,7 @@ export default class SimplePersonFinder extends Component {
         defaultValue: null,
         className: null,
         showId: false,
+        onInput: null,
     };
 
     static PERSON = PERSON_RELATION;
@@ -55,10 +57,14 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
+        const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
+        if (onInput && typeof onInput === 'function') {
+            onInput(inputValue);
+        }
     }
 
     handleSelect(type, value) {

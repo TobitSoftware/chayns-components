@@ -42,6 +42,7 @@ Then it can be used like in the following example:
 | uacId         | ID of the UAC-Group to search in                                                                   | number         |               |
 | locationId    | LocationId of the UAC-Group to search in                                                           | number         |               |
 | reducerFunction | Function to reduce the results (see example)                                                     | Function       |               |
+| onInput       | Callback on input                                                                                  | Function       |               |
 
 ## Clear the PersonFinder
 If you want to clear the PersonFinder, you need to have a reference to the ReactElement:
