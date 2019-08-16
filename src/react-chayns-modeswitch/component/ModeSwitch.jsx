@@ -147,7 +147,7 @@ export default class ModeSwitch extends Component {
             ModeSwitch.activeModeId = defaultMode || 0;
             ModeSwitch.open = false;
 
-            if (ModeSwitch.adminSwitchSupport) {
+            if (ModeSwitch.adminSwitchSupport && this.isUserInGroup([1])) {
                 chayns.removeAdminSwitchListener(this.switchMode);
                 chayns.addAdminSwitchListener(this.switchMode);
             }
