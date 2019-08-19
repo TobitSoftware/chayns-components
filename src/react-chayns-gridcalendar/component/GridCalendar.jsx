@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in,no-restricted-syntax */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -28,10 +29,12 @@ export default class ProgressCalendar extends Component {
                 ),
             }),
         ),
-        columns: PropTypes.shape({
-            names: PropTypes.arrayOf(PropTypes.string),
-            highlightedColor: PropTypes.string,
-        }),
+        columns: PropTypes.arrayOf(
+            PropTypes.shape({
+                names: PropTypes.arrayOf(PropTypes.string),
+                highlightedColor: PropTypes.string,
+            }),
+        ),
         groups: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number,
@@ -39,7 +42,6 @@ export default class ProgressCalendar extends Component {
                 color: PropTypes.string,
             }),
         ),
-        onClick: PropTypes.func.isRequired,
         onNavigateLeft: PropTypes.func,
         onNavigateRight: PropTypes.func,
         focus: PropTypes.objectOf(Date),
@@ -128,7 +130,7 @@ export default class ProgressCalendar extends Component {
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
 
         window.addEventListener('orientationchange', () => {
-            isDesktop = screen.availWidth > 450;
+            isDesktop = window.screen.availWidth > 450;
             this.forceUpdate();
         });
     }
@@ -141,7 +143,9 @@ export default class ProgressCalendar extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        const { focus, data } = this.props;
+        const {
+            focus, data, columns, groups, startTime, endTime,
+        } = this.props;
         for (const i in nextProps.data) {
             if (nextProps.data.length !== data.length) {
                 this.entries = this.getEntries(nextProps.data, nextProps.startTime, nextProps.endTime);
@@ -152,10 +156,10 @@ export default class ProgressCalendar extends Component {
                 return true;
             }
         }
-        if (nextProps.columns.length != this.props.columns.length
-            || nextProps.groups.length != this.props.groups.length
-            || nextProps.startTime.getTime() != this.props.startTime.getTime()
-            || nextProps.endTime.getTime() != this.props.endTime.getTime()) {
+        if (nextProps.columns.length !== columns.length
+            || nextProps.groups.length !== groups.length
+            || nextProps.startTime.getTime() !== startTime.getTime()
+            || nextProps.endTime.getTime() !== endTime.getTime()) {
             this.entries = this.getEntries(nextProps.data, nextProps.startTime, nextProps.endTime);
             return true;
         }
@@ -168,6 +172,7 @@ export default class ProgressCalendar extends Component {
     componentDidUpdate() {
         const { contentWidth } = this.state;
         if (contentWidth !== this.content.clientWidth) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 contentWidth: this.content.clientWidth,
             });
@@ -195,9 +200,10 @@ export default class ProgressCalendar extends Component {
     }
 
     onClick(event, entry) {
-        this.props.onClick({ event, selected: entry });
+        const { onClick, week } = this.state;
+        onClick({ event, selected: entry });
         const dateTime = entry.date.getTime();
-        const weekEnd = this.weeks[focusWeek + this.state.week][1];
+        const weekEnd = this.weeks[focusWeek + week][1];
         let
             buffer = 0;
         if (weekEnd < dateTime) {
@@ -218,8 +224,7 @@ export default class ProgressCalendar extends Component {
     getWeeks(startTime, endTime) {
         const { focus } = this.props;
         const retval = [];
-        let
-            currentStart = startTime;
+        let currentStart = startTime;
         while (currentStart.getTime() < endTime.getTime()) {
             const [monday, sunday] = ProgressCalendar.getWeek(currentStart);
             const mondayTS = monday.getTime();
@@ -248,12 +253,12 @@ export default class ProgressCalendar extends Component {
                 if (i === 0) {
                     days.push({
                         name: columns.names[j],
-                        date: new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + parseInt(j)),
+                        date: new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + parseInt(j, 10)),
                     });
                 } else if (i === 1) {
                     days.push({
                         name: columns.names[j],
-                        date: new Date(nextWeekStart.getFullYear(), nextWeekStart.getMonth(), nextWeekStart.getDate() + parseInt(j)),
+                        date: new Date(nextWeekStart.getFullYear(), nextWeekStart.getMonth(), nextWeekStart.getDate() + parseInt(j, 10)),
                     });
                 }
             }
@@ -267,13 +272,17 @@ export default class ProgressCalendar extends Component {
         return temp;
     }
 
-    getEntries(data, startTime, endTime) {
+    getEntries(dataParameter, startTimeParameter, endTimeParameter) {
         const {
-            groups, data: dataProp, endTime: endTimeProp, start: startTimeProp,
+            groups, data: dataProp, endTime: endTimeProp, startTime: startTimeProp,
         } = this.props;
-        data = data || dataProp;
-        startTime = startTime || startTimeProp;
-        endTime = endTime || endTimeProp;
+        const data = dataParameter || dataProp;
+        const startTime = startTimeParameter || startTimeProp;
+        const endTime = endTimeParameter || endTimeProp;
+
+        if (!startTime || !endTime) {
+            return [];
+        }
 
         const convertedEntries = [];
         const weeks = this.getWeeks(startTime, endTime);
@@ -287,27 +296,20 @@ export default class ProgressCalendar extends Component {
                 for (j in weeks) {
                     let m = 0;
                     const weekEntries = [];
-                    for (m; m < 7; m++) {
+                    for (m; m < 7; m += 1) {
                         let retval = {};
                         let k;
+                        // eslint-disable-next-line no-shadow
                         let startTime = new Date(weeks[j][0] + m * 24 * 60 * 60 * 1000);
+                        // eslint-disable-next-line no-shadow
                         let endTime = new Date(startTime.getTime() + (23 * 60 * 60 * 1000 + 59 * 60 * 1000));
 
                         startTime = startTime.getTime();
                         endTime = endTime.getTime();
-                        /* console.log('######################');
-                         console.log('DAY: ');
-                         console.log('Start: ', new Date(startTime), 'Offset: ', new Date(startTime).getTimezoneOffset());
-                         console.log('End: ', new Date(endTime)); */
-                        for (k = kIndex; k < entries.length; k++) {
+                        for (k = kIndex; k < entries.length; k += 1) {
                             /**
                              * Only possible for entries, which are not longer than a day
                              */
-                            /* if(k>4) {
-                             console.log('--------------------------------------');
-                             console.log('ENTRY-START: ', new Date(entries[k].startTime), 'ENTRY-END: ', new Date(entries[k].endTime));
-                             console.log('--------------------------------------');
-                             } */
                             if (entries[k].startTime >= startTime && entries[k].endTime <= endTime) {
                                 let l;
                                 if (groups.length > 0) {
@@ -333,7 +335,6 @@ export default class ProgressCalendar extends Component {
                                 break;
                             }
                         }
-                        // console.log('######################');
                         weekEntries.push(retval.user ? retval : {
                             date: new Date(startTime),
                             user: { id: data[i].id, name: data[i].name },
@@ -406,11 +407,11 @@ export default class ProgressCalendar extends Component {
     }
 
     renderEntries() {
-        const { contentWidth, week } = this.state;
+        const { contentWidth, week, focusGroup } = this.state;
         /**
          * TODO: PROBLEM WITH REF. REF GOT OLD WIDTH
          */
-        const { focus, groups, focusGroup } = this.props;
+        const { focus, groups } = this.props;
         const wrapperWidth = this.weeks ? this.weeks.length * WEEK_WIDTH * (isDesktop ? 1 : 2) : 0;
         const weekWidth = this.content ? contentWidth / 2 * (isDesktop ? 1 : 2) : 0;
 
@@ -427,6 +428,7 @@ export default class ProgressCalendar extends Component {
         )) : '';
 
         return (
+            // eslint-disable-next-line no-return-assign
             <div className="calendar__content_weeks" ref={ref => this.content = ref}>
                 <div
                     className="calendar__content_wrapper"

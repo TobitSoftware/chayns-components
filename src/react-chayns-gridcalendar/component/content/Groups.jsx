@@ -1,34 +1,30 @@
-/* eslint-disable */
-
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-export default class Groups extends Component {
-
+export default class Groups extends PureComponent {
     static propTypes = {
-        groups: PropTypes.array,
-        onClick: PropTypes.func,
-        focus: PropTypes.number
+        groups: PropTypes.array.isRequired,
+        onClick: PropTypes.func.isRequired,
+        focus: PropTypes.number.isRequired,
     };
 
-    constructor(){
-        super();
-    }
-    render(){
-        return(
+    render() {
+        const { groups, focus, onClick } = this.props;
+
+        return (
             <div className="calendar__groups">
                 {
-                    this.props.groups.map((group)=>{
-                        let className = classNames('calendar__groups_item',{
-                            'calendar__groups_notFocused': this.props.focus && group.id!=this.props.focus
+                    groups.map((group) => {
+                        const className = classNames('calendar__groups_item', {
+                            calendar__groups_notFocused: focus && group.id !== focus,
                         });
                         return (
-                            <div className={className} key={group.id} onClick={(event)=>this.props.onClick(event,group)}>
-                                <div className="calendar__groups_color" style={{backgroundColor: group.color ? group.color : chayns.env.site.color}}></div>
+                            <div className={className} key={group.id} onClick={event => onClick(event, group)}>
+                                <div className="calendar__groups_color" style={{ backgroundColor: group.color ? group.color : chayns.env.site.color }} />
                                 {group.name}
                             </div>
-                        )
+                        );
                     })
                 }
             </div>

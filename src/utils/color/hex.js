@@ -1,4 +1,3 @@
-import { HEX_REGEX } from './constants';
 import { rgbToHsv, rgbToRgbString } from './rgb';
 import hexToRgb255 from './hex/hexToRgb255';
 
