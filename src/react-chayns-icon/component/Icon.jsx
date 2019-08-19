@@ -37,14 +37,14 @@ export default class Icon extends PureComponent {
         this.onClick = this.onClick.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { icon } = this.props;
-        if (icon !== nextProps.icon
-            && nextProps.icon
-            && typeof nextProps.icon !== 'string'
-            && nextProps.icon.prefix
-            && nextProps.icon.iconName) {
-            library.add(nextProps.icon);
+        if (icon !== prevProps.icon
+            && icon
+            && typeof icon !== 'string'
+            && icon.prefix
+            && icon.iconName) {
+            library.add(icon);
         }
     }
 

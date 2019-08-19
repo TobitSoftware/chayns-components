@@ -14,7 +14,7 @@ export default class AmountInput extends PureComponent {
         onAdd: PropTypes.func.isRequired,
         onInput: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
-        buttonText: PropTypes.string.isRequired,
+        buttonText: PropTypes.string,
         showInput: PropTypes.bool.isRequired,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
@@ -30,6 +30,7 @@ export default class AmountInput extends PureComponent {
     };
 
     static defaultProps = {
+        buttonText: null,
         disabled: false,
         disableInput: false,
         autoInput: false,
@@ -115,7 +116,7 @@ export default class AmountInput extends PureComponent {
             return `${amount}`;
         }
 
-        return buttonText;
+        return buttonText || 0;
     }
 
     render() {

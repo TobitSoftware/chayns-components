@@ -1,35 +1,18 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import Navigator from './content/Navigator';
 import User from './content/User';
-import Groups from './content/Groups'
+import Groups from './content/Groups';
 
 
-const WEEK_WIDTH = 50 ;
+const WEEK_WIDTH = 50;
 
-let transformLeft = 0,
-    transformRight = 0,
-    focusWeek,
-    isDesktop = window.innerWidth>450;
+let focusWeek;
+let isDesktop = window.innerWidth > 450;
 
 export default class ProgressCalendar extends Component {
-
-    static defaultProps = {
-        columns: {
-            names: ['Mo.','Di.','Mi.','Do.','Fr.','Sa.','So.'],
-            highlightedColor: chayns.env.site.color,
-        },
-        groups: [],
-        focus: new Date(),
-        onNavigateRight: ()=>{},
-        onNavigateLeft: ()=>{},
-        className: null,
-        style: null,
-    };
-
     static propTypes = {
         data: PropTypes.arrayOf(
             PropTypes.shape({
@@ -40,21 +23,21 @@ export default class ProgressCalendar extends Component {
                         id: PropTypes.number,
                         groupId: PropTypes.number,
                         startTime: PropTypes.number,
-                        endTime: PropTypes.number
-                    })
-                )
-            })
+                        endTime: PropTypes.number,
+                    }),
+                ),
+            }),
         ),
         columns: PropTypes.shape({
             names: PropTypes.arrayOf(PropTypes.string),
-            highlightedColor: PropTypes.string
+            highlightedColor: PropTypes.string,
         }),
         groups: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number,
                 name: PropTypes.string,
-                color: PropTypes.string
-            })
+                color: PropTypes.string,
+            }),
         ),
         onClick: PropTypes.func.isRequired,
         onNavigateLeft: PropTypes.func,
@@ -66,16 +49,34 @@ export default class ProgressCalendar extends Component {
         style: PropTypes.object,
     };
 
-    static dateInterval(dateStart,dateEnd){
-        let startDate = dateStart.getDate() < 10 ? '0' +  dateStart.getDate() :  dateStart.getDate(),
-            startMonth = ( dateStart.getMonth() + 1) < 10 ? '0' + ( dateStart.getMonth() + 1) : ( dateStart.getMonth() + 1),
-            endDate = dateEnd.getDate() < 10 ? '0' +  dateEnd.getDate() :  dateEnd.getDate(),
-            endMonth = ( dateEnd.getMonth() + 1) < 10 ? '0' + ( dateEnd.getMonth() + 1) : ( dateEnd.getMonth() + 1);
+    static defaultProps = {
+        data: null,
+        columns: {
+            names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],
+            highlightedColor: chayns.env.site.color,
+        },
+        groups: [],
+        focus: new Date(),
+        onNavigateRight: () => {
+        },
+        onNavigateLeft: () => {
+        },
+        className: null,
+        style: null,
+    };
+
+    static dateInterval(dateStart, dateEnd) {
+        const startDate = dateStart.getDate() < 10 ? `0${dateStart.getDate()}` : dateStart.getDate();
+        const startMonth = (dateStart.getMonth() + 1) < 10 ? `0${dateStart.getMonth() + 1}` : (dateStart.getMonth() + 1);
+        const endDate = dateEnd.getDate() < 10 ? `0${dateEnd.getDate()}` : dateEnd.getDate();
+        const endMonth = (dateEnd.getMonth() + 1) < 10 ? `0${dateEnd.getMonth() + 1}` : (dateEnd.getMonth() + 1);
         return (`${startDate}.${startMonth} - ${endDate}.${endMonth}.${dateEnd.getFullYear()}`);
     }
 
-    static getWeek(currentStart){
-        let monday, sunday;
+    static getWeek(currentStart) {
+        let monday;
+        let
+            sunday;
         if (currentStart.getDay() === 0) {
             monday = new Date(currentStart.getFullYear(), currentStart.getMonth(), currentStart.getDate() - 6);
             sunday = new Date(currentStart.getFullYear(), currentStart.getMonth(), currentStart.getDate(), 23, 59);
@@ -83,40 +84,39 @@ export default class ProgressCalendar extends Component {
             monday = new Date(currentStart.getFullYear(), currentStart.getMonth(), currentStart.getDate() - (currentStart.getDay() - 1));
             sunday = new Date(currentStart.getFullYear(), currentStart.getMonth(), currentStart.getDate() + (7 - currentStart.getDay()), 23, 59);
         }
-        return [monday,sunday]
+        return [monday, sunday];
     }
 
-    static sortEntries(entries){
-        if(entries) {
-            let temp = entries;
-            for (let j = 1; j < temp.length; j++) {
-                let entry = temp[j];
+    static sortEntries(entries) {
+        if (entries) {
+            const temp = entries;
+            for (let j = 1; j < temp.length; j += 1) {
+                const entry = temp[j];
                 let i = j - 1;
                 while (i >= 0 && entry.startTime < temp[i].startTime) {
                     temp[i + 1] = temp[i];
-                    i = i - 1;
+                    i -= 1;
                 }
                 temp[i + 1] = entry;
             }
             return temp;
         }
+        return null;
     }
 
-    static realDay(day){
-        if(day.getDay()===0){
+    static realDay(day) {
+        if (day.getDay() === 0) {
             return 6;
-        }else{
-            return day.getDay()-1;
         }
+        return day.getDay() - 1;
     }
 
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
             week: 0,
             focusGroup: null,
-            isDesktop: window.innerWidth>450
         };
 
         this.onNavigateLeft = this.onNavigateLeft.bind(this);
@@ -127,233 +127,195 @@ export default class ProgressCalendar extends Component {
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
 
-        window.addEventListener('orientationchange', (event)=>{
-            isDesktop =  screen.availWidth>450;
-            this.forceUpdate();}
-        );
+        window.addEventListener('orientationchange', () => {
+            isDesktop = screen.availWidth > 450;
+            this.forceUpdate();
+        });
     }
 
-    componentWillMount(){
+    componentDidMount() {
+        this.setState({
+            contentWidth: this.content.clientWidth,
+        });
         this.entries = this.getEntries();
     }
 
-    componentDidMount(){
-        this.setState({
-            contentWidth: this.content.clientWidth
-        })
-    }
-
-    componentDidUpdate(){
-        if(this.state.contentWidth != this.content.clientWidth){
-            this.setState({
-                contentWidth: this.content.clientWidth
-            })
-        }
-    }
-
-    shouldComponentUpdate(nextProps){
-        for(let i in nextProps.data){
-            if(nextProps.data.length!=this.props.data.length){
-                this.entries = this.getEntries(nextProps.data,nextProps.startTime,nextProps.endTime);
-                return true
-            }else{
-                if(nextProps.data[i].entries.length != this.props.data[i].entries.length){
-                    this.entries = this.getEntries(nextProps.data,nextProps.startTime,nextProps.endTime);
-                    return true;
-                }
+    shouldComponentUpdate(nextProps) {
+        const { focus, data } = this.props;
+        for (const i in nextProps.data) {
+            if (nextProps.data.length !== data.length) {
+                this.entries = this.getEntries(nextProps.data, nextProps.startTime, nextProps.endTime);
+                return true;
+            }
+            if (nextProps.data[i].entries.length !== data[i].entries.length) {
+                this.entries = this.getEntries(nextProps.data, nextProps.startTime, nextProps.endTime);
+                return true;
             }
         }
-        if(nextProps.columns.length != this.props.columns.length
+        if (nextProps.columns.length != this.props.columns.length
             || nextProps.groups.length != this.props.groups.length
             || nextProps.startTime.getTime() != this.props.startTime.getTime()
-            || nextProps.endTime.getTime() != this.props.endTime.getTime()){
-            this.entries = this.getEntries(nextProps.data,nextProps.startTime,nextProps.endTime);
+            || nextProps.endTime.getTime() != this.props.endTime.getTime()) {
+            this.entries = this.getEntries(nextProps.data, nextProps.startTime, nextProps.endTime);
             return true;
-        }else if(nextProps.focus != this.props.focus){
+        }
+        if (nextProps.focus !== focus) {
             return true;
         }
         return true;
     }
 
-    onNavigateLeft(){
-        this.props.onNavigateLeft(this.weeks[focusWeek+(this.state.week-1)]);
-        this.setState({
-            week: this.state.week-1
-        });
-        transformLeft++;
-    }
-
-    onNavigateRight(){
-        let factor = isDesktop ? 2 : 1;
-        let retval = this.weeks[focusWeek+(this.state.week+factor)] ? this.weeks[focusWeek+(this.state.week+factor)] : [];
-        this.props.onNavigateRight(retval);
-        this.setState({
-            week: this.state.week+1
-        });
-        transformRight++;
-    }
-
-    onClick(event, entry){
-        this.props.onClick({event:event,selected:entry});
-        let dateTime = entry.date.getTime(), weekEnd= this.weeks[focusWeek+this.state.week][1], buffer = 0;
-        if(weekEnd<dateTime){
-            buffer = 1
+    componentDidUpdate() {
+        const { contentWidth } = this.state;
+        if (contentWidth !== this.content.clientWidth) {
+            this.setState({
+                contentWidth: this.content.clientWidth,
+            });
         }
-        for(let i in this.weeks) {
+    }
+
+    onNavigateLeft() {
+        const { onNavigateLeft } = this.props;
+        const { week } = this.state;
+        onNavigateLeft(this.weeks[focusWeek + (week - 1)]);
+        this.setState({
+            week: week - 1,
+        });
+    }
+
+    onNavigateRight() {
+        const { onNavigateRight } = this.props;
+        const { week } = this.state;
+        const factor = isDesktop ? 2 : 1;
+        const retval = this.weeks[focusWeek + (week + factor)] ? this.weeks[focusWeek + (week + factor)] : [];
+        onNavigateRight(retval);
+        this.setState({
+            week: week + 1,
+        });
+    }
+
+    onClick(event, entry) {
+        this.props.onClick({ event, selected: entry });
+        const dateTime = entry.date.getTime();
+        const weekEnd = this.weeks[focusWeek + this.state.week][1];
+        let
+            buffer = 0;
+        if (weekEnd < dateTime) {
+            buffer = 1;
+        }
+        for (const i in this.weeks) {
             if (this.weeks[i][0] <= entry.date.getTime() && this.weeks[i][1] >= entry.date.getTime()) {
-                focusWeek = i-buffer;
+                focusWeek = i - buffer;
                 break;
             }
         }
         this.setState({
             focusGroup: null,
-            week: 0
+            week: 0,
         });
     }
 
-    groupOnClick(event, group){
-        if(this.state.focusGroup === group.id){
-            this.setState({
-                focusGroup: null
-            })
-        }else{
-            this.setState({
-                focusGroup: group.id
-            })
-        }
-    }
-
-    handleTouchStart(event){
-        this.swipeX = event.touches[0].clientX;
-    }
-
-    handleTouchMove(event){
-        //console.log('ELEMENT',this.calendarMonths.offsetWidth);
-        //this.move = -1*(this.swipeX-event.touches[0].clientX);
-        //this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}%)`;
-
-        this.moveSwipeX = event.touches[0].clientX;
-    }
-
-    handleTouchEnd(leftHidden,rightHidden){
-        if(this.swipeX && this.moveSwipeX){
-            if(this.moveSwipeX>=this.swipeX+60){
-                if(!leftHidden) {
-                    this.onNavigateLeft();
-                }
-                this.swipeX=null;
-                this.moveSwipeX=null;
-                //this.move=null;
-            }else if(this.moveSwipeX<=this.swipeX-60){
-                if(!rightHidden){
-                    this.onNavigateRight();
-                }
-                this.swipeX=null;
-                this.moveSwipeX=null;
-            }
-        }
-    }
-
-    getWeeks(startTime,endTime){
-        let retval = [], currentStart = startTime;
-        while(currentStart.getTime()<endTime.getTime()) {
-            let [monday,sunday] = ProgressCalendar.getWeek(currentStart),
-                mondayTS = monday.getTime(),
-                sundayTS = sunday.getTime();
-            if(this.props.focus.getTime() >= mondayTS && this.props.focus.getTime() <= sundayTS){
+    getWeeks(startTime, endTime) {
+        const { focus } = this.props;
+        const retval = [];
+        let
+            currentStart = startTime;
+        while (currentStart.getTime() < endTime.getTime()) {
+            const [monday, sunday] = ProgressCalendar.getWeek(currentStart);
+            const mondayTS = monday.getTime();
+            const sundayTS = sunday.getTime();
+            if (focus.getTime() >= mondayTS && focus.getTime() <= sundayTS) {
                 focusWeek = retval.length;
             }
             retval.push([mondayTS, sundayTS]);
-            currentStart= new Date(currentStart.getFullYear(),currentStart.getMonth(),currentStart.getDate()+7);
+            currentStart = new Date(currentStart.getFullYear(), currentStart.getMonth(), currentStart.getDate() + 7);
         }
-       /* if(retval.length === focusWeek){
-            let lastMonday = new Date(retval[retval.length-1][0]), lastSunday = new Date(retval[retval.length-1][1]);
-            lastMonday.setDate(lastMonday.getDate()+7);
-            lastSunday.setDate(lastSunday.getDate()+7);
-            retval.push([lastMonday.getTime(), lastSunday.getTime()]);
-        }*/
         this.weeks = retval;
         return retval;
     }
 
-    getNavigatorDays(weekStart,weekEnd){
-        let temp = [],
-            i = 0,
-            date = new Date(weekStart),
-            [nextWeekStart,nextWeekEnd] = ProgressCalendar.getWeek(new Date(date.getFullYear(),date.getMonth(),date.getDate()+7)),
-            weekDay = ProgressCalendar.realDay(this.props.focus);
-        for(i;i< (isDesktop ? 2 : 1) ;i++) {
-            let days = [],
-                j = 0;
-            for (j in this.props.columns.names) {
-                if(i===0) {
+    getNavigatorDays(weekStart, weekEnd) {
+        const { focus, columns } = this.props;
+        const temp = [];
+        let i = 0;
+        const date = new Date(weekStart);
+        const [nextWeekStart, nextWeekEnd] = ProgressCalendar.getWeek(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7));
+        const weekDay = ProgressCalendar.realDay(focus);
+        for (i; i < (isDesktop ? 2 : 1); i += 1) {
+            const days = [];
+            let j = 0;
+            for (j in columns.names) {
+                if (i === 0) {
                     days.push({
-                        name: this.props.columns.names[j],
-                        date: new Date(weekStart.getFullYear(),weekStart.getMonth(),weekStart.getDate()+parseInt(j))
-                    })
-                }else if(i===1){
+                        name: columns.names[j],
+                        date: new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + parseInt(j)),
+                    });
+                } else if (i === 1) {
                     days.push({
-                        name: this.props.columns.names[j],
-                        date: new Date(nextWeekStart.getFullYear(),nextWeekStart.getMonth(),nextWeekStart.getDate()+parseInt(j))
-                    })
+                        name: columns.names[j],
+                        date: new Date(nextWeekStart.getFullYear(), nextWeekStart.getMonth(), nextWeekStart.getDate() + parseInt(j)),
+                    });
                 }
             }
             temp.push(days);
         }
-        if(this.props.focus.getTime()>=weekStart && this.props.focus.getTime()<=weekEnd){
-                temp[0][weekDay].selected = true;
-            }else if(temp[1]&& this.props.focus.getTime()>=nextWeekStart.getTime() && this.props.focus.getTime()<=nextWeekEnd.getTime()){
-                temp[1][weekDay].selected = true;
-            }
+        if (focus.getTime() >= weekStart && focus.getTime() <= weekEnd) {
+            temp[0][weekDay].selected = true;
+        } else if (temp[1] && focus.getTime() >= nextWeekStart.getTime() && focus.getTime() <= nextWeekEnd.getTime()) {
+            temp[1][weekDay].selected = true;
+        }
         return temp;
     }
 
-    getEntries(data,startTime,endTime){
-        data = data ? data : this.props.data;
-        startTime = startTime ? startTime : this.props.startTime;
-        endTime = endTime ? endTime : this.props.endTime;
+    getEntries(data, startTime, endTime) {
+        const {
+            groups, data: dataProp, endTime: endTimeProp, start: startTimeProp,
+        } = this.props;
+        data = data || dataProp;
+        startTime = startTime || startTimeProp;
+        endTime = endTime || endTimeProp;
 
-        let convertedEntries = [],
-            weeks = this.getWeeks(startTime, endTime),
-            i;
+        const convertedEntries = [];
+        const weeks = this.getWeeks(startTime, endTime);
+        let i;
         for (i in data) {
-            let entries = ProgressCalendar.sortEntries(data[i].entries),
-                userEntries = [],
-                kIndex = 0,
-                j;
-            if(entries) {
+            const entries = ProgressCalendar.sortEntries(data[i].entries);
+            const userEntries = [];
+            let kIndex = 0;
+            let j;
+            if (entries) {
                 for (j in weeks) {
-                    let m = 0,
-                        weekEntries = [];
+                    let m = 0;
+                    const weekEntries = [];
                     for (m; m < 7; m++) {
-                        let retval = {},
-                            k,
-                            startTime = new Date(weeks[j][0] + m * 24 * 60 * 60 * 1000),
-                            endTime = new Date(startTime.getTime() + (23 * 60 * 60 * 1000 + 59 * 60 * 1000));
+                        let retval = {};
+                        let k;
+                        let startTime = new Date(weeks[j][0] + m * 24 * 60 * 60 * 1000);
+                        let endTime = new Date(startTime.getTime() + (23 * 60 * 60 * 1000 + 59 * 60 * 1000));
 
                         startTime = startTime.getTime();
                         endTime = endTime.getTime();
-                        /*console.log('######################');
+                        /* console.log('######################');
                          console.log('DAY: ');
                          console.log('Start: ', new Date(startTime), 'Offset: ', new Date(startTime).getTimezoneOffset());
-                         console.log('End: ', new Date(endTime));*/
+                         console.log('End: ', new Date(endTime)); */
                         for (k = kIndex; k < entries.length; k++) {
                             /**
                              * Only possible for entries, which are not longer than a day
                              */
-                            /*if(k>4) {
+                            /* if(k>4) {
                              console.log('--------------------------------------');
                              console.log('ENTRY-START: ', new Date(entries[k].startTime), 'ENTRY-END: ', new Date(entries[k].endTime));
                              console.log('--------------------------------------');
-                             }*/
+                             } */
                             if (entries[k].startTime >= startTime && entries[k].endTime <= endTime) {
                                 let l;
-                                if (this.props.groups.length > 0) {
+                                if (groups.length > 0) {
                                     let isGrouped = false;
-                                    for (l in this.props.groups) {
-                                        if (entries[k].groupId === this.props.groups[l].id) {
+                                    for (l in groups) {
+                                        if (entries[k].groupId === groups[l].id) {
                                             retval = entries[k];
-                                            retval.color = this.props.groups[l].color;
+                                            retval.color = groups[l].color;
                                             isGrouped = true;
                                             break;
                                         }
@@ -365,133 +327,189 @@ export default class ProgressCalendar extends Component {
                                     retval = entries[k];
                                 }
                                 retval.date = new Date(startTime);
-                                retval.user = {id: data[i].id, name: data[i].name};
+                                retval.user = { id: data[i].id, name: data[i].name };
                                 kIndex = k + 1;
                             } else if (entries[k].endTime > endTime) {
                                 break;
                             }
                         }
-                        //console.log('######################');
+                        // console.log('######################');
                         weekEntries.push(retval.user ? retval : {
-                                date: new Date(startTime),
-                                user: {id: data[i].id, name: data[i].name}
-                            });
+                            date: new Date(startTime),
+                            user: { id: data[i].id, name: data[i].name },
+                        });
                     }
-                    userEntries.push(weekEntries)
+                    userEntries.push(weekEntries);
                 }
             }
-            convertedEntries.push({entries: userEntries, userId: data[i].id});
+            convertedEntries.push({ entries: userEntries, userId: data[i].id });
         }
         return convertedEntries;
     }
 
-    renderUser(){
-        if(this.content && this.props.data) {
-            return (
-                <div className="calendar__content_groups">
-                    {
-                        this.props.data.map((user) => {
-                            return (
-                                <div className="calendar__user ellipsis" key={user.id}>
-                                    {user.name}
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-            )
-        }else{
-            return '';
+    handleTouchStart(event) {
+        this.swipeX = event.touches[0].clientX;
+    }
+
+    handleTouchMove(event) {
+        this.moveSwipeX = event.touches[0].clientX;
+    }
+
+    handleTouchEnd(leftHidden, rightHidden) {
+        if (this.swipeX && this.moveSwipeX) {
+            if (this.moveSwipeX >= this.swipeX + 60) {
+                if (!leftHidden) {
+                    this.onNavigateLeft();
+                }
+                this.swipeX = null;
+                this.moveSwipeX = null;
+                // this.move=null;
+            } else if (this.moveSwipeX <= this.swipeX - 60) {
+                if (!rightHidden) {
+                    this.onNavigateRight();
+                }
+                this.swipeX = null;
+                this.moveSwipeX = null;
+            }
         }
     }
 
-    renderEntries(){
+    groupOnClick(event, group) {
+        const { focusGroup } = this.state;
+        if (focusGroup === group.id) {
+            this.setState({
+                focusGroup: null,
+            });
+        } else {
+            this.setState({
+                focusGroup: group.id,
+            });
+        }
+    }
+
+    renderUser() {
+        const { data } = this.props;
+        if (this.content && data) {
+            return (
+                <div className="calendar__content_groups">
+                    {
+                        data.map(user => (
+                            <div className="calendar__user ellipsis" key={user.id}>
+                                {user.name}
+                            </div>
+                        ))
+                    }
+                </div>
+            );
+        }
+        return '';
+    }
+
+    renderEntries() {
+        const { contentWidth, week } = this.state;
         /**
          * TODO: PROBLEM WITH REF. REF GOT OLD WIDTH
          */
-        let focus = this.props.focus, wrapperWidth = this.weeks.length*WEEK_WIDTH*(isDesktop ? 1 : 2),
-            weekWidth = this.content ? this.state.contentWidth/2*(isDesktop  ? 1 : 2) : 0;
+        const { focus, groups, focusGroup } = this.props;
+        const wrapperWidth = this.weeks ? this.weeks.length * WEEK_WIDTH * (isDesktop ? 1 : 2) : 0;
+        const weekWidth = this.content ? contentWidth / 2 * (isDesktop ? 1 : 2) : 0;
 
-        let content =  this.content ? this.entries.map((entries) => {
-                            return (
-                                <User
-                                    entries={entries.entries}
-                                    groups={this.props.groups}
-                                    key={entries.userId}
-                                    onClick={this.onClick}
-                                    focus={focus}
-                                    groupFocus={this.state.focusGroup}
-                                    weekWidth={weekWidth}
-                                />
-                            )
-                        }): '';
+        const content = this.content ? this.entries.map(entries => (
+            <User
+                entries={entries.entries}
+                groups={groups}
+                key={entries.userId}
+                onClick={this.onClick}
+                focus={focus}
+                groupFocus={focusGroup}
+                weekWidth={weekWidth}
+            />
+        )) : '';
 
         return (
-            <div className="calendar__content_weeks" ref={content => this.content = content}>
-                <div className="calendar__content_wrapper" style={{
-                    width: `${wrapperWidth}%`,
-                    transform: `translateX(${ -1 * (focusWeek + this.state.week) * weekWidth}px)`
-                }}>
+            <div className="calendar__content_weeks" ref={ref => this.content = ref}>
+                <div
+                    className="calendar__content_wrapper"
+                    style={{
+                        width: `${wrapperWidth}%`,
+                        transform: `translateX(${-1 * (focusWeek + week) * weekWidth}px)`,
+                    }}
+                >
                     {
                         content
                     }
                 </div>
             </div>
-        )
+        );
     }
 
-    render(){
-        const {className, style}=this.props;
+    render() {
+        const { week, focusGroup } = this.state;
+        const {
+            className, style, startTime, endTime, groups,
+        } = this.props;
 
-        let navText = '', [weekStart, weekEnd] = [new Date(),new Date()], days;
-        if(this.weeks) {
-            [weekStart, weekEnd] = this.weeks[focusWeek+this.state.week];
+        let navText = '';
+        let [weekStart, weekEnd] = [new Date(), new Date()];
+        let
+            days;
+        if (this.weeks) {
+            [weekStart, weekEnd] = this.weeks[focusWeek + week];
             weekStart = new Date(weekStart);
             weekEnd = new Date(weekEnd);
             if (isDesktop) {
-                let start = weekStart,
-                    end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 13);
-                navText = `${ProgressCalendar.dateInterval(start, end)}`
+                const start = weekStart;
+                const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 13);
+                navText = `${ProgressCalendar.dateInterval(start, end)}`;
             } else {
-                let start = weekStart,
-                    end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
-                navText = `${ProgressCalendar.dateInterval(start, end)}`
+                const start = weekStart;
+                const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
+                navText = `${ProgressCalendar.dateInterval(start, end)}`;
             }
             days = this.getNavigatorDays(weekStart, weekEnd);
         }
 
-        let leftHidden = weekStart.getTime()<=this.props.startTime,
-            rightHidden = isDesktop ? new Date(weekEnd.getFullYear(),weekEnd.getMonth(),weekEnd.getDate()+7).getTime()>=this.props.endTime : weekEnd.getTime()>=this.props.endTime;
+        const leftHidden = weekStart.getTime() <= startTime;
+        const rightHidden = isDesktop ? new Date(weekEnd.getFullYear(), weekEnd.getMonth(), weekEnd.getDate() + 7).getTime() >= endTime : weekEnd.getTime() >= endTime;
 
 
-        return(
-            <div className={classNames("calendar", className)} style={style}>
-                <div className="calendar_header" onTouchMove={this.handleTouchMove} onTouchStart={this.handleTouchStart} onTouchEnd={()=>this.handleTouchEnd(leftHidden, rightHidden)}>
+        return (
+            <div className={classNames('calendar', className)} style={style}>
+                <div
+                    className="calendar_header"
+                    onTouchMove={this.handleTouchMove}
+                    onTouchStart={this.handleTouchStart}
+                    onTouchEnd={() => this.handleTouchEnd(leftHidden, rightHidden)}
+                >
                     <Navigator
                         text={navText}
                         onClick={{
                             left: this.onNavigateLeft,
                             right: this.onNavigateRight,
-                            day: this.onClick
+                            day: this.onClick,
                         }}
                         hidden={{
                             left: leftHidden,
-                            right: rightHidden
+                            right: rightHidden,
                         }}
                         days={days}
                     />
                 </div>
-                <div className="calendar__content" onTouchMove={this.handleTouchMove} onTouchStart={this.handleTouchStart} onTouchEnd={()=>this.handleTouchEnd(leftHidden, rightHidden)}>
+                <div
+                    className="calendar__content"
+                    onTouchMove={this.handleTouchMove}
+                    onTouchStart={this.handleTouchStart}
+                    onTouchEnd={() => this.handleTouchEnd(leftHidden, rightHidden)}
+                >
                     {this.renderUser()}
                     {this.renderEntries()}
                 </div>
                 <Groups
-                    groups={this.props.groups}
+                    groups={groups}
                     onClick={this.groupOnClick}
-                    focus={this.state.focusGroup}
+                    focus={focusGroup}
                 />
             </div>
         );
     }
 }
-

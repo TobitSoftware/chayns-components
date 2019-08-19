@@ -65,12 +65,6 @@ export default class ImageAccordionGroup extends React.Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps !== this.props) {
-            this.setState();
-        }
-    }
-
     getPx = (style) => {
         if (!style) {
             return 0;

@@ -49,7 +49,7 @@ export default class SelectButton extends Component {
         this.getDialogList = this.getDialogList.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const {
             list,
             listKey,
@@ -57,11 +57,12 @@ export default class SelectButton extends Component {
             selectedFlag,
         } = this.props;
 
-        if (list !== nextProps.list
-            || listKey !== nextProps.listKey
-            || listValue !== nextProps.listValue
-            || selectedFlag !== nextProps.selectedFlag) {
-            this.setState({ selected: nextProps.list.filter(item => item[nextProps.selectedFlag]) });
+        if (list !== prevProps.list
+            || listKey !== prevProps.listKey
+            || listValue !== prevProps.listValue
+            || selectedFlag !== prevProps.selectedFlag) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ selected: list.filter(item => item[selectedFlag]) });
         }
     }
 

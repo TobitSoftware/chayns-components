@@ -10,7 +10,7 @@ import AmountInput from './AmountInput';
 
 export default class AmountControl extends PureComponent {
     static propTypes = {
-        buttonText: PropTypes.string.isRequired,
+        buttonText: PropTypes.string,
         amount: PropTypes.number,
         onChange: PropTypes.func,
         onInput: PropTypes.func,
@@ -40,6 +40,7 @@ export default class AmountControl extends PureComponent {
     };
 
     static defaultProps = {
+        buttonText: null,
         amount: 0,
         onChange: null,
         onInput: null,
