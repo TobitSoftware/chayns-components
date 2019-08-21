@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ColorPicker.scss';
@@ -16,228 +16,202 @@ import {
     rgbToRgbString,
 } from '../../utils/color';
 
-export default class ColorPicker extends Component {
-    static propTypes = {
-        color: PropTypes.oneOfType([
-            PropTypes.string.isRequired,
-            PropTypes.shape({
-                r: PropTypes.number.isRequired,
-                g: PropTypes.number.isRequired,
-                b: PropTypes.number.isRequired,
-                a: PropTypes.number,
-            }).isRequired,
-            PropTypes.shape({
-                h: PropTypes.number.isRequired,
-                s: PropTypes.number.isRequired,
-                v: PropTypes.number.isRequired,
-                a: PropTypes.number,
-            }).isRequired,
-        ]).isRequired,
-        bubblePosition: PropTypes.number,
-        onChange: PropTypes.func,
-        onChangeEnd: PropTypes.func,
-        transparency: PropTypes.bool,
-        parent: PropTypes.instanceOf(Element),
-        className: PropTypes.string,
-        style: PropTypes.object,
-        bubbleClassName: PropTypes.string,
-        bubbleStyle: PropTypes.object,
-        input: PropTypes.bool,
-        defaultColorModel: PropTypes.number,
-        children: PropTypes.node,
-    };
-
-    static defaultProps = {
-        bubblePosition: Bubble.position.BOTTOM_CENTER,
-        onChange: null,
-        onChangeEnd: null,
-        transparency: false,
-        parent: null,
-        className: null,
-        style: null,
-        bubbleClassName: null,
-        bubbleStyle: null,
-        input: false,
-        defaultColorModel: null,
-        children: null,
-    };
-
-    static colorModels = {
-        HEX: 0,
-        RGB: 1,
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            color: this.getHsvColor(props.color),
-            coordinates: { x: 0, y: 0 },
-            colorModel: props.defaultColorModel
-                || (props.transparency
-                    ? ColorPicker.colorModels.RGB
-                    : ColorPicker.colorModels.HEX
-                ),
-        };
-        this.bubbleRef = React.createRef();
-        this.bubbleContentRef = React.createRef();
-        this.linkRef = React.createRef();
-        this.childrenRef = React.createRef();
+const getHsvColor = (color) => {
+    if (typeof color === 'string') { // HEX(A)
+        return hexStringToHsv(color);
     }
-
-    componentDidUpdate(prevProps) {
-        const { color } = this.props;
-        if (color !== prevProps.color) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ color: this.getHsvColor(color) });
-        }
+    if (color.r !== undefined) { // RGB(A) (0-255)
+        return rgbToHsv(color);
     }
-
-    getHsvColor = (color) => {
-        if (typeof color === 'string') { // HEX(A)
-            return hexStringToHsv(color);
-        }
-        if (color.r) { // RGB(A) (0-255)
-            return rgbToHsv(color);
-        }
-        if (color.h) { // HSV(A)
-            return color;
-        }
-        return {
-            h: 0,
-            s: 0,
-            v: 0,
-            a: 1,
-        };
+    if (color.h !== undefined) { // HSV(A)
+        return color;
+    }
+    return {
+        h: 0,
+        s: 0,
+        v: 0,
+        a: 1,
     };
+};
 
-    openBubble = () => {
-        const { children } = this.props;
-        const ref = children ? this.childrenRef : this.linkRef;
-        const rect = ref.current.getBoundingClientRect();
-        this.setState({ coordinates: { x: rect.left + (rect.width / 2), y: rect.bottom } });
-        this.bubbleRef.current.show();
-        // Add event listeners to hide the bubble
-        document.addEventListener('click', this.closeBubble);
-        window.addEventListener('blur', this.closeBubble);
-        if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
-            chayns.disallowRefreshScroll();
-        }
-    };
+export default function ColorPicker(props) {
+    // references
+    const bubbleRef = useRef(null);
+    const bubbleContentRef = useRef(null);
+    const linkRef = useRef(null);
+    const childrenRef = useRef(null);
 
+    // state
+    const [color, setColor] = useState(getHsvColor(props.color));
+    const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+    const [colorModel, setColorModel] = useState(props.defaultColorModel
+        || (props.transparency
+            ? ColorPicker.colorModels.RGB
+            : ColorPicker.colorModels.HEX
+        ));
 
-    closeBubble = (event) => {
-        const rect = this.bubbleContentRef.current.getBoundingClientRect();
+    // effects (lifecycle methods)
+    useEffect(() => {
+        setColor(getHsvColor(props.color));
+    }, [props.color]);
+
+    const closeBubble = (event) => {
+        const rect = bubbleContentRef.current.getBoundingClientRect();
+
         // Hide bubble and remove event listeners if click was outside of the bubble
         if (event.pageX < rect.left || event.pageX > rect.right || event.pageY < rect.top || event.pageY > rect.bottom) {
-            document.removeEventListener('click', this.closeBubble);
-            window.removeEventListener('blur', this.closeBubble);
-            this.bubbleRef.current.hide();
+            document.removeEventListener('click', closeBubble);
+            window.removeEventListener('blur', closeBubble);
+            bubbleRef.current.hide();
             if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
                 chayns.allowRefreshScroll();
             }
         }
     };
 
-    onChange = (color) => {
-        const { onChange } = this.props;
-        this.setState({ color });
-        if (onChange) {
-            onChange(color);
+    const openBubble = () => {
+        const ref = props.children ? childrenRef : linkRef;
+        const rect = ref.current.getBoundingClientRect();
+        setCoordinates({ x: rect.left + (rect.width / 2), y: rect.bottom });
+        bubbleRef.current.show();
+        // Add event listeners to hide the bubble
+        document.addEventListener('click', closeBubble);
+        window.addEventListener('blur', closeBubble);
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
+            chayns.disallowRefreshScroll();
         }
     };
 
-    onColorModelToggle = () => {
-        const { colorModel } = this.state;
-        this.setState({ colorModel: (colorModel + 1) % Object.keys(ColorPicker.colorModels).length });
+    const onChange = (newColor) => {
+        setColor(newColor);
+        if (props.onChange) {
+            props.onChange(newColor);
+        }
     };
 
-    render() {
-        const {
-            bubblePosition,
-            onChangeEnd,
-            transparency,
-            parent,
-            className,
-            style,
-            bubbleClassName,
-            bubbleStyle,
-            input,
-            children,
-        } = this.props;
-        const {
-            color,
-            coordinates,
-            colorModel,
-        } = this.state;
-        const rgb255 = hsvToRgb(color);
+    const onColorModelToggle = () => {
+        setColorModel((colorModel + 1) % Object.keys(ColorPicker.colorModels).length);
+    };
 
-        return [
-            <div
-                className={classNames('cc__color-picker', className)}
-                style={style}
-                onClick={this.openBubble}
-                key="div"
-                ref={this.childrenRef}
-            >
-                {
-                    children || [
-                        <div
-                            key="circle"
-                            className="cc__color-picker__color-circle"
-                            style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
-                        />,
-                        <div
-                            key="link"
-                            className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
-                            ref={this.linkRef}
-                        >
-                            {
-                                colorModel === ColorPicker.colorModels.RGB
-                                    ? rgbToRgbString(rgb255, transparency)
-                                    : rgbToHexString(rgb255, transparency)
-                            }
-                        </div>]
+    const rgb255 = hsvToRgb(color);
 
-                }
-            </div>,
-            <Bubble
-                ref={this.bubbleRef}
-                coordinates={coordinates}
-                position={bubblePosition}
-                parent={parent}
-                className={bubbleClassName}
-                style={bubbleStyle}
-                key="bubble"
-            >
-                <div ref={this.bubbleContentRef} className="cc__color-picker__bubble-content">
-                    <ColorArea
+    return [
+        <div
+            className={classNames('cc__color-picker', props.className)}
+            style={props.style}
+            onClick={openBubble}
+            key="div"
+            ref={childrenRef}
+        >
+            {
+                props.children
+                || [
+                    <div
+                        key="circle"
+                        className="cc__color-picker__color-circle"
+                        style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
+                    />,
+                    <div
+                        key="link"
+                        className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
+                        ref={linkRef}
+                    >
+                        {
+                            colorModel === ColorPicker.colorModels.RGB
+                                ? rgbToRgbString(rgb255, props.transparency)
+                                : rgbToHexString(rgb255, props.transparency)
+                        }
+                    </div>,
+                ]
+            }
+        </div>,
+        <Bubble
+            ref={bubbleRef}
+            coordinates={coordinates}
+            position={props.bubblePosition}
+            parent={props.parent}
+            className={props.bubbleClassName}
+            style={props.bubbleStyle}
+            key="bubble"
+        >
+            <div ref={bubbleContentRef} className="cc__color-picker__bubble-content">
+                <ColorArea
+                    color={color}
+                    onChange={onChange}
+                    onChangeEnd={props.onChangeEnd}
+                />
+                <HueSlider
+                    color={color}
+                    onChange={onChange}
+                    onChangeEnd={props.onChangeEnd}
+                />
+                {props.transparency && (
+                    <TransparencySlider
                         color={color}
-                        onChange={this.onChange}
-                        onChangeEnd={onChangeEnd}
+                        onChange={onChange}
+                        onChangeEnd={props.onChangeEnd}
                     />
-                    <HueSlider
+                )}
+                {props.input && (
+                    <ColorInput
                         color={color}
-                        onChange={this.onChange}
-                        onChangeEnd={onChangeEnd}
+                        onChange={onChange}
+                        onModelToggle={onColorModelToggle}
+                        colorModel={colorModel}
+                        transparency={props.transparency}
                     />
-                    {transparency && (
-                        <TransparencySlider
-                            color={color}
-                            onChange={this.onChange}
-                            onChangeEnd={onChangeEnd}
-                        />
-                    )}
-                    {input && (
-                        <ColorInput
-                            color={color}
-                            onChange={this.onChange}
-                            onModelToggle={this.onColorModelToggle}
-                            colorModel={colorModel}
-                            transparency={transparency}
-                        />
-                    )}
-                </div>
-            </Bubble>,
-        ];
-    }
+                )}
+            </div>
+        </Bubble>,
+    ];
 }
+
+ColorPicker.propTypes = {
+    color: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.shape({
+            r: PropTypes.number.isRequired,
+            g: PropTypes.number.isRequired,
+            b: PropTypes.number.isRequired,
+            a: PropTypes.number,
+        }).isRequired,
+        PropTypes.shape({
+            h: PropTypes.number.isRequired,
+            s: PropTypes.number.isRequired,
+            v: PropTypes.number.isRequired,
+            a: PropTypes.number,
+        }).isRequired,
+    ]).isRequired,
+    bubblePosition: PropTypes.number,
+    onChange: PropTypes.func,
+    onChangeEnd: PropTypes.func,
+    transparency: PropTypes.bool,
+    parent: PropTypes.instanceOf(Element),
+    className: PropTypes.string,
+    style: PropTypes.object,
+    bubbleClassName: PropTypes.string,
+    bubbleStyle: PropTypes.object,
+    input: PropTypes.bool,
+    defaultColorModel: PropTypes.number,
+    children: PropTypes.node,
+};
+
+ColorPicker.defaultProps = {
+    bubblePosition: Bubble.position.BOTTOM_CENTER,
+    onChange: null,
+    onChangeEnd: null,
+    transparency: false,
+    parent: null,
+    className: null,
+    style: null,
+    bubbleClassName: null,
+    bubbleStyle: null,
+    input: false,
+    defaultColorModel: null,
+    children: null,
+};
+
+ColorPicker.colorModels = {
+    HEX: 0,
+    RGB: 1,
+};

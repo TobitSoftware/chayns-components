@@ -177,7 +177,7 @@ export default class ColorArea extends Component {
                 onTouchStart={this.down}
                 style={{ height: `${height}px` }}
             >
-                <canvas
+                <canvas // TODO use div with gradient background instead of canvas
                     className="cc__colorArea__area"
                     ref={this.canvas}
                     height={height}
