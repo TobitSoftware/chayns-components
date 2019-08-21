@@ -57,13 +57,14 @@ export default class Gallery extends Component {
         this.state = { active: null, images: props.images, dropzone: null };
     }
 
-    componentWillUpdate(nextProps) {
+    componentDidUpdate(prevProps) {
         const { images } = this.props;
-        if (nextProps.images !== images) {
-            // eslint-disable-next-line react/no-will-update-set-state
-            this.setState({ images: nextProps.images });
+        if (prevProps.images !== images) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ images });
         }
     }
+
 
     onDown = (event, index, image) => {
         // deactivate refresh scroll in apps

@@ -10,7 +10,7 @@ import AmountInput from './AmountInput';
 
 export default class AmountControl extends PureComponent {
     static propTypes = {
-        buttonText: PropTypes.string.isRequired,
+        buttonText: PropTypes.string,
         amount: PropTypes.number,
         onChange: PropTypes.func,
         onInput: PropTypes.func,
@@ -40,6 +40,7 @@ export default class AmountControl extends PureComponent {
     };
 
     static defaultProps = {
+        buttonText: null,
         amount: 0,
         onChange: null,
         onInput: null,
@@ -68,6 +69,13 @@ export default class AmountControl extends PureComponent {
         removeIcon: faMinus,
     };
 
+    static getDerivedStateFromProps(props) {
+        return {
+            tempAmount: props.amount,
+            tempValue: props.amount,
+        };
+    }
+
     constructor(props) {
         super(props);
 
@@ -78,13 +86,6 @@ export default class AmountControl extends PureComponent {
         };
 
         this.setInput = this.setInput.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            tempAmount: nextProps.amount,
-            tempValue: nextProps.amount,
-        });
     }
 
     onInput = (value) => {

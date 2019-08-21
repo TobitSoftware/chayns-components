@@ -43,24 +43,22 @@ export default class SelectList extends Component {
         this.state = {
             selectedId: preselectId || 0,
         };
-    }
 
-    componentWillMount() {
         this.selectListId = `cc_selectlist__${SelectList.maxId}`;
         SelectList.maxId += 1;
 
-        const { children, selectFirst } = this.props;
-        if (selectFirst) {
-            this.calculateFirst(children);
+        if (props.selectFirst) {
+            this.calculateFirst(props.children);
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { value } = this.props;
 
-        if (nextProps.value && nextProps.value !== value) {
+        if (prevProps && prevProps.value !== value) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
-                selectedId: nextProps.value,
+                selectedId: value,
             });
         }
     }

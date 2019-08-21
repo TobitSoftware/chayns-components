@@ -27,7 +27,7 @@ export default class SharingBar extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         getAvailableShareProviders().then((provider) => {
             const { link, stopPropagation } = this.props;
 

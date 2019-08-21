@@ -56,7 +56,7 @@ export default class Calendar extends Component {
 
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
 
-    constructor() {
+    constructor(props) {
         super();
 
         this.state = {
@@ -70,10 +70,8 @@ export default class Calendar extends Component {
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
-    }
 
-    componentWillMount() {
-        const { selected } = this.props; // TODO: SELECTED SHOULD NOT BE OUTSIDE THE START AND END TIME. ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
+        const { selected } = props; // TODO: SELECTED SHOULD NOT BE OUTSIDE THE START AND END TIME. ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
 
         const active = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
         this.setMonths(active);

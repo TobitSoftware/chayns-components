@@ -83,10 +83,11 @@ export default class ModeSwitch extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { modes } = this.props;
-        if (chayns.env.user.isAuthenticated && nextProps.modes !== modes) {
-            ModeSwitch.modes = this.setModes(nextProps.modes);
+        if (chayns.env.user.isAuthenticated && prevProps.modes !== modes) {
+            ModeSwitch.modes = this.setModes(modes);
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ modes: ModeSwitch.modes });
         }
     }

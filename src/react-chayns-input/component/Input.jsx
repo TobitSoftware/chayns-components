@@ -75,18 +75,14 @@ export default class Input extends PureComponent {
         this.callValidated = this.callValidated.bind(this);
     }
 
-    componentWillReceiveProps({ value }) {
-        const { value: oldValue } = this.props;
-        if (value && value !== oldValue) {
-            this.callValidated(value);
-        }
-    }
-
-    componentDidUpdate({ regExp: oldRegExp }) {
-        const { regExp, onChange } = this.props;
+    componentDidUpdate({ regExp: oldRegExp, value: oldValue }) {
+        const { regExp, onChange, value } = this.props;
 
         if (String(oldRegExp) !== String(regExp) && this.ref) {
             this.callValidated(this.ref.value, onChange);
+        }
+        if (value && value !== oldValue) {
+            this.callValidated(value);
         }
     }
 
