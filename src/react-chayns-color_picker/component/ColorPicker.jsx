@@ -57,11 +57,12 @@ export default function ColorPicker(props) {
         setColor(getHsvColor(props.color));
     }, [props.color]);
 
-    const closeBubble = useCallback((event) => {
+    const closeBubble = useCallback(async (event) => {
         const rect = bubbleContentRef.current.getBoundingClientRect();
+        const yOffset = chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0;
 
         // Hide bubble and remove event listeners if click was outside of the bubble
-        if (event.pageX < rect.left || event.pageX > rect.right || event.pageY < rect.top || event.pageY > rect.bottom) {
+        if (event.pageX < rect.left || event.pageX > rect.right || event.pageY < rect.top + yOffset || event.pageY > rect.bottom + yOffset) {
             document.removeEventListener('click', closeBubble);
             window.removeEventListener('blur', closeBubble);
             bubbleRef.current.hide();
@@ -71,10 +72,13 @@ export default function ColorPicker(props) {
         }
     }, [bubbleContentRef, bubbleRef]);
 
-    const openBubble = useCallback(() => {
+    const openBubble = useCallback(async () => {
         const ref = props.children ? childrenRef : linkRef;
         const rect = ref.current.getBoundingClientRect();
-        setCoordinates({ x: rect.left + (rect.width / 2), y: rect.bottom });
+        setCoordinates({
+            x: rect.left + (rect.width / 2),
+            y: rect.bottom + (chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0),
+        });
         bubbleRef.current.show();
         // Add event listeners to hide the bubble
         document.addEventListener('click', closeBubble);
