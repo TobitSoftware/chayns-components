@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {
+    useState, useEffect, useRef, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ColorPicker.scss';
@@ -55,7 +57,7 @@ export default function ColorPicker(props) {
         setColor(getHsvColor(props.color));
     }, [props.color]);
 
-    const closeBubble = (event) => {
+    const closeBubble = useCallback((event) => {
         const rect = bubbleContentRef.current.getBoundingClientRect();
 
         // Hide bubble and remove event listeners if click was outside of the bubble
@@ -67,9 +69,9 @@ export default function ColorPicker(props) {
                 chayns.allowRefreshScroll();
             }
         }
-    };
+    }, [bubbleContentRef, bubbleRef]);
 
-    const openBubble = () => {
+    const openBubble = useCallback(() => {
         const ref = props.children ? childrenRef : linkRef;
         const rect = ref.current.getBoundingClientRect();
         setCoordinates({ x: rect.left + (rect.width / 2), y: rect.bottom });
@@ -80,18 +82,18 @@ export default function ColorPicker(props) {
         if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
             chayns.disallowRefreshScroll();
         }
-    };
+    }, [props.children, childrenRef, linkRef, setCoordinates, bubbleRef]);
 
-    const onChange = (newColor) => {
+    const onChange = useCallback((newColor) => {
         setColor(newColor);
         if (props.onChange) {
             props.onChange(newColor);
         }
-    };
+    }, [setColor, props.onChange]);
 
-    const onColorModelToggle = () => {
+    const onColorModelToggle = useCallback(() => {
         setColorModel((colorModel + 1) % Object.keys(ColorPicker.colorModels).length);
-    };
+    }, [setColorModel, colorModel]);
 
     const rgb255 = hsvToRgb(color);
 
