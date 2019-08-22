@@ -161,7 +161,9 @@ export default class ContextMenu extends Component {
     }
 
     hide() {
-        this.bubble.hide();
+        if (this.bubble) {
+            this.bubble.hide();
+        }
         this.bubbleShown = false;
         document.removeEventListener('click', this.onLayerClick);
     }
