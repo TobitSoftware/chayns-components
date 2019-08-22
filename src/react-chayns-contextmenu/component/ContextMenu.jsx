@@ -30,6 +30,7 @@ export default class ContextMenu extends Component {
         showTriggerBackground: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
+        removeParentSpace: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -48,6 +49,7 @@ export default class ContextMenu extends Component {
         showTriggerBackground: false,
         className: null,
         style: null,
+        removeParentSpace: false,
     };
 
     static position = Bubble.position;
@@ -111,7 +113,9 @@ export default class ContextMenu extends Component {
     }
 
     async getPosition() {
-        const { position, coordinates } = this.props;
+        const {
+            position, coordinates, parent, removeParentSpace,
+        } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
 
         let x = coordinates ? coordinates.x : 0;
@@ -136,6 +140,12 @@ export default class ContextMenu extends Component {
         if (chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
+        }
+
+        if (removeParentSpace) {
+            const parentRect = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            x -= parentRect.left;
+            y -= parentRect.top;
         }
 
         if (statePosition !== pos || x !== stateX || y !== stateY) {
