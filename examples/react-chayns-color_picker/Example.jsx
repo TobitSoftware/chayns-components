@@ -10,11 +10,12 @@ export default class ColorPickerExample extends PureComponent {
         super(props);
         this.state = {
             childrenColor: chayns.env.site.color,
+            color: chayns.env.site.color,
         };
     }
 
     render() {
-        const { childrenColor } = this.state;
+        const { childrenColor, color } = this.state;
         return (
             <div style={{
                 marginBottom: '300px',
@@ -22,11 +23,12 @@ export default class ColorPickerExample extends PureComponent {
             >
                 <h2>ColorPicker with transparency</h2>
                 <ColorPicker
-                    color={chayns.env.site.color}
+                    color={color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={console.log}
-                    onChangeEnd={(color) => {
-                        console.log(hsvToHexString(color));
+                    onChangeEnd={(c) => {
+                        console.log(hsvToHexString(c));
+                        this.setState({ color: c });
                     }}
                     transparency
                     style={{
@@ -36,11 +38,12 @@ export default class ColorPickerExample extends PureComponent {
                 />
                 <h2>ColorPicker with transparency and input</h2>
                 <ColorPicker
-                    color={chayns.env.site.color}
+                    color={color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={console.log}
-                    onChangeEnd={(color) => {
-                        console.log(hsvToHexString(color));
+                    onChangeEnd={(c) => {
+                        console.log(hsvToHexString(c));
+                        this.setState({ color: c });
                     }}
                     transparency
                     input
@@ -51,10 +54,11 @@ export default class ColorPickerExample extends PureComponent {
                 />
                 <h2>ColorPicker without transparency</h2>
                 <ColorPicker
-                    color={chayns.env.site.color}
+                    color={color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                    onChangeEnd={(color) => {
-                        console.log(hsvToRgb(color));
+                    onChangeEnd={(c) => {
+                        console.log(hsvToRgb(c));
+                        this.setState({ color: c });
                     }}
                     style={{
                         marginBottom: '30px',
@@ -63,10 +67,11 @@ export default class ColorPickerExample extends PureComponent {
                 />
                 <h2>ColorPicker with input and without transparency</h2>
                 <ColorPicker
-                    color={chayns.env.site.color}
+                    color={color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                    onChangeEnd={(color) => {
-                        console.log(hsvToRgb(color));
+                    onChangeEnd={(c) => {
+                        console.log(hsvToRgb(c));
+                        this.setState({ color: c });
                     }}
                     input
                     style={{
@@ -83,12 +88,16 @@ export default class ColorPickerExample extends PureComponent {
                     }}
                 >
                     <ColorPicker
-                        color={chayns.env.site.color}
+                        color={color}
                         bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                        onChange={(color) => {
-                            const selectedColor = hsvToHexString(color);
+                        onChange={(c) => {
+                            const selectedColor = hsvToHexString(c);
                             console.log(selectedColor);
                             this.setState({ childrenColor: selectedColor });
+                        }}
+                        onChangeEnd={(c) => {
+                            console.log(c);
+                            this.setState({ color: c });
                         }}
                         input
                     >
