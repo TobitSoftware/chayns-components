@@ -212,7 +212,7 @@ export default class TextString extends Component {
     selectStringToChange() {
         const { stringName, setProps } = this.props;
 
-        if (Object.keys(setProps).length > 1) {
+        if (Object.keys(setProps).length > 0) {
             const stringList = [];
             if (stringName) {
                 stringList.push({
