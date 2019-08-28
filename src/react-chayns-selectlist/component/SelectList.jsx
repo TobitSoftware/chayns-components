@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import SelectListContext from './SelectListContext';
 
 const ANIMATION_TIMEOUT = 500;
 
@@ -35,6 +36,8 @@ export default class SelectList extends Component {
         style: null,
     };
 
+    static contextType = SelectListContext;
+
     constructor(props) {
         super(props);
 
@@ -46,9 +49,12 @@ export default class SelectList extends Component {
 
         this.selectListId = `cc_selectlist__${SelectList.maxId}`;
         SelectList.maxId += 1;
+    }
 
-        if (props.selectFirst) {
-            this.calculateFirst(props.children);
+    componentDidMount() {
+        const { selectFirst, children } = this.props;
+        if (selectFirst) {
+            this.calculateFirst(children);
         }
     }
 
@@ -117,24 +123,17 @@ export default class SelectList extends Component {
         const { className, children, style } = this.props;
         const { selectedId } = this.state;
 
-        if (children.length > 0) {
-            return (
-                <div className={className} style={style}>
-                    {React.Children.map(children, (child) => {
-                        if (!React.isValidElement(child)) {
-                            return null;
-                        }
-
-                        return React.cloneElement(child, {
-                            changeListItem: this._changeActiveItem,
-                            selectListId: this.selectListId,
-                            selectListSelectedId: selectedId,
-                        });
-                    })}
-                </div>
-            );
-        }
-
-        return null;
+        return (
+            <div className={className} style={style}>
+                <SelectListContext.Provider value={{
+                    selectListSelectedId: selectedId,
+                    changeListItem: this._changeActiveItem,
+                    selectListId: this.selectListId,
+                }}
+                >
+                    {children}
+                </SelectListContext.Provider>
+            </div>
+        );
     }
 }

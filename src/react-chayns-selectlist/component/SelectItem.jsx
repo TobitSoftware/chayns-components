@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import SelectListContext from './SelectListContext';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 
-export default class SelectItem extends Component {
+// HOC
+export default function withContext(props) {
+    return (
+        <SelectListContext.Consumer>
+            {
+                context => <SelectItem {...context} {...props} />
+            }
+        </SelectListContext.Consumer>
+    );
+}
+
+class SelectItem extends Component {
     static propTypes = {
         id: PropTypes.number,
         changeListItem: PropTypes.func,
