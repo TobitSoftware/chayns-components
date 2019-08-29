@@ -46,6 +46,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         SelectListItem: 'react-chayns-selectlist/component/SelectItem.js',
         SetupWizard: 'react-chayns-setupwizard/component/SetupWizard.js',
         SetupWizardItem: 'react-chayns-setupwizard/component/SetupItem.js',
+        withSetupWizardContext: 'react-chayns-setupwizard/component/withSetupWizardContext.js',
         SharingBar: 'react-chayns-sharingbar/component/SharingBar.js',
         SmallWaitCursor: 'react-chayns-smallwaitcursor/component/SmallWaitCursor.js',
         TextArea: 'react-chayns-textarea/component/TextArea.js',

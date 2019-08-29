@@ -17,30 +17,32 @@ import {SetupWizardItem, SetupWizard} from 'chayns-components';
 The basic structure of the component will be the following:
 ```jsx harmony
 <SetupWizard ready={()=>{}}>
-    <SetupWizardItem title="First">
+    <SetupWizardItem title="First" step={0}>
         <FirstSetup/>
     </SetupWizardItem>
-    <SetupWizardItem title="Second">
+    <SetupWizardItem title="Second" step={1}>
         <SecondSetup/>
     </SetupWizardItem>
-    <SetupWizardItem title="Third">
+    <SetupWizardItem title="Third" step={2}>
         <ThirdSetup/>
     </SetupWizardItem>
 </SetupWizard>
 ```
 
-There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the context:
-```jsx harmony
- static contextTypes = {
-     stepComplete: PropTypes.func,
-     nextStep: PropTypes.func,
-     previousStep: PropTypes.func,
-     toStep: PropTypes.func,
-     resetToStep: PropTypes.func
- };
-```
+There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. 
+You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the setupWizardContext:
+- stepComplete
+- nextStep
+- previousStep
+- toStep
+- resetToStep
+
  **Important:** `previousStep` and `toStep` are deprecated according to the design guide.
 
+ **Note:** The context is delivered through `withSetupWizardContext`.
+ 
+ **Important:** The old context is deprecated and will be removed in a future version.
+ 
  **Note:** You have to call stepComplete with a boolean parameter for completing/not completing the current step.
  
 
@@ -58,7 +60,7 @@ The components got the following properties:
 | contentStyle | style of the wizard-content-element                                        | object | false    |
 | title        | title of the wizard                                                        | object | false    |
 | description  | description of the wizard                                                  | object | false    |
-
+| numberOfSteps| number of steps                                                            | number | true     |
 
 **SetupWizardItem**:
 
@@ -66,7 +68,7 @@ The components got the following properties:
 |------------|----------------------------------------------------------------------------------------------------|--------|----------|
 | title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string | true     |
 | required   | Sets the **Setup-Wizard-Item** required or not required                                            | string | false    |
-
+| step       | step number (0-based)                                                                              | number | true     |
 
 ## Example ##
 

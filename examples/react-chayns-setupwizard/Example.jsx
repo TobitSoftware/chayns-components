@@ -6,6 +6,7 @@ import Step1 from './setup/Step1';
 import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
+import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
 export default class SetupWizardExample extends Component {
     constructor() {
@@ -37,6 +38,7 @@ export default class SetupWizardExample extends Component {
             return (
                 <div>
                     <SetupWizard
+                        numberOfSteps={4}
                         ready={this.ready}
                         notComplete={this.notComplete}
                         // contentStyle={{ fontWeight: 'bold' }}
@@ -47,17 +49,19 @@ export default class SetupWizardExample extends Component {
                         + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'
                         + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
-                        <SetupWizardItem title="Intro">
-                            <Step1/>
+                        <Tooltip content={{ text: 'This is a tooltip wrapped around a SetupWizardItem.' }}>
+                            <SetupWizardItem title="Intro" step={0}>
+                                <Step1 />
+                            </SetupWizardItem>
+                        </Tooltip>
+                        <SetupWizardItem title="Input optional" step={1}>
+                            <Step2 />
                         </SetupWizardItem>
-                        <SetupWizardItem title="Input optional">
-                            <Step2/>
+                        <SetupWizardItem title="Input required" required step={2}>
+                            <Step3 notComplete={notComplete} />
                         </SetupWizardItem>
-                        <SetupWizardItem title="Input required" required>
-                            <Step3 notComplete={notComplete}/>
-                        </SetupWizardItem>
-                        <SetupWizardItem title="Finish">
-                            <Step4/>
+                        <SetupWizardItem title="Finish" step={3}>
+                            <Step4 />
                         </SetupWizardItem>
                     </SetupWizard>
                 </div>

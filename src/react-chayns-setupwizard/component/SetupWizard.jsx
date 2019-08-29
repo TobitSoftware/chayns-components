@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import SetupWizardItem from './SetupItem';
+import SetupWizardContext from './setupWizardContext';
+import SetupItem from './SetupItem';
 
 /**
  * ############################
@@ -22,14 +21,7 @@ export default class SetupWizard extends Component {
         contentStyle: PropTypes.object,
         title: PropTypes.string,
         description: PropTypes.node,
-    };
-
-    static childContextTypes = {
-        stepComplete: PropTypes.func,
-        previousStep: PropTypes.func,
-        nextStep: PropTypes.func,
-        toStep: PropTypes.func,
-        resetToStep: PropTypes.func,
+        numberOfSteps: PropTypes.number.isRequired,
     };
 
     static defaultProps = {
@@ -43,13 +35,24 @@ export default class SetupWizard extends Component {
         className: null,
     };
 
+    static childContextTypes = {
+        stepComplete: PropTypes.func,
+        previousStep: PropTypes.func,
+        nextStep: PropTypes.func,
+        toStep: PropTypes.func,
+        resetToStep: PropTypes.func,
+    };
+
+    static contextType = SetupWizardContext;
+
     constructor() {
         super();
 
         this.state = {
             currentStep: 0,
             maxProgress: 0,
-            completedSteps: [],
+            completedSteps: [-1],
+            requiredSteps: [],
         };
 
         this.stepComplete = this.stepComplete.bind(this);
@@ -71,88 +74,90 @@ export default class SetupWizard extends Component {
         };
     }
 
-    stepComplete(value) {
+    stepComplete = (value) => {
         const { currentStep, completedSteps } = this.state;
 
-        if (value === true) {
-            if (completedSteps.indexOf(currentStep) === -1) {
-                this.setState(prevState => ({
-                    completedSteps: prevState.completedSteps.concat(currentStep),
-                }));
-            }
-        } else if (completedSteps.indexOf(currentStep) >= 0) {
-            const { children } = this.props;
-
+        if (value && completedSteps.indexOf(currentStep) === -1) {
+            this.setState(prevState => ({
+                completedSteps: prevState.completedSteps.concat(currentStep),
+            }));
+        } else if (!value && completedSteps.indexOf(currentStep) >= 0) {
             this.setState(prevState => ({
                 completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep)),
+                maxProgress: currentStep,
             }));
-
-            if (children[currentStep].props.required === true) {
-                this.setState({ maxProgress: currentStep });
-            }
         }
-    }
+    };
 
-    previousStep() {
+    stepRequired = (value, currentStep) => {
+        const { requiredSteps } = this.state;
+
+        if (value && requiredSteps.indexOf(currentStep) < 0) {
+            requiredSteps.push(currentStep);
+        } else if (requiredSteps.indexOf(currentStep) >= 0) {
+            requiredSteps.splice(requiredSteps.indexOf(currentStep), 1);
+        }
+        this.setState({ requiredSteps });
+    };
+
+    previousStep = () => {
         const { currentStep } = this.state;
         if (currentStep > 0) {
             this.updateContent(currentStep - 1);
         }
-    }
+    };
 
-    nextStep() {
-        const { children } = this.props;
+    nextStep = () => {
+        const { children, numberOfSteps } = this.props;
         const { currentStep } = this.state;
-        if (chayns.utils.isArray(children) && children.length - 1 > currentStep) {
+        if ((numberOfSteps || (chayns.utils.isArray(children) && children.length)) - 1 > currentStep) {
             this.updateContent(currentStep + 1);
         } else {
             this.ready();
         }
-    }
+    };
 
-    toStep(step) {
-        const { children } = this.props;
-        if (chayns.utils.isArray(children)) {
-            if ((children.length - 1) >= step) {
-                this.updateContent(step);
-            } else if ((children.length - 1) === step + 1) {
-                this.ready();
-            }
+    toStep = (step) => {
+        const { children, numberOfSteps } = this.props;
+        if (((numberOfSteps || (chayns.utils.isArray(children) && children.length)) - 1) >= step) {
+            this.updateContent(step);
+        } else {
+            this.ready();
         }
-    }
+    };
 
-    resetToStep(step) {
+    resetToStep = (step) => {
         this.setState(prevState => ({
             maxProgress: step,
             currentStep: step,
             completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress)),
         }));
-    }
+    };
 
-    ready() {
-        const { ready, children } = this.props;
-        const { completedSteps, currentStep } = this.state;
-        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+    ready = () => {
+        const { ready } = this.props;
+        const { completedSteps, currentStep, requiredSteps } = this.state;
+        if (!(requiredSteps.indexOf(currentStep) >= 0 && completedSteps.indexOf(currentStep) === -1)) {
             if (ready) {
                 ready();
             }
         } else {
             this.notComplete();
         }
-    }
+    };
 
-    notComplete() {
+    notComplete = () => {
         const { notComplete } = this.props;
         if (notComplete) {
             notComplete();
         }
-    }
+    };
 
-    updateContent(newCurrentStep) {
-        const { children } = this.props;
-        const { maxProgress } = this.state;
-        const { completedSteps, currentStep } = this.state;
-        if (!(children[currentStep].props.required === true && completedSteps.indexOf(currentStep) === -1)) {
+    updateContent = (newCurrentStep) => {
+        const {
+            completedSteps, currentStep, maxProgress, requiredSteps,
+        } = this.state;
+        if (requiredSteps.indexOf(currentStep) < 0 || completedSteps.indexOf(currentStep) >= 0 || newCurrentStep <= maxProgress - 1) {
             this.setState({
                 currentStep: newCurrentStep,
                 maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress,
@@ -160,7 +165,7 @@ export default class SetupWizard extends Component {
         } else {
             this.notComplete();
         }
-    }
+    };
 
     render() {
         const {
@@ -171,7 +176,9 @@ export default class SetupWizard extends Component {
             children,
             className,
         } = this.props;
-        const { maxProgress, currentStep, completedSteps } = this.state;
+        const {
+            maxProgress, currentStep, completedSteps, requiredSteps,
+        } = this.state;
 
         return (
             <div style={style} className={className}>
@@ -183,31 +190,29 @@ export default class SetupWizard extends Component {
                 {description && (
                     <p dangerouslySetInnerHTML={{ __html: description }} />
                 )}
-                {
-                    children.map((child, index) => (
-                        <SetupWizardItem
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={index}
-                            title={child.props.title}
-                            step={index + 1}
-                            ready={completedSteps.indexOf(index) >= 0}
-                            open={index === currentStep}
-                            disabled={index > maxProgress}
-                            onClick={() => {
-                                if (maxProgress >= index) {
-                                    if (currentStep === index) {
-                                        this.setState({ currentStep: -1 });
-                                    } else {
-                                        this.setState({ currentStep: index });
-                                    }
-                                }
-                            }}
-                            contentStyle={contentStyle}
-                        >
-                            {child.props.children}
-                        </SetupWizardItem>
-                    ))
-                }
+                <SetupWizardContext.Provider value={{
+                    maxProgress,
+                    completedSteps,
+                    requiredSteps,
+                    currentStep,
+                    contentStyle,
+                    stepComplete: this.stepComplete,
+                    stepRequired: this.stepRequired,
+                    previousStep: this.previousStep,
+                    nextStep: this.nextStep,
+                    toStep: this.toStep,
+                    resetToStep: this.resetToStep,
+                    notComplete: this.notComplete,
+                }}
+                >
+                    {children.map((child, index) => {
+                        if (child.type === SetupItem && !child.props.step) {
+                            console.warn('[chayns-components] SetupWizard: You did not set the step property to your SetupWizardItem. It´s deprecated since chayns-components 4.12 and will be removed in a future version. Please consider docs for migration.');
+                            return React.cloneElement(child, { step: index, key: index });
+                        }
+                        return child;
+                    })}
+                </SetupWizardContext.Provider>
             </div>
         );
     }

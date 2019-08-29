@@ -62,6 +62,7 @@ import SelectList from './react-chayns-selectlist/component/SelectList';
 import SelectListItem from './react-chayns-selectlist/component/SelectItem';
 import SetupWizard from './react-chayns-setupwizard/component/SetupWizard';
 import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
+import withSetupWizardContext from './react-chayns-setupwizard/component/withSetupWizardContext';
 
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
@@ -130,6 +131,7 @@ export {
     SelectListItem,
     SetupWizard,
     SetupWizardItem,
+    withSetupWizardContext,
     SharingBar,
     SmallWaitCursor,
     TextArea,

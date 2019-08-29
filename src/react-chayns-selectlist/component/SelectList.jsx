@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectListContext from './SelectListContext';
+import SelectListContext from './selectListContext';
 
 const ANIMATION_TIMEOUT = 500;
 

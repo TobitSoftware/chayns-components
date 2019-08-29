@@ -3,16 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../src/react-chayns-button/component/Button';
 import Input from '../../../src/react-chayns-input/component/Input';
+import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
-export default class Step3 extends Component {
-    static contextTypes = {
-        nextStep: PropTypes.func,
-        stepComplete: PropTypes.func,
-        previousStep: PropTypes.func
-    };
-
+class Step3 extends Component {
     static propTypes = {
         notComplete: PropTypes.bool.isRequired,
+        nextStep: PropTypes.func.isRequired,
+        stepComplete: PropTypes.func.isRequired,
+        previousStep: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -21,13 +19,12 @@ export default class Step3 extends Component {
     }
 
     inputOnChange(value) {
-        const { stepComplete } = this.context;
+        const { stepComplete } = this.props;
         stepComplete(value !== '');
     }
 
     render() {
-        const { nextStep } = this.context;
-        const { notComplete } = this.props;
+        const { nextStep, notComplete } = this.props;
 
         return (
             <div className="accordion__content">
@@ -47,7 +44,7 @@ export default class Step3 extends Component {
                 <div
                     style={
                         {
-                            textAlign: 'center'
+                            textAlign: 'center',
                         }
                     }
                 >
@@ -59,3 +56,5 @@ export default class Step3 extends Component {
         );
     }
 }
+
+export default withSetupWizardContext(Step3);

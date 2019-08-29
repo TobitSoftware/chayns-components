@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../src/react-chayns-button/component/Button';
+import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
-export default class Step2 extends Component {
-    static contextTypes = {
-        nextStep: PropTypes.func,
-        stepComplete: PropTypes.func
+class Step2 extends Component {
+    static propTypes = {
+        nextStep: PropTypes.func.isRequired,
+        stepComplete: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -15,13 +16,13 @@ export default class Step2 extends Component {
     }
 
     next() {
-        const { stepComplete, nextStep } = this.context;
+        const { stepComplete, nextStep } = this.props;
         stepComplete(true);
         nextStep();
     }
 
     render() {
-        const { nextStep } = this.context;
+        const { nextStep } = this.props;
         return (
             <div className="accordion__content">
                 <p>
@@ -54,7 +55,7 @@ export default class Step2 extends Component {
                 <div
                     style={
                         {
-                            textAlign: 'center'
+                            textAlign: 'center',
                         }
                     }
                 >
@@ -66,3 +67,5 @@ export default class Step2 extends Component {
         );
     }
 }
+
+export default withSetupWizardContext(Step2);
