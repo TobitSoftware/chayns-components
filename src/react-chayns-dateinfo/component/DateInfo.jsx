@@ -13,6 +13,8 @@ export default class DateInfo extends PureComponent {
         writeDay: PropTypes.bool,
         writeMonth: PropTypes.bool,
         noTitle: PropTypes.bool,
+        useToday: PropTypes.bool,
+        useTomorrowYesterday: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -24,6 +26,8 @@ export default class DateInfo extends PureComponent {
         writeDay: false,
         writeMonth: false,
         noTitle: false,
+        useToday: null,
+        useTomorrowYesterday: null,
     };
 
     static getRelativeDateString = (date, options = { language: 'de' }) => {
@@ -66,7 +70,7 @@ export default class DateInfo extends PureComponent {
             minutes: dateObj.getMinutes(),
             hours: dateObj.getHours(),
             days: dateObj.getDate(),
-            month: dateObj.getMonth(),
+            month: dateObj.getMonth() + 1,
             monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
             years: dateObj.getFullYear(),
         };
@@ -75,9 +79,9 @@ export default class DateInfo extends PureComponent {
             unit = 'days';
         }
 
-        if (relativeValues[unit] === 1) { // if value of unit is only 1...
+        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toISOString().substring(0, 10) !== now.toISOString().substring(0, 10))) && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
             unit = unit.substring(0, unit.length - 1); // ...use singular of unit
-        } else if (relativeValues[unit] === 0) {
+        } else if (relativeValues[unit] === 0 && dateObj.toISOString().substring(0, 10) === now.toISOString().substring(0, 10) && options.useToday !== false) {
             unit += '0';
         }
 
@@ -87,9 +91,9 @@ export default class DateInfo extends PureComponent {
 
         let txt = text[options.language].RELATIVE_TEXT[tense][unit];
 
-        if (options.showDate === false && options.showTime === true) {
+        if (options.showDate === false && options.showTime === true && !options.useToday && !options.useTomorrowYesterday) {
             txt = '';
-        } else if (options.showDate || options.writeMonth) {
+        } else if ((options.showDate || options.writeMonth) && (!(options.useTomorrowYesterday && unit === 'day') && !(options.useToday && (unit.charAt(unit.length - 1) === '0' || unit === 'now')))) {
             if (options.writeMonth) {
                 txt = text[options.language].ABSOLUTE_TEXT.dateMW;
             } else {
@@ -139,8 +143,8 @@ export default class DateInfo extends PureComponent {
             .replace('##rMONTHS##', relativeValues.months)
             .replace('##rYEARS##', relativeValues.years)
             .replace('##aSECONDS##', absoluteValues.seconds)
-            .replace('##aMINUTES##', absoluteValues.minutes.toLocaleString(localeConfig))
-            .replace('##aHOURS##', absoluteValues.hours.toLocaleString(localeConfig))
+            .replace('##aMINUTES##', absoluteValues.minutes.toString().padStart(2, '0'))
+            .replace('##aHOURS##', absoluteValues.hours.toString().padStart(2, '0'))
             .replace('##aDAYS##', absoluteValues.days)
             .replace('##aMONTH##', absoluteValues.month)
             .replace('##aMONTHw##', absoluteValues.monthWritten)
@@ -150,21 +154,21 @@ export default class DateInfo extends PureComponent {
 
     render() {
         const {
-            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay, date2,
+            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday,
         } = this.props;
 
         let txt = DateInfo.getRelativeDateString(date, {
-            language, showDate, showTime, writeDay, writeMonth,
+            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
         });
         if (date2) {
             txt += ' - ';
             if (new Date(date).toISOString().substring(0, 10) === new Date(date2).toISOString().substring(0, 10)) {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate: false, showTime, writeDay, writeMonth,
+                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
                 });
             } else {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate, showTime, writeDay, writeMonth,
+                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
                 });
             }
         }

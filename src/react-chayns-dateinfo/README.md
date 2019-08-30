@@ -32,3 +32,5 @@ The component got the following properties:
 | writeDay   | write day (e.g. monday)                                                                             | bool                   |          | false   |
 | writeMonth | write month (e.g. december instead of 12.)                                                          | bool                   |          | false   |
 | noTitle    | don't add the title attribute                                                                       | bool                   |          | false   |
+| useToday   | use today instead of the date                                                                       | bool                   |          | null    |
+| useTomorrowYesterday | use tomorrow and yesterday instead of the date                                            | bool                   |          | null    |

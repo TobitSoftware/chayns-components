@@ -12,7 +12,7 @@ export default class DateExample extends Component {
 
     render() {
         const { date } = this.state;
-        const language = 'en';
+        const language = 'de';
 
         return (
             <div>
@@ -52,6 +52,12 @@ export default class DateExample extends Component {
 
                 <div style={{ fontWeight: 'bold' }}>showDate showTime:</div>
                 <DateInfo date={date} showDate showTime language={language} />
+
+                <div style={{ fontWeight: 'bold' }}>showDate=false showTime useToday useTomorrowYesterday=false:</div>
+                <DateInfo date={date} showDate={false} showTime language={language} useToday useTomorrowYesterday={false} />
+
+                <div style={{ fontWeight: 'bold' }}>showDate showTime=false useToday=false useTomorrowYesterday:</div>
+                <DateInfo date={date} showDate showTime={false} language={language} useToday={false} useTomorrowYesterday />
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime=false:</div>
                 <DateInfo date={date} showDate={false} showTime={false} language={language} />
