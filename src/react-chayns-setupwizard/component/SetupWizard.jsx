@@ -207,7 +207,9 @@ export default class SetupWizard extends Component {
                 >
                     {children.map((child, index) => {
                         if (child.type === SetupItem && !child.props.step) {
+                            // eslint-disable-next-line no-console
                             console.warn('[chayns-components] SetupWizard: You did not set the step property to your SetupWizardItem. It´s deprecated since chayns-components 4.12 and will be removed in a future version. Please consider docs for migration.');
+                            // eslint-disable-next-line react/no-array-index-key
                             return React.cloneElement(child, { step: index, key: index });
                         }
                         return child;
