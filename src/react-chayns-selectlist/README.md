@@ -54,6 +54,7 @@ You can set the following props on a SelectList element:
 | name      | Sets the id of an element that should be preselected                                                | string          | *required* |
 | className | Sets the css-class of the parent element above the radiobutton                                      | boolean         | false      |
 | value     | Additional information of the item.                                                                 | object, array   | null       |
+| tooltipProps | Props to use a tooltip around the radio button.                                                  | object, array   | null       |
 
 
 ## Example ##

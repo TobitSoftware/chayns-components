@@ -86,6 +86,7 @@ export default class SelectListExample extends Component {
 
                             return (
                                 <SelectListItem
+                                    tooltipProps={{ content: { text: 'TooltipText' }, bindListeners: true }}
                                     name="Hi"
                                     id={index}
                                     key={index}
