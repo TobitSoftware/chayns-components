@@ -50,7 +50,7 @@ export default class SetupWizardExample extends Component {
                         + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
                         <Tooltip content={{ text: 'This is a tooltip wrapped around a SetupWizardItem.' }}>
-                            <SetupWizardItem title="Intro" step={0}>
+                            <SetupWizardItem title="Intro" step={0} required>
                                 <Step1 />
                             </SetupWizardItem>
                         </Tooltip>

@@ -45,13 +45,14 @@ export default class SetupWizard extends Component {
 
     static contextType = SetupWizardContext;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
+        this.completedSteps = [-1]; // Used to fix state timing problem
         this.state = {
             currentStep: 0,
             maxProgress: 0,
-            completedSteps: [-1],
+            completedSteps: this.completedSteps,
             requiredSteps: [],
         };
 
@@ -75,17 +76,19 @@ export default class SetupWizard extends Component {
     }
 
     stepComplete = (value) => {
-        const { currentStep, completedSteps } = this.state;
+        const { currentStep } = this.state;
 
-        if (value && completedSteps.indexOf(currentStep) === -1) {
-            this.setState(prevState => ({
-                completedSteps: prevState.completedSteps.concat(currentStep),
-            }));
-        } else if (!value && completedSteps.indexOf(currentStep) >= 0) {
-            this.setState(prevState => ({
-                completedSteps: prevState.completedSteps.slice(0, completedSteps.indexOf(currentStep)),
+        if (value && this.completedSteps.indexOf(currentStep) === -1) {
+            this.completedSteps = this.completedSteps.concat(currentStep);
+            this.setState({
+                completedSteps: this.completedSteps,
+            });
+        } else if (!value && this.completedSteps.indexOf(currentStep) >= 0) {
+            this.completedSteps = this.completedSteps.slice(0, this.completedSteps.indexOf(currentStep));
+            this.setState({
+                completedSteps: this.completedSteps,
                 maxProgress: currentStep,
-            }));
+            });
         }
     };
 
@@ -127,17 +130,19 @@ export default class SetupWizard extends Component {
     };
 
     resetToStep = (step) => {
-        this.setState(prevState => ({
+        const { maxProgress } = this.state;
+        this.completedSteps = this.completedSteps.filter(s => !(step <= s && s < maxProgress));
+        this.setState({
             maxProgress: step,
             currentStep: step,
-            completedSteps: prevState.completedSteps.filter(s => !(step <= s && s < prevState.maxProgress)),
-        }));
+            completedSteps: this.completedSteps,
+        });
     };
 
     ready = () => {
         const { ready } = this.props;
-        const { completedSteps, currentStep, requiredSteps } = this.state;
-        if (!(requiredSteps.indexOf(currentStep) >= 0 && completedSteps.indexOf(currentStep) === -1)) {
+        const { currentStep, requiredSteps } = this.state;
+        if (!(requiredSteps.indexOf(currentStep) >= 0 && this.completedSteps.indexOf(currentStep) === -1)) {
             if (ready) {
                 ready();
             }
@@ -155,9 +160,9 @@ export default class SetupWizard extends Component {
 
     updateContent = (newCurrentStep) => {
         const {
-            completedSteps, currentStep, maxProgress, requiredSteps,
+            currentStep, maxProgress, requiredSteps,
         } = this.state;
-        if (requiredSteps.indexOf(currentStep) < 0 || completedSteps.indexOf(currentStep) >= 0 || newCurrentStep <= maxProgress - 1) {
+        if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || newCurrentStep <= maxProgress - 1) {
             this.setState({
                 currentStep: newCurrentStep,
                 maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress,
