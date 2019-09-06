@@ -146,24 +146,21 @@ export default class DateInfo extends PureComponent {
         return DateInfo.replace(txt, {}, absoluteValues);
     };
 
-    static replace = (string, relativeValues, absoluteValues) => {
-        const localeConfig = { minimumIntegerDigits: 2, maximumFractionDigits: 0 };
-
-        return string
-            .replace('##rMINUTES##', relativeValues.minutes)
-            .replace('##rHOURS##', relativeValues.hours)
-            .replace('##rDAYS##', relativeValues.days)
-            .replace('##rMONTHS##', relativeValues.months)
-            .replace('##rYEARS##', relativeValues.years)
-            .replace('##aSECONDS##', absoluteValues.seconds)
-            .replace('##aMINUTES##', absoluteValues.minutes.toString().padStart(2, '0'))
-            .replace('##aHOURS##', absoluteValues.hours.toString().padStart(2, '0'))
-            .replace('##aDAYS##', absoluteValues.days)
-            .replace('##aMONTH##', absoluteValues.month)
-            .replace('##aMONTHw##', absoluteValues.monthWritten)
-            .replace('##aYEARS##', absoluteValues.years)
-            .replace(/^\s*|\s*$/g, '');// Matches whitespace at the start and end of the string
-    };
+    static replace = (string, relativeValues, absoluteValues) => string
+        .replace('##rMINUTES##', relativeValues.minutes)
+        .replace('##rHOURS##', relativeValues.hours)
+        .replace('##rDAYS##', relativeValues.days)
+        .replace('##rMONTHS##', relativeValues.months)
+        .replace('##rYEARS##', relativeValues.years)
+        .replace('##aSECONDS##', absoluteValues.seconds)
+        .replace('##aMINUTES##', absoluteValues.minutes.toString().padStart(2, '0'))
+        .replace('##aHOURS##', absoluteValues.hours.toString().padStart(2, '0'))
+        .replace('##aDAYS##', absoluteValues.days)
+        .replace('##aMONTH##', absoluteValues.month)
+        .replace('##aMONTHw##', absoluteValues.monthWritten)
+        .replace('##aYEARS##', absoluteValues.years)
+        .replace(/^\s*|\s*$/g, '')// Matches whitespace at the start and end of the string
+    ;
 
     render() {
         const {
