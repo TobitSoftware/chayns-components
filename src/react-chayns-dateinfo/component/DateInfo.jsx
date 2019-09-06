@@ -34,10 +34,22 @@ export default class DateInfo extends PureComponent {
         const dateObj = new Date(date);
         const now = new Date();
         let timeBetween = now.getTime() - dateObj.getTime();
+        const dateObj2 = new Date(date);
+        const now2 = new Date();
+        dateObj2.setHours(0);
+        dateObj2.setMinutes(0);
+        dateObj2.setSeconds(0);
+        dateObj2.setMilliseconds(0);
+        now2.setHours(0);
+        now2.setMinutes(0);
+        now2.setSeconds(0);
+        now2.setMilliseconds(0);
+        let timeBetween2 = now2.getTime() - dateObj2.getTime();
         let tense;
         if (timeBetween < 0) {
             tense = 'future';
             timeBetween *= -1;
+            timeBetween2 *= -1;
         } else if (timeBetween > 0) {
             tense = 'past';
         } else {
@@ -50,7 +62,7 @@ export default class DateInfo extends PureComponent {
             unit = 'minutes';
         } else if (timeBetween < 1000 * 60 * 60 * 24) {
             unit = 'hours';
-        } else if (timeBetween < 1000 * 60 * 60 * 24 * 30) {
+        } else if (timeBetween2 < 1000 * 60 * 60 * 24 * 30) {
             unit = 'days';
         } else if (timeBetween < 1000 * 60 * 60 * 24 * 365) {
             unit = 'months';
@@ -61,7 +73,8 @@ export default class DateInfo extends PureComponent {
             seconds: Math.floor((timeBetween /= 1000) % 60),
             minutes: Math.floor((timeBetween /= 60) % 60),
             hours: Math.floor((timeBetween /= 60) % 24),
-            days: Math.floor((timeBetween /= 24) % 30),
+            wrongDays: Math.floor((timeBetween /= 24) % 30),
+            days: Math.floor((timeBetween2 / 1000 / 60 / 60 / 24) % 30),
             months: Math.floor(timeBetween / 30),
             years: Math.floor(timeBetween / 365),
         };
