@@ -30,6 +30,7 @@ You can set the following props on a Bubble element:
 | children      | Children inside of the bubble                                                           | node       |
 | className     | ClassNames that will be set on the children wrapper                                     | string     |
 | style         | Styles assigned to the children wrapper                                                 | object     |
+| topDivStyle   | Styles assigned to the top div                                                          | object     |
 | position      | Position of the bubble. Valid positions are listed in Bubble.position                   | number     |
 | parent        | Node the bubble will be rendered into                                                   | DomElement |
 | coordinates   | Coordinates of the bubble arrowhead. The coordinates are in an {x,y} object.            | object     |

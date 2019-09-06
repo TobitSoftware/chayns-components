@@ -193,6 +193,8 @@ export default class Tooltip extends Component {
                         minWidth,
                         maxWidth,
                         padding: '12px',
+                    }}
+                    topDivStyle={{
                         ...!hideOnChildrenLeave || {
                             userSelect: 'none',
                             pointerEvents: 'none',

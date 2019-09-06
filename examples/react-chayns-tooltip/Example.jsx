@@ -123,6 +123,7 @@ export default class TooltipExample extends Component {
                     minWidth={150}
                     maxWidth={150}
                     parent={document.querySelector('.cc__list.list--expandable.examples')}
+                    hideOnChildrenLeave
                 >
                     <p>Tooltip</p>
                 </Tooltip>
