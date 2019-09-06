@@ -7,6 +7,7 @@ const AccordionSearch = ({
     onSearch,
     searchPlaceholder,
     onSearchEnter,
+    searchValue,
 }) => (
     <Input
         placeholder={searchPlaceholder}
@@ -14,6 +15,7 @@ const AccordionSearch = ({
         onEnter={onSearchEnter}
         onIconClick={onSearchEnter}
         icon={faSearch}
+        value={searchValue}
         stopPropagation
         dynamic
     />
@@ -23,12 +25,14 @@ AccordionSearch.propTypes = {
     onSearch: PropTypes.func,
     searchPlaceholder: PropTypes.string,
     onSearchEnter: PropTypes.func,
+    searchValue: PropTypes.string,
 };
 
 AccordionSearch.defaultProps = {
     onSearch: null,
     searchPlaceholder: null,
     onSearchEnter: null,
+    searchValue: null,
 };
 
 export default AccordionSearch;

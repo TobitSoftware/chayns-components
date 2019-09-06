@@ -49,6 +49,7 @@ export default class Accordion extends PureComponent {
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
+        searchValue: PropTypes.string,
         removeContentClosed: PropTypes.bool,
         onClick: PropTypes.func,
         disabled: PropTypes.bool,
@@ -76,6 +77,7 @@ export default class Accordion extends PureComponent {
         onSearch: null,
         onSearchEnter: null,
         searchPlaceholder: '',
+        searchValue: null,
         removeContentClosed: false,
         onClick: null,
         disabled: false,
@@ -159,18 +161,6 @@ export default class Accordion extends PureComponent {
 
         cancelAnimationFrame(rqAnimationFrame);
     }
-
-    // open = () => {
-    //     this.setState({
-    //         currentState: OPEN,
-    //     });
-    // };
-    //
-    // close = () => {
-    //     this.setState({
-    //         currentState: CLOSE,
-    //     });
-    // };
 
     handleAccordionClick = (event) => {
         const { fixed, onClick, disabled } = this.props;
@@ -287,6 +277,7 @@ export default class Accordion extends PureComponent {
             onSearch,
             onSearchEnter,
             searchPlaceholder,
+            searchValue,
         } = this.props;
 
         const { currentState } = this.state;
@@ -342,6 +333,7 @@ export default class Accordion extends PureComponent {
                         onSearch={onSearch}
                         onSearchEnter={onSearchEnter}
                         searchPlaceholder={searchPlaceholder}
+                        searchValue={searchValue}
                         state={currentState}
                     />
                 </div>

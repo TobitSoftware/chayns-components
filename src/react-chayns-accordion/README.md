@@ -57,6 +57,7 @@ The following properties can be set
 | onSearch     | Accordion search onChange callback (makes the search input visible)    | func                       |               |
 | onSearchEnter | Accordion search onEnter callback (makes the search input visible)    | func                       |               |
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
+| searchValue  | Value for the search input                                             | string                     |               |
 | removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
 | onClick      | Click listener for head                                                | bool                       | false         |
 | disabled     | Disables the accordion                                                 | bool                       | false         |

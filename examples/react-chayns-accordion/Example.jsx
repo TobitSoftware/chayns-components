@@ -11,7 +11,7 @@ import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { show: true };
+        this.state = { show: true, searchValue: '' };
     }
 
     render() {
@@ -31,10 +31,10 @@ export default class AccordionExample extends Component {
                 },
                 text: 'Löschen',
                 icon: faTrash,
-            }
+            },
         ];
 
-        const { show } = this.state;
+        const { show, searchValue } = this.state;
 
         return (
             <div>
@@ -43,8 +43,12 @@ export default class AccordionExample extends Component {
                         ? (
                             <Accordion
                                 head="Accordion with nice search"
-                                onSearch={console.log}
+                                onSearch={(data) => {
+                                    console.log(data);
+                                    this.setState({ searchValue: data });
+                                }}
                                 searchPlaceholder="Search"
+                                searchValue={searchValue}
                                 right={<Badge>12</Badge>}
                                 dataGroup="chayns"
                             >
@@ -52,7 +56,7 @@ export default class AccordionExample extends Component {
                                     Hello World
                                 </div>
                                 <div className="accordion__item">
-                                    Hello World<br/>blabla
+                                    Hello World<br />blabla
                                 </div>
                                 <div className="accordion__item">
                                     Hello World
@@ -103,7 +107,7 @@ export default class AccordionExample extends Component {
                                     style={{ width: '100%' }}
                                 />
                             ),
-                            close: 'Accordion Title Input'
+                            close: 'Accordion Title Input',
                         }}
                         isWrapped
                         icon={faRocket}
@@ -118,7 +122,7 @@ export default class AccordionExample extends Component {
                         Hello World
                     </div>
                     <div className="accordion__item">
-                        Hello World<br/>blabla
+                        Hello World<br />blabla
                     </div>
                     <div className="accordion__item">
                         Hello World
@@ -140,7 +144,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '20000px',
-                            background: 'linear-gradient(0deg, red, yellow)'
+                            background: 'linear-gradient(0deg, red, yellow)',
                         }}
                         />
                     </div>
@@ -158,7 +162,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '200px',
-                            background: 'linear-gradient(0deg, purple, orange)'
+                            background: 'linear-gradient(0deg, purple, orange)',
                         }}
                         />
                     </div>
@@ -167,7 +171,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '200px',
-                            background: 'linear-gradient(0deg, blue, green)'
+                            background: 'linear-gradient(0deg, blue, green)',
                         }}
                         />
                     </div>
@@ -183,7 +187,7 @@ export default class AccordionExample extends Component {
                     head="Accordion (animated badge)"
                     right={{
                         close: <Badge>15</Badge>,
-                        open: <Input/>
+                        open: <Input />,
                     }}
                 >
                     Content
