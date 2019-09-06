@@ -24,7 +24,7 @@ export default class DateInfo extends PureComponent {
         showTime: null,
         showDate: null,
         writeDay: false,
-        writeMonth: false,
+        writeMonth: null,
         noTitle: false,
         useToday: null,
         useTomorrowYesterday: null,
@@ -85,6 +85,7 @@ export default class DateInfo extends PureComponent {
             days: dateObj.getDate(),
             month: dateObj.getMonth() + 1,
             monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
+            monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
             years: dateObj.getFullYear(),
         };
 
@@ -109,8 +110,10 @@ export default class DateInfo extends PureComponent {
         } else if ((options.showDate || options.writeMonth) && (!(options.useTomorrowYesterday && unit === 'day') && !(options.useToday && (unit.charAt(unit.length - 1) === '0' || unit === 'now')))) {
             if (options.writeMonth) {
                 txt = text[options.language].ABSOLUTE_TEXT.dateMW;
-            } else {
+            } else if (options.writeMonth === false) {
                 txt = text[options.language].ABSOLUTE_TEXT.date;
+            } else {
+                txt = text[options.language].ABSOLUTE_TEXT.dateMSW;
             }
         }
 
@@ -134,13 +137,14 @@ export default class DateInfo extends PureComponent {
 
     static getAbsoluteDateString = (date, options = { language: 'de' }) => {
         const dateObj = new Date(date);
-        const txt = text[options.language].ABSOLUTE_TEXT.datetime;
+        const txt = text[options.language].ABSOLUTE_TEXT.datetimeMSW;
         const absoluteValues = {
             seconds: dateObj.getSeconds(),
             minutes: dateObj.getMinutes(),
             hours: dateObj.getHours(),
             days: dateObj.getDate(),
             month: dateObj.getMonth() + 1,
+            monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
             years: dateObj.getFullYear(),
         };
         return DateInfo.replace(txt, {}, absoluteValues);
@@ -153,14 +157,17 @@ export default class DateInfo extends PureComponent {
         .replace('##rMONTHS##', relativeValues.months)
         .replace('##rYEARS##', relativeValues.years)
         .replace('##aSECONDS##', absoluteValues.seconds)
-        .replace('##aMINUTES##', absoluteValues.minutes.toString().padStart(2, '0'))
-        .replace('##aHOURS##', absoluteValues.hours.toString().padStart(2, '0'))
-        .replace('##aDAYS##', absoluteValues.days)
-        .replace('##aMONTH##', absoluteValues.month)
+        .replace('##aMINUTES##', DateInfo.leadingZero(absoluteValues.minutes))
+        .replace('##aHOURS##', DateInfo.leadingZero(absoluteValues.hours))
+        .replace('##aDAYS##', DateInfo.leadingZero(absoluteValues.days))
+        .replace('##aMONTH##', DateInfo.leadingZero(absoluteValues.month))
+        .replace('##aMONTHsw##', absoluteValues.monthShortWritten)
         .replace('##aMONTHw##', absoluteValues.monthWritten)
         .replace('##aYEARS##', absoluteValues.years)
         .replace(/^\s*|\s*$/g, '')// Matches whitespace at the start and end of the string
     ;
+
+    static leadingZero = value => value.toString().padStart(2, '0');
 
     render() {
         const {

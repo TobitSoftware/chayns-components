@@ -68,6 +68,9 @@ export default class DateExample extends Component {
                 <div style={{ fontWeight: 'bold' }}>writeMonth:</div>
                 <DateInfo date={date} writeMonth language={language} />
 
+                <div style={{ fontWeight: 'bold' }}>writeMonth=false showDate:</div>
+                <DateInfo date={date} writeMonth={false} showDate language={language} />
+
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay:</div>
                 <DateInfo date={date} writeMonth writeDay language={language} />
 
