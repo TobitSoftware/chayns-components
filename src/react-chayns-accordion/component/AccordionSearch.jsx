@@ -15,7 +15,7 @@ const AccordionSearch = ({
         onEnter={onSearchEnter}
         onIconClick={onSearchEnter}
         icon={faSearch}
-        value={searchValue}
+        value={searchValue === null ? undefined : searchValue}
         stopPropagation
         dynamic
     />

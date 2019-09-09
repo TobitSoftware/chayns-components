@@ -8,6 +8,24 @@ import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMen
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
+class TestComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: 0 };
+    }
+
+    componentWillMount() {
+        setTimeout(() => {
+            this.setState({ value: 1 });
+        }, 100);
+    }
+
+    render() {
+        const { value } = this.state;
+        return (<div>{value}</div>);
+    }
+}
+
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
@@ -79,6 +97,7 @@ export default class AccordionExample extends Component {
                 >
                     <div className="accordion__content">
                         Hello World
+                        {<TestComponent />}
                     </div>
                 </Accordion>
                 <Accordion head="Accordion with only search" onSearch={console.log}>

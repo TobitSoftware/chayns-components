@@ -135,16 +135,16 @@ export default class Accordion extends PureComponent {
                 if (open) {
                     this.accordionOpenListener();
                 } else {
-                    this.accordionCloseListener();
+                    this.accordionCloseListener(null, true);
                 }
             }
 
-            if (open && !prevState.currentState === !!OPEN) {
+            if (open && !!prevProps.open === !!CLOSE) {
                 this.accordionOpenListener();
             }
 
-            if (!open && !prevState.currentState === !!CLOSE) {
-                this.accordionCloseListener();
+            if (!open && !!prevProps.open === !!OPEN) {
+                this.accordionCloseListener(null, true);
             }
         }
     }
@@ -218,7 +218,7 @@ export default class Accordion extends PureComponent {
         return null;
     }
 
-    accordionCloseListener(event) {
+    accordionCloseListener(event, preventOnClose) {
         const { onClose, autogrow } = this.props;
         const { _body } = this;
 
@@ -236,7 +236,7 @@ export default class Accordion extends PureComponent {
             }
         });
 
-        if (onClose) {
+        if (onClose && !preventOnClose) {
             onClose(event);
         }
     }
