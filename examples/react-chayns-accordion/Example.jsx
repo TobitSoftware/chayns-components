@@ -29,7 +29,7 @@ class TestComponent extends Component {
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { show: true, searchValue: '' };
+        this.state = { show: true, searchValue: '', open: false };
     }
 
     render() {
@@ -52,7 +52,7 @@ export default class AccordionExample extends Component {
             },
         ];
 
-        const { show, searchValue } = this.state;
+        const { show, searchValue, open } = this.state;
 
         return (
             <div>
@@ -60,7 +60,7 @@ export default class AccordionExample extends Component {
                     show
                         ? (
                             <Accordion
-                                head="Accordion with nice search"
+                                head="controlled Accordion with nice search"
                                 onSearch={(data) => {
                                     console.log(data);
                                     this.setState({ searchValue: data });
@@ -69,6 +69,15 @@ export default class AccordionExample extends Component {
                                 searchValue={searchValue}
                                 right={<Badge>12</Badge>}
                                 dataGroup="chayns"
+                                open={open}
+                                onOpen={() => {
+                                    console.log('onOpen');
+                                    this.setState({ open: true });
+                                }}
+                                onClose={() => {
+                                    console.log('onClose');
+                                    this.setState({ open: false });
+                                }}
                             >
                                 <div className="accordion__item">
                                     Hello World
@@ -94,6 +103,8 @@ export default class AccordionExample extends Component {
                             position={1}
                         />
                     )}
+                    onOpen={console.log}
+                    onClose={console.log}
                 >
                     <div className="accordion__content">
                         Hello World

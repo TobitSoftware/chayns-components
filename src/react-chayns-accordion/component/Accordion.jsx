@@ -133,14 +133,14 @@ export default class Accordion extends PureComponent {
         if (open !== undefined) {
             if (open !== prevState.open) {
                 if (open) {
-                    this.accordionOpenListener();
+                    this.accordionOpenListener(null, true);
                 } else {
                     this.accordionCloseListener(null, true);
                 }
             }
 
             if (open && !!prevProps.open === !!CLOSE) {
-                this.accordionOpenListener();
+                this.accordionOpenListener(null, true);
             }
 
             if (!open && !!prevProps.open === !!OPEN) {
@@ -241,7 +241,7 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    accordionOpenListener(event) {
+    accordionOpenListener(event, preventOnOpen) {
         const { onOpen, dataGroup } = this.props;
         if (dataGroup && Accordion.dataGroups[dataGroup]) {
             Accordion.dataGroups[dataGroup].forEach((accordion) => {
@@ -254,7 +254,7 @@ export default class Accordion extends PureComponent {
             currentState: OPEN,
         });
 
-        if (onOpen) {
+        if (onOpen && !preventOnOpen) {
             onOpen(event);
         }
     }
