@@ -39,7 +39,7 @@ export default class User extends PureComponent {
             <div className="calendar__content_userEntries">
                 {entries.map((e, i) => (
                     <Week
-                        data={entries}
+                        data={e}
                         groups={groups}
                         key={e[0].date.getTime() + i}
                         onClick={onClick}

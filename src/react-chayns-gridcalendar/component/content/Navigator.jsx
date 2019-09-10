@@ -36,7 +36,7 @@ export default class Navigator extends PureComponent {
 
         return (
             <div className="calendar__navigator no_select">
-                <div className="calendar__navigator_wrapper">
+                <div className="calendar__navigator_wrapper" style={{ width: '35%' }}>
                     <div className="calendar__navigator_icon" style={{ transform: 'rotate(180deg)' }}>
                         {hidden.left ? '' : (
                             <span onClick={onClick.left}>

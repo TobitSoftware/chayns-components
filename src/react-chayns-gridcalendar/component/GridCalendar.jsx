@@ -392,7 +392,7 @@ export default class ProgressCalendar extends Component {
         const { data } = this.props;
         if (this.content && data) {
             return (
-                <div className="calendar__content_groups">
+                <div className="calendar__content_groups" style={{ width: '35%', paddingRight: '5px' }}>
                     {
                         data.map(user => (
                             <div className="calendar__user ellipsis" key={user.id}>

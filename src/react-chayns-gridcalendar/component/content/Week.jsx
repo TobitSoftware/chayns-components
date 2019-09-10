@@ -31,11 +31,11 @@ export default class Week extends Component {
         const {
             onClick, focus, groupFocus, data,
         } = this.props;
-        const days = []; let
-            i = 0;
+        const days = [];
+        let i = 0;
         for (i; i < data.length; i += 1) {
             let background = '';
-            const day = data[i][0];
+            const day = data[i];
             let percentage;
             let start;
             let color = this.schemeColor;
@@ -70,7 +70,7 @@ export default class Week extends Component {
         const { weekWidth } = this.props;
         const days = this.renderDays();
         return (
-            <div className="week" style={{ width: `${weekWidth * 0.9}px`, marginRight: `${weekWidth * 0.1}px` }}>
+            <div className="week" style={{ width: `${weekWidth * 0.9}px`, marginLeft: `${weekWidth * 0.1}px` }}>
                 <div className="week_table">
                     <div className="week_row">
                         {days}
