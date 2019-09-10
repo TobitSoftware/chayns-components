@@ -102,25 +102,25 @@ export default class Calendar extends Component {
                 title: monthNames[_leftHidden.getMonth()],
                 className: 'month',
                 startDate: _leftHidden,
-                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, 0),
+                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, _leftHidden.getDate(), 23, 59, 59, 999),
             },
             {
                 title: monthNames[_rightShown.getMonth()],
                 className: 'month',
                 startDate: _rightShown,
-                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, 0),
+                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, _rightShown.getDate(), 23, 59, 59, 999),
             },
             {
                 title: monthNames[_focus.getMonth()],
                 className: 'month',
                 startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
-                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, 0),
+                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, _focus.getDate(), 23, 59, 59, 999),
             },
             {
                 title: monthNames[_rightHidden.getMonth()],
                 className: 'month',
                 startDate: _rightHidden,
-                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, 0),
+                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, _rightHidden.getDate(), 23, 59, 59, 999),
             }];
 
         this.newMonths = months;
