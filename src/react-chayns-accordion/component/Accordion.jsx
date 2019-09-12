@@ -117,7 +117,7 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
         const { autogrow, open } = this.props;
         const { currentState } = this.state;
         const { _body } = this;
@@ -131,20 +131,12 @@ export default class Accordion extends PureComponent {
         }
 
         if (open !== undefined) {
-            if (open !== prevState.open) {
+            if (open !== prevProps.open) {
                 if (open) {
                     this.accordionOpenListener(null, true);
                 } else {
                     this.accordionCloseListener(null, true);
                 }
-            }
-
-            if (open && !!prevProps.open === !!CLOSE) {
-                this.accordionOpenListener(null, true);
-            }
-
-            if (!open && !!prevProps.open === !!OPEN) {
-                this.accordionCloseListener(null, true);
             }
         }
     }
