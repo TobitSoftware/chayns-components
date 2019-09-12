@@ -17,7 +17,7 @@ export default class SelectButton extends Component {
         quickFind: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
-        showSelection: PropTypes.bool,
+        showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
         selectedFlag: PropTypes.string,
         stopPropagation: PropTypes.bool,
     };
@@ -150,6 +150,8 @@ export default class SelectButton extends Component {
         } = this.props;
         const { selected } = this.state;
 
+        const numberOfItems = typeof showSelection === 'number' ? showSelection : 2;
+
         return (
             <ChooseButton
                 className={className}
@@ -158,9 +160,9 @@ export default class SelectButton extends Component {
                 style={style}
             >
                 {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
-                    let str = (index === 1) ? ', ' : '';
-                    str += (index < 2) ? item[listValue] : '';
-                    str += (index === 2) ? '...' : '';
+                    let str = (index > 0 && index < selected.length && index < numberOfItems) ? ', ' : '';
+                    str += (index < numberOfItems) ? item[listValue] : '';
+                    str += (index === numberOfItems) ? '...' : '';
                     return str;
                 }) : label}
             </ChooseButton>
