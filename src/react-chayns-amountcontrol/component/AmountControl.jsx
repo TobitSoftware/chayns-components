@@ -80,7 +80,7 @@ export default class AmountControl extends PureComponent {
 
     componentDidUpdate(prevProps) {
         const { amount } = this.props;
-        if (prevProps.amount !== this.props.amount) {
+        if (prevProps.amount !== amount) {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 tempAmount: amount,
