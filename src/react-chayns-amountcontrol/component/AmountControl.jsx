@@ -69,23 +69,24 @@ export default class AmountControl extends PureComponent {
         removeIcon: faMinus,
     };
 
-    static getDerivedStateFromProps(props) {
-        return {
-            tempAmount: props.amount,
-            tempValue: props.amount,
-        };
-    }
-
     constructor(props) {
         super(props);
 
         this.state = {
             tempAmount: props.amount,
             tempValue: props.amount,
-            showInput: false,
         };
+    }
 
-        this.setInput = this.setInput.bind(this);
+    componentDidUpdate(prevProps) {
+        const { amount } = this.props;
+        if (prevProps.amount !== this.props.amount) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
+                tempAmount: amount,
+                tempValue: amount,
+            });
+        }
     }
 
     onInput = (value) => {
@@ -177,14 +178,8 @@ export default class AmountControl extends PureComponent {
 
                 return;
             }
-
             onChange(amount);
-            this.setInput(false);
         }
-    };
-
-    setInput = (value) => {
-        this.setState({ showInput: value });
     };
 
     render() {
@@ -211,7 +206,7 @@ export default class AmountControl extends PureComponent {
             max,
             min,
         } = this.props;
-        const { tempAmount, tempValue, showInput } = this.state;
+        const { tempAmount, tempValue } = this.state;
 
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
@@ -240,10 +235,9 @@ export default class AmountControl extends PureComponent {
                     disabled={disabled}
                     disableInput={disableInput}
                     buttonFormatHandler={buttonFormatHandler}
-                    showInput={showInput || showInputProp}
+                    showInput={tempAmount !== 0 || tempValue !== 0 || showInputProp}
                     tempAmount={tempAmount}
                     tempValue={tempValue}
-                    setInput={this.setInput}
                     focusOnClick={focusOnClick}
                 />
                 <ControlButton

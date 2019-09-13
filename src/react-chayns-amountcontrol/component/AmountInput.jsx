@@ -22,7 +22,6 @@ export default class AmountInput extends PureComponent {
         buttonFormatHandler: PropTypes.func,
         tempAmount: PropTypes.number,
         tempValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        setInput: PropTypes.func.isRequired,
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
         contentWidth: PropTypes.number,
@@ -65,11 +64,9 @@ export default class AmountInput extends PureComponent {
 
     onButtonClick = (e) => {
         const {
-            amount, onAdd, setInput, stopPropagation,
+            amount, onAdd, stopPropagation,
         } = this.props;
-        if (amount > 0) {
-            setInput(true);
-        } else {
+        if (amount <= 0) {
             onAdd();
         }
         if (stopPropagation) e.stopPropagation();
@@ -91,10 +88,9 @@ export default class AmountInput extends PureComponent {
     };
 
     onInputBlur = () => {
-        const { setInput, onChange } = this.props;
+        const { onChange } = this.props;
         let { tempAmount } = this.props;
         tempAmount = tempAmount === null ? 0 : tempAmount;
-        setInput(false);
         onChange(tempAmount);
     };
 
