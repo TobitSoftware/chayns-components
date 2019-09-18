@@ -1,113 +1,117 @@
-import React, { Component } from 'react';
+import React, {
+    useRef,
+    useCallback,
+    useState,
+    useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import assign from 'object-assign';
 
 const DEFAULT_STYLE = {
     width: '100%',
     paddingBottom: '12px',
 };
 
-class TextArea extends Component {
-    componentDidMount() {
-        const { required, autogrow } = this.props;
+const TextArea = ({
+    style: styleProp,
+    className,
+    placeholder,
+    defaultValue,
+    onChange,
+    autogrow,
+    onBlur,
+    onKeyUp,
+    onKeyDown,
+    value,
+    required,
+    stopPropagation,
+    reference,
+}) => {
+    const ref = useRef(null);
+    const [offset, setOffset] = useState(0);
 
-        if (required) {
-            this._node.setAttribute('required', '');
+    const grow = useCallback((initHeight = '0px') => {
+        if (initHeight) {
+            ref.current.style.height = initHeight;
         }
 
-        this._node.setAttribute('row', '1');
-        this._node.style.overflow = 'hidden';
+        if (ref.current.scrollHeight + offset > 0) {
+            ref.current.style.height = `${ref.current.scrollHeight + offset}px`;
+        }
+    }, [offset]);
 
+    // update in value prop
+    useEffect(() => {
         if (autogrow) {
-            this.offset = this._node.offsetHeight - this._node.clientHeight;
-
-            this.initialHeight = '0px';
-
-            this.grow('0');
+            grow();
         }
-    }
+    }, [grow, autogrow, value]);
 
-    onChange = () => {
-        const { onChange, autogrow } = this.props;
+    // reference or prop change executes initialisation code
+    const setRef = useCallback((node) => {
+        ref.current = node;
 
-        if (onChange) {
-            onChange(this._node.value);
-        }
+        if (node) {
+            if (required) {
+                node.setAttribute('required', '');
+            }
 
-        if (autogrow) {
-            if (this._node.value === '') {
-                this.grow(this.initialHeight);
-            } else {
-                this.grow('0');
+            node.setAttribute('row', '1');
+            node.style.overflow = 'hidden'; /* eslint-disable-line no-param-reassign */
+
+            if (autogrow) {
+                setOffset(node.offsetHeight - node.clientHeight);
+
+                grow();
             }
         }
-    };
-
-    onBlur = () => {
-        const { onBlur } = this.props;
-
-        if (onBlur) {
-            onBlur(this._node.value); // TODO: Get data from event
-        }
-    };
-
-    ref = (node) => {
-        const { reference } = this.props;
-
-        this._node = node;
 
         if (reference) {
             reference(node);
         }
+    }, [reference, setOffset, required, autogrow]);
+
+    // autogrows on change and pass value to onChange-prop
+    const handleChange = useCallback(() => {
+        if (onChange) {
+            onChange(ref.current.value);
+        }
+
+        if (autogrow) {
+            grow();
+        }
+    }, [grow, onChange, autogrow]);
+
+    // pass only value to onBlur-prop
+    const handleBlur = useCallback(() => {
+        if (onBlur) {
+            onBlur(ref.current.value); // TODO: Get data from event
+        }
+    }, [onBlur]);
+
+    const style = {
+        ...DEFAULT_STYLE,
+        ...styleProp,
     };
 
-    grow(initHeight) {
-        if (initHeight) {
-            this._node.style.height = initHeight;
-        }
+    const classNames = classnames('input', className);
 
-        if (this._node.scrollHeight + this.offset > 0) {
-            this._node.style.height = `${this._node.scrollHeight + this.offset}px`;
-        }
-    }
-
-    render() {
-        const {
-            style: styleProp,
-            className,
-            placeholder,
-            defaultValue,
-            onChange,
-            autogrow,
-            onBlur,
-            onKeyUp,
-            onKeyDown,
-            value,
-            stopPropagation,
-        } = this.props;
-
-        const style = assign({}, DEFAULT_STYLE, styleProp);
-
-        const classNames = classnames('input', className);
-
-        return (
-            <textarea
-                className={classNames}
-                ref={this.ref}
-                placeholder={placeholder}
-                style={style}
-                defaultValue={defaultValue}
-                onChange={(onChange || autogrow) ? this.onChange : null}
-                onBlur={onBlur ? this.onBlur : null}
-                onKeyUp={onKeyUp}
-                onKeyDown={onKeyDown}
-                value={value}
-                onClick={stopPropagation ? event => event.stopPropagation() : null}
-            />
-        );
-    }
-}
+    return (
+        <textarea
+            className={classNames}
+            ref={setRef}
+            placeholder={placeholder}
+            style={style}
+            defaultValue={defaultValue}
+            onChange={(onChange || autogrow) ? handleChange : null}
+            onBlur={onBlur ? handleBlur : null}
+            onKeyUp={onKeyUp}
+            onKeyDown={onKeyDown}
+            value={value}
+            onClick={stopPropagation ? event => event.stopPropagation() : null}
+        />
+    );
+};
 
 TextArea.defaultProps = {
     style: null,
