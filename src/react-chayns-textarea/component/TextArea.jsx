@@ -3,44 +3,12 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 
-export default class TextArea extends Component {
-    static defaultStyle = {
-        width: '100%',
-        paddingBottom: '12px',
-    };
+const DEFAULT_STYLE = {
+    width: '100%',
+    paddingBottom: '12px',
+};
 
-    static propTypes = {
-        style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-        className: PropTypes.string,
-        placeholder: PropTypes.string,
-        required: PropTypes.bool,
-        onChange: PropTypes.func,
-        onBlur: PropTypes.func,
-        defaultValue: PropTypes.string,
-        value: PropTypes.string,
-        onKeyUp: PropTypes.func,
-        onKeyDown: PropTypes.func,
-        autogrow: PropTypes.bool,
-        reference: PropTypes.func,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        style: null,
-        className: null,
-        placeholder: null,
-        required: null,
-        onChange: null,
-        onBlur: null,
-        defaultValue: undefined,
-        value: undefined,
-        onKeyUp: null,
-        onKeyDown: null,
-        autogrow: null,
-        reference: null,
-        stopPropagation: false,
-    };
-
+class TextArea extends Component {
     componentDidMount() {
         const { required, autogrow } = this.props;
 
@@ -119,7 +87,7 @@ export default class TextArea extends Component {
             stopPropagation,
         } = this.props;
 
-        const style = assign({}, TextArea.defaultStyle, styleProp);
+        const style = assign({}, DEFAULT_STYLE, styleProp);
 
         const classNames = classnames('input', className);
 
@@ -140,3 +108,37 @@ export default class TextArea extends Component {
         );
     }
 }
+
+TextArea.defaultProps = {
+    style: null,
+    className: null,
+    placeholder: null,
+    required: null,
+    onChange: null,
+    onBlur: null,
+    defaultValue: undefined,
+    value: undefined,
+    onKeyUp: null,
+    onKeyDown: null,
+    autogrow: null,
+    reference: null,
+    stopPropagation: false,
+};
+
+TextArea.propTypes = {
+    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    className: PropTypes.string,
+    placeholder: PropTypes.string,
+    required: PropTypes.bool,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    defaultValue: PropTypes.string,
+    value: PropTypes.string,
+    onKeyUp: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    autogrow: PropTypes.bool,
+    reference: PropTypes.func,
+    stopPropagation: PropTypes.bool,
+};
+
+export default TextArea;
