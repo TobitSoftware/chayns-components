@@ -93,9 +93,9 @@ export default class DateInfo extends PureComponent {
             unit = 'days';
         }
 
-        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toISOString().substring(0, 10) !== now.toISOString().substring(0, 10))) && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
+        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toDateString() !== now.toDateString())) && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
             unit = unit.substring(0, unit.length - 1); // ...use singular of unit
-        } else if (relativeValues[unit] === 0 && dateObj.toISOString().substring(0, 10) === now.toISOString().substring(0, 10) && options.useToday !== false) {
+        } else if (relativeValues[unit] === 0 && dateObj.toDateString() === now.toDateString() && options.useToday !== false) {
             unit += '0';
         }
 
@@ -179,7 +179,7 @@ export default class DateInfo extends PureComponent {
         });
         if (date2) {
             txt += ' - ';
-            if (new Date(date).toISOString().substring(0, 10) === new Date(date2).toISOString().substring(0, 10)) {
+            if (new Date(date).toDateString() === new Date(date2).toDateString()) {
                 txt += DateInfo.getRelativeDateString(date2, {
                     language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
                 });
