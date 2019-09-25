@@ -33,7 +33,8 @@ export default class TextString extends Component {
         .toLowerCase();
 
     static getTextString(stringName, language) {
-        const lang = TextString.languages.find(l => l.code === (language || TextString.language)).value;
+        let lang = TextString.languages.find(l => l.code === (language || TextString.language));
+        lang = lang ? lang.value : 'Ger';
         const { textStrings } = TextString;
         const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
         const result = Object.keys(strings)
@@ -44,7 +45,8 @@ export default class TextString extends Component {
 
     static loadLibrary(projectName, middle = 'langRes', language) {
         return new Promise((resolve, reject) => {
-            const lang = TextString.languages.find(l => l.code === (language || TextString.language)).value;
+            let lang = TextString.languages.find(l => l.code === (language || TextString.language));
+            lang = lang ? lang.value : 'Ger';
             if (!(TextString.textStrings[lang] && TextString.textStrings[lang][projectName])) {
                 fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json`)
                     .then((response) => {
