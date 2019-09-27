@@ -6,6 +6,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import Icon from '../../react-chayns-icon/component/Icon';
 import supportsFileInput from '../utils/supportsFileInput';
 import fileInputCall from '../utils/fileInputCall';
+import { isFunction } from '../../utils/is';
 
 export default class FileInput extends PureComponent {
     static types = {
@@ -123,7 +124,7 @@ export default class FileInput extends PureComponent {
     onClick = async (event, item, index) => {
         const { stopPropagation } = this.props;
         if (stopPropagation) event.stopPropagation();
-        if (typeof item.onClick === 'function') item.onClick(event);
+        if (isFunction(item.onClick)) item.onClick(event);
         if (this.needAppCall && item.onChange) {
             const compatibilityEvent = await fileInputCall();
             this.onChange(compatibilityEvent, item, index);

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+import { isNumber } from '../../utils/is';
 
 export default class SelectButton extends Component {
     static propTypes = {
@@ -150,7 +151,7 @@ export default class SelectButton extends Component {
         } = this.props;
         const { selected } = this.state;
 
-        const numberOfItems = typeof showSelection === 'number' ? showSelection : 2;
+        const numberOfItems = isNumber(showSelection) ? showSelection : 2;
 
         return (
             <ChooseButton

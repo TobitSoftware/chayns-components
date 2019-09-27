@@ -1,3 +1,5 @@
+import { isNumber } from '../../is';
+
 export default function rgb1ToHsv(rgb) {
     const {
         r,
@@ -31,6 +33,6 @@ export default function rgb1ToHsv(rgb) {
         h,
         s,
         v,
-        a: typeof a === 'number' && !isNaN(a) ? a : 1, /* eslint-disable-line no-restricted-globals */
+        a: isNumber(a) ? a : 1, /* eslint-disable-line no-restricted-globals */
     };
 }

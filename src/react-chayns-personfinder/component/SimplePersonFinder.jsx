@@ -8,6 +8,7 @@ import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import normalizeOutput from '../utils/normalizeOutput';
 import FriendsDataContainer from './data/friends/FriendsDataContainer';
+import { isFunction } from '../../utils/is';
 
 export default class SimplePersonFinder extends Component {
     static propTypes = {
@@ -62,7 +63,7 @@ export default class SimplePersonFinder extends Component {
             inputValue,
             selectedValue: false,
         });
-        if (onInput && typeof onInput === 'function') {
+        if (onInput && isFunction(onInput)) {
             onInput(inputValue);
         }
     }

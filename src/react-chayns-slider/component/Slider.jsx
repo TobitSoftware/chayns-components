@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {isNumber} from "../../utils/is";
 
 function preventDefault(e) {
     e.preventDefault();
@@ -75,15 +76,15 @@ export default class Slider extends PureComponent {
 
         this.target = null;
         if (props.interval) {
-            this.leftPercent = (((props.startValue || typeof props.startValue === 'number' ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
-            this.rightPercent = (((props.endValue || typeof props.endValue === 'number' ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
+            this.leftPercent = (((props.startValue || isNumber(props.startValue ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
+            this.rightPercent = (((props.endValue || isNumber(props.endValue) ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
             if (props.vertical) {
                 const left = this.leftPercent;
                 this.leftPercent = 100 - this.rightPercent;
                 this.rightPercent = 100 - left;
             }
         } else {
-            this.percent = (((props.value || typeof props.value === 'number' ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
+            this.percent = (((props.value || isNumber(props.value) ? props.value : props.defaultValue) - props.min) / (props.max - props.min)) * 100;
 
             if (props.vertical) {
                 this.percent = 100 - this.percent;
@@ -109,7 +110,7 @@ export default class Slider extends PureComponent {
             value,
         } = this.props;
 
-        if (typeof value === 'number' || (startValue && endValue)) {
+        if (isNumber(value) || (startValue && endValue)) {
             if (interval) {
                 this.leftPercent = ((startValue - min) / (max - min)) * 100;
                 this.rightPercent = ((endValue - min) / (max - min)) * 100;

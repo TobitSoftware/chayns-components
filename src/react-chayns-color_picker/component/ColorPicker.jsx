@@ -17,9 +17,10 @@ import {
     rgbToHsv,
     rgbToRgbString,
 } from '../../utils/color';
+import { isString } from '../../utils/is';
 
 const getHsvColor = (color) => {
-    if (typeof color === 'string') { // HEX(A)
+    if (isString(color)) { // HEX(A)
         return hexStringToHsv(color);
     }
     if (color.r !== undefined) { // RGB(A) (0-255)

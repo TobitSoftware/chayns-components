@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isFunction, isString } from '../../utils/is';
 
 export default class Icon extends PureComponent {
     static propTypes = {
@@ -31,7 +32,7 @@ export default class Icon extends PureComponent {
     constructor(props) {
         super(props);
         const { icon } = props;
-        if (typeof icon !== 'string' && icon && icon.prefix && icon.iconName) {
+        if (!isString(icon) && icon && icon.prefix && icon.iconName) {
             library.add(icon);
         }
         this.onClick = this.onClick.bind(this);
@@ -41,7 +42,7 @@ export default class Icon extends PureComponent {
         const { icon } = this.props;
         if (icon !== prevProps.icon
             && icon
-            && typeof icon !== 'string'
+            && !isString(icon)
             && icon.prefix
             && icon.iconName) {
             library.add(icon);
@@ -61,12 +62,12 @@ export default class Icon extends PureComponent {
         } = this.props;
 
         const classes = classNames('react-chayns-icon', className, {
-            [icon]: typeof icon === 'string',
+            [icon]: isString(icon),
             'react-chayns-icon--clickable': onClick,
             'react-chayns-icon--disabled': disabled,
         });
 
-        if (typeof icon === 'string') {
+        if (isString(icon)) {
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
             return (
                 <i
@@ -81,7 +82,7 @@ export default class Icon extends PureComponent {
             return null;
         }
 
-        if (typeof onClick === 'function') {
+        if (isFunction(onClick)) {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                 <span className={classes} onClick={this.onClick}>

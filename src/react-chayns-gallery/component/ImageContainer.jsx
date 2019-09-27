@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './ImageContainer.scss';
 import Icon from '../../react-chayns-icon/component/Icon';
+import { isString } from '../../utils/is';
 
 export default class ImageContainer extends PureComponent {
     static propTypes = {
@@ -57,7 +58,7 @@ export default class ImageContainer extends PureComponent {
                                         onMouseUp={tool.onUp}
                                         onTouchEnd={tool.onUp}
                                         onTouchCancel={tool.onUp}
-                                        className={classNames('image-tool', tool.className, { [tool.icon]: typeof tool.icon === 'string' })}
+                                        className={classNames('image-tool', tool.className, { [tool.icon]: isString(tool.icon) })}
                                         style={{
                                             display: 'flex',
                                             flexDirection: 'column',
@@ -65,7 +66,7 @@ export default class ImageContainer extends PureComponent {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        {typeof tool.icon !== 'string' ? (
+                                        {!isString(tool.icon) ? (
                                             <Icon
                                                 icon={tool.icon}
                                             />

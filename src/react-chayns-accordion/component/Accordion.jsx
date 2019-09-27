@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
 import AccordionHeadRight from './AccordionHeadRight';
+import { isString } from '../../utils/is';
 
 const CLOSE = 1;
 
@@ -303,7 +304,7 @@ export default class Accordion extends PureComponent {
                                     })}
                                 >
                                     {
-                                        typeof icon === 'string' || icon.iconName
+                                        isString(icon) || icon.iconName
                                             ? <Icon icon={icon} />
                                             : icon
                                     }
@@ -314,7 +315,7 @@ export default class Accordion extends PureComponent {
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(head && typeof head.open !== 'string' && typeof head.close === 'string' && isWrapped ? { fontWeight: 'inherit' } : null),
+                            ...(head && !isString(head.open) && isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null),
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}

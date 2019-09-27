@@ -6,6 +6,7 @@ import Image from './Image';
 import { getDataUrlFromFile } from '../utils/getDataUrl';
 import './Gallery.scss';
 import ImageContainer from './ImageContainer';
+import { isString } from '../../utils/is';
 
 export default class Gallery extends Component {
     static propTypes = {
@@ -47,7 +48,7 @@ export default class Gallery extends Component {
     static getBigImageUrls(images) {
         return images.map((image) => {
             const img = image.url || image.file || image;
-            return typeof img === 'string' ? img : getDataUrlFromFile(img);
+            return isString(img) ? img : getDataUrlFromFile(img);
         });
     }
 

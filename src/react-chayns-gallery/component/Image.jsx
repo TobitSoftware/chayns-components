@@ -6,6 +6,7 @@ import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallW
 import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
 import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
 import './Image.scss';
+import { isString } from '../../utils/is';
 
 export default class Image extends PureComponent {
     static propTypes = {
@@ -75,7 +76,7 @@ export default class Image extends PureComponent {
 
         const { image, styleLandscape, stylePortrait } = this.props;
 
-        if (typeof image === 'string') { // url
+        if (isString(image)) { // url
             if (Image.imageMetaData[image]) { // use cached metadata
                 this.setState({ metaData: Image.imageMetaData[image], imageUrl: image });
             } else if (image.indexOf('tsimg.cloud') >= 0) { // get preview and dimensions from tsimg.cloud
