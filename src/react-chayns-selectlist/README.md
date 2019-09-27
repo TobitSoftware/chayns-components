@@ -41,6 +41,7 @@ You can set the following props on a SelectList element:
 |--------------|-------------------------------------------------------------------------------|-------------|--------------|
 | onChange     | Callback that will be triggered when the selection changes                    | function    |              |
 | defaultValue | Sets the id of an element that should be preselected                          | string, int |              |
+| value        | Sets the id of an element that should be selected                             | string, int |              |
 | selectFirst  | Automatically select the first entry, triggers onChange-callback (deprecated) | boolean     |  false       |
 | className    | Sets the css-class of the selectlist                                          | boolean     |  false       |
 
