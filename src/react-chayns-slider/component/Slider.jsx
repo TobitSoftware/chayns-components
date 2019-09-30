@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {isNumber} from "../../utils/is";
+import { isNumber } from '../../utils/is';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -76,7 +76,7 @@ export default class Slider extends PureComponent {
 
         this.target = null;
         if (props.interval) {
-            this.leftPercent = (((props.startValue || isNumber(props.startValue ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
+            this.leftPercent = (((props.startValue || isNumber(props.startValue) ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
             this.rightPercent = (((props.endValue || isNumber(props.endValue) ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
             if (props.vertical) {
                 const left = this.leftPercent;

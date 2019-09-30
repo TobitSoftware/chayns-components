@@ -118,10 +118,11 @@ export default class DateInfo extends PureComponent {
         }
 
         if (options.writeDay) {
+            const day = text[options.language].WEEKDAYS[(dateObj.getDay() + 6) % 7];
             if (options.showDate || options.writeMonth) {
-                txt = `${text[options.language].WEEKDAYS[dateObj.getDay()]}, ${txt}`;
+                txt = `${day}, ${txt}`;
             } else {
-                txt = `${text[options.language].WEEKDAYS[dateObj.getDay()]} `;
+                txt = `${day} `;
             }
         }
 
