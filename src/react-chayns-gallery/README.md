@@ -58,7 +58,7 @@ The image shows automatically an preview of the image while the image is loading
 | style        | Styles that should be set on root-element                                | object      |                   |              |
 | styleLandscape| Styles that should be set on root-element of landscape images           | object      |                   |              |
 | stylePortrait | Styles that should be set on root-element of portrait images            | object      |                   |              |
-| preventParams | Prevent parameters on loaded image, e.g. {width: true} to prevent w-param | object    |                   |              |
+| preventParams | Prevent parameters on loaded image, e.g. {width: true} to prevent w-param | object/bool|                  |              |
 
 ### ImageContainer Props ###
 
