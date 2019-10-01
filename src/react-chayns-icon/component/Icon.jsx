@@ -1,3 +1,4 @@
+/* eslint-disable react/no-redundant-should-component-update */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
