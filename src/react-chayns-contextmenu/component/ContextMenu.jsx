@@ -76,12 +76,10 @@ export default class ContextMenu extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { coordinates } = this.props;
-        if (prevProps.coordinates && coordinates) {
-            const { x, y } = prevProps.coordinates;
-            if (coordinates.x !== x || coordinates.y !== y) {
-                this.getPosition();
-            }
+        const { coordinates, position } = this.props;
+
+        if (prevProps.coordinates !== coordinates || prevProps.position !== position) {
+            this.getPosition();
         }
     }
 

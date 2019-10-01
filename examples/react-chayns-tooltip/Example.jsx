@@ -2,15 +2,16 @@
 import React, { Component } from 'react';
 
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class TooltipExample extends Component {
     constructor() {
         super();
-        this.state = { x: 0, y: 0 };
+        this.state = { x: 0, y: 0, position: 0 };
     }
 
     render() {
-        const { x, y } = this.state;
+        const { x, y, position } = this.state;
         return (
             <div style={{ marginBottom: '500px' }}>
                 <div style={{ marginBottom: '20px' }}>
@@ -80,7 +81,7 @@ export default class TooltipExample extends Component {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Tooltip
-                        position={Tooltip.position.TOP_RIGHT}
+                        position={position}
                         content={{
                             html: (
                                 <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
@@ -99,6 +100,13 @@ export default class TooltipExample extends Component {
                             Static Tooltip
                         </p>
                     </Tooltip>
+                    <Button
+                        onClick={() => {
+                            this.setState({ position: (position + 1) % 6 });
+                        }}
+                    >
+                        Change Position
+                    </Button>
                 </div>
                 <div
                     style={{ height: '100px', width: '100%' }}

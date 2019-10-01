@@ -77,9 +77,9 @@ export default class Tooltip extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { coordinates } = this.props;
+        const { coordinates, position } = this.props;
 
-        if (prevProps.coordinates !== coordinates) {
+        if (prevProps.coordinates !== coordinates || prevProps.position !== position) {
             this.getPosition();
         }
     }
