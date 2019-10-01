@@ -10,7 +10,6 @@ class Step3 extends Component {
         notComplete: PropTypes.bool.isRequired,
         nextStep: PropTypes.func.isRequired,
         stepComplete: PropTypes.func.isRequired,
-        previousStep: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -41,13 +40,7 @@ class Step3 extends Component {
                     style={{ marginBottom: '10px' }}
                     invalid={notComplete}
                 />
-                <div
-                    style={
-                        {
-                            textAlign: 'center',
-                        }
-                    }
-                >
+                <div style={{ textAlign: 'center' }}>
                     <Button onClick={nextStep}>
                         Next
                     </Button>

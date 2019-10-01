@@ -7,6 +7,7 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class SetupWizardExample extends Component {
     constructor() {
@@ -41,19 +42,15 @@ export default class SetupWizardExample extends Component {
                         numberOfSteps={4}
                         ready={this.ready}
                         notComplete={this.notComplete}
-                        // contentStyle={{ fontWeight: 'bold' }}
-                        style={{ border: '1px solid gray', padding: '10px' }}
                         title="Wizard"
                         description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n'
                         + 'labore\n'
                         + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'
                         + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
-                        <Tooltip content={{ text: 'This is a tooltip wrapped around a SetupWizardItem.' }}>
-                            <SetupWizardItem title="Intro" step={0} required>
-                                <Step1 />
-                            </SetupWizardItem>
-                        </Tooltip>
+                        <SetupWizardItem title="Intro" step={0} required>
+                            <Step1 />
+                        </SetupWizardItem>
                         <SetupWizardItem title="Input optional" step={1}>
                             <Step2 />
                         </SetupWizardItem>
@@ -68,10 +65,14 @@ export default class SetupWizardExample extends Component {
             );
         }
 
-        return (
-            <h1>
-                {'Ready'}
-            </h1>
-        );
+        return [
+            <h1> Ready </h1>,
+            <Button onClick={() => {
+                this.setState({ ready: false });
+            }}
+            >
+                Reload
+            </Button>,
+        ];
     }
 }

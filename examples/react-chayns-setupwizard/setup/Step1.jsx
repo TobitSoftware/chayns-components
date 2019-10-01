@@ -30,13 +30,7 @@ class Step1 extends Component {
                     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
                     rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
-                <div
-                    style={
-                        {
-                            textAlign: 'center',
-                        }
-                    }
-                >
+                <div style={{ textAlign: 'center' }}>
                     <Button onClick={this.next}>
                         Next
                     </Button>

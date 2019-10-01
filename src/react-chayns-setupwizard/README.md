@@ -7,27 +7,10 @@ The **SetupWizard** - Component is part of the **chayns-components** package. Yo
 
 ## Usage ##
 
-The **SetupWizard** is usually used for setting up Tapps for the first time. My suggestion would be to create the Setup Wizard in the first component, which get rendered into the DOM. This allows you to difference between a normal site view and a setup and also allows you to render the normal view after finishing the setup.
+The **SetupWizard** is usually used for setting up Tapps for the first time. 
+My suggestion would be to create the Setup Wizard in the first component, which get rendered into the DOM. 
+This allows you to difference between a normal site view and a setup and also allows you to render the normal view after finishing the setup.
 For rendering the **SetupWizard** you have to import *SetupWizard* as well as *SetupWizardItem*.
-
-```jsx harmony
-import {SetupWizardItem, SetupWizard} from 'chayns-components';
-```
-
-The basic structure of the component will be the following:
-```jsx harmony
-<SetupWizard ready={()=>{}}>
-    <SetupWizardItem title="First" step={0}>
-        <FirstSetup/>
-    </SetupWizardItem>
-    <SetupWizardItem title="Second" step={1}>
-        <SecondSetup/>
-    </SetupWizardItem>
-    <SetupWizardItem title="Third" step={2}>
-        <ThirdSetup/>
-    </SetupWizardItem>
-</SetupWizard>
-```
 
 There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. 
 You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the setupWizardContext:
@@ -37,18 +20,20 @@ You can access them in the Step-Components (for example FirstSetup, SecondSetup,
 - toStep
 - resetToStep
 
- **Important:** `previousStep` and `toStep` are deprecated according to the design guide.
+You have to call stepComplete with a boolean parameter for completing/not completing the current step.
 
- **Note:** The context is delivered through `withSetupWizardContext`.
- 
- **Important:** The old context is deprecated and will be removed in a future version.
- 
- **Note:** You have to call stepComplete with a boolean parameter for completing/not completing the current step.
- 
+**Note:** The context is delivered through `withSetupWizardContext`.
 
+### Example ###
+Take a look at the [SetupWizard example](https://github.com/TobitSoftware/chayns-components/tree/master/examples/react-chayns-setupwizard) in the examples folder.
+
+### Deprecation ###
+`previousStep` and `toStep` are deprecated according to the design guide.
+
+The old context is deprecated and will be removed in a future version.
+ 
 ## Props ##
 The components got the following properties:
-
 
 **SetupWizard**:
 
@@ -69,7 +54,3 @@ The components got the following properties:
 | title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string | true     |
 | required   | Sets the **Setup-Wizard-Item** required or not required                                            | string | false    |
 | step       | step number (0-based)                                                                              | number | true     |
-
-## Example ##
-
-You may take a look at the **examples** folder in the **react-chayns-setupwizard** repository. There you can find an appropriate way of implementing the **SetupWizard** to your chayns®-Tapp
