@@ -1,54 +1,53 @@
-/* eslint-disable */
-
-import React, { Component } from 'react';
+/* eslint-disable react/no-array-index-key */
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Week from './Week';
 
-
-const WEEK_WIDTH =  11.5 * (window.innerWidth>450? 1 : 2);
-
-export default class User extends Component {
-
-    static defaultProps = {
-        entries: []
-    };
-
+export default class User extends PureComponent {
     static propTypes = {
         entries: PropTypes.arrayOf(
-            PropTypes.array
+            PropTypes.array,
         ),
         groups: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number,
                 name: PropTypes.string,
-                color: PropTypes.string
-            })
+                color: PropTypes.string,
+            }),
         ),
         onClick: PropTypes.func,
         focus: PropTypes.objectOf(Date),
-        groupFocus: PropTypes.number
+        groupFocus: PropTypes.number,
+        weekWidth: PropTypes.number,
     };
 
-    constructor(){
-        super();
-    }
-    render(){
-        return(
-            <div className="calendar__content_userEntries" >
-                {this.props.entries.map((entries,i)=>{
-                    return (
-                        <Week
-                            data={entries}
-                            groups={this.props.groups}
-                            key={entries[0].date.getTime()+i}
-                            onClick={this.props.onClick}
-                            focus={this.props.focus}
-                            groupFocus={this.props.groupFocus}
-                            weekWidth = {this.props.weekWidth}
-                        />
-                    )
-                })}
+    static defaultProps = {
+        entries: [],
+        groups: [],
+        onClick: null,
+        focus: null,
+        groupFocus: null,
+        weekWidth: 0,
+    };
+
+    render() {
+        const {
+            entries, groups, onClick, focus, groupFocus, weekWidth,
+        } = this.props;
+        return (
+            <div className="calendar__content_userEntries">
+                {entries.map((e, i) => (
+                    <Week
+                        data={e}
+                        groups={groups}
+                        key={e[0].date.getTime() + i}
+                        onClick={onClick}
+                        focus={focus}
+                        groupFocus={groupFocus}
+                        weekWidth={weekWidth}
+                    />
+                ))}
             </div>
         );
     }

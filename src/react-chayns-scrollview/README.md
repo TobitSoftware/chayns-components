@@ -27,7 +27,7 @@ Then it can be used like in the following:
     Hello World<br />
     Hello World<br />
     Hello World<br />
-</Accordion>
+</ScrollView>
 ```
 
 

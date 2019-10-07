@@ -10,6 +10,7 @@ import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 import getCurrentUserInformation from '../utils/getCurrentUserInformation';
+import FriendsContext from './data/friends/FriendsContext';
 
 const WAIT_CURSOR_TIMEOUT = 500;
 const LAZY_LOADING_SPACE = 100;
@@ -32,6 +33,7 @@ export default class PersonFinderData extends Component {
         uacId: PropTypes.number,
         locationId: PropTypes.number,
         parent: PropTypes.instanceOf(Element),
+        reducerFunction: PropTypes.func,
     };
 
     static defaultProps = {
@@ -47,13 +49,13 @@ export default class PersonFinderData extends Component {
         uacId: null,
         locationId: null,
         parent: document.querySelector('.tapp'),
+        reducerFunction: null,
     };
 
     resultList = null;
 
     state = {
         value: null,
-        friends: [],
         persons: { related: [], unrelated: [] },
         sites: { related: [], unrelated: [] },
         showWaitCursor: false,
@@ -87,13 +89,29 @@ export default class PersonFinderData extends Component {
         this.handleOnFocus = this.handleOnFocus.bind(this);
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
+        const { persons } = this.props;
+
+        if (persons) {
+            const { fetchFriends } = this.context;
+            fetchFriends();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
         const { value, selectedValue } = this.props;
         const { value: stateValue } = this.state;
 
         if (!selectedValue && stateValue !== value) {
             this.setValue('');
             this.setValue(value);
+        }
+
+        const { persons } = this.props;
+
+        if (persons && !prevProps.persons) {
+            const { fetchFriends } = this.context;
+            fetchFriends();
         }
     }
 
@@ -120,12 +138,13 @@ export default class PersonFinderData extends Component {
     };
 
     handleOnFocus() {
-        const { friends } = this.state;
         const { persons, uacId, value } = this.props;
+        const { fetchFriends, friends } = this.context;
+
         if (friends.length === 0 && persons === true && !uacId && (!value || value.trim() === '')) {
             this.setState({ showWaitCursor: true });
-            this.fetchFriends().then((result) => {
-                this.setState({ friends: result, showWaitCursor: false });
+            fetchFriends().then(() => {
+                this.setState({ showWaitCursor: false });
             });
         }
     }
@@ -152,8 +171,13 @@ export default class PersonFinderData extends Component {
     async handleLazyLoad() {
         if (!this.resultList) return;
 
-        const { autoLoading } = this.props;
         const { value, lazyLoading } = this.state;
+
+        if (this.showFriends() && (!value || value.trim() === '')) {
+            return;
+        }
+
+        const { autoLoading } = this.props;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
 
         if (autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
@@ -180,7 +204,7 @@ export default class PersonFinderData extends Component {
         }
 
         const {
-            persons: enablePersons, sites: enableSites, includeOwn, uacId, locationId,
+            persons: enablePersons, sites: enableSites, includeOwn, uacId, locationId, reducerFunction,
         } = this.props;
 
         const promises = [];
@@ -233,9 +257,17 @@ export default class PersonFinderData extends Component {
                 sites = { ...sites }; // Forces rerendering
             }
 
+            let newState = { persons, sites };
+
+            if (reducerFunction) {
+                newState = reducerFunction(newState);
+                if (newState instanceof Promise) {
+                    newState = await newState;
+                }
+            }
+
             this.setState({
-                persons,
-                sites,
+                ...newState,
                 lazyLoading: clear ? false : lazyLoading,
             });
         } catch (ex) {
@@ -302,28 +334,21 @@ export default class PersonFinderData extends Component {
         return this.promises[type].promise;
     }
 
-    // eslint-disable-next-line class-methods-use-this
-    async fetchFriends() {
-        const config = {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
-            },
-            mode: 'cors',
-        };
+    showFriends() {
+        const { persons, uacId } = this.props;
 
-        const response = await fetch('https://webapi.tobit.com/AccountService/v1.0/chayns/friends', config);
-        if (response.status === 200) {
-            const json = await response.json();
-            return Promise.resolve(json);
-        }
-        return Promise.resolve([]);
+        return persons && !uacId;
     }
 
     hasEntries() {
-        const { persons, sites, friends } = this.state;
+        const { persons, sites } = this.state;
+        const { friends } = this.context;
 
-        return persons.related.length > 0 || persons.unrelated.length > 0 || sites.related.length > 0 || sites.unrelated.length > 0 || friends.length > 0;
+        return (persons.related && persons.related.length > 0)
+            || (persons.unrelated && persons.unrelated.length > 0)
+            || (sites.related && sites.related.length > 0)
+            || (sites.unrelated && sites.unrelated.length > 0)
+            || (this.showFriends() && friends && friends.length > 0);
     }
 
     renderChildren() {
@@ -338,11 +363,12 @@ export default class PersonFinderData extends Component {
         const {
             persons,
             sites,
-            friends,
             showWaitCursor,
             lazyLoading,
             value,
         } = this.state;
+
+        const { friends } = this.context;
 
         const hasEntries = this.hasEntries();
         const showSeparators = showPersons && showSites;
@@ -362,7 +388,7 @@ export default class PersonFinderData extends Component {
                     moreRelatedPersons={this.loadMore[PERSON_RELATION] && !hasUnrelated}
                     moreRelatedSites={this.loadMore[LOCATION_RELATION]}
                     moreUnrelatedPersons={this.loadMore[PERSON_RELATION] && hasUnrelated}
-                    showFriends={!value || value.trim() === ''}
+                    showFriends={this.showFriends() && (!value || value.trim() === '')}
                 />
             );
 
@@ -423,3 +449,5 @@ export default class PersonFinderData extends Component {
         );
     }
 }
+
+PersonFinderData.contextType = FriendsContext;

@@ -11,6 +11,7 @@ import Calendar from './react-chayns-calendar/component/Calendar';
 import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
+import ColorPicker from './react-chayns-color_picker/component/ColorPicker';
 
 import DateInfo from './react-chayns-dateinfo/component/DateInfo';
 
@@ -49,6 +50,8 @@ import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
 
+import ProgressBar from './react-chayns-progress_bar/component/ProgressBar';
+
 import RadioButton from './react-chayns-radiobutton/component/RadioButton';
 import ReceiverInput from './react-chayns-receiverinput/component/ReceiverInput';
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
@@ -59,6 +62,7 @@ import SelectList from './react-chayns-selectlist/component/SelectList';
 import SelectListItem from './react-chayns-selectlist/component/SelectItem';
 import SetupWizard from './react-chayns-setupwizard/component/SetupWizard';
 import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
+import withSetupWizardContext from './react-chayns-setupwizard/component/withSetupWizardContext';
 
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
@@ -93,6 +97,7 @@ export {
     Checkbox,
     ComboBox,
     ContextMenu,
+    ColorPicker,
     DateInfo,
     EmojiInput,
     ExpandableContent,
@@ -116,6 +121,7 @@ export {
     OpeningTimes,
     OrientationHelper,
     PersonFinder,
+    ProgressBar,
     RadioButton,
     ReceiverInput,
     RfidInput,
@@ -125,6 +131,7 @@ export {
     SelectListItem,
     SetupWizard,
     SetupWizardItem,
+    withSetupWizardContext,
     SharingBar,
     SmallWaitCursor,
     TextArea,

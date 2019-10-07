@@ -26,6 +26,30 @@ export default class PersonFinderExample extends PureComponent {
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
+                    ref={(ref) => { this.relationFinder = ref; }}
+                    dynamic
+                    placeholder="Users with reducer: show only persons with an 'e' in the name"
+                    onChange={PersonFinderExample.handleSelect}
+                    reducerFunction={state => new Promise((resolve) => {
+                        console.log(state);
+                        const newState = {
+                            ...state,
+                            persons: {
+                                ...state.persons,
+                                related: state.persons.related.filter((person) => {
+                                    console.log(person);
+                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
+                                }),
+                                unrelated: state.persons.unrelated.filter((person) => {
+                                    console.log(person);
+                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
+                                }),
+                            },
+                        };
+                        resolve(newState);
+                    })}
+                />
+                <PersonFinder
                     defaultValue="Smith"
                     ref={(ref) => { this.relationFinder = ref; }}
                     dynamic
@@ -100,6 +124,7 @@ export default class PersonFinderExample extends PureComponent {
                     parent={document.getElementById('portal-example')}
                     boxClassName="custom-personfinder-overlay"
                 />
+                <PersonFinder onInput={console.log} />
                 <Button
                     onClick={this.clear}
                 >

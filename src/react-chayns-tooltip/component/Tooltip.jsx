@@ -35,6 +35,7 @@ export default class Tooltip extends Component {
         childrenClassNames: PropTypes.string,
         preventTriggerStyle: PropTypes.bool,
         hideOnChildrenLeave: PropTypes.bool,
+        removeParentSpace: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -50,6 +51,7 @@ export default class Tooltip extends Component {
         childrenClassNames: null,
         preventTriggerStyle: false,
         hideOnChildrenLeave: false,
+        removeParentSpace: false,
     };
 
     static position = Bubble.position;
@@ -75,9 +77,9 @@ export default class Tooltip extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { coordinates } = this.props;
+        const { coordinates, position } = this.props;
 
-        if (prevProps.coordinates !== coordinates) {
+        if (prevProps.coordinates !== coordinates || prevProps.position !== position) {
             this.getPosition();
         }
     }
@@ -113,7 +115,9 @@ export default class Tooltip extends Component {
     }
 
     async getPosition() {
-        const { position, coordinates } = this.props;
+        const {
+            position, coordinates, parent, removeParentSpace,
+        } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
         let x = coordinates ? coordinates.x : 0;
         let top = coordinates ? coordinates.y : 0;
@@ -136,6 +140,13 @@ export default class Tooltip extends Component {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
         }
+
+        if (removeParentSpace) {
+            const parentRect = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            x -= parentRect.left;
+            y -= parentRect.top;
+        }
+
         if (statePosition !== pos || x !== stateX || y !== stateY) {
             this.setState({ position: pos, x, y });
         }
@@ -182,6 +193,8 @@ export default class Tooltip extends Component {
                         minWidth,
                         maxWidth,
                         padding: '12px',
+                    }}
+                    topDivStyle={{
                         ...!hideOnChildrenLeave || {
                             userSelect: 'none',
                             pointerEvents: 'none',

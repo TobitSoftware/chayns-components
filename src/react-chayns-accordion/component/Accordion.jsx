@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
 import AccordionHeadRight from './AccordionHeadRight';
+import { isString } from '../../utils/is';
 
 const CLOSE = 1;
 
@@ -49,6 +50,7 @@ export default class Accordion extends PureComponent {
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
+        searchValue: PropTypes.string,
         removeContentClosed: PropTypes.bool,
         onClick: PropTypes.func,
         disabled: PropTypes.bool,
@@ -76,6 +78,7 @@ export default class Accordion extends PureComponent {
         onSearch: null,
         onSearchEnter: null,
         searchPlaceholder: '',
+        searchValue: null,
         removeContentClosed: false,
         onClick: null,
         disabled: false,
@@ -115,35 +118,8 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.open !== undefined) {
-            const { open } = this.props;
-            const { currentState } = this.state;
-
-            if (open !== nextProps.open) {
-                if (nextProps.open) {
-                    this.accordionOpenListener();
-                } else {
-                    this.setState({
-                        currentState: CLOSE,
-                    });
-                }
-            }
-
-            if (nextProps.open && !currentState === !!OPEN) {
-                this.accordionOpenListener();
-            }
-
-            if (!nextProps.open && !currentState === !!CLOSE) {
-                this.setState({
-                    currentState: CLOSE,
-                });
-            }
-        }
-    }
-
-    componentDidUpdate() {
-        const { autogrow } = this.props;
+    componentDidUpdate(prevProps) {
+        const { autogrow, open } = this.props;
         const { currentState } = this.state;
         const { _body } = this;
 
@@ -152,6 +128,16 @@ export default class Accordion extends PureComponent {
                 _body.style.setProperty('max-height', 'initial', 'important');
             } else if (currentState === CLOSE) {
                 _body.style.maxHeight = null;
+            }
+        }
+
+        if (open !== undefined) {
+            if (open !== prevProps.open) {
+                if (open) {
+                    this.accordionOpenListener(null, true);
+                } else {
+                    this.accordionCloseListener(null, true);
+                }
             }
         }
     }
@@ -225,7 +211,7 @@ export default class Accordion extends PureComponent {
         return null;
     }
 
-    accordionCloseListener(event) {
+    accordionCloseListener(event, preventOnClose) {
         const { onClose, autogrow } = this.props;
         const { _body } = this;
 
@@ -243,12 +229,12 @@ export default class Accordion extends PureComponent {
             }
         });
 
-        if (onClose) {
+        if (onClose && !preventOnClose) {
             onClose(event);
         }
     }
 
-    accordionOpenListener(event) {
+    accordionOpenListener(event, preventOnOpen) {
         const { onOpen, dataGroup } = this.props;
         if (dataGroup && Accordion.dataGroups[dataGroup]) {
             Accordion.dataGroups[dataGroup].forEach((accordion) => {
@@ -261,7 +247,7 @@ export default class Accordion extends PureComponent {
             currentState: OPEN,
         });
 
-        if (onOpen) {
+        if (onOpen && !preventOnOpen) {
             onOpen(event);
         }
     }
@@ -284,6 +270,7 @@ export default class Accordion extends PureComponent {
             onSearch,
             onSearchEnter,
             searchPlaceholder,
+            searchValue,
         } = this.props;
 
         const { currentState } = this.state;
@@ -317,7 +304,7 @@ export default class Accordion extends PureComponent {
                                     })}
                                 >
                                     {
-                                        typeof icon === 'string' || icon.iconName
+                                        isString(icon) || icon.iconName
                                             ? <Icon icon={icon} />
                                             : icon
                                     }
@@ -328,7 +315,7 @@ export default class Accordion extends PureComponent {
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(head && typeof head.open !== 'string' && typeof head.close === 'string' && isWrapped ? { fontWeight: 'inherit' } : null),
+                            ...(head && !isString(head.open) && isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null),
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}
@@ -339,6 +326,7 @@ export default class Accordion extends PureComponent {
                         onSearch={onSearch}
                         onSearchEnter={onSearchEnter}
                         searchPlaceholder={searchPlaceholder}
+                        searchValue={searchValue}
                         state={currentState}
                     />
                 </div>

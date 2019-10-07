@@ -6,6 +6,8 @@ import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderData from './PersonFinderData';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
+import normalizeOutput from '../utils/normalizeOutput';
+import FriendsDataContainer from './data/friends/FriendsDataContainer';
 
 export default class MultiplePersonFinder extends Component {
     static propTypes = {
@@ -109,16 +111,7 @@ export default class MultiplePersonFinder extends Component {
             return;
         }
 
-        const outValue = {
-            type,
-            name: value.name,
-            firstName: value.firstName,
-            lastName: value.lastName,
-            personId: value.personId,
-            userId: value.userId,
-            siteId: value.siteId,
-            locationId: value.locationId,
-        };
+        const outValue = normalizeOutput(type, value);
 
         this.setState({
             inputValue: '',
@@ -160,19 +153,21 @@ export default class MultiplePersonFinder extends Component {
 
         return (
             <div className={classnames('cc__person-finder', className)}>
-                <PersonFinderData
-                    {...props}
-                    inputComponent={TagInput}
-                    inputRef={(ref) => { this.input = ref; }}
-                    value={inputValue}
-                    tags={values}
-                    selectedValue={selectedValue}
-                    onChange={this.handleOnChange}
-                    onSelect={this.handleSelect}
-                    onRemoveTag={this.handleTagRemove}
-                    persons={showPersons}
-                    sites={showSites}
-                />
+                <FriendsDataContainer>
+                    <PersonFinderData
+                        {...props}
+                        inputComponent={TagInput}
+                        inputRef={(ref) => { this.input = ref; }}
+                        value={inputValue}
+                        tags={values}
+                        selectedValue={selectedValue}
+                        onChange={this.handleOnChange}
+                        onSelect={this.handleSelect}
+                        onRemoveTag={this.handleTagRemove}
+                        persons={showPersons}
+                        sites={showSites}
+                    />
+                </FriendsDataContainer>
             </div>
         );
     }

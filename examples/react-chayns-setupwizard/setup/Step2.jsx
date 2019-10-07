@@ -1,12 +1,13 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../src/react-chayns-button/component/Button';
+import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
-export default class Step2 extends Component {
-    static contextTypes = {
-        nextStep: PropTypes.func,
-        stepComplete: PropTypes.func
+class Step2 extends Component {
+    static propTypes = {
+        nextStep: PropTypes.func.isRequired,
+        stepComplete: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -15,17 +16,16 @@ export default class Step2 extends Component {
     }
 
     next() {
-        const { stepComplete, nextStep } = this.context;
+        const { stepComplete, nextStep } = this.props;
         stepComplete(true);
         nextStep();
     }
 
     render() {
-        const { nextStep } = this.context;
+        const { nextStep } = this.props;
         return (
             <div className="accordion__content">
                 <p>
-
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                     labore
                     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
@@ -51,13 +51,7 @@ export default class Step2 extends Component {
                     />
                     <label htmlFor="radio2">Option 2</label>
                 </div>
-                <div
-                    style={
-                        {
-                            textAlign: 'center'
-                        }
-                    }
-                >
+                <div style={{ textAlign: 'center' }}>
                     <Button onClick={nextStep}>
                         Next
                     </Button>
@@ -66,3 +60,5 @@ export default class Step2 extends Component {
         );
     }
 }
+
+export default withSetupWizardContext(Step2);

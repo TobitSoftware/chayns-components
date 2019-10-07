@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../src/react-chayns-button/component/Button';
+import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
-export default class Step4 extends Component {
-    static contextTypes = {
-        nextStep: PropTypes.func,
-        stepComplete: PropTypes.func,
-        resetToStep: PropTypes.func
+class Step4 extends Component {
+    static propTypes = {
+        nextStep: PropTypes.func.isRequired,
+        stepComplete: PropTypes.func.isRequired,
+        resetToStep: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -17,31 +18,26 @@ export default class Step4 extends Component {
     }
 
     next() {
-        const { stepComplete, nextStep } = this.context;
+        const { stepComplete, nextStep } = this.props;
         stepComplete(true);
         nextStep();
     }
 
     reset() {
-        const { resetToStep } = this.context;
+        const { resetToStep } = this.props;
         resetToStep(0);
     }
 
     render() {
         return (
             <div className="accordion__content">
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                <p>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
                     labore
                     et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
                     rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
-                <div
-                    style={
-                        {
-                            textAlign: 'center'
-                        }
-                    }
-                >
+                <div style={{ textAlign: 'center' }}>
                     <Button
                         onClick={this.next}
                         style={{ marginRight: '10px' }}
@@ -58,3 +54,5 @@ export default class Step4 extends Component {
         );
     }
 }
+
+export default withSetupWizardContext(Step4);

@@ -37,6 +37,7 @@ The component got the following properties:
 | minWidth              | minWidth of the contextMenu.            | number    | 100   |       |
 | maxWidth              | maxWidth of the contextMenu.                    | number    | 250   |       |
 | showTriggerBackground              | Adds a white background to the trigger (for usage on images or videos)                    | bool    | false   |       |
+| removeParentSpace  | Removes space from the parent to the page borders from contextMenu position. It's only needed if the parent has space to the page borders and it's position is relative. | bool    | false   |       |
 
 Also, you can call the methods show() and hide() on the reference of the contextMenu.
 

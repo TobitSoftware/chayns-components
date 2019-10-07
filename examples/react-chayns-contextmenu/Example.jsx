@@ -30,7 +30,7 @@ export default class ContextMenuExample extends Component {
 
     render() {
         const {
-            x, y, position, listCoordinates
+            x, y, position, listCoordinates,
         } = this.state;
 
         const items = [
@@ -45,7 +45,7 @@ export default class ContextMenuExample extends Component {
                 onClick: console.log,
                 text: 'Tobit',
                 icon: 'ts-tobit',
-            }
+            },
         ];
 
         return (
@@ -55,12 +55,12 @@ export default class ContextMenuExample extends Component {
                 </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
-                    right={<ContextMenu items={items} position={position % 6}/>}
+                    right={<ContextMenu items={items} position={position % 6} />}
                 >
                     <div className="accordion__content">
                         <p>Hello World</p>
                         <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
-                            <Icon icon={faCoffee}/>
+                            <Icon icon={faCoffee} />
                         </ContextMenu>
                     </div>
                 </Accordion>
@@ -138,6 +138,14 @@ export default class ContextMenuExample extends Component {
                         if (!e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
                     }}
                 />
+                <div style={{ padding: '10px', marginBottom: '100px' }}>
+                    <ContextMenu
+                        items={items}
+                        position={position % 6}
+                        onLayerClick={() => {
+                        }}
+                    />
+                </div>
             </div>
         );
     }

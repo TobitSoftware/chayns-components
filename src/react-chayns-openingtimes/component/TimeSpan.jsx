@@ -46,11 +46,11 @@ class TimeSpan extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const newState = Object.assign({}, this.state);
+    static getDerivedStateFromProps(nextProps) {
+        const newState = {};
         newState.startTime = nextProps.start;
         newState.endTime = nextProps.end;
-        this.setState(newState);
+        return newState;
     }
 
     onClick() {

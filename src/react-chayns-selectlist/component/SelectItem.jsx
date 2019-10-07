@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import SelectListContext from './selectListContext';
 
 import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
+import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 
-export default class SelectItem extends Component {
+// HOC
+export default function withContext(props) {
+    return (
+        <SelectListContext.Consumer>
+            {
+                context => <SelectItem {...context} {...props} />
+            }
+        </SelectListContext.Consumer>
+    );
+}
+
+class SelectItem extends Component {
     static propTypes = {
         id: PropTypes.number,
         changeListItem: PropTypes.func,
@@ -21,6 +34,8 @@ export default class SelectItem extends Component {
             PropTypes.array,
         ]),
         selectListSelectedId: PropTypes.number,
+        // eslint-disable-next-line react/require-default-props
+        tooltipProps: PropTypes.object,
     };
 
     static defaultProps = {
@@ -32,6 +47,7 @@ export default class SelectItem extends Component {
         name: '',
         value: null,
         selectListSelectedId: null,
+        tooltipProps: null,
     };
 
     _handleChange = () => {
@@ -51,6 +67,7 @@ export default class SelectItem extends Component {
             name,
             selectListSelectedId,
             children,
+            tooltipProps,
         } = this.props;
 
         const checked = (id === selectListSelectedId);
@@ -60,15 +77,32 @@ export default class SelectItem extends Component {
                 key={id}
                 className={className}
             >
-                <RadioButton
-                    name={selectListId}
-                    checked={checked}
-                    onChange={this._handleChange}
-                    disabled={disabled}
-                >
-                    {name}
-                </RadioButton>
-
+                {
+                    tooltipProps
+                        ? (
+                            <Tooltip {...tooltipProps}>
+                                <RadioButton
+                                    style={{ display: 'inline' }}
+                                    name={selectListId}
+                                    checked={checked}
+                                    onChange={this._handleChange}
+                                    disabled={disabled}
+                                >
+                                    {name}
+                                </RadioButton>
+                            </Tooltip>
+                        )
+                        : (
+                            <RadioButton
+                                name={selectListId}
+                                checked={checked}
+                                onChange={this._handleChange}
+                                disabled={disabled}
+                            >
+                                {name}
+                            </RadioButton>
+                        )
+                }
                 {children && (
                     <TransitionGroup>
                         {checked && (

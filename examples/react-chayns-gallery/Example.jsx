@@ -67,6 +67,7 @@ export default class GalleryExample extends Component {
                 />
                 <Image
                     image={images[0]}
+                    preventParams
                 />
                 <h3>ImageContainer-Component</h3>
                 <ImageContainer

@@ -14,7 +14,7 @@ export default class AmountInput extends PureComponent {
         onAdd: PropTypes.func.isRequired,
         onInput: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
-        buttonText: PropTypes.string.isRequired,
+        buttonText: PropTypes.string,
         showInput: PropTypes.bool.isRequired,
         disabled: PropTypes.bool,
         disableInput: PropTypes.bool,
@@ -22,7 +22,6 @@ export default class AmountInput extends PureComponent {
         buttonFormatHandler: PropTypes.func,
         tempAmount: PropTypes.number,
         tempValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        setInput: PropTypes.func.isRequired,
         equalize: PropTypes.string,
         focusOnClick: PropTypes.bool,
         contentWidth: PropTypes.number,
@@ -30,6 +29,7 @@ export default class AmountInput extends PureComponent {
     };
 
     static defaultProps = {
+        buttonText: null,
         disabled: false,
         disableInput: false,
         autoInput: false,
@@ -49,28 +49,24 @@ export default class AmountInput extends PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { equalize, showInput, focusOnClick } = this.props;
 
-        if (nextProps.equalize !== equalize) {
+        if (prevProps.equalize !== equalize) {
             equalizer.init();
         }
-        if (nextProps.showInput && !showInput && focusOnClick) {
-            setTimeout(() => {
-                if (this.inputRef) {
-                    this.inputRef.focus();
-                }
-            }, 20);
+        if (showInput && !prevProps.showInput && focusOnClick) {
+            if (this.inputRef) {
+                this.inputRef.focus();
+            }
         }
     }
 
     onButtonClick = (e) => {
         const {
-            amount, onAdd, setInput, stopPropagation,
+            amount, onAdd, stopPropagation,
         } = this.props;
-        if (amount > 0) {
-            setInput(true);
-        } else {
+        if (amount <= 0) {
             onAdd();
         }
         if (stopPropagation) e.stopPropagation();
@@ -92,10 +88,9 @@ export default class AmountInput extends PureComponent {
     };
 
     onInputBlur = () => {
-        const { setInput, onChange } = this.props;
+        const { onChange } = this.props;
         let { tempAmount } = this.props;
         tempAmount = tempAmount === null ? 0 : tempAmount;
-        setInput(false);
         onChange(tempAmount);
     };
 
@@ -117,7 +112,7 @@ export default class AmountInput extends PureComponent {
             return `${amount}`;
         }
 
-        return buttonText;
+        return buttonText || 0;
     }
 
     render() {

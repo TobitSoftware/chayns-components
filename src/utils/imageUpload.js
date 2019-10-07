@@ -1,3 +1,5 @@
+import { isString } from './is';
+
 export default async function imageUpload(file, referenceId, personId, siteId, url = 'https://api.tsimg.cloud/image') {
     return new Promise(async (resolve, reject) => {
         try {
@@ -30,7 +32,7 @@ export default async function imageUpload(file, referenceId, personId, siteId, u
                 }
             };
 
-            if (typeof file === 'string') {
+            if (isString(file)) {
                 headers['Content-Type'] = 'application/json';
                 uploadFunction(JSON.stringify({ url: file }));
             } else {

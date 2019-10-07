@@ -6,6 +6,9 @@ import Input from '../../react-chayns-input/component/Input';
 import PersonFinderData from './PersonFinderData';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
+import normalizeOutput from '../utils/normalizeOutput';
+import FriendsDataContainer from './data/friends/FriendsDataContainer';
+import { isFunction } from '../../utils/is';
 
 export default class SimplePersonFinder extends Component {
     static propTypes = {
@@ -24,6 +27,7 @@ export default class SimplePersonFinder extends Component {
             }),
             PropTypes.string,
         ]),
+        onInput: PropTypes.func,
     };
 
     static defaultProps = {
@@ -33,6 +37,7 @@ export default class SimplePersonFinder extends Component {
         defaultValue: null,
         className: null,
         showId: false,
+        onInput: null,
     };
 
     static PERSON = PERSON_RELATION;
@@ -53,10 +58,14 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
+        const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
+        if (onInput && isFunction(onInput)) {
+            onInput(inputValue);
+        }
     }
 
     handleSelect(type, value) {
@@ -69,16 +78,7 @@ export default class SimplePersonFinder extends Component {
         });
 
         if (onChange) {
-            onChange({
-                type,
-                name: value.name,
-                firstName: value.firstName,
-                lastName: value.lastName,
-                personId: value.personId,
-                userId: value.userId,
-                siteId: value.siteId,
-                locationId: value.locationId,
-            });
+            onChange(normalizeOutput(type, value));
         }
     }
 
@@ -108,16 +108,18 @@ export default class SimplePersonFinder extends Component {
 
         return (
             <div className={classnames('cc__person-finder', className)}>
-                <PersonFinderData
-                    {...props}
-                    inputComponent={Input}
-                    value={inputValue}
-                    selectedValue={selectedValue}
-                    onChange={this.handleOnChange}
-                    onSelect={this.handleSelect}
-                    persons={showPersons}
-                    sites={showSites}
-                />
+                <FriendsDataContainer>
+                    <PersonFinderData
+                        {...props}
+                        inputComponent={Input}
+                        value={inputValue}
+                        selectedValue={selectedValue}
+                        onChange={this.handleOnChange}
+                        onSelect={this.handleSelect}
+                        persons={showPersons}
+                        sites={showSites}
+                    />
+                </FriendsDataContainer>
             </div>
         );
     }

@@ -47,8 +47,8 @@ You can use the List like this:
 
 | Property      | Description                                                                                                                     | Type           | Default Value |
 |---------------|---------------------------------------------------------------------------------------------------------------------------------|----------------|---------------|
-| title         | Title that should be rendered on the item                                                                                       | String         | *required*    |
-| subtitle      | Second title (subtitle) that should be rendered on the item                                                                     | String         |               |
+| title         | Title that should be rendered on the item                                                                                       | React-Elements | *required*    |
+| subtitle      | Second title (subtitle) that should be rendered on the item                                                                     | React-Elements |               |
 | image         | Image that should be rendered to the left of the title                                                                          | String         |               |
 | icon          | Icon that should be rendered to the left of the title                                                                           | String/Object  |               |
 | className     | ClassName that should be set on the ListItem root element                                                                       | String         |               |

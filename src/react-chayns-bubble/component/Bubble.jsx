@@ -16,6 +16,7 @@ export default class Bubble extends PureComponent {
         }),
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
+        topDivStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -27,6 +28,7 @@ export default class Bubble extends PureComponent {
         coordinates: null,
         onMouseEnter: null,
         onMouseLeave: null,
+        topDivStyle: null,
     };
 
     static position = {
@@ -54,6 +56,10 @@ export default class Bubble extends PureComponent {
             isActive: false,
             isHidden: true,
         };
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
     }
 
     show = () => {
@@ -86,6 +92,7 @@ export default class Bubble extends PureComponent {
             className,
             onMouseEnter,
             onMouseLeave,
+            topDivStyle,
         } = this.props;
 
         const { isActive, isHidden } = this.state;
@@ -99,7 +106,7 @@ export default class Bubble extends PureComponent {
             <TappPortal parent={parent}>
                 <div
                     className={bubbleClasses}
-                    style={{ top: `${y}px`, left: `${x}px` }}
+                    style={{ top: `${y}px`, left: `${x}px`, ...topDivStyle }}
                     ref={this.bubbleNode}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}

@@ -22,7 +22,11 @@ export default class SelectButtonExample extends PureComponent {
                 id: '3',
                 name: 'Funghi',
                 price: '5.00',
-            }
+            }, {
+                id: '4',
+                name: 'Hawaii',
+                price: '5.00',
+            },
         ];
 
         return (
@@ -65,6 +69,7 @@ export default class SelectButtonExample extends PureComponent {
                         listValue="name"
                         selectedFlag="isMyPizza"
                         quickFind
+                        showSelection={4}
                     />
                 </div>
                 <div style={{ marginBottom: '20px' }}>

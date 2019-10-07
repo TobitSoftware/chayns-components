@@ -30,5 +30,7 @@ The component got the following properties:
 | showTime   | show time in the text                                                                               | bool                   |          | null    |
 | showDate   | show date in the text                                                                               | bool                   |          | null    |
 | writeDay   | write day (e.g. monday)                                                                             | bool                   |          | false   |
-| writeMonth | write month (e.g. december instead of 12.)                                                          | bool                   |          | false   |
+| writeMonth | write month (e.g. december (true) or 12. (false) instead of dec)                                    | bool                   |          | null    |
 | noTitle    | don't add the title attribute                                                                       | bool                   |          | false   |
+| useToday   | use today instead of the date                                                                       | bool                   |          | null    |
+| useTomorrowYesterday | use tomorrow and yesterday instead of the date                                            | bool                   |          | null    |

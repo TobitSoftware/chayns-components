@@ -20,7 +20,7 @@ export default class ModeSwitch extends Component {
         onChange: PropTypes.func,
         defaultMode: PropTypes.number,
         show: PropTypes.bool,
-        parent: PropTypes.arrayOf(PropTypes.node),
+        parent: PropTypes.instanceOf(Element),
     };
 
     static defaultProps = {
@@ -83,10 +83,11 @@ export default class ModeSwitch extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const { modes } = this.props;
-        if (chayns.env.user.isAuthenticated && nextProps.modes !== modes) {
-            ModeSwitch.modes = this.setModes(nextProps.modes);
+        if (chayns.env.user.isAuthenticated && prevProps.modes !== modes) {
+            ModeSwitch.modes = this.setModes(modes);
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ modes: ModeSwitch.modes });
         }
     }
@@ -147,7 +148,7 @@ export default class ModeSwitch extends Component {
             ModeSwitch.activeModeId = defaultMode || 0;
             ModeSwitch.open = false;
 
-            if (ModeSwitch.adminSwitchSupport) {
+            if (ModeSwitch.adminSwitchSupport && this.isUserInGroup([1])) {
                 chayns.removeAdminSwitchListener(this.switchMode);
                 chayns.addAdminSwitchListener(this.switchMode);
             }
@@ -218,15 +219,16 @@ export default class ModeSwitch extends Component {
             customModes -= 1;
         }
 
-        return (show || (show === null && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
+        return (show || (show === null && modes.length > 1 && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
     }
 
     render() {
         const { modes, open, activeModeId } = this.state;
+        const { parent } = this.props;
 
         if (this.showModeSwitch()) {
             return (
-                <TappPortal>
+                <TappPortal parent={parent}>
                     <div
                         className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}
                         style={{ top: `${this.pageYOffset}px` }}

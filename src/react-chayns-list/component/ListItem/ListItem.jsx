@@ -33,8 +33,14 @@ const ListItem = ({
 );
 
 ListItem.propTypes = {
-    title: PropTypes.string.isRequired,
-    subtitle: PropTypes.string,
+    title: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+    subtitle: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
     image: PropTypes.string,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,

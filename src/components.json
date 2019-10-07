@@ -94,9 +94,9 @@
   "example": "react-chayns-modeswitch/Example.jsx",
   "readme": true
 },{
-  "id": "react-chayns-openingTimes",
+  "id": "react-chayns-openingtimes",
   "title": "OpeningTimes",
-  "example": "react-chayns-openingTimes/Example.jsx",
+  "example": "react-chayns-openingtimes/Example.jsx",
   "readme": true
 },{
   "id": "react-chayns-personfinder",
@@ -165,7 +165,8 @@
   "id": "react-chayns-textstring",
   "title": "TextString",
   "example": "react-chayns-textstring/Example.jsx",
-  "readme": true
+  "readme": true,
+  "group": "internal"
 },{
   "id": "react-chayns-tooltip",
   "title": "Tooltip",
@@ -190,5 +191,20 @@
   "id": "react-chayns-dateinfo",
   "title": "DateInfo",
   "example": "react-chayns-dateinfo/Example.jsx",
+  "readme": true
+},{
+  "id": "react-chayns-color_picker",
+  "title": "ColorPicker",
+  "example": "react-chayns-color_picker/Example.jsx",
+  "readme": true
+},{
+  "id": "react-chayns-bubble",
+  "title": "Bubble",
+  "example": false,
+  "readme": true
+},{
+  "id": "react-chayns-progress_bar",
+  "title": "ProgressBar",
+  "example": "react-chayns-progress_bar/Example.jsx",
   "readme": true
 }]

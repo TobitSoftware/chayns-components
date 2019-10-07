@@ -6,6 +6,7 @@ import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallW
 import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
 import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
 import './Image.scss';
+import { isString } from '../../utils/is';
 
 export default class Image extends PureComponent {
     static propTypes = {
@@ -18,10 +19,14 @@ export default class Image extends PureComponent {
         style: PropTypes.object,
         stylePortrait: PropTypes.object,
         styleLandscape: PropTypes.object,
-        preventParams: PropTypes.shape({
-            width: PropTypes.bool,
-            height: PropTypes.bool,
-        }),
+        preventParams: PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.shape({
+                width: PropTypes.bool,
+                height: PropTypes.bool,
+                format: PropTypes.bool,
+            }),
+        ]),
     };
 
     static defaultProps = {
@@ -75,7 +80,7 @@ export default class Image extends PureComponent {
 
         const { image, styleLandscape, stylePortrait } = this.props;
 
-        if (typeof image === 'string') { // url
+        if (isString(image)) { // url
             if (Image.imageMetaData[image]) { // use cached metadata
                 this.setState({ metaData: Image.imageMetaData[image], imageUrl: image });
             } else if (image.indexOf('tsimg.cloud') >= 0) { // get preview and dimensions from tsimg.cloud
@@ -161,7 +166,9 @@ export default class Image extends PureComponent {
                                 onClick={onClick}
                                 key="image"
                                 alt=""
-                                src={chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height && elementDimensions.height, !preventParams.width && elementDimensions.width)}
+                                src={preventParams === true
+                                    ? imageUrl
+                                    : chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height && elementDimensions.height, !preventParams.width && elementDimensions.width, preventParams.format)}
                                 className={classNames('cc__image__img', { 'cc__image--clickable': onClick })}
                                 onLoad={this.onReady}
                             />

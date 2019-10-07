@@ -26,7 +26,7 @@ export default class InputExample extends PureComponent {
                     onChange={this.onChange}
                     style={{
                         width: '100%',
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                 />
                 <h3>NumericFormatter</h3>
@@ -37,7 +37,7 @@ export default class InputExample extends PureComponent {
                     onChange={this.onChange}
                     style={{
                         width: '100%',
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                 />
                 <h3>PriceFormatter (NumericFormatter)</h3>
@@ -45,9 +45,10 @@ export default class InputExample extends PureComponent {
                     defaultValue={100456.784}
                     initialFormatter={FORMAT_PRICE}
                     onChange={this.onChange}
+                    type="number"
                     style={{
                         width: '100%',
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                     dynamic
                     placeholder="price"
@@ -59,7 +60,7 @@ export default class InputExample extends PureComponent {
                     onChange={this.onChange}
                     style={{
                         width: '100%',
-                        marginBottom: '20px'
+                        marginBottom: '20px',
                     }}
                     dynamic
                     placeholder="price"

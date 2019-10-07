@@ -7,7 +7,7 @@ export default class GridCalendarExample extends Component {
     constructor() {
         super();
         this.state = {
-            date: new Date()
+            date: new Date(),
         };
         this.onClick = this.onClick.bind(this);
     }
@@ -15,7 +15,7 @@ export default class GridCalendarExample extends Component {
     onClick(data) {
         if (data.selected) {
             this.setState({
-                date: data.selected.date
+                date: data.selected.date,
             });
         }
     }
@@ -39,17 +39,17 @@ export default class GridCalendarExample extends Component {
                                 id: 0,
                                 groupId: 1,
                                 startTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 12).getTime(),
-                                endTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 23, 59).getTime()
-                            }]
+                                endTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 23, 59).getTime(),
+                            }],
                         }]}
                         columns={{
                             names: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                            highlightedColor: chayns.env.site.color
+                            highlightedColor: chayns.env.site.color,
                         }}
                         groups={[{
                             id: 1,
                             name: 'Important day',
-                            color: 'red'
+                            color: 'red',
                         }]}
                         onNavigateLeft={() => console.log('LEFT')}
                         onNavigateRight={() => console.log('RIGHT')}
@@ -68,21 +68,21 @@ export default class GridCalendarExample extends Component {
                         id: 0,
                         groupId: 1,
                         startTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 12).getTime(),
-                        endTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 23, 59).getTime()
-                    }]
+                        endTime: new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() + 1, 23, 59).getTime(),
+                    }],
                 }]}
                 columns={{
                     names: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                    highlightedColor: chayns.env.site.color
+                    highlightedColor: chayns.env.site.color,
                 }}
                 groups={[{
                     id: 1,
                     name: 'Important day',
-                    color: 'red'
+                    color: 'red',
                 }]}
                 onNavigateLeft={() => console.log('LEFT')}
                 onNavigateRight={() => console.log('RIGHT')}
-            />
+            />,
         ];
     }
 }

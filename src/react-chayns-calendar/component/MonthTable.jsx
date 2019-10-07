@@ -96,7 +96,7 @@ export default class MonthTable extends PureComponent {
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
-                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDay() - j),
+                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - j),
                             inMonth: false,
                         });
                     }

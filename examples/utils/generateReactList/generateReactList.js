@@ -2,7 +2,7 @@ import fs from 'fs';
 import { resolve, dirname } from 'path';
 
 const ROOT_PATH = dirname(dirname(dirname(__dirname)));
-const EXAMPLE_DEFINITION_PATH = resolve(ROOT_PATH, 'examples', 'examples.json');
+const EXAMPLE_DEFINITION_PATH = resolve(ROOT_PATH, 'src', 'components.json');
 const EXAMPLE_OUTPUT_PATH = resolve(ROOT_PATH, 'examples', 'ExampleList.jsx');
 
 const ITEM_TEMPLATE = fs.readFileSync(resolve(__dirname, 'templates', 'ListItem.txt')).toString();
@@ -15,7 +15,7 @@ function bootstrap() {
     const imports = [];
     const usages = [];
 
-    examples.forEach((data, index) => {
+    examples.filter(d => d.example).sort((a, b) => a.title.localeCompare(b.title)).forEach((data, index) => {
         const importName = `Example${index}`;
 
         imports.push(`import ${importName} from './${data.example}';`);

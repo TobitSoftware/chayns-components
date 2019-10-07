@@ -42,7 +42,8 @@ export default class EmojiInput extends Component {
 
     cursorPos = 0;
 
-    componentWillMount() {
+    constructor(props) {
+        super(props);
         requireEmojione().then((emojione) => {
             emojione.ascii = true; // eslint-disable-line no-param-reassign
             emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
@@ -51,31 +52,31 @@ export default class EmojiInput extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    static shouldComponentUpdate() {
+        return false;
+    }
+
+    componentDidUpdate(prevProps) {
         const { placeholder, disabled, value } = this.props;
 
-        if (nextProps.value.trim() === '') {
+        if (value.trim() === '') {
             this.placeholder.classList.remove('emoji-input__placeholder--hidden');
         } else {
             this.placeholder.classList.add('emoji-input__placeholder--hidden');
         }
 
-        if (nextProps.placeholder !== placeholder) {
-            this.placeholder.innerText = nextProps.placeholder;
+        if (prevProps.placeholder !== placeholder) {
+            this.placeholder.innerText = placeholder;
         }
 
-        if (nextProps.disabled !== disabled) {
-            this.input.contentEditable = !nextProps.disabled;
+        if (prevProps.disabled !== disabled) {
+            this.input.contentEditable = !disabled;
         }
 
-        if (nextProps.value !== value || this.firstRender) {
-            this.updateDOM(nextProps);
+        if (prevProps.value !== value || this.firstRender) {
+            this.updateDOM(this.props);
             this.firstRender = false;
         }
-    }
-
-    static shouldComponentUpdate() {
-        return false;
     }
 
     static getCaretCharacterOffsetWithin(element) {

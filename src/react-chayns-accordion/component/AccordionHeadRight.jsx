@@ -18,6 +18,7 @@ export default class AccordionHeadRight extends PureComponent {
         onSearch: PropTypes.func,
         onSearchEnter: PropTypes.func,
         searchPlaceholder: PropTypes.string,
+        searchValue: PropTypes.string,
         state: PropTypes.oneOf([OPEN, CLOSE]),
     };
 
@@ -26,6 +27,7 @@ export default class AccordionHeadRight extends PureComponent {
         onSearch: null,
         onSearchEnter: null,
         searchPlaceholder: '',
+        searchValue: null,
         state: null,
     };
 
@@ -34,6 +36,7 @@ export default class AccordionHeadRight extends PureComponent {
             onSearch,
             onSearchEnter,
             searchPlaceholder,
+            searchValue,
             state,
         } = this.props;
 
@@ -48,6 +51,7 @@ export default class AccordionHeadRight extends PureComponent {
                     onSearchEnter={onSearchEnter}
                     currentState={state}
                     searchPlaceholder={searchPlaceholder}
+                    searchValue={searchValue}
                 />
             );
         }

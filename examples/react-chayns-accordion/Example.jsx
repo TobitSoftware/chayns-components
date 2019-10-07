@@ -8,10 +8,28 @@ import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMen
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 
+class TestComponent extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: 0 };
+    }
+
+    componentWillMount() {
+        setTimeout(() => {
+            this.setState({ value: 1 });
+        }, 100);
+    }
+
+    render() {
+        const { value } = this.state;
+        return (<div>{value}</div>);
+    }
+}
+
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { show: true };
+        this.state = { show: true, searchValue: '', open: false };
     }
 
     render() {
@@ -31,10 +49,10 @@ export default class AccordionExample extends Component {
                 },
                 text: 'Löschen',
                 icon: faTrash,
-            }
+            },
         ];
 
-        const { show } = this.state;
+        const { show, searchValue, open } = this.state;
 
         return (
             <div>
@@ -42,17 +60,30 @@ export default class AccordionExample extends Component {
                     show
                         ? (
                             <Accordion
-                                head="Accordion with nice search"
-                                onSearch={console.log}
+                                head="controlled Accordion with nice search"
+                                onSearch={(data) => {
+                                    console.log(data);
+                                    this.setState({ searchValue: data });
+                                }}
                                 searchPlaceholder="Search"
+                                searchValue={searchValue}
                                 right={<Badge>12</Badge>}
                                 dataGroup="chayns"
+                                open={open}
+                                onOpen={() => {
+                                    console.log('onOpen');
+                                    this.setState({ open: true });
+                                }}
+                                onClose={() => {
+                                    console.log('onClose');
+                                    this.setState({ open: false });
+                                }}
                             >
                                 <div className="accordion__item">
                                     Hello World
                                 </div>
                                 <div className="accordion__item">
-                                    Hello World<br/>blabla
+                                    Hello World<br />blabla
                                 </div>
                                 <div className="accordion__item">
                                     Hello World
@@ -72,9 +103,12 @@ export default class AccordionExample extends Component {
                             position={1}
                         />
                     )}
+                    onOpen={console.log}
+                    onClose={console.log}
                 >
                     <div className="accordion__content">
                         Hello World
+                        {<TestComponent />}
                     </div>
                 </Accordion>
                 <Accordion head="Accordion with only search" onSearch={console.log}>
@@ -103,7 +137,7 @@ export default class AccordionExample extends Component {
                                     style={{ width: '100%' }}
                                 />
                             ),
-                            close: 'Accordion Title Input'
+                            close: 'Accordion Title Input',
                         }}
                         isWrapped
                         icon={faRocket}
@@ -118,7 +152,7 @@ export default class AccordionExample extends Component {
                         Hello World
                     </div>
                     <div className="accordion__item">
-                        Hello World<br/>blabla
+                        Hello World<br />blabla
                     </div>
                     <div className="accordion__item">
                         Hello World
@@ -140,7 +174,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '20000px',
-                            background: 'linear-gradient(0deg, red, yellow)'
+                            background: 'linear-gradient(0deg, red, yellow)',
                         }}
                         />
                     </div>
@@ -158,7 +192,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '200px',
-                            background: 'linear-gradient(0deg, purple, orange)'
+                            background: 'linear-gradient(0deg, purple, orange)',
                         }}
                         />
                     </div>
@@ -167,7 +201,7 @@ export default class AccordionExample extends Component {
                     <div className="accordion__content">
                         <div style={{
                             height: '200px',
-                            background: 'linear-gradient(0deg, blue, green)'
+                            background: 'linear-gradient(0deg, blue, green)',
                         }}
                         />
                     </div>
@@ -183,7 +217,7 @@ export default class AccordionExample extends Component {
                     head="Accordion (animated badge)"
                     right={{
                         close: <Badge>15</Badge>,
-                        open: <Input/>
+                        open: <Input />,
                     }}
                 >
                     Content

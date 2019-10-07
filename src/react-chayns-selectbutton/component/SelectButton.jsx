@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+import { isNumber } from '../../utils/is';
 
 export default class SelectButton extends Component {
     static propTypes = {
@@ -17,7 +18,7 @@ export default class SelectButton extends Component {
         quickFind: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
-        showSelection: PropTypes.bool,
+        showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
         selectedFlag: PropTypes.string,
         stopPropagation: PropTypes.bool,
     };
@@ -49,7 +50,7 @@ export default class SelectButton extends Component {
         this.getDialogList = this.getDialogList.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps) {
         const {
             list,
             listKey,
@@ -57,11 +58,12 @@ export default class SelectButton extends Component {
             selectedFlag,
         } = this.props;
 
-        if (list !== nextProps.list
-            || listKey !== nextProps.listKey
-            || listValue !== nextProps.listValue
-            || selectedFlag !== nextProps.selectedFlag) {
-            this.setState({ selected: nextProps.list.filter(item => item[nextProps.selectedFlag]) });
+        if (list !== prevProps.list
+            || listKey !== prevProps.listKey
+            || listValue !== prevProps.listValue
+            || selectedFlag !== prevProps.selectedFlag) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ selected: list.filter(item => item[selectedFlag]) });
         }
     }
 
@@ -149,6 +151,8 @@ export default class SelectButton extends Component {
         } = this.props;
         const { selected } = this.state;
 
+        const numberOfItems = isNumber(showSelection) ? showSelection : 2;
+
         return (
             <ChooseButton
                 className={className}
@@ -157,9 +161,9 @@ export default class SelectButton extends Component {
                 style={style}
             >
                 {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
-                    let str = (index === 1) ? ', ' : '';
-                    str += (index < 2) ? item[listValue] : '';
-                    str += (index === 2) ? '...' : '';
+                    let str = (index > 0 && index < selected.length && index < numberOfItems) ? ', ' : '';
+                    str += (index < numberOfItems) ? item[listValue] : '';
+                    str += (index === numberOfItems) ? '...' : '';
                     return str;
                 }) : label}
             </ChooseButton>

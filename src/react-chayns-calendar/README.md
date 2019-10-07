@@ -11,7 +11,6 @@ First of all import the component to a component of your own project.
 
 ```jsx harmony
 import { Calendar } from 'chayns-components';
-import 'chayns-components/lib/react-chayns-calendar/index.css';
 ```
 
 You can init the **Calendar** like this:
