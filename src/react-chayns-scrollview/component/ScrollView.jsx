@@ -13,6 +13,7 @@ export default class ScrollView extends Component {
         ]),
         style: PropTypes.object,
         className: PropTypes.string,
+        scrollElementId: PropTypes.string,
         scrollElementRef: PropTypes.func,
         onScroll: PropTypes.func,
     };
@@ -21,6 +22,7 @@ export default class ScrollView extends Component {
         children: null,
         style: undefined,
         className: undefined,
+        scrollElementId: undefined,
         scrollElementRef: null,
         onScroll: null,
     };
@@ -66,6 +68,7 @@ export default class ScrollView extends Component {
             style,
             className,
             children,
+            scrollElementId,
             scrollElementRef,
             onScroll,
         } = this.props;
@@ -106,6 +109,7 @@ export default class ScrollView extends Component {
                             }
                         }}
                         onScroll={onScroll}
+                        id={scrollElementId}
                     >
                         <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
