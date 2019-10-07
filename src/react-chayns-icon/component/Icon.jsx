@@ -1,12 +1,12 @@
 /* eslint-disable react/no-redundant-should-component-update */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isFunction, isString } from '../../utils/is';
 
-export default class Icon extends PureComponent {
+export default class Icon extends Component {
     static propTypes = {
         icon: PropTypes.oneOfType([
             PropTypes.string.isRequired,
