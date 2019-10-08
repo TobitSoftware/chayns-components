@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import ReactResizeDetector from 'react-resize-detector';
+
 import ScrollViewHelper from './ScrollViewHelper';
 
 export default class ScrollView extends Component {
@@ -48,14 +50,18 @@ export default class ScrollView extends Component {
     }
 
     componentDidUpdate() {
-        if (this.scrollView) {
-            this.scrollView.refresh();
-        }
+        this.handleRefreshScrollView();
     }
 
     setContentWidth() {
         this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width });
     }
+
+    handleRefreshScrollView = () => {
+        if (this.scrollView) {
+            this.scrollView.refresh();
+        }
+    };
 
     scrollTo(...args) {
         if (this.content) {
@@ -113,6 +119,7 @@ export default class ScrollView extends Component {
                     >
                         <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
+                            <ReactResizeDetector handleHeight onResize={this.handleRefreshScrollView} />
                         </div>
                     </div>
                 </div>
