@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import ReactResizeDetector from 'react-resize-detector';
+
 import ScrollViewHelper from './ScrollViewHelper';
 
 export default class ScrollView extends Component {
@@ -13,6 +15,7 @@ export default class ScrollView extends Component {
         ]),
         style: PropTypes.object,
         className: PropTypes.string,
+        scrollElementId: PropTypes.string,
         scrollElementRef: PropTypes.func,
         onScroll: PropTypes.func,
     };
@@ -21,6 +24,7 @@ export default class ScrollView extends Component {
         children: null,
         style: undefined,
         className: undefined,
+        scrollElementId: undefined,
         scrollElementRef: null,
         onScroll: null,
     };
@@ -46,14 +50,18 @@ export default class ScrollView extends Component {
     }
 
     componentDidUpdate() {
-        if (this.scrollView) {
-            this.scrollView.refresh();
-        }
+        this.handleRefreshScrollView();
     }
 
     setContentWidth() {
         this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width });
     }
+
+    handleRefreshScrollView = () => {
+        if (this.scrollView) {
+            this.scrollView.refresh();
+        }
+    };
 
     scrollTo(...args) {
         if (this.content) {
@@ -66,6 +74,7 @@ export default class ScrollView extends Component {
             style,
             className,
             children,
+            scrollElementId,
             scrollElementRef,
             onScroll,
         } = this.props;
@@ -106,9 +115,11 @@ export default class ScrollView extends Component {
                             }
                         }}
                         onScroll={onScroll}
+                        id={scrollElementId}
                     >
                         <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
+                            <ReactResizeDetector handleHeight onResize={this.handleRefreshScrollView} />
                         </div>
                     </div>
                 </div>
