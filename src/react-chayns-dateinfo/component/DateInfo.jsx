@@ -18,7 +18,7 @@ export default class DateInfo extends PureComponent {
     };
 
     static defaultProps = {
-        children: <div />,
+        children: <div/>,
         language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
         date2: null,
         showTime: null,
@@ -170,9 +170,21 @@ export default class DateInfo extends PureComponent {
 
     static leadingZero = value => value.toString().padStart(2, '0');
 
+    constructor(props) {
+        super(props);
+        let language = props.language || (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase();
+
+        if (!(language.indexOf('de') > -1 || language.indexOf('en') > -1 || language.indexOf('nl') > -1)) {
+            language = 'de';
+        }
+
+        this.state = { language };
+    }
+
     render() {
+        const { language } = this.state;
         const {
-            date, language, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday,
+            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday,
         } = this.props;
 
         let txt = DateInfo.getRelativeDateString(date, {
