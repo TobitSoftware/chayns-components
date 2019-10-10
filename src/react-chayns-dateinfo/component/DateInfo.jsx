@@ -18,7 +18,7 @@ export default class DateInfo extends PureComponent {
     };
 
     static defaultProps = {
-        children: <div/>,
+        children: <div />,
         language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
         date2: null,
         showTime: null,
