@@ -15,8 +15,8 @@ export default class ContextMenu extends Component {
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
-            text: PropTypes.string.isRequired,
-            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]).isRequired,
+            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
         })),
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         parent: PropTypes.instanceOf(Element),
