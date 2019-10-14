@@ -99,7 +99,7 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     ref={(ref) => { this.personFinderOwn = ref; }}
                     dynamic
-                    placeholder="Users/Sites (multiple)"
+                    placeholder="Users/Sites (multiple, dynamic)"
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
@@ -125,6 +125,7 @@ export default class PersonFinderExample extends PureComponent {
                     boxClassName="custom-personfinder-overlay"
                 />
                 <PersonFinder onInput={console.log} />
+                <PersonFinder placeholder="Users (multiple)" multiple />
                 <Button
                     onClick={this.clear}
                 >
