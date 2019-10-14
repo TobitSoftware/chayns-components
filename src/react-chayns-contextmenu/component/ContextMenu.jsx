@@ -15,7 +15,7 @@ export default class ContextMenu extends Component {
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
-            text: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]).isRequired,
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
             icon: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
         })),
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
@@ -198,7 +198,7 @@ export default class ContextMenu extends Component {
                         <li
                             className={classNames('context-menu__item', item.className)}
                             onClick={item.onClick}
-                            key={item.text}
+                            key={item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text}
                         >
                             {item.icon ? (
                                 <div className="context-menu__item__icon"><Icon icon={item.icon} /></div>
