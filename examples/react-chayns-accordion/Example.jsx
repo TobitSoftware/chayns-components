@@ -61,6 +61,7 @@ export default class AccordionExample extends Component {
                         ? (
                             <Accordion
                                 head="controlled Accordion with nice search"
+                                headClassNames="chayns__color"
                                 onSearch={(data) => {
                                     console.log(data);
                                     this.setState({ searchValue: data });
@@ -111,7 +112,11 @@ export default class AccordionExample extends Component {
                         {<TestComponent />}
                     </div>
                 </Accordion>
-                <Accordion head="Accordion with only search" onSearch={console.log}>
+                <Accordion
+                    head="Accordion with only search"
+                    headClassNames={['chayns__color--100', 'chayns__background-color--103i']}
+                    onSearch={console.log}
+                >
                     Content
                 </Accordion>
                 <Accordion head="Test" right={<Badge>2</Badge>} defaultOpened>

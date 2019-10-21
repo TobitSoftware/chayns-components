@@ -22,6 +22,11 @@ export default class Accordion extends PureComponent {
                 close: PropTypes.node.isRequired,
             }).isRequired,
         ]).isRequired,
+        headClassNames: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.arrayOf(PropTypes.string),
+            PropTypes.object,
+        ]),
         children: PropTypes.node.isRequired,
         right: PropTypes.oneOfType([
             PropTypes.node.isRequired,
@@ -58,6 +63,7 @@ export default class Accordion extends PureComponent {
 
     static defaultProps = {
         className: '',
+        headClassNames: null,
         dataGroup: null,
         id: null,
         style: null,
@@ -262,6 +268,7 @@ export default class Accordion extends PureComponent {
             reference,
             icon,
             head,
+            headClassNames,
             noRotate,
             noIcon,
             disabled,
@@ -291,7 +298,7 @@ export default class Accordion extends PureComponent {
                 style={style}
             >
                 <div
-                    className="accordion__head"
+                    className={classNames('accordion__head', headClassNames)}
                     onClick={this.handleAccordionClick}
                 >
                     {
