@@ -7,6 +7,7 @@ We are open to, and grateful for, any contributions made by the community.
 For starting the examples you have to first install all dependencies...
 ```
 npm i
+npm run build:sass
 ```
 ... and then start the webpack-dev-server with the following command:
 
