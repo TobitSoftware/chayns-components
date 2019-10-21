@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderData from './PersonFinderData';
+import PersonFinderView from './PersonFinderView';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import normalizeOutput from '../utils/normalizeOutput';
@@ -58,6 +59,7 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
+        console.log('hi', inputValue);
         const { onInput } = this.props;
         this.setState({
             inputValue,
@@ -69,8 +71,8 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onChange, showId } = this.props;
-        const name = convertToInputValue(value, showId);
+        const { onChange, showId, customData, orm } = this.props;
+        const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
 
         this.setState({
             inputValue: name,
@@ -78,7 +80,7 @@ export default class SimplePersonFinder extends Component {
         });
 
         if (onChange) {
-            onChange(normalizeOutput(type, value));
+            onChange(customData ? value : normalizeOutput(type, value));
         }
     }
 
@@ -100,7 +102,7 @@ export default class SimplePersonFinder extends Component {
             showSites,
             className,
             showId,
-            value: propValue, /* eslint-disable-line react/prop-types */
+            customData,
             defaultValue,
             ...props
         } = this.props;
@@ -108,18 +110,29 @@ export default class SimplePersonFinder extends Component {
 
         return (
             <div className={classnames('cc__person-finder', className)}>
-                <FriendsDataContainer>
-                    <PersonFinderData
+                {customData ? (
+                    <PersonFinderView
                         {...props}
                         inputComponent={Input}
                         value={inputValue}
                         selectedValue={selectedValue}
                         onChange={this.handleOnChange}
                         onSelect={this.handleSelect}
-                        persons={showPersons}
-                        sites={showSites}
                     />
-                </FriendsDataContainer>
+                ) : (
+                    <FriendsDataContainer>
+                        <PersonFinderData
+                            {...props}
+                            inputComponent={Input}
+                            value={inputValue}
+                            selectedValue={selectedValue}
+                            onChange={this.handleOnChange}
+                            onSelect={this.handleSelect}
+                            persons={showPersons}
+                            sites={showSites}
+                        />
+                    </FriendsDataContainer>
+                )}
             </div>
         );
     }
