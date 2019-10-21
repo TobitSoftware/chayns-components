@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
+import { isNullOrWhiteSpace } from '../../utils/is';
 
 export default class Input extends PureComponent {
     static propTypes = {
@@ -14,8 +15,8 @@ export default class Input extends PureComponent {
         regExp: PropTypes.instanceOf(RegExp),
         style: PropTypes.object,
         placeholder: PropTypes.string,
-        value: PropTypes.string,
-        defaultValue: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         invalid: PropTypes.bool,
         type: PropTypes.string,
         inputRef: PropTypes.func,
@@ -60,7 +61,7 @@ export default class Input extends PureComponent {
         super(props);
 
         this.state = {
-            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(!props.value && !props.defaultValue && props.required),
+            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
             initial: true,
             right: false,
         };
@@ -128,7 +129,7 @@ export default class Input extends PureComponent {
         this.setState({
             valid,
             initial: false,
-            right: !!value,
+            right: !isNullOrWhiteSpace(value),
         });
     }
 
@@ -157,7 +158,7 @@ export default class Input extends PureComponent {
             return (
                 <div
                     className={classNames('input-group', className, {
-                        labelRight: right || value || (initial && defaultValue),
+                        labelRight: right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input-group--disabled': disabled,
                     })}
                     ref={wrapperRef}
