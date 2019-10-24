@@ -36,9 +36,8 @@ export default class ControlButton extends PureComponent {
                     if (stopPropagation) e.stopPropagation();
                 }}
                 className={classNames(className, { disabled })}
-                style={color ? { color } : null}
             >
-                <Icon icon={icon} />
+                <Icon icon={icon} style={color ? { color } : null} />
             </div>
         );
     }
