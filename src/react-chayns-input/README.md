@@ -23,7 +23,7 @@ The following properties can be set on the Input-Component
 |--------------|-----------------------------------------------------------------------------------|----------------|---------------|
 | type         | The type that should be set on the input (e.g. text, password, number)            | string         | "text"        |
 | style        | Additional styles that should be set to the input                                 | object         |               |
-| className    | Additional CSS-Classes that should be set to the button                           | string         |               |
+| className    | Additional CSS-Classes that should be set to the input                            | string         |               |
 | placeholder  | Animated placeholder that will be shown inside the input                          | string         |               |
 | defaultValue | the value does not update if this prop updates                                    | string/number  |               |
 | value        | the value updates if this prop updates                                            | string/number  |               |
