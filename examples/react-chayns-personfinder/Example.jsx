@@ -129,6 +129,7 @@ export default class PersonFinderExample extends PureComponent {
                         imageUrl: 'imageUrl',
                     }}
                     data={data}
+                    onInput={value => console.log('input', value)}
                     hasMore={this.state.data.length < customData.length}
                     multiple
                     onLoadMore={async () => {

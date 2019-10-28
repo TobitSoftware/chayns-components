@@ -36,6 +36,7 @@ export default class MultiplePersonFinder extends Component {
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         showId: PropTypes.bool,
+        onInput: PropTypes.func,
     };
 
     static defaultProps = {
@@ -48,6 +49,7 @@ export default class MultiplePersonFinder extends Component {
         onRemove: null,
         showId: false,
         defaultValues: [],
+        onInput: null,
     };
 
     static PERSON = PERSON_RELATION;
@@ -81,10 +83,14 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
+        const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
+        if (onInput) {
+            onInput(inputValue);
+        }
     }
 
     handleTagRemove(tag) {

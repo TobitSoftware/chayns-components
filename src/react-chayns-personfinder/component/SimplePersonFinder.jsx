@@ -59,7 +59,6 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
-        console.log('hi', inputValue);
         const { onInput } = this.props;
         this.setState({
             inputValue,
