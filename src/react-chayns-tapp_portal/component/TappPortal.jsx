@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
+let lastParent = null;
+
 const TappPortal = ({ children, parent }) => {
     let parentToUse = document.getElementsByClassName('tapp')[0] || document.body;
 
     const [wasRendered, setWasRendered] = useState(false);
-    const [lastParent, setLastParent] = useState(null);
 
     if (!parent && wasRendered && parentToUse !== lastParent) {
         // destroy old tapp portals in tapp DIVs to prevent duplicates after switching tapp
@@ -22,7 +23,7 @@ const TappPortal = ({ children, parent }) => {
     }
 
     if (lastParent !== parentToUse) {
-        setLastParent(parentToUse);
+        lastParent = parentToUse;
     }
 
     return createPortal(children, parentToUse);

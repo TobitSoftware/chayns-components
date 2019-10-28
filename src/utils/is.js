@@ -14,3 +14,7 @@ export function isBoolean(value) {
 export function isFunction(value) {
     return typeof value === 'function';
 }
+
+export function isNullOrWhiteSpace(value) {
+    return value === undefined || value === null || (typeof value === 'string' && value.trim() === '');
+}
