@@ -33,11 +33,11 @@ export function convertToInputValue(data, showId) {
 }
 
 export function createInputValue(data, showId = false) {
-    if (chayns.utils.isString(data)) {
+    if (typeof data === 'string') {
         return data;
     }
 
-    if (!chayns.utils.isObject(data) || chayns.utils.isArray(data)) {
+    if (data !== Object(data) || Array.isArray(data)) {
         return data;
     }
 

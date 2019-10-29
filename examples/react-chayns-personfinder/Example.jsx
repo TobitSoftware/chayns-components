@@ -138,6 +138,10 @@ export default class PersonFinderExample extends PureComponent {
                             data: customData.slice(0, state.data.length + 1),
                         }));
                     }}
+                    defaultValues={[
+                        { displayName: "Herrmann Muster", email: 'herrmann.muster@uni-muenster.de' },
+                        { displayName: "Bill Tester", email: 'bill.tester@tobit.software' },
+                    ]}
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}

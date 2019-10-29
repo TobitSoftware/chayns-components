@@ -62,10 +62,18 @@ export default class MultiplePersonFinder extends Component {
         this.state = {
             inputValue: createInputValue(props.defaultValue, props.showId) || '',
             selectedValue: !!props.defaultValue,
-            values: props.defaultValues.map(v => ({
-                text: createInputValue(v, props.showId) || '',
-                value: v,
-            })),
+            values: props.defaultValues.map((v) => {
+                if (v === Object(v) && props.customData && props.orm) {
+                    return {
+                        text: v[props.orm.showName],
+                        value: v,
+                    };
+                }
+                return {
+                    text: createInputValue(v, props.showId) || '',
+                    value: v,
+                };
+            }),
         };
 
         this.clear = this.clear.bind(this);
