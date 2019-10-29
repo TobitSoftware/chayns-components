@@ -104,7 +104,9 @@ export default class MultiplePersonFinder extends Component {
     handleTagRemove(tag) {
         const { customData, orm, onRemove } = this.props;
         const { values } = this.state;
-        const { value } = tag;
+        const { value } = tag || {};
+
+        if (!value) return;
 
         if (customData) {
             this.setState({
