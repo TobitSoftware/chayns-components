@@ -37,6 +37,11 @@ export default class MultiplePersonFinder extends Component {
         onRemove: PropTypes.func,
         showId: PropTypes.bool,
         onInput: PropTypes.func,
+        customData: PropTypes.bool,
+        orm: PropTypes.shape({
+            showName: PropTypes.string,
+            identifier: PropTypes.string,
+        }),
     };
 
     static defaultProps = {
@@ -50,6 +55,8 @@ export default class MultiplePersonFinder extends Component {
         showId: false,
         defaultValues: [],
         onInput: null,
+        customData: false,
+        orm: {},
     };
 
     static PERSON = PERSON_RELATION;
@@ -124,7 +131,9 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onAdd, showId, customData, orm } = this.props;
+        const {
+            onAdd, showId, customData, orm,
+        } = this.props;
         const { values } = this.state;
         const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
 

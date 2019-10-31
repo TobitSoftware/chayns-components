@@ -42,7 +42,7 @@ export default class PersonFinderExample extends PureComponent {
         console.log('removed', user);
     }
 
-    state = { data: customData.slice(0, 1) }
+    state = { data: customData.slice(0, 1), value: '' }
 
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
@@ -52,7 +52,7 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data } = this.state;
+        const { data, value } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
@@ -128,8 +128,8 @@ export default class PersonFinderExample extends PureComponent {
                         search: ['email', 'displayName', 'shortHand'],
                         imageUrl: 'imageUrl',
                     }}
-                    data={data}
-                    onInput={value => console.log('input', value)}
+                    data={value.length > 2 ? data : []}
+                    onInput={value => this.setState({ value })}
                     hasMore={this.state.data.length < customData.length}
                     multiple
                     onLoadMore={async () => {
@@ -139,10 +139,10 @@ export default class PersonFinderExample extends PureComponent {
                         }));
                     }}
                     defaultValues={[
-                        { displayName: "Herrmann Muster", email: 'herrmann.muster@uni-muenster.de' },
-                        { displayName: "Bill Tester", email: 'bill.tester@tobit.software' },
+                        { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
+                        { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
                     ]}
-                    onAdd={PersonFinderExample.handleAdd}
+                    onAdd={() => this.setState({ value: '' })}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />

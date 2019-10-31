@@ -46,8 +46,6 @@ const ResultItemList = ({
         return null;
     }
 
-    console.log('item list', relations);
-
     return (
         <div className={classnames('cc__person-finder__results-list', className)}>
             {showSeparators && (

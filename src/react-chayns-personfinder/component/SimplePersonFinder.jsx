@@ -28,6 +28,11 @@ export default class SimplePersonFinder extends Component {
             }),
             PropTypes.string,
         ]),
+        customData: PropTypes.bool,
+        orm: PropTypes.shape({
+            identifier: PropTypes.string,
+            showName: PropTypes.string,
+        }),
         onInput: PropTypes.func,
     };
 
@@ -39,6 +44,8 @@ export default class SimplePersonFinder extends Component {
         className: null,
         showId: false,
         onInput: null,
+        customData: false,
+        orm: {},
     };
 
     static PERSON = PERSON_RELATION;
@@ -70,7 +77,12 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onChange, showId, customData, orm } = this.props;
+        const {
+            onChange,
+            showId,
+            customData,
+            orm,
+        } = this.props;
         const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
 
         this.setState({
