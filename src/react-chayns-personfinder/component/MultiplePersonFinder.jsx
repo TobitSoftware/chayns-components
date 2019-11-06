@@ -132,6 +132,8 @@ export default class MultiplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
+            values: null,
+            selectedValue: null,
         });
 
         if (onChange) {

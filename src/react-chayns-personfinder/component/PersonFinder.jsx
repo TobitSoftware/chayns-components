@@ -37,6 +37,7 @@ export default class PersonFinder extends Component {
         if (multiple) {
             return (
                 <MultiplePersonFinder
+                    ref={this.personFinder}
                     {...this.props}
                     autoLoading={!showPersons || !showSites}
                 />
