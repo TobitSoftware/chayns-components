@@ -1,22 +1,23 @@
-function shareWithUrl(provider, link) {
-    const openLink = provider.url.replace('{url}', link);
-    if (openLink.startsWith('mailto')) {
-        window.open(openLink);
+import { shareOptions } from './sharingProvider';
+
+function shareWithUrl(link) {
+    if (link.startsWith('mailto')) {
+        window.open(link);
     } else {
-        chayns.openUrlInBrowser(openLink);
+        chayns.openUrlInBrowser(link);
     }
 }
 
-function shareWithApp(provider, link) {
+function shareWithApp(provider, message) {
     const value = {
-        text: link,
+        text: message,
         sharingApp: provider.providerId > -1 ? provider.providerId : -1,
         sharingAndroidApp: provider.androidIdentifier || null,
     };
     chayns.share(value);
 }
 
-function copyToClipboard(provider, link) {
+function copyToClipboard(link) {
     const aux = document.createElement('input');
     const range = document.createRange();
     aux.setAttribute('value', link);
@@ -32,19 +33,42 @@ function copyToClipboard(provider, link) {
     document.body.removeChild(aux);
 }
 
-function webShareApi(provider, link) {
+function webShareApi(link, linkText) {
     navigator.share({
         url: link,
+        text: linkText,
     });
 }
 
-const actions = {
-    0: copyToClipboard,
-    1: shareWithUrl,
-    2: shareWithApp,
-    3: webShareApi,
-};
-
-export default function share(provider, link) {
-    actions[provider.action](provider, link);
+export default function share(provider, link, linkText) {
+    switch (provider.id) {
+    case shareOptions.COPY:
+        copyToClipboard(link);
+        break;
+    case shareOptions.MAIL: {
+        if (provider.useApp) {
+            shareWithApp(provider, `${linkText} ${link}`.trim());
+        } else {
+            shareWithUrl(provider.url.replace('{url}', `${linkText} ${link}`.trim()));
+        }
+        break;
+    }
+    case shareOptions.WHATSAPP:
+        shareWithUrl(provider.url.replace('{url}', `${linkText} ${link}`.trim()));
+        break;
+    case shareOptions.FACEBOOK:
+        shareWithUrl(provider.url.replace('{url}', link));
+        break;
+    case shareOptions.TWITTER:
+        shareWithUrl(provider.url.replace('{url}', link).replace('{linkText}', linkText));
+        break;
+    case shareOptions.CUSTOM_CHAYNS:
+        shareWithApp(provider, `${linkText} ${link}`.trim());
+        break;
+    case shareOptions.CUSTOM_ALL:
+        webShareApi(link, linkText);
+        break;
+    default:
+        break;
+    }
 }

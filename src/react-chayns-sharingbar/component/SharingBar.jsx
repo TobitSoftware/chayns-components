@@ -7,6 +7,7 @@ import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper
 export default class SharingBar extends Component {
     static propTypes = {
         link: PropTypes.string,
+        linkText: PropTypes.string,
         className: PropTypes.string,
         stopPropagation: PropTypes.bool,
         style: PropTypes.string,
@@ -14,6 +15,7 @@ export default class SharingBar extends Component {
 
     static defaultProps = {
         link: null,
+        linkText: '',
         className: null,
         stopPropagation: false,
         style: null,
@@ -29,7 +31,7 @@ export default class SharingBar extends Component {
 
     componentDidMount() {
         getAvailableShareProviders().then((provider) => {
-            const { link, stopPropagation } = this.props;
+            const { link, linkText, stopPropagation } = this.props;
 
             const sharingItems = [];
 
@@ -42,6 +44,7 @@ export default class SharingBar extends Component {
                             provider={item}
                             key={item.id}
                             link={link || getDefaultShareLink()}
+                            linkText={linkText}
                             stopPropagation={stopPropagation}
                         />
                     ));
