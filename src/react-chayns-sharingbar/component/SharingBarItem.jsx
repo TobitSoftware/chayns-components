@@ -5,6 +5,7 @@ import share from './sharingActions';
 import Icon from '../../react-chayns-icon/component/Icon';
 import Button from '../../react-chayns-button/component/Button';
 import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
+import { shareOptions } from './sharingProvider';
 
 export default class SharingBarItem extends Component {
     static propTypes = {
@@ -13,17 +14,22 @@ export default class SharingBarItem extends Component {
         provider: PropTypes.object.isRequired,
         link: PropTypes.string.isRequired,
         stopPropagation: PropTypes.bool.isRequired,
+        linkText: PropTypes.string,
+    };
+
+    static defaultProps = {
+        linkText: '',
     };
 
     onClick = (e) => {
-        const { provider, link, stopPropagation } = this.props;
+        const {
+            link,
+            linkText,
+            provider,
+            stopPropagation,
+        } = this.props;
 
-        if (provider.id === 2 && provider.action === 1) {
-            const linkToShare = link ? link.replace('=', '%3D') : '';
-            share(provider, linkToShare);
-        } else {
-            share(provider, link);
-        }
+        share(provider, link, linkText);
 
         if (stopPropagation) e.stopPropagation();
     };
@@ -35,7 +41,7 @@ export default class SharingBarItem extends Component {
             provider,
         } = this.props;
 
-        if (provider.action === 0) {
+        if (provider.id === shareOptions.COPY) {
             return (
                 <Tooltip content={{ text: 'Kopiert.' }} ref={ref => this.tooltip = ref} removeIcon>
                     <Button
