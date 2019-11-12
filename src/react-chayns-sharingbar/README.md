@@ -7,13 +7,13 @@ The SharingBar is part of the *chayns-components* package. It can be installed v
 
 ## Usage of the SharingBar ##
 
-At least one of the components has to be imported:
+Import the component:
 
 ```jsx harmony
 import { SharingBar } from 'chayns-components';
 ```
 
-You can use the SharingBar like this:
+You can then use the SharingBar like this:
 
 ```jsx harmony
 <SharingBar/>
@@ -23,11 +23,12 @@ You can use the SharingBar like this:
 
 The following properties can be set on the SharingBar-Component
 
-| Property   | Description                                                                                        | Type    | Default Value |
-|------------|-----------------------------------------------------------------------------------------------------|--------|--------------|
-| link | The link shared by the SharingBar                                                           | String | Link to the current Tapp |
-| className | Additional CSS-Classes that should be set to the button                                                        | String |
-| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
+| Property          | Description                                                | Type   | Default Value            |
+|-------------------|------------------------------------------------------------|--------|--------------------------|
+| link              | The link shared by the SharingBar                          | String | Link to the current Tapp |
+| linkText          | A message added in front of the shared link                | String |                          |
+| className         | Additional CSS-Classes that should be set to the button    | String |                          |
+| stopPropagation   | Stops the click propagation to parent elements             | bool   | false                    |
 
 
 ## Examples ##
