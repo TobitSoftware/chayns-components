@@ -5,83 +5,78 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 
+export const shareOptions = {
+    COPY: 0,
+    MAIL: 1,
+    WHATSAPP: 2,
+    FACEBOOK: 3,
+    TWITTER: 5,
+    CUSTOM_CHAYNS: 10,
+    CUSTOM_ALL: 11,
+};
+
 export const shareProvider = [
     {
-        id: 2,
+        id: shareOptions.WHATSAPP,
         providerId: 1,
         name: 'WhatsApp',
         androidIdentifier: 'com.whatsapp',
         icon: faWhatsapp,
-        action: 1,
         url: 'https://api.whatsapp.com/send?text={url}',
         available: true,
     },
     {
-        id: 0,
+        id: shareOptions.COPY,
         providerId: -1,
         name: 'Zwischenablage',
         androidIdentifier: null,
         icon: faCopy,
-        action: 0,
         url: null,
         available: true,
     },
     {
-        id: 1,
+        id: shareOptions.MAIL,
         providerId: 0,
         name: 'Mail',
         androidIdentifier: null,
         icon: faEnvelope,
-        action: 1,
         url: 'mailto:?body={url}',
         available: true,
     },
     {
-        id: 3,
+        id: shareOptions.FACEBOOK,
         providerId: 2,
         name: 'Facebook',
         androidIdentifier: 'com.facebook.katana',
         icon: faFacebookF,
-        action: 1,
         url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
         available: true,
     },
     {
-        id: 5,
+        id: shareOptions.TWITTER,
         providerId: 5,
         name: 'Twitter',
         androidIdentifier: null,
         icon: faTwitter,
-        action: 1,
-        url: 'http://twitter.com/intent/tweet?text=&url={url}&hashtags=chayns',
+        url: 'http://twitter.com/intent/tweet?text={linkText}&url={url}&hashtags=chayns',
         available: true,
     },
     {
-        id: 10,
+        id: shareOptions.CUSTOM_CHAYNS,
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
         icon: faShareAlt,
-        action: 2,
         url: null,
         available: false,
     },
     {
-        id: 11,
+        id: shareOptions.CUSTOM_ALL,
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
         icon: faShareAlt,
-        action: 3,
         url: null,
         available: false,
     },
-
 ];
-
-export const shareActions = {
-    copyToClipboard: 0,
-    shareWithUrl: 1,
-    shareWithApp: 2,
-    webShareApi: 3,
-};
