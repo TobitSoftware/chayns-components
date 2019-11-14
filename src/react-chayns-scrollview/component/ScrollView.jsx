@@ -54,7 +54,7 @@ export default class ScrollView extends Component {
     }
 
     setContentWidth() {
-        this.setState({ contentWidth: Math.ceil(this.content.getBoundingClientRect().width) - Math.floor(this.children.getBoundingClientRect().width) });
+        this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width + 1 });
     }
 
     handleRefreshScrollView = () => {
