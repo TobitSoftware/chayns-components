@@ -49,18 +49,18 @@ export default function share(provider, link, linkText) {
         if (provider.useApp) {
             shareWithApp(provider, `${linkText} ${link}`.trim());
         } else {
-            shareWithUrl(provider.url.replace('{url}', `${linkText} ${link}`.trim()));
+            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
         }
         break;
     }
     case shareOptions.WHATSAPP:
-        shareWithUrl(provider.url.replace('{url}', `${linkText} ${link}`.trim()));
+        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
         break;
     case shareOptions.FACEBOOK:
-        shareWithUrl(provider.url.replace('{url}', link));
+        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)));
         break;
     case shareOptions.TWITTER:
-        shareWithUrl(provider.url.replace('{url}', link).replace('{linkText}', linkText));
+        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)).replace('{linkText}', encodeURIComponent(linkText)));
         break;
     case shareOptions.CUSTOM_CHAYNS:
         shareWithApp(provider, `${linkText} ${link}`.trim());
