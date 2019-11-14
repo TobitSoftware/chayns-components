@@ -72,9 +72,9 @@ export default class MultiplePersonFinder extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { value } = this.state;
+        const { inputValue } = this.state;
 
-        if (!value && prevState.inputValue) {
+        if (!inputValue && prevState.inputValue) {
             this.input.focus();
         }
     }
