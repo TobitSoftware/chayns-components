@@ -2,6 +2,33 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 
+const customData = [
+    {
+        email: 'herrmann.muster@uni-muenster.de',
+        displayName: 'Herrmann Muster',
+        imageUrl: 'https://sub60.tobit.com/u/-1',
+        shortHand: 'HM',
+        firstName: 'Herrmann',
+        lastName: 'Muster',
+    },
+    {
+        email: 'max.muster@tobit.software',
+        displayName: 'Max Muster',
+        imageUrl: 'https://sub60.tobit.com/u/-1',
+        shortHand: 'MM',
+        firstName: 'Max',
+        lastName: 'Muster',
+    },
+    {
+        email: 'bill.tester@tobit.software',
+        displayName: 'Bill Tester',
+        imageUrl: 'https://sub60.tobit.com/u/-1',
+        shortHand: 'BT',
+        firstName: 'Bill',
+        lastName: 'Tester',
+    },
+];
+
 export default class PersonFinderExample extends PureComponent {
     static handleSelect(user) {
         chayns.dialog.alert(JSON.stringify(user, null, 2));
@@ -15,6 +42,8 @@ export default class PersonFinderExample extends PureComponent {
         console.log('removed', user);
     }
 
+    state = { data: customData.slice(0, 1), value: '' }
+
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
@@ -23,6 +52,7 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
+        const { data, value } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
@@ -86,6 +116,34 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => { this.personFinder = ref; }}
                     dynamic
                     placeholder="Users"
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
+                    dynamic
+                    placeholder="Users (Custom)"
+                    customData
+                    orm={{
+                        showName: 'displayName',
+                        identifier: 'email',
+                        search: ['email', 'displayName', 'shortHand'],
+                        imageUrl: 'imageUrl',
+                    }}
+                    data={value.length > 2 ? data : []}
+                    onInput={value => this.setState({ value })}
+                    hasMore={this.state.data.length < customData.length}
+                    multiple
+                    onLoadMore={async () => {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        this.setState(state => ({
+                            data: customData.slice(0, state.data.length + 1),
+                        }));
+                    }}
+                    defaultValues={[
+                        { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
+                        { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
+                    ]}
+                    onAdd={() => this.setState({ value: '' })}
+                    onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder

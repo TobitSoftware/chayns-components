@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderData from './PersonFinderData';
+import PersonFinderView from './PersonFinderView';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import normalizeOutput from '../utils/normalizeOutput';
@@ -35,6 +36,12 @@ export default class MultiplePersonFinder extends Component {
         onAdd: PropTypes.func,
         onRemove: PropTypes.func,
         showId: PropTypes.bool,
+        onInput: PropTypes.func,
+        customData: PropTypes.bool,
+        orm: PropTypes.shape({
+            showName: PropTypes.string,
+            identifier: PropTypes.string,
+        }),
     };
 
     static defaultProps = {
@@ -47,6 +54,9 @@ export default class MultiplePersonFinder extends Component {
         onRemove: null,
         showId: false,
         defaultValues: [],
+        onInput: null,
+        customData: false,
+        orm: {},
     };
 
     static PERSON = PERSON_RELATION;
@@ -59,10 +69,18 @@ export default class MultiplePersonFinder extends Component {
         this.state = {
             inputValue: createInputValue(props.defaultValue, props.showId) || '',
             selectedValue: !!props.defaultValue,
-            values: props.defaultValues.map(v => ({
-                text: createInputValue(v, props.showId) || '',
-                value: v,
-            })),
+            values: props.defaultValues.map((v) => {
+                if (v === Object(v) && props.customData && props.orm) {
+                    return {
+                        text: v[props.orm.showName],
+                        value: v,
+                    };
+                }
+                return {
+                    text: createInputValue(v, props.showId) || '',
+                    value: v,
+                };
+            }),
         };
 
         this.clear = this.clear.bind(this);
@@ -80,20 +98,32 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
+        const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
+        if (onInput) {
+            onInput(inputValue);
+        }
     }
 
     handleTagRemove(tag) {
-        const { onRemove } = this.props;
+        const { customData, orm, onRemove } = this.props;
         const { values } = this.state;
-        const { value } = tag;
+        const { value } = tag || {};
 
-        this.setState({
-            values: values.filter(r => r.value.type !== value.type || r.value.personId !== value.personId || r.value.siteId !== value.siteId),
-        });
+        if (!value) return;
+
+        if (customData) {
+            this.setState({
+                values: values.filter(r => r.value[orm.identifier] !== value[orm.identifier]),
+            });
+        } else {
+            this.setState({
+                values: values.filter(r => r.value.type !== value.type || r.value.personId !== value.personId || r.value.siteId !== value.siteId),
+            });
+        }
 
         if (onRemove) {
             onRemove(value);
@@ -101,17 +131,25 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleSelect(type, value) {
-        const { onAdd, showId } = this.props;
+        const {
+            onAdd, showId, customData, orm,
+        } = this.props;
         const { values } = this.state;
-        const name = convertToInputValue(value, showId);
+        const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
 
-        if (values.find(v => (v.value.type === type
+        if (!customData && values.find(v => (v.value.type === type
             && v.value.siteId === value.siteId
             && v.value.personId === value.personId))) {
             return;
         }
 
-        const outValue = normalizeOutput(type, value);
+        if (customData && values.find(v => v.value[orm.identifier] === value[orm.identifier])) {
+            return;
+        }
+
+        const outValue = customData ? {
+            ...value,
+        } : normalizeOutput(type, value);
 
         this.setState({
             inputValue: '',
@@ -146,7 +184,7 @@ export default class MultiplePersonFinder extends Component {
             showPersons,
             showSites,
             className,
-            value: propValue, /* eslint-disable-line react/prop-types */
+            customData,
             defaultValue,
             showId,
             ...props
@@ -155,8 +193,8 @@ export default class MultiplePersonFinder extends Component {
 
         return (
             <div className={classnames('cc__person-finder', className)}>
-                <FriendsDataContainer>
-                    <PersonFinderData
+                {customData ? (
+                    <PersonFinderView
                         {...props}
                         inputComponent={TagInput}
                         inputRef={(ref) => { this.input = ref; }}
@@ -164,12 +202,26 @@ export default class MultiplePersonFinder extends Component {
                         tags={values}
                         selectedValue={selectedValue}
                         onChange={this.handleOnChange}
-                        onSelect={this.handleSelect}
                         onRemoveTag={this.handleTagRemove}
-                        persons={showPersons}
-                        sites={showSites}
+                        onSelect={this.handleSelect}
                     />
-                </FriendsDataContainer>
+                ) : (
+                    <FriendsDataContainer>
+                        <PersonFinderData
+                            {...props}
+                            inputComponent={TagInput}
+                            inputRef={(ref) => { this.input = ref; }}
+                            value={inputValue}
+                            tags={values}
+                            selectedValue={selectedValue}
+                            onChange={this.handleOnChange}
+                            onSelect={this.handleSelect}
+                            onRemoveTag={this.handleTagRemove}
+                            persons={showPersons}
+                            sites={showSites}
+                        />
+                    </FriendsDataContainer>
+                )}
             </div>
         );
     }

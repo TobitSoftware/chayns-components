@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import getText from '../utils/getText';
 import Button from '../../react-chayns-button/component/Button';
 
-const LoadMore = ({ onClick, type }) => {
+const LoadMore = ({ onClick, type, hide }) => {
     const handleClick = useCallback(() => {
         if (onClick) {
             onClick(type);
@@ -18,6 +18,7 @@ const LoadMore = ({ onClick, type }) => {
                 display: 'flex',
                 justifyContent: 'center',
                 padding: '20px 0',
+                ...(hide ? { display: 'none' } : {}),
             }}
         >
             <Button
@@ -32,6 +33,11 @@ const LoadMore = ({ onClick, type }) => {
 LoadMore.propTypes = {
     onClick: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
+    hide: PropTypes.bool,
+};
+
+LoadMore.defaultProps = {
+    hide: false,
 };
 
 export default LoadMore;
