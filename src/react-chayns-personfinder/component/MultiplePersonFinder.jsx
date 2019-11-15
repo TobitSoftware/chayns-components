@@ -163,6 +163,8 @@ export default class MultiplePersonFinder extends Component {
         if (onAdd) {
             onAdd(outValue);
         }
+
+        this.inputRef.focus();
     }
 
     clear() {

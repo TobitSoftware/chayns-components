@@ -50,6 +50,7 @@ export default class InputBox extends Component {
         this.handleFocus = this.handleFocus.bind(this);
         this.updatePosition = this.updatePosition.bind(this);
         this.blur = this.blur.bind(this);
+        this.focus = this.focus.bind(this);
     }
 
     componentDidMount() {
@@ -115,6 +116,12 @@ export default class InputBox extends Component {
         }
 
         return null;
+    }
+
+    focus() {
+        this.setState({
+            hidden: false,
+        });
     }
 
     async updatePosition() {
