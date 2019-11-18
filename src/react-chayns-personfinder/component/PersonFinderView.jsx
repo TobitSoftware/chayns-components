@@ -80,6 +80,7 @@ class PersonFinderView extends Component {
             boxClassName,
             parent,
             orm,
+            boxRef,
             ...props
         } = this.props;
 
@@ -88,6 +89,7 @@ class PersonFinderView extends Component {
                 parent={parent}
                 key="single"
                 inputComponent={inputComponent}
+                ref={boxRef}
                 onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
                 onChange={this.handleOnChange}
@@ -123,6 +125,7 @@ PersonFinderView.propTypes = {
     inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
     boxClassName: PropTypes.string,
     parent: PropTypes.instanceOf(Element),
+    boxRef: PropTypes.func,
 };
 
 PersonFinderView.defaultProps = {
@@ -133,6 +136,7 @@ PersonFinderView.defaultProps = {
     selectedValue: false,
     boxClassName: null,
     parent: document.querySelector('.tapp'),
+    boxRef: null,
 };
 
 export default PersonFinderView;

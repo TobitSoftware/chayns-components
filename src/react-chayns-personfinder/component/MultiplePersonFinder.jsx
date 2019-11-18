@@ -164,8 +164,8 @@ export default class MultiplePersonFinder extends Component {
             onAdd(outValue);
         }
 
-        if (this.inputRef) {
-            this.inputRef.focus();
+        if (this.boxRef) {
+            setImmediate(this.boxRef.focus);
         }
     }
 
@@ -202,6 +202,7 @@ export default class MultiplePersonFinder extends Component {
                         {...props}
                         inputComponent={TagInput}
                         inputRef={(ref) => { this.input = ref; }}
+                        boxRef={(ref) => { this.boxRef = ref; }}
                         value={inputValue}
                         tags={values}
                         selectedValue={selectedValue}
@@ -215,6 +216,7 @@ export default class MultiplePersonFinder extends Component {
                             {...props}
                             inputComponent={TagInput}
                             inputRef={(ref) => { this.input = ref; }}
+                            boxRef={(ref) => { this.boxRef = ref; }}
                             value={inputValue}
                             tags={values}
                             selectedValue={selectedValue}
