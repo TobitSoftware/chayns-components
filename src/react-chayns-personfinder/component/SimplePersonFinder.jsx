@@ -66,7 +66,13 @@ export default class SimplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue) {
-        const { onInput } = this.props;
+        const { onInput, onChange } = this.props;
+        const { selectedValue } = this.state;
+
+        if (selectedValue) {
+            onChange(null);
+        }
+
         this.setState({
             inputValue,
             selectedValue: false,
