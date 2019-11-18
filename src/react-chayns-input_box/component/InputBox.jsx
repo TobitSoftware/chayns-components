@@ -190,6 +190,7 @@ export default class InputBox extends Component {
                     <CSSTransition
                         in={!!(position && !hidden && children)}
                         timeout={200}
+                        mountOnEnter
                         classNames="fade"
                     >
                         <div
