@@ -96,7 +96,9 @@ export default class ContextMenu extends Component {
         } else {
             this.show();
         }
-        if (stopPropagation) e.stopPropagation();
+        if (stopPropagation) {
+            e.stopPropagation();
+        }
     }
 
     onLayerClick(e) {
@@ -179,6 +181,7 @@ export default class ContextMenu extends Component {
             childrenClassName,
             className,
             style,
+            stopPropagation,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -197,7 +200,12 @@ export default class ContextMenu extends Component {
                     {items.map(item => (
                         <li
                             className={classNames('context-menu__item', item.className)}
-                            onClick={item.onClick}
+                            onClick={(e) => {
+                                if (stopPropagation) {
+                                    e.stopPropagation();
+                                }
+                                item.onClick(e);
+                            }}
                             key={item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text}
                         >
                             {item.icon ? (
