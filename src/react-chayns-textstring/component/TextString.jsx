@@ -48,7 +48,7 @@ export default class TextString extends Component {
             let lang = TextString.languages.find(l => l.code === (language || TextString.language));
             lang = lang ? lang.value : 'Ger';
             if (!(TextString.textStrings[lang] && TextString.textStrings[lang][projectName])) {
-                fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json`)
+                fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json?ts=${Date.now()}`)
                     .then((response) => {
                         if (response.status === 200) {
                             response.json()
