@@ -34,6 +34,7 @@ export default class PersonFinderData extends Component {
         locationId: PropTypes.number,
         parent: PropTypes.instanceOf(Element),
         reducerFunction: PropTypes.func,
+        boxRef: PropTypes.func,
     };
 
     static defaultProps = {
@@ -50,6 +51,7 @@ export default class PersonFinderData extends Component {
         locationId: null,
         parent: document.querySelector('.tapp'),
         reducerFunction: null,
+        boxRef: null,
     };
 
     resultList = null;
@@ -424,6 +426,7 @@ export default class PersonFinderData extends Component {
             inputComponent,
             boxClassName,
             parent,
+            boxRef,
             ...props
         } = this.props;
 
@@ -432,6 +435,7 @@ export default class PersonFinderData extends Component {
                 parent={parent}
                 key="single"
                 inputComponent={inputComponent}
+                ref={boxRef}
                 value={value}
                 onChange={this.handleOnChange}
                 onFocus={this.handleOnFocus}

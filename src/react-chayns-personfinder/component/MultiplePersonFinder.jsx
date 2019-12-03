@@ -90,9 +90,9 @@ export default class MultiplePersonFinder extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { value } = this.state;
+        const { inputValue } = this.state;
 
-        if (!value && prevState.inputValue) {
+        if (!inputValue && prevState.inputValue) {
             this.input.focus();
         }
     }
@@ -163,6 +163,10 @@ export default class MultiplePersonFinder extends Component {
         if (onAdd) {
             onAdd(outValue);
         }
+
+        if (this.boxRef) {
+            setImmediate(this.boxRef.focus);
+        }
     }
 
     clear() {
@@ -170,6 +174,8 @@ export default class MultiplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
+            values: null,
+            selectedValue: null,
         });
 
         if (onChange) {
@@ -196,6 +202,7 @@ export default class MultiplePersonFinder extends Component {
                         {...props}
                         inputComponent={TagInput}
                         inputRef={(ref) => { this.input = ref; }}
+                        boxRef={(ref) => { this.boxRef = ref; }}
                         value={inputValue}
                         tags={values}
                         selectedValue={selectedValue}
@@ -209,6 +216,7 @@ export default class MultiplePersonFinder extends Component {
                             {...props}
                             inputComponent={TagInput}
                             inputRef={(ref) => { this.input = ref; }}
+                            boxRef={(ref) => { this.boxRef = ref; }}
                             value={inputValue}
                             tags={values}
                             selectedValue={selectedValue}

@@ -95,9 +95,10 @@ export default class Accordion extends PureComponent {
     constructor(props) {
         super(props);
         const { defaultOpened, open, className } = props;
-
+        const currentState = (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE;
         this.state = {
-            currentState: (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE,
+            currentState,
+            showBody: currentState === OPEN,
         };
     }
 
@@ -124,7 +125,7 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         const { autogrow, open } = this.props;
         const { currentState } = this.state;
         const { _body } = this;
@@ -136,7 +137,13 @@ export default class Accordion extends PureComponent {
                 _body.style.maxHeight = null;
             }
         }
-
+        if (currentState === CLOSE && prevState.currentState !== currentState) {
+            setTimeout(() => {
+                this.setState({
+                    showBody: false,
+                });
+            }, 500);
+        }
         if (open !== undefined) {
             if (open !== prevProps.open) {
                 if (open) {
@@ -207,9 +214,8 @@ export default class Accordion extends PureComponent {
 
     _getBody() {
         const { renderClosed, children, removeContentClosed } = this.props;
-        const { currentState } = this.state;
-
-        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed)) {
+        const { currentState, showBody } = this.state;
+        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed) || showBody) {
             this.rendered = true;
             return children;
         }
@@ -251,6 +257,7 @@ export default class Accordion extends PureComponent {
         }
         this.setState({
             currentState: OPEN,
+            showBody: true,
         });
 
         if (onOpen && !preventOnOpen) {

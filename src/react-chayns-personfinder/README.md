@@ -22,6 +22,9 @@ Then it can be used like in the following example:
 />
 ```
 
+| WARNING: Make sure the html document contains a &lt;div class="tapp" &gt;&lt;/div&gt;   |
+| --- |
+
 ## Props ##
 
 | Property      | Description                                                                                        | Type           | Default Value |

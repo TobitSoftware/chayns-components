@@ -100,6 +100,7 @@ export default class SimplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
+            selectedValue: false,
         });
 
         if (onChange) {

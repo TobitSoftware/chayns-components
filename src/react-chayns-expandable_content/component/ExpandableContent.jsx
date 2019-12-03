@@ -109,7 +109,7 @@ export default class ExpandableContent extends Component {
             currentState: (props.open ? OPENED : CLOSED),
         };
 
-        this.contentRendered = false;
+        this.contentRendered = props.open;
     }
 
     componentDidMount() {

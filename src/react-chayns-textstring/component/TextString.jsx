@@ -32,7 +32,7 @@ export default class TextString extends Component {
     static language = (chayns.env.language || navigator.language || 'de').substring(0, 2)
         .toLowerCase();
 
-    static getTextString(stringName, language) {
+    static getTextString(stringName, language, fallback = null) {
         let lang = TextString.languages.find(l => l.code === (language || TextString.language));
         lang = lang ? lang.value : 'Ger';
         const { textStrings } = TextString;
@@ -40,7 +40,7 @@ export default class TextString extends Component {
         const result = Object.keys(strings)
             .map(lib => (strings[lib][stringName] || null))
             .filter(x => x !== null)[0];
-        return result;
+        return result !== null ? result : fallback;
     }
 
     static loadLibrary(projectName, middle = 'langRes', language) {
@@ -48,7 +48,7 @@ export default class TextString extends Component {
             let lang = TextString.languages.find(l => l.code === (language || TextString.language));
             lang = lang ? lang.value : 'Ger';
             if (!(TextString.textStrings[lang] && TextString.textStrings[lang][projectName])) {
-                fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json`)
+                fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json?ts=${Date.now()}`)
                     .then((response) => {
                         if (response.status === 200) {
                             response.json()
