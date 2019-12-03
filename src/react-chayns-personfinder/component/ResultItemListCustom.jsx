@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import WaitCursor from './WaitCursor';
 import LoadMore from './LoadMore';
@@ -21,7 +21,7 @@ const ResultItemListCustom = ({
     }
 
     return (
-        <div className={classnames('cc__person-finder__results-list', className)}>
+        <div className={classNames('cc__person-finder__results-list', className)}>
             {data.map(relation => (
                 <PersonFinderResultItemCustom
                     key={relation[orm.identifier] || relation.personId || relation.siteId}

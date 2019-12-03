@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderData from './PersonFinderData';
@@ -10,55 +10,7 @@ import { convertToInputValue, createInputValue } from '../utils/createInputValue
 import normalizeOutput from '../utils/normalizeOutput';
 import FriendsDataContainer from './data/friends/FriendsDataContainer';
 
-export default class MultiplePersonFinder extends Component {
-    static propTypes = {
-        onChange: PropTypes.func,
-        showPersons: PropTypes.bool,
-        showSites: PropTypes.bool,
-        className: PropTypes.string,
-        defaultValue: PropTypes.oneOfType([
-            PropTypes.shape({
-                name: PropTypes.string,
-                firstName: PropTypes.string,
-                lastName: PropTypes.string,
-                siteId: PropTypes.string,
-                personId: PropTypes.string,
-            }),
-            PropTypes.string,
-        ]),
-        defaultValues: PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.string,
-            firstName: PropTypes.string,
-            lastName: PropTypes.string,
-            siteId: PropTypes.string,
-            personId: PropTypes.string,
-        })),
-        onAdd: PropTypes.func,
-        onRemove: PropTypes.func,
-        showId: PropTypes.bool,
-        onInput: PropTypes.func,
-        customData: PropTypes.bool,
-        orm: PropTypes.shape({
-            showName: PropTypes.string,
-            identifier: PropTypes.string,
-        }),
-    };
-
-    static defaultProps = {
-        onChange: null,
-        showPersons: true,
-        showSites: false,
-        defaultValue: null,
-        className: null,
-        onAdd: null,
-        onRemove: null,
-        showId: false,
-        defaultValues: [],
-        onInput: null,
-        customData: false,
-        orm: {},
-    };
-
+class MultiplePersonFinder extends Component {
     static PERSON = PERSON_RELATION;
 
     static LOCATION = LOCATION_RELATION;
@@ -70,9 +22,9 @@ export default class MultiplePersonFinder extends Component {
             inputValue: createInputValue(props.defaultValue, props.showId) || '',
             selectedValue: !!props.defaultValue,
             values: props.defaultValues.map((v) => {
-                if (v === Object(v) && props.customData && props.orm) {
+                if (v === Object(v) && props.customData && props.context.ObjectMapping) {
                     return {
-                        text: v[props.orm.showName],
+                        text: v[props.context.ObjectMapping.showName],
                         value: v,
                     };
                 }
@@ -109,7 +61,7 @@ export default class MultiplePersonFinder extends Component {
     }
 
     handleTagRemove(tag) {
-        const { customData, orm, onRemove } = this.props;
+        const { customData, context: { ObjectMapping: orm }, onRemove } = this.props;
         const { values } = this.state;
         const { value } = tag || {};
 
@@ -132,7 +84,7 @@ export default class MultiplePersonFinder extends Component {
 
     handleSelect(type, value) {
         const {
-            onAdd, showId, customData, orm,
+            onAdd, showId, customData, context: { ObjectMapping: orm },
         } = this.props;
         const { values } = this.state;
         const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
@@ -165,6 +117,7 @@ export default class MultiplePersonFinder extends Component {
         }
 
         if (this.boxRef) {
+            this.boxRef.updatePosition();
             setImmediate(this.boxRef.focus);
         }
     }
@@ -191,14 +144,48 @@ export default class MultiplePersonFinder extends Component {
             customData,
             defaultValue,
             showId,
+            context: Context,
             ...props
         } = this.props;
         const { inputValue, selectedValue, values } = this.state;
 
+        if (customData) {
+            return (
+                <div className={classNames('cc__person-finder', className)}>
+                    <Context.Provider>
+                        <Context.Consumer>
+                            {ctx => (
+                                <PersonFinderView
+                                    {...props}
+                                    {...ctx}
+                                    orm={Context.ObjectMapping}
+                                    inputComponent={TagInput}
+                                    inputRef={(ref) => { this.input = ref; }}
+                                    boxRef={(ref) => { this.boxRef = ref; }}
+                                    value={inputValue}
+                                    tags={values}
+                                    selectedValue={selectedValue}
+                                    onChange={(value) => {
+                                        this.handleOnChange(value);
+                                        if (typeof ctx.onChange === 'function') {
+                                            ctx.onChange(value);
+                                        }
+                                    }}
+                                    onRemoveTag={this.handleTagRemove}
+                                    onSelect={this.handleSelect}
+                                    ctxData={ctx}
+                                />
+                            )}
+                        </Context.Consumer>
+                    </Context.Provider>
+                </div>
+            );
+        }
+
         return (
-            <div className={classnames('cc__person-finder', className)}>
-                {customData ? (
-                    <PersonFinderView
+            <div className={classNames('cc__person-finder', className)}>
+                <FriendsDataContainer>
+                    <PersonFinderData
                         {...props}
                         inputComponent={TagInput}
                         inputRef={(ref) => { this.input = ref; }}
@@ -207,28 +194,66 @@ export default class MultiplePersonFinder extends Component {
                         tags={values}
                         selectedValue={selectedValue}
                         onChange={this.handleOnChange}
-                        onRemoveTag={this.handleTagRemove}
                         onSelect={this.handleSelect}
+                        onRemoveTag={this.handleTagRemove}
+                        persons={showPersons}
+                        sites={showSites}
                     />
-                ) : (
-                    <FriendsDataContainer>
-                        <PersonFinderData
-                            {...props}
-                            inputComponent={TagInput}
-                            inputRef={(ref) => { this.input = ref; }}
-                            boxRef={(ref) => { this.boxRef = ref; }}
-                            value={inputValue}
-                            tags={values}
-                            selectedValue={selectedValue}
-                            onChange={this.handleOnChange}
-                            onSelect={this.handleSelect}
-                            onRemoveTag={this.handleTagRemove}
-                            persons={showPersons}
-                            sites={showSites}
-                        />
-                    </FriendsDataContainer>
-                )}
+                </FriendsDataContainer>
             </div>
         );
     }
 }
+
+MultiplePersonFinder.propTypes = {
+    onChange: PropTypes.func,
+    showPersons: PropTypes.bool,
+    showSites: PropTypes.bool,
+    className: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.shape({
+            name: PropTypes.string,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            siteId: PropTypes.string,
+            personId: PropTypes.string,
+        }),
+        PropTypes.string,
+    ]),
+    defaultValues: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string,
+        firstName: PropTypes.string,
+        lastName: PropTypes.string,
+        siteId: PropTypes.string,
+        personId: PropTypes.string,
+    })),
+    onAdd: PropTypes.func,
+    onRemove: PropTypes.func,
+    showId: PropTypes.bool,
+    onInput: PropTypes.func,
+    customData: PropTypes.bool,
+    context: PropTypes.shape({
+        Provider: PropTypes.func,
+        Consumer: PropTypes.object,
+        ObjectMapping: PropTypes.shape({
+            showName: PropTypes.string,
+            identifier: PropTypes.string,
+        }),
+    }).isRequired,
+};
+
+MultiplePersonFinder.defaultProps = {
+    onChange: null,
+    showPersons: true,
+    showSites: false,
+    defaultValue: null,
+    className: null,
+    onAdd: null,
+    onRemove: null,
+    showId: false,
+    defaultValues: [],
+    onInput: null,
+    customData: false,
+};
+
+export default MultiplePersonFinder;

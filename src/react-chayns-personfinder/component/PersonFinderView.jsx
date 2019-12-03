@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import PersonFinderResultsCustom from './PersonFinderResultsCustom';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
@@ -13,7 +13,7 @@ class PersonFinderView extends Component {
 
     hasEntries() {
         const { data } = this.props;
-        return !!(data && data.length);
+        return !!(data && ((Array.isArray(data.data) && data.data.length) || Object.values(data.data).some(d => Array.isArray(d) && d.length)));
     }
 
     renderChildren() {
@@ -22,7 +22,6 @@ class PersonFinderView extends Component {
             selectedValue,
             data,
             orm,
-            hasMore,
             value,
             onLoadMore,
         } = this.props;
@@ -33,13 +32,13 @@ class PersonFinderView extends Component {
 
         const hasEntries = this.hasEntries();
 
-        if (!selectedValue && hasEntries) {
+        if (!selectedValue && hasEntries && value.length > 2) {
             const results = (
                 <PersonFinderResultsCustom
                     key="results"
                     sites={[]}
                     onSelect={onSelect}
-                    data={data.filter((v) => {
+                    data={(Array.isArray(data.data) ? data.data : data.data.persons).filter((v) => {
                         if (orm.search && orm.search.length) {
                             return orm.search.some(key => v[key] && v[key].toUpperCase().includes(value.toUpperCase()));
                         }
@@ -53,7 +52,7 @@ class PersonFinderView extends Component {
                         this.setState({ showWaitCursor: false });
                     }}
                     showWaitCursor={showWaitCursor}
-                    hasMore={hasMore}
+                    hasMore={data.hasMore}
                 />
             );
 
@@ -94,7 +93,7 @@ class PersonFinderView extends Component {
                 value={value}
                 onChange={this.handleOnChange}
                 onFocus={this.handleOnFocus}
-                boxClassName={classnames('cc__person-finder__overlay', boxClassName)}
+                boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => {
                         this.resultList = ref;

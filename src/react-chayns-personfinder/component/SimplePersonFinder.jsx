@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderData from './PersonFinderData';
@@ -11,43 +11,7 @@ import normalizeOutput from '../utils/normalizeOutput';
 import FriendsDataContainer from './data/friends/FriendsDataContainer';
 import { isFunction } from '../../utils/is';
 
-export default class SimplePersonFinder extends Component {
-    static propTypes = {
-        onChange: PropTypes.func,
-        showPersons: PropTypes.bool,
-        showSites: PropTypes.bool,
-        showId: PropTypes.bool,
-        className: PropTypes.string,
-        defaultValue: PropTypes.oneOfType([
-            PropTypes.shape({
-                name: PropTypes.string,
-                firstName: PropTypes.string,
-                lastName: PropTypes.string,
-                siteId: PropTypes.string,
-                personId: PropTypes.string,
-            }),
-            PropTypes.string,
-        ]),
-        customData: PropTypes.bool,
-        orm: PropTypes.shape({
-            identifier: PropTypes.string,
-            showName: PropTypes.string,
-        }),
-        onInput: PropTypes.func,
-    };
-
-    static defaultProps = {
-        onChange: null,
-        showPersons: true,
-        showSites: false,
-        defaultValue: null,
-        className: null,
-        showId: false,
-        onInput: null,
-        customData: false,
-        orm: {},
-    };
-
+class SimplePersonFinder extends Component {
     static PERSON = PERSON_RELATION;
 
     static LOCATION = LOCATION_RELATION;
@@ -81,9 +45,9 @@ export default class SimplePersonFinder extends Component {
             onChange,
             showId,
             customData,
-            orm,
+            context: Context,
         } = this.props;
-        const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
+        const name = customData ? value[Context.ObjectMapping.showName] : convertToInputValue(value, showId);
 
         this.setState({
             inputValue: name,
@@ -116,36 +80,92 @@ export default class SimplePersonFinder extends Component {
             showId,
             customData,
             defaultValue,
+            context: Context,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
 
+        if (customData) {
+            return (
+                <div className={classNames('cc__person-finder', className)}>
+                    <Context.Provider>
+                        <Context.Consumer>
+                            {ctx => (
+                                <PersonFinderView
+                                    {...props}
+                                    {...ctx}
+                                    orm={Context.ObjectMapping}
+                                    inputComponent={Input}
+                                    value={inputValue}
+                                    selectedValue={selectedValue}
+                                    onChange={this.handleOnChange}
+                                    onSelect={this.handleSelect}
+                                    ctxData={ctx}
+                                />
+                            )}
+                        </Context.Consumer>
+                    </Context.Provider>
+                </div>
+            );
+        }
+
         return (
-            <div className={classnames('cc__person-finder', className)}>
-                {customData ? (
-                    <PersonFinderView
+            <div className={classNames('cc__person-finder', className)}>
+                <FriendsDataContainer>
+                    <PersonFinderData
                         {...props}
                         inputComponent={Input}
                         value={inputValue}
                         selectedValue={selectedValue}
                         onChange={this.handleOnChange}
                         onSelect={this.handleSelect}
+                        persons={showPersons}
+                        sites={showSites}
                     />
-                ) : (
-                    <FriendsDataContainer>
-                        <PersonFinderData
-                            {...props}
-                            inputComponent={Input}
-                            value={inputValue}
-                            selectedValue={selectedValue}
-                            onChange={this.handleOnChange}
-                            onSelect={this.handleSelect}
-                            persons={showPersons}
-                            sites={showSites}
-                        />
-                    </FriendsDataContainer>
-                )}
+                </FriendsDataContainer>
             </div>
         );
     }
 }
+
+SimplePersonFinder.propTypes = {
+    onChange: PropTypes.func,
+    showPersons: PropTypes.bool,
+    showSites: PropTypes.bool,
+    showId: PropTypes.bool,
+    className: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.shape({
+            name: PropTypes.string,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            siteId: PropTypes.string,
+            personId: PropTypes.string,
+        }),
+        PropTypes.string,
+    ]),
+    customData: PropTypes.bool,
+    onInput: PropTypes.func,
+    context: PropTypes.shape({
+        Provider: PropTypes.func,
+        Consumer: PropTypes.object,
+        ObjectMapping: PropTypes.shape({
+            identifier: PropTypes.string,
+            showName: PropTypes.string,
+        }),
+    }).isRequired,
+};
+
+SimplePersonFinder.defaultProps = {
+    onChange: null,
+    showPersons: true,
+    showSites: false,
+    defaultValue: null,
+    className: null,
+    showId: false,
+    onInput: null,
+    customData: false,
+    orm: {},
+};
+
+export default SimplePersonFinder;

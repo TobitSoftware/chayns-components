@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
+import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
 
 const customData = [
     {
@@ -122,15 +123,7 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users (Custom)"
                     customData
-                    orm={{
-                        showName: 'displayName',
-                        identifier: 'email',
-                        search: ['email', 'displayName', 'shortHand'],
-                        imageUrl: 'imageUrl',
-                    }}
-                    data={value.length > 2 ? data : []}
-                    onInput={value => this.setState({ value })}
-                    hasMore={this.state.data.length < customData.length}
+                    context={UacGroupContext}
                     multiple
                     onLoadMore={async () => {
                         await new Promise(resolve => setTimeout(resolve, 2000));

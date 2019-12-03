@@ -3,26 +3,9 @@ import PropTypes from 'prop-types';
 
 import SimplePersonFinder from './SimplePersonFinder';
 import MultiplePersonFinder from './MultiplePersonFinder';
+import DefaultContext from './data/default/DefaultContext';
 
-export default class PersonFinder extends Component {
-    static propTypes = {
-        multiple: PropTypes.bool,
-        showPersons: PropTypes.bool,
-        showSites: PropTypes.bool,
-        uacId: PropTypes.number,
-        locationId: PropTypes.number,
-        reducerFunction: PropTypes.func,
-    };
-
-    static defaultProps = {
-        multiple: false,
-        showPersons: true,
-        showSites: false,
-        uacId: null,
-        locationId: null,
-        reducerFunction: null,
-    };
-
+class PersonFinder extends Component {
     personFinder = React.createRef();
 
     clear = () => {
@@ -34,18 +17,10 @@ export default class PersonFinder extends Component {
     render() {
         const { multiple, showPersons, showSites } = this.props;
 
-        if (multiple) {
-            return (
-                <MultiplePersonFinder
-                    ref={this.personFinder}
-                    {...this.props}
-                    autoLoading={!showPersons || !showSites}
-                />
-            );
-        }
+        const PersonFinderComponent = multiple ? MultiplePersonFinder : SimplePersonFinder;
 
         return (
-            <SimplePersonFinder
+            <PersonFinderComponent
                 ref={this.personFinder}
                 {...this.props}
                 autoLoading={!showPersons || !showSites}
@@ -53,3 +28,28 @@ export default class PersonFinder extends Component {
         );
     }
 }
+
+PersonFinder.propTypes = {
+    multiple: PropTypes.bool,
+    showPersons: PropTypes.bool,
+    showSites: PropTypes.bool,
+    uacId: PropTypes.number,
+    locationId: PropTypes.number,
+    reducerFunction: PropTypes.func,
+    context: PropTypes.shape({
+        Provider: PropTypes.func,
+        Consumer: PropTypes.object,
+    }),
+};
+
+PersonFinder.defaultProps = {
+    multiple: false,
+    showPersons: true,
+    showSites: false,
+    uacId: null,
+    locationId: null,
+    reducerFunction: null,
+    context: DefaultContext,
+};
+
+export default PersonFinder;

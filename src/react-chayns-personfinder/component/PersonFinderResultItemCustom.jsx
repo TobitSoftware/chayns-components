@@ -12,7 +12,7 @@ const PersonFinderResultItemCustom = ({ onClick, data, orm }) => {
 
     return (
         <div className="result-item" onClick={handleClick}>
-            <div className="img" style={{ backgroundImage: `url(${data[orm.imageUrl]})` }} />
+            {orm.imageUrl ? (<div className="img" style={{ backgroundImage: `url(${data[orm.imageUrl]})` }} />) : null}
             <div className="text">
                 <div
                     className="title"
