@@ -1,5 +1,10 @@
 import React, {
-    useState, useEffect, useRef, useCallback,
+    useState,
+    useEffect,
+    useRef,
+    useCallback,
+    useImperativeHandle,
+    forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -37,7 +42,7 @@ const getHsvColor = (color) => {
     };
 };
 
-export default function ColorPicker(props) {
+function ColorPicker(props, reference) {
     // references
     const bubbleRef = useRef(null);
     const bubbleContentRef = useRef(null);
@@ -101,6 +106,10 @@ export default function ColorPicker(props) {
     }, [setColorModel, colorModel]);
 
     const rgb255 = hsvToRgb(color);
+
+    useImperativeHandle(reference, () => ({
+        show: openBubble,
+    }));
 
     return [
         <div
@@ -222,3 +231,5 @@ ColorPicker.colorModels = {
     HEX: 0,
     RGB: 1,
 };
+
+export default forwardRef(ColorPicker);
