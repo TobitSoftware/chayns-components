@@ -6,12 +6,14 @@ import WaitCursor from './WaitCursor';
 import LoadMore from './LoadMore';
 import PersonFinderResultItemCustom from './PersonFinderResultItemCustom';
 import { PERSON_RELATION } from '../constants/relationTypes';
+import Divider from './Divider';
 
 const ResultItemListCustom = ({
     className,
     data,
     hasMore,
     orm,
+    separator,
     showWaitCursor,
     onLoadMore,
     onClick,
@@ -22,6 +24,12 @@ const ResultItemListCustom = ({
 
     return (
         <div className={classNames('cc__person-finder__results-list', className)}>
+            {separator && (
+                <Divider
+                    key={`${separator}-divider`}
+                    name={separator}
+                />
+            )}
             {data.map(relation => (
                 <PersonFinderResultItemCustom
                     key={relation[orm.identifier] || relation.personId || relation.siteId}
@@ -59,6 +67,7 @@ ResultItemListCustom.propTypes = {
     }).isRequired,
     onLoadMore: PropTypes.func,
     showWaitCursor: PropTypes.bool,
+    separator: PropTypes.string,
     hasMore: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
@@ -67,6 +76,7 @@ ResultItemListCustom.propTypes = {
 ResultItemListCustom.defaultProps = {
     data: [],
     showWaitCursor: false,
+    separator: null,
     hasMore: false,
     onClick: null,
     onLoadMore: null,

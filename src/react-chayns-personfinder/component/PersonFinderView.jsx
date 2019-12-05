@@ -11,9 +11,20 @@ class PersonFinderView extends Component {
         showWaitCursor: false,
     }
 
+    filter(data) {
+        const { value, orm } = this.props;
+
+        return (Array.isArray(data) ? data : []).filter((v) => {
+            if (orm.search && orm.search.length) {
+                return orm.search.some(key => v[key] && v[key].toUpperCase().includes(value.toUpperCase()));
+            }
+            return v[orm.identifier].toUpperCase().includes(value.toUpperCase()) || v[orm.showName].toUpperCase().includes(value.toUpperCase());
+        });
+    }
+
     hasEntries() {
         const { data } = this.props;
-        return !!(data && ((Array.isArray(data.data) && data.data.length) || Object.values(data.data).some(d => Array.isArray(d) && d.length)));
+        return !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
     }
 
     renderChildren() {
@@ -32,18 +43,12 @@ class PersonFinderView extends Component {
 
         const hasEntries = this.hasEntries();
 
-        if (!selectedValue && hasEntries && value.length > 2) {
+        if (!selectedValue && hasEntries) {
             const results = (
                 <PersonFinderResultsCustom
                     key="results"
-                    sites={[]}
                     onSelect={onSelect}
-                    data={(Array.isArray(data.data) ? data.data : data.data.persons).filter((v) => {
-                        if (orm.search && orm.search.length) {
-                            return orm.search.some(key => v[key] && v[key].toUpperCase().includes(value.toUpperCase()));
-                        }
-                        return v[orm.identifier].toUpperCase().includes(value.toUpperCase()) || v[orm.showName].toUpperCase().includes(value.toUpperCase());
-                    })}
+                    data={data}
                     orm={orm}
                     onLoadMore={async (...args) => {
                         if (!onLoadMore) return;

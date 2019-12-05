@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
+import PersonsContext from '../../src/react-chayns-personfinder/component/data/persons/PersonsContext';
 
 const customData = [
     {
@@ -123,7 +124,7 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users (Custom)"
                     customData
-                    context={UacGroupContext}
+                    context={PersonsContext}
                     multiple
                     onLoadMore={async () => {
                         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -136,6 +137,16 @@ export default class PersonFinderExample extends PureComponent {
                         { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
                     ]}
                     onAdd={() => this.setState({ value: '' })}
+                    onRemove={PersonFinderExample.handleRemove}
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
+                    dynamic
+                    placeholder="UAC Groups (Custom)"
+                    customData
+                    context={UacGroupContext}
+                    multiple
+                    onAdd={group => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />

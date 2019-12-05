@@ -100,7 +100,6 @@ class SimplePersonFinder extends Component {
                                     selectedValue={selectedValue}
                                     onChange={this.handleOnChange}
                                     onSelect={this.handleSelect}
-                                    ctxData={ctx}
                                 />
                             )}
                         </Context.Consumer>

@@ -173,7 +173,6 @@ class MultiplePersonFinder extends Component {
                                     }}
                                     onRemoveTag={this.handleTagRemove}
                                     onSelect={this.handleSelect}
-                                    ctxData={ctx}
                                 />
                             )}
                         </Context.Consumer>

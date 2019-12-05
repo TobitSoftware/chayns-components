@@ -19,12 +19,30 @@ const PersonFinderResultsCustom = ({
         }
     }, [onSelect]);
 
+    if (Array.isArray(orm.groups)) {
+        return orm.groups.map(group => (
+            <div className="cc__person-finder__results">
+                <ResultItemListCustom
+                    data={data[group] || []}
+                    orm={orm}
+                    type={PERSON_RELATION}
+                    separator={group}
+                    hasMore={hasMore}
+                    onLoadMore={onLoadMore}
+                    showWaitCursor={showWaitCursor}
+                    onClick={handleClick}
+                />
+            </div>
+        ));
+    }
+
     return (
         <div className="cc__person-finder__results">
             <ResultItemListCustom
                 data={data}
                 orm={orm}
                 type={PERSON_RELATION}
+                showSeparators={!!orm.groups}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}
                 showWaitCursor={showWaitCursor}
@@ -39,6 +57,7 @@ PersonFinderResultsCustom.propTypes = {
         identifier: PropTypes.string,
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
+        groups: PropTypes.array,
     }).isRequired,
     data: PropTypes.arrayOf(PropTypes.object),
     onSelect: PropTypes.func,

@@ -49,7 +49,7 @@ const DefaultStateProvider = ({ children, take }) => {
     return (
         <DefaultDataContext.Provider
             value={{
-                data,
+                ...data,
                 dispatch,
                 onLoadMore,
                 onChange,

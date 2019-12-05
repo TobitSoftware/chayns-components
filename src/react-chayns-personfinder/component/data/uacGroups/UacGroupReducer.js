@@ -16,8 +16,7 @@ export const reducer = (state = initialState, action) => {
     case 'RECEIVE_DATA':
         return {
             ...state,
-            // data: [...state.data, ...action.data],
-            data: { persons: action.data, sites: [] },
+            data: [...state.data, ...action.data],
             showWaitCursor: false,
             isLoading: false,
             hasMore: action.hasMore,

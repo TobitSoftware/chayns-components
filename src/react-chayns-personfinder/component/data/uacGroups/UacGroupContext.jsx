@@ -20,11 +20,11 @@ const DefaultStateProvider = ({ children }) => {
     useEffect(() => {
         (async () => {
             dispatch({ type: 'REQUEST_DATA', showWaitCursor: true, clear: true });
-            const users = await fetchGroups();
-            if (users) {
+            const groups = await fetchGroups();
+            if (groups) {
                 dispatch({
                     type: 'RECEIVE_DATA',
-                    data: users,
+                    data: groups,
                     hasMore: false,
                 });
             }
@@ -34,7 +34,7 @@ const DefaultStateProvider = ({ children }) => {
     return (
         <DefaultDataContext.Provider
             value={{
-                data,
+                ...data,
                 dispatch,
                 onLoadMore: null,
                 onChange: () => undefined,
