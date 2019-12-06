@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import SimplePersonFinder from './SimplePersonFinder';
 import MultiplePersonFinder from './MultiplePersonFinder';
-import DefaultContext from './data/default/DefaultContext';
+import PersonsContext from './data/persons/PersonsContext';
 
 class PersonFinder extends Component {
     personFinder = React.createRef();
@@ -49,7 +49,7 @@ PersonFinder.defaultProps = {
     uacId: null,
     locationId: null,
     reducerFunction: null,
-    context: DefaultContext,
+    context: PersonsContext,
 };
 
 export default PersonFinder;

@@ -8,6 +8,7 @@ import ResultItemListCustom from './ResultItemListCustom';
 const PersonFinderResultsCustom = ({
     data,
     orm,
+    value: inputValue,
     hasMore,
     onLoadMore,
     showWaitCursor,
@@ -19,21 +20,23 @@ const PersonFinderResultsCustom = ({
         }
     }, [onSelect]);
 
+    console.log('data', data, hasMore, onLoadMore);
+
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(group => (
-            <div className="cc__person-finder__results">
+        return orm.groups.map(({ key: group, lang, show }) => (typeof show === 'function' && !show(inputValue) ? null : (
+            <div className="cc__person-finder__results" key={`resultList_${group}`}>
                 <ResultItemListCustom
                     data={data[group] || []}
                     orm={orm}
                     type={PERSON_RELATION}
-                    separator={group}
+                    separator={lang[chayns.env.language] || lang.en}
                     hasMore={hasMore}
                     onLoadMore={onLoadMore}
                     showWaitCursor={showWaitCursor}
                     onClick={handleClick}
                 />
             </div>
-        ));
+        )));
     }
 
     return (
@@ -42,7 +45,6 @@ const PersonFinderResultsCustom = ({
                 data={data}
                 orm={orm}
                 type={PERSON_RELATION}
-                showSeparators={!!orm.groups}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}
                 showWaitCursor={showWaitCursor}
@@ -60,6 +62,7 @@ PersonFinderResultsCustom.propTypes = {
         groups: PropTypes.array,
     }).isRequired,
     data: PropTypes.arrayOf(PropTypes.object),
+    value: PropTypes.string,
     onSelect: PropTypes.func,
     onLoadMore: PropTypes.func.isRequired,
     hasMore: PropTypes.bool,
@@ -68,6 +71,7 @@ PersonFinderResultsCustom.propTypes = {
 
 PersonFinderResultsCustom.defaultProps = {
     data: [],
+    value: '',
     onSelect: null,
     hasMore: false,
     showWaitCursor: false,

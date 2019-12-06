@@ -34,6 +34,7 @@ class PersonFinderView extends Component {
             data,
             orm,
             value,
+            hasMore,
             onLoadMore,
         } = this.props;
 
@@ -50,6 +51,7 @@ class PersonFinderView extends Component {
                     onSelect={onSelect}
                     data={data}
                     orm={orm}
+                    value={value}
                     onLoadMore={async (...args) => {
                         if (!onLoadMore) return;
                         this.setState({ showWaitCursor: true });
@@ -57,7 +59,7 @@ class PersonFinderView extends Component {
                         this.setState({ showWaitCursor: false });
                     }}
                     showWaitCursor={showWaitCursor}
-                    hasMore={data.hasMore}
+                    hasMore={hasMore}
                 />
             );
 

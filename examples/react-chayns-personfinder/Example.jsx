@@ -123,7 +123,6 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     dynamic
                     placeholder="Users (Custom)"
-                    customData
                     context={PersonsContext}
                     multiple
                     onLoadMore={async () => {
@@ -132,10 +131,7 @@ export default class PersonFinderExample extends PureComponent {
                             data: customData.slice(0, state.data.length + 1),
                         }));
                     }}
-                    defaultValues={[
-                        { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
-                        { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
-                    ]}
+                    enableFriends
                     onAdd={() => this.setState({ value: '' })}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
@@ -143,7 +139,6 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     dynamic
                     placeholder="UAC Groups (Custom)"
-                    customData
                     context={UacGroupContext}
                     multiple
                     onAdd={group => console.log('add group', group)}

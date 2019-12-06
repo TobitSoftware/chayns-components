@@ -1,7 +1,10 @@
 import React from 'react';
 
 const FriendsContext = React.createContext({
-    value: null,
+    isFriend: () => console.warn('isFriend: no context provided'),
+    friends: [],
+    fetchFriends: () => console.warn('fetchFriends: no context provided'),
+    setFriend: () => console.warn('setFriend: no context provided'),
 });
 
 export default FriendsContext;

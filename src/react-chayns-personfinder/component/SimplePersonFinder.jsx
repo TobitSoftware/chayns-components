@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
-import PersonFinderData from './PersonFinderData';
 import PersonFinderView from './PersonFinderView';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import normalizeOutput from '../utils/normalizeOutput';
-import FriendsDataContainer from './data/friends/FriendsDataContainer';
 import { isFunction } from '../../utils/is';
 
 class SimplePersonFinder extends Component {
@@ -85,43 +83,26 @@ class SimplePersonFinder extends Component {
         } = this.props;
         const { inputValue, selectedValue } = this.state;
 
-        if (customData) {
-            return (
-                <div className={classNames('cc__person-finder', className)}>
-                    <Context.Provider>
-                        <Context.Consumer>
-                            {ctx => (
-                                <PersonFinderView
-                                    {...props}
-                                    {...ctx}
-                                    orm={Context.ObjectMapping}
-                                    inputComponent={Input}
-                                    value={inputValue}
-                                    selectedValue={selectedValue}
-                                    onChange={this.handleOnChange}
-                                    onSelect={this.handleSelect}
-                                />
-                            )}
-                        </Context.Consumer>
-                    </Context.Provider>
-                </div>
-            );
-        }
-
         return (
             <div className={classNames('cc__person-finder', className)}>
-                <FriendsDataContainer>
-                    <PersonFinderData
-                        {...props}
-                        inputComponent={Input}
-                        value={inputValue}
-                        selectedValue={selectedValue}
-                        onChange={this.handleOnChange}
-                        onSelect={this.handleSelect}
-                        persons={showPersons}
-                        sites={showSites}
-                    />
-                </FriendsDataContainer>
+                <Context.Provider
+                    enableFriends={this.props.enableFriends}
+                >
+                    <Context.Consumer>
+                        {ctx => (
+                            <PersonFinderView
+                                {...props}
+                                {...ctx}
+                                orm={Context.ObjectMapping}
+                                inputComponent={Input}
+                                value={inputValue}
+                                selectedValue={selectedValue}
+                                onChange={this.handleOnChange}
+                                onSelect={this.handleSelect}
+                            />
+                        )}
+                    </Context.Consumer>
+                </Context.Provider>
             </div>
         );
     }
@@ -164,7 +145,6 @@ SimplePersonFinder.defaultProps = {
     showId: false,
     onInput: null,
     customData: false,
-    orm: {},
 };
 
 export default SimplePersonFinder;

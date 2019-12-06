@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
-import PersonFinderData from './PersonFinderData';
 import PersonFinderView from './PersonFinderView';
 import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
 import { convertToInputValue, createInputValue } from '../utils/createInputValue';
 import normalizeOutput from '../utils/normalizeOutput';
-import FriendsDataContainer from './data/friends/FriendsDataContainer';
 
 class MultiplePersonFinder extends Component {
     static PERSON = PERSON_RELATION;
@@ -149,56 +147,35 @@ class MultiplePersonFinder extends Component {
         } = this.props;
         const { inputValue, selectedValue, values } = this.state;
 
-        if (customData) {
-            return (
-                <div className={classNames('cc__person-finder', className)}>
-                    <Context.Provider>
-                        <Context.Consumer>
-                            {ctx => (
-                                <PersonFinderView
-                                    {...props}
-                                    {...ctx}
-                                    orm={Context.ObjectMapping}
-                                    inputComponent={TagInput}
-                                    inputRef={(ref) => { this.input = ref; }}
-                                    boxRef={(ref) => { this.boxRef = ref; }}
-                                    value={inputValue}
-                                    tags={values}
-                                    selectedValue={selectedValue}
-                                    onChange={(value) => {
-                                        this.handleOnChange(value);
-                                        if (typeof ctx.onChange === 'function') {
-                                            ctx.onChange(value);
-                                        }
-                                    }}
-                                    onRemoveTag={this.handleTagRemove}
-                                    onSelect={this.handleSelect}
-                                />
-                            )}
-                        </Context.Consumer>
-                    </Context.Provider>
-                </div>
-            );
-        }
-
         return (
             <div className={classNames('cc__person-finder', className)}>
-                <FriendsDataContainer>
-                    <PersonFinderData
-                        {...props}
-                        inputComponent={TagInput}
-                        inputRef={(ref) => { this.input = ref; }}
-                        boxRef={(ref) => { this.boxRef = ref; }}
-                        value={inputValue}
-                        tags={values}
-                        selectedValue={selectedValue}
-                        onChange={this.handleOnChange}
-                        onSelect={this.handleSelect}
-                        onRemoveTag={this.handleTagRemove}
-                        persons={showPersons}
-                        sites={showSites}
-                    />
-                </FriendsDataContainer>
+                <Context.Provider
+                    enableFriends={this.props.enableFriends}
+                >
+                    <Context.Consumer>
+                        {ctx => (
+                            <PersonFinderView
+                                {...props}
+                                {...ctx}
+                                orm={Context.ObjectMapping}
+                                inputComponent={TagInput}
+                                inputRef={(ref) => { this.input = ref; }}
+                                boxRef={(ref) => { this.boxRef = ref; }}
+                                value={inputValue}
+                                tags={values}
+                                selectedValue={selectedValue}
+                                onChange={(value) => {
+                                    this.handleOnChange(value);
+                                    if (typeof ctx.onChange === 'function') {
+                                        ctx.onChange(value);
+                                    }
+                                }}
+                                onRemoveTag={this.handleTagRemove}
+                                onSelect={this.handleSelect}
+                            />
+                        )}
+                    </Context.Consumer>
+                </Context.Provider>
             </div>
         );
     }

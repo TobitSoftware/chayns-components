@@ -2,6 +2,8 @@
 
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import FriendsIndicator from './result-item/FriendsIndicator';
+import Relation from './result-item/Relation';
 
 const PersonFinderResultItemCustom = ({ onClick, data, orm }) => {
     const handleClick = useCallback(() => {
@@ -9,6 +11,8 @@ const PersonFinderResultItemCustom = ({ onClick, data, orm }) => {
             relation: data,
         });
     }, [onClick, data]);
+
+    const hasRelations = orm.relations && Array.isArray(data[orm.relations]) ? data[orm.relations].length > 0 : false;
 
     return (
         <div className="result-item" onClick={handleClick}>
@@ -18,11 +22,27 @@ const PersonFinderResultItemCustom = ({ onClick, data, orm }) => {
                     className="title"
                 >
                     <div className="name">{data[orm.showName]}</div>
+                    {hasRelations && (
+                        <div className="identifier">
+                            {`(${data[orm.identifier]})`}
+                        </div>
+                    )}
                 </div>
-                <div className="identifier">
-                    {`(${data[orm.identifier]})`}
-                </div>
+                {hasRelations && (
+                    <Relation relation={data} />
+                )}
+                {!hasRelations && (
+                    <div className="identifier">
+                        {`(${data[orm.identifier]})`}
+                    </div>
+                )}
             </div>
+            {data.personId && (
+                <FriendsIndicator
+                    personId={data.personId}
+                    name={data[orm.showName]}
+                />
+            )}
         </div>
     );
 };
@@ -32,6 +52,7 @@ PersonFinderResultItemCustom.propTypes = {
         identifier: PropTypes.string,
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
+        relations: PropTypes.string,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,

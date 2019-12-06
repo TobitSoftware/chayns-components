@@ -67,6 +67,22 @@ export const reducer = (state = initialState, action) => {
             showWaitCursor: false,
             isLoadingSites: false,
         };
+    case 'ADD_FRIEND':
+        return {
+            ...state,
+            data: {
+                ...state.data,
+                friends: [...state.data.friends, action.data],
+            },
+        };
+    case 'REMOVE_FRIEND':
+        return {
+            ...state,
+            data: {
+                ...state.data,
+                friends: state.data.friends.filter(friend => friend.personId !== action.data.personId),
+            },
+        };
     default:
         return state;
     }
