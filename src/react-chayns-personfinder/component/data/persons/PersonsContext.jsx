@@ -41,7 +41,7 @@ const DefaultStateProvider = ({
     children,
     take,
     enablePersons,
-    enableSite,
+    enableSites,
     enableFriends,
 }) => {
     const [data, dispatch] = useReducer(PersonsReducer, initialState);
@@ -92,38 +92,50 @@ const DefaultStateProvider = ({
         });
     }, 500), [take]);
 
-    const onLoadMore = useCallback(async (value) => {
-        if (value.length < 3) return;
+    const loadMorePersons = useCallback(async (value) => {
+        if (value.length < 3 || !enablePersons) return;
+
         dispatch({
             type: 'REQUEST_PERSONS',
             showWaitCursor: true,
         });
-        dispatch({
-            type: 'REQUEST_SITES',
-            showWaitCursor: true,
-        });
 
-        const [persons, sites] = await Promise.all([
-            fetchPersons(value, skipPersons, take),
-            fetchSites(value, skipSites, take),
-        ]);
+        const persons = await fetchPersons(value, skipPersons, take);
 
         dispatch({
             type: 'RECEIVE_PERSONS',
             data: convertPersons(persons),
             hasMore: persons.length === take,
         });
+    }, [skipPersons, take, enablePersons]);
+
+    const loadMoreSites = useCallback(async (value) => {
+        if (value.length < 3 || !enableSites) return;
+
+        dispatch({
+            type: 'REQUEST_SITES',
+            showWaitCursor: true,
+        });
+
+        const sites = await fetchSites(value, skipSites, take);
+
         dispatch({
             type: 'RECEIVE_SITES',
             data: convertSites(sites),
             hasMore: sites.length === take,
         });
-    }, [skipPersons, skipSites, take]);
+    }, [skipSites, take, enableSites]);
+
+    const onLoadMore = useCallback(async (type, value) => {
+        const promises = [];
+        if (!type || type === 'PERSON') promises.push(loadMorePersons(value));
+        if (!type || type === 'LOCATION') promises.push(loadMoreSites(value));
+        await Promise.all(promises);
+    }, [loadMorePersons, loadMoreSites]);
 
     const setFriend = useCallback(async (personId, name, friend = true) => {
         const success = await setFriendApi(personId, friend);
         if (success) {
-            // const user = await chayns.getUser({ personId });
             dispatch({
                 type: friend ? 'ADD_FRIEND' : 'REMOVE_FRIEND',
                 data: convertFriend({
@@ -162,11 +174,17 @@ DefaultStateProvider.propTypes = {
         PropTypes.node,
     ]),
     take: PropTypes.number,
+    enablePersons: PropTypes.bool,
+    enableSites: PropTypes.bool,
+    enableFriends: PropTypes.bool,
 };
 
 DefaultStateProvider.defaultProps = {
     children: null,
     take: 20,
+    enablePersons: true,
+    enableSites: false,
+    enableFriends: true,
 };
 
 export default {

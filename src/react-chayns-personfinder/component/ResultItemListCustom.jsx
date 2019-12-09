@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import WaitCursor from './WaitCursor';
 import LoadMore from './LoadMore';
 import PersonFinderResultItemCustom from './PersonFinderResultItemCustom';
-import { PERSON_RELATION } from '../constants/relationTypes';
+import {LOCATION_RELATION, PERSON_RELATION} from '../constants/relationTypes';
 import Divider from './Divider';
 
 const ResultItemListCustom = ({
@@ -14,6 +14,7 @@ const ResultItemListCustom = ({
     hasMore,
     orm,
     separator,
+    type,
     showWaitCursor,
     onLoadMore,
     onClick,
@@ -49,7 +50,7 @@ const ResultItemListCustom = ({
             {onLoadMore && hasMore && (
                 <LoadMore
                     key={`${PERSON_RELATION}-more`}
-                    type={PERSON_RELATION}
+                    type={type}
                     hide={showWaitCursor}
                     onClick={onLoadMore}
                 />
@@ -65,6 +66,7 @@ ResultItemListCustom.propTypes = {
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
     }).isRequired,
+    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION]).isRequired,
     onLoadMore: PropTypes.func,
     showWaitCursor: PropTypes.bool,
     separator: PropTypes.string,

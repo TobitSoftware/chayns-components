@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
+    LOCATION_RELATION,
     PERSON_RELATION,
 } from '../constants/relationTypes';
 import ResultItemListCustom from './ResultItemListCustom';
@@ -28,7 +29,7 @@ const PersonFinderResultsCustom = ({
                 <ResultItemListCustom
                     data={data[group] || []}
                     orm={orm}
-                    type={PERSON_RELATION}
+                    type={group !== 'sites' ? PERSON_RELATION : LOCATION_RELATION}
                     separator={lang[chayns.env.language] || lang.en}
                     hasMore={hasMore}
                     onLoadMore={onLoadMore}

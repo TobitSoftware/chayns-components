@@ -86,7 +86,9 @@ class SimplePersonFinder extends Component {
         return (
             <div className={classNames('cc__person-finder', className)}>
                 <Context.Provider
-                    enableFriends={this.props.enableFriends}
+                    enableFriends={!showSites && showPersons}
+                    enableSites={showSites}
+                    enablePersons={showPersons}
                 >
                     <Context.Consumer>
                         {ctx => (

@@ -11,14 +11,14 @@ const getRelations = (data) => {
         .slice(0, SHOW_RELATIONS_COUNT)
         .map(({ name, type }) => (type === 'LIVING_IN' ? `${getText(type, name)}` : name))
         .join(', ');
-}
+};
 
 const getFurtherRelations = (relation) => {
     if (!relation || !relation.relations) return null;
 
     const further = relation.relationCount - SHOW_RELATIONS_COUNT;
     return further > 0 ? ` +${String(further)}` : '';
-}
+};
 
 const Relation = ({ relation }) => {
     const relationString = getRelations(relation.relations);

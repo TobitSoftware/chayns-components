@@ -29,13 +29,13 @@ export const convertSites = sites => sites.map(site => ({
     id: site.siteId,
     name: site.locationName,
     imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
-}))
+}));
 
 export const convertFriend = friend => ({
     id: friend.personId,
     name: friend.fullName,
     personId: friend.personId,
     imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
-})
+});
 
 export const convertFriends = friends => friends.map(convertFriend);

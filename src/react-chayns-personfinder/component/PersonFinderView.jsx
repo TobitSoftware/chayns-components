@@ -52,10 +52,10 @@ class PersonFinderView extends Component {
                     data={data}
                     orm={orm}
                     value={value}
-                    onLoadMore={async (...args) => {
+                    onLoadMore={async (type) => {
                         if (!onLoadMore) return;
                         this.setState({ showWaitCursor: true });
-                        await onLoadMore(...args);
+                        await onLoadMore(type, value);
                         this.setState({ showWaitCursor: false });
                     }}
                     showWaitCursor={showWaitCursor}
