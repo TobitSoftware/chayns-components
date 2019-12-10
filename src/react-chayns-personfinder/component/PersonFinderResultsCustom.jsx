@@ -21,8 +21,6 @@ const PersonFinderResultsCustom = ({
         }
     }, [onSelect]);
 
-    console.log('data', data, hasMore, onLoadMore);
-
     if (Array.isArray(orm.groups)) {
         return orm.groups.map(({ key: group, lang, show }) => (typeof show === 'function' && !show(inputValue) ? null : (
             <div className="cc__person-finder__results" key={`resultList_${group}`}>
@@ -31,9 +29,9 @@ const PersonFinderResultsCustom = ({
                     orm={orm}
                     type={group !== 'sites' ? PERSON_RELATION : LOCATION_RELATION}
                     separator={lang[chayns.env.language] || lang.en}
-                    hasMore={hasMore}
+                    hasMore={hasMore[group]}
                     onLoadMore={onLoadMore}
-                    showWaitCursor={showWaitCursor}
+                    showWaitCursor={showWaitCursor[group]}
                     onClick={handleClick}
                 />
             </div>

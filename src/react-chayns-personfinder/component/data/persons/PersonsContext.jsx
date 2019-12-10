@@ -44,9 +44,9 @@ const DefaultStateProvider = ({
     enableSites,
     enableFriends,
 }) => {
-    const [data, dispatch] = useReducer(PersonsReducer, initialState);
-    const skipPersons = data.data.personsUnrelated.length + data.data.personsRelated.length;
-    const skipSites = data.data.sites.length;
+    const [state, dispatch] = useReducer(PersonsReducer, initialState);
+    const skipPersons = state.data.personsUnrelated.length + state.data.personsRelated.length;
+    const skipSites = state.data.sites.length;
 
     useEffect(() => {
         if (!enableFriends) return;
@@ -68,7 +68,7 @@ const DefaultStateProvider = ({
         if (value.length < 3) return;
         dispatch({
             type: 'REQUEST_PERSONS',
-            showWaitCursor: true,
+            showWaitCursor: { personsRelated: true, personsUnrelated: false },
             clear: true,
         });
         dispatch({
@@ -77,17 +77,18 @@ const DefaultStateProvider = ({
             clear: true,
         });
         const [persons, sites] = await Promise.all([
-            fetchPersons(value, 0, take),
-            fetchSites(value, 0, take),
+            enablePersons && fetchPersons(value, 0, take),
+            enableSites && fetchSites(value, 0, take),
         ]);
+        const convertedPersons = persons ? convertPersons(persons) : { personsRelated: [], personsUnrelated: [] };
         dispatch({
             type: 'RECEIVE_PERSONS',
-            data: convertPersons(persons),
-            hasMore: persons.length === take,
+            data: convertedPersons,
+            hasMore: { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take },
         });
         dispatch({
             type: 'RECEIVE_SITES',
-            data: convertSites(sites),
+            data: sites ? convertSites(sites) : [],
             hasMore: sites.length === take,
         });
     }, 500), [take]);
@@ -97,15 +98,19 @@ const DefaultStateProvider = ({
 
         dispatch({
             type: 'REQUEST_PERSONS',
-            showWaitCursor: true,
+            showWaitCursor: {
+                personsRelated: state.hasMore.personsRelated,
+                personsUnrelated: !state.hasMore.personsRelated,
+            },
         });
 
         const persons = await fetchPersons(value, skipPersons, take);
+        const convertedPersons = convertPersons(persons);
 
         dispatch({
             type: 'RECEIVE_PERSONS',
-            data: convertPersons(persons),
-            hasMore: persons.length === take,
+            data: convertedPersons,
+            hasMore: { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take },
         });
     }, [skipPersons, take, enablePersons]);
 
@@ -151,16 +156,17 @@ const DefaultStateProvider = ({
     return (
         <DefaultDataContext.Provider
             value={{
-                ...data,
+                ...state,
                 data: {
-                    ...data.data,
-                    friends: enableFriends ? data.data.friends : [],
+                    ...state.data,
+                    friends: enableFriends ? state.data.friends : [],
                 },
+                autoLoading: !enableSites && enablePersons,
                 dispatch,
                 onLoadMore,
                 onChange,
                 setFriend,
-                isFriend: personId => data.data.friends.findIndex(person => person.personId === personId) > -1,
+                isFriend: personId => state.data.friends.findIndex(person => person.personId === personId) > -1,
             }}
         >
             {children}

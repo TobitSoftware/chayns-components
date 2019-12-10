@@ -5,10 +5,32 @@ import classNames from 'classnames';
 import PersonFinderResultsCustom from './PersonFinderResultsCustom';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
+import { PERSON_RELATION } from '../constants/relationTypes';
+
+const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
     state = {
         showWaitCursor: false,
+    };
+
+    handleLazyLoad = async () => {
+        if (!this.resultList) return;
+
+        const { lazyLoading } = this.state;
+
+        const { value, autoLoading, onLoadMore } = this.props;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
+
+        if (onLoadMore && autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+            this.setState({
+                lazyLoading: true,
+            });
+            await onLoadMore(PERSON_RELATION, value);
+            this.setState({
+                lazyLoading: false,
+            });
+        }
     }
 
     filter(data) {
@@ -36,6 +58,7 @@ class PersonFinderView extends Component {
             value,
             hasMore,
             onLoadMore,
+            showWaitCursor: waitCursor,
         } = this.props;
 
         const {
@@ -58,7 +81,7 @@ class PersonFinderView extends Component {
                         await onLoadMore(type, value);
                         this.setState({ showWaitCursor: false });
                     }}
-                    showWaitCursor={showWaitCursor}
+                    showWaitCursor={waitCursor}
                     hasMore={hasMore}
                 />
             );
