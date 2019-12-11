@@ -23,6 +23,7 @@ const TextArea = ({
     onKeyUp,
     onKeyDown,
     value,
+    disabled,
     required,
     stopPropagation,
     reference,
@@ -94,7 +95,10 @@ const TextArea = ({
         ...styleProp,
     };
 
-    const classNames = classnames('input', className);
+    const classNames = classnames('input', {
+        'input--disabled': disabled,
+        className,
+    });
 
     return (
         <textarea
@@ -108,6 +112,7 @@ const TextArea = ({
             onKeyUp={onKeyUp}
             onKeyDown={onKeyDown}
             value={value}
+            disabled={disabled}
             onClick={stopPropagation ? event => event.stopPropagation() : null}
         />
     );
@@ -126,11 +131,13 @@ TextArea.defaultProps = {
     onKeyDown: null,
     autogrow: null,
     reference: null,
+    disabled: false,
     stopPropagation: false,
 };
 
 TextArea.propTypes = {
     style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    disabled: PropTypes.bool,
     className: PropTypes.string,
     placeholder: PropTypes.string,
     required: PropTypes.bool,
