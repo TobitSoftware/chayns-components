@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
-import { PERSON_RELATION } from '../constants/relationTypes';
 
 const LAZY_LOADING_SPACE = 100;
 
@@ -26,7 +25,7 @@ class PersonFinderView extends Component {
             this.setState({
                 lazyLoading: true,
             });
-            await onLoadMore(PERSON_RELATION, value);
+            await onLoadMore('default', value);
             this.setState({
                 lazyLoading: false,
             });

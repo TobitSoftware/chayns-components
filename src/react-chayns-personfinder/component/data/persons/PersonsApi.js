@@ -36,6 +36,11 @@ export const setFriend = async (personId, friendship = true) => {
 
 
 export const fetchPersons = async (value, skip, take) => {
+    if (!chayns.env.user.isAuthenticated) {
+        chayns.login();
+
+        return Promise.reject(new Error('Not authenticated'));
+    }
     let result = [];
     const response = await fetch(`${RELATIONS_SERVER_URL}person?query=${value}&skip=${skip}&take=${take}`, {
         method: 'GET',

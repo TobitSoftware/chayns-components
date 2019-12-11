@@ -4,21 +4,14 @@ import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderView from './PersonFinderView';
-import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
-import { convertToInputValue, createInputValue } from '../utils/createInputValue';
-import normalizeOutput from '../utils/normalizeOutput';
 import { isFunction } from '../../utils/is';
 
 class SimplePersonFinder extends Component {
-    static PERSON = PERSON_RELATION;
-
-    static LOCATION = LOCATION_RELATION;
-
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: createInputValue(props.defaultValue, props.showId) || '',
+            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
             selectedValue: !!props.defaultValue,
         };
 
@@ -41,11 +34,9 @@ class SimplePersonFinder extends Component {
     handleSelect(type, value) {
         const {
             onChange,
-            showId,
-            customData,
             context: Context,
         } = this.props;
-        const name = customData ? value[Context.ObjectMapping.showName] : convertToInputValue(value, showId);
+        const name = value[Context.ObjectMapping.showName];
 
         this.setState({
             inputValue: name,
@@ -53,7 +44,7 @@ class SimplePersonFinder extends Component {
         });
 
         if (onChange) {
-            onChange(customData ? value : normalizeOutput(type, value));
+            onChange(value);
         }
     }
 

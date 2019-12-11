@@ -4,33 +4,18 @@ import classNames from 'classnames';
 
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderView from './PersonFinderView';
-import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
-import { convertToInputValue, createInputValue } from '../utils/createInputValue';
-import normalizeOutput from '../utils/normalizeOutput';
 
 class MultiplePersonFinder extends Component {
-    static PERSON = PERSON_RELATION;
-
-    static LOCATION = LOCATION_RELATION;
-
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: createInputValue(props.defaultValue, props.showId) || '',
+            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
             selectedValue: !!props.defaultValue,
-            values: props.defaultValues.map((v) => {
-                if (v === Object(v) && props.customData && props.context.ObjectMapping) {
-                    return {
-                        text: v[props.context.ObjectMapping.showName],
-                        value: v,
-                    };
-                }
-                return {
-                    text: createInputValue(v, props.showId) || '',
-                    value: v,
-                };
-            }),
+            values: props.defaultValues.map(v => ({
+                text: v[props.context.ObjectMapping.showName],
+                value: v,
+            })),
         };
 
         this.clear = this.clear.bind(this);
@@ -59,21 +44,15 @@ class MultiplePersonFinder extends Component {
     }
 
     handleTagRemove(tag) {
-        const { customData, context: { ObjectMapping: orm }, onRemove } = this.props;
+        const { context: { ObjectMapping: orm }, onRemove } = this.props;
         const { values } = this.state;
         const { value } = tag || {};
 
         if (!value) return;
 
-        if (customData) {
-            this.setState({
-                values: values.filter(r => r.value[orm.identifier] !== value[orm.identifier]),
-            });
-        } else {
-            this.setState({
-                values: values.filter(r => r.value.type !== value.type || r.value.personId !== value.personId || r.value.siteId !== value.siteId),
-            });
-        }
+        this.setState({
+            values: values.filter(r => r.value[orm.identifier] !== value[orm.identifier]),
+        });
 
         if (onRemove) {
             onRemove(value);
@@ -82,24 +61,18 @@ class MultiplePersonFinder extends Component {
 
     handleSelect(type, value) {
         const {
-            onAdd, showId, customData, context: { ObjectMapping: orm },
+            onAdd, context: { ObjectMapping: orm },
         } = this.props;
         const { values } = this.state;
-        const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
+        const name = value[orm.showName];
 
-        if (!customData && values.find(v => (v.value.type === type
-            && v.value.siteId === value.siteId
-            && v.value.personId === value.personId))) {
+        if (values.find(v => v.value[orm.identifier] === value[orm.identifier])) {
             return;
         }
 
-        if (customData && values.find(v => v.value[orm.identifier] === value[orm.identifier])) {
-            return;
-        }
-
-        const outValue = customData ? {
+        const outValue = {
             ...value,
-        } : normalizeOutput(type, value);
+        };
 
         this.setState({
             inputValue: '',
@@ -139,7 +112,6 @@ class MultiplePersonFinder extends Component {
             showPersons,
             showSites,
             className,
-            customData,
             defaultValue,
             showId,
             context: Context,
@@ -209,7 +181,6 @@ MultiplePersonFinder.propTypes = {
     onRemove: PropTypes.func,
     showId: PropTypes.bool,
     onInput: PropTypes.func,
-    customData: PropTypes.bool,
     context: PropTypes.shape({
         Provider: PropTypes.func,
         Consumer: PropTypes.object,
@@ -231,7 +202,6 @@ MultiplePersonFinder.defaultProps = {
     showId: false,
     defaultValues: [],
     onInput: null,
-    customData: false,
 };
 
 export default MultiplePersonFinder;
