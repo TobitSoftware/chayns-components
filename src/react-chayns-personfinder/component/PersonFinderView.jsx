@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import PersonFinderResultsCustom from './PersonFinderResultsCustom';
+import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 import { PERSON_RELATION } from '../constants/relationTypes';
@@ -69,7 +69,7 @@ class PersonFinderView extends Component {
 
         if (!selectedValue && hasEntries) {
             const results = (
-                <PersonFinderResultsCustom
+                <PersonFinderResults
                     key="results"
                     onSelect={onSelect}
                     data={data}
@@ -146,6 +146,7 @@ PersonFinderView.propTypes = {
         imageUrl: PropTypes.string,
     }).isRequired,
     data: PropTypes.arrayOf(PropTypes.object),
+    autoLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     onSelect: PropTypes.func.isRequired,
     onLoadMore: PropTypes.func,
@@ -155,17 +156,20 @@ PersonFinderView.propTypes = {
     boxClassName: PropTypes.string,
     parent: PropTypes.instanceOf(Element),
     boxRef: PropTypes.func,
+    showWaitCursor: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.bool), PropTypes.bool]),
 };
 
 PersonFinderView.defaultProps = {
     value: '',
     data: [],
+    autoLoading: false,
     hasMore: false,
     onLoadMore: null,
     selectedValue: false,
     boxClassName: null,
     parent: document.querySelector('.tapp'),
     boxRef: null,
+    showWaitCursor: false,
 };
 
 export default PersonFinderView;

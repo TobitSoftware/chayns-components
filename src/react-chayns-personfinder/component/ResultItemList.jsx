@@ -1,79 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
-import Divider from './Divider';
 import WaitCursor from './WaitCursor';
-import {
-    FRIEND_RELATION,
-    LOCATION_RELATION,
-    LOCATION_UNRELATED,
-    PERSON_RELATION,
-    PERSON_UNRELATED,
-} from '../constants/relationTypes';
 import LoadMore from './LoadMore';
-import getText from '../utils/getText';
 import PersonFinderResultItem from './PersonFinderResultItem';
-
-function getDividerText(type) {
-    switch (type) {
-    case FRIEND_RELATION:
-        return getText('DIVIDER_FRIEND');
-    case PERSON_RELATION:
-        return getText('DIVIDER_PERSON');
-    case PERSON_UNRELATED:
-        return getText('DIVIDER_MORE_PERSON');
-    case LOCATION_RELATION:
-        return getText('DIVIDER_SITE');
-    case LOCATION_UNRELATED:
-        return getText('DIVIDER_MORE_SITE');
-    default:
-        return null;
-    }
-}
+import Divider from './Divider';
 
 const ResultItemList = ({
     className,
-    relations,
-    type,
-    showSeparators,
+    data,
     hasMore,
+    orm,
+    separator,
+    group,
     showWaitCursor,
     onLoadMore,
     onClick,
 }) => {
-    if (!relations || relations.length === 0) {
+    if (!data || data.length === 0) {
         return null;
     }
 
     return (
-        <div className={classnames('cc__person-finder__results-list', className)}>
-            {showSeparators && (
+        <div className={classNames('cc__person-finder__results-list', className)}>
+            {separator && (
                 <Divider
-                    key={`${type}-divider`}
-                    name={getDividerText(type)}
+                    key={`${separator}-divider`}
+                    name={separator}
                 />
             )}
-            {relations.map(relation => (
+            {data.map(item => (
                 <PersonFinderResultItem
-                    key={relation.personId || relation.siteId}
-                    relation={relation}
-                    type={type}
+                    key={item[orm.identifier]}
+                    data={item}
+                    orm={orm}
                     onClick={onClick}
                 />
             ))}
-            {showSeparators && hasMore && showWaitCursor && (
+            {hasMore && showWaitCursor && (
                 <WaitCursor
                     style={{
                         padding: '24px 0',
                     }}
-                    key={`${type}-wait`}
+                    key={`${group}-wait`}
                 />
             )}
-            {showSeparators && onLoadMore && hasMore && !showWaitCursor && (
+            {onLoadMore && hasMore && (
                 <LoadMore
-                    key={`${type}-more`}
-                    type={(type === PERSON_RELATION || type === PERSON_UNRELATED) ? PERSON_RELATION : LOCATION_RELATION}
+                    key={`${group}-more`}
+                    group={group}
+                    hide={showWaitCursor}
                     onClick={onLoadMore}
                 />
             )}
@@ -82,22 +59,28 @@ const ResultItemList = ({
 };
 
 ResultItemList.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.object),
+    orm: PropTypes.shape({
+        identifier: PropTypes.string,
+        showName: PropTypes.string,
+        imageUrl: PropTypes.string,
+    }).isRequired,
+    group: PropTypes.string,
     onLoadMore: PropTypes.func,
     showWaitCursor: PropTypes.bool,
+    separator: PropTypes.string,
     hasMore: PropTypes.bool,
-    showSeparators: PropTypes.bool,
-    type: PropTypes.oneOf([PERSON_RELATION, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION, PERSON_UNRELATED]).isRequired,
-    relations: PropTypes.array,
     onClick: PropTypes.func,
     className: PropTypes.string,
 };
 
 ResultItemList.defaultProps = {
+    data: [],
     showWaitCursor: false,
+    separator: null,
     hasMore: false,
-    showSeparators: false,
-    relations: null,
     onClick: null,
+    group: 'default',
     onLoadMore: null,
     className: null,
 };

@@ -18,7 +18,7 @@ export const fetchFriends = async () => {
         result = response.status !== 204 ? await response.json() : [];
     } else {
         // TODO: error handling
-        console.error('req failed', response.status);
+        console.error('failed to fetch friends', response.status);
     }
     return result;
 };
@@ -49,7 +49,7 @@ export const fetchPersons = async (value, skip, take) => {
         result = response.status !== 204 ? await response.json() : [];
     } else {
         // TODO: error handling
-        console.error('req failed', response.status);
+        console.error('failed to fetch persons', response.status);
     }
 
     return result;
@@ -68,7 +68,7 @@ export const fetchSites = async (value, skip, take) => {
         result = response.status !== 204 ? await response.json() : [];
     } else {
         // TODO: error handling
-        console.error('req failed', response.status);
+        console.error('failed to fetch sites', response.status);
     }
 
     return result;

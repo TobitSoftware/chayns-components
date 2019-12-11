@@ -20,7 +20,6 @@ export const initialState = {
 };
 
 export const reducer = (state = initialState, action) => {
-    console.log('reducer', state, action);
     switch (action.type) {
     case 'REQUEST_PERSONS':
         return {

@@ -10,11 +10,11 @@ const ObjectMapping = {
     imageUrl: null,
 };
 
-const DefaultDataContext = createContext({
+const UacGroupContext = createContext({
     value: null,
 });
 
-const DefaultStateProvider = ({ children }) => {
+const UacGroupStateProvider = ({ children }) => {
     const [data, dispatch] = useReducer(DefaultReducer, initialState);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const DefaultStateProvider = ({ children }) => {
     }, []);
 
     return (
-        <DefaultDataContext.Provider
+        <UacGroupContext.Provider
             value={{
                 ...data,
                 dispatch,
@@ -41,23 +41,23 @@ const DefaultStateProvider = ({ children }) => {
             }}
         >
             {children}
-        </DefaultDataContext.Provider>
+        </UacGroupContext.Provider>
     );
 };
 
-DefaultStateProvider.propTypes = {
+UacGroupStateProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]),
 };
 
-DefaultStateProvider.defaultProps = {
+UacGroupStateProvider.defaultProps = {
     children: null,
 };
 
 export default {
-    Consumer: DefaultDataContext.Consumer,
-    Provider: DefaultStateProvider,
+    Consumer: UacGroupContext.Consumer,
+    Provider: UacGroupStateProvider,
     ObjectMapping,
 };

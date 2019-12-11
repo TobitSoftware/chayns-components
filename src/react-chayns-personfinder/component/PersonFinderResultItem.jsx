@@ -2,64 +2,60 @@
 
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import FriendsIndicator from './result-item/FriendsIndicator';
+import Relation from './result-item/Relation';
 
-import {
-    PERSON_RELATION,
-    LOCATION_RELATION,
-    FRIEND_RELATION,
-    PERSON_UNRELATED,
-    LOCATION_UNRELATED,
-} from '../constants/relationTypes';
-import PersonResultItem from './result-item/PersonResultItem';
-import SiteResultItem from './result-item/SiteResultItem';
-
-const PersonFinderResultItem = ({ onClick, relation, type }) => {
-    const handleClick = useCallback((additions) => {
-        const newRelation = { ...relation, ...additions };
-
+const PersonFinderResultItem = ({ onClick, data, orm }) => {
+    const handleClick = useCallback(() => {
         onClick({
-            type,
-            relation: newRelation,
+            relation: data,
         });
-    }, [onClick, type, relation]);
+    }, [onClick, data]);
 
-    if (type === LOCATION_RELATION || type === LOCATION_UNRELATED) {
-        return (
-            <SiteResultItem
-                type={type}
-                onClick={handleClick}
-                relation={relation}
-            />
-        );
-    }
+    const hasRelations = orm.relations && Array.isArray(data[orm.relations]) ? data[orm.relations].length > 0 : false;
 
     return (
-        <PersonResultItem
-            type={type}
-            onClick={handleClick}
-            relation={relation}
-        />
+        <div className="result-item" onClick={handleClick}>
+            {orm.imageUrl ? (<div className="img" style={{ backgroundImage: `url(${data[orm.imageUrl]})` }} />) : null}
+            <div className="text">
+                <div
+                    className="title"
+                >
+                    <div className="name">{data[orm.showName]}</div>
+                    {hasRelations && (
+                        <div className="identifier">
+                            {`(${data[orm.identifier]})`}
+                        </div>
+                    )}
+                </div>
+                {hasRelations && (
+                    <Relation relation={data} />
+                )}
+                {!hasRelations && (
+                    <div className="identifier">
+                        {`(${data[orm.identifier]})`}
+                    </div>
+                )}
+            </div>
+            {data.personId && (
+                <FriendsIndicator
+                    personId={data.personId}
+                    name={data[orm.showName]}
+                />
+            )}
+        </div>
     );
 };
 
 PersonFinderResultItem.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    relation: PropTypes.shape({
-        name: PropTypes.string,
-        relationCount: PropTypes.number,
-        relations: PropTypes.arrayOf(PropTypes.shape({
-            type: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            score: PropTypes.number,
-        })),
-        firstName: PropTypes.string,
-        lastName: PropTypes.string,
-        siteId: PropTypes.string,
-        locationId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        personId: PropTypes.string,
-        userId: PropTypes.number,
+    orm: PropTypes.shape({
+        identifier: PropTypes.string,
+        showName: PropTypes.string,
+        imageUrl: PropTypes.string,
+        relations: PropTypes.string,
     }).isRequired,
-    type: PropTypes.oneOf([PERSON_RELATION, PERSON_UNRELATED, LOCATION_RELATION, LOCATION_UNRELATED, FRIEND_RELATION]).isRequired,
+    onClick: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
 };
 
 export default PersonFinderResultItem;

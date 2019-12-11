@@ -28,7 +28,7 @@ const ObjectMapping = {
     imageUrl: 'imageUrl',
 };
 
-const DefaultDataContext = createContext({
+const PersonFinderContext = createContext({
     ...initialState,
     dispatch: () => console.warn('dispatch: no context provided'),
     onChange: () => console.warn('onChange: no context provided'),
@@ -37,7 +37,7 @@ const DefaultDataContext = createContext({
     isFriend: () => console.warn('isFriend: no context provided'),
 });
 
-const DefaultStateProvider = ({
+const PersonFinderStateProvider = ({
     children,
     take,
     enablePersons,
@@ -133,8 +133,8 @@ const DefaultStateProvider = ({
 
     const onLoadMore = useCallback(async (type, value) => {
         const promises = [];
-        if (!type || type === 'PERSON') promises.push(loadMorePersons(value));
-        if (!type || type === 'LOCATION') promises.push(loadMoreSites(value));
+        if (!type || type !== 'sites') promises.push(loadMorePersons(value));
+        if (!type || type === 'sites') promises.push(loadMoreSites(value));
         await Promise.all(promises);
     }, [loadMorePersons, loadMoreSites]);
 
@@ -154,7 +154,7 @@ const DefaultStateProvider = ({
     }, []);
 
     return (
-        <DefaultDataContext.Provider
+        <PersonFinderContext.Provider
             value={{
                 ...state,
                 data: {
@@ -170,11 +170,11 @@ const DefaultStateProvider = ({
             }}
         >
             {children}
-        </DefaultDataContext.Provider>
+        </PersonFinderContext.Provider>
     );
 };
 
-DefaultStateProvider.propTypes = {
+PersonFinderStateProvider.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
@@ -185,7 +185,7 @@ DefaultStateProvider.propTypes = {
     enableFriends: PropTypes.bool,
 };
 
-DefaultStateProvider.defaultProps = {
+PersonFinderStateProvider.defaultProps = {
     children: null,
     take: 20,
     enablePersons: true,
@@ -194,9 +194,9 @@ DefaultStateProvider.defaultProps = {
 };
 
 export default {
-    Consumer: DefaultDataContext.Consumer,
-    Provider: DefaultStateProvider,
+    Consumer: PersonFinderContext.Consumer,
+    Provider: PersonFinderStateProvider,
     ObjectMapping,
 };
 
-export const useStateValue = () => useContext(DefaultDataContext);
+export const useStateValue = () => useContext(PersonFinderContext);
