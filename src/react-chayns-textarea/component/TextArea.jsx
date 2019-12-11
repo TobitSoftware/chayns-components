@@ -27,6 +27,7 @@ const TextArea = ({
     required,
     stopPropagation,
     reference,
+    ...props
 }) => {
     const ref = useRef(null);
     const [offset, setOffset] = useState(0);
@@ -114,6 +115,7 @@ const TextArea = ({
             value={value}
             disabled={disabled}
             onClick={stopPropagation ? event => event.stopPropagation() : null}
+            {...props}
         />
     );
 };
