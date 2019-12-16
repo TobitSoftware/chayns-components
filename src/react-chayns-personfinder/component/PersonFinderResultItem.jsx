@@ -16,7 +16,12 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
         ev.preventDefault();
         switch (ev.keyCode) {
         case 9: {
-            const next = ev.shiftKey ? ev.target.previousSibling || ev.target.parentElement.lastChild : ev.target.nextSibling || ev.target.parentElement.firstChild;
+            let next = ev.shiftKey ? ev.target.previousSibling : ev.target.nextSibling;
+            let list = ev.target.parentElement.parentElement[ev.shiftKey ? 'previousSibling' : 'nextSibling'];
+            while ((!next || !next.classList.contains('result-item')) && list) {
+                next = list.querySelector(ev.shiftKey ? '.result-item:last-child' : '.result-item');
+                list = ev.shiftKey ? list.previousSibling : list.nextSibling;
+            }
             if (next) {
                 next.focus();
             }
@@ -25,12 +30,30 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
         case 13:
             handleClick();
             break;
-        case 38:
-            if (ev.target.previousSibling) ev.target.previousSibling.focus();
+        case 38: {
+            let next = ev.target.previousSibling;
+            let list = ev.target.parentElement.parentElement.previousSibling;
+            while ((!next || !next.classList.contains('result-item')) && list) {
+                next = list.querySelector('.result-item:last-child');
+                list = list.previousSibling;
+            }
+            if (next) {
+                next.focus();
+            }
             break;
-        case 40:
-            if (ev.target.nextSibling) ev.target.nextSibling.focus();
+        }
+        case 40: {
+            let next = ev.target.nextSibling;
+            let list = ev.target.parentElement.parentElement.nextSibling;
+            while (!next && list) {
+                next = list.querySelector('.result-item');
+                list = list.nextSibling;
+            }
+            if (next) {
+                next.focus();
+            }
             break;
+        }
         default:
             break;
         }

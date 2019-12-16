@@ -17,9 +17,9 @@ class PersonFinderView extends Component {
         if (!this.resultList) return;
 
         if ((ev.keyCode === 9 || ev.keyCode === 40)) {
-            ev.preventDefault();
             const item = this.resultList.querySelector('.result-item');
             if (item) {
+                ev.preventDefault();
                 item.focus();
             }
         }
@@ -42,9 +42,9 @@ class PersonFinderView extends Component {
                 lazyLoading: false,
             });
         }
-    }
+    };
 
-    filter(data) {
+    filter = (data) => {
         const { value, orm } = this.props;
 
         return (Array.isArray(data) ? data : []).filter((v) => {
@@ -53,12 +53,12 @@ class PersonFinderView extends Component {
             }
             return v[orm.identifier].toUpperCase().includes(value.toUpperCase()) || v[orm.showName].toUpperCase().includes(value.toUpperCase());
         });
-    }
+    };
 
-    hasEntries() {
+    hasEntries = () => {
         const { data } = this.props;
         return !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
-    }
+    };
 
     renderChildren() {
         const {
