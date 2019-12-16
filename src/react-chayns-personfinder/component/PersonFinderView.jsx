@@ -67,7 +67,7 @@ class PersonFinderView extends Component {
         const hasEntries = this.hasEntries();
 
         if (!selectedValue && hasEntries) {
-            const results = (
+            return (
                 <PersonFinderResults
                     key="results"
                     onSelect={onSelect}
@@ -84,10 +84,6 @@ class PersonFinderView extends Component {
                     hasMore={hasMore}
                 />
             );
-
-            return [
-                results,
-            ];
         }
 
         if (showWaitCursor) {
@@ -121,7 +117,6 @@ class PersonFinderView extends Component {
                 onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
                 onChange={this.handleOnChange}
-                onFocus={this.handleOnFocus}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => {

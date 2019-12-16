@@ -5,14 +5,13 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { reducer as PersonsReducer, initialState } from './PersonsReducer';
 import {
-    fetchFriends,
     fetchPersons,
     fetchSites,
-    setFriend as setFriendApi,
 } from './PersonsApi';
 import {
-    convertFriend, convertFriends, convertPersons, convertSites,
+    convertPersons, convertSites,
 } from './PersonsConverter';
+import FriendsHelper from './FriendsHelper';
 
 const ObjectMapping = {
     groups: [
@@ -49,51 +48,15 @@ const PersonFinderStateProvider = ({
     const skipSites = state.data.sites.length;
 
     useEffect(() => {
-        if (!enableFriends) return;
+        if (!enableFriends) return undefined;
 
-        (async () => {
-            dispatch({ type: 'REQUEST_FRIENDS', showWaitCursor: true, clear: true });
-            const users = await fetchFriends();
-            if (users) {
-                dispatch({
-                    type: 'RECEIVE_FRIENDS',
-                    data: convertFriends(users),
-                    hasMore: false,
-                });
-            }
-        })();
+        const friendsListener = () => dispatch({ type: 'RECEIVE_FRIENDS', data: [] });
+        FriendsHelper.addUpdateListener(friendsListener);
+
+        return () => FriendsHelper.removeUpdateListener(friendsListener);
     }, [enableFriends]);
 
-    const onChange = useCallback(debounce(async (value) => {
-        if (value.length < 3) return;
-        dispatch({
-            type: 'REQUEST_PERSONS',
-            showWaitCursor: { personsRelated: true, personsUnrelated: false },
-            clear: true,
-        });
-        dispatch({
-            type: 'REQUEST_SITES',
-            showWaitCursor: true,
-            clear: true,
-        });
-        const [persons, sites] = await Promise.all([
-            enablePersons && fetchPersons(value, 0, take),
-            enableSites && fetchSites(value, 0, take),
-        ]);
-        const convertedPersons = persons ? convertPersons(persons) : { personsRelated: [], personsUnrelated: [] };
-        dispatch({
-            type: 'RECEIVE_PERSONS',
-            data: convertedPersons,
-            hasMore: { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take },
-        });
-        dispatch({
-            type: 'RECEIVE_SITES',
-            data: sites ? convertSites(sites) : [],
-            hasMore: sites.length === take,
-        });
-    }, 500), [take]);
-
-    const loadMorePersons = useCallback(async (value) => {
+    const loadPersons = useCallback(async (value, clear = false) => {
         if (value.length < 3 || !enablePersons) return;
 
         dispatch({
@@ -102,6 +65,7 @@ const PersonFinderStateProvider = ({
                 personsRelated: state.hasMore.personsRelated,
                 personsUnrelated: !state.hasMore.personsRelated,
             },
+            clear,
         });
 
         const persons = await fetchPersons(value, skipPersons, take);
@@ -114,12 +78,13 @@ const PersonFinderStateProvider = ({
         });
     }, [skipPersons, take, enablePersons]);
 
-    const loadMoreSites = useCallback(async (value) => {
+    const loadSites = useCallback(async (value, clear = false) => {
         if (value.length < 3 || !enableSites) return;
 
         dispatch({
             type: 'REQUEST_SITES',
             showWaitCursor: true,
+            clear,
         });
 
         const sites = await fetchSites(value, skipSites, take);
@@ -131,27 +96,20 @@ const PersonFinderStateProvider = ({
         });
     }, [skipSites, take, enableSites]);
 
+    const onChange = useCallback(debounce(async (value) => {
+        if (value.length < 3) return;
+        await Promise.all([
+            loadPersons(value, true),
+            loadSites(value, true),
+        ]);
+    }, 500), [take]);
+
     const onLoadMore = useCallback(async (type, value) => {
         const promises = [];
-        if (!type || type !== 'sites') promises.push(loadMorePersons(value));
-        if (!type || type === 'sites') promises.push(loadMoreSites(value));
+        if (!type || type !== 'sites') promises.push(loadPersons(value));
+        if (!type || type === 'sites') promises.push(loadSites(value));
         await Promise.all(promises);
-    }, [loadMorePersons, loadMoreSites]);
-
-    const setFriend = useCallback(async (personId, name, friend = true) => {
-        const success = await setFriendApi(personId, friend);
-        if (success) {
-            dispatch({
-                type: friend ? 'ADD_FRIEND' : 'REMOVE_FRIEND',
-                data: convertFriend({
-                    personId,
-                    fullName: name,
-                }),
-            });
-        } else {
-            // TODO: error handling
-        }
-    }, []);
+    }, [loadPersons, loadSites]);
 
     return (
         <PersonFinderContext.Provider
@@ -159,14 +117,14 @@ const PersonFinderStateProvider = ({
                 ...state,
                 data: {
                     ...state.data,
-                    friends: enableFriends ? state.data.friends : [],
+                    friends: enableFriends ? FriendsHelper.getFriendsList() : [],
                 },
                 autoLoading: !enableSites && enablePersons,
                 dispatch,
                 onLoadMore,
                 onChange,
-                setFriend,
-                isFriend: personId => state.data.friends.findIndex(person => person.personId === personId) > -1,
+                setFriend: FriendsHelper.setFriend,
+                isFriend: FriendsHelper.isFriend,
             }}
         >
             {children}

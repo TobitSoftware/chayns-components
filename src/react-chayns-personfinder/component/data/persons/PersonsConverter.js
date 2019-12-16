@@ -37,5 +37,3 @@ export const convertFriend = friend => ({
     personId: friend.personId,
     imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
 });
-
-export const convertFriends = friends => friends.map(convertFriend);

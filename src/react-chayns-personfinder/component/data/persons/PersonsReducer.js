@@ -6,15 +6,18 @@ export const initialState = {
         friends: [],
     },
     showWaitCursor: {
-        friends: false,
         personsRelated: false,
         sites: false,
         personsUnrelated: false,
     },
     isLoading: {
-        friends: false,
         personsRelated: false,
         sites: false,
+        personsUnrelated: false,
+    },
+    hasMore: {
+        personsRelated: true,
+        sites: true,
         personsUnrelated: false,
     },
 };
