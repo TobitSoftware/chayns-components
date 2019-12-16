@@ -13,6 +13,18 @@ class PersonFinderView extends Component {
         showWaitCursor: false,
     };
 
+    handleKeyDown = (ev) => {
+        if (!this.resultList) return;
+
+        if ((ev.keyCode === 9 || ev.keyCode === 40)) {
+            ev.preventDefault();
+            const item = this.resultList.querySelector('.result-item');
+            if (item) {
+                item.focus();
+            }
+        }
+    };
+
     handleLazyLoad = async () => {
         if (!this.resultList) return;
 
@@ -113,7 +125,8 @@ class PersonFinderView extends Component {
                 parent={parent}
                 key="single"
                 inputComponent={inputComponent}
-                ref={boxRef}
+                onKeyDown={this.handleKeyDown}
+                inputRef={this.setInputRef}
                 onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
                 onChange={this.handleOnChange}

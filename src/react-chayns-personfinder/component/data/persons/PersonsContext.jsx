@@ -50,6 +50,7 @@ const PersonFinderStateProvider = ({
     useEffect(() => {
         if (!enableFriends) return undefined;
 
+        // Use event listener to update all contexts if friends change
         const friendsListener = () => dispatch({ type: 'RECEIVE_FRIENDS', data: [] });
         FriendsHelper.addUpdateListener(friendsListener);
 
