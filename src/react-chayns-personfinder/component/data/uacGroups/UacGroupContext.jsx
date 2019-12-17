@@ -8,6 +8,7 @@ const ObjectMapping = {
     identifier: 'id',
     search: ['showName', 'name'],
     imageUrl: null,
+    filter: inputValue => e => ['showName', 'name'].some(key => e[key] && e[key].toLowerCase().startsWith((inputValue || '').toLowerCase())),
 };
 
 const UacGroupContext = createContext({

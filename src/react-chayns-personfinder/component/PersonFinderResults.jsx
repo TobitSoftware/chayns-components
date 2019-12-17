@@ -21,7 +21,7 @@ const PersonFinderResults = ({
         return orm.groups.map(({ key: group, lang, show }) => (typeof show === 'function' && !show(inputValue) ? null : (
             <div className="cc__person-finder__results" key={`resultList_${group}`}>
                 <ResultItemList
-                    data={data[group] || []}
+                    data={typeof orm.filter === 'function' ? (data[group] || []).filter(orm.filter(inputValue)) : (data[group] || [])}
                     orm={orm}
                     group={group}
                     separator={lang[chayns.env.language] || lang.en}
@@ -37,7 +37,7 @@ const PersonFinderResults = ({
     return (
         <div className="cc__person-finder__results">
             <ResultItemList
-                data={data}
+                data={typeof orm.filter === 'function' ? data.filter(orm.filter(inputValue)) : data}
                 orm={orm}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}
@@ -54,6 +54,7 @@ PersonFinderResults.propTypes = {
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
         groups: PropTypes.array,
+        filter: PropTypes.func,
     }).isRequired,
     data: PropTypes.arrayOf(PropTypes.object),
     value: PropTypes.string,
