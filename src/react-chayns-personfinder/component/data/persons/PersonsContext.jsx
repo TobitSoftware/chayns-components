@@ -16,9 +16,9 @@ import FriendsHelper from './FriendsHelper';
 const ObjectMapping = {
     groups: [
         { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: value => !value },
-        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' } },
-        { key: 'sites', lang: { de: 'Sites', en: 'friends' } },
-        { key: 'personsUnrelated', lang: { de: 'Weitere Personen', en: 'further friends' } },
+        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: value => value && value.length >= 3 },
+        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: value => value && value.length >= 3 },
+        { key: 'personsUnrelated', lang: { de: 'Weitere Personen', en: 'further friends' }, show: value => value && value.length >= 3 },
     ],
     showName: 'name',
     identifier: 'id',
