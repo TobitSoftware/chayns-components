@@ -1,7 +1,22 @@
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const RELATIONS_SERVER_URL = 'https://relations.chayns.net/relations/';
 const SITE_SERVER_URL = 'https://chayns2.tobit.com/SiteSearchApi/location/search/';
 const FRIENDS_SERVER_URL = 'https://webapi.tobit.com/AccountService/v1.0/chayns/friends';
+
+const requestTracker = {};
+
+const fetchHelper = (key, requestData) => {
+    if (requestTracker[key] instanceof AbortController) {
+        requestTracker[key].abort();
+    }
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    requestTracker[key] = controller;
+
+    return fetch(requestData.url, { ...requestData.config, signal });
+};
 
 export const fetchFriends = async () => {
     let result = [];
@@ -42,11 +57,14 @@ export const fetchPersons = async (value, skip, take) => {
         return Promise.reject(new Error('Not authenticated'));
     }
     let result = [];
-    const response = await fetch(`${RELATIONS_SERVER_URL}person?query=${value}&skip=${skip}&take=${take}`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+    const response = await fetchHelper('persons', {
+        url: `${RELATIONS_SERVER_URL}person?query=${value}&skip=${skip}&take=${take}`,
+        config: {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+            },
         },
     });
 
@@ -62,10 +80,16 @@ export const fetchPersons = async (value, skip, take) => {
 
 export const fetchSites = async (value, skip, take) => {
     let result = [];
-    const response = await fetch(`${SITE_SERVER_URL}${value}/?skip=${skip}&take=${take}`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json',
+    if (requestTracker.persons instanceof AbortController) {
+        requestTracker.persons.abort();
+    }
+    const response = await fetchHelper('sites', {
+        url: `${SITE_SERVER_URL}${value}/?skip=${skip}&take=${take}`,
+        config: {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+            },
         },
     });
 
