@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderView from './PersonFinderView';
+import PersonsContext from './data/persons/PersonsContext';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {
@@ -115,6 +116,7 @@ class MultiplePersonFinder extends Component {
             defaultValue,
             showId,
             context: Context,
+            contextProps,
             ...props
         } = this.props;
         const { inputValue, selectedValue, values } = this.state;
@@ -122,9 +124,16 @@ class MultiplePersonFinder extends Component {
         return (
             <div className={classNames('cc__person-finder', className)}>
                 <Context.Provider
-                    enableFriends={!showSites && showPersons}
-                    enableSites={showSites}
-                    enablePersons={showPersons}
+                    // backward compatibility for previous props
+                    {...(Context.Provider instanceof PersonsContext.Provider ? {
+                        uacId: props.uacId,
+                        locationId: props.locationId,
+                        includeOwn: props.includeOwn,
+                        enableSites: showSites,
+                        enablePersons: showPersons,
+                        enableFriends: !showSites && showPersons,
+                    } : null)}
+                    {...contextProps}
                 >
                     <Context.Consumer>
                         {ctx => (
@@ -189,6 +198,7 @@ MultiplePersonFinder.propTypes = {
             identifier: PropTypes.string,
         }),
     }).isRequired,
+    contextProps: PropTypes.object,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -202,6 +212,7 @@ MultiplePersonFinder.defaultProps = {
     showId: false,
     defaultValues: [],
     onInput: null,
+    contextProps: null,
 };
 
 export default MultiplePersonFinder;

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderView from './PersonFinderView';
 import { isFunction } from '../../utils/is';
+import PersonsContext from './data/persons/PersonsContext';
 
 class SimplePersonFinder extends Component {
     constructor(props) {
@@ -67,9 +68,9 @@ class SimplePersonFinder extends Component {
             showSites,
             className,
             showId,
-            customData,
             defaultValue,
             context: Context,
+            contextProps,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
@@ -77,9 +78,16 @@ class SimplePersonFinder extends Component {
         return (
             <div className={classNames('cc__person-finder', className)}>
                 <Context.Provider
-                    enableFriends={!showSites && showPersons}
-                    enableSites={showSites}
-                    enablePersons={showPersons}
+                    // backward compatibility for previous props
+                    {...(Context.Provider instanceof PersonsContext.Provider ? {
+                        uacId: props.uacId,
+                        locationId: props.locationId,
+                        includeOwn: props.includeOwn,
+                        enableSites: showSites,
+                        enablePersons: showPersons,
+                        enableFriends: !showSites && showPersons,
+                    } : null)}
+                    {...contextProps}
                 >
                     <Context.Consumer>
                         {ctx => (
@@ -127,6 +135,7 @@ SimplePersonFinder.propTypes = {
             showName: PropTypes.string,
         }),
     }).isRequired,
+    contextProps: PropTypes.object,
 };
 
 SimplePersonFinder.defaultProps = {
@@ -138,6 +147,7 @@ SimplePersonFinder.defaultProps = {
     showId: false,
     onInput: null,
     customData: false,
+    contextProps: null,
 };
 
 export default SimplePersonFinder;
