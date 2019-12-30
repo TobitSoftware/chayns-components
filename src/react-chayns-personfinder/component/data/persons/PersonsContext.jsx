@@ -6,6 +6,7 @@ import debounce from 'lodash.debounce';
 import { reducer as PersonsReducer, initialState } from './PersonsReducer';
 import {
     fetchPersons,
+    fetchUacPersons,
     fetchSites,
 } from './PersonsApi';
 import {
@@ -61,7 +62,7 @@ const PersonFinderStateProvider = ({
     }, [enableFriends]);
 
     const loadPersons = useCallback(async (value, clear = false) => {
-        if (value.length < 3 || !enablePersons) return;
+        if (value.length < 3 || !enablePersons || uacId) return;
 
         dispatch({
             type: 'REQUEST_PERSONS',
@@ -95,6 +96,29 @@ const PersonFinderStateProvider = ({
         });
     }, [skipPersons, take, enablePersons]);
 
+    const loadUacPersons = useCallback(async (value, clear = false) => {
+        if (value.length < 3 || !uacId) return;
+
+        dispatch({
+            type: 'REQUEST_PERSONS',
+            showWaitCursor: {
+                personsRelated: state.hasMore.personsRelated,
+                personsUnrelated: !state.hasMore.personsRelated,
+            },
+            clear,
+        });
+
+        const persons = await fetchUacPersons(uacId, locationId)(value, skipPersons, take);
+        const convertedPersons = convertPersons(persons);
+        const hasMore = { personsRelated: false, personsUnrelated: false };
+
+        dispatch({
+            type: 'RECEIVE_PERSONS',
+            data: convertedPersons,
+            hasMore,
+        });
+    });
+
     const loadSites = useCallback(async (value, clear = false) => {
         if (value.length < 3 || !enableSites) return;
 
@@ -117,6 +141,7 @@ const PersonFinderStateProvider = ({
         if (value.length < 3) return;
         await Promise.all([
             loadPersons(value, true),
+            loadUacPersons(value, true),
             loadSites(value, true),
         ]);
     }, 500), [take]);

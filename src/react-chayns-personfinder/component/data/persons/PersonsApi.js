@@ -1,6 +1,7 @@
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const RELATIONS_SERVER_URL = 'https://relations.chayns.net/relations/';
+const ADMIN_SERVER_URL = 'https://sub50.tobit.com/backend/';
 const SITE_SERVER_URL = 'https://chayns2.tobit.com/SiteSearchApi/location/search/';
 const FRIENDS_SERVER_URL = 'https://webapi.tobit.com/AccountService/v1.0/chayns/friends';
 
@@ -59,6 +60,34 @@ export const fetchPersons = async (value, skip, take) => {
     let result = [];
     const response = await fetchHelper('persons', {
         url: `${RELATIONS_SERVER_URL}person?query=${value}&skip=${skip}&take=${take}`,
+        config: {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+            },
+        },
+    });
+
+    if (response.ok) {
+        result = response.status !== 204 ? await response.json() : [];
+    } else {
+        // TODO: error handling
+        console.error('failed to fetch persons', response.status);
+    }
+
+    return result;
+};
+
+export const fetchUacPersons = (uacId, locationId) => async (value) => {
+    if (!chayns.env.user.isAuthenticated) {
+        chayns.login();
+
+        return Promise.reject(new Error('Not authenticated'));
+    }
+    let result = [];
+    const response = await fetchHelper('persons', {
+        url: `${ADMIN_SERVER_URL}${locationId || chayns.env.site.locationId}/usergroup/${uacId}/users?filter=${value}`,
         config: {
             method: 'GET',
             headers: {
