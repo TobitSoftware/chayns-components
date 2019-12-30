@@ -82,7 +82,7 @@ const PersonFinderStateProvider = ({
             firstName: chayns.env.user.firstName,
             lastName: chayns.env.user.lastName,
             personId: chayns.env.user.personId,
-        }]).personsUnrelated;
+        }]).personsRelated;
 
         // prepend own user when prop is used, user is logged in and name matches
         if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.name && ownUser.name.toLowerCase().startsWith(value.toLowerCase())) {
