@@ -94,7 +94,7 @@ const PersonFinderStateProvider = ({
             data: convertedPersons,
             hasMore,
         });
-    }, [skipPersons, take, enablePersons]);
+    }, [skipPersons, take, enablePersons, includeOwn, uacId]);
 
     const loadUacPersons = useCallback(async (value, clear = false) => {
         if (value.length < 3 || !uacId) return;
@@ -117,7 +117,7 @@ const PersonFinderStateProvider = ({
             data: convertedPersons,
             hasMore,
         });
-    });
+    }, [uacId, locationId]);
 
     const loadSites = useCallback(async (value, clear = false) => {
         if (value.length < 3 || !enableSites) return;

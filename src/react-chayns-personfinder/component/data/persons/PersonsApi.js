@@ -86,7 +86,7 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
         return Promise.reject(new Error('Not authenticated'));
     }
     let result = [];
-    const response = await fetchHelper('persons', {
+    const response = await fetchHelper('uacPersons', {
         url: `${ADMIN_SERVER_URL}${locationId || chayns.env.site.locationId}/usergroup/${uacId}/users?filter=${value}`,
         config: {
             method: 'GET',
@@ -109,9 +109,6 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
 
 export const fetchSites = async (value, skip, take) => {
     let result = [];
-    if (requestTracker.persons instanceof AbortController) {
-        requestTracker.persons.abort();
-    }
     const response = await fetchHelper('sites', {
         url: `${SITE_SERVER_URL}${value}/?skip=${skip}&take=${take}`,
         config: {
