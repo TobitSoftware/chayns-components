@@ -79,7 +79,7 @@ class SimplePersonFinder extends Component {
             <div className={classNames('cc__person-finder', className)}>
                 <Context.Provider
                     // backward compatibility for previous props
-                    {...(Context.Provider instanceof PersonsContext.Provider ? {
+                    {...(Context.Provider === PersonsContext.Provider ? {
                         uacId: props.uacId,
                         locationId: props.locationId,
                         includeOwn: props.includeOwn,
@@ -98,7 +98,12 @@ class SimplePersonFinder extends Component {
                                 inputComponent={Input}
                                 value={inputValue}
                                 selectedValue={selectedValue}
-                                onChange={this.handleOnChange}
+                                onChange={(value) => {
+                                    this.handleOnChange(value);
+                                    if (typeof ctx.onChange === 'function') {
+                                        ctx.onChange(value);
+                                    }
+                                }}
                                 onSelect={this.handleSelect}
                             />
                         )}

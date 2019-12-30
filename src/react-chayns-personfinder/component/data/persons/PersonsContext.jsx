@@ -42,6 +42,9 @@ const PersonFinderStateProvider = ({
     enablePersons,
     enableSites,
     enableFriends,
+    includeOwn,
+    locationId,
+    uacId,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons = state.data.personsUnrelated.length + state.data.personsRelated.length;
@@ -71,11 +74,24 @@ const PersonFinderStateProvider = ({
 
         const persons = await fetchPersons(value, skipPersons, take);
         const convertedPersons = convertPersons(persons);
+        const hasMore = { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take };
+
+        // not optimal performance-wise but reduces redundant code
+        const [ownUser] = convertPersons([{
+            firstName: chayns.env.user.firstName,
+            lastName: chayns.env.user.lastName,
+            personId: chayns.env.user.personId,
+        }]).personsUnrelated;
+
+        // prepend own user when prop is used, user is logged in and name matches
+        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.name && ownUser.name.toLowerCase().startsWith(value.toLowerCase())) {
+            convertedPersons.personsRelated.unshift(ownUser);
+        }
 
         dispatch({
             type: 'RECEIVE_PERSONS',
             data: convertedPersons,
-            hasMore: { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take },
+            hasMore,
         });
     }, [skipPersons, take, enablePersons]);
 
@@ -142,6 +158,9 @@ PersonFinderStateProvider.propTypes = {
     enablePersons: PropTypes.bool,
     enableSites: PropTypes.bool,
     enableFriends: PropTypes.bool,
+    includeOwn: PropTypes.bool,
+    locationId: PropTypes.number,
+    uacId: PropTypes.number,
 };
 
 PersonFinderStateProvider.defaultProps = {
@@ -150,6 +169,9 @@ PersonFinderStateProvider.defaultProps = {
     enablePersons: true,
     enableSites: false,
     enableFriends: true,
+    includeOwn: false,
+    locationId: null,
+    uacId: null,
 };
 
 export default {

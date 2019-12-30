@@ -125,7 +125,7 @@ class MultiplePersonFinder extends Component {
             <div className={classNames('cc__person-finder', className)}>
                 <Context.Provider
                     // backward compatibility for previous props
-                    {...(Context.Provider instanceof PersonsContext.Provider ? {
+                    {...(Context.Provider === PersonsContext.Provider ? {
                         uacId: props.uacId,
                         locationId: props.locationId,
                         includeOwn: props.includeOwn,
