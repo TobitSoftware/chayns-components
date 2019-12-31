@@ -1,22 +1,12 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-    PERSON_RELATION,
-    LOCATION_RELATION,
-    FRIEND_RELATION,
-    PERSON_UNRELATED,
-    LOCATION_UNRELATED,
-} from '../constants/relationTypes';
 import ResultItemList from './ResultItemList';
 
 const PersonFinderResults = ({
-    persons,
-    sites,
-    moreRelatedPersons,
-    moreRelatedSites,
-    moreUnrelatedPersons,
-    showFriends,
-    showSeparators,
+    data,
+    orm,
+    value: inputValue,
+    hasMore,
     onLoadMore,
     showWaitCursor,
     onSelect,
@@ -27,83 +17,59 @@ const PersonFinderResults = ({
         }
     }, [onSelect]);
 
+    if (Array.isArray(orm.groups)) {
+        return orm.groups.map(({ key: group, lang, show }) => (typeof show === 'function' && !show(inputValue) ? null : (
+            <div className="cc__person-finder__results" key={`resultList_${group}`}>
+                <ResultItemList
+                    data={typeof orm.filter === 'function' ? (data[group] || []).filter(orm.filter(inputValue)) : (data[group] || [])}
+                    orm={orm}
+                    group={group}
+                    separator={lang[chayns.env.language] || lang.en}
+                    hasMore={hasMore[group]}
+                    onLoadMore={onLoadMore}
+                    showWaitCursor={showWaitCursor[group]}
+                    onClick={handleClick}
+                />
+            </div>
+        )));
+    }
+
     return (
         <div className="cc__person-finder__results">
-            {(showFriends && persons.friends && persons.friends.length) ? (
-                <ResultItemList
-                    className="cc__person-finder__results--friends"
-                    type={FRIEND_RELATION}
-                    hasMore={false}
-                    showSeparators={showSeparators}
-                    onLoadMore={onLoadMore}
-                    showWaitCursor={showWaitCursor}
-                    onClick={handleClick}
-                    relations={persons.friends}
-                />
-            ) : null}
             <ResultItemList
-                type={PERSON_RELATION}
-                hasMore={moreRelatedPersons}
-                showSeparators={showSeparators}
+                data={typeof orm.filter === 'function' ? data.filter(orm.filter(inputValue)) : data}
+                orm={orm}
+                hasMore={hasMore}
                 onLoadMore={onLoadMore}
                 showWaitCursor={showWaitCursor}
                 onClick={handleClick}
-                relations={persons.related}
-            />
-            <ResultItemList
-                type={LOCATION_RELATION}
-                hasMore={moreRelatedSites}
-                showSeparators={showSeparators}
-                onLoadMore={onLoadMore}
-                showWaitCursor={showWaitCursor}
-                onClick={handleClick}
-                relations={sites.related}
-            />
-            <ResultItemList
-                type={PERSON_UNRELATED}
-                hasMore={moreUnrelatedPersons}
-                showSeparators={showSeparators}
-                onLoadMore={onLoadMore}
-                showWaitCursor={showWaitCursor}
-                onClick={handleClick}
-                relations={persons.unrelated}
-            />
-            <ResultItemList
-                type={LOCATION_UNRELATED}
-                hasMore={false}
-                showSeparators
-                onLoadMore={null}
-                showWaitCursor={false}
-                onClick={handleClick}
-                relations={sites.unrelated}
             />
         </div>
     );
 };
 
 PersonFinderResults.propTypes = {
-    persons: PropTypes.object,
-    sites: PropTypes.object,
+    orm: PropTypes.shape({
+        identifier: PropTypes.string,
+        showName: PropTypes.string,
+        imageUrl: PropTypes.string,
+        groups: PropTypes.array,
+        filter: PropTypes.func,
+    }).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object),
+    value: PropTypes.string,
     onSelect: PropTypes.func,
-    showSeparators: PropTypes.bool,
     onLoadMore: PropTypes.func.isRequired,
-    moreRelatedSites: PropTypes.bool,
-    moreRelatedPersons: PropTypes.bool,
-    moreUnrelatedPersons: PropTypes.bool,
+    hasMore: PropTypes.bool,
     showWaitCursor: PropTypes.bool,
-    showFriends: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
-    persons: { related: [], unrelated: [], friends: [] },
-    sites: { related: [], unrelated: [] },
+    data: [],
+    value: '',
     onSelect: null,
-    showSeparators: false,
-    moreRelatedSites: false,
-    moreRelatedPersons: false,
-    moreUnrelatedPersons: false,
+    hasMore: false,
     showWaitCursor: false,
-    showFriends: false,
 };
 
 export default PersonFinderResults;

@@ -8,6 +8,7 @@ export default class Input extends PureComponent {
     static propTypes = {
         className: PropTypes.string,
         onKeyUp: PropTypes.func,
+        onKeyDown: PropTypes.func,
         onEnter: PropTypes.func,
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
@@ -34,6 +35,7 @@ export default class Input extends PureComponent {
     static defaultProps = {
         className: '',
         onKeyUp: null,
+        onKeyDown: null,
         onEnter: null,
         onChange: null,
         onBlur: null,
@@ -146,6 +148,7 @@ export default class Input extends PureComponent {
             wrapperRef,
             invalid,
             onIconClick,
+            onKeyDown,
             id,
             onFocus,
             stopPropagation,
@@ -170,6 +173,7 @@ export default class Input extends PureComponent {
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
+                        onKeyDown={onKeyDown}
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         onFocus={onFocus}
@@ -217,6 +221,7 @@ export default class Input extends PureComponent {
                 style={{ ...{ width: '100%' }, ...style }}
                 placeholder={placeholder}
                 onKeyUp={this.onKeyUp}
+                onKeyDown={onKeyDown}
                 onBlur={this.onBlur}
                 onChange={this.onChange}
                 onFocus={onFocus}

@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
+import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
+import PersonsContext from '../../src/react-chayns-personfinder/component/data/persons/PersonsContext';
 
 const customData = [
     {
@@ -121,16 +123,7 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     dynamic
                     placeholder="Users (Custom)"
-                    customData
-                    orm={{
-                        showName: 'displayName',
-                        identifier: 'email',
-                        search: ['email', 'displayName', 'shortHand'],
-                        imageUrl: 'imageUrl',
-                    }}
-                    data={value.length > 2 ? data : []}
-                    onInput={value => this.setState({ value })}
-                    hasMore={this.state.data.length < customData.length}
+                    context={PersonsContext}
                     multiple
                     onLoadMore={async () => {
                         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -138,11 +131,17 @@ export default class PersonFinderExample extends PureComponent {
                             data: customData.slice(0, state.data.length + 1),
                         }));
                     }}
-                    defaultValues={[
-                        { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
-                        { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
-                    ]}
+                    enableFriends
                     onAdd={() => this.setState({ value: '' })}
+                    onRemove={PersonFinderExample.handleRemove}
+                    onChange={PersonFinderExample.handleSelect}
+                />
+                <PersonFinder
+                    dynamic
+                    placeholder="UAC Groups (Custom)"
+                    context={UacGroupContext}
+                    multiple
+                    onAdd={group => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />
