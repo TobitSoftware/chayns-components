@@ -33,6 +33,7 @@ export default class SimplePersonFinder extends Component {
             identifier: PropTypes.string,
             showName: PropTypes.string,
         }),
+        removeIcon: PropTypes.bool,
         onInput: PropTypes.func,
     };
 
@@ -46,6 +47,7 @@ export default class SimplePersonFinder extends Component {
         onInput: null,
         customData: false,
         orm: {},
+        removeIcon: false,
     };
 
     static PERSON = PERSON_RELATION;
@@ -116,30 +118,39 @@ export default class SimplePersonFinder extends Component {
             showId,
             customData,
             defaultValue,
+            removeIcon,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
+
+        const additionalProps = {
+            inputComponent: Input,
+            value: inputValue,
+            selectedValue,
+            onChange: this.handleOnChange,
+            onSelect: this.handleSelect,
+        };
+
+        if (removeIcon) {
+            additionalProps.icon = selectedValue ? 'ts-wrong' : null;
+            additionalProps.onIconClick = (ev) => {
+                ev.stopPropagation();
+                this.clear();
+            };
+        }
 
         return (
             <div className={classnames('cc__person-finder', className)}>
                 {customData ? (
                     <PersonFinderView
                         {...props}
-                        inputComponent={Input}
-                        value={inputValue}
-                        selectedValue={selectedValue}
-                        onChange={this.handleOnChange}
-                        onSelect={this.handleSelect}
+                        {...additionalProps}
                     />
                 ) : (
                     <FriendsDataContainer>
                         <PersonFinderData
                             {...props}
-                            inputComponent={Input}
-                            value={inputValue}
-                            selectedValue={selectedValue}
-                            onChange={this.handleOnChange}
-                            onSelect={this.handleSelect}
+                            {...additionalProps}
                             persons={showPersons}
                             sites={showSites}
                         />
