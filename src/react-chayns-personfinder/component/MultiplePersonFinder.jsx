@@ -132,6 +132,7 @@ class MultiplePersonFinder extends Component {
                         enableSites: showSites,
                         enablePersons: showPersons,
                         enableFriends: !showSites && showPersons,
+                        reducerFunction: props.reducerFunction,
                     } : null)}
                     {...contextProps}
                 >

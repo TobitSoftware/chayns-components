@@ -46,6 +46,7 @@ const PersonFinderStateProvider = ({
     includeOwn,
     locationId,
     uacId,
+    reducerFunction,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons = state.data.personsUnrelated.length + state.data.personsRelated.length;
@@ -153,12 +154,14 @@ const PersonFinderStateProvider = ({
         await Promise.all(promises);
     }, [loadPersons, loadSites]);
 
+    const data = typeof reducerFunction === 'function' ? reducerFunction(state.data) : state.data;
+
     return (
         <PersonFinderContext.Provider
             value={{
                 ...state,
                 data: {
-                    ...state.data,
+                    ...data,
                     friends: enableFriends ? FriendsHelper.getFriendsList() : [],
                 },
                 autoLoading: !enableSites && enablePersons,
@@ -186,6 +189,7 @@ PersonFinderStateProvider.propTypes = {
     includeOwn: PropTypes.bool,
     locationId: PropTypes.number,
     uacId: PropTypes.number,
+    reducerFunction: PropTypes.func,
 };
 
 PersonFinderStateProvider.defaultProps = {
@@ -197,6 +201,7 @@ PersonFinderStateProvider.defaultProps = {
     includeOwn: false,
     locationId: null,
     uacId: null,
+    reducerFunction: null,
 };
 
 export default {

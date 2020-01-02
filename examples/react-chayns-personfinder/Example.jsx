@@ -62,24 +62,21 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users with reducer: show only persons with an 'e' in the name"
                     onChange={PersonFinderExample.handleSelect}
-                    reducerFunction={state => new Promise((resolve) => {
+                    reducerFunction={(state) => {
                         console.log(state);
                         const newState = {
                             ...state,
-                            persons: {
-                                ...state.persons,
-                                related: state.persons.related.filter((person) => {
-                                    console.log(person);
-                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
-                                }),
-                                unrelated: state.persons.unrelated.filter((person) => {
-                                    console.log(person);
-                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
-                                }),
-                            },
+                            personsRelated: state.personsRelated.filter((person) => {
+                                console.log(person);
+                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
+                            }),
+                            personsUnrelated: state.personsUnrelated.filter((person) => {
+                                console.log(person);
+                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
+                            }),
                         };
-                        resolve(newState);
-                    })}
+                        return newState;
+                    }}
                 />
                 <PersonFinder
                     defaultValue="Smith"
