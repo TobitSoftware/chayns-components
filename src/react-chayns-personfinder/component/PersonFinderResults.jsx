@@ -56,12 +56,21 @@ PersonFinderResults.propTypes = {
         groups: PropTypes.array,
         filter: PropTypes.func,
     }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object),
+    data: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
+        PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
+    ]),
     value: PropTypes.string,
     onSelect: PropTypes.func,
     onLoadMore: PropTypes.func.isRequired,
-    hasMore: PropTypes.bool,
-    showWaitCursor: PropTypes.bool,
+    hasMore: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
+    showWaitCursor: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
 };
 
 PersonFinderResults.defaultProps = {

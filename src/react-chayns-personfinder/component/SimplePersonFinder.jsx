@@ -12,7 +12,7 @@ class SimplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
+            inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
         };
 
@@ -85,7 +85,7 @@ class SimplePersonFinder extends Component {
                         includeOwn: props.includeOwn,
                         enableSites: showSites,
                         enablePersons: showPersons,
-                        enableFriends: !showSites && showPersons,
+                        enableFriends: !showSites && showPersons && !props.uacId,
                         reducerFunction: props.reducerFunction,
                     } : null)}
                     {...contextProps}

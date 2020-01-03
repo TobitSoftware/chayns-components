@@ -44,17 +44,6 @@ class PersonFinderView extends Component {
         }
     };
 
-    filter = (data) => {
-        const { value, orm } = this.props;
-
-        return (Array.isArray(data) ? data : []).filter((v) => {
-            if (orm.search && orm.search.length) {
-                return orm.search.some(key => v[key] && v[key].toUpperCase().includes(value.toUpperCase()));
-            }
-            return v[orm.identifier].toUpperCase().includes(value.toUpperCase()) || v[orm.showName].toUpperCase().includes(value.toUpperCase());
-        });
-    };
-
     hasEntries = () => {
         const { data } = this.props;
         return !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
@@ -152,18 +141,33 @@ PersonFinderView.propTypes = {
         search: PropTypes.arrayOf(PropTypes.string),
         imageUrl: PropTypes.string,
     }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object),
+    data: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
+        PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
+    ]),
     autoLoading: PropTypes.bool,
-    hasMore: PropTypes.bool,
+    hasMore: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
     onSelect: PropTypes.func.isRequired,
     onLoadMore: PropTypes.func,
-    value: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    value: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.string,
+    ]),
     selectedValue: PropTypes.bool,
-    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+    inputComponent: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.node,
+    ]).isRequired,
     boxClassName: PropTypes.string,
     parent: PropTypes.instanceOf(Element),
     boxRef: PropTypes.func,
-    showWaitCursor: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.bool), PropTypes.bool]),
+    showWaitCursor: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
 };
 
 PersonFinderView.defaultProps = {

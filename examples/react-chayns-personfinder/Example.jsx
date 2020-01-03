@@ -175,7 +175,7 @@ export default class PersonFinderExample extends PureComponent {
                     showPersons={false}
                     showSites
                     multiple
-                    parent={document.getElementById('portal-example')}
+                    parent={document.body}
                     boxClassName="custom-personfinder-overlay"
                 />
                 <PersonFinder onInput={console.log} />

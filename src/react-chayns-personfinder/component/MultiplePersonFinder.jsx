@@ -11,7 +11,7 @@ class MultiplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
+            inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
             values: props.defaultValues.map(v => ({
                 text: v[props.context.ObjectMapping.showName],
