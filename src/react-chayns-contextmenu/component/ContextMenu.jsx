@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,prefer-destructuring */
+/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,prefer-destructuring,react/no-array-index-key */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -197,7 +197,7 @@ export default class ContextMenu extends Component {
                 className={className}
             >
                 <ul>
-                    {items.map(item => (
+                    {items.map((item, index) => (
                         <li
                             className={classNames('context-menu__item', item.className)}
                             onClick={(e) => {
@@ -206,7 +206,7 @@ export default class ContextMenu extends Component {
                                 }
                                 item.onClick(e);
                             }}
-                            key={item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text}
+                            key={(item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text) + index}
                         >
                             {item.icon ? (
                                 <div className="context-menu__item__icon"><Icon icon={item.icon} /></div>
