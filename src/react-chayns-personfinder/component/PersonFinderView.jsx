@@ -9,10 +9,6 @@ import WaitCursor from './WaitCursor';
 const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
-    state = {
-        showWaitCursor: false,
-    };
-
     handleKeyDown = (ev) => {
         if (!this.resultList) return;
 
@@ -45,8 +41,10 @@ class PersonFinderView extends Component {
     };
 
     hasEntries = () => {
-        const { data } = this.props;
-        return !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
+        const { data, orm, value } = this.props;
+        return Array.isArray(orm.groups)
+            ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value)) && Array.isArray(data[group]) && data[group].length)
+            : !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
     };
 
     renderChildren() {
@@ -61,10 +59,6 @@ class PersonFinderView extends Component {
             showWaitCursor: waitCursor,
         } = this.props;
 
-        const {
-            showWaitCursor,
-        } = this.state;
-
         const hasEntries = this.hasEntries();
 
         if (!selectedValue && hasEntries) {
@@ -77,9 +71,7 @@ class PersonFinderView extends Component {
                     value={value}
                     onLoadMore={async (type) => {
                         if (!onLoadMore) return;
-                        this.setState({ showWaitCursor: true });
                         await onLoadMore(type, value);
-                        this.setState({ showWaitCursor: false });
                     }}
                     showWaitCursor={waitCursor}
                     hasMore={hasMore}
@@ -87,7 +79,7 @@ class PersonFinderView extends Component {
             );
         }
 
-        if (showWaitCursor) {
+        if (waitCursor === true || Object.values(waitCursor).some(x => x)) {
             return (
                 <WaitCursor key="wait-cursor" />
             );
@@ -115,10 +107,8 @@ class PersonFinderView extends Component {
                 key="single"
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
-                inputRef={this.setInputRef}
                 onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
-                onChange={this.handleOnChange}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => {
@@ -140,6 +130,10 @@ PersonFinderView.propTypes = {
         showName: PropTypes.string,
         search: PropTypes.arrayOf(PropTypes.string),
         imageUrl: PropTypes.string,
+        groups: PropTypes.arrayOf(PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            show: PropTypes.func,
+        })),
     }).isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
