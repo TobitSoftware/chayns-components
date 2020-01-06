@@ -30,6 +30,7 @@ Then it can be used like in the following example:
 | Property      | Description                                                                                        | Type           | Default Value |
 |---------------|----------------------------------------------------------------------------------------------------|----------------|---------------|
 | placeholder   | Placeholder of the input field                                                                     | String         |               |
+| removeIcon    | Show a remove icon to clear the personfinder (only dynamic and not multiple)                       | bool           | false         |
 | onChange      | Callback that will be executed when a person gets selected or input/personfinder gets cleared      | Function       |               |
 | className     | CSS classes for the wrapper-div                                                                    | String         |               |
 | style         | Styles for the input field                                                                         | Object         |               |

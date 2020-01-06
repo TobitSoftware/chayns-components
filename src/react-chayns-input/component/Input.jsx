@@ -84,7 +84,7 @@ export default class Input extends PureComponent {
         if (String(oldRegExp) !== String(regExp) && this.ref) {
             this.callValidated(this.ref.value, onChange);
         }
-        if (value && value !== oldValue) {
+        if (value !== oldValue) {
             this.callValidated(value);
         }
     }

@@ -51,16 +51,19 @@ export default class InputBox extends Component {
         this.updatePosition = this.updatePosition.bind(this);
         this.blur = this.blur.bind(this);
         this.focus = this.focus.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     componentDidMount() {
         document.addEventListener('click', this.handleBlur);
         window.addEventListener('blur', this.blur);
+        window.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleBlur);
         window.removeEventListener('blur', this.blur);
+        window.removeEventListener('keydown', this.handleKeyDown);
     }
 
     setRef(name, ref) {
@@ -122,6 +125,12 @@ export default class InputBox extends Component {
         this.setState({
             hidden: false,
         });
+    }
+
+    handleKeyDown({ keyCode, target }) {
+        if (keyCode === 9 && isDescendant(this.references.wrapper, target)) {
+            this.blur();
+        }
     }
 
     async updatePosition() {

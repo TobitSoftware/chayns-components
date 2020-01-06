@@ -147,6 +147,7 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
+                    removeIcon
                     includeOwn
                     showId
                 />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import './ColorInput.scss';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
@@ -124,7 +125,7 @@ export default class ColorInput extends Component {
                 />
                 <Icon
                     className="chayns__color--headline cc__color-input__exchange-icon"
-                    icon="fas fa-exchange"
+                    icon={faExchangeAlt}
                     onClick={onModelToggle}
                 />
             </div>

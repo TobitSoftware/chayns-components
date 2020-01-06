@@ -71,9 +71,26 @@ class SimplePersonFinder extends Component {
             defaultValue,
             context: Context,
             contextProps,
+            removeIcon,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
+
+        const additionalProps = {
+            inputComponent: Input,
+            value: inputValue,
+            selectedValue,
+            onChange: this.handleOnChange,
+            onSelect: this.handleSelect,
+        };
+
+        if (removeIcon) {
+            additionalProps.icon = selectedValue ? 'ts-wrong' : null;
+            additionalProps.onIconClick = (ev) => {
+                ev.stopPropagation();
+                this.clear();
+            };
+        }
 
         return (
             <div className={classNames('cc__person-finder', className)}>
@@ -94,6 +111,7 @@ class SimplePersonFinder extends Component {
                         {ctx => (
                             <PersonFinderView
                                 {...props}
+                                {...additionalProps}
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={Input}
@@ -142,6 +160,7 @@ SimplePersonFinder.propTypes = {
         }),
     }).isRequired,
     contextProps: PropTypes.object,
+    removeIcon: PropTypes.bool,
 };
 
 SimplePersonFinder.defaultProps = {
@@ -154,6 +173,7 @@ SimplePersonFinder.defaultProps = {
     onInput: null,
     customData: false,
     contextProps: null,
+    removeIcon: false,
 };
 
 export default SimplePersonFinder;

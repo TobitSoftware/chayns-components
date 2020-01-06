@@ -28,7 +28,7 @@ class SelectItem extends Component {
         className: PropTypes.string,
         disabled: PropTypes.bool,
         children: PropTypes.node,
-        name: PropTypes.string,
+        name: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         value: PropTypes.oneOfType([
             PropTypes.object,
             PropTypes.array,
