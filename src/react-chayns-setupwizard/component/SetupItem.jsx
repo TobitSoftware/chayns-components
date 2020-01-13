@@ -6,6 +6,7 @@ import withSetupWizardContext from './withSetupWizardContext';
 const SetupItem = (
     {
         step,
+        showStep,
         title,
         open: openProp,
         ready: readyProp,
@@ -57,7 +58,7 @@ const SetupItem = (
                         'wizard_step--notReady': !ready,
                     })}
                 >
-                    {step + 1}
+                    {(typeof showStep === 'number' ? showStep : step) + 1}
                 </div>
                 <div className="title">
                     {title}
@@ -72,6 +73,7 @@ const SetupItem = (
 
 SetupItem.propTypes = {
     step: PropTypes.number.isRequired,
+    showStep: PropTypes.number,
     title: PropTypes.string.isRequired,
     toStep: PropTypes.func.isRequired,
     stepRequired: PropTypes.func.isRequired,
@@ -88,6 +90,7 @@ SetupItem.propTypes = {
 };
 
 SetupItem.defaultProps = {
+    showStep: null,
     open: false,
     ready: false,
     disabled: false,
