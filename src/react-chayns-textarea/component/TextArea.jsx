@@ -98,8 +98,7 @@ const TextArea = ({
 
     const classNames = classnames('input', {
         'input--disabled': disabled,
-        className,
-    });
+    }, className);
 
     return (
         <textarea
