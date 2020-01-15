@@ -171,7 +171,10 @@ const ColorPicker = forwardRef((props, reference) => {
                 {props.input && (
                     <ColorInput
                         color={color}
-                        onChange={onChange}
+                        onChange={(value) => {
+                            onChange(value);
+                            props.onChangeEnd(value);
+                        }}
                         onModelToggle={onColorModelToggle}
                         colorModel={colorModel}
                         transparency={props.transparency}
