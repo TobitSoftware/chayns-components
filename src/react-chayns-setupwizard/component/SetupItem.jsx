@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import withSetupWizardContext from './withSetupWizardContext';
+import Badge from '../../react-chayns-badge/component/Badge';
 
 const SetupItem = (
     {
@@ -43,7 +44,7 @@ const SetupItem = (
     };
     return (
         <div
-            className={classNames('accordion', 'accordion--fixed', {
+            className={classNames('accordion', {
                 'accordion--open': open,
                 'accordion--disabled': disabled,
             })}
@@ -52,16 +53,16 @@ const SetupItem = (
                 className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: !disabled })}
                 onClick={onClick}
             >
-                <div
-                    className={classNames('number', {
-                        'wizard_step--ready': ready,
-                        'wizard_step--notReady': !ready,
-                    })}
-                >
-                    {(typeof showStep === 'number' ? showStep : step) + 1}
+                <div className="accordion__head__icon">
+                    <i className="react-chayns-icon ts-angle-right" />
                 </div>
-                <div className="title">
+                <div className="accordion__head__title">
+                    {(typeof showStep === 'number' ? showStep : step) + 1}
+                    {'. '}
                     {title}
+                </div>
+                <div className="accordion__head__right">
+                    {ready ? <Badge><i className="ts-check chayns__color--headline " style={{ display: 'flex', alignItems: 'center', fontSize: '1rem' }} /></Badge> : null}
                 </div>
             </div>
             <div className="accordion__body" style={contentStyle}>
