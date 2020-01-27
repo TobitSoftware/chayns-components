@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
-import PersonsContext from '../../src/react-chayns-personfinder/component/data/persons/PersonsContext';
+import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 const customData = [
     {
@@ -44,7 +44,7 @@ export default class PersonFinderExample extends PureComponent {
         console.log('removed', user);
     }
 
-    state = { data: customData.slice(0, 1), value: '' }
+    state = { data: customData.slice(0, 1), hasMore: true }
 
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
@@ -54,7 +54,7 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data, value } = this.state;
+        const { data, hasMore } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
@@ -120,15 +120,30 @@ export default class PersonFinderExample extends PureComponent {
                 <PersonFinder
                     dynamic
                     placeholder="Users (Custom)"
-                    context={PersonsContext}
-                    multiple
-                    onLoadMore={async () => {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        this.setState(state => ({
-                            data: customData.slice(0, state.data.length + 1),
-                        }));
+                    context={SimpleWrapperContext({
+                        showName: 'displayName',
+                        identifier: 'email',
+                        search: ['email', 'displayName'],
+                        imageUrl: 'imageUrl',
+                    })}
+                    contextProps={{
+                        data,
+                        hasMore,
+                        onLoadMore: async () => {
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            this.setState(state => ({
+                                data: customData.slice(0, state.data.length + 1),
+                            }));
+                        },
+                        onInput: async () => {
+                            this.setState({ data: [] });
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            this.setState({
+                                data: customData.slice(0, 1),
+                            });
+                        },
                     }}
-                    enableFriends
+                    multiple
                     onAdd={() => this.setState({ value: '' })}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
