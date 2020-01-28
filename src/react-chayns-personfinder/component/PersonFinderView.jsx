@@ -9,6 +9,8 @@ import WaitCursor from './WaitCursor';
 const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
+    state = { lazyLoading: false };
+
     handleKeyDown = (ev) => {
         if (!this.resultList) return;
 
