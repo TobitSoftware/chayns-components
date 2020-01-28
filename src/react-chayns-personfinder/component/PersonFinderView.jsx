@@ -105,6 +105,7 @@ class PersonFinderView extends Component {
             <InputBox
                 parent={parent}
                 key="single"
+                ref={boxRef}
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
                 onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
