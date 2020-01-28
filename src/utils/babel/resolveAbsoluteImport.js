@@ -34,6 +34,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         OrientationHelper: 'utils/OrientationHelper.js',
         OpeningTimes: 'react-chayns-openingtimes/component/OpeningTimes.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
+        SimpleWrapperContext: 'react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext.js',
         PositionInput: 'react-chayns-position_input/component/PositionInput.js',
         PriceFormatter: 'react-chayns-formatted_input/utils/PriceFormatter.js',
         ProgressBar: 'react-chayns-progress_bar/component/ProgressBar.js',

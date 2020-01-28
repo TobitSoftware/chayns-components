@@ -49,6 +49,7 @@ import Mode from './react-chayns-modeswitch/component/Mode';
 import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+import SimpleWrapperContext from './react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 import ProgressBar from './react-chayns-progress_bar/component/ProgressBar';
 
@@ -121,6 +122,7 @@ export {
     OpeningTimes,
     OrientationHelper,
     PersonFinder,
+    SimpleWrapperContext,
     ProgressBar,
     RadioButton,
     ReceiverInput,
