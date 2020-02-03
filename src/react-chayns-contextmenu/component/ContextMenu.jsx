@@ -93,9 +93,9 @@ export default class ContextMenu extends Component {
         const { onChildrenClick, stopPropagation } = this.props;
         if (onChildrenClick) {
             onChildrenClick(e);
-        } else {
-            this.show();
-        }
+        } else if (chayns.env.isMobile || chayns.env.isTablet) {
+            this.showSelectDialog();
+        } else { this.show(); }
         if (stopPropagation) {
             e.stopPropagation();
         }
@@ -158,6 +158,20 @@ export default class ContextMenu extends Component {
         this.bubble.show();
         this.bubbleShown = true;
         document.addEventListener('click', this.onLayerClick);
+    }
+
+
+    async showSelectDialog() {
+        const { items } = this.props;
+        const list = items.map((item, index) => ({ name: item.text, value: index, icon: (typeof item.icon === 'string' ? item.icon : `fa-${item.icon.iconName}`) }));
+        const dialogRes = await chayns.dialog.select({
+            type: 2,
+            list,
+            buttons: [],
+        });
+        if (dialogRes.buttonType === 1 && dialogRes.selection && dialogRes.selection[0]) {
+            items[dialogRes.selection[0].value].onClick();
+        }
     }
 
     hide() {
