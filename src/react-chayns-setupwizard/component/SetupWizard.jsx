@@ -86,6 +86,7 @@ class SetupWizard extends Component {
                 this.updateContent(next);
                 return;
             }
+            break;
         }
         this.ready();
     };
