@@ -50,16 +50,20 @@ export default class InputBox extends Component {
         this.handleFocus = this.handleFocus.bind(this);
         this.updatePosition = this.updatePosition.bind(this);
         this.blur = this.blur.bind(this);
+        this.focus = this.focus.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     componentDidMount() {
         document.addEventListener('click', this.handleBlur);
         window.addEventListener('blur', this.blur);
+        window.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleBlur);
         window.removeEventListener('blur', this.blur);
+        window.removeEventListener('keydown', this.handleKeyDown);
     }
 
     setRef(name, ref) {
@@ -115,6 +119,18 @@ export default class InputBox extends Component {
         }
 
         return null;
+    }
+
+    focus() {
+        this.setState({
+            hidden: false,
+        });
+    }
+
+    handleKeyDown({ keyCode, target }) {
+        if (keyCode === 9 && isDescendant(this.references.wrapper, target)) {
+            this.blur();
+        }
     }
 
     async updatePosition() {
@@ -183,7 +199,7 @@ export default class InputBox extends Component {
                     <CSSTransition
                         in={!!(position && !hidden && children)}
                         timeout={200}
-                        unmountOnExit
+                        mountOnEnter
                         classNames="fade"
                     >
                         <div

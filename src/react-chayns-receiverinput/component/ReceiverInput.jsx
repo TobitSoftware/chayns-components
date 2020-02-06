@@ -218,6 +218,8 @@ export default class ReceiverInput extends Component {
             showPopup,
         } = this.state;
 
+        this.addPopupRootDiv();
+
         ReactDOM.render(
             <ReceiverSearchPopup
                 updateReceiverSearchString={this.updateReceiverSearchString}

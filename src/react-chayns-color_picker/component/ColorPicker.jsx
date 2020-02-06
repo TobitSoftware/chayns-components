@@ -1,5 +1,10 @@
 import React, {
-    useState, useEffect, useRef, useCallback,
+    useState,
+    useEffect,
+    useRef,
+    useCallback,
+    useImperativeHandle,
+    forwardRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -37,7 +42,7 @@ const getHsvColor = (color) => {
     };
 };
 
-export default function ColorPicker(props) {
+const ColorPicker = forwardRef((props, reference) => {
     // references
     const bubbleRef = useRef(null);
     const bubbleContentRef = useRef(null);
@@ -102,6 +107,10 @@ export default function ColorPicker(props) {
 
     const rgb255 = hsvToRgb(color);
 
+    useImperativeHandle(reference, () => ({
+        show: openBubble,
+    }));
+
     return [
         <div
             className={classNames('cc__color-picker', props.className)}
@@ -162,7 +171,10 @@ export default function ColorPicker(props) {
                 {props.input && (
                     <ColorInput
                         color={color}
-                        onChange={onChange}
+                        onChange={(value) => {
+                            onChange(value);
+                            props.onChangeEnd(value);
+                        }}
                         onModelToggle={onColorModelToggle}
                         colorModel={colorModel}
                         transparency={props.transparency}
@@ -171,7 +183,7 @@ export default function ColorPicker(props) {
             </div>
         </Bubble>,
     ];
-}
+});
 
 ColorPicker.propTypes = {
     color: PropTypes.oneOfType([
@@ -222,3 +234,5 @@ ColorPicker.colorModels = {
     HEX: 0,
     RGB: 1,
 };
+
+export default ColorPicker;

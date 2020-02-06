@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,prefer-destructuring */
+/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,prefer-destructuring,react/no-array-index-key */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -15,8 +15,8 @@ export default class ContextMenu extends Component {
         items: PropTypes.arrayOf(PropTypes.shape({
             className: PropTypes.string,
             onClick: PropTypes.func,
-            text: PropTypes.string.isRequired,
-            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
         })),
         position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
         parent: PropTypes.instanceOf(Element),
@@ -96,7 +96,9 @@ export default class ContextMenu extends Component {
         } else {
             this.show();
         }
-        if (stopPropagation) e.stopPropagation();
+        if (stopPropagation) {
+            e.stopPropagation();
+        }
     }
 
     onLayerClick(e) {
@@ -152,10 +154,28 @@ export default class ContextMenu extends Component {
     }
 
     show() {
-        this.getPosition();
-        this.bubble.show();
-        this.bubbleShown = true;
-        document.addEventListener('click', this.onLayerClick);
+        if (chayns.env.isMobile || chayns.env.isTablet) {
+            this.showSelectDialog();
+        } else {
+            this.getPosition();
+            this.bubble.show();
+            this.bubbleShown = true;
+            document.addEventListener('click', this.onLayerClick);
+        }
+    }
+
+
+    async showSelectDialog() {
+        const { items } = this.props;
+        const list = items.map((item, index) => ({ name: item.text, value: index, icon: (typeof item.icon === 'string' ? item.icon : `fa-${item.icon.iconName}`) }));
+        const dialogRes = await chayns.dialog.select({
+            type: 2,
+            list,
+            buttons: [],
+        });
+        if (dialogRes.buttonType === 1 && dialogRes.selection && dialogRes.selection[0]) {
+            items[dialogRes.selection[0].value].onClick();
+        }
     }
 
     hide() {
@@ -179,6 +199,7 @@ export default class ContextMenu extends Component {
             childrenClassName,
             className,
             style,
+            stopPropagation,
         } = this.props;
 
         const { position, x, y } = this.state;
@@ -194,11 +215,16 @@ export default class ContextMenu extends Component {
                 className={className}
             >
                 <ul>
-                    {items.map(item => (
+                    {items.map((item, index) => (
                         <li
                             className={classNames('context-menu__item', item.className)}
-                            onClick={item.onClick}
-                            key={item.text}
+                            onClick={(e) => {
+                                if (stopPropagation) {
+                                    e.stopPropagation();
+                                }
+                                item.onClick(e);
+                            }}
+                            key={(item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text) + index}
                         >
                             {item.icon ? (
                                 <div className="context-menu__item__icon"><Icon icon={item.icon} /></div>

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign,no-else-return */
-import { shareProvider, shareActions } from './sharingProvider';
+import { shareProvider } from './sharingProvider';
 
 export function getAvailableShareProviders() {
     if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
@@ -14,7 +14,7 @@ export function getAvailableShareProviders() {
 
                 if (shareApp !== undefined) {
                     curProvider.available = true;
-                    curProvider.action = shareActions.shareWithApp;
+                    curProvider.useApp = true;
                 }
             });
 
@@ -32,7 +32,7 @@ export function getAvailableShareProviders() {
 
                     if (shareApp) {
                         curProvider.available = true;
-                        curProvider.action = shareActions.shareWithApp;
+                        curProvider.useApp = true;
                     }
                 });
             }

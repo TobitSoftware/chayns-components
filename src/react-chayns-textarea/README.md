@@ -32,12 +32,15 @@ Then it can be used like in the following example:
 | style        | Styles for the textarea                                                              | Object   |
 | required     | Makes the textarea required                                                          | bool     |
 | autogrow     | Activates the auto resizing of the textarea                                          | bool     |
+| disabled     | Disables the input                                                                   | bool     |
 | reference    | References the textarea element                                                      | function |
 | onKeyUp      | onKeyUp-Event                                                                        | function |
 | onKeyDown    | onKeyDown-Event                                                                      | function |
 | onChange     | Callback that is fired on onChange (from react) with textarea-value                  | function |
 | onBlur       | Callback that is fired on onBlur (from react) with textarea-value                    | function |
-| stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
+| stopPropagation     | Stops the click propagation to parent elements                                | bool     |
+
+> Additional props will be forwarded to the textarea element
 
 
 ## Examples ##

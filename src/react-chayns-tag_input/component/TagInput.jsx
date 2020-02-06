@@ -146,6 +146,7 @@ export default class TagInput extends Component {
         const { selectedIndex } = this.state;
 
         const { width } = getInputSize(`${value}${BIGGEST_LETTER}`);
+        const inputStyle = value ? { width } : {};
 
         return (
             <div
@@ -171,9 +172,7 @@ export default class TagInput extends Component {
                         onChange={this.handleChange}
                         onKeyUp={this.handleKeyUp}
                         placeholder={(!tags || !tags.length) ? placeholder : null}
-                        style={{
-                            width,
-                        }}
+                        style={inputStyle}
                     />
                 </div>
             </div>
