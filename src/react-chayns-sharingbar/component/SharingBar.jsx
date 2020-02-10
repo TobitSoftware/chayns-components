@@ -5,17 +5,18 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 import Icon from '../../react-chayns-icon/component/Icon';
-import Button from '../../react-chayns-button/component/Button';
 import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
 import share from './sharingActions';
 
+import './sharingBar.scss';
+
 function SharingBar({
-    link,
-    linkText,
-    className,
-    stopPropagation,
-    style,
-}) {
+                        link,
+                        linkText,
+                        className,
+                        stopPropagation,
+                        style,
+                    }) {
     const [sharingProvider, setSharingProvider] = useState([]);
 
     useEffect(() => {
@@ -57,14 +58,13 @@ function SharingBar({
     });
 
     return (
-        <div className={classNames('sharing-bar__item-list', className)} style={style}>
+        <div className={classNames('sharing-bar', className)} style={style}>
             <ContextMenu
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Button>
-                    <Icon icon={faShareAlt} />
-                </Button>
+                <Icon icon={faShareAlt} className="sharing-bar__icon"/>
+                <span className="sharing-bar_text">Teilen</span>
             </ContextMenu>
         </div>
     );
