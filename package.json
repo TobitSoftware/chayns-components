@@ -6,7 +6,7 @@
   "module": "dist/index.es.js",
   "jsnext:main": "lib_esnext/index.js",
   "scripts": {
-    "start": "node ./examples/utils/generateReactList && webpack-dev-server --config ./webpack/dev.babel.js",
+    "start": "node ./examples/utils/generateReactList && concurrently --kill-others \"npm run watch:sass\" \"npm run webpack\"",
     "prepublishOnly": "npm run eslint & npm run build",
     "clean": "",
     "build": "npm run build:sass && npm run build:es && npm run build:cjs && npm run build:lib:es",
@@ -17,9 +17,10 @@
     "build:examples": "npm run build:sass && node ./examples/utils/generateReactList && webpack --config ./webpack/dev.babel.js --env.prod",
     "build:md": "node ./examples/utils/generateMarkdownList",
     "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js",
-    "watch": "concurrently  \"npm run watch:js & npm run watch:sass\"",
+    "watch": "concurrently --kill-others \"npm run watch:sass\" \"npm run watch:js\"",
     "watch:js": "babel -w src/ --out-dir lib/",
     "watch:sass": "node-sass src/ -o ./src -w",
+    "webpack": "webpack-dev-server --config ./webpack/dev.babel.js",
     "dev": "npm link && npm run watch"
   },
   "author": "Tobit.Software",
