@@ -54,10 +54,24 @@ export default class DateExample extends Component {
                 <DateInfo date={date} showDate showTime language={language} />
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime useToday useTomorrowYesterday=false:</div>
-                <DateInfo date={date} showDate={false} showTime language={language} useToday useTomorrowYesterday={false} />
+                <DateInfo
+                    date={date}
+                    showDate={false}
+                    showTime
+                    language={language}
+                    useToday
+                    useTomorrowYesterday={false}
+                />
 
                 <div style={{ fontWeight: 'bold' }}>showDate showTime=false useToday=false useTomorrowYesterday:</div>
-                <DateInfo date={date} showDate showTime={false} language={language} useToday={false} useTomorrowYesterday />
+                <DateInfo
+                    date={date}
+                    showDate
+                    showTime={false}
+                    language={language}
+                    useToday={false}
+                    useTomorrowYesterday
+                />
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime=false:</div>
                 <DateInfo date={date} showDate={false} showTime={false} language={language} />
@@ -65,11 +79,11 @@ export default class DateExample extends Component {
                 <div style={{ fontWeight: 'bold' }}>writeDay:</div>
                 <DateInfo date={date} writeDay language={language} />
 
-                <div style={{ fontWeight: 'bold' }}>writeMonth:</div>
-                <DateInfo date={date} writeMonth language={language} />
+                <div style={{ fontWeight: 'bold' }}>writeMonth hideYear:</div>
+                <DateInfo date={date} writeMonth language={language} hideYear />
 
-                <div style={{ fontWeight: 'bold' }}>writeMonth=false showDate:</div>
-                <DateInfo date={date} writeMonth={false} showDate language={language} />
+                <div style={{ fontWeight: 'bold' }}>writeMonth=false showDate hideYear=null:</div>
+                <DateInfo date={date} writeMonth={false} showDate language={language} hideYear={null} />
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay:</div>
                 <DateInfo date={date} writeMonth writeDay language={language} />
