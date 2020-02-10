@@ -27,6 +27,8 @@ export default class Accordion extends PureComponent {
             PropTypes.arrayOf(PropTypes.string),
             PropTypes.object,
         ]),
+        // eslint-disable-next-line react/require-default-props
+        headCustomAttributes: PropTypes.object,
         children: PropTypes.node.isRequired,
         right: PropTypes.oneOfType([
             PropTypes.node.isRequired,
@@ -64,6 +66,7 @@ export default class Accordion extends PureComponent {
     static defaultProps = {
         className: '',
         headClassNames: null,
+        headCustomAttributes: null,
         dataGroup: null,
         id: null,
         style: null,
@@ -276,6 +279,7 @@ export default class Accordion extends PureComponent {
             icon,
             head,
             headClassNames,
+            headCustomAttributes,
             noRotate,
             noIcon,
             disabled,
@@ -307,6 +311,7 @@ export default class Accordion extends PureComponent {
                 <div
                     className={classNames('accordion__head', headClassNames)}
                     onClick={this.handleAccordionClick}
+                    {...headCustomAttributes}
                 >
                     {
                         noIcon

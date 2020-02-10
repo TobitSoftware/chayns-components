@@ -35,6 +35,7 @@ The following properties can be set
 |--------------|------------------------------------------------------------------------|----------------------------|---------------|
 | head         | Headline of the accordion                                              | String, node or object [1] | *required*    |
 | headClassNames | CSS classes for the accordion head                                   | String, array or object    | null          |
+| headCustomAttributes | Custom attributes for head element                             | object                     | null          |
 | children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
 | right        | Node that get rendered in the right side of the accordion head         | String, node or object [2] |               |
 | renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
