@@ -11,12 +11,12 @@ import share from './sharingActions';
 import './sharingBar.scss';
 
 function SharingBar({
-                        link,
-                        linkText,
-                        className,
-                        stopPropagation,
-                        style,
-                    }) {
+    link,
+    linkText,
+    className,
+    stopPropagation,
+    style,
+}) {
     const [sharingProvider, setSharingProvider] = useState([]);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon={faShareAlt} className="sharing-bar__icon"/>
+                <Icon icon={faShareAlt} className="sharing-bar__icon" />
                 <span className="sharing-bar_text">Teilen</span>
             </ContextMenu>
         </div>
