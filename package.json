@@ -19,7 +19,7 @@
     "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js",
     "watch": "concurrently --kill-others \"npm run watch:sass\" \"npm run watch:js\"",
     "watch:js": "babel -w src/ --out-dir lib/",
-    "watch:sass": "node-sass src/ -o ./src -w",
+    "watch:sass": "npm run build:sass && node-sass src/ -o ./src -w",
     "webpack": "webpack-dev-server --config ./webpack/dev.babel.js",
     "dev": "npm link && npm run watch"
   },
