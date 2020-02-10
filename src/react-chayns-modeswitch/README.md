@@ -48,7 +48,7 @@ You should set the Show property only if you have more than two modes or the adm
 ## Mode Object ##
 
 The mode object represents a mode in the ModeSwitch.
-It requires an *id** and a **name**.
+It requires an **id** and a **name**.
 It is also possible to provide an array containing UAC group ids. This causes that the specific mode (group object) can only be selected by users, that are member of the specified uac groups.
 
 

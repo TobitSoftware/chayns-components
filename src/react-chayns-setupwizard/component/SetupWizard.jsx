@@ -81,7 +81,7 @@ class SetupWizard extends Component {
     nextStep = () => {
         const { children, numberOfSteps } = this.props;
         const { currentStep } = this.state;
-        for (let next = currentStep + 1; numberOfSteps || (Array.isArray(children) && children.length) > next; next += 1) {
+        for (let next = currentStep + 1; (numberOfSteps || (Array.isArray(children) && children.length)) > next; next += 1) {
             if (children[next]) {
                 this.updateContent(next);
                 return;
