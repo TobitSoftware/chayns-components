@@ -26,9 +26,11 @@ export default class Mode extends Component {
     }
 
     updatedMode = (mode) => {
-        this.setState({
-            modeId: mode.id,
-        });
+        if (mode && mode.id !== undefined) {
+            this.setState({
+                modeId: mode.id,
+            });
+        }
     };
 
     render() {
