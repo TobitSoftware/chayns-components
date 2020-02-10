@@ -17,9 +17,9 @@
     "build:examples": "npm run build:sass && node ./examples/utils/generateReactList && webpack --config ./webpack/dev.babel.js --env.prod",
     "build:md": "node ./examples/utils/generateMarkdownList",
     "eslint": "./node_modules/.bin/eslint src --ext .jsx --ext .js",
-    "watch": "concurrently  \"npm run watch:js\"",
+    "watch": "concurrently  \"npm run watch:js & npm run watch:sass\"",
     "watch:js": "babel -w src/ --out-dir lib/",
-    "watch:sass": "npm run build:sass -- --watch",
+    "watch:sass": "node-sass src/ -o ./src -w",
     "dev": "npm link && npm run watch"
   },
   "author": "Tobit.Software",
