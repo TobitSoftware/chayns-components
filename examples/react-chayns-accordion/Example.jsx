@@ -60,6 +60,10 @@ export default class AccordionExample extends Component {
                     show
                         ? (
                             <Accordion
+                                headCustomAttributes={{
+                                    tabIndex: 0,
+                                    onKeyDown: console.log,
+                                }}
                                 head="controlled Accordion with nice search"
                                 headClassNames="chayns__color"
                                 onSearch={(data) => {

@@ -37,7 +37,7 @@ export default class SharingBarItem extends Component {
 
         return (
             <div onClick={this.onClick}>
-                <Icon icon={icon} className="sharing-bar__icon"/>
+                <Icon icon={icon} className="sharing-bar__icon" />
                 <span className="sharing-bar_text">Teilen</span>
             </div>
         );

@@ -15,6 +15,7 @@ export default class DateInfo extends PureComponent {
         noTitle: PropTypes.bool,
         useToday: PropTypes.bool,
         useTomorrowYesterday: PropTypes.bool,
+        hideYear: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -28,6 +29,7 @@ export default class DateInfo extends PureComponent {
         noTitle: false,
         useToday: null,
         useTomorrowYesterday: null,
+        hideYear: false,
     };
 
     static getRelativeDateString = (date, options = { language: 'de' }) => {
@@ -86,8 +88,13 @@ export default class DateInfo extends PureComponent {
             month: dateObj.getMonth() + 1,
             monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
             monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
-            years: dateObj.getFullYear(),
+            years: options.hideYear ? '' : dateObj.getFullYear(),
         };
+
+        // 2019->19
+        if (options.hideYear === null) {
+            absoluteValues.years = absoluteValues.years.toString().substring(absoluteValues.years.toString().length - 2);
+        }
 
         if (options.showTime === !!options.showTime && (unit === 'seconds' || unit === 'minutes' || unit === 'hours')) {
             unit = 'days';
@@ -184,21 +191,21 @@ export default class DateInfo extends PureComponent {
     render() {
         const { language } = this.state;
         const {
-            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday,
+            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday, hideYear,
         } = this.props;
 
         let txt = DateInfo.getRelativeDateString(date, {
-            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
         });
         if (date2) {
             txt += ' - ';
             if (new Date(date).toDateString() === new Date(date2).toDateString()) {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
                 });
             } else {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
                 });
             }
         }
