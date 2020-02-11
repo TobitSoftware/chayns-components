@@ -130,7 +130,7 @@ export default class ModeSwitch extends Component {
                 name: window.chayns.env.user.name,
             });
         }
-        newModes = newModes.filter(mode => !mode.uacIds || (this.isUserInGroup(mode.uacIds) && ((mode.id === 1 && ModeSwitch.adminSwitchStatus) || mode.id !== 1)));
+        newModes = newModes.filter(mode => !mode.uacIds || (this.isUserInGroup(mode.uacIds)));
         return newModes;
     }
 
