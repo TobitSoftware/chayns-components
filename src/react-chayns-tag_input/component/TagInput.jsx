@@ -14,7 +14,7 @@ export default class TagInput extends Component {
     static propTypes = {
         tags: PropTypes.arrayOf(PropTypes.shape({
             text: PropTypes.string,
-        })).isRequired,
+        })),
         value: PropTypes.string,
         onAddTag: PropTypes.func,
         onRemoveTag: PropTypes.func,
@@ -25,6 +25,7 @@ export default class TagInput extends Component {
     };
 
     static defaultProps = {
+        tags: null,
         onAddTag: null,
         onRemoveTag: null,
         placeholder: null,

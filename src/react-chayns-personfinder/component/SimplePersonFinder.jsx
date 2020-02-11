@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderView from './PersonFinderView';
-import { isFunction } from '../../utils/is';
+import { isFunction, isString } from '../../utils/is';
 import PersonsContext from './data/persons/PersonsContext';
 
 class SimplePersonFinder extends Component {
@@ -12,9 +12,13 @@ class SimplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
+            inputValue: isString(props.defaultValue) ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
         };
+
+        if (isString(props.defaultValue)) {
+            console.warn('[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.');
+        }
 
         this.clear = this.clear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);

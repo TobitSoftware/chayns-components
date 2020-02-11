@@ -99,7 +99,7 @@ class MultiplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
-            values: null,
+            values: [],
             selectedValue: null,
         });
 
