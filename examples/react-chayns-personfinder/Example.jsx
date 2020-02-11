@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
+import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
+import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 const customData = [
     {
@@ -42,58 +44,65 @@ export default class PersonFinderExample extends PureComponent {
         console.log('removed', user);
     }
 
-    state = { data: customData.slice(0, 1), value: '' }
+    state = { data: customData.slice(0, 1), hasMore: true }
 
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
-        if (this.relationFinder) this.relationFinder.clear();
-        if (this.personFinderOwn) this.personFinderOwn.clear();
+        if (this.relationFinder1) this.relationFinder1.clear();
+        if (this.relationFinder2) this.relationFinder2.clear();
+        if (this.personFinderOwn1) this.personFinderOwn1.clear();
+        if (this.personFinderOwn2) this.personFinderOwn2.clear();
+        if (this.personFinderOwn3) this.personFinderOwn3.clear();
+        if (this.customUserFinder) this.customUserFinder.clear();
+        if (this.multipleUserFinder) this.multipleUserFinder.clear();
+        if (this.uacFinder) this.uacFinder.clear();
+        if (this.relationFinderUac) this.relationFinderUac.clear();
+        if (this.relationFinderUacLocation) this.relationFinderUacLocation.clear();
     };
 
     render() {
-        const { data, value } = this.state;
+        const { data, hasMore } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
-                    ref={(ref) => { this.relationFinder = ref; }}
+                    ref={(ref) => { this.relationFinder1 = ref; }}
                     dynamic
                     placeholder="Users with reducer: show only persons with an 'e' in the name"
                     onChange={PersonFinderExample.handleSelect}
-                    reducerFunction={state => new Promise((resolve) => {
+                    reducerFunction={(state) => {
                         console.log(state);
                         const newState = {
                             ...state,
-                            persons: {
-                                ...state.persons,
-                                related: state.persons.related.filter((person) => {
-                                    console.log(person);
-                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
-                                }),
-                                unrelated: state.persons.unrelated.filter((person) => {
-                                    console.log(person);
-                                    return person.firstName.indexOf('e') >= 0 || person.lastName.indexOf('e') >= 0;
-                                }),
-                            },
+                            personsRelated: state.personsRelated.filter((person) => {
+                                console.log(person);
+                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
+                            }),
+                            personsUnrelated: state.personsUnrelated.filter((person) => {
+                                console.log(person);
+                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
+                            }),
                         };
-                        resolve(newState);
-                    })}
+                        return newState;
+                    }}
                 />
                 <PersonFinder
                     defaultValue="Smith"
-                    ref={(ref) => { this.relationFinder = ref; }}
+                    ref={(ref) => { this.relationFinder2 = ref; }}
                     dynamic
                     placeholder="User/Site"
                     onChange={PersonFinderExample.handleSelect}
                     showSites
                 />
                 <PersonFinder
+                    ref={(ref) => { this.relationFinderUac = ref; }}
                     dynamic
                     placeholder="UAC 1"
                     uacId={1}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
+                    ref={(ref) => { this.relationFinderUacLocation = ref; }}
                     dynamic
                     placeholder="UAC 1 Location 1"
                     uacId={1}
@@ -119,35 +128,53 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
+                    ref={(ref) => { this.customUserFinder = ref; }}
                     dynamic
                     placeholder="Users (Custom)"
-                    customData
-                    orm={{
+                    context={SimpleWrapperContext({
                         showName: 'displayName',
                         identifier: 'email',
-                        search: ['email', 'displayName', 'shortHand'],
+                        search: ['email', 'displayName'],
                         imageUrl: 'imageUrl',
+                    })}
+                    contextProps={{
+                        data,
+                        hasMore,
+                        onLoadMore: async () => {
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            this.setState(state => ({
+                                data: customData.slice(0, state.data.length + 1),
+                            }));
+                        },
+                        onInput: async () => {
+                            this.setState({ data: [] });
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            this.setState({
+                                data: customData.slice(0, 1),
+                            });
+                        },
                     }}
-                    data={value.length > 2 ? data : []}
-                    onInput={value => this.setState({ value })}
-                    hasMore={this.state.data.length < customData.length}
                     multiple
-                    onLoadMore={async () => {
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                        this.setState(state => ({
-                            data: customData.slice(0, state.data.length + 1),
-                        }));
-                    }}
+                    onAdd={() => this.setState({ value: '' })}
+                    onRemove={PersonFinderExample.handleRemove}
+                    onChange={PersonFinderExample.handleSelect}
                     defaultValues={[
                         { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
                         { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
                     ]}
-                    onAdd={() => this.setState({ value: '' })}
+                />
+                <PersonFinder
+                    dynamic
+                    ref={(ref) => { this.uacFinder = ref; }}
+                    placeholder="UAC Groups (Custom)"
+                    context={UacGroupContext}
+                    multiple
+                    onAdd={group => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    ref={(ref) => { this.personFinderOwn1 = ref; }}
                     dynamic
                     placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
@@ -156,7 +183,7 @@ export default class PersonFinderExample extends PureComponent {
                     showId
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    ref={(ref) => { this.personFinderOwn2 = ref; }}
                     dynamic
                     placeholder="Users/Sites (multiple, dynamic)"
                     onAdd={PersonFinderExample.handleAdd}
@@ -166,7 +193,7 @@ export default class PersonFinderExample extends PureComponent {
                     multiple
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn = ref; }}
+                    ref={(ref) => { this.personFinderOwn3 = ref; }}
                     dynamic
                     placeholder="Sites (multiple, default)"
                     defaultValues={[{
@@ -180,11 +207,14 @@ export default class PersonFinderExample extends PureComponent {
                     showPersons={false}
                     showSites
                     multiple
-                    parent={document.getElementById('portal-example')}
+                    parent={document.body}
                     boxClassName="custom-personfinder-overlay"
                 />
-                <PersonFinder onInput={console.log} />
-                <PersonFinder placeholder="Users (multiple)" multiple />
+                <PersonFinder
+                    ref={(ref) => { this.multipleUserFinder = ref; }}
+                    placeholder="Users (multiple)"
+                    multiple
+                />
                 <Button
                     onClick={this.clear}
                 >

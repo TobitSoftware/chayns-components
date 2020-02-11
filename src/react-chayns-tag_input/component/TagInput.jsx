@@ -14,7 +14,7 @@ export default class TagInput extends Component {
     static propTypes = {
         tags: PropTypes.arrayOf(PropTypes.shape({
             text: PropTypes.string,
-        })).isRequired,
+        })),
         value: PropTypes.string,
         onAddTag: PropTypes.func,
         onRemoveTag: PropTypes.func,
@@ -25,6 +25,7 @@ export default class TagInput extends Component {
     };
 
     static defaultProps = {
+        tags: null,
         onAddTag: null,
         onRemoveTag: null,
         placeholder: null,
@@ -146,7 +147,7 @@ export default class TagInput extends Component {
         const { selectedIndex } = this.state;
 
         const { width } = getInputSize(`${value}${BIGGEST_LETTER}`);
-        const inputStyle = value ? { width } : {};
+        const inputStyle = value ? { width } : { width: 20 };
 
         return (
             <div
