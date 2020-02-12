@@ -11,6 +11,7 @@ import {
     fetchSites,
 } from './PersonsApi';
 import {
+    convertPerson,
     convertPersons, convertSites,
 } from './PersonsConverter';
 import FriendsHelper from './FriendsHelper';
@@ -209,6 +210,7 @@ export default {
     Consumer: PersonFinderContext.Consumer,
     Provider: PersonFinderStateProvider,
     ObjectMapping,
+    ValueConverter: convertPerson,
 };
 
 export const useStateValue = () => useContext(PersonFinderContext);
