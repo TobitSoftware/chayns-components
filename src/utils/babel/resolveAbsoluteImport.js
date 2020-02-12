@@ -15,6 +15,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         DateInfo: 'react-chayns-dateinfo/component/DateInfo.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         ExpandableContent: 'react-chayns-expandable_content/component/ExpandableContent.js',
+        FilterButton: 'react-chayns-filterbutton/component/FilterButton.js',
         FormattedInput: 'react-chayns-formatted_input/component/FormattedInput.js',
         Formatter: 'react-chayns-formatted_input/utils/Formatter.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',

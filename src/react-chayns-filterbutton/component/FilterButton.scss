@@ -1,0 +1,48 @@
+.button--filter {
+    padding: 3px 8px;
+    position: relative;
+    margin: 5px 10px 5px 0;
+    user-select: none;
+    box-shadow: none;
+    border-width: 0px;
+    border-style: solid;
+    border-radius: 3px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+
+    &::after {
+        background-color: currentColor;
+        opacity: 0.1;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        border-radius: 3px;
+
+        transition: opacity 80ms;
+    }
+
+    &--disabled {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    &--active {
+        &::after {
+            opacity: 0.4;
+        }
+    }
+
+    &__icon:not(:last-child) {
+        margin-right: 10px;
+    }
+
+    &__input {
+        display: none;
+    }
+}
