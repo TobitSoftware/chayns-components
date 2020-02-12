@@ -1,0 +1,124 @@
+.cc__opening_times {
+  .flex {
+    flex-flow: row wrap;
+    display: flex;
+
+    .flex__left {
+      flex: 1;
+      padding: 3px 0 0;
+    }
+
+    .flex__middle {
+      text-align: right;
+      display: flex;
+
+      .inline__block {
+        display: inline-block;
+      }
+    }
+  }
+
+  .time__span {
+    margin-left: 30px;
+    width: 140px;
+    max-height: 29px;
+    display: flex;
+    transition-duration: 1500ms;
+
+    &:nth-of-type(2):before {
+      content: "&";
+      position: absolute;
+      transform: translate(-20px, 1px);
+    }
+
+    span {
+      width: 30px;
+      text-align: center;
+    }
+
+    &--input {
+      float: right;
+      width: 100px;
+      text-align: center;
+
+      input {
+        text-align: center;
+        width: 100%;
+      }
+    }
+
+    &--button {
+      min-width: 25px;
+    }
+  }
+
+  .times {
+    &.multiple {
+      //margin: 15px 0;
+    }
+
+    &--disabled {
+      .flex__middle, .flex__right {
+        opacity: .2;
+        pointer-events: none;
+      }
+    }
+
+    transition: all .2s;
+
+    .flex__middle {
+      span {
+        float: right;
+        width: 30px;
+        text-align: center;
+      }
+    }
+
+    .flex__right {
+      width: 20px;
+      height: 20px;
+      padding: 1.5px 0 0 1px;
+      font-size: 11px;
+      margin: 4px 0 4px 3px;
+      align-self: flex-end
+    }
+  }
+
+  .openingTimesIcon {
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+
+    &.add {
+      transform: rotate(0deg);
+    }
+
+    &.remove {
+      transform: rotate(45deg);
+    }
+  }
+
+  .choosebutton {
+    min-height: 1px;
+  }
+}
+
+@mixin mobile {
+  .cc__opening_times {
+    .flex__middle {
+      flex-direction: column;
+    }
+
+    .time__span:nth-of-type(2):before {
+      content: "";
+    }
+  }
+}
+
+@media screen and(max-width: 490px) {
+  @include mobile;
+}
+
+.chayns--mobile {
+  @include mobile;
+}
+

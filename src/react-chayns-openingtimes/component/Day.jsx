@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
+import Icon from '../../react-chayns-icon/component/Icon';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 
 class Day extends Component {
     constructor(props) {
@@ -36,7 +39,9 @@ class Day extends Component {
         const isDisabled = !times.some(t => !t.disabled);
 
         return (
-            <div className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}>
+            <div
+                className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}
+            >
                 <div className="flex__left">
                     <Checkbox
                         label={weekday.name}
@@ -44,29 +49,34 @@ class Day extends Component {
                         checked={!isDisabled}
                     />
                 </div>
-                <div className="flex__right">
+                <div className="flex__middle">
                     {
-                        timeSpans.length === 0 ? (
-                            <TimeSpan
-                                active={false}
-                                disabled
-                                buttonType={TimeSpan.ADD}
-                            />
-                        ) : timeSpans.map((t, index) => (
+                        timeSpans.map((t, index) => (
                             <TimeSpan
                                 key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
                                 start={t.start}
                                 end={t.end}
                                 disabled={isDisabled}
-                                // eslint-disable-next-line no-nested-ternary
-                                buttonType={timeSpans.length === 1 ? TimeSpan.ADD : index === 0 ? TimeSpan.OFF : TimeSpan.REMOVE}
-                                onAdd={(start, end) => onAdd(weekday.number, start, end)}
-                                onRemove={() => onRemove(weekday.number, index)}
                                 onChange={(start, end) => onChange(weekday.number, index, start, end)}
                             />
                         ))
                     }
                 </div>
+                <ChooseButton
+                    className="flex__right"
+                    onClick={() => {
+                        if (timeSpans.length < 2) {
+                            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+                        } else {
+                            onRemove(weekday.number, 1);
+                        }
+                    }}
+                >
+                    <Icon
+                        icon={faPlus}
+                        className={`fa-xs openingTimesIcon ${timeSpans.length < 2 ? 'add' : 'remove'}`}
+                    />
+                </ChooseButton>
             </div>
         );
     }

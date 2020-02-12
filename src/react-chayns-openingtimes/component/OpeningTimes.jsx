@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Day from './Day';
+import TimeSpan from './TimeSpan';
+import './OpeningTimes.scss';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
@@ -42,16 +44,27 @@ class OpeningTimes extends Component {
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
 
-        this.state = {
-            times: props.times,
-        };
-
-        const { times } = this.state;
+        const { times } = this.props;
 
         for (let i = 0; i < times.length; i += 1) {
             const current = times[i];
             if (current && (current.disabled === null || current.disabled === undefined)) current.disabled = false;
         }
+
+        for (let i = 0; i < OpeningTimes.weekdays.length; i += 1) {
+            if (times.findIndex(element => element.weekDay === i) < 0) {
+                times.push({
+                    weekDay: i,
+                    start: TimeSpan.defaultStart,
+                    end: TimeSpan.defaultEnd,
+                    disabled: true,
+                });
+            }
+        }
+
+        this.state = {
+            times,
+        };
     }
 
     onAdd(weekDay) {
@@ -105,7 +118,6 @@ class OpeningTimes extends Component {
             const timesOfDay = newState.times.filter(time => time.weekDay === day);
             timesOfDay[index].start = start;
             timesOfDay[index].end = end;
-
             this.setState(newState);
             onChange(times);
         }
@@ -119,6 +131,7 @@ class OpeningTimes extends Component {
             weekDay: day,
             start: '08:00',
             end: '18:00',
+            disabled: false,
         };
 
         if (timesOfDay.length === 0) {
@@ -132,15 +145,25 @@ class OpeningTimes extends Component {
                         weekDay: time.weekDay,
                         start: time.start,
                         end: time.end,
-                        disabed: !time.disabled,
+                        disabled: !time.disabled,
                     } : time));
                 } else newState.times.push(defaultTime);
-            } else newState.times = this.applyPreviousTimes(day, status);
-            if (newState.times.length === 0) newState.times.push(defaultTime);
+            }
+            // else newState.times = this.applyPreviousTimes(day, status);
+            let foundTimeForDay = false;
+            for (let i = 0; i < newState.times.length; i += 1) {
+                if (newState.times[i].weekDay === day) {
+                    if (newState.times[i].disabled === true) {
+                        newState.times[i].disabled = false;
+                    }
+                    foundTimeForDay = true;
+                }
+            }
+            if (!foundTimeForDay) newState.times.push(defaultTime);
         } else {
             for (let i = 0; i < timesOfDay.length; i += 1) {
                 const current = timesOfDay[i];
-                if (current.weekDay === day) current.disabled = !status;
+                if (current.weekDay === day) current.disabled = true;
             }
         }
 
@@ -148,54 +171,11 @@ class OpeningTimes extends Component {
         if (onChange) onChange(newState.times);
     }
 
-    getLatestPreviousWeekDay(startDay) {
-        const { times } = this.state;
-        let latest = 0;
-
-        if (!times) return null;
-
-        for (let i = 0; i < times.length; i += 1) {
-            if (times[i].weekDay < startDay && times[i].weekDay > latest && !times[i].disabled) latest = times[i].weekDay;
-        }
-
-        return latest;
-    }
-
-    getWeekDayTimes(weekDay) {
-        const { times } = this.state;
-        const foundTimes = times.filter(item => item.weekDay === weekDay && !item.disabled);
-
-        if (!times) return null;
-        if (foundTimes.length === 0) return null;
-
-        return foundTimes;
-    }
-
-    applyPreviousTimes(addedWeekDay, status = true) {
-        const { times } = this.state;
-        const foundTimes = this.getWeekDayTimes(this.getLatestPreviousWeekDay(addedWeekDay));
-        const newTimes = times.slice().filter(time => time.weekDay !== addedWeekDay);
-
-        if (foundTimes === null) return [];
-
-        for (let i = 0; i < foundTimes.length; i += 1) {
-            newTimes.push({
-                weekDay: addedWeekDay,
-                start: foundTimes[i].start,
-                end: foundTimes[i].end,
-                disabled: !status,
-            });
-        }
-
-        return newTimes;
-    }
-
     render() {
         const { className, style } = this.props;
         const { state } = this;
-
         return (
-            <div className={classNames(className, 'cc__opening-times')} style={style}>
+            <div className={classNames(className, 'cc__opening_times')} style={style}>
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day

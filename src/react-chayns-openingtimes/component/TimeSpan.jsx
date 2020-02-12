@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import Input from '../../react-chayns-input/component/Input';
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
-import Icon from '../../react-chayns-icon/component/Icon';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
@@ -12,9 +9,6 @@ class TimeSpan extends Component {
         start: PropTypes.string.isRequired,
         end: PropTypes.string.isRequired,
         disabled: PropTypes.bool,
-        buttonType: PropTypes.number.isRequired,
-        onAdd: PropTypes.func.isRequired,
-        onRemove: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
     };
 
@@ -36,27 +30,21 @@ class TimeSpan extends Component {
         super(props);
 
         this.onChange = this.onChange.bind(this);
-        this.onClick = this.onClick.bind(this);
         this.setStartTimeRef = this.setRef.bind(this, 'startTime');
         this.setEndTimeRef = this.setRef.bind(this, 'endTime');
 
         this.state = {
-            startTime: props.disabled ? TimeSpan.defaultStart : props.start,
-            endTime: props.disabled ? TimeSpan.defaultEnd : props.end,
+            startTime: props.start,
+            endTime: props.end,
         };
     }
 
-    static getDerivedStateFromProps(nextProps) {
-        const newState = {};
-        newState.startTime = nextProps.start;
-        newState.endTime = nextProps.end;
-        return newState;
-    }
-
-    onClick() {
-        const { buttonType, onAdd, onRemove } = this.props;
-        if (buttonType === TimeSpan.ADD) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
-        if (buttonType === TimeSpan.REMOVE) onRemove();
+    componentDidUpdate(prevProps) {
+        const { start, end } = this.props;
+        if (prevProps.start !== start || prevProps.end !== end) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ startTime: start, endTime: end });
+        }
     }
 
     onChange(value, inputField) {
@@ -182,43 +170,30 @@ class TimeSpan extends Component {
     render() {
         const {
             disabled,
-            buttonType,
         } = this.props;
 
-        const { state } = this;
+        const { startTime, endTime } = this.state;
 
         return (
             <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`}>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setStartTimeRef}
-                        value={state.startTime}
+                        value={startTime}
                         onChange={val => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
+                        onEnter={() => this.autoFormat('start')}
                     />
                 </div>
                 <span>-</span>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setEndTimeRef}
-                        value={state.endTime}
+                        value={endTime}
                         onChange={val => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
+                        onEnter={() => this.autoFormat('end')}
                     />
-                </div>
-                <div className="time__span--button">
-                    {
-                        buttonType !== TimeSpan.OFF && (
-                            <ChooseButton
-                                onClick={this.onClick}
-                            >
-                                <Icon
-                                    icon={faPlus}
-                                    className={`fa-xs openingTimesIcon ${buttonType === TimeSpan.ADD ? 'add' : 'remove'}`}
-                                />
-                            </ChooseButton>
-                        )
-                    }
                 </div>
             </div>
         );
