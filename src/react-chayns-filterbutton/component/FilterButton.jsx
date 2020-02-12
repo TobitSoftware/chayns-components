@@ -48,7 +48,7 @@ const FilterButton = ({
                 type={name ? 'radio' : 'checkbox'}
                 name={name}
                 className="button--filter__input"
-                onChange={e => {
+                onChange={(e) => {
                     if (e.target.type === 'checkbox') {
                         onChange(e.target.checked);
                     } else {

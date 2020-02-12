@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {
     createContext, useEffect, useReducer, useCallback, useContext,
 } from 'react';
@@ -30,11 +31,11 @@ const ObjectMapping = {
 
 const PersonFinderContext = createContext({
     ...initialState,
-    dispatch: () => console.warn('dispatch: no context provided'),
-    onChange: () => console.warn('onChange: no context provided'),
-    onLoadMore: () => console.warn('onLoadMore: no context provided'),
-    setFriend: () => console.warn('setFriend: no context provided'),
-    isFriend: () => console.warn('isFriend: no context provided'),
+    dispatch: () => console.warn('[chayns components] PersonsContext: dispatch: no context provided'),
+    onChange: () => console.warn('[chayns components] PersonsContext: onChange: no context provided'),
+    onLoadMore: () => console.warn('[chayns components] PersonsContext: onLoadMore: no context provided'),
+    setFriend: () => console.warn('[chayns components] PersonsContext: setFriend: no context provided'),
+    isFriend: () => console.warn('[chayns components] PersonsContext: isFriend: no context provided'),
 });
 
 const PersonFinderStateProvider = ({

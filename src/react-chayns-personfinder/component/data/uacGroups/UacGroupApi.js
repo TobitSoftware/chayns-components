@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-export,no-console */
 
 export const fetchGroups = async () => {
     let result = [];

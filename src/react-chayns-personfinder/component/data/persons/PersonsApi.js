@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const RELATIONS_SERVER_URL = 'https://relations.chayns.net/relations/';
