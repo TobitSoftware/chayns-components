@@ -79,7 +79,7 @@ export default class ContextMenuExample extends Component {
                     ref={ref => this.clickContextMenu = ref}
                     onLayerClick={(e) => {
                         console.log(e);
-                        if (e.srcElement.id !== 'clickZone') this.clickContextMenu.hide();
+                        if (e && e.srcElement && e.srcElement.id !== 'clickZone') this.clickContextMenu.hide();
                     }}
                 />
                 <div style={{ position: 'relative' }}>
@@ -135,7 +135,7 @@ export default class ContextMenuExample extends Component {
                     position={ContextMenu.position.TOP_LEFT}
                     ref={ref => this.listContextMenu = ref}
                     onLayerClick={(e) => {
-                        if (!e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
+                        if (e && e.target && !e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
                     }}
                 />
                 <div style={{ padding: '10px', marginBottom: '100px' }}>

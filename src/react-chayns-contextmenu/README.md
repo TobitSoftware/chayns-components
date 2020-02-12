@@ -4,6 +4,7 @@ The **ContextMenu** - Component is part of the **chayns-component** package. You
 
     npm install -S chayns-components@latest
 
+The component shows a context menu with the chosen items. On the desktop, the menu renders on the chosen position while it is a dialog on mobile devices.
 
 ## Usage ##
 
@@ -23,7 +24,7 @@ The component got the following properties:
 | Property   | Description                                                                                        | Type   | Default | Required
 |------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
 | coordinates           | Coordinates of the place to which the ContextMenu is rendered. Example: {x: 100, y: 100}                                  | object    |       |  |
-| onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page | func | ||
+| onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page. Returns an MouseEvent if it was closed on the desktop using a mouse. | func | ||
 | position | The position the ContextMenu (exported by ContextMenu.position). If not set, the ContextMenu will choose the position | number | null ||
 | items | The Items which are displayed in the **ContextMenu** | array | |
 | item.className | The className of an item of the **ContextMenu** | string | |
