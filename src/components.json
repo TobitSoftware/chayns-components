@@ -49,6 +49,11 @@
   "example": "react-chayns-expandable_content/Example.jsx",
   "readme": true
 },{
+  "id": "react-chayns-filterbutton",
+  "title": "FilterButton",
+  "example": "react-chayns-filterbutton/Example.jsx",
+  "readme": true
+},{
   "id": "react-chayns-formatted_input",
   "title": "FormattedInput",
   "example": "react-chayns-formatted_input/Example.jsx",

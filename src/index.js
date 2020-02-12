@@ -19,6 +19,8 @@ import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
 import ExpandableContent from './react-chayns-expandable_content/component/ExpandableContent';
 
+import FilterButton from './react-chayns-filterbutton/component/FilterButton';
+
 import FormattedInput from './react-chayns-formatted_input/component/FormattedInput';
 import {
     Formatter,
@@ -102,6 +104,7 @@ export {
     DateInfo,
     EmojiInput,
     ExpandableContent,
+    FilterButton,
     FormattedInput,
     Formatter,
     IntegerFormatter,
