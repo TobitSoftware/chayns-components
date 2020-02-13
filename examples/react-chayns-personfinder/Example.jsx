@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
-import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
+import SimpleWrapperContext
+    from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 const customData = [
     {
@@ -44,11 +45,18 @@ export default class PersonFinderExample extends PureComponent {
         console.log('removed', user);
     }
 
-    state = { data: customData.slice(0, 1), hasMore: true }
+    state = {
+        data: customData.slice(0, 1),
+        hasMore: true,
+        moreReceiver: [{
+            userId: 2236583, personId: '134-78226', firstName: 'Thomas', lastName: 'Tobit',
+        }],
+    };
 
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
+        if (this.personFinder0) this.personFinder0.clear();
         if (this.relationFinder1) this.relationFinder1.clear();
         if (this.relationFinder2) this.relationFinder2.clear();
         if (this.personFinderOwn1) this.personFinderOwn1.clear();
@@ -62,11 +70,40 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data, hasMore } = this.state;
+        const { data, hasMore, moreReceiver } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
-                    ref={(ref) => { this.relationFinder1 = ref; }}
+                    placeholder="Empfänger"
+                    showPersons
+                    multiple
+                    onAdd={(value) => {
+                        this.setState({
+                            moreReceiver: [
+                                ...moreReceiver,
+                                {
+                                    userId: value.userId,
+                                    personId: value.personId,
+                                    firstName: value.firstName,
+                                    lastName: value.lastName,
+                                },
+                            ],
+                        });
+                    }}
+                    defaultValues={moreReceiver}
+                    onRemove={(value) => {
+                        const newReceiver = moreReceiver.filter(rec => rec.userId !== value.userId);
+                        this.setState({
+                            moreReceiver: newReceiver,
+                        });
+                    }}
+                    ref={(ref) => { this.personFinder0 = ref; }}
+                />
+
+                <PersonFinder
+                    ref={(ref) => {
+                        this.relationFinder1 = ref;
+                    }}
                     dynamic
                     placeholder="Users with reducer: show only persons with an 'e' in the name"
                     onChange={PersonFinderExample.handleSelect}
@@ -88,21 +125,27 @@ export default class PersonFinderExample extends PureComponent {
                 />
                 <PersonFinder
                     defaultValue="Smith"
-                    ref={(ref) => { this.relationFinder2 = ref; }}
+                    ref={(ref) => {
+                        this.relationFinder2 = ref;
+                    }}
                     dynamic
                     placeholder="User/Site"
                     onChange={PersonFinderExample.handleSelect}
                     showSites
                 />
                 <PersonFinder
-                    ref={(ref) => { this.relationFinderUac = ref; }}
+                    ref={(ref) => {
+                        this.relationFinderUac = ref;
+                    }}
                     dynamic
                     placeholder="UAC 1"
                     uacId={1}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    ref={(ref) => { this.relationFinderUacLocation = ref; }}
+                    ref={(ref) => {
+                        this.relationFinderUacLocation = ref;
+                    }}
                     dynamic
                     placeholder="UAC 1 Location 1"
                     uacId={1}
@@ -110,7 +153,9 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    ref={(ref) => { this.siteFinder = ref; }}
+                    ref={(ref) => {
+                        this.siteFinder = ref;
+                    }}
                     dynamic
                     placeholder="Sites"
                     defaultValue={{
@@ -122,13 +167,17 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinder = ref; }}
+                    ref={(ref) => {
+                        this.personFinder = ref;
+                    }}
                     dynamic
                     placeholder="Users"
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    ref={(ref) => { this.customUserFinder = ref; }}
+                    ref={(ref) => {
+                        this.customUserFinder = ref;
+                    }}
                     dynamic
                     placeholder="Users (Custom)"
                     context={SimpleWrapperContext({
@@ -165,7 +214,9 @@ export default class PersonFinderExample extends PureComponent {
                 />
                 <PersonFinder
                     dynamic
-                    ref={(ref) => { this.uacFinder = ref; }}
+                    ref={(ref) => {
+                        this.uacFinder = ref;
+                    }}
                     placeholder="UAC Groups (Custom)"
                     context={UacGroupContext}
                     multiple
@@ -174,7 +225,9 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn1 = ref; }}
+                    ref={(ref) => {
+                        this.personFinderOwn1 = ref;
+                    }}
                     dynamic
                     placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
@@ -183,7 +236,9 @@ export default class PersonFinderExample extends PureComponent {
                     showId
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn2 = ref; }}
+                    ref={(ref) => {
+                        this.personFinderOwn2 = ref;
+                    }}
                     dynamic
                     placeholder="Users/Sites (multiple, dynamic)"
                     onAdd={PersonFinderExample.handleAdd}
@@ -193,7 +248,9 @@ export default class PersonFinderExample extends PureComponent {
                     multiple
                 />
                 <PersonFinder
-                    ref={(ref) => { this.personFinderOwn3 = ref; }}
+                    ref={(ref) => {
+                        this.personFinderOwn3 = ref;
+                    }}
                     dynamic
                     placeholder="Sites (multiple, default)"
                     defaultValues={[{
@@ -211,7 +268,9 @@ export default class PersonFinderExample extends PureComponent {
                     boxClassName="custom-personfinder-overlay"
                 />
                 <PersonFinder
-                    ref={(ref) => { this.multipleUserFinder = ref; }}
+                    ref={(ref) => {
+                        this.multipleUserFinder = ref;
+                    }}
                     placeholder="Users (multiple)"
                     multiple
                 />

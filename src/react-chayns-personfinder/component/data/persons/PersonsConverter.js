@@ -1,18 +1,22 @@
+export const convertPerson = (relation) => {
+    if ('siteId' in relation) return relation;
+    return {
+        id: relation.personId,
+        personId: relation.personId,
+        // due to inconsistent naming of the backends
+        name: [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ').trim(),
+        relations: relation.relations,
+        relationCount: relation.relationCount,
+        imageUrl: `https://sub60.tobit.com/u/${relation.personId}?size=50`,
+    };
+};
 
 export const convertPersons = (persons) => {
     const unrelated = [];
     const related = [];
 
     persons.forEach((relation) => {
-        const person = {
-            id: relation.personId,
-            personId: relation.personId,
-            // due to inconsistent naming of the backends
-            name: [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ').trim(),
-            relations: relation.relations,
-            relationCount: relation.relationCount,
-            imageUrl: `https://sub60.tobit.com/u/${relation.personId}?size=50`,
-        };
+        const person = convertPerson(relation);
         if (!('score' in relation) || relation.score > 0) {
             related.push(person);
         } else {

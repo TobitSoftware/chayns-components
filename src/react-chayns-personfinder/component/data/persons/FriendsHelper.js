@@ -15,12 +15,14 @@ class FriendsHelper {
 
     #init = async () => {
         await window.chayns.ready;
-        const raw = await fetchFriends().catch(() => []);
-        this.#friends = raw.map(convertFriend);
-        this.#friends.forEach((e) => {
-            this.#friendsObject[e.personId] = e;
-        });
-        this.#eventEmitter.emit('update', this.#friends);
+        if (window.chayns.env.user && window.chayns.env.user.isAuthenticated) {
+            const raw = await fetchFriends().catch(() => []);
+            this.#friends = raw.map(convertFriend);
+            this.#friends.forEach((e) => {
+                this.#friendsObject[e.personId] = e;
+            });
+            this.#eventEmitter.emit('update', this.#friends);
+        }
     };
 
     isFriend = personId => !!(this.#friendsObject[personId] || false);

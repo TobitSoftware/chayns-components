@@ -13,10 +13,13 @@ class MultiplePersonFinder extends Component {
         this.state = {
             inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
-            values: props.defaultValues.map(v => ({
-                text: v[props.context.ObjectMapping.showName],
-                value: v,
-            })),
+            values: props.defaultValues.map((v) => {
+                const value = props.context.ValueConverter ? props.context.ValueConverter(v) : v;
+                return {
+                    text: value[props.context.ObjectMapping.showName],
+                    value,
+                };
+            }),
         };
 
         this.clear = this.clear.bind(this);
@@ -198,6 +201,7 @@ MultiplePersonFinder.propTypes = {
             showName: PropTypes.string,
             identifier: PropTypes.string,
         }),
+        ValueConverter: PropTypes.func,
     }).isRequired,
     contextProps: PropTypes.object,
 };
