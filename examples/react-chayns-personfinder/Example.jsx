@@ -49,13 +49,14 @@ export default class PersonFinderExample extends PureComponent {
         data: customData.slice(0, 1),
         hasMore: true,
         moreReceiver: [{
-            userId: 1742653, personId: '127-89062', firstName: 'Gerrit', lastName: 'Adolf', fullName: 'Gerrit Adolf',
+            userId: 2236583, personId: '134-78226', firstName: 'Thomas', lastName: 'Tobit',
         }],
     };
 
     clear = () => {
         if (this.siteFinder) this.siteFinder.clear();
         if (this.personFinder) this.personFinder.clear();
+        if (this.personFinder0) this.personFinder0.clear();
         if (this.relationFinder1) this.relationFinder1.clear();
         if (this.relationFinder2) this.relationFinder2.clear();
         if (this.personFinderOwn1) this.personFinderOwn1.clear();
@@ -69,7 +70,7 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data, hasMore } = this.state;
+        const { data, hasMore, moreReceiver } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
@@ -79,7 +80,7 @@ export default class PersonFinderExample extends PureComponent {
                     onAdd={(value) => {
                         this.setState({
                             moreReceiver: [
-                                ...this.state.moreReceiver,
+                                ...moreReceiver,
                                 {
                                     userId: value.userId,
                                     personId: value.personId,
@@ -89,14 +90,14 @@ export default class PersonFinderExample extends PureComponent {
                             ],
                         });
                     }}
-                    defaultValues={this.state.moreReceiver}
+                    defaultValues={moreReceiver}
                     onRemove={(value) => {
-                        const newReceiver = this.state.moreReceiver.filter(rec => rec.userId !== value.userId);
+                        const newReceiver = moreReceiver.filter(rec => rec.userId !== value.userId);
                         this.setState({
                             moreReceiver: newReceiver,
                         });
                     }}
-                    ref={this.personFinder}
+                    ref={(ref) => { this.personFinder0 = ref; }}
                 />
 
                 <PersonFinder
