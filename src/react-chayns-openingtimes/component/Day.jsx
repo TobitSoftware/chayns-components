@@ -16,7 +16,7 @@ class Day extends Component {
         this.timeSpanKey1 = Math.random().toString();
         this.timeSpanKey2 = Math.random().toString();
 
-        this.state = { isRemoving: false };
+        this.state = { isRemoving: false, animations: false };
     }
 
     onDayActivation(status) {
@@ -35,7 +35,7 @@ class Day extends Component {
         } = this.props;
         onRemove(weekday.number, 1);
         this.setState({ isRemoving: false });
-        this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
     };
 
     render() {
@@ -46,16 +46,16 @@ class Day extends Component {
             onChange,
         } = this.props;
 
-        const { isRemoving } = this.state;
+        const { isRemoving, animations } = this.state;
 
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
         const isDisabled = !times.some(t => !t.disabled);
-        console.log(isRemoving);
         return (
             <div
                 className={classNames('flex', 'times', {
                     multiple: timeSpans.length > 1,
+                    'multiple--animations': animations && timeSpans.length > 1,
                     isRemoving,
                     'times--disabled': isDisabled,
                 })}
@@ -76,7 +76,7 @@ class Day extends Component {
                                 end={t.end}
                                 disabled={isDisabled}
                                 onChange={(start, end) => onChange(weekday.number, index, start, end)}
-                                childrenRef={index === 0 ? (ref) => {
+                                childrenRef={index === 1 ? (ref) => {
                                     this.timeSpanRef = ref;
                                 } : null}
                             />
@@ -86,7 +86,8 @@ class Day extends Component {
                 <ChooseButton
                     className="flex__right"
                     onClick={() => {
-                        this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+                        this.setState({ animations: true });
+                        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
                         if (timeSpans.length < 2) {
                             onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
                         } else {
