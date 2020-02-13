@@ -146,6 +146,10 @@
 
             &:nth-child(2) {
               animation: fadeInOpacity 0.5s;
+
+              &:before { // IE and Edge compatibility
+                animation: fadeInOpacity 0.5s;
+              }
             }
           }
         }
@@ -160,6 +164,10 @@
 
             &:nth-child(2) {
               animation: fadeOutOpacity 0.5s;
+
+              &:before { // IE and Edge compatibility
+                animation: fadeOutOpacity 0.5s;
+              }
             }
           }
         }
