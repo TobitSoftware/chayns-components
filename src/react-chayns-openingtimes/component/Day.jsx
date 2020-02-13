@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import TimeSpan from './TimeSpan';
@@ -14,6 +15,8 @@ class Day extends Component {
         this.onDayActivation = this.onDayActivation.bind(this);
         this.timeSpanKey1 = Math.random().toString();
         this.timeSpanKey2 = Math.random().toString();
+
+        this.state = { isRemoving: false };
     }
 
     onDayActivation(status) {
@@ -25,22 +28,37 @@ class Day extends Component {
         onDayActivation(weekday.number, status);
     }
 
+    animationendFunction = () => {
+        const {
+            weekday,
+            onRemove,
+        } = this.props;
+        onRemove(weekday.number, 1);
+        this.setState({ isRemoving: false });
+        this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+    };
+
     render() {
         const {
             weekday,
             times,
             onAdd,
-            onRemove,
             onChange,
         } = this.props;
+
+        const { isRemoving } = this.state;
 
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
         const isDisabled = !times.some(t => !t.disabled);
-
+        console.log(isRemoving);
         return (
             <div
-                className={`flex times${timeSpans.length > 1 ? ' multiple' : ''}${isDisabled ? ' times--disabled' : ''}`}
+                className={classNames('flex', 'times', {
+                    multiple: timeSpans.length > 1,
+                    isRemoving,
+                    'times--disabled': isDisabled,
+                })}
             >
                 <div className="flex__left">
                     <Checkbox
@@ -58,6 +76,9 @@ class Day extends Component {
                                 end={t.end}
                                 disabled={isDisabled}
                                 onChange={(start, end) => onChange(weekday.number, index, start, end)}
+                                childrenRef={index === 0 ? (ref) => {
+                                    this.timeSpanRef = ref;
+                                } : null}
                             />
                         ))
                     }
@@ -65,16 +86,18 @@ class Day extends Component {
                 <ChooseButton
                     className="flex__right"
                     onClick={() => {
+                        this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
                         if (timeSpans.length < 2) {
                             onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
                         } else {
-                            onRemove(weekday.number, 1);
+                            this.timeSpanRef.addEventListener('animationend', this.animationendFunction);
+                            this.setState({ isRemoving: true });
                         }
                     }}
                 >
                     <Icon
                         icon={faPlus}
-                        className={`fa-xs openingTimesIcon ${timeSpans.length < 2 ? 'add' : 'remove'}`}
+                        className={`fa-xs openingTimesIcon ${timeSpans.length < 2 || isRemoving ? 'add' : 'remove'}`}
                     />
                 </ChooseButton>
             </div>

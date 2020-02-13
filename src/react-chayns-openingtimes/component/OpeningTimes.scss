@@ -55,6 +55,34 @@
   .times {
     margin: 5px 0;
 
+    //&.multiple {
+    //  .flex__middle {
+    //    .time__span {
+    //      &:first-child {
+    //        animation: slideFromRight 0.3s;
+    //      }
+    //
+    //      &:nth-child(2) {
+    //        animation: fadeInOpacity 0.5s;
+    //      }
+    //    }
+    //  }
+    //}
+    //
+    //&.isRemoving{
+    //  .flex__middle {
+    //    .time__span {
+    //      &:first-child {
+    //        animation: slideToRight 0.5s;
+    //      }
+    //
+    //      &:nth-child(2) {
+    //        animation: fadeOutOpacity 0.5s;
+    //      }
+    //    }
+    //  }
+    //}
+
     &--disabled {
       .flex__middle, .flex__right {
         opacity: .2;
@@ -109,8 +137,79 @@
     .time__span:nth-of-type(2):before {
       content: "";
     }
+
+    .times {
+      &.multiple {
+        .flex__middle {
+          .time__span {
+            &:first-child {
+              animation: doNothingAnimation 0.3s;
+            }
+
+            &:nth-child(2) {
+              animation: fadeInHeight 0.3s;
+            }
+          }
+        }
+      }
+
+      &.isRemoving {
+        .flex__middle {
+          .time__span {
+            &:first-child {
+              animation: doNothingAnimation 0.3s;
+            }
+
+            &:nth-child(2) {
+              animation: fadeOutHeight 0.3s;
+            }
+          }
+        }
+      }
+    }
   }
 }
+
+@mixin desktopAnimation {
+  .cc__opening_times {
+    .times {
+      &.multiple {
+        .flex__middle {
+          .time__span {
+            &:first-child {
+              animation: slideFromRight 0.5s;
+            }
+
+            &:nth-child(2) {
+              animation: fadeInOpacity 0.5s;
+            }
+          }
+        }
+      }
+
+      &.isRemoving {
+        .flex__middle {
+          .time__span {
+            &:first-child {
+              animation: slideToRight 0.5s;
+            }
+
+            &:nth-child(2) {
+              animation: fadeOutOpacity 0.5s;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 491px) {
+  .chayns--desktop {
+    @include desktopAnimation;
+  }
+}
+
 
 @media screen and(max-width: 490px) {
   @include mobile;
@@ -120,3 +219,71 @@
   @include mobile;
 }
 
+@keyframes slideFromRight {
+  from {
+    transform: translateX(140px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(170px);
+  }
+}
+
+@keyframes fadeInOpacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutOpacity {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInHeight {
+  from {
+    height: 0;
+  }
+  to {
+    height: 29px;
+  }
+}
+
+@keyframes fadeOutHeight {
+  from {
+    max-height: 29px;
+    overflow: hidden;
+  }
+  to {
+    max-height: 0;
+    overflow: hidden;
+  }
+}
+
+//needed for animationend-event
+@keyframes doNothingAnimation {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.9;
+  }
+}

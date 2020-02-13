@@ -10,10 +10,12 @@ class TimeSpan extends Component {
         end: PropTypes.string.isRequired,
         disabled: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
+        childrenRef: PropTypes.func,
     };
 
     static defaultProps = {
         disabled: false,
+        childrenRef: null,
     };
 
     static OFF = 0;
@@ -170,12 +172,13 @@ class TimeSpan extends Component {
     render() {
         const {
             disabled,
+            childrenRef,
         } = this.props;
 
         const { startTime, endTime } = this.state;
 
         return (
-            <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`}>
+            <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setStartTimeRef}

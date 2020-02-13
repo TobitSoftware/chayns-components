@@ -10,29 +10,29 @@ export default class OpeningTimesExample extends PureComponent {
                 {
                     weekDay: 0,
                     start: '10:00',
-                    end: '11:00'
+                    end: '11:00',
                 },
                 {
                     weekDay: 0,
                     start: '15:00',
-                    end: '16:00'
+                    end: '16:00',
                 },
                 {
                     weekDay: 3,
                     start: '18:00',
-                    end: '20:00'
+                    end: '20:00',
                 },
                 {
                     weekDay: 5,
                     start: '18:00',
-                    end: '20:00'
+                    end: '20:00',
                 },
                 {
                     weekDay: 5,
                     start: '08:00',
-                    end: '12:00'
-                }
-            ]
+                    end: '12:00',
+                },
+            ],
         };
     }
 
@@ -44,7 +44,7 @@ export default class OpeningTimesExample extends PureComponent {
                 onChange={(newTimes) => {
                     console.log(times, newTimes);
                     this.setState({
-                        times: newTimes
+                        times: newTimes,
                     });
                 }}
             />
