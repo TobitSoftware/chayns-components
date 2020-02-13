@@ -53,9 +53,7 @@
   }
 
   .times {
-    &.multiple {
-      //margin: 15px 0;
-    }
+    margin: 5px 0;
 
     &--disabled {
       .flex__middle, .flex__right {
