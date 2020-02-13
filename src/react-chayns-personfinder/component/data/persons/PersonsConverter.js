@@ -1,14 +1,25 @@
 export const convertPerson = (relation) => {
-    if ('siteId' in relation) return relation;
+    if ('siteId' in relation) return { type: 'SITE', ...relation };
+    // due to inconsistent naming of the backends
+    const fullName = relation.fullName || [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ').trim();
     return {
+        type: 'PERSON',
         id: relation.personId,
+        name: fullName,
+        userId: relation.userId,
         personId: relation.personId,
-        // due to inconsistent naming of the backends
-        name: [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ').trim(),
+        fullName,
+        firstName: relation.firstName,
+        lastName: relation.lastName,
         relations: relation.relations,
         relationCount: relation.relationCount,
         imageUrl: `https://sub60.tobit.com/u/${relation.personId}?size=50`,
     };
+};
+
+export const convertPersonForReturn = (person) => {
+    const { id, name, ...other } = person;
+    return other;
 };
 
 export const convertPersons = (persons) => {
@@ -37,8 +48,13 @@ export const convertSites = sites => sites.map(site => ({
 }));
 
 export const convertFriend = friend => ({
+    type: 'PERSON',
     id: friend.personId,
     name: friend.fullName,
+    userId: friend.userId,
+    fullName: friend.fullName,
+    firstName: friend.firstName,
+    lastName: friend.lastName,
     personId: friend.personId,
     imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
 });
