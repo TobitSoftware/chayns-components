@@ -48,18 +48,18 @@ export default class SetupWizardExample extends Component {
                         + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
                         <SetupWizardItem title="Intro" required>
-                            <Step1 />
+                            <Step1/>
                         </SetupWizardItem>
                         {chayns.env.user.isAuthenticated && (
                             <SetupWizardItem title="Input optional">
-                                <Step2 />
+                                <Step2/>
                             </SetupWizardItem>
                         )}
                         <SetupWizardItem title="Input required" required>
-                            <Step3 notComplete={notComplete} />
+                            <Step3 notComplete={notComplete}/>
                         </SetupWizardItem>
                         <SetupWizardItem title="Finish">
-                            <Step4 />
+                            <Step4/>
                         </SetupWizardItem>
                     </SetupWizard>
                 </div>

@@ -93,7 +93,7 @@ export default class PersonFinderExample extends PureComponent {
                     }}
                     defaultValues={moreReceiver}
                     onRemove={(value) => {
-                        const newReceiver = moreReceiver.filter(rec => rec.userId !== value.userId);
+                        const newReceiver = moreReceiver.filter((rec) => rec.userId !== value.userId);
                         this.setState({
                             moreReceiver: newReceiver,
                         });
@@ -193,21 +193,21 @@ export default class PersonFinderExample extends PureComponent {
                         data,
                         hasMore,
                         onLoadMore: async () => {
-                            await new Promise(resolve => setTimeout(resolve, 2000));
-                            this.setState(state => ({
+                            await new Promise((resolve) => setTimeout(resolve, 2000));
+                            this.setState((state) => ({
                                 data: customData.slice(0, state.data.length + 1),
                             }));
                         },
                         onInput: async () => {
                             this.setState({ data: [] });
-                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            await new Promise((resolve) => setTimeout(resolve, 1000));
                             this.setState({
                                 data: customData.slice(0, 1),
                             });
                         },
                     }}
                     multiple
-                    onAdd={() => this.setState({ value: '' })}
+                    onAdd={console.log}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                     defaultValues={[
@@ -223,7 +223,7 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="UAC Groups (Custom)"
                     context={UacGroupContext}
                     multiple
-                    onAdd={group => console.log('add group', group)}
+                    onAdd={(group) => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                 />

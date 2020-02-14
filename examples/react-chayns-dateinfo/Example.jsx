@@ -30,28 +30,28 @@ export default class DateExample extends Component {
                 </DateInfo>
 
                 <div style={{ fontWeight: 'bold' }}>default:</div>
-                <DateInfo date={date} language={language} />
+                <DateInfo date={date} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showTime:</div>
-                <DateInfo date={date} showTime language={language} />
+                <DateInfo date={date} showTime language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showTime=false:</div>
-                <DateInfo date={date} showTime={false} language={language} />
+                <DateInfo date={date} showTime={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate:</div>
-                <DateInfo date={date} showDate language={language} />
+                <DateInfo date={date} showDate language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false:</div>
-                <DateInfo date={date} showDate={false} language={language} />
+                <DateInfo date={date} showDate={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime:</div>
-                <DateInfo date={date} showDate={false} showTime language={language} />
+                <DateInfo date={date} showDate={false} showTime language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate showTime=false:</div>
-                <DateInfo date={date} showDate showTime={false} language={language} />
+                <DateInfo date={date} showDate showTime={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate showTime:</div>
-                <DateInfo date={date} showDate showTime language={language} />
+                <DateInfo date={date} showDate showTime language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime useToday useTomorrowYesterday=false:</div>
                 <DateInfo
@@ -74,40 +74,40 @@ export default class DateExample extends Component {
                 />
 
                 <div style={{ fontWeight: 'bold' }}>showDate=false showTime=false:</div>
-                <DateInfo date={date} showDate={false} showTime={false} language={language} />
+                <DateInfo date={date} showDate={false} showTime={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeDay:</div>
-                <DateInfo date={date} writeDay language={language} />
+                <DateInfo date={date} writeDay language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth hideYear:</div>
-                <DateInfo date={date} writeMonth language={language} hideYear />
+                <DateInfo date={date} writeMonth language={language} hideYear/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth=false showDate hideYear=null:</div>
-                <DateInfo date={date} writeMonth={false} showDate language={language} hideYear={null} />
+                <DateInfo date={date} writeMonth={false} showDate language={language} hideYear={null}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay:</div>
-                <DateInfo date={date} writeMonth writeDay language={language} />
+                <DateInfo date={date} writeMonth writeDay language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay showTime showDate:</div>
-                <DateInfo date={date} writeMonth writeDay showTime showDate language={language} />
+                <DateInfo date={date} writeMonth writeDay showTime showDate language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay showTime showDate=false:</div>
-                <DateInfo date={date} writeMonth writeDay showTime showDate={false} language={language} />
+                <DateInfo date={date} writeMonth writeDay showTime showDate={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth writeDay showTime=false showDate=false:</div>
-                <DateInfo date={date} writeMonth writeDay showTime={false} showDate={false} language={language} />
+                <DateInfo date={date} writeMonth writeDay showTime={false} showDate={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>writeMonth showTime=false showDate=false:</div>
-                <DateInfo date={date} writeMonth showTime={false} showDate={false} language={language} />
+                <DateInfo date={date} writeMonth showTime={false} showDate={false} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>two dates:</div>
-                <DateInfo date={date} date2={new Date()} language={language} />
+                <DateInfo date={date} date2={new Date()} language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>two dates showTime:</div>
-                <DateInfo date={date} date2={new Date()} showTime language={language} />
+                <DateInfo date={date} date2={new Date()} showTime language={language}/>
 
                 <div style={{ fontWeight: 'bold' }}>two dates showDate:</div>
-                <DateInfo date={date} date2={new Date()} showDate language={language} />
+                <DateInfo date={date} date2={new Date()} showDate language={language}/>
             </div>
         );
     }

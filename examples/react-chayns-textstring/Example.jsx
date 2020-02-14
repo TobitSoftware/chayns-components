@@ -11,8 +11,6 @@ export default class TextStringExample extends Component {
         console.log('TextString.getTextString', TextString.getTextString('txt_chayns_textStringTest'));
 
         this.state = { number: 1 };
-
-        chayns.register({ apiDialogs: true });
     }
 
     render() {
@@ -26,7 +24,7 @@ export default class TextStringExample extends Component {
                     fallback="Test ##REPLACE## Fallback"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
                 >
-                    <p />
+                    <p/>
                 </TextString>
                 <TextString
                     preventNoTranslate
@@ -34,14 +32,14 @@ export default class TextStringExample extends Component {
                     stringName="txt_chayns_textStringTest"
                     fallback="Test ##REPLACE## Fallback"
                 >
-                    <p />
+                    <p/>
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
                     fallback="Test ##REPLACE## Fallback"
                 >
-                    <p style={{ color: 'red' }} />
+                    <p style={{ color: 'red' }}/>
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
@@ -62,13 +60,13 @@ export default class TextStringExample extends Component {
                     stringName="txt_chayns_textStringTest_html"
                     useDangerouslySetInnerHTML
                 >
-                    <div />
+                    <div/>
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
                     language="nl"
                 >
-                    <p />
+                    <p/>
                 </TextString>
                 <TextString
                     replacements={{ '##REPLACE##': chayns.env.user.name, '##REPLACE_SITE##': chayns.env.site.title }}

@@ -14,7 +14,7 @@ function normalize(value) {
         });
     });
 
-    return value.map(v => v.map((d, i) => d.padEnd(len[i], ' ')));
+    return value.map((v) => v.map((d, i) => d.padEnd(len[i], ' ')));
 }
 
 function toList(value) {
@@ -27,7 +27,7 @@ function toList(value) {
 
         if (i === 0) {
             retVal += '|';
-            retVal += v.map(d => '-'.repeat(d.length + 2)).join('|');
+            retVal += v.map((d) => '-'.repeat(d.length + 2)).join('|');
             retVal += '|\n';
         }
     });
@@ -39,7 +39,7 @@ function bootstrap() {
     const examplesData = fs.readFileSync(EXAMPLE_DEFINITION_PATH);
     const examples = JSON.parse(examplesData);
 
-    const data = examples.filter(d => d.readme && !d.group).sort((a, b) => a.title.localeCompare(b.title)).map((d) => {
+    const data = examples.filter((d) => d.readme && !d.group).sort((a, b) => a.title.localeCompare(b.title)).map((d) => {
         if (!d.readme) {
             return null;
         }
@@ -49,8 +49,9 @@ function bootstrap() {
             `${d.title} Component`,
             `[Readme](/src/${d.id}/README.md)`,
         ];
-    }).filter(d => d);
+    }).filter((d) => d);
 
+    // eslint-disable-next-line max-len
     const markdownList = `<!--- start component list -->\n${toList(normalize([['Component', 'Description', 'Readme File'], ...data]))}<!--- end component list -->`;
 
     const markdownFile = fs.readFileSync(MARKDOWN_PATH);

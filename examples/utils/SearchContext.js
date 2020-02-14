@@ -8,8 +8,9 @@ export default SearchContext;
 
 export function connectSearchContext(WrappedComponent) {
     return ({ ...props }) => (
+        // eslint-disable-next-line react/jsx-filename-extension
         <SearchContext.Consumer>
-            {context => (
+            {(context) => (
                 <WrappedComponent
                     {...props}
                     search={context && context.search}
@@ -18,4 +19,3 @@ export function connectSearchContext(WrappedComponent) {
         </SearchContext.Consumer>
     );
 }
-
