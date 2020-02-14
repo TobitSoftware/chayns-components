@@ -24,7 +24,7 @@ You can access them in the Step-Components (for example FirstStep, SecondStep,..
 - reset steps
     - resetToStep(step)
 - enable or disable steps
-    - enableStep(value, step)
+    - stepEnabled(value, step)
 - set steps as required or not    
     - stepRequired(value, currentStep)
 
