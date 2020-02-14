@@ -10,6 +10,7 @@ class Step3 extends Component {
         notComplete: PropTypes.bool.isRequired,
         nextStep: PropTypes.func.isRequired,
         stepComplete: PropTypes.func.isRequired,
+        stepEnabled: PropTypes.func.isRequired,
     };
 
     constructor(props, context) {
@@ -18,8 +19,9 @@ class Step3 extends Component {
     }
 
     inputOnChange(value) {
-        const { stepComplete } = this.props;
+        const { stepComplete, stepEnabled } = this.props;
         stepComplete(value !== '');
+        stepEnabled(value !== '', 3);
     }
 
     render() {

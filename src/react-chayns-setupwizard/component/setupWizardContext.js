@@ -7,6 +7,7 @@ const SetupWizardContext = createContext({
     currentStep: -1,
     contentStyle: null,
     stepComplete: null,
+    stepEnabled: null,
     stepRequired: null,
     previousStep: null,
     nextStep: null,
