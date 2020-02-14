@@ -1,3 +1,5 @@
+import FriendsHelper from './FriendsHelper';
+
 export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
     // due to inconsistent naming of the backends
@@ -14,6 +16,7 @@ export const convertPerson = (relation) => {
         relations: relation.relations,
         relationCount: relation.relationCount,
         imageUrl: `https://sub60.tobit.com/u/${relation.personId}?size=50`,
+        isFriend: FriendsHelper.isFriend(relation.personId),
     };
 };
 
@@ -42,19 +45,8 @@ export const convertPersons = (persons) => {
 };
 
 export const convertSites = sites => sites.map(site => ({
+    type: 'SITE',
     id: site.siteId,
     name: site.locationName,
     imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
 }));
-
-export const convertFriend = friend => ({
-    type: 'PERSON',
-    id: friend.personId,
-    name: friend.fullName,
-    userId: friend.userId,
-    fullName: friend.fullName,
-    firstName: friend.firstName,
-    lastName: friend.lastName,
-    personId: friend.personId,
-    imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
-});
