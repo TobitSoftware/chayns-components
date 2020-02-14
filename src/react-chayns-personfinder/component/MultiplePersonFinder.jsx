@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderView from './PersonFinderView';
 import PersonsContext from './data/persons/PersonsContext';
+import { convertPersonForReturn } from './data/persons/PersonsConverter';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {
@@ -74,7 +75,7 @@ class MultiplePersonFinder extends Component {
             return;
         }
 
-        const outValue = {
+        let outValue = {
             ...value,
         };
 
@@ -88,6 +89,9 @@ class MultiplePersonFinder extends Component {
         });
 
         if (onAdd) {
+            if (outValue && outValue.type === 'PERSON') {
+                outValue = convertPersonForReturn(outValue);
+            }
             onAdd(outValue);
         }
 

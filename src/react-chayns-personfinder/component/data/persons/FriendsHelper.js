@@ -1,59 +1,69 @@
 import EventEmitter from '../../../../utils/events/EventEmitter';
 import { fetchFriends, setFriend } from './PersonsApi';
-import { convertFriend } from './PersonsConverter';
 
 class FriendsHelper {
-    #friends = [];
+    static #friends = [];
 
-    #friendsObject = {};
+    static #friendsObject = {};
 
-    #eventEmitter = new EventEmitter();
+    static #eventEmitter = new EventEmitter();
 
-    constructor() {
-        this.#init();
-    }
-
-    #init = async () => {
+    static init = async () => {
         await window.chayns.ready;
         if (window.chayns.env.user && window.chayns.env.user.isAuthenticated) {
             const raw = await fetchFriends().catch(() => []);
-            this.#friends = raw.map(convertFriend);
-            this.#friends.forEach((e) => {
-                this.#friendsObject[e.personId] = e;
+            FriendsHelper.#friends = raw.map(FriendsHelper.convertFriend);
+            FriendsHelper.#friends.forEach((e) => {
+                FriendsHelper.#friendsObject[e.personId] = e;
             });
-            this.#eventEmitter.emit('update', this.#friends);
+            FriendsHelper.#eventEmitter.emit('update', FriendsHelper.#friends);
         }
     };
 
-    isFriend = personId => !!(this.#friendsObject[personId] || false);
+    static isFriend = personId => !!(FriendsHelper.#friendsObject[personId] || false);
 
-    getFriendsList = () => this.#friends;
+    static getFriendsList = () => FriendsHelper.#friends;
 
-    setFriend = async (personId, fullName, friendship = true) => {
+    static setFriend = async (personId, fullName, friendship = true) => {
         const success = await setFriend(personId, friendship);
         if (!success) return;
 
         if (friendship) {
-            const friend = convertFriend({
+            const friend = FriendsHelper.convertFriend({
                 personId,
                 fullName,
             });
-            this.#friends.push(friend);
-            this.#friendsObject[personId] = friend;
+            FriendsHelper.#friends.push(friend);
+            FriendsHelper.#friendsObject[personId] = friend;
         } else {
-            this.#friends.splice(this.#friends.findIndex(person => person.personId === personId), 1);
-            delete this.#friendsObject[personId];
+            FriendsHelper.#friends.splice(FriendsHelper.#friends.findIndex(person => person.personId === personId), 1);
+            delete FriendsHelper.#friendsObject[personId];
         }
-        this.#eventEmitter.emit('update', this.#friends);
-    }
+        FriendsHelper.#eventEmitter.emit('update', FriendsHelper.#friends);
+    };
 
-    addUpdateListener = (listener) => {
-        this.#eventEmitter.on('update', listener);
-    }
+    static addUpdateListener = (listener) => {
+        FriendsHelper.#eventEmitter.on('update', listener);
+    };
 
-    removeUpdateListener = (listener) => {
-        this.#eventEmitter.off('update', listener);
-    }
+    static removeUpdateListener = (listener) => {
+        FriendsHelper.#eventEmitter.off('update', listener);
+    };
+
+    static convertFriend = friend => ({
+        type: 'PERSON',
+        id: friend.personId,
+        name: friend.fullName,
+        userId: friend.userId,
+        fullName: friend.fullName,
+        firstName: friend.firstName,
+        lastName: friend.lastName,
+        personId: friend.personId,
+        imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
+        isFriend: true,
+    });
 }
 
-export default new FriendsHelper();
+FriendsHelper.init();
+
+export default FriendsHelper;

@@ -21,11 +21,15 @@ const ObjectMapping = {
         { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: value => !value },
         { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: value => value && value.length >= 3 },
         { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: value => value && value.length >= 3 },
-        { key: 'personsUnrelated', lang: { de: 'Weitere Personen', en: 'further friends' }, show: value => value && value.length >= 3 },
+        {
+            key: 'personsUnrelated',
+            lang: { de: 'Weitere Personen', en: 'further friends' },
+            show: value => value && value.length >= 3,
+        },
     ],
     showName: 'name',
     identifier: 'id',
-    search: ['name'],
+    search: ['fullName', 'firstName', 'lastName', 'personId'],
     relations: 'relations',
     imageUrl: 'imageUrl',
 };
@@ -78,17 +82,25 @@ const PersonFinderStateProvider = ({
 
         const persons = await fetchPersons(value, skipPersons, take);
         const convertedPersons = convertPersons(persons);
-        const hasMore = { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take };
+        const hasMore = {
+            personsRelated: convertedPersons.personsRelated.length === take,
+            personsUnrelated: persons.length === take,
+        };
 
         // not optimal performance-wise but reduces redundant code
         const [ownUser] = convertPersons([{
+            type: 'PERSON',
+            name: chayns.env.user.fullName,
+            id: chayns.env.user.personId,
+            fullName: chayns.env.user.fullName,
             firstName: chayns.env.user.firstName,
             lastName: chayns.env.user.lastName,
             personId: chayns.env.user.personId,
+            userId: chayns.env.user.userId,
         }]).personsRelated;
 
         // prepend own user when prop is used, user is logged in and name matches
-        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.name && ownUser.name.toLowerCase().startsWith(value.toLowerCase())) {
+        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.fullName && ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())) {
             convertedPersons.personsRelated.unshift(ownUser);
         }
 

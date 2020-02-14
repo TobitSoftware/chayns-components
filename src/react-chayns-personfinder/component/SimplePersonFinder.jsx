@@ -7,6 +7,7 @@ import Input from '../../react-chayns-input/component/Input';
 import PersonFinderView from './PersonFinderView';
 import { isFunction, isString } from '../../utils/is';
 import PersonsContext from './data/persons/PersonsContext';
+import { convertPersonForReturn } from './data/persons/PersonsConverter';
 
 class SimplePersonFinder extends Component {
     constructor(props) {
@@ -49,8 +50,12 @@ class SimplePersonFinder extends Component {
             selectedValue: true,
         });
 
+        let outValue = value;
         if (onChange) {
-            onChange(value);
+            if (outValue && outValue.type === 'PERSON') {
+                outValue = convertPersonForReturn(outValue);
+            }
+            onChange(outValue);
         }
     }
 

@@ -78,6 +78,7 @@ export default class PersonFinderExample extends PureComponent {
                     showPersons
                     multiple
                     onAdd={(value) => {
+                        console.log(value);
                         this.setState({
                             moreReceiver: [
                                 ...moreReceiver,
@@ -97,7 +98,9 @@ export default class PersonFinderExample extends PureComponent {
                             moreReceiver: newReceiver,
                         });
                     }}
-                    ref={(ref) => { this.personFinder0 = ref; }}
+                    ref={(ref) => {
+                        this.personFinder0 = ref;
+                    }}
                 />
 
                 <PersonFinder
@@ -108,7 +111,7 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="Users with reducer: show only persons with an 'e' in the name"
                     onChange={PersonFinderExample.handleSelect}
                     reducerFunction={(state) => {
-                        console.log(state);
+                        console.log('added', state);
                         const newState = {
                             ...state,
                             personsRelated: state.personsRelated.filter((person) => {
