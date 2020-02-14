@@ -7,30 +7,6 @@ import isDescendant from '../../utils/isDescendant';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class InputBox extends Component {
-    static propTypes = {
-        inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
-        parent: PropTypes.instanceOf(Element),
-        onFocus: PropTypes.func,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        className: PropTypes.string,
-        boxClassName: PropTypes.string,
-        inputRef: PropTypes.func,
-        overlayProps: PropTypes.object,
-    };
-
-    static defaultProps = {
-        parent: null,
-        onFocus: null,
-        children: null,
-        className: null,
-        boxClassName: null,
-        inputRef: null,
-        overlayProps: null,
-    };
-
     state = {
         hidden: true,
         position: null,
@@ -203,7 +179,7 @@ export default class InputBox extends Component {
                         classNames="fade"
                     >
                         <div
-                            onClick={e => e.preventDefault()}
+                            onClick={(e) => e.preventDefault()}
                             className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
                             style={position ? {
                                 width: `${position.width}px`,
@@ -221,3 +197,28 @@ export default class InputBox extends Component {
         );
     }
 }
+
+InputBox.propTypes = {
+    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+    parent: PropTypes.instanceOf(Element),
+    onFocus: PropTypes.func,
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+    className: PropTypes.string,
+    boxClassName: PropTypes.string,
+    inputRef: PropTypes.func,
+    // eslint-disable-next-line react/forbid-prop-types
+    overlayProps: PropTypes.object,
+};
+
+InputBox.defaultProps = {
+    parent: null,
+    onFocus: null,
+    children: null,
+    className: null,
+    boxClassName: null,
+    inputRef: null,
+    overlayProps: null,
+};

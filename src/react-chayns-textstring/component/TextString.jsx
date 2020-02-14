@@ -6,46 +6,25 @@ import isTobitEmployee from '../../utils/tobitEmployee';
 import getTappWidth from '../../utils/tappWidth';
 
 export default class TextString extends Component {
-    static propTypes = {
-        stringName: PropTypes.string,
-        replacements: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
-        children: PropTypes.node.isRequired,
-        useDangerouslySetInnerHTML: PropTypes.bool,
-        language: PropTypes.string,
-        fallback: PropTypes.string, /* eslint-disable-line react/no-unused-prop-types */ // used by setTextStrings
-        setProps: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number])),
-        preventNoTranslate: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        stringName: null,
-        replacements: {},
-        useDangerouslySetInnerHTML: false,
-        language: null,
-        fallback: '',
-        setProps: {},
-        preventNoTranslate: false,
-    };
-
     static textStrings = {};
 
     static language = (chayns.env.language || navigator.language || 'de').substring(0, 2)
         .toLowerCase();
 
     static getTextString(stringName, language, fallback = null) {
-        let lang = TextString.languages.find(l => l.code === (language || TextString.language));
+        let lang = TextString.languages.find((l) => l.code === (language || TextString.language));
         lang = lang ? lang.value : 'Ger';
         const { textStrings } = TextString;
         const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
         const result = Object.keys(strings)
-            .map(lib => (strings[lib][stringName] || null))
-            .filter(x => x !== null)[0];
+            .map((lib) => (strings[lib][stringName] || null))
+            .filter((x) => x !== null)[0];
         return result !== null ? result : fallback;
     }
 
     static loadLibrary(projectName, middle = 'langRes', language) {
         return new Promise((resolve, reject) => {
-            let lang = TextString.languages.find(l => l.code === (language || TextString.language));
+            let lang = TextString.languages.find((l) => l.code === (language || TextString.language));
             lang = lang ? lang.value : 'Ger';
             if (!(TextString.textStrings[lang] && TextString.textStrings[lang][projectName])) {
                 fetch(`https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json`)
@@ -255,7 +234,7 @@ export default class TextString extends Component {
 
         chayns.dialog.select({
             title: `TextString bearbeiten: ${stringName}`,
-            message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find(l => l.code === (language || TextString.language)).name})`,
+            message: `Wähle die Sprache: (angezeigt wird ${TextString.languages.find((l) => l.code === (language || TextString.language)).name})`,
             quickfind: 0,
             multiselect: 0,
             list: TextString.languages,
@@ -263,13 +242,14 @@ export default class TextString extends Component {
             .then((data) => {
                 if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
                     const lang = data.selection[0];
-                    if (lang.value === TextString.languages.find(l => l.code === (language || TextString.language)).value) { // language is already selected
+                    // language is already selected
+                    if (lang.value === TextString.languages.find((l) => l.code === (language || TextString.language)).value) {
                         this.changeStringDialog(stringName, lang);
                     } else {
                         // Get lib
                         let library = null;
                         let middle = 'langRes';
-                        const globalLang = TextString.languages.find(l => l.code === TextString.language).value;
+                        const globalLang = TextString.languages.find((l) => l.code === TextString.language).value;
                         Object.keys(TextString.textStrings[globalLang])
                             .forEach((lib) => {
                                 if (TextString.textStrings[globalLang][lib][stringName]) {
@@ -278,7 +258,7 @@ export default class TextString extends Component {
                                     middle = TextString.textStrings[globalLang][lib].middle;
                                 }
                             });
-                        TextString.loadLibrary(library, middle, TextString.languages.find(l => l.value === lang.value).code)
+                        TextString.loadLibrary(library, middle, TextString.languages.find((l) => l.value === lang.value).code)
                             .then(() => {
                                 this.changeStringDialog(stringName, lang);
                             });
@@ -290,7 +270,7 @@ export default class TextString extends Component {
     changeStringDialog(stringName, lang) {
         const { useDangerouslySetInnerHTML } = this.props;
 
-        const string = TextString.getTextString(stringName, TextString.languages.find(l => l.value === lang.value).code);
+        const string = TextString.getTextString(stringName, TextString.languages.find((l) => l.value === lang.value).code);
         if (string) {
             if (useDangerouslySetInnerHTML) {
                 chayns.register({ apiDialogs: true });
@@ -339,7 +319,10 @@ export default class TextString extends Component {
             TextString.changeTextString(stringName, useDangerouslySetInnerHTML ? data.value : data.text, lang.value)
                 .then((result) => {
                     if (result.ResultCode === 0) {
-                        chayns.dialog.alert('', 'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.');
+                        chayns.dialog.alert(
+                            '',
+                            'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.'
+                        );
                     } else {
                         chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
                     }
@@ -376,7 +359,8 @@ export default class TextString extends Component {
                     : null
             ),
             ...textStringProps,
-            ...(!preventNoTranslate && (!language || language === TextString.language) ? { className: classNames('no-translate', children.props.className) } : null),
+            ...(!preventNoTranslate && (!language || language === TextString.language)
+                ? { className: classNames('no-translate', children.props.className) } : null),
         };
 
         if (textString) {
@@ -392,3 +376,24 @@ export default class TextString extends Component {
         );
     }
 }
+
+TextString.propTypes = {
+    stringName: PropTypes.string,
+    replacements: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    children: PropTypes.node.isRequired,
+    useDangerouslySetInnerHTML: PropTypes.bool,
+    language: PropTypes.string,
+    fallback: PropTypes.string, /* eslint-disable-line react/no-unused-prop-types */ // used by setTextStrings
+    setProps: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.number])),
+    preventNoTranslate: PropTypes.bool,
+};
+
+TextString.defaultProps = {
+    stringName: null,
+    replacements: {},
+    useDangerouslySetInnerHTML: false,
+    language: null,
+    fallback: '',
+    setProps: {},
+    preventNoTranslate: false,
+};

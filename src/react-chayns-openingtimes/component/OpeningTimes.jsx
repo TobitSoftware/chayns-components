@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -8,24 +9,6 @@ import './OpeningTimes.scss';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class OpeningTimes extends Component {
-    static propTypes = {
-        times: PropTypes.arrayOf(PropTypes.shape({
-            weekDay: PropTypes.number.isRequired,
-            start: PropTypes.string.isRequired,
-            end: PropTypes.string.isRequired,
-            disabled: PropTypes.bool,
-        })).isRequired,
-        onChange: PropTypes.func,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        onChange: null,
-        className: null,
-        style: null,
-    };
-
     static weekdays = [
         'Montag',
         'Dienstag',
@@ -52,7 +35,7 @@ class OpeningTimes extends Component {
         }
 
         for (let i = 0; i < OpeningTimes.weekdays.length; i += 1) {
-            if (times.findIndex(element => element.weekDay === i) < 0) {
+            if (times.findIndex((element) => element.weekDay === i) < 0) {
                 times.push({
                     weekDay: i,
                     start: TimeSpan.defaultStart,
@@ -69,8 +52,8 @@ class OpeningTimes extends Component {
 
     onAdd(weekDay) {
         const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
-        const foundTimes = newState.times.filter(time => time.weekDay === weekDay);
+        const newState = { ...this.state };
+        const foundTimes = newState.times.filter((time) => time.weekDay === weekDay);
 
         const oldStart = getTimeStringMinutes(foundTimes[0].start);
         const oldEnd = getTimeStringMinutes(foundTimes[0].end);
@@ -94,10 +77,10 @@ class OpeningTimes extends Component {
 
     onRemove(day, span) {
         const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
+        const newState = { ...this.state };
 
-        const timesOfDay = newState.times.filter(time => time.weekDay === day).filter((time, index) => index !== span);
-        const otherTimes = newState.times.filter(time => time.weekDay !== day);
+        const timesOfDay = newState.times.filter((time) => time.weekDay === day).filter((time, index) => index !== span);
+        const otherTimes = newState.times.filter((time) => time.weekDay !== day);
 
         newState.times = [...timesOfDay, ...otherTimes];
 
@@ -112,10 +95,10 @@ class OpeningTimes extends Component {
         const { times } = this.state;
         const { onChange } = this.props;
 
-        const newState = Object.assign({}, this.state);
+        const newState = { ...this.state };
 
         if (onChange) {
-            const timesOfDay = newState.times.filter(time => time.weekDay === day);
+            const timesOfDay = newState.times.filter((time) => time.weekDay === day);
             timesOfDay[index].start = start;
             timesOfDay[index].end = end;
             this.setState(newState);
@@ -125,8 +108,8 @@ class OpeningTimes extends Component {
 
     onDayActivation(day, status) {
         const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
-        const timesOfDay = newState.times.filter(time => time.weekDay === day);
+        const newState = { ...this.state };
+        const timesOfDay = newState.times.filter((time) => time.weekDay === day);
         const defaultTime = {
             weekDay: day,
             start: '08:00',
@@ -139,9 +122,9 @@ class OpeningTimes extends Component {
         }
 
         if (status) {
-            if (newState.times.length === newState.times.filter(time => time.disabled).length || newState.times.length === 0) {
-                if (newState.times.find(time => time.weekDay === day)) {
-                    newState.times = newState.times.map(time => (time.weekDay === day ? {
+            if (newState.times.length === newState.times.filter((time) => time.disabled).length || newState.times.length === 0) {
+                if (newState.times.find((time) => time.weekDay === day)) {
+                    newState.times = newState.times.map((time) => (time.weekDay === day ? {
                         weekDay: time.weekDay,
                         start: time.start,
                         end: time.end,
@@ -185,7 +168,7 @@ class OpeningTimes extends Component {
                                 name: day,
                                 number: index,
                             }}
-                            times={state.times.filter(t => t.weekDay === index)}
+                            times={state.times.filter((t) => t.weekDay === index)}
                             onDayActivation={this.onDayActivation}
                             onAdd={this.onAdd}
                             onRemove={this.onRemove}
@@ -197,5 +180,23 @@ class OpeningTimes extends Component {
         );
     }
 }
+
+OpeningTimes.propTypes = {
+    times: PropTypes.arrayOf(PropTypes.shape({
+        weekDay: PropTypes.number.isRequired,
+        start: PropTypes.string.isRequired,
+        end: PropTypes.string.isRequired,
+        disabled: PropTypes.bool,
+    })).isRequired,
+    onChange: PropTypes.func,
+    className: PropTypes.string,
+    style: PropTypes.object,
+};
+
+OpeningTimes.defaultProps = {
+    onChange: null,
+    className: null,
+    style: null,
+};
 
 export default OpeningTimes;

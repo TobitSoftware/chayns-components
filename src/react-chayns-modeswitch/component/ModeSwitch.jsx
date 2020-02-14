@@ -8,30 +8,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class ModeSwitch extends Component {
-    static propTypes = {
-        modes: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number,
-                name: PropTypes.string,
-                uacIds: PropTypes.arrayOf(PropTypes.number),
-            }),
-        ),
-        save: PropTypes.bool,
-        onChange: PropTypes.func,
-        defaultMode: PropTypes.number,
-        show: PropTypes.bool,
-        parent: PropTypes.instanceOf(Element),
-    };
-
-    static defaultProps = {
-        modes: null,
-        save: false,
-        onChange: null,
-        defaultMode: null,
-        show: null,
-        parent: null,
-    };
-
     static modes = [];
 
     static activeModeId = 0;
@@ -46,13 +22,13 @@ export default class ModeSwitch extends Component {
 
     static getCurrentMode() {
         const { modes, activeModeId } = ModeSwitch;
-        return modes.find(mode => mode.id === activeModeId || null);
+        return modes.find((mode) => mode.id === activeModeId || null);
     }
 
     static addChangeListener(callback) {
         ModeSwitch.onChangeListener.push(callback);
         if (ModeSwitch.modes.length > 0) {
-            const mode = ModeSwitch.modes.find(m => m.id === ModeSwitch.activeModeId);
+            const mode = ModeSwitch.modes.find((m) => m.id === ModeSwitch.activeModeId);
             callback(mode);
         }
     }
@@ -76,7 +52,8 @@ export default class ModeSwitch extends Component {
             open: false,
         };
         ModeSwitch.adminSwitchStatus = chayns.env.user.adminMode ? 1 : 0;
-        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp) && !!chayns.env.user.groups.find(g => g.id === 1);
+        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp)
+            && !!chayns.env.user.groups.find((g) => g.id === 1);
         window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(this.init);
             this.init();
@@ -95,7 +72,7 @@ export default class ModeSwitch extends Component {
     onChange(id) {
         const { modes } = this.state;
         const { onChange } = this.props;
-        const mode = modes.find(m => m && m.id === id);
+        const mode = modes.find((m) => m && m.id === id);
         if (onChange) {
             onChange(mode);
         }
@@ -115,8 +92,8 @@ export default class ModeSwitch extends Component {
 
     setModes(modes) {
         let newModes = modes || [];
-        const user = newModes.filter(mode => mode.id === 0);
-        const admin = newModes.filter(mode => mode.id === 1);
+        const user = newModes.filter((mode) => mode.id === 0);
+        const admin = newModes.filter((mode) => mode.id === 1);
         if (admin.length === 0) {
             newModes.unshift({
                 id: 1,
@@ -130,7 +107,7 @@ export default class ModeSwitch extends Component {
                 name: window.chayns.env.user.name,
             });
         }
-        newModes = newModes.filter(mode => !mode.uacIds || (this.isUserInGroup(mode.uacIds)));
+        newModes = newModes.filter((mode) => !mode.uacIds || (this.isUserInGroup(mode.uacIds)));
         return newModes;
     }
 
@@ -200,7 +177,7 @@ export default class ModeSwitch extends Component {
     }
 
     isUserInGroup(uacIds) {
-        return !!window.chayns.env.user.groups.find(group => uacIds.indexOf(group.id) >= 0);
+        return !!window.chayns.env.user.groups.find((group) => uacIds.indexOf(group.id) >= 0);
     }
 
     toggleModeSwitch() {
@@ -213,14 +190,15 @@ export default class ModeSwitch extends Component {
         const { modes } = this.state;
 
         let customModes = modes.length;
-        if (modes.find(mode => mode.uacIds && mode.uacIds.indexOf(1) >= 0)) {
+        if (modes.find((mode) => mode.uacIds && mode.uacIds.indexOf(1) >= 0)) {
             customModes -= 1;
         }
-        if (modes.find(mode => !mode.uacIds || (mode.uacIds && mode.uacIds.indexOf(0) >= 0))) {
+        if (modes.find((mode) => !mode.uacIds || (mode.uacIds && mode.uacIds.indexOf(0) >= 0))) {
             customModes -= 1;
         }
 
-        return (show || (show === null && modes.length > 1 && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes))) && chayns.env.user.isAuthenticated;
+        return (show || (show === null && modes.length > 1 && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes)))
+            && chayns.env.user.isAuthenticated;
     }
 
     render() {
@@ -237,7 +215,7 @@ export default class ModeSwitch extends Component {
                         <div className="cc__modeswitch__content">
                             <h2>Diese Seite verwenden als:</h2>
                             {
-                                modes.map(mode => (
+                                modes.map((mode) => (
                                     !ModeSwitch.adminSwitchSupport || mode.id > 1 || mode.id === ModeSwitch.adminSwitchStatus
                                         ? (
                                             <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
@@ -259,7 +237,7 @@ export default class ModeSwitch extends Component {
                             className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId > 1 })}
                             onClick={this.toggleModeSwitch}
                         >
-                            <Icon icon="ts-cog" />
+                            <Icon icon="ts-cog"/>
                         </div>
                     </div>
                 </TappPortal>
@@ -268,3 +246,25 @@ export default class ModeSwitch extends Component {
         return null;
     }
 }
+
+ModeSwitch.propTypes = {
+    modes: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        uacIds: PropTypes.arrayOf(PropTypes.number),
+    }),),
+    save: PropTypes.bool,
+    onChange: PropTypes.func,
+    defaultMode: PropTypes.number,
+    show: PropTypes.bool,
+    parent: PropTypes.instanceOf(Element),
+};
+
+ModeSwitch.defaultProps = {
+    modes: null,
+    save: false,
+    onChange: null,
+    defaultMode: null,
+    show: null,
+    parent: null,
+};

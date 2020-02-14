@@ -1,4 +1,4 @@
-/* eslint-disable react/no-redundant-should-component-update */
+/* eslint-disable react/no-redundant-should-component-update,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -7,29 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isFunction, isString } from '../../utils/is';
 
 export default class Icon extends Component {
-    static propTypes = {
-        icon: PropTypes.oneOfType([
-            PropTypes.string.isRequired,
-            PropTypes.shape({
-                iconName: PropTypes.string.isRequired,
-                prefix: PropTypes.string.isRequired,
-            }).isRequired,
-        ]).isRequired,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        onClick: PropTypes.func,
-        disabled: PropTypes.bool,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        className: '',
-        style: undefined,
-        onClick: undefined,
-        disabled: false,
-        stopPropagation: false,
-    };
-
     constructor(props) {
         super(props);
         const { icon } = props;
@@ -88,7 +65,7 @@ export default class Icon extends Component {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                 <span className={classes} onClick={this.onClick}>
-                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other} />
+                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other}/>
                 </span>
             );
         }
@@ -102,3 +79,26 @@ export default class Icon extends Component {
         );
     }
 }
+
+Icon.propTypes = {
+    icon: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.shape({
+            iconName: PropTypes.string.isRequired,
+            prefix: PropTypes.string.isRequired,
+        }).isRequired,
+    ]).isRequired,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    onClick: PropTypes.func,
+    disabled: PropTypes.bool,
+    stopPropagation: PropTypes.bool,
+};
+
+Icon.defaultProps = {
+    className: '',
+    style: undefined,
+    onClick: undefined,
+    disabled: false,
+    stopPropagation: false,
+};

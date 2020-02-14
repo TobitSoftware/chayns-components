@@ -18,13 +18,13 @@ import FriendsHelper from './FriendsHelper';
 
 const ObjectMapping = {
     groups: [
-        { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: value => !value },
-        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: value => value && value.length >= 3 },
-        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: value => value && value.length >= 3 },
+        { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: (value) => !value },
+        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: (value) => value && value.length >= 3 },
+        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: (value) => value && value.length >= 3 },
         {
             key: 'personsUnrelated',
             lang: { de: 'Weitere Personen', en: 'further friends' },
-            show: value => value && value.length >= 3,
+            show: (value) => value && value.length >= 3,
         },
     ],
     showName: 'name',
@@ -100,7 +100,8 @@ const PersonFinderStateProvider = ({
         }]).personsRelated;
 
         // prepend own user when prop is used, user is logged in and name matches
-        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.fullName && ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())) {
+        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.fullName
+            && ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())) {
             convertedPersons.personsRelated.unshift(ownUser);
         }
 

@@ -12,28 +12,6 @@ function requireEmojione(returnPromise) {
 }
 
 export default class EmojiInput extends Component {
-    static propTypes = {
-        placeholder: PropTypes.string.isRequired,
-        onInput: PropTypes.func.isRequired,
-        value: PropTypes.string.isRequired,
-        id: PropTypes.string.isRequired,
-        hideBorder: PropTypes.bool,
-        onKeyDown: PropTypes.func,
-        disabled: PropTypes.bool,
-        style: PropTypes.object,
-        onFocus: PropTypes.func,
-        onBlur: PropTypes.func,
-    };
-
-    static defaultProps = {
-        hideBorder: false,
-        onKeyDown: null,
-        disabled: false,
-        onFocus: null,
-        onBlur: null,
-        style: null,
-    };
-
     lastKeyPressed = null;
 
     firstRender = true;
@@ -122,7 +100,9 @@ export default class EmojiInput extends Component {
                     curNode = curNode.childNodes[0];
                 }
 
-                if (curNode === anchorNode || (curNode.wholeText === anchorNode.wholeText && curNode.nextElementSibling === anchorNode.nextElementSibling && curNode.previousElementSibling === anchorNode.previousElementSibling)) {
+                if (curNode === anchorNode
+                    || (curNode.wholeText === anchorNode.wholeText && curNode.nextElementSibling === anchorNode.nextElementSibling
+                        && curNode.previousElementSibling === anchorNode.previousElementSibling)) {
                     activeChildNode = curNode.nodeType === 1 ? i + 1 : i;
                     break;
                 }
@@ -194,20 +174,20 @@ export default class EmojiInput extends Component {
         while (curChild !== null) {
             if (curChild.nodeType === 1) {
                 switch (curChild.tagName) {
-                case 'IMG':
-                    textLines[lineIndex] += curChild.getAttribute('alt');
-                    break;
-                case 'DIV':
-                    textLines.push('');
-                    lineIndex += 1;
-                    break;
-                case 'BR':
-                    if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
-                        textLines[lineIndex] += '\n';
-                    }
-                    break;
-                default:
-                    break;
+                    case 'IMG':
+                        textLines[lineIndex] += curChild.getAttribute('alt');
+                        break;
+                    case 'DIV':
+                        textLines.push('');
+                        lineIndex += 1;
+                        break;
+                    case 'BR':
+                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
+                            textLines[lineIndex] += '\n';
+                        }
+                        break;
+                    default:
+                        break;
                 }
             } else if (curChild.nodeType === 3) {
                 textLines[lineIndex] += curChild.nodeValue;
@@ -401,3 +381,25 @@ export default class EmojiInput extends Component {
         );
     }
 }
+EmojiInput.propTypes = {
+    placeholder: PropTypes.string.isRequired,
+    onInput: PropTypes.func.isRequired,
+    value: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    hideBorder: PropTypes.bool,
+    onKeyDown: PropTypes.func,
+    disabled: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+};
+
+EmojiInput.defaultProps = {
+    hideBorder: false,
+    onKeyDown: null,
+    disabled: false,
+    onFocus: null,
+    onBlur: null,
+    style: null,
+};

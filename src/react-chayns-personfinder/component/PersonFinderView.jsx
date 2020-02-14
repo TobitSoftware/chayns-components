@@ -45,8 +45,9 @@ class PersonFinderView extends Component {
     hasEntries = () => {
         const { data, orm, value } = this.props;
         return Array.isArray(orm.groups)
-            ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value)) && Array.isArray(data[group]) && data[group].length)
-            : !!((Array.isArray(data) && data.length) || Object.values(data).some(d => Array.isArray(d) && d.length));
+            ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value))
+                && Array.isArray(data[group]) && data[group].length)
+            : !!((Array.isArray(data) && data.length) || Object.values(data).some((d) => Array.isArray(d) && d.length));
     };
 
     renderChildren() {
@@ -81,9 +82,9 @@ class PersonFinderView extends Component {
             );
         }
 
-        if (waitCursor === true || Object.values(waitCursor).some(x => x)) {
+        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
             return (
-                <WaitCursor key="wait-cursor" />
+                <WaitCursor key="wait-cursor"/>
             );
         }
 
@@ -110,7 +111,7 @@ class PersonFinderView extends Component {
                 ref={boxRef}
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
-                onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
+                onAddTag={(data) => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{

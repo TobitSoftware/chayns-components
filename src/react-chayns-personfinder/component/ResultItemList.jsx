@@ -30,7 +30,7 @@ const ResultItemList = ({
                     name={separator}
                 />
             )}
-            {data.map(item => (
+            {data.map((item) => (
                 <PersonFinderResultItem
                     key={item[orm.identifier]}
                     data={item}

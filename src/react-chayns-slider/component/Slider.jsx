@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -8,62 +9,6 @@ function preventDefault(e) {
 }
 
 export default class Slider extends PureComponent {
-    static propTypes = {
-        min: PropTypes.number,
-        max: PropTypes.number,
-        step: PropTypes.number,
-        defaultValue: PropTypes.number,
-        value: PropTypes.number,
-        style: PropTypes.object,
-        className: PropTypes.string,
-        showLabel: PropTypes.bool,
-        valueFormatter: PropTypes.func,
-        labelStyle: PropTypes.object,
-        onChangeStart: PropTypes.func,
-        onChange: PropTypes.func,
-        onChangeEnd: PropTypes.func,
-        thumbStyle: PropTypes.object,
-        disabled: PropTypes.bool,
-        vertical: PropTypes.bool,
-        interval: PropTypes.bool,
-        minInterval: PropTypes.number,
-        maxInterval: PropTypes.number,
-        defaultStartValue: PropTypes.number,
-        defaultEndValue: PropTypes.number,
-        startValue: PropTypes.number,
-        endValue: PropTypes.number,
-        trackStyle: PropTypes.object,
-        innerTrackStyle: PropTypes.object,
-    };
-
-    static defaultProps = {
-        min: 0,
-        max: 100,
-        step: null,
-        defaultValue: 0,
-        value: null,
-        style: null,
-        className: null,
-        showLabel: false,
-        valueFormatter: (value1, value2) => (value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)),
-        labelStyle: { minWidth: '50px' },
-        onChangeStart: null,
-        onChange: null,
-        onChangeEnd: null,
-        thumbStyle: null,
-        disabled: false,
-        vertical: false,
-        interval: false,
-        minInterval: null,
-        maxInterval: null,
-        defaultStartValue: 0,
-        defaultEndValue: 0,
-        startValue: null,
-        endValue: null,
-        trackStyle: null,
-        innerTrackStyle: null,
-    };
-
     constructor(props) {
         super(props);
 
@@ -76,8 +21,10 @@ export default class Slider extends PureComponent {
 
         this.target = null;
         if (props.interval) {
-            this.leftPercent = (((props.startValue || isNumber(props.startValue) ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
-            this.rightPercent = (((props.endValue || isNumber(props.endValue) ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
+            this.leftPercent = (((props.startValue || isNumber(props.startValue)
+                ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
+            this.rightPercent = (((props.endValue || isNumber(props.endValue)
+                ? props.endValue : props.defaultEndValue) - props.min) / (props.max - props.min)) * 100;
             if (props.vertical) {
                 const left = this.leftPercent;
                 this.leftPercent = 100 - this.rightPercent;
@@ -318,12 +265,14 @@ export default class Slider extends PureComponent {
         if (interval) {
             const width = max - min;
             const maxIntervalPercent = (maxInterval / width) * 100;
-            if (this.leftPercent > clickPercent || (chayns.env.isMobile && this.rightPercent > clickPercent && clickPercent - this.leftPercent < this.rightPercent - clickPercent)) {
+            if (this.leftPercent > clickPercent || (chayns.env.isMobile && this.rightPercent > clickPercent
+                && clickPercent - this.leftPercent < this.rightPercent - clickPercent)) {
                 this.leftPercent = clickPercent;
                 if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
-            } else if (this.rightPercent < clickPercent || (chayns.env.isMobile && this.leftPercent < clickPercent && clickPercent - this.leftPercent > this.rightPercent - clickPercent)) {
+            } else if (this.rightPercent < clickPercent || (chayns.env.isMobile && this.leftPercent < clickPercent
+                && clickPercent - this.leftPercent > this.rightPercent - clickPercent)) {
                 this.rightPercent = clickPercent;
                 if (maxInterval && this.rightPercent - this.leftPercent > maxIntervalPercent) {
                     this.leftPercent = this.rightPercent - maxIntervalPercent;
@@ -383,11 +332,11 @@ export default class Slider extends PureComponent {
         if (showLabel && !vertical) {
             const realInterval = max - min;
             if (interval) {
-                const left = min + (realInterval * leftPercent / 100);
-                const right = min + (realInterval * rightPercent / 100);
+                const left = min + (realInterval * (leftPercent / 100));
+                const right = min + (realInterval * (rightPercent / 100));
                 this.label.current.innerText = valueFormatter(left, right);
             } else {
-                const value = min + (realInterval * percent / 100);
+                const value = min + (realInterval * (percent / 100));
                 this.label.current.innerText = valueFormatter(value);
             }
         }
@@ -436,13 +385,13 @@ export default class Slider extends PureComponent {
         }
         const realInterval = max - min;
         if (interval) {
-            const left = min + (realInterval * leftPercent / 100);
-            const right = min + (realInterval * rightPercent / 100);
+            const left = min + (realInterval * (leftPercent / 100));
+            const right = min + (realInterval * (rightPercent / 100));
             listeners.forEach((l) => {
                 if (l) l(left, right);
             });
         } else {
-            const value = Math.round(1000 * (min + (realInterval * percent / 100))) / 1000;
+            const value = Math.round(1000 * (min + (realInterval * (percent / 100)))) / 1000;
 
             listeners.forEach((l) => {
                 if (l) l(value);
@@ -576,3 +525,59 @@ export default class Slider extends PureComponent {
         );
     }
 }
+
+Slider.propTypes = {
+    min: PropTypes.number,
+    max: PropTypes.number,
+    step: PropTypes.number,
+    defaultValue: PropTypes.number,
+    value: PropTypes.number,
+    style: PropTypes.object,
+    className: PropTypes.string,
+    showLabel: PropTypes.bool,
+    valueFormatter: PropTypes.func,
+    labelStyle: PropTypes.object,
+    onChangeStart: PropTypes.func,
+    onChange: PropTypes.func,
+    onChangeEnd: PropTypes.func,
+    thumbStyle: PropTypes.object,
+    disabled: PropTypes.bool,
+    vertical: PropTypes.bool,
+    interval: PropTypes.bool,
+    minInterval: PropTypes.number,
+    maxInterval: PropTypes.number,
+    defaultStartValue: PropTypes.number,
+    defaultEndValue: PropTypes.number,
+    startValue: PropTypes.number,
+    endValue: PropTypes.number,
+    trackStyle: PropTypes.object,
+    innerTrackStyle: PropTypes.object,
+};
+
+Slider.defaultProps = {
+    min: 0,
+    max: 100,
+    step: null,
+    defaultValue: 0,
+    value: null,
+    style: null,
+    className: null,
+    showLabel: false,
+    valueFormatter: (value1, value2) => (value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)),
+    labelStyle: { minWidth: '50px' },
+    onChangeStart: null,
+    onChange: null,
+    onChangeEnd: null,
+    thumbStyle: null,
+    disabled: false,
+    vertical: false,
+    interval: false,
+    minInterval: null,
+    maxInterval: null,
+    defaultStartValue: 0,
+    defaultEndValue: 0,
+    startValue: null,
+    endValue: null,
+    trackStyle: null,
+    innerTrackStyle: null,
+};

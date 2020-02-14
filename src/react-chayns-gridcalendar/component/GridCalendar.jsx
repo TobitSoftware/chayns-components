@@ -1,4 +1,4 @@
-/* eslint-disable guard-for-in,no-restricted-syntax */
+/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Navigator from './content/Navigator';
 import User from './content/User';
 import Groups from './content/Groups';
+import { GridCalendar } from '../../index';
 
 
 const WEEK_WIDTH = 50;
@@ -14,59 +15,6 @@ let focusWeek;
 let isDesktop = window.innerWidth > 450;
 
 export default class ProgressCalendar extends Component {
-    static propTypes = {
-        data: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number,
-                name: PropTypes.string,
-                entries: PropTypes.arrayOf(
-                    PropTypes.shape({
-                        id: PropTypes.number,
-                        groupId: PropTypes.number,
-                        startTime: PropTypes.number,
-                        endTime: PropTypes.number,
-                    }),
-                ),
-            }),
-        ),
-        columns: PropTypes.arrayOf(
-            PropTypes.shape({
-                names: PropTypes.arrayOf(PropTypes.string),
-                highlightedColor: PropTypes.string,
-            }),
-        ),
-        groups: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number,
-                name: PropTypes.string,
-                color: PropTypes.string,
-            }),
-        ),
-        onNavigateLeft: PropTypes.func,
-        onNavigateRight: PropTypes.func,
-        focus: PropTypes.objectOf(Date),
-        startTime: PropTypes.objectOf(Date).isRequired,
-        endTime: PropTypes.objectOf(Date).isRequired,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        data: null,
-        columns: {
-            names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],
-            highlightedColor: chayns.env.site.color,
-        },
-        groups: [],
-        focus: new Date(),
-        onNavigateRight: () => {
-        },
-        onNavigateLeft: () => {
-        },
-        className: null,
-        style: null,
-    };
-
     static dateInterval(dateStart, dateEnd) {
         const startDate = dateStart.getDate() < 10 ? `0${dateStart.getDate()}` : dateStart.getDate();
         const startMonth = (dateStart.getMonth() + 1) < 10 ? `0${dateStart.getMonth() + 1}` : (dateStart.getMonth() + 1);
@@ -394,7 +342,7 @@ export default class ProgressCalendar extends Component {
             return (
                 <div className="calendar__content_groups" style={{ width: '35%', paddingRight: '5px' }}>
                     {
-                        data.map(user => (
+                        data.map((user) => (
                             <div className="calendar__user ellipsis" key={user.id}>
                                 {user.name}
                             </div>
@@ -415,7 +363,7 @@ export default class ProgressCalendar extends Component {
         const wrapperWidth = this.weeks ? this.weeks.length * WEEK_WIDTH * (isDesktop ? 1 : 2) : 0;
         const weekWidth = this.content ? contentWidth / 2 * (isDesktop ? 1 : 2) : 0;
 
-        const content = this.content ? this.entries.map(entries => (
+        const content = this.content ? this.entries.map((entries) => (
             <User
                 entries={entries.entries}
                 groups={groups}
@@ -429,7 +377,7 @@ export default class ProgressCalendar extends Component {
 
         return (
             // eslint-disable-next-line no-return-assign
-            <div className="calendar__content_weeks" ref={ref => this.content = ref}>
+            <div className="calendar__content_weeks" ref={(ref) => this.content = ref}>
                 <div
                     className="calendar__content_wrapper"
                     style={{
@@ -515,3 +463,48 @@ export default class ProgressCalendar extends Component {
         );
     }
 }
+
+GridCalendar.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        entries: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number,
+            groupId: PropTypes.number,
+            startTime: PropTypes.number,
+            endTime: PropTypes.number,
+        }),),
+    }),),
+    columns: PropTypes.arrayOf(PropTypes.shape({
+        names: PropTypes.arrayOf(PropTypes.string),
+        highlightedColor: PropTypes.string,
+    }),),
+    groups: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        color: PropTypes.string,
+    }),),
+    onNavigateLeft: PropTypes.func,
+    onNavigateRight: PropTypes.func,
+    focus: PropTypes.objectOf(Date),
+    startTime: PropTypes.objectOf(Date).isRequired,
+    endTime: PropTypes.objectOf(Date).isRequired,
+    className: PropTypes.string,
+    style: PropTypes.object,
+};
+
+GridCalendar.defaultProps = {
+    data: null,
+    columns: {
+        names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],
+        highlightedColor: chayns.env.site.color,
+    },
+    groups: [],
+    focus: new Date(),
+    onNavigateRight: () => {
+    },
+    onNavigateLeft: () => {
+    },
+    className: null,
+    style: null,
+};

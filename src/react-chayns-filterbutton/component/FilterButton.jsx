@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 import './FilterButton.scss';
 
-const isValue = val => typeof val !== 'undefined' && val !== null;
+const isValue = (val) => typeof val !== 'undefined' && val !== null;
 
 const PREFIX = 'CC_FB_';
 let currentId = 0;
@@ -29,7 +29,7 @@ const FilterButton = ({
         return null;
     }
 
-    const captureClick = stopPropagation ? e => e.stopPropagation() : undefined;
+    const captureClick = stopPropagation ? (e) => e.stopPropagation() : undefined;
 
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -87,9 +87,7 @@ FilterButton.propTypes = {
         }).isRequired,
     ]),
     className: PropTypes.string,
-    style: PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    ),
+    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]),),
     id: PropTypes.string,
     disabled: PropTypes.bool,
     stopPropagation: PropTypes.bool,

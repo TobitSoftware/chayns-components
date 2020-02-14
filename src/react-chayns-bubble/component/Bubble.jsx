@@ -1,36 +1,10 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class Bubble extends PureComponent {
-    static propTypes = {
-        children: PropTypes.node,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
-        parent: PropTypes.instanceOf(Element),
-        coordinates: PropTypes.shape({
-            x: PropTypes.number.isRequired,
-            y: PropTypes.number.isRequired,
-        }),
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func,
-        topDivStyle: PropTypes.object,
-    };
-
-    static defaultProps = {
-        className: null,
-        style: null,
-        children: null,
-        position: 0,
-        parent: null,
-        coordinates: null,
-        onMouseEnter: null,
-        onMouseLeave: null,
-        topDivStyle: null,
-    };
-
     static position = {
         TOP_LEFT: 0,
         BOTTOM_LEFT: 1,
@@ -123,3 +97,30 @@ export default class Bubble extends PureComponent {
         );
     }
 }
+
+Bubble.propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
+    parent: PropTypes.instanceOf(Element),
+    coordinates: PropTypes.shape({
+        x: PropTypes.number.isRequired,
+        y: PropTypes.number.isRequired,
+    }),
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+    topDivStyle: PropTypes.object,
+};
+
+Bubble.defaultProps = {
+    className: null,
+    style: null,
+    children: null,
+    position: 0,
+    parent: null,
+    coordinates: null,
+    onMouseEnter: null,
+    onMouseLeave: null,
+    topDivStyle: null,
+};

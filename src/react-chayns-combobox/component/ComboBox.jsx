@@ -4,27 +4,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class ComboBox extends PureComponent {
-    static propTypes = {
-        onSelect: PropTypes.func,
-        disabled: PropTypes.bool,
-        label: PropTypes.string,
-        list: PropTypes.array.isRequired,
-        listKey: PropTypes.string.isRequired,
-        listValue: PropTypes.string.isRequired,
-        className: PropTypes.string,
-        defaultValue: PropTypes.string,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        label: null,
-        className: null,
-        onSelect: null,
-        disabled: false,
-        stopPropagation: false,
-        defaultValue: null,
-    };
-
     constructor() {
         super();
 
@@ -35,7 +14,7 @@ export default class ComboBox extends PureComponent {
         const { onSelect, list, listKey } = this.props;
         const selection = e.target.value;
         if (onSelect && list && list.length > 0 && listKey && selection) {
-            onSelect(list.find(item => String(item[listKey]) === selection));
+            onSelect(list.find((item) => String(item[listKey]) === selection));
         }
     }
 
@@ -49,14 +28,14 @@ export default class ComboBox extends PureComponent {
                     disabled={disabled}
                     onChange={this.onSelect}
                     defaultValue={label ? 'ComboBoxLabel' : defaultValue}
-                    onClick={stopPropagation ? event => event.stopPropagation() : null}
+                    onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                 >
                     {
                         label
                             ? <option value="ComboBoxLabel" disabled>{label}</option>
                             : null
                     }
-                    {list.map(item => (
+                    {list.map((item) => (
                         <option key={item[listKey]} value={item[listKey]}>
                             {item[listValue]}
                         </option>
@@ -66,3 +45,25 @@ export default class ComboBox extends PureComponent {
         );
     }
 }
+
+ComboBox.propTypes = {
+    onSelect: PropTypes.func,
+    disabled: PropTypes.bool,
+    label: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    list: PropTypes.array.isRequired,
+    listKey: PropTypes.string.isRequired,
+    listValue: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    defaultValue: PropTypes.string,
+    stopPropagation: PropTypes.bool,
+};
+
+ComboBox.defaultProps = {
+    label: null,
+    className: null,
+    onSelect: null,
+    disabled: false,
+    stopPropagation: false,
+    defaultValue: null,
+};

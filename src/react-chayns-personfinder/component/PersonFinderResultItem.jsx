@@ -15,47 +15,47 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
     const onKeyDown = useCallback((ev) => {
         ev.preventDefault();
         switch (ev.keyCode) {
-        case 9: {
-            let next = ev.shiftKey ? ev.target.previousSibling : ev.target.nextSibling;
-            let list = ev.target.parentElement.parentElement[ev.shiftKey ? 'previousSibling' : 'nextSibling'];
-            while ((!next || !next.classList.contains('result-item')) && list) {
-                next = list.querySelector(ev.shiftKey ? '.result-item:last-child' : '.result-item');
-                list = ev.shiftKey ? list.previousSibling : list.nextSibling;
+            case 9: {
+                let next = ev.shiftKey ? ev.target.previousSibling : ev.target.nextSibling;
+                let list = ev.target.parentElement.parentElement[ev.shiftKey ? 'previousSibling' : 'nextSibling'];
+                while ((!next || !next.classList.contains('result-item')) && list) {
+                    next = list.querySelector(ev.shiftKey ? '.result-item:last-child' : '.result-item');
+                    list = ev.shiftKey ? list.previousSibling : list.nextSibling;
+                }
+                if (next) {
+                    next.focus();
+                }
+                break;
             }
-            if (next) {
-                next.focus();
+            case 13:
+                handleClick();
+                break;
+            case 38: {
+                let next = ev.target.previousSibling;
+                let list = ev.target.parentElement.parentElement.previousSibling;
+                while ((!next || !next.classList.contains('result-item')) && list) {
+                    next = list.querySelector('.result-item:last-child');
+                    list = list.previousSibling;
+                }
+                if (next) {
+                    next.focus();
+                }
+                break;
             }
-            break;
-        }
-        case 13:
-            handleClick();
-            break;
-        case 38: {
-            let next = ev.target.previousSibling;
-            let list = ev.target.parentElement.parentElement.previousSibling;
-            while ((!next || !next.classList.contains('result-item')) && list) {
-                next = list.querySelector('.result-item:last-child');
-                list = list.previousSibling;
+            case 40: {
+                let next = ev.target.nextSibling;
+                let list = ev.target.parentElement.parentElement.nextSibling;
+                while (!next && list) {
+                    next = list.querySelector('.result-item');
+                    list = list.nextSibling;
+                }
+                if (next) {
+                    next.focus();
+                }
+                break;
             }
-            if (next) {
-                next.focus();
-            }
-            break;
-        }
-        case 40: {
-            let next = ev.target.nextSibling;
-            let list = ev.target.parentElement.parentElement.nextSibling;
-            while (!next && list) {
-                next = list.querySelector('.result-item');
-                list = list.nextSibling;
-            }
-            if (next) {
-                next.focus();
-            }
-            break;
-        }
-        default:
-            break;
+            default:
+                break;
         }
     }, []);
 
@@ -68,7 +68,7 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
             onClick={handleClick}
             onKeyDown={onKeyDown}
         >
-            {orm.imageUrl ? (<div className="img" style={{ backgroundImage: `url(${data[orm.imageUrl]})` }} />) : null}
+            {orm.imageUrl ? (<div className="img" style={{ backgroundImage: `url(${data[orm.imageUrl]})` }}/>) : null}
             <div className="text">
                 <div
                     className="title"
@@ -81,7 +81,7 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
                     )}
                 </div>
                 {hasRelations && (
-                    <Relation relation={data} />
+                    <Relation relation={data}/>
                 )}
                 {!hasRelations && (
                     <div className="identifier">
@@ -107,6 +107,7 @@ PersonFinderResultItem.propTypes = {
         relations: PropTypes.string,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
 };
 

@@ -20,6 +20,7 @@ const WaitCursor = ({ style }) => (
 );
 
 WaitCursor.propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
 };
 

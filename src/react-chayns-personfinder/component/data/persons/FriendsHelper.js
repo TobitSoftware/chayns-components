@@ -20,7 +20,7 @@ class FriendsHelper {
         }
     };
 
-    static isFriend = personId => !!(FriendsHelper.#friendsObject[personId] || false);
+    static isFriend = (personId) => !!(FriendsHelper.#friendsObject[personId] || false);
 
     static getFriendsList = () => FriendsHelper.#friends;
 
@@ -36,7 +36,7 @@ class FriendsHelper {
             FriendsHelper.#friends.push(friend);
             FriendsHelper.#friendsObject[personId] = friend;
         } else {
-            FriendsHelper.#friends.splice(FriendsHelper.#friends.findIndex(person => person.personId === personId), 1);
+            FriendsHelper.#friends.splice(FriendsHelper.#friends.findIndex((person) => person.personId === personId), 1);
             delete FriendsHelper.#friendsObject[personId];
         }
         FriendsHelper.#eventEmitter.emit('update', FriendsHelper.#friends);
@@ -50,7 +50,7 @@ class FriendsHelper {
         FriendsHelper.#eventEmitter.off('update', listener);
     };
 
-    static convertFriend = friend => ({
+    static convertFriend = (friend) => ({
         type: 'PERSON',
         id: friend.personId,
         name: friend.fullName,

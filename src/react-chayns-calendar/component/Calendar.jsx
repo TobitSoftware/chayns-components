@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events,no-underscore-dangle,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -21,39 +21,6 @@ function getMonthNames(language = chayns.env.language) {
 }
 
 export default class Calendar extends Component {
-    static propTypes = {
-        startDate: PropTypes.instanceOf(Date),
-        endDate: PropTypes.instanceOf(Date),
-        onDateSelect: PropTypes.func,
-        selected: PropTypes.instanceOf(Date),
-        activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-        highlighted: PropTypes.oneOfType([
-            PropTypes.shape({
-                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-                color: PropTypes.string,
-            }),
-            PropTypes.arrayOf(PropTypes.shape({
-                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-                color: PropTypes.string,
-            })),
-        ]),
-        activateAll: PropTypes.bool,
-        style: PropTypes.object,
-        className: PropTypes.string,
-    };
-
-    static defaultProps = {
-        selected: TODAY,
-        startDate: null,
-        endDate: null,
-        onDateSelect: null,
-        activateAll: true,
-        activated: null,
-        highlighted: null,
-        style: null,
-        className: null,
-    };
-
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
 
     constructor(props) {
@@ -71,7 +38,9 @@ export default class Calendar extends Component {
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
 
-        const { selected } = props; // TODO: SELECTED SHOULD NOT BE OUTSIDE THE START AND END TIME. ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
+        // TODO: SELECTED SHOULD NOT BE OUTSIDE THE START AND END TIME.
+        //  ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
+        const { selected } = props;
 
         const active = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
         this.setMonths(active);
@@ -372,7 +341,13 @@ export default class Calendar extends Component {
                 onTouchMove={this.handleTouchMove}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
-                style={{ ...{ minHeight: '205px', overflow: 'hidden' }, ...style }}
+                style={{
+                    ...{
+                        minHeight: '205px',
+                        overflow: 'hidden',
+                    },
+                    ...style,
+                }}
             >
                 <div className="absolute">
                     <div className="cc__calendar__navigation">
@@ -381,15 +356,15 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
-                            <Icon icon={faChevronLeft} />
+                            <Icon icon={faChevronLeft}/>
                         </div>
-                        <div className="cc__calendar__navigate middle" />
+                        <div className="cc__calendar__navigate middle"/>
                         <div
                             onClick={this.navigateRightOnClick}
                             className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
-                            <Icon icon={faChevronRight} />
+                            <Icon icon={faChevronRight}/>
                         </div>
                     </div>
                 </div>
@@ -407,3 +382,36 @@ export default class Calendar extends Component {
         );
     }
 }
+
+Calendar.propTypes = {
+    startDate: PropTypes.instanceOf(Date),
+    endDate: PropTypes.instanceOf(Date),
+    onDateSelect: PropTypes.func,
+    selected: PropTypes.instanceOf(Date),
+    activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+    highlighted: PropTypes.oneOfType([
+        PropTypes.shape({
+            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+            color: PropTypes.string,
+        }),
+        PropTypes.arrayOf(PropTypes.shape({
+            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+            color: PropTypes.string,
+        })),
+    ]),
+    activateAll: PropTypes.bool,
+    style: PropTypes.object,
+    className: PropTypes.string,
+};
+
+Calendar.defaultProps = {
+    selected: TODAY,
+    startDate: null,
+    endDate: null,
+    onDateSelect: null,
+    activateAll: true,
+    activated: null,
+    highlighted: null,
+    style: null,
+    className: null,
+};

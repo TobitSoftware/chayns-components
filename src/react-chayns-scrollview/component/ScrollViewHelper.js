@@ -5,7 +5,7 @@ const requestAnimationFrameFallback = window.requestAnimationFrame.bind(window)
     || window.mozRequestAnimationFrame
     || window.oRequestAnimationFrame
     || window.msRequestAnimationFrame
-    || (c => setTimeout(c, 0));
+    || ((c) => setTimeout(c, 0));
 
 export default class ScrollViewHelper {
     constructor(el, { wrapper, content, bar }) {

@@ -56,7 +56,7 @@ class MultiplePersonFinder extends Component {
         if (!value) return;
 
         this.setState({
-            values: values.filter(r => r.value[orm.identifier] !== value[orm.identifier]),
+            values: values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]),
         });
 
         if (onRemove) {
@@ -71,7 +71,7 @@ class MultiplePersonFinder extends Component {
         const { values } = this.state;
         const name = value[orm.showName];
 
-        if (values.find(v => v.value[orm.identifier] === value[orm.identifier])) {
+        if (values.find((v) => v.value[orm.identifier] === value[orm.identifier])) {
             return;
         }
 
@@ -144,7 +144,7 @@ class MultiplePersonFinder extends Component {
                     {...contextProps}
                 >
                     <Context.Consumer>
-                        {ctx => (
+                        {(ctx) => (
                             <PersonFinderView
                                 {...props}
                                 {...ctx}
@@ -207,6 +207,7 @@ MultiplePersonFinder.propTypes = {
         }),
         ValueConverter: PropTypes.func,
     }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
 };
 

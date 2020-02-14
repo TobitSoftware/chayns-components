@@ -6,18 +6,6 @@ import ExpandableContext from './ExpandableContext';
 import AbstractList from '../AbstractList';
 
 export default class ExpandableList extends Component {
-    static propTypes = {
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]).isRequired,
-        className: PropTypes.string,
-    };
-
-    static defaultProps = {
-        className: null,
-    };
-
     static Context = ExpandableContext;
 
     state = {
@@ -82,3 +70,14 @@ export default class ExpandableList extends Component {
         );
     }
 }
+ExpandableList.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+    className: PropTypes.string,
+};
+
+ExpandableList.defaultProps = {
+    className: null,
+};
