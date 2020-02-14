@@ -12,22 +12,49 @@
   },
   "parser": "babel-eslint",
   "rules": {
-    "max-len": "off",
-    "linebreak-style": "off",
-    "indent": ["error", 4],
-    "strict": 0,
+    "function-paren-newline": ["error", "multiline"],
+    "comma-dangle": ["error", "always-multiline"],
+    "arrow-parens": ["error", "always"],
+    "no-param-reassign": ["error", {
+      "props": true,
+      "ignorePropertyModificationsFor": ["draftState"]
+    }],
+    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "linebreak-style": ["error", "windows"],
+    "max-len": ["error", { "code": 150 }],
+    "no-plusplus": "off",
+    "strict": "off",
+    "object-curly-newline": ["error", {
+      "ObjectExpression": {
+        "multiline": true,
+        "consistent": true
+      },
+      "ObjectPattern": {
+        "multiline": true,
+        "consistent": true
+      }
+    }],
     "import/no-extraneous-dependencies": "off",
-    "react/jsx-indent": ["error", 4],
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": ["error", {
+      "ignore": ["chayns-components"]
+    }],
+    "import/no-cycle": "off",
+    "react/static-property-placement": ["error", "property assignment"],
     "react/jsx-indent-props": ["error", 4],
-    "jsx-a11y/no-static-element-interactions": "off",
+    "react/jsx-tag-spacing": ["error", {
+      "beforeSelfClosing": "never",
+      "beforeClosing": "never"
+    }],
+    "react/jsx-indent": ["error", 4],
     "react/no-danger": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
-    "no-underscore-dangle": "off",
-    "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/mouse-events-have-key-events": "off",
-    "react/forbid-prop-types": [2, { "forbid": ["any"] }]
+    "jsx-a11y/heading-has-content": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/href-no-hash": "off"
   },
   "extends": "airbnb"
 }
