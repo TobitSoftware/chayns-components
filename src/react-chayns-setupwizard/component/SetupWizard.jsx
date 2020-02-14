@@ -199,10 +199,10 @@ class SetupWizard extends Component {
                             if (child) {
                                 visibleIndex += 1;
                             }
-                            // eslint-disable-next-line react/no-array-index-key
                             return React.cloneElement(child, {
                                 step: index,
                                 showStep: child ? visibleIndex : -1,
+                                // eslint-disable-next-line react/no-array-index-key
                                 key: index,
                             });
                         }
