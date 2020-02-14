@@ -1,3 +1,6 @@
+$animationDurationDesktop: 300ms;
+$animationDurationMobile: 300ms;
+
 .cc__opening_times {
   .flex {
     flex-flow: row wrap;
@@ -115,7 +118,7 @@
         .flex__middle {
           .time__span {
             &:nth-child(2) {
-              animation: fadeInHeight 0.3s;
+              animation: fadeInHeight $animationDurationMobile;
             }
           }
         }
@@ -125,7 +128,7 @@
         .flex__middle {
           .time__span {
             &:nth-child(2) {
-              animation: fadeOutHeight 0.3s;
+              animation: fadeOutHeight $animationDurationMobile;
             }
           }
         }
@@ -141,14 +144,14 @@
         .flex__middle {
           .time__span {
             &:first-child {
-              animation: slideFromRight 0.5s;
+              animation: slideFromRight $animationDurationMobile;
             }
 
             &:nth-child(2) {
-              animation: fadeInOpacity 0.5s;
+              animation: fadeInOpacity $animationDurationMobile;
 
               &:before { // IE and Edge compatibility
-                animation: fadeInOpacity 0.5s;
+                animation: fadeInOpacity $animationDurationMobile;
               }
             }
           }
@@ -159,14 +162,14 @@
         .flex__middle {
           .time__span {
             &:first-child {
-              animation: slideToRight 0.5s;
+              animation: slideToRight $animationDurationMobile;
             }
 
             &:nth-child(2) {
-              animation: fadeOutOpacity 0.5s;
+              animation: fadeOutOpacity $animationDurationMobile;
 
               &:before { // IE and Edge compatibility
-                animation: fadeOutOpacity 0.5s;
+                animation: fadeOutOpacity $animationDurationMobile;
               }
             }
           }
@@ -233,9 +236,11 @@
 @keyframes fadeInHeight {
   from {
     height: 0;
+    overflow: hidden;
   }
   to {
     height: 29px;
+    overflow: hidden;
   }
 }
 
