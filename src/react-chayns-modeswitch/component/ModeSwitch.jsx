@@ -8,18 +8,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class ModeSwitch extends Component {
-    static modes = [];
-
-    static activeModeId = 0;
-
-    static open = false;
-
-    static onChangeListener = [];
-
-    static adminSwitchSupport = false;
-
-    static adminSwitchStatus = 0;
-
     static getCurrentMode() {
         const { modes, activeModeId } = ModeSwitch;
         return modes.find((mode) => mode.id === activeModeId || null);
@@ -246,6 +234,18 @@ export default class ModeSwitch extends Component {
         return null;
     }
 }
+
+ModeSwitch.modes = [];
+
+ModeSwitch.activeModeId = 0;
+
+ModeSwitch.open = false;
+
+ModeSwitch.onChangeListener = [];
+
+ModeSwitch.adminSwitchSupport = false;
+
+ModeSwitch.adminSwitchStatus = 0;
 
 ModeSwitch.propTypes = {
     modes: PropTypes.arrayOf(PropTypes.shape({

@@ -5,15 +5,6 @@ import classNames from 'classnames';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class Bubble extends PureComponent {
-    static position = {
-        TOP_LEFT: 0,
-        BOTTOM_LEFT: 1,
-        BOTTOM_RIGHT: 2,
-        TOP_RIGHT: 3,
-        TOP_CENTER: 4,
-        BOTTOM_CENTER: 5,
-    };
-
     static isPositionBottom(position) {
         const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;
 
@@ -97,6 +88,15 @@ export default class Bubble extends PureComponent {
         );
     }
 }
+
+Bubble.position = {
+    TOP_LEFT: 0,
+    BOTTOM_LEFT: 1,
+    BOTTOM_RIGHT: 2,
+    TOP_RIGHT: 3,
+    TOP_CENTER: 4,
+    BOTTOM_CENTER: 5,
+};
 
 Bubble.propTypes = {
     children: PropTypes.node,

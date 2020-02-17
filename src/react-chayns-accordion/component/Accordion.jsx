@@ -14,8 +14,6 @@ const OPEN = 2;
 let rqAnimationFrame;
 
 export default class Accordion extends PureComponent {
-    static dataGroups = {};
-
     constructor(props) {
         super(props);
         const { defaultOpened, open, className } = props;
@@ -283,6 +281,8 @@ export default class Accordion extends PureComponent {
         );
     }
 }
+
+Accordion.dataGroups = {};
 
 Accordion.propTypes = {
     head: PropTypes.oneOfType([

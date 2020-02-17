@@ -9,16 +9,6 @@ import './OpeningTimes.scss';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class OpeningTimes extends Component {
-    static weekdays = [
-        'Montag',
-        'Dienstag',
-        'Mittwoch',
-        'Donnerstag',
-        'Freitag',
-        'Samstag',
-        'Sonntag',
-    ];
-
     constructor(props) {
         super(props);
 
@@ -180,6 +170,16 @@ class OpeningTimes extends Component {
         );
     }
 }
+
+OpeningTimes.weekdays = [
+    'Montag',
+    'Dienstag',
+    'Mittwoch',
+    'Donnerstag',
+    'Freitag',
+    'Samstag',
+    'Sonntag',
+];
 
 OpeningTimes.propTypes = {
     times: PropTypes.arrayOf(PropTypes.shape({

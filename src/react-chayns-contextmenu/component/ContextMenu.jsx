@@ -6,8 +6,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class ContextMenu extends Component {
-    static position = Bubble.position;
-
     constructor(props) {
         super(props);
 
@@ -232,6 +230,8 @@ export default class ContextMenu extends Component {
         ];
     }
 }
+
+ContextMenu.position = Bubble.position;
 
 ContextMenu.propTypes = {
     onLayerClick: PropTypes.func,

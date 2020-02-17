@@ -10,18 +10,6 @@ import fileInputCall from '../utils/fileInputCall';
 import { isFunction } from '../../utils/is';
 
 export default class FileInput extends PureComponent {
-    static types = {
-        IMAGE: 'image/*',
-        VIDEO: 'video/*',
-        AUDIO: 'audio/*',
-        ALL: '*',
-    };
-
-    static typePresets = {
-        TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
-        STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
-    };
-
     constructor(props) {
         super(props);
         this.itemRefs = [];
@@ -175,6 +163,18 @@ export default class FileInput extends PureComponent {
         );
     }
 }
+
+FileInput.types = {
+    IMAGE: 'image/*',
+    VIDEO: 'video/*',
+    AUDIO: 'audio/*',
+    ALL: '*',
+};
+
+FileInput.typePresets = {
+    TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+    STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
+};
 
 FileInput.propTypes = {
     className: PropTypes.string,

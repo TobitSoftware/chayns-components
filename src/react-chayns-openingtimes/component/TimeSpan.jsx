@@ -5,16 +5,6 @@ import Input from '../../react-chayns-input/component/Input';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class TimeSpan extends Component {
-    static OFF = 0;
-
-    static ADD = 1;
-
-    static REMOVE = 2;
-
-    static defaultStart = '08:00';
-
-    static defaultEnd = '18:00';
-
     constructor(props) {
         super(props);
 
@@ -189,6 +179,16 @@ class TimeSpan extends Component {
         );
     }
 }
+
+TimeSpan.OFF = 0;
+
+TimeSpan.ADD = 1;
+
+TimeSpan.REMOVE = 2;
+
+TimeSpan.defaultStart = '08:00';
+
+TimeSpan.defaultEnd = '18:00';
 
 TimeSpan.propTypes = {
     start: PropTypes.string.isRequired,

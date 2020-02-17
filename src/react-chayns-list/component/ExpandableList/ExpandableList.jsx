@@ -6,8 +6,6 @@ import ExpandableContext from './ExpandableContext';
 import AbstractList from '../AbstractList';
 
 export default class ExpandableList extends Component {
-    static Context = ExpandableContext;
-
     state = {
         open: [],
     };
@@ -70,6 +68,9 @@ export default class ExpandableList extends Component {
         );
     }
 }
+
+ExpandableList.Context = ExpandableContext;
+
 ExpandableList.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.node,

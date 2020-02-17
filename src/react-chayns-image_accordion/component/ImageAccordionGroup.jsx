@@ -22,10 +22,6 @@ function listToMatrix(list, count) {
 }
 
 export default class ImageAccordionGroup extends React.Component {
-    static dataGroups = {}
-
-    static index = -1
-
     constructor(props) {
         super(props);
         this.state = {
@@ -231,6 +227,10 @@ export default class ImageAccordionGroup extends React.Component {
         );
     }
 }
+
+ImageAccordionGroup.dataGroups = {};
+
+ImageAccordionGroup.index = -1;
 
 ImageAccordionGroup.propTypes = {
     children: PropTypes.instanceOf(Array),

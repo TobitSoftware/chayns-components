@@ -6,11 +6,6 @@ import isTobitEmployee from '../../utils/tobitEmployee';
 import getTappWidth from '../../utils/tappWidth';
 
 export default class TextString extends Component {
-    static textStrings = {};
-
-    static language = (chayns.env.language || navigator.language || 'de').substring(0, 2)
-        .toLowerCase();
-
     static getTextString(stringName, language, fallback = null) {
         let lang = TextString.languages.find((l) => l.code === (language || TextString.language));
         lang = lang ? lang.value : 'Ger';
@@ -80,40 +75,6 @@ export default class TextString extends Component {
         TextString.language = language.substring(0, 2)
             .toLowerCase();
     }
-
-    static languages = [{
-        name: 'Deutsch',
-        value: 'Ger',
-        code: 'de',
-    }, {
-        name: 'Englisch',
-        value: 'Eng',
-        code: 'en',
-    }, {
-        name: 'Französisch',
-        value: 'Fra',
-        code: 'fr',
-    }, {
-        name: 'Niederländisch',
-        value: 'Ned',
-        code: 'nl',
-    }, {
-        name: 'Italienisch',
-        value: 'Ita',
-        code: 'it',
-    }, {
-        name: 'Portugiesisch',
-        value: 'Pt',
-        code: 'pt',
-    }, {
-        name: 'Spanisch',
-        value: 'Es',
-        code: 'es',
-    }, {
-        name: 'Türkisch',
-        value: 'Tr',
-        code: 'tr',
-    }];
 
     static replace(text, replacements) {
         let textString = text;
@@ -376,6 +337,45 @@ export default class TextString extends Component {
         );
     }
 }
+
+TextString.textStrings = {};
+
+TextString.language = (chayns.env.language || navigator.language || 'de').substring(0, 2)
+    .toLowerCase();
+
+TextString.languages = [{
+    name: 'Deutsch',
+    value: 'Ger',
+    code: 'de',
+}, {
+    name: 'Englisch',
+    value: 'Eng',
+    code: 'en',
+}, {
+    name: 'Französisch',
+    value: 'Fra',
+    code: 'fr',
+}, {
+    name: 'Niederländisch',
+    value: 'Ned',
+    code: 'nl',
+}, {
+    name: 'Italienisch',
+    value: 'Ita',
+    code: 'it',
+}, {
+    name: 'Portugiesisch',
+    value: 'Pt',
+    code: 'pt',
+}, {
+    name: 'Spanisch',
+    value: 'Es',
+    code: 'es',
+}, {
+    name: 'Türkisch',
+    value: 'Tr',
+    code: 'tr',
+}];
 
 TextString.propTypes = {
     stringName: PropTypes.string,

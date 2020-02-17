@@ -5,11 +5,6 @@ import SelectListContext from './selectListContext';
 const ANIMATION_TIMEOUT = 500;
 
 export default class SelectList extends Component {
-    static maxId = 0;
-
-    // eslint-disable-next-line react/static-property-placement
-    static contextType = SelectListContext;
-
     constructor(props) {
         super(props);
 
@@ -109,6 +104,10 @@ export default class SelectList extends Component {
         );
     }
 }
+
+SelectList.maxId = 0;
+
+SelectList.contextType = SelectListContext;
 
 SelectList.propTypes = {
     onChange: PropTypes.func,

@@ -9,13 +9,6 @@ import './Image.scss';
 import { isString } from '../../utils/is';
 
 export default class Image extends PureComponent {
-    static format = {
-        LANDSCAPE: 1,
-        PORTRAIT: 2,
-    };
-
-    static imageMetaData = {};
-
     constructor(props) {
         super(props);
         this.state = {
@@ -164,6 +157,13 @@ export default class Image extends PureComponent {
         );
     }
 }
+
+Image.format = {
+    LANDSCAPE: 1,
+    PORTRAIT: 2,
+};
+
+Image.imageMetaData = {};
 
 Image.propTypes = {
     image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]).isRequired,
