@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 
 import { SelectList, SelectListItem } from '../../src/index';
@@ -17,6 +18,7 @@ export default function SelectListExample() {
         <div>
             <SelectList
                 selectFirst
+                key={1}
                 // value={this.state.selectedId}
                 className="hello world"
                 onChange={(id, value) => {
@@ -40,6 +42,7 @@ export default function SelectListExample() {
                                 <SelectListItem
                                     name="Hi"
                                     id={index}
+                                    key={`SelectListItem${index}`}
                                     value={{ doubleIndex: index * 2 }}
                                     className="Hi"
                                     {...others}
@@ -53,6 +56,7 @@ export default function SelectListExample() {
             </SelectList>
             <SelectList
                 selectFirst
+                key={2}
                 // value={this.state.selectedId}
                 className="hello world"
                 onChange={(id, value) => {
@@ -78,6 +82,7 @@ export default function SelectListExample() {
                                 }}
                                 name="Hi"
                                 id={index}
+                                key={`SelectListItem${index}`}
                                 value={{ doubleIndex: index * 2 }}
                                 className="Hi"
                                 {...others}

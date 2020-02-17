@@ -33,36 +33,36 @@ The following properties can be set
 
 | Property     | Description                                                            | Type                       | Default Value |
 |--------------|------------------------------------------------------------------------|----------------------------|---------------|
+| autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
+| children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
+| className    | CSS classes for the accordion                                          | String                     |               |
+| dataGroup    | Accordion group. Accordions of one group close each other on opening   | String                     |               |
+| defaultOpened| The accordion is default opened                                        | bool                       |               |
+| disabled     | Disables the accordion                                                 | bool                       | false         |
+| ellipsis     | Cuts the accordion headline if it is too long                          | bool                       |               |
+| fixed        | Disable open/close logic                                               | bool                       |               |
 | head         | Headline of the accordion                                              | String, node or object [1] | *required*    |
 | headClassNames | CSS classes for the accordion head                                   | String, array or object    | null          |
 | headCustomAttributes | Custom attributes for head element                             | object                     | null          |
-| children     | React components that should be stored in the accordion body           | React-Elements             | *required*    |
-| right        | Node that get rendered in the right side of the accordion head         | String, node or object [2] |               |
-| renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
 | isWrapped    | Makes this accordion a wrapped accordion                               | bool                       | false         |
-| dataGroup    | Accordion group. Accordions of one group close each other on opening   | String                     |               |
-| className    | CSS classes for the accordion                                          | String                     |               |
-| id           | The accordions Id                                                      | String                     |               |
 | icon         | The accordion icon                                                     | String/object              | 'ts-angle-right' |
-| style        | Accordion styles                                                       | Object                     |               |
-| styleBody    | Accordion body styles                                                  | Function                   |               |
-| onOpen       | onOpened-Event                                                         | Function                   |               |
-| onClose      | onClose-Event                                                          | Function                   |               |
-| ellipsis     | Cuts the accordion headline if it is too long                          | bool                       |               |
-| open         | true: the accordion will open, false: it will close                    | bool                       | undefined     |
-| defaultOpened| The accordion is default opened                                        | bool                       |               |
-| autogrow     | The accordion will adjust its height when opened                       | bool                       | false         |
-| reference    | A reference for the accordion                                          | Function                   |               |
-| noRotate     | Disable rotating of the icon                                           | Function                   |               |
-| fixed        | Disable open/close logic                                               | bool                       |               |
+| id           | The accordions Id                                                      | String                     |               |
 | noIcon       | Remove Icon from the left                                              | bool                       | false         |
+| noRotate     | Disable rotating of the icon                                           | Function                   |               |
+| onClick      | Click listener for head                                                | bool                       | false         |
+| onClose      | onClose-Event                                                          | Function                   |               |
+| onOpen       | onOpened-Event                                                         | Function                   |               |
 | onSearch     | Accordion search onChange callback (makes the search input visible)    | func                       |               |
 | onSearchEnter | Accordion search onEnter callback (makes the search input visible)    | func                       |               |
+| open         | true: the accordion will open, false: it will close                    | bool                       | undefined     |
+| reference    | A reference for the accordion                                          | Function                   |               |
+| removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
+| renderClosed | Renders the accordion even if it is closed                             | bool                       | false         |
+| right        | Node that get rendered in the right side of the accordion head         | String, node or object [2] |               |
 | searchPlaceholder | Placeholder for the accordion search                              | string                     |               |
 | searchValue  | Value for the search input                                             | string                     |               |
-| removeContentClosed | Remove content from body when accordion is closing.             | bool                       | false         |
-| onClick      | Click listener for head                                                | bool                       | false         |
-| disabled     | Disables the accordion                                                 | bool                       | false         |
+| style        | Accordion styles                                                       | Object                     |               |
+| styleBody    | Accordion body styles                                                  | Function                   |               |
 
 [1]: You can set an head for an open and a close accordion: ``head={{open: <Input/>, close: 'Text'}}``.
 [2]: You can set an right element for an open and a close accordion: ``right={{open: <Input/>, close: <Badge>10</Badge>}}``.

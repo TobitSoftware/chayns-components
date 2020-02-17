@@ -464,7 +464,7 @@ export default class ProgressCalendar extends Component {
     }
 }
 
-GridCalendar.propTypes = {
+ProgressCalendar.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
@@ -493,7 +493,7 @@ GridCalendar.propTypes = {
     style: PropTypes.object,
 };
 
-GridCalendar.defaultProps = {
+ProgressCalendar.defaultProps = {
     data: null,
     columns: {
         names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],

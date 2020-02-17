@@ -49,10 +49,12 @@ const FilterButton = ({
                 name={name}
                 className="button--filter__input"
                 onChange={(e) => {
-                    if (e.target.type === 'checkbox') {
-                        onChange(e.target.checked);
-                    } else {
-                        onChange(isValue(value) ? value : e.target.value);
+                    if (onChange) {
+                        if (e.target.type === 'checkbox') {
+                            onChange(e.target.checked);
+                        } else {
+                            onChange(isValue(value) ? value : e.target.value);
+                        }
                     }
                 }}
                 checked={checked}
