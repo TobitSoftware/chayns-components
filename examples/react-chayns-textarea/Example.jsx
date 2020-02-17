@@ -6,7 +6,7 @@ const TextAreaExample = () => {
     const [autogrow, setAutogrow] = useState(false);
 
     const handleAutogrow = useCallback(() => {
-        setAutogrow(v => !v);
+        setAutogrow((v) => !v);
     }, [setAutogrow]);
 
     return (

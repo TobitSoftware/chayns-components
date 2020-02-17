@@ -1,20 +1,9 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ModeSwitch from './ModeSwitch';
 
 export default class Mode extends Component {
-    static propTypes = {
-        modes: PropTypes.arrayOf(PropTypes.number).isRequired,
-        children: PropTypes.node.isRequired,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        className: null,
-        style: null,
-    };
-
     constructor() {
         super();
         this.state = { modeId: null };
@@ -49,3 +38,14 @@ export default class Mode extends Component {
         return null;
     }
 }
+Mode.propTypes = {
+    modes: PropTypes.arrayOf(PropTypes.number).isRequired,
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string,
+    style: PropTypes.object,
+};
+
+Mode.defaultProps = {
+    className: null,
+    style: null,
+};

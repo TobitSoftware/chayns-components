@@ -37,6 +37,7 @@ const Relation = ({ relation }) => {
 };
 
 Relation.propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
     relation: PropTypes.object.isRequired,
 };
 

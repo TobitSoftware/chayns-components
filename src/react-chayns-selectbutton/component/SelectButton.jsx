@@ -5,45 +5,10 @@ import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import { isNumber } from '../../utils/is';
 
 export default class SelectButton extends Component {
-    static propTypes = {
-        onSelect: PropTypes.func,
-        title: PropTypes.string,
-        description: PropTypes.string,
-        disabled: PropTypes.bool,
-        label: PropTypes.string,
-        list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-        listKey: PropTypes.string,
-        listValue: PropTypes.string,
-        multiSelect: PropTypes.bool,
-        quickFind: PropTypes.bool,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-        selectedFlag: PropTypes.string,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        quickFind: false,
-        multiSelect: false,
-        title: '',
-        description: '',
-        label: 'Select',
-        showSelection: true,
-        className: null,
-        onSelect: null,
-        disabled: false,
-        listKey: 'name',
-        listValue: 'value',
-        selectedFlag: 'isSelected',
-        stopPropagation: false,
-        style: null,
-    };
-
     constructor(props) {
         super(props);
         this.state = {
-            selected: props.list.filter(item => item[props.selectedFlag]),
+            selected: props.list.filter((item) => item[props.selectedFlag]),
         };
 
         this.onClick = this.onClick.bind(this);
@@ -63,7 +28,7 @@ export default class SelectButton extends Component {
             || listValue !== prevProps.listValue
             || selectedFlag !== prevProps.selectedFlag) {
             // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ selected: list.filter(item => item[selectedFlag]) });
+            this.setState({ selected: list.filter((item) => item[selectedFlag]) });
         }
     }
 
@@ -77,14 +42,14 @@ export default class SelectButton extends Component {
             onSelect,
             stopPropagation,
         } = this.props;
-        const _list = this.getDialogList(list);
+        const dialogList = this.getDialogList(list);
 
         chayns.dialog.select({
             title,
             message: description,
             quickfind: quickFind,
             multiselect: multiSelect,
-            list: _list,
+            list: dialogList,
             buttons: multiSelect || [],
         }).then((result) => {
             if (onSelect && result.buttonType > 0) {
@@ -170,3 +135,39 @@ export default class SelectButton extends Component {
         );
     }
 }
+
+SelectButton.propTypes = {
+    onSelect: PropTypes.func,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    disabled: PropTypes.bool,
+    label: PropTypes.string,
+    list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+    listKey: PropTypes.string,
+    listValue: PropTypes.string,
+    multiSelect: PropTypes.bool,
+    quickFind: PropTypes.bool,
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+    showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+    selectedFlag: PropTypes.string,
+    stopPropagation: PropTypes.bool,
+};
+
+SelectButton.defaultProps = {
+    quickFind: false,
+    multiSelect: false,
+    title: '',
+    description: '',
+    label: 'Select',
+    showSelection: true,
+    className: null,
+    onSelect: null,
+    disabled: false,
+    listKey: 'name',
+    listValue: 'value',
+    selectedFlag: 'isSelected',
+    stopPropagation: false,
+    style: null,
+};

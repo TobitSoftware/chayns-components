@@ -44,7 +44,7 @@ export const convertPersons = (persons) => {
     };
 };
 
-export const convertSites = sites => sites.map(site => ({
+export const convertSites = (sites) => sites.map((site) => ({
     type: 'SITE',
     id: site.siteId,
     name: site.locationName,

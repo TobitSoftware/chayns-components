@@ -5,29 +5,6 @@ import Input from '../../react-chayns-input/component/Input';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class TimeSpan extends Component {
-    static propTypes = {
-        start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired,
-        disabled: PropTypes.bool,
-        onChange: PropTypes.func.isRequired,
-        childrenRef: PropTypes.func,
-    };
-
-    static defaultProps = {
-        disabled: false,
-        childrenRef: null,
-    };
-
-    static OFF = 0;
-
-    static ADD = 1;
-
-    static REMOVE = 2;
-
-    static defaultStart = '08:00';
-
-    static defaultEnd = '18:00';
-
     constructor(props) {
         super(props);
 
@@ -106,7 +83,7 @@ class TimeSpan extends Component {
 
     autoFormat(inputField) {
         const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
+        const newState = { ...this.state };
         const val = inputField === 'start' ? newState.startTime : newState.endTime;
         const inspectResult = this.inspectTimeStr(val);
 
@@ -183,7 +160,7 @@ class TimeSpan extends Component {
                     <Input
                         inputRef={this.setStartTimeRef}
                         value={startTime}
-                        onChange={val => this.onChange(val, 'start')}
+                        onChange={(val) => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
                         onEnter={() => this.autoFormat('start')}
                     />
@@ -193,7 +170,7 @@ class TimeSpan extends Component {
                     <Input
                         inputRef={this.setEndTimeRef}
                         value={endTime}
-                        onChange={val => this.onChange(val, 'end')}
+                        onChange={(val) => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
                         onEnter={() => this.autoFormat('end')}
                     />
@@ -202,5 +179,28 @@ class TimeSpan extends Component {
         );
     }
 }
+
+TimeSpan.OFF = 0;
+
+TimeSpan.ADD = 1;
+
+TimeSpan.REMOVE = 2;
+
+TimeSpan.defaultStart = '08:00';
+
+TimeSpan.defaultEnd = '18:00';
+
+TimeSpan.propTypes = {
+    start: PropTypes.string.isRequired,
+    end: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    childrenRef: PropTypes.func,
+};
+
+TimeSpan.defaultProps = {
+    disabled: false,
+    childrenRef: null,
+};
 
 export default TimeSpan;

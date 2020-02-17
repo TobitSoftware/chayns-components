@@ -5,12 +5,6 @@ import Button from '../../../src/react-chayns-button/component/Button';
 import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
 class Step4 extends Component {
-    static propTypes = {
-        nextStep: PropTypes.func.isRequired,
-        stepComplete: PropTypes.func.isRequired,
-        resetToStep: PropTypes.func.isRequired,
-    };
-
     constructor(props, context) {
         super(props, context);
         this.next = this.next.bind(this);
@@ -54,5 +48,11 @@ class Step4 extends Component {
         );
     }
 }
+
+Step4.propTypes = {
+    nextStep: PropTypes.func.isRequired,
+    stepComplete: PropTypes.func.isRequired,
+    resetToStep: PropTypes.func.isRequired,
+};
 
 export default withSetupWizardContext(Step4);

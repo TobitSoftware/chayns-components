@@ -1,4 +1,4 @@
-/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable react/prefer-stateless-function,max-len */
 import React, { PureComponent } from 'react';
 
 import { ImageAccordionGroup, ImageAccordion, Accordion } from '../../src/index';
@@ -79,7 +79,7 @@ export default class ImageAccordionExample extends PureComponent {
                             <ImageAccordionGroup
                                 dataGroup="1"
                             >
-                                {persons.map(person => (
+                                {persons.map((person) => (
                                     <ImageAccordion
                                         key={person.id}
                                         headline={person.name}
@@ -99,7 +99,7 @@ export default class ImageAccordionExample extends PureComponent {
 
                     {/* Fruits */}
                     <ImageAccordionGroup>
-                        {fruits.map(fruit => (
+                        {fruits.map((fruit) => (
                             <ImageAccordion
                                 key={fruit.id}
                                 headline={fruit.name}

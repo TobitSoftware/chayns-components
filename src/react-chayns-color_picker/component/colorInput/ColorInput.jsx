@@ -15,18 +15,6 @@ import rgb255ToRgb1 from '../../../utils/color/rgb/rgb255ToRgb1';
 import hexToRgb255 from '../../../utils/color/hex/hexToRgb255';
 
 export default class ColorInput extends Component {
-    static propTypes = {
-        color: PropTypes.shape({
-            h: PropTypes.number.isRequired,
-            s: PropTypes.number.isRequired,
-            v: PropTypes.number.isRequired,
-        }).isRequired,
-        onChange: PropTypes.func.isRequired,
-        colorModel: PropTypes.number.isRequired,
-        onModelToggle: PropTypes.func.isRequired,
-        transparency: PropTypes.bool.isRequired,
-    };
-
     constructor(props) {
         super(props);
 
@@ -132,3 +120,15 @@ export default class ColorInput extends Component {
         );
     }
 }
+
+ColorInput.propTypes = {
+    color: PropTypes.shape({
+        h: PropTypes.number.isRequired,
+        s: PropTypes.number.isRequired,
+        v: PropTypes.number.isRequired,
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    colorModel: PropTypes.number.isRequired,
+    onModelToggle: PropTypes.func.isRequired,
+    transparency: PropTypes.bool.isRequired,
+};

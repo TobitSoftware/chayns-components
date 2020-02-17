@@ -25,7 +25,7 @@ const AmountControlExample = () => {
                 stopPropagation
             />
 
-            <br />
+            <br/>
 
             <AmountControl
                 disabled={false}
@@ -39,7 +39,7 @@ const AmountControlExample = () => {
                 removeIcon="ts-tobit"
             />
 
-            <br />
+            <br/>
 
             <AmountControl
                 disabled
@@ -49,7 +49,7 @@ const AmountControlExample = () => {
                 buttonText="test-article"
             />
 
-            <br />
+            <br/>
 
             <Accordion
                 right={(
@@ -68,7 +68,7 @@ const AmountControlExample = () => {
                 Test
             </Accordion>
 
-            <br />
+            <br/>
 
             <AmountControl
                 amount={amount}
@@ -78,7 +78,7 @@ const AmountControlExample = () => {
                 disableInput
             />
 
-            <br />
+            <br/>
 
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <AmountControl
@@ -114,7 +114,7 @@ const AmountControlExample = () => {
                 disableInput
             />
 
-            <br />
+            <br/>
 
             <AmountControl
                 amount={amount}
@@ -140,7 +140,7 @@ const AmountControlExample = () => {
                 showInput={amount > 0}
             />
 
-            <br />
+            <br/>
 
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <AmountControl

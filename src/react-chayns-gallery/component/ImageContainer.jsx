@@ -7,32 +7,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import { isString } from '../../utils/is';
 
 export default class ImageContainer extends PureComponent {
-    static propTypes = {
-        children: PropTypes.node.isRequired,
-        tools: PropTypes.arrayOf(PropTypes.shape({
-            icon: PropTypes.oneOfType([
-                PropTypes.string.isRequired,
-                PropTypes.shape({
-                    iconName: PropTypes.string.isRequired,
-                    prefix: PropTypes.string.isRequired,
-                }).isRequired,
-            ]).isRequired,
-            onClick: PropTypes.func,
-            onDown: PropTypes.func,
-            onMove: PropTypes.func,
-            onUp: PropTypes.func,
-            className: PropTypes.string,
-        })),
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        tools: [],
-        className: null,
-        style: null,
-    };
-
     render() {
         const {
             children, tools, className, style,
@@ -81,3 +55,30 @@ export default class ImageContainer extends PureComponent {
         );
     }
 }
+
+ImageContainer.propTypes = {
+    children: PropTypes.node.isRequired,
+    tools: PropTypes.arrayOf(PropTypes.shape({
+        icon: PropTypes.oneOfType([
+            PropTypes.string.isRequired,
+            PropTypes.shape({
+                iconName: PropTypes.string.isRequired,
+                prefix: PropTypes.string.isRequired,
+            }).isRequired,
+        ]).isRequired,
+        onClick: PropTypes.func,
+        onDown: PropTypes.func,
+        onMove: PropTypes.func,
+        onUp: PropTypes.func,
+        className: PropTypes.string,
+    })),
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+};
+
+ImageContainer.defaultProps = {
+    tools: [],
+    className: null,
+    style: null,
+};

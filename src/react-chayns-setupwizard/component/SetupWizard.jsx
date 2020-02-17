@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SetupWizardContext from './setupWizardContext';
@@ -112,7 +113,7 @@ class SetupWizard extends Component {
 
     resetToStep = (step) => {
         const { maxProgress } = this.state;
-        this.completedSteps = this.completedSteps.filter(s => !(step <= s && s < maxProgress));
+        this.completedSteps = this.completedSteps.filter((s) => !(step <= s && s < maxProgress));
         this.setState({
             maxProgress: step,
             currentStep: step,
@@ -176,7 +177,7 @@ class SetupWizard extends Component {
                     </h1>
                 )}
                 {description && (
-                    <p dangerouslySetInnerHTML={{ __html: description }} />
+                    <p dangerouslySetInnerHTML={{ __html: description }}/>
                 )}
                 <SetupWizardContext.Provider value={{
                     maxProgress,

@@ -49,9 +49,9 @@ class ExampleContainer extends PureComponent {
     static getMultilineText(text) {
         const componentArray = [];
 
-        (text || '').split('\n').map((i) => {
+        (text || '').split('\n').forEach((i) => {
             componentArray.push(i);
-            componentArray.push(<br />);
+            componentArray.push(<br/>);
         });
 
         return componentArray;
@@ -95,11 +95,7 @@ class ExampleContainer extends PureComponent {
             headline,
             children,
             open,
-            onOpen,
-            examplePath,
-            readme,
             search,
-            ...props
         } = this.props;
         const { hasError, error, info } = this.state;
 
@@ -140,8 +136,8 @@ class ExampleContainer extends PureComponent {
                     style={{ margin: '20px 0', backgroundColor: 'red' }}
                 >
                     <h1>{headline}</h1>
-                    <div style={{ textAlign: 'center', fontSize: '80px', }}>
-                        <Icon icon={faExclamationTriangle} />
+                    <div style={{ textAlign: 'center', fontSize: '80px' }}>
+                        <Icon icon={faExclamationTriangle}/>
                     </div>
                     <div>
                         <b>{error && error.message}</b>
@@ -157,25 +153,25 @@ class ExampleContainer extends PureComponent {
         }
 
         return [
-                <div
+            <div
+                style={{
+                    display: 'flex',
+                }}
+                key="exampleHeader"
+            >
+                <h1
                     style={{
-                        display: 'flex',
+                        flexGrow: 1,
                     }}
-                    key="exampleHeader"
                 >
-                    <h1
-                        style={{
-                            flexGrow: 1,
-                        }}
-                    >
-                        {headline}
-                    </h1>
-                    <ContextMenu
-                        items={this.items}
-                        position={1}
-                    />
-                </div>,
-                children
+                    {headline}
+                </h1>
+                <ContextMenu
+                    items={this.items}
+                    position={1}
+                />
+            </div>,
+            children,
         ];
     }
 }
@@ -183,13 +179,13 @@ class ExampleContainer extends PureComponent {
 ExampleContainer.propTypes = {
     id: PropTypes.oneOfType([
         PropTypes.number,
-        PropTypes.string
+        PropTypes.string,
     ]),
     headline: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
     open: PropTypes.oneOfType([
         PropTypes.number,
-        PropTypes.string
+        PropTypes.string,
     ]),
     onOpen: PropTypes.func.isRequired,
     search: PropTypes.string,

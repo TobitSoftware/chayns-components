@@ -1,34 +1,10 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Button extends PureComponent {
-    static propTypes = {
-        children: PropTypes.node.isRequired,
-        chooseButton: PropTypes.bool,
-        disabled: PropTypes.bool,
-        onClick: PropTypes.func,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        buttonRef: PropTypes.func,
-        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        secondary: PropTypes.bool,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        buttonRef: null,
-        style: null,
-        className: null,
-        onClick: null,
-        disabled: false,
-        chooseButton: false,
-        icon: null,
-        secondary: false,
-        stopPropagation: false,
-    };
-
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -80,7 +56,7 @@ export default class Button extends PureComponent {
                             choosebutton__icon: chooseButton,
                         })}
                     >
-                        <Icon icon={icon} />
+                        <Icon icon={icon}/>
                     </span>
                 ) : null}
                 {children}
@@ -88,3 +64,28 @@ export default class Button extends PureComponent {
         );
     }
 }
+
+Button.propTypes = {
+    children: PropTypes.node.isRequired,
+    chooseButton: PropTypes.bool,
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    buttonRef: PropTypes.func,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    secondary: PropTypes.bool,
+    stopPropagation: PropTypes.bool,
+};
+
+Button.defaultProps = {
+    buttonRef: null,
+    style: null,
+    className: null,
+    onClick: null,
+    disabled: false,
+    chooseButton: false,
+    icon: null,
+    secondary: false,
+    stopPropagation: false,
+};

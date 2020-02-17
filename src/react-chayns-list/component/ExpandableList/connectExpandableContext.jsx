@@ -4,7 +4,7 @@ import ExpandableContext from './ExpandableContext';
 export default function connectExpandableContext(WrappedComponent) {
     return ({ ...props }) => (
         <ExpandableContext.Consumer>
-            {context => (
+            {(context) => (
                 <WrappedComponent
                     {...props}
                     open={context && context.open}

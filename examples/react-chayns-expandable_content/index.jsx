@@ -5,7 +5,7 @@ import Example from './Example';
 
 window.chayns.ready.then(() => {
     ReactDom.render(
-        <Example />,
+        <Example/>,
         document.querySelector('#react-chayns-expandable_content')
     );
 });

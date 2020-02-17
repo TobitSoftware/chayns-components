@@ -50,7 +50,7 @@ class Day extends Component {
 
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
-        const isDisabled = !times.some(t => !t.disabled);
+        const isDisabled = !times.some((t) => !t.disabled);
         return (
             <div
                 className={classNames('flex', 'times', {

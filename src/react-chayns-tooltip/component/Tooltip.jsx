@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,prefer-destructuring */
+/* eslint-disable jsx-a11y/click-events-have-key-events,prefer-destructuring,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -7,55 +7,6 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 
 export default class Tooltip extends Component {
-    static propTypes = {
-        content: PropTypes.oneOfType([
-            PropTypes.shape({
-                text: PropTypes.string.isRequired,
-                headline: PropTypes.string,
-                imageUrl: PropTypes.string,
-                buttonText: PropTypes.string,
-                buttonOnClick: PropTypes.func,
-            }),
-            PropTypes.shape({
-                html: PropTypes.node.isRequired,
-            }),
-        ]).isRequired,
-        children: PropTypes.node,
-        bindListeners: PropTypes.bool,
-        position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
-        minWidth: PropTypes.number,
-        maxWidth: PropTypes.number,
-        removeIcon: PropTypes.bool,
-        parent: PropTypes.instanceOf(Element),
-        coordinates: PropTypes.shape({
-            x: PropTypes.number.isRequired,
-            y: PropTypes.number.isRequired,
-        }),
-        childrenStyle: PropTypes.object,
-        childrenClassNames: PropTypes.string,
-        preventTriggerStyle: PropTypes.bool,
-        hideOnChildrenLeave: PropTypes.bool,
-        removeParentSpace: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        children: null,
-        bindListeners: false,
-        position: null,
-        minWidth: 100,
-        maxWidth: 250,
-        removeIcon: chayns.env.isIOS,
-        parent: null,
-        coordinates: null,
-        childrenStyle: null,
-        childrenClassNames: null,
-        preventTriggerStyle: false,
-        hideOnChildrenLeave: false,
-        removeParentSpace: false,
-    };
-
-    static position = Bubble.position;
-
     constructor(props) {
         super(props);
 
@@ -205,7 +156,7 @@ export default class Tooltip extends Component {
                 >
                     {removeIcon ? (
                         <div className="cc__tooltip__icon" onClick={this.hide}>
-                            <Icon icon="ts-wrong" />
+                            <Icon icon="ts-wrong"/>
                         </div>
                     ) : null}
                     {this.getContent()}
@@ -225,3 +176,52 @@ export default class Tooltip extends Component {
         ];
     }
 }
+
+Tooltip.position = Bubble.position;
+
+Tooltip.propTypes = {
+    content: PropTypes.oneOfType([
+        PropTypes.shape({
+            text: PropTypes.string.isRequired,
+            headline: PropTypes.string,
+            imageUrl: PropTypes.string,
+            buttonText: PropTypes.string,
+            buttonOnClick: PropTypes.func,
+        }),
+        PropTypes.shape({
+            html: PropTypes.node.isRequired,
+        }),
+    ]).isRequired,
+    children: PropTypes.node,
+    bindListeners: PropTypes.bool,
+    position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
+    minWidth: PropTypes.number,
+    maxWidth: PropTypes.number,
+    removeIcon: PropTypes.bool,
+    parent: PropTypes.instanceOf(Element),
+    coordinates: PropTypes.shape({
+        x: PropTypes.number.isRequired,
+        y: PropTypes.number.isRequired,
+    }),
+    childrenStyle: PropTypes.object,
+    childrenClassNames: PropTypes.string,
+    preventTriggerStyle: PropTypes.bool,
+    hideOnChildrenLeave: PropTypes.bool,
+    removeParentSpace: PropTypes.bool,
+};
+
+Tooltip.defaultProps = {
+    children: null,
+    bindListeners: false,
+    position: null,
+    minWidth: 100,
+    maxWidth: 250,
+    removeIcon: chayns.env.isIOS,
+    parent: null,
+    coordinates: null,
+    childrenStyle: null,
+    childrenClassNames: null,
+    preventTriggerStyle: false,
+    hideOnChildrenLeave: false,
+    removeParentSpace: false,
+};

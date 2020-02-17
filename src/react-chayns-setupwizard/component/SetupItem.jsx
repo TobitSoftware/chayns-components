@@ -4,25 +4,23 @@ import classNames from 'classnames';
 import withSetupWizardContext from './withSetupWizardContext';
 import Badge from '../../react-chayns-badge/component/Badge';
 
-const SetupItem = (
-    {
-        step,
-        showStep,
-        title,
-        open: openProp,
-        ready: readyProp,
-        disabled: disabledProp,
-        onClick: onClickProp,
-        required,
-        contentStyle,
-        children,
-        maxProgress,
-        completedSteps,
-        currentStep,
-        toStep,
-        stepRequired,
-    },
-) => {
+const SetupItem = ({
+    step,
+    showStep,
+    title,
+    open: openProp,
+    ready: readyProp,
+    disabled: disabledProp,
+    onClick: onClickProp,
+    required,
+    contentStyle,
+    children,
+    maxProgress,
+    completedSteps,
+    currentStep,
+    toStep,
+    stepRequired,
+}) => {
     useEffect(() => {
         stepRequired(required, step);
     }, []);
@@ -54,7 +52,7 @@ const SetupItem = (
                 onClick={onClick}
             >
                 <div className="accordion__head__icon">
-                    <i className="react-chayns-icon ts-angle-right" />
+                    <i className="react-chayns-icon ts-angle-right"/>
                 </div>
                 <div className="accordion__head__title">
                     {(typeof showStep === 'number' ? showStep : step) + 1}
@@ -62,7 +60,20 @@ const SetupItem = (
                     {title}
                 </div>
                 <div className="accordion__head__right">
-                    {ready ? <Badge><i className="ts-check chayns__color--headline " style={{ display: 'flex', alignItems: 'center', fontSize: '1rem' }} /></Badge> : null}
+                    {ready
+                        ? (
+                            <Badge>
+                                <i
+                                    className="ts-check chayns__color--headline "
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        fontSize: '1rem',
+                                    }}
+                                />
+                            </Badge>
+                        )
+                        : null}
                 </div>
             </div>
             <div className="accordion__body" style={contentStyle}>
@@ -82,6 +93,7 @@ SetupItem.propTypes = {
     ready: PropTypes.bool,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
+    // eslint-disable-next-line react/forbid-prop-types
     contentStyle: PropTypes.object,
     children: PropTypes.element,
     required: PropTypes.bool,

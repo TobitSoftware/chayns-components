@@ -10,7 +10,7 @@ import debounce from '../../utils/debounce';
 import './styles.scss';
 
 /** Uses the `toJSON()` method to return a human readable-object */
-const toLiteral = value => JSON.parse(JSON.stringify(value));
+const toLiteral = (value) => JSON.parse(JSON.stringify(value));
 
 const ADDRESS = 1;
 const COORDS = 2;
@@ -18,40 +18,11 @@ const COORDS = 2;
 const noop = () => {};
 
 export default class PositionInput extends PureComponent {
-    static propTypes = {
-        defaultPosition: PositionProps.isRequired,
-        onPositionChange: PropTypes.func,
-        mapOptions: PropTypes.object,
-        children: PropTypes.func,
-    };
-
-    static defaultProps = {
-        onPositionChange: noop,
-        mapOptions: {
-            zoom: 15,
-            gestureHandling: 'greedy',
-            disableDefaultUI: true,
-            styles: [
-                {
-                    featureType: 'poi',
-                    elementType: 'labels',
-                    stylers: [{ visibility: 'off' }],
-                },
-            ],
-        },
-        children: (value, onChange) => (
-            <Input
-                placeholder="Position"
-                value={value}
-                onChange={onChange}
-            />
-        ),
-    };
-
     constructor(props) {
         super(props);
 
         if (!window.google) {
+            // eslint-disable-next-line max-len
             throw new Error('The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.');
         }
 
@@ -132,7 +103,7 @@ export default class PositionInput extends PureComponent {
         }, (result, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 this.setState({
-                    addresses: result.map(a => a.description),
+                    addresses: result.map((a) => a.description),
                 });
             }
         });
@@ -170,9 +141,7 @@ export default class PositionInput extends PureComponent {
 
         return (
             <div className="cc__map">
-                <div className="map--crosshair">
-                    {'+'}
-                </div>
+                <div className="map--crosshair">+</div>
                 <GoogleMap
                     mapRef={this.mapRef}
                     containerStyle={{
@@ -209,3 +178,34 @@ export default class PositionInput extends PureComponent {
         );
     }
 }
+
+PositionInput.propTypes = {
+    defaultPosition: PositionProps.isRequired,
+    onPositionChange: PropTypes.func,
+    // eslint-disable-next-line react/forbid-prop-types
+    mapOptions: PropTypes.object,
+    children: PropTypes.func,
+};
+
+PositionInput.defaultProps = {
+    onPositionChange: noop,
+    mapOptions: {
+        zoom: 15,
+        gestureHandling: 'greedy',
+        disableDefaultUI: true,
+        styles: [
+            {
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [{ visibility: 'off' }],
+            },
+        ],
+    },
+    children: (value, onChange) => (
+        <Input
+            placeholder="Position"
+            value={value}
+            onChange={onChange}
+        />
+    ),
+};

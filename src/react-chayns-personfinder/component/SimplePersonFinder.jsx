@@ -14,7 +14,8 @@ class SimplePersonFinder extends Component {
         super(props);
 
         this.state = {
-            inputValue: isString(props.defaultValue) ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
+            inputValue: isString(props.defaultValue)
+                ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
         };
 
@@ -118,7 +119,7 @@ class SimplePersonFinder extends Component {
                     {...contextProps}
                 >
                     <Context.Consumer>
-                        {ctx => (
+                        {(ctx) => (
                             <PersonFinderView
                                 {...props}
                                 {...additionalProps}
@@ -169,6 +170,7 @@ SimplePersonFinder.propTypes = {
             showName: PropTypes.string,
         }),
     }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
     removeIcon: PropTypes.bool,
 };

@@ -5,39 +5,6 @@ import SelectListContext from './selectListContext';
 const ANIMATION_TIMEOUT = 500;
 
 export default class SelectList extends Component {
-    static maxId = 0;
-
-    static propTypes = {
-        onChange: PropTypes.func,
-        defaultValue: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number,
-        ]),
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number,
-        ]),
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        className: null,
-        defaultValue: null,
-        value: null,
-        onChange: null,
-        selectFirst: null,
-        children: null,
-        style: null,
-    };
-
-    static contextType = SelectListContext;
-
     constructor(props) {
         super(props);
 
@@ -69,7 +36,7 @@ export default class SelectList extends Component {
         }
     }
 
-    _changeActiveItem = (id, value) => {
+    changeActiveItem = (id, value) => {
         const { selectedId } = this.state;
 
         if (id === selectedId) return;
@@ -127,7 +94,7 @@ export default class SelectList extends Component {
             <div className={className} style={style}>
                 <SelectListContext.Provider value={{
                     selectListSelectedId: selectedId,
-                    changeListItem: this._changeActiveItem,
+                    changeListItem: this.changeActiveItem,
                     selectListId: this.selectListId,
                 }}
                 >
@@ -137,3 +104,37 @@ export default class SelectList extends Component {
         );
     }
 }
+
+SelectList.maxId = 0;
+
+SelectList.contextType = SelectListContext;
+
+SelectList.propTypes = {
+    onChange: PropTypes.func,
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+    selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+};
+
+SelectList.defaultProps = {
+    className: null,
+    defaultValue: null,
+    value: null,
+    onChange: null,
+    selectFirst: null,
+    children: null,
+    style: null,
+};

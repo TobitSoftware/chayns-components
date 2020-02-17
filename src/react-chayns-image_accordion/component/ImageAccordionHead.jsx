@@ -4,20 +4,6 @@ import PropTypes from 'prop-types';
 import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 
 export default class ImageAccordionHead extends React.PureComponent {
-    static propTypes = {
-        item: PropTypes.instanceOf(Object),
-        width: PropTypes.number,
-        itemsPerRow: PropTypes.number,
-        wrapperHeight: PropTypes.string,
-    };
-
-    static defaultProps = {
-        item: null,
-        width: 0,
-        itemsPerRow: 0,
-        wrapperHeight: 0,
-    };
-
     render() {
         const {
             item,
@@ -64,7 +50,9 @@ export default class ImageAccordionHead extends React.PureComponent {
                 <h5
                     className="subheadline"
                 >
-                    {item.props.subheadline && item.props.subheadline.length > 13 ? `${item.props.subheadline.slice(0, 13)}...` : item.props.subheadline}
+                    {item.props.subheadline && item.props.subheadline.length > 13
+                        ? `${item.props.subheadline.slice(0, 13)}...`
+                        : item.props.subheadline}
                 </h5>
                 {item.props.icon
                     && (
@@ -89,3 +77,17 @@ export default class ImageAccordionHead extends React.PureComponent {
         );
     }
 }
+
+ImageAccordionHead.propTypes = {
+    item: PropTypes.instanceOf(Object),
+    width: PropTypes.number,
+    itemsPerRow: PropTypes.number,
+    wrapperHeight: PropTypes.string,
+};
+
+ImageAccordionHead.defaultProps = {
+    item: null,
+    width: 0,
+    itemsPerRow: 0,
+    wrapperHeight: 0,
+};

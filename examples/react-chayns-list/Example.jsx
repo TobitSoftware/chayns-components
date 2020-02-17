@@ -105,7 +105,7 @@ export default class ListExample extends Component {
                                     display: 'flex',
                                     alignItems: 'center',
                                 }}
-                                onClick={e => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <ContextMenu
                                     items={[{
@@ -143,7 +143,7 @@ export default class ListExample extends Component {
                                     display: 'flex',
                                     alignItems: 'center',
                                 }}
-                                onClick={e => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <ContextMenu
                                     items={[{

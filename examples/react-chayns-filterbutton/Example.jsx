@@ -3,9 +3,9 @@ import FilterButton from '../../src/react-chayns-filterbutton/component/FilterBu
 
 const FilterButtonExample = () => (
     <div>
-        <FilterButton icon="ts-tobit" checked count={33} label="Tobit.Software" />
-        <FilterButton icon="ts-chayns" count={5} label="chayns" />
-        <FilterButton icon="ts-david" count={3} label="david" />
+        <FilterButton icon="ts-tobit" checked count={33} label="Tobit.Software" onChange={console.log}/>
+        <FilterButton icon="ts-chayns" count={5} label="chayns"/>
+        <FilterButton icon="ts-david" count={3} label="david"/>
     </div>
 );
 

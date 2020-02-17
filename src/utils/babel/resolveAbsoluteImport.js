@@ -66,6 +66,7 @@ module.exports = function resolveAbsoluteImport(importName) {
     };
 
     if (!values[importName]) {
+        // eslint-disable-next-line max-len
         throw new Error(`Unable to resolve ${importName} from chayns-components. Please check the spelling. If it's not wrong please create an issue (https://github.com/TobitSoftware/chayns-components/issues).`);
     }
 

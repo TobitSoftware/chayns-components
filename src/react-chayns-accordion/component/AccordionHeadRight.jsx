@@ -7,30 +7,6 @@ const OPEN = 2;
 const CLOSE = 1;
 
 export default class AccordionHeadRight extends PureComponent {
-    static propTypes = {
-        right: PropTypes.oneOfType([
-            PropTypes.node.isRequired,
-            PropTypes.shape({
-                open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired,
-            }).isRequired,
-        ]),
-        onSearch: PropTypes.func,
-        onSearchEnter: PropTypes.func,
-        searchPlaceholder: PropTypes.string,
-        searchValue: PropTypes.string,
-        state: PropTypes.oneOf([OPEN, CLOSE]),
-    };
-
-    static defaultProps = {
-        right: null,
-        onSearch: null,
-        onSearchEnter: null,
-        searchPlaceholder: '',
-        searchValue: null,
-        state: null,
-    };
-
     renderOpen(openChildren) {
         const {
             onSearch,
@@ -109,3 +85,27 @@ export default class AccordionHeadRight extends PureComponent {
         );
     }
 }
+
+AccordionHeadRight.propTypes = {
+    right: PropTypes.oneOfType([
+        PropTypes.node.isRequired,
+        PropTypes.shape({
+            open: PropTypes.node.isRequired,
+            close: PropTypes.node.isRequired,
+        }).isRequired,
+    ]),
+    onSearch: PropTypes.func,
+    onSearchEnter: PropTypes.func,
+    searchPlaceholder: PropTypes.string,
+    searchValue: PropTypes.string,
+    state: PropTypes.oneOf([OPEN, CLOSE]),
+};
+
+AccordionHeadRight.defaultProps = {
+    right: null,
+    onSearch: null,
+    onSearchEnter: null,
+    searchPlaceholder: '',
+    searchValue: null,
+    state: null,
+};

@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { createContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
@@ -68,7 +69,7 @@ SimpleWrapperStateProvider.defaultProps = {
     onInput: null,
 };
 
-export default objectMapping => ({
+export default (objectMapping) => ({
     Consumer: SimpleWrapperContext.Consumer,
     Provider: SimpleWrapperStateProvider,
     ObjectMapping: objectMapping,

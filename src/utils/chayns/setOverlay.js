@@ -11,6 +11,7 @@ export default function setOverlay(enabled, { color, transition, mode }) {
     });
 
     return new Promise((resolve) => {
+        // eslint-disable-next-line no-underscore-dangle
         window._chaynsCallbacks.showOverlay = resolve;
     });
 }

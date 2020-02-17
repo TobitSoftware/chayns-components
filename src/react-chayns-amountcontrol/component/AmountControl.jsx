@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-// import { faTrashAlt } from '@fortawesome/free-regular-svg-icons/faTrashAlt';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
@@ -9,66 +8,6 @@ import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
 
 export default class AmountControl extends PureComponent {
-    static propTypes = {
-        buttonText: PropTypes.string,
-        amount: PropTypes.number,
-        onChange: PropTypes.func,
-        onInput: PropTypes.func,
-        onAdd: PropTypes.func,
-        onRemove: PropTypes.func,
-        disabled: PropTypes.bool,
-        disableInput: PropTypes.bool,
-        disableAdd: PropTypes.bool,
-        disableRemove: PropTypes.bool,
-        className: PropTypes.string,
-        autoInput: PropTypes.bool,
-        buttonFormatHandler: PropTypes.func,
-        showInput: PropTypes.bool,
-        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        plusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        minusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        removeIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        removeColor: PropTypes.string,
-        addColor: PropTypes.string,
-        iconColor: PropTypes.string,
-        equalize: PropTypes.string,
-        focusOnClick: PropTypes.bool,
-        contentWidth: PropTypes.number,
-        min: PropTypes.number,
-        max: PropTypes.number,
-        stopPropagation: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        buttonText: null,
-        amount: 0,
-        onChange: null,
-        onInput: null,
-        onAdd: null,
-        onRemove: null,
-        disabled: false,
-        disableInput: false,
-        disableAdd: false,
-        disableRemove: false,
-        className: '',
-        autoInput: false,
-        buttonFormatHandler: undefined,
-        showInput: false,
-        icon: null,
-        removeColor: null,
-        addColor: null,
-        iconColor: null,
-        equalize: null,
-        focusOnClick: true,
-        contentWidth: null,
-        stopPropagation: false,
-        min: null,
-        max: null,
-        plusIcon: faPlus,
-        minusIcon: faMinus,
-        removeIcon: faMinus,
-    };
-
     constructor(props) {
         super(props);
 
@@ -252,3 +191,63 @@ export default class AmountControl extends PureComponent {
         );
     }
 }
+
+AmountControl.propTypes = {
+    buttonText: PropTypes.string,
+    amount: PropTypes.number,
+    onChange: PropTypes.func,
+    onInput: PropTypes.func,
+    onAdd: PropTypes.func,
+    onRemove: PropTypes.func,
+    disabled: PropTypes.bool,
+    disableInput: PropTypes.bool,
+    disableAdd: PropTypes.bool,
+    disableRemove: PropTypes.bool,
+    className: PropTypes.string,
+    autoInput: PropTypes.bool,
+    buttonFormatHandler: PropTypes.func,
+    showInput: PropTypes.bool,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    plusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    minusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    removeIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    removeColor: PropTypes.string,
+    addColor: PropTypes.string,
+    iconColor: PropTypes.string,
+    equalize: PropTypes.string,
+    focusOnClick: PropTypes.bool,
+    contentWidth: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    stopPropagation: PropTypes.bool,
+};
+
+AmountControl.defaultProps = {
+    buttonText: null,
+    amount: 0,
+    onChange: null,
+    onInput: null,
+    onAdd: null,
+    onRemove: null,
+    disabled: false,
+    disableInput: false,
+    disableAdd: false,
+    disableRemove: false,
+    className: '',
+    autoInput: false,
+    buttonFormatHandler: undefined,
+    showInput: false,
+    icon: null,
+    removeColor: null,
+    addColor: null,
+    iconColor: null,
+    equalize: null,
+    focusOnClick: true,
+    contentWidth: null,
+    stopPropagation: false,
+    min: null,
+    max: null,
+    plusIcon: faPlus,
+    minusIcon: faMinus,
+    removeIcon: faMinus,
+};

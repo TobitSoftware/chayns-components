@@ -16,33 +16,6 @@ function getId() {
 }
 
 class AbstractExpandableListItem extends PureComponent {
-    static propTypes = {
-        onToggle: PropTypes.func.isRequired,
-        open: PropTypes.arrayOf(PropTypes.number),
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        header: PropTypes.node.isRequired,
-        onOpen: PropTypes.func.isRequired,
-        onClose: PropTypes.func.isRequired,
-        className: PropTypes.string,
-        clickable: PropTypes.bool,
-        noContentClass: PropTypes.bool,
-        openProp: PropTypes.bool,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        open: false,
-        children: null,
-        className: '',
-        clickable: false,
-        noContentClass: false,
-        openProp: null,
-        style: null,
-    };
-
     constructor(props) {
         super(props);
 
@@ -127,5 +100,33 @@ class AbstractExpandableListItem extends PureComponent {
         );
     }
 }
+
+AbstractExpandableListItem.propTypes = {
+    onToggle: PropTypes.func.isRequired,
+    open: PropTypes.arrayOf(PropTypes.number),
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+    header: PropTypes.node.isRequired,
+    onOpen: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    clickable: PropTypes.bool,
+    noContentClass: PropTypes.bool,
+    openProp: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+};
+
+AbstractExpandableListItem.defaultProps = {
+    open: false,
+    children: null,
+    className: '',
+    clickable: false,
+    noContentClass: false,
+    openProp: null,
+    style: null,
+};
 
 export default connectExpandableContext(AbstractExpandableListItem);

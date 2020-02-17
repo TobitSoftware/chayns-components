@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-array-index-key,no-underscore-dangle */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import DayItem from './DayItem';
@@ -15,27 +15,6 @@ function getDayNames(language = chayns.env.language) {
 }
 
 export default class MonthTable extends PureComponent {
-    static propTypes = {
-        onDateSelect: PropTypes.func,
-        activateAll: PropTypes.bool,
-        startDate: PropTypes.instanceOf(Date),
-        selected: PropTypes.instanceOf(Date),
-        activated: PropTypes.arrayOf(Date),
-        highlighted: PropTypes.arrayOf(PropTypes.shape({
-            dates: PropTypes.arrayOf(Date).isRequired,
-            style: PropTypes.object,
-        })),
-    };
-
-    static defaultProps = {
-        selected: null,
-        activated: null,
-        highlighted: null,
-        startDate: null,
-        activateAll: true,
-        onDateSelect: null,
-    };
-
     static isActivated(activated, date) {
         for (let i = 0; i < activated.length; i += 1) {
             if (areDatesEqual(activated[i], date)) {
@@ -181,3 +160,24 @@ export default class MonthTable extends PureComponent {
         );
     }
 }
+
+MonthTable.propTypes = {
+    onDateSelect: PropTypes.func,
+    activateAll: PropTypes.bool,
+    startDate: PropTypes.instanceOf(Date),
+    selected: PropTypes.instanceOf(Date),
+    activated: PropTypes.arrayOf(Date),
+    highlighted: PropTypes.arrayOf(PropTypes.shape({
+        dates: PropTypes.arrayOf(Date).isRequired,
+        style: PropTypes.object,
+    })),
+};
+
+MonthTable.defaultProps = {
+    selected: null,
+    activated: null,
+    highlighted: null,
+    startDate: null,
+    activateAll: true,
+    onDateSelect: null,
+};

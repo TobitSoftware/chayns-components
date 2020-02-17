@@ -42,33 +42,33 @@ function webShareApi(link, linkText) {
 
 export default function share(provider, link, linkText) {
     switch (provider.id) {
-    case shareOptions.COPY:
-        copyToClipboard(link);
-        break;
-    case shareOptions.MAIL: {
-        if (provider.useApp) {
-            shareWithApp(provider, `${linkText} ${link}`.trim());
-        } else {
-            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
+        case shareOptions.COPY:
+            copyToClipboard(link);
+            break;
+        case shareOptions.MAIL: {
+            if (provider.useApp) {
+                shareWithApp(provider, `${linkText} ${link}`.trim());
+            } else {
+                shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
+            }
+            break;
         }
-        break;
-    }
-    case shareOptions.WHATSAPP:
-        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
-        break;
-    case shareOptions.FACEBOOK:
-        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)));
-        break;
-    case shareOptions.TWITTER:
-        shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)).replace('{linkText}', encodeURIComponent(linkText)));
-        break;
-    case shareOptions.CUSTOM_CHAYNS:
-        shareWithApp(provider, `${linkText} ${link}`.trim());
-        break;
-    case shareOptions.CUSTOM_ALL:
-        webShareApi(link, linkText);
-        break;
-    default:
-        break;
+        case shareOptions.WHATSAPP:
+            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(`${linkText} ${link}`.trim())));
+            break;
+        case shareOptions.FACEBOOK:
+            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)));
+            break;
+        case shareOptions.TWITTER:
+            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)).replace('{linkText}', encodeURIComponent(linkText)));
+            break;
+        case shareOptions.CUSTOM_CHAYNS:
+            shareWithApp(provider, `${linkText} ${link}`.trim());
+            break;
+        case shareOptions.CUSTOM_ALL:
+            webShareApi(link, linkText);
+            break;
+        default:
+            break;
     }
 }
