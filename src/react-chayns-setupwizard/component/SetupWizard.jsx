@@ -43,7 +43,7 @@ class SetupWizard extends Component {
     }
 
     stepComplete = (value) => {
-        const { currentStep } = this.state;
+        const { currentStep, requiredSteps, maxProgress } = this.state;
 
         if (value && this.completedSteps.indexOf(currentStep) === -1) {
             this.completedSteps = this.completedSteps.concat(currentStep);
@@ -54,7 +54,7 @@ class SetupWizard extends Component {
             this.completedSteps = this.completedSteps.slice(0, this.completedSteps.indexOf(currentStep));
             this.setState({
                 completedSteps: this.completedSteps,
-                maxProgress: currentStep,
+                maxProgress: requiredSteps.indexOf(currentStep) >= 0 ? currentStep : maxProgress,
             });
         }
     };
