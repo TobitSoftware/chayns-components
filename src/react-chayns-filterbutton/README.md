@@ -16,7 +16,7 @@ You can use the FilterButton like in the [example](https://github.com/TobitSoftw
 
 ## Props
 
-You can set the following props on a ColorPicker element:
+You can set the following props on a FilterButton element:
 
 | Property        | Description                                                        | Type            |
 | --------------- | ------------------------------------------------------------------ | --------------- |
@@ -32,3 +32,6 @@ You can set the following props on a ColorPicker element:
 | id              | Optional HTML-id for the input element. Generated if not specified | string          |
 | disabled        | Makes FilterButton disabled and changes style                      | bool            |
 | stopPropagation | Stops the click propagation to parent elements                     | bool            |
+| small           | Shrinks the FilterButton                                           | bool            |
+
+To adjust the color of the FilterButton, just pass a `color` via the `style` prop or give it a `className` that changes the `color` (not `background-color`);
