@@ -22,6 +22,7 @@ const FilterButton = ({
     id,
     disabled,
     stopPropagation,
+    small,
 }) => {
     const htmlId = useRef(id || `${PREFIX}${(currentId += 1)}`);
 
@@ -38,6 +39,7 @@ const FilterButton = ({
                 'button--filter--disabled': disabled,
                 'button--filter--active': checked,
                 'chayns__color--headline': checked,
+                'button--filter--small': small,
             })}
             style={style}
             htmlFor={htmlId.current}
@@ -48,7 +50,7 @@ const FilterButton = ({
                 type={name ? 'radio' : 'checkbox'}
                 name={name}
                 className="button--filter__input"
-                onChange={(e) => {
+                onChange={e => {
                     if (onChange) {
                         if (e.target.type === 'checkbox') {
                             onChange(e.target.checked);
@@ -108,6 +110,7 @@ FilterButton.defaultProps = {
     id: undefined,
     disabled: false,
     stopPropagation: false,
+    small: false,
 };
 
 export default FilterButton;
