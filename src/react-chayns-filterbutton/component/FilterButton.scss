@@ -4,9 +4,7 @@
     margin: 5px 10px 5px 0;
     user-select: none;
     box-shadow: none;
-    border-radius: 300px;
     cursor: pointer;
-    overflow: hidden;
     white-space: nowrap;
 
     &--small {
@@ -17,10 +15,12 @@
         justify-content: center;
     }
 
-    // Hintergrund
+    // Background
     &::after {
         content: '';
-        border-radius: 300px;
+
+        // High pixel value to get stadium shape instead of ellipse
+        border-radius: 100px;
         position: absolute;
         top: 0;
         right: 0;
@@ -33,10 +33,12 @@
         transition: opacity 0.08s;
     }
 
-    // Kontur
+    // Border
     &::before {
         content: '';
-        border-radius: 300px;
+
+        // High pixel value to get stadium shape instead of ellipse
+        border-radius: 100px;
         position: absolute;
         top: 0;
         right: 0;
@@ -65,10 +67,12 @@
     }
 
     &.button--filter--active {
+        // Background
         &::after {
             opacity: 0.4;
         }
 
+        // Border
         &::before {
             opacity: 0.9;
         }
@@ -87,13 +91,13 @@
     .button--filter {
         &:not(.chayns__color--headline) {
             &.button--filter--active {
-                &:after {
-                    // Hintergrund
+                // Background
+                &::after {
                     opacity: 1;
                 }
 
-                &:before {
-                    // Kontur
+                // Border
+                &::before {
                     opacity: 1;
                 }
             }
