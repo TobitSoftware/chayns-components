@@ -22,6 +22,7 @@ const FilterButton = ({
     id,
     disabled,
     stopPropagation,
+    small,
 }) => {
     const htmlId = useRef(id || `${PREFIX}${(currentId += 1)}`);
 
@@ -37,7 +38,8 @@ const FilterButton = ({
             className={classNames(className, 'button--filter', {
                 'button--filter--disabled': disabled,
                 'button--filter--active': checked,
-                'chayns__color--headline': checked,
+                'chayns__color--headline': checked && !className,
+                'button--filter--small': small,
             })}
             style={style}
             htmlFor={htmlId.current}
@@ -58,6 +60,7 @@ const FilterButton = ({
                     }
                 }}
                 checked={checked}
+                disabled={disabled}
             />
             <span className="chayns__color--text">
                 {icon ? (
@@ -93,6 +96,7 @@ FilterButton.propTypes = {
     id: PropTypes.string,
     disabled: PropTypes.bool,
     stopPropagation: PropTypes.bool,
+    small: PropTypes.bool,
 };
 
 FilterButton.defaultProps = {
@@ -108,6 +112,7 @@ FilterButton.defaultProps = {
     id: undefined,
     disabled: false,
     stopPropagation: false,
+    small: false,
 };
 
 export default FilterButton;
