@@ -91,13 +91,13 @@
     .button--filter {
         &:not(.chayns__color--headline) {
             &.button--filter--active {
-                // Background
                 &::after {
+                    // Hintergrund
                     opacity: 1;
                 }
 
-                // Border
                 &::before {
+                    // Kontur
                     opacity: 1;
                 }
             }
