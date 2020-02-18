@@ -20,7 +20,7 @@ You can access them in the Step-Components (for example FirstStep, SecondStep,..
     - previousStep()
     - toStep(step)
 - set steps as complete or incomplete
-    - stepComplete(value)
+    - stepComplete(value, step=currentStep)
 - reset steps
     - resetToStep(step)
 - enable or disable steps
