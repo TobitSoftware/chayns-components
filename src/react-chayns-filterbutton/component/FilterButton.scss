@@ -1,29 +1,53 @@
 .button--filter {
-    padding: 3px 8px;
+    padding: 3px 14px;
     position: relative;
     margin: 5px 10px 5px 0;
     user-select: none;
     box-shadow: none;
-    border-width: 0px;
-    border-style: solid;
-    border-radius: 3px;
     cursor: pointer;
-    overflow: hidden;
     white-space: nowrap;
-    display: inline-block;
 
+    &--small {
+        padding: 2px 10px 1px 10px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    // Background
     &::after {
-        background-color: currentColor;
-        opacity: 0.1;
         content: '';
+
+        // High pixel value to get stadium shape instead of ellipse
+        border-radius: 100px;
         position: absolute;
         top: 0;
         right: 0;
         left: 0;
         bottom: 0;
-        border-radius: 3px;
+        opacity: 0;
+        z-index: -1;
+        background-color: currentColor;
+        border: 1px solid currentColor;
+        transition: opacity 0.08s;
+    }
 
-        transition: opacity 80ms;
+    // Border
+    &::before {
+        content: '';
+
+        // High pixel value to get stadium shape instead of ellipse
+        border-radius: 100px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        opacity: 0.4;
+        z-index: 10;
+        border: 1px solid currentColor;
+        transition: opacity 0.08s;
     }
 
     &--disabled {
@@ -32,9 +56,25 @@
         pointer-events: none;
     }
 
-    &--active {
+    &:hover {
+        &::after {
+            opacity: 0.2;
+        }
+
+        &::before {
+            opacity: 0.45;
+        }
+    }
+
+    &.button--filter--active {
+        // Background
         &::after {
             opacity: 0.4;
+        }
+
+        // Border
+        &::before {
+            opacity: 0.9;
         }
     }
 
@@ -44,5 +84,23 @@
 
     &__input {
         display: none;
+    }
+}
+
+.chayns-color-mode--1 {
+    .button--filter {
+        &:not(.chayns__color--headline) {
+            &.button--filter--active {
+                // Background
+                &::after {
+                    opacity: 1;
+                }
+
+                // Border
+                &::before {
+                    opacity: 1;
+                }
+            }
+        }
     }
 }
