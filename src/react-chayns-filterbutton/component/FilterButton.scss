@@ -90,10 +90,8 @@
     &__input {
         display: none;
     }
-}
 
-.chayns-color-mode--1 {
-    .button--filter {
+    .chayns-color-mode--1 & {
         &:not(.chayns__color--headline) {
             &.button--filter--active {
                 // Background
@@ -105,6 +103,32 @@
                 &::before {
                     opacity: 1;
                 }
+            }
+        }
+    }
+
+    .chayns--mobile & {
+        &:hover {
+            // Background
+            &::after {
+                opacity: 0;
+            }
+
+            // Border
+            &::before {
+                opacity: 0.4;
+            }
+        }
+
+        &.button--filter--active:hover {
+            // Background
+            &::after {
+                opacity: 0.4;
+            }
+
+            // Border
+            &::before {
+                opacity: 0.9;
             }
         }
     }
