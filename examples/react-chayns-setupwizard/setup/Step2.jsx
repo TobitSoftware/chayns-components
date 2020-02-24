@@ -17,7 +17,7 @@ class Step2 extends Component {
     }
 
     render() {
-        const { nextStep } = this.props;
+        const { nextStep, stepComplete, stepEnabled } = this.props;
         return (
             <div className="accordion__content">
                 <p>
@@ -32,9 +32,12 @@ class Step2 extends Component {
                         type="radio"
                         className="radio"
                         id="radio1"
-                        onClick={this.next}
+                        onClick={() => {
+                            stepComplete(false);
+                            stepEnabled(false, 2);
+                        }}
                     />
-                    <label htmlFor="radio1">Option 1</label>
+                    <label htmlFor="radio1">Option 1 - will uncomplete the step</label>
                 </div>
                 <div>
                     <input
@@ -44,7 +47,7 @@ class Step2 extends Component {
                         id="radio2"
                         onClick={this.next}
                     />
-                    <label htmlFor="radio2">Option 2</label>
+                    <label htmlFor="radio2">Option 2 - will complete the step</label>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <Button onClick={nextStep}>
