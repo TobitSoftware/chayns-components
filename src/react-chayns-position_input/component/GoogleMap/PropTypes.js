@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 /** Turns a string into PascalCase
  * @param {string} str
  */
-const pascalize = str => str.split(/[ _]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+const pascalize = (str) => str.split(/[ _]/).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('');
 
 /**
  * @param {string} eventName Name of the event
  * @returns {string} Name of the event handler
  */
-export const toHandlerName = eventName => `on${pascalize(eventName)}`;
+export const toHandlerName = (eventName) => `on${pascalize(eventName)}`;
 
 /**
  * Transforms event names into PropTypes

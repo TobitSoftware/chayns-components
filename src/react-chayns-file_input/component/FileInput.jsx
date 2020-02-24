@@ -1,4 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign,react/no-array-index-key */
+// eslint-disable-next-line max-len
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign,react/no-array-index-key,react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -9,74 +10,6 @@ import fileInputCall from '../utils/fileInputCall';
 import { isFunction } from '../../utils/is';
 
 export default class FileInput extends PureComponent {
-    static types = {
-        IMAGE: 'image/*',
-        VIDEO: 'video/*',
-        AUDIO: 'audio/*',
-        ALL: '*',
-    };
-
-    static typePresets = {
-        TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
-        STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
-    };
-
-    static propTypes = {
-        className: PropTypes.string,
-        style: PropTypes.object,
-        stopPropagation: PropTypes.bool,
-        disabled: PropTypes.bool,
-        errorMessages: PropTypes.shape({
-            tooMuchFiles: PropTypes.string,
-            fileTooBig: PropTypes.string,
-            wrongFileType: PropTypes.string,
-        }),
-        items: PropTypes.arrayOf(PropTypes.shape({
-            types: PropTypes.arrayOf(PropTypes.string),
-            maxFileSize: PropTypes.number,
-            maxNumberOfFiles: PropTypes.number,
-            directory: PropTypes.bool,
-            onClick: PropTypes.func,
-            onChange: PropTypes.func,
-            className: PropTypes.string,
-            style: PropTypes.object,
-            disabled: PropTypes.bool,
-            content: PropTypes.oneOfType([PropTypes.shape({
-                text: PropTypes.string,
-                icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-            }), PropTypes.shape({
-                children: PropTypes.oneOfType([
-                    PropTypes.node,
-                    PropTypes.arrayOf(PropTypes.node),
-                ]),
-            })]),
-        })),
-    };
-
-    static defaultProps = {
-        className: null,
-        style: null,
-        stopPropagation: false,
-        disabled: false,
-        errorMessages: {
-            tooMuchFiles: 'Du kannst nur ##NUMBER## Dateien hochladen.',
-            fileTooBig: 'Es sind nur Dateien bis ##SIZE## erlaubt.',
-            wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
-        },
-        items: [{
-            types: [FileInput.types.ALL],
-            maxFileSize: 4 * 1024 * 1024, // 4 MB
-            maxNumberOfFiles: 0, // 0=infinity
-            directory: false,
-            onClick: null,
-            onChange: null,
-            className: null,
-            style: null,
-            disabled: false,
-            content: null,
-        }],
-    };
-
     constructor(props) {
         super(props);
         this.itemRefs = [];
@@ -180,8 +113,8 @@ export default class FileInput extends PureComponent {
                                     : (
                                         <div
                                             className="cc__file-input--placeholder"
-                                            ref={ref => this.itemRefs[index] = ref}
-                                            onClick={event => this.onClick(event, item, index)}
+                                            ref={(ref) => this.itemRefs[index] = ref}
+                                            onClick={(event) => this.onClick(event, item, index)}
                                         >
                                             {
                                                 item.onChange && !this.needAppCall
@@ -193,11 +126,11 @@ export default class FileInput extends PureComponent {
                                                             webkitdirectory={item.directory ? '' : null}
                                                             className="cc__file-input__input"
                                                             type="file"
-                                                            onChange={event => this.onChange(event, item, index)}
+                                                            onChange={(event) => this.onChange(event, item, index)}
                                                             accept={item.types}
-                                                            onDragEnter={event => this.onDragEnter(event, item, index)}
+                                                            onDragEnter={(event) => this.onDragEnter(event, item, index)}
                                                             onDragLeave={() => this.onDragLeave(index)}
-                                                            ref={ref => this.fileInputRefs[index] = ref}
+                                                            ref={(ref) => this.fileInputRefs[index] = ref}
                                                         />
                                                     )
                                                     : null
@@ -230,3 +163,71 @@ export default class FileInput extends PureComponent {
         );
     }
 }
+
+FileInput.types = {
+    IMAGE: 'image/*',
+    VIDEO: 'video/*',
+    AUDIO: 'audio/*',
+    ALL: '*',
+};
+
+FileInput.typePresets = {
+    TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+    STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
+};
+
+FileInput.propTypes = {
+    className: PropTypes.string,
+    style: PropTypes.object,
+    stopPropagation: PropTypes.bool,
+    disabled: PropTypes.bool,
+    errorMessages: PropTypes.shape({
+        tooMuchFiles: PropTypes.string,
+        fileTooBig: PropTypes.string,
+        wrongFileType: PropTypes.string,
+    }),
+    items: PropTypes.arrayOf(PropTypes.shape({
+        types: PropTypes.arrayOf(PropTypes.string),
+        maxFileSize: PropTypes.number,
+        maxNumberOfFiles: PropTypes.number,
+        directory: PropTypes.bool,
+        onClick: PropTypes.func,
+        onChange: PropTypes.func,
+        className: PropTypes.string,
+        style: PropTypes.object,
+        disabled: PropTypes.bool,
+        content: PropTypes.oneOfType([PropTypes.shape({
+            text: PropTypes.string,
+            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+        }), PropTypes.shape({
+            children: PropTypes.oneOfType([
+                PropTypes.node,
+                PropTypes.arrayOf(PropTypes.node),
+            ]),
+        })]),
+    })),
+};
+
+FileInput.defaultProps = {
+    className: null,
+    style: null,
+    stopPropagation: false,
+    disabled: false,
+    errorMessages: {
+        tooMuchFiles: 'Du kannst nur ##NUMBER## Dateien hochladen.',
+        fileTooBig: 'Es sind nur Dateien bis ##SIZE## erlaubt.',
+        wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
+    },
+    items: [{
+        types: [FileInput.types.ALL],
+        maxFileSize: 4 * 1024 * 1024, // 4 MB
+        maxNumberOfFiles: 0, // 0=infinity
+        directory: false,
+        onClick: null,
+        onChange: null,
+        className: null,
+        style: null,
+        disabled: false,
+        content: null,
+    }],
+};

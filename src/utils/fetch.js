@@ -77,7 +77,7 @@ export function fetchDataFromApi(url, method = 'GET', body, statusCodes) {
             });
         }
 
-        const BadStatusError = message => ({
+        const BadStatusError = (message) => ({
             name: 'BadStatusError',
             message: message || 'Unknown Status',
             stack: (new Error()).stack,
@@ -93,7 +93,10 @@ export function reloadCache(reload) {
     return new Promise((resolve, reject) => {
         fetchDataFromApi(`##server_url##/cache/${window.chayns.env.site.locationId}`, 'GET', null).then((data) => {
             if (data !== true) {
-                window.chayns.dialog.alert(window.chayns.utils.lang.get('txt_shopMashup_reloadCache'), window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'));
+                window.chayns.dialog.alert(
+                    window.chayns.utils.lang.get('txt_shopMashup_reloadCache'),
+                    window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning')
+                );
                 reject();
             } else {
                 resolve();
@@ -105,7 +108,10 @@ export function reloadCache(reload) {
         }).catch((error) => {
             // eslint-disable-next-line no-console
             console.warn(error);
-            window.chayns.dialog.alert(window.chayns.utils.lang.get('txt_shopMashup_reloadCache'), window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'));
+            window.chayns.dialog.alert(
+                window.chayns.utils.lang.get('txt_shopMashup_reloadCache'),
+                window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning')
+            );
             reject();
         }).then(() => {
             window.extendedWaitCursor.hideWaitCursor('reload_cache');

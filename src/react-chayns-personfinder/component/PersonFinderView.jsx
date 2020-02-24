@@ -1,20 +1,54 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
-import PersonFinderResultsCustom from './PersonFinderResultsCustom';
+import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 
-class PersonFinderView extends Component {
-    state = {
-        showWaitCursor: false,
-    }
+const LAZY_LOADING_SPACE = 100;
 
-    hasEntries() {
-        const { data } = this.props;
-        return !!(data && data.length);
-    }
+class PersonFinderView extends Component {
+    state = { lazyLoading: false };
+
+    handleKeyDown = (ev) => {
+        if (!this.resultList) return;
+
+        if ((ev.keyCode === 9 || ev.keyCode === 40)) {
+            const item = this.resultList.querySelector('.result-item');
+            if (item) {
+                ev.preventDefault();
+                item.focus();
+            }
+        }
+    };
+
+    handleLazyLoad = async () => {
+        if (!this.resultList) return;
+
+        const { lazyLoading } = this.state;
+
+        const { value, autoLoading, onLoadMore } = this.props;
+        const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
+
+        if (onLoadMore && autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+            this.setState({
+                lazyLoading: true,
+            });
+            await onLoadMore('default', value);
+            this.setState({
+                lazyLoading: false,
+            });
+        }
+    };
+
+    hasEntries = () => {
+        const { data, orm, value } = this.props;
+        return Array.isArray(orm.groups)
+            ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value))
+                && Array.isArray(data[group]) && data[group].length)
+            : !!((Array.isArray(data) && data.length) || Object.values(data).some((d) => Array.isArray(d) && d.length));
+    };
 
     renderChildren() {
         const {
@@ -22,49 +56,35 @@ class PersonFinderView extends Component {
             selectedValue,
             data,
             orm,
-            hasMore,
             value,
+            hasMore,
             onLoadMore,
+            showWaitCursor: waitCursor,
         } = this.props;
-
-        const {
-            showWaitCursor,
-        } = this.state;
 
         const hasEntries = this.hasEntries();
 
         if (!selectedValue && hasEntries) {
-            const results = (
-                <PersonFinderResultsCustom
+            return (
+                <PersonFinderResults
                     key="results"
-                    sites={[]}
                     onSelect={onSelect}
-                    data={data.filter((v) => {
-                        if (orm.search && orm.search.length) {
-                            return orm.search.some(key => v[key] && v[key].toUpperCase().includes(value.toUpperCase()));
-                        }
-                        return v[orm.identifier].toUpperCase().includes(value.toUpperCase()) || v[orm.showName].toUpperCase().includes(value.toUpperCase());
-                    })}
+                    data={data}
                     orm={orm}
-                    onLoadMore={async (...args) => {
+                    value={value}
+                    onLoadMore={async (type) => {
                         if (!onLoadMore) return;
-                        this.setState({ showWaitCursor: true });
-                        await onLoadMore(...args);
-                        this.setState({ showWaitCursor: false });
+                        await onLoadMore(type, value);
                     }}
-                    showWaitCursor={showWaitCursor}
+                    showWaitCursor={waitCursor}
                     hasMore={hasMore}
                 />
             );
-
-            return [
-                results,
-            ];
         }
 
-        if (showWaitCursor) {
+        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
             return (
-                <WaitCursor key="wait-cursor" />
+                <WaitCursor key="wait-cursor"/>
             );
         }
 
@@ -88,13 +108,12 @@ class PersonFinderView extends Component {
             <InputBox
                 parent={parent}
                 key="single"
-                inputComponent={inputComponent}
                 ref={boxRef}
-                onAddTag={data => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
+                inputComponent={inputComponent}
+                onKeyDown={this.handleKeyDown}
+                onAddTag={(data) => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
                 value={value}
-                onChange={this.handleOnChange}
-                onFocus={this.handleOnFocus}
-                boxClassName={classnames('cc__person-finder__overlay', boxClassName)}
+                boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
                     ref: (ref) => {
                         this.resultList = ref;
@@ -115,28 +134,51 @@ PersonFinderView.propTypes = {
         showName: PropTypes.string,
         search: PropTypes.arrayOf(PropTypes.string),
         imageUrl: PropTypes.string,
+        groups: PropTypes.arrayOf(PropTypes.shape({
+            key: PropTypes.string.isRequired,
+            show: PropTypes.func,
+        })),
     }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object),
-    hasMore: PropTypes.bool,
+    data: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
+        PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
+    ]),
+    autoLoading: PropTypes.bool,
+    hasMore: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
     onSelect: PropTypes.func.isRequired,
     onLoadMore: PropTypes.func,
-    value: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
+    value: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.string,
+    ]),
     selectedValue: PropTypes.bool,
-    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+    inputComponent: PropTypes.oneOfType([
+        PropTypes.func,
+        PropTypes.node,
+    ]).isRequired,
     boxClassName: PropTypes.string,
     parent: PropTypes.instanceOf(Element),
     boxRef: PropTypes.func,
+    showWaitCursor: PropTypes.oneOfType([
+        PropTypes.objectOf(PropTypes.bool),
+        PropTypes.bool,
+    ]),
 };
 
 PersonFinderView.defaultProps = {
     value: '',
     data: [],
+    autoLoading: false,
     hasMore: false,
     onLoadMore: null,
     selectedValue: false,
     boxClassName: null,
     parent: document.querySelector('.tapp'),
     boxRef: null,
+    showWaitCursor: false,
 };
 
 export default PersonFinderView;

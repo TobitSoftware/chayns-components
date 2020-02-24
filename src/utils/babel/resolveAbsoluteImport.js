@@ -15,6 +15,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         DateInfo: 'react-chayns-dateinfo/component/DateInfo.js',
         EmojiInput: 'react-chayns-emoji_input/component/EmojiInput.js',
         ExpandableContent: 'react-chayns-expandable_content/component/ExpandableContent.js',
+        FilterButton: 'react-chayns-filterbutton/component/FilterButton.js',
         FormattedInput: 'react-chayns-formatted_input/component/FormattedInput.js',
         Formatter: 'react-chayns-formatted_input/utils/Formatter.js',
         Gallery: 'react-chayns-gallery/component/Gallery.js',
@@ -34,6 +35,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         OrientationHelper: 'utils/OrientationHelper.js',
         OpeningTimes: 'react-chayns-openingtimes/component/OpeningTimes.js',
         PersonFinder: 'react-chayns-personfinder/component/PersonFinder.js',
+        SimpleWrapperContext: 'react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext.js',
         PositionInput: 'react-chayns-position_input/component/PositionInput.js',
         PriceFormatter: 'react-chayns-formatted_input/utils/PriceFormatter.js',
         ProgressBar: 'react-chayns-progress_bar/component/ProgressBar.js',
@@ -64,6 +66,7 @@ module.exports = function resolveAbsoluteImport(importName) {
     };
 
     if (!values[importName]) {
+        // eslint-disable-next-line max-len
         throw new Error(`Unable to resolve ${importName} from chayns-components. Please check the spelling. If it's not wrong please create an issue (https://github.com/TobitSoftware/chayns-components/issues).`);
     }
 

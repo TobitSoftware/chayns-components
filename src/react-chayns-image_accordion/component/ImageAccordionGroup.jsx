@@ -22,26 +22,6 @@ function listToMatrix(list, count) {
 }
 
 export default class ImageAccordionGroup extends React.Component {
-    static dataGroups = {}
-
-    static index = -1
-
-    static propTypes = {
-        children: PropTypes.instanceOf(Array),
-        dataGroup: PropTypes.string,
-        className: PropTypes.string,
-        reference: PropTypes.string,
-        onHeadOpen: PropTypes.func,
-    };
-
-    static defaultProps = {
-        children: [],
-        dataGroup: null,
-        className: '',
-        reference: null,
-        onHeadOpen: null,
-    };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -83,7 +63,8 @@ export default class ImageAccordionGroup extends React.Component {
         const node = event.target;
         for (let i = 0; i < 15; i += 1) {
             if (node.classList) {
-                if (node.classList.contains('accordion--no--trigger') || node.classList.contains('context-menu-overlay') || node.classList.contains('context-menu__item__text') || node.classList.contains('context-menu__item')) {
+                if (node.classList.contains('accordion--no--trigger') || node.classList.contains('context-menu-overlay')
+                    || node.classList.contains('context-menu__item__text') || node.classList.contains('context-menu__item')) {
                     trigger = false;
                     return trigger;
                 }
@@ -108,7 +89,7 @@ export default class ImageAccordionGroup extends React.Component {
     };
 
     accordionCloseListener() {
-        this.setState(state => ({
+        this.setState((state) => ({
             currentState: undefined,
             prevOpen: state.currentState,
         }));
@@ -126,10 +107,10 @@ export default class ImageAccordionGroup extends React.Component {
 
         let findChild = -1;
         if (children) {
-            findChild = children.findIndex(g => g && g.key === key);
+            findChild = children.findIndex((g) => g && g.key === key);
         }
 
-        this.setState(state => ({
+        this.setState((state) => ({
             currentState: findChild !== -1 && children[findChild].props.children ? key : null,
             prevOpen: !sameRow && state.currentState,
         }));
@@ -175,13 +156,13 @@ export default class ImageAccordionGroup extends React.Component {
             >
                 {/* ImageAccordionGroup Row */}
                 {
-                    imageAccordionMatrix.map(matrixRow => (
+                    imageAccordionMatrix.map((matrixRow) => (
                         // ImageAccordion Heads per row
                         <div
-                            className={classNames('image-accordion-container', { open: matrixRow.some(row => row.props.open) })}
+                            className={classNames('image-accordion-container', { open: matrixRow.some((row) => row.props.open) })}
                             key={matrixRow[0].key}
                         >
-                            {matrixRow.map(item => (
+                            {matrixRow.map((item) => (
                                 <div
                                     className={classNames('image-accordion', {
                                         open: currentState === item.props.originalKey,
@@ -189,7 +170,7 @@ export default class ImageAccordionGroup extends React.Component {
                                     onClick={(e) => {
                                         this.handleAccordionClick(
                                             item.props.originalKey,
-                                            matrixRow.some(row => row.props.originalKey === currentState),
+                                            matrixRow.some((row) => row.props.originalKey === currentState),
                                             item.props,
                                             e,
                                         );
@@ -217,22 +198,22 @@ export default class ImageAccordionGroup extends React.Component {
                             >
                                 <div
                                     className={classNames('arrow', {
-                                        'no-arrow': matrixRow.findIndex(c => (
+                                        'no-arrow': matrixRow.findIndex((c) => (
                                             !c.props.children && (c.props.originalKey === currentState || (c.props.originalKey === prevOpen))
                                         )) !== -1,
                                     })}
                                     style={{
-                                        marginLeft: (matrixRow.findIndex(c => (
+                                        marginLeft: (matrixRow.findIndex((c) => (
                                             c.props.originalKey === currentState)
                                                 || (c.props.originalKey === prevOpen)) + 0.5) * (width * (percent / 100)) - 12,
-                                        opacity: (matrixRow.find(c => (
+                                        opacity: (matrixRow.find((c) => (
                                             c.props.originalKey === currentState)
                                                 || (c.props.originalKey === prevOpen))
                                                 || { props: { item: {} } }).props.disabled ? 0.55 : 1,
                                     }}
                                 />
                                 <ExpandableContent
-                                    open={matrixRow.find(c => c.props.children && ((c.props.originalKey === currentState)
+                                    open={matrixRow.find((c) => c.props.children && ((c.props.originalKey === currentState)
                                     || (c.props.originalKey === prevOpen))) !== -1}
                                 >
                                     {matrixRow}
@@ -246,3 +227,23 @@ export default class ImageAccordionGroup extends React.Component {
         );
     }
 }
+
+ImageAccordionGroup.dataGroups = {};
+
+ImageAccordionGroup.index = -1;
+
+ImageAccordionGroup.propTypes = {
+    children: PropTypes.instanceOf(Array),
+    dataGroup: PropTypes.string,
+    className: PropTypes.string,
+    reference: PropTypes.string,
+    onHeadOpen: PropTypes.func,
+};
+
+ImageAccordionGroup.defaultProps = {
+    children: [],
+    dataGroup: null,
+    className: '',
+    reference: null,
+    onHeadOpen: null,
+};

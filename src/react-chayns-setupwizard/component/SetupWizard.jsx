@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SetupWizardContext from './setupWizardContext';
@@ -21,6 +22,7 @@ class SetupWizard extends Component {
         };
 
         this.stepComplete = this.stepComplete.bind(this);
+        this.stepEnabled = this.stepEnabled.bind(this);
         this.previousStep = this.previousStep.bind(this);
         this.nextStep = this.nextStep.bind(this);
         this.toStep = this.toStep.bind(this);
@@ -32,6 +34,7 @@ class SetupWizard extends Component {
     getChildContext() {
         return {
             stepComplete: this.stepComplete,
+            stepEnabled: this.stepEnabled,
             previousStep: this.previousStep,
             nextStep: this.nextStep,
             toStep: this.toStep,
@@ -39,20 +42,31 @@ class SetupWizard extends Component {
         };
     }
 
-    stepComplete = (value) => {
-        const { currentStep } = this.state;
+    stepComplete = (value, step) => {
+        const { currentStep, requiredSteps, maxProgress } = this.state;
 
-        if (value && this.completedSteps.indexOf(currentStep) === -1) {
-            this.completedSteps = this.completedSteps.concat(currentStep);
+        const selectedStep = step === undefined ? currentStep : step;
+
+        if (value && this.completedSteps.indexOf(selectedStep) === -1) {
+            this.completedSteps = this.completedSteps.concat(selectedStep);
             this.setState({
                 completedSteps: this.completedSteps,
             });
-        } else if (!value && this.completedSteps.indexOf(currentStep) >= 0) {
-            this.completedSteps = this.completedSteps.slice(0, this.completedSteps.indexOf(currentStep));
+        } else if (!value && this.completedSteps.indexOf(selectedStep) >= 0) {
+            this.completedSteps = this.completedSteps.slice(0, this.completedSteps.indexOf(selectedStep));
             this.setState({
                 completedSteps: this.completedSteps,
-                maxProgress: currentStep,
+                maxProgress: requiredSteps.indexOf(selectedStep) >= 0 ? selectedStep : maxProgress,
             });
+        }
+    };
+
+    stepEnabled = (value, step) => {
+        const { maxProgress } = this.state;
+        if (value && step > maxProgress) { // enable step
+            this.setState({ maxProgress: step });
+        } else if (!value && step <= maxProgress) { // disable step
+            this.setState({ maxProgress: step - 1 });
         }
     };
 
@@ -101,7 +115,7 @@ class SetupWizard extends Component {
 
     resetToStep = (step) => {
         const { maxProgress } = this.state;
-        this.completedSteps = this.completedSteps.filter(s => !(step <= s && s < maxProgress));
+        this.completedSteps = this.completedSteps.filter((s) => !(step <= s && s < maxProgress));
         this.setState({
             maxProgress: step,
             currentStep: step,
@@ -165,7 +179,7 @@ class SetupWizard extends Component {
                     </h1>
                 )}
                 {description && (
-                    <p dangerouslySetInnerHTML={{ __html: description }} />
+                    <p dangerouslySetInnerHTML={{ __html: description }}/>
                 )}
                 <SetupWizardContext.Provider value={{
                     maxProgress,
@@ -174,6 +188,7 @@ class SetupWizard extends Component {
                     currentStep,
                     contentStyle,
                     stepComplete: this.stepComplete,
+                    stepEnabled: this.stepEnabled,
                     stepRequired: this.stepRequired,
                     previousStep: this.previousStep,
                     nextStep: this.nextStep,
@@ -187,8 +202,12 @@ class SetupWizard extends Component {
                             if (child) {
                                 visibleIndex += 1;
                             }
-                            // eslint-disable-next-line react/no-array-index-key
-                            return React.cloneElement(child, { step: index, showStep: child ? visibleIndex : -1, key: index });
+                            return React.cloneElement(child, {
+                                step: index,
+                                showStep: child ? visibleIndex : -1,
+                                // eslint-disable-next-line react/no-array-index-key
+                                key: index,
+                            });
                         }
                         return child;
                     })}
@@ -227,6 +246,7 @@ SetupWizard.defaultProps = {
 
 SetupWizard.childContextTypes = {
     stepComplete: PropTypes.func,
+    stepEnabled: PropTypes.func,
     previousStep: PropTypes.func,
     nextStep: PropTypes.func,
     toStep: PropTypes.func,

@@ -6,21 +6,6 @@ import classnames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Tag extends PureComponent {
-    static propTypes = {
-        value: PropTypes.object.isRequired,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]).isRequired,
-        onDelete: PropTypes.func,
-        selected: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        onDelete: null,
-        selected: false,
-    };
-
     handleDelete = () => {
         const { value, onDelete } = this.props;
 
@@ -48,3 +33,19 @@ export default class Tag extends PureComponent {
         );
     }
 }
+
+Tag.propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    value: PropTypes.object.isRequired,
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+    onDelete: PropTypes.func,
+    selected: PropTypes.bool,
+};
+
+Tag.defaultProps = {
+    onDelete: null,
+    selected: false,
+};

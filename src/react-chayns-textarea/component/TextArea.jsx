@@ -113,7 +113,7 @@ const TextArea = ({
             onKeyDown={onKeyDown}
             value={value}
             disabled={disabled}
-            onClick={stopPropagation ? event => event.stopPropagation() : null}
+            onClick={stopPropagation ? (event) => event.stopPropagation() : null}
             {...props}
         />
     );

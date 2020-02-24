@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key, jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/no-array-index-key, jsx-a11y/click-events-have-key-events,react/forbid-prop-types,no-underscore-dangle */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,26 +6,6 @@ import classNames from 'classnames';
 import areDatesEqual from '../utils/areDatesEqual';
 
 class DayItem extends PureComponent {
-    static propTypes = {
-        date: PropTypes.instanceOf(Date).isRequired,
-        inMonth: PropTypes.bool.isRequired,
-        onDateSelect: PropTypes.func,
-        activateAll: PropTypes.bool,
-        selected: PropTypes.instanceOf(Date),
-        activated: PropTypes.bool,
-        highlighted: PropTypes.bool,
-        highlightStyle: PropTypes.object,
-    };
-
-    static defaultProps = {
-        selected: null,
-        activated: false,
-        highlighted: false,
-        activateAll: null,
-        highlightStyle: null,
-        onDateSelect: null,
-    };
-
     constructor(props) {
         super(props);
 
@@ -121,5 +101,25 @@ class DayItem extends PureComponent {
         );
     }
 }
+
+DayItem.propTypes = {
+    date: PropTypes.instanceOf(Date).isRequired,
+    inMonth: PropTypes.bool.isRequired,
+    onDateSelect: PropTypes.func,
+    activateAll: PropTypes.bool,
+    selected: PropTypes.instanceOf(Date),
+    activated: PropTypes.bool,
+    highlighted: PropTypes.bool,
+    highlightStyle: PropTypes.object,
+};
+
+DayItem.defaultProps = {
+    selected: null,
+    activated: false,
+    highlighted: false,
+    activateAll: null,
+    highlightStyle: null,
+    onDateSelect: null,
+};
 
 export default DayItem;

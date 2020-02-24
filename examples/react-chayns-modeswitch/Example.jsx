@@ -45,7 +45,7 @@ export default class ModeSwitchExample extends Component {
                 />
                 {
                     mode
-                        ? <p>{`Mode: ${mode.id} ${mode.name} UacId: [ ${mode.uacIds && mode.uacIds.map(uacId => `${uacId} `)} ]`}</p>
+                        ? <p>{`Mode: ${mode.id} ${mode.name} UacId: [ ${mode.uacIds && mode.uacIds.map((uacId) => `${uacId} `)} ]`}</p>
                         : null
                 }
                 <Button onClick={() => {

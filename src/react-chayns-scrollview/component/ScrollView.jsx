@@ -8,27 +8,6 @@ import ReactResizeDetector from 'react-resize-detector';
 import ScrollViewHelper from './ScrollViewHelper';
 
 export default class ScrollView extends Component {
-    static propTypes = {
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        style: PropTypes.object,
-        className: PropTypes.string,
-        scrollElementId: PropTypes.string,
-        scrollElementRef: PropTypes.func,
-        onScroll: PropTypes.func,
-    };
-
-    static defaultProps = {
-        children: null,
-        style: undefined,
-        className: undefined,
-        scrollElementId: undefined,
-        scrollElementRef: null,
-        onScroll: null,
-    };
-
     constructor(props) {
         super(props);
 
@@ -119,7 +98,7 @@ export default class ScrollView extends Component {
                     >
                         <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
                             {children}
-                            <ReactResizeDetector handleHeight onResize={this.handleRefreshScrollView} />
+                            <ReactResizeDetector handleHeight onResize={this.handleRefreshScrollView}/>
                         </div>
                     </div>
                 </div>
@@ -131,3 +110,25 @@ export default class ScrollView extends Component {
         );
     }
 }
+
+ScrollView.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+    className: PropTypes.string,
+    scrollElementId: PropTypes.string,
+    scrollElementRef: PropTypes.func,
+    onScroll: PropTypes.func,
+};
+
+ScrollView.defaultProps = {
+    children: null,
+    style: undefined,
+    className: undefined,
+    scrollElementId: undefined,
+    scrollElementRef: null,
+    onScroll: null,
+};

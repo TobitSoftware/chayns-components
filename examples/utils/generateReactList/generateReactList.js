@@ -15,7 +15,7 @@ function bootstrap() {
     const imports = [];
     const usages = [];
 
-    examples.filter(d => d.example).sort((a, b) => a.title.localeCompare(b.title)).forEach((data, index) => {
+    examples.filter((d) => d.example).sort((a, b) => a.title.localeCompare(b.title)).forEach((data, index) => {
         const importName = `Example${index}`;
 
         imports.push(`import ${importName} from './${data.example}';`);

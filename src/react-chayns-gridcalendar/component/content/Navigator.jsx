@@ -5,27 +5,6 @@ import PropTypes from 'prop-types';
 import Icon from '../../../react-chayns-icon/component/Icon';
 
 export default class Navigator extends PureComponent {
-    static propTypes = {
-        text: PropTypes.string,
-        onClick: PropTypes.shape({
-            left: PropTypes.func.isRequired,
-            right: PropTypes.func.isRequired,
-            day: PropTypes.func.isRequired,
-        }),
-        hidden: PropTypes.shape({
-            left: PropTypes.bool,
-            right: PropTypes.bool,
-        }),
-        days: PropTypes.array,
-    };
-
-    static defaultProps = {
-        text: '',
-        onClick: null,
-        hidden: {},
-        days: [],
-    };
-
     render() {
         const {
             text,
@@ -40,7 +19,7 @@ export default class Navigator extends PureComponent {
                     <div className="calendar__navigator_icon" style={{ transform: 'rotate(180deg)' }}>
                         {hidden.left ? '' : (
                             <span onClick={onClick.left}>
-                                <Icon icon="ts-angle-right" />
+                                <Icon icon="ts-angle-right"/>
                             </span>
                         )}
                     </div>
@@ -48,7 +27,7 @@ export default class Navigator extends PureComponent {
                     <div className="calendar__navigator_icon">
                         {hidden.right ? '' : (
                             <span onClick={onClick.right}>
-                                <Icon icon="ts-angle-right" />
+                                <Icon icon="ts-angle-right"/>
                             </span>
                         )}
                     </div>
@@ -66,7 +45,7 @@ export default class Navigator extends PureComponent {
                                             className="calendar__navigator_days_item ellipsis"
                                             style={{ fontWeight: selected }}
                                             key={j}
-                                            onClick={event => onClick.day(event, value)}
+                                            onClick={(event) => onClick.day(event, value)}
                                         >
                                             {value.name}
                                         </div>
@@ -80,3 +59,25 @@ export default class Navigator extends PureComponent {
         );
     }
 }
+
+Navigator.propTypes = {
+    text: PropTypes.string,
+    onClick: PropTypes.shape({
+        left: PropTypes.func.isRequired,
+        right: PropTypes.func.isRequired,
+        day: PropTypes.func.isRequired,
+    }),
+    hidden: PropTypes.shape({
+        left: PropTypes.bool,
+        right: PropTypes.bool,
+    }),
+    // eslint-disable-next-line react/forbid-prop-types
+    days: PropTypes.array,
+};
+
+Navigator.defaultProps = {
+    text: '',
+    onClick: null,
+    hidden: {},
+    days: [],
+};

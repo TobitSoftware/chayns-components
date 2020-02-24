@@ -15,13 +15,13 @@ export default class FileInputExample extends Component {
 
     onChange = (validFiles) => {
         const { images } = this.state;
-        this.setState({ images: images.concat(validFiles.map(f => ({ file: f }))) });
+        this.setState({ images: images.concat(validFiles.map((f) => ({ file: f }))) });
     };
 
     onClick = async () => {
         const { images } = this.state;
         const data = await chayns.dialog.mediaSelect({ multiselect: true });
-        this.setState({ images: images.concat(data.selection.map(url => ({ url }))) });
+        this.setState({ images: images.concat(data.selection.map((url) => ({ url }))) });
     };
 
     onDelete = (image, index) => {
@@ -92,7 +92,7 @@ export default class FileInputExample extends Component {
                 >
                     {'Upload'}
                 </Button>
-                <p ref={ref => this.logRef = ref} />
+                <p ref={(ref) => this.logRef = ref}/>
                 <FileInput
                     items={[{
                         types: [FileInput.types.ALL],

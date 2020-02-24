@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -19,7 +20,7 @@ const ExpandableListItem = ({ children, ...props }) => {
             className={className}
             header={(
                 <ExpandableList.Context.Consumer>
-                    {c => (
+                    {(c) => (
                         <ExpandableListHeader
                             onClick={c.onToggle}
                             {...props}

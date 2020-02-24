@@ -11,5 +11,5 @@ export default function rgb255ToHex(rgb) {
     const b = Math.round(rgb.b);
     const a = Math.round(rgb.a * 255);
 
-    return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}${isNumber(a) ? componentToHex(a) : ''}`; /* eslint-disable-line no-restricted-globals */
+    return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}${isNumber(a) ? componentToHex(a) : ''}`;
 }

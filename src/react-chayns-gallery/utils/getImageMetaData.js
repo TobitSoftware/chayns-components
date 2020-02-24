@@ -1,4 +1,5 @@
 export async function getImageMetaDataFromApi(url) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
         const response = await fetch(url, {
             method: 'HEAD',
@@ -16,6 +17,7 @@ export async function getImageMetaDataFromApi(url) {
 }
 
 export function getImageMetaDataFromPreview(url) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
         try {
             const image = new Image();

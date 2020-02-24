@@ -29,8 +29,8 @@ export default class GalleryExample extends Component {
                     style={{ marginBottom: '30px' }}
                     images={images}
                     dragMode
-                    onDragEnd={(images) => {
-                        this.setState({ images });
+                    onDragEnd={(imgs) => {
+                        this.setState({ images: imgs });
                     }}
                 />
                 <Gallery

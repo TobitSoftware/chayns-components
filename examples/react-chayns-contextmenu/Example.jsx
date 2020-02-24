@@ -21,6 +21,9 @@ export default class ContextMenuExample extends Component {
         };
 
         this.buttonClick = this.buttonClick.bind(this);
+
+        this.listContextMenu = React.createRef();
+        this.clickContextMenu = React.createRef();
     }
 
     buttonClick() {
@@ -55,12 +58,12 @@ export default class ContextMenuExample extends Component {
                 </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
-                    right={<ContextMenu items={items} position={position % 6} />}
+                    right={<ContextMenu items={items} position={position % 6}/>}
                 >
                     <div className="accordion__content">
                         <p>Hello World</p>
                         <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
-                            <Icon icon={faCoffee} />
+                            <Icon icon={faCoffee}/>
                         </ContextMenu>
                     </div>
                 </Accordion>
@@ -68,7 +71,7 @@ export default class ContextMenuExample extends Component {
                     style={{ height: '100px', width: '100%', margin: '20px 0' }}
                     onClick={(e) => {
                         this.setState({ x: e.clientX, y: e.clientY });
-                        this.clickContextMenu.show();
+                        this.clickContextMenu.current.show();
                     }}
                     id="clickZone"
                     className="chayns__background-color--white-4"
@@ -76,10 +79,10 @@ export default class ContextMenuExample extends Component {
                 <ContextMenu
                     items={items}
                     coordinates={{ x, y }}
-                    ref={ref => this.clickContextMenu = ref}
+                    ref={this.clickContextMenu}
                     onLayerClick={(e) => {
                         console.log(e);
-                        if (e.srcElement.id !== 'clickZone') this.clickContextMenu.hide();
+                        if (e && e.srcElement && e.srcElement.id !== 'clickZone') this.clickContextMenu.current.hide();
                     }}
                 />
                 <div style={{ position: 'relative' }}>
@@ -87,6 +90,7 @@ export default class ContextMenuExample extends Component {
                         height={300}
                         images={[{
                             url: 'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
+                            // eslint-disable-next-line max-len
                             preview: '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoADwDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAgABAwT/xAAjEAEAAwABBQABBQAAAAAAAAABAAIRIQMSMUFRgSJCYWKx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAABEBMVH/2gAMAwEAAhEDEQA/APN2JVc4mViOo9oewyb0qi8+DlgOleQzl+zerRDN9h4iAd4y3khFbnd6fEjXAek+mFMvzPStV7ahv+Tj1acNh3PMUnira1Hh5Zyva1rKvMlcyGVlpOlDZzBDfUdHIM674mBZ5++oba2NR/tFU7jfnr7Le67hmASNIUM7T8MzqNu12mGRGVWr5/awdS36f5eJBxSGJMhmmSrxXfktV3dlKTDXSt3znP2bXqZZsvuUpYUep1C3g/MDbXXllKIWsXXmGUoH/9k=',
                             width: 640,
                             height: 426,
@@ -101,8 +105,9 @@ export default class ContextMenuExample extends Component {
                 </div>
                 <Accordion head="List with one contextMenu for all entries">
                     <List>{
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(number => (
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
                             <ListItem
+                                key={number}
                                 title={`Listentry ${number}`}
                                 subtitle="Description"
                                 right={(
@@ -119,7 +124,7 @@ export default class ContextMenuExample extends Component {
                                             onClick={(e) => {
                                                 const { top, left, width } = e.target.getBoundingClientRect();
                                                 this.setState({ listCoordinates: { x: left + (width / 2), y: top } });
-                                                this.listContextMenu.show();
+                                                this.listContextMenu.current.show();
                                             }}
                                         />
                                     </div>
@@ -133,9 +138,9 @@ export default class ContextMenuExample extends Component {
                     items={items}
                     coordinates={listCoordinates}
                     position={ContextMenu.position.TOP_LEFT}
-                    ref={ref => this.listContextMenu = ref}
+                    ref={this.listContextMenu}
                     onLayerClick={(e) => {
-                        if (!e.target.classList.contains('listTrigger')) this.listContextMenu.hide();
+                        if (e && e.target && !e.target.classList.contains('listTrigger')) this.listContextMenu.current.hide();
                     }}
                 />
                 <div style={{ padding: '10px', marginBottom: '100px' }}>

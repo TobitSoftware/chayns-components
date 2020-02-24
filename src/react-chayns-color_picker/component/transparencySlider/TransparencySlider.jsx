@@ -6,22 +6,6 @@ import './TransparencySlider.scss';
 import { hsvToRgbString } from '../../../utils/color';
 
 export default class TransparencySlider extends PureComponent {
-    static propTypes = {
-        onChange: PropTypes.func,
-        onChangeEnd: PropTypes.func,
-        color: PropTypes.shape({
-            h: PropTypes.number.isRequired,
-            s: PropTypes.number.isRequired,
-            v: PropTypes.number.isRequired,
-            a: PropTypes.number.isRequired,
-        }).isRequired,
-    };
-
-    static defaultProps = {
-        onChange: null,
-        onChangeEnd: null,
-    };
-
     onChange = (value) => {
         const { color, onChange } = this.props;
         if (onChange) {
@@ -63,3 +47,19 @@ export default class TransparencySlider extends PureComponent {
         );
     }
 }
+
+TransparencySlider.propTypes = {
+    onChange: PropTypes.func,
+    onChangeEnd: PropTypes.func,
+    color: PropTypes.shape({
+        h: PropTypes.number.isRequired,
+        s: PropTypes.number.isRequired,
+        v: PropTypes.number.isRequired,
+        a: PropTypes.number.isRequired,
+    }).isRequired,
+};
+
+TransparencySlider.defaultProps = {
+    onChange: null,
+    onChangeEnd: null,
+};

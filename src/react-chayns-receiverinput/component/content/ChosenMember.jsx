@@ -4,26 +4,6 @@ import PropTypes from 'prop-types';
 import Icon from '../../../react-chayns-icon/component/Icon';
 
 export default class ChosenMember extends Component {
-    static propTypes = {
-        removeMember: PropTypes.func.isRequired,
-        name: PropTypes.string.isRequired,
-        locationId: PropTypes.number,
-        personId: PropTypes.string,
-        groupId: PropTypes.number,
-        siteId: PropTypes.string,
-        userId: PropTypes.number,
-        fixed: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        locationId: null,
-        personId: null,
-        groupId: null,
-        siteId: null,
-        userId: null,
-        fixed: false,
-    };
-
     remove = () => {
         const {
             removeMember,
@@ -74,3 +54,23 @@ export default class ChosenMember extends Component {
         );
     }
 }
+
+ChosenMember.propTypes = {
+    removeMember: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    locationId: PropTypes.number,
+    personId: PropTypes.string,
+    groupId: PropTypes.number,
+    siteId: PropTypes.string,
+    userId: PropTypes.number,
+    fixed: PropTypes.bool,
+};
+
+ChosenMember.defaultProps = {
+    locationId: null,
+    personId: null,
+    groupId: null,
+    siteId: null,
+    userId: null,
+    fixed: false,
+};

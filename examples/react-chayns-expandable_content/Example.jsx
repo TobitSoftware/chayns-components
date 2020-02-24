@@ -31,7 +31,7 @@ export default class Example extends Component {
     render() {
         const { open } = this.state;
 
-        return(
+        return (
             <div>
                 <div>
                     <Button onClick={this.toggle}>Toggle</Button>

@@ -21,11 +21,11 @@ function SharingBar({
 
     useEffect(() => {
         getAvailableShareProviders().then((provider) => {
-            setSharingProvider(provider.filter(item => item.available));
+            setSharingProvider(provider.filter((item) => item.available));
         });
     }, []);
 
-    const mobileShare = sharingProvider.find(app => app.id === 10 || app.id === 11);
+    const mobileShare = sharingProvider.find((app) => app.id === 10 || app.id === 11);
 
     if (mobileShare) {
         return (
@@ -43,18 +43,16 @@ function SharingBar({
 
     const sharingItems = [];
 
-    sharingProvider.filter(item => item.available).forEach((x) => {
-        sharingItems.push(
-            {
-                className: null,
-                onClick: (e) => {
-                    if (stopPropagation) e.stopPropagation();
-                    share(x, link, linkText);
-                },
-                text: x.name,
-                icon: x.icon,
+    sharingProvider.filter((item) => item.available).forEach((x) => {
+        sharingItems.push({
+            className: null,
+            onClick: (e) => {
+                if (stopPropagation) e.stopPropagation();
+                share(x, link, linkText);
             },
-        );
+            text: x.name,
+            icon: x.icon,
+        },);
     });
 
     return (
@@ -63,7 +61,7 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon={faShareAlt} className="sharing-bar__icon" />
+                <Icon icon={faShareAlt} className="sharing-bar__icon"/>
                 <span className="sharing-bar_text">Teilen</span>
             </ContextMenu>
         </div>

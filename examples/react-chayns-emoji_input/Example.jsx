@@ -7,20 +7,20 @@ export default class EmojiInputExample extends Component {
         super();
 
         this.state = {
-            text: ''
+            text: '',
         };
     }
 
     handleInput = (event) => {
         this.setState({
-            text: event.target.pureInnerText
+            text: event.target.pureInnerText,
         });
     };
 
     render() {
         const { text } = this.state;
 
-        return(
+        return (
             <div>
                 <EmojiInput
                     onInput={this.handleInput}

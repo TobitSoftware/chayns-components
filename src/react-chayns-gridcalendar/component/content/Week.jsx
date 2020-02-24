@@ -1,27 +1,10 @@
+/* eslint-disable max-len,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { hexStringToRgb } from '../../../utils/color';
 
 export default class Week extends Component {
-    static propTypes = {
-        startTime: PropTypes.objectOf(Date),
-        data: PropTypes.array,
-        onClick: PropTypes.func,
-        focus: PropTypes.objectOf(Date),
-        groupFocus: PropTypes.number,
-        weekWidth: PropTypes.number,
-    };
-
-    static defaultProps = {
-        data: [],
-        startTime: null,
-        onClick: null,
-        focus: null,
-        groupFocus: null,
-        weekWidth: null,
-    };
-
     constructor(props) {
         super(props);
         this.schemeColor = hexStringToRgb(chayns.env.site.color);
@@ -48,7 +31,7 @@ export default class Week extends Component {
             });
             if (day && day.id) {
                 start = Math.round((new Date(day.startTime).getHours() / 24) * 100);
-                percentage = Math.round((day.endTime - day.startTime) / (24 * 60 * 60 * 1000) * 100);
+                percentage = Math.round(((day.endTime - day.startTime) / (24 * 60 * 60 * 1000)) * 100);
                 if (day.color) {
                     /**
                      * For correct calculating of the percentage it is required, that the entry is in one day
@@ -59,9 +42,7 @@ export default class Week extends Component {
                 background = `linear-gradient(to right, rgba(${color.r},${color.g},${color.b},0.5) ${start}%,rgba(${color.r},${color.g},${color.b},1) ${start + 1}%,rgba(${color.r},${color.g},${color.b},1) ${start + percentage}%,rgba(${color.r},${color.g},${color.b},0.5) ${start + percentage + 1}%)`;
             }
 
-            days.push(
-                <div className={classes} style={{ background, backgroundColor }} key={i} onClick={event => onClick(event, day)} />,
-            );
+            days.push(<div className={classes} style={{ background, backgroundColor }} key={i} onClick={(event) => onClick(event, day)}/>,);
         }
         return days;
     }
@@ -80,3 +61,21 @@ export default class Week extends Component {
         );
     }
 }
+
+Week.propTypes = {
+    startTime: PropTypes.objectOf(Date),
+    data: PropTypes.array,
+    onClick: PropTypes.func,
+    focus: PropTypes.objectOf(Date),
+    groupFocus: PropTypes.number,
+    weekWidth: PropTypes.number,
+};
+
+Week.defaultProps = {
+    data: [],
+    startTime: null,
+    onClick: null,
+    focus: null,
+    groupFocus: null,
+    weekWidth: null,
+};

@@ -1,66 +1,27 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
-import PersonFinderData from './PersonFinderData';
 import PersonFinderView from './PersonFinderView';
-import { PERSON_RELATION, LOCATION_RELATION } from '../constants/relationTypes';
-import { convertToInputValue, createInputValue } from '../utils/createInputValue';
-import normalizeOutput from '../utils/normalizeOutput';
-import FriendsDataContainer from './data/friends/FriendsDataContainer';
-import { isFunction } from '../../utils/is';
+import { isFunction, isString } from '../../utils/is';
+import PersonsContext from './data/persons/PersonsContext';
+import { convertPersonForReturn } from './data/persons/PersonsConverter';
 
-export default class SimplePersonFinder extends Component {
-    static propTypes = {
-        onChange: PropTypes.func,
-        showPersons: PropTypes.bool,
-        showSites: PropTypes.bool,
-        showId: PropTypes.bool,
-        className: PropTypes.string,
-        defaultValue: PropTypes.oneOfType([
-            PropTypes.shape({
-                name: PropTypes.string,
-                firstName: PropTypes.string,
-                lastName: PropTypes.string,
-                siteId: PropTypes.string,
-                personId: PropTypes.string,
-            }),
-            PropTypes.string,
-        ]),
-        customData: PropTypes.bool,
-        orm: PropTypes.shape({
-            identifier: PropTypes.string,
-            showName: PropTypes.string,
-        }),
-        removeIcon: PropTypes.bool,
-        onInput: PropTypes.func,
-    };
-
-    static defaultProps = {
-        onChange: null,
-        showPersons: true,
-        showSites: false,
-        defaultValue: null,
-        className: null,
-        showId: false,
-        onInput: null,
-        customData: false,
-        orm: {},
-        removeIcon: false,
-    };
-
-    static PERSON = PERSON_RELATION;
-
-    static LOCATION = LOCATION_RELATION;
-
+class SimplePersonFinder extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: createInputValue(props.defaultValue, props.showId) || '',
+            inputValue: isString(props.defaultValue)
+                ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
         };
+
+        if (isString(props.defaultValue)) {
+            console.warn('[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.');
+        }
 
         this.clear = this.clear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -81,19 +42,21 @@ export default class SimplePersonFinder extends Component {
     handleSelect(type, value) {
         const {
             onChange,
-            showId,
-            customData,
-            orm,
+            context: Context,
         } = this.props;
-        const name = customData ? value[orm.showName] : convertToInputValue(value, showId);
+        const name = value[Context.ObjectMapping.showName];
 
         this.setState({
             inputValue: name,
             selectedValue: true,
         });
 
+        let outValue = value;
         if (onChange) {
-            onChange(customData ? value : normalizeOutput(type, value));
+            if (outValue && outValue.type === 'PERSON') {
+                outValue = convertPersonForReturn(outValue);
+            }
+            onChange(outValue);
         }
     }
 
@@ -116,8 +79,9 @@ export default class SimplePersonFinder extends Component {
             showSites,
             className,
             showId,
-            customData,
             defaultValue,
+            context: Context,
+            contextProps,
             removeIcon,
             ...props
         } = this.props;
@@ -140,23 +104,88 @@ export default class SimplePersonFinder extends Component {
         }
 
         return (
-            <div className={classnames('cc__person-finder', className)}>
-                {customData ? (
-                    <PersonFinderView
-                        {...props}
-                        {...additionalProps}
-                    />
-                ) : (
-                    <FriendsDataContainer>
-                        <PersonFinderData
-                            {...props}
-                            {...additionalProps}
-                            persons={showPersons}
-                            sites={showSites}
-                        />
-                    </FriendsDataContainer>
-                )}
+            <div className={classNames('cc__person-finder', className)}>
+                <Context.Provider
+                    // backward compatibility for previous props
+                    {...(Context.Provider === PersonsContext.Provider ? {
+                        uacId: props.uacId,
+                        locationId: props.locationId,
+                        includeOwn: props.includeOwn,
+                        enableSites: showSites,
+                        enablePersons: showPersons,
+                        enableFriends: !showSites && showPersons && !props.uacId,
+                        reducerFunction: props.reducerFunction,
+                    } : null)}
+                    {...contextProps}
+                >
+                    <Context.Consumer>
+                        {(ctx) => (
+                            <PersonFinderView
+                                {...props}
+                                {...additionalProps}
+                                {...ctx}
+                                orm={Context.ObjectMapping}
+                                inputComponent={Input}
+                                value={inputValue}
+                                selectedValue={selectedValue}
+                                onChange={(value) => {
+                                    this.handleOnChange(value);
+                                    if (typeof ctx.onChange === 'function') {
+                                        ctx.onChange(value);
+                                    }
+                                }}
+                                onSelect={this.handleSelect}
+                            />
+                        )}
+                    </Context.Consumer>
+                </Context.Provider>
             </div>
         );
     }
 }
+
+SimplePersonFinder.propTypes = {
+    onChange: PropTypes.func,
+    showPersons: PropTypes.bool,
+    showSites: PropTypes.bool,
+    showId: PropTypes.bool,
+    className: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.shape({
+            name: PropTypes.string,
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            siteId: PropTypes.string,
+            personId: PropTypes.string,
+        }),
+        PropTypes.string,
+    ]),
+    customData: PropTypes.bool,
+    onInput: PropTypes.func,
+    context: PropTypes.shape({
+        Provider: PropTypes.func,
+        Consumer: PropTypes.object,
+        ObjectMapping: PropTypes.shape({
+            identifier: PropTypes.string,
+            showName: PropTypes.string,
+        }),
+    }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    contextProps: PropTypes.object,
+    removeIcon: PropTypes.bool,
+};
+
+SimplePersonFinder.defaultProps = {
+    onChange: null,
+    showPersons: true,
+    showSites: false,
+    defaultValue: null,
+    className: null,
+    showId: false,
+    onInput: null,
+    customData: false,
+    contextProps: null,
+    removeIcon: false,
+};
+
+export default SimplePersonFinder;

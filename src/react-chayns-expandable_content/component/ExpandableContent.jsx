@@ -29,35 +29,6 @@ const DEFAULT_TIMEOUTS = {
 };
 
 export default class ExpandableContent extends Component {
-    static propTypes = {
-        classNames: PropTypes.shape({
-            opening: PropTypes.string,
-            opened: PropTypes.string,
-            closing: PropTypes.string,
-            closed: PropTypes.string,
-        }),
-        timeout: PropTypes.shape({
-            opening: PropTypes.number,
-            closing: PropTypes.number,
-        }),
-        open: PropTypes.bool.isRequired,
-        style: PropTypes.object,
-        className: PropTypes.string,
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]).isRequired,
-        removeContentClosed: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        classNames: DEFAULT_CLASSNAMES,
-        timeout: DEFAULT_TIMEOUTS,
-        style: null,
-        className: null,
-        removeContentClosed: false,
-    };
-
     static getMaxHeight(state, style) {
         if (state === PRE_CLOSING) {
             return null;
@@ -204,3 +175,33 @@ export default class ExpandableContent extends Component {
         );
     }
 }
+
+ExpandableContent.propTypes = {
+    classNames: PropTypes.shape({
+        opening: PropTypes.string,
+        opened: PropTypes.string,
+        closing: PropTypes.string,
+        closed: PropTypes.string,
+    }),
+    timeout: PropTypes.shape({
+        opening: PropTypes.number,
+        closing: PropTypes.number,
+    }),
+    open: PropTypes.bool.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+    className: PropTypes.string,
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+    removeContentClosed: PropTypes.bool,
+};
+
+ExpandableContent.defaultProps = {
+    classNames: DEFAULT_CLASSNAMES,
+    timeout: DEFAULT_TIMEOUTS,
+    style: null,
+    className: null,
+    removeContentClosed: false,
+};

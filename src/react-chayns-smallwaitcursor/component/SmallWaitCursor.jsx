@@ -1,24 +1,9 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class SmallWaitCursor extends PureComponent {
-    static propTypes = {
-        show: PropTypes.bool,
-        style: PropTypes.object,
-        showBackground: PropTypes.bool,
-        inline: PropTypes.bool,
-        className: PropTypes.string,
-    };
-
-    static defaultProps = {
-        show: false,
-        style: null,
-        showBackground: true,
-        inline: false,
-        className: null,
-    };
-
     render() {
         const {
             show,
@@ -36,7 +21,7 @@ export default class SmallWaitCursor extends PureComponent {
                     })}
                     style={style}
                 >
-                    <div className="wait-cursor__spinner" />
+                    <div className="wait-cursor__spinner"/>
                 </div>
             );
         }
@@ -50,3 +35,19 @@ export default class SmallWaitCursor extends PureComponent {
         );
     }
 }
+
+SmallWaitCursor.propTypes = {
+    show: PropTypes.bool,
+    style: PropTypes.object,
+    showBackground: PropTypes.bool,
+    inline: PropTypes.bool,
+    className: PropTypes.string,
+};
+
+SmallWaitCursor.defaultProps = {
+    show: false,
+    style: null,
+    showBackground: true,
+    inline: false,
+    className: null,
+};

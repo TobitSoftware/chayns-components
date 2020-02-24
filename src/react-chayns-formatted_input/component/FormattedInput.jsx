@@ -5,17 +5,6 @@ import Input from '../../react-chayns-input/component/Input';
 import Formatter from '../utils/Formatter';
 
 export default class FormattedInput extends Component {
-    static propTypes = {
-        initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
-        onChange: PropTypes.func,
-        defaultValue: PropTypes.any, /* eslint-disable-line react/forbid-prop-types */
-    };
-
-    static defaultProps = {
-        onChange: null,
-        defaultValue: null,
-    };
-
     lastSend = null;
 
     constructor(props) {
@@ -118,3 +107,14 @@ export default class FormattedInput extends Component {
         );
     }
 }
+
+FormattedInput.propTypes = {
+    initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
+    onChange: PropTypes.func,
+    defaultValue: PropTypes.any, /* eslint-disable-line react/forbid-prop-types */
+};
+
+FormattedInput.defaultProps = {
+    onChange: null,
+    defaultValue: null,
+};

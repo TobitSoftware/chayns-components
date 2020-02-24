@@ -6,20 +6,15 @@ import Input from '../../../src/react-chayns-input/component/Input';
 import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
 class Step3 extends Component {
-    static propTypes = {
-        notComplete: PropTypes.bool.isRequired,
-        nextStep: PropTypes.func.isRequired,
-        stepComplete: PropTypes.func.isRequired,
-    };
-
     constructor(props, context) {
         super(props, context);
         this.inputOnChange = this.inputOnChange.bind(this);
     }
 
     inputOnChange(value) {
-        const { stepComplete } = this.props;
+        const { stepComplete, stepEnabled } = this.props;
         stepComplete(value !== '');
+        stepEnabled(value !== '', 3);
     }
 
     render() {
@@ -49,5 +44,12 @@ class Step3 extends Component {
         );
     }
 }
+
+Step3.propTypes = {
+    notComplete: PropTypes.bool.isRequired,
+    nextStep: PropTypes.func.isRequired,
+    stepComplete: PropTypes.func.isRequired,
+    stepEnabled: PropTypes.func.isRequired,
+};
 
 export default withSetupWizardContext(Step3);

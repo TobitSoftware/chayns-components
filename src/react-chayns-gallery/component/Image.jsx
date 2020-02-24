@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign */
+/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -9,45 +9,6 @@ import './Image.scss';
 import { isString } from '../../utils/is';
 
 export default class Image extends PureComponent {
-    static propTypes = {
-        image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]).isRequired,
-        onClick: PropTypes.func,
-        moreImages: PropTypes.number,
-        className: PropTypes.string,
-        classNameLandscape: PropTypes.string,
-        classNamePortrait: PropTypes.string,
-        style: PropTypes.object,
-        stylePortrait: PropTypes.object,
-        styleLandscape: PropTypes.object,
-        preventParams: PropTypes.oneOfType([
-            PropTypes.bool,
-            PropTypes.shape({
-                width: PropTypes.bool,
-                height: PropTypes.bool,
-                format: PropTypes.bool,
-            }),
-        ]),
-    };
-
-    static defaultProps = {
-        moreImages: 0,
-        onClick: null,
-        className: '',
-        classNameLandscape: '',
-        classNamePortrait: '',
-        style: {},
-        stylePortrait: {},
-        styleLandscape: {},
-        preventParams: {},
-    };
-
-    static format = {
-        LANDSCAPE: 1,
-        PORTRAIT: 2,
-    };
-
-    static imageMetaData = {};
-
     constructor(props) {
         super(props);
         this.state = {
@@ -168,7 +129,8 @@ export default class Image extends PureComponent {
                                 alt=""
                                 src={preventParams === true
                                     ? imageUrl
-                                    : chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height && elementDimensions.height, !preventParams.width && elementDimensions.width, preventParams.format)}
+                                    : chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height
+                                        && elementDimensions.height, !preventParams.width && elementDimensions.width, preventParams.format)}
                                 className={classNames('cc__image__img', { 'cc__image--clickable': onClick })}
                                 onLoad={this.onReady}
                             />
@@ -186,7 +148,7 @@ export default class Image extends PureComponent {
                                 className={classNames('cc__image__preview', { 'cc__image--clickable': onClick })}
                             />,
                             <div className="cc__image__wait-cursor" key="waitCursor">
-                                <SmallWaitCursor show={!ready} showBackground={false} />
+                                <SmallWaitCursor show={!ready} showBackground={false}/>
                             </div>,
                         ]
                         : null
@@ -195,3 +157,42 @@ export default class Image extends PureComponent {
         );
     }
 }
+
+Image.format = {
+    LANDSCAPE: 1,
+    PORTRAIT: 2,
+};
+
+Image.imageMetaData = {};
+
+Image.propTypes = {
+    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]).isRequired,
+    onClick: PropTypes.func,
+    moreImages: PropTypes.number,
+    className: PropTypes.string,
+    classNameLandscape: PropTypes.string,
+    classNamePortrait: PropTypes.string,
+    style: PropTypes.object,
+    stylePortrait: PropTypes.object,
+    styleLandscape: PropTypes.object,
+    preventParams: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.shape({
+            width: PropTypes.bool,
+            height: PropTypes.bool,
+            format: PropTypes.bool,
+        }),
+    ]),
+};
+
+Image.defaultProps = {
+    moreImages: 0,
+    onClick: null,
+    className: '',
+    classNameLandscape: '',
+    classNamePortrait: '',
+    style: {},
+    stylePortrait: {},
+    styleLandscape: {},
+    preventParams: {},
+};
