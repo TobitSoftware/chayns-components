@@ -48,12 +48,12 @@ class SetupWizard extends Component {
         const selectedStep = step === undefined ? currentStep : step;
 
         if (value && this.completedSteps.indexOf(selectedStep) === -1) {
-            this.completedSteps = this.completedSteps.concat(selectedStep);
+            this.completedSteps.push(selectedStep);
             this.setState({
                 completedSteps: this.completedSteps,
             });
         } else if (!value && this.completedSteps.indexOf(selectedStep) >= 0) {
-            this.completedSteps = this.completedSteps.slice(0, this.completedSteps.indexOf(selectedStep));
+            this.completedSteps.splice(this.completedSteps.indexOf(selectedStep), 1);
             this.setState({
                 completedSteps: this.completedSteps,
                 maxProgress: requiredSteps.indexOf(selectedStep) >= 0 ? selectedStep : maxProgress,

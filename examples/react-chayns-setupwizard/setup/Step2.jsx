@@ -62,6 +62,7 @@ class Step2 extends Component {
 Step2.propTypes = {
     nextStep: PropTypes.func.isRequired,
     stepComplete: PropTypes.func.isRequired,
+    stepEnabled: PropTypes.func.isRequired,
 };
 
 export default withSetupWizardContext(Step2);
