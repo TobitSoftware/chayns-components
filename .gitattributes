@@ -1,1 +1,1 @@
-*.js text lf=eol
+*.js text eol=crlf
