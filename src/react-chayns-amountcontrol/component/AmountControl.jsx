@@ -76,7 +76,7 @@ export default class AmountControl extends PureComponent {
     };
 
     removeItem = () => {
-        const { amount, onRemove, min } = this.props;
+        const { amount, onRemove, min, hasAlwaysControls } = this.props;
 
         if (min && amount - 1 < min) {
             return;
@@ -86,7 +86,7 @@ export default class AmountControl extends PureComponent {
 
         if (amount > 0) {
             this.changeAmount(amount - 1);
-        } else {
+        } else if (!hasAlwaysControls) {
             this.addItem();
         }
     };
@@ -144,12 +144,13 @@ export default class AmountControl extends PureComponent {
             plusIcon,
             max,
             min,
+            hasAlwaysControls,
         } = this.props;
         const { tempAmount, tempValue } = this.state;
 
         return (
             <div className={classNames('cc__amount-control choosebutton', className, {
-                'cc__amount-control--active': amount > 0,
+                'cc__amount-control--active': amount > 0 || hasAlwaysControls,
                 'cc__amount-control--disabled': disabled,
             })}
             >
@@ -157,8 +158,8 @@ export default class AmountControl extends PureComponent {
                     stopPropagation={stopPropagation}
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
-                    disabled={disabled || disableRemove || (min && (amount <= min))}
-                    className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon })}
+                    disabled={disabled || disableRemove || (amount <= (0 || min))}
+                    className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon || hasAlwaysControls })}
                     color={(icon && !tempAmount) ? iconColor : removeColor}
                 />
                 <AmountInput
@@ -174,7 +175,7 @@ export default class AmountControl extends PureComponent {
                     disabled={disabled}
                     disableInput={disableInput}
                     buttonFormatHandler={buttonFormatHandler}
-                    showInput={tempAmount !== 0 || tempValue !== 0 || showInputProp}
+                    showInput={tempAmount !== 0 || tempValue !== 0 || showInputProp || hasAlwaysControls}
                     tempAmount={tempAmount}
                     tempValue={tempValue}
                     focusOnClick={focusOnClick}
@@ -184,7 +185,7 @@ export default class AmountControl extends PureComponent {
                     icon={plusIcon}
                     onClick={this.addItem}
                     disabled={disabled || disableAdd || (max && (amount >= max))}
-                    className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 })}
+                    className={classNames('cc__amount-control__add', { 'cc__amount-control--icon': amount > 0 || hasAlwaysControls })}
                     color={addColor}
                 />
             </div>
@@ -220,6 +221,7 @@ AmountControl.propTypes = {
     min: PropTypes.number,
     max: PropTypes.number,
     stopPropagation: PropTypes.bool,
+    hasAlwaysControls: PropTypes.bool,
 };
 
 AmountControl.defaultProps = {
@@ -250,4 +252,5 @@ AmountControl.defaultProps = {
     plusIcon: faPlus,
     minusIcon: faMinus,
     removeIcon: faMinus,
+    hasAlwaysControls: false,
 };

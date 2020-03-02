@@ -55,6 +55,7 @@ You can set the following props on a AmountControl element:
 | contentWidth  | The width of the amountControl content                                                  | number   |         |
 | min           | The minimal value of the AmountControl (onInput will not be validated)                  | number   |         |
 | max           | The maximal value of the AmountControl (onInput will not be validated)                  | number   |         |
+| hasAlwaysControls | The AmountControl will always have +/- buttons                                      | bool     | false   |
 
 The shopStyle property is deprecated and will no longer be supported. You can get the shopStyle by setting the 
 icon-, iconColor-, addColor-, removeColor- and focusOnClick-properties. 
