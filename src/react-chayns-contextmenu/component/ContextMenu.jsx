@@ -114,7 +114,8 @@ export default class ContextMenu extends Component {
     }
 
     show() {
-        if (chayns.env.isMobile || chayns.env.isTablet) {
+        const { disableDialog } = this.props;
+        if (!disableDialog && (chayns.env.isMobile || chayns.env.isTablet)) {
             this.showSelectDialog();
         } else {
             this.getPosition();
@@ -259,6 +260,7 @@ ContextMenu.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     removeParentSpace: PropTypes.bool,
+    disableDialog: PropTypes.bool,
 };
 
 ContextMenu.defaultProps = {
@@ -278,4 +280,5 @@ ContextMenu.defaultProps = {
     className: null,
     style: null,
     removeParentSpace: false,
+    disableDialog: false,
 };
