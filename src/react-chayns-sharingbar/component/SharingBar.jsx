@@ -11,7 +11,7 @@ import share from './sharingActions';
 import './sharingBar.scss';
 
 function SharingBar({
-    link,
+    link: linkProp,
     linkText,
     className,
     stopPropagation,
@@ -20,12 +20,18 @@ function SharingBar({
     const [sharingProvider, setSharingProvider] = useState([]);
 
     useEffect(() => {
-        getAvailableShareProviders().then((provider) => {
-            setSharingProvider(provider.filter((item) => item.available));
-        });
+        getAvailableShareProviders()
+            .then((provider) => {
+                setSharingProvider(provider.filter((item) => item.available));
+            });
     }, []);
 
     const mobileShare = sharingProvider.find((app) => app.id === 10 || app.id === 11);
+
+    let link = linkProp;
+    if (!link) {
+        link = getDefaultShareLink();
+    }
 
     if (mobileShare) {
         return (
@@ -34,7 +40,7 @@ function SharingBar({
                 name={mobileShare.name}
                 provider={mobileShare}
                 key={mobileShare.id}
-                link={link || getDefaultShareLink()}
+                link={link}
                 linkText={linkText}
                 stopPropagation={stopPropagation}
             />
@@ -43,17 +49,18 @@ function SharingBar({
 
     const sharingItems = [];
 
-    sharingProvider.filter((item) => item.available).forEach((x) => {
-        sharingItems.push({
-            className: null,
-            onClick: (e) => {
-                if (stopPropagation) e.stopPropagation();
-                share(x, link, linkText);
-            },
-            text: x.name,
-            icon: x.icon,
-        },);
-    });
+    sharingProvider.filter((item) => item.available)
+        .forEach((x) => {
+            sharingItems.push({
+                className: null,
+                onClick: (e) => {
+                    if (stopPropagation) e.stopPropagation();
+                    share(x, link, linkText);
+                },
+                text: x.name,
+                icon: x.icon,
+            });
+        });
 
     return (
         <div className={classNames('sharing-bar', className)} style={style}>

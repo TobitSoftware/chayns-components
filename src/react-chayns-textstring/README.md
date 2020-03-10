@@ -23,7 +23,7 @@ Then, you need to load your lib before your components are rendered:
     });
 ```
 
-Then it can be used like in the following example:
+After this, it can be used like in the following example:
 ```jsx harmony
     <TextString
         stringName="txt_chayns_textStringTest"
@@ -35,7 +35,11 @@ Then it can be used like in the following example:
 ```
 
 If you need the textString as a string, e.g. for a dialog, you can use the static method `TextString.getTextString(stringName)`.
+Note that changing the textString via STRG+Click is not available with this function.
 
+There is a working example in the examples folder. Take a look at it to learn more about the usage of the TextString component:
+- [index.jsx](https://github.com/TobitSoftware/chayns-components/blob/master/examples/index.jsx) (loading libraries)
+- [Example.jsx](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-textstring/Example.jsx) (usage of the React component)
 
 ## Props ##
 
@@ -50,8 +54,3 @@ If you need the textString as a string, e.g. for a dialog, you can use the stati
 | setProps | StringNames for children Props e.g. placeholder or accordion head                        | object   |
 | setProps.fallback | Fallback strings for setProps                                                   | object   |
 | preventNoTranslate | Prevents setting no-translate class to children if textString language is the same as tapp language | bool |
-
-
-## Example ##
-
-You can take a look at the **examples** folder in the **react-chayns-textstring** repository. There you can find an appropriate way of implementing the **TextString** to your chayns-Tapp.

@@ -31,13 +31,17 @@ export default class InputBox extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('click', this.handleBlur);
+        document.addEventListener('mousedown', this.handleBlur);
+        document.addEventListener('touchstart', this.handleBlur);
+
         window.addEventListener('blur', this.blur);
         window.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('click', this.handleBlur);
+        document.removeEventListener('mousedown', this.handleBlur);
+        document.removeEventListener('touchstart', this.handleBlur);
+
         window.removeEventListener('blur', this.blur);
         window.removeEventListener('keydown', this.handleKeyDown);
     }

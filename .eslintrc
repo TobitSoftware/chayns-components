@@ -20,7 +20,7 @@
       "ignorePropertyModificationsFor": ["draftState"]
     }],
     "indent": ["error", 4, { "SwitchCase": 1 }],
-//    "linebreak-style": ["error", "windows"],
+    "linebreak-style": "off",
     "max-len": ["error", { "code": 150 }],
     "no-plusplus": "off",
     "strict": "off",

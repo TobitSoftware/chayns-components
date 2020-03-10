@@ -23,6 +23,7 @@ const AmountControlExample = () => {
                 focusOnClick={false}
                 icon={faShoppingCart}
                 stopPropagation
+                hasAlwaysControls
             />
 
             <br/>

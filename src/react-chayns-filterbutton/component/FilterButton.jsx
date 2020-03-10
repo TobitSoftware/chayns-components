@@ -62,7 +62,7 @@ const FilterButton = ({
                 checked={checked}
                 disabled={disabled}
             />
-            <span className="chayns__color--text">
+            <span className="label chayns__color--text">
                 {icon ? (
                     <Icon
                         icon={icon}

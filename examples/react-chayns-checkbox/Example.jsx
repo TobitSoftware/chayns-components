@@ -15,6 +15,7 @@ export default function CheckboxExample() {
                     toggleButton
                     defaultChecked={false}
                     stopPropagation
+                    id="chechboxId"
                 />
             </div>
 

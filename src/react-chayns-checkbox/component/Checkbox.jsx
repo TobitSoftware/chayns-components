@@ -6,9 +6,9 @@ import ToggleButton from '../views/ToggleButton';
 import CheckboxView from '../views/Checkbox';
 
 export default class Checkbox extends PureComponent {
-    constructor() {
-        super();
-        this.id = Math.random();
+    constructor(props) {
+        super(props);
+        this.id = props.id ? props.id : Math.random();
     }
 
     onChange = () => {
@@ -24,7 +24,9 @@ export default class Checkbox extends PureComponent {
             <CheckboxView
                 {...props}
                 id={this.id}
-                ref={(ref) => { this.node = ref; }}
+                ref={(ref) => {
+                    this.node = ref;
+                }}
                 onChange={this.onChange}
             />
         );
@@ -35,7 +37,9 @@ export default class Checkbox extends PureComponent {
             <ToggleButton
                 {...props}
                 id={this.id}
-                ref={(ref) => { this.node = ref; }}
+                ref={(ref) => {
+                    this.node = ref;
+                }}
                 onChange={this.onChange}
             />
         );
@@ -76,6 +80,7 @@ Checkbox.propTypes = {
     disabled: PropTypes.bool,
     dangerouslySetLabel: PropTypes.object,
     stopPropagation: PropTypes.bool,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 Checkbox.defaultProps = {
@@ -92,4 +97,5 @@ Checkbox.defaultProps = {
     disabled: false,
     dangerouslySetLabel: null,
     stopPropagation: false,
+    id: null,
 };
