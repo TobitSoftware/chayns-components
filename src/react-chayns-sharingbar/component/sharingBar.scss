@@ -1,5 +1,8 @@
 .sharing-bar {
-  cursor: pointer;
+  > div {
+    cursor: pointer;
+  }
+
   &__icon {
     margin-right: 5px;
   }
