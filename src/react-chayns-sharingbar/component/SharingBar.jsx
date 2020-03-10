@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 import Icon from '../../react-chayns-icon/component/Icon';
