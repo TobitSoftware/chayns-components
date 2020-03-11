@@ -3,7 +3,6 @@ import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 
 export const shareOptions = {
     COPY: 0,
@@ -66,7 +65,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
-        icon: "far fa-share-alt",
+        icon: 'far fa-share-alt',
         url: null,
         available: false,
     },
@@ -75,7 +74,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
-        icon: "far fa-share-alt",
+        icon: 'far fa-share-alt',
         url: null,
         available: false,
     },
