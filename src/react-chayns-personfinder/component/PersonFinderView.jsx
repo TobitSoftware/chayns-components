@@ -5,21 +5,49 @@ import classNames from 'classnames';
 import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
+import getListLength from '../utils/getListLength';
+import mod from '../../utils/modulo';
+import getSelectedListItem from '../utils/getSelectedListItem';
 
 const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
-    state = { lazyLoading: false };
+    state = {
+        lazyLoading: false,
+        focusIndex: null,
+    };
+
+    updateIndex = (focusIndex) => {
+        this.setState({ focusIndex });
+        const { data } = this.props;
+        if (focusIndex !== null) this.resultList.scrollTo(0, (63 * (mod(focusIndex, getListLength(data)) - 1)));
+    };
 
     handleKeyDown = (ev) => {
         if (!this.resultList) return;
+        const { focusIndex } = this.state;
+        const {
+            onSelect,
+            data,
+        } = this.props;
 
-        if ((ev.keyCode === 9 || ev.keyCode === 40)) {
-            const item = this.resultList.querySelector('.result-item');
-            if (item) {
-                ev.preventDefault();
-                item.focus();
+        if (ev.keyCode === 40) { // Arrow down
+            if (focusIndex === null) {
+                this.updateIndex(0);
+            } else {
+                this.updateIndex(focusIndex + 1);
             }
+        } else if (ev.keyCode === 38) { // Arrow up
+            if (focusIndex === null) {
+                this.updateIndex(0);
+            } else {
+                this.updateIndex(focusIndex - 1);
+            }
+        } else if (ev.keyCode === 27) { // Esc
+            this.updateIndex(null);
+            this.boxRef.blur();
+        } else if (ev.keyCode === 13) { // Enter
+            onSelect(undefined, getSelectedListItem(data, mod(focusIndex, getListLength(data))));
         }
     };
 
@@ -47,7 +75,8 @@ class PersonFinderView extends Component {
         return Array.isArray(orm.groups)
             ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value))
                 && Array.isArray(data[group]) && data[group].length)
-            : !!((Array.isArray(data) && data.length) || Object.values(data).some((d) => Array.isArray(d) && d.length));
+            : !!((Array.isArray(data) && data.length) || Object.values(data)
+                .some((d) => Array.isArray(d) && d.length));
     };
 
     renderChildren() {
@@ -61,6 +90,8 @@ class PersonFinderView extends Component {
             onLoadMore,
             showWaitCursor: waitCursor,
         } = this.props;
+
+        const { focusIndex } = this.state;
 
         const hasEntries = this.hasEntries();
 
@@ -78,11 +109,13 @@ class PersonFinderView extends Component {
                     }}
                     showWaitCursor={waitCursor}
                     hasMore={hasMore}
+                    focusIndex={focusIndex}
                 />
             );
         }
 
-        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
+        if (waitCursor === true || Object.values(waitCursor)
+            .some((x) => x)) {
             return (
                 <WaitCursor key="wait-cursor"/>
             );
@@ -108,10 +141,18 @@ class PersonFinderView extends Component {
             <InputBox
                 parent={parent}
                 key="single"
-                ref={boxRef}
+                ref={(ref) => {
+                    if (boxRef) {
+                        boxRef(ref);
+                    }
+                    this.boxRef = ref;
+                }}
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
-                onAddTag={(data) => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
+                onAddTag={(data) => onSelect(undefined, {
+                    [orm.identifier]: data.text,
+                    [orm.showName]: data.text,
+                })}
                 value={value}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{

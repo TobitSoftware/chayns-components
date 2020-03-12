@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ResultItemList from './ResultItemList';
+import mod from '../../utils/modulo';
 
 const PersonFinderResults = ({
     data,
@@ -10,28 +11,45 @@ const PersonFinderResults = ({
     onLoadMore,
     showWaitCursor,
     onSelect,
+    focusIndex,
 }) => {
     const handleClick = useCallback((value) => {
         if (onSelect) {
+            console.log('value.type, value.relation', value.type, value.relation);
             onSelect(value.type, value.relation);
         }
     }, [onSelect]);
 
+    let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, lang, show }) => (typeof show === 'function' && !show(inputValue) ? null : (
-            <div className="cc__person-finder__results" key={`resultList_${group}`}>
-                <ResultItemList
-                    data={typeof orm.filter === 'function' ? (data[group] || []).filter(orm.filter(inputValue)) : (data[group] || [])}
-                    orm={orm}
-                    group={group}
-                    separator={lang[chayns.env.language] || lang.en}
-                    hasMore={hasMore[group]}
-                    onLoadMore={onLoadMore}
-                    showWaitCursor={showWaitCursor[group]}
-                    onClick={handleClick}
-                />
-            </div>
-        )));
+        return orm.groups.map(({ key: group, lang, show }) => {
+            if (typeof show === 'function' && !show(inputValue)) {
+                return null;
+            }
+            const groupData = typeof orm.filter === 'function' ? (data[group] || []).filter(orm.filter(inputValue)) : (data[group] || []);
+            const groupLength = groupData.length;
+            length += groupLength;
+            let groupFocusIndex = null;
+            if (length - groupLength <= focusIndex && focusIndex < length) {
+                groupFocusIndex = mod(focusIndex - (length - groupLength), groupData.length);
+            }
+            console.log(groupFocusIndex, groupLength, length, lang[chayns.env.language] || lang.en);
+            return (
+                <div className="cc__person-finder__results" key={`resultList_${group}`}>
+                    <ResultItemList
+                        data={groupData}
+                        orm={orm}
+                        group={group}
+                        separator={lang[chayns.env.language] || lang.en}
+                        hasMore={hasMore[group]}
+                        onLoadMore={onLoadMore}
+                        showWaitCursor={showWaitCursor[group]}
+                        onClick={handleClick}
+                        focusIndex={groupFocusIndex}
+                    />
+                </div>
+            );
+        });
     }
 
     return (
@@ -43,6 +61,7 @@ const PersonFinderResults = ({
                 onLoadMore={onLoadMore}
                 showWaitCursor={showWaitCursor}
                 onClick={handleClick}
+                focusIndex={focusIndex}
             />
         </div>
     );
@@ -71,6 +90,7 @@ PersonFinderResults.propTypes = {
         PropTypes.objectOf(PropTypes.bool),
         PropTypes.bool,
     ]),
+    focusIndex: PropTypes.number,
 };
 
 PersonFinderResults.defaultProps = {
@@ -79,6 +99,7 @@ PersonFinderResults.defaultProps = {
     onSelect: null,
     hasMore: false,
     showWaitCursor: false,
+    focusIndex: null,
 };
 
 export default PersonFinderResults;

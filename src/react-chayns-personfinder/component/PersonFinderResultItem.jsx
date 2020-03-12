@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 import React, { useCallback } from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
 
-const PersonFinderResultItem = ({ onClick, data, orm }) => {
+const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
     const handleClick = useCallback(() => {
         onClick({
             relation: data,
@@ -63,7 +64,7 @@ const PersonFinderResultItem = ({ onClick, data, orm }) => {
 
     return (
         <div
-            className="result-item"
+            className={classNames('result-item', { 'result-item--focused': isFocused })}
             tabIndex="-1"
             onClick={handleClick}
             onKeyDown={onKeyDown}
@@ -109,6 +110,7 @@ PersonFinderResultItem.propTypes = {
     onClick: PropTypes.func.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
+    isFocused: PropTypes.bool.isRequired,
 };
 
 export default PersonFinderResultItem;
