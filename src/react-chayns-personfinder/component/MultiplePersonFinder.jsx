@@ -37,6 +37,21 @@ class MultiplePersonFinder extends Component {
         }
     }
 
+    getValues() {
+        const { values: valuesProps, context } = this.props;
+        if (valuesProps) {
+            return valuesProps.map((v) => {
+                const value = context.ValueConverter ? context.ValueConverter(v) : v;
+                return {
+                    text: value[context.ObjectMapping.showName],
+                    value,
+                };
+            });
+        }
+        const { values: valuesState } = this.state;
+        return valuesState;
+    }
+
     handleOnChange(inputValue, ...other) {
         const { onInput } = this.props;
         this.setState({
@@ -127,7 +142,7 @@ class MultiplePersonFinder extends Component {
             max,
             ...props
         } = this.props;
-        const { inputValue, selectedValue, values } = this.state;
+        const { inputValue, selectedValue } = this.state;
 
         return (
             <div className={classNames('cc__person-finder', className)}>
@@ -158,8 +173,8 @@ class MultiplePersonFinder extends Component {
                                     this.boxRef = ref;
                                 }}
                                 value={inputValue}
-                                tags={values}
-                                selectedValue={selectedValue || (max && values.length >= max)}
+                                tags={this.getValues()}
+                                selectedValue={selectedValue || (max && this.getValues().length >= max)}
                                 onChange={(...value) => {
                                     this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
@@ -215,6 +230,8 @@ MultiplePersonFinder.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
     max: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    values: PropTypes.array,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -230,6 +247,7 @@ MultiplePersonFinder.defaultProps = {
     onInput: null,
     contextProps: null,
     max: null,
+    values: null,
 };
 
 export default MultiplePersonFinder;
