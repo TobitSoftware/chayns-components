@@ -41,3 +41,5 @@ The following properties can be set on the Input-Component
 | stopPropagation | Stops the click propagation to parent elements                                 | bool           | false         |
 | required     | Input is invalid if there is no value                                             | bool           | false         |
 | disabled     | Disables the input                                                                | bool           | false         |
+
+Note: The functions onEnter, onChange and onBlur return three values: the input value, if the input is valid and the event.
