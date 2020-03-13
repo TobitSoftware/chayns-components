@@ -6,7 +6,6 @@ import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
 import getListLength from '../utils/getListLength';
-import mod from '../../utils/modulo';
 import getSelectedListItem from '../utils/getSelectedListItem';
 
 const LAZY_LOADING_SPACE = 100;
@@ -17,10 +16,31 @@ class PersonFinderView extends Component {
         focusIndex: null,
     };
 
-    updateIndex = (focusIndex) => {
+    updateIndex = (index) => {
+        const { data, value, orm } = this.props;
+        let focusIndex = index;
+        if (focusIndex !== null) {
+            const listLength = getListLength(data, orm, value);
+            if (focusIndex >= listLength) {
+                focusIndex = listLength - 1;
+            } else if (focusIndex < 0) {
+                focusIndex = 0;
+            }
+            // if (this.animationFrameId) {
+            //     window.cancelAnimationFrame(this.animationFrameId);
+            // }
+            if (!this.animationFrameId) {
+                this.animationFrameId = window.requestAnimationFrame(() => {
+                    this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                    this.animationFrameId = null;
+                });
+            }
+        }
         this.setState({ focusIndex });
-        const { data } = this.props;
-        if (focusIndex !== null) this.resultList.scrollTo(0, (63 * (mod(focusIndex, getListLength(data)) - 1)));
+    };
+
+    handleOnBlur = () => {
+        this.updateIndex(null);
     };
 
     handleKeyDown = (ev) => {
@@ -29,25 +49,35 @@ class PersonFinderView extends Component {
         const {
             onSelect,
             data,
+            orm,
+            value,
         } = this.props;
 
-        if (ev.keyCode === 40) { // Arrow down
-            if (focusIndex === null) {
-                this.updateIndex(0);
-            } else {
-                this.updateIndex(focusIndex + 1);
-            }
-        } else if (ev.keyCode === 38) { // Arrow up
-            if (focusIndex === null) {
-                this.updateIndex(0);
-            } else {
-                this.updateIndex(focusIndex - 1);
-            }
-        } else if (ev.keyCode === 27) { // Esc
-            this.updateIndex(null);
-            this.boxRef.blur();
-        } else if (ev.keyCode === 13) { // Enter
-            onSelect(undefined, getSelectedListItem(data, mod(focusIndex, getListLength(data))));
+        switch (ev.keyCode) {
+            case 40: // Arrow down
+                if (focusIndex === null) {
+                    this.updateIndex(0);
+                } else {
+                    this.updateIndex(focusIndex + 1);
+                }
+                break;
+            case 38: // Arrow up
+                if (focusIndex === null) {
+                    this.updateIndex(0);
+                } else {
+                    this.updateIndex(focusIndex - 1);
+                }
+                break;
+            case 27: // Esc
+                this.updateIndex(null);
+                this.boxRef.blur();
+                break;
+            case 13: // Enter
+                onSelect(undefined, getSelectedListItem(data, focusIndex, orm, value));
+                this.updateIndex(null);// TODO nicht bei freunden
+                break;
+            default:
+                break;
         }
     };
 
@@ -134,11 +164,13 @@ class PersonFinderView extends Component {
             parent,
             orm,
             boxRef,
+            onChange,
             ...props
         } = this.props;
 
         return (
             <InputBox
+                onBlur={this.handleOnBlur}
                 parent={parent}
                 key="single"
                 ref={(ref) => {
@@ -160,6 +192,10 @@ class PersonFinderView extends Component {
                         this.resultList = ref;
                     },
                     onScroll: this.handleLazyLoad,
+                }}
+                onChange={(e) => {
+                    onChange(e);
+                    this.updateIndex(null);
                 }}
                 {...props}
             >
@@ -207,6 +243,7 @@ PersonFinderView.propTypes = {
         PropTypes.objectOf(PropTypes.bool),
         PropTypes.bool,
     ]),
+    onChange: PropTypes.func,
 };
 
 PersonFinderView.defaultProps = {
@@ -220,6 +257,7 @@ PersonFinderView.defaultProps = {
     parent: document.querySelector('.tapp'),
     boxRef: null,
     showWaitCursor: false,
+    onChange: null,
 };
 
 export default PersonFinderView;

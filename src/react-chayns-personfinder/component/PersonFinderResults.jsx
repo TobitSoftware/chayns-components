@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ResultItemList from './ResultItemList';
-import mod from '../../utils/modulo';
 
 const PersonFinderResults = ({
     data,
@@ -15,7 +14,6 @@ const PersonFinderResults = ({
 }) => {
     const handleClick = useCallback((value) => {
         if (onSelect) {
-            console.log('value.type, value.relation', value.type, value.relation);
             onSelect(value.type, value.relation);
         }
     }, [onSelect]);
@@ -30,10 +28,9 @@ const PersonFinderResults = ({
             const groupLength = groupData.length;
             length += groupLength;
             let groupFocusIndex = null;
-            if (length - groupLength <= focusIndex && focusIndex < length) {
-                groupFocusIndex = mod(focusIndex - (length - groupLength), groupData.length);
+            if (length - groupLength <= focusIndex && focusIndex < length && focusIndex !== null) {
+                groupFocusIndex = focusIndex - (length - groupLength);
             }
-            console.log(groupFocusIndex, groupLength, length, lang[chayns.env.language] || lang.en);
             return (
                 <div className="cc__person-finder__results" key={`resultList_${group}`}>
                     <ResultItemList

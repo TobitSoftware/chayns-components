@@ -23,10 +23,8 @@ const ResultItemList = ({
         return null;
     }
 
-    console.log('resultitemlist', focusIndex, separator);
-
     return (
-        <div className={classNames('cc__person-finder__results-list', className)}>
+        <div className={classNames('cc__person-finder__results-list', className, { 'cc__person-finder__results-list--noTransition': focusIndex !== null })}>
             {separator && (
                 <Divider
                     key={`${separator}-divider`}
