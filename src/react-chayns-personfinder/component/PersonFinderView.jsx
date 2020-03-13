@@ -71,8 +71,11 @@ class PersonFinderView extends Component {
                 this.boxRef.blur();
                 break;
             case 13: // Enter
-                onSelect(undefined, getSelectedListItem(data, focusIndex, orm, value));
-                this.updateIndex(null);// TODO nicht bei freunden
+                if (focusIndex !== null) {
+                    onSelect(undefined, getSelectedListItem(data, focusIndex, orm, value));
+                    this.updateIndex(null);
+                    this.resultList.scrollTo(0, 0);
+                }
                 break;
             default:
                 break;
