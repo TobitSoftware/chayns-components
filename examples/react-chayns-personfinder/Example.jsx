@@ -91,6 +91,7 @@ export default class PersonFinderExample extends PureComponent {
                             ],
                         });
                     }}
+                    onInput={console.log}
                     defaultValues={moreReceiver}
                     onRemove={(value) => {
                         const newReceiver = moreReceiver.filter((rec) => rec.userId !== value.userId);

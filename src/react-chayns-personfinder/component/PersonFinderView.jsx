@@ -26,15 +26,13 @@ class PersonFinderView extends Component {
             } else if (focusIndex < 0) {
                 focusIndex = 0;
             }
-            // if (this.animationFrameId) {
-            //     window.cancelAnimationFrame(this.animationFrameId);
-            // }
-            if (!this.animationFrameId) {
-                this.animationFrameId = window.requestAnimationFrame(() => {
-                    this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
-                    this.animationFrameId = null;
-                });
+            if (this.animationFrameId) {
+                window.cancelAnimationFrame(this.animationFrameId);
             }
+            this.animationFrameId = window.requestAnimationFrame(() => {
+                this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                this.animationFrameId = null;
+            });
         }
         this.setState({ focusIndex });
     };
@@ -193,8 +191,8 @@ class PersonFinderView extends Component {
                     },
                     onScroll: this.handleLazyLoad,
                 }}
-                onChange={(e) => {
-                    onChange(e);
+                onChange={(...e) => {
+                    onChange(...e);
                     this.updateIndex(null);
                 }}
                 {...props}

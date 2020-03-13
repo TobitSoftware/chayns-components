@@ -29,7 +29,7 @@ export default class TagInput extends Component {
         this.input = ref;
     }
 
-    handleChange(value) {
+    handleChange(...value) {
         const { onChange } = this.props;
 
         this.setState({
@@ -37,7 +37,7 @@ export default class TagInput extends Component {
         });
 
         if (onChange) {
-            onChange(value);
+            onChange(...value);
         }
     }
 

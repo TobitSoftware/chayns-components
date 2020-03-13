@@ -37,14 +37,14 @@ class MultiplePersonFinder extends Component {
         }
     }
 
-    handleOnChange(inputValue) {
+    handleOnChange(inputValue, ...other) {
         const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
         if (onInput) {
-            onInput(inputValue);
+            onInput(inputValue, ...other);
         }
     }
 
@@ -155,10 +155,10 @@ class MultiplePersonFinder extends Component {
                                 value={inputValue}
                                 tags={values}
                                 selectedValue={selectedValue}
-                                onChange={(value) => {
-                                    this.handleOnChange(value);
+                                onChange={(...value) => {
+                                    this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
-                                        ctx.onChange(value);
+                                        ctx.onChange(...value);
                                     }
                                 }}
                                 onRemoveTag={this.handleTagRemove}
