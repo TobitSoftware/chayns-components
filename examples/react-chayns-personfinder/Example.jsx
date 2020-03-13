@@ -74,6 +74,7 @@ export default class PersonFinderExample extends PureComponent {
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
+                    max={3}
                     placeholder="Empfänger"
                     showPersons
                     multiple
@@ -281,7 +282,7 @@ export default class PersonFinderExample extends PureComponent {
                 <Button
                     onClick={this.clear}
                 >
-                    {'Clear all'}
+                    Clear all
                 </Button>
             </div>
         );

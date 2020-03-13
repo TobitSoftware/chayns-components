@@ -124,6 +124,7 @@ class MultiplePersonFinder extends Component {
             showId,
             context: Context,
             contextProps,
+            max,
             ...props
         } = this.props;
         const { inputValue, selectedValue, values } = this.state;
@@ -150,11 +151,15 @@ class MultiplePersonFinder extends Component {
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={TagInput}
-                                inputRef={(ref) => { this.input = ref; }}
-                                boxRef={(ref) => { this.boxRef = ref; }}
+                                inputRef={(ref) => {
+                                    this.input = ref;
+                                }}
+                                boxRef={(ref) => {
+                                    this.boxRef = ref;
+                                }}
                                 value={inputValue}
                                 tags={values}
-                                selectedValue={selectedValue}
+                                selectedValue={selectedValue || (max && values.length >= max)}
                                 onChange={(...value) => {
                                     this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
@@ -209,6 +214,7 @@ MultiplePersonFinder.propTypes = {
     }).isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
+    max: PropTypes.number,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -223,6 +229,7 @@ MultiplePersonFinder.defaultProps = {
     defaultValues: [],
     onInput: null,
     contextProps: null,
+    max: null,
 };
 
 export default MultiplePersonFinder;
