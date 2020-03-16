@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 const SetupWizardContext = createContext({
-    maxProgress: 0,
+    enabledSteps: [],
     completedSteps: [],
     requiredSteps: [],
     currentStep: -1,
