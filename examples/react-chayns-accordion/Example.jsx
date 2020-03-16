@@ -7,11 +7,14 @@ import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMen
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 import { TestComponent } from './TestComponent';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true, searchValue: '', open: false };
+        this.accordionRef = React.createRef();
+        this.accordionDivRef = null;
     }
 
     render() {
@@ -65,7 +68,13 @@ export default class AccordionExample extends Component {
                                     console.log('onClose');
                                     this.setState({ open: false });
                                 }}
+                                ref={this.accordionRef}
+                                reference={(ref) => { this.accordionDivRef = ref; }}
                             >
+                                <Button onClick={() => { this.setState({ searchValue: '' }); }}>Clear search input</Button>
+                                <Button onClick={() => { console.log('reference ref', this.accordionDivRef, this.accordionRef); }}>
+                                    Log reference & ref
+                                </Button>
                                 <div className="accordion__item">
                                     Hello World
                                 </div>
@@ -95,7 +104,7 @@ export default class AccordionExample extends Component {
                 >
                     <div className="accordion__content">
                         Hello World
-                        {<TestComponent/>}
+                        <TestComponent/>
                     </div>
                 </Accordion>
                 <Accordion
