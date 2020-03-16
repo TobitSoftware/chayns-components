@@ -122,8 +122,11 @@ export default class TagInput extends Component {
         } = this.props;
         const { selectedIndex } = this.state;
 
-        const { width } = getInputSize(`${value}${BIGGEST_LETTER}`);
-        const inputStyle = value ? { width } : { minWidth: 20 };
+        const { width } = getInputSize(`${value || tags.length > 0 ? value : placeholder}${BIGGEST_LETTER}`);
+        const inputStyle = {
+            width: `${width}px`,
+            minWidth: '20px',
+        };
 
         return (
             <div
