@@ -51,6 +51,7 @@ export default class PersonFinderExample extends PureComponent {
         moreReceiver: [{
             userId: 2236583, personId: '134-78226', firstName: 'Thomas', lastName: 'Tobit',
         }],
+        controlledValues: [],
     };
 
     clear = () => {
@@ -70,7 +71,7 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data, hasMore, moreReceiver } = this.state;
+        const { data, hasMore, moreReceiver, controlledValues } = this.state;
         return (
             <div style={{ marginBottom: '300px' }}>
                 <PersonFinder
@@ -104,7 +105,21 @@ export default class PersonFinderExample extends PureComponent {
                         this.personFinder0 = ref;
                     }}
                 />
-
+                <PersonFinder
+                    values={controlledValues}
+                    multiple
+                    onAdd={(value) => {
+                        console.log('add', value);
+                        controlledValues.push(value);
+                        this.setState({ controlledValues });
+                    }}
+                    onRemove={(value) => {
+                        console.log('remove', value, controlledValues);
+                        controlledValues.splice(controlledValues.findIndex((v) => v.userId === value.userId), 1);
+                        this.setState({ controlledValues });
+                    }}
+                    placeholder="Controlled PersonFinder"
+                />
                 <PersonFinder
                     ref={(ref) => {
                         this.relationFinder1 = ref;
