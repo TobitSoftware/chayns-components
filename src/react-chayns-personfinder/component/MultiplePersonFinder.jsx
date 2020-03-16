@@ -37,14 +37,29 @@ class MultiplePersonFinder extends Component {
         }
     }
 
-    handleOnChange(inputValue) {
+    getValues() {
+        const { values: valuesProps, context } = this.props;
+        if (valuesProps) {
+            return valuesProps.map((v) => {
+                const value = context.ValueConverter ? context.ValueConverter(v) : v;
+                return {
+                    text: value[context.ObjectMapping.showName],
+                    value,
+                };
+            });
+        }
+        const { values: valuesState } = this.state;
+        return valuesState;
+    }
+
+    handleOnChange(inputValue, ...other) {
         const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
         if (onInput) {
-            onInput(inputValue);
+            onInput(inputValue, ...other);
         }
     }
 
@@ -124,9 +139,10 @@ class MultiplePersonFinder extends Component {
             showId,
             context: Context,
             contextProps,
+            max,
             ...props
         } = this.props;
-        const { inputValue, selectedValue, values } = this.state;
+        const { inputValue, selectedValue } = this.state;
 
         return (
             <div className={classNames('cc__person-finder', className)}>
@@ -150,15 +166,19 @@ class MultiplePersonFinder extends Component {
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={TagInput}
-                                inputRef={(ref) => { this.input = ref; }}
-                                boxRef={(ref) => { this.boxRef = ref; }}
+                                inputRef={(ref) => {
+                                    this.input = ref;
+                                }}
+                                boxRef={(ref) => {
+                                    this.boxRef = ref;
+                                }}
                                 value={inputValue}
-                                tags={values}
-                                selectedValue={selectedValue}
-                                onChange={(value) => {
-                                    this.handleOnChange(value);
+                                tags={this.getValues()}
+                                selectedValue={selectedValue || (max && this.getValues().length >= max)}
+                                onChange={(...value) => {
+                                    this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
-                                        ctx.onChange(value);
+                                        ctx.onChange(...value);
                                     }
                                 }}
                                 onRemoveTag={this.handleTagRemove}
@@ -209,6 +229,9 @@ MultiplePersonFinder.propTypes = {
     }).isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
+    max: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    values: PropTypes.array,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -223,6 +246,8 @@ MultiplePersonFinder.defaultProps = {
     defaultValues: [],
     onInput: null,
     contextProps: null,
+    max: null,
+    values: null,
 };
 
 export default MultiplePersonFinder;

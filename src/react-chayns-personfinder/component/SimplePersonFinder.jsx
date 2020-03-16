@@ -28,14 +28,14 @@ class SimplePersonFinder extends Component {
         this.handleOnChange = this.handleOnChange.bind(this);
     }
 
-    handleOnChange(inputValue) {
+    handleOnChange(inputValue, ...other) {
         const { onInput } = this.props;
         this.setState({
             inputValue,
             selectedValue: false,
         });
         if (onInput && isFunction(onInput)) {
-            onInput(inputValue);
+            onInput(inputValue, ...other);
         }
     }
 
@@ -128,10 +128,10 @@ class SimplePersonFinder extends Component {
                                 inputComponent={Input}
                                 value={inputValue}
                                 selectedValue={selectedValue}
-                                onChange={(value) => {
-                                    this.handleOnChange(value);
+                                onChange={(...value) => {
+                                    this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
-                                        ctx.onChange(value);
+                                        ctx.onChange(...value);
                                     }
                                 }}
                                 onSelect={this.handleSelect}

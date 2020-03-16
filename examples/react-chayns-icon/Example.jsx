@@ -35,6 +35,18 @@ export default class IconExample extends PureComponent {
                 <Icon icon={faCoffee} style={{ fontSize: '2rem' }}/>
                 <Icon icon={faCoffee} style={{ fontSize: '1rem' }}/>
                 <Icon icon={faCoffee} className="test"/>
+                <Icon icon="fa fa-coffee" style={{ fontSize: '2rem' }}/>
+                <Icon icon="fa fa-coffee" style={{ fontSize: '1rem' }}/>
+                <Icon icon="fa fa-coffee"/>
+                <Icon icon="far fa-coffee"/>
+                <Icon icon="fal fa-coffee"/>
+                <Icon icon="fas fa-coffee"/>
+                <Icon icon="fab fa-twitter"/>
+                <i className="fa fa-coffee"/>
+                <i className="far fa-coffee"/>
+                <i className="fas fa-coffee"/>
+                <i className="fal fa-coffee"/>
+                <i className="fab fa-twitter"/>
                 <br/>
                 <a href="https://design.chayns.net/IconsundSymbole" target="_blank" rel="noopener noreferrer">
                     Tobit

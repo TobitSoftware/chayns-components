@@ -17,25 +17,27 @@ const ResultItemList = ({
     showWaitCursor,
     onLoadMore,
     onClick,
+    focusIndex,
 }) => {
     if (!data || data.length === 0) {
         return null;
     }
 
     return (
-        <div className={classNames('cc__person-finder__results-list', className)}>
+        <div className={classNames('cc__person-finder__results-list', className, { 'cc__person-finder__results-list--noTransition': focusIndex !== null })}>
             {separator && (
                 <Divider
                     key={`${separator}-divider`}
                     name={separator}
                 />
             )}
-            {data.map((item) => (
+            {data.map((item, index) => (
                 <PersonFinderResultItem
                     key={item[orm.identifier]}
                     data={item}
                     orm={orm}
                     onClick={onClick}
+                    isFocused={focusIndex !== null && focusIndex === index}
                 />
             ))}
             {hasMore && showWaitCursor && (
@@ -72,6 +74,7 @@ ResultItemList.propTypes = {
     hasMore: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
+    focusIndex: PropTypes.number,
 };
 
 ResultItemList.defaultProps = {
@@ -83,6 +86,7 @@ ResultItemList.defaultProps = {
     group: 'default',
     onLoadMore: null,
     className: null,
+    focusIndex: null,
 };
 
 export default ResultItemList;

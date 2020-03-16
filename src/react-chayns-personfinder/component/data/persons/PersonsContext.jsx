@@ -63,6 +63,7 @@ const PersonFinderStateProvider = ({
 
         // Use event listener to update all contexts if friends change
         const friendsListener = () => dispatch({ type: 'RECEIVE_FRIENDS', data: [] });
+        friendsListener(FriendsHelper.getFriendsList());
         FriendsHelper.addUpdateListener(friendsListener);
 
         return () => FriendsHelper.removeUpdateListener(friendsListener);
