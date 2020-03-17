@@ -73,7 +73,6 @@ export default class Input extends PureComponent {
         const valid = !(required && !value) && !(regExp && !value.match(regExp));
 
         if (callback) {
-            console.log('input', event);
             callback(value, valid, event);
         }
 

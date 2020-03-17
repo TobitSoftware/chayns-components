@@ -43,7 +43,9 @@ class AbstractExpandableListItem extends PureComponent {
 
     componentDidUpdate(prevProps) {
         const { open: openIds, openProp } = this.props;
-        const prevOpen = prevProps.openProp !== null ? prevProps.openProp : (prevProps.open && prevProps.open.indexOf && prevProps.open.indexOf(this.id) !== -1);
+        const prevOpen = prevProps.openProp !== null
+            ? prevProps.openProp
+            : (prevProps.open && prevProps.open.indexOf && prevProps.open.indexOf(this.id) !== -1);
         const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
 
         if (prevOpen !== open && openProp === null) {
