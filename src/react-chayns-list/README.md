@@ -54,6 +54,8 @@ You can use the List like this:
 | hideIndicator | Remove the opening icon from the left                                                                                           | bool           |               |
 | className     | ClassName that should be set on the ListItem root element                                                                       | String         |               |
 | onClick       | onClick-Listener that should be set on the item                                                                                 | Function       |               |
+| onOpen        | onOpen-Listener that should be set on the item                                                                                  | Function       |               |
+| onClose       | onClose-Listener that should be set on the item                                                                                 | Function       |               |
 | children      | Children that should be shown, when clicked on the item (works only inside Lists that does not have the notExpandable-prop set) | React-Elements |               |
 | right         | React-Elements that should be rendered on the right side of the ListItem                                                        | React-Elements |               |
 | noContentClass | Prevents adding the "list-item__content"-Class to the children wrapper.                                                        | bool           | false         |
