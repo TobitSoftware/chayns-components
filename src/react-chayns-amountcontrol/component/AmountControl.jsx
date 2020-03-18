@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 
 import ControlButton from './ControlButton';
 import AmountInput from './AmountInput';
@@ -48,11 +46,11 @@ export default class AmountControl extends PureComponent {
 
     getRemoveIcon() {
         const {
-            amount, icon, removeIcon, minusIcon,
+            amount, icon, removeIcon, minusIcon, hasAlwaysControls,
         } = this.props;
         const { tempAmount } = this.state;
 
-        if (icon && !tempAmount) {
+        if (icon && !tempAmount && !hasAlwaysControls) {
             return icon;
         }
 
@@ -160,7 +158,7 @@ export default class AmountControl extends PureComponent {
                     onClick={this.removeItem}
                     disabled={disabled || disableRemove || (amount <= (0 || min))}
                     className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon || hasAlwaysControls })}
-                    color={(icon && !tempAmount) ? iconColor : removeColor}
+                    color={(icon && !tempAmount && !hasAlwaysControls) ? iconColor : removeColor}
                 />
                 <AmountInput
                     stopPropagation={stopPropagation}
@@ -249,8 +247,8 @@ AmountControl.defaultProps = {
     stopPropagation: false,
     min: null,
     max: null,
-    plusIcon: faPlus,
-    minusIcon: faMinus,
-    removeIcon: faMinus,
+    plusIcon: 'fa fa-plus',
+    minusIcon: 'fa fa-minus',
+    removeIcon: 'fa fa-minus',
     hasAlwaysControls: false,
 };

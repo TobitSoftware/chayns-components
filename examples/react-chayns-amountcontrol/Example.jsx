@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useState } from 'react';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import { AmountControl } from '../../src/index';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
@@ -21,9 +20,19 @@ const AmountControlExample = () => {
                 removeColor="#E71E28"
                 iconColor="#20C65A"
                 focusOnClick={false}
-                icon={faShoppingCart}
+                icon="fa fa-shopping-cart"
                 stopPropagation
+            />
+
+            <br/>
+
+            <AmountControl
+                amount={amount}
+                onChange={setAmount}
+                equalize="group-1"
                 hasAlwaysControls
+                addColor="#20C65A"
+                removeColor="#E71E28"
             />
 
             <br/>

@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
@@ -41,7 +40,7 @@ export default class ContextMenuExample extends Component {
                 className: null,
                 onClick: console.log,
                 text: 'Coffee',
-                icon: faCoffee,
+                icon: 'fa fa-coffee',
             },
             {
                 className: null,
@@ -63,7 +62,7 @@ export default class ContextMenuExample extends Component {
                     <div className="accordion__content">
                         <p>Hello World</p>
                         <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
-                            <Icon icon={faCoffee}/>
+                            <Icon icon="fa fa-coffee"/>
                         </ContextMenu>
                     </div>
                 </Accordion>

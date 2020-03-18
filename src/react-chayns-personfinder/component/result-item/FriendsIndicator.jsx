@@ -1,7 +1,5 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { faStar } from '@fortawesome/free-regular-svg-icons/faStar';
-import { faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons/faStar';
 
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { COLOR_004, COLOR_YELLOW_3 } from '../../../constants/colors';
@@ -19,7 +17,7 @@ const FriendsIndicator = ({ personId, name }) => {
     return (
         <div className="friends">
             <Icon
-                icon={isFriend(personId) ? faStarSolid : faStar}
+                icon={isFriend(personId) ? 'fas fa-star' : 'far fa-star'}
                 onClick={handleClick}
                 className={isFriend(personId) ? COLOR_YELLOW_3 : COLOR_004}
             />
