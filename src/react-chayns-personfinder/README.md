@@ -50,7 +50,9 @@ Then it can be used like in the following example:
 | context       | The personfinder context. Take a look at the example and the following paragraph.                  | Function       |               |
 | contextProps  | Props for the context.                                                                             | object         |               |
 | max           | Maximum count of selected persons (only multiple personFinder)                                     | number         |               |
+| value         | Value shown in the personFinder input (controlled).                                                | string         |               |
 | values        | Values for the multiple personFinder (controlled).                                                 | array          |               |
+| autoSelectFirst | Autoselect the first entry in result list                                                        | bool           |               |
 
 ## Custom finder ##
 If you want to build your own custom finder for searching e.g. mails in a chayns-based mail application, you can use the SimpleWrapperContext with object mapping and custom props.

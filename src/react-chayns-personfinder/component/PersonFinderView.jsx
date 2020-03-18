@@ -11,10 +11,13 @@ import getSelectedListItem from '../utils/getSelectedListItem';
 const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
-    state = {
-        lazyLoading: false,
-        focusIndex: null,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            lazyLoading: false,
+            focusIndex: props.autoSelectFirst ? 0 : null,
+        };
+    }
 
     updateIndex = (index) => {
         const { data, value, orm } = this.props;
@@ -23,7 +26,8 @@ class PersonFinderView extends Component {
             const listLength = getListLength(data, orm, value);
             if (focusIndex >= listLength) {
                 focusIndex = listLength - 1;
-            } else if (focusIndex < 0) {
+            }
+            if (focusIndex < 0) {
                 focusIndex = 0;
             }
             if (this.animationFrameId) {
@@ -38,7 +42,8 @@ class PersonFinderView extends Component {
     };
 
     handleOnBlur = () => {
-        this.updateIndex(null);
+        const { autoSelectFirst } = this.props;
+        this.updateIndex(autoSelectFirst ? 0 : null);
     };
 
     handleKeyDown = (ev) => {
@@ -49,10 +54,17 @@ class PersonFinderView extends Component {
             data,
             orm,
             value,
+            onKeyDown,
+            autoSelectFirst,
         } = this.props;
+
+        if (onKeyDown) {
+            onKeyDown(ev);
+        }
 
         switch (ev.keyCode) {
             case 40: // Arrow down
+                ev.preventDefault();
                 if (focusIndex === null) {
                     this.updateIndex(0);
                 } else {
@@ -60,6 +72,7 @@ class PersonFinderView extends Component {
                 }
                 break;
             case 38: // Arrow up
+                ev.preventDefault();
                 if (focusIndex === null) {
                     this.updateIndex(0);
                 } else {
@@ -67,13 +80,13 @@ class PersonFinderView extends Component {
                 }
                 break;
             case 27: // Esc
-                this.updateIndex(null);
+                this.updateIndex(autoSelectFirst ? 0 : null);
                 this.boxRef.blur();
                 break;
             case 13: // Enter
                 if (focusIndex !== null) {
                     onSelect(undefined, getSelectedListItem(data, focusIndex, orm, value));
-                    this.updateIndex(null);
+                    this.updateIndex(autoSelectFirst ? 0 : null);
                     this.resultList.scrollTo(0, 0);
                 }
                 break;
@@ -166,6 +179,8 @@ class PersonFinderView extends Component {
             orm,
             boxRef,
             onChange,
+            onKeyDown,
+            autoSelectFirst,
             ...props
         } = this.props;
 
@@ -196,7 +211,7 @@ class PersonFinderView extends Component {
                 }}
                 onChange={(...e) => {
                     onChange(...e);
-                    this.updateIndex(null);
+                    this.updateIndex(autoSelectFirst ? 0 : null);
                 }}
                 {...props}
             >
@@ -245,6 +260,8 @@ PersonFinderView.propTypes = {
         PropTypes.bool,
     ]),
     onChange: PropTypes.func,
+    autoSelectFirst: PropTypes.bool,
+    onKeyDown: PropTypes.func,
 };
 
 PersonFinderView.defaultProps = {
@@ -259,6 +276,8 @@ PersonFinderView.defaultProps = {
     boxRef: null,
     showWaitCursor: false,
     onChange: null,
+    autoSelectFirst: false,
+    onKeyDown: null,
 };
 
 export default PersonFinderView;

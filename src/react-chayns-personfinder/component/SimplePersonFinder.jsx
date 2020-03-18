@@ -83,6 +83,7 @@ class SimplePersonFinder extends Component {
             context: Context,
             contextProps,
             removeIcon,
+            value: valueProp,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
@@ -126,7 +127,7 @@ class SimplePersonFinder extends Component {
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={Input}
-                                value={inputValue}
+                                value={valueProp || inputValue}
                                 selectedValue={selectedValue}
                                 onChange={(...value) => {
                                     this.handleOnChange(...value);
@@ -173,6 +174,7 @@ SimplePersonFinder.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
     removeIcon: PropTypes.bool,
+    value: PropTypes.string,
 };
 
 SimplePersonFinder.defaultProps = {
@@ -186,6 +188,7 @@ SimplePersonFinder.defaultProps = {
     customData: false,
     contextProps: null,
     removeIcon: false,
+    value: null,
 };
 
 export default SimplePersonFinder;
