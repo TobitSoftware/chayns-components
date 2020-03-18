@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import Icon from '../../react-chayns-icon/component/Icon';
 import supportsFileInput from '../utils/supportsFileInput';
 import fileInputCall from '../utils/fileInputCall';
@@ -140,7 +139,7 @@ export default class FileInput extends PureComponent {
                                                     icon={
                                                         item.content && item.content.icon
                                                             ? item.content.icon
-                                                            : faUpload
+                                                            : 'fa fa-upload'
                                                     }
                                                 />
                                             </span>

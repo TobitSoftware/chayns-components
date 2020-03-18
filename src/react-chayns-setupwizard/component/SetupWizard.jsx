@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SetupWizardContext from './setupWizardContext';
 import SetupItem from './SetupItem';
+import { isDisabled } from '../utils/setupWizardHelper';
 
 /**
  * ############################
@@ -19,6 +20,7 @@ class SetupWizard extends Component {
             maxProgress: 0,
             completedSteps: this.completedSteps,
             requiredSteps: [],
+            enabledSteps: [0],
         };
 
         this.stepComplete = this.stepComplete.bind(this);
@@ -42,8 +44,13 @@ class SetupWizard extends Component {
         };
     }
 
+    /**
+     * Complete or uncomplete a step
+     * @param value: true/false to complete/uncomplete
+     * @param step: step that should be changed
+     */
     stepComplete = (value, step) => {
-        const { currentStep, requiredSteps, maxProgress } = this.state;
+        const { currentStep } = this.state;
 
         const selectedStep = step === undefined ? currentStep : step;
 
@@ -56,68 +63,98 @@ class SetupWizard extends Component {
             this.completedSteps.splice(this.completedSteps.indexOf(selectedStep), 1);
             this.setState({
                 completedSteps: this.completedSteps,
-                maxProgress: requiredSteps.indexOf(selectedStep) >= 0 ? selectedStep : maxProgress,
             });
         }
     };
 
+    /**
+     * Enable or disable a step
+     * @param value: true/false to enable/disable
+     * @param step: step that should be changed
+     */
     stepEnabled = (value, step) => {
-        const { maxProgress } = this.state;
-        if (value && step > maxProgress) { // enable step
-            this.setState({ maxProgress: step });
-        } else if (!value && step <= maxProgress) { // disable step
-            this.setState({ maxProgress: step - 1 });
+        const { enabledSteps } = this.state;
+        const index = enabledSteps.indexOf(step);
+        if (value && index < 0) { // enable step
+            enabledSteps.push(step);
+        } else if (!value && index >= 0) { // disable step
+            enabledSteps.splice(index, 1);
         }
+        this.setState({ enabledSteps });
     };
 
-    stepRequired = (value, currentStep) => {
+    /**
+     * Set a step required/not required
+     * @param value: true/false for required/not required
+     * @param step: step that should be changed
+     */
+    stepRequired = (value, step) => {
         const { requiredSteps } = this.state;
 
-        if (value && requiredSteps.indexOf(currentStep) < 0) {
-            requiredSteps.push(currentStep);
-        } else if (requiredSteps.indexOf(currentStep) >= 0) {
-            requiredSteps.splice(requiredSteps.indexOf(currentStep), 1);
+        if (value && requiredSteps.indexOf(step) < 0) {
+            requiredSteps.push(step);
+        } else if (requiredSteps.indexOf(step) >= 0) {
+            requiredSteps.splice(requiredSteps.indexOf(step), 1);
         }
         this.setState({ requiredSteps });
     };
 
+    /**
+     * Go one step back
+     */
     previousStep = () => {
-        const { children } = this.props;
         const { currentStep } = this.state;
-        for (let next = currentStep - 1; next >= 0; next -= 1) {
-            if (children[next]) {
-                this.updateContent(next);
-                return;
-            }
-        }
+        this.toStep(currentStep - 1);
     };
 
+    /**
+     * Go one step forward
+     */
     nextStep = () => {
-        const { children, numberOfSteps } = this.props;
         const { currentStep } = this.state;
-        for (let next = currentStep + 1; (numberOfSteps || (Array.isArray(children) && children.length)) > next; next += 1) {
-            if (children[next]) {
-                this.updateContent(next);
-                return;
-            }
-        }
-        this.ready();
+        this.toStep(currentStep + 1);
     };
 
+    /**
+     * Go to a step
+     * @param step: the chosen step
+     */
     toStep = (step) => {
-        const { children, numberOfSteps } = this.props;
+        const {
+            children,
+            numberOfSteps,
+        } = this.props;
+        const {
+            currentStep,
+            enabledSteps,
+            requiredSteps,
+        } = this.state;
+
         if (((numberOfSteps || (Array.isArray(children) && children.length)) - 1) >= step) {
-            this.updateContent(step);
+            if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || !isDisabled(enabledSteps, step)) {
+                for (let i = 0; i <= step; i += 1) {
+                    this.stepEnabled(true, i);
+                }
+                this.setState({
+                    currentStep: step,
+                });
+            } else {
+                this.notComplete();
+            }
         } else {
             this.ready();
         }
     };
 
+    /**
+     * Reset the wizard to a step and go to this step
+     * @param step: the chosen step
+     */
     resetToStep = (step) => {
-        const { maxProgress } = this.state;
-        this.completedSteps = this.completedSteps.filter((s) => !(step <= s && s < maxProgress));
+        const { enabledSteps } = this.state;
+        this.completedSteps = this.completedSteps.filter((s) => !(step <= s && s < enabledSteps));
         this.setState({
-            maxProgress: step,
+            enabledSteps: enabledSteps.filter((s) => s <= step),
             currentStep: step,
             completedSteps: this.completedSteps,
         });
@@ -142,20 +179,6 @@ class SetupWizard extends Component {
         }
     };
 
-    updateContent = (newCurrentStep) => {
-        const {
-            currentStep, maxProgress, requiredSteps,
-        } = this.state;
-        if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || newCurrentStep <= maxProgress - 1) {
-            this.setState({
-                currentStep: newCurrentStep,
-                maxProgress: (newCurrentStep > maxProgress) ? newCurrentStep : maxProgress,
-            });
-        } else {
-            this.notComplete();
-        }
-    };
-
     render() {
         const {
             style,
@@ -166,7 +189,7 @@ class SetupWizard extends Component {
             className,
         } = this.props;
         const {
-            maxProgress, currentStep, completedSteps, requiredSteps,
+            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps,
         } = this.state;
 
         let visibleIndex = -1;
@@ -187,6 +210,7 @@ class SetupWizard extends Component {
                     requiredSteps,
                     currentStep,
                     contentStyle,
+                    enabledSteps,
                     stepComplete: this.stepComplete,
                     stepEnabled: this.stepEnabled,
                     stepRequired: this.stepRequired,

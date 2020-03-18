@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import requestAnimationFrame from '../../utils/requestAnimationFrame';
 import Icon from '../../react-chayns-icon/component/Icon';
 import AccordionHeadRight from './AccordionHeadRight';
-import { isString } from '../../utils/is';
+import { isFunction, isString } from '../../utils/is';
 
 const CLOSE = 1;
 
@@ -222,7 +222,7 @@ export default class Accordion extends PureComponent {
                 })}
                 ref={(ref) => {
                     this.accordion = ref;
-                    if (reference) reference(ref);
+                    if (reference && isFunction(reference)) reference(ref);
                 }}
                 id={id}
                 style={style}

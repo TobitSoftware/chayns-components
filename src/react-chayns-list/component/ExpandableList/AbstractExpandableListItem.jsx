@@ -41,22 +41,47 @@ class AbstractExpandableListItem extends PureComponent {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        const { open: openIds, openProp } = this.props;
+        const prevOpen = prevProps.openProp !== null
+            ? prevProps.openProp
+            : (prevProps.open && prevProps.open.indexOf && prevProps.open.indexOf(this.id) !== -1);
+        const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
+
+        if (prevOpen !== open && openProp === null) {
+            if (open) {
+                this.onOpen();
+            } else {
+                this.onClose();
+            }
+        }
+    }
+
     onToggle() {
-        const { onToggle } = this.props;
+        const {
+            openProp,
+            onToggle,
+        } = this.props;
+
+        if (openProp !== null) {
+            if (openProp) {
+                this.onClose();
+            } else {
+                this.onOpen();
+            }
+        }
 
         onToggle(this.id);
     }
 
     onOpen() {
-        const { onOpen } = this.props;
-
-        onOpen(this.id);
+        const { onOpenProp } = this.props;
+        if (onOpenProp) onOpenProp(this.id);
     }
 
     onClose() {
-        const { onClose } = this.props;
-
-        onClose(this.id);
+        const { onCloseProp } = this.props;
+        if (onCloseProp) onCloseProp(this.id);
     }
 
     render() {
@@ -109,8 +134,10 @@ AbstractExpandableListItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     header: PropTypes.node.isRequired,
-    onOpen: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired,
+    // onOpen: PropTypes.func.isRequired,
+    // onClose: PropTypes.func.isRequired,
+    onOpenProp: PropTypes.func,
+    onCloseProp: PropTypes.func,
     className: PropTypes.string,
     clickable: PropTypes.bool,
     noContentClass: PropTypes.bool,
@@ -127,6 +154,8 @@ AbstractExpandableListItem.defaultProps = {
     noContentClass: false,
     openProp: null,
     style: null,
+    onOpenProp: null,
+    onCloseProp: null,
 };
 
 export default connectExpandableContext(AbstractExpandableListItem);

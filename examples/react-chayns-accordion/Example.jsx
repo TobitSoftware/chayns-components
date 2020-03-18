@@ -1,17 +1,19 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import Input from '../../src/react-chayns-input/component/Input';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
 import { TestComponent } from './TestComponent';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class AccordionExample extends Component {
     constructor(props) {
         super(props);
         this.state = { show: true, searchValue: '', open: false };
+        this.accordionRef = React.createRef();
+        this.accordionDivRef = null;
     }
 
     render() {
@@ -22,7 +24,7 @@ export default class AccordionExample extends Component {
                     this.setState({ show: true });
                 },
                 text: 'Hinzufügen',
-                icon: faPlus,
+                icon: 'fa fa-plus',
             },
             {
                 className: null,
@@ -30,7 +32,7 @@ export default class AccordionExample extends Component {
                     this.setState({ show: false });
                 },
                 text: 'Löschen',
-                icon: faTrash,
+                icon: 'fa fa-trash',
             },
         ];
 
@@ -65,7 +67,13 @@ export default class AccordionExample extends Component {
                                     console.log('onClose');
                                     this.setState({ open: false });
                                 }}
+                                ref={this.accordionRef}
+                                reference={(ref) => { this.accordionDivRef = ref; }}
                             >
+                                <Button onClick={() => { this.setState({ searchValue: '' }); }}>Clear search input</Button>
+                                <Button onClick={() => { console.log('reference ref', this.accordionDivRef, this.accordionRef); }}>
+                                    Log reference & ref
+                                </Button>
                                 <div className="accordion__item">
                                     Hello World
                                 </div>
@@ -95,7 +103,7 @@ export default class AccordionExample extends Component {
                 >
                     <div className="accordion__content">
                         Hello World
-                        {<TestComponent/>}
+                        <TestComponent/>
                     </div>
                 </Accordion>
                 <Accordion
@@ -131,7 +139,7 @@ export default class AccordionExample extends Component {
                             close: 'Accordion Title Input',
                         }}
                         isWrapped
-                        icon={faRocket}
+                        icon="fa fa-rocket"
                         dataGroup="abc"
                         noTitleTrigger
                     >

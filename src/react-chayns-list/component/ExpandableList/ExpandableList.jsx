@@ -24,25 +24,18 @@ export default class ExpandableList extends Component {
         this.changeOpen(id);
     }
 
-    onClose(id) {
-        const { open } = this.state;
-
-        if (open.indexOf(id) === -1) {
-            return;
-        }
-
+    onClose() {
         this.changeOpen(null);
     }
 
     onToggle(id) {
-        let openId = null;
         const { open } = this.state;
 
         if (open.indexOf(id) === -1) {
-            openId = id;
+            this.onOpen(id);
+        } else {
+            this.onClose(id);
         }
-
-        this.changeOpen(openId);
     }
 
     changeOpen(id) {

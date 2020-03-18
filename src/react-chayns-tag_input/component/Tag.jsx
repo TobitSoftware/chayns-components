@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import classnames from 'classnames';
 
 import Icon from '../../react-chayns-icon/component/Icon';
@@ -26,7 +25,7 @@ export default class Tag extends PureComponent {
                 {children}
                 <Icon
                     className="icon"
-                    icon={faTimes}
+                    icon="fa fa-times"
                     onClick={this.handleDelete}
                 />
             </div>

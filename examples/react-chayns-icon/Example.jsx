@@ -1,17 +1,11 @@
 import React, { PureComponent } from 'react';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
-import { faRocket } from '@fortawesome/free-solid-svg-icons/faRocket';
-import { faCocktail } from '@fortawesome/free-solid-svg-icons/faCocktail';
-import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
-import { faReact } from '@fortawesome/free-brands-svg-icons/faReact';
-
 import { Icon } from '../../src/index';
 
 export default class IconExample extends PureComponent {
     constructor(props) {
         super(props);
-        this.icons = [faCoffee, faRocket, faCocktail, faCode, faReact];
+        this.icons = ['fa-coffee', 'fa-cocktail', 'fa-glass', 'fa-wine-glass', 'fa-glass-whiskey-rocks', 'fa-beer'];
         this.state = { index: 0 };
     }
 
@@ -25,6 +19,7 @@ export default class IconExample extends PureComponent {
                 </a>
                 <br/>
                 <Icon
+                    className="fa"
                     icon={this.icons[index % this.icons.length]}
                     style={{ fontSize: '3rem' }}
                     stopPropagation
@@ -32,9 +27,6 @@ export default class IconExample extends PureComponent {
                         this.setState({ index: index + 1 });
                     }}
                 />
-                <Icon icon={faCoffee} style={{ fontSize: '2rem' }}/>
-                <Icon icon={faCoffee} style={{ fontSize: '1rem' }}/>
-                <Icon icon={faCoffee} className="test"/>
                 <Icon icon="fa fa-coffee" style={{ fontSize: '2rem' }}/>
                 <Icon icon="fa fa-coffee" style={{ fontSize: '1rem' }}/>
                 <Icon icon="fa fa-coffee"/>

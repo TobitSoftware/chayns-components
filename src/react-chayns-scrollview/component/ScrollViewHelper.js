@@ -69,6 +69,8 @@ export default class ScrollViewHelper {
 
             if (this.scrollRatio >= 1) {
                 this.content.classList.add('cc__scroll-view--hidden');
+
+                this.bar.style.height = 0;
             } else {
                 this.content.classList.remove('cc__scroll-view--hidden');
 
