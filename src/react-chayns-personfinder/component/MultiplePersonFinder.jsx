@@ -140,6 +140,7 @@ class MultiplePersonFinder extends Component {
             context: Context,
             contextProps,
             max,
+            value: valueProp,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
@@ -172,7 +173,7 @@ class MultiplePersonFinder extends Component {
                                 boxRef={(ref) => {
                                     this.boxRef = ref;
                                 }}
-                                value={inputValue}
+                                value={valueProp || inputValue}
                                 tags={this.getValues()}
                                 selectedValue={selectedValue || (max && this.getValues().length >= max)}
                                 onChange={(...value) => {
@@ -232,6 +233,7 @@ MultiplePersonFinder.propTypes = {
     max: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     values: PropTypes.array,
+    value: PropTypes.string,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -248,6 +250,7 @@ MultiplePersonFinder.defaultProps = {
     contextProps: null,
     max: null,
     values: null,
+    value: null,
 };
 
 export default MultiplePersonFinder;
