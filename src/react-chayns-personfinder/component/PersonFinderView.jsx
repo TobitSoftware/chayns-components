@@ -53,6 +53,7 @@ class PersonFinderView extends Component {
 
         switch (ev.keyCode) {
             case 40: // Arrow down
+                ev.preventDefault();
                 if (focusIndex === null) {
                     this.updateIndex(0);
                 } else {
@@ -60,6 +61,7 @@ class PersonFinderView extends Component {
                 }
                 break;
             case 38: // Arrow up
+                ev.preventDefault();
                 if (focusIndex === null) {
                     this.updateIndex(0);
                 } else {
