@@ -104,6 +104,8 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.personFinder0 = ref;
                     }}
+                    onKeyDown={(...e) => { console.log('onkeydown personfinder', ...e); }}
+                    autoSelectFirst
                 />
                 <PersonFinder
                     values={controlledValues}
@@ -195,6 +197,7 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
+                    autoSelectFirst
                     ref={(ref) => {
                         this.customUserFinder = ref;
                     }}
