@@ -156,7 +156,7 @@ export default class Tooltip extends Component {
                 >
                     {removeIcon ? (
                         <div className="cc__tooltip__icon" onClick={this.hide}>
-                            <Icon icon="ts-wrong"/>
+                            <Icon icon="fa fa-times"/>
                         </div>
                     ) : null}
                     {this.getContent()}

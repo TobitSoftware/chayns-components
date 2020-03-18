@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import Input from '../../src/react-chayns-input/component/Input';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
@@ -25,7 +24,7 @@ export default class AccordionExample extends Component {
                     this.setState({ show: true });
                 },
                 text: 'Hinzufügen',
-                icon: faPlus,
+                icon: 'fa fa-plus',
             },
             {
                 className: null,
@@ -33,7 +32,7 @@ export default class AccordionExample extends Component {
                     this.setState({ show: false });
                 },
                 text: 'Löschen',
-                icon: faTrash,
+                icon: 'fa fa-trash',
             },
         ];
 
@@ -140,7 +139,7 @@ export default class AccordionExample extends Component {
                             close: 'Accordion Title Input',
                         }}
                         isWrapped
-                        icon={faRocket}
+                        icon="fa fa-rocket"
                         dataGroup="abc"
                         noTitleTrigger
                     >

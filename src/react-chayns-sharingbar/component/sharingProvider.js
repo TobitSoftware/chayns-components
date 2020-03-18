@@ -1,9 +1,3 @@
-import { faFacebookF } from '@fortawesome/free-brands-svg-icons/faFacebookF';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons/faWhatsapp';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons/faEnvelope';
-import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
-
 export const shareOptions = {
     COPY: 0,
     MAIL: 1,
@@ -20,7 +14,7 @@ export const shareProvider = [
         providerId: 1,
         name: 'WhatsApp',
         androidIdentifier: 'com.whatsapp',
-        icon: faWhatsapp,
+        icon: 'fab fa-whatsapp',
         url: 'https://api.whatsapp.com/send?text={url}',
         available: true,
     },
@@ -29,7 +23,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Zwischenablage',
         androidIdentifier: null,
-        icon: faCopy,
+        icon: 'fa fa-copy',
         url: null,
         available: true,
     },
@@ -38,7 +32,7 @@ export const shareProvider = [
         providerId: 0,
         name: 'Mail',
         androidIdentifier: null,
-        icon: faEnvelope,
+        icon: 'fa fa-envelope',
         url: 'mailto:?body={url}',
         available: true,
     },
@@ -47,7 +41,7 @@ export const shareProvider = [
         providerId: 2,
         name: 'Facebook',
         androidIdentifier: 'com.facebook.katana',
-        icon: faFacebookF,
+        icon: 'fab fa-facebook-f',
         url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
         available: true,
     },
@@ -56,7 +50,7 @@ export const shareProvider = [
         providerId: 5,
         name: 'Twitter',
         androidIdentifier: null,
-        icon: faTwitter,
+        icon: 'fab fa-twitter',
         url: 'http://twitter.com/intent/tweet?text={linkText}&url={url}&hashtags=chayns',
         available: true,
     },
@@ -65,7 +59,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
-        icon: 'far fa-share-alt',
+        icon: 'fa fa-share-alt',
         url: null,
         available: false,
     },
@@ -74,7 +68,7 @@ export const shareProvider = [
         providerId: -1,
         name: 'Share',
         androidIdentifier: null,
-        icon: 'far fa-share-alt',
+        icon: 'fa fa-share-alt',
         url: null,
         available: false,
     },

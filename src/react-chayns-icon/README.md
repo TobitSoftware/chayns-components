@@ -13,31 +13,11 @@ The icon component has to be imported:
 import { Icon } from 'chayns-components';
 ```
 
+You can use [Font Awesome Icons](https://fontawesome.com/icons) and [Tobit Software Icons](https://design.chayns.net/IconsundSymbole).
+Therefor, you have to set the icon class name into the icon prop. 
+For Font Awesome Icons, you also have to set the icon style (fa, fas, far, fal, fab).
 
-## Font Awesome ##
-
-If you want to use a [Font Awesome Icon](https://fontawesome.com/icons), you also have to install the icon packages and import the icon from the corresponding font awesome library.
-
-If you have a [Font Awesome Pro Subscription](https://fontawesome.com/pro), you can use the pro icon packages:
-
-    npm i --save @fortawesome/pro-solid-svg-icons @fortawesome/pro-regular-svg-icons @fortawesome/pro-light-svg-icons @fortawesome/free-brands-svg-icons
-    
-Otherwise, you have to install the free packages:
-    
-    npm i --save @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
-    
-
-
-```jsx harmony
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'; /**Brands Style*/
-```
-
-You can use the icon like this:
-```jsx harmony
-<Icon icon={faGoogle}/>
-<Icon icon="ts-bamboo"/>
-```
-
+Take a look at the [examples](https://github.com/TobitSoftware/chayns-components/tree/master/examples/react-chayns-icon) for an appropriate way of implementing the component to your chayns-Tapp. 
 
 ## Props ##
 

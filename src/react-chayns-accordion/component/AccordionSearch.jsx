@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import Input from '../../react-chayns-input/component/Input';
 
 const AccordionSearch = ({
@@ -14,7 +13,7 @@ const AccordionSearch = ({
         onChange={onSearch}
         onEnter={onSearchEnter}
         onIconClick={onSearchEnter}
-        icon={faSearch}
+        icon="fa fa-search"
         value={searchValue === null ? undefined : searchValue}
         stopPropagation
         dynamic

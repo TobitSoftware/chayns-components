@@ -11,23 +11,6 @@
   "plugins": [
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
-    "babel-plugin-optimize-clsx",
-    [
-      "transform-imports",
-      {
-        "@fortawesome/free-solid-svg-icons": {
-          "transform": "@fortawesome/free-solid-svg-icons/${member}",
-          "preventFullImport": true
-        },
-        "@fortawesome/free-regular-svg-icons": {
-          "transform": "@fortawesome/free-regular-svg-icons/${member}",
-          "preventFullImport": true
-        },
-        "@fortawesome/free-brands-svg-icons": {
-          "transform": "@fortawesome/free-brands-svg-icons/${member}",
-          "preventFullImport": true
-        }
-      }
-    ]
+    "babel-plugin-optimize-clsx"
   ]
 }

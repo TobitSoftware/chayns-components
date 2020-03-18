@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import { faRocket } from '@fortawesome/free-solid-svg-icons/faRocket';
 import { ContextMenu, List, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 
@@ -104,7 +103,7 @@ export default class ListExample extends Component {
                         onOpen={() => { this.setState({ open1: true }); }}
                         onClose={() => { this.setState({ open1: false }); }}
                         // image="https://chayns.tobit.com/storage/59143-10991/Images/icon-72.png"
-                        icon={faRocket}
+                        icon="fa fa-rocket"
                         right={(
                             <div
                                 style={{
