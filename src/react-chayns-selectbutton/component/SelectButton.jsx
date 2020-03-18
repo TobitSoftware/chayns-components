@@ -65,7 +65,7 @@ export default class SelectButton extends Component {
 
     getDialogList(_list) {
         const { selected } = this.state;
-        const { showSelection, listKey, listValue } = this.props;
+        const { showListSelection, listKey, listValue } = this.props;
         const list = [];
 
         if (_list) {
@@ -75,7 +75,7 @@ export default class SelectButton extends Component {
                     list.push({
                         name: item[listValue],
                         value: item[curListKey],
-                        isSelected: selected.indexOf(item) >= 0 && showSelection,
+                        isSelected: selected.indexOf(item) >= 0 && showListSelection,
                     });
                 }
             });
@@ -151,6 +151,7 @@ SelectButton.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
     showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+    showListSelection: PropTypes.bool,
     selectedFlag: PropTypes.string,
     stopPropagation: PropTypes.bool,
 };
@@ -169,5 +170,6 @@ SelectButton.defaultProps = {
     listValue: 'value',
     selectedFlag: 'isSelected',
     stopPropagation: false,
+    showListSelection: true,
     style: null,
 };

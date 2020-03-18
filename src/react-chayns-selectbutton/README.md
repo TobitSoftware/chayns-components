@@ -44,6 +44,7 @@ You can set the following props on a SelectButton element:
 | quickFind | If true, a search input is shown above the list.                                               | bool  | false |
 | className | Add additional classes to the button.                                                          | string   | |
 | showSelection | Shows selection in button. Use a number to set the maximum number of shown items. | bool / number | true |
+| showListSelection | Shows selection in select dialog list.  | bool | true |
 | selectedFlag | The name of the flag which sets an item selected | string | isSelected |
 | stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
 
