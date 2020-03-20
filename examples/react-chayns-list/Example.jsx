@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 
 import { ContextMenu, List, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
+import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 
 export default class ListExample extends Component {
     constructor(props) {
         super(props);
         this.state = { open1: false, open2: false };
+        this.tooltipRef = React.createRef();
     }
 
     render() {
@@ -37,17 +39,27 @@ export default class ListExample extends Component {
                         subtitle={<i>italic subtitle</i>}
                         notExpandable
                     />
-                    <ListItem
-                        title="ListItem (accordion-style, with image, without indicator)"
-                        subtitle="Description"
-                        image="https://chayns.tobit.com/storage/59140-09519/Images/icon-72.png"
-                        hideIndicator
-                        noContentClass
-                        onOpen={(...e) => { console.log('onOpen', ...e); }}
-                        onClose={(...e) => { console.log('onClose', ...e); }}
-                    >
-                        Content
-                    </ListItem>
+                    <Tooltip content={{ text: 'Tooltip' }} position={Tooltip.position.TOP_CENTER} ref={this.tooltipRef}>
+                        <ListItem
+                            title="ListItem (accordion-style, with image, without indicator)"
+                            subtitle="Description"
+                            image="https://chayns.tobit.com/storage/59140-09519/Images/icon-72.png"
+                            hideIndicator
+                            noContentClass
+                            onOpen={(...e) => { console.log('onOpen', ...e); }}
+                            onClose={(...e) => { console.log('onClose', ...e); }}
+                            headerProps={{
+                                onMouseEnter: () => {
+                                    this.tooltipRef.current.show();
+                                },
+                                onMouseLeave: () => {
+                                    this.tooltipRef.current.hide();
+                                },
+                            }}
+                        >
+                            Content
+                        </ListItem>
+                    </Tooltip>
                     <ListItem
                         title="ListItem (accordion-style, with image)"
                         subtitle="Description"

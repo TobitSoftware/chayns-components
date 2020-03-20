@@ -63,6 +63,7 @@ You can use the List like this:
 | style         | ListItem styles.                                                                                                                | Object         |               |
 | style.head    | Styles only applied to the head of the ListItem                                                                                 | Object         |               |
 | style.body    | Styles only applied to the body of the ListItem                                                                                 | Object         |               |
+| headerProps   | Props applied to the head of the ListItem                                                                                       | Object         |               |
 
 ## Example ##
 

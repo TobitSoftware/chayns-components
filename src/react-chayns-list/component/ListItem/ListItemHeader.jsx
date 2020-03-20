@@ -9,16 +9,14 @@ const ListItemHeader = ({
     subtitle,
     image,
     icon,
-    onClick,
     className,
     left,
     right,
-    style,
+    ...otherProps
 }) => (
     <div
         className={classnames('list-item__header', className)}
-        onClick={onClick}
-        style={style}
+        {...otherProps}
     >
         {left}
         {image && (
@@ -70,7 +68,6 @@ ListItemHeader.propTypes = {
     image: PropTypes.string,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,
-    onClick: PropTypes.func,
     left: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
@@ -79,7 +76,6 @@ ListItemHeader.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
-    style: PropTypes.object,
 };
 
 ListItemHeader.defaultProps = {
@@ -87,10 +83,8 @@ ListItemHeader.defaultProps = {
     image: null,
     icon: null,
     className: null,
-    onClick: null,
     left: null,
     right: null,
-    style: null,
 };
 
 export default ListItemHeader;

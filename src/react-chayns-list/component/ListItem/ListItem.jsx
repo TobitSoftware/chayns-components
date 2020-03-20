@@ -13,6 +13,7 @@ const ListItem = ({
     onClick,
     right,
     style,
+    headerProps,
 }) => (
     <div
         className={classnames('list-item', className, {
@@ -29,6 +30,7 @@ const ListItem = ({
             className={className}
             right={right}
             style={style && style.head ? style.head : null}
+            {...headerProps}
         />
     </div>
 );
@@ -51,6 +53,7 @@ ListItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     style: PropTypes.object,
+    headerProps: PropTypes.object,
 };
 
 ListItem.defaultProps = {
@@ -61,6 +64,7 @@ ListItem.defaultProps = {
     onClick: null,
     right: null,
     style: null,
+    headerProps: null,
 };
 
 export default ListItem;
