@@ -73,6 +73,9 @@ const ColorPicker = forwardRef((props, reference) => {
             document.removeEventListener('click', closeBubble);
             window.removeEventListener('blur', closeBubble);
             bubbleRef.current.hide();
+            if (props.onBlur) {
+                props.onBlur(color);
+            }
             if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
                 chayns.allowRefreshScroll();
             }
@@ -205,6 +208,7 @@ ColorPicker.propTypes = {
     bubblePosition: PropTypes.number,
     onChange: PropTypes.func,
     onChangeEnd: PropTypes.func,
+    onBlur: PropTypes.func,
     transparency: PropTypes.bool,
     parent: PropTypes.instanceOf(Element),
     className: PropTypes.string,
@@ -220,6 +224,7 @@ ColorPicker.defaultProps = {
     bubblePosition: Bubble.position.BOTTOM_CENTER,
     onChange: null,
     onChangeEnd: null,
+    onBlur: null,
     transparency: false,
     parent: null,
     className: null,

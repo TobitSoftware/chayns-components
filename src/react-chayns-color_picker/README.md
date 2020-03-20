@@ -29,6 +29,7 @@ You can set the following props on a ColorPicker element:
 | parent        | Node the bubble will be rendered into                                                   | DOM-Element|
 | onChange      | onChange - Callback                                                                     | function   |
 | onChangeEnd   | onChange - Callback                                                                     | function   |
+| onBlur        | onBlur - Callback                                                                       | function   |
 | transparency  | Adds the transparency slider                                                            | bool       |
 | input         | Adds an input to type colors                                                            | bool       |
 | defaultColorModel | Default used color model                                                            | number (from ColorPicker.colorModels) |
