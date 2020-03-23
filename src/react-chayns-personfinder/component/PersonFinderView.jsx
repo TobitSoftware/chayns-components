@@ -47,7 +47,6 @@ class PersonFinderView extends Component {
     };
 
     handleKeyDown = (ev) => {
-        if (!this.resultList) return;
         const { focusIndex } = this.state;
         const {
             onSelect,
@@ -61,6 +60,8 @@ class PersonFinderView extends Component {
         if (onKeyDown) {
             onKeyDown(ev);
         }
+
+        if (!this.resultList) return;
 
         switch (ev.keyCode) {
             case 40: // Arrow down
