@@ -86,7 +86,10 @@ class PersonFinderView extends Component {
                 break;
             case 13: // Enter
                 if (focusIndex !== null) {
-                    onSelect(undefined, getSelectedListItem(data, focusIndex, orm, value));
+                    const item = getSelectedListItem(data, focusIndex, orm, value);
+                    if (item !== undefined) {
+                        onSelect(undefined, item);
+                    }
                     this.updateIndex(autoSelectFirst ? 0 : null);
                     this.resultList.scrollTo(0, 0);
                 }
@@ -198,10 +201,15 @@ class PersonFinderView extends Component {
                 }}
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
-                onAddTag={(data) => onSelect(undefined, {
-                    [orm.identifier]: data.text,
-                    [orm.showName]: data.text,
-                })}
+                onAddTag={(data) => {
+                    if (data.text !== undefined) {
+                        return onSelect(undefined, {
+                            [orm.identifier]: data.text,
+                            [orm.showName]: data.text,
+                        });
+                    }
+                    return null;
+                }}
                 value={value}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
