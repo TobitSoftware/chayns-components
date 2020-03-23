@@ -208,6 +208,7 @@ export default class PersonFinderExample extends PureComponent {
                         identifier: 'email',
                         search: ['email', 'displayName'],
                         imageUrl: 'imageUrl',
+                        filter: (inputValue) => (e) => ['email', 'displayName'].some((key) => e[key] && e[key].toLowerCase().startsWith((inputValue || '').toLowerCase())),
                     })}
                     contextProps={{
                         data,

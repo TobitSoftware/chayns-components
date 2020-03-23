@@ -34,7 +34,9 @@ class PersonFinderView extends Component {
                 window.cancelAnimationFrame(this.animationFrameId);
             }
             this.animationFrameId = window.requestAnimationFrame(() => {
-                this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                if (this.resultList) {
+                    this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                }
                 this.animationFrameId = null;
             });
         }
