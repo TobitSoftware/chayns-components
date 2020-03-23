@@ -91,7 +91,9 @@ class PersonFinderView extends Component {
                         onSelect(undefined, item);
                     }
                     this.updateIndex(autoSelectFirst ? 0 : null);
-                    this.resultList.scrollTo(0, 0);
+                    if (this.resultList) {
+                        this.resultList.scrollTo(0, 0);
+                    }
                 }
                 break;
             default:
