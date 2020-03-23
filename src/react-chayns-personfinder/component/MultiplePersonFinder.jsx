@@ -82,9 +82,10 @@ class MultiplePersonFinder extends Component {
 
     handleSelect(type, value) {
         const {
-            onAdd, context: { ObjectMapping: orm },
+            onAdd, context: { ObjectMapping: orm }, values: valuesProp,
         } = this.props;
-        const { values } = this.state;
+        const { values: valuesState } = this.state;
+        const values = valuesProp || valuesState;
         const name = value[orm.showName];
 
         if (values.find((v) => v.value[orm.identifier] === value[orm.identifier])) {
