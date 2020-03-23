@@ -127,7 +127,7 @@ class SimplePersonFinder extends Component {
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={Input}
-                                value={valueProp || inputValue}
+                                value={isString(valueProp) ? valueProp : inputValue}
                                 selectedValue={selectedValue}
                                 onChange={(...value) => {
                                     this.handleOnChange(...value);
