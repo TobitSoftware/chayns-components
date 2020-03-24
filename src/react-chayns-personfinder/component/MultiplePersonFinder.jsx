@@ -38,6 +38,18 @@ class MultiplePersonFinder extends Component {
         }
     }
 
+    onChange(values) {
+        const { onChange } = this.props;
+        const retVal = values.map((v) => v.value);
+        if (onChange) {
+            if (retVal.length > 0 && retVal[0].type === 'PERSON') {
+                onChange(retVal.map(convertPersonForReturn));
+            } else {
+                onChange(retVal);
+            }
+        }
+    }
+
     getValues() {
         const { values: valuesProps, context } = this.props;
         if (valuesProps) {
@@ -71,9 +83,13 @@ class MultiplePersonFinder extends Component {
 
         if (!value) return;
 
+        const newValues = values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]);
+
         this.setState({
-            values: values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]),
+            values: newValues,
         });
+
+        this.onChange(newValues);
 
         if (onRemove) {
             onRemove(value);
@@ -110,13 +126,15 @@ class MultiplePersonFinder extends Component {
             ...value,
         };
 
+        const newValues = [...values, {
+            text: name,
+            value: outValue,
+        }];
+
         this.setState({
             inputValue: '',
             selectedValue: false,
-            values: [...values, {
-                text: name,
-                value: outValue,
-            }],
+            values: newValues,
         });
 
         if (onAdd) {
@@ -126,6 +144,8 @@ class MultiplePersonFinder extends Component {
             onAdd(outValue);
         }
 
+        this.onChange(newValues);
+
         if (this.boxRef) {
             this.boxRef.updatePosition();
             setImmediate(this.boxRef.focus);
@@ -133,17 +153,13 @@ class MultiplePersonFinder extends Component {
     }
 
     clear() {
-        const { onChange } = this.props;
-
         this.setState({
             inputValue: '',
             values: [],
             selectedValue: null,
         });
 
-        if (onChange) {
-            onChange(null);
-        }
+        this.onChange([]);
     }
 
     render() {

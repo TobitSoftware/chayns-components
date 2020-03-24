@@ -79,6 +79,7 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="Empfänger"
                     showPersons
                     multiple
+                    onChange={console.log}
                     onAdd={(value) => {
                         console.log(value);
                         this.setState({
