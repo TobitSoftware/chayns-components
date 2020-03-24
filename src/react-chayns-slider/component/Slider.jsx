@@ -120,7 +120,7 @@ export default class Slider extends PureComponent {
         const newPercent = (((clientX - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100);
         if (interval) {
             if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
-                this.leftPercent = newPercent;
+                this.leftPercent = newPercent < minPercent ? minPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.rightPercent = this.leftPercent + minIntervalPercent;
                 }
@@ -128,7 +128,7 @@ export default class Slider extends PureComponent {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
             } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
-                this.rightPercent = newPercent;
+                this.rightPercent = newPercent > maxPercent ? maxPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.leftPercent = this.rightPercent - minIntervalPercent;
                 }
@@ -137,8 +137,10 @@ export default class Slider extends PureComponent {
                 }
             }
             // prevent out of range
+            if (this.rightPercent > maxPercent) {
+                this.rightPercent = maxPercent;
+            }
             if (this.leftPercent < minPercent) {
-                // this.rightPercent = this.rightPercent + (minPercent - this.leftPercent); // TODO
                 this.leftPercent = minPercent;
             }
             if (this.leftPercent > maxPercent - minIntervalPercent) {
@@ -146,10 +148,6 @@ export default class Slider extends PureComponent {
             }
             if (this.rightPercent < minPercent + minIntervalPercent) {
                 this.rightPercent = minPercent + minIntervalPercent;
-            }
-            if (this.rightPercent > maxPercent) {
-                // this.leftPercent = this.leftPercent - (this.rightPercent - maxPercent);// TODO
-                this.rightPercent = maxPercent;
             }
         } else {
             this.percent = newPercent;
@@ -360,7 +358,10 @@ export default class Slider extends PureComponent {
                 leftPercent -= (left < stepPercent / 2) ? left : left - stepPercent;
                 const right = rightPercent % stepPercent;
                 rightPercent -= (right < stepPercent / 2) ? right : right - stepPercent;
-                return { leftPercent, rightPercent };
+                return {
+                    leftPercent,
+                    rightPercent,
+                };
             }
             const thumb = percent % stepPercent;
             percent -= (thumb < stepPercent / 2) ? thumb : thumb - stepPercent;
