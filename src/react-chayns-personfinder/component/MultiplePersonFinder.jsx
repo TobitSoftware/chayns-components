@@ -85,7 +85,21 @@ class MultiplePersonFinder extends Component {
             onAdd, context: { ObjectMapping: orm }, values: valuesProp,
         } = this.props;
         const { values: valuesState } = this.state;
-        const values = valuesProp || valuesState;
+
+        const { ValueConverter } = PersonsContext;
+
+        let values = valuesState;
+        if (valuesProp) {
+            values = valuesProp.map((v) => {
+                let retVal = v;
+                if (!retVal.value) {
+                    retVal = {
+                        value: ValueConverter ? ValueConverter(v) : v,
+                    };
+                }
+                return retVal;
+            });
+        }
         const name = value[orm.showName];
 
         if (values.find((v) => v.value[orm.identifier] === value[orm.identifier])) {
