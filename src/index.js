@@ -70,6 +70,7 @@ import withSetupWizardContext from './react-chayns-setupwizard/component/withSet
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
+import TagInput from './react-chayns-tag_input/component/TagInput';
 import TextArea from './react-chayns-textarea/component/TextArea';
 import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
@@ -139,6 +140,7 @@ export {
     withSetupWizardContext,
     SharingBar,
     SmallWaitCursor,
+    TagInput,
     TextArea,
     TextString,
     Tooltip,

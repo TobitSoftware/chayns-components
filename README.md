@@ -46,6 +46,7 @@ The following components are part of this package:
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)               | EmojiInput Component        | [Readme](/src/react-chayns-emoji_input/README.md)        |
 | [react-chayns-expandable_content](/src/react-chayns-expandable_content/) | ExpandableContent Component | [Readme](/src/react-chayns-expandable_content/README.md) |
 | [react-chayns-file_input](/src/react-chayns-file_input/)                 | FileInput Component         | [Readme](/src/react-chayns-file_input/README.md)         |
+| [react-chayns-filterbutton](/src/react-chayns-filterbutton/)             | FilterButton Component      | [Readme](/src/react-chayns-filterbutton/README.md)       |
 | [react-chayns-formatted_input](/src/react-chayns-formatted_input/)       | FormattedInput Component    | [Readme](/src/react-chayns-formatted_input/README.md)    |
 | [react-chayns-gallery](/src/react-chayns-gallery/)                       | Gallery Component           | [Readme](/src/react-chayns-gallery/README.md)            |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)             | Grid-Calendar Component     | [Readme](/src/react-chayns-gridcalendar/README.md)       |
@@ -69,6 +70,7 @@ The following components are part of this package:
 | [react-chayns-sharingbar](/src/react-chayns-sharingbar/)                 | SharingBar Component        | [Readme](/src/react-chayns-sharingbar/README.md)         |
 | [react-chayns-slider](/src/react-chayns-slider/)                         | Slider Component            | [Readme](/src/react-chayns-slider/README.md)             |
 | [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/)       | SmallWaitCursor Component   | [Readme](/src/react-chayns-smallwaitcursor/README.md)    |
+| [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
 | [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
 <!--- end component list -->

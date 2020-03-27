@@ -51,6 +51,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         withSetupWizardContext: 'react-chayns-setupwizard/component/withSetupWizardContext.js',
         SharingBar: 'react-chayns-sharingbar/component/SharingBar.js',
         SmallWaitCursor: 'react-chayns-smallwaitcursor/component/SmallWaitCursor.js',
+        TagInput: 'react-chayns-tag_input/component/TagInput.js',
         TextArea: 'react-chayns-textarea/component/TextArea.js',
         TextString: 'react-chayns-textstring/component/TextString.js',
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',

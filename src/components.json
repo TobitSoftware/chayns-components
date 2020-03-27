@@ -156,7 +156,8 @@
 },{
   "id": "react-chayns-tag_input",
   "title": "TagInput",
-  "example": "react-chayns-tag_input/Example.jsx"
+  "example": "react-chayns-tag_input/Example.jsx",
+  "readme": true
 },{
   "id": "react-chayns-tapp_portal",
   "title": "TappPortal",
