@@ -100,7 +100,7 @@ export default class Example extends React.Component {
 When you use multiple AmountControls that are near to each other. It maybe looks better, if they have the same size.
 The following example exactly does that:
 ```jsx harmony
-<div data-equalize="group-1">
+<div data-cc-equalize="group-1">
     <AmountControl
         equalize="group-1"
         buttonText="0,15"

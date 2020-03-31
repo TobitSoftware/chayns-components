@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as equalizer from '../../utils/equalizer';
+import equalizer from '../../utils/equalizer';
 
 import Input from '../../react-chayns-input/component/Input';
 
@@ -13,7 +13,7 @@ export default class AmountInput extends PureComponent {
         const { equalize } = this.props;
 
         if (equalize) {
-            equalizer.init();
+            equalizer();
         }
     }
 
@@ -21,7 +21,7 @@ export default class AmountInput extends PureComponent {
         const { equalize, showInput, focusOnClick } = this.props;
 
         if (prevProps.equalize !== equalize) {
-            equalizer.init();
+            equalizer();
         }
         if (showInput && !prevProps.showInput && focusOnClick) {
             if (this.inputRef) {

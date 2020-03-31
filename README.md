@@ -90,6 +90,7 @@ The following components are part of this package:
 | [createLinks](/src/utils/createLinks.js)                           | Creates a string with links from a string with URLs       |
 | [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                           |
 | [ColorUtils](/src/utils/color/README.md)                           | Utility functions to convert color values (hex, rgb, hsv) |
+| [equalizer](/src/utils/equalizer.js)                               | Utility functions to equalize the width of html elements  |
 
 ## Development ##
 

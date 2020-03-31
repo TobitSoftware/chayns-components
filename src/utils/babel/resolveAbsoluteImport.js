@@ -60,6 +60,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         imageUpload: 'utils/imageUpload.js',
         createLinks: 'utils/createLinks',
         removeHtml: 'utils/removeHtml',
+        equalize: 'utils/equalizer',
         isTobitEmployee: 'utils/tobitEmployee',
         FORMAT_INTEGER: 'react-chayns-formatted_input/component/FormattedInput/instances/formatInteger.js',
         FORMAT_DECIMAL: 'react-chayns-formatted_input/component/FormattedInput/instances/formatDecimal.js',

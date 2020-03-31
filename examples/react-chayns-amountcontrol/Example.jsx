@@ -8,7 +8,7 @@ const AmountControlExample = () => {
     const [amount, setAmount] = useState(0);
 
     return (
-        <div data-equalize="group-1">
+        <div data-cc-equalize="group-1">
             <AmountControl
                 autoInput
                 disabled={false}

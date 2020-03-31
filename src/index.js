@@ -86,6 +86,7 @@ import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from './react-ch
 import isTobitEmployee from './utils/tobitEmployee';
 import createLinks from './utils/createLinks';
 import removeHtml from './utils/removeHtml';
+import equalizer from './utils/equalizer';
 
 import { CHAYNS_CSS_VERSION } from './constants';
 
@@ -151,6 +152,7 @@ export {
     isTobitEmployee,
     createLinks,
     removeHtml,
+    equalizer,
     getImageMetaDataFromPreview,
     getImageMetaDataFromApi,
     getDataUrlFromBase64,
