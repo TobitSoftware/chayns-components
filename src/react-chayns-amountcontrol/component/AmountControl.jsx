@@ -156,7 +156,7 @@ export default class AmountControl extends PureComponent {
                     stopPropagation={stopPropagation}
                     icon={this.getRemoveIcon()}
                     onClick={this.removeItem}
-                    disabled={disabled || disableRemove || (amount <= (0 || min))}
+                    disabled={disabled || disableRemove || (min && (amount <= (min || 0)))}
                     className={classNames('cc__amount-control__remove', { 'cc__amount-control--icon': amount > 0 || icon || hasAlwaysControls })}
                     color={(icon && !tempAmount && !hasAlwaysControls) ? iconColor : removeColor}
                 />
