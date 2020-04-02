@@ -34,3 +34,5 @@ ImageAccordion.defaultProps = {
     disabled: false,
     open: false,
 };
+
+ImageAccordion.displayName = 'ImageAccordion';

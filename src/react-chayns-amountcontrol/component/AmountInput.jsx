@@ -161,3 +161,5 @@ AmountInput.defaultProps = {
     focusOnClick: true,
     contentWidth: null,
 };
+
+AmountInput.displayName = 'AmountInput';

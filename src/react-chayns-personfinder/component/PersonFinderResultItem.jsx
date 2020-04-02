@@ -65,4 +65,6 @@ PersonFinderResultItem.propTypes = {
     isFocused: PropTypes.bool.isRequired,
 };
 
+PersonFinderResultItem.displayName = 'PersonFinderResultItem';
+
 export default PersonFinderResultItem;

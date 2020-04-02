@@ -1,4 +1,7 @@
-# ReceiverInput
+# ReceiverInput *(deprecated)*
+
+**The ReceiverInput is deprecated. Use the multiple personFinder instead.**
+
 The ReceiverInput-Component is part of the *chayns-components*-Package. You can install it with the following command:
 
     npm install -S chayns-components@latest

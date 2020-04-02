@@ -97,5 +97,6 @@ Checkbox.defaultProps = {
     stopPropagation: false,
 };
 
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox;

@@ -413,3 +413,5 @@ Calendar.defaultProps = {
     style: null,
     className: null,
 };
+
+Calendar.displayName = 'Calendar';

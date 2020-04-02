@@ -48,3 +48,5 @@ Tag.defaultProps = {
     onDelete: null,
     selected: false,
 };
+
+Tag.displayName = 'Tag';

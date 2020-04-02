@@ -75,3 +75,5 @@ ExpandableList.propTypes = {
 ExpandableList.defaultProps = {
     className: null,
 };
+
+ExpandableList.displayName = 'ExpandableList';

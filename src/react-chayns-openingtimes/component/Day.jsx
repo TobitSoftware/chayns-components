@@ -120,4 +120,6 @@ Day.propTypes = {
     onChange: PropTypes.func.isRequired,
 };
 
+Day.displayName = 'Day';
+
 export default Day;

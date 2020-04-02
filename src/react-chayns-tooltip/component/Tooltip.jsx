@@ -225,3 +225,5 @@ Tooltip.defaultProps = {
     hideOnChildrenLeave: false,
     removeParentSpace: false,
 };
+
+Tooltip.displayName = 'Tooltip';

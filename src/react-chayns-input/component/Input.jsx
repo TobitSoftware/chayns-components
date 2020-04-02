@@ -240,3 +240,5 @@ Input.defaultProps = {
     required: false,
     disabled: false,
 };
+
+Input.displayName = 'Input';

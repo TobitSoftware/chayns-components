@@ -93,4 +93,6 @@ ResultItemList.defaultProps = {
     focusIndex: null,
 };
 
+ResultItemList.displayName = 'ResultItemList';
+
 export default ResultItemList;

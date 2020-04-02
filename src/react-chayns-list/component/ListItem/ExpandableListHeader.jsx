@@ -66,4 +66,6 @@ ExpandableListHeader.defaultProps = {
     headerProps: null,
 };
 
+ExpandableListHeader.displayName = 'ExpandableListHeader';
+
 export default ExpandableListHeader;

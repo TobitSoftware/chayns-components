@@ -90,4 +90,6 @@ SharingBar.defaultProps = {
     style: null,
 };
 
+SharingBar.displayName = 'SharingBar';
+
 export default SharingBar;

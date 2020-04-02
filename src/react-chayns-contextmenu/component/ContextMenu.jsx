@@ -282,3 +282,5 @@ ContextMenu.defaultProps = {
     removeParentSpace: false,
     disableDialog: false,
 };
+
+ContextMenu.displayName = 'ContextMenu';

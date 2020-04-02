@@ -67,3 +67,5 @@ ComboBox.defaultProps = {
     stopPropagation: false,
     defaultValue: null,
 };
+
+ComboBox.displayName = 'ComboBox';

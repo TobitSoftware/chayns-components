@@ -28,4 +28,6 @@ WaitCursor.defaultProps = {
     style: null,
 };
 
+WaitCursor.displayName = 'WaitCursor';
+
 export default WaitCursor;

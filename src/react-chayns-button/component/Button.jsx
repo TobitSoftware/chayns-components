@@ -89,3 +89,5 @@ Button.defaultProps = {
     secondary: false,
     stopPropagation: false,
 };
+
+Button.displayName = 'Button';

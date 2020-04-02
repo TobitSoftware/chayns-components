@@ -58,7 +58,7 @@ export default class FileInput extends PureComponent {
         if (stopPropagation) event.stopPropagation();
         if (isFunction(item.onClick)) item.onClick(event);
         if (this.needAppCall && item.onChange) {
-            const compatibilityEvent = await fileInputCall();
+            const compatibilityEvent = await fileInputCall(); // TODO remove in future version
             this.onChange(compatibilityEvent, item, index);
         }
     };
@@ -230,3 +230,5 @@ FileInput.defaultProps = {
         content: null,
     }],
 };
+
+FileInput.displayName = 'FileInput';

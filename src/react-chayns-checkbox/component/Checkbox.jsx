@@ -99,3 +99,5 @@ Checkbox.defaultProps = {
     stopPropagation: false,
     id: null,
 };
+
+Checkbox.displayName = 'Checkbox';

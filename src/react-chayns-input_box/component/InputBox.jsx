@@ -234,3 +234,5 @@ InputBox.defaultProps = {
     inputRef: null,
     overlayProps: null,
 };
+
+InputBox.displayName = 'InputBox';

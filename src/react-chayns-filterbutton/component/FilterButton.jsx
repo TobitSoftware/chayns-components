@@ -115,4 +115,6 @@ FilterButton.defaultProps = {
     small: false,
 };
 
+FilterButton.displayName = 'FilterButton';
+
 export default FilterButton;

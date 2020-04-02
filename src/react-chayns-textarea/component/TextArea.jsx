@@ -153,4 +153,6 @@ TextArea.propTypes = {
     stopPropagation: PropTypes.bool,
 };
 
+TextArea.displayName = 'TextArea';
+
 export default TextArea;

@@ -286,3 +286,5 @@ Gallery.defaultProps = {
     dragMode: false,
     onDragEnd: null,
 };
+
+Gallery.displayName = 'Gallery';

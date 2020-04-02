@@ -173,3 +173,5 @@ SelectButton.defaultProps = {
     showListSelection: true,
     style: null,
 };
+
+SelectButton.displayName = 'SelectButton';

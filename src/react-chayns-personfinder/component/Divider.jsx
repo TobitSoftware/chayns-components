@@ -9,4 +9,6 @@ Divider.propTypes = {
     name: PropTypes.string.isRequired,
 };
 
+Divider.displayName = 'Divider';
+
 export default Divider;

@@ -118,4 +118,6 @@ SetupItem.defaultProps = {
     currentStep: -1,
 };
 
+SetupItem.displayName = 'SetupItem';
+
 export default withSetupWizardContext(SetupItem);

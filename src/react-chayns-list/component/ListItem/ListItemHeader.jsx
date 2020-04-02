@@ -87,4 +87,6 @@ ListItemHeader.defaultProps = {
     right: null,
 };
 
+ListItemHeader.displayName = 'ListItemHeader';
+
 export default ListItemHeader;

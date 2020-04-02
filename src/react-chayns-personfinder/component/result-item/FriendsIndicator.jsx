@@ -30,4 +30,6 @@ FriendsIndicator.propTypes = {
     name: PropTypes.string.isRequired,
 };
 
+FriendsIndicator.displayName = 'FriendsIndicator';
+
 export default FriendsIndicator;

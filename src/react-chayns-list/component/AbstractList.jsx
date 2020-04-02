@@ -21,4 +21,6 @@ AbstractList.defaultProps = {
     children: null,
 };
 
+AbstractList.displayName = 'AbstractList';
+
 export default AbstractList;

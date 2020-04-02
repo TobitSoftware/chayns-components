@@ -63,3 +63,5 @@ TransparencySlider.defaultProps = {
     onChange: null,
     onChangeEnd: null,
 };
+
+TransparencySlider.displayName = 'TransparencySlider';

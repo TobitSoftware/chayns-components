@@ -158,4 +158,6 @@ AbstractExpandableListItem.defaultProps = {
     onCloseProp: null,
 };
 
+AbstractExpandableListItem.displayName = 'AbstractExpandableListItem';
+
 export default connectExpandableContext(AbstractExpandableListItem);

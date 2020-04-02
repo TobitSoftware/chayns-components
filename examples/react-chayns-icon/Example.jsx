@@ -27,8 +27,8 @@ export default class IconExample extends PureComponent {
                         this.setState({ index: index + 1 });
                     }}
                 />
-                <Icon icon="fa fa-coffee" style={{ fontSize: '2rem' }}/>
-                <Icon icon="fa fa-coffee" style={{ fontSize: '1rem' }}/>
+                <Icon icon="fa fa-bell" style={{ fontSize: '2rem' }}/>
+                <Icon icon="fa fa-bell-on" style={{ fontSize: '1rem' }}/>
                 <Icon icon="fa fa-coffee"/>
                 <Icon icon="far fa-coffee"/>
                 <Icon icon="fal fa-coffee"/>

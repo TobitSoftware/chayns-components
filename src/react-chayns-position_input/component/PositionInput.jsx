@@ -51,7 +51,7 @@ export default class PositionInput extends PureComponent {
                 });
             }
         });
-    }
+    };
 
     handleUserPan = (map) => {
         const { onPositionChange } = this.props;
@@ -67,7 +67,7 @@ export default class PositionInput extends PureComponent {
         } else {
             this.setAddress(center);
         }
-    }
+    };
 
     handleInputChange = (value) => {
         this.setState({ value });
@@ -91,7 +91,7 @@ export default class PositionInput extends PureComponent {
                 currentInputType: ADDRESS,
             });
         }
-    }
+    };
 
     getAddresses = (value) => {
         const { defaultPosition: { lat, lng } } = this.props;
@@ -107,7 +107,7 @@ export default class PositionInput extends PureComponent {
                 });
             }
         });
-    }
+    };
 
     selectAddress = (value) => {
         this.setState({
@@ -124,7 +124,7 @@ export default class PositionInput extends PureComponent {
                 onPositionChange(position);
             }
         });
-    }
+    };
 
     render() {
         const {
@@ -201,6 +201,7 @@ PositionInput.defaultProps = {
             },
         ],
     },
+    // eslint-disable-next-line react/display-name
     children: (value, onChange) => (
         <Input
             placeholder="Position"
@@ -209,3 +210,5 @@ PositionInput.defaultProps = {
         />
     ),
 };
+
+PositionInput.displayName = 'PositionInput';

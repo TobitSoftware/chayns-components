@@ -131,3 +131,5 @@ ColorInput.propTypes = {
     onModelToggle: PropTypes.func.isRequired,
     transparency: PropTypes.bool.isRequired,
 };
+
+ColorInput.displayName = 'ColorInput';

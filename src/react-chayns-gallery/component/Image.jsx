@@ -196,3 +196,5 @@ Image.defaultProps = {
     styleLandscape: {},
     preventParams: {},
 };
+
+Image.displayName = 'Image';

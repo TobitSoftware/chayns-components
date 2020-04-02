@@ -38,4 +38,6 @@ List.defaultProps = {
     notExpandable: false,
 };
 
+List.displayName = 'List';
+
 export default List;

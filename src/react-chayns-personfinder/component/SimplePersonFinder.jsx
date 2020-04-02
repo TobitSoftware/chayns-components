@@ -191,4 +191,6 @@ SimplePersonFinder.defaultProps = {
     value: null,
 };
 
+SimplePersonFinder.displayName = 'SimplePersonFinder';
+
 export default SimplePersonFinder;

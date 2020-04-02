@@ -138,3 +138,5 @@ SelectList.defaultProps = {
     children: null,
     style: null,
 };
+
+SelectList.displayName = 'SelectList';

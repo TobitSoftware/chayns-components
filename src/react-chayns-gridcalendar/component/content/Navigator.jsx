@@ -81,3 +81,5 @@ Navigator.defaultProps = {
     hidden: {},
     days: [],
 };
+
+Navigator.displayName = 'Navigator';

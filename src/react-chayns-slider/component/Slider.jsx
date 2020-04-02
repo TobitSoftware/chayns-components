@@ -582,3 +582,5 @@ Slider.defaultProps = {
     trackStyle: null,
     innerTrackStyle: null,
 };
+
+Slider.displayName = 'Slider';

@@ -99,4 +99,6 @@ PersonFinderResults.defaultProps = {
     focusIndex: null,
 };
 
+PersonFinderResults.displayName = 'PersonFinderResults';
+
 export default PersonFinderResults;

@@ -35,3 +35,5 @@ Groups.propTypes = {
     onClick: PropTypes.func.isRequired,
     focus: PropTypes.number.isRequired,
 };
+
+Groups.displayName = 'Groups';

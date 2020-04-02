@@ -184,3 +184,5 @@ TagInput.defaultProps = {
     className: null,
     style: null,
 };
+
+TagInput.displayName = 'TagInput';

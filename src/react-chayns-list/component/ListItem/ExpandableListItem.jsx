@@ -63,4 +63,6 @@ ExpandableListItem.defaultProps = {
     onClose: null,
 };
 
+ExpandableListItem.displayName = 'ExpandableListItem';
+
 export default ExpandableListItem;

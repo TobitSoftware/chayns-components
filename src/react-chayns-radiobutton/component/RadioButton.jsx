@@ -98,3 +98,5 @@ RadioButton.defaultProps = {
     stopPropagation: false,
     style: null,
 };
+
+RadioButton.displayName = 'RadioButton';

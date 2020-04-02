@@ -181,3 +181,5 @@ MonthTable.defaultProps = {
     activateAll: true,
     onDateSelect: null,
 };
+
+MonthTable.displayName = 'MonthTable';

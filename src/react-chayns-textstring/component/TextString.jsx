@@ -397,3 +397,5 @@ TextString.defaultProps = {
     setProps: {},
     preventNoTranslate: false,
 };
+
+TextString.displayName = 'TextString';

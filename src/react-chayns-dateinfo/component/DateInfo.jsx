@@ -226,3 +226,5 @@ DateInfo.defaultProps = {
     useTomorrowYesterday: null,
     hideYear: false,
 };
+
+DateInfo.displayName = 'DateInfo';

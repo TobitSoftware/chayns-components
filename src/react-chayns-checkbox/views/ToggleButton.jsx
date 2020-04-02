@@ -96,5 +96,6 @@ ToggleButton.defaultProps = {
     stopPropagation: false,
 };
 
+ToggleButton.displayName = 'ToggleButton';
 
 export default ToggleButton;

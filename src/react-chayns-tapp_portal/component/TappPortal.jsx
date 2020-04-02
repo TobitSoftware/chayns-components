@@ -21,4 +21,6 @@ TappPortal.propTypes = {
     parent: PropTypes.instanceOf(Element),
 };
 
+TappPortal.displayName = 'TappPortal';
+
 export default TappPortal;

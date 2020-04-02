@@ -41,3 +41,5 @@ ControlButton.defaultProps = {
     disabled: false,
     color: null,
 };
+
+ControlButton.displayName = 'ControlButton';

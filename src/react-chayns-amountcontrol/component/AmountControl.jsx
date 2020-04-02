@@ -252,3 +252,5 @@ AmountControl.defaultProps = {
     removeIcon: 'fa fa-minus',
     hasAlwaysControls: false,
 };
+
+AmountControl.displayName = 'AmountControl';

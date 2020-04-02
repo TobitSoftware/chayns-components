@@ -34,4 +34,6 @@ AccordionSearch.defaultProps = {
     searchValue: null,
 };
 
+AccordionSearch.displayName = 'AccordionSearch';
+
 export default AccordionSearch;

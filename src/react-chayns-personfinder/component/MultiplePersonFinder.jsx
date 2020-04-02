@@ -285,4 +285,6 @@ MultiplePersonFinder.defaultProps = {
     value: null,
 };
 
+MultiplePersonFinder.displayName = 'MultiplePersonFinder';
+
 export default MultiplePersonFinder;

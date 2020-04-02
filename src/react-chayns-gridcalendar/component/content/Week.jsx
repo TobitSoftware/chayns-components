@@ -79,3 +79,5 @@ Week.defaultProps = {
     groupFocus: null,
     weekWidth: null,
 };
+
+Week.displayName = 'Week';

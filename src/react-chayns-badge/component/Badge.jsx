@@ -39,3 +39,5 @@ Badge.defaultProps = {
     className: '',
     badgeRef: null,
 };
+
+Badge.displayName = 'Badge';

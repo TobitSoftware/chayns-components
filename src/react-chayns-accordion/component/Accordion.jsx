@@ -362,3 +362,5 @@ Accordion.defaultProps = {
     onClick: null,
     disabled: false,
 };
+
+Accordion.displayName = 'Accordion';

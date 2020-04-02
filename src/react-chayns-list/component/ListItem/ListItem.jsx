@@ -67,4 +67,6 @@ ListItem.defaultProps = {
     headerProps: null,
 };
 
+ListItem.displayName = 'ListItem';
+
 export default ListItem;

@@ -538,3 +538,5 @@ ReceiverInput.defaultProps = {
     placeholder: '',
     fontSize: null,
 };
+
+ReceiverInput.displayName = 'ReceiverInput';

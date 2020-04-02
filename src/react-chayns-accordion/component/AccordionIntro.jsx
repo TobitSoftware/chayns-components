@@ -7,9 +7,10 @@ const AccordionIntro = ({ children }) => (
     </div>
 );
 
-
 AccordionIntro.propTypes = {
     children: PropTypes.node.isRequired,
 };
+
+AccordionIntro.displayName = 'AccordionIntro';
 
 export default AccordionIntro;

@@ -199,4 +199,6 @@ OpeningTimes.defaultProps = {
     style: null,
 };
 
+OpeningTimes.displayName = 'OpeningTimes';
+
 export default OpeningTimes;

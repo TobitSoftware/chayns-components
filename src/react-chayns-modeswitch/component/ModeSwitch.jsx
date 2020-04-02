@@ -268,3 +268,5 @@ ModeSwitch.defaultProps = {
     show: null,
     parent: null,
 };
+
+ModeSwitch.displayName = 'ModeSwitch';

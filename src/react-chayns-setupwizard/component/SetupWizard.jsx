@@ -277,6 +277,8 @@ SetupWizard.childContextTypes = {
     resetToStep: PropTypes.func,
 };
 
+SetupWizard.displayName = 'SetupWizard';
+
 SetupWizard.contextType = SetupWizardContext;
 
 export default SetupWizard;

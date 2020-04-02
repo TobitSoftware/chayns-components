@@ -105,3 +105,5 @@ Icon.defaultProps = {
     disabled: false,
     stopPropagation: false,
 };
+
+Icon.displayName = 'Icon';

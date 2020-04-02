@@ -122,4 +122,6 @@ DayItem.defaultProps = {
     onDateSelect: null,
 };
 
+DayItem.displayName = 'DayItem';
+
 export default DayItem;

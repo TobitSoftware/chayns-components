@@ -241,4 +241,6 @@ ColorPicker.colorModels = {
     RGB: 1,
 };
 
+ColorPicker.displayName = 'ColorPicker';
+
 export default ColorPicker;

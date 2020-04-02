@@ -293,4 +293,6 @@ PersonFinderView.defaultProps = {
     onKeyDown: null,
 };
 
+PersonFinderView.displayName = 'PersonFinderView';
+
 export default PersonFinderView;
