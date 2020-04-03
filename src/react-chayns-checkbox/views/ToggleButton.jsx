@@ -60,7 +60,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
 });
 
 ToggleButton.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     style: PropTypes.object,
     className: PropTypes.string,
     labelStyle: PropTypes.object,
