@@ -33,6 +33,15 @@ const customData = [
 ];
 
 export default class PersonFinderExample extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.simplePersonFinderRef1 = React.createRef();
+        this.simplePersonFinderRef2 = React.createRef();
+        this.simplePersonFinderRef3 = React.createRef();
+        this.simplePersonFinderRef4 = React.createRef();
+    }
+
+
     static handleSelect(user) {
         chayns.dialog.alert(JSON.stringify(user, null, 2));
     }
@@ -49,9 +58,13 @@ export default class PersonFinderExample extends PureComponent {
         data: customData.slice(0, 1),
         hasMore: true,
         moreReceiver: [{
-            userId: 2236583, personId: '134-78226', firstName: 'Thomas', lastName: 'Tobit',
+            userId: 2236583,
+            personId: '134-78226',
+            firstName: 'Thomas',
+            lastName: 'Tobit',
         }],
         controlledValues: [],
+        value: '',
     };
 
     clear = () => {
@@ -68,60 +81,49 @@ export default class PersonFinderExample extends PureComponent {
         if (this.uacFinder) this.uacFinder.clear();
         if (this.relationFinderUac) this.relationFinderUac.clear();
         if (this.relationFinderUacLocation) this.relationFinderUacLocation.clear();
+        this.simplePersonFinderRef1.current.clear();
+        this.simplePersonFinderRef2.current.clear();
+        this.simplePersonFinderRef3.current.clear();
+        this.simplePersonFinderRef4.current.clear();
+        this.setState({ controlledValues: [] });
     };
 
     render() {
-        const { data, hasMore, moreReceiver, controlledValues } = this.state;
+        const { data, hasMore, moreReceiver, controlledValues, value } = this.state;
         return (
-            <div style={{ marginBottom: '300px' }}>
+            <div style={{ marginBottom: '500px' }}>
+                <h2>Simple PersonFinders</h2>
                 <PersonFinder
-                    max={3}
-                    placeholder="Empfänger"
-                    showPersons
-                    multiple
                     onChange={console.log}
-                    onAdd={(value) => {
-                        console.log(value);
-                        this.setState({
-                            moreReceiver: [
-                                ...moreReceiver,
-                                {
-                                    userId: value.userId,
-                                    personId: value.personId,
-                                    firstName: value.firstName,
-                                    lastName: value.lastName,
-                                },
-                            ],
-                        });
-                    }}
                     onInput={console.log}
-                    defaultValues={moreReceiver}
-                    onRemove={(value) => {
-                        const newReceiver = moreReceiver.filter((rec) => rec.userId !== value.userId);
-                        this.setState({
-                            moreReceiver: newReceiver,
-                        });
-                    }}
-                    ref={(ref) => {
-                        this.personFinder0 = ref;
-                    }}
-                    onKeyDown={(...e) => { console.log('onkeydown personfinder', ...e); }}
-                    autoSelectFirst
+                    ref={this.simplePersonFinderRef1}
                 />
                 <PersonFinder
-                    values={controlledValues}
-                    multiple
-                    onAdd={(value) => {
-                        console.log('add', value);
-                        controlledValues.push(value);
-                        this.setState({ controlledValues });
+                    value={value}
+                    onChange={(value) => {
+                        console.log(value);
+                        this.setState({ value });
                     }}
-                    onRemove={(value) => {
-                        console.log('remove', value, controlledValues);
-                        controlledValues.splice(controlledValues.findIndex((v) => v.userId === value.userId), 1);
-                        this.setState({ controlledValues });
+                    onInput={(value) => {
+                        console.log(value);
+                        this.setState({ value });
                     }}
-                    placeholder="Controlled PersonFinder"
+                    ref={this.simplePersonFinderRef2}
+                />
+                <PersonFinder
+                    defaultValue="Jonas Gossens"
+                    onChange={console.log}
+                    ref={this.simplePersonFinderRef3}
+                />
+                <PersonFinder
+                    defaultValue={{
+                        type: 'PERSON',
+                        fullName: 'Test User',
+                        firstName: 'Test',
+                        lastName: 'User',
+                    }}
+                    onChange={console.log}
+                    ref={this.simplePersonFinderRef4}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -198,6 +200,70 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder
+                    ref={(ref) => {
+                        this.personFinderOwn1 = ref;
+                    }}
+                    dynamic
+                    placeholder="Users (including own, showId)"
+                    onChange={PersonFinderExample.handleSelect}
+                    removeIcon
+                    includeOwn
+                    showId
+                />
+
+                <h2>Multiple PersonFinders</h2>
+                <PersonFinder
+                    max={3}
+                    placeholder="Empfänger"
+                    showPersons
+                    multiple
+                    onChange={console.log}
+                    onAdd={(value) => {
+                        console.log(value);
+                        this.setState({
+                            moreReceiver: [
+                                ...moreReceiver,
+                                {
+                                    userId: value.userId,
+                                    personId: value.personId,
+                                    firstName: value.firstName,
+                                    lastName: value.lastName,
+                                },
+                            ],
+                        });
+                    }}
+                    onInput={console.log}
+                    defaultValues={moreReceiver}
+                    onRemove={(value) => {
+                        const newReceiver = moreReceiver.filter((rec) => rec.userId !== value.userId);
+                        this.setState({
+                            moreReceiver: newReceiver,
+                        });
+                    }}
+                    ref={(ref) => {
+                        this.personFinder0 = ref;
+                    }}
+                    onKeyDown={(...e) => {
+                        console.log('onkeydown personfinder', ...e);
+                    }}
+                    autoSelectFirst
+                />
+                <PersonFinder
+                    values={controlledValues}
+                    multiple
+                    onAdd={(value) => {
+                        console.log('add', value);
+                        controlledValues.push(value);
+                        this.setState({ controlledValues });
+                    }}
+                    onRemove={(value) => {
+                        console.log('remove', value, controlledValues);
+                        controlledValues.splice(controlledValues.findIndex((v) => v.userId === value.userId), 1);
+                        this.setState({ controlledValues });
+                    }}
+                    placeholder="Controlled PersonFinder"
+                />
+                <PersonFinder
                     autoSelectFirst
                     ref={(ref) => {
                         this.customUserFinder = ref;
@@ -209,7 +275,8 @@ export default class PersonFinderExample extends PureComponent {
                         identifier: 'email',
                         search: ['email', 'displayName'],
                         imageUrl: 'imageUrl',
-                        filter: (inputValue) => (e) => ['email', 'displayName'].some((key) => e[key] && e[key].toLowerCase().startsWith((inputValue || '').toLowerCase())),
+                        filter: (inputValue) => (e) => ['email', 'displayName'].some((key) => e[key] && e[key].toLowerCase()
+                            .startsWith((inputValue || '').toLowerCase())),
                     })}
                     contextProps={{
                         data,
@@ -233,8 +300,14 @@ export default class PersonFinderExample extends PureComponent {
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                     defaultValues={[
-                        { displayName: 'Herrmann Muster', email: 'herrmann.muster@uni-muenster.de' },
-                        { displayName: 'Bill Tester', email: 'bill.tester@tobit.software' },
+                        {
+                            displayName: 'Herrmann Muster',
+                            email: 'herrmann.muster@uni-muenster.de',
+                        },
+                        {
+                            displayName: 'Bill Tester',
+                            email: 'bill.tester@tobit.software',
+                        },
                     ]}
                 />
                 <PersonFinder
@@ -248,17 +321,6 @@ export default class PersonFinderExample extends PureComponent {
                     onAdd={(group) => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
-                />
-                <PersonFinder
-                    ref={(ref) => {
-                        this.personFinderOwn1 = ref;
-                    }}
-                    dynamic
-                    placeholder="Users (including own, showId)"
-                    onChange={PersonFinderExample.handleSelect}
-                    removeIcon
-                    includeOwn
-                    showId
                 />
                 <PersonFinder
                     ref={(ref) => {

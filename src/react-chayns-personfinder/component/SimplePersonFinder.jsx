@@ -1,146 +1,59 @@
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import Input from '../../react-chayns-input/component/Input';
-import PersonFinderView from './PersonFinderView';
-import { isFunction, isString } from '../../utils/is';
-import PersonsContext from './data/persons/PersonsContext';
-import { convertPersonForReturn } from './data/persons/PersonsConverter';
+import { isString } from '../../utils/is';
+import MultiplePersonFinder from './MultiplePersonFinder';
 
 class SimplePersonFinder extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            inputValue: isString(props.defaultValue)
-                ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
-            selectedValue: !!props.defaultValue,
-        };
-
         if (isString(props.defaultValue)) {
+            // eslint-disable-next-line no-console
             console.warn('[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.');
         }
 
+        this.multipleFinder = React.createRef();
+
         this.clear = this.clear.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.handleOnChange = this.handleOnChange.bind(this);
-    }
-
-    handleOnChange(inputValue, ...other) {
-        const { onInput } = this.props;
-        this.setState({
-            inputValue,
-            selectedValue: false,
-        });
-        if (onInput && isFunction(onInput)) {
-            onInput(inputValue, ...other);
-        }
-    }
-
-    handleSelect(type, value) {
-        const {
-            onChange,
-            context: Context,
-        } = this.props;
-        const name = value[Context.ObjectMapping.showName];
-
-        this.setState({
-            inputValue: name,
-            selectedValue: true,
-        });
-
-        let outValue = value;
-        if (onChange) {
-            if (outValue && outValue.type === 'PERSON') {
-                outValue = convertPersonForReturn(outValue);
-            }
-            onChange(outValue);
-        }
     }
 
     clear() {
-        const { onChange } = this.props;
-
-        this.setState({
-            inputValue: '',
-            selectedValue: false,
-        });
-
-        if (onChange) {
-            onChange(null);
-        }
+        this.multipleFinder.current.clear();
     }
 
     render() {
         const {
-            showPersons,
-            showSites,
-            className,
-            showId,
             defaultValue,
-            context: Context,
-            contextProps,
-            removeIcon,
-            value: valueProp,
+            value,
+            onChange,
             ...props
         } = this.props;
-        const { inputValue, selectedValue } = this.state;
 
-        const additionalProps = {
-            inputComponent: Input,
-            value: inputValue,
-            selectedValue,
-            onChange: this.handleOnChange,
-            onSelect: this.handleSelect,
-        };
+        let defaultValues = [];
+        if (isString(defaultValue)) {
+            defaultValues = [{ fullName: defaultValue }];
+        } else if (defaultValue) {
+            defaultValues = [defaultValue];
+        }
 
-        if (removeIcon) {
-            additionalProps.icon = selectedValue ? 'ts-wrong' : null;
-            additionalProps.onIconClick = (ev) => {
-                ev.stopPropagation();
-                this.clear();
-            };
+        if (isString(value)) {
+            props.value = value;
+        } else if (value) {
+            props.values = [value];
         }
 
         return (
-            <div className={classNames('cc__person-finder', className)}>
-                <Context.Provider
-                    // backward compatibility for previous props
-                    {...(Context.Provider === PersonsContext.Provider ? {
-                        uacId: props.uacId,
-                        locationId: props.locationId,
-                        includeOwn: props.includeOwn,
-                        enableSites: showSites,
-                        enablePersons: showPersons,
-                        enableFriends: !showSites && showPersons && !props.uacId,
-                        reducerFunction: props.reducerFunction,
-                    } : null)}
-                    {...contextProps}
-                >
-                    <Context.Consumer>
-                        {(ctx) => (
-                            <PersonFinderView
-                                {...props}
-                                {...additionalProps}
-                                {...ctx}
-                                orm={Context.ObjectMapping}
-                                inputComponent={Input}
-                                value={isString(valueProp) ? valueProp : inputValue}
-                                selectedValue={selectedValue}
-                                onChange={(...value) => {
-                                    this.handleOnChange(...value);
-                                    if (typeof ctx.onChange === 'function') {
-                                        ctx.onChange(...value);
-                                    }
-                                }}
-                                onSelect={this.handleSelect}
-                            />
-                        )}
-                    </Context.Consumer>
-                </Context.Provider>
-            </div>
+            <MultiplePersonFinder
+                ref={this.multipleFinder}
+                defaultValues={defaultValues}
+                onChange={(values) => {
+                    if (onChange) {
+                        onChange(values.length > 0 ? values[0] : null);
+                    }
+                }}
+                {...props}
+                max={1}
+            />
         );
     }
 }
@@ -174,7 +87,7 @@ SimplePersonFinder.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
     removeIcon: PropTypes.bool,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 SimplePersonFinder.defaultProps = {

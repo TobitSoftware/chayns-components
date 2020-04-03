@@ -11,7 +11,6 @@ import { isString } from '../../utils/is';
 class MultiplePersonFinder extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
@@ -66,13 +65,14 @@ class MultiplePersonFinder extends Component {
     }
 
     handleOnChange(inputValue, ...other) {
-        const { onInput } = this.props;
+        const { onInput, max } = this.props;
+        const newInputValue = (max && max <= this.getValues().length) ? '' : inputValue;
         this.setState({
-            inputValue,
+            inputValue: newInputValue,
             selectedValue: false,
         });
         if (onInput) {
-            onInput(inputValue, ...other);
+            onInput(newInputValue, ...other);
         }
     }
 
