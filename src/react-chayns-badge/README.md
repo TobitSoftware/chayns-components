@@ -1,10 +1,10 @@
-# Badge #
+# Badge
 
-The Badge is part of the *chayns-components* package. It can be installed via npm:
+The Badge is part of the _chayns-components_ package. It can be installed via npm:
 
     npm install -S chayns-components@latest
 
-## Usage ##
+## Usage
 
 The component has to be imported:
 
@@ -18,19 +18,18 @@ You can use the badge like this:
 <Badge>1</Badge>
 ```
 
-
-## Props ##
+## Props
 
 The following properties can be set on the Badge:
 
-| Property   | Description                                                                                         | Type   | Default Value |
-|------------|-----------------------------------------------------------------------------------------------------|--------|---------------|
-| children   | Value of the badge                                                                                  | node   | *required*    |
-| className  | ClassName added to the badge                                                                        | string |               |
-| badgeRef   | Reference to the badge div                                                                          | func   |               |
-| style      | Extra styles for badge element                                                                      | object |               |
+| Property  | Description                  | Type   | Default Value |
+| --------- | ---------------------------- | ------ | ------------- |
+| children  | Value of the badge           | node   | _required_    |
+| className | ClassName added to the badge | string |               |
+| ref       | Reference to the badge div   | func   |               |
 
+Additional props will be passed on to the badge div.
 
-## Example ##
+## Example
 
 You can take a look at the **examples** folder in the **react-chayns-badge** repository. There you can find an appropriate way of implementing the **Badge** to your chayns-Tapp.
