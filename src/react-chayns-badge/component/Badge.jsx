@@ -33,12 +33,10 @@ export default Badge;
 Badge.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-    badgeRef: PropTypes.func,
 };
 
 Badge.defaultProps = {
     className: '',
-    badgeRef: null,
 };
 
 Badge.displayName = 'Badge';
