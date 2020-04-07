@@ -16,10 +16,12 @@ export default class ContextMenuExample extends Component {
             x: 0,
             y: 0,
             position: 0,
+            positionOnChildren: 0,
             listCoordinates: { x: 0, y: 0 },
         };
 
         this.buttonClick = this.buttonClick.bind(this);
+        this.buttonClick2 = this.buttonClick2.bind(this);
 
         this.listContextMenu = React.createRef();
         this.clickContextMenu = React.createRef();
@@ -30,9 +32,14 @@ export default class ContextMenuExample extends Component {
         this.setState({ position: position + 1 });
     }
 
+    buttonClick2() {
+        const { positionOnChildren } = this.state;
+        this.setState({ positionOnChildren: positionOnChildren + 1 });
+    }
+
     render() {
         const {
-            x, y, position, listCoordinates,
+            x, y, position, listCoordinates, positionOnChildren,
         } = this.state;
 
         const items = [
@@ -54,6 +61,9 @@ export default class ContextMenuExample extends Component {
             <div>
                 <Button onClick={this.buttonClick}>
                     Change position
+                </Button>
+                <Button onClick={this.buttonClick2}>
+                    Change position on children
                 </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
@@ -146,6 +156,7 @@ export default class ContextMenuExample extends Component {
                     <ContextMenu
                         items={items}
                         position={position % 6}
+                        positionOnChildren={positionOnChildren % 3}
                         onLayerClick={() => {
                         }}
                     />

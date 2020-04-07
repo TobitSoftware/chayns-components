@@ -25,7 +25,9 @@ The component got the following properties:
 |------------|-----------------------------------------------------------------------------------------------------|--------|-------|------|
 | coordinates           | Coordinates of the place to which the ContextMenu is rendered. Example: {x: 100, y: 100}                                  | object    |       |  |
 | onLayerClick | An Event which get triggered when the **ContextMenu** is shown and the User clicks on the Layer over the page. Returns an MouseEvent if it was closed on the desktop using a mouse. | func | ||
-| position | The position the ContextMenu (exported by ContextMenu.position). If not set, the ContextMenu will choose the position | number | null ||
+| position | The position of the ContextMenu (exported by ContextMenu.position). If not set, the ContextMenu will choose the position | number | null ||
+| positionOnChildren | The position of the ContextMenu arrow on the children (exported by ContextMenu.positionOnChildren). | number | 1 (center) ||
+| arrowDistance | The distance between the arrow and the end of the children (only if positionOnChildren is set to left or right). | number | 0 ||
 | items | The Items which are displayed in the **ContextMenu** | array | |
 | item.className | The className of an item of the **ContextMenu** | string | |
 | item.onClick | The function, which gets triggered when the user clicks on a certain item in the **ContextMenu** | func | ||
