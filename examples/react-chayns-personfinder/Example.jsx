@@ -341,9 +341,12 @@ export default class PersonFinderExample extends PureComponent {
                     dynamic
                     placeholder="Sites (multiple, default)"
                     defaultValues={[{
-                        type: 'LOCATION',
-                        name: 'BamBoo!',
-                        siteId: '77891-25316',
+                        type: 'SITE',
+                        id: '59140-09519',
+                        name: 'BamBoo! Ahaus',
+                        imageUrl: 'https://sub60.tobit.com/l/59140-09519?size=40',
+                        siteId: '59140-09519',
+                        locationId: 1,
                     }]}
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
