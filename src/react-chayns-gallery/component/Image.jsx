@@ -7,12 +7,18 @@ import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/g
 import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
 import './Image.scss';
 import { isString } from '../../utils/is';
+import getOrientation from '../utils/getOrientation';
 
 export default class Image extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            ready: false, imageUrl: null, metaData: null, elementDimensions: null,
+            ready: false,
+            imageUrl: null,
+            metaData: null,
+            elementDimensions: null,
+            rotate: 0,
+            mirror: false,
         };
         this.imageRef = React.createRef();
     }
@@ -43,15 +49,24 @@ export default class Image extends PureComponent {
 
         if (isString(image)) { // url
             if (Image.imageMetaData[image]) { // use cached metadata
-                this.setState({ metaData: Image.imageMetaData[image], imageUrl: image });
+                this.setState({
+                    metaData: Image.imageMetaData[image],
+                    imageUrl: image,
+                });
             } else if (image.indexOf('tsimg.cloud') >= 0) { // get preview and dimensions from tsimg.cloud
                 const metaData = await getImageMetaDataFromApi(image);
                 Image.imageMetaData[image] = metaData;
-                this.setState({ metaData, imageUrl: image });
+                this.setState({
+                    metaData,
+                    imageUrl: image,
+                });
             } else if (styleLandscape || stylePortrait) { // get dimensions if needed
                 const metaData = await getImageMetaDataFromPreview(image);
                 Image.imageMetaData[image] = metaData;
-                this.setState({ metaData, imageUrl: image });
+                this.setState({
+                    metaData,
+                    imageUrl: image,
+                });
             } else { // set only the image url
                 this.setState({ imageUrl: image });
             }
@@ -59,16 +74,19 @@ export default class Image extends PureComponent {
             const cacheId = `##FILE##${image.name}${image.lastModified}${image.size}`;
             if (Image.imageMetaData[cacheId]) { // use cache
                 this.setState(Image.imageMetaData[cacheId]);
-            } else { // get dataUrl and metaData and set cache
+            } else { // get dataUrl, metaData and exifData and set cache
+                const exifData = await getOrientation(image);
                 const imageUrl = await getDataUrlFromFile(image);
-                if (styleLandscape || stylePortrait) { // get dimensions if needed
-                    const metaData = await getImageMetaDataFromPreview(imageUrl);
-                    Image.imageMetaData[cacheId] = { metaData, imageUrl };
-                    this.setState({ metaData, imageUrl });
-                } else { // set only the image url
-                    Image.imageMetaData[cacheId] = { imageUrl };
-                    this.setState({ imageUrl });
+                const newImage = { imageUrl };
+                if (exifData) {
+                    newImage.mirror = exifData.mirrored;
+                    newImage.rotate = exifData.rotation * -1;
                 }
+                if (styleLandscape || stylePortrait) { // get dimensions if needed
+                    newImage.metaData = await getImageMetaDataFromPreview(imageUrl);
+                }
+                Image.imageMetaData[cacheId] = newImage;
+                this.setState(newImage);
             }
         }
     };
@@ -95,6 +113,8 @@ export default class Image extends PureComponent {
             imageUrl,
             ready,
             elementDimensions,
+            mirror,
+            rotate,
         } = this.state;
 
         let format = 0;
@@ -133,6 +153,7 @@ export default class Image extends PureComponent {
                                         && elementDimensions.height, !preventParams.width && elementDimensions.width, preventParams.format)}
                                 className={classNames('cc__image__img', { 'cc__image--clickable': onClick })}
                                 onLoad={this.onReady}
+                                style={{ transform: (mirror ? 'scaleX(-1) ' : '') + (rotate ? `rotateZ(${rotate}deg)` : '') }}
                             />
                         )
                         : null

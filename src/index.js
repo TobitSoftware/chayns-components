@@ -83,6 +83,7 @@ import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
 import { getDataUrlFromFile, getDataUrlFromBase64 } from './react-chayns-gallery/utils/getDataUrl';
 import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from './react-chayns-gallery/utils/getImageMetaData';
+import getOrientation from './react-chayns-gallery/utils/getOrientation';
 import isTobitEmployee from './utils/tobitEmployee';
 import createLinks from './utils/createLinks';
 import removeHtml from './utils/removeHtml';
@@ -157,6 +158,7 @@ export {
     getImageMetaDataFromApi,
     getDataUrlFromBase64,
     getDataUrlFromFile,
+    getOrientation,
     CHAYNS_CSS_VERSION,
     FORMAT_INTEGER,
     FORMAT_DECIMAL,
