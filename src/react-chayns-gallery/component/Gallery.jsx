@@ -19,7 +19,11 @@ export default class Gallery extends Component {
     constructor(props) {
         super(props);
         this.galleryRef = React.createRef();
-        this.state = { active: null, images: props.images, dropzone: null };
+        this.state = {
+            active: null,
+            images: props.images,
+            dropzone: null,
+        };
     }
 
     componentDidUpdate(prevProps) {
@@ -74,7 +78,10 @@ export default class Gallery extends Component {
         const { dropzone: oldDropzone } = this.state;
         const newDropzone = this.newPosition + (this.newPosition > this.index ? 1 : 0);
         if (oldDropzone !== newDropzone) {
-            this.setState({ dropzone: newDropzone, active: this.index });
+            this.setState({
+                dropzone: newDropzone,
+                active: this.index,
+            });
         }
 
         // show corresponding dropzone
@@ -116,7 +123,11 @@ export default class Gallery extends Component {
                         onDragEnd(newArray);
                     }
 
-                    this.setState({ dropzone: null, active: null, images: newArray });
+                    this.setState({
+                        dropzone: null,
+                        active: null,
+                        images: newArray,
+                    });
                 }
             };
             this.transitionEnded = false;
@@ -226,10 +237,14 @@ export default class Gallery extends Component {
                                             image={image.url || image.file || image}
                                             moreImages={(index === 3 && defaultMode) ? numberOfImages - 1 - index : 0}
                                             onClick={
-                                                (defaultMode)
+                                                onClick || defaultMode
                                                     ? (event) => {
                                                         if (stopPropagation) event.stopPropagation();
-                                                        onClick(Gallery.getBigImageUrls(images), index);
+                                                        if (onClick) {
+                                                            onClick(Gallery.getBigImageUrls(images), index);
+                                                        } else if (defaultMode) {
+                                                            chayns.openImage(Gallery.getBigImageUrls(images), index);
+                                                        }
                                                     }
                                                     : null
                                             }
@@ -275,7 +290,7 @@ Gallery.propTypes = {
 };
 
 Gallery.defaultProps = {
-    onClick: chayns.openImage,
+    onClick: null,
     onDelete: null,
     deleteMode: false,
     height: null,
