@@ -3,16 +3,16 @@
  * Idea from http://stackoverflow.com/a/32490603.
  *
  * @param file - The file that should be checked
- * @returns Promise(resolve: {exifOrientationCode, rotation, mirrored},reject)
+ * @returns Promise(resolve: {exifOrientationCode, rotation, mirrored})
  */
 export default async function getOrientation(file) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const reader = new FileReader();
 
         reader.onload = (event) => {
             const view = new DataView(event.target.result);
 
-            if (view.getUint16(0, false) !== 0xFFD8) return reject();
+            if (view.getUint16(0, false) !== 0xFFD8) return resolve(null);
 
             const length = view.byteLength;
             let offset = 2;
@@ -24,7 +24,7 @@ export default async function getOrientation(file) {
                 if (marker === 0xFFE1) {
                     // eslint-disable-next-line no-cond-assign
                     if (view.getUint32(offset += 2, false) !== 0x45786966) {
-                        return reject();
+                        return resolve(null);
                     }
                     const little = view.getUint16(offset += 6, false) === 0x4949;
                     offset += view.getUint32(offset + 4, little);
@@ -56,7 +56,7 @@ export default async function getOrientation(file) {
                     offset += view.getUint16(offset, false);
                 }
             }
-            return reject();
+            return resolve(null);
         };
 
         reader.readAsArrayBuffer(file.slice(0, 64 * 1024));

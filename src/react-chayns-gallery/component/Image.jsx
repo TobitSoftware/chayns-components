@@ -75,9 +75,9 @@ export default class Image extends PureComponent {
             if (Image.imageMetaData[cacheId]) { // use cache
                 this.setState(Image.imageMetaData[cacheId]);
             } else { // get dataUrl, metaData and exifData and set cache
-                const exifData = await getOrientation(image);
                 const imageUrl = await getDataUrlFromFile(image);
                 const newImage = { imageUrl };
+                const exifData = await getOrientation(image);
                 if (exifData) {
                     newImage.mirror = exifData.mirrored;
                     newImage.rotate = exifData.rotation * -1;
