@@ -7,6 +7,8 @@
 
 # chayns-components #
 
+## Installation ##
+
 The ChaynsComponents can be installed directly from npm by using the following package:
 
     npm install -S chayns-components@latest
@@ -15,13 +17,15 @@ The corresponding styles are included in our [chayns CSS API](https://github.com
 
 ```HTML
 <!-- css styles -->
-<link rel="stylesheet" href="https://api.chayns.net/css/v4.1/">
+<script src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js" version="4.2"></script>
 
 <!-- js api -->
 <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
 ``` 
 
-## Chayns Components ##
+The chayns-components are [tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking). To use tree-shaking, follow [this instruction](./tree-shaking.md).
+
+## Components Overview ##
 The following components are part of this package:
 
 <!---
