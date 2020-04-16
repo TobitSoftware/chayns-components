@@ -147,6 +147,7 @@ export default class Gallery extends Component {
             deleteMode,
             dragMode,
             className,
+            preventParams,
             stopPropagation,
             onClick,
         } = this.props;
@@ -234,6 +235,7 @@ export default class Gallery extends Component {
                                     >
                                         <Image
                                             key={`image${index}`}
+                                            preventParams={preventParams}
                                             image={image.url || image.file || image}
                                             moreImages={(index === 3 && defaultMode) ? numberOfImages - 1 - index : 0}
                                             onClick={
