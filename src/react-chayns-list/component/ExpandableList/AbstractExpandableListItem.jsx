@@ -128,7 +128,7 @@ class AbstractExpandableListItem extends PureComponent {
 
 AbstractExpandableListItem.propTypes = {
     onToggle: PropTypes.func.isRequired,
-    open: PropTypes.arrayOf(PropTypes.number),
+    open: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.bool]),
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
