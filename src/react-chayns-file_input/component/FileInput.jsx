@@ -14,7 +14,7 @@ export default class FileInput extends PureComponent {
         this.itemRefs = [];
         this.fileInputRefs = [];
         this.needAppCall = !supportsFileInput();
-        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.appVersion >= 6235) };
+        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.appVersion >= 6244) };
     }
 
     onDragEnter = (event, item, index) => {
