@@ -2,36 +2,34 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useCallback, useState } from 'react';
 
-const Badge = forwardRef(
-    ({ children, className, style, badgeRef, ...other }, ref) => {
-        const [minWidth, setMinWidth] = useState();
+const Badge = forwardRef(({ children, className, style, badgeRef, ...other }, ref) => {
+    const [minWidth, setMinWidth] = useState();
 
-        const measureRef = useCallback((node) => {
-            if (node) {
-                setMinWidth(node.getBoundingClientRect().height);
-            }
-        }, []);
+    const measureRef = useCallback((node) => {
+        if (node) {
+            setMinWidth(node.getBoundingClientRect().height);
+        }
+    }, []);
 
-        return (
-            <div
-                className={classNames(className, 'badge')}
-                ref={(node) => {
-                    measureRef(node);
-                    if (ref) {
-                        ref(node);
-                    }
-                    if (badgeRef) {
-                        badgeRef(node);
-                    }
-                }}
-                style={{ minWidth, ...style }}
-                {...other}
-            >
-                {children}
-            </div>
-        );
-    }
-);
+    return (
+        <div
+            className={classNames(className, 'badge')}
+            ref={(node) => {
+                measureRef(node);
+                if (ref) {
+                    ref(node);
+                }
+                if (badgeRef) {
+                    badgeRef(node);
+                }
+            }}
+            style={{ minWidth, ...style }}
+            {...other}
+        >
+            {children}
+        </div>
+    );
+});
 
 export default Badge;
 

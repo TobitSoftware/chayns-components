@@ -289,6 +289,7 @@ Gallery.propTypes = {
     stopPropagation: PropTypes.bool,
     dragMode: PropTypes.bool,
     onDragEnd: PropTypes.func,
+    preventParams: PropTypes.bool,
 };
 
 Gallery.defaultProps = {
@@ -302,6 +303,7 @@ Gallery.defaultProps = {
     stopPropagation: false,
     dragMode: false,
     onDragEnd: null,
+    preventParams: false,
 };
 
 Gallery.displayName = 'Gallery';

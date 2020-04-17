@@ -8,7 +8,6 @@ import AutocompleteItem from './AutocompleteItem';
 import { PositionProps } from './GoogleMap/PropTypes';
 import debounce from '../../utils/debounce';
 import './styles.scss';
-import Bubble from '../../react-chayns-bubble/component/Bubble';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 /** Uses the `toJSON()` method to return a human readable-object */
