@@ -94,19 +94,21 @@ export default class PositionInput extends PureComponent {
     };
 
     getAddresses = (value) => {
-        const { defaultPosition: { lat, lng } } = this.props;
+        if (value) {
+            const { defaultPosition: { lat, lng } } = this.props;
 
-        this.autocomplete.getPlacePredictions({
-            location: new google.maps.LatLng(lat, lng),
-            radius: 10000,
-            input: value,
-        }, (result, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                this.setState({
-                    addresses: result.map((a) => a.description),
-                });
-            }
-        });
+            this.autocomplete.getPlacePredictions({
+                location: new google.maps.LatLng(lat, lng),
+                radius: 10000,
+                input: value,
+            }, (result, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    this.setState({
+                        addresses: result.map((a) => a.description),
+                    });
+                }
+            });
+        }
     };
 
     selectAddress = (value) => {
@@ -161,7 +163,7 @@ export default class PositionInput extends PureComponent {
                             <div className="map--autocomplete_popup_root">
                                 <div className="map--autocomplete_popup">
                                     {
-                                        currentInputType === ADDRESS && addresses.map((a, index) => (
+                                        !!value && currentInputType === ADDRESS && addresses.map((a, index) => (
                                             <AutocompleteItem
                                                 index={index}
                                                 address={a}
