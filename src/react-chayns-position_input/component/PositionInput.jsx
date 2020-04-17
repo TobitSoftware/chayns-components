@@ -8,6 +8,8 @@ import AutocompleteItem from './AutocompleteItem';
 import { PositionProps } from './GoogleMap/PropTypes';
 import debounce from '../../utils/debounce';
 import './styles.scss';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 /** Uses the `toJSON()` method to return a human readable-object */
 const toLiteral = (value) => JSON.parse(JSON.stringify(value));
@@ -15,7 +17,8 @@ const toLiteral = (value) => JSON.parse(JSON.stringify(value));
 const ADDRESS = 1;
 const COORDS = 2;
 
-const noop = () => {};
+const noop = () => {
+};
 
 export default class PositionInput extends PureComponent {
     constructor(props) {
@@ -33,10 +36,16 @@ export default class PositionInput extends PureComponent {
             value: '',
             addresses: [],
             currentInputType: ADDRESS,
+            overlayPosition: {
+                width: 0,
+                left: 0,
+                bottom: 0,
+            },
         };
 
         /** @type {React.RefObject<google.maps.Map>} */
         this.mapRef = createRef();
+        this.mapOverlayRef = createRef();
 
         this.getAddresses = debounce(this.getAddresses, 500);
 
@@ -70,12 +79,18 @@ export default class PositionInput extends PureComponent {
     };
 
     handleInputChange = (value) => {
-        this.setState({ value });
+        this.setState({
+            value,
+            overlayPosition: this.mapOverlayRef.current.getBoundingClientRect(),
+        });
 
         try {
             const { onPositionChange } = this.props;
             const { latitude: lat, longitude: lng } = new Coordinates(value);
-            const position = { lat, lng };
+            const position = {
+                lat,
+                lng,
+            };
             this.mapRef.current.panTo(position);
             onPositionChange(position);
 
@@ -133,12 +148,14 @@ export default class PositionInput extends PureComponent {
             defaultPosition,
             mapOptions,
             children,
+            parent,
         } = this.props;
 
         const {
             value,
             addresses,
             currentInputType,
+            overlayPosition,
         } = this.state;
 
         return (
@@ -158,21 +175,29 @@ export default class PositionInput extends PureComponent {
                 />
                 {
                     children && (
-                        <div className="map--overlay">
+                        <div className="map--overlay" ref={this.mapOverlayRef}>
                             {children(value, this.handleInputChange)}
-                            <div className="map--autocomplete_popup_root">
-                                <div className="map--autocomplete_popup">
+                            <TappPortal parent={parent}>
+                                <div
+                                    className="map--autocomplete_popup"
+                                    style={{
+                                        left: `${overlayPosition.left}px`,
+                                        top: `${overlayPosition.bottom}px`,
+                                        width: `${overlayPosition.width}px`,
+                                    }}
+                                >
                                     {
                                         !!value && currentInputType === ADDRESS && addresses.map((a, index) => (
                                             <AutocompleteItem
                                                 index={index}
                                                 address={a}
                                                 onClick={this.selectAddress}
+                                                key={a}
                                             />
                                         ))
                                     }
                                 </div>
-                            </div>
+                            </TappPortal>
                         </div>
                     )
                 }
@@ -187,6 +212,7 @@ PositionInput.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     mapOptions: PropTypes.object,
     children: PropTypes.func,
+    parent: PropTypes.node,
 };
 
 PositionInput.defaultProps = {
@@ -211,6 +237,7 @@ PositionInput.defaultProps = {
             onChange={onChange}
         />
     ),
+    parent: null,
 };
 
 PositionInput.displayName = 'PositionInput';
