@@ -40,6 +40,9 @@ export default class SetupWizardExample extends Component {
                 <div>
                     <SetupWizard
                         ready={this.ready}
+                        allRequiredStepsCompleted={() => {
+                            console.log('All required steps are completed!');
+                        }}
                         notComplete={this.notComplete}
                         title="Wizard"
                         description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n'

@@ -31,6 +31,7 @@ class SetupWizard extends Component {
         this.resetToStep = this.resetToStep.bind(this);
         this.ready = this.ready.bind(this);
         this.notComplete = this.notComplete.bind(this);
+        this.allRequiredStepsCompleted = this.allRequiredStepsCompleted.bind(this);
     }
 
     getChildContext() {
@@ -59,6 +60,7 @@ class SetupWizard extends Component {
             this.setState({
                 completedSteps: this.completedSteps,
             });
+            this.allRequiredStepsCompleted();
         } else if (!value && this.completedSteps.indexOf(selectedStep) >= 0) {
             this.completedSteps.splice(this.completedSteps.indexOf(selectedStep), 1);
             this.setState({
@@ -172,6 +174,16 @@ class SetupWizard extends Component {
         }
     };
 
+    allRequiredStepsCompleted = () => {
+        const { allRequiredStepsCompleted } = this.props;
+        if (allRequiredStepsCompleted) {
+            const { requiredSteps } = this.state;
+            if (requiredSteps.every((v) => this.completedSteps.includes(v))) {
+                allRequiredStepsCompleted();
+            }
+        }
+    };
+
     notComplete = () => {
         const { notComplete } = this.props;
         if (notComplete) {
@@ -254,6 +266,7 @@ SetupWizard.propTypes = {
     title: PropTypes.string,
     description: PropTypes.node,
     numberOfSteps: PropTypes.number,
+    allRequiredStepsCompleted: PropTypes.func,
 };
 
 SetupWizard.defaultProps = {
@@ -266,6 +279,7 @@ SetupWizard.defaultProps = {
     description: null,
     className: null,
     numberOfSteps: null,
+    allRequiredStepsCompleted: null,
 };
 
 SetupWizard.childContextTypes = {
