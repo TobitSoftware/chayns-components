@@ -26,6 +26,8 @@ const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
     return <CheckboxView {...props} id={currentId} onChange={handleChange}/>;
 };
 
+export default Checkbox;
+
 Checkbox.propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,

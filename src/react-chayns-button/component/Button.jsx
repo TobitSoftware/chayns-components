@@ -55,13 +55,14 @@ const Button = forwardRef((props, ref) => {
     );
 });
 
+export default Button;
+
 Button.propTypes = {
     children: PropTypes.node.isRequired,
     chooseButton: PropTypes.bool,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
-    buttonRef: PropTypes.func,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     secondary: PropTypes.bool,
     stopPropagation: PropTypes.bool,
@@ -69,7 +70,6 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-    buttonRef: null,
     className: null,
     onClick: null,
     disabled: false,
