@@ -74,8 +74,9 @@ export default class ScrollViewHelper {
             } else {
                 this.content.classList.remove('cc__scroll-view--hidden');
 
-                this.bar.style.height = `${Math.max(this.scrollRatio, 0.1) * ownHeight}px`;
-                this.bar.style.top = `${(this.content.scrollTop / totalHeight) * ownHeight}px`;
+                const barHeightPercent = Math.max(this.scrollRatio, 0.1);
+                this.bar.style.height = `${barHeightPercent * ownHeight}px`;
+                this.bar.style.top = `${(this.content.scrollTop / (totalHeight - ownHeight)) * (ownHeight * (1 - barHeightPercent))}px`;
                 this.bar.style.right = `${right}px`;
             }
         });

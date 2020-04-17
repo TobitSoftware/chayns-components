@@ -14,6 +14,16 @@ export default class ScrollViewExample extends PureComponent {
             <div>
                 <ScrollView
                     style={{
+                        maxHeight: '200px',
+                        width: '150px',
+                        background: '#777',
+                    }}
+                    onScroll={(e) => console.log(e.target.scrollTop)}
+                >
+                    {this.text}
+                </ScrollView>
+                <ScrollView
+                    style={{
                         maxHeight: '500px',
                         width: '100%',
                     }}
