@@ -1,69 +1,59 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { forwardRef } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-export default class Button extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
+const Button = forwardRef((props, ref) => {
+    const {
+        chooseButton,
+        disabled,
+        children,
+        className,
+        icon,
+        secondary,
+        stopPropagation,
+        onClick,
+        type,
+        ...other
+    } = props;
 
-    handleClick(event) {
-        const { onClick, disabled, stopPropagation } = this.props;
-
+    const handleClick = (event) => {
         if (onClick && !disabled) onClick(event);
         if (stopPropagation) event.stopPropagation();
-    }
+    };
 
-    render() {
-        const {
-            chooseButton,
-            disabled,
-            children,
-            className,
-            style,
-            buttonRef,
-            icon,
-            secondary,
-            stopPropagation, // exclude this prop from ...other
-            ...other
-        } = this.props;
-
-        return (
-            <button
-                type="button"
-                className={classNames({
-                    button: !chooseButton,
-                    choosebutton: chooseButton,
-                    'button--disabled': disabled,
-                    'button--secondary': secondary,
-                    'button--icon': icon && !chooseButton,
-                    'choosebutton--icon': icon && chooseButton,
-                    [className]: className,
-                })}
-                onClick={this.handleClick}
-                style={style}
-                disabled={disabled}
-                ref={buttonRef}
-                {...other}
-            >
-                {icon ? (
-                    <span
-                        className={classNames({
-                            button__icon: !chooseButton,
-                            choosebutton__icon: chooseButton,
-                        })}
-                    >
-                        <Icon icon={icon}/>
-                    </span>
-                ) : null}
-                {children}
-            </button>
-        );
-    }
-}
+    return (
+        // eslint-disable-next-line react/button-has-type
+        <button
+            type={type}
+            className={classNames(className, {
+                button: !chooseButton,
+                choosebutton: chooseButton,
+                'button--disabled': disabled,
+                'button--secondary': secondary,
+                'button--icon': icon && !chooseButton,
+                'choosebutton--icon': icon && chooseButton,
+            })}
+            onClick={handleClick}
+            disabled={disabled}
+            ref={ref}
+            {...other}
+        >
+            {icon && (
+                <span
+                    className={classNames({
+                        button__icon: !chooseButton,
+                        choosebutton__icon: chooseButton,
+                    })}
+                >
+                    <Icon icon={icon}/>
+                </span>
+            )}
+            {children}
+        </button>
+    );
+});
 
 Button.propTypes = {
     children: PropTypes.node.isRequired,
@@ -71,16 +61,15 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
-    style: PropTypes.object,
     buttonRef: PropTypes.func,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     secondary: PropTypes.bool,
     stopPropagation: PropTypes.bool,
+    type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 
 Button.defaultProps = {
     buttonRef: null,
-    style: null,
     className: null,
     onClick: null,
     disabled: false,
@@ -88,6 +77,7 @@ Button.defaultProps = {
     icon: null,
     secondary: false,
     stopPropagation: false,
+    type: 'button',
 };
 
 Button.displayName = 'Button';
