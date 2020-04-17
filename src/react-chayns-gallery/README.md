@@ -42,6 +42,7 @@ The following properties can be set on the Gallery-Component
 | height       | Height of the gallery in px, not used in deleteMode  | number   | width of the gallery |           |
 | width        | Width of the gallery in px                           | number   | 100%              |              |
 | stopPropagation | Stops the click propagation to parent elements    | bool     | false             |              |
+| preventParams | Forwarded to the Image component. See details below.  | object/bool|        |              | 
 
 ### Image Props ###
 
