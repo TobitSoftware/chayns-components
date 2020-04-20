@@ -145,17 +145,22 @@ export default class Accordion extends PureComponent {
         const { body } = this;
 
         if (autogrow && body) {
-            this.body.style.removeProperty('max-height');
             rqAnimationFrame = requestAnimationFrame(() => {
-                if (autogrow && body) {
-                    this.setState({
-                        currentState: CLOSE,
-                    });
-
-                    if (onClose && !preventOnClose) {
-                        onClose(event);
-                    }
+                if (this.body) {
+                    this.body.style.removeProperty('max-height');
                 }
+
+                rqAnimationFrame = requestAnimationFrame(() => {
+                    if (autogrow && body) {
+                        this.setState({
+                            currentState: CLOSE,
+                        });
+
+                        if (onClose && !preventOnClose) {
+                            onClose(event);
+                        }
+                    }
+                });
             });
         } else {
             this.setState({
