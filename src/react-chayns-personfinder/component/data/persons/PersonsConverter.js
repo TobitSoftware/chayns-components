@@ -3,8 +3,10 @@ import FriendsHelper from './FriendsHelper';
 export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
     // due to inconsistent naming of the backends
-    const fullName = relation.fullName || [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ')
-        .trim();
+    const fullName = relation.fullName
+        || relation.name
+        || [(relation.firstName || relation.firstname), (relation.lastName || relation.lastname)].join(' ').trim();
+
     return {
         type: 'PERSON',
         id: relation.personId,
