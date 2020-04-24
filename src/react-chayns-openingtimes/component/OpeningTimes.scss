@@ -22,6 +22,7 @@ $animationDurationMobile: 300ms;
   }
 
   .time__span {
+    margin-left: 30px;
     width: 140px;
     max-height: 29px;
     display: flex;
@@ -103,32 +104,30 @@ $animationDurationMobile: 300ms;
 }
 
 @mixin mobile {
-  .cc__opening_times {
-    .flex__middle {
-      flex-direction: column;
-    }
+  .flex__middle {
+    flex-direction: column;
+  }
 
-    .time__span:nth-of-type(2):before {
-      content: "";
-    }
+  .time__span:nth-of-type(2):before {
+    content: "";
+  }
 
-    .times {
-      &.multiple {
-        .flex__middle {
-          .time__span {
-            &:nth-child(2) {
-              animation: fadeInHeight $animationDurationMobile;
-            }
+  .times {
+    &.multiple {
+      .flex__middle {
+        .time__span {
+          &:nth-child(2) {
+            animation: fadeInHeight $animationDurationMobile;
           }
         }
       }
+    }
 
-      &.isRemoving {
-        .flex__middle {
-          .time__span {
-            &:nth-child(2) {
-              animation: fadeOutHeight $animationDurationMobile;
-            }
+    &.isRemoving {
+      .flex__middle {
+        .time__span {
+          &:nth-child(2) {
+            animation: fadeOutHeight $animationDurationMobile;
           }
         }
       }
@@ -186,10 +185,12 @@ $animationDurationMobile: 300ms;
 
 
 @media screen and(max-width: 490px) {
-  @include mobile;
+  .cc__opening_times {
+    @include mobile;
+  }
 }
 
-.chayns--mobile {
+.chayns--mobile .cc__opening_times, .cc__opening_times.cc__opening_times--force-mobile {
   @include mobile;
 }
 
