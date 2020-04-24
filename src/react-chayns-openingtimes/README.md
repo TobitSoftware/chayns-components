@@ -45,3 +45,4 @@ The following properties can be set on the OpeningTimes-Component
 | time.start    | The start of the timespan                              | string (HH:MM)                    |                   | true         |
 | time.end      | The end of the timespan                                | string (HH:MM)                    |                   | true         |
 | onChange      | Returns the modified times                             | func                              |                   |              |
+| forceMobile   | Force mobile view                                      | bool                              | false             |              |
