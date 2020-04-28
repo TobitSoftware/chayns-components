@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isFunction, isString } from '../../utils/is';
 
+let displayedIconWarning = false;
 export default class Icon extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,16 @@ export default class Icon extends Component {
             library.add(icon);
         }
         this.onClick = this.onClick.bind(this);
+    }
+
+    componentDidMount() {
+        const { icon } = this.props;
+        if (!displayedIconWarning && icon && !isString(icon)) {
+            displayedIconWarning = true;
+
+            // eslint-disable-next-line no-console,max-len
+            console.warn('[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated');
+        }
     }
 
     shouldComponentUpdate(nextProps) {
@@ -69,9 +80,6 @@ export default class Icon extends Component {
                 </span>
             );
         }
-
-        // eslint-disable-next-line no-console,max-len
-        console.warn('[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated');
 
         return (
             <FontAwesomeIcon
