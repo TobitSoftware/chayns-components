@@ -5,18 +5,22 @@ import classNames from 'classnames';
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderView from './PersonFinderView';
 import PersonsContext from './data/persons/PersonsContext';
+import { convertPersonForReturn } from './data/persons/PersonsConverter';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
+            inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
-            values: props.defaultValues.map(v => ({
-                text: v[props.context.ObjectMapping.showName],
-                value: v,
-            })),
+            values: props.defaultValues.map((v) => {
+                const value = props.context.ValueConverter ? props.context.ValueConverter(v) : v;
+                return {
+                    text: value[props.context.ObjectMapping.showName],
+                    value,
+                };
+            }),
         };
 
         this.clear = this.clear.bind(this);
@@ -52,7 +56,7 @@ class MultiplePersonFinder extends Component {
         if (!value) return;
 
         this.setState({
-            values: values.filter(r => r.value[orm.identifier] !== value[orm.identifier]),
+            values: values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]),
         });
 
         if (onRemove) {
@@ -67,11 +71,11 @@ class MultiplePersonFinder extends Component {
         const { values } = this.state;
         const name = value[orm.showName];
 
-        if (values.find(v => v.value[orm.identifier] === value[orm.identifier])) {
+        if (values.find((v) => v.value[orm.identifier] === value[orm.identifier])) {
             return;
         }
 
-        const outValue = {
+        let outValue = {
             ...value,
         };
 
@@ -85,6 +89,9 @@ class MultiplePersonFinder extends Component {
         });
 
         if (onAdd) {
+            if (outValue && outValue.type === 'PERSON') {
+                outValue = convertPersonForReturn(outValue);
+            }
             onAdd(outValue);
         }
 
@@ -99,7 +106,7 @@ class MultiplePersonFinder extends Component {
 
         this.setState({
             inputValue: '',
-            values: null,
+            values: [],
             selectedValue: null,
         });
 
@@ -132,11 +139,12 @@ class MultiplePersonFinder extends Component {
                         enableSites: showSites,
                         enablePersons: showPersons,
                         enableFriends: !showSites && showPersons,
+                        reducerFunction: props.reducerFunction,
                     } : null)}
                     {...contextProps}
                 >
                     <Context.Consumer>
-                        {ctx => (
+                        {(ctx) => (
                             <PersonFinderView
                                 {...props}
                                 {...ctx}
@@ -197,7 +205,9 @@ MultiplePersonFinder.propTypes = {
             showName: PropTypes.string,
             identifier: PropTypes.string,
         }),
+        ValueConverter: PropTypes.func,
     }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
 };
 

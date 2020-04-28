@@ -12,13 +12,21 @@ My suggestion would be to create the Setup Wizard in the first component, which 
 This allows you to difference between a normal site view and a setup and also allows you to render the normal view after finishing the setup.
 For rendering the **SetupWizard** you have to import *SetupWizard* as well as *SetupWizardItem*.
 
-There are 3 different methods for changing the current step, one method for completing the current step and one method to reset the wizard. 
-You can access them in the Step-Components (for example FirstSetup, SecondSetup,...) through the setupWizardContext:
-- stepComplete
-- nextStep
-- previousStep
-- toStep
-- resetToStep
+There are different methods to update the wizard.
+You can access them in the Step-Components (for example FirstStep, SecondStep,...) through the setupWizardContext:
+
+- navigate through steps
+    - nextStep()
+    - previousStep()
+    - toStep(step)
+- set steps as complete or incomplete
+    - stepComplete(value, step=currentStep)
+- reset steps
+    - resetToStep(step)
+- enable or disable steps
+    - stepEnabled(value, step)
+- set steps as required or not    
+    - stepRequired(value, currentStep)
 
 You have to call stepComplete with a boolean parameter for completing/not completing the current step.
 
@@ -30,7 +38,7 @@ Take a look at the [SetupWizard example](https://github.com/TobitSoftware/chayns
 ### Deprecation ###
 `previousStep` and `toStep` are deprecated according to the design guide.
 
-The old context is deprecated and will be removed in a future version.
+**The old context is deprecated and will be removed in a future version.**
  
 ## Props ##
 The components got the following properties:

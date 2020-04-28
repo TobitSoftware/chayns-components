@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable no-nested-ternary,react/forbid-prop-types */
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { Component, Fragment } from 'react';
 import isEqual from 'lodash.isequal';
@@ -7,26 +7,6 @@ import PropTypes from 'prop-types';
 import Receiver from './Receiver';
 
 export default class ReceiverSearchPopup extends Component {
-    static propTypes = {
-        updateReceiverSearchString: PropTypes.func.isRequired,
-        updateChosenReceivers: PropTypes.func.isRequired,
-        chosenReceivers: PropTypes.array.isRequired,
-        foundReceivers: PropTypes.object.isRequired,
-        isLocation: PropTypes.bool.isRequired,
-        position: PropTypes.object.isRequired,
-        width: PropTypes.number.isRequired,
-        show: PropTypes.bool.isRequired,
-        showIdInPopup: PropTypes.bool,
-        onlyPersons: PropTypes.bool,
-        onlySites: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        showIdInPopup: false,
-        onlyPersons: false,
-        onlySites: false,
-    };
-
     shouldComponentUpdate(nextProps) {
         const {
             chosenReceivers,
@@ -153,7 +133,7 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item" />
+                                        <div className="popup-item"/>
                                     )}
                                 </Fragment>
                             )}
@@ -168,7 +148,7 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item" />
+                                        <div className="popup-item"/>
                                     )}
                                 </Fragment>
                             )}
@@ -183,16 +163,36 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item" />
+                                        <div className="popup-item"/>
                                     )}
                                 </Fragment>
                             )}
                         </div>
                     ) : (
-                        <div />
+                        <div/>
                     )}
                 </CSSTransition>
             </TransitionGroup>
         );
     }
 }
+
+ReceiverSearchPopup.propTypes = {
+    updateReceiverSearchString: PropTypes.func.isRequired,
+    updateChosenReceivers: PropTypes.func.isRequired,
+    chosenReceivers: PropTypes.array.isRequired,
+    foundReceivers: PropTypes.object.isRequired,
+    isLocation: PropTypes.bool.isRequired,
+    position: PropTypes.object.isRequired,
+    width: PropTypes.number.isRequired,
+    show: PropTypes.bool.isRequired,
+    showIdInPopup: PropTypes.bool,
+    onlyPersons: PropTypes.bool,
+    onlySites: PropTypes.bool,
+};
+
+ReceiverSearchPopup.defaultProps = {
+    showIdInPopup: false,
+    onlyPersons: false,
+    onlySites: false,
+};

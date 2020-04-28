@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 export default class Groups extends PureComponent {
-    static propTypes = {
-        groups: PropTypes.array.isRequired,
-        onClick: PropTypes.func.isRequired,
-        focus: PropTypes.number.isRequired,
-    };
-
     render() {
         const { groups, focus, onClick } = this.props;
 
@@ -20,8 +14,11 @@ export default class Groups extends PureComponent {
                             calendar__groups_notFocused: focus && group.id !== focus,
                         });
                         return (
-                            <div className={className} key={group.id} onClick={event => onClick(event, group)}>
-                                <div className="calendar__groups_color" style={{ backgroundColor: group.color ? group.color : chayns.env.site.color }} />
+                            <div className={className} key={group.id} onClick={(event) => onClick(event, group)}>
+                                <div
+                                    className="calendar__groups_color"
+                                    style={{ backgroundColor: group.color ? group.color : chayns.env.site.color }}
+                                />
                                 {group.name}
                             </div>
                         );
@@ -31,3 +28,10 @@ export default class Groups extends PureComponent {
         );
     }
 }
+
+Groups.propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    groups: PropTypes.array.isRequired,
+    onClick: PropTypes.func.isRequired,
+    focus: PropTypes.number.isRequired,
+};

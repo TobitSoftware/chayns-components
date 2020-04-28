@@ -22,7 +22,7 @@ Then it can be used like in the following example:
 />
 ```
 
-| WARNING: Make sure the html document contains a &lt;div class="tapp" &gt;&lt;/div&gt;   |
+| WARNING: Make sure the html document contains a &lt;div class="tapp" &gt;&lt;/div&gt; or use the parent attribute.  |
 | --- |
 
 ## Props ##
@@ -30,6 +30,7 @@ Then it can be used like in the following example:
 | Property      | Description                                                                                        | Type           | Default Value |
 |---------------|----------------------------------------------------------------------------------------------------|----------------|---------------|
 | placeholder   | Placeholder of the input field                                                                     | String         |               |
+| removeIcon    | Show a remove icon to clear the personfinder (only dynamic and not multiple)                       | bool           | false         |
 | onChange      | Callback that will be executed when a person gets selected or input/personfinder gets cleared      | Function       |               |
 | className     | CSS classes for the wrapper-div                                                                    | String         |               |
 | style         | Styles for the input field                                                                         | Object         |               |
@@ -46,8 +47,32 @@ Then it can be used like in the following example:
 | locationId    | LocationId of the UAC-Group to search in                                                           | number         |               |
 | reducerFunction | Function to reduce the results (see example)                                                     | Function       |               |
 | onInput       | Callback on input                                                                                  | Function       |               |
+| context       | The personfinder context. Take a look at the example and the following paragraph.                  | Function       |               |
+| contextProps  | Props for the context.                                                                             | object         |               |
 
-## Clear the PersonFinder
+## Custom finder ##
+If you want to build your own custom finder for searching e.g. mails in a chayns-based mail application, you can use the SimpleWrapperContext with object mapping and custom props.
+The object mapping has to look like the following and can be given into the wrapper context:
+````json5
+{
+    showName: 'emailTitle',
+    identifier: 'emailId',
+    search: ['emailTitle', 'emailText', 'emailSenderName'],
+    imageUrl: 'emailSenderImageUrl',
+}
+````
+In contextProps, you can set the following properties:
+- data
+- hasMore
+- onLoadMore
+- onInput
+
+To see a working example, you can take a look at the [PersonFinder example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-personfinder/Example.jsx).
+
+## Common problems ##
+If you have the problem, that the position of the personFinder box does not fit, try to change the parent attribute to the body or another DOM element.
+
+## Clear the PersonFinder ##
 If you want to clear the PersonFinder, you need to have a reference to the ReactElement:
 ```jsx harmony
 personFinder = React.createRef();
@@ -59,7 +84,7 @@ personFinder = React.createRef();
 />
 ```
 On this reference you have to execute the clear()-Method to remove the content of the PersonFinder:
-```
+```js
 if (this.personFinder.current) {
     this.personFinder.current.clear();
 }

@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -14,84 +14,6 @@ const OPEN = 2;
 let rqAnimationFrame;
 
 export default class Accordion extends PureComponent {
-    static propTypes = {
-        head: PropTypes.oneOfType([
-            PropTypes.node.isRequired,
-            PropTypes.shape({
-                open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired,
-            }).isRequired,
-        ]).isRequired,
-        headClassNames: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.arrayOf(PropTypes.string),
-            PropTypes.object,
-        ]),
-        children: PropTypes.node.isRequired,
-        right: PropTypes.oneOfType([
-            PropTypes.node.isRequired,
-            PropTypes.shape({
-                open: PropTypes.node.isRequired,
-                close: PropTypes.node.isRequired,
-            }).isRequired,
-        ]),
-        renderClosed: PropTypes.bool,
-        isWrapped: PropTypes.bool,
-        dataGroup: PropTypes.string,
-        className: PropTypes.string,
-        id: PropTypes.string,
-        style: PropTypes.object,
-        styleBody: PropTypes.object,
-        onOpen: PropTypes.func,
-        onClose: PropTypes.func,
-        defaultOpened: PropTypes.bool,
-        reference: PropTypes.func,
-        autogrow: PropTypes.bool,
-        open: PropTypes.bool,
-        icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
-        noRotate: PropTypes.bool,
-        fixed: PropTypes.bool,
-        noIcon: PropTypes.bool,
-        onSearch: PropTypes.func,
-        onSearchEnter: PropTypes.func,
-        searchPlaceholder: PropTypes.string,
-        searchValue: PropTypes.string,
-        removeContentClosed: PropTypes.bool,
-        onClick: PropTypes.func,
-        disabled: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        className: '',
-        headClassNames: null,
-        dataGroup: null,
-        id: null,
-        style: null,
-        styleBody: null,
-        onOpen: null,
-        onClose: null,
-        defaultOpened: null,
-        reference: null,
-        isWrapped: false,
-        renderClosed: false,
-        right: null,
-        autogrow: false,
-        open: undefined,
-        icon: 'ts-angle-right',
-        noRotate: false,
-        fixed: false,
-        noIcon: false,
-        onSearch: null,
-        onSearchEnter: null,
-        searchPlaceholder: '',
-        searchValue: null,
-        removeContentClosed: false,
-        onClick: null,
-        disabled: false,
-    };
-
-    static dataGroups = {};
-
     constructor(props) {
         super(props);
         const { defaultOpened, open, className } = props;
@@ -104,16 +26,9 @@ export default class Accordion extends PureComponent {
 
     componentDidMount() {
         const { className, autogrow, dataGroup } = this.props;
-        const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
             this.accordion.classList.add('accordion--open');
-        }
-
-        if (currentState === OPEN) {
-            if (autogrow && this._body) {
-                this._body.style.setProperty('max-height', 'initial', 'important');
-            }
         }
 
         if (dataGroup) {
@@ -123,20 +38,22 @@ export default class Accordion extends PureComponent {
 
             Accordion.dataGroups[dataGroup].push(this);
         }
+
+        this.body.addEventListener('transitionend', (e) => {
+            if (autogrow && e.propertyName === 'max-height') {
+                // It's important that the state is accessed inside of the transitionend function
+                const { currentState } = this.state;
+                if (currentState === OPEN) {
+                    this.body.style.setProperty('max-height', 'initial', 'important');
+                }
+            }
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { autogrow, open } = this.props;
+        const { open } = this.props;
         const { currentState } = this.state;
-        const { _body } = this;
 
-        if (autogrow && _body) {
-            if (currentState === OPEN) {
-                _body.style.setProperty('max-height', 'initial', 'important');
-            } else if (currentState === CLOSE) {
-                _body.style.maxHeight = null;
-            }
-        }
         if (currentState === CLOSE && prevState.currentState !== currentState) {
             setTimeout(() => {
                 this.setState({
@@ -166,6 +83,18 @@ export default class Accordion extends PureComponent {
         }
 
         cancelAnimationFrame(rqAnimationFrame);
+    }
+
+
+    getBody() {
+        const { renderClosed, children, removeContentClosed } = this.props;
+        const { currentState, showBody } = this.state;
+        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed) || showBody) {
+            this.rendered = true;
+            return children;
+        }
+
+        return null;
     }
 
     handleAccordionClick = (event) => {
@@ -211,38 +140,31 @@ export default class Accordion extends PureComponent {
         }
     };
 
-
-    _getBody() {
-        const { renderClosed, children, removeContentClosed } = this.props;
-        const { currentState, showBody } = this.state;
-        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed) || showBody) {
-            this.rendered = true;
-            return children;
-        }
-
-        return null;
-    }
-
     accordionCloseListener(event, preventOnClose) {
         const { onClose, autogrow } = this.props;
-        const { _body } = this;
+        const { body } = this;
 
-        if (autogrow && _body) {
-            _body.style.setProperty('max-height', '9999px', 'important');
-        }
+        if (autogrow && body) {
+            this.body.style.removeProperty('max-height');
+            rqAnimationFrame = requestAnimationFrame(() => {
+                if (autogrow && body) {
+                    this.setState({
+                        currentState: CLOSE,
+                    });
 
-        this.setState({
-            currentState: CLOSE,
-        });
+                    if (onClose && !preventOnClose) {
+                        onClose(event);
+                    }
+                }
+            });
+        } else {
+            this.setState({
+                currentState: CLOSE,
+            });
 
-        rqAnimationFrame = requestAnimationFrame(() => {
-            if (autogrow && _body) {
-                _body.style.removeProperty('max-height');
+            if (onClose && !preventOnClose) {
+                onClose(event);
             }
-        });
-
-        if (onClose && !preventOnClose) {
-            onClose(event);
         }
     }
 
@@ -276,6 +198,7 @@ export default class Accordion extends PureComponent {
             icon,
             head,
             headClassNames,
+            headCustomAttributes,
             noRotate,
             noIcon,
             disabled,
@@ -307,6 +230,7 @@ export default class Accordion extends PureComponent {
                 <div
                     className={classNames('accordion__head', headClassNames)}
                     onClick={this.handleAccordionClick}
+                    {...headCustomAttributes}
                 >
                     {
                         noIcon
@@ -319,7 +243,7 @@ export default class Accordion extends PureComponent {
                                 >
                                     {
                                         isString(icon) || icon.iconName
-                                            ? <Icon icon={icon} />
+                                            ? <Icon icon={icon}/>
                                             : icon
                                     }
                                 </div>
@@ -347,13 +271,94 @@ export default class Accordion extends PureComponent {
                 <div
                     className="accordion__body"
                     ref={(ref) => {
-                        this._body = ref;
+                        this.body = ref;
                     }}
                     style={styleBody}
                 >
-                    {this._getBody()}
+                    {this.getBody()}
                 </div>
             </div>
         );
     }
 }
+
+Accordion.dataGroups = {};
+
+Accordion.propTypes = {
+    head: PropTypes.oneOfType([
+        PropTypes.node.isRequired,
+        PropTypes.shape({
+            open: PropTypes.node.isRequired,
+            close: PropTypes.node.isRequired,
+        }).isRequired,
+    ]).isRequired,
+    headClassNames: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.object,
+    ]),
+    // eslint-disable-next-line react/require-default-props
+    headCustomAttributes: PropTypes.object,
+    children: PropTypes.node.isRequired,
+    right: PropTypes.oneOfType([
+        PropTypes.node.isRequired,
+        PropTypes.shape({
+            open: PropTypes.node.isRequired,
+            close: PropTypes.node.isRequired,
+        }).isRequired,
+    ]),
+    renderClosed: PropTypes.bool,
+    isWrapped: PropTypes.bool,
+    dataGroup: PropTypes.string,
+    className: PropTypes.string,
+    id: PropTypes.string,
+    style: PropTypes.object,
+    styleBody: PropTypes.object,
+    onOpen: PropTypes.func,
+    onClose: PropTypes.func,
+    defaultOpened: PropTypes.bool,
+    reference: PropTypes.func,
+    autogrow: PropTypes.bool,
+    open: PropTypes.bool,
+    icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
+    noRotate: PropTypes.bool,
+    fixed: PropTypes.bool,
+    noIcon: PropTypes.bool,
+    onSearch: PropTypes.func,
+    onSearchEnter: PropTypes.func,
+    searchPlaceholder: PropTypes.string,
+    searchValue: PropTypes.string,
+    removeContentClosed: PropTypes.bool,
+    onClick: PropTypes.func,
+    disabled: PropTypes.bool,
+};
+
+Accordion.defaultProps = {
+    className: '',
+    headClassNames: null,
+    headCustomAttributes: null,
+    dataGroup: null,
+    id: null,
+    style: null,
+    styleBody: null,
+    onOpen: null,
+    onClose: null,
+    defaultOpened: null,
+    reference: null,
+    isWrapped: false,
+    renderClosed: false,
+    right: null,
+    autogrow: false,
+    open: undefined,
+    icon: 'ts-angle-right',
+    noRotate: false,
+    fixed: false,
+    noIcon: false,
+    onSearch: null,
+    onSearchEnter: null,
+    searchPlaceholder: '',
+    searchValue: null,
+    removeContentClosed: false,
+    onClick: null,
+    disabled: false,
+};

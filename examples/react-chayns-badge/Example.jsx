@@ -11,7 +11,7 @@ export default class BadgeExample extends PureComponent {
                     30
                 </Badge>
                 <Badge>
-                    <Icon icon="ts-chayns" />
+                    <Icon icon="ts-chayns"/>
                 </Badge>
                 <Badge style={{ color: 'white', backgroundColor: 'red' }}>
                     {'1'}

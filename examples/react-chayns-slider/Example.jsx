@@ -18,7 +18,7 @@ export default class SliderExample extends Component {
                     <Tooltip
                         minWidth={150}
                         content={{
-                            html: <Slider />
+                            html: <Slider/>,
                         }}
                         bindListeners
                     >
@@ -28,7 +28,7 @@ export default class SliderExample extends Component {
                 <div style={{ textAlign: 'center' }}>
                     <Tooltip
                         content={{
-                            html: <Slider vertical style={{ maxHeight: '100px' }} />
+                            html: <Slider vertical style={{ maxHeight: '100px' }}/>,
                         }}
                         minWidth="auto"
                         bindListeners

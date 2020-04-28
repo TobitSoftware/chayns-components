@@ -19,6 +19,8 @@ import EmojiInput from './react-chayns-emoji_input/component/EmojiInput';
 
 import ExpandableContent from './react-chayns-expandable_content/component/ExpandableContent';
 
+import FilterButton from './react-chayns-filterbutton/component/FilterButton';
+
 import FormattedInput from './react-chayns-formatted_input/component/FormattedInput';
 import {
     Formatter,
@@ -49,6 +51,7 @@ import Mode from './react-chayns-modeswitch/component/Mode';
 import OpeningTimes from './react-chayns-openingtimes/component/OpeningTimes';
 
 import PersonFinder from './react-chayns-personfinder/component/PersonFinder';
+import SimpleWrapperContext from './react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 import ProgressBar from './react-chayns-progress_bar/component/ProgressBar';
 
@@ -101,6 +104,7 @@ export {
     DateInfo,
     EmojiInput,
     ExpandableContent,
+    FilterButton,
     FormattedInput,
     Formatter,
     IntegerFormatter,
@@ -121,6 +125,7 @@ export {
     OpeningTimes,
     OrientationHelper,
     PersonFinder,
+    SimpleWrapperContext,
     ProgressBar,
     RadioButton,
     ReceiverInput,

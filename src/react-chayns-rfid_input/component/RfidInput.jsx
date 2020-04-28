@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -15,30 +16,6 @@ export default class RfidInput extends Component {
         return (chayns.env.isMyChaynsApp && (chayns.env.isAndroid || (chayns.env.isIOS && chayns.env.myChaynsAppVersion >= 5764)))
             || (chayns.env.isApp && (chayns.env.isAndroid));
     }
-
-    static propTypes = {
-        className: PropTypes.string,
-        style: PropTypes.object,
-        placeholder: PropTypes.string,
-        confirmNode: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]),
-        enableScan: PropTypes.bool,
-        scanText: PropTypes.string,
-        value: PropTypes.string.isRequired,
-        onInput: PropTypes.func.isRequired,
-        onConfirm: PropTypes.func.isRequired,
-    };
-
-    static defaultProps = {
-        className: null,
-        style: null,
-        placeholder: 'Kartennummer',
-        confirmNode: 'OK',
-        enableScan: false,
-        scanText: 'Scannen',
-    };
 
     state = {
         isScanning: false,
@@ -141,3 +118,27 @@ export default class RfidInput extends Component {
         );
     }
 }
+
+RfidInput.propTypes = {
+    className: PropTypes.string,
+    style: PropTypes.object,
+    placeholder: PropTypes.string,
+    confirmNode: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
+    enableScan: PropTypes.bool,
+    scanText: PropTypes.string,
+    value: PropTypes.string.isRequired,
+    onInput: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+};
+
+RfidInput.defaultProps = {
+    className: null,
+    style: null,
+    placeholder: 'Kartennummer',
+    confirmNode: 'OK',
+    enableScan: false,
+    scanText: 'Scannen',
+};

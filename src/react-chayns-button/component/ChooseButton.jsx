@@ -16,6 +16,7 @@ ChooseButton.propTypes = {
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
     className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };

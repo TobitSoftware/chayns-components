@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* global google */
 import React, {
     PureComponent,
@@ -35,18 +36,6 @@ const events = [
  * A react component wrapper around the google maps JS API.
  */
 class GoogleMap extends PureComponent {
-    static propTypes = {
-        /** @type {React.CSSProperties} */
-        containerStyle: PropTypes.object.isRequired,
-        /** @type {google.maps.MapOptions} */
-        options: PropTypes.object.isRequired,
-        ...toPropTypes(events, false),
-    };
-
-    static defaultProps = {
-        ...toPropTypes(events, true),
-    };
-
     constructor(props) {
         super(props);
 
@@ -83,7 +72,7 @@ class GoogleMap extends PureComponent {
 
         if (!children) return null;
 
-        return Children.map(children, c => (c ? cloneElement(c, {
+        return Children.map(children, (c) => (c ? cloneElement(c, {
             __map: this.map,
         }) : c));
     }
@@ -98,5 +87,17 @@ class GoogleMap extends PureComponent {
         );
     }
 }
+
+GoogleMap.propTypes = {
+    /** @type {React.CSSProperties} */
+    containerStyle: PropTypes.object.isRequired,
+    /** @type {google.maps.MapOptions} */
+    options: PropTypes.object.isRequired,
+    ...toPropTypes(events, false),
+};
+
+GoogleMap.defaultProps = {
+    ...toPropTypes(events, true),
+};
 
 export default GoogleMap;

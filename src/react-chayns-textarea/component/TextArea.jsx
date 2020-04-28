@@ -98,8 +98,7 @@ const TextArea = ({
 
     const classNames = classnames('input', {
         'input--disabled': disabled,
-        className,
-    });
+    }, className);
 
     return (
         <textarea
@@ -114,7 +113,7 @@ const TextArea = ({
             onKeyDown={onKeyDown}
             value={value}
             disabled={disabled}
-            onClick={stopPropagation ? event => event.stopPropagation() : null}
+            onClick={stopPropagation ? (event) => event.stopPropagation() : null}
             {...props}
         />
     );

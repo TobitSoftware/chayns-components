@@ -5,10 +5,10 @@ import ProgressBarIndeterminate from './ProgressBarIndeterminate';
 
 const AutoProgressBar = ({ value }) => {
     if (chayns.utils.isNumber(value)) {
-        return <ProgressBarDeterminate value={value} />;
+        return <ProgressBarDeterminate value={value}/>;
     }
 
-    return <ProgressBarIndeterminate />;
+    return <ProgressBarIndeterminate/>;
 };
 
 AutoProgressBar.propTypes = {

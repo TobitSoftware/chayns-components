@@ -1,70 +1,87 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
+import Icon from '../../react-chayns-icon/component/Icon';
+import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
+import share from './sharingActions';
 
-export default class SharingBar extends Component {
-    static propTypes = {
-        link: PropTypes.string,
-        linkText: PropTypes.string,
-        className: PropTypes.string,
-        stopPropagation: PropTypes.bool,
-        style: PropTypes.string,
-    };
+import './sharingBar.scss';
 
-    static defaultProps = {
-        link: null,
-        linkText: '',
-        className: null,
-        stopPropagation: false,
-        style: null,
-    };
+function SharingBar({
+    link,
+    linkText,
+    className,
+    stopPropagation,
+    style,
+}) {
+    const [sharingProvider, setSharingProvider] = useState([]);
 
-    constructor() {
-        super();
-
-        this.state = {
-            sharingProvider: [],
-        };
-    }
-
-    componentDidMount() {
+    useEffect(() => {
         getAvailableShareProviders().then((provider) => {
-            const { link, linkText, stopPropagation } = this.props;
-
-            const sharingItems = [];
-
-            provider.forEach((item) => {
-                if (item.available) {
-                    sharingItems.push((
-                        <SharingBarItem
-                            icon={item.icon}
-                            name={item.name}
-                            provider={item}
-                            key={item.id}
-                            link={link || getDefaultShareLink()}
-                            linkText={linkText}
-                            stopPropagation={stopPropagation}
-                        />
-                    ));
-                }
-            });
-
-            this.setState({
-                sharingProvider: sharingItems, // TODO: save data in state and not components
-            });
+            setSharingProvider(provider.filter((item) => item.available));
         });
-    }
+    }, []);
 
-    render() {
-        const { className, style } = this.props;
-        const { sharingProvider } = this.state;
+    const mobileShare = sharingProvider.find((app) => app.id === 10 || app.id === 11);
 
+    if (mobileShare) {
         return (
-            <div className={classNames('sharing-bar__item-list', className)} style={style}>
-                {sharingProvider}
-            </div>
+            <SharingBarItem
+                icon={mobileShare.icon}
+                name={mobileShare.name}
+                provider={mobileShare}
+                key={mobileShare.id}
+                link={link || getDefaultShareLink()}
+                linkText={linkText}
+                stopPropagation={stopPropagation}
+            />
         );
     }
+
+    const sharingItems = [];
+
+    sharingProvider.filter((item) => item.available).forEach((x) => {
+        sharingItems.push({
+            className: null,
+            onClick: (e) => {
+                if (stopPropagation) e.stopPropagation();
+                share(x, link, linkText);
+            },
+            text: x.name,
+            icon: x.icon,
+        },);
+    });
+
+    return (
+        <div className={classNames('sharing-bar', className)} style={style}>
+            <ContextMenu
+                items={sharingItems}
+                childrenStyle={{ display: 'inline' }}
+            >
+                <Icon icon={faShareAlt} className="sharing-bar__icon"/>
+                <span className="sharing-bar_text">Teilen</span>
+            </ContextMenu>
+        </div>
+    );
 }
+
+SharingBar.propTypes = {
+    link: PropTypes.string,
+    linkText: PropTypes.string,
+    className: PropTypes.string,
+    stopPropagation: PropTypes.bool,
+    style: PropTypes.string,
+};
+
+SharingBar.defaultProps = {
+    link: null,
+    linkText: '',
+    className: null,
+    stopPropagation: false,
+    style: null,
+};
+
+export default SharingBar;

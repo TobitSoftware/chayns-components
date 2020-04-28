@@ -11,29 +11,6 @@ const KEY_ENTER = 13;
 const BIGGEST_LETTER = 'm';
 
 export default class TagInput extends Component {
-    static propTypes = {
-        tags: PropTypes.arrayOf(PropTypes.shape({
-            text: PropTypes.string,
-        })).isRequired,
-        value: PropTypes.string,
-        onAddTag: PropTypes.func,
-        onRemoveTag: PropTypes.func,
-        onChange: PropTypes.func,
-        placeholder: PropTypes.string,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-
-    static defaultProps = {
-        onAddTag: null,
-        onRemoveTag: null,
-        placeholder: null,
-        onChange: null,
-        value: '',
-        className: null,
-        style: null,
-    };
-
     state = {
         selectedIndex: null,
     };
@@ -146,7 +123,7 @@ export default class TagInput extends Component {
         const { selectedIndex } = this.state;
 
         const { width } = getInputSize(`${value}${BIGGEST_LETTER}`);
-        const inputStyle = value ? { width } : {};
+        const inputStyle = value ? { width } : { minWidth: 20 };
 
         return (
             <div
@@ -179,3 +156,28 @@ export default class TagInput extends Component {
         );
     }
 }
+
+TagInput.propTypes = {
+    tags: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string,
+    })),
+    value: PropTypes.string,
+    onAddTag: PropTypes.func,
+    onRemoveTag: PropTypes.func,
+    onChange: PropTypes.func,
+    placeholder: PropTypes.string,
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+};
+
+TagInput.defaultProps = {
+    tags: null,
+    onAddTag: null,
+    onRemoveTag: null,
+    placeholder: null,
+    onChange: null,
+    value: '',
+    className: null,
+    style: null,
+};

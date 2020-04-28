@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -23,7 +24,7 @@ const ExpandableListHeader = ({
         left={!hideIndicator && (
             <div className="list-item__indicator">
                 <div className="icon-wrapper">
-                    <i className="ts-icon ts-angle-right" />
+                    <i className="ts-icon ts-angle-right"/>
                 </div>
             </div>
         )}

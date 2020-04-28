@@ -9,25 +9,6 @@ function preventDefault(e) {
 }
 
 export default class ColorArea extends Component {
-    static propTypes = {
-        color: PropTypes.shape({
-            h: PropTypes.number.isRequired,
-            s: PropTypes.number.isRequired,
-            v: PropTypes.number.isRequired,
-        }).isRequired,
-        height: PropTypes.number,
-        width: PropTypes.number,
-        onChange: PropTypes.func,
-        onChangeEnd: PropTypes.func,
-    };
-
-    static defaultProps = {
-        height: 150,
-        width: 300,
-        onChange: null,
-        onChangeEnd: null,
-    };
-
     constructor(props) {
         super(props);
         this.state = { top: 0, left: 0 };
@@ -191,3 +172,22 @@ export default class ColorArea extends Component {
         );
     }
 }
+
+ColorArea.propTypes = {
+    color: PropTypes.shape({
+        h: PropTypes.number.isRequired,
+        s: PropTypes.number.isRequired,
+        v: PropTypes.number.isRequired,
+    }).isRequired,
+    height: PropTypes.number,
+    width: PropTypes.number,
+    onChange: PropTypes.func,
+    onChangeEnd: PropTypes.func,
+};
+
+ColorArea.defaultProps = {
+    height: 150,
+    width: 300,
+    onChange: null,
+    onChangeEnd: null,
+};

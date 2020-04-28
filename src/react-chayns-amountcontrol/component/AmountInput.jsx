@@ -9,38 +9,6 @@ import Input from '../../react-chayns-input/component/Input';
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
 export default class AmountInput extends PureComponent {
-    static propTypes = {
-        amount: PropTypes.number.isRequired,
-        onAdd: PropTypes.func.isRequired,
-        onInput: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired,
-        buttonText: PropTypes.string,
-        showInput: PropTypes.bool.isRequired,
-        disabled: PropTypes.bool,
-        disableInput: PropTypes.bool,
-        autoInput: PropTypes.bool,
-        buttonFormatHandler: PropTypes.func,
-        tempAmount: PropTypes.number,
-        tempValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        equalize: PropTypes.string,
-        focusOnClick: PropTypes.bool,
-        contentWidth: PropTypes.number,
-        stopPropagation: PropTypes.bool.isRequired,
-    };
-
-    static defaultProps = {
-        buttonText: null,
-        disabled: false,
-        disableInput: false,
-        autoInput: false,
-        buttonFormatHandler: undefined,
-        tempAmount: 0,
-        tempValue: '0',
-        equalize: null,
-        focusOnClick: true,
-        contentWidth: null,
-    };
-
     componentDidMount() {
         const { equalize } = this.props;
 
@@ -132,7 +100,7 @@ export default class AmountInput extends PureComponent {
 
         return [
             <Input
-                onClick={stopPropagation ? event => event.stopPropagation() : null}
+                onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                 key="amountInput"
                 type="number"
                 value={tempValue.toString()}
@@ -161,3 +129,35 @@ export default class AmountInput extends PureComponent {
         ];
     }
 }
+
+AmountInput.propTypes = {
+    amount: PropTypes.number.isRequired,
+    onAdd: PropTypes.func.isRequired,
+    onInput: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    buttonText: PropTypes.string,
+    showInput: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool,
+    disableInput: PropTypes.bool,
+    autoInput: PropTypes.bool,
+    buttonFormatHandler: PropTypes.func,
+    tempAmount: PropTypes.number,
+    tempValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    equalize: PropTypes.string,
+    focusOnClick: PropTypes.bool,
+    contentWidth: PropTypes.number,
+    stopPropagation: PropTypes.bool.isRequired,
+};
+
+AmountInput.defaultProps = {
+    buttonText: null,
+    disabled: false,
+    disableInput: false,
+    autoInput: false,
+    buttonFormatHandler: undefined,
+    tempAmount: 0,
+    tempValue: '0',
+    equalize: null,
+    focusOnClick: true,
+    contentWidth: null,
+};

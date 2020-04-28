@@ -1,62 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import Input from '../../react-chayns-input/component/Input';
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
-import Icon from '../../react-chayns-icon/component/Icon';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class TimeSpan extends Component {
-    static propTypes = {
-        start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired,
-        disabled: PropTypes.bool,
-        buttonType: PropTypes.number.isRequired,
-        onAdd: PropTypes.func.isRequired,
-        onRemove: PropTypes.func.isRequired,
-        onChange: PropTypes.func.isRequired,
-    };
-
-    static defaultProps = {
-        disabled: false,
-    };
-
-    static OFF = 0;
-
-    static ADD = 1;
-
-    static REMOVE = 2;
-
-    static defaultStart = '08:00';
-
-    static defaultEnd = '18:00';
-
     constructor(props) {
         super(props);
 
         this.onChange = this.onChange.bind(this);
-        this.onClick = this.onClick.bind(this);
         this.setStartTimeRef = this.setRef.bind(this, 'startTime');
         this.setEndTimeRef = this.setRef.bind(this, 'endTime');
 
         this.state = {
-            startTime: props.disabled ? TimeSpan.defaultStart : props.start,
-            endTime: props.disabled ? TimeSpan.defaultEnd : props.end,
+            startTime: props.start,
+            endTime: props.end,
         };
     }
 
-    static getDerivedStateFromProps(nextProps) {
-        const newState = {};
-        newState.startTime = nextProps.start;
-        newState.endTime = nextProps.end;
-        return newState;
-    }
-
-    onClick() {
-        const { buttonType, onAdd, onRemove } = this.props;
-        if (buttonType === TimeSpan.ADD) onAdd(TimeSpan.defaultStart, TimeSpan.defaultEnd);
-        if (buttonType === TimeSpan.REMOVE) onRemove();
+    componentDidUpdate(prevProps) {
+        const { start, end } = this.props;
+        if (prevProps.start !== start || prevProps.end !== end) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ startTime: start, endTime: end });
+        }
     }
 
     onChange(value, inputField) {
@@ -116,7 +83,7 @@ class TimeSpan extends Component {
 
     autoFormat(inputField) {
         const { onChange } = this.props;
-        const newState = Object.assign({}, this.state);
+        const newState = { ...this.state };
         const val = inputField === 'start' ? newState.startTime : newState.endTime;
         const inspectResult = this.inspectTimeStr(val);
 
@@ -182,47 +149,58 @@ class TimeSpan extends Component {
     render() {
         const {
             disabled,
-            buttonType,
+            childrenRef,
         } = this.props;
 
-        const { state } = this;
+        const { startTime, endTime } = this.state;
 
         return (
-            <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`}>
+            <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setStartTimeRef}
-                        value={state.startTime}
-                        onChange={val => this.onChange(val, 'start')}
+                        value={startTime}
+                        onChange={(val) => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
+                        onEnter={() => this.autoFormat('start')}
                     />
                 </div>
                 <span>-</span>
                 <div className="time__span--input">
                     <Input
                         inputRef={this.setEndTimeRef}
-                        value={state.endTime}
-                        onChange={val => this.onChange(val, 'end')}
+                        value={endTime}
+                        onChange={(val) => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
+                        onEnter={() => this.autoFormat('end')}
                     />
-                </div>
-                <div className="time__span--button">
-                    {
-                        buttonType !== TimeSpan.OFF && (
-                            <ChooseButton
-                                onClick={this.onClick}
-                            >
-                                <Icon
-                                    icon={faPlus}
-                                    className={`fa-xs openingTimesIcon ${buttonType === TimeSpan.ADD ? 'add' : 'remove'}`}
-                                />
-                            </ChooseButton>
-                        )
-                    }
                 </div>
             </div>
         );
     }
 }
+
+TimeSpan.OFF = 0;
+
+TimeSpan.ADD = 1;
+
+TimeSpan.REMOVE = 2;
+
+TimeSpan.defaultStart = '08:00';
+
+TimeSpan.defaultEnd = '18:00';
+
+TimeSpan.propTypes = {
+    start: PropTypes.string.isRequired,
+    end: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    childrenRef: PropTypes.func,
+};
+
+TimeSpan.defaultProps = {
+    disabled: false,
+    childrenRef: null,
+};
 
 export default TimeSpan;

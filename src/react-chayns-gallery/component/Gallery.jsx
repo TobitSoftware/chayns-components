@@ -9,42 +9,6 @@ import ImageContainer from './ImageContainer';
 import { isString } from '../../utils/is';
 
 export default class Gallery extends Component {
-    static propTypes = {
-        images: PropTypes.arrayOf(PropTypes.oneOfType([
-            PropTypes.shape({
-                url: PropTypes.string.isRequired,
-            }),
-            PropTypes.shape({
-                file: PropTypes.instanceOf(File).isRequired,
-            }),
-            PropTypes.string,
-            PropTypes.instanceOf(File),
-        ]).isRequired).isRequired,
-        onClick: PropTypes.func,
-        onDelete: PropTypes.func,
-        deleteMode: PropTypes.bool,
-        height: PropTypes.number,
-        width: PropTypes.number,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        stopPropagation: PropTypes.bool,
-        dragMode: PropTypes.bool,
-        onDragEnd: PropTypes.func,
-    };
-
-    static defaultProps = {
-        onClick: chayns.openImage,
-        onDelete: null,
-        deleteMode: false,
-        height: null,
-        width: null,
-        className: null,
-        style: {},
-        stopPropagation: false,
-        dragMode: false,
-        onDragEnd: null,
-    };
-
     static getBigImageUrls(images) {
         return images.map((image) => {
             const img = image.url || image.file || image;
@@ -285,3 +249,40 @@ export default class Gallery extends Component {
         );
     }
 }
+
+Gallery.propTypes = {
+    images: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.shape({
+            url: PropTypes.string.isRequired,
+        }),
+        PropTypes.shape({
+            file: PropTypes.instanceOf(File).isRequired,
+        }),
+        PropTypes.string,
+        PropTypes.instanceOf(File),
+    ]).isRequired).isRequired,
+    onClick: PropTypes.func,
+    onDelete: PropTypes.func,
+    deleteMode: PropTypes.bool,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
+    stopPropagation: PropTypes.bool,
+    dragMode: PropTypes.bool,
+    onDragEnd: PropTypes.func,
+};
+
+Gallery.defaultProps = {
+    onClick: chayns.openImage,
+    onDelete: null,
+    deleteMode: false,
+    height: null,
+    width: null,
+    className: null,
+    style: {},
+    stopPropagation: false,
+    dragMode: false,
+    onDragEnd: null,
+};

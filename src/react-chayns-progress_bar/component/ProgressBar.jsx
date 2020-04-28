@@ -20,7 +20,7 @@ const ProgressBar = ({ children, value, ready }) => {
                 in={!ready}
                 unmountOnExit
             >
-                <AutoProgressBar value={value} />
+                <AutoProgressBar value={value}/>
             </CSSTransition>
             <CSSTransition
                 timeout={300}

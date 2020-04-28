@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, {
     useState,
     useEffect,
@@ -42,7 +43,7 @@ const getHsvColor = (color) => {
     };
 };
 
-function ColorPicker(props, reference) {
+const ColorPicker = forwardRef((props, reference) => {
     // references
     const bubbleRef = useRef(null);
     const bubbleContentRef = useRef(null);
@@ -171,7 +172,10 @@ function ColorPicker(props, reference) {
                 {props.input && (
                     <ColorInput
                         color={color}
-                        onChange={onChange}
+                        onChange={(value) => {
+                            onChange(value);
+                            props.onChangeEnd(value);
+                        }}
                         onModelToggle={onColorModelToggle}
                         colorModel={colorModel}
                         transparency={props.transparency}
@@ -180,7 +184,7 @@ function ColorPicker(props, reference) {
             </div>
         </Bubble>,
     ];
-}
+});
 
 ColorPicker.propTypes = {
     color: PropTypes.oneOfType([
@@ -232,4 +236,4 @@ ColorPicker.colorModels = {
     RGB: 1,
 };
 
-export default forwardRef(ColorPicker);
+export default ColorPicker;

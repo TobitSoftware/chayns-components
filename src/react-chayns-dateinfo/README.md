@@ -34,3 +34,4 @@ The component got the following properties:
 | noTitle    | don't add the title attribute                                                                       | bool                   |          | false   |
 | useToday   | use today instead of the date                                                                       | bool                   |          | null    |
 | useTomorrowYesterday | use tomorrow and yesterday instead of the date                                            | bool                   |          | null    |
+| hideYear   | hide the year (true) or shorten the year (null)                                                     | bool                   |          | false   |

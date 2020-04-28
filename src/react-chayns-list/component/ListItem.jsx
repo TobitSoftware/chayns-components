@@ -21,7 +21,7 @@ const ListItem = ({
     }
 
     return (
-        <SimpleListItem {...props} />
+        <SimpleListItem {...props}/>
     );
 };
 

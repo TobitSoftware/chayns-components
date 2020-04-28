@@ -43,7 +43,8 @@ You can set the following props on a SelectList element:
 | defaultValue | Sets the id of an element that should be preselected                          | string, int |              |
 | value        | Sets the id of an element that should be selected                             | string, int |              |
 | selectFirst  | Automatically select the first entry, triggers onChange-callback (deprecated) | boolean     |  false       |
-| className    | Sets the css-class of the selectlist                                          | boolean     |  false       |
+| className    | Sets the css-class of the selectlist                                          | string      |              |
+| style        | Sets custom style properties to the selectlist                                | object      |              |
 
 
 ## Props (SelectItem) ##
@@ -52,6 +53,7 @@ You can set the following props on a SelectList element:
 | Property  | Description                                                                                         | Type            | Default    |
 |-----------|-----------------------------------------------------------------------------------------------------|-----------------|------------|
 | id        | The id of the item, will be send to onChange-callback and used in defaultId prop of the SelectList  | string, int     | *required* |
+| disabled  | Disables the item                                                                                   | boolean         | false      |
 | name      | Sets the id of an element that should be preselected                                                | string          | *required* |
 | className | Sets the css-class of the parent element above the radiobutton                                      | boolean         | false      |
 | value     | Additional information of the item.                                                                 | object, array   | null       |

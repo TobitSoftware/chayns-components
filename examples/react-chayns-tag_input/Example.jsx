@@ -20,7 +20,7 @@ export default class TagInputExample extends PureComponent {
 
         console.log('add tag', tag);
 
-        if (!tags.find(t => t.text === tag.text)) {
+        if (!tags.find((t) => t.text === tag.text)) {
             this.setState({
                 tags: [...tags, tag],
                 value: '',
@@ -32,7 +32,7 @@ export default class TagInputExample extends PureComponent {
         const { tags } = this.state;
 
         this.setState({
-            tags: tags.filter(t => tag.text !== t.text),
+            tags: tags.filter((t) => tag.text !== t.text),
         });
     };
 

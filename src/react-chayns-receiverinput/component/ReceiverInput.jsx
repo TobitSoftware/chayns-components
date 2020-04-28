@@ -1,4 +1,4 @@
-/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-array-index-key,max-len */
 import React, { Component } from 'react';
 import throttle from 'lodash.throttle';
 import isEqual from 'lodash.isequal';
@@ -12,48 +12,6 @@ import ReceiverSearchPopup from './content/ReceiverSearchPopup';
 import ChosenMember from './content/ChosenMember';
 
 export default class ReceiverInput extends Component {
-    static propTypes = {
-        includeIntercomDisabled: PropTypes.bool,
-        onChosenReceiverChange: PropTypes.func,
-        preselectedReceivers: PropTypes.array,
-        maxReceiverCount: PropTypes.number,
-        onGroupNameChange: PropTypes.func,
-        showIdInSelection: PropTypes.bool,
-        groupNameEnabled: PropTypes.bool,
-        showIdInPopup: PropTypes.bool,
-        addPageOffset: PropTypes.bool,
-        placeholder: PropTypes.string,
-        locationMode: PropTypes.bool,
-        fontFamily: PropTypes.string,
-        onlyPersons: PropTypes.bool,
-        canFindOwn: PropTypes.bool,
-        fontSize: PropTypes.string,
-        onlySites: PropTypes.bool,
-        disabled: PropTypes.bool,
-        pureMode: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        includeIntercomDisabled: false,
-        onChosenReceiverChange: null,
-        preselectedReceivers: null,
-        showIdInSelection: false,
-        onGroupNameChange: null,
-        groupNameEnabled: false,
-        maxReceiverCount: null,
-        showIdInPopup: false,
-        addPageOffset: false,
-        locationMode: false,
-        onlyPersons: false,
-        canFindOwn: false,
-        onlySites: false,
-        fontFamily: null,
-        disabled: false,
-        pureMode: false,
-        placeholder: '',
-        fontSize: null,
-    };
-
     defaultState = {
         foundReceivers: {
             locations: { state: 3, values: [] },
@@ -256,17 +214,17 @@ export default class ReceiverInput extends Component {
         const { chosenReceivers } = this.state;
 
         switch (receiverType) {
-        case 0:
-            this.updateChosenReceivers(chosenReceivers.filter(r => r.locationId !== id));
-            break;
-        case 1:
-            this.updateChosenReceivers(chosenReceivers.filter(r => r.userId !== id));
-            break;
-        case 2:
-            this.updateChosenReceivers(chosenReceivers.filter(r => r.groupId !== id));
-            break;
-        default:
-            break;
+            case 0:
+                this.updateChosenReceivers(chosenReceivers.filter((r) => r.locationId !== id));
+                break;
+            case 1:
+                this.updateChosenReceivers(chosenReceivers.filter((r) => r.userId !== id));
+                break;
+            case 2:
+                this.updateChosenReceivers(chosenReceivers.filter((r) => r.groupId !== id));
+                break;
+            default:
+                break;
         }
     };
 
@@ -382,7 +340,7 @@ export default class ReceiverInput extends Component {
                 Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
             },
         })
-            .then(response => response.json())
+            .then((response) => response.json())
             .then((result) => {
                 // stop if request data is older than current data
                 if (this.lastResultDisplayedTime > requestStartTime) {
@@ -408,9 +366,9 @@ export default class ReceiverInput extends Component {
 
                 if (locationsResult.state === 0 && !onlyPersons) {
                     if (chosenSender) {
-                        locationsResult.values = result.locations.Value.filter(l => (chosenSender && !canFindOwn ? l.locationID !== parseInt(chosenSender.locationId, 10) : true));
+                        locationsResult.values = result.locations.Value.filter((l) => (chosenSender && !canFindOwn ? l.locationID !== parseInt(chosenSender.locationId, 10) : true));
                     } else {
-                        locationsResult.values = result.locations.Value.filter(l => (locationMode && !canFindOwn ? l.locationID !== parseInt(chayns.env.site.locationId, 10) : true));
+                        locationsResult.values = result.locations.Value.filter((l) => (locationMode && !canFindOwn ? l.locationID !== parseInt(chayns.env.site.locationId, 10) : true));
                     }
 
                     if (locationsResult.values.length < 1) {
@@ -420,7 +378,7 @@ export default class ReceiverInput extends Component {
 
                 if (usersResult.state === 0 && !onlySites) {
                     usersResult.values = result.users.Value
-                        .filter(u => (locationMode || canFindOwn ? true : u.userId !== chayns.env.user.id));
+                        .filter((u) => (locationMode || canFindOwn ? true : u.userId !== chayns.env.user.id));
 
                     if (usersResult.values.length < 1) {
                         usersResult.state = 1; // set state to "no match" if only own user was found
@@ -459,7 +417,7 @@ export default class ReceiverInput extends Component {
                 return null;
             })
             // eslint-disable-next-line no-console
-            .catch(error => console.error(error));
+            .catch((error) => console.error(error));
     }, 250, { leading: false });
 
     render() {
@@ -474,7 +432,7 @@ export default class ReceiverInput extends Component {
 
         const { chosenReceivers, groupName, receiverSearchString } = this.state;
 
-        const knownPersonsSelected = chosenReceivers.filter(cr => cr.groupId === 0).length > 0;
+        const knownPersonsSelected = chosenReceivers.filter((cr) => cr.groupId === 0).length > 0;
 
         const memberCount = getMemberCount(chosenReceivers);
 
@@ -538,3 +496,45 @@ export default class ReceiverInput extends Component {
         );
     }
 }
+ReceiverInput.propTypes = {
+    includeIntercomDisabled: PropTypes.bool,
+    onChosenReceiverChange: PropTypes.func,
+    // eslint-disable-next-line react/forbid-prop-types
+    preselectedReceivers: PropTypes.array,
+    maxReceiverCount: PropTypes.number,
+    onGroupNameChange: PropTypes.func,
+    showIdInSelection: PropTypes.bool,
+    groupNameEnabled: PropTypes.bool,
+    showIdInPopup: PropTypes.bool,
+    addPageOffset: PropTypes.bool,
+    placeholder: PropTypes.string,
+    locationMode: PropTypes.bool,
+    fontFamily: PropTypes.string,
+    onlyPersons: PropTypes.bool,
+    canFindOwn: PropTypes.bool,
+    fontSize: PropTypes.string,
+    onlySites: PropTypes.bool,
+    disabled: PropTypes.bool,
+    pureMode: PropTypes.bool,
+};
+
+ReceiverInput.defaultProps = {
+    includeIntercomDisabled: false,
+    onChosenReceiverChange: null,
+    preselectedReceivers: null,
+    showIdInSelection: false,
+    onGroupNameChange: null,
+    groupNameEnabled: false,
+    maxReceiverCount: null,
+    showIdInPopup: false,
+    addPageOffset: false,
+    locationMode: false,
+    onlyPersons: false,
+    canFindOwn: false,
+    onlySites: false,
+    fontFamily: null,
+    disabled: false,
+    pureMode: false,
+    placeholder: '',
+    fontSize: null,
+};

@@ -1,20 +1,27 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import Input from '../../react-chayns-input/component/Input';
 import PersonFinderView from './PersonFinderView';
-import { isFunction } from '../../utils/is';
+import { isFunction, isString } from '../../utils/is';
 import PersonsContext from './data/persons/PersonsContext';
+import { convertPersonForReturn } from './data/persons/PersonsConverter';
 
 class SimplePersonFinder extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName],
+            inputValue: isString(props.defaultValue)
+                ? props.defaultValue : (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
         };
+
+        if (isString(props.defaultValue)) {
+            console.warn('[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.');
+        }
 
         this.clear = this.clear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
@@ -44,8 +51,12 @@ class SimplePersonFinder extends Component {
             selectedValue: true,
         });
 
+        let outValue = value;
         if (onChange) {
-            onChange(value);
+            if (outValue && outValue.type === 'PERSON') {
+                outValue = convertPersonForReturn(outValue);
+            }
+            onChange(outValue);
         }
     }
 
@@ -71,9 +82,26 @@ class SimplePersonFinder extends Component {
             defaultValue,
             context: Context,
             contextProps,
+            removeIcon,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
+
+        const additionalProps = {
+            inputComponent: Input,
+            value: inputValue,
+            selectedValue,
+            onChange: this.handleOnChange,
+            onSelect: this.handleSelect,
+        };
+
+        if (removeIcon) {
+            additionalProps.icon = selectedValue ? 'ts-wrong' : null;
+            additionalProps.onIconClick = (ev) => {
+                ev.stopPropagation();
+                this.clear();
+            };
+        }
 
         return (
             <div className={classNames('cc__person-finder', className)}>
@@ -85,14 +113,16 @@ class SimplePersonFinder extends Component {
                         includeOwn: props.includeOwn,
                         enableSites: showSites,
                         enablePersons: showPersons,
-                        enableFriends: !showSites && showPersons,
+                        enableFriends: !showSites && showPersons && !props.uacId,
+                        reducerFunction: props.reducerFunction,
                     } : null)}
                     {...contextProps}
                 >
                     <Context.Consumer>
-                        {ctx => (
+                        {(ctx) => (
                             <PersonFinderView
                                 {...props}
+                                {...additionalProps}
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={Input}
@@ -140,7 +170,9 @@ SimplePersonFinder.propTypes = {
             showName: PropTypes.string,
         }),
     }).isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
+    removeIcon: PropTypes.bool,
 };
 
 SimplePersonFinder.defaultProps = {
@@ -153,6 +185,7 @@ SimplePersonFinder.defaultProps = {
     onInput: null,
     customData: false,
     contextProps: null,
+    removeIcon: false,
 };
 
 export default SimplePersonFinder;

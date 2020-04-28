@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable import/prefer-default-export,no-console */
 
 export const fetchGroups = async () => {
     let result = [];
@@ -13,8 +13,7 @@ export const fetchGroups = async () => {
     if (response.ok) {
         result = await response.json().catch(() => []);
     } else {
-        // TODO: error handling
-        console.error('failed to fetch uac groups', response.status);
+        console.error('[chayns components] Personfinder: failed to fetch uac groups', response.status);
     }
     return result;
 };

@@ -6,12 +6,11 @@ import Step1 from './setup/Step1';
 import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
-import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 import Button from '../../src/react-chayns-button/component/Button';
 
 export default class SetupWizardExample extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             ready: false,
             notComplete: false,
@@ -35,11 +34,11 @@ export default class SetupWizardExample extends Component {
 
     render() {
         const { ready, notComplete } = this.state;
+
         if (!ready) {
             return (
                 <div>
                     <SetupWizard
-                        numberOfSteps={4}
                         ready={this.ready}
                         notComplete={this.notComplete}
                         title="Wizard"
@@ -48,31 +47,35 @@ export default class SetupWizardExample extends Component {
                         + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'
                         + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
                     >
-                        <SetupWizardItem title="Intro" step={0} required>
-                            <Step1 />
+                        <SetupWizardItem title="Intro" required>
+                            <Step1/>
                         </SetupWizardItem>
-                        <SetupWizardItem title="Input optional" step={1}>
-                            <Step2 />
+                        {chayns.env.user.isAuthenticated && (
+                            <SetupWizardItem title="Input optional">
+                                <Step2/>
+                            </SetupWizardItem>
+                        )}
+                        <SetupWizardItem title="Input required" required>
+                            <Step3 notComplete={notComplete}/>
                         </SetupWizardItem>
-                        <SetupWizardItem title="Input required" required step={2}>
-                            <Step3 notComplete={notComplete} />
-                        </SetupWizardItem>
-                        <SetupWizardItem title="Finish" step={3}>
-                            <Step4 />
+                        <SetupWizardItem title="Finish">
+                            <Step4/>
                         </SetupWizardItem>
                     </SetupWizard>
                 </div>
             );
         }
 
-        return [
-            <h1> Ready </h1>,
-            <Button onClick={() => {
-                this.setState({ ready: false });
-            }}
-            >
-                Reload
-            </Button>,
-        ];
+        return (
+            <React.Fragment>
+                <h1> Ready </h1>
+                <Button onClick={() => {
+                    this.setState({ ready: false });
+                }}
+                >
+                    Reload
+                </Button>
+            </React.Fragment>
+        );
     }
 }

@@ -3,33 +3,6 @@ import PropTypes from 'prop-types';
 import text from '../constants/text';
 
 export default class DateInfo extends PureComponent {
-    static propTypes = {
-        children: PropTypes.node,
-        language: PropTypes.string,
-        date: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
-        date2: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
-        showTime: PropTypes.bool,
-        showDate: PropTypes.bool,
-        writeDay: PropTypes.bool,
-        writeMonth: PropTypes.bool,
-        noTitle: PropTypes.bool,
-        useToday: PropTypes.bool,
-        useTomorrowYesterday: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        children: <div />,
-        language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
-        date2: null,
-        showTime: null,
-        showDate: null,
-        writeDay: false,
-        writeMonth: null,
-        noTitle: false,
-        useToday: null,
-        useTomorrowYesterday: null,
-    };
-
     static getRelativeDateString = (date, options = { language: 'de' }) => {
         const dateObj = new Date(date);
         const now = new Date();
@@ -86,20 +59,28 @@ export default class DateInfo extends PureComponent {
             month: dateObj.getMonth() + 1,
             monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
             monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
-            years: dateObj.getFullYear(),
+            years: options.hideYear ? '' : dateObj.getFullYear(),
         };
+
+        // 2019->19
+        if (options.hideYear === null) {
+            absoluteValues.years = absoluteValues.years.toString().substring(absoluteValues.years.toString().length - 2);
+        }
 
         if (options.showTime === !!options.showTime && (unit === 'seconds' || unit === 'minutes' || unit === 'hours')) {
             unit = 'days';
         }
 
-        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toDateString() !== now.toDateString())) && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
+        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toDateString() !== now.toDateString()))
+            && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
             unit = unit.substring(0, unit.length - 1); // ...use singular of unit
         } else if (relativeValues[unit] === 0 && dateObj.toDateString() === now.toDateString() && options.useToday !== false) {
             unit += '0';
         }
 
-        if (options.showDate === false && !(unit === 'seconds' || unit === 'now' || unit === 'minutes' || unit === 'hours') && options.showTime === null) {
+        if (options.showDate === false
+            && !(unit === 'seconds' || unit === 'now' || unit === 'minutes' || unit === 'hours')
+            && options.showTime === null) {
             unit = 'hours';
         }
 
@@ -107,7 +88,9 @@ export default class DateInfo extends PureComponent {
 
         if (options.showDate === false && options.showTime === true && !options.useToday && !options.useTomorrowYesterday) {
             txt = '';
-        } else if ((options.showDate || options.writeMonth) && (!(options.useTomorrowYesterday && unit === 'day') && !(options.useToday && (unit.charAt(unit.length - 1) === '0' || unit === 'now')))) {
+        } else if ((options.showDate || options.writeMonth)
+            && (!(options.useTomorrowYesterday && unit === 'day')
+                && !(options.useToday && (unit.charAt(unit.length - 1) === '0' || unit === 'now')))) {
             if (options.writeMonth) {
                 txt = text[options.language].ABSOLUTE_TEXT.dateMW;
             } else if (options.writeMonth === false) {
@@ -168,7 +151,7 @@ export default class DateInfo extends PureComponent {
         .replace(/^\s*|\s*$/g, '')// Matches whitespace at the start and end of the string
     ;
 
-    static leadingZero = value => value.toString().padStart(2, '0');
+    static leadingZero = (value) => value.toString().padStart(2, '0');
 
     constructor(props) {
         super(props);
@@ -184,21 +167,21 @@ export default class DateInfo extends PureComponent {
     render() {
         const { language } = this.state;
         const {
-            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday,
+            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday, hideYear,
         } = this.props;
 
         let txt = DateInfo.getRelativeDateString(date, {
-            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
         });
         if (date2) {
             txt += ' - ';
             if (new Date(date).toDateString() === new Date(date2).toDateString()) {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
                 });
             } else {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday,
+                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
                 });
             }
         }
@@ -214,3 +197,32 @@ export default class DateInfo extends PureComponent {
         );
     }
 }
+
+DateInfo.propTypes = {
+    children: PropTypes.node,
+    language: PropTypes.string,
+    date: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
+    date2: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+    showTime: PropTypes.bool,
+    showDate: PropTypes.bool,
+    writeDay: PropTypes.bool,
+    writeMonth: PropTypes.bool,
+    noTitle: PropTypes.bool,
+    useToday: PropTypes.bool,
+    useTomorrowYesterday: PropTypes.bool,
+    hideYear: PropTypes.bool,
+};
+
+DateInfo.defaultProps = {
+    children: <div/>,
+    language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
+    date2: null,
+    showTime: null,
+    showDate: null,
+    writeDay: false,
+    writeMonth: null,
+    noTitle: false,
+    useToday: null,
+    useTomorrowYesterday: null,
+    hideYear: false,
+};

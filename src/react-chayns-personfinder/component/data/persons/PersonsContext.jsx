@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {
     createContext, useEffect, useReducer, useCallback, useContext,
 } from 'react';
@@ -10,31 +11,36 @@ import {
     fetchSites,
 } from './PersonsApi';
 import {
+    convertPerson,
     convertPersons, convertSites,
 } from './PersonsConverter';
 import FriendsHelper from './FriendsHelper';
 
 const ObjectMapping = {
     groups: [
-        { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: value => !value },
-        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: value => value && value.length >= 3 },
-        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: value => value && value.length >= 3 },
-        { key: 'personsUnrelated', lang: { de: 'Weitere Personen', en: 'further friends' }, show: value => value && value.length >= 3 },
+        { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: (value) => !value },
+        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: (value) => value && value.length >= 3 },
+        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: (value) => value && value.length >= 3 },
+        {
+            key: 'personsUnrelated',
+            lang: { de: 'Weitere Personen', en: 'further friends' },
+            show: (value) => value && value.length >= 3,
+        },
     ],
     showName: 'name',
     identifier: 'id',
-    search: ['name'],
+    search: ['fullName', 'firstName', 'lastName', 'personId'],
     relations: 'relations',
     imageUrl: 'imageUrl',
 };
 
 const PersonFinderContext = createContext({
     ...initialState,
-    dispatch: () => console.warn('dispatch: no context provided'),
-    onChange: () => console.warn('onChange: no context provided'),
-    onLoadMore: () => console.warn('onLoadMore: no context provided'),
-    setFriend: () => console.warn('setFriend: no context provided'),
-    isFriend: () => console.warn('isFriend: no context provided'),
+    dispatch: () => console.warn('[chayns components] PersonsContext: dispatch: no context provided'),
+    onChange: () => console.warn('[chayns components] PersonsContext: onChange: no context provided'),
+    onLoadMore: () => console.warn('[chayns components] PersonsContext: onLoadMore: no context provided'),
+    setFriend: () => console.warn('[chayns components] PersonsContext: setFriend: no context provided'),
+    isFriend: () => console.warn('[chayns components] PersonsContext: isFriend: no context provided'),
 });
 
 const PersonFinderStateProvider = ({
@@ -46,6 +52,7 @@ const PersonFinderStateProvider = ({
     includeOwn,
     locationId,
     uacId,
+    reducerFunction,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons = state.data.personsUnrelated.length + state.data.personsRelated.length;
@@ -75,17 +82,26 @@ const PersonFinderStateProvider = ({
 
         const persons = await fetchPersons(value, skipPersons, take);
         const convertedPersons = convertPersons(persons);
-        const hasMore = { personsRelated: convertedPersons.personsRelated.length === take, personsUnrelated: persons.length === take };
+        const hasMore = {
+            personsRelated: convertedPersons.personsRelated.length === take,
+            personsUnrelated: persons.length === take,
+        };
 
         // not optimal performance-wise but reduces redundant code
         const [ownUser] = convertPersons([{
+            type: 'PERSON',
+            name: chayns.env.user.fullName,
+            id: chayns.env.user.personId,
+            fullName: chayns.env.user.fullName,
             firstName: chayns.env.user.firstName,
             lastName: chayns.env.user.lastName,
             personId: chayns.env.user.personId,
+            userId: chayns.env.user.userId,
         }]).personsRelated;
 
         // prepend own user when prop is used, user is logged in and name matches
-        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.name && ownUser.name.toLowerCase().startsWith(value.toLowerCase())) {
+        if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.fullName
+            && ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())) {
             convertedPersons.personsRelated.unshift(ownUser);
         }
 
@@ -153,12 +169,14 @@ const PersonFinderStateProvider = ({
         await Promise.all(promises);
     }, [loadPersons, loadSites]);
 
+    const data = typeof reducerFunction === 'function' ? reducerFunction(state.data) : state.data;
+
     return (
         <PersonFinderContext.Provider
             value={{
                 ...state,
                 data: {
-                    ...state.data,
+                    ...data,
                     friends: enableFriends ? FriendsHelper.getFriendsList() : [],
                 },
                 autoLoading: !enableSites && enablePersons,
@@ -186,6 +204,7 @@ PersonFinderStateProvider.propTypes = {
     includeOwn: PropTypes.bool,
     locationId: PropTypes.number,
     uacId: PropTypes.number,
+    reducerFunction: PropTypes.func,
 };
 
 PersonFinderStateProvider.defaultProps = {
@@ -197,12 +216,14 @@ PersonFinderStateProvider.defaultProps = {
     includeOwn: false,
     locationId: null,
     uacId: null,
+    reducerFunction: null,
 };
 
 export default {
     Consumer: PersonFinderContext.Consumer,
     Provider: PersonFinderStateProvider,
     ObjectMapping,
+    ValueConverter: convertPerson,
 };
 
 export const useStateValue = () => useContext(PersonFinderContext);

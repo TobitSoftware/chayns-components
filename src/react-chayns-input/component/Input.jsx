@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -5,65 +6,12 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import { isNullOrWhiteSpace } from '../../utils/is';
 
 export default class Input extends PureComponent {
-    static propTypes = {
-        className: PropTypes.string,
-        onKeyUp: PropTypes.func,
-        onKeyDown: PropTypes.func,
-        onEnter: PropTypes.func,
-        onChange: PropTypes.func,
-        onBlur: PropTypes.func,
-        onFocus: PropTypes.func,
-        regExp: PropTypes.instanceOf(RegExp),
-        style: PropTypes.object,
-        placeholder: PropTypes.string,
-        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        invalid: PropTypes.bool,
-        type: PropTypes.string,
-        inputRef: PropTypes.func,
-        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        onIconClick: PropTypes.func,
-        wrapperRef: PropTypes.func,
-        dynamic: PropTypes.bool,
-        customProps: PropTypes.object,
-        id: PropTypes.string,
-        stopPropagation: PropTypes.bool,
-        required: PropTypes.bool,
-        disabled: PropTypes.bool,
-    };
-
-    static defaultProps = {
-        className: '',
-        onKeyUp: null,
-        onKeyDown: null,
-        onEnter: null,
-        onChange: null,
-        onBlur: null,
-        onFocus: null,
-        regExp: null,
-        style: {},
-        placeholder: '',
-        value: undefined,
-        defaultValue: undefined,
-        invalid: false,
-        type: 'text',
-        inputRef: null,
-        icon: null,
-        onIconClick: null,
-        wrapperRef: null,
-        dynamic: false,
-        customProps: null,
-        id: null,
-        stopPropagation: false,
-        required: false,
-        disabled: false,
-    };
-
     constructor(props) {
         super(props);
 
         this.state = {
-            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp)) && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
+            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp))
+                && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
             initial: true,
             right: false,
         };
@@ -84,7 +32,7 @@ export default class Input extends PureComponent {
         if (String(oldRegExp) !== String(regExp) && this.ref) {
             this.callValidated(this.ref.value, onChange);
         }
-        if (value && value !== oldValue) {
+        if (value !== oldValue) {
             this.callValidated(value);
         }
     }
@@ -180,7 +128,7 @@ export default class Input extends PureComponent {
                         type={type || 'text'}
                         id={id || this.id}
                         required
-                        onClick={stopPropagation ? event => event.stopPropagation() : null}
+                        onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                         disabled={disabled}
                         {...customProps}
                     />
@@ -230,7 +178,7 @@ export default class Input extends PureComponent {
                 type={type}
                 ref={this.setRef}
                 id={id || this.id}
-                onClick={stopPropagation ? event => event.stopPropagation() : null}
+                onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                 required
                 disabled={disabled}
                 {...customProps}
@@ -238,3 +186,57 @@ export default class Input extends PureComponent {
         );
     }
 }
+
+Input.propTypes = {
+    className: PropTypes.string,
+    onKeyUp: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onEnter: PropTypes.func,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func,
+    regExp: PropTypes.instanceOf(RegExp),
+    style: PropTypes.object,
+    placeholder: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    invalid: PropTypes.bool,
+    type: PropTypes.string,
+    inputRef: PropTypes.func,
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    onIconClick: PropTypes.func,
+    wrapperRef: PropTypes.func,
+    dynamic: PropTypes.bool,
+    customProps: PropTypes.object,
+    id: PropTypes.string,
+    stopPropagation: PropTypes.bool,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+};
+
+Input.defaultProps = {
+    className: '',
+    onKeyUp: null,
+    onKeyDown: null,
+    onEnter: null,
+    onChange: null,
+    onBlur: null,
+    onFocus: null,
+    regExp: null,
+    style: {},
+    placeholder: '',
+    value: undefined,
+    defaultValue: undefined,
+    invalid: false,
+    type: 'text',
+    inputRef: null,
+    icon: null,
+    onIconClick: null,
+    wrapperRef: null,
+    dynamic: false,
+    customProps: null,
+    id: null,
+    stopPropagation: false,
+    required: false,
+    disabled: false,
+};

@@ -1,30 +1,12 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { Component } from 'react';
-
 import { faPlus, faRocket, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Accordion } from '../../src/index';
 import Input from '../../src/react-chayns-input/component/Input';
 import ContextMenu from '../../src/react-chayns-contextmenu/component/ContextMenu';
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import Checkbox from '../../src/react-chayns-checkbox/component/Checkbox';
-
-class TestComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { value: 0 };
-    }
-
-    componentWillMount() {
-        setTimeout(() => {
-            this.setState({ value: 1 });
-        }, 100);
-    }
-
-    render() {
-        const { value } = this.state;
-        return (<div>{value}</div>);
-    }
-}
+import { TestComponent } from './TestComponent';
 
 export default class AccordionExample extends Component {
     constructor(props) {
@@ -60,6 +42,10 @@ export default class AccordionExample extends Component {
                     show
                         ? (
                             <Accordion
+                                headCustomAttributes={{
+                                    tabIndex: 0,
+                                    onKeyDown: console.log,
+                                }}
                                 head="controlled Accordion with nice search"
                                 headClassNames="chayns__color"
                                 onSearch={(data) => {
@@ -84,7 +70,7 @@ export default class AccordionExample extends Component {
                                     Hello World
                                 </div>
                                 <div className="accordion__item">
-                                    Hello World<br />blabla
+                                    Hello World<br/>blabla
                                 </div>
                                 <div className="accordion__item">
                                     Hello World
@@ -109,7 +95,7 @@ export default class AccordionExample extends Component {
                 >
                     <div className="accordion__content">
                         Hello World
-                        {<TestComponent />}
+                        {<TestComponent/>}
                     </div>
                 </Accordion>
                 <Accordion
@@ -157,7 +143,7 @@ export default class AccordionExample extends Component {
                         Hello World
                     </div>
                     <div className="accordion__item">
-                        Hello World<br />blabla
+                        Hello World<br/>blabla
                     </div>
                     <div className="accordion__item">
                         Hello World
@@ -222,7 +208,7 @@ export default class AccordionExample extends Component {
                     head="Accordion (animated badge)"
                     right={{
                         close: <Badge>15</Badge>,
-                        open: <Input />,
+                        open: <Input className="accordion--no-trigger"/>,
                     }}
                 >
                     Content

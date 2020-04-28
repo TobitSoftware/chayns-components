@@ -11,46 +11,14 @@ export default function withContext(props) {
     return (
         <SelectListContext.Consumer>
             {
-                context => <SelectItem {...context} {...props} />
+                (context) => <SelectItem {...context} {...props}/>
             }
         </SelectListContext.Consumer>
     );
 }
 
 class SelectItem extends Component {
-    static propTypes = {
-        id: PropTypes.number,
-        changeListItem: PropTypes.func,
-        selectListId: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.string,
-        ]).isRequired,
-        className: PropTypes.string,
-        disabled: PropTypes.bool,
-        children: PropTypes.node,
-        name: PropTypes.string,
-        value: PropTypes.oneOfType([
-            PropTypes.object,
-            PropTypes.array,
-        ]),
-        selectListSelectedId: PropTypes.number,
-        // eslint-disable-next-line react/require-default-props
-        tooltipProps: PropTypes.object,
-    };
-
-    static defaultProps = {
-        id: null,
-        className: '',
-        disabled: false,
-        children: null,
-        changeListItem: null,
-        name: '',
-        value: null,
-        selectListSelectedId: null,
-        tooltipProps: null,
-    };
-
-    _handleChange = () => {
+    handleChange = () => {
         const { changeListItem, id, value } = this.props;
 
         if (changeListItem) {
@@ -85,7 +53,7 @@ class SelectItem extends Component {
                                     style={{ display: 'inline' }}
                                     name={selectListId}
                                     checked={checked}
-                                    onChange={this._handleChange}
+                                    onChange={this.handleChange}
                                     disabled={disabled}
                                 >
                                     {name}
@@ -96,7 +64,7 @@ class SelectItem extends Component {
                             <RadioButton
                                 name={selectListId}
                                 checked={checked}
-                                onChange={this._handleChange}
+                                onChange={this.handleChange}
                                 disabled={disabled}
                             >
                                 {name}
@@ -122,3 +90,35 @@ class SelectItem extends Component {
         );
     }
 }
+
+SelectItem.propTypes = {
+    id: PropTypes.number,
+    changeListItem: PropTypes.func,
+    selectListId: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+    ]).isRequired,
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
+    children: PropTypes.node,
+    name: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    value: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
+    ]),
+    selectListSelectedId: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    tooltipProps: PropTypes.object,
+};
+
+SelectItem.defaultProps = {
+    id: null,
+    className: '',
+    disabled: false,
+    children: null,
+    changeListItem: null,
+    name: '',
+    value: null,
+    selectListSelectedId: null,
+    tooltipProps: null,
+};

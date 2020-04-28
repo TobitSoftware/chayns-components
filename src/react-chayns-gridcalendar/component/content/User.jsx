@@ -5,32 +5,6 @@ import PropTypes from 'prop-types';
 import Week from './Week';
 
 export default class User extends PureComponent {
-    static propTypes = {
-        entries: PropTypes.arrayOf(
-            PropTypes.array,
-        ),
-        groups: PropTypes.arrayOf(
-            PropTypes.shape({
-                id: PropTypes.number,
-                name: PropTypes.string,
-                color: PropTypes.string,
-            }),
-        ),
-        onClick: PropTypes.func,
-        focus: PropTypes.objectOf(Date),
-        groupFocus: PropTypes.number,
-        weekWidth: PropTypes.number,
-    };
-
-    static defaultProps = {
-        entries: [],
-        groups: [],
-        onClick: null,
-        focus: null,
-        groupFocus: null,
-        weekWidth: 0,
-    };
-
     render() {
         const {
             entries, groups, onClick, focus, groupFocus, weekWidth,
@@ -52,3 +26,25 @@ export default class User extends PureComponent {
         );
     }
 }
+
+User.propTypes = {
+    entries: PropTypes.arrayOf(PropTypes.array,),
+    groups: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        color: PropTypes.string,
+    }),),
+    onClick: PropTypes.func,
+    focus: PropTypes.objectOf(Date),
+    groupFocus: PropTypes.number,
+    weekWidth: PropTypes.number,
+};
+
+User.defaultProps = {
+    entries: [],
+    groups: [],
+    onClick: null,
+    focus: null,
+    groupFocus: null,
+    weekWidth: 0,
+};

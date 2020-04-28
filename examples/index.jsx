@@ -13,7 +13,7 @@ async function bootstrap() {
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
     ReactDom.render(
-        <ExampleList />,
+        <ExampleList/>,
         document.querySelector('#app')
     );
 }

@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
 import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
@@ -7,32 +7,6 @@ import { getGroupImage, handleImageError } from '../../utils/image';
 import { getTextstring } from '../../utils/textstring';
 
 export default class Receiver extends Component {
-    static propTypes = {
-        updateReceiverSearchString: PropTypes.func.isRequired,
-        updateChosenReceivers: PropTypes.func.isRequired,
-        chosenReceivers: PropTypes.array.isRequired,
-        name: PropTypes.string.isRequired,
-        includedUsers: PropTypes.array,
-        showIdInPopup: PropTypes.bool,
-        locationId: PropTypes.number,
-        personId: PropTypes.string,
-        groupId: PropTypes.number,
-        userId: PropTypes.number,
-        imgUrl: PropTypes.string,
-        siteId: PropTypes.string,
-    };
-
-    static defaultProps = {
-        showIdInPopup: false,
-        includedUsers: [],
-        locationId: null,
-        personId: null,
-        groupId: null,
-        userId: null,
-        siteId: null,
-        imgUrl: '',
-    };
-
     shouldComponentUpdate(nextProps) {
         const {
             chosenReceivers,
@@ -72,21 +46,22 @@ export default class Receiver extends Component {
 
         if (locationId) {
             newReceiver = { name, locationId, siteId };
-            receivers = chosenReceivers.filter(r => r.locationId !== locationId);
+            receivers = chosenReceivers.filter((r) => r.locationId !== locationId);
         } else if (userId) {
             newReceiver = { name, userId, personId };
-            receivers = chosenReceivers.filter(r => r.userId !== userId);
+            receivers = chosenReceivers.filter((r) => r.userId !== userId);
         } else {
             newReceiver = { name, groupId, includedUsers };
-            receivers = chosenReceivers.filter(r => r.groupId !== groupId);
+            receivers = chosenReceivers.filter((r) => r.groupId !== groupId);
         }
 
         receivers.push(newReceiver);
 
-        const locationReceivers = receivers.filter(r => r.locationId !== undefined && r.locationId !== null);
+        const locationReceivers = receivers.filter((r) => r.locationId !== undefined && r.locationId !== null);
 
         if (locationReceivers.length > 1) {
-            receivers = receivers.filter(r => (r.locationId === undefined || r.locationId === null) || r.locationId === locationReceivers[locationReceivers.length - 1].locationId);
+            receivers = receivers.filter((r) => (r.locationId === undefined || r.locationId === null)
+                || r.locationId === locationReceivers[locationReceivers.length - 1].locationId);
 
             chayns.dialog.alert(null, getTextstring('txt_chayns_interCom2_newThread_toManyLocations'));
         }
@@ -120,7 +95,7 @@ export default class Receiver extends Component {
                 <div className="receiver popup-item">
                     <div className="pic popup-item">
                         {groupId !== null ? (
-                            getGroupImage(groupId, includedUsers.map(id => ({ userId: id })))
+                            getGroupImage(groupId, includedUsers.map((id) => ({ userId: id })))
                         ) : (
                             <img
                                 className="popup-item"
@@ -138,3 +113,29 @@ export default class Receiver extends Component {
         );
     }
 }
+
+Receiver.propTypes = {
+    updateReceiverSearchString: PropTypes.func.isRequired,
+    updateChosenReceivers: PropTypes.func.isRequired,
+    chosenReceivers: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
+    includedUsers: PropTypes.array,
+    showIdInPopup: PropTypes.bool,
+    locationId: PropTypes.number,
+    personId: PropTypes.string,
+    groupId: PropTypes.number,
+    userId: PropTypes.number,
+    imgUrl: PropTypes.string,
+    siteId: PropTypes.string,
+};
+
+Receiver.defaultProps = {
+    showIdInPopup: false,
+    includedUsers: [],
+    locationId: null,
+    personId: null,
+    groupId: null,
+    userId: null,
+    siteId: null,
+    imgUrl: '',
+};

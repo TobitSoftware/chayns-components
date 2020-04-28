@@ -90,7 +90,7 @@ export default class TooltipExample extends Component {
                             ),
                         }}
                         removeIcon
-                        ref={ref => this.staticTooltip = ref}
+                        ref={(ref) => this.staticTooltip = ref}
                     >
                         <p
                             onClick={() => {
@@ -122,7 +122,7 @@ export default class TooltipExample extends Component {
                     removeIcon
                     content={{ text: 'Test' }}
                     coordinates={{ x, y }}
-                    ref={ref => this.clickTooltip = ref}
+                    ref={(ref) => this.clickTooltip = ref}
                 />
                 <Tooltip
                     bindListeners

@@ -19,22 +19,22 @@ export default class ModeSwitchExample extends Component {
                     modes={[{
                         id: 1,
                         name: 'Administrator',
-                        uacIds: [1]
+                        uacIds: [1],
                     }, {
                         id: 2,
                         name: 'Group 56911',
-                        uacIds: [56911]
+                        uacIds: [56911],
                     }, {
                         id: 3,
                         name: 'Group 56752',
-                        uacIds: [56752]
+                        uacIds: [56752],
                     }, {
                         id: 4,
                         name: 'Group 56752, 56911',
-                        uacIds: [56752, 56911]
+                        uacIds: [56752, 56911],
                     }, {
                         id: 5,
-                        name: 'No uacIds set'
+                        name: 'No uacIds set',
                     }]}
                     save
                     show
@@ -45,7 +45,7 @@ export default class ModeSwitchExample extends Component {
                 />
                 {
                     mode
-                        ? <p>{`Mode: ${mode.id} ${mode.name} UacId: [ ${mode.uacIds && mode.uacIds.map(uacId => `${uacId} `)} ]`}</p>
+                        ? <p>{`Mode: ${mode.id} ${mode.name} UacId: [ ${mode.uacIds && mode.uacIds.map((uacId) => `${uacId} `)} ]`}</p>
                         : null
                 }
                 <Button onClick={() => {
@@ -57,6 +57,7 @@ export default class ModeSwitchExample extends Component {
                 <h3>Mode</h3>
                 <Mode modes={[1]}>Admin</Mode>
                 <Mode className="mode1" modes={[0]}>User</Mode>
+                <Mode className="mode1" modes={[2]}>UAC-Group 56911</Mode>
                 <Mode className="mode2" modes={[5]}>No uacIds set</Mode>
                 <Mode modes={[-1]}>Not authorized</Mode>
                 <Mode modes={[-1, 0]}>Not authorized or mode 0</Mode>
