@@ -91,3 +91,5 @@ ImageAccordionHead.defaultProps = {
     itemsPerRow: 0,
     wrapperHeight: 0,
 };
+
+ImageAccordionHead.displayName = 'ImageAccordionHead';

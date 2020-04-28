@@ -17,4 +17,6 @@ AutocompleteItem.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
+AutocompleteItem.displayName = 'AutocompleteItem';
+
 export default AutocompleteItem;

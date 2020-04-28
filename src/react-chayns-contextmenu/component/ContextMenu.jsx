@@ -32,9 +32,9 @@ export default class ContextMenu extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { coordinates, position } = this.props;
+        const { coordinates, position, positionOnChildren } = this.props;
 
-        if (prevProps.coordinates !== coordinates || prevProps.position !== position) {
+        if (prevProps.coordinates !== coordinates || prevProps.position !== position || prevProps.positionOnChildren !== positionOnChildren) {
             this.getPosition();
         }
     }
@@ -70,7 +70,7 @@ export default class ContextMenu extends Component {
 
     async getPosition() {
         const {
-            position, coordinates, parent, removeParentSpace,
+            position, coordinates, parent, removeParentSpace, positionOnChildren, arrowDistance,
         } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
 
@@ -79,7 +79,13 @@ export default class ContextMenu extends Component {
         let bottom = coordinates ? coordinates.y : 0;
         if (this.childrenNode && !coordinates) {
             const rect = this.childrenNode.getBoundingClientRect();
-            x = rect.left + (rect.width / 2);
+            if (positionOnChildren === ContextMenu.positionOnChildren.LEFT) {
+                x = rect.left + arrowDistance;
+            } else if (positionOnChildren === ContextMenu.positionOnChildren.CENTER) {
+                x = rect.left + (rect.width / 2);
+            } else if (positionOnChildren === ContextMenu.positionOnChildren.RIGHT) {
+                x = rect.left + rect.width - arrowDistance;
+            }
             top = rect.top;
             bottom = rect.bottom;
         }
@@ -114,7 +120,8 @@ export default class ContextMenu extends Component {
     }
 
     show() {
-        if (chayns.env.isMobile || chayns.env.isTablet) {
+        const { disableDialog } = this.props;
+        if (!disableDialog && (chayns.env.isMobile || chayns.env.isTablet)) {
             this.showSelectDialog();
         } else {
             this.getPosition();
@@ -233,6 +240,8 @@ export default class ContextMenu extends Component {
 
 ContextMenu.position = Bubble.position;
 
+ContextMenu.positionOnChildren = { LEFT: 0, CENTER: 1, RIGHT: 2 };
+
 ContextMenu.propTypes = {
     onLayerClick: PropTypes.func,
     coordinates: PropTypes.shape({
@@ -245,8 +254,8 @@ ContextMenu.propTypes = {
         text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
         icon: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
     })),
-    position: PropTypes.number,
-    /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
+    position: PropTypes.number, // 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right
+    positionOnChildren: PropTypes.number, // 0 = left, 1 = center, 2 = right
     parent: PropTypes.instanceOf(Element),
     children: PropTypes.node,
     onChildrenClick: PropTypes.func,
@@ -259,12 +268,15 @@ ContextMenu.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     removeParentSpace: PropTypes.bool,
+    disableDialog: PropTypes.bool,
+    arrowDistance: PropTypes.number,
 };
 
 ContextMenu.defaultProps = {
     onLayerClick: null,
     items: [],
     position: null,
+    positionOnChildren: 1,
     parent: null,
     children: <Icon icon="ts-ellipsis_v"/>,
     coordinates: null,
@@ -278,4 +290,8 @@ ContextMenu.defaultProps = {
     className: null,
     style: null,
     removeParentSpace: false,
+    disableDialog: false,
+    arrowDistance: 0,
 };
+
+ContextMenu.displayName = 'ContextMenu';

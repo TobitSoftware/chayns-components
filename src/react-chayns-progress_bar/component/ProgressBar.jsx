@@ -49,4 +49,6 @@ ProgressBar.defaultProps = {
     ready: false,
 };
 
+ProgressBar.displayName = 'ProgressBar';
+
 export default ProgressBar;

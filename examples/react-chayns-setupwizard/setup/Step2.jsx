@@ -4,20 +4,10 @@ import PropTypes from 'prop-types';
 import Button from '../../../src/react-chayns-button/component/Button';
 import withSetupWizardContext from '../../../src/react-chayns-setupwizard/component/withSetupWizardContext';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Step2 extends Component {
-    constructor(props, context) {
-        super(props, context);
-        this.next = this.next.bind(this);
-    }
-
-    next() {
-        const { stepComplete, nextStep } = this.props;
-        stepComplete(true);
-        nextStep();
-    }
-
     render() {
-        const { nextStep } = this.props;
+        const { nextStep, stepComplete, stepEnabled } = this.props;
         return (
             <div className="accordion__content">
                 <p>
@@ -32,9 +22,12 @@ class Step2 extends Component {
                         type="radio"
                         className="radio"
                         id="radio1"
-                        onClick={this.next}
+                        onClick={() => {
+                            stepComplete(false);
+                            stepEnabled(false, 2);
+                        }}
                     />
-                    <label htmlFor="radio1">Option 1</label>
+                    <label htmlFor="radio1">Option 1 - will uncomplete the step</label>
                 </div>
                 <div>
                     <input
@@ -42,9 +35,13 @@ class Step2 extends Component {
                         type="radio"
                         className="radio"
                         id="radio2"
-                        onClick={this.next}
+                        onClick={() => {
+                            stepComplete(true);
+                            stepEnabled(true, 2);
+                            nextStep();
+                        }}
                     />
-                    <label htmlFor="radio2">Option 2</label>
+                    <label htmlFor="radio2">Option 2 - will complete the step</label>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <Button onClick={nextStep}>
@@ -59,6 +56,7 @@ class Step2 extends Component {
 Step2.propTypes = {
     nextStep: PropTypes.func.isRequired,
     stepComplete: PropTypes.func.isRequired,
+    stepEnabled: PropTypes.func.isRequired,
 };
 
 export default withSetupWizardContext(Step2);

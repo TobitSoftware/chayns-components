@@ -30,6 +30,7 @@ export default class ColorPickerExample extends PureComponent {
                         console.log(hsvToHexString(c));
                         this.setState({ color: c });
                     }}
+                    onBlur={console.log}
                     transparency
                     style={{
                         marginBottom: '30px',

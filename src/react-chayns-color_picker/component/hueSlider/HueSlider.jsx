@@ -64,3 +64,5 @@ HueSlider.defaultProps = {
     onChange: null,
     onChangeEnd: null,
 };
+
+HueSlider.displayName = 'HueSlider';

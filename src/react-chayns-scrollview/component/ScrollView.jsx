@@ -132,3 +132,5 @@ ScrollView.defaultProps = {
     scrollElementRef: null,
     onScroll: null,
 };
+
+ScrollView.displayName = 'ScrollView';

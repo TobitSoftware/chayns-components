@@ -52,4 +52,6 @@ PersonFinder.defaultProps = {
     context: PersonsContext,
 };
 
+PersonFinder.displayName = 'PersonFinder';
+
 export default PersonFinder;

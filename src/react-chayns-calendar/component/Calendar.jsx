@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 
 import Month from './Month';
 import areDatesEqual from '../utils/areDatesEqual';
@@ -356,7 +354,7 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
-                            <Icon icon={faChevronLeft}/>
+                            <Icon icon="fa fa-chevron-left"/>
                         </div>
                         <div className="cc__calendar__navigate middle"/>
                         <div
@@ -364,7 +362,7 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
-                            <Icon icon={faChevronRight}/>
+                            <Icon icon="fa fa-chevron-right"/>
                         </div>
                     </div>
                 </div>
@@ -415,3 +413,5 @@ Calendar.defaultProps = {
     style: null,
     className: null,
 };
+
+Calendar.displayName = 'Calendar';

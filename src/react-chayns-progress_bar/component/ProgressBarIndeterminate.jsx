@@ -16,4 +16,6 @@ ProgressBarIndeterminate.propTypes = {
 ProgressBarIndeterminate.defaultProps = {
 };
 
+ProgressBarIndeterminate.displayName = 'ProgressBarIndeterminate';
+
 export default ProgressBarIndeterminate;

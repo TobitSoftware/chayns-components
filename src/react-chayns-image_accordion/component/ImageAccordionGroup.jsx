@@ -247,3 +247,5 @@ ImageAccordionGroup.defaultProps = {
     reference: null,
     onHeadOpen: null,
 };
+
+ImageAccordionGroup.displayName = 'ImageAccordionGroup';

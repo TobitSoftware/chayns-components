@@ -48,3 +48,5 @@ User.defaultProps = {
     groupFocus: null,
     weekWidth: 0,
 };
+
+User.displayName = 'User';

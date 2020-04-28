@@ -1,6 +1,6 @@
 {
   "name": "chayns-components",
-  "version": "4.14.3",
+  "version": "4.15.3",
   "description": "Some react components for chayns®",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -82,9 +82,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
-    "@fortawesome/free-brands-svg-icons": "^5.12.1",
-    "@fortawesome/free-regular-svg-icons": "^5.12.1",
-    "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "0.1.4",
     "abortcontroller-polyfill": "^1.4.0",
     "babel-regenerator-runtime": "^6.5.0",

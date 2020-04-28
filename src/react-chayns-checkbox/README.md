@@ -38,7 +38,7 @@ The following properties can be set on the Checkbox-Component
 | labelClassName      | Class names for the label                                                                           | string        |               |
 | labelStyle          | Styles for the label                                                                                | string        |               |
 | stopPropagation     | Stops the click propagation to parent elements                                                      | bool          | false         |
-
+| id                  | The id should be set if server-side-rendering is used.                                              | number/string | Math.random() |
 
 ## Example ##
 

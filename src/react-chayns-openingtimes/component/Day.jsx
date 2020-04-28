@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 import Icon from '../../react-chayns-icon/component/Icon';
@@ -97,8 +96,8 @@ class Day extends Component {
                     }}
                 >
                     <Icon
-                        icon={faPlus}
-                        className={`fa-xs openingTimesIcon ${timeSpans.length < 2 || isRemoving ? 'add' : 'remove'}`}
+                        icon={timeSpans.length < 2 || isRemoving ? 'fa fa-plus' : 'fa fa-times'}
+                        style={{ fontSize: 'inherit' }}
                     />
                 </ChooseButton>
             </div>
@@ -120,5 +119,7 @@ Day.propTypes = {
     onRemove: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 };
+
+Day.displayName = 'Day';
 
 export default Day;

@@ -53,7 +53,7 @@ export default class TextStringExample extends Component {
                             this.setState({ number: number + 1 });
                         }}
                     >
-                        {'Required children'}
+                        Required children
                     </Button>
                 </TextString>
                 <TextString
@@ -69,13 +69,16 @@ export default class TextStringExample extends Component {
                     <p/>
                 </TextString>
                 <TextString
-                    replacements={{ '##REPLACE##': chayns.env.user.name, '##REPLACE_SITE##': chayns.env.site.title }}
+                    replacements={{
+                        '##REPLACE##': chayns.env.user.name,
+                        '##REPLACE_SITE##': chayns.env.site.title,
+                    }}
                     setProps={{
-                        head: 'txt_chayns_textStringTest2',
+                        head: number % 2 ? 'txt_chayns_textStringTest2' : 'txt_chayns_textStringTest',
                         right: 'fallbackTest',
                         fallback: {
                             head: 'Fallback for head property',
-                            right: 'Fallback for right property ##REPLACE_SITE##',
+                            right: number % 2 ? 'Fallback for right property ##REPLACE_SITE##' : 'Fallback 2 ##REPLACE##',
                         },
                     }}
                 >

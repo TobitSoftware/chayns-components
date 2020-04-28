@@ -122,3 +122,5 @@ SelectItem.defaultProps = {
     selectListSelectedId: null,
     tooltipProps: null,
 };
+
+SelectItem.displayName = 'SelectItem';

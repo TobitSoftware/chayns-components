@@ -40,4 +40,6 @@ LoadMore.defaultProps = {
     hide: false,
 };
 
+LoadMore.displayName = 'LoadMore';
+
 export default LoadMore;

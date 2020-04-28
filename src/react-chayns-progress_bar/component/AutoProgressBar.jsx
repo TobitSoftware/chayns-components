@@ -19,4 +19,6 @@ AutoProgressBar.defaultProps = {
     value: null,
 };
 
+AutoProgressBar.displayName = 'AutoProgressBar';
+
 export default AutoProgressBar;

@@ -43,18 +43,18 @@ export default class Input extends PureComponent {
             onKeyUp(e);
         }
         if (e.keyCode === 13) {
-            this.callValidated(e.target.value, onEnter);
+            this.callValidated(e.target.value, onEnter, e);
         }
     }
 
     onBlur(e) {
         const { onBlur } = this.props;
-        this.callValidated(e.target.value, onBlur);
+        this.callValidated(e.target.value, onBlur, e);
     }
 
     onChange(e) {
         const { onChange } = this.props;
-        this.callValidated(e.target.value, onChange);
+        this.callValidated(e.target.value, onChange, e);
     }
 
     setRef(ref) {
@@ -67,13 +67,13 @@ export default class Input extends PureComponent {
         this.ref = ref;
     }
 
-    callValidated(value, callback) {
+    callValidated(value, callback, event) {
         const { regExp, required } = this.props;
 
         const valid = !(required && !value) && !(regExp && !value.match(regExp));
 
         if (callback) {
-            callback(value, valid);
+            callback(value, valid, event);
         }
 
         this.setState({
@@ -240,3 +240,5 @@ Input.defaultProps = {
     required: false,
     disabled: false,
 };
+
+Input.displayName = 'Input';

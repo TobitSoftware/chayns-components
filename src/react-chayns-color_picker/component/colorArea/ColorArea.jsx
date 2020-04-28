@@ -191,3 +191,5 @@ ColorArea.defaultProps = {
     onChange: null,
     onChangeEnd: null,
 };
+
+ColorArea.displayName = 'ColorArea';

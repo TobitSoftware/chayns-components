@@ -2,6 +2,7 @@ import React from 'react';
 import ExpandableContext from './ExpandableContext';
 
 export default function connectExpandableContext(WrappedComponent) {
+    // eslint-disable-next-line react/display-name
     return ({ ...props }) => (
         <ExpandableContext.Consumer>
             {(context) => (

@@ -5,21 +5,101 @@ import classNames from 'classnames';
 import PersonFinderResults from './PersonFinderResults';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import WaitCursor from './WaitCursor';
+import getListLength from '../utils/getListLength';
+import getSelectedListItem from '../utils/getSelectedListItem';
 
 const LAZY_LOADING_SPACE = 100;
 
 class PersonFinderView extends Component {
-    state = { lazyLoading: false };
+    constructor(props) {
+        super(props);
+        this.state = {
+            lazyLoading: false,
+            focusIndex: props.autoSelectFirst ? 0 : null,
+        };
+    }
+
+    updateIndex = (index) => {
+        const { data, value, orm } = this.props;
+        let focusIndex = index;
+        if (focusIndex !== null) {
+            const listLength = getListLength(data, orm, value);
+            if (focusIndex >= listLength) {
+                focusIndex = listLength - 1;
+            }
+            if (focusIndex < 0) {
+                focusIndex = 0;
+            }
+            if (this.animationFrameId) {
+                window.cancelAnimationFrame(this.animationFrameId);
+            }
+            this.animationFrameId = window.requestAnimationFrame(() => {
+                if (this.resultList) {
+                    this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                }
+                this.animationFrameId = null;
+            });
+        }
+        this.setState({ focusIndex });
+    };
+
+    handleOnBlur = () => {
+        const { autoSelectFirst } = this.props;
+        this.updateIndex(autoSelectFirst ? 0 : null);
+    };
 
     handleKeyDown = (ev) => {
+        const { focusIndex } = this.state;
+        const {
+            onSelect,
+            data,
+            orm,
+            value,
+            onKeyDown,
+            autoSelectFirst,
+        } = this.props;
+
+        if (onKeyDown) {
+            onKeyDown(ev);
+        }
+
         if (!this.resultList) return;
 
-        if ((ev.keyCode === 9 || ev.keyCode === 40)) {
-            const item = this.resultList.querySelector('.result-item');
-            if (item) {
+        switch (ev.keyCode) {
+            case 40: // Arrow down
                 ev.preventDefault();
-                item.focus();
-            }
+                if (focusIndex === null) {
+                    this.updateIndex(0);
+                } else {
+                    this.updateIndex(focusIndex + 1);
+                }
+                break;
+            case 38: // Arrow up
+                ev.preventDefault();
+                if (focusIndex === null) {
+                    this.updateIndex(0);
+                } else {
+                    this.updateIndex(focusIndex - 1);
+                }
+                break;
+            case 27: // Esc
+                this.updateIndex(autoSelectFirst ? 0 : null);
+                this.boxRef.blur();
+                break;
+            case 13: // Enter
+                if (focusIndex !== null) {
+                    const item = getSelectedListItem(data, focusIndex, orm, value);
+                    if (item !== undefined) {
+                        onSelect(undefined, item);
+                    }
+                    this.updateIndex(autoSelectFirst ? 0 : null);
+                    if (this.resultList) {
+                        this.resultList.scrollTo(0, 0);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     };
 
@@ -47,7 +127,8 @@ class PersonFinderView extends Component {
         return Array.isArray(orm.groups)
             ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value))
                 && Array.isArray(data[group]) && data[group].length)
-            : !!((Array.isArray(data) && data.length) || Object.values(data).some((d) => Array.isArray(d) && d.length));
+            : !!((Array.isArray(data) && data.length) || Object.values(data)
+                .some((d) => Array.isArray(d) && d.length));
     };
 
     renderChildren() {
@@ -61,6 +142,8 @@ class PersonFinderView extends Component {
             onLoadMore,
             showWaitCursor: waitCursor,
         } = this.props;
+
+        const { focusIndex } = this.state;
 
         const hasEntries = this.hasEntries();
 
@@ -78,11 +161,13 @@ class PersonFinderView extends Component {
                     }}
                     showWaitCursor={waitCursor}
                     hasMore={hasMore}
+                    focusIndex={focusIndex}
                 />
             );
         }
 
-        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
+        if (waitCursor === true || Object.values(waitCursor)
+            .some((x) => x)) {
             return (
                 <WaitCursor key="wait-cursor"/>
             );
@@ -101,17 +186,34 @@ class PersonFinderView extends Component {
             parent,
             orm,
             boxRef,
+            onChange,
+            onKeyDown,
+            autoSelectFirst,
             ...props
         } = this.props;
 
         return (
             <InputBox
+                onBlur={this.handleOnBlur}
                 parent={parent}
                 key="single"
-                ref={boxRef}
+                ref={(ref) => {
+                    if (boxRef) {
+                        boxRef(ref);
+                    }
+                    this.boxRef = ref;
+                }}
                 inputComponent={inputComponent}
                 onKeyDown={this.handleKeyDown}
-                onAddTag={(data) => onSelect(undefined, { [orm.identifier]: data.text, [orm.showName]: data.text })}
+                onAddTag={(data) => {
+                    if (data.text !== undefined) {
+                        return onSelect(undefined, {
+                            [orm.identifier]: data.text,
+                            [orm.showName]: data.text,
+                        });
+                    }
+                    return null;
+                }}
                 value={value}
                 boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
                 overlayProps={{
@@ -119,6 +221,10 @@ class PersonFinderView extends Component {
                         this.resultList = ref;
                     },
                     onScroll: this.handleLazyLoad,
+                }}
+                onChange={(...e) => {
+                    onChange(...e);
+                    this.updateIndex(autoSelectFirst ? 0 : null);
                 }}
                 {...props}
             >
@@ -166,6 +272,9 @@ PersonFinderView.propTypes = {
         PropTypes.objectOf(PropTypes.bool),
         PropTypes.bool,
     ]),
+    onChange: PropTypes.func,
+    autoSelectFirst: PropTypes.bool,
+    onKeyDown: PropTypes.func,
 };
 
 PersonFinderView.defaultProps = {
@@ -179,6 +288,11 @@ PersonFinderView.defaultProps = {
     parent: document.querySelector('.tapp'),
     boxRef: null,
     showWaitCursor: false,
+    onChange: null,
+    autoSelectFirst: false,
+    onKeyDown: null,
 };
+
+PersonFinderView.displayName = 'PersonFinderView';
 
 export default PersonFinderView;

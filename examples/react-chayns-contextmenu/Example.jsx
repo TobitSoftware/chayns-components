@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line,jsx-a11y/click-events-have-key-events */
 import React, { Component } from 'react';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons/faCoffee';
 import { ContextMenu, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
@@ -17,10 +16,12 @@ export default class ContextMenuExample extends Component {
             x: 0,
             y: 0,
             position: 0,
+            positionOnChildren: 0,
             listCoordinates: { x: 0, y: 0 },
         };
 
         this.buttonClick = this.buttonClick.bind(this);
+        this.buttonClick2 = this.buttonClick2.bind(this);
 
         this.listContextMenu = React.createRef();
         this.clickContextMenu = React.createRef();
@@ -31,9 +32,14 @@ export default class ContextMenuExample extends Component {
         this.setState({ position: position + 1 });
     }
 
+    buttonClick2() {
+        const { positionOnChildren } = this.state;
+        this.setState({ positionOnChildren: positionOnChildren + 1 });
+    }
+
     render() {
         const {
-            x, y, position, listCoordinates,
+            x, y, position, listCoordinates, positionOnChildren,
         } = this.state;
 
         const items = [
@@ -41,7 +47,7 @@ export default class ContextMenuExample extends Component {
                 className: null,
                 onClick: console.log,
                 text: 'Coffee',
-                icon: faCoffee,
+                icon: 'fa fa-coffee',
             },
             {
                 className: null,
@@ -56,6 +62,9 @@ export default class ContextMenuExample extends Component {
                 <Button onClick={this.buttonClick}>
                     Change position
                 </Button>
+                <Button onClick={this.buttonClick2}>
+                    Change position on children
+                </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
                     right={<ContextMenu items={items} position={position % 6}/>}
@@ -63,7 +72,7 @@ export default class ContextMenuExample extends Component {
                     <div className="accordion__content">
                         <p>Hello World</p>
                         <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
-                            <Icon icon={faCoffee}/>
+                            <Icon icon="fa fa-coffee"/>
                         </ContextMenu>
                     </div>
                 </Accordion>
@@ -147,6 +156,7 @@ export default class ContextMenuExample extends Component {
                     <ContextMenu
                         items={items}
                         position={position % 6}
+                        positionOnChildren={positionOnChildren % 3}
                         onLayerClick={() => {
                         }}
                     />

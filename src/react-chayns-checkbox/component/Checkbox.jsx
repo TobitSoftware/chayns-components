@@ -1,60 +1,32 @@
 /* eslint-disable jsx-a11y/label-has-associated-control,react/forbid-prop-types */
-import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
-import ToggleButton from '../views/ToggleButton';
+import React, { useRef } from 'react';
 import CheckboxView from '../views/Checkbox';
+import ToggleButton from '../views/ToggleButton';
 
-export default class Checkbox extends PureComponent {
-    constructor() {
-        super();
-        this.id = Math.random();
-    }
+let checkboxId = 1;
 
-    onChange = () => {
-        const { onChange, disabled } = this.props;
+const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
+    const idRef = useRef(`cc_checkbox_${checkboxId++}`);
 
+    const handleChange = (e) => {
         if (!disabled && onChange) {
-            onChange(this.node.checked);
+            onChange(e.target.checked);
         }
     };
 
-    renderCheckbox(props) {
+    const currentId = id || idRef.current;
+
+    if (toggleButton) {
         return (
-            <CheckboxView
-                {...props}
-                id={this.id}
-                ref={(ref) => { this.node = ref; }}
-                onChange={this.onChange}
-            />
+            <ToggleButton {...props} id={currentId} onChange={handleChange}/>
         );
     }
 
-    renderToggleButton(props) {
-        return (
-            <ToggleButton
-                {...props}
-                id={this.id}
-                ref={(ref) => { this.node = ref; }}
-                onChange={this.onChange}
-            />
-        );
-    }
+    return <CheckboxView {...props} id={currentId} onChange={handleChange}/>;
+};
 
-    render() {
-        const {
-            toggleButton,
-            onChange,
-            ...props
-        } = this.props;
-
-        if (toggleButton) {
-            return this.renderToggleButton(props);
-        }
-
-        return this.renderCheckbox(props);
-    }
-}
+export default Checkbox;
 
 Checkbox.propTypes = {
     style: PropTypes.object,
@@ -76,6 +48,7 @@ Checkbox.propTypes = {
     disabled: PropTypes.bool,
     dangerouslySetLabel: PropTypes.object,
     stopPropagation: PropTypes.bool,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 Checkbox.defaultProps = {
@@ -92,4 +65,7 @@ Checkbox.defaultProps = {
     disabled: false,
     dangerouslySetLabel: null,
     stopPropagation: false,
+    id: null,
 };
+
+Checkbox.displayName = 'Checkbox';

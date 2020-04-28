@@ -20,7 +20,7 @@
       "ignorePropertyModificationsFor": ["draftState"]
     }],
     "indent": ["error", 4, { "SwitchCase": 1 }],
-//    "linebreak-style": ["error", "windows"],
+    "linebreak-style": "off",
     "max-len": ["error", { "code": 150 }],
     "no-plusplus": "off",
     "strict": "off",
@@ -48,6 +48,7 @@
     }],
     "react/jsx-indent": ["error", 4],
     "react/no-danger": "off",
+    "react/display-name": "error",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",

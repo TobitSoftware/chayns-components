@@ -7,6 +7,8 @@
 
 # chayns-components #
 
+## Installation ##
+
 The ChaynsComponents can be installed directly from npm by using the following package:
 
     npm install -S chayns-components@latest
@@ -15,13 +17,15 @@ The corresponding styles are included in our [chayns CSS API](https://github.com
 
 ```HTML
 <!-- css styles -->
-<link rel="stylesheet" href="https://api.chayns.net/css/v4.1/">
+<script src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js" version="4.2"></script>
 
 <!-- js api -->
 <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
 ``` 
 
-## Chayns Components ##
+The chayns-components are [tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking). To use tree-shaking, follow [this instruction](./tree-shaking.md).
+
+## Components Overview ##
 The following components are part of this package:
 
 <!---
@@ -46,6 +50,7 @@ The following components are part of this package:
 | [react-chayns-emoji_input](/src/react-chayns-emoji_input/)               | EmojiInput Component        | [Readme](/src/react-chayns-emoji_input/README.md)        |
 | [react-chayns-expandable_content](/src/react-chayns-expandable_content/) | ExpandableContent Component | [Readme](/src/react-chayns-expandable_content/README.md) |
 | [react-chayns-file_input](/src/react-chayns-file_input/)                 | FileInput Component         | [Readme](/src/react-chayns-file_input/README.md)         |
+| [react-chayns-filterbutton](/src/react-chayns-filterbutton/)             | FilterButton Component      | [Readme](/src/react-chayns-filterbutton/README.md)       |
 | [react-chayns-formatted_input](/src/react-chayns-formatted_input/)       | FormattedInput Component    | [Readme](/src/react-chayns-formatted_input/README.md)    |
 | [react-chayns-gallery](/src/react-chayns-gallery/)                       | Gallery Component           | [Readme](/src/react-chayns-gallery/README.md)            |
 | [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)             | Grid-Calendar Component     | [Readme](/src/react-chayns-gridcalendar/README.md)       |
@@ -69,6 +74,7 @@ The following components are part of this package:
 | [react-chayns-sharingbar](/src/react-chayns-sharingbar/)                 | SharingBar Component        | [Readme](/src/react-chayns-sharingbar/README.md)         |
 | [react-chayns-slider](/src/react-chayns-slider/)                         | Slider Component            | [Readme](/src/react-chayns-slider/README.md)             |
 | [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/)       | SmallWaitCursor Component   | [Readme](/src/react-chayns-smallwaitcursor/README.md)    |
+| [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
 | [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
 <!--- end component list -->
@@ -88,6 +94,7 @@ The following components are part of this package:
 | [createLinks](/src/utils/createLinks.js)                           | Creates a string with links from a string with URLs       |
 | [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                           |
 | [ColorUtils](/src/utils/color/README.md)                           | Utility functions to convert color values (hex, rgb, hsv) |
+| [equalizer](/src/utils/equalizer.js)                               | Utility functions to equalize the width of html elements  |
 
 ## Development ##
 

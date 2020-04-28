@@ -1,41 +1,50 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { forwardRef, useCallback, useState } from 'react';
 
-export default class Badge extends PureComponent {
-    componentDidMount() {
-        this.ref.style['min-width'] = `${this.ref.getBoundingClientRect().height}px`;
-    }
+const Badge = forwardRef(({ children, className, style, badgeRef, ...other }, ref) => {
+    const [minWidth, setMinWidth] = useState();
 
-    render() {
-        const {
-            children, className, badgeRef, ...other
-        } = this.props;
+    const measureRef = useCallback((node) => {
+        if (node) {
+            setMinWidth(node.getBoundingClientRect().height);
+        }
+    }, []);
 
-        return (
-            <div
-                className={classNames(className, 'badge')}
-                ref={(ref) => {
-                    this.ref = ref;
-                    if (badgeRef) {
-                        badgeRef(ref);
-                    }
-                }}
-                {...other}
-            >
-                {children}
-            </div>
-        );
-    }
-}
+    return (
+        <div
+            className={classNames(className, 'badge')}
+            ref={(node) => {
+                measureRef(node);
+                if (ref) {
+                    ref(node);
+                }
+                if (badgeRef) {
+                    badgeRef(node);
+                }
+            }}
+            style={{ minWidth, ...style }}
+            {...other}
+        >
+            {children}
+        </div>
+    );
+});
+
+export default Badge;
 
 Badge.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    style: PropTypes.object,
     badgeRef: PropTypes.func,
 };
 
 Badge.defaultProps = {
     className: '',
-    badgeRef: null,
+    style: undefined,
+    badgeRef: undefined,
 };
+
+Badge.displayName = 'Badge';

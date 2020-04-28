@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons/faShareAlt';
 import SharingBarItem from './SharingBarItem';
 import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
 import Icon from '../../react-chayns-icon/component/Icon';
@@ -11,7 +10,7 @@ import share from './sharingActions';
 import './sharingBar.scss';
 
 function SharingBar({
-    link,
+    link: linkProp,
     linkText,
     className,
     stopPropagation,
@@ -20,12 +19,18 @@ function SharingBar({
     const [sharingProvider, setSharingProvider] = useState([]);
 
     useEffect(() => {
-        getAvailableShareProviders().then((provider) => {
-            setSharingProvider(provider.filter((item) => item.available));
-        });
+        getAvailableShareProviders()
+            .then((provider) => {
+                setSharingProvider(provider.filter((item) => item.available));
+            });
     }, []);
 
     const mobileShare = sharingProvider.find((app) => app.id === 10 || app.id === 11);
+
+    let link = linkProp;
+    if (!link) {
+        link = getDefaultShareLink();
+    }
 
     if (mobileShare) {
         return (
@@ -34,7 +39,7 @@ function SharingBar({
                 name={mobileShare.name}
                 provider={mobileShare}
                 key={mobileShare.id}
-                link={link || getDefaultShareLink()}
+                link={link}
                 linkText={linkText}
                 stopPropagation={stopPropagation}
             />
@@ -43,17 +48,18 @@ function SharingBar({
 
     const sharingItems = [];
 
-    sharingProvider.filter((item) => item.available).forEach((x) => {
-        sharingItems.push({
-            className: null,
-            onClick: (e) => {
-                if (stopPropagation) e.stopPropagation();
-                share(x, link, linkText);
-            },
-            text: x.name,
-            icon: x.icon,
-        },);
-    });
+    sharingProvider.filter((item) => item.available)
+        .forEach((x) => {
+            sharingItems.push({
+                className: null,
+                onClick: (e) => {
+                    if (stopPropagation) e.stopPropagation();
+                    share(x, link, linkText);
+                },
+                text: x.name,
+                icon: x.icon,
+            });
+        });
 
     return (
         <div className={classNames('sharing-bar', className)} style={style}>
@@ -61,8 +67,8 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon={faShareAlt} className="sharing-bar__icon"/>
-                <span className="sharing-bar_text">Teilen</span>
+                <Icon icon="fa fa-share-alt" className="sharing-bar__icon"/>
+                <span className="sharing-bar__text">Teilen</span>
             </ContextMenu>
         </div>
     );
@@ -83,5 +89,7 @@ SharingBar.defaultProps = {
     stopPropagation: false,
     style: null,
 };
+
+SharingBar.displayName = 'SharingBar';
 
 export default SharingBar;

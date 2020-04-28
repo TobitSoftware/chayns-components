@@ -63,6 +63,7 @@ const PersonFinderStateProvider = ({
 
         // Use event listener to update all contexts if friends change
         const friendsListener = () => dispatch({ type: 'RECEIVE_FRIENDS', data: [] });
+        friendsListener(FriendsHelper.getFriendsList());
         FriendsHelper.addUpdateListener(friendsListener);
 
         return () => FriendsHelper.removeUpdateListener(friendsListener);
@@ -169,16 +170,18 @@ const PersonFinderStateProvider = ({
         await Promise.all(promises);
     }, [loadPersons, loadSites]);
 
-    const data = typeof reducerFunction === 'function' ? reducerFunction(state.data) : state.data;
+    const unreducedData = {
+        ...state.data,
+        friends: enableFriends ? FriendsHelper.getFriendsList() : [],
+    };
+
+    const data = typeof reducerFunction === 'function' ? reducerFunction(unreducedData) : unreducedData;
 
     return (
         <PersonFinderContext.Provider
             value={{
                 ...state,
-                data: {
-                    ...data,
-                    friends: enableFriends ? FriendsHelper.getFriendsList() : [],
-                },
+                data,
                 autoLoading: !enableSites && enablePersons,
                 dispatch,
                 onLoadMore,

@@ -31,7 +31,10 @@ Then it can be used like in the following example:
 |---------------|----------------------------------------------------------------------------------------------------|----------------|---------------|
 | placeholder   | Placeholder of the input field                                                                     | String         |               |
 | removeIcon    | Show a remove icon to clear the personfinder (only dynamic and not multiple)                       | bool           | false         |
-| onChange      | Callback that will be executed when a person gets selected or input/personfinder gets cleared      | Function       |               |
+| onInput       | Callback on input                                                                                  | Function       |               |
+| onChange      | Callback that will be executed when a person gets selected/removed or input/personfinder gets cleared.| Function    |               |
+| onAdd         | Callback that will be executed when a person is added. Works only for the multiple PersonFinder.   | Function       |               |
+| onRemove      | Callback that will be executed when a person is removed. Works only for the multiple PersonFinder. | Function       |               |
 | className     | CSS classes for the wrapper-div                                                                    | String         |               |
 | style         | Styles for the input field                                                                         | Object         |               |
 | required      | Makes the input required                                                                           | bool           |               |
@@ -46,9 +49,12 @@ Then it can be used like in the following example:
 | uacId         | ID of the UAC-Group to search in                                                                   | number         |               |
 | locationId    | LocationId of the UAC-Group to search in                                                           | number         |               |
 | reducerFunction | Function to reduce the results (see example)                                                     | Function       |               |
-| onInput       | Callback on input                                                                                  | Function       |               |
 | context       | The personfinder context. Take a look at the example and the following paragraph.                  | Function       |               |
 | contextProps  | Props for the context.                                                                             | object         |               |
+| max           | Maximum count of selected persons (only multiple personFinder)                                     | number         |               |
+| value         | Value shown in the personFinder input (controlled).                                                | string         |               |
+| values        | Values for the multiple personFinder (controlled).                                                 | array          |               |
+| autoSelectFirst | Autoselect the first entry in result list                                                        | bool           |               |
 
 ## Custom finder ##
 If you want to build your own custom finder for searching e.g. mails in a chayns-based mail application, you can use the SimpleWrapperContext with object mapping and custom props.

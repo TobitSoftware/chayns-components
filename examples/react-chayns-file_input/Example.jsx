@@ -90,7 +90,7 @@ export default class FileInputExample extends Component {
                     disabled={!images}
                     onClick={this.upload}
                 >
-                    {'Upload'}
+                    Upload
                 </Button>
                 <p ref={(ref) => this.logRef = ref}/>
                 <FileInput

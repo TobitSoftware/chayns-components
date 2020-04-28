@@ -5,6 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 
 import isDescendant from '../../utils/isDescendant';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+import { isFunction } from '../../utils/is';
 
 export default class InputBox extends Component {
     state = {
@@ -31,13 +32,17 @@ export default class InputBox extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('click', this.handleBlur);
+        document.addEventListener('mousedown', this.handleBlur);
+        document.addEventListener('touchstart', this.handleBlur);
+
         window.addEventListener('blur', this.blur);
         window.addEventListener('keydown', this.handleKeyDown);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('click', this.handleBlur);
+        document.removeEventListener('mousedown', this.handleBlur);
+        document.removeEventListener('touchstart', this.handleBlur);
+
         window.removeEventListener('blur', this.blur);
         window.removeEventListener('keydown', this.handleKeyDown);
     }
@@ -58,6 +63,7 @@ export default class InputBox extends Component {
 
     handleBlur(e) {
         const { hidden } = this.state;
+        const { onBlur } = this.props;
         if (hidden) {
             return;
         }
@@ -73,6 +79,10 @@ export default class InputBox extends Component {
         this.setState({
             hidden: true,
         });
+
+        if (onBlur && isFunction(onBlur)) {
+            onBlur(e);
+        }
     }
 
     blur() {
@@ -199,6 +209,7 @@ export default class InputBox extends Component {
 }
 
 InputBox.propTypes = {
+    onBlur: PropTypes.func,
     inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
     parent: PropTypes.instanceOf(Element),
     onFocus: PropTypes.func,
@@ -214,6 +225,7 @@ InputBox.propTypes = {
 };
 
 InputBox.defaultProps = {
+    onBlur: null,
     parent: null,
     onFocus: null,
     children: null,
@@ -222,3 +234,5 @@ InputBox.defaultProps = {
     inputRef: null,
     overlayProps: null,
 };
+
+InputBox.displayName = 'InputBox';

@@ -100,4 +100,6 @@ GoogleMap.defaultProps = {
     ...toPropTypes(events, true),
 };
 
+GoogleMap.displayName = 'GoogleMap';
+
 export default GoogleMap;

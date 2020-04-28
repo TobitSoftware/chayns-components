@@ -205,3 +205,5 @@ ExpandableContent.defaultProps = {
     className: null,
     removeContentClosed: false,
 };
+
+ExpandableContent.displayName = 'ExpandableContent';

@@ -54,6 +54,21 @@ export default class SelectButtonExample extends PureComponent {
                         listKey="id"
                         listValue="name"
                         multiSelect
+                        showSelection={false}
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <SelectButton
+                        description="Select one or more pizza"
+                        label="Select one or more pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        multiSelect
+                        showListSelection={false}
                     />
                 </div>
                 <div style={{ marginBottom: '20px' }}>

@@ -118,3 +118,5 @@ FormattedInput.defaultProps = {
     onChange: null,
     defaultValue: null,
 };
+
+FormattedInput.displayName = 'FormattedInput';

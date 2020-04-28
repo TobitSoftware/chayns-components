@@ -203,4 +203,6 @@ TimeSpan.defaultProps = {
     childrenRef: null,
 };
 
+TimeSpan.displayName = 'TimeSpan';
+
 export default TimeSpan;

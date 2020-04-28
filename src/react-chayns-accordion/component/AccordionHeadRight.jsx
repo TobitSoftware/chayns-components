@@ -109,3 +109,5 @@ AccordionHeadRight.defaultProps = {
     searchValue: null,
     state: null,
 };
+
+AccordionHeadRight.displayName = 'AccordionHeadRight';

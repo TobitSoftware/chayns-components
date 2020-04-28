@@ -196,3 +196,5 @@ ReceiverSearchPopup.defaultProps = {
     onlyPersons: false,
     onlySites: false,
 };
+
+ReceiverSearchPopup.displayName = 'ReceiverSearchPopup';

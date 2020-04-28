@@ -15,6 +15,7 @@ export default function CheckboxExample() {
                     toggleButton
                     defaultChecked={false}
                     stopPropagation
+                    id="chechboxId"
                 />
             </div>
 
@@ -24,7 +25,6 @@ export default function CheckboxExample() {
                 }}
                 checked
                 disabled
-                tooltip="Description for xyz"
                 labelStyle={{ marginRight: '10px' }}
             >
                 Enable xyz

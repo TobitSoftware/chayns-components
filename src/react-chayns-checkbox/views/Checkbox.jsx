@@ -61,7 +61,7 @@ const Checkbox = React.forwardRef((props, ref) => {
 });
 
 Checkbox.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     style: PropTypes.object,
     className: PropTypes.string,
     labelStyle: PropTypes.object,
@@ -97,5 +97,6 @@ Checkbox.defaultProps = {
     stopPropagation: false,
 };
 
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox;

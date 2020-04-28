@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 
 import SearchContext from '../SearchContext';
 import ExpandableList from '../../../src/react-chayns-list/component/ExpandableList/ExpandableList';
@@ -8,13 +7,6 @@ import List from '../../../src/react-chayns-list/component/List';
 import { Input } from '../../../src';
 
 export default class ExampleList extends Component {
-    static propTypes = {
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.arrayOf(PropTypes.node),
-        ]).isRequired,
-    };
-
     state = {
         open: null,
         searchValue: '',
@@ -47,7 +39,8 @@ export default class ExampleList extends Component {
         });
 
         this.setState({
-            open: String(id).toLowerCase(),
+            open: String(id)
+                .toLowerCase(),
             searchValue: '',
         });
     }
@@ -67,7 +60,7 @@ export default class ExampleList extends Component {
                 {!open && (<h1>ChaynsComponents</h1>)}
                 {!open && (
                     <Input
-                        icon={faSearch}
+                        icon="fa fa-search"
                         value={searchValue}
                         onChange={this.handleSearchChange}
                         placeholder="Search component"
@@ -95,3 +88,10 @@ export default class ExampleList extends Component {
         );
     }
 }
+
+ExampleList.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
+};

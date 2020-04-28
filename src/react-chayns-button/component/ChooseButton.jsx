@@ -29,4 +29,6 @@ ChooseButton.defaultProps = {
     icon: null,
 };
 
+ChooseButton.displayName = 'ChooseButton';
+
 export default ChooseButton;

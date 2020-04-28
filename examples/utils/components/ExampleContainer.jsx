@@ -1,8 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
-import { faCode } from '@fortawesome/free-solid-svg-icons/faCode';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen';
 
 import { Accordion, ContextMenu, Icon } from '../../../src';
 import connectExpandableContext from '../../../src/react-chayns-list/component/ExpandableList/connectExpandableContext';
@@ -30,7 +27,7 @@ class ExampleContainer extends PureComponent {
             className: null,
             onClick: this.handleExampleClick.bind(this),
             text: 'Sourcecode (GitHub)',
-            icon: faCode,
+            icon: 'fa fa-code',
         }];
 
         if (props.readme) {
@@ -38,7 +35,7 @@ class ExampleContainer extends PureComponent {
                 className: null,
                 onClick: this.handleReadmeClick.bind(this),
                 text: 'Readme (GitHub)',
-                icon: faBookOpen,
+                icon: 'fa fa-book-open',
             });
         }
 
@@ -137,7 +134,7 @@ class ExampleContainer extends PureComponent {
                 >
                     <h1>{headline}</h1>
                     <div style={{ textAlign: 'center', fontSize: '80px' }}>
-                        <Icon icon={faExclamationTriangle}/>
+                        <Icon icon="fa fa-exclamation-triangle"/>
                     </div>
                     <div>
                         <b>{error && error.message}</b>

@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { faUpload } from '@fortawesome/free-solid-svg-icons/faUpload';
 import Icon from '../../react-chayns-icon/component/Icon';
 import supportsFileInput from '../utils/supportsFileInput';
 import fileInputCall from '../utils/fileInputCall';
@@ -15,6 +14,7 @@ export default class FileInput extends PureComponent {
         this.itemRefs = [];
         this.fileInputRefs = [];
         this.needAppCall = !supportsFileInput();
+        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.appVersion >= 6244) };
     }
 
     onDragEnter = (event, item, index) => {
@@ -34,33 +34,59 @@ export default class FileInput extends PureComponent {
         if (files && files.length > 0) {
             const invalidFiles = [];
             const validFiles = [];
-            Object.keys(files).forEach((fileIndex) => {
-                const file = files[fileIndex];
-                if (!this.checkFileType(file.type, item.types)) {
-                    invalidFiles.push(file);
-                    chayns.dialog.alert('', errorMessages.wrongFileType);
-                } else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
-                    invalidFiles.push(file);
-                    chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
-                } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
-                    chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`));
-                    invalidFiles.push(file);
-                } else {
-                    validFiles.push(file);
-                }
-            });
+            Object.keys(files)
+                .forEach((fileIndex) => {
+                    const file = files[fileIndex];
+                    if (!this.checkFileType(file.type, item.types)) {
+                        invalidFiles.push(file);
+                        chayns.dialog.alert('', errorMessages.wrongFileType);
+                    } else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
+                        invalidFiles.push(file);
+                        chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
+                    } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
+                        chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`));
+                        invalidFiles.push(file);
+                    } else {
+                        validFiles.push(file);
+                    }
+                });
             item.onChange(validFiles, invalidFiles);
         }
         this.fileInputRefs[index].value = null;
     };
 
     onClick = async (event, item, index) => {
-        const { stopPropagation } = this.props;
+        const { hasMemoryAccess } = this.state;
+        const { stopPropagation, errorMessages } = this.props;
         if (stopPropagation) event.stopPropagation();
         if (isFunction(item.onClick)) item.onClick(event);
-        if (this.needAppCall && item.onChange) {
-            const compatibilityEvent = await fileInputCall();
-            this.onChange(compatibilityEvent, item, index);
+        if (item.onChange) {
+            if (this.needAppCall) {
+                const compatibilityEvent = await fileInputCall(); // TODO remove in future version
+                this.onChange(compatibilityEvent, item, index);
+            } else if (!hasMemoryAccess) {
+                chayns.invokeCall({
+                    action: 239,
+                }, true)
+                    .then((result) => {
+                        if (result.status === 1) {
+                            this.setState({ hasMemoryAccess: true });
+                            this.fileInputRefs[index].click();
+                        } else if (result.status === 2 && errorMessages.temporaryNoPermission) {
+                            chayns.dialog.alert('', errorMessages.temporaryNoPermission);
+                        } else if (result.status === 3 && errorMessages.permanentNoPermission) {
+                            chayns.dialog.alert('', errorMessages.permanentNoPermission)
+                                .then(() => {
+                                    chayns.invokeCall({
+                                        action: 239,
+                                        value: {
+                                            showAppInfo: true,
+                                        },
+                                    });
+                                });
+                        }
+                    });
+            }
         }
     };
 
@@ -95,6 +121,8 @@ export default class FileInput extends PureComponent {
             disabled,
         } = this.props;
 
+        const { hasMemoryAccess } = this.state;
+
         return (
             <div
                 className={classNames('cc__file-input', 'cc__file-input--custom', className, { 'cc__file-input--disabled': disabled })}
@@ -120,6 +148,7 @@ export default class FileInput extends PureComponent {
                                                 item.onChange && !this.needAppCall
                                                     ? (
                                                         <input
+                                                            style={!hasMemoryAccess ? { display: 'none' } : null}
                                                             title=""
                                                             multiple={item.maxNumberOfFiles !== 1}
                                                             directory={item.directory ? '' : null}
@@ -140,7 +169,7 @@ export default class FileInput extends PureComponent {
                                                     icon={
                                                         item.content && item.content.icon
                                                             ? item.content.icon
-                                                            : faUpload
+                                                            : 'fa fa-upload'
                                                     }
                                                 />
                                             </span>
@@ -185,6 +214,8 @@ FileInput.propTypes = {
         tooMuchFiles: PropTypes.string,
         fileTooBig: PropTypes.string,
         wrongFileType: PropTypes.string,
+        permanentNoPermission: PropTypes.string,
+        temporaryNoPermission: PropTypes.string,
     }),
     items: PropTypes.arrayOf(PropTypes.shape({
         types: PropTypes.arrayOf(PropTypes.string),
@@ -217,6 +248,8 @@ FileInput.defaultProps = {
         tooMuchFiles: 'Du kannst nur ##NUMBER## Dateien hochladen.',
         fileTooBig: 'Es sind nur Dateien bis ##SIZE## erlaubt.',
         wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
+        permanentNoPermission: 'Bitte überprüfe die Einstellungen Deiner App und erlaube den Dateizugriff auf Deinem Gerät.',
+        temporaryNoPermission: null,
     },
     items: [{
         types: [FileInput.types.ALL],
@@ -231,3 +264,5 @@ FileInput.defaultProps = {
         content: null,
     }],
 };
+
+FileInput.displayName = 'FileInput';

@@ -74,3 +74,5 @@ ChosenMember.defaultProps = {
     userId: null,
     fixed: false,
 };
+
+ChosenMember.displayName = 'ChosenMember';

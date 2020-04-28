@@ -2,7 +2,8 @@ import React from 'react';
 import { SharingBar } from '../../src/index';
 
 export default function SharingBarExample() {
-    return (
-        <SharingBar stopPropagation/>
-    );
+    return [
+        <div style={{ height: '200px' }}/>,
+        <SharingBar stopPropagation/>,
+    ];
 }

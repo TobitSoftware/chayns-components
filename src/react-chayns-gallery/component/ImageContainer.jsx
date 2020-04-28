@@ -82,3 +82,5 @@ ImageContainer.defaultProps = {
     className: null,
     style: null,
 };
+
+ImageContainer.displayName = 'ImageContainer';

@@ -41,4 +41,6 @@ Relation.propTypes = {
     relation: PropTypes.object.isRequired,
 };
 
+Relation.displayName = 'Relation';
+
 export default Relation;

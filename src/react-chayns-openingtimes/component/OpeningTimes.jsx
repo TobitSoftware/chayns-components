@@ -145,10 +145,10 @@ class OpeningTimes extends Component {
     }
 
     render() {
-        const { className, style } = this.props;
+        const { className, style, forceMobile } = this.props;
         const { state } = this;
         return (
-            <div className={classNames(className, 'cc__opening_times')} style={style}>
+            <div className={classNames(className, 'cc__opening_times', { 'cc__opening_times--force-mobile': forceMobile })} style={style}>
                 {
                     OpeningTimes.weekdays.map((day, index) => (
                         <Day
@@ -191,12 +191,16 @@ OpeningTimes.propTypes = {
     onChange: PropTypes.func,
     className: PropTypes.string,
     style: PropTypes.object,
+    forceMobile: PropTypes.bool,
 };
 
 OpeningTimes.defaultProps = {
     onChange: null,
     className: null,
     style: null,
+    forceMobile: false,
 };
+
+OpeningTimes.displayName = 'OpeningTimes';
 
 export default OpeningTimes;

@@ -69,4 +69,6 @@ Month.defaultProps = {
     onDateSelect: null,
 };
 
+Month.displayName = 'Month';
+
 export default Month;

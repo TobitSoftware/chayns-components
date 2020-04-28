@@ -139,3 +139,5 @@ Receiver.defaultProps = {
     siteId: null,
     imgUrl: '',
 };
+
+Receiver.displayName = 'Receiver';

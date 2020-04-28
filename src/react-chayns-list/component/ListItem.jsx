@@ -38,4 +38,6 @@ ListItem.defaultProps = {
     hideIndicator: false,
 };
 
+ListItem.displayName = 'ListItem';
+
 export default ListItem;

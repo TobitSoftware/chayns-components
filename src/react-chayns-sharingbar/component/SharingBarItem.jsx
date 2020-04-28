@@ -43,3 +43,5 @@ SharingBarItem.propTypes = {
 SharingBarItem.defaultProps = {
     linkText: '',
 };
+
+SharingBarItem.displayName = 'SharingBarItem';

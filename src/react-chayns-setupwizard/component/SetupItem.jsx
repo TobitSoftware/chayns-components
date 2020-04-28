@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import withSetupWizardContext from './withSetupWizardContext';
 import Badge from '../../react-chayns-badge/component/Badge';
+import { isDisabled } from '../utils/setupWizardHelper';
 
 const SetupItem = ({
     step,
@@ -15,7 +16,7 @@ const SetupItem = ({
     required,
     contentStyle,
     children,
-    maxProgress,
+    enabledSteps,
     completedSteps,
     currentStep,
     toStep,
@@ -25,7 +26,7 @@ const SetupItem = ({
         stepRequired(required, step);
     }, []);
 
-    const disabled = step > maxProgress || disabledProp;
+    const disabled = isDisabled(enabledSteps, step) || disabledProp;
     const open = step === currentStep || openProp;
     const ready = completedSteps.indexOf(step) >= 0 || readyProp;
     const onClick = (event) => {
@@ -40,6 +41,7 @@ const SetupItem = ({
             }
         }
     };
+
     return (
         <div
             className={classNames('accordion', {
@@ -97,7 +99,7 @@ SetupItem.propTypes = {
     contentStyle: PropTypes.object,
     children: PropTypes.element,
     required: PropTypes.bool,
-    maxProgress: PropTypes.number,
+    enabledSteps: PropTypes.arrayOf(PropTypes.number),
     completedSteps: PropTypes.arrayOf(PropTypes.number),
     currentStep: PropTypes.number,
 };
@@ -111,9 +113,11 @@ SetupItem.defaultProps = {
     contentStyle: {},
     children: null,
     required: false,
-    maxProgress: 0,
+    enabledSteps: [],
     completedSteps: [],
     currentStep: -1,
 };
+
+SetupItem.displayName = 'SetupItem';
 
 export default withSetupWizardContext(SetupItem);

@@ -124,3 +124,5 @@ Bubble.defaultProps = {
     onMouseLeave: null,
     topDivStyle: null,
 };
+
+Bubble.displayName = 'Bubble';

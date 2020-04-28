@@ -70,6 +70,9 @@ export default class Icon extends Component {
             );
         }
 
+        // eslint-disable-next-line no-console,max-len
+        console.warn('[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated');
+
         return (
             <FontAwesomeIcon
                 icon={[icon.prefix, icon.iconName]}
@@ -102,3 +105,5 @@ Icon.defaultProps = {
     disabled: false,
     stopPropagation: false,
 };
+
+Icon.displayName = 'Icon';

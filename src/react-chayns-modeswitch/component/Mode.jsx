@@ -38,6 +38,7 @@ export default class Mode extends Component {
         return null;
     }
 }
+
 Mode.propTypes = {
     modes: PropTypes.arrayOf(PropTypes.number).isRequired,
     children: PropTypes.node.isRequired,
@@ -49,3 +50,5 @@ Mode.defaultProps = {
     className: null,
     style: null,
 };
+
+Mode.displayName = 'Mode';

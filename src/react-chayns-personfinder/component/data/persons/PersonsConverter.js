@@ -3,7 +3,10 @@ import FriendsHelper from './FriendsHelper';
 export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
     // due to inconsistent naming of the backends
-    const fullName = relation.fullName || [relation.firstName, relation.lastName, relation.firstname, relation.lastname].join(' ').trim();
+    const fullName = relation.fullName
+        || relation.name
+        || [(relation.firstName || relation.firstname), (relation.lastName || relation.lastname)].join(' ').trim();
+
     return {
         type: 'PERSON',
         id: relation.personId,
@@ -49,4 +52,6 @@ export const convertSites = (sites) => sites.map((site) => ({
     id: site.siteId,
     name: site.locationName,
     imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
+    siteId: site.siteId,
+    locationId: site.locationId,
 }));

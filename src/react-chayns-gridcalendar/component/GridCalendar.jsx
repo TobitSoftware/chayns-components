@@ -508,3 +508,5 @@ ProgressCalendar.defaultProps = {
     className: null,
     style: null,
 };
+
+ProgressCalendar.displayName = 'GridCalendar';

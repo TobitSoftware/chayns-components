@@ -47,8 +47,9 @@ The components got the following properties:
 
 | Property     | Description                                                                | Type   | Required |
 |--------------|----------------------------------------------------------------------------|--------|----------|
-| ready        | callback-function which gets called right after the last step finished     | func   | true     |
-| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func   | true     |
+| ready        | callback-function which gets called right after nextStep is called on the last step when all required steps are completed. | func | true |
+| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func | true |
+| allRequiredStepsCompleted | callback-function which gets called when all required steps are completed | func | true |
 | style        | style of the wizard-root-element                                           | object | false    |
 | contentStyle | style of the wizard-content-element                                        | object | false    |
 | title        | title of the wizard                                                        | object | false    |

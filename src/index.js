@@ -70,6 +70,7 @@ import withSetupWizardContext from './react-chayns-setupwizard/component/withSet
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
+import TagInput from './react-chayns-tag_input/component/TagInput';
 import TextArea from './react-chayns-textarea/component/TextArea';
 import TextString from './react-chayns-textstring/component/TextString';
 import Tooltip from './react-chayns-tooltip/component/Tooltip';
@@ -82,9 +83,11 @@ import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
 import { getDataUrlFromFile, getDataUrlFromBase64 } from './react-chayns-gallery/utils/getDataUrl';
 import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from './react-chayns-gallery/utils/getImageMetaData';
+import getOrientation from './react-chayns-gallery/utils/getOrientation';
 import isTobitEmployee from './utils/tobitEmployee';
 import createLinks from './utils/createLinks';
 import removeHtml from './utils/removeHtml';
+import equalizer from './utils/equalizer';
 
 import { CHAYNS_CSS_VERSION } from './constants';
 
@@ -139,6 +142,7 @@ export {
     withSetupWizardContext,
     SharingBar,
     SmallWaitCursor,
+    TagInput,
     TextArea,
     TextString,
     Tooltip,
@@ -149,10 +153,12 @@ export {
     isTobitEmployee,
     createLinks,
     removeHtml,
+    equalizer,
     getImageMetaDataFromPreview,
     getImageMetaDataFromApi,
     getDataUrlFromBase64,
     getDataUrlFromFile,
+    getOrientation,
     CHAYNS_CSS_VERSION,
     FORMAT_INTEGER,
     FORMAT_DECIMAL,

@@ -403,3 +403,5 @@ EmojiInput.defaultProps = {
     onBlur: null,
     style: null,
 };
+
+EmojiInput.displayName = 'EmojiInput';

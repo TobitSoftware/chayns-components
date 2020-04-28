@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { ScrollView } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
+import TextArea from '../../src/react-chayns-textarea/component/TextArea';
 
 
 export default class ScrollViewExample extends PureComponent {
@@ -11,6 +12,16 @@ export default class ScrollViewExample extends PureComponent {
     render() {
         return (
             <div>
+                <ScrollView
+                    style={{
+                        maxHeight: '200px',
+                        width: '150px',
+                        background: '#777',
+                    }}
+                    onScroll={(e) => console.log(e.target.scrollTop)}
+                >
+                    {this.text}
+                </ScrollView>
                 <ScrollView
                     style={{
                         maxHeight: '500px',
@@ -26,7 +37,7 @@ export default class ScrollViewExample extends PureComponent {
                         this.ref.scrollTo(0, 0);
                     }}
                 >
-                    {'Scroll to top'}
+                    Scroll to top
                 </Button>
                 <ScrollView
                     style={{
@@ -35,9 +46,17 @@ export default class ScrollViewExample extends PureComponent {
                     }}
                     onScroll={console.log}
                 >
-                    {'Not scrollable'}
+                    Not scrollable
                     <br/>
-                    {'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirm'}
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirm
+                </ScrollView>
+                <ScrollView
+                    style={{
+                        maxHeight: '300px',
+                        width: '100%',
+                    }}
+                >
+                    <TextArea autogrow/>
                 </ScrollView>
             </div>
         );

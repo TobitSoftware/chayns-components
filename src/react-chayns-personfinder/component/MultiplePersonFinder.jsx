@@ -6,11 +6,11 @@ import TagInput from '../../react-chayns-tag_input/component/TagInput';
 import PersonFinderView from './PersonFinderView';
 import PersonsContext from './data/persons/PersonsContext';
 import { convertPersonForReturn } from './data/persons/PersonsConverter';
+import { isString } from '../../utils/is';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             inputValue: (props.defaultValue && props.defaultValue[props.context.ObjectMapping.showName]) || '',
             selectedValue: !!props.defaultValue,
@@ -37,14 +37,42 @@ class MultiplePersonFinder extends Component {
         }
     }
 
-    handleOnChange(inputValue) {
-        const { onInput } = this.props;
+    onChange(values) {
+        const { onChange } = this.props;
+        const retVal = values.map((v) => v.value);
+        if (onChange) {
+            if (retVal.length > 0 && retVal[0].type === 'PERSON') {
+                onChange(retVal.map(convertPersonForReturn));
+            } else {
+                onChange(retVal);
+            }
+        }
+    }
+
+    getValues() {
+        const { values: valuesProps, context } = this.props;
+        if (valuesProps) {
+            return valuesProps.map((v) => {
+                const value = context.ValueConverter ? context.ValueConverter(v) : v;
+                return {
+                    text: value[context.ObjectMapping.showName],
+                    value,
+                };
+            });
+        }
+        const { values: valuesState } = this.state;
+        return valuesState;
+    }
+
+    handleOnChange(inputValue, ...other) {
+        const { onInput, max } = this.props;
+        const newInputValue = (max && max <= this.getValues().length) ? '' : inputValue;
         this.setState({
-            inputValue,
+            inputValue: newInputValue,
             selectedValue: false,
         });
         if (onInput) {
-            onInput(inputValue);
+            onInput(newInputValue, ...other);
         }
     }
 
@@ -55,9 +83,13 @@ class MultiplePersonFinder extends Component {
 
         if (!value) return;
 
+        const newValues = values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]);
+
         this.setState({
-            values: values.filter((r) => r.value[orm.identifier] !== value[orm.identifier]),
+            values: newValues,
         });
+
+        this.onChange(newValues);
 
         if (onRemove) {
             onRemove(value);
@@ -66,9 +98,24 @@ class MultiplePersonFinder extends Component {
 
     handleSelect(type, value) {
         const {
-            onAdd, context: { ObjectMapping: orm },
+            onAdd, context: { ObjectMapping: orm }, values: valuesProp,
         } = this.props;
-        const { values } = this.state;
+        const { values: valuesState } = this.state;
+
+        const { ValueConverter } = PersonsContext;
+
+        let values = valuesState;
+        if (valuesProp) {
+            values = valuesProp.map((v) => {
+                let retVal = v;
+                if (!retVal.value) {
+                    retVal = {
+                        value: ValueConverter ? ValueConverter(v) : v,
+                    };
+                }
+                return retVal;
+            });
+        }
         const name = value[orm.showName];
 
         if (values.find((v) => v.value[orm.identifier] === value[orm.identifier])) {
@@ -79,13 +126,15 @@ class MultiplePersonFinder extends Component {
             ...value,
         };
 
+        const newValues = [...values, {
+            text: name,
+            value: outValue,
+        }];
+
         this.setState({
             inputValue: '',
             selectedValue: false,
-            values: [...values, {
-                text: name,
-                value: outValue,
-            }],
+            values: newValues,
         });
 
         if (onAdd) {
@@ -95,6 +144,8 @@ class MultiplePersonFinder extends Component {
             onAdd(outValue);
         }
 
+        this.onChange(newValues);
+
         if (this.boxRef) {
             this.boxRef.updatePosition();
             setImmediate(this.boxRef.focus);
@@ -102,17 +153,13 @@ class MultiplePersonFinder extends Component {
     }
 
     clear() {
-        const { onChange } = this.props;
-
         this.setState({
             inputValue: '',
             values: [],
             selectedValue: null,
         });
 
-        if (onChange) {
-            onChange(null);
-        }
+        this.onChange([]);
     }
 
     render() {
@@ -124,9 +171,11 @@ class MultiplePersonFinder extends Component {
             showId,
             context: Context,
             contextProps,
+            max,
+            value: valueProp,
             ...props
         } = this.props;
-        const { inputValue, selectedValue, values } = this.state;
+        const { inputValue, selectedValue } = this.state;
 
         return (
             <div className={classNames('cc__person-finder', className)}>
@@ -150,15 +199,19 @@ class MultiplePersonFinder extends Component {
                                 {...ctx}
                                 orm={Context.ObjectMapping}
                                 inputComponent={TagInput}
-                                inputRef={(ref) => { this.input = ref; }}
-                                boxRef={(ref) => { this.boxRef = ref; }}
-                                value={inputValue}
-                                tags={values}
-                                selectedValue={selectedValue}
-                                onChange={(value) => {
-                                    this.handleOnChange(value);
+                                inputRef={(ref) => {
+                                    this.input = ref;
+                                }}
+                                boxRef={(ref) => {
+                                    this.boxRef = ref;
+                                }}
+                                value={isString(valueProp) ? valueProp : inputValue}
+                                tags={this.getValues()}
+                                selectedValue={selectedValue || (max && this.getValues().length >= max)}
+                                onChange={(...value) => {
+                                    this.handleOnChange(...value);
                                     if (typeof ctx.onChange === 'function') {
-                                        ctx.onChange(value);
+                                        ctx.onChange(...value);
                                     }
                                 }}
                                 onRemoveTag={this.handleTagRemove}
@@ -209,6 +262,10 @@ MultiplePersonFinder.propTypes = {
     }).isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     contextProps: PropTypes.object,
+    max: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    values: PropTypes.array,
+    value: PropTypes.string,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -223,6 +280,11 @@ MultiplePersonFinder.defaultProps = {
     defaultValues: [],
     onInput: null,
     contextProps: null,
+    max: null,
+    values: null,
+    value: null,
 };
+
+MultiplePersonFinder.displayName = 'MultiplePersonFinder';
 
 export default MultiplePersonFinder;

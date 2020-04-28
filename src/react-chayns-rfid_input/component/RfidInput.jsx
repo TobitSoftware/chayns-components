@@ -142,3 +142,5 @@ RfidInput.defaultProps = {
     enableScan: false,
     scanText: 'Scannen',
 };
+
+RfidInput.displayName = 'RfidInput';

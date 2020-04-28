@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import { Input } from '../../src/index';
 
@@ -122,7 +121,7 @@ export default class InputExample extends PureComponent {
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
                         onEnter={InputExample.onEnter}
-                        icon={faCoffee}
+                        icon="fa fa-coffee"
                         noDeleteIcon
                         onIconClick={console.log}
                         dynamic
@@ -149,7 +148,7 @@ export default class InputExample extends PureComponent {
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
                         onEnter={InputExample.onEnter}
-                        icon={faCoffee}
+                        icon="fa fa-coffee"
                         noDeleteIcon
                         onIconClick={console.log}
                         dynamic
@@ -165,7 +164,7 @@ export default class InputExample extends PureComponent {
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
                         onEnter={InputExample.onEnter}
-                        icon={faCoffee}
+                        icon="ts-tobit"
                         noDeleteIcon
                         onIconClick={console.log}
                         dynamic

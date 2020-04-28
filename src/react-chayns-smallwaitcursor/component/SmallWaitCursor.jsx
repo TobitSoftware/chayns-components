@@ -51,3 +51,5 @@ SmallWaitCursor.defaultProps = {
     inline: false,
     className: null,
 };
+
+SmallWaitCursor.displayName = 'SmallWaitCursor';

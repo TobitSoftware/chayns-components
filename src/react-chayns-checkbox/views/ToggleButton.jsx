@@ -60,7 +60,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
 });
 
 ToggleButton.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     style: PropTypes.object,
     className: PropTypes.string,
     labelStyle: PropTypes.object,
@@ -96,5 +96,6 @@ ToggleButton.defaultProps = {
     stopPropagation: false,
 };
 
+ToggleButton.displayName = 'ToggleButton';
 
 export default ToggleButton;
