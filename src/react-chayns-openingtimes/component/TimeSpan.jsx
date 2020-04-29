@@ -174,7 +174,7 @@ class TimeSpan extends Component {
             if (startHours > -1 && startHours < 24 && startMinutes > -1 && startMinutes < 60
                 && endHours > -1 && endHours < 24 && endMinutes > -1 && endMinutes < 60) {
                 // check start and end
-                return startHours < endHours || (startHours === endHours && endMinutes > startMinutes);
+                return (startHours < endHours) || (startHours === endHours && endMinutes > startMinutes) || (endHours === 0 && endMinutes === 0);
             }
         }
         return false;
