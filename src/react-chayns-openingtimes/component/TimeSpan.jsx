@@ -6,14 +6,14 @@ import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/date
 
 class TimeSpan extends Component {
     static getDataFromTimeString(str) {
-        const regexRes = new RegExp('[0-9]{2}:[0-9]{2}').exec(str);
+        const regexRes = new RegExp('[0-9]{0,2}:[0-9]{0,2}').exec(str);
         let hours = null;
         let minutes = null;
         if (regexRes) {
             const parts = regexRes[0].split(':');
 
-            hours = parseInt(parts[0], 0);
-            minutes = parseInt(parts[1], 0);
+            hours = parseInt(parts[0], 10) || 0;
+            minutes = parseInt(parts[1], 10) || 0;
         }
 
         return {
@@ -167,6 +167,8 @@ class TimeSpan extends Component {
             hours: endHours,
             minutes: endMinutes,
         } = TimeSpan.getDataFromTimeString(endTime);
+
+        console.log('test', endHours, endMinutes, startHours, startMinutes);
 
         // check value are valid
         if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {
