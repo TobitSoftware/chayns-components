@@ -150,15 +150,12 @@ class OpeningTimes extends Component {
         return (
             <div className={classNames(className, 'cc__opening_times', { 'cc__opening_times--force-mobile': forceMobile })} style={style}>
                 {
-                    OpeningTimes.weekdays.map((day, index) => (
+                    OpeningTimes.weekdays.map((day) => (
                         <Day
                             // eslint-disable-next-line react/no-array-index-key
-                            key={index}
-                            weekday={{
-                                name: day,
-                                number: index,
-                            }}
-                            times={state.times.filter((t) => t.weekDay === index)}
+                            key={day.number}
+                            weekday={day}
+                            times={state.times.filter((t) => t.weekDay === day.number)}
                             onDayActivation={this.onDayActivation}
                             onAdd={this.onAdd}
                             onRemove={this.onRemove}
@@ -172,13 +169,34 @@ class OpeningTimes extends Component {
 }
 
 OpeningTimes.weekdays = [
-    'Montag',
-    'Dienstag',
-    'Mittwoch',
-    'Donnerstag',
-    'Freitag',
-    'Samstag',
-    'Sonntag',
+    {
+        name: 'Montag',
+        number: 1,
+    },
+    {
+        name: 'Dienstag',
+        number: 2,
+    },
+    {
+        name: 'Mittwoch',
+        number: 3,
+    },
+    {
+        name: 'Donnerstag',
+        number: 4,
+    },
+    {
+        name: 'Freitag',
+        number: 5,
+    },
+    {
+        name: 'Samstag',
+        number: 6,
+    },
+    {
+        name: 'Sonntag',
+        number: 0,
+    },
 ];
 
 OpeningTimes.propTypes = {
