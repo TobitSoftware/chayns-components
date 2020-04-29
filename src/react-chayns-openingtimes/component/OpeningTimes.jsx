@@ -80,7 +80,7 @@ class OpeningTimes extends Component {
         }
     }
 
-    onChange(day, index, start, end) {
+    onChange(day, index, start, end, isInvalid) {
         // eslint-disable-next-line no-nested-ternary
         const { times } = this.state;
         const { onChange } = this.props;
@@ -92,7 +92,9 @@ class OpeningTimes extends Component {
             timesOfDay[index].start = start;
             timesOfDay[index].end = end;
             this.setState(newState);
-            onChange(times);
+            if (!isInvalid) {
+                onChange(times);
+            }
         }
     }
 

@@ -15,7 +15,7 @@ class Day extends Component {
         this.timeSpanKey1 = Math.random().toString();
         this.timeSpanKey2 = Math.random().toString();
 
-        this.state = { isRemoving: false, animations: false };
+        this.state = { isRemoving: false, animations: false, isInvalid: false };
     }
 
     onDayActivation(status) {
@@ -37,15 +37,53 @@ class Day extends Component {
         if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
     };
 
+    onChange = (weekDayNumber, index, start, end) => {
+        const {
+            times,
+            onChange,
+        } = this.props;
+        let isInvalid = false;
+        if (times.length > 1) {
+            const otherTime = times[times.length - 1 - index];
+            const {
+                hours: newStartHours,
+                minutes: newStartMinutes,
+            } = TimeSpan.getDataFromTimeString(start);
+            const {
+                hours: newEndHours,
+                minutes: newEndMinutes,
+            } = TimeSpan.getDataFromTimeString(end);
+
+            const {
+                hours: otherStartHours,
+                minutes: otherStartMinutes,
+            } = TimeSpan.getDataFromTimeString(otherTime.start);
+            const {
+                hours: otherEndHours,
+                minutes: otherEndMinutes,
+            } = TimeSpan.getDataFromTimeString(otherTime.end);
+            if (index === 0 && (newEndHours > otherStartHours || (newEndHours === otherStartHours && newEndMinutes > otherStartMinutes))) {
+                isInvalid = true;
+            }
+            if (index === 1 && (otherEndHours > newStartHours || (newStartHours === otherEndHours && otherEndMinutes > newStartMinutes))) {
+                isInvalid = true;
+            }
+        }
+
+        this.setState({
+            isInvalid,
+        });
+        onChange(weekDayNumber, index, start, end, isInvalid);
+    };
+
     render() {
         const {
             weekday,
             times,
             onAdd,
-            onChange,
         } = this.props;
 
-        const { isRemoving, animations } = this.state;
+        const { isRemoving, animations, isInvalid } = this.state;
 
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
@@ -74,10 +112,11 @@ class Day extends Component {
                                 start={t.start}
                                 end={t.end}
                                 disabled={isDisabled}
-                                onChange={(start, end) => onChange(weekday.number, index, start, end)}
+                                onChange={(start, end) => this.onChange(weekday.number, index, start, end)}
                                 childrenRef={index === 1 ? (ref) => {
                                     this.timeSpanRef = ref;
                                 } : null}
+                                isInvalid={isInvalid}
                             />
                         ))
                     }

@@ -183,6 +183,7 @@ class TimeSpan extends Component {
     render() {
         const {
             disabled,
+            isInvalid,
             childrenRef,
         } = this.props;
 
@@ -197,7 +198,7 @@ class TimeSpan extends Component {
                         onChange={(val) => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
                         onEnter={() => this.autoFormat('start')}
-                        invalid={!this.checkTimes(startTime, endTime)}
+                        invalid={!this.checkTimes(startTime, endTime) || isInvalid}
                     />
                 </div>
                 <span>-</span>
@@ -208,7 +209,7 @@ class TimeSpan extends Component {
                         onChange={(val) => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
                         onEnter={() => this.autoFormat('end')}
-                        invalid={!this.checkTimes(startTime, endTime)}
+                        invalid={!this.checkTimes(startTime, endTime) || isInvalid}
                     />
                 </div>
             </div>
@@ -231,11 +232,13 @@ TimeSpan.propTypes = {
     end: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
+    isInvalid: PropTypes.bool,
     childrenRef: PropTypes.func,
 };
 
 TimeSpan.defaultProps = {
     disabled: false,
+    isInvalid: false,
     childrenRef: null,
 };
 
