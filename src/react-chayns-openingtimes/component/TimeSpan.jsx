@@ -5,6 +5,23 @@ import Input from '../../react-chayns-input/component/Input';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 
 class TimeSpan extends Component {
+    static getDataFromTimeString(str) {
+        const regexRes = new RegExp('[0-9]{2}:[0-9]{2}').exec(str);
+        let hours = null;
+        let minutes = null;
+        if (regexRes) {
+            const parts = regexRes[0].split(':');
+
+            hours = parseInt(parts[0], 0);
+            minutes = parseInt(parts[1], 0);
+        }
+
+        return {
+            hours,
+            minutes,
+        };
+    }
+
     constructor(props) {
         super(props);
 
@@ -34,12 +51,11 @@ class TimeSpan extends Component {
         if (this.checkInputChars(value)) {
             if (inputField === 'start' && this.startTime) newState.startTime = value;
             else newState.endTime = value;
-
             this.setState(newState);
         }
 
         // Call onChange if time string is valid
-        if (this.isValidTime(value)) onChange(newState.startTime, newState.endTime);
+        if (this.isValidTime(value) && this.checkTimes(newState.startTime, newState.endTime)) onChange(newState.startTime, newState.endTime);
     }
 
     setRef = (name, ref) => {
@@ -104,8 +120,9 @@ class TimeSpan extends Component {
             newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
             this.setState(newState);
         }
-
-        onChange(newState.startTime, newState.endTime);
+        if (this.checkTimes(newState.startTime, newState.endTime)) {
+            onChange(newState.startTime, newState.endTime);
+        }
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -131,18 +148,35 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     isValidTime(str) {
-        const regexRes = new RegExp('[0-9]{2}:[0-9]{2}').exec(str);
+        const {
+            hours,
+            minutes,
+        } = TimeSpan.getDataFromTimeString(str);
+        // check time if its not like '24:60'
+        return hours && minutes && hours > -1 && hours < 24 && minutes > -1 && minutes < 60;
+    }
 
-        if (regexRes) {
-            const parts = regexRes[0].split(':');
+    // eslint-disable-next-line class-methods-use-this
+    checkTimes(startTime, endTime) {
+        const {
+            hours: startHours,
+            minutes: startMinutes,
+        } = TimeSpan.getDataFromTimeString(startTime);
 
-            const hours = parseInt(parts[0], 0);
-            const minutes = parseInt(parts[1], 0);
+        const {
+            hours: endHours,
+            minutes: endMinutes,
+        } = TimeSpan.getDataFromTimeString(endTime);
 
+        // check value are valid
+        if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {
             // check time if its not like '24:60'
-            if (hours > -1 && hours < 24 && minutes > -1 && minutes < 60) return true;
+            if (startHours > -1 && startHours < 24 && startMinutes > -1 && startMinutes < 60
+                && endHours > -1 && endHours < 24 && endMinutes > -1 && endMinutes < 60) {
+                // check start and end
+                return startHours < endHours || (startHours === endHours && endMinutes > startMinutes);
+            }
         }
-
         return false;
     }
 
@@ -163,6 +197,7 @@ class TimeSpan extends Component {
                         onChange={(val) => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
                         onEnter={() => this.autoFormat('start')}
+                        invalid={!this.checkTimes(startTime, endTime)}
                     />
                 </div>
                 <span>-</span>
@@ -173,6 +208,7 @@ class TimeSpan extends Component {
                         onChange={(val) => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
                         onEnter={() => this.autoFormat('end')}
+                        invalid={!this.checkTimes(startTime, endTime)}
                     />
                 </div>
             </div>
