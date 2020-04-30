@@ -168,8 +168,6 @@ class TimeSpan extends Component {
             minutes: endMinutes,
         } = TimeSpan.getDataFromTimeString(endTime);
 
-        console.log('test', endHours, endMinutes, startHours, startMinutes);
-
         // check value are valid
         if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {
             // check time if its not like '24:60'
