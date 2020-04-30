@@ -79,9 +79,7 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
         }
 
         // Call onChange if time string is valid
-        if (validateTime(value) && checkTimeSpan(newState.startTime, newState.endTime)) {
-            onChange(newState.startTime, newState.endTime);
-        }
+        onChange(newState.startTime, newState.endTime);
 
         return newState;
     }), [onChange, setTime]);
@@ -90,10 +88,12 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
     const handleEndChange = useMemo(() => handleChange('end'), [handleChange]);
 
     useEffect(() => {
-        setTime(() => ({
-            startTime,
-            endTime,
-        }));
+        if (validateTime(startTime) && validateTime(endTime) && checkTimeSpan(startTime, endTime)) {
+            setTime(() => ({
+                startTime,
+                endTime,
+            }));
+        }
     }, [startTime, endTime, setTime]);
 
     const handleAutoFormat = useCallback((inputField) => () => setTime((currentState) => {
@@ -116,9 +116,7 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
             newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
         }
 
-        if (checkTimeSpan(newState.startTime, newState.endTime)) {
-            onChange(newState.startTime, newState.endTime);
-        }
+        onChange(newState.startTime, newState.endTime);
 
         return newState;
     }), [setTime, onChange]);
