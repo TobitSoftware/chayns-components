@@ -8,6 +8,8 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import checkDay from '../utils/checkDay';
 
+const PLACEHOLDER_STYLE = { width: 23 };
+
 class Day extends Component {
     constructor(props) {
         super(props);
@@ -78,8 +80,8 @@ class Day extends Component {
                     />
                 </div>
                 <div className="flex__middle">
-                    {
-                        timeSpans.map((t, index) => (
+                    {timeSpans.map((t, index) => (
+                        <div className="flex__middle--wrapper">
                             <TimeSpan
                                 key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
                                 startTime={t.start}
@@ -91,27 +93,31 @@ class Day extends Component {
                                 } : null}
                                 isInvalid={!dateValid}
                             />
-                        ))
-                    }
+                            {(index === timeSpans.length - 1) ? (
+                                <ChooseButton
+                                    className="flex__right"
+                                    onClick={() => {
+                                        this.setState({ animations: true });
+                                        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+                                        if (timeSpans.length < 2) {
+                                            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+                                        } else {
+                                            this.timeSpanRef.addEventListener('animationend', this.animationendFunction);
+                                            this.setState({ isRemoving: true });
+                                        }
+                                    }}
+                                >
+                                    <Icon
+                                        icon={timeSpans.length < 2 || isRemoving ? 'fa fa-plus' : 'fa fa-times'}
+                                        style={{ fontSize: 'inherit' }}
+                                    />
+                                </ChooseButton>
+                            ) : (
+                                <div style={PLACEHOLDER_STYLE}/>
+                            )}
+                        </div>
+                    ))}
                 </div>
-                <ChooseButton
-                    className="flex__right"
-                    onClick={() => {
-                        this.setState({ animations: true });
-                        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
-                        if (timeSpans.length < 2) {
-                            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
-                        } else {
-                            this.timeSpanRef.addEventListener('animationend', this.animationendFunction);
-                            this.setState({ isRemoving: true });
-                        }
-                    }}
-                >
-                    <Icon
-                        icon={timeSpans.length < 2 || isRemoving ? 'fa fa-plus' : 'fa fa-times'}
-                        style={{ fontSize: 'inherit' }}
-                    />
-                </ChooseButton>
             </div>
         );
     }
