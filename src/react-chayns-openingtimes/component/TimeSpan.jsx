@@ -4,6 +4,7 @@ import Input from '../../react-chayns-input/component/Input';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 import parseTimeString from '../utils/parseTimeString';
+import { checkTimeSpan } from '../utils/checkTimeSpan';
 
 class TimeSpan extends Component {
     constructor(props) {
@@ -142,26 +143,10 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     checkTimes(startTime, endTime) {
-        const {
-            hours: startHours,
-            minutes: startMinutes,
-        } = parseTimeString(startTime);
+        const parsedStart = parseTimeString(startTime);
+        const parsedEnd = parseTimeString(endTime);
 
-        const {
-            hours: endHours,
-            minutes: endMinutes,
-        } = parseTimeString(endTime);
-
-        // check value are valid
-        if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {
-            // check time if its not like '24:60'
-            if (startHours > -1 && startHours < 24 && startMinutes > -1 && startMinutes < 60
-                && endHours > -1 && endHours < 24 && endMinutes > -1 && endMinutes < 60) {
-                // check start and end
-                return (startHours < endHours) || (startHours === endHours && endMinutes > startMinutes) || (endHours === 0 && endMinutes === 0);
-            }
-        }
-        return false;
+        return checkTimeSpan(parsedStart, parsedEnd);
     }
 
     render() {
