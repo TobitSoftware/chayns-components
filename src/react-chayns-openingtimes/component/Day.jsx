@@ -6,7 +6,7 @@ import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 import Icon from '../../react-chayns-icon/component/Icon';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
-import parseTimeString from '../utils/parseTimeString';
+import checkDay from '../utils/checkDay';
 
 class Day extends Component {
     constructor(props) {
@@ -16,7 +16,7 @@ class Day extends Component {
         this.timeSpanKey1 = Math.random().toString();
         this.timeSpanKey2 = Math.random().toString();
 
-        this.state = { isRemoving: false, animations: false, isInvalid: false };
+        this.state = { isRemoving: false, animations: false };
     }
 
     onDayActivation(status) {
@@ -40,42 +40,10 @@ class Day extends Component {
 
     onChange = (weekDayNumber, index, start, end) => {
         const {
-            times,
             onChange,
         } = this.props;
-        let isInvalid = false;
-        if (times.length > 1) {
-            const otherTime = times[times.length - 1 - index];
-            const {
-                hours: newStartHours,
-                minutes: newStartMinutes,
-            } = parseTimeString(start);
-            const {
-                hours: newEndHours,
-                minutes: newEndMinutes,
-            } = parseTimeString(end);
 
-            const {
-                hours: otherStartHours,
-                minutes: otherStartMinutes,
-            } = parseTimeString(otherTime.start);
-            const {
-                hours: otherEndHours,
-                minutes: otherEndMinutes,
-            } = parseTimeString(otherTime.end);
-
-            if (index === 0 && (newEndHours > otherStartHours || (newEndHours === otherStartHours && newEndMinutes > otherStartMinutes))) {
-                isInvalid = true;
-            }
-            if (index === 1 && (otherEndHours > newStartHours || (newStartHours === otherEndHours && otherEndMinutes > newStartMinutes))) {
-                isInvalid = true;
-            }
-        }
-
-        this.setState({
-            isInvalid,
-        });
-        onChange(weekDayNumber, index, start, end, isInvalid);
+        onChange(weekDayNumber, index, start, end);
     };
 
     render() {
@@ -85,7 +53,7 @@ class Day extends Component {
             onAdd,
         } = this.props;
 
-        const { isRemoving, animations, isInvalid } = this.state;
+        const { isRemoving, animations } = this.state;
 
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
@@ -118,7 +86,7 @@ class Day extends Component {
                                 childrenRef={index === 1 ? (ref) => {
                                     this.timeSpanRef = ref;
                                 } : null}
-                                isInvalid={isInvalid}
+                                isInvalid={!checkDay(timeSpans)}
                             />
                         ))
                     }
