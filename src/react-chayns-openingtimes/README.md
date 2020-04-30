@@ -28,7 +28,7 @@ You can use the OpeningTimes like this:
             end: '15:00'
         }
     ]}
-    onChange={(times) => console.log(times)}
+    onChange={(times, isValid) => console.log(times, isValid)}
 />
 ```
 
@@ -46,3 +46,5 @@ The following properties can be set on the OpeningTimes-Component
 | time.end      | The end of the timespan                                | string (HH:MM)                    |                   | true         |
 | onChange      | Returns the modified times                             | func                              |                   |              |
 | forceMobile   | Force mobile view                                      | bool                              | false             |              |
+| hintPosition  | The position of the hint (top, bottom, none)           | OpeningTimes.hintPositions        | TOP               |              |
+| hintText      | Text that should be displayed inside the hint          | string                            |                   |              |

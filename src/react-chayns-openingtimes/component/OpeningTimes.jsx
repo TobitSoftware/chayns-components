@@ -7,6 +7,9 @@ import TimeSpan from './TimeSpan';
 import './OpeningTimes.scss';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+import validateOpeningTimes from '../utils/validateOpeningTimes';
+import OpeningTimesHint, { HINT_POSITIONS } from './OpeningTimesHint';
+import debounce from '../../utils/debounce';
 
 class OpeningTimes extends Component {
     constructor(props) {
@@ -16,6 +19,8 @@ class OpeningTimes extends Component {
         this.onRemove = this.onRemove.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
+        this.validateState = this.validateState.bind(this);
+        this.onValidateStateDebounce = debounce(this.onValidateState.bind(this), 1500);
 
         const { times } = this.props;
 
@@ -37,7 +42,10 @@ class OpeningTimes extends Component {
 
         this.state = {
             times,
+            timesValid: validateOpeningTimes(times),
         };
+
+        console.log(this.state, times);
     }
 
     onAdd(weekDay) {
@@ -61,8 +69,10 @@ class OpeningTimes extends Component {
             disabled: false,
         });
 
+        const openingTimesValid = validateOpeningTimes(newState.times);
         this.setState(newState);
-        if (onChange) onChange(newState.times);
+        this.validateState(openingTimesValid);
+        if (onChange) onChange(newState.times, openingTimesValid);
     }
 
     onRemove(day, span) {
@@ -75,8 +85,10 @@ class OpeningTimes extends Component {
         newState.times = [...timesOfDay, ...otherTimes];
 
         if (onChange) {
+            const openingTimesValid = validateOpeningTimes(newState.times);
             this.setState(newState);
-            onChange(newState.times);
+            this.validateState(openingTimesValid);
+            onChange(newState.times, openingTimesValid);
         }
     }
 
@@ -91,8 +103,12 @@ class OpeningTimes extends Component {
             const timesOfDay = newState.times.filter((time) => time.weekDay === day);
             timesOfDay[index].start = start;
             timesOfDay[index].end = end;
+
+            const openingTimesValid = validateOpeningTimes(newState.times);
             this.setState(newState);
-            onChange(times);
+            this.validateState(openingTimesValid);
+
+            onChange(times, openingTimesValid);
         }
     }
 
@@ -140,45 +156,92 @@ class OpeningTimes extends Component {
             }
         }
 
+        const openingTimesValid = validateOpeningTimes(newState.times);
         this.setState(newState);
-        if (onChange) onChange(newState.times);
+        this.validateState(openingTimesValid);
+        if (onChange) onChange(newState.times, openingTimesValid);
+    }
+
+    onValidateState() {
+        const { times } = this.state;
+
+        const timesValid = validateOpeningTimes(times);
+
+        this.setState({
+            timesValid,
+        });
+    }
+
+    validateState(valid = false) {
+        if (valid) {
+            this.setState({
+                timesValid: valid,
+            });
+        } else {
+            this.onValidateStateDebounce();
+        }
     }
 
     render() {
-        const { className, style, forceMobile } = this.props;
-        const { state } = this;
+        const { className, style, forceMobile, hintPosition, hintText } = this.props;
+        const { times, timesValid } = this.state;
+
         return (
             <div className={classNames(className, 'cc__opening_times', { 'cc__opening_times--force-mobile': forceMobile })} style={style}>
-                {
-                    OpeningTimes.weekdays.map((day, index) => (
-                        <Day
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={index}
-                            weekday={{
-                                name: day,
-                                number: index,
-                            }}
-                            times={state.times.filter((t) => t.weekDay === index)}
-                            onDayActivation={this.onDayActivation}
-                            onAdd={this.onAdd}
-                            onRemove={this.onRemove}
-                            onChange={this.onChange}
-                        />
-                    ))
-                }
+                {!timesValid && hintPosition === OpeningTimes.hintPositions.TOP && (
+                    <OpeningTimesHint content={hintText} position={hintPosition}/>
+                )}
+                {OpeningTimes.weekdays.map((day) => (
+                    <Day
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={day.number}
+                        weekday={day}
+                        times={times.filter((t) => t.weekDay === day.number)}
+                        onDayActivation={this.onDayActivation}
+                        onAdd={this.onAdd}
+                        onRemove={this.onRemove}
+                        onChange={this.onChange}
+                    />
+                ))}
+                {!timesValid && hintPosition === OpeningTimes.hintPositions.BOTTOM && (
+                    <OpeningTimesHint content={hintText} position={hintPosition}/>
+                )}
             </div>
         );
     }
 }
 
+OpeningTimes.hintPositions = HINT_POSITIONS;
+
 OpeningTimes.weekdays = [
-    'Montag',
-    'Dienstag',
-    'Mittwoch',
-    'Donnerstag',
-    'Freitag',
-    'Samstag',
-    'Sonntag',
+    {
+        name: 'Montag',
+        number: 1,
+    },
+    {
+        name: 'Dienstag',
+        number: 2,
+    },
+    {
+        name: 'Mittwoch',
+        number: 3,
+    },
+    {
+        name: 'Donnerstag',
+        number: 4,
+    },
+    {
+        name: 'Freitag',
+        number: 5,
+    },
+    {
+        name: 'Samstag',
+        number: 6,
+    },
+    {
+        name: 'Sonntag',
+        number: 0,
+    },
 ];
 
 OpeningTimes.propTypes = {
@@ -192,6 +255,12 @@ OpeningTimes.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     forceMobile: PropTypes.bool,
+    hintPosition: PropTypes.oneOf([
+        OpeningTimes.hintPositions.NONE,
+        OpeningTimes.hintPositions.TOP,
+        OpeningTimes.hintPositions.BOTTOM,
+    ]),
+    hintText: PropTypes.string,
 };
 
 OpeningTimes.defaultProps = {
@@ -199,6 +268,8 @@ OpeningTimes.defaultProps = {
     className: null,
     style: null,
     forceMobile: false,
+    hintPosition: OpeningTimes.hintPositions.TOP,
+    hintText: '',
 };
 
 OpeningTimes.displayName = 'OpeningTimes';

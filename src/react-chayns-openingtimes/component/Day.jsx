@@ -6,6 +6,7 @@ import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 import Icon from '../../react-chayns-icon/component/Icon';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+import checkDay from '../utils/checkDay';
 
 class Day extends Component {
     constructor(props) {
@@ -37,12 +38,19 @@ class Day extends Component {
         if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
     };
 
+    onChange = (weekDayNumber, index, start, end) => {
+        const {
+            onChange,
+        } = this.props;
+
+        onChange(weekDayNumber, index, start, end);
+    };
+
     render() {
         const {
             weekday,
             times,
             onAdd,
-            onChange,
         } = this.props;
 
         const { isRemoving, animations } = this.state;
@@ -50,6 +58,9 @@ class Day extends Component {
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
         const isDisabled = !times.some((t) => !t.disabled);
+
+        const dateValid = checkDay(times);
+
         return (
             <div
                 className={classNames('flex', 'times', {
@@ -71,13 +82,14 @@ class Day extends Component {
                         timeSpans.map((t, index) => (
                             <TimeSpan
                                 key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
-                                start={t.start}
-                                end={t.end}
+                                startTime={t.start}
+                                endTime={t.end}
                                 disabled={isDisabled}
-                                onChange={(start, end) => onChange(weekday.number, index, start, end)}
+                                onChange={(start, end) => this.onChange(weekday.number, index, start, end)}
                                 childrenRef={index === 1 ? (ref) => {
                                     this.timeSpanRef = ref;
                                 } : null}
+                                isInvalid={!dateValid}
                             />
                         ))
                     }

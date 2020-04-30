@@ -41,12 +41,13 @@ export default class OpeningTimesExample extends PureComponent {
         return (
             <OpeningTimes
                 times={times}
-                onChange={(newTimes) => {
-                    console.log(times, newTimes);
+                onChange={(newTimes, valid) => {
+                    console.log(times, newTimes, valid);
                     this.setState({
                         times: newTimes,
                     });
                 }}
+                hintPosition={OpeningTimes.hintPositions.BOTTOM}
             />
         );
     }

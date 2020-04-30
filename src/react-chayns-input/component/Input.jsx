@@ -10,7 +10,7 @@ export default class Input extends PureComponent {
         super(props);
 
         this.state = {
-            valid: !props.invalid && (!props.regExp || !props.value || props.value.match(props.regExp))
+            valid: (!props.regExp || !props.value || props.value.match(props.regExp))
                 && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
             initial: true,
             right: false,
