@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../react-chayns-input/component/Input';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
-import parseTimeString from '../utils/parseTimeString';
 import { checkTimeSpan } from '../utils/checkTimeSpan';
 import validateTime from '../utils/validateTime';
 
@@ -27,84 +26,83 @@ function checkInputChars(str) {
     return true;
 }
 
-class TimeSpan extends Component {
-    constructor(props) {
-        super(props);
+function inspectTimeStr(str) {
+    const leftDigits = [];
+    const rightDigits = [];
 
-        this.onChange = this.onChange.bind(this);
+    let foundColons = 0;
 
-        this.state = {
-            startTime: props.start,
-            endTime: props.end,
-        };
-    }
+    for (let i = 0; i < str.length; i += 1) {
+        const char = str.charAt(i);
+        const charCode = str.charCodeAt(i);
 
-    componentDidUpdate(prevProps) {
-        const { start, end } = this.props;
-        if (prevProps.start !== start || prevProps.end !== end) {
-            // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ startTime: start, endTime: end });
+        if (char === ':') foundColons += 1;
+        else if (charCode > 47 && charCode < 58) {
+            if (foundColons === 0 && leftDigits.length < 2) leftDigits.push(char);
+            else if (rightDigits.length < 2) rightDigits.push(char);
         }
     }
 
-    onChange(value, inputField) {
-        const { onChange } = this.props;
-        const newState = Object.assign(this.state);
+    return {
+        left: leftDigits,
+        right: rightDigits,
+        colons: foundColons,
+    };
+}
 
+function generateTimePart(digits, type) {
+    if (digits.length === 1) {
+        if (type === 'minutes') return `${digits[0]}0`;
+        return `0${digits[0]}`;
+    }
+    if (digits.length === 2) return `${digits[0]}${digits[1]}`;
+    return '00';
+}
+
+const TimeSpan = React.memo(({ start, end, onChange, childrenRef, isInvalid, disabled }) => {
+    const [time, setTime] = useState({
+        startTime: start,
+        endTime: end,
+    });
+
+    const handleChange = useCallback((inputField) => (value) => setTime((currentState) => {
+        let newState = currentState;
         // Apply input value only if chars are valid
         if (checkInputChars(value)) {
-            if (inputField === 'start') newState.startTime = value;
-            else newState.endTime = value;
-            this.setState(newState);
-        }
+            newState = { ...currentState };
 
-        // Call onChange if time string is valid
-        if (this.isValidTime(value) && this.checkTimes(newState.startTime, newState.endTime)) onChange(newState.startTime, newState.endTime);
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    inspectTimeStr(str) {
-        const leftDigits = [];
-        const rightDigits = [];
-
-        let foundColons = 0;
-
-        for (let i = 0; i < str.length; i += 1) {
-            const char = str.charAt(i);
-            const charCode = str.charCodeAt(i);
-
-            if (char === ':') foundColons += 1;
-            else if (charCode > 47 && charCode < 58) {
-                if (foundColons === 0 && leftDigits.length < 2) leftDigits.push(char);
-                else if (rightDigits.length < 2) rightDigits.push(char);
+            if (inputField === 'start') {
+                newState.startTime = value;
+            } else {
+                newState.endTime = value;
             }
         }
 
-        return {
-            left: leftDigits,
-            right: rightDigits,
-            colons: foundColons,
-        };
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    generateTimePart(digits, type) {
-        if (digits.length === 1) {
-            if (type === 'minutes') return `${digits[0]}0`;
-            return `0${digits[0]}`;
+        // Call onChange if time string is valid
+        if (validateTime(value) && checkTimeSpan(newState.startTime, newState.endTime)) {
+            onChange(newState.startTime, newState.endTime);
         }
-        if (digits.length === 2) return `${digits[0]}${digits[1]}`;
-        return '00';
-    }
 
-    autoFormat(inputField) {
-        const { onChange } = this.props;
-        const newState = { ...this.state };
+        return newState;
+    }), [onChange, setTime]);
+
+    const handleStartChange = useMemo(() => handleChange('start'), [handleChange]);
+    const handleEndChange = useMemo(() => handleChange('end'), [handleChange]);
+
+    useEffect(() => {
+        setTime(() => ({
+            startTime: start,
+            endTime: end,
+        }));
+    }, [start, end, setTime]);
+
+    const handleAutoFormat = useCallback((inputField) => () => setTime((currentState) => {
+        const newState = { ...currentState };
         const val = inputField === 'start' ? newState.startTime : newState.endTime;
-        const inspectResult = this.inspectTimeStr(val);
+        const inspectResult = inspectTimeStr(val);
 
-        let minutePart = this.generateTimePart(inspectResult.right, 'minutes');
-        let hourPart = this.generateTimePart(inspectResult.left, 'hours');
+        let minutePart = generateTimePart(inspectResult.right, 'minutes');
+        let hourPart = generateTimePart(inspectResult.left, 'hours');
 
         if (parseInt(minutePart, 0) > 59) minutePart = '59';
         if (parseInt(hourPart, 0) > 23) hourPart = '23';
@@ -114,65 +112,44 @@ class TimeSpan extends Component {
         if (inputField === 'start') newState.startTime = timeStr;
         else newState.endTime = timeStr;
 
-        this.setState(newState);
-
         if (newState.startTime === newState.endTime) {
             newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
-            this.setState(newState);
         }
-        if (this.checkTimes(newState.startTime, newState.endTime)) {
+
+        if (checkTimeSpan(newState.startTime, newState.endTime)) {
             onChange(newState.startTime, newState.endTime);
         }
-    }
 
-    // eslint-disable-next-line class-methods-use-this
-    isValidTime(str) {
-        const parsedTime = parseTimeString(str);
-        return validateTime(parsedTime);
-    }
+        return newState;
+    }), [setTime, onChange]);
 
-    // eslint-disable-next-line class-methods-use-this
-    checkTimes(startTime, endTime) {
-        const parsedStart = parseTimeString(startTime);
-        const parsedEnd = parseTimeString(endTime);
+    const handleStartAutoFormat = useMemo(() => handleAutoFormat('start'), [handleAutoFormat]);
+    const handleEndAutoFormat = useMemo(() => handleAutoFormat('end'), [handleAutoFormat]);
 
-        return checkTimeSpan(parsedStart, parsedEnd);
-    }
-
-    render() {
-        const {
-            disabled,
-            isInvalid,
-            childrenRef,
-        } = this.props;
-
-        const { startTime, endTime } = this.state;
-
-        return (
-            <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
-                <div className="time__span--input">
-                    <Input
-                        value={startTime}
-                        onChange={(val) => this.onChange(val, 'start')}
-                        onBlur={() => this.autoFormat('start')}
-                        onEnter={() => this.autoFormat('start')}
-                        invalid={!this.checkTimes(startTime, endTime) || isInvalid}
-                    />
-                </div>
-                <span>-</span>
-                <div className="time__span--input">
-                    <Input
-                        value={endTime}
-                        onChange={(val) => this.onChange(val, 'end')}
-                        onBlur={() => this.autoFormat('end')}
-                        onEnter={() => this.autoFormat('end')}
-                        invalid={!this.checkTimes(startTime, endTime) || isInvalid}
-                    />
-                </div>
+    return (
+        <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
+            <div className="time__span--input">
+                <Input
+                    value={time.startTime}
+                    onChange={handleStartChange}
+                    onBlur={handleStartAutoFormat}
+                    onEnter={handleStartAutoFormat}
+                    invalid={!checkTimeSpan(time.startTime, time.endTime) || isInvalid}
+                />
             </div>
-        );
-    }
-}
+            <span>-</span>
+            <div className="time__span--input">
+                <Input
+                    value={time.endTime}
+                    onChange={handleEndChange}
+                    onBlur={handleEndAutoFormat}
+                    onEnter={handleEndAutoFormat}
+                    invalid={!checkTimeSpan(time.startTime, time.endTime) || isInvalid}
+                />
+            </div>
+        </div>
+    );
+});
 
 TimeSpan.OFF = 0;
 
