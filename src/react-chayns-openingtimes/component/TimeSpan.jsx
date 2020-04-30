@@ -53,7 +53,7 @@ class TimeSpan extends Component {
 
         // Apply input value only if chars are valid
         if (checkInputChars(value)) {
-            if (inputField === 'start' && this.startTime) newState.startTime = value;
+            if (inputField === 'start') newState.startTime = value;
             else newState.endTime = value;
             this.setState(newState);
         }
