@@ -7,6 +7,7 @@ import TimeSpan from './TimeSpan';
 import './OpeningTimes.scss';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+import validateOpeningTimes from '../utils/validateOpeningTimes';
 
 class OpeningTimes extends Component {
     constructor(props) {
@@ -62,7 +63,7 @@ class OpeningTimes extends Component {
         });
 
         this.setState(newState);
-        if (onChange) onChange(newState.times);
+        if (onChange) onChange(newState.times, validateOpeningTimes(newState.times));
     }
 
     onRemove(day, span) {
@@ -76,11 +77,11 @@ class OpeningTimes extends Component {
 
         if (onChange) {
             this.setState(newState);
-            onChange(newState.times);
+            onChange(newState.times, validateOpeningTimes(newState.times));
         }
     }
 
-    onChange(day, index, start, end, isInvalid) {
+    onChange(day, index, start, end) {
         // eslint-disable-next-line no-nested-ternary
         const { times } = this.state;
         const { onChange } = this.props;
@@ -92,9 +93,8 @@ class OpeningTimes extends Component {
             timesOfDay[index].start = start;
             timesOfDay[index].end = end;
             this.setState(newState);
-            if (!isInvalid) {
-                onChange(times);
-            }
+
+            onChange(times, validateOpeningTimes(timesOfDay));
         }
     }
 
@@ -143,7 +143,7 @@ class OpeningTimes extends Component {
         }
 
         this.setState(newState);
-        if (onChange) onChange(newState.times);
+        if (onChange) onChange(newState.times, validateOpeningTimes(newState.times));
     }
 
     render() {
