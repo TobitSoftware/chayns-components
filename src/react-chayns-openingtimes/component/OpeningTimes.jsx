@@ -44,8 +44,6 @@ class OpeningTimes extends Component {
             times,
             timesValid: validateOpeningTimes(times),
         };
-
-        console.log(this.state, times);
     }
 
     onAdd(weekDay) {
@@ -53,14 +51,23 @@ class OpeningTimes extends Component {
         const newState = { ...this.state };
         const foundTimes = newState.times.filter((time) => time.weekDay === weekDay);
 
-        const oldStart = getTimeStringMinutes(foundTimes[0].start);
-        const oldEnd = getTimeStringMinutes(foundTimes[0].end);
-        let diff = oldEnd - oldStart;
+        let oldEnd = getTimeStringMinutes(foundTimes[0].end);
+        if (oldEnd === 0) {
+            oldEnd = 24 * 60;
+        }
 
-        if (oldEnd < oldStart) diff += 24 * 60;
+        let newStart = oldEnd + 60;
+        if (oldEnd < 18 * 60) {
+            newStart = 18 * 60;
+        }
+        if (newStart > 24 * 60) {
+            newStart = Math.max(24 * 60 - 1, oldEnd);
+        }
 
-        const newStart = oldEnd + 60;
-        const newEnd = newStart + diff;
+        let newEnd = newStart + 2 * 60;
+        if (newEnd > 24 * 60) {
+            newEnd = 24 * 60;
+        }
 
         newState.times.push({
             weekDay,
@@ -119,7 +126,7 @@ class OpeningTimes extends Component {
         const defaultTime = {
             weekDay: day,
             start: '08:00',
-            end: '18:00',
+            end: '17:00',
             disabled: false,
         };
 

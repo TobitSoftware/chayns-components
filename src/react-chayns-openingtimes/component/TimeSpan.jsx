@@ -164,7 +164,7 @@ TimeSpan.REMOVE = 2;
 
 TimeSpan.defaultStart = '08:00';
 
-TimeSpan.defaultEnd = '18:00';
+TimeSpan.defaultEnd = '17:00';
 
 TimeSpan.propTypes = {
     startTime: PropTypes.string.isRequired,
