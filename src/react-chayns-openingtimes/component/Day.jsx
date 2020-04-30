@@ -79,9 +79,9 @@ class Day extends Component {
                         checked={!isDisabled}
                     />
                 </div>
-                <div className="flex__middle">
+                <div className="flex__middle flex__middle--wrapper">
                     {timeSpans.map((t, index) => (
-                        <div className="flex__middle--wrapper">
+                        <div className="flex__middle__wrapper">
                             <TimeSpan
                                 key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
                                 startTime={t.start}
