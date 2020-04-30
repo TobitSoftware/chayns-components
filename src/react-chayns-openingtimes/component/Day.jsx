@@ -53,6 +53,7 @@ class Day extends Component {
             weekday,
             times,
             onAdd,
+            onRemove,
         } = this.props;
 
         const { isRemoving, animations } = this.state;
@@ -68,7 +69,6 @@ class Day extends Component {
                 className={classNames('flex', 'times', {
                     multiple: timeSpans.length > 1,
                     'multiple--animations': animations && timeSpans.length > 1,
-                    isRemoving,
                     'times--disabled': isDisabled,
                 })}
             >
@@ -102,6 +102,7 @@ class Day extends Component {
                                         if (timeSpans.length < 2) {
                                             onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
                                         } else {
+                                            onRemove(weekday.number, 1);
                                             this.timeSpanRef.addEventListener('animationend', this.animationendFunction);
                                             this.setState({ isRemoving: true });
                                         }
