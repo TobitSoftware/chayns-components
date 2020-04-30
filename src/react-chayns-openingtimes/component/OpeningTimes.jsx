@@ -9,6 +9,7 @@ import './OpeningTimes.scss';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 import validateOpeningTimes from '../utils/validateOpeningTimes';
 import OpeningTimesHint, { HINT_POSITIONS } from './OpeningTimesHint';
+import debounce from '../../utils/debounce';
 
 class OpeningTimes extends Component {
     constructor(props) {
@@ -18,6 +19,8 @@ class OpeningTimes extends Component {
         this.onRemove = this.onRemove.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
+        this.validateState = this.validateState.bind(this);
+        this.onValidateStateDebounce = debounce(this.onValidateState.bind(this), 1500);
 
         const { times } = this.props;
 
@@ -67,8 +70,8 @@ class OpeningTimes extends Component {
         });
 
         const openingTimesValid = validateOpeningTimes(newState.times);
-        newState.timesValid = openingTimesValid;
         this.setState(newState);
+        this.validateState(openingTimesValid);
         if (onChange) onChange(newState.times, openingTimesValid);
     }
 
@@ -83,8 +86,8 @@ class OpeningTimes extends Component {
 
         if (onChange) {
             const openingTimesValid = validateOpeningTimes(newState.times);
-            newState.timesValid = openingTimesValid;
             this.setState(newState);
+            this.validateState(openingTimesValid);
             onChange(newState.times, openingTimesValid);
         }
     }
@@ -102,8 +105,8 @@ class OpeningTimes extends Component {
             timesOfDay[index].end = end;
 
             const openingTimesValid = validateOpeningTimes(newState.times);
-            newState.timesValid = openingTimesValid;
             this.setState(newState);
+            this.validateState(openingTimesValid);
 
             onChange(times, openingTimesValid);
         }
@@ -154,9 +157,29 @@ class OpeningTimes extends Component {
         }
 
         const openingTimesValid = validateOpeningTimes(newState.times);
-        newState.timesValid = openingTimesValid;
         this.setState(newState);
+        this.validateState(openingTimesValid);
         if (onChange) onChange(newState.times, openingTimesValid);
+    }
+
+    onValidateState() {
+        const { times } = this.state;
+
+        const timesValid = validateOpeningTimes(times);
+
+        this.setState({
+            timesValid,
+        });
+    }
+
+    validateState(valid = false) {
+        if (valid) {
+            this.setState({
+                timesValid: valid,
+            });
+        } else {
+            this.onValidateStateDebounce();
+        }
     }
 
     render() {
