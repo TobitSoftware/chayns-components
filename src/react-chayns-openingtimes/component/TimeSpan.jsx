@@ -3,25 +3,9 @@ import PropTypes from 'prop-types';
 import Input from '../../react-chayns-input/component/Input';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+import parseTimeString from '../utils/parseTimeString';
 
 class TimeSpan extends Component {
-    static getDataFromTimeString(str) {
-        const regexRes = new RegExp('[0-9]{0,2}:[0-9]{0,2}').exec(str);
-        let hours = null;
-        let minutes = null;
-        if (regexRes) {
-            const parts = regexRes[0].split(':');
-
-            hours = parseInt(parts[0], 10) || 0;
-            minutes = parseInt(parts[1], 10) || 0;
-        }
-
-        return {
-            hours,
-            minutes,
-        };
-    }
-
     constructor(props) {
         super(props);
 
@@ -151,7 +135,7 @@ class TimeSpan extends Component {
         const {
             hours,
             minutes,
-        } = TimeSpan.getDataFromTimeString(str);
+        } = parseTimeString(str);
         // check time if its not like '24:60'
         return hours && minutes && hours > -1 && hours < 24 && minutes > -1 && minutes < 60;
     }
@@ -161,12 +145,12 @@ class TimeSpan extends Component {
         const {
             hours: startHours,
             minutes: startMinutes,
-        } = TimeSpan.getDataFromTimeString(startTime);
+        } = parseTimeString(startTime);
 
         const {
             hours: endHours,
             minutes: endMinutes,
-        } = TimeSpan.getDataFromTimeString(endTime);
+        } = parseTimeString(endTime);
 
         // check value are valid
         if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {

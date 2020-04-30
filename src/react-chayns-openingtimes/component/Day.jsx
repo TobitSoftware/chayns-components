@@ -6,6 +6,7 @@ import TimeSpan from './TimeSpan';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 import Icon from '../../react-chayns-icon/component/Icon';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
+import parseTimeString from '../utils/parseTimeString';
 
 class Day extends Component {
     constructor(props) {
@@ -48,20 +49,21 @@ class Day extends Component {
             const {
                 hours: newStartHours,
                 minutes: newStartMinutes,
-            } = TimeSpan.getDataFromTimeString(start);
+            } = parseTimeString(start);
             const {
                 hours: newEndHours,
                 minutes: newEndMinutes,
-            } = TimeSpan.getDataFromTimeString(end);
+            } = parseTimeString(end);
 
             const {
                 hours: otherStartHours,
                 minutes: otherStartMinutes,
-            } = TimeSpan.getDataFromTimeString(otherTime.start);
+            } = parseTimeString(otherTime.start);
             const {
                 hours: otherEndHours,
                 minutes: otherEndMinutes,
-            } = TimeSpan.getDataFromTimeString(otherTime.end);
+            } = parseTimeString(otherTime.end);
+
             if (index === 0 && (newEndHours > otherStartHours || (newEndHours === otherStartHours && newEndMinutes > otherStartMinutes))) {
                 isInvalid = true;
             }
