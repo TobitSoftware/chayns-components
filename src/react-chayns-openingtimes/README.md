@@ -28,7 +28,7 @@ You can use the OpeningTimes like this:
             end: '15:00'
         }
     ]}
-    onChange={(times) => console.log(times)}
+    onChange={(times, isValid) => console.log(times, isValid)}
 />
 ```
 
