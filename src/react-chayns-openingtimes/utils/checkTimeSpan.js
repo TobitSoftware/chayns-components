@@ -1,6 +1,8 @@
+import parseTimeString from './parseTimeString';
+
 export function checkTimeSpan(startTime, endTime) {
-    const { hours: startHours, minutes: startMinutes } = startTime;
-    const { hours: endHours, minutes: endMinutes } = endTime;
+    const { hours: startHours, minutes: startMinutes } = parseTimeString(startTime);
+    const { hours: endHours, minutes: endMinutes } = parseTimeString(endTime);
 
     if (startHours !== null && startMinutes !== null && endHours !== null && endMinutes !== null) {
         // check time if its not like '24:60'
