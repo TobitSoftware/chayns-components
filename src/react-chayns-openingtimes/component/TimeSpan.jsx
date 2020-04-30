@@ -7,6 +7,26 @@ import parseTimeString from '../utils/parseTimeString';
 import { checkTimeSpan } from '../utils/checkTimeSpan';
 import validateTime from '../utils/validateTime';
 
+function checkInputChars(str) {
+    if (str.length > 5) return false;
+
+    let alreadyFoundColon = false;
+
+    for (let i = 0; i < str.length; i += 1) {
+        const charCode = str.charCodeAt(i);
+        if (charCode === 58) {
+            // If char is colon and amount colons < 1 add colon
+            if (alreadyFoundColon) return false;
+            alreadyFoundColon = true;
+        }
+
+        // If not digit or colon return false
+        if (charCode > 58 || charCode < 48) return false;
+    }
+
+    return true;
+}
+
 class TimeSpan extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +54,7 @@ class TimeSpan extends Component {
         const newState = Object.assign(this.state);
 
         // Apply input value only if chars are valid
-        if (this.checkInputChars(value)) {
+        if (checkInputChars(value)) {
             if (inputField === 'start' && this.startTime) newState.startTime = value;
             else newState.endTime = value;
             this.setState(newState);
@@ -109,27 +129,6 @@ class TimeSpan extends Component {
         if (this.checkTimes(newState.startTime, newState.endTime)) {
             onChange(newState.startTime, newState.endTime);
         }
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    checkInputChars(str) {
-        if (str.length > 5) return false;
-
-        let alreadyFoundColon = false;
-
-        for (let i = 0; i < str.length; i += 1) {
-            const charCode = str.charCodeAt(i);
-            if (charCode === 58) {
-                // If char is colon and amount colons < 1 add colon
-                if (alreadyFoundColon) return false;
-                alreadyFoundColon = true;
-            }
-
-            // If not digit or colon return false
-            if (charCode > 58 || charCode < 48) return false;
-        }
-
-        return true;
     }
 
     // eslint-disable-next-line class-methods-use-this
