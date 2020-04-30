@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-const DEFAULT_HINT_TEXT = 'Es gibt sich überschneidende Öffnungszeiten.';
+const DEFAULT_HINT_TEXT = 'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.';
 
 export const HINT_POSITIONS = {
     NONE: 0,
