@@ -124,6 +124,8 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
     const handleStartAutoFormat = useMemo(() => handleAutoFormat('start'), [handleAutoFormat]);
     const handleEndAutoFormat = useMemo(() => handleAutoFormat('end'), [handleAutoFormat]);
 
+    const timeSpanValid = checkTimeSpan(time.startTime, time.endTime);
+
     return (
         <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
             <div className="time__span--input">
@@ -132,7 +134,7 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
                     onChange={handleStartChange}
                     onBlur={handleStartAutoFormat}
                     onEnter={handleStartAutoFormat}
-                    invalid={!checkTimeSpan(time.startTime, time.endTime) || isInvalid}
+                    invalid={!timeSpanValid || isInvalid}
                 />
             </div>
             <span>-</span>
@@ -142,7 +144,7 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
                     onChange={handleEndChange}
                     onBlur={handleEndAutoFormat}
                     onEnter={handleEndAutoFormat}
-                    invalid={!checkTimeSpan(time.startTime, time.endTime) || isInvalid}
+                    invalid={!timeSpanValid || isInvalid}
                 />
             </div>
         </div>

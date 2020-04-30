@@ -58,6 +58,9 @@ class Day extends Component {
         // eslint-disable-next-line no-nested-ternary
         const timeSpans = times.slice();
         const isDisabled = !times.some((t) => !t.disabled);
+
+        const dateValid = checkDay(times);
+
         return (
             <div
                 className={classNames('flex', 'times', {
@@ -86,7 +89,7 @@ class Day extends Component {
                                 childrenRef={index === 1 ? (ref) => {
                                     this.timeSpanRef = ref;
                                 } : null}
-                                isInvalid={!checkDay(timeSpans)}
+                                isInvalid={!dateValid}
                             />
                         ))
                     }
