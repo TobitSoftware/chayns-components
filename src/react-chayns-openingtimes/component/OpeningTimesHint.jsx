@@ -12,9 +12,9 @@ export const HINT_POSITIONS = {
 
 const OpeningTimesHint = ({ content, position }) => (
     <div
-        className={classnames('content__card content__card--warning cc__opening_times__hint', {
-            'cc__opening_times__hint--top': position === HINT_POSITIONS.TOP,
-            'cc__opening_times__hint--bottom': position === HINT_POSITIONS.BOTTOM,
+        className={classnames('content__card content__card--warning cc__opening-times__hint', {
+            'cc__opening-times__hint--top': position === HINT_POSITIONS.TOP,
+            'cc__opening-times__hint--bottom': position === HINT_POSITIONS.BOTTOM,
         })}
     >
         {content || DEFAULT_HINT_TEXT}
