@@ -5,6 +5,7 @@ import Input from '../../react-chayns-input/component/Input';
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 import parseTimeString from '../utils/parseTimeString';
 import { checkTimeSpan } from '../utils/checkTimeSpan';
+import validateTime from '../utils/validateTime';
 
 class TimeSpan extends Component {
     constructor(props) {
@@ -133,12 +134,8 @@ class TimeSpan extends Component {
 
     // eslint-disable-next-line class-methods-use-this
     isValidTime(str) {
-        const {
-            hours,
-            minutes,
-        } = parseTimeString(str);
-        // check time if its not like '24:60'
-        return hours && minutes && hours > -1 && hours < 24 && minutes > -1 && minutes < 60;
+        const parsedTime = parseTimeString(str);
+        return validateTime(parsedTime);
     }
 
     // eslint-disable-next-line class-methods-use-this
