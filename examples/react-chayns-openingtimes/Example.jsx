@@ -47,6 +47,7 @@ export default class OpeningTimesExample extends PureComponent {
                         times: newTimes,
                     });
                 }}
+                hintPosition={OpeningTimes.hintPositions.BOTTOM}
             />
         );
     }
