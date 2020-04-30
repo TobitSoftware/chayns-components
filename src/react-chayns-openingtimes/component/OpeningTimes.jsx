@@ -20,7 +20,7 @@ class OpeningTimes extends Component {
         this.onChange = this.onChange.bind(this);
         this.onDayActivation = this.onDayActivation.bind(this);
         this.validateState = this.validateState.bind(this);
-        this.onValidateStateDebounce = debounce(this.onValidateState.bind(this), 1500);
+        this.onValidateStateDebounce = debounce(this.onValidateState.bind(this), 1000);
 
         const { times } = this.props;
 
