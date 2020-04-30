@@ -34,4 +34,6 @@ OpeningTimesHint.defaultProps = {
     content: '',
 };
 
+OpeningTimesHint.displayName = 'OpeningTimesHint';
+
 export default React.memo(OpeningTimesHint);
