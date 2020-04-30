@@ -78,8 +78,10 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
             }
         }
 
-        // Call onChange if time string is valid
-        onChange(newState.startTime, newState.endTime);
+        window.setTimeout(() => { // call in non-blocking way
+            // Call onChange if time string is valid
+            onChange(newState.startTime, newState.endTime);
+        }, 0);
 
         return newState;
     }), [onChange, setTime]);
@@ -89,10 +91,10 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
 
     useEffect(() => {
         if (validateTimeSpan(startTime, endTime)) {
-            setTime(() => ({
+            setTime({
                 startTime,
                 endTime,
-            }));
+            });
         }
     }, [startTime, endTime, setTime]);
 
@@ -116,7 +118,10 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
             newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
         }
 
-        onChange(newState.startTime, newState.endTime);
+        window.setTimeout(() => { // call in non-blocking way
+            // Call onChange if time string is valid
+            onChange(newState.startTime, newState.endTime);
+        }, 0);
 
         return newState;
     }), [setTime, onChange]);
