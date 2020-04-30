@@ -111,8 +111,8 @@ class Day extends Component {
                         timeSpans.map((t, index) => (
                             <TimeSpan
                                 key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
-                                start={t.start}
-                                end={t.end}
+                                startTime={t.start}
+                                endTime={t.end}
                                 disabled={isDisabled}
                                 onChange={(start, end) => this.onChange(weekday.number, index, start, end)}
                                 childrenRef={index === 1 ? (ref) => {

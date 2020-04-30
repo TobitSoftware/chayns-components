@@ -59,10 +59,10 @@ function generateTimePart(digits, type) {
     return '00';
 }
 
-const TimeSpan = React.memo(({ start, end, onChange, childrenRef, isInvalid, disabled }) => {
+const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInvalid, disabled }) => {
     const [time, setTime] = useState({
-        startTime: start,
-        endTime: end,
+        startTime,
+        endTime,
     });
 
     const handleChange = useCallback((inputField) => (value) => setTime((currentState) => {
@@ -91,10 +91,10 @@ const TimeSpan = React.memo(({ start, end, onChange, childrenRef, isInvalid, dis
 
     useEffect(() => {
         setTime(() => ({
-            startTime: start,
-            endTime: end,
+            startTime,
+            endTime,
         }));
-    }, [start, end, setTime]);
+    }, [startTime, endTime, setTime]);
 
     const handleAutoFormat = useCallback((inputField) => () => setTime((currentState) => {
         const newState = { ...currentState };
@@ -162,8 +162,8 @@ TimeSpan.defaultStart = '08:00';
 TimeSpan.defaultEnd = '18:00';
 
 TimeSpan.propTypes = {
-    start: PropTypes.string.isRequired,
-    end: PropTypes.string.isRequired,
+    startTime: PropTypes.string.isRequired,
+    endTime: PropTypes.string.isRequired,
     disabled: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     isInvalid: PropTypes.bool,
