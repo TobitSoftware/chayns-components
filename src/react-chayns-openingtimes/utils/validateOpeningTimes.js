@@ -4,11 +4,11 @@ export default function validateOpeningTimes(openingTimes) {
     const openingTimesByDay = {};
 
     openingTimes.forEach((openingTime) => {
-        if (!openingTimesByDay[openingTime.weekday]) {
-            openingTimesByDay[openingTime.weekday] = [];
+        if (!openingTimesByDay[openingTime.weekDay]) {
+            openingTimesByDay[openingTime.weekDay] = [];
         }
 
-        openingTimesByDay[openingTime.weekday].push(openingTime);
+        openingTimesByDay[openingTime.weekDay].push(openingTime);
     });
 
     const days = Object.values(openingTimesByDay);
