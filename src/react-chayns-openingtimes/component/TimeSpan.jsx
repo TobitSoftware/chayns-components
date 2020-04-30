@@ -4,7 +4,7 @@ import Input from '../../react-chayns-input/component/Input';
 
 import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
 import { checkTimeSpan } from '../utils/checkTimeSpan';
-import validateTime from '../utils/validateTime';
+import { validateTimeSpan } from '../utils/validateTimeSpan';
 
 function checkInputChars(str) {
     if (str.length > 5) return false;
@@ -88,7 +88,7 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
     const handleEndChange = useMemo(() => handleChange('end'), [handleChange]);
 
     useEffect(() => {
-        if (validateTime(startTime) && validateTime(endTime) && checkTimeSpan(startTime, endTime)) {
+        if (validateTimeSpan(startTime, endTime)) {
             setTime(() => ({
                 startTime,
                 endTime,
