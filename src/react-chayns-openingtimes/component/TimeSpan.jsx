@@ -32,8 +32,6 @@ class TimeSpan extends Component {
         super(props);
 
         this.onChange = this.onChange.bind(this);
-        this.setStartTimeRef = this.setRef.bind(this, 'startTime');
-        this.setEndTimeRef = this.setRef.bind(this, 'endTime');
 
         this.state = {
             startTime: props.start,
@@ -63,10 +61,6 @@ class TimeSpan extends Component {
         // Call onChange if time string is valid
         if (this.isValidTime(value) && this.checkTimes(newState.startTime, newState.endTime)) onChange(newState.startTime, newState.endTime);
     }
-
-    setRef = (name, ref) => {
-        this[name] = ref;
-    };
 
     // eslint-disable-next-line class-methods-use-this
     inspectTimeStr(str) {
@@ -158,7 +152,6 @@ class TimeSpan extends Component {
             <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
                 <div className="time__span--input">
                     <Input
-                        inputRef={this.setStartTimeRef}
                         value={startTime}
                         onChange={(val) => this.onChange(val, 'start')}
                         onBlur={() => this.autoFormat('start')}
@@ -169,7 +162,6 @@ class TimeSpan extends Component {
                 <span>-</span>
                 <div className="time__span--input">
                     <Input
-                        inputRef={this.setEndTimeRef}
                         value={endTime}
                         onChange={(val) => this.onChange(val, 'end')}
                         onBlur={() => this.autoFormat('end')}
