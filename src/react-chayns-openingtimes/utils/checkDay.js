@@ -16,7 +16,7 @@ export default function checkDay(times) {
     const {
         hours: firstEndHours,
         minutes: firstEndMinutes,
-    } = parseTimeString(firstTime.start);
+    } = parseTimeString(firstTime.end);
 
     if (firstEndHours > lastStartHours || (firstEndHours === lastStartHours && firstEndMinutes > lastStartMinutes)) {
         return false;
