@@ -85,10 +85,21 @@ const ColorPicker = forwardRef((props, reference) => {
     const openBubble = useCallback(async () => {
         const ref = props.children ? childrenRef : linkRef;
         const rect = ref.current.getBoundingClientRect();
+
+        let newX = rect.left + (rect.width / 2);
+        let newY = rect.bottom + (chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0);
+
+        if (props.removeParentSpace) {
+            const parentRect = (props.parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            newX -= parentRect.left;
+            newY -= parentRect.top;
+        }
+
         setCoordinates({
-            x: rect.left + (rect.width / 2),
-            y: rect.bottom + (chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0),
+            x: newX,
+            y: newY,
         });
+
         bubbleRef.current.show();
         // Add event listeners to hide the bubble
         document.addEventListener('click', closeBubble);
@@ -218,6 +229,7 @@ ColorPicker.propTypes = {
     input: PropTypes.bool,
     defaultColorModel: PropTypes.number,
     children: PropTypes.node,
+    removeParentSpace: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -234,6 +246,7 @@ ColorPicker.defaultProps = {
     input: false,
     defaultColorModel: null,
     children: null,
+    removeParentSpace: false,
 };
 
 ColorPicker.colorModels = {

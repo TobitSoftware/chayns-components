@@ -34,5 +34,6 @@ You can set the following props on a ColorPicker element:
 | input         | Adds an input to type colors                                                            | bool       |
 | defaultColorModel | Default used color model                                                            | number (from ColorPicker.colorModels) |
 | children      | Children rendered into the tapp                                                         | node       |
+| removeParentSpace| Removes space from the parent to the page borders from tooltip position. It's only needed if the parent has space to the page borders and it's position is relative. | bool |
 
 **Note:** The color from the callback is in the hsva color model. You can convert it to the hex(a)- or rgb(a)-model using the [helper functions](https://github.com/TobitSoftware/chayns-components/blob/master/src/utils/color/README.md).
