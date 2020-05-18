@@ -107,6 +107,18 @@ export default class PositionInput extends PureComponent {
         }
     };
 
+    changePosition = (value) => {
+        const { currentInputType } = this.state;
+        this.mapRef.current.panTo(value);
+        if (currentInputType === COORDS) {
+            this.setState({
+                value: `${value.lat.toFixed(4)}  ${value.lng.toFixed(4)}`,
+            });
+        } else {
+            this.setAddress(value);
+        }
+    }
+
     getAddresses = (value) => {
         if (value) {
             const { defaultPosition: { lat, lng } } = this.props;
@@ -175,7 +187,7 @@ export default class PositionInput extends PureComponent {
                 {
                     children && (
                         <div className="map--overlay" ref={this.mapOverlayRef}>
-                            {children(value, this.handleInputChange)}
+                            {children(value, this.handleInputChange, this.changePosition)}
                             <TappPortal parent={parent}>
                                 <div
                                     className="map--autocomplete_popup"
