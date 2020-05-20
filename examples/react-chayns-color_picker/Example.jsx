@@ -116,6 +116,25 @@ export default class ColorPickerExample extends PureComponent {
                         }}
                     />
                 </div>
+                <div>
+                    <h2>Inline ColorPicker</h2>
+                    <ColorPicker
+                        inline
+                        input
+                        color={color}
+                        onChange={(c) => {
+                            const selectedColor = hsvToHexString(c);
+                            console.log(selectedColor);
+                            this.setState({ childrenColor: selectedColor });
+                        }}
+                        onChangeEnd={(c) => {
+                            console.log(c);
+                            this.setState({ color: c });
+                        }}
+                    >
+
+                    </ColorPicker>
+                </div>
             </div>
         );
     }
