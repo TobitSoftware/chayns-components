@@ -83,6 +83,7 @@ const ColorPicker = forwardRef((props, reference) => {
     }, [bubbleContentRef, bubbleRef]);
 
     const openBubble = useCallback(async () => {
+        if (props.inline) return;
         const ref = props.children ? childrenRef : linkRef;
         const rect = ref.current.getBoundingClientRect();
 
@@ -125,6 +126,50 @@ const ColorPicker = forwardRef((props, reference) => {
     useImperativeHandle(reference, () => ({
         show: openBubble,
     }));
+
+    if (props.inline) {
+        return (
+            <div
+                className={classNames('cc__color-picker', props.className)}
+                style={props.style}
+                onClick={openBubble}
+                key="div"
+                ref={childrenRef}
+            >
+                <div ref={bubbleContentRef} className="cc__color-picker__bubble-content">
+                    <ColorArea
+                        color={color}
+                        onChange={onChange}
+                        onChangeEnd={props.onChangeEnd}
+                    />
+                    <HueSlider
+                        color={color}
+                        onChange={onChange}
+                        onChangeEnd={props.onChangeEnd}
+                    />
+                    {props.transparency && (
+                        <TransparencySlider
+                            color={color}
+                            onChange={onChange}
+                            onChangeEnd={props.onChangeEnd}
+                        />
+                    )}
+                    {props.input && (
+                        <ColorInput
+                            color={color}
+                            onChange={(value) => {
+                                onChange(value);
+                                props.onChangeEnd(value);
+                            }}
+                            onModelToggle={onColorModelToggle}
+                            colorModel={colorModel}
+                            transparency={props.transparency}
+                        />
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return [
         <div
@@ -201,6 +246,7 @@ const ColorPicker = forwardRef((props, reference) => {
 });
 
 ColorPicker.propTypes = {
+    inline: PropTypes.bool,
     color: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.shape({
@@ -235,6 +281,7 @@ ColorPicker.propTypes = {
 ColorPicker.defaultProps = {
     bubblePosition: Bubble.position.BOTTOM_CENTER,
     onChange: null,
+    inline: false,
     onChangeEnd: null,
     onBlur: null,
     transparency: false,
