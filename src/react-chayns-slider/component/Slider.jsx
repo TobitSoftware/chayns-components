@@ -330,11 +330,11 @@ export default class Slider extends PureComponent {
         if (showLabel && !vertical) {
             const realInterval = max - min;
             if (interval) {
-                const left = min + (realInterval * (leftPercent / 100));
-                const right = min + (realInterval * (rightPercent / 100));
+                const left = min + ((realInterval * leftPercent) / 100);
+                const right = min + ((realInterval * rightPercent) / 100);
                 this.label.current.innerText = valueFormatter(left, right);
             } else {
-                const value = min + (realInterval * (percent / 100));
+                const value = min + ((realInterval * percent) / 100);
                 this.label.current.innerText = valueFormatter(value);
             }
         }
@@ -386,13 +386,13 @@ export default class Slider extends PureComponent {
         }
         const realInterval = max - min;
         if (interval) {
-            const left = min + (realInterval * (leftPercent / 100));
-            const right = min + (realInterval * (rightPercent / 100));
+            const left = min + ((realInterval * leftPercent) / 100);
+            const right = min + ((realInterval * rightPercent) / 100);
             listeners.forEach((l) => {
                 if (l) l(left, right);
             });
         } else {
-            const value = Math.round(1000 * (min + (realInterval * (percent / 100)))) / 1000;
+            const value = Math.round(1000 * (min + ((realInterval * percent) / 100))) / 1000;
 
             listeners.forEach((l) => {
                 if (l) l(value);
