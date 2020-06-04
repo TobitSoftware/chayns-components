@@ -26,6 +26,7 @@ export default class Accordion extends PureComponent {
 
     componentDidMount() {
         const { className, autogrow, dataGroup } = this.props;
+        const { currentState } = this.state;
 
         if (className.indexOf('accordion--open') !== -1) {
             this.accordion.classList.add('accordion--open');
@@ -39,9 +40,14 @@ export default class Accordion extends PureComponent {
             Accordion.dataGroups[dataGroup].push(this);
         }
 
+        if (currentState === OPEN && autogrow && this.body) {
+            this.body.style.setProperty('max-height', 'initial', 'important');
+        }
+
         this.body.addEventListener('transitionend', (e) => {
             if (autogrow && e.propertyName === 'max-height') {
                 // It's important that the state is accessed inside of the transitionend function
+                // eslint-disable-next-line no-shadow
                 const { currentState } = this.state;
                 if (currentState === OPEN) {
                     this.body.style.setProperty('max-height', 'initial', 'important');
