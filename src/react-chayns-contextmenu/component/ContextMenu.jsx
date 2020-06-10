@@ -256,7 +256,7 @@ ContextMenu.propTypes = {
     })),
     position: PropTypes.number, // 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right
     positionOnChildren: PropTypes.number, // 0 = left, 1 = center, 2 = right
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     children: PropTypes.node,
     onChildrenClick: PropTypes.func,
     childrenStyle: PropTypes.object,
