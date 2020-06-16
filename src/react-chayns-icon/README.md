@@ -47,3 +47,7 @@ You simply have to change the SVGs to CSS class names and add the fa/fal/far/fas
 <Icon icon="fas fa-coffee"/> // use solid style
 <Icon icon="fab fa-twitter"/> // brand icons need to use the brands style
 ````
+
+## Offline availability ##
+
+Since browsers only load the font when actually rendering the fontawesome icons you cannot rely on them being available when offline
