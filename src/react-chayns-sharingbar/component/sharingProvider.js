@@ -1,9 +1,11 @@
+/* eslint-disable max-len */
 export const shareOptions = {
     COPY: 0,
     MAIL: 1,
     WHATSAPP: 2,
     FACEBOOK: 3,
     TWITTER: 5,
+    QRCODE: 6,
     CUSTOM_CHAYNS: 10,
     CUSTOM_ALL: 11,
 };
@@ -52,6 +54,15 @@ export const shareProvider = [
         androidIdentifier: null,
         icon: 'fab fa-twitter',
         url: 'http://twitter.com/intent/tweet?text={linkText}&url={url}&hashtags=chayns',
+        available: true,
+    },
+    {
+        id: shareOptions.QRCODE,
+        providerId: 6,
+        name: 'QR-Code',
+        androidIdentifier: null,
+        icon: 'fas fa-qrcode',
+        url: 'https://webapi.tobit.com/chaynsqrcodegenerator/v1.0/png?width=500&color={color}&value={url}&text={linkText}',
         available: true,
     },
     {

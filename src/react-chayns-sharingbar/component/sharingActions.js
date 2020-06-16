@@ -3,6 +3,8 @@ import { shareOptions } from './sharingProvider';
 function shareWithUrl(link) {
     if (link.startsWith('mailto')) {
         window.open(link);
+    } else if (link.indexOf('chaynsqrcodegenerator') > 0) {
+        chayns.openImage(link);
     } else {
         chayns.openUrlInBrowser(link);
     }
@@ -61,6 +63,10 @@ export default function share(provider, link, linkText) {
             break;
         case shareOptions.TWITTER:
             shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)).replace('{linkText}', encodeURIComponent(linkText)));
+            break;
+        case shareOptions.QRCODE:
+            shareWithUrl(provider.url.replace('{url}', encodeURIComponent(link)).replace('{linkText}', encodeURIComponent(linkText))
+                .replace('{color}', chayns.env.site.color.replace('#', '')));
             break;
         case shareOptions.CUSTOM_CHAYNS:
             shareWithApp(provider, `${linkText} ${link}`.trim());
