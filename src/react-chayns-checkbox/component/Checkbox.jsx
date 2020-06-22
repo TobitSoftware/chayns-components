@@ -19,11 +19,23 @@ const Checkbox = ({ id, toggleButton, onChange, disabled, ...props }) => {
 
     if (toggleButton) {
         return (
-            <ToggleButton {...props} id={currentId} onChange={handleChange}/>
+            <ToggleButton
+                {...props}
+                id={currentId}
+                disabled={disabled}
+                onChange={handleChange}
+            />
         );
     }
 
-    return <CheckboxView {...props} id={currentId} onChange={handleChange}/>;
+    return (
+        <CheckboxView
+            {...props}
+            id={currentId}
+            disabled={disabled}
+            onChange={handleChange}
+        />
+    );
 };
 
 export default Checkbox;
