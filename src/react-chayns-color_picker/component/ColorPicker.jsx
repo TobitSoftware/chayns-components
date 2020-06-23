@@ -267,7 +267,7 @@ ColorPicker.propTypes = {
     onChangeEnd: PropTypes.func,
     onBlur: PropTypes.func,
     transparency: PropTypes.bool,
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     className: PropTypes.string,
     style: PropTypes.object,
     bubbleClassName: PropTypes.string,

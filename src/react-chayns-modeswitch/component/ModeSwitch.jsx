@@ -257,7 +257,7 @@ ModeSwitch.propTypes = {
     onChange: PropTypes.func,
     defaultMode: PropTypes.number,
     show: PropTypes.bool,
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
 };
 
 ModeSwitch.defaultProps = {

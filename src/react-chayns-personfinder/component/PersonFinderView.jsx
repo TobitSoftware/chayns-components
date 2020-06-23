@@ -266,7 +266,7 @@ PersonFinderView.propTypes = {
         PropTypes.node,
     ]).isRequired,
     boxClassName: PropTypes.string,
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     boxRef: PropTypes.func,
     showWaitCursor: PropTypes.oneOfType([
         PropTypes.objectOf(PropTypes.bool),
