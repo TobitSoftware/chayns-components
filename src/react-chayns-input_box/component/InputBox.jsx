@@ -211,7 +211,7 @@ export default class InputBox extends Component {
 InputBox.propTypes = {
     onBlur: PropTypes.func,
     inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     onFocus: PropTypes.func,
     children: PropTypes.oneOfType([
         PropTypes.node,

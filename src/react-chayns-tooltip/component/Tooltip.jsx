@@ -198,7 +198,7 @@ Tooltip.propTypes = {
     minWidth: PropTypes.number,
     maxWidth: PropTypes.number,
     removeIcon: PropTypes.bool,
-    parent: PropTypes.instanceOf(Element),
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
