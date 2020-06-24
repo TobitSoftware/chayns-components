@@ -21,7 +21,7 @@ You can set the following props on a FilterButton element:
 | Property        | Description                                                        | Type            |
 | --------------- | ------------------------------------------------------------------ | --------------- |
 | icon            | Icon to be shown in the button                                     | string / object |
-| label           | Text to be shown in the button                                     | string          |
+| label           | Text to be shown in the button                                     | string / element|
 | count           | Count to be shown in the button in bold                            | number          |
 | checked         | Whether the button is activated                                    | bool            |
 | onChange        | Function to be called on state change                              | function        |
