@@ -69,7 +69,8 @@ const FilterButton = ({
                         className="button--filter__icon chayns__color--headlinei"
                     />
                 ) : null}
-                {isValue(label) ? `${label} ` : null}
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {isValue(label) ? typeof label === 'string' ? `${label} ` : label : null}
                 {isValue(count) ? <b>{count}</b> : null}
             </span>
         </label>
@@ -77,7 +78,7 @@ const FilterButton = ({
 };
 
 FilterButton.propTypes = {
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.element]),
     count: PropTypes.number,
     onChange: PropTypes.func,
     checked: PropTypes.bool,
