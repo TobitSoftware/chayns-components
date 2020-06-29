@@ -30,6 +30,7 @@ You can set the following props on a AmountControl element:
 | Property       | Description                                                                                                  | Type     | Default |
 |----------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
 | show           | Renders the WaitCursor                                                                                       | bool     | false   |
-| style          | style-object of the wrapper                                                                                  | object   |         |
+| style          | style-object of the wrapper                                                                                  | object   | null    |
 | showBackground | Renders the WaitCursor with a background                                                                     | bool     | true    |
 | inline         | Renders the WaitCursor as inline-block (only works with showBackground: false)                               | bool     | false   |
+| className      | Add additional classes to the wait cursor root element                                                       | string   | null    |

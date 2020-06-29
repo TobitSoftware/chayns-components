@@ -27,7 +27,7 @@ export default class SmallWaitCursor extends PureComponent {
         }
         return (
             <div
-                className={classNames('wait-cursor__spinner', {
+                className={classNames('wait-cursor__spinner', className, {
                     'wait-cursor__spinner--inline': inline,
                     hidden: !show,
                 })}
