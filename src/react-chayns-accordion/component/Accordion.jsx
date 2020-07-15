@@ -208,6 +208,7 @@ export default class Accordion extends PureComponent {
             reference,
             icon,
             head,
+            headMultiline,
             headClassNames,
             headCustomAttributes,
             noRotate,
@@ -239,7 +240,7 @@ export default class Accordion extends PureComponent {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', headClassNames)}
+                    className={classNames('accordion__head', headClassNames, { accordion__head__multiline: headMultiline })}
                     onClick={this.handleAccordionClick}
                     {...headCustomAttributes}
                 >
@@ -303,6 +304,7 @@ Accordion.propTypes = {
             close: PropTypes.node.isRequired,
         }).isRequired,
     ]).isRequired,
+    headMultiline: PropTypes.bool,
     headClassNames: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string),
@@ -347,6 +349,7 @@ Accordion.propTypes = {
 Accordion.defaultProps = {
     className: '',
     headClassNames: null,
+    headMultiline: false,
     headCustomAttributes: null,
     dataGroup: null,
     id: null,
