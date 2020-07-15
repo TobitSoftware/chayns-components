@@ -14,12 +14,14 @@ const ListItem = ({
     right,
     style,
     headerProps,
+    ...props,
 }) => (
     <div
         className={classnames('list-item', className, {
             'list-item--clickable': onClick,
         })}
         style={style}
+        {...props}
     >
         <ListItemHeader
             title={title}
