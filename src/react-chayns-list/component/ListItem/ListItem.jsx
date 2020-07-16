@@ -14,7 +14,7 @@ const ListItem = ({
     right,
     style,
     headerProps,
-    ...props,
+    ...props
 }) => (
     <div
         className={classnames('list-item', className, {
