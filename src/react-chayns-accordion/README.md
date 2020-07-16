@@ -44,6 +44,7 @@ The following properties can be set
 | head         | Headline of the accordion                                              | String, node or object [1] | *required*    |
 | headClassNames | CSS classes for the accordion head                                   | String, array or object    | null          |
 | headCustomAttributes | Custom attributes for head element                             | object                     | null          |
+| headMultiline | Allows line-wrap in accordion head title                              | bool                       | false         |
 | isWrapped    | Makes this accordion a wrapped accordion                               | bool                       | false         |
 | icon         | The accordion icon                                                     | String/object              | 'ts-angle-right' |
 | id           | The accordions Id                                                      | String                     |               |
