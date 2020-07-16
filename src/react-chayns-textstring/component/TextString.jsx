@@ -11,6 +11,7 @@ export default class TextString extends Component {
         lang = lang ? lang.value : 'Ger';
         const { textStrings } = TextString;
         const strings = textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
+        if (!strings) return fallback;
         const result = Object.keys(strings)
             .map((lib) => (strings[lib][stringName] || null))
             .filter((x) => x !== null)[0];
