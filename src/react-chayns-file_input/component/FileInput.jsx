@@ -201,7 +201,7 @@ FileInput.types = {
 };
 
 FileInput.typePresets = {
-    TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'],
+    TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp'],
     STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
 };
 
