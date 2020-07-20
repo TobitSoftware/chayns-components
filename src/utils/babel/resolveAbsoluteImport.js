@@ -3,6 +3,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         Accordion: 'react-chayns-accordion/component/Accordion.js',
         AccordionIntro: 'react-chayns-accordion/component/AccordionIntro.js',
         AmountControl: 'react-chayns-amountcontrol/component/AmountControl.js',
+        AnimationWrapper: 'react-chayns-animation_wrapper/component/AnimationWrapper.js',
         Badge: 'react-chayns-badge/component/Badge.js',
         Bubble: 'react-chayns-bubble/component/Bubble.js',
         Button: 'react-chayns-button/component/Button.js',
