@@ -9,6 +9,11 @@
   "example": "react-chayns-amountcontrol/Example.jsx",
   "readme": true
 },{
+  "id": "react-chayns-animation_wrapper",
+  "title": "AnimationWrapper",
+  "example": "react-chayns-animation_wrapper/Example.jsx",
+  "readme": true
+},{
   "id": "react-chayns-badge",
   "title": "Badge",
   "example": "react-chayns-badge/Example.jsx",

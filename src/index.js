@@ -1,6 +1,7 @@
 import Accordion from './react-chayns-accordion/component/Accordion';
 import AccordionIntro from './react-chayns-accordion/component/AccordionIntro';
 import AmountControl from './react-chayns-amountcontrol/component/AmountControl';
+import AnimationWrapper from './react-chayns-animation_wrapper/component/AnimationWrapper';
 
 import Badge from './react-chayns-badge/component/Badge';
 import Button from './react-chayns-button/component/Button';
@@ -95,6 +96,7 @@ export {
     Accordion,
     AccordionIntro,
     AmountControl,
+    AnimationWrapper,
     Badge,
     Bubble,
     Button,
