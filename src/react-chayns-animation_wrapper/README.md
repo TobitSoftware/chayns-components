@@ -1,4 +1,4 @@
-# FilterButton
+# AnimationWrapper
 
 The AnimationWrapper-Component is part of the `chayns-components`-Package. You can install it with the following command:
 
