@@ -61,7 +61,7 @@ export default class Accordion extends PureComponent {
         const { currentState } = this.state;
 
         if (currentState === CLOSE && prevState.currentState !== currentState) {
-            setTimeout(() => {
+            this.timeout = setTimeout(() => {
                 this.setState({
                     showBody: false,
                 });
@@ -89,6 +89,7 @@ export default class Accordion extends PureComponent {
         }
 
         cancelAnimationFrame(rqAnimationFrame);
+        window.clearTimeout(this.timeout);
     }
 
 
