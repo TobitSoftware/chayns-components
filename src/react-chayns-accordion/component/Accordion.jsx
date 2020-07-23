@@ -67,12 +67,13 @@ export default class Accordion extends PureComponent {
                 });
             }, 500);
         }
+
         if (open !== undefined) {
             if (open !== prevProps.open) {
                 if (open) {
-                    this.accordionOpenListener(null, true);
+                    this.accordionOpenListener(null, true, true);
                 } else {
-                    this.accordionCloseListener(null, true);
+                    this.accordionCloseListener(null, true, true);
                 }
             }
         }
@@ -146,8 +147,8 @@ export default class Accordion extends PureComponent {
         }
     };
 
-    accordionCloseListener(event, preventOnClose) {
-        const { onClose, autogrow } = this.props;
+    accordionCloseListener(event, preventOnClose, controlledChange = false) {
+        const { onClose, autogrow, controlled } = this.props;
         const { body } = this;
 
         if (autogrow && body) {
@@ -169,9 +170,11 @@ export default class Accordion extends PureComponent {
                 });
             });
         } else {
-            this.setState({
-                currentState: CLOSE,
-            });
+            if (!controlled || controlledChange) {
+                this.setState({
+                    currentState: CLOSE,
+                });
+            }
 
             if (onClose && !preventOnClose) {
                 onClose(event);
@@ -179,19 +182,23 @@ export default class Accordion extends PureComponent {
         }
     }
 
-    accordionOpenListener(event, preventOnOpen) {
-        const { onOpen, dataGroup } = this.props;
-        if (dataGroup && Accordion.dataGroups[dataGroup]) {
-            Accordion.dataGroups[dataGroup].forEach((accordion) => {
-                if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
-                    accordion.accordionCloseListener();
-                }
+    accordionOpenListener(event, preventOnOpen, controlledChange = false) {
+        const { onOpen, dataGroup, controlled } = this.props;
+
+        if (!controlled || controlledChange) {
+            if (dataGroup && Accordion.dataGroups[dataGroup]) {
+                Accordion.dataGroups[dataGroup].forEach((accordion) => {
+                    if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
+                        accordion.accordionCloseListener();
+                    }
+                });
+            }
+
+            this.setState({
+                currentState: OPEN,
+                showBody: true,
             });
         }
-        this.setState({
-            currentState: OPEN,
-            showBody: true,
-        });
 
         if (onOpen && !preventOnOpen) {
             onOpen(event);
@@ -344,6 +351,7 @@ Accordion.propTypes = {
     removeContentClosed: PropTypes.bool,
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
+    controlled: PropTypes.bool,
 };
 
 Accordion.defaultProps = {
@@ -375,6 +383,7 @@ Accordion.defaultProps = {
     removeContentClosed: false,
     onClick: null,
     disabled: false,
+    controlled: false,
 };
 
 Accordion.displayName = 'Accordion';
