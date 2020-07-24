@@ -34,9 +34,7 @@ const TextArea = ({
     const [currentHeight, setCurrentHeight] = useState(0);
 
     const grow = useCallback(() => {
-        if (currentHeight === 0) {
-            ref.current.style.height = '0px';
-        }
+        ref.current.style.height = '0px';
 
         const newHeight = ref.current.scrollHeight + offset;
 
