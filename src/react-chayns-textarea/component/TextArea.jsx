@@ -31,14 +31,19 @@ const TextArea = ({
 }) => {
     const ref = useRef(null);
     const [offset, setOffset] = useState(0);
+    const [currentHeight, setCurrentHeight] = useState(0);
 
-    const grow = useCallback((initHeight = '0px') => {
-        if (initHeight) {
-            ref.current.style.height = initHeight;
+    const grow = useCallback(() => {
+        if (currentHeight === 0) {
+            ref.current.style.height = '0px';
         }
 
-        if (ref.current.scrollHeight + offset > 0) {
-            ref.current.style.height = `${ref.current.scrollHeight + offset}px`;
+        const newHeight = ref.current.scrollHeight + offset;
+
+        if (newHeight > 0 && newHeight !== currentHeight) {
+            setCurrentHeight(newHeight);
+
+            ref.current.style.height = `${newHeight}px`;
         }
     }, [offset]);
 
