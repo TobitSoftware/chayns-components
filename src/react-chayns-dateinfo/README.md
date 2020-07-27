@@ -4,7 +4,7 @@ The **DateInfo** - Component shows an date as a fancy text with the absolute dat
 
     npm install -S chayns-components@latest
 
-If you need the text as a string for a dialog, you can use the static functions getRelativeDateString and getAbsoluteDateString.
+If you need the text as a string for a dialog, you can use the static functions ``DateInfo.getRelativeDateString`` and ``DateInfo.getAbsoluteDateString``.
 
 ## Usage ##
 
