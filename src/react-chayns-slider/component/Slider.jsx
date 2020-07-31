@@ -18,7 +18,9 @@ export default class Slider extends PureComponent {
         this.rightThumb = React.createRef();
         this.label = React.createRef();
         this.thumb = React.createRef();
-
+        this.state = {
+            isMoving: false,
+        };
         this.target = null;
         if (props.interval) {
             this.leftPercent = (((props.startValue || isNumber(props.startValue)
@@ -90,6 +92,10 @@ export default class Slider extends PureComponent {
         document.addEventListener('touchmove', this.thumbMove);
         document.addEventListener('touchend', this.thumbUp);
         document.addEventListener('touchcancel', this.thumbUp);
+
+        this.setState({
+            isMoving: true,
+        });
 
         this.setScrolling(false);
 
@@ -178,6 +184,9 @@ export default class Slider extends PureComponent {
         const stepped = this.getSteppedPercents(this);
         this.setScrolling(true);
         this.onChange([onChangeEnd], stepped);
+        this.setState({
+            isMoving: false,
+        });
     };
 
     innerTrackDown = (e) => {
@@ -443,8 +452,10 @@ export default class Slider extends PureComponent {
             trackStyle,
             innerTrackStyle,
             vertical,
+            showTooltip,
+            tooltipValue,
         } = this.props;
-
+        const { isMoving } = this.state;
         return (
             <div
                 className={classNames('cc__slider', {
@@ -463,6 +474,7 @@ export default class Slider extends PureComponent {
                             />
                         ) : null
                 }
+
                 <div
                     className="cc__slider__bar"
                     ref={this.bar}
@@ -514,6 +526,8 @@ export default class Slider extends PureComponent {
                                     onTouchStart={this.thumbDown}
                                     ref={this.thumb}
                                 >
+                                    {showTooltip
+                                    && (typeof tooltipValue === 'function' ? tooltipValue(isMoving) : tooltipValue)}
                                     <div
                                         style={thumbStyle}
                                         className="cc__slider__bar__thumb__dot"
@@ -553,6 +567,13 @@ Slider.propTypes = {
     endValue: PropTypes.number,
     trackStyle: PropTypes.object,
     innerTrackStyle: PropTypes.object,
+    showTooltip: PropTypes.bool,
+    tooltipValue: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.node,
+        PropTypes.func,
+    ]),
 };
 
 Slider.defaultProps = {
@@ -581,6 +602,8 @@ Slider.defaultProps = {
     endValue: null,
     trackStyle: null,
     innerTrackStyle: null,
+    showTooltip: false,
+    tooltipValue: null,
 };
 
 Slider.displayName = 'Slider';

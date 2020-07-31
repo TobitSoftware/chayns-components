@@ -4,6 +4,7 @@ import { ColorPicker } from '../../src/index';
 import Bubble from '../../src/react-chayns-bubble/component/Bubble';
 import { hsvToHexString, hsvToRgb } from '../../src/utils/color/hsv';
 import Input from '../../src/react-chayns-input/component/Input';
+import HueSlider from '../../src/react-chayns-color_picker/component/hueSlider/HueSlider';
 
 export default class ColorPickerExample extends PureComponent {
     constructor(props) {
@@ -131,9 +132,36 @@ export default class ColorPickerExample extends PureComponent {
                             console.log(c);
                             this.setState({ color: c });
                         }}
-                    >
-
-                    </ColorPicker>
+                    />
+                </div>
+                <div>
+                    <h2>Slider only ColorPicker</h2>
+                    <HueSlider
+                        showTooltip
+                        tooltipValue={(moving) => moving && (
+                            <div style={{ position: 'absolute', marginLeft: '-5px', top: -45, transform: 'rotate(180deg)' }}>
+                                <svg width="100%" viewBox="0 0 30 42">
+                                    <path
+                                        fill={childrenColor}
+                                        stroke={childrenColor}
+                                        strokeWidth="1.5"
+                                        d="M15 3
+                                               Q16.5 6.8 25 18
+                                               A12.8 12.8 0 1 1 5 18
+                                               Q13.5 6.8 15 3z"
+                                    />
+                                </svg>
+                            </div>
+                        )}
+                        color={color}
+                        onChange={(c) => {
+                            const selectedColor = hsvToHexString(c);
+                            this.setState({ childrenColor: selectedColor, color: c });
+                        }}
+                        onChangeEnd={(c) => {
+                            this.setState({ color: c });
+                        }}
+                    />
                 </div>
             </div>
         );
