@@ -28,7 +28,7 @@ export default class SliderExample extends Component {
                 <div style={{ textAlign: 'center' }}>
                     <Tooltip
                         content={{
-                            html: <Slider vertical style={{ maxHeight: '100px' }}/>,
+                            html: <Slider vertical style={{ maxHeight: '100px', marginBottom: '20px' }}/>,
                         }}
                         minWidth="auto"
                         bindListeners
@@ -50,6 +50,29 @@ export default class SliderExample extends Component {
                     }}
                 />
                 <Slider
+                    showLabel
+                    min={50}
+                    max={150}
+                    defaultValue={100}
+                    onChange={(newValue) => {
+                        this.setState({ value: newValue });
+                    }}
+                    step={10}
+                />
+                <Slider
+                    showValueInThumb
+                    showLabel
+                    interval
+                    minInterval={10}
+                    maxInterval={60}
+                    defaultStartValue={30}
+                    defaultEndValue={70}
+                    onChange={(start, end) => {
+                        this.setState({ startValue: start, endValue: end });
+                    }}
+                />
+                <Slider
+                    showValueInThumb
                     showLabel
                     min={50}
                     max={150}

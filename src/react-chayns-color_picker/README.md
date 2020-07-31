@@ -14,6 +14,7 @@ import { ColorPicker } from 'chayns-components';
 
 You can use the ColorPicker like in the [example](https://github.com/TobitSoftware/chayns-components/blob/master/examples/react-chayns-color_picker/Example.jsx).
 
+It is also possible to use the components `HueSlider`, `TransparencySlider`, `ColorArea` and `ColorInput`.
 
 ## Props ##
 You can set the following props on a ColorPicker element:
