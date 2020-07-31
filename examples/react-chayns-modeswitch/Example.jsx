@@ -52,7 +52,7 @@ export default class ModeSwitchExample extends Component {
                     console.log(ModeSwitch.getCurrentMode());
                 }}
                 >
-                    {'console.log(ModeSwitch.getCurrentMode());'}
+                    console.log(ModeSwitch.getCurrentMode());
                 </Button>
                 <h3>Mode</h3>
                 <Mode modes={[1]}>Admin</Mode>

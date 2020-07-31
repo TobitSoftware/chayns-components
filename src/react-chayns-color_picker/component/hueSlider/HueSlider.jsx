@@ -76,8 +76,6 @@ HueSlider.propTypes = {
     onChangeEnd: PropTypes.func,
     showTooltip: PropTypes.bool,
     tooltipValue: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
         PropTypes.node,
         PropTypes.func,
     ]),

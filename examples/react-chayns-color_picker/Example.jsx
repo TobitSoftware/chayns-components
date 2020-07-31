@@ -10,8 +10,8 @@ export default class ColorPickerExample extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            childrenColor: chayns.env.site.color,
-            color: chayns.env.site.color,
+            childrenColor: '#ff00ff',
+            color: '#ff00ff',
         };
     }
 

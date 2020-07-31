@@ -16,7 +16,7 @@ export default class RadioButtonExample extends PureComponent {
                     }}
                     value="Test1"
                 >
-                    {'String: Test1'}
+                    String: Test1
                 </RadioButton>
 
                 <RadioButton
@@ -24,7 +24,7 @@ export default class RadioButtonExample extends PureComponent {
                         console.log(data);
                     }}
                 >
-                    {'Number: 2'}
+                    Number: 2
                 </RadioButton>
 
                 <RadioButton
@@ -33,7 +33,7 @@ export default class RadioButtonExample extends PureComponent {
                     }}
                     disabled
                 >
-                    {'Disabled'}
+                    Disabled
                 </RadioButton>
 
                 <RadioButton
@@ -44,7 +44,7 @@ export default class RadioButtonExample extends PureComponent {
                     name="group1"
                     defaultChecked
                 >
-                    {'Name: group1'}
+                    Name: group1
                 </RadioButton>
 
                 <RadioButton
@@ -54,7 +54,7 @@ export default class RadioButtonExample extends PureComponent {
                     value="2"
                     name="group1"
                 >
-                    {'Name: group1'}
+                    Name: group1
                 </RadioButton>
             </div>
         );

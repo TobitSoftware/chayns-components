@@ -569,8 +569,6 @@ Slider.propTypes = {
     innerTrackStyle: PropTypes.object,
     showTooltip: PropTypes.bool,
     tooltipValue: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
         PropTypes.node,
         PropTypes.func,
     ]),

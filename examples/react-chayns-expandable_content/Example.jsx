@@ -43,7 +43,7 @@ export default class Example extends Component {
                 <ExpandableContent
                     open={open}
                 >
-                    {'Test opened'}
+                    Test opened
                 </ExpandableContent>
             </div>
         );

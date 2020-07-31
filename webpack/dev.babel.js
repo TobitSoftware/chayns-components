@@ -7,17 +7,17 @@ const ROOT_PATH = path.resolve('.');
 
 let sslCert;
 let sslKey;
+
 try {
-    sslCert = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.crt'));
-    sslKey = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.key'));
-} catch (err) {
-    sslCert = null;
-    sslKey = null;
+    sslCert = fs.readFileSync(path.join('\\\\fs1', 'SSL', 'tobitag.crt'));
+    sslKey = fs.readFileSync(path.join('\\\\fs1', 'SSL', 'tobitag.key'));
+} catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('\n---------------------------\nNo SSL Certificate found.\n---------------------------\n');
 }
 
 export default (env) => {
     const production = !!(env && env.prod);
-
     return {
         entry: {
             template: [
@@ -36,7 +36,7 @@ export default (env) => {
         devServer: {
             host: '0.0.0.0',
             disableHostCheck: true,
-            port: 9009,
+            port: 8081,
             historyApiFallback: true,
             compress: true,
             hot: true,
