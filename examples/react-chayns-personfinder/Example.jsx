@@ -97,6 +97,7 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={console.log}
                     onInput={console.log}
                     ref={this.simplePersonFinderRef1}
+                    disableFriends
                 />
                 <PersonFinder
                     value={value}

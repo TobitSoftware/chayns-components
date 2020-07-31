@@ -62,6 +62,7 @@ SimplePersonFinder.propTypes = {
     onChange: PropTypes.func,
     showPersons: PropTypes.bool,
     showSites: PropTypes.bool,
+    disableFriends: PropTypes.bool,
     showId: PropTypes.bool,
     className: PropTypes.string,
     defaultValue: PropTypes.oneOfType([
@@ -94,6 +95,7 @@ SimplePersonFinder.defaultProps = {
     onChange: null,
     showPersons: true,
     showSites: false,
+    disableFriends: false,
     defaultValue: null,
     className: null,
     showId: false,

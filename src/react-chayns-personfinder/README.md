@@ -42,6 +42,7 @@ Then it can be used like in the following example:
 | parent        | DOM Node into which the **PersonFinder** will be rendered. On default, it's the tapp div.          | node           | .tapp         |
 | showPersons   | Enables/Disables the search of persons                                                             | bool           | true          |
 | showSites     | Enables/Disables the search of sites                                                               | bool           | false         |
+| disableFriends | Enables/Disables the friends view                                                                 | bool           | false         |
 | multiple      | Allows the input of multiple persons/sites using a TagInput                                        | bool           | false         |
 | defaultValue  | The default value of the input element                                                             | string, object |               |
 | defaultValues | Tags that should be added to the TagInput (multiple-prop) on initial rendering                     | array          |               |

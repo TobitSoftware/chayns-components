@@ -173,6 +173,7 @@ class MultiplePersonFinder extends Component {
             contextProps,
             max,
             value: valueProp,
+            disableFriends,
             ...props
         } = this.props;
         const { inputValue, selectedValue } = this.state;
@@ -187,7 +188,7 @@ class MultiplePersonFinder extends Component {
                         includeOwn: props.includeOwn,
                         enableSites: showSites,
                         enablePersons: showPersons,
-                        enableFriends: !showSites && showPersons,
+                        enableFriends: (showPersons && !disableFriends && !props.uacId),
                         reducerFunction: props.reducerFunction,
                     } : null)}
                     {...contextProps}
@@ -229,6 +230,7 @@ MultiplePersonFinder.propTypes = {
     onChange: PropTypes.func,
     showPersons: PropTypes.bool,
     showSites: PropTypes.bool,
+    disableFriends: PropTypes.bool,
     className: PropTypes.string,
     defaultValue: PropTypes.oneOfType([
         PropTypes.shape({
@@ -272,6 +274,7 @@ MultiplePersonFinder.defaultProps = {
     onChange: null,
     showPersons: true,
     showSites: false,
+    disableFriends: false,
     defaultValue: null,
     className: null,
     onAdd: null,
