@@ -56,12 +56,12 @@ export default class Example extends Component {
                 <Button
                     onClick={this.handleToggleVisibility}
                 >
-                    {'Toggle visibility'}
+                    Toggle visibility
                 </Button>
                 <Button
                     onClick={this.handleTogglePositioning}
                 >
-                    {'Toggle positioning'}
+                    Toggle positioning
                 </Button>
                 <TappPortal>
                     {show && this.renderElement('Inside portal')}

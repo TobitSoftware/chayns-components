@@ -29,15 +29,15 @@ export default class PositionInputExample extends PureComponent {
                 <ProgressBar
                     value={value % 100}
                 >
-                    {'Uploading ...'}
+                    Uploading ...
                 </ProgressBar>
                 <ProgressBar
                     value={50}
                 >
-                    {'Uploading (static) ...'}
+                    Uploading (static) ...
                 </ProgressBar>
                 <ProgressBar>
-                    {'Converting ...'}
+                    Converting ...
                 </ProgressBar>
                 <ProgressBar value={value < 100 ? value : null} ready={value > 200}>
                     {Math.floor(value / 100) === 0 && 'Uploading ...'}

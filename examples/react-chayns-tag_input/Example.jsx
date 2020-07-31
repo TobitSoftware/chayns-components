@@ -65,17 +65,17 @@ export default class TagInputExample extends PureComponent {
                 <Button
                     onClick={this.clearValue}
                 >
-                    {'Clear input'}
+                    Clear input
                 </Button>
                 <Button
                     onClick={this.clearTags}
                 >
-                    {'Clear tags'}
+                    Clear tags
                 </Button>
                 <Button
                     onClick={this.focus}
                 >
-                    {'Focus()'}
+                    Focus()
                 </Button>
             </div>
         );

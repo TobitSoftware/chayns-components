@@ -13,6 +13,10 @@ import Checkbox from './react-chayns-checkbox/component/Checkbox';
 import ComboBox from './react-chayns-combobox/component/ComboBox';
 import ContextMenu from './react-chayns-contextmenu/component/ContextMenu';
 import ColorPicker from './react-chayns-color_picker/component/ColorPicker';
+import HueSlider from './react-chayns-color_picker/component/hueSlider/HueSlider';
+import TransparencySlider from './react-chayns-color_picker/component/transparencySlider/TransparencySlider';
+import ColorInput from './react-chayns-color_picker/component/colorInput/ColorInput';
+import ColorArea from './react-chayns-color_picker/component/colorArea/ColorArea';
 
 import DateInfo from './react-chayns-dateinfo/component/DateInfo';
 
@@ -105,6 +109,10 @@ export {
     Checkbox,
     ComboBox,
     ContextMenu,
+    HueSlider,
+    TransparencySlider,
+    ColorInput,
+    ColorArea,
     ColorPicker,
     DateInfo,
     EmojiInput,
