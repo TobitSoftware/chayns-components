@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isNumber } from '../../utils/is';
+import './slider.scss';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -15,12 +16,13 @@ export default class Slider extends PureComponent {
         this.bar = React.createRef();
         this.innerTrack = React.createRef();
         this.leftThumb = React.createRef();
+        this.leftDot = React.createRef();
         this.rightThumb = React.createRef();
+        this.rightDot = React.createRef();
         this.label = React.createRef();
         this.thumb = React.createRef();
-        this.state = {
-            isMoving: false,
-        };
+        this.dot = React.createRef();
+
         this.target = null;
         if (props.interval) {
             this.leftPercent = (((props.startValue || isNumber(props.startValue)
@@ -81,7 +83,7 @@ export default class Slider extends PureComponent {
     }
 
     thumbDown = (e) => {
-        const { onChangeStart } = this.props;
+        const { onChangeStart, showValueInThumb, scaleOnDown } = this.props;
         this.target = e.target;
         const stepped = this.getSteppedPercents(this);
         this.onChange([onChangeStart], stepped);
@@ -93,10 +95,9 @@ export default class Slider extends PureComponent {
         document.addEventListener('touchend', this.thumbUp);
         document.addEventListener('touchcancel', this.thumbUp);
 
-        this.setState({
-            isMoving: true,
-        });
-
+        if (scaleOnDown === null ? (chayns.env.isMobile && showValueInThumb) : scaleOnDown) {
+            this.bar.current.classList.add('cc__new-slider__bar--down');
+        }
         this.setScrolling(false);
 
         e.stopPropagation();
@@ -125,7 +126,7 @@ export default class Slider extends PureComponent {
         const rect = this.bar.current.getBoundingClientRect();
         const newPercent = (((clientX - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100);
         if (interval) {
-            if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
+            if (this.target.classList.contains('cc__new-slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent < minPercent ? minPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.rightPercent = this.leftPercent + minIntervalPercent;
@@ -133,7 +134,7 @@ export default class Slider extends PureComponent {
                 if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
-            } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
+            } else if (this.target.classList.contains('cc__new-slider__bar__thumb--interval-right')) {
                 this.rightPercent = newPercent > maxPercent ? maxPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.leftPercent = this.rightPercent - minIntervalPercent;
@@ -183,10 +184,8 @@ export default class Slider extends PureComponent {
         this.target = null;
         const stepped = this.getSteppedPercents(this);
         this.setScrolling(true);
+        this.bar.current.classList.remove('cc__new-slider__bar--down');
         this.onChange([onChangeEnd], stepped);
-        this.setState({
-            isMoving: false,
-        });
     };
 
     innerTrackDown = (e) => {
@@ -306,6 +305,7 @@ export default class Slider extends PureComponent {
             showLabel,
             interval,
             vertical,
+            showValueInThumb,
         } = this.props;
         const { leftPercent, rightPercent, percent } = percents;
         // set elements
@@ -336,15 +336,26 @@ export default class Slider extends PureComponent {
             this.innerTrack.current.style[this.width] = `${percent}%`;
         }
 
-        if (showLabel && !vertical) {
+        if (!vertical) {
             const realInterval = max - min;
             if (interval) {
                 const left = min + ((realInterval * leftPercent) / 100);
                 const right = min + ((realInterval * rightPercent) / 100);
-                this.label.current.innerText = valueFormatter(left, right);
+                if (showLabel) {
+                    this.label.current.innerText = valueFormatter(left, right);
+                }
+                if (showValueInThumb) {
+                    this.leftDot.current.innerText = valueFormatter(left);
+                    this.rightDot.current.innerText = valueFormatter(right);
+                }
             } else {
                 const value = min + ((realInterval * percent) / 100);
-                this.label.current.innerText = valueFormatter(value);
+                if (showLabel) {
+                    this.label.current.innerText = valueFormatter(value);
+                }
+                if (showValueInThumb) {
+                    this.dot.current.innerText = valueFormatter(value);
+                }
             }
         }
     };
@@ -452,15 +463,13 @@ export default class Slider extends PureComponent {
             trackStyle,
             innerTrackStyle,
             vertical,
-            showTooltip,
-            tooltipValue,
         } = this.props;
-        const { isMoving } = this.state;
+
         return (
             <div
-                className={classNames('cc__slider', {
-                    'cc__slider--disabled': disabled,
-                    'cc__slider--vertical': vertical,
+                className={classNames('cc__new-slider', {
+                    'cc__new-slider--disabled': disabled,
+                    'cc__new-slider--vertical': vertical,
                 }, className)}
                 style={style}
             >
@@ -468,24 +477,23 @@ export default class Slider extends PureComponent {
                     showLabel && !vertical
                         ? (
                             <div
-                                className="cc__slider__label"
+                                className="cc__new-slider__label"
                                 ref={this.label}
                                 style={labelStyle}
                             />
                         ) : null
                 }
-
                 <div
-                    className="cc__slider__bar"
+                    className="cc__new-slider__bar"
                     ref={this.bar}
                 >
                     <div
-                        className="cc__slider__bar__track"
+                        className="cc__new-slider__bar__track chayns__background-color--102"
                         onClick={this.trackDown}
                         style={trackStyle}
                     >
                         <div
-                            className="cc__slider__bar__track__inner"
+                            className="cc__new-slider__bar__track__inner chayns__background-color--primary"
                             onMouseDown={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
@@ -496,41 +504,42 @@ export default class Slider extends PureComponent {
                             ? [
                                 <div
                                     key="left"
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.leftThumb}
                                 >
                                     <div
                                         style={thumbStyle && thumbStyle.left}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
+                                        ref={this.leftDot}
                                     />
                                 </div>,
                                 <div
                                     key="right"
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-right"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-right"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.rightThumb}
                                 >
                                     <div
                                         style={thumbStyle && thumbStyle.right}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
+                                        ref={this.rightDot}
                                     />
                                 </div>,
                             ]
                             : (
                                 <div
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.thumb}
                                 >
-                                    {showTooltip
-                                    && (typeof tooltipValue === 'function' ? tooltipValue(isMoving) : tooltipValue)}
                                     <div
                                         style={thumbStyle}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
+                                        ref={this.dot}
                                     />
                                 </div>
                             )
@@ -567,11 +576,8 @@ Slider.propTypes = {
     endValue: PropTypes.number,
     trackStyle: PropTypes.object,
     innerTrackStyle: PropTypes.object,
-    showTooltip: PropTypes.bool,
-    tooltipValue: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func,
-    ]),
+    showValueInThumb: PropTypes.bool,
+    scaleOnDown: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -600,8 +606,8 @@ Slider.defaultProps = {
     endValue: null,
     trackStyle: null,
     innerTrackStyle: null,
-    showTooltip: false,
-    tooltipValue: null,
+    showValueInThumb: false,
+    scaleOnDown: null,
 };
 
 Slider.displayName = 'Slider';

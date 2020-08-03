@@ -52,7 +52,10 @@ const ColorPicker = forwardRef((props, reference) => {
 
     // state
     const [color, setColor] = useState(getHsvColor(props.color));
-    const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+    const [coordinates, setCoordinates] = useState({
+        x: 0,
+        y: 0,
+    });
     const [colorModel, setColorModel] = useState(props.defaultColorModel
         || (props.transparency
             ? ColorPicker.colorModels.RGB
@@ -146,6 +149,7 @@ const ColorPicker = forwardRef((props, reference) => {
                         color={color}
                         onChange={onChange}
                         onChangeEnd={props.onChangeEnd}
+                        showTooltip={false}
                     />
                     {props.transparency && (
                         <TransparencySlider
@@ -220,6 +224,7 @@ const ColorPicker = forwardRef((props, reference) => {
                     color={color}
                     onChange={onChange}
                     onChangeEnd={props.onChangeEnd}
+                    showTooltip={false}
                 />
                 {props.transparency && (
                     <TransparencySlider
@@ -267,7 +272,8 @@ ColorPicker.propTypes = {
     onChangeEnd: PropTypes.func,
     onBlur: PropTypes.func,
     transparency: PropTypes.bool,
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
+    },
     className: PropTypes.string,
     style: PropTypes.object,
     bubbleClassName: PropTypes.string,

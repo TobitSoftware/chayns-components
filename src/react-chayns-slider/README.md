@@ -47,3 +47,5 @@ You can set the following props on a slider:
 | defaultEndValue| default value for right thumb                                                                                | number   | 0       |
 | startValue     | value to control the left thumb                                                                              | number   | null    |
 | endValue       | value to control the right thumb                                                                             | number   | null    |
+| scaleOnDown    | Scale the slider on click/touch (default: only on mobile devices)                                            | bool     | null    |
+| showValueInThumb | Shows the value in the thumb                                                                               | bool     | null    |
