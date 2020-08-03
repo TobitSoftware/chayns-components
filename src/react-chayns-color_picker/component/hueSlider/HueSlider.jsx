@@ -52,6 +52,7 @@ export default class HueSlider extends PureComponent {
             v: 1,
             a: null,
         });
+
         return (
             <div>
                 <Slider

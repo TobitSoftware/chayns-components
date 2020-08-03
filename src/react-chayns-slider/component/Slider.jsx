@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isNumber } from '../../utils/is';
+import './slider.scss';
 
 function preventDefault(e) {
     e.preventDefault();
@@ -487,12 +488,12 @@ export default class Slider extends PureComponent {
                     ref={this.bar}
                 >
                     <div
-                        className="cc__slider__bar__track"
+                        className="cc__slider__bar__track chayns__background-color--102"
                         onClick={this.trackDown}
                         style={trackStyle}
                     >
                         <div
-                            className="cc__slider__bar__track__inner"
+                            className="cc__slider__bar__track__inner chayns__background-color--primary"
                             onMouseDown={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
