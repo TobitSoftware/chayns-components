@@ -16,6 +16,7 @@ export default class SliderExample extends Component {
             <div>
                 <div style={{ textAlign: 'center' }}>
                     <Tooltip
+                        position={Tooltip.position.BOTTOM_CENTER}
                         minWidth={150}
                         content={{
                             html: <Slider/>,
@@ -27,6 +28,7 @@ export default class SliderExample extends Component {
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <Tooltip
+                        position={Tooltip.position.BOTTOM_CENTER}
                         content={{
                             html: <Slider vertical style={{ maxHeight: '100px', marginBottom: '20px' }}/>,
                         }}

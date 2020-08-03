@@ -31,19 +31,21 @@
       background-size: 8px 8px;
       background-repeat: repeat;
       height: inherit;
-      width: inherit;
+      width: 20px;
       position: absolute;
       overflow: hidden;
       top: inherit;
       left: inherit;
       border-radius: inherit;
+      opacity: 1;
+      transform: none;
     }
     // color
     &:after{
       content: "";
       background-color: inherit;
       height: inherit;
-      width: inherit;
+      width: 20px;
       top: inherit;
       left: inherit;
       position: absolute;

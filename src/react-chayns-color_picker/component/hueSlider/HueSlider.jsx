@@ -45,8 +45,9 @@ export default class HueSlider extends PureComponent {
 
     render() {
         const { color, showTooltip } = this.props;
+        const hsv = getHsvColor(color);
         const thumbColor = hsvToRgbString({
-            h: color.h,
+            h: hsv.h,
             s: 1,
             v: 1,
             a: null,
@@ -74,10 +75,6 @@ HueSlider.propTypes = {
     onChange: PropTypes.func,
     onChangeEnd: PropTypes.func,
     showTooltip: PropTypes.bool,
-    tooltipValue: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func,
-    ]),
     color: PropTypes.shape({
         h: PropTypes.number.isRequired,
         s: PropTypes.number.isRequired,

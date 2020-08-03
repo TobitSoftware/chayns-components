@@ -94,7 +94,7 @@ export default class Slider extends PureComponent {
         document.addEventListener('touchend', this.thumbUp);
         document.addEventListener('touchcancel', this.thumbUp);
 
-        if ((chayns.env.isMobile && showValueInThumb) || scaleOnDown) {
+        if (scaleOnDown === null ? (chayns.env.isMobile && showValueInThumb) : scaleOnDown) {
             this.bar.current.classList.add('cc__slider__bar--down');
         }
         this.setScrolling(false);
@@ -606,7 +606,7 @@ Slider.defaultProps = {
     trackStyle: null,
     innerTrackStyle: null,
     showValueInThumb: false,
-    scaleOnDown: false,
+    scaleOnDown: null,
 };
 
 Slider.displayName = 'Slider';
