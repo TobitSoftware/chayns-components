@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   user-select: none;
+  -webkit-user-select: none;
 
   &--vertical {
     width: 30px;
