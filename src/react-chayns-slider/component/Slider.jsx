@@ -96,7 +96,7 @@ export default class Slider extends PureComponent {
         document.addEventListener('touchcancel', this.thumbUp);
 
         if (scaleOnDown === null ? (chayns.env.isMobile && showValueInThumb) : scaleOnDown) {
-            this.bar.current.classList.add('cc__slider__bar--down');
+            this.bar.current.classList.add('cc__new-slider__bar--down');
         }
         this.setScrolling(false);
 
@@ -126,7 +126,7 @@ export default class Slider extends PureComponent {
         const rect = this.bar.current.getBoundingClientRect();
         const newPercent = (((clientX - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100);
         if (interval) {
-            if (this.target.classList.contains('cc__slider__bar__thumb--interval-left')) {
+            if (this.target.classList.contains('cc__new-slider__bar__thumb--interval-left')) {
                 this.leftPercent = newPercent < minPercent ? minPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.rightPercent = this.leftPercent + minIntervalPercent;
@@ -134,7 +134,7 @@ export default class Slider extends PureComponent {
                 if (maxInterval && this.leftPercent + maxIntervalPercent < this.rightPercent) {
                     this.rightPercent = this.leftPercent + maxIntervalPercent;
                 }
-            } else if (this.target.classList.contains('cc__slider__bar__thumb--interval-right')) {
+            } else if (this.target.classList.contains('cc__new-slider__bar__thumb--interval-right')) {
                 this.rightPercent = newPercent > maxPercent ? maxPercent : newPercent;
                 if (this.leftPercent + minIntervalPercent > this.rightPercent) {
                     this.leftPercent = this.rightPercent - minIntervalPercent;
@@ -184,7 +184,7 @@ export default class Slider extends PureComponent {
         this.target = null;
         const stepped = this.getSteppedPercents(this);
         this.setScrolling(true);
-        this.bar.current.classList.remove('cc__slider__bar--down');
+        this.bar.current.classList.remove('cc__new-slider__bar--down');
         this.onChange([onChangeEnd], stepped);
     };
 
@@ -467,9 +467,9 @@ export default class Slider extends PureComponent {
 
         return (
             <div
-                className={classNames('cc__slider', {
-                    'cc__slider--disabled': disabled,
-                    'cc__slider--vertical': vertical,
+                className={classNames('cc__new-slider', {
+                    'cc__new-slider--disabled': disabled,
+                    'cc__new-slider--vertical': vertical,
                 }, className)}
                 style={style}
             >
@@ -477,23 +477,23 @@ export default class Slider extends PureComponent {
                     showLabel && !vertical
                         ? (
                             <div
-                                className="cc__slider__label"
+                                className="cc__new-slider__label"
                                 ref={this.label}
                                 style={labelStyle}
                             />
                         ) : null
                 }
                 <div
-                    className="cc__slider__bar"
+                    className="cc__new-slider__bar"
                     ref={this.bar}
                 >
                     <div
-                        className="cc__slider__bar__track chayns__background-color--102"
+                        className="cc__new-slider__bar__track chayns__background-color--102"
                         onClick={this.trackDown}
                         style={trackStyle}
                     >
                         <div
-                            className="cc__slider__bar__track__inner chayns__background-color--primary"
+                            className="cc__new-slider__bar__track__inner chayns__background-color--primary"
                             onMouseDown={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
@@ -504,41 +504,41 @@ export default class Slider extends PureComponent {
                             ? [
                                 <div
                                     key="left"
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.leftThumb}
                                 >
                                     <div
                                         style={thumbStyle && thumbStyle.left}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
                                         ref={this.leftDot}
                                     />
                                 </div>,
                                 <div
                                     key="right"
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-right"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-right"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.rightThumb}
                                 >
                                     <div
                                         style={thumbStyle && thumbStyle.right}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
                                         ref={this.rightDot}
                                     />
                                 </div>,
                             ]
                             : (
                                 <div
-                                    className="cc__slider__bar__thumb cc__slider__bar__thumb--interval-left"
+                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
                                     onMouseDown={this.thumbDown}
                                     onTouchStart={this.thumbDown}
                                     ref={this.thumb}
                                 >
                                     <div
                                         style={thumbStyle}
-                                        className="cc__slider__bar__thumb__dot"
+                                        className="cc__new-slider__bar__thumb__dot"
                                         ref={this.dot}
                                     />
                                 </div>

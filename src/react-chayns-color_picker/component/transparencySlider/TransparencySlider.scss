@@ -1,5 +1,5 @@
 .cc__transparency-slider {
-  .cc__slider__bar__track {
+  .cc__new-slider__bar__track {
     // checkerboard
     &:before {
       content: "";
@@ -21,7 +21,7 @@
       position: absolute;
     }
   }
-  .cc__slider__bar__thumb__dot{
+  .cc__new-slider__bar__thumb__dot{
     // checkerboard
     &:before {
       content: "";

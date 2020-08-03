@@ -1,4 +1,4 @@
-.cc__slider {
+.cc__new-slider {
   width: 100%;
   display: flex;
   user-select: none;
@@ -8,7 +8,7 @@
     height: 300px;
     display: inline-block;
 
-    .cc__slider {
+    .cc__new-slider {
       &__label {
         flex-direction: row;
       }
@@ -61,7 +61,7 @@
     justify-content: center;
 
     &--down {
-      .cc__slider__bar {
+      .cc__new-slider__bar {
         &__track {
           height: 30px;
         }
