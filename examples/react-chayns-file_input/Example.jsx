@@ -1,106 +1,100 @@
-/* eslint-disable no-return-assign,jsx-a11y/alt-text */
-import React, { Component } from 'react';
+/* eslint-disable no-console */
+import React, { useState, useCallback } from 'react';
 
 import FileInput from '../../src/react-chayns-file_input/component/FileInput';
 import imageUpload from '../../src/utils/imageUpload';
 import Button from '../../src/react-chayns-button/component/Button';
 import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 
-export default class FileInputExample extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { images: [] };
-        chayns.register({ apiDialogs: true });
-    }
+const FileInputExample = () => {
+    const [images, setImages] = useState([]);
+    const [displayPath, setDisplayPath] = useState('');
 
-    onChange = (validFiles) => {
-        const { images } = this.state;
-        this.setState({ images: images.concat(validFiles.map((f) => ({ file: f }))) });
-    };
+    const onChange = useCallback((validFiles) => {
+        setImages(images.concat(validFiles.map((f) => ({ file: f }))));
+    }, [images, setImages]);
 
-    onClick = async () => {
-        const { images } = this.state;
+    const onClick = useCallback(async () => {
         const data = await chayns.dialog.mediaSelect({ multiselect: true });
-        this.setState({ images: images.concat(data.selection.map((url) => ({ url }))) });
-    };
+        setImages(images.concat(data.selection.map((url) => ({ url }))));
+    }, [images, setImages]);
 
-    onDelete = (image, index) => {
-        const { images } = this.state;
+    const onDelete = useCallback((image, index) => {
         const img = images.slice();
         img.splice(index, 1);
-        this.setState({ images: img });
-    };
+        setImages(img);
+    }, [images, setImages]);
 
-    onDragEnd = (images) => {
-        this.setState({ images });
-    };
+    const onDragEnd = useCallback((imgs) => {
+        setImages(imgs);
+    }, [setImages]);
 
-    upload = () => {
-        const { images } = this.state;
+    const upload = useCallback(() => {
         images.forEach(async (image) => {
             const result = await imageUpload(image.file || image.url, 'componentsTestUpload', chayns.env.user.personId, chayns.env.site.id);
-            // eslint-disable-next-line no-console
             console.log('Uploaded image', result);
-            this.logRef.innerText = `${this.logRef.innerText}${result.base}/${result.key}\n`;
+            setDisplayPath(`${displayPath}${result.base}/${result.key}\n`);
         });
-    };
+    }, [images, setDisplayPath]);
 
-    render() {
-        const { images } = this.state;
-        return (
-            <div>
-                <FileInput
-                    style={{ marginBottom: '20px' }}
-                    stopPropagation
-                    items={[{
-                        types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
-                        maxFileSize: 4194304, // max file size is 4 MB
-                        maxNumberOfFiles: 0, // no limit for number of files
-                        onChange: this.onChange,
-                        content: { text: 'Bild hochladen' },
-                    }, {
-                        onClick: this.onClick,
-                        content: { text: 'Bild auswählen', icon: 'ts-image' },
-                    }]}
-                />
-                <h3>Gallery with dragMode and deleteMode</h3>
-                <Gallery
-                    images={images}
-                    deleteMode
-                    onDelete={this.onDelete}
-                    dragMode
-                    onDragEnd={this.onDragEnd}
-                    style={{ marginBottom: '30px' }}
-                />
-                <h3>Gallery with dragMode</h3>
-                <Gallery
-                    images={images}
-                    dragMode
-                    onDragEnd={this.onDragEnd}
-                    style={{ marginBottom: '30px' }}
-                />
-                <h3>Gallery with deleteMode</h3>
-                <Gallery
-                    images={images}
-                    deleteMode
-                    onDelete={this.onDelete}
-                    style={{ marginBottom: '30px' }}
-                />
-                <Button
-                    disabled={!images}
-                    onClick={this.upload}
-                >
-                    Upload
-                </Button>
-                <p ref={(ref) => this.logRef = ref}/>
-                <FileInput
-                    items={[{
-                        types: [FileInput.types.ALL],
-                        onChange: console.log,
-                        content: { text: 'Upload all' },
-                    }]}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            <FileInput
+                style={{ marginBottom: '20px' }}
+                stopPropagation
+                items={[{
+                    types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
+                    maxFileSize: 4194304, // max file size is 4 MB
+                    maxNumberOfFiles: 0, // no limit for number of files
+                    onChange,
+                    content: { text: 'Bild hochladen' },
+                }, {
+                    onClick,
+                    content: {
+                        text: 'Bild auswählen',
+                        icon: 'ts-image',
+                    },
+                }]}
+            />
+            <h3>Gallery with dragMode and deleteMode</h3>
+            <Gallery
+                images={images}
+                deleteMode
+                onDelete={onDelete}
+                dragMode
+                onDragEnd={onDragEnd}
+                style={{ marginBottom: '30px' }}
+            />
+            <h3>Gallery with dragMode</h3>
+            <Gallery
+                images={images}
+                dragMode
+                onDragEnd={onDragEnd}
+                style={{ marginBottom: '30px' }}
+            />
+            <h3>Gallery with deleteMode</h3>
+            <Gallery
+                images={images}
+                deleteMode
+                onDelete={onDelete}
+                style={{ marginBottom: '30px' }}
+            />
+            <Button
+                disabled={!images}
+                onClick={upload}
+            >
+                Upload
+            </Button>
+            <p>{displayPath}</p>
+            <FileInput
+                items={[{
+                    types: [FileInput.types.ALL],
+                    onChange: console.log,
+                    content: { text: 'Upload all' },
+                }]}
+            />
+        </div>
+    );
+};
+
+export default FileInputExample;
