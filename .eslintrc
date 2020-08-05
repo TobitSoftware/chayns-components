@@ -10,6 +10,9 @@
     "__QA__": true,
     "__LIVE__": true
   },
+  "plugins": [
+    "react-hooks"
+  ],
   "parser": "babel-eslint",
   "rules": {
     "function-paren-newline": ["error", "multiline"],

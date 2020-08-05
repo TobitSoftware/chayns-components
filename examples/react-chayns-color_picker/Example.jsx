@@ -7,7 +7,6 @@ import Input from '../../src/react-chayns-input/component/Input';
 import HueSlider from '../../src/react-chayns-color_picker/component/hueSlider/HueSlider';
 import { hexStringToHsv } from '../../src/utils/color';
 
-
 const ColorPickerExample = () => {
     const [color, setColor] = useState(hexStringToHsv(chayns.env.site.color));
     const [childrenColor, setChildrenColor] = useState(chayns.env.site.color);
