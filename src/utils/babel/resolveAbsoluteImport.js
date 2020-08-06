@@ -15,6 +15,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         ColorInput: 'react-chayns-color_picker/component/colorInput/ColorInput.js',
         ColorArea: 'react-chayns-color_picker/component/colorArea/ColorArea.js',
         ColorPicker: 'react-chayns-color_picker/component/ColorPicker.js',
+        ColorScheme: 'react-chayns-color_scheme/component/ColorScheme.js',
         ComboBox: 'react-chayns-combobox/component/ComboBox.js',
         ContextMenu: 'react-chayns-contextmenu/component/ContextMenu.js',
         DateInfo: 'react-chayns-dateinfo/component/DateInfo.js',

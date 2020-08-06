@@ -218,4 +218,9 @@
   "title": "ProgressBar",
   "example": "react-chayns-progress_bar/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-color_scheme",
+  "title": "ColorScheme",
+  "example": "react-chayns-color_scheme/Example.jsx",
+  "readme": true
 }]
