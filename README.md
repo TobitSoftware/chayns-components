@@ -45,6 +45,7 @@ The following components are part of this package:
 | [react-chayns-calendar](/src/react-chayns-calendar/)                     | Calendar Component          | [Readme](/src/react-chayns-calendar/README.md)           |
 | [react-chayns-checkbox](/src/react-chayns-checkbox/)                     | Checkbox Component          | [Readme](/src/react-chayns-checkbox/README.md)           |
 | [react-chayns-color_picker](/src/react-chayns-color_picker/)             | ColorPicker Component       | [Readme](/src/react-chayns-color_picker/README.md)       |
+| [react-chayns-color_scheme](/src/react-chayns-color_scheme/)             | ColorScheme Component       | [Readme](/src/react-chayns-color_scheme/README.md)       |
 | [react-chayns-combobox](/src/react-chayns-combobox/)                     | ComboBox Component          | [Readme](/src/react-chayns-combobox/README.md)           |
 | [react-chayns-contextmenu](/src/react-chayns-contextmenu/)               | ContextMenu Component       | [Readme](/src/react-chayns-contextmenu/README.md)        |
 | [react-chayns-dateinfo](/src/react-chayns-dateinfo/)                     | DateInfo Component          | [Readme](/src/react-chayns-dateinfo/README.md)           |
