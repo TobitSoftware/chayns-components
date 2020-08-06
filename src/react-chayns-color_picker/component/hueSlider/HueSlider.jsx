@@ -76,11 +76,19 @@ HueSlider.propTypes = {
     onChange: PropTypes.func,
     onChangeEnd: PropTypes.func,
     showTooltip: PropTypes.bool,
-    color: PropTypes.shape({
-        h: PropTypes.number.isRequired,
-        s: PropTypes.number.isRequired,
-        v: PropTypes.number.isRequired,
-    }).isRequired,
+    color: PropTypes.oneOfType([
+        PropTypes.shape({
+            h: PropTypes.number.isRequired,
+            s: PropTypes.number.isRequired,
+            v: PropTypes.number.isRequired,
+        }).isRequired,
+        PropTypes.shape({
+            r: PropTypes.number.isRequired,
+            g: PropTypes.number.isRequired,
+            b: PropTypes.number.isRequired,
+        }).isRequired,
+        PropTypes.string.isRequired,
+    ]).isRequired,
 };
 
 HueSlider.defaultProps = {
