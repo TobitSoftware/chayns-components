@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { hexStringToRgb } from '../../utils/color';
 
@@ -46,21 +46,37 @@ const colorNames = [
     'primary',
     'headline',
     'text',
+    'red-1',
+    'red-2',
+    'red-3',
+    'red-4',
+    'yellow-1',
+    'yellow-2',
+    'yellow-3',
+    'yellow-4',
+    'green-1',
+    'green-2',
+    'green-3',
+    'green-4',
 ];
 
 const ColorScheme = ({ color, colorMode, children, style, ...props }) => {
-    const styles = {};
+    if (typeof chayns === 'undefined') return null;
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const colorName of colorNames) {
-        const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
-        styles[`--chayns-color--${colorName}`] = hexColor;
-        const rgbColor = hexStringToRgb(hexColor);
-        styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-    }
+    const colorStyles = useMemo(() => {
+        const styles = {};
+        // eslint-disable-next-line no-restricted-syntax
+        for (const colorName of colorNames) {
+            const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
+            styles[`--chayns-color--${colorName}`] = hexColor;
+            const rgbColor = hexStringToRgb(hexColor);
+            styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+        }
+        return styles;
+    }, [color, colorMode]);
 
     return (
-        <div style={{ ...style, ...styles }} {...props}>
+        <div style={{ ...style, ...colorStyles }} {...props}>
             {children}
         </div>
     );
@@ -80,4 +96,4 @@ ColorScheme.defaultProps = {
     style: {},
 };
 
-export default ColorScheme;
+export default memo(ColorScheme);

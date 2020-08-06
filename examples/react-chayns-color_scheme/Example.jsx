@@ -7,6 +7,7 @@ import Bubble from '../../src/react-chayns-bubble/component/Bubble';
 import Accordion from '../../src/react-chayns-accordion/component/Accordion';
 import Badge from '../../src/react-chayns-badge/component/Badge';
 import RadioButton from '../../src/react-chayns-radiobutton/component/RadioButton';
+import Slider from '../../src/react-chayns-slider/component/Slider';
 
 const ColorSchemeExample = () => {
     const [color, setColor] = useState(chayns.env.site.color);
@@ -42,6 +43,7 @@ const ColorSchemeExample = () => {
                     </p>
                     <Button style={{ marginRight: '10px' }}>Button</Button>
                     <Button secondary>Button</Button>
+                    <Slider/>
                     <Accordion head="Accordion" right={<Badge>100</Badge>}>
                         <div className="accordion__content">
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
