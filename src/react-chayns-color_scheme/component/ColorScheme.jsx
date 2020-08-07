@@ -46,25 +46,25 @@ const colorNames = [
     'primary',
     'headline',
     'text',
-    'red-1',
-    'red-2',
-    'red-3',
-    'red-4',
-    'yellow-1',
-    'yellow-2',
-    'yellow-3',
-    'yellow-4',
-    'green-1',
-    'green-2',
-    'green-3',
-    'green-4',
+    'depend-on-brightness',
+    'cw-body-background',
+    'red',
+    'green',
+    'wrong',
 ];
 
 const ColorScheme = ({ color, colorMode, children, style, ...props }) => {
     if (typeof chayns === 'undefined') return null;
 
     const colorStyles = useMemo(() => {
-        const styles = {};
+        const primaryRgbColor = hexStringToRgb(color);
+        const bgRgbColor = hexStringToRgb(chayns.utils.colors.getColorFromPalette('100', color, colorMode));
+        const styles = {
+            color: 'var(--chayns-color--text)',
+            '--chayns-color-rgb': `${primaryRgbColor.r}, ${primaryRgbColor.g}, ${primaryRgbColor.b}`,
+            '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
+        };
+
         // eslint-disable-next-line no-restricted-syntax
         for (const colorName of colorNames) {
             const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
