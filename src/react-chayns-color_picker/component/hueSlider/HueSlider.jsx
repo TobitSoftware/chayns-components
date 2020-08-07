@@ -64,7 +64,7 @@ export default class HueSlider extends PureComponent {
                     onChangeEnd={this.onChangeEnd}
                     min={0}
                     max={360}
-                    value={color.h}
+                    value={hsv.h}
                     scaleOnDown={showTooltip === null ? chayns.env.isMobile : showTooltip}
                 />
             </div>

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import { ComboBox } from '../../src/index';
+import Button from '../../src/react-chayns-button/component/Button';
 
 export default class ComboBoxExample extends PureComponent {
     render() {
@@ -27,33 +28,46 @@ export default class ComboBoxExample extends PureComponent {
         return (
             <div>
                 <div style={{ marginBottom: '20px' }}>
+                    <Button secondary>Secondary Button</Button>
+                </div>
+                <div style={{ marginBottom: '20px' }}>
                     <ComboBox
                         label="Select Pizza"
                         list={pizza}
-                        onSelect={(value) => { console.log(value); }}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
                         listKey="id"
                         listValue="name"
                         htmlSelect
                         stopPropagation
                     />
                 </div>
-                <ComboBox
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    defaultValue="2"
-                    htmlSelect
-                />
-                <ComboBox
-                    label="Select Pizza"
-                    list={pizza}
-                    onSelect={(value) => { console.log(value); }}
-                    listKey="id"
-                    listValue="name"
-                    htmlSelect
-                    disabled
-                />
+                <div style={{ marginBottom: '20px' }}>
+                    <ComboBox
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        defaultValue="2"
+                        htmlSelect
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <ComboBox
+                        label="Select Pizza"
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                        htmlSelect
+                        disabled
+                    />
+                </div>
             </div>
         );
     }
