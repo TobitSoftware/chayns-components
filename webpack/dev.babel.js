@@ -78,7 +78,8 @@ export default (env) => {
             new HtmlWebpackPlugin({
                 template: path.resolve(ROOT_PATH, 'examples', 'index.html'),
                 templateParameters: {
-                    chaynsCssUrl: (process.env.CHAYNS_CSS_URL || 'https://api.chayns.net/css/'),
+                    // QA css url; use 'https://api.chayns.net/css/' for production
+                    chaynsCssUrl: (process.env.CHAYNS_CSS_URL || 'https://api-qa.chayns.net/css/'),
                 },
             }),
             new webpack.HotModuleReplacementPlugin(),
