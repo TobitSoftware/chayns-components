@@ -36,8 +36,8 @@ export default class Image extends PureComponent {
     getElementDimensions = () => {
         this.setState({
             elementDimensions: {
-                height: this.imageRef.current.clientHeight,
-                width: this.imageRef.current.clientWidth,
+                height: Math.ceil(this.imageRef.current.clientHeight / 50) * 50,
+                width: Math.ceil(this.imageRef.current.clientWidth / 50) * 50,
             },
         });
     };
