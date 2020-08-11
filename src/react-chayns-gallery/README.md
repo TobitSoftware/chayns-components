@@ -61,6 +61,8 @@ The image shows automatically an preview of the image while the image is loading
 | stylePortrait | Styles that should be set on root-element of portrait images            | object      |                   |              |
 | preventParams | Prevent parameters on loaded image, e.g. {width: true} to prevent w-param | object/bool|                  |              |
 
+> The image height and width will automatically set to next 50px step.
+
 ### ImageContainer Props ###
 
 The imageContainer displays children in an 1:1 aspect ratio if height or padding-top are not given. It can also add a toolbar to the upper right corner.
