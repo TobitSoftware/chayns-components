@@ -67,7 +67,7 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon="fa fa-share-alt" className="sharing-bar__icon"/>
+                <Icon icon="fal fa-share-alt" className="sharing-bar__icon"/>
                 <span className="sharing-bar__text">Teilen</span>
             </ContextMenu>
         </div>
