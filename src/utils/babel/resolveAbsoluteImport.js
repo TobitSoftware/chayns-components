@@ -64,13 +64,13 @@ module.exports = function resolveAbsoluteImport(importName) {
         FileInput: 'react-chayns-file_input/component/FileInput.js',
         Slider: 'react-chayns-slider/component/Slider.js',
         imageUpload: 'utils/imageUpload.js',
-        createLinks: 'utils/createLinks',
-        removeHtml: 'utils/removeHtml',
-        equalize: 'utils/equalizer',
-        isTobitEmployee: 'utils/tobitEmployee',
-        FORMAT_INTEGER: 'react-chayns-formatted_input/component/FormattedInput/instances/formatInteger.js',
-        FORMAT_DECIMAL: 'react-chayns-formatted_input/component/FormattedInput/instances/formatDecimal.js',
-        FORMAT_PRICE: 'react-chayns-formatted_input/component/FormattedInput/instances/formatPrice.js',
+        createLinks: 'utils/createLinks.js',
+        removeHtml: 'utils/removeHtml.js',
+        equalize: 'utils/equalizer.js',
+        isTobitEmployee: 'utils/tobitEmployee.js',
+        FORMAT_INTEGER: 'react-chayns-formatted_input/utils/instances/formatInteger.js',
+        FORMAT_DECIMAL: 'react-chayns-formatted_input/utils/instances/formatDecimal.js',
+        FORMAT_PRICE: 'react-chayns-formatted_input/utils/instances/formatPrice.js',
     };
 
     if (!values[importName]) {
