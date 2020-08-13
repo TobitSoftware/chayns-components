@@ -41,6 +41,7 @@ export default class Slider extends PureComponent {
                 this.percent = 100 - this.percent;
             }
         }
+        this.state = { preventClick: false };
 
         this.setDirection();
     }
@@ -115,6 +116,7 @@ export default class Slider extends PureComponent {
             startValue,
             endValue,
         } = this.props;
+        this.setState({ preventClick: true });
 
         const width = max - min;
         const minPercent = 0;
@@ -214,6 +216,7 @@ export default class Slider extends PureComponent {
             endValue,
         } = this.props;
 
+
         const minPercent = 0;
         const maxPercent = 100;
 
@@ -264,7 +267,10 @@ export default class Slider extends PureComponent {
             startValue,
             endValue,
         } = this.props;
-
+        if (this.state.preventClick) {
+            this.setState({ preventClick: false });
+            return;
+        }
         const rect = this.bar.current.getBoundingClientRect();
         const clickPercent = ((e[this.clientX] - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100;
 
