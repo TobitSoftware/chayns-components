@@ -53,7 +53,7 @@ const FilterButton = ({
                 onChange={(e) => {
                     if (onChange) {
                         if (e.target.type === 'checkbox') {
-                            onChange(e.target.checked);
+                            onChange(e.target.checked, htmlId.current);
                         } else {
                             onChange(isValue(value) ? value : e.target.value);
                         }
