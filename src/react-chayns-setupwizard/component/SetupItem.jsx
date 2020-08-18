@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import withSetupWizardContext from './withSetupWizardContext';
 import { isDisabled } from '../utils/setupWizardHelper';
-import SetupItemRight from "./SetupItemRight";
+import SetupItemRight from './SetupItemRight';
 
 const SetupItem = ({
     step,
