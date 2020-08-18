@@ -23,7 +23,10 @@ export default class Slider extends PureComponent {
         this.thumb = React.createRef();
         this.dot = React.createRef();
 
+        this.preventClick = false;
+
         this.target = null;
+
         if (props.interval) {
             this.leftPercent = (((props.startValue || isNumber(props.startValue)
                 ? props.startValue : props.defaultStartValue) - props.min) / (props.max - props.min)) * 100;
@@ -116,6 +119,10 @@ export default class Slider extends PureComponent {
             endValue,
         } = this.props;
 
+        if (chayns.env.isIOS) {
+            this.preventClick = true;
+        }
+
         const width = max - min;
         const minPercent = 0;
         const maxPercent = 100;
@@ -186,6 +193,11 @@ export default class Slider extends PureComponent {
         this.setScrolling(true);
         this.bar.current.classList.remove('cc__new-slider__bar--down');
         this.onChange([onChangeEnd], stepped);
+        if (this.preventClick) {
+            setTimeout(() => {
+                this.preventClick = false;
+            }, 100);
+        }
     };
 
     innerTrackDown = (e) => {
@@ -264,6 +276,11 @@ export default class Slider extends PureComponent {
             startValue,
             endValue,
         } = this.props;
+
+        if (this.preventClick) {
+            this.preventClick = false;
+            return;
+        }
 
         const rect = this.bar.current.getBoundingClientRect();
         const clickPercent = ((e[this.clientX] - rect[this.offsetLeft]) / rect[this.clientWidth]) * 100;
