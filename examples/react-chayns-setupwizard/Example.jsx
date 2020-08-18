@@ -7,6 +7,7 @@ import Step2 from './setup/Step2';
 import Step3 from './setup/Step3';
 import Step4 from './setup/Step4';
 import Button from '../../src/react-chayns-button/component/Button';
+import Badge from '../../src/react-chayns-badge/component/Badge';
 
 export default class SetupWizardExample extends Component {
     constructor(props) {
@@ -54,7 +55,13 @@ export default class SetupWizardExample extends Component {
                             <Step1/>
                         </SetupWizardItem>
                         {chayns.env.user.isAuthenticated && (
-                            <SetupWizardItem title="Input optional">
+                            <SetupWizardItem
+                                title="Input optional"
+                                right={{
+                                    complete: <Badge>Done!</Badge>,
+                                    notComplete: <Badge>Not done</Badge>,
+                                }}
+                            >
                                 <Step2/>
                             </SetupWizardItem>
                         )}
