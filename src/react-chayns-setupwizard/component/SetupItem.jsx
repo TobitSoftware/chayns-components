@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import withSetupWizardContext from './withSetupWizardContext';
-import Badge from '../../react-chayns-badge/component/Badge';
 import { isDisabled } from '../utils/setupWizardHelper';
+import SetupItemRight from "./SetupItemRight";
 
 const SetupItem = ({
     step,
@@ -21,6 +21,7 @@ const SetupItem = ({
     currentStep,
     toStep,
     stepRequired,
+    right,
 }) => {
     useEffect(() => {
         stepRequired(required, step);
@@ -61,22 +62,10 @@ const SetupItem = ({
                     {'. '}
                     {title}
                 </div>
-                <div className="accordion__head__right">
-                    {ready
-                        ? (
-                            <Badge>
-                                <i
-                                    className="ts-check chayns__color--headline "
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        fontSize: '1rem',
-                                    }}
-                                />
-                            </Badge>
-                        )
-                        : null}
-                </div>
+                <SetupItemRight
+                    ready={ready}
+                    right={right}
+                />
             </div>
             <div className="accordion__body" style={contentStyle}>
                 {children}
@@ -102,6 +91,13 @@ SetupItem.propTypes = {
     enabledSteps: PropTypes.arrayOf(PropTypes.number),
     completedSteps: PropTypes.arrayOf(PropTypes.number),
     currentStep: PropTypes.number,
+    right: PropTypes.oneOfType([
+        PropTypes.node.isRequired,
+        PropTypes.shape({
+            complete: PropTypes.node.isRequired,
+            notComplete: PropTypes.node.isRequired,
+        }).isRequired,
+    ]),
 };
 
 SetupItem.defaultProps = {
@@ -116,6 +112,7 @@ SetupItem.defaultProps = {
     enabledSteps: [],
     completedSteps: [],
     currentStep: -1,
+    right: null,
 };
 
 SetupItem.displayName = 'SetupItem';
