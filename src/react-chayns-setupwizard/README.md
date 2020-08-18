@@ -58,8 +58,11 @@ The components got the following properties:
 
 **SetupWizardItem**:
 
-| Property   | Description                                                                                        | Type   | Required |
-|------------|----------------------------------------------------------------------------------------------------|--------|----------|
-| title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string | true     |
-| required   | Sets the **Setup-Wizard-Item** required or not required                                            | string | false    |
-| step       | step number (0-based)                                                                              | number | true     |
+| Property   | Description                                                                                        | Type                       | Required |
+|------------|----------------------------------------------------------------------------------------------------|----------------------------|----------|
+| title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string                     | true     |
+| required   | Sets the **Setup-Wizard-Item** required or not required                                            | string                     | false    |
+| step       | step number (0-based)                                                                              | number                     | true     |
+| right      | Node that get rendered in the right side of the accordion head                                     | String, node or object [1] | false    |
+
+[1]: You can set a right element for a complete, and a not complete step: ``right={{complete: <Badge>Done!</Badge>, notComplete: <Badge>Not done!</Badge>}}``.

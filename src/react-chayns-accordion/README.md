@@ -66,8 +66,8 @@ The following properties can be set
 | styleBody    | Accordion body styles                                                           | Function                   |               |
 | controlled   | When set, the open-prop updates and onChange does not update the internal state | bool                       | false         |
 
-[1]: You can set an head for an open and a close accordion: ``head={{open: <Input/>, close: 'Text'}}``.
-[2]: You can set an right element for an open and a close accordion: ``right={{open: <Input/>, close: <Badge>10</Badge>}}``.
+[1]: You can set a head for an open and a close accordion: ``head={{open: <Input/>, close: 'Text'}}``.
+[2]: You can set a right element for an open and a close accordion: ``right={{open: <Input/>, close: <Badge>10</Badge>}}``.
 
 ## Examples ##
 
