@@ -18,7 +18,6 @@ class SetupWizard extends Component {
         this.state = {
             currentStep: 0,
             maxProgress: 0,
-            operationMode: SetupWizard.operationMode.DEFAULT,
             completedSteps: this.completedSteps,
             requiredSteps: [],
             enabledSteps: [0],
