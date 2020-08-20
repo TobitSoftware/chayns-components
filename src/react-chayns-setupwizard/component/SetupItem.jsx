@@ -58,8 +58,7 @@ const SetupItem = ({
                     <i className="react-chayns-icon ts-angle-right"/>
                 </div>
                 <div className="accordion__head__title">
-                    {(typeof showStep === 'number' ? showStep : step) + 1}
-                    {'. '}
+                    {showStep !== null && `${(typeof showStep === 'number' ? showStep : step) + 1}. `}
                     {title}
                 </div>
                 <SetupItemRight

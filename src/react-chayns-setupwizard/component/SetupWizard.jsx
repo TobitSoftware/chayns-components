@@ -13,10 +13,17 @@ import { isDisabled } from '../utils/setupWizardHelper';
 class SetupWizard extends Component {
     constructor(props) {
         super(props);
+        const { initialStep } = this.props;
 
+        this.initialStep = 0;
         this.completedSteps = [-1]; // Used to fix state timing problem
+
+        if (initialStep > 0) {
+            this.initialStep = initialStep;
+        }
+
         this.state = {
-            currentStep: 0,
+            currentStep: this.initialStep,
             maxProgress: 0,
             completedSteps: this.completedSteps,
             requiredSteps: [],
@@ -43,6 +50,13 @@ class SetupWizard extends Component {
             toStep: this.toStep,
             resetToStep: this.resetToStep,
         };
+    }
+
+    componentDidMount() {
+        const { initialStep } = this.props;
+        if (initialStep > 0) {
+            this.toStep(initialStep);
+        }
     }
 
     /**
@@ -125,6 +139,7 @@ class SetupWizard extends Component {
         const {
             children,
             numberOfSteps,
+            operationMode,
         } = this.props;
         const {
             currentStep,
@@ -135,7 +150,12 @@ class SetupWizard extends Component {
         if (((numberOfSteps || (Array.isArray(children) && children.length)) - 1) >= step) {
             if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || !isDisabled(enabledSteps, step)) {
                 for (let i = 0; i <= step; i += 1) {
-                    this.stepEnabled(true, i);
+                    this.stepEnabled(
+                        operationMode === SetupWizard.operationMode.DEFAULT
+                            ? true
+                            : operationMode === SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED && i === step,
+                        i,
+                    );
                 }
                 this.setState({
                     currentStep: step,
@@ -199,9 +219,10 @@ class SetupWizard extends Component {
             description,
             children,
             className,
+            disableShowStep,
         } = this.props;
         const {
-            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps,
+            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps, operationMode,
         } = this.state;
 
         let visibleIndex = -1;
@@ -223,6 +244,7 @@ class SetupWizard extends Component {
                     currentStep,
                     contentStyle,
                     enabledSteps,
+                    operationMode,
                     stepComplete: this.stepComplete,
                     stepEnabled: this.stepEnabled,
                     stepRequired: this.stepRequired,
@@ -240,7 +262,7 @@ class SetupWizard extends Component {
                             }
                             return React.cloneElement(child, {
                                 step: index,
-                                showStep: child ? visibleIndex : -1,
+                                showStep: child && !disableShowStep ? visibleIndex : null,
                                 // eslint-disable-next-line react/no-array-index-key
                                 key: index,
                             });
@@ -252,6 +274,11 @@ class SetupWizard extends Component {
         );
     }
 }
+
+SetupWizard.operationMode = {
+    DEFAULT: 0,
+    ONLY_CURRENT_STEP_ENABLED: 1,
+};
 
 SetupWizard.propTypes = {
     children: PropTypes.oneOfType([
@@ -267,6 +294,12 @@ SetupWizard.propTypes = {
     description: PropTypes.node,
     numberOfSteps: PropTypes.number,
     allRequiredStepsCompleted: PropTypes.func,
+    initialStep: PropTypes.number,
+    disableShowStep: PropTypes.bool,
+    operationMode: PropTypes.oneOf([
+        SetupWizard.operationMode.DEFAULT,
+        SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED,
+    ]),
 };
 
 SetupWizard.defaultProps = {
@@ -280,6 +313,9 @@ SetupWizard.defaultProps = {
     className: null,
     numberOfSteps: null,
     allRequiredStepsCompleted: null,
+    initialStep: 0,
+    disableShowStep: false,
+    operationMode: SetupWizard.operationMode.DEFAULT,
 };
 
 SetupWizard.childContextTypes = {

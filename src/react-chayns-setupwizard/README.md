@@ -45,16 +45,19 @@ The components got the following properties:
 
 **SetupWizard**:
 
-| Property     | Description                                                                | Type   | Required |
-|--------------|----------------------------------------------------------------------------|--------|----------|
-| ready        | callback-function which gets called right after nextStep is called on the last step when all required steps are completed. | func | true |
-| notComplete  | callback-function which gets called after calling nextStep but step is required and not complete | func | true |
+| Property      | Description                                                                | Type   | Required |
+|---------------|----------------------------------------------------------------------------|--------|----------|
+| ready         | callback-function which gets called right after nextStep is called on the last step when all required steps are completed. | func | true |
+| notComplete   | callback-function which gets called after calling nextStep but step is required and not complete | func | true |
 | allRequiredStepsCompleted | callback-function which gets called when all required steps are completed | func | true |
-| style        | style of the wizard-root-element                                           | object | false    |
-| contentStyle | style of the wizard-content-element                                        | object | false    |
-| title        | title of the wizard                                                        | object | false    |
-| description  | description of the wizard                                                  | object | false    |
-| numberOfSteps| number of steps                                                            | number | true     |
+| style         | style of the wizard-root-element                                           | object | false    |
+| contentStyle  | style of the wizard-content-element                                        | object | false    |
+| title         | title of the wizard                                                        | object | false    |
+| description   | description of the wizard                                                  | object | false    |
+| numberOfSteps | number of steps                                                            | number | true     |
+| initialStep   | step to start with                                                         | number | false    |
+| disableShowStep | removes the number before the title                                      | bool   | false    |
+| operationMode | changes the behavior of the wizard [1]                                     | number | false    |
 
 **SetupWizardItem**:
 
@@ -63,6 +66,15 @@ The components got the following properties:
 | title      | The title which is shown in the menu over the **Setup-Wizard**-Content                             | string                     | true     |
 | required   | Sets the **Setup-Wizard-Item** required or not required                                            | string                     | false    |
 | step       | step number (0-based)                                                                              | number                     | true     |
-| right      | Node that get rendered in the right side of the accordion head                                     | String, node or object [1] | false    |
+| right      | Node that get rendered in the right side of the accordion head                                     | String, node or object [2] | false    |
 
-[1]: You can set a right element for a complete, and a not complete step: ``right={{complete: <Badge>Done!</Badge>, notComplete: <Badge>Not done!</Badge>}}``.
+[1]: You can find all operationModes in the table below.  
+[2]: You can set a right element for a complete, and a not complete step: ``right={{complete: <Badge>Done!</Badge>, notComplete: <Badge>Not done!</Badge>}}``.
+
+**OperationModes**:  
+All modes can be found at `SetupWizard.operationMode`.  
+
+| Mode                      | Number | Description |
+|---------------------------|--------|-------------|
+| DEFAULT                   | 0      | The standard behavior of the SetupWizard. |
+| ONLY_CURRENT_STEP_ENABLED | 1      | All Steps except the current Step will always be disabled after calling a function to navigate through the steps. |
