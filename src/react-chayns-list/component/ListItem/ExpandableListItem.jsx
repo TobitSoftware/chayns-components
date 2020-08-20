@@ -14,6 +14,7 @@ const ExpandableListItem = ({ children, ...props }) => {
         style,
         onOpen,
         onClose,
+        defaultOpen,
     } = props;
 
     return (
@@ -35,6 +36,7 @@ const ExpandableListItem = ({ children, ...props }) => {
             style={style}
             onOpenProp={onOpen}
             onCloseProp={onClose}
+            defaultOpen={defaultOpen}
         >
             {children}
         </AbstractExpandableListItem>
@@ -52,6 +54,7 @@ ExpandableListItem.propTypes = {
     style: PropTypes.object,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
+    defaultOpen: PropTypes.bool,
 };
 
 ExpandableListItem.defaultProps = {
@@ -61,6 +64,7 @@ ExpandableListItem.defaultProps = {
     style: null,
     onOpen: null,
     onClose: null,
+    defaultOpen: false,
 };
 
 ExpandableListItem.displayName = 'ExpandableListItem';

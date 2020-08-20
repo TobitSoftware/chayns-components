@@ -41,6 +41,11 @@ class AbstractExpandableListItem extends PureComponent {
         };
     }
 
+    componentDidMount() {
+        const { onOpen, defaultOpen } = this.props;
+        if (onOpen && defaultOpen) onOpen(this.id);
+    }
+
     componentDidUpdate(prevProps) {
         const { open: openIds, openProp } = this.props;
         const prevOpen = prevProps.openProp !== null
@@ -134,8 +139,6 @@ AbstractExpandableListItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     header: PropTypes.node.isRequired,
-    // onOpen: PropTypes.func.isRequired,
-    // onClose: PropTypes.func.isRequired,
     onOpenProp: PropTypes.func,
     onCloseProp: PropTypes.func,
     className: PropTypes.string,
@@ -144,6 +147,8 @@ AbstractExpandableListItem.propTypes = {
     openProp: PropTypes.bool,
     // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
+    defaultOpen: PropTypes.bool,
+    onOpen: PropTypes.func,
 };
 
 AbstractExpandableListItem.defaultProps = {
@@ -156,6 +161,8 @@ AbstractExpandableListItem.defaultProps = {
     style: null,
     onOpenProp: null,
     onCloseProp: null,
+    defaultOpen: false,
+    onOpen: null,
 };
 
 AbstractExpandableListItem.displayName = 'AbstractExpandableListItem';

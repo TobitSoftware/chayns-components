@@ -7,7 +7,10 @@ import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
 export default class ListExample extends Component {
     constructor(props) {
         super(props);
-        this.state = { open1: false, open2: false };
+        this.state = {
+            open1: false,
+            open2: false,
+        };
         this.tooltipRef = React.createRef();
     }
 
@@ -46,8 +49,12 @@ export default class ListExample extends Component {
                             image="https://chayns.tobit.com/storage/59140-09519/Images/icon-72.png"
                             hideIndicator
                             noContentClass
-                            onOpen={(...e) => { console.log('onOpen', ...e); }}
-                            onClose={(...e) => { console.log('onClose', ...e); }}
+                            onOpen={(...e) => {
+                                console.log('onOpen', ...e);
+                            }}
+                            onClose={(...e) => {
+                                console.log('onClose', ...e);
+                            }}
                             headerProps={{
                                 onMouseEnter: () => {
                                     this.tooltipRef.current.show();
@@ -64,8 +71,12 @@ export default class ListExample extends Component {
                         title="ListItem (accordion-style, with image)"
                         subtitle="Description"
                         image="https://chayns.tobit.com/storage/59143-10608/Images/icon-72.png"
-                        onOpen={(...e) => { console.log('onOpen', ...e); }}
-                        onClose={(...e) => { console.log('onClose', ...e); }}
+                        onOpen={(...e) => {
+                            console.log('onOpen', ...e);
+                        }}
+                        onClose={(...e) => {
+                            console.log('onClose', ...e);
+                        }}
                     >
                         Content
                     </ListItem>
@@ -74,6 +85,7 @@ export default class ListExample extends Component {
                         subtitle="Description"
                         // image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
                         icon="ts-tobit"
+                        defaultOpen
                     >
                         Content
                     </ListItem>
@@ -112,8 +124,12 @@ export default class ListExample extends Component {
                         title="ListItem (accordion-style, with image, with ContextMenu)"
                         subtitle="Description"
                         open={open1}
-                        onOpen={() => { this.setState({ open1: true }); }}
-                        onClose={() => { this.setState({ open1: false }); }}
+                        onOpen={() => {
+                            this.setState({ open1: true });
+                        }}
+                        onClose={() => {
+                            this.setState({ open1: false });
+                        }}
                         // image="https://chayns.tobit.com/storage/59143-10991/Images/icon-72.png"
                         icon="fa fa-rocket"
                         right={(
@@ -149,7 +165,9 @@ export default class ListExample extends Component {
                         `}
                     </ListItem>
                     <ListItem
-                        onClick={() => { this.setState({ open2: !open2 }); }}
+                        onClick={() => {
+                            this.setState({ open2: !open2 });
+                        }}
                         open={open2}
                         title="ListItem (button controlled)"
                         subtitle="Description"
