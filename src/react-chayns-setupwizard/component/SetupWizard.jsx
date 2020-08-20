@@ -13,10 +13,17 @@ import { isDisabled } from '../utils/setupWizardHelper';
 class SetupWizard extends Component {
     constructor(props) {
         super(props);
+        const { initialStep } = this.props;
 
+        this.initialStep = 0;
         this.completedSteps = [-1]; // Used to fix state timing problem
+
+        if (initialStep > 0) {
+            this.initialStep = initialStep;
+        }
+
         this.state = {
-            currentStep: 0,
+            currentStep: this.initialStep,
             maxProgress: 0,
             completedSteps: this.completedSteps,
             requiredSteps: [],
@@ -43,6 +50,13 @@ class SetupWizard extends Component {
             toStep: this.toStep,
             resetToStep: this.resetToStep,
         };
+    }
+
+    componentDidMount() {
+        const { initialStep } = this.props;
+        if (initialStep > 0) {
+            this.toStep(initialStep);
+        }
     }
 
     /**
@@ -267,6 +281,7 @@ SetupWizard.propTypes = {
     description: PropTypes.node,
     numberOfSteps: PropTypes.number,
     allRequiredStepsCompleted: PropTypes.func,
+    initialStep: PropTypes.number,
 };
 
 SetupWizard.defaultProps = {
@@ -280,6 +295,7 @@ SetupWizard.defaultProps = {
     className: null,
     numberOfSteps: null,
     allRequiredStepsCompleted: null,
+    initialStep: 0,
 };
 
 SetupWizard.childContextTypes = {
