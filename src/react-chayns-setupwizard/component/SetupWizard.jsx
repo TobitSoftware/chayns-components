@@ -213,6 +213,7 @@ class SetupWizard extends Component {
             description,
             children,
             className,
+            disableShowStep,
         } = this.props;
         const {
             maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps,
@@ -254,7 +255,7 @@ class SetupWizard extends Component {
                             }
                             return React.cloneElement(child, {
                                 step: index,
-                                showStep: child ? visibleIndex : -1,
+                                showStep: child && !disableShowStep ? visibleIndex : null,
                                 // eslint-disable-next-line react/no-array-index-key
                                 key: index,
                             });
@@ -282,6 +283,7 @@ SetupWizard.propTypes = {
     numberOfSteps: PropTypes.number,
     allRequiredStepsCompleted: PropTypes.func,
     initialStep: PropTypes.number,
+    disableShowStep: PropTypes.bool,
 };
 
 SetupWizard.defaultProps = {
@@ -296,6 +298,7 @@ SetupWizard.defaultProps = {
     numberOfSteps: null,
     allRequiredStepsCompleted: null,
     initialStep: 0,
+    disableShowStep: false,
 };
 
 SetupWizard.childContextTypes = {
