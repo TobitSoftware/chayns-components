@@ -139,6 +139,7 @@ class SetupWizard extends Component {
         const {
             children,
             numberOfSteps,
+            operationMode,
         } = this.props;
         const {
             currentStep,
@@ -149,7 +150,12 @@ class SetupWizard extends Component {
         if (((numberOfSteps || (Array.isArray(children) && children.length)) - 1) >= step) {
             if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || !isDisabled(enabledSteps, step)) {
                 for (let i = 0; i <= step; i += 1) {
-                    this.stepEnabled(true, i);
+                    this.stepEnabled(
+                        operationMode === SetupWizard.operationMode.DEFAULT
+                            ? true
+                            : operationMode === SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED && i === step,
+                        i,
+                    );
                 }
                 this.setState({
                     currentStep: step,
@@ -216,7 +222,7 @@ class SetupWizard extends Component {
             disableShowStep,
         } = this.props;
         const {
-            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps,
+            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps, operationMode,
         } = this.state;
 
         let visibleIndex = -1;
@@ -238,6 +244,7 @@ class SetupWizard extends Component {
                     currentStep,
                     contentStyle,
                     enabledSteps,
+                    operationMode,
                     stepComplete: this.stepComplete,
                     stepEnabled: this.stepEnabled,
                     stepRequired: this.stepRequired,
@@ -268,6 +275,11 @@ class SetupWizard extends Component {
     }
 }
 
+SetupWizard.operationMode = {
+    DEFAULT: 0,
+    ONLY_CURRENT_STEP_ENABLED: 1,
+};
+
 SetupWizard.propTypes = {
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
@@ -284,6 +296,10 @@ SetupWizard.propTypes = {
     allRequiredStepsCompleted: PropTypes.func,
     initialStep: PropTypes.number,
     disableShowStep: PropTypes.bool,
+    operationMode: PropTypes.oneOf([
+        SetupWizard.operationMode.DEFAULT,
+        SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED,
+    ]),
 };
 
 SetupWizard.defaultProps = {
@@ -297,8 +313,6 @@ SetupWizard.defaultProps = {
     className: null,
     numberOfSteps: null,
     allRequiredStepsCompleted: null,
-    initialStep: 0,
-    disableShowStep: false,
 };
 
 SetupWizard.childContextTypes = {
