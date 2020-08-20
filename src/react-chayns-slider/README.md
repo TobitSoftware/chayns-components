@@ -49,3 +49,4 @@ You can set the following props on a slider:
 | endValue       | value to control the right thumb                                                                             | number   | null    |
 | scaleOnDown    | Scale the slider on click/touch (default: only on mobile devices)                                            | bool     | null    |
 | showValueInThumb | Shows the value in the thumb                                                                               | bool     | null    |
+| thumbWidth     | Width of the thumb. Needed to prevent that the thumb protrudes from the tapp when there is text inside of it.| number   | 20      |

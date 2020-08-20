@@ -17,11 +17,14 @@ export default class Slider extends PureComponent {
         this.innerTrack = React.createRef();
         this.leftThumb = React.createRef();
         this.leftDot = React.createRef();
+        this.leftArrow = React.createRef();
         this.rightThumb = React.createRef();
         this.rightDot = React.createRef();
+        this.rightArrow = React.createRef();
         this.label = React.createRef();
         this.thumb = React.createRef();
         this.dot = React.createRef();
+        this.arrow = React.createRef();
 
         this.preventClick = false;
 
@@ -324,33 +327,39 @@ export default class Slider extends PureComponent {
             vertical,
             showValueInThumb,
         } = this.props;
+
         const { leftPercent, rightPercent, percent } = percents;
+        const multipleLeft = `${leftPercent}%`;
+        const multipleRight = `${rightPercent}%`;
+        const multipleWidth = `${rightPercent - leftPercent}%`;
+        const single = `${percent}%`;
+        let singleWidth = `${percent}%`;
+        if (vertical) {
+            singleWidth = `${100 - percent}%`;
+        }
+
         // set elements
         if (vertical) {
             if (interval) {
-                this.leftThumb.current.style[this.left] = `${leftPercent}%`;
-                this.rightThumb.current.style[this.left] = `${rightPercent}%`;
-                this.innerTrack.current.style[this.left] = `${leftPercent}%`;
-                this.innerTrack.current.style[this.width] = `${rightPercent - leftPercent}%`;
-
                 // Prevent scrolling on touch-devices
                 this.leftThumb.current.addEventListener('touchstart', preventDefault);
                 this.rightThumb.current.addEventListener('touchstart', preventDefault);
             } else {
-                this.thumb.current.style[this.left] = `${percent}%`;
-                this.innerTrack.current.style[this.width] = `${100 - percent}%`;
-
                 // Prevent scrolling on touch-devices
                 this.thumb.current.addEventListener('touchstart', preventDefault);
             }
-        } else if (interval) {
-            this.leftThumb.current.style[this.left] = `${leftPercent}%`;
-            this.rightThumb.current.style[this.left] = `${rightPercent}%`;
-            this.innerTrack.current.style[this.left] = `${leftPercent}%`;
-            this.innerTrack.current.style[this.width] = `${rightPercent - leftPercent}%`;
+        }
+        if (interval) {
+            this.leftThumb.current.style[this.left] = multipleLeft;
+            this.rightThumb.current.style[this.left] = multipleRight;
+            this.leftArrow.current.style[this.left] = multipleLeft;
+            this.rightArrow.current.style[this.left] = multipleRight;
+            this.innerTrack.current.style[this.left] = multipleLeft;
+            this.innerTrack.current.style[this.width] = multipleWidth;
         } else {
-            this.thumb.current.style[this.left] = `${percent}%`;
-            this.innerTrack.current.style[this.width] = `${percent}%`;
+            this.thumb.current.style[this.left] = single;
+            this.arrow.current.style[this.left] = single;
+            this.innerTrack.current.style[this.width] = singleWidth;
         }
 
         if (!vertical) {
@@ -446,6 +455,7 @@ export default class Slider extends PureComponent {
             this.offsetWidth = 'offsetHeight';
             this.movementX = 'movementY';
             this.left = 'top';
+            this.right = 'bottom';
             this.width = 'height';
         } else {
             this.clientX = 'clientX';
@@ -454,6 +464,7 @@ export default class Slider extends PureComponent {
             this.offsetWidth = 'offsetWidth';
             this.movementX = 'movementX';
             this.left = 'left';
+            this.right = 'right';
             this.width = 'width';
         }
     };
@@ -480,6 +491,7 @@ export default class Slider extends PureComponent {
             trackStyle,
             innerTrackStyle,
             vertical,
+            thumbWidth,
         } = this.props;
 
         return (
@@ -516,49 +528,94 @@ export default class Slider extends PureComponent {
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}
                         />
                     </div>
+                    <div
+                        className="cc__new-slider__bar__thumb-wrapper"
+                        style={{
+                            [this.width]: `calc(100% - ${(thumbWidth - 20)}px`,
+                            [`margin-${this.left}`]: `${thumbWidth / 2 - 10}px`,
+                            [`margin-${this.right}`]: `${thumbWidth / 2 - 10}px`,
+                        }}
+                    >
+                        {
+                            interval
+                                ? [
+                                    <div
+                                        key="left"
+                                        className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
+                                        onMouseDown={this.thumbDown}
+                                        onTouchStart={this.thumbDown}
+                                        ref={this.leftThumb}
+                                    >
+                                        <div
+                                            style={{ minWidth: thumbWidth, ...(thumbStyle && thumbStyle.left) }}
+                                            className="cc__new-slider__bar__thumb__dot"
+                                            ref={this.leftDot}
+                                        />
+                                    </div>,
+                                    <div
+                                        key="right"
+                                        className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-right"
+                                        onMouseDown={this.thumbDown}
+                                        onTouchStart={this.thumbDown}
+                                        ref={this.rightThumb}
+                                    >
+                                        <div
+                                            style={{ minWidth: thumbWidth, ...(thumbStyle && thumbStyle.right) }}
+                                            className="cc__new-slider__bar__thumb__dot"
+                                            ref={this.rightDot}
+                                        />
+                                    </div>,
+                                ]
+                                : (
+                                    <div
+                                        className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
+                                        onMouseDown={this.thumbDown}
+                                        onTouchStart={this.thumbDown}
+                                        ref={this.thumb}
+                                    >
+                                        <div
+                                            style={{ minWidth: thumbWidth, ...thumbStyle }}
+                                            className="cc__new-slider__bar__thumb__dot"
+                                            ref={this.dot}
+                                        />
+                                    </div>
+                                )
+                        }
+                    </div>
                     {
                         interval
                             ? [
                                 <div
+                                    style={{
+                                        background: thumbStyle?.left && (thumbStyle.left.background
+                                            || thumbStyle.left.backgroundColor
+                                            || thumbStyle.left['background-color']),
+                                    }}
+                                    ref={this.leftArrow}
                                     key="left"
-                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
-                                    onMouseDown={this.thumbDown}
-                                    onTouchStart={this.thumbDown}
-                                    ref={this.leftThumb}
-                                >
-                                    <div
-                                        style={thumbStyle && thumbStyle.left}
-                                        className="cc__new-slider__bar__thumb__dot"
-                                        ref={this.leftDot}
-                                    />
-                                </div>,
+                                    className="cc__new-slider__bar__mobile-arrow"
+                                />,
                                 <div
+                                    style={{
+                                        background: thumbStyle?.right && (thumbStyle.right.background
+                                            || thumbStyle.right.backgroundColor
+                                            || thumbStyle.right['background-color']),
+                                    }}
+                                    ref={this.rightArrow}
                                     key="right"
-                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-right"
-                                    onMouseDown={this.thumbDown}
-                                    onTouchStart={this.thumbDown}
-                                    ref={this.rightThumb}
-                                >
-                                    <div
-                                        style={thumbStyle && thumbStyle.right}
-                                        className="cc__new-slider__bar__thumb__dot"
-                                        ref={this.rightDot}
-                                    />
-                                </div>,
+                                    className="cc__new-slider__bar__mobile-arrow"
+                                />,
                             ]
                             : (
                                 <div
-                                    className="cc__new-slider__bar__thumb cc__new-slider__bar__thumb--interval-left"
-                                    onMouseDown={this.thumbDown}
-                                    onTouchStart={this.thumbDown}
-                                    ref={this.thumb}
-                                >
-                                    <div
-                                        style={thumbStyle}
-                                        className="cc__new-slider__bar__thumb__dot"
-                                        ref={this.dot}
-                                    />
-                                </div>
+                                    style={{
+                                        background: thumbStyle && (thumbStyle.background
+                                            || thumbStyle.backgroundColor
+                                            || thumbStyle['background-color']),
+                                    }}
+                                    ref={this.arrow}
+                                    className="cc__new-slider__bar__mobile-arrow"
+                                />
                             )
                     }
                 </div>
@@ -595,6 +652,7 @@ Slider.propTypes = {
     innerTrackStyle: PropTypes.object,
     showValueInThumb: PropTypes.bool,
     scaleOnDown: PropTypes.bool,
+    thumbWidth: PropTypes.number,
 };
 
 Slider.defaultProps = {
@@ -625,6 +683,7 @@ Slider.defaultProps = {
     innerTrackStyle: null,
     showValueInThumb: false,
     scaleOnDown: null,
+    thumbWidth: 20,
 };
 
 Slider.displayName = 'Slider';
