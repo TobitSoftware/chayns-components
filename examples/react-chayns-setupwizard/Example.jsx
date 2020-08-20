@@ -46,6 +46,7 @@ export default class SetupWizardExample extends Component {
                         }}
                         notComplete={this.notComplete}
                         title="Wizard"
+                        initialStep={2}
                         description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n'
                         + 'labore\n'
                         + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'

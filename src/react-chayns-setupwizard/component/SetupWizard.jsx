@@ -15,15 +15,10 @@ class SetupWizard extends Component {
         super(props);
         const { initialStep } = this.props;
 
-        this.initialStep = 0;
         this.completedSteps = [-1]; // Used to fix state timing problem
 
-        if (initialStep > 0) {
-            this.initialStep = initialStep;
-        }
-
         this.state = {
-            currentStep: this.initialStep,
+            currentStep: initialStep,
             maxProgress: 0,
             completedSteps: this.completedSteps,
             requiredSteps: [],
@@ -55,7 +50,7 @@ class SetupWizard extends Component {
     componentDidMount() {
         const { initialStep } = this.props;
         if (initialStep > 0) {
-            this.toStep(initialStep);
+            this.toStep(initialStep); // needed to enable all steps until the initial step
         }
     }
 
