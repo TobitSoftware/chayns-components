@@ -313,6 +313,9 @@ SetupWizard.defaultProps = {
     className: null,
     numberOfSteps: null,
     allRequiredStepsCompleted: null,
+    initialStep: 0,
+    disableShowStep: false,
+    operationMode: SetupWizard.operationMode.DEFAULT,
 };
 
 SetupWizard.childContextTypes = {
