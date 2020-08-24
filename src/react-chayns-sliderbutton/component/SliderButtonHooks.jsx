@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/forbid-prop-types */
 import React, {
     useState,
     useRef,
@@ -181,7 +183,7 @@ const SliderButtonHooks = (props) => {
             }
             <div
                 className={classNames(
-                    { 'button': !disabled },
+                    { button: !disabled },
                     'sliderButtonHooks__item',
                     'sliderButtonHooks__item__marker'
                 )}
