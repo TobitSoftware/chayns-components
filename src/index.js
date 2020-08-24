@@ -74,6 +74,7 @@ import SetupWizardItem from './react-chayns-setupwizard/component/SetupItem';
 import withSetupWizardContext from './react-chayns-setupwizard/component/withSetupWizardContext';
 
 import SharingBar from './react-chayns-sharingbar/component/SharingBar';
+import SliderButtonHooks from './react-chayns-sliderbutton/component/SliderButtonHooks';
 import SmallWaitCursor from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
 
 import TagInput from './react-chayns-tag_input/component/TagInput';
@@ -153,6 +154,7 @@ export {
     SetupWizardItem,
     withSetupWizardContext,
     SharingBar,
+    SliderButtonHooks,
     SmallWaitCursor,
     TagInput,
     TextArea,

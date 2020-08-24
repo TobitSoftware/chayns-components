@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './SliderButtonHooks.scss';
+import './sliderButtonHooks.css';
 
 const SliderButtonHooks = (props) => {
     const {
