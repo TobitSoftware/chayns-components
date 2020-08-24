@@ -29,5 +29,5 @@ You can set the following props on a slider:
 | onDragStart    | onDragStart-Listener that should be set on the item                                                          | Function | null    |
 | onDragStop     | onDragStop-Listener that should be set on the item                                                           | Function | null    |
 | selectedItemId | Id of the item that should be selected                                                                       | Number   | 0       |
-| disabled       | Id of the item that should be selected                                                                       | Bool     | false   |
+| disabled       | Disable SliderButton for input                                                                               | Bool     | false   |
 
