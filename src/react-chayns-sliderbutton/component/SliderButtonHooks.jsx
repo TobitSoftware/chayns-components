@@ -33,6 +33,77 @@ const SliderButtonHooks = (props) => {
     const markerRef = useRef();
     let marker = markerRef && markerRef.current;
 
+    const handleChange = (newIndex) => {
+        if (newIndex !== lastSelectedIndex) {
+            setLastSelectedIndex(newIndex);
+            onChange && onChange(items[newIndex]);
+        }
+    };
+
+    const getHoveredItemIndex = (markerPositionX = markerPosX) => {
+        if (firstItem) {
+            const markerHalfPosX = markerPositionX + firstItem.clientWidth / 2;
+            const index = Math.floor(markerHalfPosX / firstItem.clientWidth);
+
+            return index;
+        }
+
+        return 0;
+    };
+
+    const setMarkerIndex = (index) => {
+        if (firstItem && index > -1 && index < items.length) {
+            const newMarkerPosX = index * firstItem.clientWidth;
+
+            marker.animate([
+                { left: `${markerPosX}px` },
+                { left: `${newMarkerPosX}px` },
+            ], {
+                duration: 200,
+                easing: 'cubic-bezier(0.42, 0, 0.29, 1.36)',
+            }).onfinish = () => {
+                setMarkerPosX(newMarkerPosX);
+            };
+        }
+    };
+
+    const startDrag = (posX) => {
+        if (!disabled) {
+            setDragStartPosX(posX);
+            setDragStartMarkerPosX(markerPosX);
+
+            onDragStart && onDragStart();
+        }
+    };
+
+    const stopDrag = () => {
+        if (dragStartPosX) {
+            setDragStartPosX(null);
+            setDragStartMarkerPosX(null);
+            setMarkerIndex(getHoveredItemIndex());
+
+            onDragStop && onDragStop();
+        }
+    };
+
+    const handleMovement = (posX) => {
+        if (dragStartPosX) {
+            const maxMarkerPosX = sliderButton && firstItem ? sliderButton.clientWidth - firstItem.clientWidth : 0;
+            let newMarkerPosX = dragStartMarkerPosX + posX - dragStartPosX;
+
+            if (newMarkerPosX < 0) {
+                newMarkerPosX = 0;
+            } else if (newMarkerPosX > maxMarkerPosX) {
+                newMarkerPosX = maxMarkerPosX;
+            }
+
+            const newSelectedIndex = getHoveredItemIndex(newMarkerPosX);
+
+            handleChange(newSelectedIndex);
+            setMarkerPosX(newMarkerPosX);
+        }
+    };
+
     useEffect(() => {
         firstItem = firstItemRef.current;
         marker = markerRef.current;
@@ -76,77 +147,6 @@ const SliderButtonHooks = (props) => {
             listener.forEach((lst) => window.removeEventListener(lst.type, lst.cb));
         };
     });
-
-    const startDrag = (posX) => {
-        if (!disabled) {
-            setDragStartPosX(posX);
-            setDragStartMarkerPosX(markerPosX);
-
-            onDragStart && onDragStart();
-        }
-    };
-
-    const stopDrag = () => {
-        if (dragStartPosX) {
-            setDragStartPosX(null);
-            setDragStartMarkerPosX(null);
-            setMarkerIndex(getHoveredItemIndex());
-
-            onDragStop && onDragStop();
-        }
-    };
-
-    const handleMovement = (posX) => {
-        if (dragStartPosX) {
-            const maxMarkerPosX = sliderButton && firstItem ? sliderButton.clientWidth - firstItem.clientWidth : 0;
-            let newMarkerPosX = dragStartMarkerPosX + posX - dragStartPosX;
-
-            if (newMarkerPosX < 0) {
-                newMarkerPosX = 0;
-            } else if (newMarkerPosX > maxMarkerPosX) {
-                newMarkerPosX = maxMarkerPosX;
-            }
-
-            const newSelectedIndex = getHoveredItemIndex(newMarkerPosX);
-
-            handleChange(newSelectedIndex);
-            setMarkerPosX(newMarkerPosX);
-        }
-    };
-
-    const handleChange = (newIndex) => {
-        if (newIndex !== lastSelectedIndex) {
-            setLastSelectedIndex(newIndex);
-            onChange && onChange(items[newIndex]);
-        }
-    };
-
-    const getHoveredItemIndex = (markerPositionX = markerPosX) => {
-        if (firstItem) {
-            const markerHalfPosX = markerPositionX + firstItem.clientWidth / 2;
-            const index = Math.floor(markerHalfPosX / firstItem.clientWidth);
-
-            return index;
-        }
-
-        return 0;
-    };
-
-    const setMarkerIndex = (index) => {
-        if (firstItem && index > -1 && index < items.length) {
-            const newMarkerPosX = index * firstItem.clientWidth;
-
-            marker.animate([
-                { left: `${markerPosX}px` },
-                { left: `${newMarkerPosX}px` },
-            ], {
-                duration: 200,
-                easing: 'cubic-bezier(0.42, 0, 0.29, 1.36)',
-            }).onfinish = () => {
-                setMarkerPosX(newMarkerPosX);
-            };
-        }
-    };
 
     const hoveredItemIndex = getHoveredItemIndex();
 
