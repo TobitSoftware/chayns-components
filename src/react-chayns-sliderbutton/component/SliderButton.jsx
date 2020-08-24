@@ -7,9 +7,9 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './sliderButtonHooks.css';
+import './sliderButton.css';
 
-const SliderButtonHooks = (props) => {
+const SliderButton = (props) => {
     const {
         className,
         style,
@@ -155,9 +155,9 @@ const SliderButtonHooks = (props) => {
     return (
         <div
             className={classNames(
-                'sliderButtonHooks',
+                'sliderButton',
                 { [className]: className },
-                { 'sliderButtonHooks--disabled': disabled }
+                { 'sliderButton--disabled': disabled }
             )}
             style={style}
             ref={sliderButtonRef}
@@ -165,7 +165,7 @@ const SliderButtonHooks = (props) => {
             {
                 items.map((item, i) => (
                     <div
-                        className="sliderButtonHooks__item"
+                        className="sliderButton__item"
                         style={{ backgroundColor: chayns.env.site.color }}
                         ref={(ref) => {
                             if (i === 0) {
@@ -177,15 +177,15 @@ const SliderButtonHooks = (props) => {
                             handleChange(i);
                         }}
                     >
-                        <div className="sliderButtonHooks__item__content">{item.text}</div>
+                        <div className="sliderButton__item__content">{item.text}</div>
                     </div>
                 ))
             }
             <div
                 className={classNames(
                     { button: !disabled },
-                    'sliderButtonHooks__item',
-                    'sliderButtonHooks__item__marker'
+                    'sliderButton__item',
+                    'sliderButton__item__marker'
                 )}
                 style={{
                     backgroundColor: chayns.env.site.color,
@@ -199,13 +199,13 @@ const SliderButtonHooks = (props) => {
                 onTouchStart={(ev) => startDrag(ev.touches[0].clientX)}
                 ref={markerRef}
             >
-                <div className="sliderButtonHooks__item__content">{items[hoveredItemIndex].text}</div>
+                <div className="sliderButton__item__content">{items[hoveredItemIndex].text}</div>
             </div>
         </div>
     );
 };
 
-SliderButtonHooks.propTypes = {
+SliderButton.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     items: PropTypes.array,
@@ -216,7 +216,7 @@ SliderButtonHooks.propTypes = {
     disabled: PropTypes.bool,
 };
 
-SliderButtonHooks.defaultProps = {
+SliderButton.defaultProps = {
     className: null,
     style: null,
     items: [
@@ -240,4 +240,4 @@ SliderButtonHooks.defaultProps = {
     disabled: false,
 };
 
-export default SliderButtonHooks;
+export default SliderButton;

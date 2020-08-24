@@ -1,8 +1,8 @@
 import React from 'react';
-import { SliderButtonHooks } from '../../src/index';
+import { SliderButton } from '../../src/index';
 
 const SliderButtonExample = () => {
-    return (<SliderButtonHooks />);
+    return (<SliderButton />);
 };
 
 export default SliderButtonExample;
