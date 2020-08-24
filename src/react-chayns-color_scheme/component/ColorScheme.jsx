@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types,no-restricted-syntax */
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { hexStringToRgb } from '../../utils/color';
@@ -53,30 +54,32 @@ const colorNames = [
     'wrong',
 ];
 
-const ColorScheme = ({ color, colorMode, children, style, ...props }) => {
-    if (typeof chayns === 'undefined') return null;
+const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props }) => {
+    if (typeof chayns === 'undefined') return children;
 
     const colorStyles = useMemo(() => {
-        const primaryRgbColor = hexStringToRgb(color);
-        const bgRgbColor = hexStringToRgb(chayns.utils.colors.getColorFromPalette('100', color, colorMode));
-        const styles = {
-            color: 'var(--chayns-color--text)',
-            '--chayns-color-rgb': `${primaryRgbColor.r}, ${primaryRgbColor.g}, ${primaryRgbColor.b}`,
-            '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
-        };
+        if (color && typeof chayns.utils !== 'undefined') {
+            const primaryRgbColor = hexStringToRgb(color);
+            const bgRgbColor = hexStringToRgb(chayns.utils.colors.getColorFromPalette('100', color, colorMode));
+            const styles = {
+                color: 'var(--chayns-color--text)',
+                '--chayns-color-rgb': `${primaryRgbColor.r}, ${primaryRgbColor.g}, ${primaryRgbColor.b}`,
+                '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
+            };
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const colorName of colorNames) {
-            const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
-            styles[`--chayns-color--${colorName}`] = hexColor;
-            const rgbColor = hexStringToRgb(hexColor);
-            styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+            for (const colorName of colorNames) {
+                const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
+                styles[`--chayns-color--${colorName}`] = hexColor;
+                const rgbColor = hexStringToRgb(hexColor);
+                styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+            }
+            return styles;
         }
-        return styles;
+        return null;
     }, [color, colorMode]);
 
     return (
-        <div style={{ ...style, ...colorStyles }} {...props}>
+        <div style={{ ...style, ...colorStyles, ...cssVariables }} {...props}>
             {children}
         </div>
     );
@@ -86,14 +89,17 @@ ColorScheme.propTypes = {
     color: PropTypes.string,
     colorMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     children: PropTypes.node.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
+    cssVariables: PropTypes.object,
 };
 
 ColorScheme.defaultProps = {
-    color: chayns.env.site.color,
-    colorMode: chayns.env.site.colorMode,
+    color: typeof chayns !== 'undefined' ? chayns.env.site.color : '',
+    colorMode: typeof chayns !== 'undefined' ? chayns.env.site.colorMode : '',
     style: {},
+    cssVariables: {},
 };
+
+ColorScheme.displayName = 'ColorScheme';
 
 export default memo(ColorScheme);

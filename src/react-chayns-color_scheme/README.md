@@ -20,10 +20,11 @@ You can use the ColorScheme like in the [example](https://github.com/TobitSoftwa
 
 The component got the following properties:
 
-| Property      | Description                                       | Type          | Default                   | 
-|---------------|---------------------------------------------------|---------------|---------------------------|
-| color         | Color used for children components                | string        | chayns.env.site.color     |
-| colorMode     | Color mode used for children components           | string/number | chayns.env.site.colorMode |
-| children      | Children                                          | node          | *required*                |
-| style         | Style set to the ColorScheme component            | object        | {}                        |
-| other props   | Additional props set to the ColorScheme component | objects       | -                         |
+| Property      | Description                                               | Type          | Default                   | 
+|---------------|-----------------------------------------------------------|---------------|---------------------------|
+| color         | Color used for children components                        | string        | chayns.env.site.color     |
+| colorMode     | Color mode used for children components                   | string/number | chayns.env.site.colorMode |
+| children      | Children                                                  | node          | *required*                |
+| style         | Style set to the ColorScheme component                    | object        | {}                        |
+| cssVariables  | Additional CSS Variables set to the ColorScheme component | object        | {}                        |
+| other props   | Additional props set to the ColorScheme component         | objects       | -                         |
