@@ -1,0 +1,45 @@
+.sliderButtonHooks {
+    $borderRadius: 4px;
+
+    display: inline-flex;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+
+    &__item {
+        min-width: 0;
+        width: 64px;
+        height: 36px !important;
+        text-align: center;
+        opacity: .4;
+
+        &__content {
+            display: inline-block;
+            top: 50%;
+            position: relative;
+            transform: translateY(-50%);
+        }
+
+        &__marker {
+            position: absolute;
+            left: 0px;
+            opacity: 1;
+            border-radius: $borderRadius;
+        }
+
+        &:first-child {
+            border-top-left-radius: $borderRadius;
+            border-bottom-left-radius: $borderRadius;
+        }
+
+        &:nth-last-child(2) {
+            border-top-right-radius: $borderRadius;
+            border-bottom-right-radius: $borderRadius;
+        }
+    }
+
+    &--disabled {
+        opacity: .5;
+    }
+}
