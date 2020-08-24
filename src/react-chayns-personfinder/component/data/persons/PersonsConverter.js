@@ -4,22 +4,22 @@ export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
     // due to inconsistent naming of the backends
     const fullName = relation.fullName
-        || relation.name
+        || relation.name || relation.UserFullName
         || [(relation.firstName || relation.firstname), (relation.lastName || relation.lastname)].join(' ').trim();
 
     return {
         type: 'PERSON',
-        id: relation.personId,
+        id: relation.personId || relation.PersonID,
         name: fullName,
-        userId: relation.userId,
-        personId: relation.personId,
+        userId: relation.userId || relation.UserID,
+        personId: relation.personId || relation.PersonID,
         fullName,
-        firstName: relation.firstName,
-        lastName: relation.lastName,
+        firstName: relation.firstName || relation.firstname || relation.FirstName,
+        lastName: relation.lastName || relation.lastname || relation.LastName,
         relations: relation.relations,
         relationCount: relation.relationCount,
-        imageUrl: `https://sub60.tobit.com/u/${relation.personId}?size=50`,
-        isFriend: FriendsHelper.isFriend(relation.personId),
+        imageUrl: `https://sub60.tobit.com/u/${relation.personId || relation.PersonID}?size=50`,
+        isFriend: FriendsHelper.isFriend(relation.personId || relation.PersonID),
     };
 };
 

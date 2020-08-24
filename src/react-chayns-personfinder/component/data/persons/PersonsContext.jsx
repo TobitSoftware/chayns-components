@@ -18,12 +18,36 @@ import FriendsHelper from './FriendsHelper';
 
 const ObjectMapping = {
     groups: [
-        { key: 'friends', lang: { de: 'Freunde', en: 'friends' }, show: (value) => !value },
-        { key: 'personsRelated', lang: { de: 'Personen', en: 'persons' }, show: (value) => value && value.length >= 3 },
-        { key: 'sites', lang: { de: 'Sites', en: 'friends' }, show: (value) => value && value.length >= 3 },
+        {
+            key: 'friends',
+            lang: {
+                de: 'Freunde',
+                en: 'friends',
+            },
+            show: (value) => !value,
+        },
+        {
+            key: 'personsRelated',
+            lang: {
+                de: 'Personen',
+                en: 'persons',
+            },
+            show: (value) => value && value.length >= 3,
+        },
+        {
+            key: 'sites',
+            lang: {
+                de: 'Sites',
+                en: 'friends',
+            },
+            show: (value) => value && value.length >= 3,
+        },
         {
             key: 'personsUnrelated',
-            lang: { de: 'Weitere Personen', en: 'further friends' },
+            lang: {
+                de: 'Weitere Personen',
+                en: 'further friends',
+            },
             show: (value) => value && value.length >= 3,
         },
     ],
@@ -62,14 +86,18 @@ const PersonFinderStateProvider = ({
         if (!enableFriends) return undefined;
 
         // Use event listener to update all contexts if friends change
-        const friendsListener = () => dispatch({ type: 'RECEIVE_FRIENDS', data: [] });
+        const friendsListener = () => dispatch({
+            type: 'RECEIVE_FRIENDS',
+            data: [],
+        });
         friendsListener(FriendsHelper.getFriendsList());
         FriendsHelper.addUpdateListener(friendsListener);
 
         return () => FriendsHelper.removeUpdateListener(friendsListener);
     }, [enableFriends]);
 
-    const loadPersons = useCallback(async (value, clear = false) => {
+    const loadPersons = useCallback(async (inputValue, clear = false) => {
+        const value = inputValue.trim();
         if (value.length < 3 || !enablePersons || uacId) return;
 
         dispatch({
@@ -83,6 +111,12 @@ const PersonFinderStateProvider = ({
 
         const persons = await fetchPersons(value, skipPersons, take);
         const convertedPersons = convertPersons(persons);
+        if (value.match(/^[0-9]{3}-[0-9]{5}$/g)) {
+            const user = convertPerson(await chayns.getUser({ personId: value }));
+            if (user.id !== null) {
+                convertedPersons.personsRelated = [user, ...convertedPersons.personsRelated];
+            }
+        }
         const hasMore = {
             personsRelated: convertedPersons.personsRelated.length === take,
             personsUnrelated: persons.length === take,
@@ -102,7 +136,8 @@ const PersonFinderStateProvider = ({
 
         // prepend own user when prop is used, user is logged in and name matches
         if (includeOwn && clear && chayns.env.user.isAuthenticated && ownUser.fullName
-            && ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())) {
+            && ownUser.fullName.toLowerCase()
+                .startsWith(value.toLowerCase())) {
             convertedPersons.personsRelated.unshift(ownUser);
         }
 
@@ -127,7 +162,10 @@ const PersonFinderStateProvider = ({
 
         const persons = await fetchUacPersons(uacId, locationId)(value, skipPersons, take);
         const convertedPersons = convertPersons(persons);
-        const hasMore = { personsRelated: false, personsUnrelated: false };
+        const hasMore = {
+            personsRelated: false,
+            personsUnrelated: false,
+        };
 
         dispatch({
             type: 'RECEIVE_PERSONS',
