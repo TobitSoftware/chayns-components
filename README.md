@@ -79,6 +79,7 @@ The following components are part of this package:
 | [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
 | [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
+| [react-chayns-sliderbutton](/src/react-chayns-sliderbutton/)             | SliderButton Component      | [Readme](/src/react-chayns-sliderbutton/README.md)       |
 <!--- end component list -->
 
 ## Internal Components ##
