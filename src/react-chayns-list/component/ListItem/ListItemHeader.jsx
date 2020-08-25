@@ -12,6 +12,7 @@ const ListItemHeader = ({
     className,
     left,
     right,
+    circle,
     ...otherProps
 }) => (
     <div
@@ -21,7 +22,9 @@ const ListItemHeader = ({
         {left}
         {image && (
             <div
-                className="list-item__image"
+                className={classnames('list-item__image', {
+                    'list-item__image--circle': circle,
+                })}
                 style={{
                     backgroundImage: `url(${image})`,
                 }}
@@ -29,7 +32,9 @@ const ListItemHeader = ({
         )}
         {icon && (
             <Icon
-                className="list-item__icon chayns__background-color--102 chayns__color--headline"
+                className={classnames('list-item__icon chayns__background-color--102 chayns__color--headline', {
+                    'list-item__icon--circle': circle,
+                })}
                 icon={icon}
             />
         )}
@@ -76,6 +81,7 @@ ListItemHeader.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    circle: PropTypes.bool,
 };
 
 ListItemHeader.defaultProps = {
@@ -85,6 +91,7 @@ ListItemHeader.defaultProps = {
     className: null,
     left: null,
     right: null,
+    circle: false,
 };
 
 ListItemHeader.displayName = 'ListItemHeader';

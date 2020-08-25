@@ -13,6 +13,7 @@ const ListItem = ({
     onClick,
     right,
     style,
+    circle,
     headerProps,
     ...props
 }) => (
@@ -32,6 +33,7 @@ const ListItem = ({
             className={className}
             right={right}
             style={style && style.head ? style.head : null}
+            circle={circle}
             {...headerProps}
         />
     </div>
@@ -56,6 +58,7 @@ ListItem.propTypes = {
     ]),
     style: PropTypes.object,
     headerProps: PropTypes.object,
+    circle: PropTypes.bool,
 };
 
 ListItem.defaultProps = {
@@ -67,6 +70,7 @@ ListItem.defaultProps = {
     right: null,
     style: null,
     headerProps: null,
+    circle: false,
 };
 
 ListItem.displayName = 'ListItem';

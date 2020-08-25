@@ -23,6 +23,8 @@ export default class ListExample extends Component {
                         title="ListItem"
                         subtitle="Description"
                         notExpandable
+                        icon="ts-chayns"
+                        circle
                     />
                     <ListItem
                         title="ListItem (clickable)"
@@ -71,6 +73,7 @@ export default class ListExample extends Component {
                         title="ListItem (accordion-style, with image)"
                         subtitle="Description"
                         image="https://chayns.tobit.com/storage/59143-10608/Images/icon-72.png"
+                        circle
                         onOpen={(...e) => {
                             console.log('onOpen', ...e);
                         }}
