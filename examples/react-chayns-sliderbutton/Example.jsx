@@ -11,6 +11,14 @@ const SliderButtonExample = () => {
                     onDragStop={() => console.log('DRAG STOP')}
                     selectedItemId={1}
                 />
+                <SliderButton
+                    style={{ marginLeft: '16px' }}
+                    onChange={console.log}
+                    onDragStart={() => console.log('DRAG START')}
+                    onDragStop={() => console.log('DRAG STOP')}
+                    selectedItemId={1}
+                    disabled
+                />
             </div>
             <div style={{ marginTop: '8px' }}>
                 <SliderButton
