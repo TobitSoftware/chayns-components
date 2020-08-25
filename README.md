@@ -75,11 +75,11 @@ The following components are part of this package:
 | [react-chayns-setupwizard](/src/react-chayns-setupwizard/)               | SetupWizard Component       | [Readme](/src/react-chayns-setupwizard/README.md)        |
 | [react-chayns-sharingbar](/src/react-chayns-sharingbar/)                 | SharingBar Component        | [Readme](/src/react-chayns-sharingbar/README.md)         |
 | [react-chayns-slider](/src/react-chayns-slider/)                         | Slider Component            | [Readme](/src/react-chayns-slider/README.md)             |
+| [react-chayns-sliderbutton](/src/react-chayns-sliderbutton/)             | SliderButton Component      | [Readme](/src/react-chayns-sliderbutton/README.md)       |
 | [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/)       | SmallWaitCursor Component   | [Readme](/src/react-chayns-smallwaitcursor/README.md)    |
 | [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
 | [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
-| [react-chayns-sliderbutton](/src/react-chayns-sliderbutton/)             | SliderButton Component      | [Readme](/src/react-chayns-sliderbutton/README.md)       |
 <!--- end component list -->
 
 ## Internal Components ##
