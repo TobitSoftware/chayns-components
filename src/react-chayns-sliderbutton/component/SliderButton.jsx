@@ -241,4 +241,6 @@ SliderButton.defaultProps = {
     disabled: false,
 };
 
+SliderButton.displayName = 'SliderButton';
+
 export default SliderButton;
