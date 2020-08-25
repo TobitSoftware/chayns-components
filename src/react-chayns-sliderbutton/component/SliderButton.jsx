@@ -209,7 +209,10 @@ const SliderButton = (props) => {
 SliderButton.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
-    items: PropTypes.array,
+    items: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.any,
+        text: PropTypes.string,
+    })),
     onChange: PropTypes.func,
     onDragStop: PropTypes.func,
     onDragStart: PropTypes.func,
