@@ -457,6 +457,8 @@ export default class Slider extends PureComponent {
             this.left = 'top';
             this.right = 'bottom';
             this.width = 'height';
+            this.marginLeft = 'marginTop';
+            this.marginRight = 'marginBottom';
         } else {
             this.clientX = 'clientX';
             this.clientWidth = 'width';
@@ -466,6 +468,8 @@ export default class Slider extends PureComponent {
             this.left = 'left';
             this.right = 'right';
             this.width = 'width';
+            this.marginLeft = 'marginLeft';
+            this.marginRight = 'marginRight';
         }
     };
 
@@ -532,8 +536,8 @@ export default class Slider extends PureComponent {
                         className="cc__new-slider__bar__thumb-wrapper"
                         style={{
                             [this.width]: `calc(100% - ${(thumbWidth - 20)}px`,
-                            [`margin-${this.left}`]: `${thumbWidth / 2 - 10}px`,
-                            [`margin-${this.right}`]: `${thumbWidth / 2 - 10}px`,
+                            [this.marginLeft]: `${thumbWidth / 2 - 10}px`,
+                            [this.marginRight]: `${thumbWidth / 2 - 10}px`,
                         }}
                     >
                         {
