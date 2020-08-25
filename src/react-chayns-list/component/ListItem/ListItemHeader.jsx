@@ -54,9 +54,21 @@ const ListItemHeader = ({
         )}
         <div className="list-item__spacer"/>
         {right && (
-            <div className="list-item__right">
-                {right}
-            </div>
+            Array.isArray(right) ? (
+                <div className="list-item__right list-item__right--column">
+                    {right.map((node) => {
+                        if (typeof node === 'string') {
+                            return <div key={node} className="list-item__right--column__text">{node}</div>;
+                        }
+                        return node;
+                    })}
+                </div>
+            ) : (
+                <div className="list-item__right">
+                    {right}
+                </div>
+            )
+
         )}
     </div>
 );

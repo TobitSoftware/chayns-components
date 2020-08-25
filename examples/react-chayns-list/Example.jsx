@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { ContextMenu, List, ListItem } from '../../src/index';
 import Button from '../../src/react-chayns-button/component/Button';
 import Tooltip from '../../src/react-chayns-tooltip/component/Tooltip';
+import Icon from '../../src/react-chayns-icon/component/Icon';
+import Badge from '../../src/react-chayns-badge/component/Badge';
 
 export default class ListExample extends Component {
     constructor(props) {
@@ -215,6 +217,29 @@ export default class ListExample extends Component {
                 >
                     Open/Close
                 </Button>
+                <List>
+                    <ListItem
+                        title="Lorem ipsum dolor sit amet"
+                        subtitle="Leo Benz"
+                        image="https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg"
+                        circle
+                        right={['09:04', <Icon icon="fa fa-paperclip"/>]}
+                    />
+                    <ListItem
+                        title="Releasenote chayns-components"
+                        subtitle="Rosie Santiago"
+                        image="https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg"
+                        circle
+                        right={['09:02', <Badge>5</Badge>]}
+                    />
+                    <ListItem
+                        title="Meeting Tuesday"
+                        subtitle="Fatima Chalis"
+                        image="https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg"
+                        circle
+                        right={['08:41']}
+                    />
+                </List>
             </div>
         );
     }
