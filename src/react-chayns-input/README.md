@@ -34,12 +34,14 @@ The following properties can be set on the Input-Component
 | regExp       | The input will check if the entered text is valid (see Regular Expressions)       | string, RegExp |               |
 | inputRef     | Exposes the input DOM Ref to the parent component                                 | func           |               |
 | invalid      | Marks the input as invalid                                                        | bool           | false         |
-| icon         | Icon shown on the right side (only dynamic input)                                 | string/object  |               |
+| icon         | Icon shown on the right side (only dynamic input and border-design)               | string/object  |               |
 | onIconClick  | Icon onClick Event (only dynamic input)                                           | func           | clear value   |
 | dynamic      | Use dynamic input                                                                 | bool           | false         |
 | customProps  | CustomProps for the html input element                                            | object         |               |
 | stopPropagation | Stops the click propagation to parent elements                                 | bool           | false         |
 | required     | Input is invalid if there is no value                                             | bool           | false         |
 | disabled     | Disables the input                                                                | bool           | false         |
+| design       | Design of the input (``Input.DEFAULT_DESIGN`` or ``Input.BORDER_DESIGN``)         | number         | 0             |
+| iconLeft     | Icon on the left side of the input (only border-design)                           | string/object  | null          |
 
 Note: The functions onEnter, onChange and onBlur return three values: the input value, if the input is valid and the event.

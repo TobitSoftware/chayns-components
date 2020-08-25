@@ -93,6 +93,7 @@ export default class Input extends PureComponent {
             type,
             dynamic,
             icon,
+            iconLeft,
             wrapperRef,
             invalid,
             onIconClick,
@@ -102,8 +103,57 @@ export default class Input extends PureComponent {
             stopPropagation,
             customProps,
             disabled,
+            design,
         } = this.props;
         const { valid, right, initial } = this.state;
+
+        if (design === Input.BORDER_DESIGN) {
+            return (
+                <div
+                    className={classNames('input--border-design', {
+                        'input--disabled': disabled,
+                        'input--border-design--invalid': !valid || invalid,
+                    })}
+                    onClick={() => {
+                        this.ref.focus();
+                    }}
+                >
+                    {iconLeft && <Icon icon={iconLeft} className="input__icon-left"/>}
+                    <input
+                        placeholder={placeholder}
+                        style={style}
+                        ref={this.setRef}
+                        className={className}
+                        value={value}
+                        defaultValue={defaultValue}
+                        onKeyUp={this.onKeyUp}
+                        onKeyDown={onKeyDown}
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        onFocus={onFocus}
+                        type={type || 'text'}
+                        id={id || this.id}
+                        required
+                        onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                        disabled={disabled}
+                        {...customProps}
+                    />
+                    {icon && (
+                        <Icon
+                            icon={icon}
+                            style={onIconClick ? {
+                                pointerEvents: 'all',
+                            } : null}
+                            className="input__icon-right"
+                            onClick={onIconClick ? (e) => {
+                                onIconClick(e);
+                                e.stopPropagation();
+                            } : null}
+                        />
+                    )}
+                </div>
+            );
+        }
 
         if (dynamic) {
             return (
@@ -187,6 +237,9 @@ export default class Input extends PureComponent {
     }
 }
 
+Input.DEFAULT_DESIGN = 0;
+Input.BORDER_DESIGN = 1;
+
 Input.propTypes = {
     className: PropTypes.string,
     onKeyUp: PropTypes.func,
@@ -212,6 +265,8 @@ Input.propTypes = {
     stopPropagation: PropTypes.bool,
     required: PropTypes.bool,
     disabled: PropTypes.bool,
+    design: PropTypes.number,
+    iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
 
 Input.defaultProps = {
@@ -239,6 +294,8 @@ Input.defaultProps = {
     stopPropagation: false,
     required: false,
     disabled: false,
+    design: Input.DEFAULT_DESIGN,
+    iconLeft: null,
 };
 
 Input.displayName = 'Input';

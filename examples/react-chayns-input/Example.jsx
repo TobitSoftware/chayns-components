@@ -170,6 +170,47 @@ export default class InputExample extends PureComponent {
                         dynamic
                     />
                 </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon="ts-calling-code"
+                        iconLeft="fa fa-search"
+                        onIconClick={console.log}
+                        design={Input.BORDER_DESIGN}
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon="ts-calling-code"
+                        iconLeft="fa fa-search"
+                        onIconClick={console.log}
+                        design={Input.BORDER_DESIGN}
+                        disabled
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon="ts-calling-code"
+                        iconLeft="fa fa-search"
+                        onIconClick={console.log}
+                        design={Input.BORDER_DESIGN}
+                        invalid
+                    />
+                </div>
             </div>
         );
     }
