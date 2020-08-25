@@ -165,6 +165,7 @@ const SliderButton = (props) => {
             {
                 items.map((item, i) => (
                     <div
+                        key={item.id}
                         className="sliderButton__item"
                         style={{ backgroundColor: chayns.env.site.color }}
                         ref={(ref) => {
