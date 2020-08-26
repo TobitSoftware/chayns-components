@@ -1,13 +1,9 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/forbid-prop-types */
-import React, {
-    useState,
-    useRef,
-    useEffect,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './sliderButton.css';
+import './SliderButton.scss';
 
 const SliderButton = (props) => {
     const {
@@ -45,9 +41,7 @@ const SliderButton = (props) => {
     const getHoveredItemIndex = (markerPositionX = markerPosX) => {
         if (firstItem) {
             const markerHalfPosX = markerPositionX + firstItem.clientWidth / 2;
-            const index = Math.floor(markerHalfPosX / firstItem.clientWidth);
-
-            return index;
+            return Math.floor(markerHalfPosX / firstItem.clientWidth);
         }
 
         return 0;
@@ -171,7 +165,7 @@ const SliderButton = (props) => {
                 items.map((item, i) => (
                     <div
                         key={item.id}
-                        className="sliderButton__item"
+                        className="sliderButton__item button"
                         style={{ backgroundColor: chayns.env.site.color }}
                         ref={(ref) => {
                             if (i === 0) {
@@ -191,9 +185,8 @@ const SliderButton = (props) => {
             }
             <div
                 className={classNames(
-                    { button: !disabled },
-                    'sliderButton__item',
-                    'sliderButton__item__marker'
+                    'sliderButton__item__marker',
+                    'button'
                 )}
                 style={{
                     backgroundColor: chayns.env.site.color,

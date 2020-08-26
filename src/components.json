@@ -223,4 +223,9 @@
   "title": "ColorScheme",
   "example": "react-chayns-color_scheme/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-sliderbutton",
+  "title": "SliderButton",
+  "example": "react-chayns-sliderbutton/Example.jsx",
+  "readme": true
 }]

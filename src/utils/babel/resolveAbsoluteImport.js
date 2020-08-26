@@ -63,6 +63,7 @@ module.exports = function resolveAbsoluteImport(importName) {
         Tooltip: 'react-chayns-tooltip/component/Tooltip.js',
         FileInput: 'react-chayns-file_input/component/FileInput.js',
         Slider: 'react-chayns-slider/component/Slider.js',
+        SliderButton: 'react-chayns-sliderbutton/component/SliderButton.js',
         imageUpload: 'utils/imageUpload.js',
         createLinks: 'utils/createLinks.js',
         removeHtml: 'utils/removeHtml.js',

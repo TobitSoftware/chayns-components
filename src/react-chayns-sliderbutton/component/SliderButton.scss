@@ -1,0 +1,40 @@
+.sliderButton {
+  $borderRadius: 4px;
+  $itemWidth: 64px;
+
+  display: inline-flex;
+  user-select: none;
+  position: relative;
+
+  &__item {
+    width: $itemWidth;
+    opacity: .4;
+    border-radius: 0;
+    box-shadow: none;
+
+    &:after{
+      content: none !important;
+    }
+
+    &__marker {
+      position: absolute;
+      left: 0;
+      width: $itemWidth;
+    }
+
+    &:first-child {
+      border-top-left-radius: $borderRadius;
+      border-bottom-left-radius: $borderRadius;
+    }
+
+    &:nth-last-child(2) {
+      border-top-right-radius: $borderRadius;
+      border-bottom-right-radius: $borderRadius;
+    }
+  }
+
+  &--disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+}
