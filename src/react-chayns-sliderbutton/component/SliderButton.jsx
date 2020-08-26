@@ -58,18 +58,15 @@ const SliderButton = (props) => {
             const newMarkerPosX = index * firstItem.clientWidth;
 
             // Element.animate() does not work on iOS, so we need transition
-            const onAnimationEnd = () => setMarkerPosX(newMarkerPosX);
-
-            marker.style.left = `${newMarkerPosX}px`;
+            setMarkerPosX(newMarkerPosX);
             marker.style.transition = 'left 0.2s cubic-bezier(0.42, 0, 0.29, 1.36)';
-            marker.removeEventListener('webkitTransitionEnd', onAnimationEnd);
-            marker.addEventListener('webkitTransitionEnd', onAnimationEnd);
         }
     };
 
     const startDrag = (posX) => {
         if (!disabled) {
             // Element.animate() does not work on iOS, so we need transition
+            // Transition have to be removed if the user drags the marker
             marker.style.transition = '';
 
             setDragStartPosX(posX);
