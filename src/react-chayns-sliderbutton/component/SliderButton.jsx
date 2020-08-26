@@ -59,6 +59,7 @@ const SliderButton = (props) => {
 
             // Element.animate() does not work on iOS, so we need transition
             setMarkerPosX(newMarkerPosX);
+            setLastSelectedIndex(index);
             marker.style.transition = 'left 0.2s cubic-bezier(0.42, 0, 0.29, 1.36)';
         }
     };
