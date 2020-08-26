@@ -43,11 +43,12 @@ const ComboBox = ({
         };
     }, [showOverlay, onHide]);
 
-    useEffect(() => {
-        if (onSelect && list && list.length > 0 && listKey && selected !== null && selected !== undefined) {
-            onSelect(getItem(selected));
+    const select = (selection) => {
+        setSelected(selection);
+        if (onSelect && list && list.length > 0 && listKey && selection !== null && selection !== undefined) {
+            onSelect(getItem(selection));
         }
-    }, [selected]);
+    };
 
     const onButtonClick = useCallback((e) => {
         if (stopPropagation) e.stopPropagation();
@@ -64,7 +65,7 @@ const ComboBox = ({
             })
                 .then((result) => {
                     if (result.buttonType === 1 && result.selection && result.selection[0]) {
-                        setSelected(result.selection[0].value);
+                        select(result.selection[0].value);
                     }
                 });
         } else {
@@ -74,10 +75,10 @@ const ComboBox = ({
     }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation]);
 
     const onItemClick = useCallback((e) => {
-        setSelected(e.target.id);
+        select(e.target.id);
         setShowOverlay(false);
         if (stopPropagation) e.stopPropagation();
-    }, [setSelected, setShowOverlay, onSelect, list, listKey, stopPropagation]);
+    }, [setShowOverlay, onSelect, list, listKey, stopPropagation]);
 
     return [
         <Button
