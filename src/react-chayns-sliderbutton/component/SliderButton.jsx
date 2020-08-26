@@ -83,9 +83,11 @@ const SliderButton = (props) => {
         if (dragStartPosX) {
             setDragStartPosX(null);
             setDragStartMarkerPosX(null);
-            setMarkerIndex(getHoveredItemIndex());
 
-            onDragStop && onDragStop();
+            const hoveredItemIndex = getHoveredItemIndex();
+            setMarkerIndex(hoveredItemIndex);
+
+            onDragStop && onDragStop(items[hoveredItemIndex]);
         }
     };
 
@@ -175,8 +177,10 @@ const SliderButton = (props) => {
                             }
                         }}
                         onClick={() => {
-                            setMarkerIndex(i);
-                            handleChange(i);
+                            if (!disabled) {
+                                setMarkerIndex(i);
+                                handleChange(i);
+                            }
                         }}
                     >
                         <div className="sliderButton__item__content">{item.text}</div>
