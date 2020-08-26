@@ -8,14 +8,15 @@ const SliderButtonExample = () => {
                 <SliderButton
                     onChange={console.log}
                     onDragStart={() => console.log('DRAG START')}
-                    onDragStop={() => console.log('DRAG STOP')}
+                    onDragStop={(data) => console.log('DRAG STOP', data)}
                     selectedItemId={1}
                 />
+            </div>
+            <div style={{ marginTop: '8px' }}>
                 <SliderButton
-                    style={{ marginLeft: '16px' }}
                     onChange={console.log}
                     onDragStart={() => console.log('DRAG START')}
-                    onDragStop={() => console.log('DRAG STOP')}
+                    onDragStop={(data) => console.log('DRAG STOP', data)}
                     selectedItemId={1}
                     disabled
                 />
@@ -24,7 +25,7 @@ const SliderButtonExample = () => {
                 <SliderButton
                     onChange={console.log}
                     onDragStart={() => console.log('DRAG START')}
-                    onDragStop={() => console.log('DRAG STOP')}
+                    onDragStop={(data) => console.log('DRAG STOP', data)}
                     items={[
                         {
                             id: 0,
@@ -46,14 +47,6 @@ const SliderButtonExample = () => {
                             id: 4,
                             text: 'Fr.',
                         },
-                        {
-                            id: 5,
-                            text: 'Sa.',
-                        },
-                        {
-                            id: 6,
-                            text: 'So.',
-                        },
                     ]}
                     selectedItemId={2}
                 />
@@ -62,7 +55,7 @@ const SliderButtonExample = () => {
                 <SliderButton
                     onChange={console.log}
                     onDragStart={() => console.log('DRAG START')}
-                    onDragStop={() => console.log('DRAG STOP')}
+                    onDragStop={(data) => console.log('DRAG STOP', data)}
                     items={[
                         {
                             id: 0,
@@ -83,10 +76,6 @@ const SliderButtonExample = () => {
                         {
                             id: 4,
                             text: '5',
-                        },
-                        {
-                            id: 5,
-                            text: '6',
                         },
                     ]}
                     selectedItemId={4}
