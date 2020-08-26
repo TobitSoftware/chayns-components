@@ -1,4 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/forbid-prop-types,no-nested-ternary */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -56,7 +56,7 @@ export default class Slider extends PureComponent {
         this.setElements(stepped);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         const {
             interval,
             min,
@@ -67,17 +67,23 @@ export default class Slider extends PureComponent {
             value,
         } = this.props;
 
-        if (isNumber(value) || (startValue && endValue)) {
+        if (isNumber(value) || (startValue && endValue) || prevProps.min !== min || prevProps.max !== max) {
             if (interval) {
-                this.leftPercent = ((startValue - min) / (max - min)) * 100;
-                this.rightPercent = ((endValue - min) / (max - min)) * 100;
+                let start = typeof startValue === 'number' ? startValue : this.getRealValue(this.leftPercent, prevProps.min, prevProps.max);
+                let end = typeof endValue === 'number' ? endValue : this.getRealValue(this.rightPercent, prevProps.min, prevProps.max);
+                start = start > max ? max : (start < min ? min : start);
+                end = end > max ? max : (end < min ? min : end);
+                this.leftPercent = ((start - min) / (max - min)) * 100;
+                this.rightPercent = ((end - min) / (max - min)) * 100;
                 if (vertical) {
                     const left = this.leftPercent;
                     this.leftPercent = 100 - this.rightPercent;
                     this.rightPercent = 100 - left;
                 }
             } else {
-                this.percent = ((value - min) / (max - min)) * 100;
+                let v = typeof value === 'number' ? value : this.getRealValue(this.percent, prevProps.min, prevProps.max);
+                v = v > max ? max : (v < min ? min : v);
+                this.percent = ((v - min) / (max - min)) * 100;
                 if (vertical) {
                     this.percent = 100 - this.percent;
                 }
@@ -320,12 +326,12 @@ export default class Slider extends PureComponent {
     setElements = (percents) => {
         const {
             valueFormatter,
-            min,
-            max,
             showLabel,
             interval,
             vertical,
             showValueInThumb,
+            min,
+            max,
         } = this.props;
 
         const { leftPercent, rightPercent, percent } = percents;
@@ -363,10 +369,9 @@ export default class Slider extends PureComponent {
         }
 
         if (!vertical) {
-            const realInterval = max - min;
             if (interval) {
-                const left = min + ((realInterval * leftPercent) / 100);
-                const right = min + ((realInterval * rightPercent) / 100);
+                const left = this.getRealValue(leftPercent, min, max);
+                const right = this.getRealValue(rightPercent, min, max);
                 if (showLabel) {
                     this.label.current.innerText = valueFormatter(left, right);
                 }
@@ -375,7 +380,7 @@ export default class Slider extends PureComponent {
                     this.rightDot.current.innerText = valueFormatter(right);
                 }
             } else {
-                const value = min + ((realInterval * percent) / 100);
+                const value = this.getRealValue(percent, min, max);
                 if (showLabel) {
                     this.label.current.innerText = valueFormatter(value);
                 }
@@ -385,6 +390,8 @@ export default class Slider extends PureComponent {
             }
         }
     };
+
+    getRealValue = (percent, min, max) => min + (((max - min) * percent) / 100);
 
     getSteppedPercents = (percents) => {
         const {
