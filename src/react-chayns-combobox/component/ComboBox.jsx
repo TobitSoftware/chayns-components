@@ -30,6 +30,8 @@ const ComboBox = ({
         }
     }, []);
 
+    const getItem = (key) => list.find((item) => String(item[listKey]) === String(key));
+
     useEffect(() => {
         if (showOverlay) {
             window.addEventListener('click', onHide);
@@ -41,22 +43,41 @@ const ComboBox = ({
         };
     }, [showOverlay, onHide]);
 
+    useEffect(() => {
+        if (onSelect && list && list.length > 0 && listKey && selected !== null && selected !== undefined) {
+            onSelect(getItem(selected));
+        }
+    }, [selected]);
+
     const onButtonClick = useCallback((e) => {
-        setPosition(e.target.getBoundingClientRect());
-        setShowOverlay(!showOverlay);
-        setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
         if (stopPropagation) e.stopPropagation();
-    }, [setPosition, setShowOverlay, setMinWidth, showOverlay]);
+        setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
+        if (chayns.env.isMobile) {
+            const items = list.map((item) => ({
+                name: item[listValue],
+                value: item[listKey],
+                isSelected: item[listKey] === selected,
+            }));
+            chayns.dialog.select({
+                list: items,
+                buttons: [],
+            })
+                .then((result) => {
+                    if (result.buttonType === 1 && result.selection && result.selection[0]) {
+                        setSelected(result.selection[0].value);
+                    }
+                });
+        } else {
+            setPosition(e.target.getBoundingClientRect());
+            setShowOverlay(!showOverlay);
+        }
+    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation]);
 
     const onItemClick = useCallback((e) => {
-        const selection = e.target.id;
-        if (onSelect && list && list.length > 0 && listKey && selection) {
-            onSelect(list.find((item) => String(item[listKey]) === selection));
-        }
-        setSelected(selection);
+        setSelected(e.target.id);
         setShowOverlay(false);
         if (stopPropagation) e.stopPropagation();
-    }, [setSelected, setShowOverlay, onSelect, list, listKey]);
+    }, [setSelected, setShowOverlay, onSelect, list, listKey, stopPropagation]);
 
     return [
         <Button
@@ -67,7 +88,11 @@ const ComboBox = ({
             className={classNames('cc__combo-box', className, { 'cc__combo-box--disabled': disabled })}
             style={{ minWidth, ...style }}
         >
-            <div className="cc__combo-box__label">{selected ? list.find((item) => String(item[listKey]) === selected)[listValue] : label}</div>
+            <div
+                className="cc__combo-box__label"
+            >
+                {selected !== null && selected !== undefined ? getItem(selected)[listValue] : label}
+            </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-caret-down"/>
         </Button>,
         <TappPortal parent={parent} key="combobox-portal">
