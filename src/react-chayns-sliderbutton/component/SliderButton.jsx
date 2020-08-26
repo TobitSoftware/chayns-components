@@ -65,6 +65,8 @@ const SliderButton = (props) => {
 
     const startDrag = (posX) => {
         if (!disabled) {
+            chayns.disallowRefreshScroll();
+
             // Element.animate() does not work on iOS, so we need transition
             // Transition have to be removed if the user drags the marker
             marker.style.transition = '';
@@ -78,6 +80,8 @@ const SliderButton = (props) => {
 
     const stopDrag = () => {
         if (dragStartPosX) {
+            chayns.allowRefreshScroll();
+
             setDragStartPosX(null);
             setDragStartMarkerPosX(null);
 
