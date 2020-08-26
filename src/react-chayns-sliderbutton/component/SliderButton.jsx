@@ -24,7 +24,7 @@ const SliderButton = (props) => {
     const [markerPosX, setMarkerPosX] = useState(0);
     const [dragStartPosX, setDragStartPosX] = useState(null);
     const [dragStartMarkerPosX, setDragStartMarkerPosX] = useState(null);
-    const [lastSelectedIndex, setLastSelectedIndex] = useState(0);
+    const [lastSelectedIndex, setLastSelectedIndex] = useState(selectedItemId);
 
     const sliderButtonRef = useRef();
     const sliderButton = sliderButtonRef && sliderButtonRef.current;
