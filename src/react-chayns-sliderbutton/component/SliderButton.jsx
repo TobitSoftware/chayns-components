@@ -57,20 +57,18 @@ const SliderButton = (props) => {
         if (firstItem && index > -1 && index < items.length) {
             const newMarkerPosX = index * firstItem.clientWidth;
 
-            marker.animate([
-                { left: `${markerPosX}px` },
-                { left: `${newMarkerPosX}px` },
-            ], {
-                duration: 200,
-                easing: 'cubic-bezier(0.42, 0, 0.29, 1.36)',
-            }).onfinish = () => {
-                setMarkerPosX(newMarkerPosX);
-            };
+            // Element.animate() does not work on iOS, so we need transition
+            setMarkerPosX(newMarkerPosX);
+            marker.style.transition = 'left 0.2s cubic-bezier(0.42, 0, 0.29, 1.36)';
         }
     };
 
     const startDrag = (posX) => {
         if (!disabled) {
+            // Element.animate() does not work on iOS, so we need transition
+            // Transition have to be removed if the user drags the marker
+            marker.style.transition = '';
+
             setDragStartPosX(posX);
             setDragStartMarkerPosX(markerPosX);
 
@@ -82,9 +80,11 @@ const SliderButton = (props) => {
         if (dragStartPosX) {
             setDragStartPosX(null);
             setDragStartMarkerPosX(null);
-            setMarkerIndex(getHoveredItemIndex());
 
-            onDragStop && onDragStop();
+            const hoveredItemIndex = getHoveredItemIndex();
+            setMarkerIndex(hoveredItemIndex);
+
+            onDragStop && onDragStop(items[hoveredItemIndex]);
         }
     };
 
@@ -174,8 +174,10 @@ const SliderButton = (props) => {
                             }
                         }}
                         onClick={() => {
-                            setMarkerIndex(i);
-                            handleChange(i);
+                            if (!disabled) {
+                                setMarkerIndex(i);
+                                handleChange(i);
+                            }
                         }}
                     >
                         <div className="sliderButton__item__content">{item.text}</div>
