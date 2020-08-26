@@ -185,7 +185,7 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Finden"
+                        placeholder="Finden (disabled)"
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}

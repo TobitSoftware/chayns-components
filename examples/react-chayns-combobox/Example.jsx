@@ -1,9 +1,18 @@
 import React, { PureComponent } from 'react';
-
 import { ComboBox } from '../../src/index';
-import Button from '../../src/react-chayns-button/component/Button';
 
 export default class ComboBoxExample extends PureComponent {
+    constructor() {
+        super();
+        this.longList = [];
+        for (let i = 0; i < 100; i += 1) {
+            this.longList.push({
+                key: i,
+                value: i.toString(),
+            });
+        }
+    }
+
     render() {
         const pizza = [
             {
@@ -26,10 +35,7 @@ export default class ComboBoxExample extends PureComponent {
         ];
 
         return (
-            <div>
-                <div style={{ marginBottom: '20px' }}>
-                    <Button secondary>Secondary Button</Button>
-                </div>
+            <div style={{ marginBottom: '300px' }}>
                 <div style={{ marginBottom: '20px' }}>
                     <ComboBox
                         label="Select Pizza"
@@ -39,7 +45,6 @@ export default class ComboBoxExample extends PureComponent {
                         }}
                         listKey="id"
                         listValue="name"
-                        htmlSelect
                         stopPropagation
                     />
                 </div>
@@ -52,7 +57,6 @@ export default class ComboBoxExample extends PureComponent {
                         listKey="id"
                         listValue="name"
                         defaultValue="2"
-                        htmlSelect
                     />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
@@ -64,8 +68,18 @@ export default class ComboBoxExample extends PureComponent {
                         }}
                         listKey="id"
                         listValue="name"
-                        htmlSelect
                         disabled
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <ComboBox
+                        label="Long list"
+                        list={this.longList}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="key"
+                        listValue="value"
                     />
                 </div>
             </div>
