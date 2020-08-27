@@ -110,20 +110,19 @@ export default class Input extends PureComponent {
         if (design === Input.BORDER_DESIGN) {
             return (
                 <div
-                    className={classNames('input--border-design', {
+                    className={classNames('input--border-design', className, {
                         'input--disabled': disabled,
                         'input--border-design--invalid': !valid || invalid,
                     })}
                     onClick={() => {
                         this.ref.focus();
                     }}
+                    style={style}
                 >
                     {iconLeft && <Icon icon={iconLeft} className="input__icon-left"/>}
                     <input
                         placeholder={placeholder}
-                        style={style}
                         ref={this.setRef}
-                        className={className}
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
