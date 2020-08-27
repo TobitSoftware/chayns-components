@@ -11,8 +11,10 @@
     opacity: .4;
     border-radius: 0;
     box-shadow: none;
+    pointer-events: auto;
+    cursor: pointer;
 
-    &:after{
+    &:after {
       content: none !important;
     }
 

@@ -165,8 +165,7 @@ const SliderButton = (props) => {
                 items.map((item, i) => (
                     <div
                         key={item.id}
-                        className="sliderButton__item button"
-                        style={{ backgroundColor: chayns.env.site.color }}
+                        className="sliderButton__item button button--disabled" // disabled to remove hover animation
                         ref={(ref) => {
                             if (i === 0) {
                                 firstItemRef.current = ref;
@@ -189,7 +188,6 @@ const SliderButton = (props) => {
                     'button'
                 )}
                 style={{
-                    backgroundColor: chayns.env.site.color,
                     left: `${markerPosX}px`,
                 }}
                 onMouseDown={(ev) => {
