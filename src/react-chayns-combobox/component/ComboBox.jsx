@@ -77,13 +77,13 @@ const ComboBox = ({
             setPosition(e.target.getBoundingClientRect());
             setShowOverlay(!showOverlay);
         }
-    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation]);
+    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation, list, listKey, listValue, select]);
 
     const onItemClick = useCallback((e) => {
         select(e.target.id);
         setShowOverlay(false);
         if (stopPropagation) e.stopPropagation();
-    }, [setShowOverlay, onSelect, list, listKey, stopPropagation]);
+    }, [setShowOverlay, onSelect, list, listKey, stopPropagation, select]);
 
     return [
         <Button
@@ -95,7 +95,7 @@ const ComboBox = ({
             style={{ minWidth, ...style }}
         >
             <div
-                className="cc__combo-box__label"
+                className="cc__combo-box__label ellipsis"
             >
                 {(selected === null || selected === undefined) && label ? label : getItem(selected)[listValue]}
             </div>
