@@ -18,7 +18,7 @@ const ComboBox = ({
         width: 0,
     });
     const [showOverlay, setShowOverlay] = useState(false);
-    const [selected, setSelected] = useState(defaultValue || label ? defaultValue : 0);
+    const [selected, setSelected] = useState(defaultValue);
     const [minWidth, setMinWidth] = useState('0px');
 
     const overlayRef = useRef(null);
@@ -30,7 +30,12 @@ const ComboBox = ({
         }
     }, []);
 
-    const getItem = (key) => list.find((item) => String(item[listKey]) === String(key));
+    const getItem = (key) => {
+        if (key === null || key === undefined) {
+            return list[0];
+        }
+        return list.find((item) => String(item[listKey]) === String(key));
+    };
 
     useEffect(() => {
         if (showOverlay) {
@@ -92,7 +97,7 @@ const ComboBox = ({
             <div
                 className="cc__combo-box__label"
             >
-                {selected !== null && selected !== undefined ? getItem(selected)[listValue] : label}
+                {(selected === null || selected === undefined) && label ? label : getItem(selected)[listValue]}
             </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-caret-down"/>
         </Button>,

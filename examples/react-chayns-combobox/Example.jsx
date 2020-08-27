@@ -61,6 +61,16 @@ export default class ComboBoxExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <ComboBox
+                        list={pizza}
+                        onSelect={(value) => {
+                            console.log(value);
+                        }}
+                        listKey="id"
+                        listValue="name"
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <ComboBox
                         label="Select Pizza"
                         list={pizza}
                         onSelect={(value) => {
