@@ -528,12 +528,12 @@ export default class Slider extends PureComponent {
                     ref={this.bar}
                 >
                     <div
-                        className="cc__new-slider__bar__track chayns__background-color--102"
+                        className="cc__new-slider__bar__track chayns__background-color--402"
                         onClick={this.trackDown}
                         style={trackStyle}
                     >
                         <div
-                            className="cc__new-slider__bar__track__inner chayns__background-color--primary"
+                            className="cc__new-slider__bar__track__inner chayns__background-color--408"
                             onMouseDown={this.innerTrackDown}
                             ref={this.innerTrack}
                             style={{ ...innerTrackStyle, ...(interval ? { left: 0 } : null) }}

@@ -28,7 +28,7 @@ const ColorSchemeExample = () => {
                 style={{ fontSize: `${fontSize}px` }}
                 cssVariables={{ '--fa-secondary-opacity': faOpacity }}
             >
-                <div>
+                <div className="chayns__background-color--cw-body-background">
                     <ColorPicker color={color} onChangeEnd={onColorChangeEnd} bubblePosition={Bubble.position.BOTTOM_RIGHT}/>
                     <RadioButton name="colormode" value={0} onChange={setColorMode} defaultChecked={chayns.env.site.colorMode === 0}>
                         Default ColorMode

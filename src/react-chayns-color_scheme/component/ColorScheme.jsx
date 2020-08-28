@@ -3,57 +3,6 @@ import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { hexStringToRgb } from '../../utils/color';
 
-const colorNames = [
-    '000',
-    '001',
-    '002',
-    '003',
-    '004',
-    '005',
-    '006',
-    '007',
-    '008',
-    '009',
-    '100',
-    '101',
-    '102',
-    '103',
-    '104',
-    '105',
-    '106',
-    '107',
-    '108',
-    '109',
-    '200',
-    '201',
-    '202',
-    '203',
-    '204',
-    '205',
-    '206',
-    '207',
-    '208',
-    '209',
-    '300',
-    '301',
-    '302',
-    '303',
-    '304',
-    '305',
-    '306',
-    '307',
-    '308',
-    '309',
-    'primary',
-    'headline',
-    'text',
-    'depend-on-brightness',
-    'cw-body-background',
-    'red',
-    'green',
-    'wrong',
-];
-
 const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props }) => {
     if (typeof chayns === 'undefined') return children;
 
@@ -67,7 +16,7 @@ const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props
                 '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
             };
 
-            for (const colorName of colorNames) {
+            for (const colorName of chayns.utils.colors.getAvailableColorList()) {
                 const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
                 styles[`--chayns-color--${colorName}`] = hexColor;
                 const rgbColor = hexStringToRgb(hexColor);
