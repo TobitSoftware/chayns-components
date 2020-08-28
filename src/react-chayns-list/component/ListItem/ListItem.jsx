@@ -15,6 +15,13 @@ const ListItem = ({
     style,
     circle,
     headerProps,
+    hoverItem,
+    onLongPress,
+    onMouseDown,
+    onMouseUp,
+    onTouchStart,
+    onTouchEnd,
+    onTouchCancel,
     ...props
 }) => (
     <div
@@ -34,6 +41,13 @@ const ListItem = ({
             right={right}
             style={style && style.head ? style.head : null}
             circle={circle}
+            hoverItem={hoverItem}
+            onLongPress={onLongPress}
+            onKeyDown={onMouseDown}
+            onKeyUp={onMouseUp}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            onTouchCancel={onTouchCancel}
             {...headerProps}
         />
     </div>
@@ -59,6 +73,16 @@ ListItem.propTypes = {
     style: PropTypes.object,
     headerProps: PropTypes.object,
     circle: PropTypes.bool,
+    hoverItem: PropTypes.node,
+    onLongPress: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onTouchStart: PropTypes.func,
+    onTouchMove: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchCancel: PropTypes.func,
+    longPressTimeout: PropTypes.number,
 };
 
 ListItem.defaultProps = {
@@ -71,6 +95,16 @@ ListItem.defaultProps = {
     style: null,
     headerProps: null,
     circle: false,
+    hoverItem: null,
+    onLongPress: null,
+    onMouseDown: null,
+    onMouseMove: null,
+    onMouseUp: null,
+    onTouchStart: null,
+    onTouchMove: null,
+    onTouchEnd: null,
+    onTouchCancel: null,
+    longPressTimeout: 450,
 };
 
 ListItem.displayName = 'ListItem';

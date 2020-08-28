@@ -66,6 +66,16 @@ You can use the List like this:
 | headerProps   | Props applied to the head of the ListItem                                                                                       | Object         |               |
 | defaultOpen   | default opening state                                                                                                           | bool           | false         |
 | circle        | renders the image/icon as a circle                                                                                              | bool           | false         |
+| hoverItem     | item which is shown on the right side of the item on hover                                                                      | node           | null          |
+| onLongPress   | event which gets triggered on long press                                                                                        | func           | false         |
+| longPressTimeout | press duration for the onLongPress event                                                                                     | number         | 450           |
+| onMouseDown   | onMouseDown event                                                                                                               | func           | null          |
+| onMouseMove   | onMouseMove event                                                                                                               | func           | null          |
+| onMouseUp     | onMouseUp event                                                                                                                 | func           | null          |
+| onTouchStart  | onTouchStart event                                                                                                              | func           | null          |
+| onTouchMove   | onTouchMove event                                                                                                               | func           | null          |
+| onTouchEnd    | onTouchEnd event                                                                                                                | func           | null          |
+| onTouchCancel | onTouchCancel event                                                                                                             | func           | null          |
 
 ## Example ##
 

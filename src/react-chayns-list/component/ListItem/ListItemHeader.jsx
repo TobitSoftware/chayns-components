@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from '../../../react-chayns-icon/component/Icon';
@@ -13,65 +13,121 @@ const ListItemHeader = ({
     left,
     right,
     circle,
+    hoverItem,
+    onLongPress,
+    longPressTimeout,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    onTouchCancel,
     ...otherProps
-}) => (
-    <div
-        className={classnames('list-item__header', className)}
-        {...otherProps}
-    >
-        {left}
-        {image && (
-            <div
-                className={classnames('list-item__image', {
-                    'list-item__image--circle': circle,
-                })}
-                style={{
-                    backgroundImage: `url(${image})`,
-                }}
-            />
-        )}
-        {icon && (
-            <Icon
-                className={classnames('list-item__icon chayns__background-color--102 chayns__color--headline', {
-                    'list-item__icon--circle': circle,
-                })}
-                icon={icon}
-            />
-        )}
-        {(title || subtitle) && (
-            <div className="list-item__titles">
-                {title && (
-                    <div className="list-item__title ellipsis">
-                        {title}
-                    </div>
-                )}
-                {subtitle && (
-                    <div className="list-item__subtitle ellipsis">
-                        {subtitle}
-                    </div>
-                )}
-            </div>
-        )}
-        <div className="list-item__spacer"/>
-        {right && (
-            Array.isArray(right) ? (
-                <div className="list-item__right list-item__right--column">
-                    {right.map((node) => {
-                        if (typeof node === 'string') {
-                            return <div key={node} className="list-item__right--column__text">{node}</div>;
-                        }
-                        return node;
-                    })}
-                </div>
-            ) : (
-                <div className="list-item__right">
-                    {right}
-                </div>
-            )
+}) => {
+    const timeout = useRef(null);
+    const onStart = useCallback((event) => {
+        if (event.type === 'mousedown' && onMouseDown) {
+            onMouseDown(event);
+        } else if (event.type === 'touchstart' && onTouchStart) {
+            onTouchStart(event);
+        }
+        if (onLongPress) {
+            timeout.current = setTimeout(() => {
+                onLongPress(event);
+            }, longPressTimeout);
+        }
+    }, [onMouseDown, onTouchStart, onLongPress]);
+    const onEnd = useCallback((event) => {
+        if (event.type === 'mousemove' && onMouseMove) {
+            onMouseMove(event);
+        } else if (event.type === 'mouseup' && onMouseUp) {
+            onMouseUp(event);
+        } else if (event.type === 'touchmove' && onTouchMove) {
+            onTouchMove(event);
+        } else if (event.type === 'touchend' && onTouchEnd) {
+            onTouchEnd(event);
+        } else if (event.type === 'touchcancel' && onTouchCancel) {
+            onTouchCancel(event);
+        }
+        if (onLongPress) {
+            clearTimeout(timeout.current);
+        }
+    }, [onMouseUp, onTouchEnd, onTouchCancel, onLongPress]);
 
-        )}
-    </div>
-);
+    return (
+        <div
+            className={classnames('list-item__header', className)}
+            onMouseDown={onMouseDown || onLongPress ? onStart : null}
+            onMouseMove={onMouseMove || onLongPress ? onEnd : null}
+            onMouseUp={onMouseUp || onLongPress ? onEnd : null}
+            onTouchStart={onTouchStart || onLongPress ? onStart : null}
+            onTouchMove={onTouchMove || onLongPress ? onEnd : null}
+            onTouchEnd={onTouchEnd || onLongPress ? onEnd : null}
+            onTouchCancel={onTouchCancel || onLongPress ? onEnd : null}
+            {...otherProps}
+        >
+            {left}
+            {image && (
+                <div
+                    className={classnames('list-item__image', {
+                        'list-item__image--circle': circle,
+                    })}
+                    style={{
+                        backgroundImage: `url(${image})`,
+                    }}
+                />
+            )}
+            {icon && (
+                <Icon
+                    className={classnames('list-item__icon chayns__background-color--102 chayns__color--headline', {
+                        'list-item__icon--circle': circle,
+                    })}
+                    icon={icon}
+                />
+            )}
+            {(title || subtitle) && (
+                <div className="list-item__titles">
+                    {title && (
+                        <div className="list-item__title ellipsis">
+                            {title}
+                        </div>
+                    )}
+                    {subtitle && (
+                        <div className="list-item__subtitle ellipsis">
+                            {subtitle}
+                        </div>
+                    )}
+                </div>
+            )}
+            <div className="list-item__spacer"/>
+            {right && (
+                Array.isArray(right) ? (
+                    <div className="list-item__right list-item__right--column">
+                        {right.map((node) => {
+                            if (typeof node === 'string') {
+                                return <div key={node} className="list-item__right--column__text">{node}</div>;
+                            }
+                            return node;
+                        })}
+                    </div>
+                ) : (
+                    <div className="list-item__right">
+                        {right}
+                    </div>
+                )
+
+            )}
+            {
+                hoverItem && (
+                    <div className="list-item__hover-item" tabIndex={-1}>
+                        {hoverItem}
+                    </div>
+                )
+            }
+        </div>
+    );
+};
 
 ListItemHeader.propTypes = {
     title: PropTypes.oneOfType([
@@ -94,6 +150,16 @@ ListItemHeader.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     circle: PropTypes.bool,
+    hoverItem: PropTypes.node,
+    onLongPress: PropTypes.func,
+    onMouseDown: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    onMouseUp: PropTypes.func,
+    onTouchStart: PropTypes.func,
+    onTouchMove: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchCancel: PropTypes.func,
+    longPressTimeout: PropTypes.number,
 };
 
 ListItemHeader.defaultProps = {
@@ -104,6 +170,16 @@ ListItemHeader.defaultProps = {
     left: null,
     right: null,
     circle: false,
+    hoverItem: null,
+    onLongPress: null,
+    onMouseDown: null,
+    onMouseMove: null,
+    onMouseUp: null,
+    onTouchStart: null,
+    onTouchMove: null,
+    onTouchEnd: null,
+    onTouchCancel: null,
+    longPressTimeout: 450,
 };
 
 ListItemHeader.displayName = 'ListItemHeader';

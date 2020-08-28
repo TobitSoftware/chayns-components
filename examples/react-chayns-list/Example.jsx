@@ -18,6 +18,24 @@ export default class ListExample extends Component {
 
     render() {
         const { open1, open2 } = this.state;
+
+        const contextMenuItems = [{
+            icon: 'ts-plus',
+            onClick: () => chayns.dialog.alert('Create'),
+            text: 'Create',
+            name: 'Create',
+        }, {
+            icon: 'ts-trash',
+            onClick: () => chayns.dialog.alert('Delete'),
+            text: 'Delete',
+            name: 'Delete',
+        }];
+
+        const onLongPress = () => {
+            chayns.vibrate(50);
+            chayns.dialog.select({ list: contextMenuItems });
+        };
+
         return (
             <div>
                 <List>
@@ -147,15 +165,7 @@ export default class ListExample extends Component {
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <ContextMenu
-                                    items={[{
-                                        icon: 'ts-plus',
-                                        onClick: () => chayns.dialog.alert('Create'),
-                                        text: 'Create',
-                                    }, {
-                                        icon: 'ts-trash',
-                                        onClick: () => chayns.dialog.alert('Delete'),
-                                        text: 'Delete',
-                                    }]}
+                                    items={contextMenuItems}
                                 />
                             </div>
                         )}
@@ -224,6 +234,8 @@ export default class ListExample extends Component {
                         image="https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg"
                         circle
                         right={['09:04', <Icon icon="fa fa-paperclip"/>]}
+                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Releasenote chayns-components"
@@ -231,6 +243,8 @@ export default class ListExample extends Component {
                         image="https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg"
                         circle
                         right={['09:02', <Badge>5</Badge>]}
+                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Meeting Tuesday"
@@ -238,6 +252,8 @@ export default class ListExample extends Component {
                         image="https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg"
                         circle
                         right={['08:41']}
+                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                 </List>
             </div>
