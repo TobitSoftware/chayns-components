@@ -39,7 +39,7 @@ const SliderButton = (props) => {
     };
 
     const getHoveredItemIndex = (markerPositionX = markerPosX) => {
-        if (firstItem) {
+        if (firstItem && firstItem.clientWidth > 0) {
             const markerHalfPosX = markerPositionX + firstItem.clientWidth / 2;
             return Math.floor(markerHalfPosX / firstItem.clientWidth);
         }
@@ -156,7 +156,7 @@ const SliderButton = (props) => {
             className={classNames(
                 'sliderButton',
                 { [className]: className },
-                { 'sliderButton--disabled': disabled }
+                { 'sliderButton--disabled': disabled },
             )}
             style={style}
             ref={sliderButtonRef}
@@ -185,7 +185,7 @@ const SliderButton = (props) => {
             <div
                 className={classNames(
                     'sliderButton__item__marker',
-                    'button'
+                    'button',
                 )}
                 style={{
                     left: `${markerPosX}px`,
