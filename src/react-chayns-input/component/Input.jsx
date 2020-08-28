@@ -111,6 +111,7 @@ export default class Input extends PureComponent {
             return (
                 <div
                     className={classNames('input--border-design', className, {
+                        'input--label-right': right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input--disabled': disabled,
                         'input--border-design--invalid': !valid || invalid,
                     })}
@@ -121,7 +122,7 @@ export default class Input extends PureComponent {
                 >
                     {iconLeft && <Icon icon={iconLeft} className="input__icon-left"/>}
                     <input
-                        placeholder={placeholder}
+                        placeholder={dynamic && !chayns.env.isMobile ? null : placeholder}
                         ref={this.setRef}
                         value={value}
                         defaultValue={defaultValue}
@@ -137,6 +138,15 @@ export default class Input extends PureComponent {
                         disabled={disabled}
                         {...customProps}
                     />
+                    {dynamic && !chayns.env.isMobile && placeholder
+                    && (
+                        <label
+                            htmlFor={id || this.id}
+                        >
+                            {placeholder}
+                        </label>
+                    )
+                    }
                     {icon && (
                         <Icon
                             icon={icon}

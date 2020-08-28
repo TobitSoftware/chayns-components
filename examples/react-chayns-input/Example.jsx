@@ -211,6 +211,41 @@ export default class InputExample extends PureComponent {
                         invalid
                     />
                 </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden (invalid)"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        design={Input.BORDER_DESIGN}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden (invalid)"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        design={Input.BORDER_DESIGN}
+                        dynamic
+                        disabled
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Finden (invalid)"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        design={Input.BORDER_DESIGN}
+                        dynamic
+                        invalid
+                    />
+                </div>
             </div>
         );
     }
