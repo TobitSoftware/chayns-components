@@ -27,5 +27,4 @@ The component got the following properties:
 | children      | Children                                                  | node          | *required*                |
 | style         | Style set to the ColorScheme component                    | object        | {}                        |
 | cssVariables  | Additional CSS Variables set to the ColorScheme component | object        | {}                        |
-| setWindowFunction | Sets a window function to change the colorScheme      | bool          | false                     |
 | other props   | Additional props set to the ColorScheme component         | objects       | -                         |
