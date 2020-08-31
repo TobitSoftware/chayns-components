@@ -324,8 +324,8 @@ Accordion.propTypes = {
     right: PropTypes.oneOfType([
         PropTypes.node.isRequired,
         PropTypes.shape({
-            open: PropTypes.node.isRequired,
-            close: PropTypes.node.isRequired,
+            open: PropTypes.node,
+            close: PropTypes.node,
         }).isRequired,
     ]),
     renderClosed: PropTypes.bool,
