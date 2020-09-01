@@ -13,7 +13,8 @@ const ExpandableListHeader = ({
     hideIndicator,
     right,
     style,
-    ...headerProps
+    headerProps,
+    ...props
 }) => (
     <ListItemHeader
         title={title}
@@ -30,6 +31,7 @@ const ExpandableListHeader = ({
             </div>
         )}
         style={style && style.head ? style.head : null}
+        {...props}
         {...headerProps}
     />
 );

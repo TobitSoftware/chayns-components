@@ -23,6 +23,11 @@ const ListItemHeader = ({
     onTouchMove,
     onTouchEnd,
     onTouchCancel,
+    notExpandable,
+    noContentClass,
+    onOpen,
+    headerProps,
+    defaultOpen,
     ...otherProps
 }) => {
     const timeout = useRef(null);
@@ -160,6 +165,11 @@ ListItemHeader.propTypes = {
     onTouchEnd: PropTypes.func,
     onTouchCancel: PropTypes.func,
     longPressTimeout: PropTypes.number,
+    notExpandable: PropTypes.bool,
+    noContentClass: PropTypes.bool,
+    onOpen: PropTypes.func,
+    headerProps: PropTypes.object,
+    defaultOpen: PropTypes.bool,
 };
 
 ListItemHeader.defaultProps = {
@@ -180,6 +190,11 @@ ListItemHeader.defaultProps = {
     onTouchEnd: null,
     onTouchCancel: null,
     longPressTimeout: 450,
+    notExpandable: null,
+    noContentClass: null,
+    onOpen: null,
+    headerProps: null,
+    defaultOpen: null,
 };
 
 ListItemHeader.displayName = 'ListItemHeader';

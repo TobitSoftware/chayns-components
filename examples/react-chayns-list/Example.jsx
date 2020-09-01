@@ -186,7 +186,7 @@ export default class ListExample extends Component {
                         open={open2}
                         title="ListItem (button controlled)"
                         subtitle="Description"
-                        image="https://chayns.tobit.com/storage/70231-10288/Images/icon-72.png"
+                        image="http://broken url.png"
                         right={(
                             <div
                                 style={{
@@ -233,7 +233,7 @@ export default class ListExample extends Component {
                         subtitle="Leo Benz"
                         image="https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg"
                         circle
-                        right={['09:04', <Icon icon="fa fa-paperclip"/>]}
+                        right={['09:04', <Icon key="icon" icon="fa fa-paperclip"/>]}
                         hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
@@ -242,7 +242,7 @@ export default class ListExample extends Component {
                         subtitle="Rosie Santiago"
                         image="https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg"
                         circle
-                        right={['09:02', <Badge>5</Badge>]}
+                        right={['09:02', <Badge key="badge">5</Badge>]}
                         hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />

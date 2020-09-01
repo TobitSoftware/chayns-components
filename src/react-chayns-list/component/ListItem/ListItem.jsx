@@ -22,6 +22,10 @@ const ListItem = ({
     onTouchStart,
     onTouchEnd,
     onTouchCancel,
+    longPressTimeout,
+    notExpandable,
+    noContentClass,
+    onOpen,
     ...props
 }) => (
     <div
@@ -42,6 +46,7 @@ const ListItem = ({
             style={style && style.head ? style.head : null}
             circle={circle}
             hoverItem={hoverItem}
+            longPressTimeout={longPressTimeout}
             onLongPress={onLongPress}
             onKeyDown={onMouseDown}
             onKeyUp={onMouseUp}
@@ -83,6 +88,9 @@ ListItem.propTypes = {
     onTouchEnd: PropTypes.func,
     onTouchCancel: PropTypes.func,
     longPressTimeout: PropTypes.number,
+    notExpandable: PropTypes.bool,
+    noContentClass: PropTypes.bool,
+    onOpen: PropTypes.func,
 };
 
 ListItem.defaultProps = {
@@ -105,6 +113,9 @@ ListItem.defaultProps = {
     onTouchEnd: null,
     onTouchCancel: null,
     longPressTimeout: 450,
+    notExpandable: null,
+    noContentClass: null,
+    onOpen: null,
 };
 
 ListItem.displayName = 'ListItem';
