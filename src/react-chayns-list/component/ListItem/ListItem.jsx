@@ -8,6 +8,7 @@ const ListItem = ({
     title,
     subtitle,
     image,
+    images,
     icon,
     className,
     onClick,
@@ -40,6 +41,7 @@ const ListItem = ({
             subtitle={subtitle}
             onClick={onClick}
             image={image}
+            images={images}
             icon={icon}
             className={className}
             right={right}
@@ -68,6 +70,7 @@ ListItem.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     image: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string),
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,
     onClick: PropTypes.func,
@@ -96,6 +99,7 @@ ListItem.propTypes = {
 ListItem.defaultProps = {
     subtitle: null,
     image: null,
+    images: null,
     icon: null,
     className: null,
     onClick: null,

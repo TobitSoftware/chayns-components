@@ -50,6 +50,7 @@ You can use the List like this:
 | title         | Title that should be rendered on the item                                                                                       | React-Elements | *required*    |
 | subtitle      | Second title (subtitle) that should be rendered on the item                                                                     | React-Elements |               |
 | image         | Image that should be rendered to the left of the title                                                                          | String         |               |
+| images        | Images that should be rendered to the left of the title like a puzzle.                                                          | String-Array   |               |
 | icon          | Icon that should be rendered to the left of the title                                                                           | String/Object  |               |
 | hideIndicator | Remove the opening icon from the left                                                                                           | bool           |               |
 | className     | ClassName that should be set on the ListItem root element                                                                       | String         |               |

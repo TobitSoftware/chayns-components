@@ -28,6 +28,7 @@ const ListItemHeader = ({
     onOpen,
     headerProps,
     defaultOpen,
+    images,
     ...otherProps
 }) => {
     const timeout = useRef(null);
@@ -82,6 +83,27 @@ const ListItemHeader = ({
                         backgroundImage: `url(${image})`,
                     }}
                 />
+            )}
+            {images && (
+                <div
+                    className={classnames('list-item__images', {
+                        'list-item__image--circle': circle,
+                    })}
+                >
+                    {
+                        images.map((img, index) => {
+                            if (index > 2) return null;
+                            return (
+                                <div
+                                    className="list-item__image"
+                                    style={{
+                                        backgroundImage: `url(${img})`,
+                                    }}
+                                />
+                            );
+                        })
+                    }
+                </div>
             )}
             {icon && (
                 <Icon
@@ -144,6 +166,7 @@ ListItemHeader.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
     ]),
     image: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string),
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,
     left: PropTypes.oneOfType([
@@ -175,6 +198,7 @@ ListItemHeader.propTypes = {
 ListItemHeader.defaultProps = {
     subtitle: null,
     image: null,
+    images: null,
     icon: null,
     className: null,
     left: null,

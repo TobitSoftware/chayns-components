@@ -249,11 +249,28 @@ export default class ListExample extends Component {
                     <ListItem
                         title="Meeting Tuesday"
                         subtitle="Fatima Chalis"
-                        image="https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg"
+                        images={['https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
                         circle
                         right={['08:41']}
                         hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
+                    />
+                    <ListItem
+                        title="Development Team"
+                        subtitle="Rosie: Hello!"
+                        images={['https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg',
+                            'https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
+                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
+                        circle
+                        right={['08:01']}
+                    />
+                    <ListItem
+                        title="Design Team"
+                        subtitle="Fatima: Hello!"
+                        images={['https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
+                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
+                        circle
+                        right={['07:59']}
                     />
                 </List>
             </div>
