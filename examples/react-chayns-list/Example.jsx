@@ -257,20 +257,24 @@ export default class ListExample extends Component {
                     />
                     <ListItem
                         title="Development Team"
-                        subtitle="Rosie: Hello!"
+                        subtitle="Rosie: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore"
                         images={['https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg',
                             'https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
                             'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
                         circle
                         right={['08:01']}
+                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Design Team"
-                        subtitle="Fatima: Hello!"
+                        subtitle="Fatima: Hello! Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt"
                         images={['https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
                             'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
                         circle
-                        right={['07:59']}
+                        right={['07:59', <Badge key="badge">2</Badge>]}
+                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                 </List>
             </div>

@@ -117,34 +117,39 @@ const ListItemHeader = ({
             {(title || subtitle) && (
                 <div className="list-item__titles">
                     {title && (
-                        <div className="list-item__title ellipsis">
-                            {title}
-                        </div>
+                        Array.isArray(right) && right.length > 0 ? (
+                            <div className="list-item__title-wrapper">
+                                <div className="list-item__title ellipsis">{title}</div>
+                                <div className="list-item__right" style={typeof right[0] === 'string' ? { opacity: 0.75 } : null}>{right[0]}</div>
+                            </div>
+                        ) : (
+                            <div className="list-item__title ellipsis">
+                                title
+                            </div>
+                        )
+
                     )}
                     {subtitle && (
-                        <div className="list-item__subtitle ellipsis">
-                            {subtitle}
-                        </div>
+                        Array.isArray(right) && right.length > 1 ? (
+                            <div className="list-item__subtitle-wrapper">
+                                <div className="list-item__subtitle ellipsis">{subtitle}</div>
+                                <div className="list-item__right">{right[1]}</div>
+                            </div>
+                        ) : (
+                            <div className="list-item__subtitle ellipsis">
+                                {subtitle}
+                            </div>
+                        )
                     )}
                 </div>
             )}
             <div className="list-item__spacer"/>
             {right && (
-                Array.isArray(right) ? (
-                    <div className="list-item__right list-item__right--column">
-                        {right.map((node) => {
-                            if (typeof node === 'string') {
-                                return <div key={node} className="list-item__right--column__text">{node}</div>;
-                            }
-                            return node;
-                        })}
-                    </div>
-                ) : (
+                !Array.isArray(right) && (
                     <div className="list-item__right">
                         {right}
                     </div>
                 )
-
             )}
             {
                 hoverItem && (
