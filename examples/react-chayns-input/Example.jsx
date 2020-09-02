@@ -213,7 +213,7 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Finden (invalid)"
+                        placeholder="Name"
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
@@ -224,7 +224,7 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Finden (invalid)"
+                        placeholder="Name (disabled)"
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
@@ -236,7 +236,7 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
-                        placeholder="Finden (invalid)"
+                        placeholder="Name (invalid)"
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}
                         onKeyUp={InputExample.onKeyUp}
@@ -244,6 +244,19 @@ export default class InputExample extends PureComponent {
                         design={Input.BORDER_DESIGN}
                         dynamic
                         invalid
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
+                        placeholder="Postleitzahl (Type=number)"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        design={Input.BORDER_DESIGN}
+                        dynamic
+                        defaultValue={48683}
+                        type="number"
                     />
                 </div>
             </div>

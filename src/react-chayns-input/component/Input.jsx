@@ -150,7 +150,7 @@ export default class Input extends PureComponent {
                     {icon && (
                         <Icon
                             icon={icon}
-                            style={onIconClick ? {
+                            style={onIconClick && !disabled ? {
                                 pointerEvents: 'all',
                             } : null}
                             className="input__icon-right"
