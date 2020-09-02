@@ -124,7 +124,7 @@ const ListItemHeader = ({
                             </div>
                         ) : (
                             <div className="list-item__title ellipsis">
-                                title
+                                {title}
                             </div>
                         )
 
