@@ -95,6 +95,7 @@ const ListItemHeader = ({
                             if (index > 2) return null;
                             return (
                                 <div
+                                    key={img}
                                     className="list-item__image"
                                     style={{
                                         backgroundImage: `url(${img})`,
