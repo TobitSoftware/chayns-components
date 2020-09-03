@@ -156,9 +156,9 @@ export default class Input extends PureComponent {
                             required
                             onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                             disabled={disabled}
-                            style={{
+                            style={dynamic ? {
                                 paddingRight: `${placeholderWidth}px`,
-                            }}
+                            } : null}
                             {...customProps}
                         />
                         {placeholder
@@ -232,13 +232,14 @@ export default class Input extends PureComponent {
                             labelIcon: icon,
                         })}
                     >
-                        <span
+                        <div
+                            className="ellipsis"
                             ref={(ref) => {
                                 this.placeholderRef = ref;
                             }}
                         >
                             {placeholder}
-                        </span>
+                        </div>
                     </label>
                     {
                         icon
