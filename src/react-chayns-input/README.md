@@ -43,5 +43,6 @@ The following properties can be set on the Input-Component
 | disabled     | Disables the input                                                                | bool           | false         |
 | design       | Design of the input (``Input.DEFAULT_DESIGN`` or ``Input.BORDER_DESIGN``)         | number         | 0             |
 | iconLeft     | Icon on the left side of the input (only border-design)                           | string/object  | null          |
+| clearIcon    | Shows a clear-icon instead of the icon on the right side while there is a value   | bool           | false         |
 
 Note: The functions onEnter, onChange and onBlur return three values: the input value, if the input is valid and the event.

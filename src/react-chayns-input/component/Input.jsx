@@ -25,6 +25,8 @@ export default class Input extends PureComponent {
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
         this.callValidated = this.callValidated.bind(this);
+        this.onIconClick = this.onIconClick.bind(this);
+        this.setPlaceholderWidth = this.setPlaceholderWidth.bind(this);
     }
 
     componentDidMount() {
@@ -65,14 +67,16 @@ export default class Input extends PureComponent {
         this.callValidated(e.target.value, onChange, e);
     }
 
-    setPlaceholderWidth() {
-        const { placeholder } = this.props;
-        if (placeholder && this.placeholderRef) {
-            setTimeout(() => {
-                this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
-            }, 100);
-        } else {
-            this.setState({ placeholderWidth: 0 });
+    onIconClick(e) {
+        const { right, initial } = this.state;
+        const { onIconClick, clearIcon, value, defaultValue } = this.props;
+        if (clearIcon && (right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)))) {
+            this.onChange({ target: { value: '' } });
+            e.stopPropagation();
+            this.ref.value = '';
+        } else if (onIconClick) {
+            onIconClick(e);
+            e.stopPropagation();
         }
     }
 
@@ -84,6 +88,17 @@ export default class Input extends PureComponent {
         }
 
         this.ref = ref;
+    }
+
+    setPlaceholderWidth() {
+        const { placeholder } = this.props;
+        if (placeholder && this.placeholderRef) {
+            setTimeout(() => {
+                this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
+            }, 100);
+        } else {
+            this.setState({ placeholderWidth: 0 });
+        }
     }
 
     callValidated(value, callback, event) {
@@ -111,7 +126,7 @@ export default class Input extends PureComponent {
             placeholder,
             type,
             dynamic,
-            icon,
+            icon: iconProp,
             iconLeft,
             wrapperRef,
             invalid,
@@ -123,8 +138,11 @@ export default class Input extends PureComponent {
             customProps,
             disabled,
             design,
+            clearIcon,
         } = this.props;
         const { valid, right, initial, placeholderWidth } = this.state;
+
+        const icon = clearIcon && (right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue))) ? 'fa fa-times' : iconProp;
 
         if (design === Input.BORDER_DESIGN) {
             return (
@@ -180,14 +198,11 @@ export default class Input extends PureComponent {
                     {icon && (
                         <Icon
                             icon={icon}
-                            style={onIconClick && !disabled ? {
+                            style={(onIconClick || clearIcon) && !disabled ? {
                                 pointerEvents: 'all',
                             } : null}
-                            className={'input__icon-right'}
-                            onClick={onIconClick ? (e) => {
-                                onIconClick(e);
-                                e.stopPropagation();
-                            } : null}
+                            className="input__icon-right"
+                            onClick={this.onIconClick}
                         />
                     )}
                 </div>
@@ -251,7 +266,7 @@ export default class Input extends PureComponent {
                                         opacity: '.3',
                                         pointerEvents: 'all',
                                     } : { opacity: '0' }}
-                                    onClick={onIconClick}
+                                    onClick={this.onIconClick}
                                 />
                             )
                             : null
@@ -315,6 +330,7 @@ Input.propTypes = {
     stopPropagation: PropTypes.bool,
     required: PropTypes.bool,
     disabled: PropTypes.bool,
+    clearIcon: PropTypes.bool,
     design: PropTypes.number,
     iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
@@ -344,6 +360,7 @@ Input.defaultProps = {
     stopPropagation: false,
     required: false,
     disabled: false,
+    clearIcon: false,
     design: Input.DEFAULT_DESIGN,
     iconLeft: null,
 };

@@ -152,6 +152,7 @@ export default class InputExample extends PureComponent {
                         noDeleteIcon
                         onIconClick={console.log}
                         dynamic
+                        clearIcon
                     />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
@@ -181,6 +182,7 @@ export default class InputExample extends PureComponent {
                         iconLeft="fa fa-search"
                         onIconClick={console.log}
                         design={Input.BORDER_DESIGN}
+                        clearIcon
                     />
                 </div>
                 <div style={{ marginBottom: '20px' }}>
