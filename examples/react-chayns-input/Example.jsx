@@ -213,6 +213,20 @@ export default class InputExample extends PureComponent {
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                     <Input
+                        placeholder="Finden (dynamic)"
+                        onBlur={InputExample.onBlur}
+                        onChange={InputExample.onChange}
+                        onKeyUp={InputExample.onKeyUp}
+                        onEnter={InputExample.onEnter}
+                        icon="ts-calling-code"
+                        iconLeft="fa fa-search"
+                        onIconClick={console.log}
+                        design={Input.BORDER_DESIGN}
+                        dynamic
+                    />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                    <Input
                         placeholder="Name"
                         onBlur={InputExample.onBlur}
                         onChange={InputExample.onChange}

@@ -14,6 +14,7 @@ export default class Input extends PureComponent {
                 && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
             initial: true,
             right: false,
+            placeholderWidth: 0,
         };
 
         this.id = Math.random()
@@ -26,14 +27,21 @@ export default class Input extends PureComponent {
         this.callValidated = this.callValidated.bind(this);
     }
 
-    componentDidUpdate({ regExp: oldRegExp, value: oldValue }) {
-        const { regExp, onChange, value } = this.props;
+    componentDidMount() {
+        this.setPlaceholderWidth();
+    }
+
+    componentDidUpdate({ regExp: oldRegExp, value: oldValue, placeholder: oldPlaceholder }) {
+        const { regExp, onChange, value, placeholder } = this.props;
 
         if (String(oldRegExp) !== String(regExp) && this.ref) {
             this.callValidated(this.ref.value, onChange);
         }
         if (value !== oldValue) {
             this.callValidated(value);
+        }
+        if (placeholder !== oldPlaceholder) {
+            this.setPlaceholderWidth();
         }
     }
 
@@ -55,6 +63,17 @@ export default class Input extends PureComponent {
     onChange(e) {
         const { onChange } = this.props;
         this.callValidated(e.target.value, onChange, e);
+    }
+
+    setPlaceholderWidth() {
+        const { placeholder } = this.props;
+        if (placeholder && this.placeholderRef) {
+            setTimeout(() => {
+                this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
+            }, 100);
+        } else {
+            this.setState({ placeholderWidth: 0 });
+        }
     }
 
     setRef(ref) {
@@ -105,7 +124,7 @@ export default class Input extends PureComponent {
             disabled,
             design,
         } = this.props;
-        const { valid, right, initial } = this.state;
+        const { valid, right, initial, placeholderWidth } = this.state;
 
         if (design === Input.BORDER_DESIGN) {
             return (
@@ -113,6 +132,7 @@ export default class Input extends PureComponent {
                     className={classNames('input--border-design', className, {
                         'input--label-right': right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input--disabled': disabled,
+                        'input--dynamic': dynamic,
                         'input--border-design--invalid': !valid || invalid,
                     })}
                     onClick={() => {
@@ -121,39 +141,49 @@ export default class Input extends PureComponent {
                     style={style}
                 >
                     {iconLeft && <Icon icon={iconLeft} className="input__icon-left"/>}
-                    <input
-                        placeholder={dynamic && !chayns.env.isMobile ? null : placeholder}
-                        ref={this.setRef}
-                        value={value}
-                        defaultValue={defaultValue}
-                        onKeyUp={this.onKeyUp}
-                        onKeyDown={onKeyDown}
-                        onBlur={this.onBlur}
-                        onChange={this.onChange}
-                        onFocus={onFocus}
-                        type={type || 'text'}
-                        id={id || this.id}
-                        required
-                        onClick={stopPropagation ? (event) => event.stopPropagation() : null}
-                        disabled={disabled}
-                        {...customProps}
-                    />
-                    {dynamic && !chayns.env.isMobile && placeholder
-                    && (
-                        <label
-                            htmlFor={id || this.id}
-                        >
-                            {placeholder}
-                        </label>
-                    )
-                    }
+                    <div className="input__input-wrapper">
+                        <input
+                            ref={this.setRef}
+                            value={value}
+                            defaultValue={defaultValue}
+                            onKeyUp={this.onKeyUp}
+                            onKeyDown={onKeyDown}
+                            onBlur={this.onBlur}
+                            onChange={this.onChange}
+                            onFocus={onFocus}
+                            type={type || 'text'}
+                            id={id || this.id}
+                            required
+                            onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                            disabled={disabled}
+                            style={dynamic ? {
+                                paddingRight: `${placeholderWidth}px`,
+                            } : null}
+                            {...customProps}
+                        />
+                        {placeholder
+                        && (
+                            <label
+                                htmlFor={id || this.id}
+                            >
+                                <div
+                                    className="ellipsis"
+                                    ref={(ref) => {
+                                        this.placeholderRef = ref;
+                                    }}
+                                >
+                                    {placeholder}
+                                </div>
+                            </label>
+                        )}
+                    </div>
                     {icon && (
                         <Icon
                             icon={icon}
                             style={onIconClick && !disabled ? {
                                 pointerEvents: 'all',
                             } : null}
-                            className="input__icon-right"
+                            className={'input__icon-right'}
                             onClick={onIconClick ? (e) => {
                                 onIconClick(e);
                                 e.stopPropagation();
@@ -174,7 +204,11 @@ export default class Input extends PureComponent {
                     ref={wrapperRef}
                 >
                     <input
-                        style={{ ...{ width: '100%' }, ...(icon ? { paddingRight: '30px' } : null), ...style }}
+                        style={{
+                            width: '100%',
+                            paddingRight: (icon ? '30px' : `${placeholderWidth}px`),
+                            ...style,
+                        }}
                         ref={this.setRef}
                         className={classNames('input', className, { 'input--invalid': !valid || invalid })}
                         value={value}
@@ -198,7 +232,14 @@ export default class Input extends PureComponent {
                             labelIcon: icon,
                         })}
                     >
-                        {placeholder}
+                        <div
+                            className="ellipsis"
+                            ref={(ref) => {
+                                this.placeholderRef = ref;
+                            }}
+                        >
+                            {placeholder}
+                        </div>
                     </label>
                     {
                         icon
