@@ -77,6 +77,7 @@ You can use the List like this:
 | onTouchMove   | onTouchMove event                                                                                                               | func           | null          |
 | onTouchEnd    | onTouchEnd event                                                                                                                | func           | null          |
 | onTouchCancel | onTouchCancel event                                                                                                             | func           | null          |
+| imageBorderColor | image border color                                                                                                           | string    | nearly transparent |
 
 ## Example ##
 

@@ -27,6 +27,7 @@ const ListItem = ({
     notExpandable,
     noContentClass,
     onOpen,
+    imageBorderColor,
     ...props
 }) => (
     <div
@@ -55,6 +56,7 @@ const ListItem = ({
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
             onTouchCancel={onTouchCancel}
+            imageBorderColor={imageBorderColor}
             {...headerProps}
         />
     </div>
@@ -94,6 +96,7 @@ ListItem.propTypes = {
     notExpandable: PropTypes.bool,
     noContentClass: PropTypes.bool,
     onOpen: PropTypes.func,
+    imageBorderColor: PropTypes.string,
 };
 
 ListItem.defaultProps = {
@@ -120,6 +123,7 @@ ListItem.defaultProps = {
     notExpandable: null,
     noContentClass: null,
     onOpen: null,
+    imageBorderColor: chayns.env.site.colorMode === 1 ? 'rgba(255, 255, 255, .08)' : 'rgba(0, 0, 0, .08)',
 };
 
 ListItem.displayName = 'ListItem';

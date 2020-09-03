@@ -29,6 +29,7 @@ const ListItemHeader = ({
     headerProps,
     defaultOpen,
     images,
+    imageBorderColor,
     ...otherProps
 }) => {
     const timeout = useRef(null);
@@ -80,6 +81,7 @@ const ListItemHeader = ({
                         'list-item__image--circle': circle,
                     })}
                     style={{
+                        boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
                         backgroundImage: `url(${image})`,
                     }}
                 />
@@ -89,6 +91,9 @@ const ListItemHeader = ({
                     className={classnames('list-item__images', {
                         'list-item__image--circle': circle,
                     })}
+                    style={{
+                        boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
+                    }}
                 >
                     {
                         images.map((img, index) => {
@@ -199,6 +204,7 @@ ListItemHeader.propTypes = {
     onOpen: PropTypes.func,
     headerProps: PropTypes.object,
     defaultOpen: PropTypes.bool,
+    imageBorderColor: PropTypes.string,
 };
 
 ListItemHeader.defaultProps = {
@@ -225,6 +231,7 @@ ListItemHeader.defaultProps = {
     onOpen: null,
     headerProps: null,
     defaultOpen: null,
+    imageBorderColor: chayns.env.site.colorMode === 1 ? 'rgba(255, 255, 255, .08)' : 'rgba(0, 0, 0, .08)',
 };
 
 ListItemHeader.displayName = 'ListItemHeader';
