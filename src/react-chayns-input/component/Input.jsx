@@ -94,7 +94,9 @@ export default class Input extends PureComponent {
         const { placeholder } = this.props;
         if (placeholder && this.placeholderRef) {
             setTimeout(() => {
-                this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
+                if (this.placeholderRef) {
+                    this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
+                }
             }, 100);
         } else {
             this.setState({ placeholderWidth: 0 });
