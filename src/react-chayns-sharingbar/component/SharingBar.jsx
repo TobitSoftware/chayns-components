@@ -53,7 +53,7 @@ function SharingBar({
             sharingItems.push({
                 className: null,
                 onClick: (e) => {
-                    if (stopPropagation) e.stopPropagation();
+                    if (stopPropagation && e && e.stopPropagation) e.stopPropagation();
                     share(x, link, linkText);
                 },
                 text: x.name,
