@@ -123,7 +123,7 @@ ListItem.defaultProps = {
     notExpandable: null,
     noContentClass: null,
     onOpen: null,
-    imageBorderColor: chayns.env.site.colorMode === 1 ? 'rgba(255, 255, 255, .08)' : 'rgba(0, 0, 0, .08)',
+    imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
 };
 
 ListItem.displayName = 'ListItem';
