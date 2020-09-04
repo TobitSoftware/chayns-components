@@ -28,6 +28,7 @@ Then it can be used like in the following example:
 |------------|----------------------------------------------------------------------------------------|----------|
 | placeholder  | Placeholder of the textarea                                                          | String   |
 | defaultValue | defaultValue of the textarea                                                         | String   |
+| value        | value of the textarea                                                                | String   |
 | className    | CSS classes for the textarea                                                         | String   |
 | style        | Styles for the textarea                                                              | Object   |
 | required     | Makes the textarea required                                                          | bool     |
