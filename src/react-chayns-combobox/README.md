@@ -40,7 +40,8 @@ You can set the following props on a ComboBox element:
 | listValue       | The value of the list items. It is shown in the dialog for each item.                         | string   |         |
 | className       | Add additional classes to the button and overlay                                              | string   |         |
 | stopPropagation | Stops the click propagation to parent elements                                                | bool     | false   |
-| defaultValue    | The defaultValue of the ComboBox (does not work in combination with label-prop)               | string   |         |
+| defaultValue    | The defaultValue of the ComboBox (does not work in combination with label- and value-prop)    | string   |         |
+| value           | The value of the ComboBox (does not work in combination with label-prop)                      | string   |         |
 | parent          | The parent of the ComboBox overlay                                                            | node     | tapp    |
 | style           | Styles applied to the ComboBox button and overlay                                             | object   | null    |
 

@@ -10,7 +10,7 @@ import isDescendant from '../../utils/isDescendant';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 const ComboBox = ({
-    className, label, list, disabled, listValue, listKey, stopPropagation, defaultValue, parent, onSelect, style,
+    className, label, list, disabled, listValue, listKey, stopPropagation, defaultValue, parent, onSelect, style, value,
 }) => {
     const [position, setPosition] = useState({
         bottom: 0,
@@ -62,7 +62,7 @@ const ComboBox = ({
             const items = list.map((item) => ({
                 name: item[listValue],
                 value: item[listKey],
-                isSelected: item[listKey] === selected,
+                isSelected: item[listKey] === ((value !== null) ? value : selected),
             }));
             chayns.dialog.select({
                 list: items,
@@ -77,7 +77,7 @@ const ComboBox = ({
             setPosition(e.target.getBoundingClientRect());
             setShowOverlay(!showOverlay);
         }
-    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation, list, listKey, listValue, select]);
+    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation, list, listKey, listValue, select, value]);
 
     const onItemClick = useCallback((e) => {
         select(e.target.id);
@@ -97,7 +97,8 @@ const ComboBox = ({
             <div
                 className="cc__combo-box__label ellipsis"
             >
-                {(selected === null || selected === undefined) && label ? label : getItem(selected)[listValue]}
+                {((selected === null || selected === undefined) && value === null) && label
+                    ? label : getItem((value !== null) ? value : selected)[listValue]}
             </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-caret-down"/>
         </Button>,
@@ -143,6 +144,7 @@ ComboBox.propTypes = {
     stopPropagation: PropTypes.bool,
     parent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     style: PropTypes.object,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 ComboBox.defaultProps = {
@@ -154,6 +156,7 @@ ComboBox.defaultProps = {
     defaultValue: null,
     parent: null,
     style: null,
+    value: null,
 };
 
 ComboBox.displayName = 'ComboBox';
