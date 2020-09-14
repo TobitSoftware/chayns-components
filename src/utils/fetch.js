@@ -95,7 +95,7 @@ export function reloadCache(reload) {
             if (data !== true) {
                 window.chayns.dialog.alert(
                     window.chayns.utils.lang.get('txt_shopMashup_reloadCache'),
-                    window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning')
+                    window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'),
                 );
                 reject();
             } else {
@@ -110,7 +110,7 @@ export function reloadCache(reload) {
             console.warn(error);
             window.chayns.dialog.alert(
                 window.chayns.utils.lang.get('txt_shopMashup_reloadCache'),
-                window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning')
+                window.chayns.utils.lang.get('txt_shopMashup_reloadCacheWarning'),
             );
             reject();
         }).then(() => {

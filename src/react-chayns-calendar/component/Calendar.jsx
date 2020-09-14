@@ -7,7 +7,6 @@ import Month from './Month';
 import areDatesEqual from '../utils/areDatesEqual';
 import Icon from '../../react-chayns-icon/component/Icon';
 
-
 const TODAY = new Date();
 const MONTH_NAMES = {
     de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],

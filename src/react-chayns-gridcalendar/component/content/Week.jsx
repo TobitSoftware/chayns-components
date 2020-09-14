@@ -42,7 +42,7 @@ export default class Week extends Component {
                 background = `linear-gradient(to right, rgba(${color.r},${color.g},${color.b},0.5) ${start}%,rgba(${color.r},${color.g},${color.b},1) ${start + 1}%,rgba(${color.r},${color.g},${color.b},1) ${start + percentage}%,rgba(${color.r},${color.g},${color.b},0.5) ${start + percentage + 1}%)`;
             }
 
-            days.push(<div className={classes} style={{ background, backgroundColor }} key={i} onClick={(event) => onClick(event, day)}/>,);
+            days.push(<div className={classes} style={{ background, backgroundColor }} key={i} onClick={(event) => onClick(event, day)}/>);
         }
         return days;
     }

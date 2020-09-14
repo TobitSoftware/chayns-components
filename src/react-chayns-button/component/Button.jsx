@@ -24,8 +24,8 @@ const Button = forwardRef((props, ref) => {
     };
 
     return (
-        // eslint-disable-next-line react/button-has-type
         <button
+            /* eslint-disable-next-line react/button-has-type */
             type={type}
             className={classNames(className, {
                 button: !chooseButton,

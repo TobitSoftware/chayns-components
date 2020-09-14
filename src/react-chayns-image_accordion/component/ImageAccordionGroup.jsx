@@ -190,8 +190,7 @@ export default class ImageAccordionGroup extends React.Component {
                                         itemsPerRow={itemsPerRow}
                                     />
                                 </div>
-                            ))
-                            }
+                            ))}
                             {/* Body of Row */}
                             <div
                                 className="image-accordion-body"

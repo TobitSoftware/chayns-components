@@ -131,7 +131,6 @@ export default class ContextMenu extends Component {
         }
     }
 
-
     async showSelectDialog() {
         const { items, onLayerClick } = this.props;
         const list = items.map((item, index) => ({

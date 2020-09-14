@@ -9,7 +9,6 @@ export default class EventEmitter {
         this.removeListener = this.removeListener.bind(this);
     }
 
-
     on(event, listener) {
         if (!this.#events[event]) {
             this.#events[event] = [];

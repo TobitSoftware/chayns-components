@@ -105,7 +105,8 @@
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/label-has-for": "off",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-props-no-spreading": "off"
   },
   "extends": "airbnb"
 }

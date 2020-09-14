@@ -34,7 +34,6 @@ export default class Gallery extends Component {
         }
     }
 
-
     onDown = (event, index, image) => {
         // deactivate refresh scroll in apps
         if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.disallowRefreshScroll();

@@ -252,7 +252,7 @@ ModeSwitch.propTypes = {
         id: PropTypes.number,
         name: PropTypes.string,
         uacIds: PropTypes.arrayOf(PropTypes.number),
-    }),),
+    })),
     save: PropTypes.bool,
     onChange: PropTypes.func,
     defaultMode: PropTypes.number,

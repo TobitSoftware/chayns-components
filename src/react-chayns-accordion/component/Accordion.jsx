@@ -93,7 +93,6 @@ export default class Accordion extends PureComponent {
         window.clearTimeout(this.timeout);
     }
 
-
     getBody() {
         const { renderClosed, children, removeContentClosed } = this.props;
         const { currentState, showBody } = this.state;

@@ -22,7 +22,6 @@ export const toPropTypes = (events, returnDefaultProps) => events.reduce((props,
     [toHandlerName(eventName)]: returnDefaultProps ? null : PropTypes.func,
 }), {});
 
-
 export const PositionProps = PropTypes.shape({
     lat: PropTypes.number.isRequired,
     lng: PropTypes.number.isRequired,

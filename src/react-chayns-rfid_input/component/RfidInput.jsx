@@ -9,7 +9,8 @@ import Button from '../../react-chayns-button/component/Button';
 
 export default class RfidInput extends Component {
     static pretifyRfid(rfid) {
-        return rfid ? rfid.match(SPLIT_RFID).join(' ') : '';
+        return rfid ? rfid.match(SPLIT_RFID)
+            .join(' ') : '';
     }
 
     static isNfcAvailable() {
@@ -17,9 +18,12 @@ export default class RfidInput extends Component {
             || (chayns.env.isApp && (chayns.env.isAndroid));
     }
 
-    state = {
-        isScanning: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isScanning: false,
+        };
+    }
 
     onConfirm = () => {
         const { onConfirm, value } = this.props;
@@ -29,7 +33,8 @@ export default class RfidInput extends Component {
     onInput = (newRfid) => {
         const { onInput } = this.props;
 
-        const newValue = newRfid.toUpperCase().replace(/\s/g, '');
+        const newValue = newRfid.toUpperCase()
+            .replace(/\s/g, '');
         if (!RFID_CONTENT.test(newValue)) {
             return;
         }

@@ -50,7 +50,6 @@ export const setFriend = async (personId, friendship = true) => {
     return response.status === 200;
 };
 
-
 export const fetchPersons = async (value, skip, take) => {
     if (!chayns.env.user.isAuthenticated) {
         chayns.login();

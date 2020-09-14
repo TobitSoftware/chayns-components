@@ -6,10 +6,6 @@ import ExpandableContext from './ExpandableContext';
 import AbstractList from '../AbstractList';
 
 export default class ExpandableList extends Component {
-    state = {
-        open: [],
-    };
-
     constructor(props) {
         super(props);
 
@@ -17,6 +13,10 @@ export default class ExpandableList extends Component {
             onOpen: this.onOpen.bind(this),
             onClose: this.onClose.bind(this),
             onToggle: this.onToggle.bind(this),
+        };
+
+        this.state = {
+            open: [],
         };
     }
 

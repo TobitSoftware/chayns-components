@@ -11,10 +11,6 @@ const KEY_ENTER = 13;
 const BIGGEST_LETTER = 'm';
 
 export default class TagInput extends Component {
-    state = {
-        selectedIndex: null,
-    };
-
     constructor(props) {
         super(props);
 
@@ -23,6 +19,10 @@ export default class TagInput extends Component {
         this.handleTagRemove = this.handleTagRemove.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+
+        this.state = {
+            selectedIndex: null,
+        };
     }
 
     setInputRef(ref) {

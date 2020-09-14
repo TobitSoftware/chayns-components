@@ -36,10 +36,12 @@ function inspectTimeStr(str) {
         const char = str.charAt(i);
         const charCode = str.charCodeAt(i);
 
-        if (char === ':') foundColons += 1;
-        else if (charCode > 47 && charCode < 58) {
-            if (foundColons === 0 && leftDigits.length < 2) leftDigits.push(char);
-            else if (rightDigits.length < 2) rightDigits.push(char);
+        if (char === ':') {
+            foundColons += 1;
+        } else if (charCode > 47 && charCode < 58) {
+            if (foundColons === 0 && leftDigits.length < 2) {
+                leftDigits.push(char);
+            } else if (rightDigits.length < 2) rightDigits.push(char);
         }
     }
 
@@ -106,13 +108,16 @@ const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInva
         let minutePart = generateTimePart(inspectResult.right, 'minutes');
         let hourPart = generateTimePart(inspectResult.left, 'hours');
 
-        if (parseInt(minutePart, 0) > 59) minutePart = '59';
-        if (parseInt(hourPart, 0) > 23) hourPart = '23';
+        if (parseInt(minutePart, 10) > 59) minutePart = '59';
+        if (parseInt(hourPart, 10) > 23) hourPart = '23';
 
         const timeStr = `${hourPart}:${minutePart}`;
 
-        if (inputField === 'start') newState.startTime = timeStr;
-        else newState.endTime = timeStr;
+        if (inputField === 'start') {
+            newState.startTime = timeStr;
+        } else {
+            newState.endTime = timeStr;
+        }
 
         if (newState.startTime === newState.endTime) {
             newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));

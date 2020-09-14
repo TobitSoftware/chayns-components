@@ -8,11 +8,6 @@ import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
 
 export default class InputBox extends Component {
-    state = {
-        hidden: true,
-        position: null,
-    };
-
     references = {
         box: null,
         wrapper: null,
@@ -29,6 +24,11 @@ export default class InputBox extends Component {
         this.blur = this.blur.bind(this);
         this.focus = this.focus.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+
+        this.state = {
+            hidden: true,
+            position: null,
+        };
     }
 
     componentDidMount() {

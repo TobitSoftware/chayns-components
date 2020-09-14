@@ -283,7 +283,7 @@ export default class TextString extends Component {
                     if (result.ResultCode === 0) {
                         chayns.dialog.alert(
                             '',
-                            'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.'
+                            'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.',
                         );
                     } else {
                         chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');

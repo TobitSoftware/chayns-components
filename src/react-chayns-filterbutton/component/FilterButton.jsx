@@ -93,7 +93,7 @@ FilterButton.propTypes = {
         }).isRequired,
     ]),
     className: PropTypes.string,
-    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]),),
+    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     id: PropTypes.string,
     disabled: PropTypes.bool,
     stopPropagation: PropTypes.bool,

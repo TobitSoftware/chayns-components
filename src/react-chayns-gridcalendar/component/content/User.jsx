@@ -28,12 +28,12 @@ export default class User extends PureComponent {
 }
 
 User.propTypes = {
-    entries: PropTypes.arrayOf(PropTypes.array,),
+    entries: PropTypes.arrayOf(PropTypes.array),
     groups: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
         color: PropTypes.string,
-    }),),
+    })),
     onClick: PropTypes.func,
     focus: PropTypes.objectOf(Date),
     groupFocus: PropTypes.number,

@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary,react/forbid-prop-types */
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
 
@@ -123,7 +123,7 @@ export default class ReceiverSearchPopup extends Component {
                     {showPopup ? (
                         <div className="receiver-popup" style={receiverPopupStyles}>
                             {onlyPersons ? false : (
-                                <Fragment>
+                                <>
                                     <div className="group-headline popup-item">Sites</div>
                                     {locations}
                                     {locationResultState > 0 ? (
@@ -135,10 +135,10 @@ export default class ReceiverSearchPopup extends Component {
                                     ) : (
                                         <div className="popup-item"/>
                                     )}
-                                </Fragment>
+                                </>
                             )}
                             {onlySites ? false : (
-                                <Fragment>
+                                <>
                                     <div className="group-headline popup-item">Personen</div>
                                     {users}
                                     {userResultState > 0 ? (
@@ -150,10 +150,10 @@ export default class ReceiverSearchPopup extends Component {
                                     ) : (
                                         <div className="popup-item"/>
                                     )}
-                                </Fragment>
+                                </>
                             )}
                             {!isLocation ? false : (
-                                <Fragment>
+                                <>
                                     <div className="group-headline popup-item">Gruppen</div>
                                     {groups}
                                     {groupResultState > 0 ? (
@@ -165,7 +165,7 @@ export default class ReceiverSearchPopup extends Component {
                                     ) : (
                                         <div className="popup-item"/>
                                     )}
-                                </Fragment>
+                                </>
                             )}
                         </div>
                     ) : (

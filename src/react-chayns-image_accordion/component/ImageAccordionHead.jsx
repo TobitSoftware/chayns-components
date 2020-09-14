@@ -44,8 +44,7 @@ export default class ImageAccordionHead extends React.PureComponent {
                         >
                             {item.props.headline}
                         </p>
-                    )
-                }
+                    )}
 
                 <h5
                     className="subheadline"
@@ -71,8 +70,7 @@ export default class ImageAccordionHead extends React.PureComponent {
                         >
                             {item.props.icon}
                         </div>
-                    )
-                }
+                    )}
             </div>
         );
     }

@@ -16,6 +16,7 @@ const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props
                 '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
             };
 
+            // eslint-disable-next-line no-unused-vars
             for (const colorName of chayns.utils.colors.getAvailableColorList()) {
                 const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
                 styles[`--chayns-color--${colorName}`] = hexColor;
