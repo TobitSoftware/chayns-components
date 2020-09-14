@@ -30,7 +30,7 @@ Then it can be used like in the following example:
 | Property      | Description                                                                                        | Type           | Default Value |
 |---------------|----------------------------------------------------------------------------------------------------|----------------|---------------|
 | placeholder   | Placeholder of the input field                                                                     | String         |               |
-| removeIcon    | Show a remove icon to clear the personfinder (only dynamic and not multiple)                       | bool           | false         |
+| removeIcon    | obsolete since the personFinder is always multiple                                                 | bool           | false         |
 | onInput       | Callback on input                                                                                  | Function       |               |
 | onChange      | Callback that will be executed when a person gets selected/removed or input/personfinder gets cleared.| Function    |               |
 | onAdd         | Callback that will be executed when a person is added. Works only for the multiple PersonFinder.   | Function       |               |

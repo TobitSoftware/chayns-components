@@ -130,7 +130,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.relationFinder1 = ref;
                     }}
-                    dynamic
                     placeholder="Users with reducer: show only persons with an 'e' in the name"
                     onChange={PersonFinderExample.handleSelect}
                     reducerFunction={(state) => {
@@ -154,7 +153,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.relationFinder2 = ref;
                     }}
-                    dynamic
                     placeholder="User/Site"
                     onChange={PersonFinderExample.handleSelect}
                     showSites
@@ -163,7 +161,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.relationFinderUac = ref;
                     }}
-                    dynamic
                     placeholder="UAC 1"
                     uacId={1}
                     onChange={PersonFinderExample.handleSelect}
@@ -172,7 +169,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.relationFinderUacLocation = ref;
                     }}
-                    dynamic
                     placeholder="UAC 1 Location 1"
                     uacId={1}
                     locationId={1}
@@ -182,7 +178,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.siteFinder = ref;
                     }}
-                    dynamic
                     placeholder="Sites"
                     defaultValue={{
                         name: 'Tobit.Software',
@@ -196,7 +191,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.personFinder = ref;
                     }}
-                    dynamic
                     placeholder="Users"
                     onChange={PersonFinderExample.handleSelect}
                 />
@@ -204,7 +198,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.personFinderOwn1 = ref;
                     }}
-                    dynamic
                     placeholder="Users (including own, showId)"
                     onChange={PersonFinderExample.handleSelect}
                     removeIcon
@@ -269,7 +262,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.customUserFinder = ref;
                     }}
-                    dynamic
                     placeholder="Users (Custom)"
                     context={SimpleWrapperContext({
                         showName: 'displayName',
@@ -312,7 +304,6 @@ export default class PersonFinderExample extends PureComponent {
                     ]}
                 />
                 <PersonFinder
-                    dynamic
                     ref={(ref) => {
                         this.uacFinder = ref;
                     }}
@@ -327,8 +318,7 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.personFinderOwn2 = ref;
                     }}
-                    dynamic
-                    placeholder="Users/Sites (multiple, dynamic)"
+                    placeholder="Users/Sites (multiple)"
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
@@ -339,7 +329,6 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.personFinderOwn3 = ref;
                     }}
-                    dynamic
                     placeholder="Sites (multiple, default)"
                     defaultValues={[{
                         type: 'SITE',
