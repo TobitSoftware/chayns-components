@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
+import { isFunction } from '../../utils/is';
 
 export default class ContextMenu extends Component {
     constructor(props) {
@@ -145,7 +146,7 @@ export default class ContextMenu extends Component {
         });
         if (dialogRes.buttonType === 1 && dialogRes.selection && dialogRes.selection[0]) {
             items[dialogRes.selection[0].value].onClick();
-        } else if (dialogRes.buttonType === -1) {
+        } else if (dialogRes.buttonType === -1 && isFunction(onLayerClick)) {
             onLayerClick();
         }
     }
@@ -239,7 +240,11 @@ export default class ContextMenu extends Component {
 
 ContextMenu.position = Bubble.position;
 
-ContextMenu.positionOnChildren = { LEFT: 0, CENTER: 1, RIGHT: 2 };
+ContextMenu.positionOnChildren = {
+    LEFT: 0,
+    CENTER: 1,
+    RIGHT: 2,
+};
 
 ContextMenu.propTypes = {
     onLayerClick: PropTypes.func,
@@ -255,7 +260,8 @@ ContextMenu.propTypes = {
     })),
     position: PropTypes.number, // 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right
     positionOnChildren: PropTypes.number, // 0 = left, 1 = center, 2 = right
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
+    },
     children: PropTypes.node,
     onChildrenClick: PropTypes.func,
     childrenStyle: PropTypes.object,
