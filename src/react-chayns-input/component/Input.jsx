@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
 import { isNullOrWhiteSpace } from '../../utils/is';
+import Button from '../../react-chayns-button/component/Button';
 
 export default class Input extends PureComponent {
     constructor(props) {
@@ -154,6 +155,7 @@ export default class Input extends PureComponent {
                         'input--disabled': disabled,
                         'input--dynamic': dynamic,
                         'input--border-design--invalid': !valid || invalid,
+                        'input--border_has-icon': icon,
                     })}
                     onClick={() => {
                         this.ref.focus();
@@ -198,14 +200,16 @@ export default class Input extends PureComponent {
                         )}
                     </div>
                     {icon && (
-                        <Icon
-                            icon={icon}
-                            style={(onIconClick || clearIcon) && !disabled ? {
-                                pointerEvents: 'all',
-                            } : null}
-                            className="input__icon-right"
-                            onClick={this.onIconClick}
-                        />
+                        <Button>
+                            <Icon
+                                icon={icon}
+                                style={(onIconClick || clearIcon) && !disabled ? {
+                                    pointerEvents: 'all',
+                                } : null}
+                                className="input__icon-right"
+                                onClick={this.onIconClick}
+                            />
+                        </Button>
                     )}
                 </div>
             );
