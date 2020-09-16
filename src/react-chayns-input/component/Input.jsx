@@ -200,14 +200,15 @@ export default class Input extends PureComponent {
                         )}
                     </div>
                     {icon && (
-                        <Button>
+                        <Button
+                            onClick={this.onIconClick}
+                        >
                             <Icon
                                 icon={icon}
                                 style={(onIconClick || clearIcon) && !disabled ? {
                                     pointerEvents: 'all',
                                 } : null}
                                 className="input__icon-right"
-                                onClick={this.onIconClick}
                             />
                         </Button>
                     )}
