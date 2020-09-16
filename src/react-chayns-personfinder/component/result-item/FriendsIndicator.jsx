@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '../../../react-chayns-icon/component/Icon';
-import { COLOR_004, COLOR_YELLOW_3 } from '../../../constants/colors';
 import { useStateValue } from '../data/persons/PersonsContext';
 
 const FriendsIndicator = ({ personId, name }) => {
@@ -19,7 +18,7 @@ const FriendsIndicator = ({ personId, name }) => {
             <Icon
                 icon={isFriend(personId) ? 'fas fa-star' : 'far fa-star'}
                 onClick={handleClick}
-                className={isFriend(personId) ? COLOR_YELLOW_3 : COLOR_004}
+                className={isFriend(personId) ? 'chayns__color--yellow-3i' : 'chayns__color--004i'}
             />
         </div>
     );
