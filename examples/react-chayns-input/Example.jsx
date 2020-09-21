@@ -270,7 +270,7 @@ const InputExample = () => {
             </div>
             <div style={{ marginBottom: '20px' }}>
                 <Input
-                    placeholder="Postleitzahl (Type=number)"
+                    placeholder="Postleitzahl (Type=number, Regex)"
                     onBlur={onBlur}
                     onChange={onChange}
                     onKeyUp={onKeyUp}
@@ -278,6 +278,7 @@ const InputExample = () => {
                     design={Input.BORDER_DESIGN}
                     dynamic
                     defaultValue={48683}
+                    regExp={new RegExp('^[0-9]{5}$')}
                     type="number"
                 />
             </div>

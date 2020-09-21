@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../../react-chayns-icon/component/Icon';
-import { isNullOrWhiteSpace } from '../../utils/is';
+import { isNullOrWhiteSpace, isString } from '../../utils/is';
 import Button from '../../react-chayns-button/component/Button';
 
 export default class Input extends PureComponent {
@@ -15,7 +15,7 @@ export default class Input extends PureComponent {
                 && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
             initial: true,
             right: false,
-            placeholderWidth: 0,
+            value: props.value || props.defaultValue || '',
         };
 
         this.id = Math.random()
@@ -27,24 +27,16 @@ export default class Input extends PureComponent {
         this.onChange = this.onChange.bind(this);
         this.callValidated = this.callValidated.bind(this);
         this.onIconClick = this.onIconClick.bind(this);
-        this.setPlaceholderWidth = this.setPlaceholderWidth.bind(this);
     }
 
-    componentDidMount() {
-        this.setPlaceholderWidth();
-    }
-
-    componentDidUpdate({ regExp: oldRegExp, value: oldValue, placeholder: oldPlaceholder }) {
-        const { regExp, onChange, value, placeholder } = this.props;
+    componentDidUpdate({ regExp: oldRegExp, value: oldValue }) {
+        const { regExp, onChange, value } = this.props;
 
         if (String(oldRegExp) !== String(regExp) && this.ref) {
             this.callValidated(this.ref.value, onChange);
         }
         if (value !== oldValue) {
             this.callValidated(value);
-        }
-        if (placeholder !== oldPlaceholder) {
-            this.setPlaceholderWidth();
         }
     }
 
@@ -65,6 +57,7 @@ export default class Input extends PureComponent {
 
     onChange(e) {
         const { onChange } = this.props;
+        this.setState({ value: e.target.value });
         this.callValidated(e.target.value, onChange, e);
     }
 
@@ -89,19 +82,6 @@ export default class Input extends PureComponent {
         }
 
         this.ref = ref;
-    }
-
-    setPlaceholderWidth() {
-        const { placeholder } = this.props;
-        if (placeholder && this.placeholderRef) {
-            setTimeout(() => {
-                if (this.placeholderRef) {
-                    this.setState({ placeholderWidth: this.placeholderRef.offsetWidth + 10 }); // 10px gap between placeholder and text
-                }
-            }, 100);
-        } else {
-            this.setState({ placeholderWidth: 0 });
-        }
     }
 
     callValidated(value, callback, event) {
@@ -143,7 +123,7 @@ export default class Input extends PureComponent {
             design,
             clearIcon,
         } = this.props;
-        const { valid, right, initial, placeholderWidth } = this.state;
+        const { valid, right, initial, value: stateValue } = this.state;
 
         const icon = clearIcon && (right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue))) ? 'fa fa-times' : iconProp;
 
@@ -178,21 +158,17 @@ export default class Input extends PureComponent {
                             required
                             onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                             disabled={disabled}
-                            style={dynamic ? {
-                                paddingRight: `${placeholderWidth}px`,
-                            } : null}
-                            {...customProps}
                         />
                         {placeholder
                         && (
                             <label
                                 htmlFor={id || this.id}
                             >
+                                <div className="space">
+                                    {isString(value) ? value : stateValue}
+                                </div>
                                 <div
                                     className="ellipsis"
-                                    ref={(ref) => {
-                                        this.placeholderRef = ref;
-                                    }}
                                 >
                                     {placeholder}
                                 </div>
@@ -228,7 +204,7 @@ export default class Input extends PureComponent {
                     <input
                         style={{
                             width: '100%',
-                            paddingRight: (icon ? '30px' : `${placeholderWidth}px`),
+                            paddingRight: (icon ? '30px' : null),
                             ...style,
                         }}
                         ref={this.setRef}
@@ -247,22 +223,25 @@ export default class Input extends PureComponent {
                         disabled={disabled}
                         {...customProps}
                     />
-                    <label
-                        htmlFor={id || this.id}
-                        className={classNames({
-                            'input--invalid': (!valid || invalid),
-                            labelIcon: icon,
-                        })}
-                    >
-                        <div
-                            className="ellipsis"
-                            ref={(ref) => {
-                                this.placeholderRef = ref;
-                            }}
+                    {placeholder
+                    && (
+                        <label
+                            htmlFor={id || this.id}
+                            className={classNames({
+                                'input--invalid': (!valid || invalid),
+                                labelIcon: icon,
+                            })}
                         >
-                            {placeholder}
-                        </div>
-                    </label>
+                            <div className="space">
+                                {isString(value) ? value : stateValue}
+                            </div>
+                            <div
+                                className="ellipsis"
+                            >
+                                {placeholder}
+                            </div>
+                        </label>
+                    )}
                     {
                         icon
                             ? (
