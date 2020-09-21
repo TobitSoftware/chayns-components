@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import AbstractExpandableListItem from '../ExpandableList/AbstractExpandableListItem';
 import ExpandableListHeader from './ExpandableListHeader';
 import ExpandableList from '../ExpandableList/ExpandableList';
+import { isFunction } from '../../../utils/is';
 
-const ExpandableListItem = ({ children, ...props }) => {
+const ExpandableListItem = ({ children, onClick, ...props }) => {
     const {
         noContentClass,
         className,
@@ -25,7 +26,14 @@ const ExpandableListItem = ({ children, ...props }) => {
                 <ExpandableList.Context.Consumer>
                     {(c) => (
                         <ExpandableListHeader
-                            onClick={c.onToggle}
+                            onClick={(...args) => {
+                                if (isFunction(onClick)) {
+                                    onClick(...args);
+                                }
+                                if (c && isFunction(c.onToggle)) {
+                                    c.onToggle(...args);
+                                }
+                            }}
                             {...props}
                         />
                     )}
@@ -54,6 +62,7 @@ ExpandableListItem.propTypes = {
     style: PropTypes.object,
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
+    onClick: PropTypes.func,
     defaultOpen: PropTypes.bool,
 };
 
@@ -64,6 +73,7 @@ ExpandableListItem.defaultProps = {
     style: null,
     onOpen: null,
     onClose: null,
+    onClick: null,
     defaultOpen: false,
 };
 
