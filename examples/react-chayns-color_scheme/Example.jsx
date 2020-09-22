@@ -12,6 +12,7 @@ import Icon from '../../src/react-chayns-icon/component/Icon';
 
 const ColorSchemeExample = () => {
     const [color, setColor] = useState(chayns.env.site.color);
+    const [secondaryColor, setSecondaryColor] = useState(chayns.env.site.color);
     const [colorMode, setColorMode] = useState(chayns.env.site.colorMode);
     const [fontSize, setFontSize] = useState(15);
     const [faOpacity, setFaOpacity] = useState(0.4);
@@ -19,17 +20,22 @@ const ColorSchemeExample = () => {
     const onColorChangeEnd = useCallback((hsv) => {
         setColor(hsvToHexString(hsv));
     }, [setColor]);
+    const onSecondaryColorChangeEnd = useCallback((hsv) => {
+        setSecondaryColor(hsvToHexString(hsv));
+    }, [setSecondaryColor]);
 
     return (
         <div>
             <ColorScheme
                 color={color}
+                secondaryColor={secondaryColor}
                 colorMode={colorMode}
                 style={{ fontSize: `${fontSize}px` }}
                 cssVariables={{ '--fa-secondary-opacity': faOpacity }}
             >
                 <div className="chayns__background-color--cw-body-background">
                     <ColorPicker color={color} onChangeEnd={onColorChangeEnd} bubblePosition={Bubble.position.BOTTOM_RIGHT}/>
+                    <ColorPicker color={secondaryColor} onChangeEnd={onSecondaryColorChangeEnd} bubblePosition={Bubble.position.BOTTOM_RIGHT}/>
                     <RadioButton name="colormode" value={0} onChange={setColorMode} defaultChecked={chayns.env.site.colorMode === 0}>
                         Default ColorMode
                     </RadioButton>

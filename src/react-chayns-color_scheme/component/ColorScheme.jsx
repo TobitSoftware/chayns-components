@@ -1,15 +1,41 @@
 /* eslint-disable react/forbid-prop-types,no-restricted-syntax */
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { getAvailableColorList, getColorFromPalette } from '@chayns/colors';
 import { hexStringToRgb } from '../../utils/color';
 
-const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props }) => {
-    if (typeof chayns === 'undefined') return children;
+const ColorScheme = (props) => {
+    // eslint-disable-next-line prefer-const
+    let { color, colorMode, secondaryColor, children, style, cssVariables, ...otherProps } = props;
+    if (color !== null || secondaryColor !== null || colorMode !== null) {
+        if (typeof chayns !== 'undefined') {
+            if (color === null) {
+                color = chayns.env.site.color;
+            }
+            if (colorMode === null) {
+                colorMode = 0;
+            }
+        } else {
+            if (color === null) {
+                color = '#8e8e8e';
+            }
+            if (colorMode === null) {
+                colorMode = 0;
+            }
+        }
+        if (secondaryColor === null) {
+            secondaryColor = color;
+        }
+    }
 
     const colorStyles = useMemo(() => {
-        if (color && typeof chayns.utils !== 'undefined') {
+        if (color) {
             const primaryRgbColor = hexStringToRgb(color);
-            const bgRgbColor = hexStringToRgb(chayns.utils.colors.getColorFromPalette('100', color, colorMode));
+            const bgRgbColor = hexStringToRgb(getColorFromPalette('100', {
+                color,
+                secondaryColor,
+                colorMode,
+            }));
             const styles = {
                 color: 'var(--chayns-color--text)',
                 '--chayns-color-rgb': `${primaryRgbColor.r}, ${primaryRgbColor.g}, ${primaryRgbColor.b}`,
@@ -17,8 +43,12 @@ const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props
             };
 
             // eslint-disable-next-line no-unused-vars
-            for (const colorName of chayns.utils.colors.getAvailableColorList()) {
-                const hexColor = chayns.utils.colors.getColorFromPalette(colorName, color, colorMode);
+            for (const colorName of getAvailableColorList()) {
+                const hexColor = getColorFromPalette(colorName, {
+                    color,
+                    secondaryColor,
+                    colorMode,
+                });
                 styles[`--chayns-color--${colorName}`] = hexColor;
                 const rgbColor = hexStringToRgb(hexColor);
                 styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
@@ -26,10 +56,10 @@ const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props
             return styles;
         }
         return null;
-    }, [color, colorMode]);
+    }, [color, secondaryColor, colorMode]);
 
     return (
-        <div style={{ ...style, ...colorStyles, ...cssVariables }} {...props}>
+        <div style={{ ...style, ...colorStyles, ...cssVariables }} {...otherProps}>
             {children}
         </div>
     );
@@ -37,6 +67,7 @@ const ColorScheme = ({ color, colorMode, children, style, cssVariables, ...props
 
 ColorScheme.propTypes = {
     color: PropTypes.string,
+    secondaryColor: PropTypes.string,
     colorMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     children: PropTypes.node.isRequired,
     style: PropTypes.object,
@@ -44,8 +75,9 @@ ColorScheme.propTypes = {
 };
 
 ColorScheme.defaultProps = {
-    color: typeof chayns !== 'undefined' ? chayns.env.site.color : '',
-    colorMode: typeof chayns !== 'undefined' ? chayns.env.site.colorMode : '',
+    color: null,
+    secondaryColor: null,
+    colorMode: null,
     style: {},
     cssVariables: {},
 };
