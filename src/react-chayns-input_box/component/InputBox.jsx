@@ -6,6 +6,7 @@ import { CSSTransition } from 'react-transition-group';
 import isDescendant from '../../utils/isDescendant';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
+import Input from '../../react-chayns-input/component/Input';
 
 export default class InputBox extends Component {
     references = {
@@ -210,7 +211,7 @@ export default class InputBox extends Component {
 
 InputBox.propTypes = {
     onBlur: PropTypes.func,
-    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
     onFocus: PropTypes.func,
     children: PropTypes.oneOfType([
@@ -226,6 +227,7 @@ InputBox.propTypes = {
 
 InputBox.defaultProps = {
     onBlur: null,
+    inputComponent: Input,
     parent: null,
     onFocus: null,
     children: null,
