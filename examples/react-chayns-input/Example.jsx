@@ -1,9 +1,15 @@
 /* eslint-disable no-console */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Input } from '../../src/index';
+import Button from '../../src/react-chayns-button/component/Button';
+import Icon from '../../src/react-chayns-icon/component/Icon';
+import DateInfo from '../../src/react-chayns-dateinfo/component/DateInfo';
 
 const InputExample = () => {
+    const [userName, setUserName] = useState('');
+    const [date, setDate] = useState('');
+
     const onBlur = useCallback((value, valid) => {
         console.log('onBlur', value, valid);
     }, []);
@@ -280,6 +286,67 @@ const InputExample = () => {
                     defaultValue={48683}
                     regExp={new RegExp('^[0-9]{5}$')}
                     type="number"
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <Input
+                    placeholder="Handynummer oder eMail"
+                    onBlur={onBlur}
+                    onChange={setUserName}
+                    onKeyUp={onKeyUp}
+                    onEnter={onEnter}
+                    design={Input.BORDER_DESIGN}
+                    dynamic
+                    value={userName}
+                    right={(
+                        <Button
+                            disabled={!userName}
+                            style={{
+                                backgroundColor: '#8e8e93',
+                                padding: '7px 15px',
+                            }}
+                        >
+                            Weiter
+                        </Button>
+                    )}
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <Input
+                    placeholder="Geburtstag"
+                    onBlur={onBlur}
+                    onChange={setDate}
+                    onKeyUp={onKeyUp}
+                    onEnter={onEnter}
+                    design={Input.BORDER_DESIGN}
+                    dynamic
+                    value={date}
+                    right={(
+                        <Icon
+                            icon="fa fa-calendar-day"
+                            style={{
+                                marginLeft: '8px',
+                                width: '30px',
+                                fontSize: '1.5em',
+                            }}
+                            onClick={() => {
+                                chayns.dialog.advancedDate({
+                                    monthSelect: true,
+                                    yearSelect: true,
+                                    preSelect: new Date(date).getTime() / 1000,
+                                })
+                                    .then((value) => {
+                                        if (value.buttonType === 1) {
+                                            setDate(DateInfo.getRelativeDateString(value.selectedDates[0].timestamp * 1000, {
+                                                showTime: false,
+                                                showDate: true,
+                                                language: chayns.env.language,
+                                            }));
+                                        }
+                                    });
+                            }}
+                        />
+                    )}
                 />
             </div>
         </div>

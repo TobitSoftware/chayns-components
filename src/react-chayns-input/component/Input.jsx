@@ -122,6 +122,7 @@ export default class Input extends PureComponent {
             disabled,
             design,
             clearIcon,
+            right: rightProp,
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
 
@@ -136,6 +137,7 @@ export default class Input extends PureComponent {
                         'input--dynamic': dynamic,
                         'input--border-design--invalid': !valid || invalid,
                         'input--border_has-icon': icon,
+                        'input--border_has-right': rightProp,
                     })}
                     onClick={() => {
                         this.ref.focus();
@@ -175,6 +177,7 @@ export default class Input extends PureComponent {
                             </label>
                         )}
                     </div>
+                    {rightProp}
                     {icon && (
                         <Button
                             onClick={this.onIconClick}
@@ -319,6 +322,7 @@ Input.propTypes = {
     clearIcon: PropTypes.bool,
     design: PropTypes.number,
     iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    right: PropTypes.node,
 };
 
 Input.defaultProps = {
@@ -349,6 +353,7 @@ Input.defaultProps = {
     clearIcon: false,
     design: Input.DEFAULT_DESIGN,
     iconLeft: null,
+    right: null,
 };
 
 Input.displayName = 'Input';
