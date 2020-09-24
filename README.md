@@ -70,6 +70,7 @@ The following components are part of this package:
 | [react-chayns-receiverinput](/src/react-chayns-receiverinput/)           | ReceiverInput Component     | [Readme](/src/react-chayns-receiverinput/README.md)      |
 | [react-chayns-rfid_input](/src/react-chayns-rfid_input/)                 | RFID Input Component        | [Readme](/src/react-chayns-rfid_input/README.md)         |
 | [react-chayns-scrollview](/src/react-chayns-scrollview/)                 | ScrollView Component        | [Readme](/src/react-chayns-scrollview/README.md)         |
+| [react-chayns-searchbox](/src/react-chayns-searchbox/)                   | SearchBox Component         | [Readme](/src/react-chayns-searchbox/README.md)          |
 | [react-chayns-selectbutton](/src/react-chayns-selectbutton/)             | SelectButton Component      | [Readme](/src/react-chayns-selectbutton/README.md)       |
 | [react-chayns-selectlist](/src/react-chayns-selectlist/)                 | SelectList Component        | [Readme](/src/react-chayns-selectlist/README.md)         |
 | [react-chayns-setupwizard](/src/react-chayns-setupwizard/)               | SetupWizard Component       | [Readme](/src/react-chayns-setupwizard/README.md)        |
