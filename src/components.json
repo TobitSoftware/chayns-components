@@ -228,4 +228,9 @@
   "title": "SliderButton",
   "example": "react-chayns-sliderbutton/Example.jsx",
   "readme": true
+},{
+  "id": "react-chayns-searchbox",
+  "title": "SearchBox",
+  "example": "react-chayns-searchbox/Example.jsx",
+  "readme": true
 }]

@@ -49,6 +49,8 @@ module.exports = function resolveAbsoluteImport(importName) {
         ReceiverInput: 'react-chayns-receiverinput/component/ReceiverInput.js',
         RfidInput: 'react-chayns-rfid_input/component/RfidInput.js',
         ScrollView: 'react-chayns-scrollview/component/ScrollView.js',
+        SearchBox: 'react-chayns-searchbox/component/SearchBox.js',
+        ResultSelection: 'react-chayns-searchbox/component/result-selection/ResultSelection.js',
         SelectButton: 'react-chayns-selectbutton/component/SelectButton.js',
         SelectList: 'react-chayns-selectlist/component/SelectList.js',
         SelectListItem: 'react-chayns-selectlist/component/SelectItem.js',

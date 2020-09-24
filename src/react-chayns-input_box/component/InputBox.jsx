@@ -161,6 +161,7 @@ export default class InputBox extends Component {
             className,
             overlayProps,
             boxClassName,
+            style,
             ...props
         } = this.props;
         const { hidden, position } = this.state;
@@ -173,6 +174,7 @@ export default class InputBox extends Component {
             <div
                 style={{
                     display: 'inline-block',
+                    ...style,
                 }}
                 className={classnames('cc__input-box', className)}
                 ref={this.setWrapperRef}

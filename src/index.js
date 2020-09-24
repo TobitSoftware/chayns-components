@@ -66,6 +66,8 @@ import ReceiverInput from './react-chayns-receiverinput/component/ReceiverInput'
 import RfidInput from './react-chayns-rfid_input/component/RfidInput';
 
 import ScrollView from './react-chayns-scrollview/component/ScrollView';
+import SearchBox from './react-chayns-searchbox/component/SearchBox';
+import ResultSelection from './react-chayns-searchbox/component/result-selection/ResultSelection';
 import SelectButton from './react-chayns-selectbutton/component/SelectButton';
 import SelectList from './react-chayns-selectlist/component/SelectList';
 import SelectListItem from './react-chayns-selectlist/component/SelectItem';
@@ -147,6 +149,8 @@ export {
     ReceiverInput,
     RfidInput,
     ScrollView,
+    SearchBox,
+    ResultSelection,
     SelectButton,
     SelectList,
     SelectListItem,
