@@ -1,15 +1,14 @@
 .cc__search-box {
-  cursor: pointer;
-
   &__item {
     padding: 4px 10px;
+    cursor: pointer;
 
     &--selected, &:hover {
       background: var(--chayns-color--102);
     }
   }
 
-  &--disabled{
+  &--disabled {
     pointer-events: none;
     user-select: none;
   }

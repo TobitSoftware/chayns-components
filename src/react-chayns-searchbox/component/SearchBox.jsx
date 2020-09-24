@@ -43,6 +43,8 @@ const SearchBox = ({
         setInputValueState(input);
     }, [onChange]);
 
+    const filteredList = list.filter((item) => (item[listValue].toLowerCase()
+        .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue));
     return (
         <InputBox
             value={inputValue}
@@ -53,29 +55,20 @@ const SearchBox = ({
             disabled={disabled}
             className={classNames(className, { 'cc__search-box--disabled': disabled })}
         >
-            <div
-                className={classNames(
-                    'cc__search-box scrollbar chayns__background-color--101 chayns__border-color--104',
-                    { 'cc__search-box--disabled': disabled },
-                )}
-            >
-                {list.filter((item) => (item[listValue].toLowerCase()
-                    .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue))
-                    .map((item) => (
-                        <div
-                            key={item[listKey]}
-                            id={item[listKey]}
-                            className={classNames('cc__search-box__item ellipsis', { 'cc__search-box__item--selected': value === item[listKey] })}
-                            onClick={onItemClick}
-                        >
-                            {
-                                inputValue
-                                    ? <ResultSelection text={item[listValue]} search={inputValue}/>
-                                    : item[listValue]
-                            }
-                        </div>
-                    ))}
-            </div>
+            {filteredList.length > 0 && filteredList.map((item) => (
+                <div
+                    key={item[listKey]}
+                    id={item[listKey]}
+                    className={classNames('cc__search-box__item ellipsis', { 'cc__search-box__item--selected': value === item[listKey] })}
+                    onClick={onItemClick}
+                >
+                    {
+                        inputValue
+                            ? <ResultSelection text={item[listValue]} search={inputValue}/>
+                            : item[listValue]
+                    }
+                </div>
+            ))}
         </InputBox>
     );
 };

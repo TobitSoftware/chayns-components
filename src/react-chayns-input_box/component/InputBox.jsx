@@ -185,26 +185,31 @@ export default class InputBox extends Component {
                     onFocus={this.handleFocus}
                 />
                 <TappPortal parent={parent}>
-                    <CSSTransition
-                        in={!!(position && !hidden && children)}
-                        timeout={200}
-                        mountOnEnter
-                        classNames="fade"
-                    >
-                        <div
-                            onClick={(e) => e.preventDefault()}
-                            className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
-                            style={position ? {
-                                width: `${position.width}px`,
-                                top: `${position.bottom}px`,
-                                left: `${position.left}px`,
-                            } : null}
-                            {...overlayProps}
-                            ref={this.setBoxRef}
-                        >
-                            {children}
-                        </div>
-                    </CSSTransition>
+                    {
+                        !!children
+                        && (
+                            <CSSTransition
+                                in={!!(position && !hidden && children)}
+                                timeout={200}
+                                mountOnEnter
+                                classNames="fade"
+                            >
+                                <div
+                                    onClick={(e) => e.preventDefault()}
+                                    className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
+                                    style={position ? {
+                                        width: `${position.width}px`,
+                                        top: `${position.bottom}px`,
+                                        left: `${position.left}px`,
+                                    } : null}
+                                    {...overlayProps}
+                                    ref={this.setBoxRef}
+                                >
+                                    {children}
+                                </div>
+                            </CSSTransition>
+                        )
+                    }
                 </TappPortal>
             </div>
         );
@@ -214,7 +219,8 @@ export default class InputBox extends Component {
 InputBox.propTypes = {
     onBlur: PropTypes.func,
     inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
+    },
     onFocus: PropTypes.func,
     children: PropTypes.oneOfType([
         PropTypes.node,
@@ -225,6 +231,7 @@ InputBox.propTypes = {
     inputRef: PropTypes.func,
     // eslint-disable-next-line react/forbid-prop-types
     overlayProps: PropTypes.object,
+    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
 };
 
 InputBox.defaultProps = {
@@ -237,6 +244,7 @@ InputBox.defaultProps = {
     boxClassName: null,
     inputRef: null,
     overlayProps: null,
+    style: null,
 };
 
 InputBox.displayName = 'InputBox';
