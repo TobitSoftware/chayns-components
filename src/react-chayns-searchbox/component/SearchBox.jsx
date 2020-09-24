@@ -44,7 +44,16 @@ const SearchBox = ({
     }, [onChange]);
 
     const filteredList = list.filter((item) => (item[listValue].toLowerCase()
-        .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue));
+        .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue))
+        .sort((a, b) => {
+            const aValue = a[listValue].toLowerCase();
+            const bValue = b[listValue].toLowerCase();
+            const aStartsWith = aValue.startsWith(inputValue.toLowerCase());
+            const bStartsWith = bValue.startsWith(inputValue.toLowerCase());
+            if (aStartsWith && !bStartsWith) return -1;
+            if (!aStartsWith && bStartsWith) return 1;
+            return aValue.localeCompare(bValue);
+        });
     return (
         <InputBox
             value={inputValue}

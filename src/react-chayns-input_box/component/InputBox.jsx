@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { CSSTransition } from 'react-transition-group';
 
 import isDescendant from '../../utils/isDescendant';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
@@ -186,28 +185,21 @@ export default class InputBox extends Component {
                 />
                 <TappPortal parent={parent}>
                     {
-                        !!children
+                        !!(position && !hidden && children)
                         && (
-                            <CSSTransition
-                                in={!!(position && !hidden && children)}
-                                timeout={200}
-                                mountOnEnter
-                                classNames="fade"
+                            <div
+                                onClick={(e) => e.preventDefault()}
+                                className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
+                                style={position ? {
+                                    width: `${position.width}px`,
+                                    top: `${position.bottom}px`,
+                                    left: `${position.left}px`,
+                                } : null}
+                                {...overlayProps}
+                                ref={this.setBoxRef}
                             >
-                                <div
-                                    onClick={(e) => e.preventDefault()}
-                                    className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
-                                    style={position ? {
-                                        width: `${position.width}px`,
-                                        top: `${position.bottom}px`,
-                                        left: `${position.left}px`,
-                                    } : null}
-                                    {...overlayProps}
-                                    ref={this.setBoxRef}
-                                >
-                                    {children}
-                                </div>
-                            </CSSTransition>
+                                {children}
+                            </div>
                         )
                     }
                 </TappPortal>
