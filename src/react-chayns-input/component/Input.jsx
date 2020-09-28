@@ -160,6 +160,7 @@ export default class Input extends PureComponent {
                             required
                             onClick={stopPropagation ? (event) => event.stopPropagation() : null}
                             disabled={disabled}
+                            {...customProps}
                         />
                         {placeholder
                         && (
