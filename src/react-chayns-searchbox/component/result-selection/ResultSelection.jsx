@@ -8,10 +8,16 @@ const ResultSelection = ({ text, search }) => {
     const regexp = new RegExp(escapeRegExp(search), 'gi');
     const mismatches = text.split(regexp);
     const matches = text.match(regexp);
-    return mismatches.map((mismatch, mismatchIndex) => [
-        <span className="cc__result-selection cc__result-selection--mismatch">{mismatch}</span>,
+
+    const mismatchesWithId = mismatches.map((part, index) => ({
+        value: part,
+        id: index,
+    }));
+
+    return mismatchesWithId.map((mismatch, mismatchIndex) => [
+        <span key={`${mismatch.id}_missmatch`} className="cc__result-selection cc__result-selection--mismatch">{mismatch.value}</span>,
         matches && mismatchIndex < matches.length
-        && <span className="cc__result-selection cc__result-selection--match">{matches[mismatchIndex]}</span>,
+        && <span key={`${mismatch.id}_match`} className="cc__result-selection cc__result-selection--match">{matches[mismatchIndex]}</span>,
     ]);
 };
 
