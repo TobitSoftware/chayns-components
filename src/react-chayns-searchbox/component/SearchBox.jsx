@@ -10,8 +10,21 @@ import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 
 const SearchBox = ({
-    list, disabled, listValue, listKey, defaultValue, parent, onSelect, value: valueProp, stopPropagation, showListWithoutInput,
-    inputValue: inputValueProp, inputDefaultValue, onChange, className, ...otherProps
+    list,
+    disabled,
+    listValue,
+    listKey,
+    defaultValue,
+    parent,
+    onSelect,
+    value: valueProp,
+    stopPropagation,
+    showListWithoutInput,
+    inputValue: inputValueProp,
+    inputDefaultValue,
+    onChange,
+    className,
+    ...otherProps
 }) => {
     const getItem = useCallback((key) => {
         if (key === null || key === undefined) {
@@ -43,7 +56,7 @@ const SearchBox = ({
         setInputValueState(input);
     }, [onChange]);
 
-    const filteredList = list.filter((item) => (item[listValue].toLowerCase()
+    const filteredList = list?.filter((item) => (item[listValue].toLowerCase()
         .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue))
         .sort((a, b) => {
             const aValue = a[listValue].toLowerCase();
@@ -54,17 +67,18 @@ const SearchBox = ({
             if (!aStartsWith && bStartsWith) return 1;
             return aValue.localeCompare(bValue);
         });
+
     return (
         <InputBox
             value={inputValue}
-            defaultValue={inputDefaultValue}
+            defaultValue={!inputValue && inputDefaultValue ? inputDefaultValue : undefined}
             onChange={inputOnChange}
             {...otherProps}
             ref={inputBoxRef}
             disabled={disabled}
             className={classNames(className, { 'cc__search-box--disabled': disabled })}
         >
-            {filteredList.length > 0 && filteredList.map((item) => (
+            {filteredList?.length > 0 && filteredList.map((item) => (
                 <div
                     key={item[listKey]}
                     id={item[listKey]}
@@ -73,7 +87,12 @@ const SearchBox = ({
                 >
                     {
                         inputValue
-                            ? <ResultSelection text={item[listValue]} search={inputValue}/>
+                            ? (
+                                <ResultSelection
+                                    text={item[listValue]}
+                                    search={inputValue}
+                                />
+                            )
                             : item[listValue]
                     }
                 </div>
@@ -85,11 +104,11 @@ const SearchBox = ({
 SearchBox.propTypes = {
     onSelect: PropTypes.func,
     disabled: PropTypes.bool,
-    list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])).isRequired,
+    list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])),
     listKey: PropTypes.string.isRequired,
     listValue: PropTypes.string.isRequired,
     className: PropTypes.string,
-    defaultValue: PropTypes.string,
+    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     stopPropagation: PropTypes.bool,
     parent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
@@ -113,6 +132,7 @@ SearchBox.defaultProps = {
     showListWithoutInput: false,
     inputDefaultValue: null,
     onChange: null,
+    list: null,
 };
 
 SearchBox.displayName = 'SearchBox';
