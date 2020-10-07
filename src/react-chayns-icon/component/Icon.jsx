@@ -1,7 +1,6 @@
 /* eslint-disable react/no-redundant-should-component-update,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 import { isString } from '../../utils/is';
 
@@ -9,10 +8,6 @@ let displayedIconWarning = false;
 export default class Icon extends Component {
     constructor(props) {
         super(props);
-        const { icon } = props;
-        if (!isString(icon) && icon && icon.prefix && icon.iconName) {
-            library.add(icon);
-        }
         this.onClick = this.onClick.bind(this);
     }
 
