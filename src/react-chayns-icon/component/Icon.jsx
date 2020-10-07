@@ -21,18 +21,6 @@ export default class Icon extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps) {
-        const { icon } = this.props;
-        if (icon !== nextProps.icon
-            && nextProps.icon
-            && !isString(nextProps.icon)
-            && nextProps.icon.prefix
-            && nextProps.icon.iconName) {
-            library.add(nextProps.icon);
-        }
-        return true;
-    }
-
     onClick(e) {
         const { onClick, disabled, stopPropagation } = this.props;
 
