@@ -132,7 +132,7 @@ const SearchBox = ({
             onKeyDown={handleKeyDown}
             inputRef={(ref) => inputRef.current = ref}
         >
-            {filteredList?.length > 0 && filteredList.map((item, index) => (
+            {filteredList && filteredList.map((item, index) => (
                 <div
                     key={item[listKey]}
                     id={item[listKey]}
