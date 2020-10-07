@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isFunction, isString } from '../../utils/is';
+import { isString } from '../../utils/is';
 
 let displayedIconWarning = false;
 export default class Icon extends Component {
@@ -51,40 +50,21 @@ export default class Icon extends Component {
             icon, className, onClick, disabled, stopPropagation, ...other
         } = this.props;
 
-        const classes = classNames('react-chayns-icon', className, {
-            [icon]: isString(icon),
+        let iconName = icon;
+        if (typeof icon === 'object') {
+            iconName = `${icon.prefix} fa-${icon.iconName}`;
+        }
+        if (!isString(iconName)) return null;
+
+        const classes = classNames('react-chayns-icon', iconName, className, {
             'react-chayns-icon--clickable': onClick,
             'react-chayns-icon--disabled': disabled,
         });
 
-        if (isString(icon)) {
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            return (
-                <i
-                    className={classes}
-                    onClick={this.onClick}
-                    {...other}
-                />
-            );
-        }
-
-        if (!icon) {
-            return null;
-        }
-
-        if (isFunction(onClick)) {
-            return (
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                <span className={classes} onClick={this.onClick}>
-                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other}/>
-                </span>
-            );
-        }
-
         return (
-            <FontAwesomeIcon
-                icon={[icon.prefix, icon.iconName]}
+            <i
                 className={classes}
+                onClick={this.onClick}
                 {...other}
             />
         );

@@ -85,8 +85,6 @@
   },
   "dependencies": {
     "@chayns/colors": "^1.0.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.27",
-    "@fortawesome/react-fontawesome": "0.1.4",
     "abortcontroller-polyfill": "^1.4.0",
     "classnames": "^2.2.6",
     "coordinate-parser": "^1.0.3",
