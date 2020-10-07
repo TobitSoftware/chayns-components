@@ -7,6 +7,7 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import supportsFileInput from '../utils/supportsFileInput';
 import fileInputCall from '../utils/fileInputCall';
 import { isFunction } from '../../utils/is';
+import isInIframeDialog from '../utils/isInIframeDialog';
 
 export default class FileInput extends PureComponent {
     constructor(props) {
@@ -14,6 +15,7 @@ export default class FileInput extends PureComponent {
         this.itemRefs = [];
         this.fileInputRefs = [];
         this.needAppCall = !supportsFileInput();
+        this.isInIframeDialog = isInIframeDialog();
         this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.appVersion >= 6244) };
     }
 
@@ -61,7 +63,7 @@ export default class FileInput extends PureComponent {
         if (stopPropagation) event.stopPropagation();
         if (isFunction(item.onClick)) item.onClick(event);
         if (item.onChange) {
-            if (this.needAppCall) {
+            if (this.needAppCall && !this.isInIframeDialog) {
                 const compatibilityEvent = await fileInputCall(); // TODO remove in future version
                 this.onChange(compatibilityEvent, item, index);
             } else if (!hasMemoryAccess) {
@@ -145,7 +147,7 @@ export default class FileInput extends PureComponent {
                                             onClick={(event) => this.onClick(event, item, index)}
                                         >
                                             {
-                                                item.onChange && !this.needAppCall
+                                                item.onChange && (!this.needAppCall || this.isInIframeDialog)
                                                     ? (
                                                         <input
                                                             style={!hasMemoryAccess ? { display: 'none' } : null}
