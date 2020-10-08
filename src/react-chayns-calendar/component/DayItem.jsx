@@ -72,9 +72,10 @@ class DayItem extends PureComponent {
                 'is-selected': _selected,
                 'is-marked': _marked,
                 'is-marked-is-highlighted': _marked && _highlighted,
-                'chayns__background-color--80 chayns__color--5': _active && _marked,
-                'chayns__background-color--80': !_active && _marked && !_selected,
-
+                'chayns__background-color--80 chayns__color--5':
+                    _active && _marked,
+                'chayns__background-color--80':
+                    !_active && _marked && !_selected,
             });
 
             return (
@@ -83,20 +84,14 @@ class DayItem extends PureComponent {
                     style={_style}
                     onClick={_onClick ? this.onClick : null}
                 >
-                    <div className="day__item__content">
-                        {date.getDate()}
-                    </div>
+                    <div className="day__item__content">{date.getDate()}</div>
                 </div>
             );
         }
 
         return (
-            <div
-                className="day__item day-out-month"
-            >
-                <div className="day__item__content">
-                    {date.getDate()}
-                </div>
+            <div className="day__item day-out-month">
+                <div className="day__item__content">{date.getDate()}</div>
             </div>
         );
     }

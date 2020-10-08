@@ -1,6 +1,7 @@
 # Button / ChooseButton
 
-The Button/ChooseButton is part of the _chayns-components_ package. It can be installed via npm:
+The Button/ChooseButton is part of the _chayns-components_ package. It can be
+installed via npm:
 
     npm install -S chayns-components@latest
 
@@ -39,4 +40,6 @@ Additional props will be passed on to the underlying `button`-element.
 
 ## Example
 
-You can take a look at the **examples** folder in the **react-chayns-button** repository. There you can find an appropriate way of implementing the **Button** to your chayns-Tapp.
+You can take a look at the **examples** folder in the **react-chayns-button**
+repository. There you can find an appropriate way of implementing the **Button**
+to your chayns-Tapp.

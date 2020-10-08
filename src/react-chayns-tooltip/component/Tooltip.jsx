@@ -30,7 +30,10 @@ export default class Tooltip extends Component {
     componentDidUpdate(prevProps) {
         const { coordinates, position } = this.props;
 
-        if (prevProps.coordinates !== coordinates || prevProps.position !== position) {
+        if (
+            prevProps.coordinates !== coordinates ||
+            prevProps.position !== position
+        ) {
             this.getPosition();
         }
     }
@@ -42,49 +45,59 @@ export default class Tooltip extends Component {
         }
         const nodeArray = [<p key={`p${this.tooltipKey}`}>{content.text}</p>];
         if (content.imageUrl) {
-            nodeArray.unshift(<div
-                key={`divImg${this.tooltipKey}`}
-                className="cc__tooltip__image"
-                style={{ backgroundImage: `url(${content.imageUrl})` }}
-            />);
+            nodeArray.unshift(
+                <div
+                    key={`divImg${this.tooltipKey}`}
+                    className="cc__tooltip__image"
+                    style={{ backgroundImage: `url(${content.imageUrl})` }}
+                />
+            );
         }
         if (content.headline) {
-            nodeArray.unshift(<h5 key={`h5${this.tooltipKey}`}>{content.headline}</h5>);
+            nodeArray.unshift(
+                <h5 key={`h5${this.tooltipKey}`}>{content.headline}</h5>
+            );
         }
         if (content.buttonText && content.buttonOnClick) {
-            nodeArray.push((
-                <div className="cc__tooltip__button" key={`divBtn${this.tooltipKey}`}>
-                    <Button
-                        onClick={content.buttonOnClick}
-                    >
+            nodeArray.push(
+                <div
+                    className="cc__tooltip__button"
+                    key={`divBtn${this.tooltipKey}`}
+                >
+                    <Button onClick={content.buttonOnClick}>
                         {content.buttonText}
                     </Button>
                 </div>
-            ));
+            );
         }
         return nodeArray;
     }
 
     async getPosition() {
-        const {
-            position, coordinates, parent, removeParentSpace,
-        } = this.props;
+        const { position, coordinates, parent, removeParentSpace } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
         let x = coordinates ? coordinates.x : 0;
         let top = coordinates ? coordinates.y : 0;
         let bottom = coordinates ? coordinates.y : 0;
         if (this.childrenWrapper && !coordinates) {
             const rect = this.childrenWrapper.current.getBoundingClientRect();
-            x = rect.left + (rect.width / 2);
+            x = rect.left + rect.width / 2;
             top = rect.top;
             bottom = rect.bottom;
         }
         let pos = position;
         if (position === null) {
-            const posArray = (x > window.innerWidth / 2)
-                ? [Tooltip.position.TOP_LEFT, Tooltip.position.BOTTOM_LEFT]
-                : [Tooltip.position.TOP_RIGHT, Tooltip.position.BOTTOM_RIGHT];
-            pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
+            const posArray =
+                x > window.innerWidth / 2
+                    ? [Tooltip.position.TOP_LEFT, Tooltip.position.BOTTOM_LEFT]
+                    : [
+                          Tooltip.position.TOP_RIGHT,
+                          Tooltip.position.BOTTOM_RIGHT,
+                      ];
+            pos =
+                (top + bottom) / 2 > window.innerHeight / 2
+                    ? posArray[0]
+                    : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
         if (chayns.env.isApp) {
@@ -93,7 +106,11 @@ export default class Tooltip extends Component {
         }
 
         if (removeParentSpace) {
-            const parentRect = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            const parentRect = (
+                parent ||
+                document.getElementsByClassName('tapp')[0] ||
+                document.body
+            ).getBoundingClientRect();
             x -= parentRect.left;
             y -= parentRect.top;
         }
@@ -146,28 +163,34 @@ export default class Tooltip extends Component {
                         padding: '12px',
                     }}
                     topDivStyle={{
-                        ...!hideOnChildrenLeave || {
+                        ...(!hideOnChildrenLeave || {
                             userSelect: 'none',
                             pointerEvents: 'none',
-                        },
+                        }),
                     }}
                     key="bubble"
                     ref={this.bubble}
                 >
                     {removeIcon ? (
                         <div className="cc__tooltip__icon" onClick={this.hide}>
-                            <Icon icon="fa fa-times"/>
+                            <Icon icon="fa fa-times" />
                         </div>
                     ) : null}
                     {this.getContent()}
                 </Bubble>
             ) : null,
             <div
-                className={classNames({ 'cc__tooltip__children--trigger': !preventTriggerStyle }, 'cc__tooltip__children', childrenClassNames)}
+                className={classNames(
+                    { 'cc__tooltip__children--trigger': !preventTriggerStyle },
+                    'cc__tooltip__children',
+                    childrenClassNames
+                )}
                 ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
-                onMouseEnter={!chayns.env.isIOS && bindListeners ? this.show : null}
+                onMouseEnter={
+                    !chayns.env.isIOS && bindListeners ? this.show : null
+                }
                 onMouseLeave={bindListeners ? this.hide : null}
                 onClick={chayns.env.isIOS && bindListeners ? this.show : null}
             >
@@ -194,11 +217,15 @@ Tooltip.propTypes = {
     ]).isRequired,
     children: PropTypes.node,
     bindListeners: PropTypes.bool,
-    position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
+    position:
+        PropTypes.number /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */,
     minWidth: PropTypes.number,
     maxWidth: PropTypes.number,
     removeIcon: PropTypes.bool,
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,

@@ -39,23 +39,32 @@ function bootstrap() {
     const examplesData = fs.readFileSync(EXAMPLE_DEFINITION_PATH);
     const examples = JSON.parse(examplesData);
 
-    const data = examples.filter((d) => d.readme && !d.group).sort((a, b) => a.title.localeCompare(b.title)).map((d) => {
-        if (!d.readme) {
-            return null;
-        }
+    const data = examples
+        .filter((d) => d.readme && !d.group)
+        .sort((a, b) => a.title.localeCompare(b.title))
+        .map((d) => {
+            if (!d.readme) {
+                return null;
+            }
 
-        return [
-            `[${d.id}](/src/${d.id}/)`,
-            `${d.title} Component`,
-            `[Readme](/src/${d.id}/README.md)`,
-        ];
-    }).filter((d) => d);
+            return [
+                `[${d.id}](/src/${d.id}/)`,
+                `${d.title} Component`,
+                `[Readme](/src/${d.id}/README.md)`,
+            ];
+        })
+        .filter((d) => d);
 
     // eslint-disable-next-line max-len
-    const markdownList = `<!--- start component list -->\n${toList(normalize([['Component', 'Description', 'Readme File'], ...data]))}<!--- end component list -->`;
+    const markdownList = `<!--- start component list -->\n${toList(
+        normalize([['Component', 'Description', 'Readme File'], ...data])
+    )}<!--- end component list -->`;
 
     const markdownFile = fs.readFileSync(MARKDOWN_PATH);
-    const manipulatedMarkdown = String(markdownFile).replace(/<!--- start component list -->(.*)<!--- end component list -->/s, markdownList);
+    const manipulatedMarkdown = String(markdownFile).replace(
+        /<!--- start component list -->(.*)<!--- end component list -->/s,
+        markdownList
+    );
 
     fs.writeFileSync(MARKDOWN_PATH, manipulatedMarkdown);
 }

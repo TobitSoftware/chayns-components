@@ -47,7 +47,7 @@ const Button = forwardRef((props, ref) => {
                         choosebutton__icon: chooseButton,
                     })}
                 >
-                    <Icon icon={icon}/>
+                    <Icon icon={icon} />
                 </span>
             )}
             {children}

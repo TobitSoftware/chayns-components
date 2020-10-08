@@ -9,7 +9,9 @@ class SimplePersonFinder extends Component {
 
         if (isString(props.defaultValue)) {
             // eslint-disable-next-line no-console
-            console.warn('[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.');
+            console.warn(
+                '[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.'
+            );
         }
 
         this.multipleFinder = React.createRef();
@@ -22,12 +24,7 @@ class SimplePersonFinder extends Component {
     }
 
     render() {
-        const {
-            defaultValue,
-            value,
-            onChange,
-            ...props
-        } = this.props;
+        const { defaultValue, value, onChange, ...props } = this.props;
 
         let defaultValues = [];
         if (isString(defaultValue)) {

@@ -12,11 +12,14 @@ const PersonFinderResults = ({
     onSelect,
     focusIndex,
 }) => {
-    const handleClick = useCallback((value) => {
-        if (onSelect) {
-            onSelect(value.type, value.relation);
-        }
-    }, [onSelect]);
+    const handleClick = useCallback(
+        (value) => {
+            if (onSelect) {
+                onSelect(value.type, value.relation);
+            }
+        },
+        [onSelect]
+    );
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
@@ -24,15 +27,25 @@ const PersonFinderResults = ({
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
-            const groupData = typeof orm.filter === 'function' ? (data[group] || []).filter(orm.filter(inputValue)) : (data[group] || []);
+            const groupData =
+                typeof orm.filter === 'function'
+                    ? (data[group] || []).filter(orm.filter(inputValue))
+                    : data[group] || [];
             const groupLength = groupData.length;
             length += groupLength;
             let groupFocusIndex = null;
-            if (length - groupLength <= focusIndex && focusIndex < length && focusIndex !== null) {
+            if (
+                length - groupLength <= focusIndex &&
+                focusIndex < length &&
+                focusIndex !== null
+            ) {
                 groupFocusIndex = focusIndex - (length - groupLength);
             }
             return (
-                <div className="cc__person-finder__results" key={`resultList_${group}`}>
+                <div
+                    className="cc__person-finder__results"
+                    key={`resultList_${group}`}
+                >
                     <ResultItemList
                         data={groupData}
                         orm={orm}
@@ -52,7 +65,11 @@ const PersonFinderResults = ({
     return (
         <div className="cc__person-finder__results">
             <ResultItemList
-                data={typeof orm.filter === 'function' ? data.filter(orm.filter(inputValue)) : data}
+                data={
+                    typeof orm.filter === 'function'
+                        ? data.filter(orm.filter(inputValue))
+                        : data
+                }
                 orm={orm}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}

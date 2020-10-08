@@ -53,6 +53,8 @@ export default function hsvToRgb1(hsv) {
         r,
         g,
         b,
-        a: isNumber(hsv.a) ? hsv.a : 1, /* eslint-disable-line no-restricted-globals */
+        a: isNumber(hsv.a)
+            ? hsv.a
+            : 1 /* eslint-disable-line no-restricted-globals */,
     };
 }

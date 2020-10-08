@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 const AbstractList = ({ className, children }) => (
-    <div className={classnames('cc__list', className)}>
-        {children}
-    </div>
+    <div className={classnames('cc__list', className)}>{children}</div>
 );
 
 AbstractList.propTypes = {

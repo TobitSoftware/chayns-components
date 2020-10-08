@@ -9,8 +9,34 @@ import Icon from '../../react-chayns-icon/component/Icon';
 
 const TODAY = new Date();
 const MONTH_NAMES = {
-    de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    de: [
+        'Januar',
+        'Februar',
+        'März',
+        'April',
+        'Mai',
+        'Juni',
+        'Juli',
+        'August',
+        'September',
+        'Oktober',
+        'November',
+        'Dezember',
+    ],
+    en: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ],
 };
 
 function getMonthNames(language = chayns.env.language) {
@@ -39,7 +65,11 @@ export default class Calendar extends Component {
         //  ADDITIONALLY SELECTED SHOULD BE THE FIRST DATE IN TIME CONTEXT, NOT THE FIRST DATE OF THE LIST
         const { selected } = props;
 
-        const active = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
+        const active = new Date(
+            selected.getFullYear(),
+            selected.getMonth(),
+            selected.getDate()
+        );
         this.setMonths(active);
     }
 
@@ -58,9 +88,21 @@ export default class Calendar extends Component {
             });
         }
 
-        const _leftHidden = new Date(_focus.getFullYear(), _focus.getMonth() - 2, 1);
-        const _rightShown = new Date(_focus.getFullYear(), _focus.getMonth() - 1, 1);
-        const _rightHidden = new Date(_focus.getFullYear(), _focus.getMonth() + 1, 1);
+        const _leftHidden = new Date(
+            _focus.getFullYear(),
+            _focus.getMonth() - 2,
+            1
+        );
+        const _rightShown = new Date(
+            _focus.getFullYear(),
+            _focus.getMonth() - 1,
+            1
+        );
+        const _rightHidden = new Date(
+            _focus.getFullYear(),
+            _focus.getMonth() + 1,
+            1
+        );
 
         const monthNames = getMonthNames();
         const months = [
@@ -68,26 +110,59 @@ export default class Calendar extends Component {
                 title: monthNames[_leftHidden.getMonth()],
                 className: 'month',
                 startDate: _leftHidden,
-                endDate: new Date(_leftHidden.getFullYear(), _leftHidden.getMonth() + 1, _leftHidden.getDate(), 23, 59, 59, 999),
+                endDate: new Date(
+                    _leftHidden.getFullYear(),
+                    _leftHidden.getMonth() + 1,
+                    _leftHidden.getDate(),
+                    23,
+                    59,
+                    59,
+                    999
+                ),
             },
             {
                 title: monthNames[_rightShown.getMonth()],
                 className: 'month',
                 startDate: _rightShown,
-                endDate: new Date(_rightShown.getFullYear(), _rightShown.getMonth() + 1, _rightShown.getDate(), 23, 59, 59, 999),
+                endDate: new Date(
+                    _rightShown.getFullYear(),
+                    _rightShown.getMonth() + 1,
+                    _rightShown.getDate(),
+                    23,
+                    59,
+                    59,
+                    999
+                ),
             },
             {
                 title: monthNames[_focus.getMonth()],
                 className: 'month',
                 startDate: new Date(_focus.getFullYear(), _focus.getMonth(), 1),
-                endDate: new Date(_focus.getFullYear(), _focus.getMonth() + 1, _focus.getDate(), 23, 59, 59, 999),
+                endDate: new Date(
+                    _focus.getFullYear(),
+                    _focus.getMonth() + 1,
+                    _focus.getDate(),
+                    23,
+                    59,
+                    59,
+                    999
+                ),
             },
             {
                 title: monthNames[_rightHidden.getMonth()],
                 className: 'month',
                 startDate: _rightHidden,
-                endDate: new Date(_rightHidden.getFullYear(), _rightHidden.getMonth() + 1, _rightHidden.getDate(), 23, 59, 59, 999),
-            }];
+                endDate: new Date(
+                    _rightHidden.getFullYear(),
+                    _rightHidden.getMonth() + 1,
+                    _rightHidden.getDate(),
+                    23,
+                    59,
+                    59,
+                    999
+                ),
+            },
+        ];
 
         this.newMonths = months;
 
@@ -122,8 +197,10 @@ export default class Calendar extends Component {
 
         const FOCUS_FACTOR = Calendar.IsMobile() ? 0 : 1;
 
-        return startDate.getFullYear() === focus.getFullYear()
-            && startDate.getMonth() + FOCUS_FACTOR < focus.getMonth();
+        return (
+            startDate.getFullYear() === focus.getFullYear() &&
+            startDate.getMonth() + FOCUS_FACTOR < focus.getMonth()
+        );
     }
 
     getNavigateRight() {
@@ -138,8 +215,10 @@ export default class Calendar extends Component {
             return true;
         }
 
-        return endDate.getFullYear() === focus.getFullYear()
-            && endDate.getMonth() > focus.getMonth();
+        return (
+            endDate.getFullYear() === focus.getFullYear() &&
+            endDate.getMonth() > focus.getMonth()
+        );
     }
 
     navigateRightOnClick() {
@@ -219,7 +298,8 @@ export default class Calendar extends Component {
          * @private
          */
         const _startDate = startDate || null;
-        const _activated = activatedProp && activatedProp.length > 0 ? activatedProp : null;
+        const _activated =
+            activatedProp && activatedProp.length > 0 ? activatedProp : null;
         const _highlighted = highlighted || null;
 
         return months.map((month) => {
@@ -229,16 +309,27 @@ export default class Calendar extends Component {
             let _selected;
             let tempHighlighted = [];
 
-            if (month.startDate.getYear() === selected.getYear() && month.startDate.getMonth() === selected.getMonth()) {
+            if (
+                month.startDate.getYear() === selected.getYear() &&
+                month.startDate.getMonth() === selected.getMonth()
+            ) {
                 _selected = selected;
             }
 
             for (let i = 0; _activated && i < _activated.length; i += 1) {
-                if (month.startDate.getYear() === _activated[i].getYear() && month.startDate.getMonth() === _activated[i].getMonth()) {
+                if (
+                    month.startDate.getYear() === _activated[i].getYear() &&
+                    month.startDate.getMonth() === _activated[i].getMonth()
+                ) {
                     if (_startDate) {
-                        if ((_startDate.getYear() < _activated[i].getYear()
-                            || (_startDate.getYear() === _activated[i].getYear() && _startDate.getMonth() < _activated[i].getMonth()))
-                            || (_startDate.getMonth() === _activated[i].getMonth() && _startDate.getDate() <= _activated[i].getDate())
+                        if (
+                            _startDate.getYear() < _activated[i].getYear() ||
+                            (_startDate.getYear() === _activated[i].getYear() &&
+                                _startDate.getMonth() <
+                                    _activated[i].getMonth()) ||
+                            (_startDate.getMonth() ===
+                                _activated[i].getMonth() &&
+                                _startDate.getDate() <= _activated[i].getDate())
                         ) {
                             activated.push(_activated[i]);
                         }
@@ -253,8 +344,17 @@ export default class Calendar extends Component {
                     for (let j = 0; j < _highlighted.length; j += 1) {
                         const dates = [];
 
-                        for (let k = 0; k < _highlighted[j].dates.length; k += 1) {
-                            if (_highlighted[j].dates[k].getTime() >= month.startDate && _highlighted[j].dates[k].getTime() <= month.endDate) {
+                        for (
+                            let k = 0;
+                            k < _highlighted[j].dates.length;
+                            k += 1
+                        ) {
+                            if (
+                                _highlighted[j].dates[k].getTime() >=
+                                    month.startDate &&
+                                _highlighted[j].dates[k].getTime() <=
+                                    month.endDate
+                            ) {
                                 dates.push(_highlighted[j].dates[k]);
                             }
                         }
@@ -278,8 +378,17 @@ export default class Calendar extends Component {
                         for (let j = 0; j < _highlighted.length; j += 1) {
                             const dates = [];
 
-                            for (let k = 0; k < _highlighted[j].dates.length; k += 1) {
-                                if (areDatesEqual(_highlighted[j].dates[k], activated[i])) {
+                            for (
+                                let k = 0;
+                                k < _highlighted[j].dates.length;
+                                k += 1
+                            ) {
+                                if (
+                                    areDatesEqual(
+                                        _highlighted[j].dates[k],
+                                        activated[i]
+                                    )
+                                ) {
                                     dates.push(_highlighted[j].dates[k]);
                                 }
                             }
@@ -326,8 +435,8 @@ export default class Calendar extends Component {
     }
 
     render() {
-        const _navigateLeft = !(this.getNavigateLeft());
-        const _navigateRight = !(this.getNavigateRight());
+        const _navigateLeft = !this.getNavigateLeft();
+        const _navigateRight = !this.getNavigateRight();
         const { style, className } = this.props;
         const { animate, translate } = this.state;
         const _months = this.renderMonths();
@@ -353,21 +462,25 @@ export default class Calendar extends Component {
                             className="cc__calendar__navigate left"
                             hidden={_navigateLeft}
                         >
-                            <Icon icon="fa fa-chevron-left"/>
+                            <Icon icon="fa fa-chevron-left" />
                         </div>
-                        <div className="cc__calendar__navigate middle"/>
+                        <div className="cc__calendar__navigate middle" />
                         <div
                             onClick={this.navigateRightOnClick}
                             className="cc__calendar__navigate right"
                             hidden={_navigateRight}
                         >
-                            <Icon icon="fa fa-chevron-right"/>
+                            <Icon icon="fa fa-chevron-right" />
                         </div>
                     </div>
                 </div>
                 <div className="cc__calendar__months">
                     <div
-                        className={`cc__calendar__months__wrapper ${animate ? 'cc__calendar__months__wrapper--animate' : ''}`}
+                        className={`cc__calendar__months__wrapper ${
+                            animate
+                                ? 'cc__calendar__months__wrapper--animate'
+                                : ''
+                        }`}
                         style={{
                             transform: `translateX(${translate})`,
                         }}
@@ -391,10 +504,12 @@ Calendar.propTypes = {
             dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
             color: PropTypes.string,
         }),
-        PropTypes.arrayOf(PropTypes.shape({
-            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-            color: PropTypes.string,
-        })),
+        PropTypes.arrayOf(
+            PropTypes.shape({
+                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+                color: PropTypes.string,
+            })
+        ),
     ]),
     activateAll: PropTypes.bool,
     style: PropTypes.object,

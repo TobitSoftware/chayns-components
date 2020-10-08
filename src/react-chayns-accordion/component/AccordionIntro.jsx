@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const AccordionIntro = ({ children }) => (
-    <div className="accordion__intro">
-        {children}
-    </div>
+    <div className="accordion__intro">{children}</div>
 );
 
 AccordionIntro.propTypes = {

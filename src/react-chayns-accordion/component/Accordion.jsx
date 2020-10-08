@@ -17,7 +17,12 @@ export default class Accordion extends PureComponent {
     constructor(props) {
         super(props);
         const { defaultOpened, open, className } = props;
-        const currentState = (props && defaultOpened) || (open || (className && className.indexOf('accordion--open') !== -1)) ? OPEN : CLOSE;
+        const currentState =
+            (props && defaultOpened) ||
+            open ||
+            (className && className.indexOf('accordion--open') !== -1)
+                ? OPEN
+                : CLOSE;
         this.state = {
             currentState,
             showBody: currentState === OPEN,
@@ -50,7 +55,11 @@ export default class Accordion extends PureComponent {
                 // eslint-disable-next-line no-shadow
                 const { currentState } = this.state;
                 if (currentState === OPEN) {
-                    this.body.style.setProperty('max-height', 'initial', 'important');
+                    this.body.style.setProperty(
+                        'max-height',
+                        'initial',
+                        'important'
+                    );
                 }
             }
         });
@@ -96,7 +105,12 @@ export default class Accordion extends PureComponent {
     getBody() {
         const { renderClosed, children, removeContentClosed } = this.props;
         const { currentState, showBody } = this.state;
-        if (currentState === OPEN || renderClosed || (this.rendered && !removeContentClosed) || showBody) {
+        if (
+            currentState === OPEN ||
+            renderClosed ||
+            (this.rendered && !removeContentClosed) ||
+            showBody
+        ) {
             this.rendered = true;
             return children;
         }
@@ -117,7 +131,8 @@ export default class Accordion extends PureComponent {
 
         let trigger = true;
         let node = event.target;
-        for (let i = 0; i < 15; i += 1) { // look for up to 15 parent nodes
+        for (let i = 0; i < 15; i += 1) {
+            // look for up to 15 parent nodes
             if (node.classList) {
                 if (node.classList.contains('accordion--no-trigger')) {
                     trigger = false;
@@ -139,7 +154,10 @@ export default class Accordion extends PureComponent {
             const { currentState } = this.state;
             const { dataGroup } = this.props;
 
-            if ((!dataGroup && currentState === OPEN) || this.accordion.classList.contains('accordion--open')) {
+            if (
+                (!dataGroup && currentState === OPEN) ||
+                this.accordion.classList.contains('accordion--open')
+            ) {
                 this.accordionCloseListener(event);
             } else {
                 this.accordionOpenListener(event);
@@ -188,7 +206,11 @@ export default class Accordion extends PureComponent {
         if (!controlled || controlledChange) {
             if (dataGroup && Accordion.dataGroups[dataGroup]) {
                 Accordion.dataGroups[dataGroup].forEach((accordion) => {
-                    if (accordion !== this && accordion.state && accordion.state.currentState === OPEN) {
+                    if (
+                        accordion !== this &&
+                        accordion.state &&
+                        accordion.state.currentState === OPEN
+                    ) {
                         accordion.accordionCloseListener();
                     }
                 });
@@ -232,8 +254,9 @@ export default class Accordion extends PureComponent {
         const { currentState } = this.state;
         return (
             <div
-                className={classNames('accordion', 'react-accordion', { // react-accordion prevents collision with ui-accordions
-                    'accordion--wrapped': (isWrapped === true),
+                className={classNames('accordion', 'react-accordion', {
+                    // react-accordion prevents collision with ui-accordions
+                    'accordion--wrapped': isWrapped === true,
                     'accordion--open': currentState === OPEN,
                     'accordion--disabled': disabled,
                     'accordion--fixed': fixed,
@@ -247,36 +270,45 @@ export default class Accordion extends PureComponent {
                 style={style}
             >
                 <div
-                    className={classNames('accordion__head', headClassNames, { accordion__head__multiline: headMultiline })}
+                    className={classNames('accordion__head', headClassNames, {
+                        accordion__head__multiline: headMultiline,
+                    })}
                     onClick={this.handleAccordionClick}
                     {...headCustomAttributes}
                 >
-                    {
-                        noIcon
-                            ? null
-                            : (
-                                <div
-                                    className={classNames('accordion__head__icon', {
-                                        'accordion__head__icon--no-rotate': noRotate,
-                                    })}
-                                >
-                                    {
-                                        isString(icon) || icon.iconName
-                                            ? <Icon icon={icon}/>
-                                            : icon
-                                    }
-                                </div>
-                            )
-                    }
+                    {noIcon ? null : (
+                        <div
+                            className={classNames('accordion__head__icon', {
+                                'accordion__head__icon--no-rotate': noRotate,
+                            })}
+                        >
+                            {isString(icon) || icon.iconName ? (
+                                <Icon icon={icon} />
+                            ) : (
+                                icon
+                            )}
+                        </div>
+                    )}
                     <div
                         className="accordion__head__title"
                         style={{
                             ...(noIcon ? { paddingLeft: '10px' } : null),
-                            ...(head && !isString(head.open) && isString(head.close) && isWrapped ? { fontWeight: 'inherit' } : null),
+                            ...(head &&
+                            !isString(head.open) &&
+                            isString(head.close) &&
+                            isWrapped
+                                ? { fontWeight: 'inherit' }
+                                : null),
                         }}
                     >
                         {/* eslint-disable-next-line no-nested-ternary */}
-                        {head ? (head.open ? (currentState === OPEN ? head.open : head.close) : head) : null}
+                        {head
+                            ? head.open
+                                ? currentState === OPEN
+                                    ? head.open
+                                    : head.close
+                                : head
+                            : null}
                     </div>
                     <AccordionHeadRight
                         right={right}
@@ -340,7 +372,11 @@ Accordion.propTypes = {
     reference: PropTypes.func,
     autogrow: PropTypes.bool,
     open: PropTypes.bool,
-    icon: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.node]),
+    icon: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.string,
+        PropTypes.node,
+    ]),
     noRotate: PropTypes.bool,
     fixed: PropTypes.bool,
     noIcon: PropTypes.bool,

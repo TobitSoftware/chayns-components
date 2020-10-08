@@ -5,13 +5,7 @@ import Icon from '../../../react-chayns-icon/component/Icon';
 
 export default class ChosenMember extends Component {
     remove = () => {
-        const {
-            removeMember,
-            locationId,
-            groupId,
-            userId,
-            fixed,
-        } = this.props;
+        const { removeMember, locationId, groupId, userId, fixed } = this.props;
 
         if (!fixed) {
             if (locationId !== null) {
@@ -25,15 +19,11 @@ export default class ChosenMember extends Component {
     };
 
     render() {
-        const {
-            personId,
-            siteId,
-            fixed,
-            name,
-        } = this.props;
+        const { personId, siteId, fixed, name } = this.props;
 
         // eslint-disable-next-line no-nested-ternary
-        const memberId = siteId !== null ? siteId : (personId !== null ? personId : null);
+        const memberId =
+            siteId !== null ? siteId : personId !== null ? personId : null;
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
         return (

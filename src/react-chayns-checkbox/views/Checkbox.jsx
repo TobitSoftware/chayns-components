@@ -24,7 +24,7 @@ const Checkbox = React.forwardRef((props, ref) => {
     } = props;
 
     let modifiedLabelStyle = labelStyle;
-    if ((!label && !dangerouslySetLabel && !children)) {
+    if (!label && !dangerouslySetLabel && !children) {
         modifiedLabelStyle = {
             ...labelStyle,
             ...CHECKBOX_LABEL_STYLE,
@@ -54,7 +54,7 @@ const Checkbox = React.forwardRef((props, ref) => {
                 htmlFor={id}
                 dangerouslySetInnerHTML={dangerouslySetLabel}
             >
-                {!dangerouslySetLabel ? (children || label || '') : null}
+                {!dangerouslySetLabel ? children || label || '' : null}
             </label>
         </div>
     );

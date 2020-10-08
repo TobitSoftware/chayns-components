@@ -48,10 +48,16 @@ class AbstractExpandableListItem extends PureComponent {
 
     componentDidUpdate(prevProps) {
         const { open: openIds, openProp } = this.props;
-        const prevOpen = prevProps.openProp !== null
-            ? prevProps.openProp
-            : (prevProps.open && prevProps.open.indexOf && prevProps.open.indexOf(this.id) !== -1);
-        const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
+        const prevOpen =
+            prevProps.openProp !== null
+                ? prevProps.openProp
+                : prevProps.open &&
+                  prevProps.open.indexOf &&
+                  prevProps.open.indexOf(this.id) !== -1;
+        const open =
+            openProp !== null
+                ? openProp
+                : openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1;
 
         if (prevOpen !== open && openProp === null) {
             if (open) {
@@ -63,10 +69,7 @@ class AbstractExpandableListItem extends PureComponent {
     }
 
     onToggle() {
-        const {
-            openProp,
-            onToggle,
-        } = this.props;
+        const { openProp, onToggle } = this.props;
 
         if (openProp !== null) {
             if (openProp) {
@@ -101,7 +104,10 @@ class AbstractExpandableListItem extends PureComponent {
             style,
         } = this.props;
 
-        const open = openProp !== null ? openProp : (openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1);
+        const open =
+            openProp !== null
+                ? openProp
+                : openIds && openIds.indexOf && openIds.indexOf(this.id) !== -1;
 
         return (
             <div
@@ -111,16 +117,18 @@ class AbstractExpandableListItem extends PureComponent {
                 })}
                 style={style}
             >
-                <ExpandableContext.Provider
-                    value={this.precreated[open]}
-                >
+                <ExpandableContext.Provider value={this.precreated[open]}>
                     {header}
                     {children && (
                         <ExpandableContent
                             open={open}
                             style={style ? style.body : null}
                         >
-                            <div className={classnames({ 'list-item__content': !noContentClass })}>
+                            <div
+                                className={classnames({
+                                    'list-item__content': !noContentClass,
+                                })}
+                            >
                                 {children}
                             </div>
                         </ExpandableContent>
@@ -133,7 +141,10 @@ class AbstractExpandableListItem extends PureComponent {
 
 AbstractExpandableListItem.propTypes = {
     onToggle: PropTypes.func.isRequired,
-    open: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.bool]),
+    open: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.number),
+        PropTypes.bool,
+    ]),
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),

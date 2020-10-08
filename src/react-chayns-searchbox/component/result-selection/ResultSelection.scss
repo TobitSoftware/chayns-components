@@ -1,13 +1,12 @@
 .cc__result-selection {
-  user-select: none;
-  pointer-events: none;
+    user-select: none;
+    pointer-events: none;
 
-  &--match {
-    font-weight: bold;
-    color: var(--chayns-color--headline);
-  }
+    &--match {
+        font-weight: bold;
+        color: var(--chayns-color--headline);
+    }
 
-  &--mismatch {
-
-  }
+    &--mismatch {
+    }
 }

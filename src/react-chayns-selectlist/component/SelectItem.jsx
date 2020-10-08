@@ -10,9 +10,7 @@ import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 export default function withContext(props) {
     return (
         <SelectListContext.Consumer>
-            {
-                (context) => <SelectItem {...context} {...props}/>
-            }
+            {(context) => <SelectItem {...context} {...props} />}
         </SelectListContext.Consumer>
     );
 }
@@ -38,39 +36,32 @@ class SelectItem extends Component {
             tooltipProps,
         } = this.props;
 
-        const checked = (id === selectListSelectedId);
+        const checked = id === selectListSelectedId;
 
         return (
-            <div
-                key={id}
-                className={className}
-            >
-                {
-                    tooltipProps
-                        ? (
-                            <Tooltip {...tooltipProps}>
-                                <RadioButton
-                                    style={{ display: 'inline' }}
-                                    name={selectListId}
-                                    checked={checked}
-                                    onChange={this.handleChange}
-                                    disabled={disabled}
-                                >
-                                    {name}
-                                </RadioButton>
-                            </Tooltip>
-                        )
-                        : (
-                            <RadioButton
-                                name={selectListId}
-                                checked={checked}
-                                onChange={this.handleChange}
-                                disabled={disabled}
-                            >
-                                {name}
-                            </RadioButton>
-                        )
-                }
+            <div key={id} className={className}>
+                {tooltipProps ? (
+                    <Tooltip {...tooltipProps}>
+                        <RadioButton
+                            style={{ display: 'inline' }}
+                            name={selectListId}
+                            checked={checked}
+                            onChange={this.handleChange}
+                            disabled={disabled}
+                        >
+                            {name}
+                        </RadioButton>
+                    </Tooltip>
+                ) : (
+                    <RadioButton
+                        name={selectListId}
+                        checked={checked}
+                        onChange={this.handleChange}
+                        disabled={disabled}
+                    >
+                        {name}
+                    </RadioButton>
+                )}
                 {children && (
                     <TransitionGroup>
                         {checked && (
@@ -94,18 +85,13 @@ class SelectItem extends Component {
 SelectItem.propTypes = {
     id: PropTypes.number,
     changeListItem: PropTypes.func,
-    selectListId: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-    ]).isRequired,
+    selectListId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+        .isRequired,
     className: PropTypes.string,
     disabled: PropTypes.bool,
     children: PropTypes.node,
     name: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-    value: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     selectListSelectedId: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     tooltipProps: PropTypes.object,

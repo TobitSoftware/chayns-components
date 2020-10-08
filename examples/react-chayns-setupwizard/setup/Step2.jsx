@@ -11,10 +11,11 @@ class Step2 extends Component {
         return (
             <div className="accordion__content">
                 <p>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore
-                    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-                    rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+                    sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
                 <div>
                     <input
@@ -27,7 +28,9 @@ class Step2 extends Component {
                             stepEnabled(false, 2);
                         }}
                     />
-                    <label htmlFor="radio1">Option 1 - will uncomplete the step</label>
+                    <label htmlFor="radio1">
+                        Option 1 - will uncomplete the step
+                    </label>
                 </div>
                 <div>
                     <input
@@ -41,12 +44,12 @@ class Step2 extends Component {
                             nextStep();
                         }}
                     />
-                    <label htmlFor="radio2">Option 2 - will complete the step</label>
+                    <label htmlFor="radio2">
+                        Option 2 - will complete the step
+                    </label>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <Button onClick={nextStep}>
-                        Next
-                    </Button>
+                    <Button onClick={nextStep}>Next</Button>
                 </div>
             </div>
         );

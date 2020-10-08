@@ -8,7 +8,9 @@ export default class Bubble extends PureComponent {
     static isPositionBottom(position) {
         const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;
 
-        return [BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT].indexOf(position) !== -1;
+        return (
+            [BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT].indexOf(position) !== -1
+        );
     }
 
     constructor(props) {
@@ -62,10 +64,13 @@ export default class Bubble extends PureComponent {
 
         const { isActive, isHidden } = this.state;
 
-        const bubbleClasses = classNames(`cc__bubble cc__bubble--position${position}`, {
-            'cc__bubble--active': isActive,
-            'cc__bubble--hide': isHidden,
-        });
+        const bubbleClasses = classNames(
+            `cc__bubble cc__bubble--position${position}`,
+            {
+                'cc__bubble--active': isActive,
+                'cc__bubble--hide': isHidden,
+            }
+        );
 
         return (
             <TappPortal parent={parent}>
@@ -102,8 +107,12 @@ Bubble.propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
     style: PropTypes.object,
-    position: PropTypes.number, /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    position:
+        PropTypes.number /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */,
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,

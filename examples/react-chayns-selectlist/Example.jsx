@@ -28,31 +28,29 @@ export default function SelectListExample() {
                     });
                 }}
             >
-                {
-                    elements.map((element, index) => {
-                        if (!element) return null;
+                {elements.map((element, index) => {
+                    if (!element) return null;
 
-                        const others = {
-                            disabled: index === 0,
-                        };
+                    const others = {
+                        disabled: index === 0,
+                    };
 
-                        // div to test if component is still working with other components between SelectList and SelectListItem
-                        return (
-                            <div>
-                                <SelectListItem
-                                    name="Hi"
-                                    id={index}
-                                    key={`SelectListItem${index}`}
-                                    value={{ doubleIndex: index * 2 }}
-                                    className="Hi"
-                                    {...others}
-                                >
-                                    {element}
-                                </SelectListItem>
-                            </div>
-                        );
-                    })
-                }
+                    // div to test if component is still working with other components between SelectList and SelectListItem
+                    return (
+                        <div>
+                            <SelectListItem
+                                name="Hi"
+                                id={index}
+                                key={`SelectListItem${index}`}
+                                value={{ doubleIndex: index * 2 }}
+                                className="Hi"
+                                {...others}
+                            >
+                                {element}
+                            </SelectListItem>
+                        </div>
+                    );
+                })}
             </SelectList>
             <SelectList
                 selectFirst
@@ -66,32 +64,30 @@ export default function SelectListExample() {
                     });
                 }}
             >
-                {
-                    elements.map((element, index) => {
-                        if (!element) return null;
+                {elements.map((element, index) => {
+                    if (!element) return null;
 
-                        const others = {
-                            disabled: index === 0,
-                        };
+                    const others = {
+                        disabled: index === 0,
+                    };
 
-                        return (
-                            <SelectListItem
-                                tooltipProps={{
-                                    content: { text: 'TooltipText' },
-                                    bindListeners: true,
-                                }}
-                                name="Hi"
-                                id={index}
-                                key={`SelectListItem${index}`}
-                                value={{ doubleIndex: index * 2 }}
-                                className="Hi"
-                                {...others}
-                            >
-                                {element}
-                            </SelectListItem>
-                        );
-                    })
-                }
+                    return (
+                        <SelectListItem
+                            tooltipProps={{
+                                content: { text: 'TooltipText' },
+                                bindListeners: true,
+                            }}
+                            name="Hi"
+                            id={index}
+                            key={`SelectListItem${index}`}
+                            value={{ doubleIndex: index * 2 }}
+                            className="Hi"
+                            {...others}
+                        >
+                            {element}
+                        </SelectListItem>
+                    );
+                })}
             </SelectList>
         </div>
     );

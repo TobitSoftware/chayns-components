@@ -6,54 +6,59 @@ import Icon from '../../../react-chayns-icon/component/Icon';
 
 export default class Navigator extends PureComponent {
     render() {
-        const {
-            text,
-            onClick,
-            hidden,
-            days,
-        } = this.props;
+        const { text, onClick, hidden, days } = this.props;
 
         return (
             <div className="calendar__navigator no_select">
-                <div className="calendar__navigator_wrapper" style={{ width: '35%' }}>
-                    <div className="calendar__navigator_icon" style={{ transform: 'rotate(180deg)' }}>
-                        {hidden.left ? '' : (
+                <div
+                    className="calendar__navigator_wrapper"
+                    style={{ width: '35%' }}
+                >
+                    <div
+                        className="calendar__navigator_icon"
+                        style={{ transform: 'rotate(180deg)' }}
+                    >
+                        {hidden.left ? (
+                            ''
+                        ) : (
                             <span onClick={onClick.left}>
-                                <Icon icon="ts-angle-right"/>
+                                <Icon icon="ts-angle-right" />
                             </span>
                         )}
                     </div>
                     {text}
                     <div className="calendar__navigator_icon">
-                        {hidden.right ? '' : (
+                        {hidden.right ? (
+                            ''
+                        ) : (
                             <span onClick={onClick.right}>
-                                <Icon icon="ts-angle-right"/>
+                                <Icon icon="ts-angle-right" />
                             </span>
                         )}
                     </div>
                 </div>
                 <div className="calendar__navigator_days">
-                    {
-                        days.map((day, i) => (
-                            <div className="calendar__navigator_days_table" key={i}>
-                                {day.map((value, j) => {
-                                    const selected = value.selected
-                                        ? 'bold'
-                                        : 'normal';
-                                    return (
-                                        <div
-                                            className="calendar__navigator_days_item ellipsis"
-                                            style={{ fontWeight: selected }}
-                                            key={j}
-                                            onClick={(event) => onClick.day(event, value)}
-                                        >
-                                            {value.name}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ))
-                    }
+                    {days.map((day, i) => (
+                        <div className="calendar__navigator_days_table" key={i}>
+                            {day.map((value, j) => {
+                                const selected = value.selected
+                                    ? 'bold'
+                                    : 'normal';
+                                return (
+                                    <div
+                                        className="calendar__navigator_days_item ellipsis"
+                                        style={{ fontWeight: selected }}
+                                        key={j}
+                                        onClick={(event) =>
+                                            onClick.day(event, value)
+                                        }
+                                    >
+                                        {value.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
             </div>
         );

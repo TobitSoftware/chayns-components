@@ -13,9 +13,7 @@ export default class SmallWaitCursorExample extends Component {
         const { show } = this.state;
         return (
             <div>
-                <SmallWaitCursor
-                    show={show}
-                />
+                <SmallWaitCursor show={show} />
                 <div
                     style={{
                         width: '100%',
@@ -30,9 +28,7 @@ export default class SmallWaitCursorExample extends Component {
                         this.setState({ show: !show });
                     }}
                 >
-                    <SmallWaitCursor
-                        show={show}
-                    />
+                    <SmallWaitCursor show={show} />
                 </div>
                 <div
                     style={{

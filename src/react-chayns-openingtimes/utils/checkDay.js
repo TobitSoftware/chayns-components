@@ -13,12 +13,14 @@ export default function checkDay(times) {
         minutes: lastStartMinutes,
     } = parseTimeString(lastTime.start);
 
-    const {
-        hours: firstEndHours,
-        minutes: firstEndMinutes,
-    } = parseTimeString(firstTime.end);
+    const { hours: firstEndHours, minutes: firstEndMinutes } = parseTimeString(
+        firstTime.end
+    );
 
-    if (firstEndHours > lastStartHours || (firstEndHours === lastStartHours && firstEndMinutes > lastStartMinutes)) {
+    if (
+        firstEndHours > lastStartHours ||
+        (firstEndHours === lastStartHours && firstEndMinutes > lastStartMinutes)
+    ) {
         return false;
     }
 

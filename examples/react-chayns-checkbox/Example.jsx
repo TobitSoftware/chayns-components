@@ -30,7 +30,12 @@ export default function CheckboxExample() {
                 Enable xyz
             </Checkbox>
 
-            <Tooltip content={{ text: 'Description' }} bindListeners position={3} minWidth={100}>
+            <Tooltip
+                content={{ text: 'Description' }}
+                bindListeners
+                position={3}
+                minWidth={100}
+            >
                 <Checkbox
                     onChange={(value) => {
                         console.log(value);

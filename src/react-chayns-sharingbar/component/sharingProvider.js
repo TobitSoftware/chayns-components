@@ -44,7 +44,8 @@ export const shareProvider = [
         name: 'Facebook',
         androidIdentifier: 'com.facebook.katana',
         icon: 'fab fa-facebook-f',
-        url: 'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
+        url:
+            'http://www.facebook.com/dialog/share?app_id=472449496108149&display=page&href={url}&redirect_uri=http://facebook.com',
         available: true,
     },
     {
@@ -53,7 +54,8 @@ export const shareProvider = [
         name: 'Twitter',
         androidIdentifier: null,
         icon: 'fab fa-twitter',
-        url: 'http://twitter.com/intent/tweet?text={linkText}&url={url}&hashtags=chayns',
+        url:
+            'http://twitter.com/intent/tweet?text={linkText}&url={url}&hashtags=chayns',
         available: true,
     },
     {
@@ -62,7 +64,8 @@ export const shareProvider = [
         name: 'QR-Code',
         androidIdentifier: null,
         icon: 'fas fa-qrcode',
-        url: 'https://webapi.tobit.com/chaynsqrcodegenerator/v1.0/png?width=500&color={color}&value={url}&text={linkText}',
+        url:
+            'https://webapi.tobit.com/chaynsqrcodegenerator/v1.0/png?width=500&color={color}&value={url}&text={linkText}',
         available: true,
     },
     {

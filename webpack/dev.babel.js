@@ -32,7 +32,7 @@ export default (env) => {
             path: path.resolve(ROOT_PATH, 'build'),
             filename: '[name].bundle.js',
         },
-        mode: (production ? 'production' : 'development'),
+        mode: production ? 'production' : 'development',
         devServer: {
             host: '0.0.0.0',
             disableHostCheck: true,
@@ -79,14 +79,20 @@ export default (env) => {
                 template: path.resolve(ROOT_PATH, 'examples', 'index.html'),
                 templateParameters: {
                     // QA css url; use 'https://api.chayns.net/css/' for production
-                    chaynsCssUrl: (process.env.CHAYNS_CSS_URL || 'https://api-qa.chayns.net/css/'),
+                    chaynsCssUrl:
+                        process.env.CHAYNS_CSS_URL ||
+                        'https://api-qa.chayns.net/css/',
                 },
             }),
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NamedModulesPlugin(),
             new webpack.NoEmitOnErrorsPlugin(),
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify((production || process.env.NODE_ENV === 'production') ? 'production' : 'development'),
+                'process.env.NODE_ENV': JSON.stringify(
+                    production || process.env.NODE_ENV === 'production'
+                        ? 'production'
+                        : 'development'
+                ),
                 __DEV__: !production,
                 __QA__: false,
                 __LIVE__: production,

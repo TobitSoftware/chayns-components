@@ -36,13 +36,19 @@ export default class Gallery extends Component {
 
     onDown = (event, index, image) => {
         // deactivate refresh scroll in apps
-        if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.disallowRefreshScroll();
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp)
+            chayns.disallowRefreshScroll();
 
         this.index = index;
         this.image = image;
-        this.pageXStart = event.changedTouches ? event.changedTouches[0].pageX : event.pageX;
-        this.pageYStart = event.changedTouches ? event.changedTouches[0].pageY : event.pageY;
-        this.selectedElement = event.target.parentElement.parentElement.parentElement;
+        this.pageXStart = event.changedTouches
+            ? event.changedTouches[0].pageX
+            : event.pageX;
+        this.pageYStart = event.changedTouches
+            ? event.changedTouches[0].pageY
+            : event.pageY;
+        this.selectedElement =
+            event.target.parentElement.parentElement.parentElement;
         this.selectedElementStartPosition = this.selectedElement.getBoundingClientRect();
         this.galleryStartPosition = this.galleryRef.current.getBoundingClientRect();
         this.galleryOffsetX = this.galleryStartPosition.left;
@@ -59,23 +65,35 @@ export default class Gallery extends Component {
 
     onMove = (event) => {
         event.preventDefault();
-        const { pageX, pageY } = event.changedTouches ? event.changedTouches[0] : event;
+        const { pageX, pageY } = event.changedTouches
+            ? event.changedTouches[0]
+            : event;
         const { clientWidth: galleryWidth } = this.galleryRef.current;
-        const { clientHeight: itemHeight, clientWidth: itemWidth } = event.target.parentElement.parentElement.parentElement;
+        const {
+            clientHeight: itemHeight,
+            clientWidth: itemWidth,
+        } = event.target.parentElement.parentElement.parentElement;
 
         // move item
-        this.selectedElement.style.left = `${pageX - this.galleryOffsetX - this.offsetX}px`;
-        this.selectedElement.style.top = `${pageY - this.galleryOffsetY - this.offsetY}px`;
+        this.selectedElement.style.left = `${
+            pageX - this.galleryOffsetX - this.offsetX
+        }px`;
+        this.selectedElement.style.top = `${
+            pageY - this.galleryOffsetY - this.offsetY
+        }px`;
 
         // determine new position
         const itemsPerRow = Math.round(galleryWidth / itemWidth);
-        const middleX = pageX - this.galleryOffsetX - this.offsetX + (itemWidth / 2);
-        const middleY = pageY - this.galleryOffsetY - this.offsetY + (itemHeight / 2);
+        const middleX =
+            pageX - this.galleryOffsetX - this.offsetX + itemWidth / 2;
+        const middleY =
+            pageY - this.galleryOffsetY - this.offsetY + itemHeight / 2;
         const row = Math.floor(middleY / itemHeight);
         const column = Math.floor(middleX / itemWidth);
-        this.newPosition = (row * itemsPerRow) + column;
+        this.newPosition = row * itemsPerRow + column;
         const { dropzone: oldDropzone } = this.state;
-        const newDropzone = this.newPosition + (this.newPosition > this.index ? 1 : 0);
+        const newDropzone =
+            this.newPosition + (this.newPosition > this.index ? 1 : 0);
         if (oldDropzone !== newDropzone) {
             this.setState({
                 dropzone: newDropzone,
@@ -93,7 +111,8 @@ export default class Gallery extends Component {
     };
 
     onUp = () => {
-        if (chayns.env.isApp || chayns.env.isMyChaynsApp) chayns.allowRefreshScroll();
+        if (chayns.env.isApp || chayns.env.isMyChaynsApp)
+            chayns.allowRefreshScroll();
 
         document.removeEventListener('mousemove', this.onMove);
         document.removeEventListener('touchmove', this.onMove);
@@ -101,17 +120,29 @@ export default class Gallery extends Component {
         document.removeEventListener('touchend', this.onUp);
         document.removeEventListener('touchcancel', this.onUp);
 
-        if (this.lastDropzone) { // there's no lastDropzone if user hasn't moved
+        if (this.lastDropzone) {
+            // there's no lastDropzone if user hasn't moved
             const { onDragEnd, images } = this.props;
             const rect = this.lastDropzone.getBoundingClientRect();
-            this.selectedElement.classList.add('cc__gallery__image--transition');
-            this.selectedElement.style.left = `${rect.left - this.galleryOffsetX}px`;
-            this.selectedElement.style.top = `${rect.top - this.galleryOffsetY}px`;
+            this.selectedElement.classList.add(
+                'cc__gallery__image--transition'
+            );
+            this.selectedElement.style.left = `${
+                rect.left - this.galleryOffsetX
+            }px`;
+            this.selectedElement.style.top = `${
+                rect.top - this.galleryOffsetY
+            }px`;
             const onTransitionEnd = () => {
                 if (this.selectedElement && !this.transitionEnded) {
                     this.transitionEnded = true;
-                    this.selectedElement.removeEventListener('transitionend', onTransitionEnd);
-                    this.selectedElement.classList.remove('cc__gallery__image--transition');
+                    this.selectedElement.removeEventListener(
+                        'transitionend',
+                        onTransitionEnd
+                    );
+                    this.selectedElement.classList.remove(
+                        'cc__gallery__image--transition'
+                    );
 
                     const image = images[this.index];
                     const newArray = images.slice();
@@ -130,7 +161,10 @@ export default class Gallery extends Component {
                 }
             };
             this.transitionEnded = false;
-            this.selectedElement.addEventListener('transitionend', onTransitionEnd);
+            this.selectedElement.addEventListener(
+                'transitionend',
+                onTransitionEnd
+            );
         } else {
             this.selectedElement.classList.remove('cc__gallery__image--active');
         }
@@ -173,11 +207,16 @@ export default class Gallery extends Component {
             <div
                 key={key}
                 id={key}
-                className={classNames('cc__gallery__image cc__gallery__image--dropzone', { 'cc__gallery__image--show_dropzone': show })}
+                className={classNames(
+                    'cc__gallery__image cc__gallery__image--dropzone',
+                    { 'cc__gallery__image--show_dropzone': show }
+                )}
             >
                 <ImageContainer>
                     <div
-                        className={classNames('cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300')}
+                        className={classNames(
+                            'cc__gallery__image__dropzone chayns__background-color--101 chayns__border-color--300'
+                        )}
                     />
                 </ImageContainer>
             </div>
@@ -194,89 +233,105 @@ export default class Gallery extends Component {
                 ref={this.galleryRef}
                 key="gallery"
             >
-                {
-                    dragMode
-                        ? dropzone('dropzone', dropzoneId === 0)
-                        : null
-                }
-                {
-                    images.map((image, index) => {
-                        if (index < 4 || deleteMode || dragMode) {
-                            const tools = [];
-                            if (dragMode && images.length > 1) { // Show drag icon only if a reorder is possible
-                                tools.push({
-                                    icon: 'ts-bars',
-                                    className: 'cc__gallery__image__tool--drag',
-                                    onDown: (event) => {
-                                        event.preventDefault();
-                                        this.onDown(event, index, image);
-                                    },
-                                    noScroll: true,
-                                });
-                            }
-                            if (deleteMode) {
-                                tools.push({
-                                    icon: 'ts-wrong',
-                                    onClick: () => {
-                                        onDelete(image, index);
-                                    },
-                                });
-                            }
-
-                            return [
-                                <div
-                                    className={classNames('cc__gallery__image', { 'cc__gallery__image--active': index === active })}
-                                    id={`image${index}`}
-                                    key={`imageDiv${index}`}
-                                >
-                                    <ImageContainer
-                                        tools={tools}
-                                    >
-                                        <Image
-                                            key={`image${index}`}
-                                            preventParams={preventParams}
-                                            image={image.url || image.file || image}
-                                            moreImages={(index === 3 && defaultMode) ? numberOfImages - 1 - index : 0}
-                                            onClick={
-                                                onClick || defaultMode
-                                                    ? (event) => {
-                                                        if (stopPropagation) event.stopPropagation();
-                                                        if (onClick) {
-                                                            onClick(Gallery.getBigImageUrls(images), index);
-                                                        } else if (defaultMode) {
-                                                            chayns.openImage(Gallery.getBigImageUrls(images), index);
-                                                        }
-                                                    }
-                                                    : null
-                                            }
-                                            className="cc__gallery__image--cover"
-                                        />
-                                    </ImageContainer>
-                                </div>,
-                                dragMode
-                                    ? dropzone(`dropzone${index}`, dropzoneId === index + 1)
-                                    : null,
-                            ];
+                {dragMode ? dropzone('dropzone', dropzoneId === 0) : null}
+                {images.map((image, index) => {
+                    if (index < 4 || deleteMode || dragMode) {
+                        const tools = [];
+                        if (dragMode && images.length > 1) {
+                            // Show drag icon only if a reorder is possible
+                            tools.push({
+                                icon: 'ts-bars',
+                                className: 'cc__gallery__image__tool--drag',
+                                onDown: (event) => {
+                                    event.preventDefault();
+                                    this.onDown(event, index, image);
+                                },
+                                noScroll: true,
+                            });
                         }
-                        return null;
-                    })
-                }
+                        if (deleteMode) {
+                            tools.push({
+                                icon: 'ts-wrong',
+                                onClick: () => {
+                                    onDelete(image, index);
+                                },
+                            });
+                        }
+
+                        return [
+                            <div
+                                className={classNames('cc__gallery__image', {
+                                    'cc__gallery__image--active':
+                                        index === active,
+                                })}
+                                id={`image${index}`}
+                                key={`imageDiv${index}`}
+                            >
+                                <ImageContainer tools={tools}>
+                                    <Image
+                                        key={`image${index}`}
+                                        preventParams={preventParams}
+                                        image={image.url || image.file || image}
+                                        moreImages={
+                                            index === 3 && defaultMode
+                                                ? numberOfImages - 1 - index
+                                                : 0
+                                        }
+                                        onClick={
+                                            onClick || defaultMode
+                                                ? (event) => {
+                                                      if (stopPropagation)
+                                                          event.stopPropagation();
+                                                      if (onClick) {
+                                                          onClick(
+                                                              Gallery.getBigImageUrls(
+                                                                  images
+                                                              ),
+                                                              index
+                                                          );
+                                                      } else if (defaultMode) {
+                                                          chayns.openImage(
+                                                              Gallery.getBigImageUrls(
+                                                                  images
+                                                              ),
+                                                              index
+                                                          );
+                                                      }
+                                                  }
+                                                : null
+                                        }
+                                        className="cc__gallery__image--cover"
+                                    />
+                                </ImageContainer>
+                            </div>,
+                            dragMode
+                                ? dropzone(
+                                      `dropzone${index}`,
+                                      dropzoneId === index + 1
+                                  )
+                                : null,
+                        ];
+                    }
+                    return null;
+                })}
             </div>
         );
     }
 }
 
 Gallery.propTypes = {
-    images: PropTypes.arrayOf(PropTypes.oneOfType([
-        PropTypes.shape({
-            url: PropTypes.string.isRequired,
-        }),
-        PropTypes.shape({
-            file: PropTypes.instanceOf(File).isRequired,
-        }),
-        PropTypes.string,
-        PropTypes.instanceOf(File),
-    ]).isRequired).isRequired,
+    images: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.shape({
+                url: PropTypes.string.isRequired,
+            }),
+            PropTypes.shape({
+                file: PropTypes.instanceOf(File).isRequired,
+            }),
+            PropTypes.string,
+            PropTypes.instanceOf(File),
+        ]).isRequired
+    ).isRequired,
     onClick: PropTypes.func,
     onDelete: PropTypes.func,
     deleteMode: PropTypes.bool,

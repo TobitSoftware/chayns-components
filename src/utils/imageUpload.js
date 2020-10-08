@@ -1,6 +1,12 @@
 import { isString } from './is';
 
-export default async function imageUpload(file, referenceId, personId, siteId, url = 'https://api.tsimg.cloud/image') {
+export default async function imageUpload(
+    file,
+    referenceId,
+    personId,
+    siteId,
+    url = 'https://api.tsimg.cloud/image'
+) {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
         try {

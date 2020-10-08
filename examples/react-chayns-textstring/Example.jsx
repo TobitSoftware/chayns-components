@@ -8,7 +8,10 @@ export default class TextStringExample extends Component {
     constructor(props) {
         super(props);
         // Take a look in index.jsx
-        console.log('TextString.getTextString', TextString.getTextString('txt_chayns_textStringTest'));
+        console.log(
+            'TextString.getTextString',
+            TextString.getTextString('txt_chayns_textStringTest')
+        );
 
         this.state = { number: 1 };
     }
@@ -24,7 +27,7 @@ export default class TextStringExample extends Component {
                     fallback="Test ##REPLACE## Fallback"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
                 >
-                    <p/>
+                    <p />
                 </TextString>
                 <TextString
                     preventNoTranslate
@@ -32,14 +35,14 @@ export default class TextStringExample extends Component {
                     stringName="txt_chayns_textStringTest"
                     fallback="Test ##REPLACE## Fallback"
                 >
-                    <p/>
+                    <p />
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
                     replacements={{ '##REPLACE##': chayns.env.user.name }}
                     fallback="Test ##REPLACE## Fallback"
                 >
-                    <p style={{ color: 'red' }}/>
+                    <p style={{ color: 'red' }} />
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
@@ -60,13 +63,13 @@ export default class TextStringExample extends Component {
                     stringName="txt_chayns_textStringTest_html"
                     useDangerouslySetInnerHTML
                 >
-                    <div/>
+                    <div />
                 </TextString>
                 <TextString
                     stringName="txt_chayns_textStringTest"
                     language="nl"
                 >
-                    <p/>
+                    <p />
                 </TextString>
                 <TextString
                     replacements={{
@@ -74,11 +77,17 @@ export default class TextStringExample extends Component {
                         '##REPLACE_SITE##': chayns.env.site.title,
                     }}
                     setProps={{
-                        head: number % 2 ? 'txt_chayns_textStringTest2' : 'txt_chayns_textStringTest',
+                        head:
+                            number % 2
+                                ? 'txt_chayns_textStringTest2'
+                                : 'txt_chayns_textStringTest',
                         right: 'fallbackTest',
                         fallback: {
                             head: 'Fallback for head property',
-                            right: number % 2 ? 'Fallback for right property ##REPLACE_SITE##' : 'Fallback 2 ##REPLACE##',
+                            right:
+                                number % 2
+                                    ? 'Fallback for right property ##REPLACE_SITE##'
+                                    : 'Fallback 2 ##REPLACE##',
                         },
                     }}
                 >

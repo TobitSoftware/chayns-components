@@ -34,9 +34,14 @@ export default class TransparencySlider extends PureComponent {
                     className="cc__transparency-slider"
                     innerTrackStyle={{ backgroundColor: 'transparent' }}
                     trackStyle={{
-                        background: `linear-gradient(90deg, ${hsvToRgbString({ ...color, a: null }, true)}, transparent)`,
+                        background: `linear-gradient(90deg, ${hsvToRgbString(
+                            { ...color, a: null },
+                            true
+                        )}, transparent)`,
                     }}
-                    thumbStyle={{ backgroundColor: hsvToRgbString(color, true) }}
+                    thumbStyle={{
+                        backgroundColor: hsvToRgbString(color, true),
+                    }}
                     onChange={this.onChange}
                     onChangeEnd={this.onChangeEnd}
                     min={0}

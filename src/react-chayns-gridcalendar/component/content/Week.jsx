@@ -11,9 +11,7 @@ export default class Week extends Component {
     }
 
     renderDays() {
-        const {
-            onClick, focus, groupFocus, data,
-        } = this.props;
+        const { onClick, focus, groupFocus, data } = this.props;
         const days = [];
         let i = 0;
         for (i; i < data.length; i += 1) {
@@ -22,16 +20,25 @@ export default class Week extends Component {
             let percentage;
             let start;
             let color = this.schemeColor;
-            const backgroundColor = day.date.getDate() === focus.getDate() && day.date.getMonth() === focus.getMonth() && day.date.getFullYear() === focus.getFullYear()
-                ? `rgba(${this.schemeColor.r},${this.schemeColor.g},${this.schemeColor.b},0.3)`
-                : '';
+            const backgroundColor =
+                day.date.getDate() === focus.getDate() &&
+                day.date.getMonth() === focus.getMonth() &&
+                day.date.getFullYear() === focus.getFullYear()
+                    ? `rgba(${this.schemeColor.r},${this.schemeColor.g},${this.schemeColor.b},0.3)`
+                    : '';
             const classes = classNames('week_item', {
                 week_item_filled: day && day.id,
-                week_item_focused: day && day.groupId && groupFocus === day.groupId,
+                week_item_focused:
+                    day && day.groupId && groupFocus === day.groupId,
             });
             if (day && day.id) {
-                start = Math.round((new Date(day.startTime).getHours() / 24) * 100);
-                percentage = Math.round(((day.endTime - day.startTime) / (24 * 60 * 60 * 1000)) * 100);
+                start = Math.round(
+                    (new Date(day.startTime).getHours() / 24) * 100
+                );
+                percentage = Math.round(
+                    ((day.endTime - day.startTime) / (24 * 60 * 60 * 1000)) *
+                        100
+                );
                 if (day.color) {
                     /**
                      * For correct calculating of the percentage it is required, that the entry is in one day
@@ -39,10 +46,25 @@ export default class Week extends Component {
                      */
                     color = hexStringToRgb(day.color);
                 }
-                background = `linear-gradient(to right, rgba(${color.r},${color.g},${color.b},0.5) ${start}%,rgba(${color.r},${color.g},${color.b},1) ${start + 1}%,rgba(${color.r},${color.g},${color.b},1) ${start + percentage}%,rgba(${color.r},${color.g},${color.b},0.5) ${start + percentage + 1}%)`;
+                background = `linear-gradient(to right, rgba(${color.r},${
+                    color.g
+                },${color.b},0.5) ${start}%,rgba(${color.r},${color.g},${
+                    color.b
+                },1) ${start + 1}%,rgba(${color.r},${color.g},${color.b},1) ${
+                    start + percentage
+                }%,rgba(${color.r},${color.g},${color.b},0.5) ${
+                    start + percentage + 1
+                }%)`;
             }
 
-            days.push(<div className={classes} style={{ background, backgroundColor }} key={i} onClick={(event) => onClick(event, day)}/>);
+            days.push(
+                <div
+                    className={classes}
+                    style={{ background, backgroundColor }}
+                    key={i}
+                    onClick={(event) => onClick(event, day)}
+                />
+            );
         }
         return days;
     }
@@ -51,11 +73,15 @@ export default class Week extends Component {
         const { weekWidth } = this.props;
         const days = this.renderDays();
         return (
-            <div className="week" style={{ width: `${weekWidth * 0.9}px`, marginLeft: `${weekWidth * 0.1}px` }}>
+            <div
+                className="week"
+                style={{
+                    width: `${weekWidth * 0.9}px`,
+                    marginLeft: `${weekWidth * 0.1}px`,
+                }}
+            >
                 <div className="week_table">
-                    <div className="week_row">
-                        {days}
-                    </div>
+                    <div className="week_row">{days}</div>
                 </div>
             </div>
         );

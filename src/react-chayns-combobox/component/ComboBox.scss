@@ -1,58 +1,60 @@
 .cc__combo-box {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 
-  &__icon {
-    margin-left: 8px;
-  }
-
-  &--disabled {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  &__overlay {
-    position: absolute;
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: 300px;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .20);
-    border-width: 1px;
-    border-style: solid;
-
-    &__item {
-      padding: 2px 8px;
-      cursor: pointer;
-      user-select: none;
-
-      &:hover {
-        background-color: rgba(128, 128, 128, 0.5); //IE fallback
-        background-color: var(--chayns-color--106);
-      }
+    &__icon {
+        margin-left: 8px;
     }
 
-    &.fade {
-      &-enter, &-appear {
-        opacity: 0;
-      }
-
-      &-enter.fade-enter-active, &-appear.fade-appear-active {
-        opacity: 1;
-        transition: opacity 200ms;
-      }
-
-      &-exit {
-        opacity: 1;
-      }
-
-      &-exit.fade-exit-active {
-        opacity: 0.01;
-        transition: opacity 200ms;
-      }
-
-      &-exit-done {
-        display: none;
-      }
+    &--disabled {
+        opacity: 0.6;
+        pointer-events: none;
     }
-  }
+
+    &__overlay {
+        position: absolute;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 300px;
+        box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
+        border-width: 1px;
+        border-style: solid;
+
+        &__item {
+            padding: 2px 8px;
+            cursor: pointer;
+            user-select: none;
+
+            &:hover {
+                background-color: rgba(128, 128, 128, 0.5); //IE fallback
+                background-color: var(--chayns-color--106);
+            }
+        }
+
+        &.fade {
+            &-enter,
+            &-appear {
+                opacity: 0;
+            }
+
+            &-enter.fade-enter-active,
+            &-appear.fade-appear-active {
+                opacity: 1;
+                transition: opacity 200ms;
+            }
+
+            &-exit {
+                opacity: 1;
+            }
+
+            &-exit.fade-exit-active {
+                opacity: 0.01;
+                transition: opacity 200ms;
+            }
+
+            &-exit-done {
+                display: none;
+            }
+        }
+    }
 }

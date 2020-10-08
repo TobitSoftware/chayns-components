@@ -122,7 +122,9 @@ export default class TagInput extends Component {
         } = this.props;
         const { selectedIndex } = this.state;
 
-        const { width } = getInputSize(`${value || tags.length > 0 ? value : placeholder}${BIGGEST_LETTER}`);
+        const { width } = getInputSize(
+            `${value || tags.length > 0 ? value : placeholder}${BIGGEST_LETTER}`
+        );
         const inputStyle = {
             width: `${width}px`,
             minWidth: '20px',
@@ -134,16 +136,17 @@ export default class TagInput extends Component {
                 className={classNames(className, 'cc__tag-input input')}
                 style={style}
             >
-                {tags && tags.map((tag, index) => (
-                    <Tag
-                        key={tag.id || index}
-                        value={tag}
-                        onDelete={this.handleTagRemove}
-                        selected={selectedIndex === index}
-                    >
-                        {tag.text}
-                    </Tag>
-                ))}
+                {tags &&
+                    tags.map((tag, index) => (
+                        <Tag
+                            key={tag.id || index}
+                            value={tag}
+                            onDelete={this.handleTagRemove}
+                            selected={selectedIndex === index}
+                        >
+                            {tag.text}
+                        </Tag>
+                    ))}
                 <div className="cc__tag-input__input">
                     <Input
                         {...props}
@@ -151,7 +154,7 @@ export default class TagInput extends Component {
                         value={value}
                         onChange={this.handleChange}
                         onKeyUp={this.handleKeyUp}
-                        placeholder={(!tags || !tags.length) ? placeholder : null}
+                        placeholder={!tags || !tags.length ? placeholder : null}
                         style={inputStyle}
                     />
                 </div>
@@ -161,9 +164,11 @@ export default class TagInput extends Component {
 }
 
 TagInput.propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string,
-    })),
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            text: PropTypes.string,
+        })
+    ),
     value: PropTypes.string,
     onAddTag: PropTypes.func,
     onRemoveTag: PropTypes.func,

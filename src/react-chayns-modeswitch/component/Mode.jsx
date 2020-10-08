@@ -24,15 +24,18 @@ export default class Mode extends Component {
 
     render() {
         const { modeId } = this.state;
-        const {
-            modes,
-            children,
-            className,
-            style,
-        } = this.props;
+        const { modes, children, className, style } = this.props;
 
-        if (window.chayns.utils.isArray(modes) && (modes.indexOf(modeId) !== -1 || (modes.indexOf(-1) !== -1 && !chayns.env.user.isAuthenticated))) {
-            return <div className={className} style={style}>{children}</div>;
+        if (
+            window.chayns.utils.isArray(modes) &&
+            (modes.indexOf(modeId) !== -1 ||
+                (modes.indexOf(-1) !== -1 && !chayns.env.user.isAuthenticated))
+        ) {
+            return (
+                <div className={className} style={style}>
+                    {children}
+                </div>
+            );
         }
 
         return null;

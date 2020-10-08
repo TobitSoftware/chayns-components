@@ -39,7 +39,7 @@ export default class DateInfo extends PureComponent {
             unit = 'days';
         } else if (timeBetween < 1000 * 60 * 60 * 24 * 365) {
             unit = 'months';
-        } else if ((timeBetween >= 1000 * 60 * 60 * 24 * 365)) {
+        } else if (timeBetween >= 1000 * 60 * 60 * 24 * 365) {
             unit = 'years';
         }
         const relativeValues = {
@@ -58,39 +58,71 @@ export default class DateInfo extends PureComponent {
             days: dateObj.getDate(),
             month: dateObj.getMonth() + 1,
             monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
-            monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
+            monthShortWritten:
+                text[options.language].MONTHS_SHORT[dateObj.getMonth()],
             years: options.hideYear ? '' : dateObj.getFullYear(),
         };
 
         // 2019->19
         if (options.hideYear === null) {
-            absoluteValues.years = absoluteValues.years.toString().substring(absoluteValues.years.toString().length - 2);
+            absoluteValues.years = absoluteValues.years
+                .toString()
+                .substring(absoluteValues.years.toString().length - 2);
         }
 
-        if (options.showTime === !!options.showTime && (unit === 'seconds' || unit === 'minutes' || unit === 'hours')) {
+        if (
+            options.showTime === !!options.showTime &&
+            (unit === 'seconds' || unit === 'minutes' || unit === 'hours')
+        ) {
             unit = 'days';
         }
 
-        if ((relativeValues[unit] === 1 || (relativeValues.days === 0 && dateObj.toDateString() !== now.toDateString()))
-            && options.useTomorrowYesterday !== false) { // if value of unit is only 1...
+        if (
+            (relativeValues[unit] === 1 ||
+                (relativeValues.days === 0 &&
+                    dateObj.toDateString() !== now.toDateString())) &&
+            options.useTomorrowYesterday !== false
+        ) {
+            // if value of unit is only 1...
             unit = unit.substring(0, unit.length - 1); // ...use singular of unit
-        } else if (relativeValues[unit] === 0 && dateObj.toDateString() === now.toDateString() && options.useToday !== false) {
+        } else if (
+            relativeValues[unit] === 0 &&
+            dateObj.toDateString() === now.toDateString() &&
+            options.useToday !== false
+        ) {
             unit += '0';
         }
 
-        if (options.showDate === false
-            && !(unit === 'seconds' || unit === 'now' || unit === 'minutes' || unit === 'hours')
-            && options.showTime === null) {
+        if (
+            options.showDate === false &&
+            !(
+                unit === 'seconds' ||
+                unit === 'now' ||
+                unit === 'minutes' ||
+                unit === 'hours'
+            ) &&
+            options.showTime === null
+        ) {
             unit = 'hours';
         }
 
         let txt = text[options.language].RELATIVE_TEXT[tense][unit];
 
-        if (options.showDate === false && options.showTime === true && !options.useToday && !options.useTomorrowYesterday) {
+        if (
+            options.showDate === false &&
+            options.showTime === true &&
+            !options.useToday &&
+            !options.useTomorrowYesterday
+        ) {
             txt = '';
-        } else if ((options.showDate || options.writeMonth)
-            && (!(options.useTomorrowYesterday && unit === 'day')
-                && !(options.useToday && (unit.charAt(unit.length - 1) === '0' || unit === 'now')))) {
+        } else if (
+            (options.showDate || options.writeMonth) &&
+            !(options.useTomorrowYesterday && unit === 'day') &&
+            !(
+                options.useToday &&
+                (unit.charAt(unit.length - 1) === '0' || unit === 'now')
+            )
+        ) {
             if (options.writeMonth) {
                 txt = text[options.language].ABSOLUTE_TEXT.dateMW;
             } else if (options.writeMonth === false) {
@@ -101,7 +133,8 @@ export default class DateInfo extends PureComponent {
         }
 
         if (options.writeDay) {
-            const day = text[options.language].WEEKDAYS[(dateObj.getDay() + 6) % 7];
+            const day =
+                text[options.language].WEEKDAYS[(dateObj.getDay() + 6) % 7];
             if (options.showDate || options.writeMonth) {
                 txt = `${day}, ${txt}`;
             } else {
@@ -128,36 +161,50 @@ export default class DateInfo extends PureComponent {
             hours: dateObj.getHours(),
             days: dateObj.getDate(),
             month: dateObj.getMonth() + 1,
-            monthShortWritten: text[options.language].MONTHS_SHORT[dateObj.getMonth()],
+            monthShortWritten:
+                text[options.language].MONTHS_SHORT[dateObj.getMonth()],
             years: dateObj.getFullYear(),
         };
         return DateInfo.replace(txt, {}, absoluteValues);
     };
 
-    static replace = (string, relativeValues, absoluteValues) => string
-        .replace('##rMINUTES##', relativeValues.minutes)
-        .replace('##rHOURS##', relativeValues.hours)
-        .replace('##rDAYS##', relativeValues.days)
-        .replace('##rMONTHS##', relativeValues.months)
-        .replace('##rYEARS##', relativeValues.years)
-        .replace('##aSECONDS##', absoluteValues.seconds)
-        .replace('##aMINUTES##', DateInfo.leadingZero(absoluteValues.minutes))
-        .replace('##aHOURS##', DateInfo.leadingZero(absoluteValues.hours))
-        .replace('##aDAYS##', DateInfo.leadingZero(absoluteValues.days))
-        .replace('##aMONTH##', DateInfo.leadingZero(absoluteValues.month))
-        .replace('##aMONTHsw##', absoluteValues.monthShortWritten)
-        .replace('##aMONTHw##', absoluteValues.monthWritten)
-        .replace('##aYEARS##', absoluteValues.years)
-        .replace(/^\s*|\s*$/g, '')// Matches whitespace at the start and end of the string
-    ;
+    static replace = (string, relativeValues, absoluteValues) =>
+        string
+            .replace('##rMINUTES##', relativeValues.minutes)
+            .replace('##rHOURS##', relativeValues.hours)
+            .replace('##rDAYS##', relativeValues.days)
+            .replace('##rMONTHS##', relativeValues.months)
+            .replace('##rYEARS##', relativeValues.years)
+            .replace('##aSECONDS##', absoluteValues.seconds)
+            .replace(
+                '##aMINUTES##',
+                DateInfo.leadingZero(absoluteValues.minutes)
+            )
+            .replace('##aHOURS##', DateInfo.leadingZero(absoluteValues.hours))
+            .replace('##aDAYS##', DateInfo.leadingZero(absoluteValues.days))
+            .replace('##aMONTH##', DateInfo.leadingZero(absoluteValues.month))
+            .replace('##aMONTHsw##', absoluteValues.monthShortWritten)
+            .replace('##aMONTHw##', absoluteValues.monthWritten)
+            .replace('##aYEARS##', absoluteValues.years)
+            .replace(/^\s*|\s*$/g, ''); // Matches whitespace at the start and end of the string
 
     static leadingZero = (value) => value.toString().padStart(2, '0');
 
     constructor(props) {
         super(props);
-        let language = props.language || (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase();
+        let language =
+            props.language ||
+            (chayns.env.language || navigator.language || 'de')
+                .substring(0, 2)
+                .toLowerCase();
 
-        if (!(language.indexOf('de') > -1 || language.indexOf('en') > -1 || language.indexOf('nl') > -1)) {
+        if (
+            !(
+                language.indexOf('de') > -1 ||
+                language.indexOf('en') > -1 ||
+                language.indexOf('nl') > -1
+            )
+        ) {
             language = 'de';
         }
 
@@ -167,21 +214,54 @@ export default class DateInfo extends PureComponent {
     render() {
         const { language } = this.state;
         const {
-            date, noTitle, children, showDate, showTime, writeMonth, writeDay, date2, useToday, useTomorrowYesterday, hideYear,
+            date,
+            noTitle,
+            children,
+            showDate,
+            showTime,
+            writeMonth,
+            writeDay,
+            date2,
+            useToday,
+            useTomorrowYesterday,
+            hideYear,
         } = this.props;
 
         let txt = DateInfo.getRelativeDateString(date, {
-            language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
+            language,
+            showDate,
+            showTime,
+            writeDay,
+            writeMonth,
+            useToday,
+            useTomorrowYesterday,
+            hideYear,
         });
         if (date2) {
             txt += ' - ';
-            if (new Date(date).toDateString() === new Date(date2).toDateString()) {
+            if (
+                new Date(date).toDateString() === new Date(date2).toDateString()
+            ) {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate: false, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
+                    language,
+                    showDate: false,
+                    showTime,
+                    writeDay,
+                    writeMonth,
+                    useToday,
+                    useTomorrowYesterday,
+                    hideYear,
                 });
             } else {
                 txt += DateInfo.getRelativeDateString(date2, {
-                    language, showDate, showTime, writeDay, writeMonth, useToday, useTomorrowYesterday, hideYear,
+                    language,
+                    showDate,
+                    showTime,
+                    writeDay,
+                    writeMonth,
+                    useToday,
+                    useTomorrowYesterday,
+                    hideYear,
                 });
             }
         }
@@ -192,8 +272,10 @@ export default class DateInfo extends PureComponent {
 
         return React.cloneElement(
             children,
-            noTitle || { title: DateInfo.getAbsoluteDateString(date, { language }) },
-            txt,
+            noTitle || {
+                title: DateInfo.getAbsoluteDateString(date, { language }),
+            },
+            txt
         );
     }
 }
@@ -201,8 +283,16 @@ export default class DateInfo extends PureComponent {
 DateInfo.propTypes = {
     children: PropTypes.node,
     language: PropTypes.string,
-    date: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]).isRequired,
-    date2: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+    date: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.instanceOf(Date),
+    ]).isRequired,
+    date2: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.instanceOf(Date),
+    ]),
     showTime: PropTypes.bool,
     showDate: PropTypes.bool,
     writeDay: PropTypes.bool,
@@ -214,8 +304,10 @@ DateInfo.propTypes = {
 };
 
 DateInfo.defaultProps = {
-    children: <div/>,
-    language: (chayns.env.language || navigator.language || 'de').substring(0, 2).toLowerCase(),
+    children: <div />,
+    language: (chayns.env.language || navigator.language || 'de')
+        .substring(0, 2)
+        .toLowerCase(),
     date2: null,
     showTime: null,
     showDate: null,

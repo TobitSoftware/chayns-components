@@ -16,8 +16,7 @@ const toLiteral = (value) => JSON.parse(JSON.stringify(value));
 const ADDRESS = 1;
 const COORDS = 2;
 
-const noop = () => {
-};
+const noop = () => {};
 
 export default class PositionInput extends PureComponent {
     constructor(props) {
@@ -25,7 +24,9 @@ export default class PositionInput extends PureComponent {
 
         if (!window.google) {
             // eslint-disable-next-line max-len
-            throw new Error('The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.');
+            throw new Error(
+                'The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.'
+            );
         }
 
         this.autocomplete = new google.maps.places.AutocompleteService();
@@ -117,23 +118,28 @@ export default class PositionInput extends PureComponent {
         } else {
             this.setAddress(value);
         }
-    }
+    };
 
     getAddresses = (value) => {
         if (value) {
-            const { defaultPosition: { lat, lng } } = this.props;
+            const {
+                defaultPosition: { lat, lng },
+            } = this.props;
 
-            this.autocomplete.getPlacePredictions({
-                location: new google.maps.LatLng(lat, lng),
-                radius: 10000,
-                input: value,
-            }, (result, status) => {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    this.setState({
-                        addresses: result.map((a) => a.description),
-                    });
+            this.autocomplete.getPlacePredictions(
+                {
+                    location: new google.maps.LatLng(lat, lng),
+                    radius: 10000,
+                    input: value,
+                },
+                (result, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        this.setState({
+                            addresses: result.map((a) => a.description),
+                        });
+                    }
                 }
-            });
+            );
         }
     };
 
@@ -155,12 +161,7 @@ export default class PositionInput extends PureComponent {
     };
 
     render() {
-        const {
-            defaultPosition,
-            mapOptions,
-            children,
-            parent,
-        } = this.props;
+        const { defaultPosition, mapOptions, children, parent } = this.props;
 
         const {
             value,
@@ -184,34 +185,36 @@ export default class PositionInput extends PureComponent {
                     }}
                     onDragend={this.handleUserPan}
                 />
-                {
-                    children && (
-                        <div className="map--overlay" ref={this.mapOverlayRef}>
-                            {children(value, this.handleInputChange, this.changePosition)}
-                            <TappPortal parent={parent}>
-                                <div
-                                    className="map--autocomplete_popup"
-                                    style={{
-                                        left: `${overlayPosition.left}px`,
-                                        top: `${overlayPosition.bottom}px`,
-                                        width: `${overlayPosition.width}px`,
-                                    }}
-                                >
-                                    {
-                                        !!value && currentInputType === ADDRESS && addresses.map((a, index) => (
-                                            <AutocompleteItem
-                                                index={index}
-                                                address={a}
-                                                onClick={this.selectAddress}
-                                                key={a}
-                                            />
-                                        ))
-                                    }
-                                </div>
-                            </TappPortal>
-                        </div>
-                    )
-                }
+                {children && (
+                    <div className="map--overlay" ref={this.mapOverlayRef}>
+                        {children(
+                            value,
+                            this.handleInputChange,
+                            this.changePosition
+                        )}
+                        <TappPortal parent={parent}>
+                            <div
+                                className="map--autocomplete_popup"
+                                style={{
+                                    left: `${overlayPosition.left}px`,
+                                    top: `${overlayPosition.bottom}px`,
+                                    width: `${overlayPosition.width}px`,
+                                }}
+                            >
+                                {!!value &&
+                                    currentInputType === ADDRESS &&
+                                    addresses.map((a, index) => (
+                                        <AutocompleteItem
+                                            index={index}
+                                            address={a}
+                                            onClick={this.selectAddress}
+                                            key={a}
+                                        />
+                                    ))}
+                            </div>
+                        </TappPortal>
+                    </div>
+                )}
             </div>
         );
     }
@@ -242,11 +245,7 @@ PositionInput.defaultProps = {
     },
     // eslint-disable-next-line react/display-name
     children: (value, onChange) => (
-        <Input
-            placeholder="Position"
-            value={value}
-            onChange={onChange}
-        />
+        <Input placeholder="Position" value={value} onChange={onChange} />
     ),
     parent: null,
 };

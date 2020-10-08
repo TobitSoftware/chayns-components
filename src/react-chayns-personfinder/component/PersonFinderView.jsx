@@ -35,7 +35,7 @@ class PersonFinderView extends Component {
             }
             this.animationFrameId = window.requestAnimationFrame(() => {
                 if (this.resultList) {
-                    this.resultList.scrollTo(0, (63 * (focusIndex - 1)));
+                    this.resultList.scrollTo(0, 63 * (focusIndex - 1));
                 }
                 this.animationFrameId = null;
             });
@@ -88,7 +88,12 @@ class PersonFinderView extends Component {
                 break;
             case 13: // Enter
                 if (focusIndex !== null) {
-                    const item = getSelectedListItem(data, focusIndex, orm, value);
+                    const item = getSelectedListItem(
+                        data,
+                        focusIndex,
+                        orm,
+                        value
+                    );
                     if (item !== undefined) {
                         onSelect(undefined, item);
                     }
@@ -111,7 +116,12 @@ class PersonFinderView extends Component {
         const { value, autoLoading, onLoadMore } = this.props;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
 
-        if (onLoadMore && autoLoading && !lazyLoading && (scrollHeight - scrollTop - offsetHeight) <= LAZY_LOADING_SPACE) {
+        if (
+            onLoadMore &&
+            autoLoading &&
+            !lazyLoading &&
+            scrollHeight - scrollTop - offsetHeight <= LAZY_LOADING_SPACE
+        ) {
             this.setState({
                 lazyLoading: true,
             });
@@ -125,10 +135,16 @@ class PersonFinderView extends Component {
     hasEntries = () => {
         const { data, orm, value } = this.props;
         return Array.isArray(orm.groups)
-            ? orm.groups.some(({ key: group, show }) => (typeof show !== 'function' || show(value))
-                && Array.isArray(data[group]) && data[group].length)
-            : !!((Array.isArray(data) && data.length) || Object.values(data)
-                .some((d) => Array.isArray(d) && d.length));
+            ? orm.groups.some(
+                  ({ key: group, show }) =>
+                      (typeof show !== 'function' || show(value)) &&
+                      Array.isArray(data[group]) &&
+                      data[group].length
+              )
+            : !!(
+                  (Array.isArray(data) && data.length) ||
+                  Object.values(data).some((d) => Array.isArray(d) && d.length)
+              );
     };
 
     renderChildren() {
@@ -166,11 +182,8 @@ class PersonFinderView extends Component {
             );
         }
 
-        if (waitCursor === true || Object.values(waitCursor)
-            .some((x) => x)) {
-            return (
-                <WaitCursor key="wait-cursor"/>
-            );
+        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
+            return <WaitCursor key="wait-cursor" />;
         }
 
         return null;
@@ -215,7 +228,10 @@ class PersonFinderView extends Component {
                     return null;
                 }}
                 value={value}
-                boxClassName={classNames('cc__person-finder__overlay', boxClassName)}
+                boxClassName={classNames(
+                    'cc__person-finder__overlay',
+                    boxClassName
+                )}
                 overlayProps={{
                     ref: (ref) => {
                         this.resultList = ref;
@@ -240,10 +256,12 @@ PersonFinderView.propTypes = {
         showName: PropTypes.string,
         search: PropTypes.arrayOf(PropTypes.string),
         imageUrl: PropTypes.string,
-        groups: PropTypes.arrayOf(PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            show: PropTypes.func,
-        })),
+        groups: PropTypes.arrayOf(
+            PropTypes.shape({
+                key: PropTypes.string.isRequired,
+                show: PropTypes.func,
+            })
+        ),
     }).isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
@@ -256,17 +274,15 @@ PersonFinderView.propTypes = {
     ]),
     onSelect: PropTypes.func.isRequired,
     onLoadMore: PropTypes.func,
-    value: PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.string,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     selectedValue: PropTypes.bool,
-    inputComponent: PropTypes.oneOfType([
-        PropTypes.func,
-        PropTypes.node,
-    ]).isRequired,
+    inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+        .isRequired,
     boxClassName: PropTypes.string,
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     boxRef: PropTypes.func,
     showWaitCursor: PropTypes.oneOfType([
         PropTypes.objectOf(PropTypes.bool),

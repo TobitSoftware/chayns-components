@@ -8,7 +8,14 @@ const ObjectMapping = {
     identifier: 'id',
     search: ['showName', 'name'],
     imageUrl: null,
-    filter: (inputValue) => (e) => ['showName', 'name'].some((key) => e[key] && e[key].toLowerCase().startsWith((inputValue || '').toLowerCase())),
+    filter: (inputValue) => (e) =>
+        ['showName', 'name'].some(
+            (key) =>
+                e[key] &&
+                e[key]
+                    .toLowerCase()
+                    .startsWith((inputValue || '').toLowerCase())
+        ),
 };
 
 const UacGroupContext = createContext({
@@ -20,7 +27,11 @@ const UacGroupStateProvider = ({ children }) => {
 
     useEffect(() => {
         (async () => {
-            dispatch({ type: 'REQUEST_DATA', showWaitCursor: true, clear: true });
+            dispatch({
+                type: 'REQUEST_DATA',
+                showWaitCursor: true,
+                clear: true,
+            });
             const groups = await fetchGroups();
             if (groups) {
                 dispatch({

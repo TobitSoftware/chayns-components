@@ -26,33 +26,32 @@
 //  }
 //}
 
-
 .accordion__head.accordion__head__multiline {
-  padding: 4px 0;
-  transition: max-height 300ms, min-height 300ms;
-  will-change: max-height, min-height;
-  height: unset !important;
-  min-height: 32px;
-  max-height: 32px;
-  align-self: flex-start;
-
-  .accordion>&>.accordion__head__title, .accordion>&>.accordion__head__right {
+    padding: 4px 0;
+    transition: max-height 300ms, min-height 300ms;
+    will-change: max-height, min-height;
+    height: unset !important;
+    min-height: 32px;
+    max-height: 32px;
     align-self: flex-start;
-  }
 
-  .accordion.accordion--open>& {
-    min-height: 38px;
-    max-height: 160px;
-    overflow: hidden;
-
-    &>.accordion__head__title {
-      word-break: break-word;
-      white-space: normal;
+    .accordion > & > .accordion__head__title,
+    .accordion > & > .accordion__head__right {
+        align-self: flex-start;
     }
-  }
 
-  .accordion.accordion--wrapped.accordion--open>& {
-    min-height: 40px;
-  }
+    .accordion.accordion--open > & {
+        min-height: 38px;
+        max-height: 160px;
+        overflow: hidden;
 
+        & > .accordion__head__title {
+            word-break: break-word;
+            white-space: normal;
+        }
+    }
+
+    .accordion.accordion--wrapped.accordion--open > & {
+        min-height: 40px;
+    }
 }

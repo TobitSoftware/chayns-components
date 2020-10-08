@@ -7,18 +7,25 @@ import { useStateValue } from '../data/persons/PersonsContext';
 const FriendsIndicator = ({ personId, name }) => {
     const { isFriend, setFriend } = useStateValue();
 
-    const handleClick = useCallback((event) => {
-        event.stopPropagation();
+    const handleClick = useCallback(
+        (event) => {
+            event.stopPropagation();
 
-        setFriend(personId, name, !isFriend(personId));
-    }, [personId, isFriend, setFriend]);
+            setFriend(personId, name, !isFriend(personId));
+        },
+        [personId, isFriend, setFriend]
+    );
 
     return (
         <div className="friends">
             <Icon
                 icon={isFriend(personId) ? 'fas fa-star' : 'far fa-star'}
                 onClick={handleClick}
-                className={isFriend(personId) ? 'chayns__color--yellow-3i' : 'chayns__color--004i'}
+                className={
+                    isFriend(personId)
+                        ? 'chayns__color--yellow-3i'
+                        : 'chayns__color--004i'
+                }
             />
         </div>
     );

@@ -6,7 +6,15 @@ import { hexStringToRgb } from '../../utils/color';
 
 const ColorScheme = (props) => {
     // eslint-disable-next-line prefer-const
-    let { color, colorMode, secondaryColor, children, style, cssVariables, ...otherProps } = props;
+    let {
+        color,
+        colorMode,
+        secondaryColor,
+        children,
+        style,
+        cssVariables,
+        ...otherProps
+    } = props;
     if (color !== null || secondaryColor !== null || colorMode !== null) {
         if (typeof chayns !== 'undefined') {
             if (color === null) {
@@ -31,11 +39,13 @@ const ColorScheme = (props) => {
     const colorStyles = useMemo(() => {
         if (color) {
             const primaryRgbColor = hexStringToRgb(color);
-            const bgRgbColor = hexStringToRgb(getColorFromPalette('100', {
-                color,
-                secondaryColor,
-                colorMode,
-            }));
+            const bgRgbColor = hexStringToRgb(
+                getColorFromPalette('100', {
+                    color,
+                    secondaryColor,
+                    colorMode,
+                })
+            );
             const styles = {
                 color: 'var(--chayns-color--text)',
                 '--chayns-color-rgb': `${primaryRgbColor.r}, ${primaryRgbColor.g}, ${primaryRgbColor.b}`,
@@ -51,7 +61,9 @@ const ColorScheme = (props) => {
                 });
                 styles[`--chayns-color--${colorName}`] = hexColor;
                 const rgbColor = hexStringToRgb(hexColor);
-                styles[`--chayns-color-rgb--${colorName}`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                styles[
+                    `--chayns-color-rgb--${colorName}`
+                ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
             }
             return styles;
         }
@@ -59,7 +71,10 @@ const ColorScheme = (props) => {
     }, [color, secondaryColor, colorMode]);
 
     return (
-        <div style={{ ...style, ...colorStyles, ...cssVariables }} {...otherProps}>
+        <div
+            style={{ ...style, ...colorStyles, ...cssVariables }}
+            {...otherProps}
+        >
             {children}
         </div>
     );

@@ -23,7 +23,7 @@ export default class ControlButton extends PureComponent {
                 }}
                 className={classNames(className, { disabled })}
             >
-                <Icon icon={icon} style={color ? { color } : null}/>
+                <Icon icon={icon} style={color ? { color } : null} />
             </div>
         );
     }

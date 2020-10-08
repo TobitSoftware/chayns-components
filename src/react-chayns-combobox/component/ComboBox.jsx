@@ -10,7 +10,18 @@ import isDescendant from '../../utils/isDescendant';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 const ComboBox = ({
-    className, label, list, disabled, listValue, listKey, stopPropagation, defaultValue, parent, onSelect, style, value,
+    className,
+    label,
+    list,
+    disabled,
+    listValue,
+    listKey,
+    stopPropagation,
+    defaultValue,
+    parent,
+    onSelect,
+    style,
+    value,
 }) => {
     const [position, setPosition] = useState({
         bottom: 0,
@@ -25,7 +36,12 @@ const ComboBox = ({
     const buttonRef = useRef(null);
 
     const onHide = useCallback((e) => {
-        if (!(isDescendant(overlayRef.current, e.target) || buttonRef.current === e.target)) {
+        if (
+            !(
+                isDescendant(overlayRef.current, e.target) ||
+                buttonRef.current === e.target
+            )
+        ) {
             setShowOverlay(false);
         }
     }, []);
@@ -50,40 +66,71 @@ const ComboBox = ({
 
     const select = (selection) => {
         setSelected(selection);
-        if (onSelect && list && list.length > 0 && listKey && selection !== null && selection !== undefined) {
+        if (
+            onSelect &&
+            list &&
+            list.length > 0 &&
+            listKey &&
+            selection !== null &&
+            selection !== undefined
+        ) {
             onSelect(getItem(selection));
         }
     };
 
-    const onButtonClick = useCallback((e) => {
-        if (stopPropagation) e.stopPropagation();
-        setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
-        if (chayns.env.isMobile) {
-            const items = list.map((item) => ({
-                name: item[listValue],
-                value: item[listKey],
-                isSelected: item[listKey] === ((value !== null) ? value : selected),
-            }));
-            chayns.dialog.select({
-                list: items,
-                buttons: [],
-            })
-                .then((result) => {
-                    if (result.buttonType === 1 && result.selection && result.selection[0]) {
-                        select(result.selection[0].value);
-                    }
-                });
-        } else {
-            setPosition(e.target.getBoundingClientRect());
-            setShowOverlay(!showOverlay);
-        }
-    }, [setPosition, setShowOverlay, setMinWidth, showOverlay, selected, stopPropagation, list, listKey, listValue, select, value]);
+    const onButtonClick = useCallback(
+        (e) => {
+            if (stopPropagation) e.stopPropagation();
+            setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
+            if (chayns.env.isMobile) {
+                const items = list.map((item) => ({
+                    name: item[listValue],
+                    value: item[listKey],
+                    isSelected:
+                        item[listKey] === (value !== null ? value : selected),
+                }));
+                chayns.dialog
+                    .select({
+                        list: items,
+                        buttons: [],
+                    })
+                    .then((result) => {
+                        if (
+                            result.buttonType === 1 &&
+                            result.selection &&
+                            result.selection[0]
+                        ) {
+                            select(result.selection[0].value);
+                        }
+                    });
+            } else {
+                setPosition(e.target.getBoundingClientRect());
+                setShowOverlay(!showOverlay);
+            }
+        },
+        [
+            setPosition,
+            setShowOverlay,
+            setMinWidth,
+            showOverlay,
+            selected,
+            stopPropagation,
+            list,
+            listKey,
+            listValue,
+            select,
+            value,
+        ]
+    );
 
-    const onItemClick = useCallback((e) => {
-        select(e.target.id);
-        setShowOverlay(false);
-        if (stopPropagation) e.stopPropagation();
-    }, [setShowOverlay, onSelect, list, listKey, stopPropagation, select]);
+    const onItemClick = useCallback(
+        (e) => {
+            select(e.target.id);
+            setShowOverlay(false);
+            if (stopPropagation) e.stopPropagation();
+        },
+        [setShowOverlay, onSelect, list, listKey, stopPropagation, select]
+    );
 
     return [
         <Button
@@ -91,16 +138,19 @@ const ComboBox = ({
             secondary
             ref={buttonRef}
             onClick={onButtonClick}
-            className={classNames('cc__combo-box', className, { 'cc__combo-box--disabled': disabled })}
+            className={classNames('cc__combo-box', className, {
+                'cc__combo-box--disabled': disabled,
+            })}
             style={{ minWidth, ...style }}
         >
-            <div
-                className="cc__combo-box__label ellipsis"
-            >
-                {((selected === null || selected === undefined) && value === null) && label
-                    ? label : getItem((value !== null) ? value : selected)[listValue]}
+            <div className="cc__combo-box__label ellipsis">
+                {(selected === null || selected === undefined) &&
+                value === null &&
+                label
+                    ? label
+                    : getItem(value !== null ? value : selected)[listValue]}
             </div>
-            <Icon className="cc__combo-box__icon" icon="fa fa-caret-down"/>
+            <Icon className="cc__combo-box__icon" icon="fa fa-caret-down" />
         </Button>,
         <TappPortal parent={parent} key="combobox-portal">
             <CSSTransition
@@ -111,7 +161,10 @@ const ComboBox = ({
             >
                 <div
                     ref={overlayRef}
-                    className={classNames('cc__combo-box__overlay scrollbar chayns__background-color--101 chayns__border-color--104', className)}
+                    className={classNames(
+                        'cc__combo-box__overlay scrollbar chayns__background-color--101 chayns__border-color--104',
+                        className
+                    )}
                     style={{
                         top: position.bottom,
                         left: position.left,
@@ -120,7 +173,12 @@ const ComboBox = ({
                     }}
                 >
                     {list.map((item) => (
-                        <div key={item[listKey]} id={item[listKey]} className="cc__combo-box__overlay__item ellipsis" onClick={onItemClick}>
+                        <div
+                            key={item[listKey]}
+                            id={item[listKey]}
+                            className="cc__combo-box__overlay__item ellipsis"
+                            onClick={onItemClick}
+                        >
                             {item[listValue]}
                         </div>
                     ))}

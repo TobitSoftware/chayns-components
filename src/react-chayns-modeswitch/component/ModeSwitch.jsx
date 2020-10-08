@@ -16,13 +16,18 @@ export default class ModeSwitch extends Component {
     static addChangeListener(callback) {
         ModeSwitch.onChangeListener.push(callback);
         if (ModeSwitch.modes.length > 0) {
-            const mode = ModeSwitch.modes.find((m) => m.id === ModeSwitch.activeModeId);
+            const mode = ModeSwitch.modes.find(
+                (m) => m.id === ModeSwitch.activeModeId
+            );
             callback(mode);
         }
     }
 
     static removeChangeListener(callback) {
-        ModeSwitch.onChangeListener.splice(ModeSwitch.onChangeListener.indexOf(callback), 1);
+        ModeSwitch.onChangeListener.splice(
+            ModeSwitch.onChangeListener.indexOf(callback),
+            1
+        );
     }
 
     constructor(props) {
@@ -40,8 +45,12 @@ export default class ModeSwitch extends Component {
             open: false,
         };
         ModeSwitch.adminSwitchStatus = chayns.env.user.adminMode ? 1 : 0;
-        ModeSwitch.adminSwitchSupport = !(chayns.env.appVersion < 5691 && chayns.env.isIOS && chayns.env.isApp)
-            && !!chayns.env.user.groups.find((g) => g.id === 1);
+        ModeSwitch.adminSwitchSupport =
+            !(
+                chayns.env.appVersion < 5691 &&
+                chayns.env.isIOS &&
+                chayns.env.isApp
+            ) && !!chayns.env.user.groups.find((g) => g.id === 1);
         window.chayns.ready.then(() => {
             window.chayns.addAccessTokenChangeListener(this.init);
             this.init();
@@ -95,19 +104,20 @@ export default class ModeSwitch extends Component {
                 name: window.chayns.env.user.name,
             });
         }
-        newModes = newModes.filter((mode) => !mode.uacIds || (this.isUserInGroup(mode.uacIds)));
+        newModes = newModes.filter(
+            (mode) => !mode.uacIds || this.isUserInGroup(mode.uacIds)
+        );
         return newModes;
     }
 
     async init() {
-        const {
-            defaultMode,
-            save,
-            modes,
-            parent,
-        } = this.props;
+        const { defaultMode, save, modes, parent } = this.props;
 
-        this.pageYOffset = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect().top;
+        this.pageYOffset = (
+            parent ||
+            document.getElementsByClassName('tapp')[0] ||
+            document.body
+        ).getBoundingClientRect().top;
         if (chayns.env.user.isAuthenticated) {
             ModeSwitch.modes = this.setModes(modes);
             ModeSwitch.activeModeId = defaultMode || 0;
@@ -122,12 +132,17 @@ export default class ModeSwitch extends Component {
                 ModeSwitch.activeModeId = defaultMode;
             }
             if (save) {
-                const storage = window.chayns.utils.ls.get('react__modeSwitch--currentMode');
+                const storage = window.chayns.utils.ls.get(
+                    'react__modeSwitch--currentMode'
+                );
                 if (chayns.utils.isNumber(storage)) {
                     ModeSwitch.activeModeId = storage;
                 }
             }
-            if (ModeSwitch.adminSwitchSupport && (ModeSwitch.activeModeId === 0 || ModeSwitch.activeModeId === 1)) {
+            if (
+                ModeSwitch.adminSwitchSupport &&
+                (ModeSwitch.activeModeId === 0 || ModeSwitch.activeModeId === 1)
+            ) {
                 ModeSwitch.activeModeId = ModeSwitch.adminSwitchStatus;
             }
         } else {
@@ -165,7 +180,9 @@ export default class ModeSwitch extends Component {
     }
 
     isUserInGroup(uacIds) {
-        return !!window.chayns.env.user.groups.find((group) => uacIds.indexOf(group.id) >= 0);
+        return !!window.chayns.env.user.groups.find(
+            (group) => uacIds.indexOf(group.id) >= 0
+        );
     }
 
     toggleModeSwitch() {
@@ -181,12 +198,24 @@ export default class ModeSwitch extends Component {
         if (modes.find((mode) => mode.uacIds && mode.uacIds.indexOf(1) >= 0)) {
             customModes -= 1;
         }
-        if (modes.find((mode) => !mode.uacIds || (mode.uacIds && mode.uacIds.indexOf(0) >= 0))) {
+        if (
+            modes.find(
+                (mode) =>
+                    !mode.uacIds || (mode.uacIds && mode.uacIds.indexOf(0) >= 0)
+            )
+        ) {
             customModes -= 1;
         }
 
-        return (show || (show === null && modes.length > 1 && (!ModeSwitch.adminSwitchSupport || modes.length > 2 || customModes)))
-            && chayns.env.user.isAuthenticated;
+        return (
+            (show ||
+                (show === null &&
+                    modes.length > 1 &&
+                    (!ModeSwitch.adminSwitchSupport ||
+                        modes.length > 2 ||
+                        customModes))) &&
+            chayns.env.user.isAuthenticated
+        );
     }
 
     render() {
@@ -197,35 +226,41 @@ export default class ModeSwitch extends Component {
             return (
                 <TappPortal parent={parent}>
                     <div
-                        className={classNames('cc__modeswitch', { 'cc__modeswitch--open': open })}
+                        className={classNames('cc__modeswitch', {
+                            'cc__modeswitch--open': open,
+                        })}
                         style={{ top: `${this.pageYOffset}px` }}
                     >
                         <div className="cc__modeswitch__content">
                             <h2>Diese Seite verwenden als:</h2>
-                            {
-                                modes.map((mode) => (
-                                    !ModeSwitch.adminSwitchSupport || mode.id > 1 || mode.id === ModeSwitch.adminSwitchStatus
-                                        ? (
-                                            <div key={mode.id} className="grid__item col-1-2-desktop col-1-1-mobile">
-                                                <RadioButton
-                                                    name="modeSwitchRadioButtons"
-                                                    value={mode.id}
-                                                    onChange={this.switchMode}
-                                                    checked={mode.id === activeModeId}
-                                                >
-                                                    {mode.name}
-                                                </RadioButton>
-                                            </div>
-                                        )
-                                        : null
-                                ))
-                            }
+                            {modes.map((mode) =>
+                                !ModeSwitch.adminSwitchSupport ||
+                                mode.id > 1 ||
+                                mode.id === ModeSwitch.adminSwitchStatus ? (
+                                    <div
+                                        key={mode.id}
+                                        className="grid__item col-1-2-desktop col-1-1-mobile"
+                                    >
+                                        <RadioButton
+                                            name="modeSwitchRadioButtons"
+                                            value={mode.id}
+                                            onChange={this.switchMode}
+                                            checked={mode.id === activeModeId}
+                                        >
+                                            {mode.name}
+                                        </RadioButton>
+                                    </div>
+                                ) : null
+                            )}
                         </div>
                         <div
-                            className={classNames('cc__modeswitch__trigger', { 'cc__modeswitch__trigger--red': activeModeId > 1 })}
+                            className={classNames('cc__modeswitch__trigger', {
+                                'cc__modeswitch__trigger--red':
+                                    activeModeId > 1,
+                            })}
                             onClick={this.toggleModeSwitch}
                         >
-                            <Icon icon="ts-cog"/>
+                            <Icon icon="ts-cog" />
                         </div>
                     </div>
                 </TappPortal>
@@ -248,16 +283,21 @@ ModeSwitch.adminSwitchSupport = false;
 ModeSwitch.adminSwitchStatus = 0;
 
 ModeSwitch.propTypes = {
-    modes: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        uacIds: PropTypes.arrayOf(PropTypes.number),
-    })),
+    modes: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            uacIds: PropTypes.arrayOf(PropTypes.number),
+        })
+    ),
     save: PropTypes.bool,
     onChange: PropTypes.func,
     defaultMode: PropTypes.number,
     show: PropTypes.bool,
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
 };
 
 ModeSwitch.defaultProps = {

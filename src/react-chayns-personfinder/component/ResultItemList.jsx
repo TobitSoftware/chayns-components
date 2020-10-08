@@ -25,15 +25,17 @@ const ResultItemList = ({
 
     return (
         <div
-            className={classNames('cc__person-finder__results-list', className, {
-                'cc__person-finder__results-list--noTransition': focusIndex !== null,
-            })}
+            className={classNames(
+                'cc__person-finder__results-list',
+                className,
+                {
+                    'cc__person-finder__results-list--noTransition':
+                        focusIndex !== null,
+                }
+            )}
         >
             {separator && (
-                <Divider
-                    key={`${separator}-divider`}
-                    name={separator}
-                />
+                <Divider key={`${separator}-divider`} name={separator} />
             )}
             {data.map((item, index) => (
                 <PersonFinderResultItem

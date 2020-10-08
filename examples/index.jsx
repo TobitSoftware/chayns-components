@@ -14,10 +14,7 @@ async function bootstrap() {
     // load textString library "TextStringTest" in dutch
     await TextString.loadLibrary('TextStringTest', 'langRes', 'nl');
 
-    ReactDom.render(
-        <ExampleList/>,
-        document.querySelector('#app'),
-    );
+    ReactDom.render(<ExampleList />, document.querySelector('#app'));
 }
 
 bootstrap();

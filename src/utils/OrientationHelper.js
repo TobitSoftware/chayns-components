@@ -13,7 +13,12 @@ class OrientationHelper {
 
     // eslint-disable-next-line class-methods-use-this
     getOrientation() {
-        if (window.screen && window.screen.orientation && (window.screen.orientation.angle || window.screen.orientation.angle === 0)) {
+        if (
+            window.screen &&
+            window.screen.orientation &&
+            (window.screen.orientation.angle ||
+                window.screen.orientation.angle === 0)
+        ) {
             const angle = window.screen.orientation.angle % 360;
 
             if (angle === 90 || angle === 270 || angle === -90) {
@@ -24,7 +29,9 @@ class OrientationHelper {
         }
 
         if (window.orientation || window.orientation === 0) {
-            return (window.orientation === -90 || window.orientation === 90) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+            return window.orientation === -90 || window.orientation === 90
+                ? ORIENTATION_LANDSCAPE
+                : ORIENTATION_PORTRAIT;
         }
 
         if (window.innerHeight > window.innerWidth) {
