@@ -6,6 +6,7 @@
   "module": "dist/index.es.js",
   "jsnext:main": "lib_esnext/index.js",
   "scripts": {
+    "format": "prettier . --ignore-path .gitignore --write",
     "start": "node ./examples/utils/generateReactList && concurrently --kill-others \"npm run watch:sass\" \"npm run webpack\"",
     "prepublishOnly": "npm run eslint & npm run build",
     "clean": "",
