@@ -12,7 +12,7 @@ export default async function getOrientation(file) {
         reader.onload = (event) => {
             const view = new DataView(event.target.result);
 
-            if (view.getUint16(0, false) !== 0xFFD8) return resolve(null);
+            if (view.getUint16(0, false) !== 0xffd8) return resolve(null);
 
             const length = view.byteLength;
             let offset = 2;
@@ -21,19 +21,25 @@ export default async function getOrientation(file) {
                 const marker = view.getUint16(offset, false);
                 offset += 2;
 
-                if (marker === 0xFFE1) {
+                if (marker === 0xffe1) {
                     // eslint-disable-next-line no-cond-assign
-                    if (view.getUint32(offset += 2, false) !== 0x45786966) {
+                    if (view.getUint32((offset += 2), false) !== 0x45786966) {
                         return resolve(null);
                     }
-                    const little = view.getUint16(offset += 6, false) === 0x4949;
+                    const little =
+                        view.getUint16((offset += 6), false) === 0x4949;
                     offset += view.getUint32(offset + 4, little);
                     const tags = view.getUint16(offset, little);
                     offset += 2;
 
                     for (let i = 0; i < tags; i++) {
-                        if (view.getUint16(offset + (i * 12), little) === 0x0112) {
-                            const exifOrientationCode = view.getUint16(offset + (i * 12) + 8, little);
+                        if (
+                            view.getUint16(offset + i * 12, little) === 0x0112
+                        ) {
+                            const exifOrientationCode = view.getUint16(
+                                offset + i * 12 + 8,
+                                little
+                            );
                             let rotation = 0;
                             if (exifOrientationCode > 6) {
                                 rotation = 90;
@@ -45,12 +51,14 @@ export default async function getOrientation(file) {
                             return resolve({
                                 exifOrientationCode,
                                 rotation,
-                                mirrored: [2, 4, 5, 7].indexOf(exifOrientationCode) >= 0,
+                                mirrored:
+                                    [2, 4, 5, 7].indexOf(exifOrientationCode) >=
+                                    0,
                             });
                         }
                     }
                     // eslint-disable-next-line no-bitwise
-                } else if ((marker & 0xFF00) !== 0xFF00) {
+                } else if ((marker & 0xff00) !== 0xff00) {
                     break;
                 } else {
                     offset += view.getUint16(offset, false);

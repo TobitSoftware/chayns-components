@@ -12,7 +12,7 @@ export default class PositionInputExample extends PureComponent {
             const { value } = this.state;
 
             this.setState({
-                value: ((value + 10) % 300),
+                value: (value + 10) % 300,
             });
         }, 500);
     }
@@ -26,20 +26,13 @@ export default class PositionInputExample extends PureComponent {
 
         return (
             <div>
+                <ProgressBar value={value % 100}>Uploading ...</ProgressBar>
+                <ProgressBar value={50}>Uploading (static) ...</ProgressBar>
+                <ProgressBar>Converting ...</ProgressBar>
                 <ProgressBar
-                    value={value % 100}
+                    value={value < 100 ? value : null}
+                    ready={value > 200}
                 >
-                    Uploading ...
-                </ProgressBar>
-                <ProgressBar
-                    value={50}
-                >
-                    Uploading (static) ...
-                </ProgressBar>
-                <ProgressBar>
-                    Converting ...
-                </ProgressBar>
-                <ProgressBar value={value < 100 ? value : null} ready={value > 200}>
                     {Math.floor(value / 100) === 0 && 'Uploading ...'}
                     {Math.floor(value / 100) === 1 && 'Converting ...'}
                     {Math.floor(value / 100) === 2 && 'Ready!'}

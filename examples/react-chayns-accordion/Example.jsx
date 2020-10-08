@@ -40,92 +40,94 @@ export default class AccordionExample extends Component {
 
         return (
             <div>
-                {
-                    show
-                        ? (
-                            <Accordion
-                                headCustomAttributes={{
-                                    tabIndex: 0,
-                                    onKeyDown: console.log,
-                                }}
-                                head="controlled Accordion with nice search"
-                                headClassNames="chayns__color"
-                                onSearch={(data) => {
-                                    console.log(data);
-                                    this.setState({ searchValue: data });
-                                }}
-                                searchPlaceholder="Search"
-                                searchValue={searchValue}
-                                right={<Badge>12</Badge>}
-                                dataGroup="chayns"
-                                open={open}
-                                onOpen={() => {
-                                    console.log('onOpen');
-                                    this.setState({ open: true });
-                                }}
-                                onClose={() => {
-                                    console.log('onClose');
-                                    this.setState({ open: false });
-                                }}
-                                ref={this.accordionRef}
-                                reference={(ref) => { this.accordionDivRef = ref; }}
-                            >
-                                <Button onClick={() => { this.setState({ searchValue: '' }); }}>Clear search input</Button>
-                                <Button onClick={() => { console.log('reference ref', this.accordionDivRef, this.accordionRef); }}>
-                                    Log reference & ref
-                                </Button>
-                                <div className="accordion__item">
-                                    Hello World
-                                </div>
-                                <div className="accordion__item">
-                                    Hello World<br/>blabla
-                                </div>
-                                <div className="accordion__item">
-                                    Hello World
-                                </div>
-                            </Accordion>
-                        )
-                        : null
-                }
+                {show ? (
+                    <Accordion
+                        headCustomAttributes={{
+                            tabIndex: 0,
+                            onKeyDown: console.log,
+                        }}
+                        head="controlled Accordion with nice search"
+                        headClassNames="chayns__color"
+                        onSearch={(data) => {
+                            console.log(data);
+                            this.setState({ searchValue: data });
+                        }}
+                        searchPlaceholder="Search"
+                        searchValue={searchValue}
+                        right={<Badge>12</Badge>}
+                        dataGroup="chayns"
+                        open={open}
+                        onOpen={() => {
+                            console.log('onOpen');
+                            this.setState({ open: true });
+                        }}
+                        onClose={() => {
+                            console.log('onClose');
+                            this.setState({ open: false });
+                        }}
+                        ref={this.accordionRef}
+                        reference={(ref) => {
+                            this.accordionDivRef = ref;
+                        }}
+                    >
+                        <Button
+                            onClick={() => {
+                                this.setState({ searchValue: '' });
+                            }}
+                        >
+                            Clear search input
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                console.log(
+                                    'reference ref',
+                                    this.accordionDivRef,
+                                    this.accordionRef
+                                );
+                            }}
+                        >
+                            Log reference & ref
+                        </Button>
+                        <div className="accordion__item">Hello World</div>
+                        <div className="accordion__item">
+                            Hello World
+                            <br />
+                            blabla
+                        </div>
+                        <div className="accordion__item">Hello World</div>
+                    </Accordion>
+                ) : null}
                 <Accordion
                     head="Accordion with animated search input, nice dots and a very long title"
                     onSearch={console.log}
                     searchPlaceholder="Search"
                     dataGroup="chayns"
-                    right={(
-                        <ContextMenu
-                            items={items}
-                            position={1}
-                        />
-                    )}
+                    right={<ContextMenu items={items} position={1} />}
                     onOpen={console.log}
                     onClose={console.log}
                 >
                     <div className="accordion__content">
                         Hello World
-                        <TestComponent/>
+                        <TestComponent />
                     </div>
                 </Accordion>
                 <Accordion
                     head="Accordion with only search"
-                    headClassNames={['chayns__color--100', 'chayns__background-color--103i']}
+                    headClassNames={[
+                        'chayns__color--100',
+                        'chayns__background-color--103i',
+                    ]}
                     onSearch={console.log}
                 >
                     Content
                 </Accordion>
                 <Accordion head="Test" right={<Badge>2</Badge>} defaultOpened>
                     <Accordion
-                        head={(
-                            <span style={{ color: '#FF0000' }}>
-                                Test
-                            </span>
-                        )}
+                        head={<span style={{ color: '#FF0000' }}>Test</span>}
                         isWrapped
                         open
                     >
-                        <div className="accordion__content">
-                            Hello World 1
-                        </div>
+                        <div className="accordion__content">Hello World 1</div>
                     </Accordion>
                     <Accordion
                         head={{
@@ -143,19 +145,15 @@ export default class AccordionExample extends Component {
                         dataGroup="abc"
                         noTitleTrigger
                     >
-                        <div className="accordion__content">
-                            Hello World 2
-                        </div>
+                        <div className="accordion__content">Hello World 2</div>
                     </Accordion>
+                    <div className="accordion__item">Hello World</div>
                     <div className="accordion__item">
                         Hello World
+                        <br />
+                        blabla
                     </div>
-                    <div className="accordion__item">
-                        Hello World<br/>blabla
-                    </div>
-                    <div className="accordion__item">
-                        Hello World
-                    </div>
+                    <div className="accordion__item">Hello World</div>
                     <Accordion
                         dataGroup="abc"
                         icon="ts-tobit"
@@ -164,44 +162,53 @@ export default class AccordionExample extends Component {
                         right={<Badge>1</Badge>}
                         isWrapped
                     >
-                        <div className="accordion__content">
-                            Hello World 2
-                        </div>
+                        <div className="accordion__content">Hello World 2</div>
                     </Accordion>
                 </Accordion>
                 <Accordion head="Autogrow" autogrow>
                     <div className="accordion__content">
-                        <div style={{
-                            height: '20000px',
-                            background: 'linear-gradient(0deg, red, yellow)',
-                        }}
+                        <div
+                            style={{
+                                height: '20000px',
+                                background:
+                                    'linear-gradient(0deg, red, yellow)',
+                            }}
                         />
                     </div>
                 </Accordion>
                 <Accordion
                     head="Accordion with Button"
-                    right={(
+                    right={
                         <Checkbox
                             toggleButton
                             className="accordion--no-trigger"
                             labelClassName="accordion--no-trigger"
                         />
-                    )}
+                    }
                 >
                     <div className="accordion__content">
-                        <div style={{
-                            height: '200px',
-                            background: 'linear-gradient(0deg, purple, orange)',
-                        }}
+                        <div
+                            style={{
+                                height: '200px',
+                                background:
+                                    'linear-gradient(0deg, purple, orange)',
+                            }}
                         />
                     </div>
                 </Accordion>
-                <Accordion head="Fixed Accordion without icon" fixed defaultOpened noIcon>
+                <Accordion
+                    head="Fixed Accordion without icon"
+                    fixed
+                    defaultOpened
+                    noIcon
+                >
                     <div className="accordion__content">
-                        <div style={{
-                            height: '200px',
-                            background: 'linear-gradient(0deg, blue, green)',
-                        }}
+                        <div
+                            style={{
+                                height: '200px',
+                                background:
+                                    'linear-gradient(0deg, blue, green)',
+                            }}
                         />
                     </div>
                 </Accordion>
@@ -216,7 +223,7 @@ export default class AccordionExample extends Component {
                     head="Accordion (animated badge)"
                     right={{
                         close: <Badge>15</Badge>,
-                        open: <Input className="accordion--no-trigger"/>,
+                        open: <Input className="accordion--no-trigger" />,
                     }}
                 >
                     Content

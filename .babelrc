@@ -1,16 +1,16 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": false
-      }
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "modules": false
+            }
+        ],
+        "@babel/preset-react"
     ],
-    "@babel/preset-react"
-  ],
-  "plugins": [
-    "@babel/plugin-transform-runtime",
-    "@babel/plugin-proposal-class-properties",
-    "babel-plugin-optimize-clsx"
-  ]
+    "plugins": [
+        "@babel/plugin-transform-runtime",
+        "@babel/plugin-proposal-class-properties",
+        "babel-plugin-optimize-clsx"
+    ]
 }

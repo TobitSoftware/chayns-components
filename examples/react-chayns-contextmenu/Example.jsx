@@ -39,7 +39,11 @@ export default class ContextMenuExample extends Component {
 
     render() {
         const {
-            x, y, position, listCoordinates, positionOnChildren,
+            x,
+            y,
+            position,
+            listCoordinates,
+            positionOnChildren,
         } = this.state;
 
         const items = [
@@ -59,20 +63,23 @@ export default class ContextMenuExample extends Component {
 
         return (
             <div>
-                <Button onClick={this.buttonClick}>
-                    Change position
-                </Button>
+                <Button onClick={this.buttonClick}>Change position</Button>
                 <Button onClick={this.buttonClick2}>
                     Change position on children
                 </Button>
                 <Accordion
                     head="Accordion with ContextMenu"
-                    right={<ContextMenu items={items} position={position % 6}/>}
+                    right={
+                        <ContextMenu items={items} position={position % 6} />
+                    }
                 >
                     <div className="accordion__content">
                         <p>Hello World</p>
-                        <ContextMenu items={items} childrenStyle={{ display: 'inline' }}>
-                            <Icon icon="fa fa-coffee"/>
+                        <ContextMenu
+                            items={items}
+                            childrenStyle={{ display: 'inline' }}
+                        >
+                            <Icon icon="fa fa-coffee" />
                         </ContextMenu>
                     </div>
                 </Accordion>
@@ -91,35 +98,48 @@ export default class ContextMenuExample extends Component {
                     ref={this.clickContextMenu}
                     onLayerClick={(e) => {
                         console.log(e);
-                        if (e && e.srcElement && e.srcElement.id !== 'clickZone') this.clickContextMenu.current.hide();
+                        if (
+                            e &&
+                            e.srcElement &&
+                            e.srcElement.id !== 'clickZone'
+                        )
+                            this.clickContextMenu.current.hide();
                     }}
                 />
                 <div style={{ position: 'relative' }}>
                     <Gallery
                         height={300}
-                        images={[{
-                            url: 'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
-                            // eslint-disable-next-line max-len
-                            preview: '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoADwDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAgABAwT/xAAjEAEAAwABBQABBQAAAAAAAAABAAIRIQMSMUFRgSJCYWKx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAABEBMVH/2gAMAwEAAhEDEQA/APN2JVc4mViOo9oewyb0qi8+DlgOleQzl+zerRDN9h4iAd4y3khFbnd6fEjXAek+mFMvzPStV7ahv+Tj1acNh3PMUnira1Hh5Zyva1rKvMlcyGVlpOlDZzBDfUdHIM674mBZ5++oba2NR/tFU7jfnr7Le67hmASNIUM7T8MzqNu12mGRGVWr5/awdS36f5eJBxSGJMhmmSrxXfktV3dlKTDXSt3znP2bXqZZsvuUpYUep1C3g/MDbXXllKIWsXXmGUoH/9k=',
-                            width: 640,
-                            height: 426,
-                        }]}
+                        images={[
+                            {
+                                url:
+                                    'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
+                                // eslint-disable-next-line max-len
+                                preview:
+                                    '/9j/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAAoADwDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAgABAwT/xAAjEAEAAwABBQABBQAAAAAAAAABAAIRIQMSMUFRgSJCYWKx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAABEBMVH/2gAMAwEAAhEDEQA/APN2JVc4mViOo9oewyb0qi8+DlgOleQzl+zerRDN9h4iAd4y3khFbnd6fEjXAek+mFMvzPStV7ahv+Tj1acNh3PMUnira1Hh5Zyva1rKvMlcyGVlpOlDZzBDfUdHIM674mBZ5++oba2NR/tFU7jfnr7Le67hmASNIUM7T8MzqNu12mGRGVWr5/awdS36f5eJBxSGJMhmmSrxXfktV3dlKTDXSt3znP2bXqZZsvuUpYUep1C3g/MDbXXllKIWsXXmGUoH/9k=',
+                                width: 640,
+                                height: 426,
+                            },
+                        ]}
                     />
                     <ContextMenu
                         items={items}
                         position={position % 4}
                         showTriggerBackground
-                        childrenStyle={{ position: 'absolute', top: 0, right: 0 }}
+                        childrenStyle={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                        }}
                     />
                 </div>
                 <Accordion head="List with one contextMenu for all entries">
-                    <List>{
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
+                    <List>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
                             <ListItem
                                 key={number}
                                 title={`Listentry ${number}`}
                                 subtitle="Description"
-                                right={(
+                                right={
                                     <div
                                         style={{
                                             height: '100%',
@@ -131,16 +151,24 @@ export default class ContextMenuExample extends Component {
                                             className="listTrigger"
                                             icon="ts-ellipsis_v"
                                             onClick={(e) => {
-                                                const { top, left, width } = e.target.getBoundingClientRect();
-                                                this.setState({ listCoordinates: { x: left + (width / 2), y: top } });
+                                                const {
+                                                    top,
+                                                    left,
+                                                    width,
+                                                } = e.target.getBoundingClientRect();
+                                                this.setState({
+                                                    listCoordinates: {
+                                                        x: left + width / 2,
+                                                        y: top,
+                                                    },
+                                                });
                                                 this.listContextMenu.current.show();
                                             }}
                                         />
                                     </div>
-                                )}
+                                }
                             />
-                        ))
-                    }
+                        ))}
                     </List>
                 </Accordion>
                 <ContextMenu
@@ -149,7 +177,12 @@ export default class ContextMenuExample extends Component {
                     position={ContextMenu.position.TOP_LEFT}
                     ref={this.listContextMenu}
                     onLayerClick={(e) => {
-                        if (e && e.target && !e.target.classList.contains('listTrigger')) this.listContextMenu.current.hide();
+                        if (
+                            e &&
+                            e.target &&
+                            !e.target.classList.contains('listTrigger')
+                        )
+                            this.listContextMenu.current.hide();
                     }}
                 />
                 <div style={{ padding: '10px', marginBottom: '100px' }}>
@@ -157,8 +190,7 @@ export default class ContextMenuExample extends Component {
                         items={items}
                         position={position % 6}
                         positionOnChildren={positionOnChildren % 3}
-                        onLayerClick={() => {
-                        }}
+                        onLayerClick={() => {}}
                     />
                 </div>
             </div>

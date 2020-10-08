@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 
 import { Button, PersonFinder } from '../../src';
 import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
-import SimpleWrapperContext
-    from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
+import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
 const customData = [
     {
@@ -41,7 +40,6 @@ export default class PersonFinderExample extends PureComponent {
         this.simplePersonFinderRef4 = React.createRef();
     }
 
-
     static handleSelect(user) {
         chayns.dialog.alert(JSON.stringify(user, null, 2));
     }
@@ -57,12 +55,14 @@ export default class PersonFinderExample extends PureComponent {
     state = {
         data: customData.slice(0, 1),
         hasMore: true,
-        moreReceiver: [{
-            userId: 2236583,
-            personId: '134-78226',
-            firstName: 'Thomas',
-            lastName: 'Tobit',
-        }],
+        moreReceiver: [
+            {
+                userId: 2236583,
+                personId: '134-78226',
+                firstName: 'Thomas',
+                lastName: 'Tobit',
+            },
+        ],
         controlledValues: [],
         value: '',
     };
@@ -80,7 +80,8 @@ export default class PersonFinderExample extends PureComponent {
         if (this.multipleUserFinder) this.multipleUserFinder.clear();
         if (this.uacFinder) this.uacFinder.clear();
         if (this.relationFinderUac) this.relationFinderUac.clear();
-        if (this.relationFinderUacLocation) this.relationFinderUacLocation.clear();
+        if (this.relationFinderUacLocation)
+            this.relationFinderUacLocation.clear();
         this.simplePersonFinderRef1.current.clear();
         this.simplePersonFinderRef2.current.clear();
         this.simplePersonFinderRef3.current.clear();
@@ -89,7 +90,13 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const { data, hasMore, moreReceiver, controlledValues, value } = this.state;
+        const {
+            data,
+            hasMore,
+            moreReceiver,
+            controlledValues,
+            value,
+        } = this.state;
         return (
             <div style={{ marginBottom: '500px' }}>
                 <h2>Simple PersonFinders</h2>
@@ -136,14 +143,24 @@ export default class PersonFinderExample extends PureComponent {
                         console.log('added', state);
                         const newState = {
                             ...state,
-                            personsRelated: state.personsRelated.filter((person) => {
-                                console.log(person);
-                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
-                            }),
-                            personsUnrelated: state.personsUnrelated.filter((person) => {
-                                console.log(person);
-                                return person.name.indexOf('e') >= 0 || person.name.indexOf('e') >= 0;
-                            }),
+                            personsRelated: state.personsRelated.filter(
+                                (person) => {
+                                    console.log(person);
+                                    return (
+                                        person.name.indexOf('e') >= 0 ||
+                                        person.name.indexOf('e') >= 0
+                                    );
+                                }
+                            ),
+                            personsUnrelated: state.personsUnrelated.filter(
+                                (person) => {
+                                    console.log(person);
+                                    return (
+                                        person.name.indexOf('e') >= 0 ||
+                                        person.name.indexOf('e') >= 0
+                                    );
+                                }
+                            ),
                         };
                         return newState;
                     }}
@@ -229,7 +246,9 @@ export default class PersonFinderExample extends PureComponent {
                     onInput={console.log}
                     defaultValues={moreReceiver}
                     onRemove={(value) => {
-                        const newReceiver = moreReceiver.filter((rec) => rec.userId !== value.userId);
+                        const newReceiver = moreReceiver.filter(
+                            (rec) => rec.userId !== value.userId
+                        );
                         this.setState({
                             moreReceiver: newReceiver,
                         });
@@ -252,7 +271,12 @@ export default class PersonFinderExample extends PureComponent {
                     }}
                     onRemove={(value) => {
                         console.log('remove', value, controlledValues);
-                        controlledValues.splice(controlledValues.findIndex((v) => v.userId === value.userId), 1);
+                        controlledValues.splice(
+                            controlledValues.findIndex(
+                                (v) => v.userId === value.userId
+                            ),
+                            1
+                        );
                         this.setState({ controlledValues });
                     }}
                     placeholder="Controlled PersonFinder"
@@ -268,21 +292,36 @@ export default class PersonFinderExample extends PureComponent {
                         identifier: 'email',
                         search: ['email', 'displayName'],
                         imageUrl: 'imageUrl',
-                        filter: (inputValue) => (e) => ['email', 'displayName'].some((key) => e[key] && e[key].toLowerCase()
-                            .startsWith((inputValue || '').toLowerCase())),
+                        filter: (inputValue) => (e) =>
+                            ['email', 'displayName'].some(
+                                (key) =>
+                                    e[key] &&
+                                    e[key]
+                                        .toLowerCase()
+                                        .startsWith(
+                                            (inputValue || '').toLowerCase()
+                                        )
+                            ),
                     })}
                     contextProps={{
                         data,
                         hasMore,
                         onLoadMore: async () => {
-                            await new Promise((resolve) => setTimeout(resolve, 2000));
+                            await new Promise((resolve) =>
+                                setTimeout(resolve, 2000)
+                            );
                             this.setState((state) => ({
-                                data: customData.slice(0, state.data.length + 1),
+                                data: customData.slice(
+                                    0,
+                                    state.data.length + 1
+                                ),
                             }));
                         },
                         onInput: async () => {
                             this.setState({ data: [] });
-                            await new Promise((resolve) => setTimeout(resolve, 1000));
+                            await new Promise((resolve) =>
+                                setTimeout(resolve, 1000)
+                            );
                             this.setState({
                                 data: customData.slice(0, 1),
                             });
@@ -330,14 +369,17 @@ export default class PersonFinderExample extends PureComponent {
                         this.personFinderOwn3 = ref;
                     }}
                     placeholder="Sites (multiple, default)"
-                    defaultValues={[{
-                        type: 'SITE',
-                        id: '59140-09519',
-                        name: 'BamBoo! Ahaus',
-                        imageUrl: 'https://sub60.tobit.com/l/59140-09519?size=40',
-                        siteId: '59140-09519',
-                        locationId: 1,
-                    }]}
+                    defaultValues={[
+                        {
+                            type: 'SITE',
+                            id: '59140-09519',
+                            name: 'BamBoo! Ahaus',
+                            imageUrl:
+                                'https://sub60.tobit.com/l/59140-09519?size=40',
+                            siteId: '59140-09519',
+                            locationId: 1,
+                        },
+                    ]}
                     onAdd={PersonFinderExample.handleAdd}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
@@ -354,11 +396,7 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="Users (multiple)"
                     multiple
                 />
-                <Button
-                    onClick={this.clear}
-                >
-                    Clear all
-                </Button>
+                <Button onClick={this.clear}>Clear all</Button>
             </div>
         );
     }

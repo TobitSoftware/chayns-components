@@ -19,7 +19,10 @@ export default class TooltipExample extends Component {
                     <Tooltip
                         bindListeners
                         position={Tooltip.position.BOTTOM_RIGHT}
-                        content={{ text: 'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.' }}
+                        content={{
+                            text:
+                                'This is a tooltip with a custom width of 150px. Optional, you can add a headline and an image.',
+                        }}
                         minWidth={150}
                         maxWidth={150}
                     >
@@ -31,7 +34,8 @@ export default class TooltipExample extends Component {
                         bindListeners
                         position={Tooltip.position.TOP_RIGHT}
                         content={{
-                            text: 'H5 will be used as headline inside of a tooltip.',
+                            text:
+                                'H5 will be used as headline inside of a tooltip.',
                             headline: 'Headline',
                         }}
                     >
@@ -56,7 +60,8 @@ export default class TooltipExample extends Component {
                                 bindListeners
                                 position={Tooltip.position.TOP_LEFT}
                                 content={{
-                                    text: 'Buttons within tooltips can be used to show more informations.',
+                                    text:
+                                        'Buttons within tooltips can be used to show more informations.',
                                     buttonText: 'More informations',
                                     buttonOnClick: console.log,
                                 }}
@@ -69,9 +74,11 @@ export default class TooltipExample extends Component {
                                 bindListeners
                                 position={Tooltip.position.BOTTOM_LEFT}
                                 content={{
-                                    text: 'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
+                                    text:
+                                        'This is a tooltip with an image. The image will be displayed with a maximum height of 100px.',
                                     headline: 'Headline',
-                                    imageUrl: 'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
+                                    imageUrl:
+                                        'https://tapp01.tobit.com/content/design/Designguide/chayns_design_guide/chayns_icon.png',
                                 }}
                             >
                                 <p>Tooltip with headline and image</p>
@@ -84,13 +91,20 @@ export default class TooltipExample extends Component {
                         position={position}
                         content={{
                             html: (
-                                <div style={{ height: '224px', transform: 'rotate(45deg) translate(0, 40%)' }}>
-                                    This is a static Tooltip with custom html content.
+                                <div
+                                    style={{
+                                        height: '224px',
+                                        transform:
+                                            'rotate(45deg) translate(0, 40%)',
+                                    }}
+                                >
+                                    This is a static Tooltip with custom html
+                                    content.
                                 </div>
                             ),
                         }}
                         removeIcon
-                        ref={(ref) => this.staticTooltip = ref}
+                        ref={(ref) => (this.staticTooltip = ref)}
                     >
                         <p
                             onClick={() => {
@@ -122,15 +136,20 @@ export default class TooltipExample extends Component {
                     removeIcon
                     content={{ text: 'Test' }}
                     coordinates={{ x, y }}
-                    ref={(ref) => this.clickTooltip = ref}
+                    ref={(ref) => (this.clickTooltip = ref)}
                 />
                 <Tooltip
                     bindListeners
                     position={Tooltip.position.BOTTOM_RIGHT}
-                    content={{ text: 'This is a tooltip with a custom width of 150px and a specified parent.' }}
+                    content={{
+                        text:
+                            'This is a tooltip with a custom width of 150px and a specified parent.',
+                    }}
                     minWidth={150}
                     maxWidth={150}
-                    parent={document.querySelector('.cc__list.list--expandable.examples')}
+                    parent={document.querySelector(
+                        '.cc__list.list--expandable.examples'
+                    )}
                     hideOnChildrenLeave
                 >
                     <p>Tooltip</p>

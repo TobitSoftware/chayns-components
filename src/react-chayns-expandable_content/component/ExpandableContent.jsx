@@ -54,7 +54,10 @@ export default class ExpandableContent extends Component {
             return null;
         }
 
-        if ((state === CLOSING || state === PRE_CLOSING) && classNames.closing) {
+        if (
+            (state === CLOSING || state === PRE_CLOSING) &&
+            classNames.closing
+        ) {
             return classNames.closing;
         }
 
@@ -77,14 +80,17 @@ export default class ExpandableContent extends Component {
         super(props);
 
         this.state = {
-            currentState: (props.open ? OPENED : CLOSED),
+            currentState: props.open ? OPENED : CLOSED,
         };
 
         this.contentRendered = props.open;
     }
 
     componentDidMount() {
-        insertStyle('expandable_content', '.expandable_content { max-height: 9999px; }');
+        insertStyle(
+            'expandable_content',
+            '.expandable_content { max-height: 9999px; }'
+        );
     }
 
     componentDidUpdate(prevProps) {
@@ -108,11 +114,14 @@ export default class ExpandableContent extends Component {
             currentState: OPENING,
         });
 
-        this.timeout = window.setTimeout(() => {
-            this.setState({
-                currentState: OPENED,
-            });
-        }, isInteger(timeout) ? timeout : DEFAULT_OPEN_TIMEOUT);
+        this.timeout = window.setTimeout(
+            () => {
+                this.setState({
+                    currentState: OPENED,
+                });
+            },
+            isInteger(timeout) ? timeout : DEFAULT_OPEN_TIMEOUT
+        );
 
         this.contentRendered = true;
     }
@@ -131,11 +140,14 @@ export default class ExpandableContent extends Component {
                 });
             });
 
-            this.timeout = window.setTimeout(() => {
-                this.setState({
-                    currentState: CLOSED,
-                });
-            }, isInteger(timeout) ? timeout : DEFAULT_CLOSE_TIMEOUT);
+            this.timeout = window.setTimeout(
+                () => {
+                    this.setState({
+                        currentState: CLOSED,
+                    });
+                },
+                isInteger(timeout) ? timeout : DEFAULT_CLOSE_TIMEOUT
+            );
         });
     }
 
@@ -160,17 +172,15 @@ export default class ExpandableContent extends Component {
 
         const newClassNames = classnames(
             className,
-            (classNames === DEFAULT_CLASSNAMES) ? DEFAULT_CLASSNAME : null,
-            ExpandableContent.getClassNames(currentState, classNames),
+            classNames === DEFAULT_CLASSNAMES ? DEFAULT_CLASSNAME : null,
+            ExpandableContent.getClassNames(currentState, classNames)
         );
 
         return (
-            <div
-                style={divStyle}
-                className={newClassNames}
-                {...props}
-            >
-                {(currentState !== CLOSED || (this.contentRendered && !removeContentClosed)) && children}
+            <div style={divStyle} className={newClassNames} {...props}>
+                {(currentState !== CLOSED ||
+                    (this.contentRendered && !removeContentClosed)) &&
+                    children}
             </div>
         );
     }

@@ -25,8 +25,10 @@ export default class ColorArea extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props !== nextProps // update if props changed (equal by reference)
-            || JSON.stringify(this.state) !== JSON.stringify(nextState); // update if state changed (equal by value)
+        return (
+            this.props !== nextProps || // update if props changed (equal by reference)
+            JSON.stringify(this.state) !== JSON.stringify(nextState)
+        ); // update if state changed (equal by value)
     }
 
     componentDidUpdate(prevProps) {
@@ -45,14 +47,18 @@ export default class ColorArea extends Component {
         });
     };
 
-    drawCanvas = () => { // draw the canvas
+    drawCanvas = () => {
+        // draw the canvas
         const { color, height, width } = this.props;
-        const hex = hsvToHexString({
-            h: color.h,
-            s: 1,
-            v: 1,
-            a: null,
-        }, false);
+        const hex = hsvToHexString(
+            {
+                h: color.h,
+                s: 1,
+                v: 1,
+                a: null,
+            },
+            false
+        );
         const ctx = this.canvas.current.getContext('2d');
         const gradient1 = ctx.createLinearGradient(0, 0, width - 1, 0);
         gradient1.addColorStop(0, '#fff');
@@ -66,7 +72,8 @@ export default class ColorArea extends Component {
         ctx.fillRect(0, 0, width, height);
     };
 
-    getColor = (x, y) => { // get selected color from canvas
+    getColor = (x, y) => {
+        // get selected color from canvas
         const { color, height, width } = this.props;
         return {
             ...color,
@@ -99,8 +106,14 @@ export default class ColorArea extends Component {
         let { top, left } = this.state;
         // set the user's coordinates
         if (event) {
-            top = (event.changedTouches ? event.changedTouches[0].clientY : event.clientY) - rect.top;
-            left = (event.changedTouches ? event.changedTouches[0].clientX : event.clientX) - rect.left;
+            top =
+                (event.changedTouches
+                    ? event.changedTouches[0].clientY
+                    : event.clientY) - rect.top;
+            left =
+                (event.changedTouches
+                    ? event.changedTouches[0].clientX
+                    : event.clientX) - rect.left;
         }
         // user leaves area
         if (rect) {
@@ -123,8 +136,10 @@ export default class ColorArea extends Component {
         }
     };
 
-    mouseenter = (event) => { // mouse enters window/webview/iframe
-        if (event.buttons !== 1) { // left mouse click
+    mouseenter = (event) => {
+        // mouse enters window/webview/iframe
+        if (event.buttons !== 1) {
+            // left mouse click
             this.up();
         }
     };

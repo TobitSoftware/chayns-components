@@ -48,33 +48,58 @@ function equalizeDimensions(elements, d, d2) {
  * @param {HTMLElement} element - optional root node of the elements that should be equalized
  */
 export default function equalizer(element) {
-    const parents = Array.prototype.slice.call((element || document).querySelectorAll('[data-cc-equalize], [data-equalize]'));
+    const parents = Array.prototype.slice.call(
+        (element || document).querySelectorAll(
+            '[data-cc-equalize], [data-equalize]'
+        )
+    );
 
-    if (element && (element.hasAttribute('data-cc-equalize') || element.hasAttribute('data-equalize'))) {
+    if (
+        element &&
+        (element.hasAttribute('data-cc-equalize') ||
+            element.hasAttribute('data-equalize'))
+    ) {
         parents.push(element);
     }
 
     for (let i = 0, l = parents.length; i < l; i += 1) {
         const parent = parents[i];
-        const equalizeId = parent.getAttribute('data-cc-equalize') || parent.getAttribute('data-equalize') || '';
+        const equalizeId =
+            parent.getAttribute('data-cc-equalize') ||
+            parent.getAttribute('data-equalize') ||
+            '';
 
         // equalize width
-        let elements = parent.querySelectorAll(`[data-cc-equalize-width="${equalizeId}"]`);
+        let elements = parent.querySelectorAll(
+            `[data-cc-equalize-width="${equalizeId}"]`
+        );
         if (elements.length) {
             equalizeDimensions(elements, dimension.WIDTH, dimension.MIN_WIDTH);
         }
 
         // equalize height
-        elements = parent.querySelectorAll(`[data-cc-equalize-height="${equalizeId}"]`);
+        elements = parent.querySelectorAll(
+            `[data-cc-equalize-height="${equalizeId}"]`
+        );
         if (elements.length) {
-            equalizeDimensions(elements, dimension.HEIGHT, dimension.MIN_HEIGHT);
+            equalizeDimensions(
+                elements,
+                dimension.HEIGHT,
+                dimension.MIN_HEIGHT
+            );
         }
 
         // equalize both
-        elements = parent.querySelectorAll(`[data-cc-equalize-both="${equalizeId}"]`);
+        elements = parent.querySelectorAll(
+            `[data-cc-equalize-both="${equalizeId}"]`
+        );
         if (elements.length) {
             equalizeDimensions(elements, dimension.WIDTH, dimension.MIN_WIDTH);
-            equalizeDimensions(elements, dimension.HEIGHT, dimension.MIN_HEIGHT);
+            equalizeDimensions(
+                elements,
+                dimension.HEIGHT,
+                dimension.MIN_HEIGHT
+            );
         }
     }
 }

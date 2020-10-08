@@ -2,10 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import Badge from '../../react-chayns-badge/component/Badge';
 
-const SetupItemRight = ({
-    right,
-    ready,
-}) => {
+const SetupItemRight = ({ right, ready }) => {
     const getReady = () => {
         if (right) {
             if (right.complete) {

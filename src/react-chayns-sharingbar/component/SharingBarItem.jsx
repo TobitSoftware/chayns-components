@@ -6,12 +6,7 @@ import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class SharingBarItem extends Component {
     onClick = (e) => {
-        const {
-            link,
-            linkText,
-            provider,
-            stopPropagation,
-        } = this.props;
+        const { link, linkText, provider, stopPropagation } = this.props;
 
         share(provider, link, linkText);
 
@@ -19,13 +14,11 @@ export default class SharingBarItem extends Component {
     };
 
     render() {
-        const {
-            icon,
-        } = this.props;
+        const { icon } = this.props;
 
         return (
             <div onClick={this.onClick}>
-                <Icon icon={icon} className="sharing-bar__icon"/>
+                <Icon icon={icon} className="sharing-bar__icon" />
                 <span className="sharing-bar_text">Teilen</span>
             </div>
         );
@@ -33,7 +26,10 @@ export default class SharingBarItem extends Component {
 }
 
 SharingBarItem.propTypes = {
-    icon: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.object.isRequired]).isRequired,
+    icon: PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.object.isRequired,
+    ]).isRequired,
     provider: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
     stopPropagation: PropTypes.bool.isRequired,

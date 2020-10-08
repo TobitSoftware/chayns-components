@@ -4,7 +4,12 @@ import classNames from 'classnames';
 
 const AutocompleteItem = ({ index, onClick, address }) => (
     <div
-        className={classNames('map--autocomplete_item', index % 2 ? 'chayns__background-color--100' : 'chayns__background-color--102')}
+        className={classNames(
+            'map--autocomplete_item',
+            index % 2
+                ? 'chayns__background-color--100'
+                : 'chayns__background-color--102'
+        )}
         onClick={() => onClick(address)}
     >
         {address}

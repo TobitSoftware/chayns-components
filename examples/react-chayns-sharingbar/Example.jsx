@@ -3,7 +3,7 @@ import { SharingBar } from '../../src/index';
 
 export default function SharingBarExample() {
     return [
-        <div style={{ height: '200px' }}/>,
-        <SharingBar stopPropagation/>,
+        <div style={{ height: '200px' }} />,
+        <SharingBar stopPropagation />,
     ];
 }

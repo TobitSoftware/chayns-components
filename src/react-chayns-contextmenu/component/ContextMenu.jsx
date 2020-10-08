@@ -35,7 +35,11 @@ export default class ContextMenu extends Component {
     componentDidUpdate(prevProps) {
         const { coordinates, position, positionOnChildren } = this.props;
 
-        if (prevProps.coordinates !== coordinates || prevProps.position !== position || prevProps.positionOnChildren !== positionOnChildren) {
+        if (
+            prevProps.coordinates !== coordinates ||
+            prevProps.position !== position ||
+            prevProps.positionOnChildren !== positionOnChildren
+        ) {
             this.getPosition();
         }
     }
@@ -71,7 +75,12 @@ export default class ContextMenu extends Component {
 
     async getPosition() {
         const {
-            position, coordinates, parent, removeParentSpace, positionOnChildren, arrowDistance,
+            position,
+            coordinates,
+            parent,
+            removeParentSpace,
+            positionOnChildren,
+            arrowDistance,
         } = this.props;
         const { position: statePosition, x: stateX, y: stateY } = this.state;
 
@@ -82,9 +91,13 @@ export default class ContextMenu extends Component {
             const rect = this.childrenNode.getBoundingClientRect();
             if (positionOnChildren === ContextMenu.positionOnChildren.LEFT) {
                 x = rect.left + arrowDistance;
-            } else if (positionOnChildren === ContextMenu.positionOnChildren.CENTER) {
-                x = rect.left + (rect.width / 2);
-            } else if (positionOnChildren === ContextMenu.positionOnChildren.RIGHT) {
+            } else if (
+                positionOnChildren === ContextMenu.positionOnChildren.CENTER
+            ) {
+                x = rect.left + rect.width / 2;
+            } else if (
+                positionOnChildren === ContextMenu.positionOnChildren.RIGHT
+            ) {
                 x = rect.left + rect.width - arrowDistance;
             }
             top = rect.top;
@@ -93,10 +106,20 @@ export default class ContextMenu extends Component {
 
         let pos = position;
         if (position === null) {
-            const posArray = (x > window.innerWidth / 2)
-                ? [ContextMenu.position.TOP_LEFT, ContextMenu.position.BOTTOM_LEFT]
-                : [ContextMenu.position.TOP_RIGHT, ContextMenu.position.BOTTOM_RIGHT];
-            pos = ((top + bottom) / 2 > window.innerHeight / 2) ? posArray[0] : posArray[1];
+            const posArray =
+                x > window.innerWidth / 2
+                    ? [
+                          ContextMenu.position.TOP_LEFT,
+                          ContextMenu.position.BOTTOM_LEFT,
+                      ]
+                    : [
+                          ContextMenu.position.TOP_RIGHT,
+                          ContextMenu.position.BOTTOM_RIGHT,
+                      ];
+            pos =
+                (top + bottom) / 2 > window.innerHeight / 2
+                    ? posArray[0]
+                    : posArray[1];
         }
 
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
@@ -106,7 +129,11 @@ export default class ContextMenu extends Component {
         }
 
         if (removeParentSpace) {
-            const parentRect = (parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            const parentRect = (
+                parent ||
+                document.getElementsByClassName('tapp')[0] ||
+                document.body
+            ).getBoundingClientRect();
             x -= parentRect.left;
             y -= parentRect.top;
         }
@@ -137,14 +164,21 @@ export default class ContextMenu extends Component {
         const list = items.map((item, index) => ({
             name: item.text,
             value: index,
-            icon: (typeof item.icon === 'string' ? item.icon : `fa-${item.icon.iconName}`),
+            icon:
+                typeof item.icon === 'string'
+                    ? item.icon
+                    : `fa-${item.icon.iconName}`,
         }));
         const dialogRes = await chayns.dialog.select({
             type: 2,
             list,
             buttons: [],
         });
-        if (dialogRes.buttonType === 1 && dialogRes.selection && dialogRes.selection[0]) {
+        if (
+            dialogRes.buttonType === 1 &&
+            dialogRes.selection &&
+            dialogRes.selection[0]
+        ) {
             items[dialogRes.selection[0].value].onClick();
         } else if (dialogRes.buttonType === -1 && isFunction(onLayerClick)) {
             onLayerClick();
@@ -193,23 +227,32 @@ export default class ContextMenu extends Component {
                     ...style,
                 }}
                 key="bubble"
-                ref={(ref) => this.bubble = ref}
+                ref={(ref) => (this.bubble = ref)}
                 className={className}
             >
                 <ul>
                     {items.map((item, index) => (
                         <li
-                            className={classNames('context-menu__item', item.className)}
+                            className={classNames(
+                                'context-menu__item',
+                                item.className
+                            )}
                             onClick={(e) => {
                                 if (stopPropagation) {
                                     e.stopPropagation();
                                 }
                                 item.onClick(e);
                             }}
-                            key={(item.text.props && item.text.props.stringName ? item.text.props.stringName : item.text) + index}
+                            key={
+                                (item.text.props && item.text.props.stringName
+                                    ? item.text.props.stringName
+                                    : item.text) + index
+                            }
                         >
                             {item.icon ? (
-                                <div className="context-menu__item__icon"><Icon icon={item.icon}/></div>
+                                <div className="context-menu__item__icon">
+                                    <Icon icon={item.icon} />
+                                </div>
                             ) : null}
                             <div className="context-menu__item__text">
                                 {item.text}
@@ -218,22 +261,22 @@ export default class ContextMenu extends Component {
                     ))}
                 </ul>
             </Bubble>,
-            coordinates
-                ? null
-                : (
-                    <div
-                        key="cc__contextMenu__children"
-                        ref={(ref) => this.childrenNode = ref}
-                        onClick={this.onChildrenClick}
-                        style={childrenStyle}
-                        className={classNames(
-                            childrenClassName, 'accordion--no-trigger', 'context-menu__children',
-                            { 'image-tool': showTriggerBackground },
-                        )}
-                    >
-                        {children}
-                    </div>
-                ),
+            coordinates ? null : (
+                <div
+                    key="cc__contextMenu__children"
+                    ref={(ref) => (this.childrenNode = ref)}
+                    onClick={this.onChildrenClick}
+                    style={childrenStyle}
+                    className={classNames(
+                        childrenClassName,
+                        'accordion--no-trigger',
+                        'context-menu__children',
+                        { 'image-tool': showTriggerBackground }
+                    )}
+                >
+                    {children}
+                </div>
+            ),
         ];
     }
 }
@@ -252,16 +295,24 @@ ContextMenu.propTypes = {
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     }),
-    items: PropTypes.arrayOf(PropTypes.shape({
-        className: PropTypes.string,
-        onClick: PropTypes.func,
-        text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-        icon: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Object)]),
-    })),
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            className: PropTypes.string,
+            onClick: PropTypes.func,
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+                .isRequired,
+            icon: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.instanceOf(Object),
+            ]),
+        })
+    ),
     position: PropTypes.number, // 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right
     positionOnChildren: PropTypes.number, // 0 = left, 1 = center, 2 = right
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
-    },
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     children: PropTypes.node,
     onChildrenClick: PropTypes.func,
     childrenStyle: PropTypes.object,
@@ -283,7 +334,7 @@ ContextMenu.defaultProps = {
     position: null,
     positionOnChildren: 1,
     parent: null,
-    children: <Icon icon="ts-ellipsis_v"/>,
+    children: <Icon icon="ts-ellipsis_v" />,
     coordinates: null,
     onChildrenClick: null,
     childrenStyle: null,

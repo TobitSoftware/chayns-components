@@ -34,7 +34,9 @@ export default class ReceiverInput extends Component {
         super(props);
 
         // eslint-disable-next-line no-console
-        console.warn('[chayns components] ReceiverInput: The ReceiverInput is deprecated and will be removed in a future version. Use the personFinder instead.');
+        console.warn(
+            '[chayns components] ReceiverInput: The ReceiverInput is deprecated and will be removed in a future version. Use the personFinder instead.'
+        );
 
         this.lastResultDisplayedTime = 0;
 
@@ -42,7 +44,10 @@ export default class ReceiverInput extends Component {
 
         const firstState = this.defaultState;
 
-        if (Array.isArray(preselectedReceivers) && preselectedReceivers.length > 0) {
+        if (
+            Array.isArray(preselectedReceivers) &&
+            preselectedReceivers.length > 0
+        ) {
             firstState.chosenReceivers = preselectedReceivers;
         }
 
@@ -56,9 +61,9 @@ export default class ReceiverInput extends Component {
 
         document.addEventListener('click', this.handleClick, true);
 
-        window.getChosenReceivers = () => (chosenReceivers || []);
+        window.getChosenReceivers = () => chosenReceivers || [];
 
-        window.getGroupName = () => (groupName || '');
+        window.getGroupName = () => groupName || '';
 
         window.clearReceiverInput = () => {
             this.setState(this.defaultState);
@@ -95,29 +100,31 @@ export default class ReceiverInput extends Component {
             groupName,
         } = this.state;
 
-        return includeIntercomDisabled !== nextProps.includeIntercomDisabled
-            || receiverSearchString !== nextState.receiverSearchString
-            || !isEqual(chosenReceivers, nextState.chosenReceivers)
-            || !isEqual(foundReceivers, nextState.foundReceivers)
-            || showIdInSelection !== nextProps.showIdInSelection
-            || !isEqual(popupPosition, nextState.popupPosition)
-            || groupNameEnabled !== nextProps.groupNameEnabled
-            || maxReceiverCount !== nextProps.maxReceiverCount
-            || !isEqual(chosenSender, nextState.chosenSender)
-            || showIdInPopup !== nextProps.showIdInPopup
-            || addPageOffset !== nextProps.addPageOffset
-            || locationMode !== nextProps.locationMode
-            || placeholder !== nextProps.placeholder
-            || onlyPersons !== nextProps.onlyPersons
-            || canFindOwn !== nextProps.canFindOwn
-            || popupWidth !== nextState.popupWidth
-            || fontFamily !== nextProps.fontFamily
-            || onlySites !== nextProps.onlySites
-            || showPopup !== nextState.showPopup
-            || groupName !== nextState.groupName
-            || fontSize !== nextProps.fontSize
-            || disabled !== nextProps.disabled
-            || pureMode !== nextProps.pureMode;
+        return (
+            includeIntercomDisabled !== nextProps.includeIntercomDisabled ||
+            receiverSearchString !== nextState.receiverSearchString ||
+            !isEqual(chosenReceivers, nextState.chosenReceivers) ||
+            !isEqual(foundReceivers, nextState.foundReceivers) ||
+            showIdInSelection !== nextProps.showIdInSelection ||
+            !isEqual(popupPosition, nextState.popupPosition) ||
+            groupNameEnabled !== nextProps.groupNameEnabled ||
+            maxReceiverCount !== nextProps.maxReceiverCount ||
+            !isEqual(chosenSender, nextState.chosenSender) ||
+            showIdInPopup !== nextProps.showIdInPopup ||
+            addPageOffset !== nextProps.addPageOffset ||
+            locationMode !== nextProps.locationMode ||
+            placeholder !== nextProps.placeholder ||
+            onlyPersons !== nextProps.onlyPersons ||
+            canFindOwn !== nextProps.canFindOwn ||
+            popupWidth !== nextState.popupWidth ||
+            fontFamily !== nextProps.fontFamily ||
+            onlySites !== nextProps.onlySites ||
+            showPopup !== nextState.showPopup ||
+            groupName !== nextState.groupName ||
+            fontSize !== nextProps.fontSize ||
+            disabled !== nextProps.disabled ||
+            pureMode !== nextProps.pureMode
+        );
     }
 
     componentDidUpdate() {
@@ -192,7 +199,7 @@ export default class ReceiverInput extends Component {
                 width={popupWidth}
                 show={showPopup}
             />,
-            document.getElementById('receiverPopupRoot'),
+            document.getElementById('receiverPopupRoot')
         );
     };
 
@@ -215,13 +222,19 @@ export default class ReceiverInput extends Component {
 
         switch (receiverType) {
             case 0:
-                this.updateChosenReceivers(chosenReceivers.filter((r) => r.locationId !== id));
+                this.updateChosenReceivers(
+                    chosenReceivers.filter((r) => r.locationId !== id)
+                );
                 break;
             case 1:
-                this.updateChosenReceivers(chosenReceivers.filter((r) => r.userId !== id));
+                this.updateChosenReceivers(
+                    chosenReceivers.filter((r) => r.userId !== id)
+                );
                 break;
             case 2:
-                this.updateChosenReceivers(chosenReceivers.filter((r) => r.groupId !== id));
+                this.updateChosenReceivers(
+                    chosenReceivers.filter((r) => r.groupId !== id)
+                );
                 break;
             default:
                 break;
@@ -277,19 +290,22 @@ export default class ReceiverInput extends Component {
         });
     };
 
-    hideReceiverPopup = () => this.setState({
-        popupPosition: { top: 0, left: 0 },
-        showPopup: false,
-        popupWidth: 0,
-    });
+    hideReceiverPopup = () =>
+        this.setState({
+            popupPosition: { top: 0, left: 0 },
+            showPopup: false,
+            popupWidth: 0,
+        });
 
     handleClick = (event) => {
         const { target } = event;
 
         if (target) {
-            if (!target.classList.contains('popup-item')
-                && !target.classList.contains('receiver-popup')
-                && !target.classList.contains('receiver-input-field')) {
+            if (
+                !target.classList.contains('popup-item') &&
+                !target.classList.contains('receiver-popup') &&
+                !target.classList.contains('receiver-input-field')
+            ) {
                 this.hideReceiverPopup();
             }
         } else {
@@ -314,111 +330,141 @@ export default class ReceiverInput extends Component {
     };
 
     // eslint-disable-next-line react/sort-comp
-    searchReceiversForString = throttle((searchString) => {
-        const {
-            includeIntercomDisabled,
-            locationMode,
-            onlyPersons,
-            canFindOwn,
-            onlySites,
-        } = this.props;
+    searchReceiversForString = throttle(
+        (searchString) => {
+            const {
+                includeIntercomDisabled,
+                locationMode,
+                onlyPersons,
+                canFindOwn,
+                onlySites,
+            } = this.props;
 
-        const { chosenSender } = this.state;
+            const { chosenSender } = this.state;
 
-        const locationId = chosenSender ? chosenSender.locationId : chayns.env.site.locationId;
-        const userId = chayns.env.user.id;
+            const locationId = chosenSender
+                ? chosenSender.locationId
+                : chayns.env.site.locationId;
+            const userId = chayns.env.user.id;
 
-        const url = `//chayns1.tobit.com/TappApi/Global/Search?SearchString=${searchString}&LocationId=${locationId}&userId=${userId}&includeIntercomDisabled=${includeIntercomDisabled}`;
+            const url = `//chayns1.tobit.com/TappApi/Global/Search?SearchString=${searchString}&LocationId=${locationId}&userId=${userId}&includeIntercomDisabled=${includeIntercomDisabled}`;
 
-        const requestStartTime = Date.now();
+            const requestStartTime = Date.now();
 
-        fetch(encodeURI(url), {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((result) => {
-                // stop if request data is older than current data
-                if (this.lastResultDisplayedTime > requestStartTime) {
-                    return null;
-                }
-
-                this.lastResultDisplayedTime = requestStartTime;
-
-                const locationsResult = {
-                    state: result.locations.Status.ResultCode,
-                    values: [],
-                };
-
-                const usersResult = {
-                    state: result.users.Status.ResultCode,
-                    values: [],
-                };
-
-                const groupsResult = {
-                    state: result.groups.Status.ResultCode,
-                    values: [],
-                };
-
-                if (locationsResult.state === 0 && !onlyPersons) {
-                    if (chosenSender) {
-                        locationsResult.values = result.locations.Value.filter((l) => (chosenSender && !canFindOwn ? l.locationID !== parseInt(chosenSender.locationId, 10) : true));
-                    } else {
-                        locationsResult.values = result.locations.Value.filter((l) => (locationMode && !canFindOwn ? l.locationID !== parseInt(chayns.env.site.locationId, 10) : true));
-                    }
-
-                    if (locationsResult.values.length < 1) {
-                        locationsResult.state = 1; // set state to "no match" if only own location was found
-                    }
-                }
-
-                if (usersResult.state === 0 && !onlySites) {
-                    usersResult.values = result.users.Value
-                        .filter((u) => (locationMode || canFindOwn ? true : u.userId !== chayns.env.user.id));
-
-                    if (usersResult.values.length < 1) {
-                        usersResult.state = 1; // set state to "no match" if only own user was found
-                    }
-                }
-
-                if (locationMode) {
-                    if (groupsResult.state === 0) {
-                        groupsResult.values = result.groups.Value;
-                    }
-
-                    const knownPersonsString = 'Bekannte Personen';
-
-                    if (knownPersonsString.toLowerCase().indexOf(searchString.toLowerCase()) > -1
-                        && (groupsResult.state < 2 || searchString.toLowerCase() === knownPersonsString.toLowerCase())) {
-                        const knownPersonsGroup = {
-                            groupId: 0,
-                            userIds: [],
-                            name: knownPersonsString,
-                            showName: knownPersonsString,
-                        };
-
-                        groupsResult.values.unshift(knownPersonsGroup);
-                        groupsResult.state = 0;
-                    }
-                }
-
-                const foundReceivers = {
-                    locations: locationsResult,
-                    groups: groupsResult,
-                    users: usersResult,
-                };
-
-                this.setState({ foundReceivers });
-
-                return null;
+            fetch(encodeURI(url), {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+                },
             })
-            // eslint-disable-next-line no-console
-            .catch((error) => console.error(error));
-    }, 250, { leading: false });
+                .then((response) => response.json())
+                .then((result) => {
+                    // stop if request data is older than current data
+                    if (this.lastResultDisplayedTime > requestStartTime) {
+                        return null;
+                    }
+
+                    this.lastResultDisplayedTime = requestStartTime;
+
+                    const locationsResult = {
+                        state: result.locations.Status.ResultCode,
+                        values: [],
+                    };
+
+                    const usersResult = {
+                        state: result.users.Status.ResultCode,
+                        values: [],
+                    };
+
+                    const groupsResult = {
+                        state: result.groups.Status.ResultCode,
+                        values: [],
+                    };
+
+                    if (locationsResult.state === 0 && !onlyPersons) {
+                        if (chosenSender) {
+                            locationsResult.values = result.locations.Value.filter(
+                                (l) =>
+                                    chosenSender && !canFindOwn
+                                        ? l.locationID !==
+                                          parseInt(chosenSender.locationId, 10)
+                                        : true
+                            );
+                        } else {
+                            locationsResult.values = result.locations.Value.filter(
+                                (l) =>
+                                    locationMode && !canFindOwn
+                                        ? l.locationID !==
+                                          parseInt(
+                                              chayns.env.site.locationId,
+                                              10
+                                          )
+                                        : true
+                            );
+                        }
+
+                        if (locationsResult.values.length < 1) {
+                            locationsResult.state = 1; // set state to "no match" if only own location was found
+                        }
+                    }
+
+                    if (usersResult.state === 0 && !onlySites) {
+                        usersResult.values = result.users.Value.filter((u) =>
+                            locationMode || canFindOwn
+                                ? true
+                                : u.userId !== chayns.env.user.id
+                        );
+
+                        if (usersResult.values.length < 1) {
+                            usersResult.state = 1; // set state to "no match" if only own user was found
+                        }
+                    }
+
+                    if (locationMode) {
+                        if (groupsResult.state === 0) {
+                            groupsResult.values = result.groups.Value;
+                        }
+
+                        const knownPersonsString = 'Bekannte Personen';
+
+                        if (
+                            knownPersonsString
+                                .toLowerCase()
+                                .indexOf(searchString.toLowerCase()) > -1 &&
+                            (groupsResult.state < 2 ||
+                                searchString.toLowerCase() ===
+                                    knownPersonsString.toLowerCase())
+                        ) {
+                            const knownPersonsGroup = {
+                                groupId: 0,
+                                userIds: [],
+                                name: knownPersonsString,
+                                showName: knownPersonsString,
+                            };
+
+                            groupsResult.values.unshift(knownPersonsGroup);
+                            groupsResult.state = 0;
+                        }
+                    }
+
+                    const foundReceivers = {
+                        locations: locationsResult,
+                        groups: groupsResult,
+                        users: usersResult,
+                    };
+
+                    this.setState({ foundReceivers });
+
+                    return null;
+                })
+                // eslint-disable-next-line no-console
+                .catch((error) => console.error(error));
+        },
+        250,
+        { leading: false }
+    );
 
     render() {
         const {
@@ -432,12 +478,15 @@ export default class ReceiverInput extends Component {
 
         const { chosenReceivers, groupName, receiverSearchString } = this.state;
 
-        const knownPersonsSelected = chosenReceivers.filter((cr) => cr.groupId === 0).length > 0;
+        const knownPersonsSelected =
+            chosenReceivers.filter((cr) => cr.groupId === 0).length > 0;
 
         const memberCount = getMemberCount(chosenReceivers);
 
-        const maxReceiverCountGiven = maxReceiverCount && memberCount >= maxReceiverCount;
-        const moreThanOneReceiverChosen = memberCount > 1 || knownPersonsSelected;
+        const maxReceiverCountGiven =
+            maxReceiverCount && memberCount >= maxReceiverCount;
+        const moreThanOneReceiverChosen =
+            memberCount > 1 || knownPersonsSelected;
 
         const groupNameInputClasses = classNames('group-name-input', {
             hide: !moreThanOneReceiverChosen || !groupNameEnabled,
@@ -454,16 +503,20 @@ export default class ReceiverInput extends Component {
         const receivers = [];
 
         chosenReceivers.forEach((r, i) => {
-            receivers.push(<ChosenMember
-                personId={showIdInSelection && r.personId ? r.personId : null}
-                siteId={showIdInSelection && r.siteId ? r.siteId : null}
-                removeMember={this.removeReceiver}
-                locationId={r.locationId}
-                groupId={r.groupId}
-                userId={r.userId}
-                name={r.name}
-                key={i}
-            />);
+            receivers.push(
+                <ChosenMember
+                    personId={
+                        showIdInSelection && r.personId ? r.personId : null
+                    }
+                    siteId={showIdInSelection && r.siteId ? r.siteId : null}
+                    removeMember={this.removeReceiver}
+                    locationId={r.locationId}
+                    groupId={r.groupId}
+                    userId={r.userId}
+                    name={r.name}
+                    key={i}
+                />
+            );
         });
 
         return (
@@ -484,7 +537,11 @@ export default class ReceiverInput extends Component {
                 </div>
                 <div className={groupNameInputClasses}>
                     <input
-                        disabled={disabled || !groupNameEnabled || !moreThanOneReceiverChosen}
+                        disabled={
+                            disabled ||
+                            !groupNameEnabled ||
+                            !moreThanOneReceiverChosen
+                        }
                         placeholder="Gruppenname (optional)"
                         onChange={this.changeGroupName}
                         value={groupName}

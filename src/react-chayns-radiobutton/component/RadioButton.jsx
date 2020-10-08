@@ -55,11 +55,19 @@ export default class RadioButton extends Component {
                     onChange={this.handleChange}
                     name={name}
                     disabled={disabled}
-                    onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                    onClick={
+                        stopPropagation
+                            ? (event) => event.stopPropagation()
+                            : null
+                    }
                 />
                 <label
                     htmlFor={id || this.id}
-                    onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                    onClick={
+                        stopPropagation
+                            ? (event) => event.stopPropagation()
+                            : null
+                    }
                 >
                     {children}
                 </label>

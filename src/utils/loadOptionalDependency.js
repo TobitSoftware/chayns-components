@@ -1,7 +1,13 @@
 import loadScript from './loadScript';
 import loadStyle from './loadStyle';
 
-export default function loadOptionalDependency(module, windowModule, jsArray, cssArray, returnPromise = true) {
+export default function loadOptionalDependency(
+    module,
+    windowModule,
+    jsArray,
+    cssArray,
+    returnPromise = true
+) {
     let emojione = null;
     try {
         // eslint-disable-next-line global-require,import/no-dynamic-require

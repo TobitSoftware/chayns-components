@@ -10,12 +10,15 @@ import { hexStringToHsv } from '../../src/utils/color';
 const ColorPickerExample = () => {
     const [color, setColor] = useState(hexStringToHsv(chayns.env.site.color));
     const [childrenColor, setChildrenColor] = useState(chayns.env.site.color);
-    const [hueSliderColor, setHueSliderColor] = useState(hexStringToHsv(chayns.env.site.color));
+    const [hueSliderColor, setHueSliderColor] = useState(
+        hexStringToHsv(chayns.env.site.color)
+    );
 
     return (
-        <div style={{
-            marginBottom: '300px',
-        }}
+        <div
+            style={{
+                marginBottom: '300px',
+            }}
         >
             <h2>ColorPicker with transparency</h2>
             <ColorPicker

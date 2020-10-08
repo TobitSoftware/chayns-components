@@ -8,7 +8,10 @@ export default class SelectList extends Component {
     constructor(props) {
         super(props);
 
-        const preselectId = ((props.defaultValue || props.defaultValue === 0) ? props.defaultValue : props.value);
+        const preselectId =
+            props.defaultValue || props.defaultValue === 0
+                ? props.defaultValue
+                : props.value;
 
         this.state = {
             selectedId: preselectId || 0,
@@ -74,7 +77,12 @@ export default class SelectList extends Component {
         for (let i = 0, z = children.length; i < z; i += 1) {
             const child = children[i];
             if (React.isValidElement(child)) {
-                if (child && child.props && child.props.id && !child.props.disabled) {
+                if (
+                    child &&
+                    child.props &&
+                    child.props.id &&
+                    !child.props.disabled
+                ) {
                     firstItemId = child.props.id;
                     break;
                 }
@@ -92,11 +100,12 @@ export default class SelectList extends Component {
 
         return (
             <div className={className} style={style}>
-                <SelectListContext.Provider value={{
-                    selectListSelectedId: selectedId,
-                    changeListItem: this.changeActiveItem,
-                    selectListId: this.selectListId,
-                }}
+                <SelectListContext.Provider
+                    value={{
+                        selectListSelectedId: selectedId,
+                        changeListItem: this.changeActiveItem,
+                        selectListId: this.selectListId,
+                    }}
                 >
                     {children}
                 </SelectListContext.Provider>
@@ -111,14 +120,8 @@ SelectList.contextType = SelectListContext;
 
 SelectList.propTypes = {
     onChange: PropTypes.func,
-    defaultValue: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
+    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),

@@ -24,14 +24,20 @@ export default class DecimalFormatter extends Formatter {
 
     format(value) {
         const { decimals } = this.config;
-        const { thousand: thousandSeparator, decimal: decimalSeparator } = this.config.seperators;
+        const {
+            thousand: thousandSeparator,
+            decimal: decimalSeparator,
+        } = this.config.seperators;
 
         if (value === null) {
             return '';
         }
 
         const valueParts = String(value).split('.');
-        valueParts[0] = valueParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+        valueParts[0] = valueParts[0].replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            thousandSeparator
+        );
 
         if (decimals) {
             if (valueParts[1] && valueParts[1].length > decimals) {
@@ -52,25 +58,40 @@ export default class DecimalFormatter extends Formatter {
     }
 
     parse(value) {
-        const { thousand: thousandSeparator, decimal: decimalSeparator } = this.config.seperators;
+        const {
+            thousand: thousandSeparator,
+            decimal: decimalSeparator,
+        } = this.config.seperators;
 
         if (value === '') {
             return null;
         }
 
-        const parsedValue = parseFloat(value.split(thousandSeparator).join('').replace(decimalSeparator, '.'));
+        const parsedValue = parseFloat(
+            value
+                .split(thousandSeparator)
+                .join('')
+                .replace(decimalSeparator, '.')
+        );
 
         /* eslint-disable-next-line no-restricted-globals */
-        return (isNaN(parsedValue) || !isFinite(parsedValue)) ? false : parsedValue;
+        return isNaN(parsedValue) || !isFinite(parsedValue)
+            ? false
+            : parsedValue;
     }
 
     validateChars(value) {
-        const { thousand: thousandSeparator, decimal: decimalSeparator } = this.config.seperators;
+        const {
+            thousand: thousandSeparator,
+            decimal: decimalSeparator,
+        } = this.config.seperators;
 
         for (let i = 0; i < value.length; i += 1) {
-            if (IntegerFormatter.ALLOWED_CHARS.indexOf(value[i]) === -1
-                && value[i] !== thousandSeparator
-                && value[i] !== decimalSeparator) {
+            if (
+                IntegerFormatter.ALLOWED_CHARS.indexOf(value[i]) === -1 &&
+                value[i] !== thousandSeparator &&
+                value[i] !== decimalSeparator
+            ) {
                 if (i === 0 && value[i] === '-') {
                     return true;
                 }
@@ -88,9 +109,12 @@ export default class DecimalFormatter extends Formatter {
 
         const valueParts = value.split(decimalSeparator);
 
-        if (valueParts.length > 2
-            || (decimals !== null && valueParts[1] && valueParts[1].length > decimals)
-            || !this.validateChars(value)
+        if (
+            valueParts.length > 2 ||
+            (decimals !== null &&
+                valueParts[1] &&
+                valueParts[1].length > decimals) ||
+            !this.validateChars(value)
         ) {
             return {
                 valid: false,

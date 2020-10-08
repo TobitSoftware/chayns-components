@@ -7,7 +7,8 @@ export default class GalleryExample extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            images: ['https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
+            images: [
+                'https://tsimg.cloud/127-89061/9d6979d3ac95a053c532f86af9acfb5af9262020.jpg',
                 'https://tsimg.cloud/127-89061/2b83dfa29f2f88bcb35372cbfbefe04a3f899d00.jpg',
                 'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
                 'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
@@ -16,7 +17,6 @@ export default class GalleryExample extends Component {
             ],
         };
     }
-
 
     render() {
         const { images } = this.state;
@@ -32,13 +32,16 @@ export default class GalleryExample extends Component {
                         this.setState({ images: imgs });
                     }}
                 />
+                <Gallery style={{ marginBottom: '30px' }} images={images} />
                 <Gallery
                     style={{ marginBottom: '30px' }}
-                    images={images}
-                />
-                <Gallery
-                    style={{ marginBottom: '30px' }}
-                    images={[images[0], images[1], images[2], images[3], images[4]]}
+                    images={[
+                        images[0],
+                        images[1],
+                        images[2],
+                        images[3],
+                        images[4],
+                    ]}
                 />
                 <Gallery
                     style={{ marginBottom: '30px' }}
@@ -60,14 +63,15 @@ export default class GalleryExample extends Component {
                 <Image
                     image={images[0]}
                     onClick={console.log}
-                    style={{ width: '100px', height: '100px', marginBottom: '30px' }}
+                    style={{
+                        width: '100px',
+                        height: '100px',
+                        marginBottom: '30px',
+                    }}
                     styleLandscape={{ borderRadius: '10px' }}
                     stylePortrait={{ border: '3px solid black' }}
                 />
-                <Image
-                    image={images[0]}
-                    preventParams
-                />
+                <Image image={images[0]} preventParams />
                 <h3>ImageContainer-Component</h3>
                 <ImageContainer
                     tools={[
@@ -78,10 +82,7 @@ export default class GalleryExample extends Component {
                     ]}
                     style={{ marginBottom: '30px' }}
                 >
-                    <Image
-                        image={images[0]}
-                        onClick={console.log}
-                    />
+                    <Image image={images[0]} onClick={console.log} />
                 </ImageContainer>
             </div>
         );

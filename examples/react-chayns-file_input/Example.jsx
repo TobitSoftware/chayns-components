@@ -10,28 +10,42 @@ const FileInputExample = () => {
     const [images, setImages] = useState([]);
     const [displayPath, setDisplayPath] = useState('');
 
-    const onChange = useCallback((validFiles) => {
-        setImages(images.concat(validFiles.map((f) => ({ file: f }))));
-    }, [images, setImages]);
+    const onChange = useCallback(
+        (validFiles) => {
+            setImages(images.concat(validFiles.map((f) => ({ file: f }))));
+        },
+        [images, setImages]
+    );
 
     const onClick = useCallback(async () => {
         const data = await chayns.dialog.mediaSelect({ multiselect: true });
         setImages(images.concat(data.selection.map((url) => ({ url }))));
     }, [images, setImages]);
 
-    const onDelete = useCallback((image, index) => {
-        const img = images.slice();
-        img.splice(index, 1);
-        setImages(img);
-    }, [images, setImages]);
+    const onDelete = useCallback(
+        (image, index) => {
+            const img = images.slice();
+            img.splice(index, 1);
+            setImages(img);
+        },
+        [images, setImages]
+    );
 
-    const onDragEnd = useCallback((imgs) => {
-        setImages(imgs);
-    }, [setImages]);
+    const onDragEnd = useCallback(
+        (imgs) => {
+            setImages(imgs);
+        },
+        [setImages]
+    );
 
     const upload = useCallback(() => {
         images.forEach(async (image) => {
-            const result = await imageUpload(image.file || image.url, 'componentsTestUpload', chayns.env.user.personId, chayns.env.site.id);
+            const result = await imageUpload(
+                image.file || image.url,
+                'componentsTestUpload',
+                chayns.env.user.personId,
+                chayns.env.site.id
+            );
             console.log('Uploaded image', result);
             setDisplayPath(`${displayPath}${result.base}/${result.key}\n`);
         });
@@ -42,19 +56,22 @@ const FileInputExample = () => {
             <FileInput
                 style={{ marginBottom: '20px' }}
                 stopPropagation
-                items={[{
-                    types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
-                    maxFileSize: 4194304, // max file size is 4 MB
-                    maxNumberOfFiles: 0, // no limit for number of files
-                    onChange,
-                    content: { text: 'Bild hochladen' },
-                }, {
-                    onClick,
-                    content: {
-                        text: 'Bild auswählen',
-                        icon: 'ts-image',
+                items={[
+                    {
+                        types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
+                        maxFileSize: 4194304, // max file size is 4 MB
+                        maxNumberOfFiles: 0, // no limit for number of files
+                        onChange,
+                        content: { text: 'Bild hochladen' },
                     },
-                }]}
+                    {
+                        onClick,
+                        content: {
+                            text: 'Bild auswählen',
+                            icon: 'ts-image',
+                        },
+                    },
+                ]}
             />
             <h3>Gallery with dragMode and deleteMode</h3>
             <Gallery
@@ -79,19 +96,18 @@ const FileInputExample = () => {
                 onDelete={onDelete}
                 style={{ marginBottom: '30px' }}
             />
-            <Button
-                disabled={!images}
-                onClick={upload}
-            >
+            <Button disabled={!images} onClick={upload}>
                 Upload
             </Button>
             <p>{displayPath}</p>
             <FileInput
-                items={[{
-                    types: [FileInput.types.ALL],
-                    onChange: console.log,
-                    content: { text: 'Upload all' },
-                }]}
+                items={[
+                    {
+                        types: [FileInput.types.ALL],
+                        onChange: console.log,
+                        content: { text: 'Upload all' },
+                    },
+                ]}
             />
         </div>
     );

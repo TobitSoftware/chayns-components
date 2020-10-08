@@ -17,7 +17,9 @@ class PersonFinder extends Component {
     render() {
         const { multiple, showPersons, showSites } = this.props;
 
-        const PersonFinderComponent = multiple ? MultiplePersonFinder : SimplePersonFinder;
+        const PersonFinderComponent = multiple
+            ? MultiplePersonFinder
+            : SimplePersonFinder;
 
         return (
             <PersonFinderComponent

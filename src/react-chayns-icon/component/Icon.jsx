@@ -23,17 +23,21 @@ export default class Icon extends Component {
             displayedIconWarning = true;
 
             // eslint-disable-next-line no-console,max-len
-            console.warn('[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated');
+            console.warn(
+                '[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated'
+            );
         }
     }
 
     shouldComponentUpdate(nextProps) {
         const { icon } = this.props;
-        if (icon !== nextProps.icon
-            && nextProps.icon
-            && !isString(nextProps.icon)
-            && nextProps.icon.prefix
-            && nextProps.icon.iconName) {
+        if (
+            icon !== nextProps.icon &&
+            nextProps.icon &&
+            !isString(nextProps.icon) &&
+            nextProps.icon.prefix &&
+            nextProps.icon.iconName
+        ) {
             library.add(nextProps.icon);
         }
         return true;
@@ -48,7 +52,12 @@ export default class Icon extends Component {
 
     render() {
         const {
-            icon, className, onClick, disabled, stopPropagation, ...other
+            icon,
+            className,
+            onClick,
+            disabled,
+            stopPropagation,
+            ...other
         } = this.props;
 
         const classes = classNames('react-chayns-icon', className, {
@@ -59,13 +68,7 @@ export default class Icon extends Component {
 
         if (isString(icon)) {
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            return (
-                <i
-                    className={classes}
-                    onClick={this.onClick}
-                    {...other}
-                />
-            );
+            return <i className={classes} onClick={this.onClick} {...other} />;
         }
 
         if (!icon) {
@@ -76,7 +79,10 @@ export default class Icon extends Component {
             return (
                 // eslint-disable-next-line jsx-a11y/click-events-have-key-events
                 <span className={classes} onClick={this.onClick}>
-                    <FontAwesomeIcon icon={[icon.prefix, icon.iconName]} {...other}/>
+                    <FontAwesomeIcon
+                        icon={[icon.prefix, icon.iconName]}
+                        {...other}
+                    />
                 </span>
             );
         }

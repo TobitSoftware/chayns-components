@@ -17,5 +17,7 @@ export const getTimeStringFromMinutes = (total) => {
 
     if (hours === 24) hours = 0;
 
-    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+    return `${hours < 10 ? `0${hours}` : hours}:${
+        minutes < 10 ? `0${minutes}` : minutes
+    }`;
 };

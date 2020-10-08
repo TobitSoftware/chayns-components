@@ -22,7 +22,7 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
         <AbstractExpandableListItem
             noContentClass={noContentClass}
             className={className}
-            header={(
+            header={
                 <ExpandableList.Context.Consumer>
                     {(c) => (
                         <ExpandableListHeader
@@ -38,7 +38,7 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
                         />
                     )}
                 </ExpandableList.Context.Consumer>
-            )}
+            }
             clickable
             openProp={open}
             style={style}

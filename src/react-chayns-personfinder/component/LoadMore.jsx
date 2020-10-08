@@ -21,11 +21,7 @@ const LoadMore = ({ onClick, group, hide }) => {
                 ...(hide ? { display: 'none' } : {}),
             }}
         >
-            <Button
-                onClick={handleClick}
-            >
-                {getText('LOAD_MORE')}
-            </Button>
+            <Button onClick={handleClick}>{getText('LOAD_MORE')}</Button>
         </div>
     );
 };

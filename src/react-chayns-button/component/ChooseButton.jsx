@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 const ChooseButton = ({ children, ...props }) => (
-    <Button
-        chooseButton
-        {...props}
-    >
+    <Button chooseButton {...props}>
         {children}
     </Button>
 );

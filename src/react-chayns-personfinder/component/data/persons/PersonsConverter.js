@@ -3,9 +3,16 @@ import FriendsHelper from './FriendsHelper';
 export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
     // due to inconsistent naming of the backends
-    const fullName = relation.fullName
-        || relation.name || relation.UserFullName
-        || [(relation.firstName || relation.firstname), (relation.lastName || relation.lastname)].join(' ').trim();
+    const fullName =
+        relation.fullName ||
+        relation.name ||
+        relation.UserFullName ||
+        [
+            relation.firstName || relation.firstname,
+            relation.lastName || relation.lastname,
+        ]
+            .join(' ')
+            .trim();
 
     return {
         type: 'PERSON',
@@ -14,12 +21,17 @@ export const convertPerson = (relation) => {
         userId: relation.userId || relation.UserID,
         personId: relation.personId || relation.PersonID,
         fullName,
-        firstName: relation.firstName || relation.firstname || relation.FirstName,
+        firstName:
+            relation.firstName || relation.firstname || relation.FirstName,
         lastName: relation.lastName || relation.lastname || relation.LastName,
         relations: relation.relations,
         relationCount: relation.relationCount,
-        imageUrl: `https://sub60.tobit.com/u/${relation.personId || relation.PersonID}?size=50`,
-        isFriend: FriendsHelper.isFriend(relation.personId || relation.PersonID),
+        imageUrl: `https://sub60.tobit.com/u/${
+            relation.personId || relation.PersonID
+        }?size=50`,
+        isFriend: FriendsHelper.isFriend(
+            relation.personId || relation.PersonID
+        ),
     };
 };
 
@@ -47,11 +59,12 @@ export const convertPersons = (persons) => {
     };
 };
 
-export const convertSites = (sites) => sites.map((site) => ({
-    type: 'SITE',
-    id: site.siteId,
-    name: site.locationName,
-    imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
-    siteId: site.siteId,
-    locationId: site.locationId,
-}));
+export const convertSites = (sites) =>
+    sites.map((site) => ({
+        type: 'SITE',
+        id: site.siteId,
+        name: site.locationName,
+        imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
+        siteId: site.siteId,
+        locationId: site.locationId,
+    }));

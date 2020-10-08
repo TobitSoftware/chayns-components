@@ -11,15 +11,21 @@ export default class Input extends PureComponent {
         super(props);
 
         this.state = {
-            valid: (!props.regExp || !props.value || props.value.match(props.regExp))
-                && !(isNullOrWhiteSpace(props.value) && isNullOrWhiteSpace(props.defaultValue) && props.required),
+            valid:
+                (!props.regExp ||
+                    !props.value ||
+                    props.value.match(props.regExp)) &&
+                !(
+                    isNullOrWhiteSpace(props.value) &&
+                    isNullOrWhiteSpace(props.defaultValue) &&
+                    props.required
+                ),
             initial: true,
             right: false,
             value: props.value || props.defaultValue || '',
         };
 
-        this.id = Math.random()
-            .toString();
+        this.id = Math.random().toString();
 
         this.setRef = this.setRef.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
@@ -64,7 +70,12 @@ export default class Input extends PureComponent {
     onIconClick(e) {
         const { right, initial } = this.state;
         const { onIconClick, clearIcon, value, defaultValue } = this.props;
-        if (clearIcon && (right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)))) {
+        if (
+            clearIcon &&
+            (right ||
+                !isNullOrWhiteSpace(value) ||
+                (initial && !isNullOrWhiteSpace(defaultValue)))
+        ) {
             this.onChange({ target: { value: '' } });
             e.stopPropagation();
             this.ref.value = '';
@@ -87,7 +98,8 @@ export default class Input extends PureComponent {
     callValidated(value, callback, event) {
         const { regExp, required } = this.props;
 
-        const valid = !(required && !value) && !(regExp && !value.match(regExp));
+        const valid =
+            !(required && !value) && !(regExp && !value.match(regExp));
 
         if (callback) {
             callback(value, valid, event);
@@ -126,13 +138,22 @@ export default class Input extends PureComponent {
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
 
-        const icon = clearIcon && (right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue))) ? 'fa fa-times' : iconProp;
+        const icon =
+            clearIcon &&
+            (right ||
+                !isNullOrWhiteSpace(value) ||
+                (initial && !isNullOrWhiteSpace(defaultValue)))
+                ? 'fa fa-times'
+                : iconProp;
 
         if (design === Input.BORDER_DESIGN) {
             return (
                 <div
                     className={classNames('input--border-design', className, {
-                        'input--label-right': right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)),
+                        'input--label-right':
+                            right ||
+                            !isNullOrWhiteSpace(value) ||
+                            (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input--disabled': disabled,
                         'input--dynamic': dynamic,
                         'input--border-design--invalid': !valid || invalid,
@@ -144,7 +165,9 @@ export default class Input extends PureComponent {
                     }}
                     style={style}
                 >
-                    {iconLeft && <Icon icon={iconLeft} className="input__icon-left"/>}
+                    {iconLeft && (
+                        <Icon icon={iconLeft} className="input__icon-left" />
+                    )}
                     <div className="input__input-wrapper">
                         <input
                             ref={this.setRef}
@@ -158,36 +181,35 @@ export default class Input extends PureComponent {
                             type={type || 'text'}
                             id={id || this.id}
                             required
-                            onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                            onClick={
+                                stopPropagation
+                                    ? (event) => event.stopPropagation()
+                                    : null
+                            }
                             disabled={disabled}
                             {...customProps}
                         />
-                        {placeholder
-                        && (
-                            <label
-                                htmlFor={id || this.id}
-                            >
+                        {placeholder && (
+                            <label htmlFor={id || this.id}>
                                 <div className="space">
                                     {isString(value) ? value : stateValue}
                                 </div>
-                                <div
-                                    className="ellipsis"
-                                >
-                                    {placeholder}
-                                </div>
+                                <div className="ellipsis">{placeholder}</div>
                             </label>
                         )}
                     </div>
                     {rightProp}
                     {icon && (
-                        <Button
-                            onClick={this.onIconClick}
-                        >
+                        <Button onClick={this.onIconClick}>
                             <Icon
                                 icon={icon}
-                                style={(onIconClick || clearIcon) && !disabled ? {
-                                    pointerEvents: 'all',
-                                } : null}
+                                style={
+                                    (onIconClick || clearIcon) && !disabled
+                                        ? {
+                                              pointerEvents: 'all',
+                                          }
+                                        : null
+                                }
                                 className="input__icon-right"
                             />
                         </Button>
@@ -200,7 +222,10 @@ export default class Input extends PureComponent {
             return (
                 <div
                     className={classNames('input-group', className, {
-                        labelRight: right || !isNullOrWhiteSpace(value) || (initial && !isNullOrWhiteSpace(defaultValue)),
+                        labelRight:
+                            right ||
+                            !isNullOrWhiteSpace(value) ||
+                            (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input-group--disabled': disabled,
                     })}
                     ref={wrapperRef}
@@ -208,11 +233,13 @@ export default class Input extends PureComponent {
                     <input
                         style={{
                             width: '100%',
-                            paddingRight: (icon ? '30px' : null),
+                            paddingRight: icon ? '30px' : null,
                             ...style,
                         }}
                         ref={this.setRef}
-                        className={classNames('input', className, { 'input--invalid': !valid || invalid })}
+                        className={classNames('input', className, {
+                            'input--invalid': !valid || invalid,
+                        })}
                         value={value}
                         defaultValue={defaultValue}
                         onKeyUp={this.onKeyUp}
@@ -223,44 +250,43 @@ export default class Input extends PureComponent {
                         type={type || 'text'}
                         id={id || this.id}
                         required
-                        onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                        onClick={
+                            stopPropagation
+                                ? (event) => event.stopPropagation()
+                                : null
+                        }
                         disabled={disabled}
                         {...customProps}
                     />
-                    {placeholder
-                    && (
+                    {placeholder && (
                         <label
                             htmlFor={id || this.id}
                             className={classNames({
-                                'input--invalid': (!valid || invalid),
+                                'input--invalid': !valid || invalid,
                                 labelIcon: icon,
                             })}
                         >
                             <div className="space">
                                 {isString(value) ? value : stateValue}
                             </div>
-                            <div
-                                className="ellipsis"
-                            >
-                                {placeholder}
-                            </div>
+                            <div className="ellipsis">{placeholder}</div>
                         </label>
                     )}
-                    {
-                        icon
-                            ? (
-                                <Icon
-                                    icon={icon}
-                                    className="input-group__icon"
-                                    style={icon ? {
-                                        opacity: '.3',
-                                        pointerEvents: 'all',
-                                    } : { opacity: '0' }}
-                                    onClick={this.onIconClick}
-                                />
-                            )
-                            : null
-                    }
+                    {icon ? (
+                        <Icon
+                            icon={icon}
+                            className="input-group__icon"
+                            style={
+                                icon
+                                    ? {
+                                          opacity: '.3',
+                                          pointerEvents: 'all',
+                                      }
+                                    : { opacity: '0' }
+                            }
+                            onClick={this.onIconClick}
+                        />
+                    ) : null}
                 </div>
             );
         }
@@ -283,7 +309,9 @@ export default class Input extends PureComponent {
                 type={type}
                 ref={this.setRef}
                 id={id || this.id}
-                onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                onClick={
+                    stopPropagation ? (event) => event.stopPropagation() : null
+                }
                 required
                 disabled={disabled}
                 {...customProps}

@@ -6,5 +6,9 @@ export default function getTappWidth() {
     const element = document.querySelector('.tapp');
     if (!element) return null;
     const computedStyle = window.getComputedStyle(element);
-    return parseInt(computedStyle.width, 10) - parseInt(computedStyle.paddingLeft, 10) - parseInt(computedStyle.paddingRight, 10);
+    return (
+        parseInt(computedStyle.width, 10) -
+        parseInt(computedStyle.paddingLeft, 10) -
+        parseInt(computedStyle.paddingRight, 10)
+    );
 }

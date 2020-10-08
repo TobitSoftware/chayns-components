@@ -27,7 +27,11 @@ export default class MonthTable extends PureComponent {
 
     static getHighlightedData(highlighted, date) {
         for (let k = 0; k < highlighted.length; k += 1) {
-            for (let l = 0; highlighted[k].dates && l < highlighted[k].dates.length; l += 1) {
+            for (
+                let l = 0;
+                highlighted[k].dates && l < highlighted[k].dates.length;
+                l += 1
+            ) {
                 if (areDatesEqual(highlighted[k].dates[l], date)) {
                     return {
                         highlighted: true,
@@ -50,9 +54,17 @@ export default class MonthTable extends PureComponent {
         let normalWeekStart;
 
         if (startDate.getDay() > 0) {
-            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (9 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(
+                startDate.getFullYear(),
+                startDate.getMonth(),
+                9 - startDate.getDay()
+            );
         } else {
-            normalWeekStart = DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (2 - startDate.getDay()));
+            normalWeekStart = DateStorage.From(
+                startDate.getFullYear(),
+                startDate.getMonth(),
+                2 - startDate.getDay()
+            );
         }
 
         for (let i = 0; i < 6; i += 1) {
@@ -62,32 +74,52 @@ export default class MonthTable extends PureComponent {
                 if (startDate.getDay() > 0) {
                     for (let j = 2; j <= startDate.getDay(); j += 1) {
                         _row.push({
-                            date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), (startDate.getDay() * -1) + j),
+                            date: DateStorage.From(
+                                startDate.getFullYear(),
+                                startDate.getMonth(),
+                                startDate.getDay() * -1 + j
+                            ),
                             inMonth: false,
                         });
                     }
-                    for (let k = 1; k <= (8 - startDate.getDay()); k += 1) {
+                    for (let k = 1; k <= 8 - startDate.getDay(); k += 1) {
                         _row.push({
-                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), k),
+                            date: new DateStorage.From(
+                                startDate.getFullYear(),
+                                startDate.getMonth(),
+                                k
+                            ),
                             inMonth: true,
                         });
                     }
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
-                            date: new DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - j),
+                            date: new DateStorage.From(
+                                startDate.getFullYear(),
+                                startDate.getMonth(),
+                                startDate.getDate() - j
+                            ),
                             inMonth: false,
                         });
                     }
 
                     _row.push({
-                        date: DateStorage.From(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()),
+                        date: DateStorage.From(
+                            startDate.getFullYear(),
+                            startDate.getMonth(),
+                            startDate.getDate()
+                        ),
                         inMonth: true,
                     });
                 }
             } else {
                 for (let j = 0; j < 7; j += 1) {
-                    const _date = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + j);
+                    const _date = DateStorage.From(
+                        normalWeekStart.getFullYear(),
+                        normalWeekStart.getMonth(),
+                        normalWeekStart.getDate() + j
+                    );
                     if (_date.getMonth() === startDate.getMonth()) {
                         _row.push({
                             date: _date,
@@ -100,7 +132,11 @@ export default class MonthTable extends PureComponent {
                         });
                     }
                 }
-                normalWeekStart = DateStorage.From(normalWeekStart.getFullYear(), normalWeekStart.getMonth(), normalWeekStart.getDate() + 7);
+                normalWeekStart = DateStorage.From(
+                    normalWeekStart.getFullYear(),
+                    normalWeekStart.getMonth(),
+                    normalWeekStart.getDate() + 7
+                );
             }
             _table.push(_row);
         }
@@ -132,13 +168,16 @@ export default class MonthTable extends PureComponent {
                     ))}
                 </div>
                 {_table.map((row, index) => (
-                    <div
-                        className="day__row"
-                        key={index}
-                    >
+                    <div className="day__row" key={index}>
                         {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
                         {row.map((day) => {
-                            const { style, highlighted } = MonthTable.getHighlightedData(highlightedList, day.date);
+                            const {
+                                style,
+                                highlighted,
+                            } = MonthTable.getHighlightedData(
+                                highlightedList,
+                                day.date
+                            );
 
                             return (
                                 <DayItem
@@ -146,7 +185,10 @@ export default class MonthTable extends PureComponent {
                                     date={day.date}
                                     inMonth={day.inMonth}
                                     activateAll={activateAll}
-                                    activated={MonthTable.isActivated(activated, day.date)}
+                                    activated={MonthTable.isActivated(
+                                        activated,
+                                        day.date
+                                    )}
                                     selected={selected}
                                     highlightStyle={style}
                                     highlighted={highlighted}
@@ -167,10 +209,12 @@ MonthTable.propTypes = {
     startDate: PropTypes.instanceOf(Date),
     selected: PropTypes.instanceOf(Date),
     activated: PropTypes.arrayOf(Date),
-    highlighted: PropTypes.arrayOf(PropTypes.shape({
-        dates: PropTypes.arrayOf(Date).isRequired,
-        style: PropTypes.object,
-    })),
+    highlighted: PropTypes.arrayOf(
+        PropTypes.shape({
+            dates: PropTypes.arrayOf(Date).isRequired,
+            style: PropTypes.object,
+        })
+    ),
 };
 
 MonthTable.defaultProps = {

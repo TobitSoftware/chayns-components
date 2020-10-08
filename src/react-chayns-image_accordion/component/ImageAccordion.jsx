@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 
 export default class ImageAccordion extends React.PureComponent {
     render() {
-        const {
-            open, prevOpen, disabled, children,
-        } = this.props;
+        const { open, prevOpen, disabled, children } = this.props;
 
         return (
             <div

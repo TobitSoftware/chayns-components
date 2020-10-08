@@ -2,7 +2,10 @@ import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 const TappPortal = ({ children, parent }) => {
-    let parentToUse = typeof document !== 'undefined' ? document.getElementsByClassName('tapp')[0] : null;
+    let parentToUse =
+        typeof document !== 'undefined'
+            ? document.getElementsByClassName('tapp')[0]
+            : null;
 
     if (parent) {
         parentToUse = parent;
@@ -18,7 +21,10 @@ TappPortal.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {},
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
 };
 
 TappPortal.displayName = 'TappPortal';

@@ -14,6 +14,6 @@ export class TestComponent extends Component {
 
     render() {
         const { value } = this.state;
-        return (<div>{value}</div>);
+        return <div>{value}</div>;
     }
 }

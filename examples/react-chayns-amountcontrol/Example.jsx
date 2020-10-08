@@ -24,7 +24,7 @@ const AmountControlExample = () => {
                 stopPropagation
             />
 
-            <br/>
+            <br />
 
             <AmountControl
                 amount={amount}
@@ -35,7 +35,7 @@ const AmountControlExample = () => {
                 removeColor="#E71E28"
             />
 
-            <br/>
+            <br />
 
             <AmountControl
                 disabled={false}
@@ -49,7 +49,7 @@ const AmountControlExample = () => {
                 removeIcon="ts-tobit"
             />
 
-            <br/>
+            <br />
 
             <AmountControl
                 disabled
@@ -59,10 +59,10 @@ const AmountControlExample = () => {
                 buttonText="test-article"
             />
 
-            <br/>
+            <br />
 
             <Accordion
-                right={(
+                right={
                     <AmountControl
                         className="accordion--no-trigger"
                         icon="ts-bamboo"
@@ -72,13 +72,13 @@ const AmountControlExample = () => {
                         buttonText="2,20€"
                         iconColor="blue"
                     />
-                )}
+                }
                 head="Afri Cola"
             >
                 Test
             </Accordion>
 
-            <br/>
+            <br />
 
             <AmountControl
                 amount={amount}
@@ -88,7 +88,7 @@ const AmountControlExample = () => {
                 disableInput
             />
 
-            <br/>
+            <br />
 
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <AmountControl
@@ -124,7 +124,7 @@ const AmountControlExample = () => {
                 disableInput
             />
 
-            <br/>
+            <br />
 
             <AmountControl
                 amount={amount}
@@ -150,7 +150,7 @@ const AmountControlExample = () => {
                 showInput={amount > 0}
             />
 
-            <br/>
+            <br />
 
             <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <AmountControl

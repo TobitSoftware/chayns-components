@@ -23,13 +23,15 @@ const ExpandableListHeader = ({
         image={image}
         icon={icon}
         right={right}
-        left={!hideIndicator && (
-            <div className="list-item__indicator">
-                <div className="icon-wrapper">
-                    <i className="ts-icon ts-angle-right"/>
+        left={
+            !hideIndicator && (
+                <div className="list-item__indicator">
+                    <div className="icon-wrapper">
+                        <i className="ts-icon ts-angle-right" />
+                    </div>
                 </div>
-            </div>
-        )}
+            )
+        }
         style={style && style.head ? style.head : null}
         {...props}
         {...headerProps}

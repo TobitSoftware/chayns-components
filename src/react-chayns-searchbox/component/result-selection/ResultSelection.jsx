@@ -15,9 +15,20 @@ const ResultSelection = ({ text, search }) => {
     }));
 
     return mismatchesWithId.map((mismatch, mismatchIndex) => [
-        <span key={`${mismatch.id}_missmatch`} className="cc__result-selection cc__result-selection--mismatch">{mismatch.value}</span>,
-        matches && mismatchIndex < matches.length
-        && <span key={`${mismatch.id}_match`} className="cc__result-selection cc__result-selection--match">{matches[mismatchIndex]}</span>,
+        <span
+            key={`${mismatch.id}_missmatch`}
+            className="cc__result-selection cc__result-selection--mismatch"
+        >
+            {mismatch.value}
+        </span>,
+        matches && mismatchIndex < matches.length && (
+            <span
+                key={`${mismatch.id}_match`}
+                className="cc__result-selection cc__result-selection--match"
+            >
+                {matches[mismatchIndex]}
+            </span>
+        ),
     ]);
 };
 

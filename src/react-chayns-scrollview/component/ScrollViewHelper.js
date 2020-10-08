@@ -1,11 +1,12 @@
 let lastPageY;
 
-const requestAnimationFrameFallback = window.requestAnimationFrame.bind(window)
-    || window.webkitRequestAnimationFrame
-    || window.mozRequestAnimationFrame
-    || window.oRequestAnimationFrame
-    || window.msRequestAnimationFrame
-    || ((c) => setTimeout(c, 0));
+const requestAnimationFrameFallback =
+    window.requestAnimationFrame.bind(window) ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    ((c) => setTimeout(c, 0));
 
 export default class ScrollViewHelper {
     constructor(el, { wrapper, content, bar }) {
@@ -25,7 +26,10 @@ export default class ScrollViewHelper {
 
         if (!chayns.env.isMobile) {
             this.content.addEventListener('scroll', this.moveBar.bind(this));
-            this.content.addEventListener('mouseenter', this.moveBar.bind(this));
+            this.content.addEventListener(
+                'mouseenter',
+                this.moveBar.bind(this)
+            );
         }
     }
 
@@ -76,7 +80,10 @@ export default class ScrollViewHelper {
 
                 const barHeightPercent = Math.max(this.scrollRatio, 0.1);
                 this.bar.style.height = `${barHeightPercent * ownHeight}px`;
-                this.bar.style.top = `${(this.content.scrollTop / (totalHeight - ownHeight)) * (ownHeight * (1 - barHeightPercent))}px`;
+                this.bar.style.top = `${
+                    (this.content.scrollTop / (totalHeight - ownHeight)) *
+                    (ownHeight * (1 - barHeightPercent))
+                }px`;
                 this.bar.style.right = `${right}px`;
             }
         });

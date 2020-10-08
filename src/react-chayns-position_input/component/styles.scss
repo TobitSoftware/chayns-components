@@ -1,47 +1,47 @@
 .cc__map {
-  position: relative;
-  height: 276px;
+    position: relative;
+    height: 276px;
 
-  .map--crosshair {
-    position: absolute;
-    display: flex;
-    top: 50%;
-    left: 50%;
-    z-index: 1;
-    pointer-events: none;
-    height: 0px;
-    width: 0px;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    font-size: 25px;
-  }
+    .map--crosshair {
+        position: absolute;
+        display: flex;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        pointer-events: none;
+        height: 0px;
+        width: 0px;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-size: 25px;
+    }
 
-  .map--overlay {
-    height: 50px;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    box-shadow: 0px -3px 14px -6px rgba(0, 0, 0, 0.4);
-    position: absolute;
-    z-Index: 10;
-    bottom: 0px;
-    width: 100%;
+    .map--overlay {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        box-shadow: 0px -3px 14px -6px rgba(0, 0, 0, 0.4);
+        position: absolute;
+        z-index: 10;
+        bottom: 0px;
+        width: 100%;
 
-    background-color: rgba(var(--chayns-bg-rgb), 1)
-  }
+        background-color: rgba(var(--chayns-bg-rgb), 1);
+    }
 }
 
 .map--autocomplete {
-  &_popup {
-    position: absolute;
-  }
+    &_popup {
+        position: absolute;
+    }
 
-  &_item {
-    padding: 5px 5px 5px 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
-  }
+    &_item {
+        padding: 5px 5px 5px 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+    }
 }

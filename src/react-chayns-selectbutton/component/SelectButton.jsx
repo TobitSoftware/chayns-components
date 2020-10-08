@@ -16,19 +16,18 @@ export default class SelectButton extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const {
-            list,
-            listKey,
-            listValue,
-            selectedFlag,
-        } = this.props;
+        const { list, listKey, listValue, selectedFlag } = this.props;
 
-        if (list !== prevProps.list
-            || listKey !== prevProps.listKey
-            || listValue !== prevProps.listValue
-            || selectedFlag !== prevProps.selectedFlag) {
+        if (
+            list !== prevProps.list ||
+            listKey !== prevProps.listKey ||
+            listValue !== prevProps.listValue ||
+            selectedFlag !== prevProps.selectedFlag
+        ) {
             // eslint-disable-next-line react/no-did-update-set-state
-            this.setState({ selected: list.filter((item) => item[selectedFlag]) });
+            this.setState({
+                selected: list.filter((item) => item[selectedFlag]),
+            });
         }
     }
 
@@ -44,21 +43,24 @@ export default class SelectButton extends Component {
         } = this.props;
         const dialogList = this.getDialogList(list);
 
-        chayns.dialog.select({
-            title,
-            message: description,
-            quickfind: quickFind,
-            multiselect: multiSelect,
-            list: dialogList,
-            buttons: multiSelect || [],
-        }).then((result) => {
-            if (onSelect && result.buttonType > 0) {
-                onSelect(this.getReturnList(result));
-            }
-        }).catch((err) => {
-            // eslint-disable-next-line no-console
-            console.error(err);
-        });
+        chayns.dialog
+            .select({
+                title,
+                message: description,
+                quickfind: quickFind,
+                multiselect: multiSelect,
+                list: dialogList,
+                buttons: multiSelect || [],
+            })
+            .then((result) => {
+                if (onSelect && result.buttonType > 0) {
+                    onSelect(this.getReturnList(result));
+                }
+            })
+            .catch((err) => {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            });
 
         if (stopPropagation) e.stopPropagation();
     }
@@ -75,7 +77,8 @@ export default class SelectButton extends Component {
                     list.push({
                         name: item[listValue],
                         value: item[curListKey],
-                        isSelected: selected.indexOf(item) >= 0 && showListSelection,
+                        isSelected:
+                            selected.indexOf(item) >= 0 && showListSelection,
                     });
                 }
             });
@@ -125,12 +128,19 @@ export default class SelectButton extends Component {
                 onClick={this.onClick}
                 style={style}
             >
-                {selected && selected.length > 0 && showSelection ? selected.map((item, index) => {
-                    let str = (index > 0 && index < selected.length && index < numberOfItems) ? ', ' : '';
-                    str += (index < numberOfItems) ? item[listValue] : '';
-                    str += (index === numberOfItems) ? '...' : '';
-                    return str;
-                }) : label}
+                {selected && selected.length > 0 && showSelection
+                    ? selected.map((item, index) => {
+                          let str =
+                              index > 0 &&
+                              index < selected.length &&
+                              index < numberOfItems
+                                  ? ', '
+                                  : '';
+                          str += index < numberOfItems ? item[listValue] : '';
+                          str += index === numberOfItems ? '...' : '';
+                          return str;
+                      })
+                    : label}
             </ChooseButton>
         );
     }

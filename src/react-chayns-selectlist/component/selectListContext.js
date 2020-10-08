@@ -2,8 +2,7 @@ import { createContext } from 'react';
 
 const SelectListContext = createContext({
     selectListSelectedId: null,
-    changeListItem: () => {
-    },
+    changeListItem: () => {},
 });
 
 export default SelectListContext;

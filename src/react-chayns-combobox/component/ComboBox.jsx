@@ -7,7 +7,18 @@ import DialogSelectComboBox from './DialogSelectComboBox';
 import './ComboBox.scss';
 
 const ComboBox = ({
-    className, label, list, disabled, listValue, listKey, stopPropagation, defaultValue, parent, onSelect, style, value,
+    className,
+    label,
+    list,
+    disabled,
+    listValue,
+    listKey,
+    stopPropagation,
+    defaultValue,
+    parent,
+    onSelect,
+    style,
+    value,
 }) => {
     const iframeDialogView = useMemo(isInIframeDialog, []);
 

@@ -10,7 +10,7 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 data: action.clear ? [] : state.data,
-                showWaitCursor: !!(action.showWaitCursor),
+                showWaitCursor: !!action.showWaitCursor,
                 isLoading: true,
             };
         case 'RECEIVE_DATA':

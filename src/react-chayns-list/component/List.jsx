@@ -5,22 +5,10 @@ import ExpandableList from './ExpandableList/ExpandableList';
 
 const List = ({ className, children, notExpandable }) => {
     if (notExpandable) {
-        return (
-            <AbstractList
-                className={className}
-            >
-                {children}
-            </AbstractList>
-        );
+        return <AbstractList className={className}>{children}</AbstractList>;
     }
 
-    return (
-        <ExpandableList
-            className={className}
-        >
-            {children}
-        </ExpandableList>
-    );
+    return <ExpandableList className={className}>{children}</ExpandableList>;
 };
 
 List.propTypes = {

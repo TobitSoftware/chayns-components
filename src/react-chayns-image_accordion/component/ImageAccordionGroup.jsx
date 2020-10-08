@@ -63,8 +63,12 @@ export default class ImageAccordionGroup extends React.Component {
         const node = event.target;
         for (let i = 0; i < 15; i += 1) {
             if (node.classList) {
-                if (node.classList.contains('accordion--no--trigger') || node.classList.contains('context-menu-overlay')
-                    || node.classList.contains('context-menu__item__text') || node.classList.contains('context-menu__item')) {
+                if (
+                    node.classList.contains('accordion--no--trigger') ||
+                    node.classList.contains('context-menu-overlay') ||
+                    node.classList.contains('context-menu__item__text') ||
+                    node.classList.contains('context-menu__item')
+                ) {
                     trigger = false;
                     return trigger;
                 }
@@ -111,36 +115,39 @@ export default class ImageAccordionGroup extends React.Component {
         }
 
         this.setState((state) => ({
-            currentState: findChild !== -1 && children[findChild].props.children ? key : null,
+            currentState:
+                findChild !== -1 && children[findChild].props.children
+                    ? key
+                    : null,
             prevOpen: !sameRow && state.currentState,
         }));
         if (onOpen) onOpen();
     }
 
     render() {
-        const {
-            children,
-            className,
-            reference,
-        } = this.props;
+        const { children, className, reference } = this.props;
         const { currentState, prevOpen, width } = this.state;
 
         const itemsPerRow = parseInt(width / 100, 10);
         const percent = 100 / itemsPerRow;
         const columnCount = Math.trunc(100 / percent);
 
-        const childrenWithProps = React.Children.map(children, (child) => {
-            if (child) {
-                return React.cloneElement(child, {
-                    originalKey: child.key,
-                    open: child.key === currentState,
-                    prevOpen: child.key === prevOpen,
-                });
-            }
-            return null;
-        }) || [];
+        const childrenWithProps =
+            React.Children.map(children, (child) => {
+                if (child) {
+                    return React.cloneElement(child, {
+                        originalKey: child.key,
+                        open: child.key === currentState,
+                        prevOpen: child.key === prevOpen,
+                    });
+                }
+                return null;
+            }) || [];
 
-        const imageAccordionMatrix = listToMatrix(childrenWithProps, columnCount);
+        const imageAccordionMatrix = listToMatrix(
+            childrenWithProps,
+            columnCount
+        );
 
         let wrapperHeight = '150px';
         if (width < 200) wrapperHeight = '185px';
@@ -155,73 +162,102 @@ export default class ImageAccordionGroup extends React.Component {
                 })}
             >
                 {/* ImageAccordionGroup Row */}
-                {
-                    imageAccordionMatrix.map((matrixRow) => (
-                        // ImageAccordion Heads per row
-                        <div
-                            className={classNames('image-accordion-container', { open: matrixRow.some((row) => row.props.open) })}
-                            key={matrixRow[0].key}
-                        >
-                            {matrixRow.map((item) => (
-                                <div
-                                    className={classNames('image-accordion', {
-                                        open: currentState === item.props.originalKey,
-                                    })}
-                                    onClick={(e) => {
-                                        this.handleAccordionClick(
-                                            item.props.originalKey,
-                                            matrixRow.some((row) => row.props.originalKey === currentState),
-                                            item.props,
-                                            e,
-                                        );
-                                    }}
-                                    onKeyPress={() => { }}
-                                    ref={(ref) => {
-                                        this.accordion = ref;
-                                        if (reference) reference(ref);
-                                    }}
-                                    style={{ width: `${percent}%` }}
-                                    key={item.props.originalKey}
-                                >
-                                    <ImageAccordionHead
-                                        item={item}
-                                        wrapperHeight={wrapperHeight}
-                                        width={width}
-                                        itemsPerRow={itemsPerRow}
-                                    />
-                                </div>
-                            ))}
-                            {/* Body of Row */}
+                {imageAccordionMatrix.map((matrixRow) => (
+                    // ImageAccordion Heads per row
+                    <div
+                        className={classNames('image-accordion-container', {
+                            open: matrixRow.some((row) => row.props.open),
+                        })}
+                        key={matrixRow[0].key}
+                    >
+                        {matrixRow.map((item) => (
                             <div
-                                className="image-accordion-body"
+                                className={classNames('image-accordion', {
+                                    open:
+                                        currentState === item.props.originalKey,
+                                })}
+                                onClick={(e) => {
+                                    this.handleAccordionClick(
+                                        item.props.originalKey,
+                                        matrixRow.some(
+                                            (row) =>
+                                                row.props.originalKey ===
+                                                currentState
+                                        ),
+                                        item.props,
+                                        e
+                                    );
+                                }}
+                                onKeyPress={() => {}}
+                                ref={(ref) => {
+                                    this.accordion = ref;
+                                    if (reference) reference(ref);
+                                }}
+                                style={{ width: `${percent}%` }}
+                                key={item.props.originalKey}
                             >
-                                <div
-                                    className={classNames('arrow', {
-                                        'no-arrow': matrixRow.findIndex((c) => (
-                                            !c.props.children && (c.props.originalKey === currentState || (c.props.originalKey === prevOpen))
-                                        )) !== -1,
-                                    })}
-                                    style={{
-                                        marginLeft: (matrixRow.findIndex((c) => (
-                                            c.props.originalKey === currentState)
-                                                || (c.props.originalKey === prevOpen)) + 0.5) * (width * (percent / 100)) - 12,
-                                        opacity: (matrixRow.find((c) => (
-                                            c.props.originalKey === currentState)
-                                                || (c.props.originalKey === prevOpen))
-                                                || { props: { item: {} } }).props.disabled ? 0.55 : 1,
-                                    }}
+                                <ImageAccordionHead
+                                    item={item}
+                                    wrapperHeight={wrapperHeight}
+                                    width={width}
+                                    itemsPerRow={itemsPerRow}
                                 />
-                                <ExpandableContent
-                                    open={matrixRow.find((c) => c.props.children && ((c.props.originalKey === currentState)
-                                    || (c.props.originalKey === prevOpen))) !== -1}
-                                >
-                                    {matrixRow}
-                                </ExpandableContent>
                             </div>
-
+                        ))}
+                        {/* Body of Row */}
+                        <div className="image-accordion-body">
+                            <div
+                                className={classNames('arrow', {
+                                    'no-arrow':
+                                        matrixRow.findIndex(
+                                            (c) =>
+                                                !c.props.children &&
+                                                (c.props.originalKey ===
+                                                    currentState ||
+                                                    c.props.originalKey ===
+                                                        prevOpen)
+                                        ) !== -1,
+                                })}
+                                style={{
+                                    marginLeft:
+                                        (matrixRow.findIndex(
+                                            (c) =>
+                                                c.props.originalKey ===
+                                                    currentState ||
+                                                c.props.originalKey === prevOpen
+                                        ) +
+                                            0.5) *
+                                            (width * (percent / 100)) -
+                                        12,
+                                    opacity: (
+                                        matrixRow.find(
+                                            (c) =>
+                                                c.props.originalKey ===
+                                                    currentState ||
+                                                c.props.originalKey === prevOpen
+                                        ) || { props: { item: {} } }
+                                    ).props.disabled
+                                        ? 0.55
+                                        : 1,
+                                }}
+                            />
+                            <ExpandableContent
+                                open={
+                                    matrixRow.find(
+                                        (c) =>
+                                            c.props.children &&
+                                            (c.props.originalKey ===
+                                                currentState ||
+                                                c.props.originalKey ===
+                                                    prevOpen)
+                                    ) !== -1
+                                }
+                            >
+                                {matrixRow}
+                            </ExpandableContent>
                         </div>
-                    ))
-                }
+                    </div>
+                ))}
             </div>
         );
     }
