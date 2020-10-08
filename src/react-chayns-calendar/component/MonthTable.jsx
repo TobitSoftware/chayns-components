@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key,no-underscore-dangle */
-import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import DayItem from './DayItem';
-import DateStorage from '../utils/DateStorage';
+import React, { PureComponent } from 'react';
 import areDatesEqual from '../utils/areDatesEqual';
+import DateStorage from '../utils/DateStorage';
+import DayItem from './DayItem';
 
 const DAYS = {
     de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
@@ -84,7 +84,7 @@ export default class MonthTable extends PureComponent {
                     }
                     for (let k = 1; k <= 8 - startDate.getDay(); k += 1) {
                         _row.push({
-                            date: new DateStorage.From(
+                            date: DateStorage.From(
                                 startDate.getFullYear(),
                                 startDate.getMonth(),
                                 k
@@ -95,7 +95,7 @@ export default class MonthTable extends PureComponent {
                 } else {
                     for (let j = 6; j > 0; j -= 1) {
                         _row.push({
-                            date: new DateStorage.From(
+                            date: DateStorage.From(
                                 startDate.getFullYear(),
                                 startDate.getMonth(),
                                 startDate.getDate() - j
