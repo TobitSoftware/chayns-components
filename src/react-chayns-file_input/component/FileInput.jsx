@@ -16,7 +16,7 @@ export default class FileInput extends PureComponent {
         this.fileInputRefs = [];
         this.needAppCall = !supportsFileInput();
         this.isInIframeDialog = isInIframeDialog();
-        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && chayns.env.myChaynsAppVersion >= 6244) };
+        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && (chayns.env.myChaynsAppVersion || chayns.env.appVersion) >= 6244) };
     }
 
     onDragEnter = (event, item, index) => {
@@ -60,8 +60,12 @@ export default class FileInput extends PureComponent {
     onClick = async (event, item, index) => {
         const { hasMemoryAccess } = this.state;
         const { stopPropagation, errorMessages } = this.props;
-        if (stopPropagation) event.stopPropagation();
-        if (isFunction(item.onClick)) item.onClick(event);
+        if (stopPropagation) {
+            event.stopPropagation();
+        }
+        if (isFunction(item.onClick)) {
+            item.onClick(event);
+        }
         if (item.onChange) {
             if (this.needAppCall && !this.isInIframeDialog) {
                 const compatibilityEvent = await fileInputCall(); // TODO remove in future version
@@ -203,8 +207,22 @@ FileInput.types = {
 };
 
 FileInput.typePresets = {
-    TSIMG_CLOUD: ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/webp'],
-    STREAMINGSERVICE: ['video/mp4', 'video/webm', 'video/avi', 'video/flv', 'video/wmv', 'video/mpg', 'video/quicktime'],
+    TSIMG_CLOUD: [
+        'image/png',
+        'image/jpg',
+        'image/jpeg',
+        'image/gif',
+        'image/webp',
+    ],
+    STREAMINGSERVICE: [
+        'video/mp4',
+        'video/webm',
+        'video/avi',
+        'video/flv',
+        'video/wmv',
+        'video/mpg',
+        'video/quicktime',
+    ],
 };
 
 FileInput.propTypes = {
@@ -229,15 +247,21 @@ FileInput.propTypes = {
         className: PropTypes.string,
         style: PropTypes.object,
         disabled: PropTypes.bool,
-        content: PropTypes.oneOfType([PropTypes.shape({
-            text: PropTypes.string,
-            icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-        }), PropTypes.shape({
-            children: PropTypes.oneOfType([
-                PropTypes.node,
-                PropTypes.arrayOf(PropTypes.node),
-            ]),
-        })]),
+        content: PropTypes.oneOfType([
+            PropTypes.shape({
+                text: PropTypes.string,
+                icon: PropTypes.oneOfType([
+                    PropTypes.string,
+                    PropTypes.object,
+                ]),
+            }),
+            PropTypes.shape({
+                children: PropTypes.oneOfType([
+                    PropTypes.node,
+                    PropTypes.arrayOf(PropTypes.node),
+                ]),
+            }),
+        ]),
     })),
 };
 
@@ -253,18 +277,20 @@ FileInput.defaultProps = {
         permanentNoPermission: 'Bitte überprüfe die Einstellungen Deiner App und erlaube den Dateizugriff auf Deinem Gerät.',
         temporaryNoPermission: null,
     },
-    items: [{
-        types: [FileInput.types.ALL],
-        maxFileSize: 4 * 1024 * 1024, // 4 MB
-        maxNumberOfFiles: 0, // 0=infinity
-        directory: false,
-        onClick: null,
-        onChange: null,
-        className: null,
-        style: null,
-        disabled: false,
-        content: null,
-    }],
+    items: [
+        {
+            types: [FileInput.types.ALL],
+            maxFileSize: 4 * 1024 * 1024, // 4 MB
+            maxNumberOfFiles: 0, // 0=infinity
+            directory: false,
+            onClick: null,
+            onChange: null,
+            className: null,
+            style: null,
+            disabled: false,
+            content: null,
+        },
+    ],
 };
 
 FileInput.displayName = 'FileInput';
