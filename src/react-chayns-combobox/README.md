@@ -24,7 +24,7 @@ You can now use the component as follows:
     listValue="name"
 />
 ```
-If the component is used in an iframe dialog, native HTML dialogs are used instead of the chayns select dialogs.
+If the component is used in an iframe dialog (chayns dialog.js script), native HTML dialogs are used instead of the chayns select dialogs.
 
 ## Props ##
 
