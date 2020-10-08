@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import React, { Component } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import Formatter from '../utils/Formatter';
 
@@ -112,8 +111,8 @@ export default class FormattedInput extends Component {
 FormattedInput.propTypes = {
     initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
     onChange: PropTypes.func,
-    defaultValue:
-        PropTypes.any /* eslint-disable-line react/forbid-prop-types */,
+    // eslint-disable-next-line react/forbid-prop-types
+    defaultValue: PropTypes.any,
 };
 
 FormattedInput.defaultProps = {

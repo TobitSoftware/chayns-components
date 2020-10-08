@@ -1,7 +1,6 @@
-/* eslint-disable react/forbid-prop-types */
-import React from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ListItemHeader from './ListItemHeader';
 
 const ListItem = ({
@@ -80,7 +79,10 @@ ListItem.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+    // eslint-disable-next-line react/forbid-prop-types
     headerProps: PropTypes.object,
     circle: PropTypes.bool,
     hoverItem: PropTypes.node,

@@ -1,20 +1,13 @@
-/* eslint-disable react/forbid-prop-types,no-restricted-syntax */
-import React, { memo, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { getAvailableColorList, getColorFromPalette } from '@chayns/colors';
+import PropTypes from 'prop-types';
+import React, { memo, useMemo } from 'react';
 import { hexStringToRgb } from '../../utils/color';
 
 const ColorScheme = (props) => {
-    // eslint-disable-next-line prefer-const
-    let {
-        color,
-        colorMode,
-        secondaryColor,
-        children,
-        style,
-        cssVariables,
-        ...otherProps
-    } = props;
+    let { color, colorMode, secondaryColor } = props;
+
+    const { children, style, cssVariables, ...otherProps } = props;
+
     if (color !== null || secondaryColor !== null || colorMode !== null) {
         if (typeof chayns !== 'undefined') {
             if (color === null) {
@@ -52,7 +45,7 @@ const ColorScheme = (props) => {
                 '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
             };
 
-            // eslint-disable-next-line no-unused-vars
+            // eslint-disable-next-line no-restricted-syntax
             for (const colorName of getAvailableColorList()) {
                 const hexColor = getColorFromPalette(colorName, {
                     color,
@@ -85,7 +78,10 @@ ColorScheme.propTypes = {
     secondaryColor: PropTypes.string,
     colorMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     children: PropTypes.node.isRequired,
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+    // eslint-disable-next-line react/forbid-prop-types
     cssVariables: PropTypes.object,
 };
 

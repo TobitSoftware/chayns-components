@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/forbid-prop-types */
-import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from 'react';
 import './SliderButton.scss';
 
 const SliderButton = (props) => {
@@ -34,7 +32,10 @@ const SliderButton = (props) => {
     const handleChange = (newIndex) => {
         if (newIndex !== lastSelectedIndex) {
             setLastSelectedIndex(newIndex);
-            onChange && onChange(items[newIndex]);
+
+            if (onChange) {
+                onChange(items[newIndex]);
+            }
         }
     };
 
@@ -70,7 +71,9 @@ const SliderButton = (props) => {
             setDragStartPosX(posX);
             setDragStartMarkerPosX(markerPosX);
 
-            onDragStart && onDragStart();
+            if (onDragStart) {
+                onDragStart();
+            }
         }
     };
 
@@ -84,7 +87,9 @@ const SliderButton = (props) => {
             const hoveredItemIndex = getHoveredItemIndex();
             setMarkerIndex(hoveredItemIndex);
 
-            onDragStop && onDragStop(items[hoveredItemIndex]);
+            if (onDragStop) {
+                onDragStop(items[hoveredItemIndex]);
+            }
         }
     };
 
@@ -211,7 +216,9 @@ const SliderButton = (props) => {
 
 SliderButton.propTypes = {
     className: PropTypes.string,
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.any,

@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Button from '../../react-chayns-button/component/Button';
-import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
-import './ComboBox.scss';
-import isDescendant from '../../utils/isDescendant';
 import Icon from '../../react-chayns-icon/component/Icon';
+import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+import isDescendant from '../../utils/isDescendant';
+import './ComboBox.scss';
 
 const ComboBox = ({
     className,
@@ -78,59 +78,41 @@ const ComboBox = ({
         }
     };
 
-    const onButtonClick = useCallback(
-        (e) => {
-            if (stopPropagation) e.stopPropagation();
-            setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
-            if (chayns.env.isMobile) {
-                const items = list.map((item) => ({
-                    name: item[listValue],
-                    value: item[listKey],
-                    isSelected:
-                        item[listKey] === (value !== null ? value : selected),
-                }));
-                chayns.dialog
-                    .select({
-                        list: items,
-                        buttons: [],
-                    })
-                    .then((result) => {
-                        if (
-                            result.buttonType === 1 &&
-                            result.selection &&
-                            result.selection[0]
-                        ) {
-                            select(result.selection[0].value);
-                        }
-                    });
-            } else {
-                setPosition(e.target.getBoundingClientRect());
-                setShowOverlay(!showOverlay);
-            }
-        },
-        [
-            setPosition,
-            setShowOverlay,
-            setMinWidth,
-            showOverlay,
-            selected,
-            stopPropagation,
-            list,
-            listKey,
-            listValue,
-            select,
-            value,
-        ]
-    );
+    const onButtonClick = (e) => {
+        if (stopPropagation) e.stopPropagation();
+        setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
+        if (chayns.env.isMobile) {
+            const items = list.map((item) => ({
+                name: item[listValue],
+                value: item[listKey],
+                isSelected:
+                    item[listKey] === (value !== null ? value : selected),
+            }));
+            chayns.dialog
+                .select({
+                    list: items,
+                    buttons: [],
+                })
+                .then((result) => {
+                    if (
+                        result.buttonType === 1 &&
+                        result.selection &&
+                        result.selection[0]
+                    ) {
+                        select(result.selection[0].value);
+                    }
+                });
+        } else {
+            setPosition(e.target.getBoundingClientRect());
+            setShowOverlay(!showOverlay);
+        }
+    };
 
-    const onItemClick = useCallback(
-        (e) => {
-            select(e.target.id);
-            setShowOverlay(false);
-            if (stopPropagation) e.stopPropagation();
-        },
-        [setShowOverlay, onSelect, list, listKey, stopPropagation, select]
-    );
+    const onItemClick = (e) => {
+        select(e.target.id);
+        setShowOverlay(false);
+        if (stopPropagation) e.stopPropagation();
+    };
 
     return [
         <Button

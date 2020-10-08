@@ -1,20 +1,16 @@
-import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-
+import React from 'react';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { useStateValue } from '../data/persons/PersonsContext';
 
 const FriendsIndicator = ({ personId, name }) => {
     const { isFriend, setFriend } = useStateValue();
 
-    const handleClick = useCallback(
-        (event) => {
-            event.stopPropagation();
+    const handleClick = (event) => {
+        event.stopPropagation();
 
-            setFriend(personId, name, !isFriend(personId));
-        },
-        [personId, isFriend, setFriend]
-    );
+        setFriend(personId, name, !isFriend(personId));
+    };
 
     return (
         <div className="friends">
