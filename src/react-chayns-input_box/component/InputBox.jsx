@@ -68,11 +68,17 @@ export default class InputBox extends Component {
             return;
         }
 
-        if (e.target === this.references.wrapper || e.target === this.references.box) {
+        if (
+            e.target === this.references.wrapper ||
+            e.target === this.references.box
+        ) {
             return;
         }
 
-        if (isDescendant(this.references.wrapper, e.target) || isDescendant(this.references.box, e.target)) {
+        if (
+            isDescendant(this.references.wrapper, e.target) ||
+            isDescendant(this.references.box, e.target)
+        ) {
             return;
         }
 
@@ -121,7 +127,10 @@ export default class InputBox extends Component {
 
     async updatePosition() {
         let { parent } = this.props;
-        parent = parent || document.getElementsByClassName('tapp')[0] || document.body;
+        parent =
+            parent ||
+            document.getElementsByClassName('tapp')[0] ||
+            document.body;
         const parentRect = parent.getBoundingClientRect();
 
         if (!this.references.wrapper) {
@@ -184,24 +193,29 @@ export default class InputBox extends Component {
                     onFocus={this.handleFocus}
                 />
                 <TappPortal parent={parent}>
-                    {
-                        !!(position && !hidden && children)
-                        && (
-                            <div
-                                onClick={(e) => e.preventDefault()}
-                                className={classnames('cc__input-box__overlay', 'scrollbar', boxClassName)}
-                                style={position ? {
-                                    width: `${position.width}px`,
-                                    top: `${position.bottom}px`,
-                                    left: `${position.left}px`,
-                                } : null}
-                                {...overlayProps}
-                                ref={this.setBoxRef}
-                            >
-                                {children}
-                            </div>
-                        )
-                    }
+                    {!!(position && !hidden && children) && (
+                        <div
+                            onClick={(e) => e.preventDefault()}
+                            className={classnames(
+                                'cc__input-box__overlay',
+                                'scrollbar',
+                                boxClassName
+                            )}
+                            style={
+                                position
+                                    ? {
+                                          width: `${position.width}px`,
+                                          top: `${position.bottom}px`,
+                                          left: `${position.left}px`,
+                                      }
+                                    : null
+                            }
+                            {...overlayProps}
+                            ref={this.setBoxRef}
+                        >
+                            {children}
+                        </div>
+                    )}
                 </TappPortal>
             </div>
         );
@@ -211,8 +225,10 @@ export default class InputBox extends Component {
 InputBox.propTypes = {
     onBlur: PropTypes.func,
     inputComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
-    },
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     onFocus: PropTypes.func,
     children: PropTypes.oneOfType([
         PropTypes.node,
@@ -223,7 +239,9 @@ InputBox.propTypes = {
     inputRef: PropTypes.func,
     // eslint-disable-next-line react/forbid-prop-types
     overlayProps: PropTypes.object,
-    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 InputBox.defaultProps = {

@@ -8,22 +8,29 @@ export default class Groups extends PureComponent {
 
         return (
             <div className="calendar__groups">
-                {
-                    groups.map((group) => {
-                        const className = classNames('calendar__groups_item', {
-                            calendar__groups_notFocused: focus && group.id !== focus,
-                        });
-                        return (
-                            <div className={className} key={group.id} onClick={(event) => onClick(event, group)}>
-                                <div
-                                    className="calendar__groups_color"
-                                    style={{ backgroundColor: group.color ? group.color : chayns.env.site.color }}
-                                />
-                                {group.name}
-                            </div>
-                        );
-                    })
-                }
+                {groups.map((group) => {
+                    const className = classNames('calendar__groups_item', {
+                        calendar__groups_notFocused:
+                            focus && group.id !== focus,
+                    });
+                    return (
+                        <div
+                            className={className}
+                            key={group.id}
+                            onClick={(event) => onClick(event, group)}
+                        >
+                            <div
+                                className="calendar__groups_color"
+                                style={{
+                                    backgroundColor: group.color
+                                        ? group.color
+                                        : chayns.env.site.color,
+                                }}
+                            />
+                            {group.name}
+                        </div>
+                    );
+                })}
             </div>
         );
     }

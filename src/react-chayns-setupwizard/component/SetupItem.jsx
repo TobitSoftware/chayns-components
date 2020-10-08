@@ -51,20 +51,26 @@ const SetupItem = ({
             })}
         >
             <div
-                className={classNames('accordion__head', 'no-arrow', 'ellipsis', 'wizardHead', { pointer: !disabled })}
+                className={classNames(
+                    'accordion__head',
+                    'no-arrow',
+                    'ellipsis',
+                    'wizardHead',
+                    { pointer: !disabled }
+                )}
                 onClick={onClick}
             >
                 <div className="accordion__head__icon">
-                    <i className="react-chayns-icon ts-angle-right"/>
+                    <i className="react-chayns-icon ts-angle-right" />
                 </div>
                 <div className="accordion__head__title">
-                    {showStep !== null && `${(typeof showStep === 'number' ? showStep : step) + 1}. `}
+                    {showStep !== null &&
+                        `${
+                            (typeof showStep === 'number' ? showStep : step) + 1
+                        }. `}
                     {title}
                 </div>
-                <SetupItemRight
-                    ready={ready}
-                    right={right}
-                />
+                <SetupItemRight ready={ready} right={right} />
             </div>
             <div className="accordion__body" style={contentStyle}>
                 {children}

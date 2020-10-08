@@ -9,6 +9,6 @@ export default function hexToRgb255(hex) {
         r: parseInt(components[1].substring(0, 2), 16),
         g: parseInt(components[1].substring(2, 4), 16),
         b: parseInt(components[1].substring(4, 6), 16),
-        a: isNumber(a) ? a : 1, /* eslint-disable-line no-restricted-globals */
+        a: isNumber(a) ? a : 1 /* eslint-disable-line no-restricted-globals */,
     };
 }

@@ -9,21 +9,32 @@ const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
     useEffect(() => {
         const item = document.getElementById('animated__content');
         const styles = getComputedStyle(item);
-        const itemMargin = parseInt(styles.marginTop, 10) + parseInt(styles.marginBottom, 10);
+        const itemMargin =
+            parseInt(styles.marginTop, 10) + parseInt(styles.marginBottom, 10);
         const itemHeight = item.offsetHeight + itemMargin;
 
         const [element] = Array.from(childrenRef.current.children);
 
-        const childrenMargin = parseInt(window.getComputedStyle(element).marginTop, 10);
+        const childrenMargin = parseInt(
+            window.getComputedStyle(element).marginTop,
+            10
+        );
         setHeight(itemHeight + childrenMargin);
 
         const timeout = setTimeout(() => {
-            item.parentElement.style.height = `${itemHeight + childrenMargin}px`;
+            item.parentElement.style.height = `${
+                itemHeight + childrenMargin
+            }px`;
             item.parentElement.style.opacity = '1';
 
-            setTimeout(() => {
-                item.parentElement.style.height = 'auto';
-            }, setAutoTime || itemHeight ? ((itemHeight + childrenMargin) / 5) * 200 : 400);
+            setTimeout(
+                () => {
+                    item.parentElement.style.height = 'auto';
+                },
+                setAutoTime || itemHeight
+                    ? ((itemHeight + childrenMargin) / 5) * 200
+                    : 400
+            );
         }, 300);
 
         return () => clearTimeout(timeout);
@@ -32,12 +43,13 @@ const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
     return (
         <div
             className="animation__wrapper"
-            style={{ transition: `height ${animationTime || (height / 40) * 0.2}s, opacity ${animationTime || (height / 40) * 0.3}s ` }}
+            style={{
+                transition: `height ${
+                    animationTime || (height / 40) * 0.2
+                }s, opacity ${animationTime || (height / 40) * 0.3}s `,
+            }}
         >
-            <div
-                ref={childrenRef}
-                id="animated__content"
-            >
+            <div ref={childrenRef} id="animated__content">
                 {children}
             </div>
         </div>
@@ -51,7 +63,7 @@ AnimationWrapper.propTypes = {
 };
 
 AnimationWrapper.defaultProps = {
-    children: <div/>,
+    children: <div />,
     animationTime: 0.2,
     setAutoTime: 400,
 };

@@ -31,9 +31,7 @@ export default class AmountInput extends PureComponent {
     }
 
     onButtonClick = (e) => {
-        const {
-            amount, onAdd, stopPropagation,
-        } = this.props;
+        const { amount, onAdd, stopPropagation } = this.props;
         if (amount <= 0) {
             onAdd();
         }
@@ -96,11 +94,16 @@ export default class AmountInput extends PureComponent {
             stopPropagation,
         } = this.props;
 
-        const renderInput = !disabled && !disableInput && ((autoInput && amount > AUTO_HIDE_INPUT_MAX_AMOUNT) || showInput);
+        const renderInput =
+            !disabled &&
+            !disableInput &&
+            ((autoInput && amount > AUTO_HIDE_INPUT_MAX_AMOUNT) || showInput);
 
         return [
             <Input
-                onClick={stopPropagation ? (event) => event.stopPropagation() : null}
+                onClick={
+                    stopPropagation ? (event) => event.stopPropagation() : null
+                }
                 key="amountInput"
                 type="number"
                 value={tempValue.toString()}
@@ -111,7 +114,10 @@ export default class AmountInput extends PureComponent {
                 onEnter={this.onInputBlur}
                 customProps={{ 'data-cc-equalize-width': equalize }}
                 inputRef={this.setRef}
-                style={{ ...{ width: `${contentWidth || 55}px` }, ...(renderInput ? null : { display: 'none' }) }}
+                style={{
+                    ...{ width: `${contentWidth || 55}px` },
+                    ...(renderInput ? null : { display: 'none' }),
+                }}
             />,
             <div
                 key="amountDiv"
@@ -122,7 +128,10 @@ export default class AmountInput extends PureComponent {
                     disabled,
                 })}
                 data-cc-equalize-width={equalize}
-                style={{ ...(contentWidth ? { width: `${contentWidth}px` } : null), ...(!renderInput ? null : { display: 'none' }) }}
+                style={{
+                    ...(contentWidth ? { width: `${contentWidth}px` } : null),
+                    ...(!renderInput ? null : { display: 'none' }),
+                }}
             >
                 {this.getButtonValue()}
             </div>,

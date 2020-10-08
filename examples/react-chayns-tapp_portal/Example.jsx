@@ -53,14 +53,10 @@ export default class Example extends Component {
                     height: '100px',
                 }}
             >
-                <Button
-                    onClick={this.handleToggleVisibility}
-                >
+                <Button onClick={this.handleToggleVisibility}>
                     Toggle visibility
                 </Button>
-                <Button
-                    onClick={this.handleTogglePositioning}
-                >
+                <Button onClick={this.handleTogglePositioning}>
                     Toggle positioning
                 </Button>
                 <TappPortal>

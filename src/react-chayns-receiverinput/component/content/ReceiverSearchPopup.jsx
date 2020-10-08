@@ -20,15 +20,17 @@ export default class ReceiverSearchPopup extends Component {
             show,
         } = this.props;
 
-        return !isEqual(chosenReceivers, nextProps.chosenReceivers)
-            || !isEqual(foundReceivers, nextProps.foundReceivers)
-            || showIdInPopup !== nextProps.showIdInPopup
-            || !isEqual(position, nextProps.position)
-            || onlyPersons !== nextProps.onlyPersons
-            || isLocation !== nextProps.isLocation
-            || onlySites !== nextProps.onlySites
-            || width !== nextProps.width
-            || show !== nextProps.show;
+        return (
+            !isEqual(chosenReceivers, nextProps.chosenReceivers) ||
+            !isEqual(foundReceivers, nextProps.foundReceivers) ||
+            showIdInPopup !== nextProps.showIdInPopup ||
+            !isEqual(position, nextProps.position) ||
+            onlyPersons !== nextProps.onlyPersons ||
+            isLocation !== nextProps.isLocation ||
+            onlySites !== nextProps.onlySites ||
+            width !== nextProps.width ||
+            show !== nextProps.show
+        );
     }
 
     render() {
@@ -50,52 +52,66 @@ export default class ReceiverSearchPopup extends Component {
         const groupResultState = foundReceivers.groups.state;
         const userResultState = foundReceivers.users.state;
 
-        const tooManyResultsError = <div className="popup-item error-message">Zu viele Ergebnisse gefunden</div>;
-        const noMatchError = <div className="popup-item error-message">Keine passenden Ergebnisse gefunden</div>;
+        const tooManyResultsError = (
+            <div className="popup-item error-message">
+                Zu viele Ergebnisse gefunden
+            </div>
+        );
+        const noMatchError = (
+            <div className="popup-item error-message">
+                Keine passenden Ergebnisse gefunden
+            </div>
+        );
 
         const locations = [];
         const groups = [];
         const users = [];
 
         foundReceivers.locations.values.forEach((l) => {
-            locations.push(<Receiver
-                imgUrl={`https://sub60.tobit.com/l/${l.locationID}?size=30`}
-                name={l.appstoreName !== '' ? l.appstoreName : l.showName}
-                updateReceiverSearchString={updateReceiverSearchString}
-                updateChosenReceivers={updateChosenReceivers}
-                key={`locationId_${l.locationID}`}
-                chosenReceivers={chosenReceivers}
-                showIdInPopup={showIdInPopup}
-                locationId={l.locationID}
-                siteId={l.siteID}
-            />);
+            locations.push(
+                <Receiver
+                    imgUrl={`https://sub60.tobit.com/l/${l.locationID}?size=30`}
+                    name={l.appstoreName !== '' ? l.appstoreName : l.showName}
+                    updateReceiverSearchString={updateReceiverSearchString}
+                    updateChosenReceivers={updateChosenReceivers}
+                    key={`locationId_${l.locationID}`}
+                    chosenReceivers={chosenReceivers}
+                    showIdInPopup={showIdInPopup}
+                    locationId={l.locationID}
+                    siteId={l.siteID}
+                />
+            );
         });
 
         foundReceivers.users.values.forEach((u) => {
-            users.push(<Receiver
-                imgUrl={`https://sub60.tobit.com/u/${u.userId}?size=30`}
-                updateReceiverSearchString={updateReceiverSearchString}
-                updateChosenReceivers={updateChosenReceivers}
-                chosenReceivers={chosenReceivers}
-                showIdInPopup={showIdInPopup}
-                key={`userId_${u.userId}`}
-                personId={u.personId}
-                userId={u.userId}
-                name={u.name}
-            />);
+            users.push(
+                <Receiver
+                    imgUrl={`https://sub60.tobit.com/u/${u.userId}?size=30`}
+                    updateReceiverSearchString={updateReceiverSearchString}
+                    updateChosenReceivers={updateChosenReceivers}
+                    chosenReceivers={chosenReceivers}
+                    showIdInPopup={showIdInPopup}
+                    key={`userId_${u.userId}`}
+                    personId={u.personId}
+                    userId={u.userId}
+                    name={u.name}
+                />
+            );
         });
 
         if (isLocation) {
             foundReceivers.groups.values.forEach((g) => {
-                groups.push(<Receiver
-                    updateReceiverSearchString={updateReceiverSearchString}
-                    updateChosenReceivers={updateChosenReceivers}
-                    chosenReceivers={chosenReceivers}
-                    key={`groupId_${g.groupId}`}
-                    includedUsers={g.userIds}
-                    groupId={g.groupId}
-                    name={g.showName}
-                />);
+                groups.push(
+                    <Receiver
+                        updateReceiverSearchString={updateReceiverSearchString}
+                        updateChosenReceivers={updateChosenReceivers}
+                        chosenReceivers={chosenReceivers}
+                        key={`groupId_${g.groupId}`}
+                        includedUsers={g.userIds}
+                        groupId={g.groupId}
+                        name={g.showName}
+                    />
+                );
             });
         }
 
@@ -115,16 +131,31 @@ export default class ReceiverSearchPopup extends Component {
             }
         }
 
-        const showPopup = show && (locationResultState !== 3 || userResultState !== 3 || (groupResultState !== 3 && isLocation));
+        const showPopup =
+            show &&
+            (locationResultState !== 3 ||
+                userResultState !== 3 ||
+                (groupResultState !== 3 && isLocation));
 
         return (
             <TransitionGroup>
-                <CSSTransition key={showPopup} timeout={300} classNames="swipe-up">
+                <CSSTransition
+                    key={showPopup}
+                    timeout={300}
+                    classNames="swipe-up"
+                >
                     {showPopup ? (
-                        <div className="receiver-popup" style={receiverPopupStyles}>
-                            {onlyPersons ? false : (
+                        <div
+                            className="receiver-popup"
+                            style={receiverPopupStyles}
+                        >
+                            {onlyPersons ? (
+                                false
+                            ) : (
                                 <>
-                                    <div className="group-headline popup-item">Sites</div>
+                                    <div className="group-headline popup-item">
+                                        Sites
+                                    </div>
                                     {locations}
                                     {locationResultState > 0 ? (
                                         locationResultState === 2 ? (
@@ -133,13 +164,17 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </>
                             )}
-                            {onlySites ? false : (
+                            {onlySites ? (
+                                false
+                            ) : (
                                 <>
-                                    <div className="group-headline popup-item">Personen</div>
+                                    <div className="group-headline popup-item">
+                                        Personen
+                                    </div>
                                     {users}
                                     {userResultState > 0 ? (
                                         userResultState === 2 ? (
@@ -148,13 +183,17 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </>
                             )}
-                            {!isLocation ? false : (
+                            {!isLocation ? (
+                                false
+                            ) : (
                                 <>
-                                    <div className="group-headline popup-item">Gruppen</div>
+                                    <div className="group-headline popup-item">
+                                        Gruppen
+                                    </div>
                                     {groups}
                                     {groupResultState > 0 ? (
                                         groupResultState === 2 ? (
@@ -163,13 +202,13 @@ export default class ReceiverSearchPopup extends Component {
                                             noMatchError
                                         )
                                     ) : (
-                                        <div className="popup-item"/>
+                                        <div className="popup-item" />
                                     )}
                                 </>
                             )}
                         </div>
                     ) : (
-                        <div/>
+                        <div />
                     )}
                 </CSSTransition>
             </TransitionGroup>

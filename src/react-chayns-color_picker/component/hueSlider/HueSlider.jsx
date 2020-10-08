@@ -5,13 +5,16 @@ import { hexStringToHsv, hsvToRgbString, rgbToHsv } from '../../../utils/color';
 import { isString } from '../../../utils/is';
 
 const getHsvColor = (color) => {
-    if (isString(color)) { // HEX(A)
+    if (isString(color)) {
+        // HEX(A)
         return hexStringToHsv(color);
     }
-    if (color.r !== undefined) { // RGB(A) (0-255)
+    if (color.r !== undefined) {
+        // RGB(A) (0-255)
         return rgbToHsv(color);
     }
-    if (color.h !== undefined) { // HSV(A)
+    if (color.h !== undefined) {
+        // HSV(A)
         return color;
     }
     return {
@@ -58,14 +61,19 @@ export default class HueSlider extends PureComponent {
                 <Slider
                     innerTrackStyle={{ background: 'transparent' }}
                     /* eslint-disable-next-line max-len */
-                    trackStyle={{ background: 'linear-gradient(90deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)' }}
+                    trackStyle={{
+                        background:
+                            'linear-gradient(90deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)',
+                    }}
                     thumbStyle={{ background: thumbColor }}
                     onChange={this.onChange}
                     onChangeEnd={this.onChangeEnd}
                     min={0}
                     max={360}
                     value={hsv.h}
-                    scaleOnDown={showTooltip === null ? chayns.env.isMobile : showTooltip}
+                    scaleOnDown={
+                        showTooltip === null ? chayns.env.isMobile : showTooltip
+                    }
                 />
             </div>
         );

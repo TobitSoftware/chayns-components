@@ -8,7 +8,8 @@ import { connectSearchContext } from '../SearchContext';
 
 let maxId = 1;
 
-const BASE_GITHUB_URL = 'https://github.com/TobitSoftware/chayns-components/tree/master';
+const BASE_GITHUB_URL =
+    'https://github.com/TobitSoftware/chayns-components/tree/master';
 
 class ExampleContainer extends PureComponent {
     state = {
@@ -23,12 +24,14 @@ class ExampleContainer extends PureComponent {
         const { id } = props;
         this.id = id || maxId++; /* eslint-disable-line no-plusplus */
 
-        this.items = [{
-            className: null,
-            onClick: this.handleExampleClick.bind(this),
-            text: 'Sourcecode (GitHub)',
-            icon: 'fa fa-code',
-        }];
+        this.items = [
+            {
+                className: null,
+                onClick: this.handleExampleClick.bind(this),
+                text: 'Sourcecode (GitHub)',
+                icon: 'fa fa-code',
+            },
+        ];
 
         if (props.readme) {
             this.items.push({
@@ -42,13 +45,12 @@ class ExampleContainer extends PureComponent {
         this.handleClick = this.handleClick.bind(this);
     }
 
-
     static getMultilineText(text) {
         const componentArray = [];
 
         (text || '').split('\n').forEach((i) => {
             componentArray.push(i);
-            componentArray.push(<br/>);
+            componentArray.push(<br />);
         });
 
         return componentArray;
@@ -88,16 +90,16 @@ class ExampleContainer extends PureComponent {
     }
 
     render() {
-        const {
-            headline,
-            children,
-            open,
-            search,
-        } = this.props;
+        const { headline, children, open, search } = this.props;
         const { hasError, error, info } = this.state;
 
         if (!open) {
-            if (search && String(headline).toLowerCase().indexOf(String(search).toLowerCase()) === -1) {
+            if (
+                search &&
+                String(headline)
+                    .toLowerCase()
+                    .indexOf(String(search).toLowerCase()) === -1
+            ) {
                 return null;
             }
 
@@ -105,7 +107,7 @@ class ExampleContainer extends PureComponent {
                 <ListItem
                     title={headline}
                     onClick={this.handleClick}
-                    right={(
+                    right={
                         <ContextMenu
                             childrenStyle={{
                                 display: 'flex',
@@ -117,7 +119,7 @@ class ExampleContainer extends PureComponent {
                             position={1}
                             stopPropagation
                         />
-                    )}
+                    }
                 />
             );
         }
@@ -134,15 +136,19 @@ class ExampleContainer extends PureComponent {
                 >
                     <h1>{headline}</h1>
                     <div style={{ textAlign: 'center', fontSize: '80px' }}>
-                        <Icon icon="fa fa-exclamation-triangle"/>
+                        <Icon icon="fa fa-exclamation-triangle" />
                     </div>
                     <div>
                         <b>{error && error.message}</b>
                         <Accordion head="Stack">
-                            {error && ExampleContainer.getMultilineText(error.stack)}
+                            {error &&
+                                ExampleContainer.getMultilineText(error.stack)}
                         </Accordion>
                         <Accordion head="ComponentStack">
-                            {info && ExampleContainer.getMultilineText(info.componentStack)}
+                            {info &&
+                                ExampleContainer.getMultilineText(
+                                    info.componentStack
+                                )}
                         </Accordion>
                     </div>
                 </div>
@@ -163,10 +169,7 @@ class ExampleContainer extends PureComponent {
                 >
                     {headline}
                 </h1>
-                <ContextMenu
-                    items={this.items}
-                    position={1}
-                />
+                <ContextMenu items={this.items} position={1} />
             </div>,
             children,
         ];
@@ -174,16 +177,10 @@ class ExampleContainer extends PureComponent {
 }
 
 ExampleContainer.propTypes = {
-    id: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-    ]),
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     headline: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
-    open: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-    ]),
+    open: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onOpen: PropTypes.func.isRequired,
     search: PropTypes.string,
     examplePath: PropTypes.string,

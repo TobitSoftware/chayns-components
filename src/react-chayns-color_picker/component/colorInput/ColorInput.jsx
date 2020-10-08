@@ -35,25 +35,31 @@ export default class ColorInput extends Component {
     getInputValue = () => {
         const { color, transparency, colorModel } = this.props;
 
-        if (colorModel) { // rgb(a)
-            return getRgb255String(rgb1ToRgb255(hsvToRgb1(color)), transparency);
+        if (colorModel) {
+            // rgb(a)
+            return getRgb255String(
+                rgb1ToRgb255(hsvToRgb1(color)),
+                transparency
+            );
         }
 
         // hex(a)
-        return getHexString(rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))), transparency);
+        return getHexString(
+            rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))),
+            transparency
+        );
     };
 
-    setColor=() => {
+    setColor = () => {
         this.setState({
             inputValue: this.getInputValue(),
         });
     };
 
     onBlur = (value) => {
-        const {
-            colorModel, onChange,
-        } = this.props;
-        if (colorModel) { // rgb(a)
+        const { colorModel, onChange } = this.props;
+        if (colorModel) {
+            // rgb(a)
             const matches = value.match(RGB_REGEX);
             if (matches) {
                 const rgb = {
@@ -67,7 +73,8 @@ export default class ColorInput extends Component {
                     onChange(hsv);
                 }
             }
-        } else { // hex(a)
+        } else {
+            // hex(a)
             const matches = value.match(HEX_REGEX);
             if (matches) {
                 const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
@@ -83,14 +90,16 @@ export default class ColorInput extends Component {
         const { inputValue } = this.state;
         let placeholder;
         let regex;
-        if (colorModel) { // rgb(a)
+        if (colorModel) {
+            // rgb(a)
             if (transparency) {
                 placeholder = 'rgba(255,255,255,0.5)';
             } else {
                 placeholder = 'rgb(255,255,255)';
             }
             regex = RGB_REGEX;
-        } else { // hex(a)
+        } else {
+            // hex(a)
             if (transparency) {
                 placeholder = '#HEXa';
             } else {

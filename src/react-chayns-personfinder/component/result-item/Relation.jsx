@@ -9,7 +9,9 @@ const getRelations = (data) => {
 
     return data
         .slice(0, SHOW_RELATIONS_COUNT)
-        .map(({ name, type }) => (type === 'LIVING_IN' ? `${getText(type, name)}` : name))
+        .map(({ name, type }) =>
+            type === 'LIVING_IN' ? `${getText(type, name)}` : name
+        )
         .join(', ');
 };
 

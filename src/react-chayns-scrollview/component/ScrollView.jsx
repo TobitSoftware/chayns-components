@@ -33,7 +33,12 @@ export default class ScrollView extends Component {
     }
 
     setContentWidth() {
-        this.setState({ contentWidth: this.content.getBoundingClientRect().width - this.children.getBoundingClientRect().width + 1 });
+        this.setState({
+            contentWidth:
+                this.content.getBoundingClientRect().width -
+                this.children.getBoundingClientRect().width +
+                1,
+        });
     }
 
     handleRefreshScrollView = () => {
@@ -82,8 +87,14 @@ export default class ScrollView extends Component {
                     <div
                         style={{
                             width: `calc( 100% + ${contentWidth}px)`,
-                            maxHeight: (style && style.maxHeight) ? style.maxHeight : undefined,
-                            height: (style && style.height) ? style.height : undefined,
+                            maxHeight:
+                                style && style.maxHeight
+                                    ? style.maxHeight
+                                    : undefined,
+                            height:
+                                style && style.height
+                                    ? style.height
+                                    : undefined,
                             overflowY: 'scroll',
                         }}
                         className="cc__scroll-view__content"
@@ -96,15 +107,25 @@ export default class ScrollView extends Component {
                         onScroll={onScroll}
                         id={scrollElementId}
                     >
-                        <div className="cc__scroll-view__children" ref={(ref) => { this.children = ref; }}>
+                        <div
+                            className="cc__scroll-view__children"
+                            ref={(ref) => {
+                                this.children = ref;
+                            }}
+                        >
                             {children}
-                            <ReactResizeDetector handleHeight onResize={this.handleRefreshScrollView}/>
+                            <ReactResizeDetector
+                                handleHeight
+                                onResize={this.handleRefreshScrollView}
+                            />
                         </div>
                     </div>
                 </div>
                 <div
                     className="cc__scroll-view__scrollbar"
-                    ref={(ref) => { this.bar = ref; }}
+                    ref={(ref) => {
+                        this.bar = ref;
+                    }}
                 />
             </div>
         );

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import SharingBarItem from './SharingBarItem';
-import { getAvailableShareProviders, getDefaultShareLink } from './sharingHelper';
+import {
+    getAvailableShareProviders,
+    getDefaultShareLink,
+} from './sharingHelper';
 import Icon from '../../react-chayns-icon/component/Icon';
 import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
 import share from './sharingActions';
@@ -19,13 +22,14 @@ function SharingBar({
     const [sharingProvider, setSharingProvider] = useState([]);
 
     useEffect(() => {
-        getAvailableShareProviders()
-            .then((provider) => {
-                setSharingProvider(provider.filter((item) => item.available));
-            });
+        getAvailableShareProviders().then((provider) => {
+            setSharingProvider(provider.filter((item) => item.available));
+        });
     }, []);
 
-    const mobileShare = sharingProvider.find((app) => app.id === 10 || app.id === 11);
+    const mobileShare = sharingProvider.find(
+        (app) => app.id === 10 || app.id === 11
+    );
 
     let link = linkProp;
     if (!link) {
@@ -48,12 +52,14 @@ function SharingBar({
 
     const sharingItems = [];
 
-    sharingProvider.filter((item) => item.available)
+    sharingProvider
+        .filter((item) => item.available)
         .forEach((x) => {
             sharingItems.push({
                 className: null,
                 onClick: (e) => {
-                    if (stopPropagation && e && e.stopPropagation) e.stopPropagation();
+                    if (stopPropagation && e && e.stopPropagation)
+                        e.stopPropagation();
                     share(x, link, linkText);
                 },
                 text: x.name,
@@ -67,7 +73,7 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon="fal fa-share-alt" className="sharing-bar__icon"/>
+                <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />
                 <span className="sharing-bar__text">Teilen</span>
             </ContextMenu>
         </div>

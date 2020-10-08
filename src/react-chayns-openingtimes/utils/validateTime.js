@@ -4,5 +4,12 @@ import parseTimeString from './parseTimeString';
 export default function validateTime(time) {
     const { hours, minutes } = parseTimeString(time);
 
-    return (hours !== null) && (minutes !== null) && hours > -1 && hours < 24 && minutes > -1 && minutes < 60;
+    return (
+        hours !== null &&
+        minutes !== null &&
+        hours > -1 &&
+        hours < 24 &&
+        minutes > -1 &&
+        minutes < 60
+    );
 }

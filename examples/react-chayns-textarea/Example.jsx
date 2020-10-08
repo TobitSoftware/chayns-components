@@ -27,12 +27,9 @@ const TextAreaExample = () => {
                 value={value}
                 autogrow={autogrow}
             />
-            <Button
-                onClick={handleAutogrow}
-            >
+            <Button onClick={handleAutogrow}>
                 Toggle Autogrow (current:
-                {` ${autogrow}`}
-                )
+                {` ${autogrow}`})
             </Button>
             <TextArea
                 stopPropagation

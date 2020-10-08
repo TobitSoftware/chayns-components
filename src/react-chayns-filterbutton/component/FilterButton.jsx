@@ -30,7 +30,9 @@ const FilterButton = ({
         return null;
     }
 
-    const captureClick = stopPropagation ? (e) => e.stopPropagation() : undefined;
+    const captureClick = stopPropagation
+        ? (e) => e.stopPropagation()
+        : undefined;
 
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -70,7 +72,11 @@ const FilterButton = ({
                     />
                 ) : null}
                 {/* eslint-disable-next-line no-nested-ternary */}
-                {isValue(label) ? typeof label === 'string' ? `${label} ` : label : null}
+                {isValue(label)
+                    ? typeof label === 'string'
+                        ? `${label} `
+                        : label
+                    : null}
                 {isValue(count) ? <b>{count}</b> : null}
             </span>
         </label>
@@ -78,7 +84,11 @@ const FilterButton = ({
 };
 
 FilterButton.propTypes = {
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.element]),
+    label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+        PropTypes.element,
+    ]),
     count: PropTypes.number,
     onChange: PropTypes.func,
     checked: PropTypes.bool,
@@ -93,7 +103,9 @@ FilterButton.propTypes = {
         }).isRequired,
     ]),
     className: PropTypes.string,
-    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     id: PropTypes.string,
     disabled: PropTypes.bool,
     stopPropagation: PropTypes.bool,

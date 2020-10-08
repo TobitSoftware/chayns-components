@@ -3,7 +3,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';
-import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from '../utils/getImageMetaData';
+import {
+    getImageMetaDataFromApi,
+    getImageMetaDataFromPreview,
+} from '../utils/getImageMetaData';
 import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
 import './Image.scss';
 import { isString } from '../../utils/is';
@@ -42,39 +45,48 @@ export default class Image extends PureComponent {
         });
     };
 
-    init = async () => { // set url and metadata
+    init = async () => {
+        // set url and metadata
         this.getElementDimensions();
 
         const { image, styleLandscape, stylePortrait } = this.props;
 
-        if (isString(image)) { // url
-            if (Image.imageMetaData[image]) { // use cached metadata
+        if (isString(image)) {
+            // url
+            if (Image.imageMetaData[image]) {
+                // use cached metadata
                 this.setState({
                     metaData: Image.imageMetaData[image],
                     imageUrl: image,
                 });
-            } else if (image.indexOf('tsimg.cloud') >= 0) { // get preview and dimensions from tsimg.cloud
+            } else if (image.indexOf('tsimg.cloud') >= 0) {
+                // get preview and dimensions from tsimg.cloud
                 const metaData = await getImageMetaDataFromApi(image);
                 Image.imageMetaData[image] = metaData;
                 this.setState({
                     metaData,
                     imageUrl: image,
                 });
-            } else if (styleLandscape || stylePortrait) { // get dimensions if needed
+            } else if (styleLandscape || stylePortrait) {
+                // get dimensions if needed
                 const metaData = await getImageMetaDataFromPreview(image);
                 Image.imageMetaData[image] = metaData;
                 this.setState({
                     metaData,
                     imageUrl: image,
                 });
-            } else { // set only the image url
+            } else {
+                // set only the image url
                 this.setState({ imageUrl: image });
             }
-        } else { // file
+        } else {
+            // file
             const cacheId = `##FILE##${image.name}${image.lastModified}${image.size}`;
-            if (Image.imageMetaData[cacheId]) { // use cache
+            if (Image.imageMetaData[cacheId]) {
+                // use cache
                 this.setState(Image.imageMetaData[cacheId]);
-            } else { // get dataUrl, metaData and exifData and set cache
+            } else {
+                // get dataUrl, metaData and exifData and set cache
                 const imageUrl = await getDataUrlFromFile(image);
                 const newImage = { imageUrl };
                 const exifData = await getOrientation(image);
@@ -82,8 +94,11 @@ export default class Image extends PureComponent {
                     newImage.mirror = exifData.mirrored;
                     newImage.rotate = exifData.rotation * -1;
                 }
-                if (styleLandscape || stylePortrait) { // get dimensions if needed
-                    newImage.metaData = await getImageMetaDataFromPreview(imageUrl);
+                if (styleLandscape || stylePortrait) {
+                    // get dimensions if needed
+                    newImage.metaData = await getImageMetaDataFromPreview(
+                        imageUrl
+                    );
                 }
                 Image.imageMetaData[cacheId] = newImage;
                 this.setState(newImage);
@@ -119,7 +134,10 @@ export default class Image extends PureComponent {
 
         let format = 0;
         if (metaData) {
-            format = metaData.width > metaData.height ? Image.format.LANDSCAPE : Image.format.PORTRAIT;
+            format =
+                metaData.width > metaData.height
+                    ? Image.format.LANDSCAPE
+                    : Image.format.PORTRAIT;
         }
 
         return (
@@ -135,45 +153,65 @@ export default class Image extends PureComponent {
                 ref={this.imageRef}
                 style={{
                     ...style,
-                    ...(format === Image.format.LANDSCAPE ? styleLandscape : null),
-                    ...(format === Image.format.PORTRAIT ? stylePortrait : null),
+                    ...(format === Image.format.LANDSCAPE
+                        ? styleLandscape
+                        : null),
+                    ...(format === Image.format.PORTRAIT
+                        ? stylePortrait
+                        : null),
                 }}
-                data-more={(moreImages > 0) ? `+${moreImages}` : undefined}
+                data-more={moreImages > 0 ? `+${moreImages}` : undefined}
             >
-                {
-                    imageUrl
-                        ? (
-                            <img
-                                onClick={onClick}
-                                key="image"
-                                alt=""
-                                src={preventParams === true
-                                    ? imageUrl
-                                    : chayns.utils.getScaledImageUrl(imageUrl, !preventParams.height
-                                        && elementDimensions.height, !preventParams.width && elementDimensions.width, preventParams.format)}
-                                className={classNames('cc__image__img', { 'cc__image--clickable': onClick })}
-                                onLoad={this.onReady}
-                                style={{ transform: (mirror ? 'scaleX(-1) ' : '') + (rotate ? `rotateZ(${rotate}deg)` : '') }}
-                            />
-                        )
-                        : null
-                }
-                {
-                    !ready && metaData && metaData.preview
-                        ? [
-                            <img
-                                onClick={onClick}
-                                key="preview"
-                                alt=""
-                                src={getDataUrlFromBase64(metaData.preview)}
-                                className={classNames('cc__image__preview', { 'cc__image--clickable': onClick })}
-                            />,
-                            <div className="cc__image__wait-cursor" key="waitCursor">
-                                <SmallWaitCursor show={!ready} showBackground={false}/>
-                            </div>,
-                        ]
-                        : null
-                }
+                {imageUrl ? (
+                    <img
+                        onClick={onClick}
+                        key="image"
+                        alt=""
+                        src={
+                            preventParams === true
+                                ? imageUrl
+                                : chayns.utils.getScaledImageUrl(
+                                      imageUrl,
+                                      !preventParams.height &&
+                                          elementDimensions.height,
+                                      !preventParams.width &&
+                                          elementDimensions.width,
+                                      preventParams.format
+                                  )
+                        }
+                        className={classNames('cc__image__img', {
+                            'cc__image--clickable': onClick,
+                        })}
+                        onLoad={this.onReady}
+                        style={{
+                            transform:
+                                (mirror ? 'scaleX(-1) ' : '') +
+                                (rotate ? `rotateZ(${rotate}deg)` : ''),
+                        }}
+                    />
+                ) : null}
+                {!ready && metaData && metaData.preview
+                    ? [
+                          <img
+                              onClick={onClick}
+                              key="preview"
+                              alt=""
+                              src={getDataUrlFromBase64(metaData.preview)}
+                              className={classNames('cc__image__preview', {
+                                  'cc__image--clickable': onClick,
+                              })}
+                          />,
+                          <div
+                              className="cc__image__wait-cursor"
+                              key="waitCursor"
+                          >
+                              <SmallWaitCursor
+                                  show={!ready}
+                                  showBackground={false}
+                              />
+                          </div>,
+                      ]
+                    : null}
             </div>
         );
     }
@@ -187,7 +225,8 @@ Image.format = {
 Image.imageMetaData = {};
 
 Image.propTypes = {
-    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string]).isRequired,
+    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string])
+        .isRequired,
     onClick: PropTypes.func,
     moreImages: PropTypes.number,
     className: PropTypes.string,

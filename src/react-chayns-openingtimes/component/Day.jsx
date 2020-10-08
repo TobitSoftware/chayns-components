@@ -22,39 +22,30 @@ class Day extends Component {
     }
 
     onDayActivation(status) {
-        const {
-            onDayActivation,
-            weekday,
-        } = this.props;
+        const { onDayActivation, weekday } = this.props;
 
         onDayActivation(weekday.number, status);
     }
 
     animationendFunction = () => {
-        const {
-            weekday,
-            onRemove,
-        } = this.props;
+        const { weekday, onRemove } = this.props;
         onRemove(weekday.number, 1);
         this.setState({ isRemoving: false });
-        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+        if (this.timeSpanRef)
+            this.timeSpanRef.removeEventListener(
+                'animationend',
+                this.animationendFunction
+            );
     };
 
     onChange = (weekDayNumber, index, start, end) => {
-        const {
-            onChange,
-        } = this.props;
+        const { onChange } = this.props;
 
         onChange(weekDayNumber, index, start, end);
     };
 
     render() {
-        const {
-            weekday,
-            times,
-            onAdd,
-            onRemove,
-        } = this.props;
+        const { weekday, times, onAdd, onRemove } = this.props;
 
         const { isRemoving, animations } = this.state;
 
@@ -83,38 +74,68 @@ class Day extends Component {
                     {timeSpans.map((t, index) => (
                         <div className="flex__middle__wrapper">
                             <TimeSpan
-                                key={index === 0 ? this.timeSpanKey1 : this.timeSpanKey2}
+                                key={
+                                    index === 0
+                                        ? this.timeSpanKey1
+                                        : this.timeSpanKey2
+                                }
                                 startTime={t.start}
                                 endTime={t.end}
                                 disabled={isDisabled}
-                                onChange={(start, end) => this.onChange(weekday.number, index, start, end)}
-                                childrenRef={index === 1 ? (ref) => {
-                                    this.timeSpanRef = ref;
-                                } : null}
+                                onChange={(start, end) =>
+                                    this.onChange(
+                                        weekday.number,
+                                        index,
+                                        start,
+                                        end
+                                    )
+                                }
+                                childrenRef={
+                                    index === 1
+                                        ? (ref) => {
+                                              this.timeSpanRef = ref;
+                                          }
+                                        : null
+                                }
                                 isInvalid={!dateValid}
                             />
-                            {(index === timeSpans.length - 1) ? (
+                            {index === timeSpans.length - 1 ? (
                                 <ChooseButton
                                     className="flex__right"
                                     onClick={() => {
                                         this.setState({ animations: true });
-                                        if (this.timeSpanRef) this.timeSpanRef.removeEventListener('animationend', this.animationendFunction);
+                                        if (this.timeSpanRef)
+                                            this.timeSpanRef.removeEventListener(
+                                                'animationend',
+                                                this.animationendFunction
+                                            );
                                         if (timeSpans.length < 2) {
-                                            onAdd(weekday.number, TimeSpan.defaultStart, TimeSpan.defaultEnd);
+                                            onAdd(
+                                                weekday.number,
+                                                TimeSpan.defaultStart,
+                                                TimeSpan.defaultEnd
+                                            );
                                         } else {
                                             onRemove(weekday.number, 1);
-                                            this.timeSpanRef.addEventListener('animationend', this.animationendFunction);
+                                            this.timeSpanRef.addEventListener(
+                                                'animationend',
+                                                this.animationendFunction
+                                            );
                                             this.setState({ isRemoving: true });
                                         }
                                     }}
                                 >
                                     <Icon
-                                        icon={timeSpans.length < 2 || isRemoving ? 'fa fa-plus' : 'fa fa-times'}
+                                        icon={
+                                            timeSpans.length < 2 || isRemoving
+                                                ? 'fa fa-plus'
+                                                : 'fa fa-times'
+                                        }
                                         style={{ fontSize: 'inherit' }}
                                     />
                                 </ChooseButton>
                             ) : (
-                                <div style={PLACEHOLDER_STYLE}/>
+                                <div style={PLACEHOLDER_STYLE} />
                             )}
                         </div>
                     ))}
@@ -129,10 +150,12 @@ Day.propTypes = {
         name: PropTypes.string.isRequired,
         number: PropTypes.number.isRequired,
     }).isRequired,
-    times: PropTypes.arrayOf(PropTypes.shape({
-        start: PropTypes.string.isRequired,
-        end: PropTypes.string.isRequired,
-    })).isRequired,
+    times: PropTypes.arrayOf(
+        PropTypes.shape({
+            start: PropTypes.string.isRequired,
+            end: PropTypes.string.isRequired,
+        })
+    ).isRequired,
     onDayActivation: PropTypes.func.isRequired,
     onAdd: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,

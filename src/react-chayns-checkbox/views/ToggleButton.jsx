@@ -54,7 +54,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
                 style={modifiedLabelStyle}
                 onClick={stopPropagation ? stopPropagationListener : null}
             />
-            {!dangerouslySetLabel ? (children || label || '') : null}
+            {!dangerouslySetLabel ? children || label || '' : null}
         </div>
     );
 });

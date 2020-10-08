@@ -23,7 +23,10 @@ export default class FormattedInput extends Component {
 
     componentDidUpdate() {
         if (this.selection && this.input) {
-            this.input.setSelectionRange(this.selection.start, this.selection.start);
+            this.input.setSelectionRange(
+                this.selection.start,
+                this.selection.start
+            );
         }
 
         this.selection = null;
@@ -86,11 +89,7 @@ export default class FormattedInput extends Component {
 
     render() {
         const { value } = this.state;
-        const {
-            defaultValue,
-            initialFormatter,
-            ...props
-        } = this.props;
+        const { defaultValue, initialFormatter, ...props } = this.props;
 
         if (!(initialFormatter instanceof Formatter)) {
             return null;
@@ -99,7 +98,9 @@ export default class FormattedInput extends Component {
         return (
             <Input
                 {...props}
-                inputRef={(ref) => { this.input = ref; }}
+                inputRef={(ref) => {
+                    this.input = ref;
+                }}
                 value={value}
                 onChange={this.handleInputChange}
                 onBlur={this.handleChange}
@@ -111,7 +112,8 @@ export default class FormattedInput extends Component {
 FormattedInput.propTypes = {
     initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
     onChange: PropTypes.func,
-    defaultValue: PropTypes.any, /* eslint-disable-line react/forbid-prop-types */
+    defaultValue:
+        PropTypes.any /* eslint-disable-line react/forbid-prop-types */,
 };
 
 FormattedInput.defaultProps = {

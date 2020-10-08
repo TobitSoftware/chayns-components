@@ -50,9 +50,12 @@ const text = {
             dateMW: '##aDAYS##. ##aMONTHw## ##aYEARS##',
             dateMSW: '##aDAYS##. ##aMONTHsw## ##aYEARS##',
             time: '##aHOURS##:##aMINUTES## Uhr',
-            datetime: '##aDAYS##.##aMONTH##.##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
-            datetimeMW: '##aDAYS##. ##aMONTHw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
-            datetimeMSW: '##aDAYS##. ##aMONTHsw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
+            datetime:
+                '##aDAYS##.##aMONTH##.##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
+            datetimeMW:
+                '##aDAYS##. ##aMONTHw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
+            datetimeMSW:
+                '##aDAYS##. ##aMONTHsw## ##aYEARS##, ##aHOURS##:##aMINUTES## Uhr',
             at: 'um',
         },
         INTERVAL: {
@@ -148,9 +151,12 @@ const text = {
             dateMW: '##aDAYS## ##aMONTHw## ##aYEARS##',
             dateMSW: '##aDAYS## ##aMONTHsw## ##aYEARS##',
             time: '##aHOURS##:##aMINUTES##',
-            datetime: '##aDAYS##/##aMONTH##/##aYEARS##, ##aHOURS##:##aMINUTES##',
-            datetimeMW: '##aDAYS## ##aMONTHw## ##aYEARS##, ##aHOURS##:##aMINUTES##',
-            datetimeMSW: '##aDAYS## ##aMONTHsw## ##aYEARS##, ##aHOURS##:##aMINUTES##',
+            datetime:
+                '##aDAYS##/##aMONTH##/##aYEARS##, ##aHOURS##:##aMINUTES##',
+            datetimeMW:
+                '##aDAYS## ##aMONTHw## ##aYEARS##, ##aHOURS##:##aMINUTES##',
+            datetimeMSW:
+                '##aDAYS## ##aMONTHsw## ##aYEARS##, ##aHOURS##:##aMINUTES##',
             at: 'at',
         },
         INTERVAL: {
@@ -246,9 +252,12 @@ const text = {
             dateMW: '##aDAYS## ##aMONTHw## ##aYEARS##',
             dateMSW: '##aDAYS## ##aMONTHsw## ##aYEARS##',
             time: '##aHOURS##.##aMINUTES## uur',
-            datetime: '##aDAYS##-##aMONTH##-##aYEARS##, ##aHOURS##.##aMINUTES## uur',
-            datetimeMW: '##aDAYS## ##aMONTHw## ##aYEARS##, ##aHOURS##.##aMINUTES## uur',
-            datetimeMSW: '##aDAYS## ##aMONTHsw## ##aYEARS##, ##aHOURS##.##aMINUTES## uur',
+            datetime:
+                '##aDAYS##-##aMONTH##-##aYEARS##, ##aHOURS##.##aMINUTES## uur',
+            datetimeMW:
+                '##aDAYS## ##aMONTHw## ##aYEARS##, ##aHOURS##.##aMINUTES## uur',
+            datetimeMSW:
+                '##aDAYS## ##aMONTHsw## ##aYEARS##, ##aHOURS##.##aMINUTES## uur',
             at: 'om',
         },
         INTERVAL: {

@@ -27,22 +27,39 @@ export const reducer = (state = initialState, action) => {
         case 'REQUEST_PERSONS':
             return {
                 ...state,
-                data: action.clear ? { ...state.data, personsRelated: [], personsUnrelated: [] } : state.data,
-                showWaitCursor: { ...state.showWaitCursor, ...action.showWaitCursor },
+                data: action.clear
+                    ? {
+                          ...state.data,
+                          personsRelated: [],
+                          personsUnrelated: [],
+                      }
+                    : state.data,
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    ...action.showWaitCursor,
+                },
                 isLoading: { ...state.isLoading, ...action.isLoading },
             };
         case 'REQUEST_SITES':
             return {
                 ...state,
                 data: action.clear ? { ...state.data, sites: [] } : state.data,
-                showWaitCursor: { ...state.showWaitCursor, sites: action.showWaitCursor },
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    sites: action.showWaitCursor,
+                },
                 isLoading: { ...state.isLoading, sites: true },
             };
         case 'REQUEST_FRIENDS': {
             return {
                 ...state,
-                data: action.clear ? { ...state.data, friends: [] } : state.data,
-                showWaitCursor: { ...state.showWaitCursor, friends: action.showWaitCursor },
+                data: action.clear
+                    ? { ...state.data, friends: [] }
+                    : state.data,
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    friends: action.showWaitCursor,
+                },
                 isLoading: { ...state.isLoading, friends: true },
             };
         }
@@ -51,10 +68,20 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 data: {
                     ...state.data,
-                    personsRelated: [...state.data.personsRelated, ...action.data.personsRelated],
-                    personsUnrelated: [...state.data.personsUnrelated, ...action.data.personsUnrelated],
+                    personsRelated: [
+                        ...state.data.personsRelated,
+                        ...action.data.personsRelated,
+                    ],
+                    personsUnrelated: [
+                        ...state.data.personsUnrelated,
+                        ...action.data.personsUnrelated,
+                    ],
                 },
-                showWaitCursor: { ...state.showWaitCursor, personsRelated: false, personsUnrelated: false },
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    personsRelated: false,
+                    personsUnrelated: false,
+                },
                 isLoading: { ...state.isLoading, ...action.isLoading },
                 hasMore: { ...state.hasMore, ...action.hasMore },
             };
@@ -93,7 +120,9 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 data: {
                     ...state.data,
-                    friends: state.data.friends.filter((friend) => friend.personId !== action.data.personId),
+                    friends: state.data.friends.filter(
+                        (friend) => friend.personId !== action.data.personId
+                    ),
                 },
             };
         default:

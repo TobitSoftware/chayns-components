@@ -3,8 +3,10 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const RELATIONS_SERVER_URL = 'https://relations.chayns.net/relations/';
 const ADMIN_SERVER_URL = 'https://sub50.tobit.com/backend/';
-const SITE_SERVER_URL = 'https://chayns2.tobit.com/SiteSearchApi/location/search/';
-const FRIENDS_SERVER_URL = 'https://webapi.tobit.com/AccountService/v1.0/chayns/friends';
+const SITE_SERVER_URL =
+    'https://chayns2.tobit.com/SiteSearchApi/location/search/';
+const FRIENDS_SERVER_URL =
+    'https://webapi.tobit.com/AccountService/v1.0/chayns/friends';
 
 const requestTracker = {};
 
@@ -34,7 +36,10 @@ export const fetchFriends = async () => {
     if (response.ok) {
         result = response.status !== 204 ? await response.json() : [];
     } else {
-        console.error('[chayns components] Personfinder: failed to fetch friends', response.status);
+        console.error(
+            '[chayns components] Personfinder: failed to fetch friends',
+            response.status
+        );
     }
     return result;
 };
@@ -71,7 +76,10 @@ export const fetchPersons = async (value, skip, take) => {
     if (response.ok) {
         result = response.status !== 204 ? await response.json() : [];
     } else {
-        console.error('[chayns components] Personfinder: failed to fetch persons', response.status);
+        console.error(
+            '[chayns components] Personfinder: failed to fetch persons',
+            response.status
+        );
     }
 
     return result;
@@ -85,7 +93,9 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
     }
     let result = [];
     const response = await fetchHelper('uacPersons', {
-        url: `${ADMIN_SERVER_URL}${locationId || chayns.env.site.locationId}/usergroup/${uacId}/users?filter=${value}`,
+        url: `${ADMIN_SERVER_URL}${
+            locationId || chayns.env.site.locationId
+        }/usergroup/${uacId}/users?filter=${value}`,
         config: {
             method: 'GET',
             headers: {
@@ -98,7 +108,10 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
     if (response.ok) {
         result = response.status !== 204 ? await response.json() : [];
     } else {
-        console.error('[chayns components] Personfinder: failed to fetch persons', response.status);
+        console.error(
+            '[chayns components] Personfinder: failed to fetch persons',
+            response.status
+        );
     }
 
     return result;
@@ -119,7 +132,10 @@ export const fetchSites = async (value, skip, take) => {
     if (response.ok) {
         result = response.status !== 204 ? await response.json() : [];
     } else {
-        console.error('[chayns components] Personfinder: failed to fetch sites', response.status);
+        console.error(
+            '[chayns components] Personfinder: failed to fetch sites',
+            response.status
+        );
     }
 
     return result;

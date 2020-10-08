@@ -54,7 +54,8 @@ const SliderButton = (props) => {
             // Element.animate() does not work on iOS, so we need transition
             setLastSelectedIndex(index);
             setMarkerPosX(newMarkerPosX);
-            marker.style.transition = 'left 0.2s cubic-bezier(0.42, 0, 0.29, 1.36)';
+            marker.style.transition =
+                'left 0.2s cubic-bezier(0.42, 0, 0.29, 1.36)';
         }
     };
 
@@ -89,7 +90,10 @@ const SliderButton = (props) => {
 
     const handleMovement = (posX) => {
         if (dragStartPosX) {
-            const maxMarkerPosX = sliderButton && firstItem ? sliderButton.clientWidth - firstItem.clientWidth : 0;
+            const maxMarkerPosX =
+                sliderButton && firstItem
+                    ? sliderButton.clientWidth - firstItem.clientWidth
+                    : 0;
             let newMarkerPosX = dragStartMarkerPosX + posX - dragStartPosX;
 
             if (newMarkerPosX < 0) {
@@ -145,7 +149,9 @@ const SliderButton = (props) => {
         listener.forEach((lst) => window.addEventListener(lst.type, lst.cb));
 
         return () => {
-            listener.forEach((lst) => window.removeEventListener(lst.type, lst.cb));
+            listener.forEach((lst) =>
+                window.removeEventListener(lst.type, lst.cb)
+            );
         };
     });
 
@@ -156,37 +162,34 @@ const SliderButton = (props) => {
             className={classNames(
                 'sliderButton',
                 { [className]: className },
-                { 'sliderButton--disabled': disabled },
+                { 'sliderButton--disabled': disabled }
             )}
             style={style}
             ref={sliderButtonRef}
         >
-            {
-                items.map((item, i) => (
-                    <div
-                        key={item.id}
-                        className="sliderButton__item button button--disabled" // disabled to remove hover animation
-                        ref={(ref) => {
-                            if (i === 0) {
-                                firstItemRef.current = ref;
-                            }
-                        }}
-                        onClick={() => {
-                            if (!disabled) {
-                                setMarkerIndex(i);
-                                handleChange(i);
-                            }
-                        }}
-                    >
-                        <div className="sliderButton__item__content">{item.text}</div>
+            {items.map((item, i) => (
+                <div
+                    key={item.id}
+                    className="sliderButton__item button button--disabled" // disabled to remove hover animation
+                    ref={(ref) => {
+                        if (i === 0) {
+                            firstItemRef.current = ref;
+                        }
+                    }}
+                    onClick={() => {
+                        if (!disabled) {
+                            setMarkerIndex(i);
+                            handleChange(i);
+                        }
+                    }}
+                >
+                    <div className="sliderButton__item__content">
+                        {item.text}
                     </div>
-                ))
-            }
+                </div>
+            ))}
             <div
-                className={classNames(
-                    'sliderButton__item__marker',
-                    'button',
-                )}
+                className={classNames('sliderButton__item__marker', 'button')}
                 style={{
                     left: `${markerPosX}px`,
                 }}
@@ -198,7 +201,9 @@ const SliderButton = (props) => {
                 onTouchStart={(ev) => startDrag(ev.touches[0].clientX)}
                 ref={markerRef}
             >
-                <div className="sliderButton__item__content">{items[hoveredItemIndex].text}</div>
+                <div className="sliderButton__item__content">
+                    {items[hoveredItemIndex].text}
+                </div>
             </div>
         </div>
     );
@@ -207,10 +212,12 @@ const SliderButton = (props) => {
 SliderButton.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
-    items: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.any,
-        text: PropTypes.string,
-    })),
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.any,
+            text: PropTypes.string,
+        })
+    ),
     onChange: PropTypes.func,
     onDragStop: PropTypes.func,
     onDragStart: PropTypes.func,

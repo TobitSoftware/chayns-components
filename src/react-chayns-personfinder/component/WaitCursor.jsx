@@ -11,11 +11,7 @@ const WaitCursor = ({ style }) => (
             ...style,
         }}
     >
-        <SmallWaitCursor
-            showBackground={false}
-            show
-            inline
-        />
+        <SmallWaitCursor showBackground={false} show inline />
     </div>
 );
 

@@ -90,8 +90,14 @@ import PositionInput from './react-chayns-position_input/component/PositionInput
 import resolveAbsoluteImport from './utils/babel/resolveAbsoluteImport';
 import OrientationHelper from './utils/OrientationHelper';
 import imageUpload from './utils/imageUpload';
-import { getDataUrlFromFile, getDataUrlFromBase64 } from './react-chayns-gallery/utils/getDataUrl';
-import { getImageMetaDataFromApi, getImageMetaDataFromPreview } from './react-chayns-gallery/utils/getImageMetaData';
+import {
+    getDataUrlFromFile,
+    getDataUrlFromBase64,
+} from './react-chayns-gallery/utils/getDataUrl';
+import {
+    getImageMetaDataFromApi,
+    getImageMetaDataFromPreview,
+} from './react-chayns-gallery/utils/getImageMetaData';
 import getOrientation from './react-chayns-gallery/utils/getOrientation';
 import isTobitEmployee from './utils/tobitEmployee';
 import createLinks from './utils/createLinks';

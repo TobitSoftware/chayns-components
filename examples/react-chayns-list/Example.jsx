@@ -19,17 +19,20 @@ export default class ListExample extends Component {
     render() {
         const { open1, open2 } = this.state;
 
-        const contextMenuItems = [{
-            icon: 'ts-plus',
-            onClick: () => chayns.dialog.alert('Create'),
-            text: 'Create',
-            name: 'Create',
-        }, {
-            icon: 'ts-trash',
-            onClick: () => chayns.dialog.alert('Delete'),
-            text: 'Delete',
-            name: 'Delete',
-        }];
+        const contextMenuItems = [
+            {
+                icon: 'ts-plus',
+                onClick: () => chayns.dialog.alert('Create'),
+                text: 'Create',
+                name: 'Create',
+            },
+            {
+                icon: 'ts-trash',
+                onClick: () => chayns.dialog.alert('Delete'),
+                text: 'Delete',
+                name: 'Delete',
+            },
+        ];
 
         const onLongPress = () => {
             chayns.vibrate(50);
@@ -49,14 +52,22 @@ export default class ListExample extends Component {
                     <ListItem
                         title="ListItem (clickable)"
                         subtitle="Description"
-                        onClick={() => chayns.dialog.alert('"ListItem (clickable)" clicked')}
+                        onClick={() =>
+                            chayns.dialog.alert(
+                                '"ListItem (clickable)" clicked'
+                            )
+                        }
                         notExpandable
                     />
                     <ListItem
                         title="ListItem (with image, clickable)"
                         subtitle="Description"
                         image="https://chayns.tobit.com/storage/60038-22141/Images/icon-72.png"
-                        onClick={() => chayns.dialog.alert('"ListItem (with image, clickable)" clicked')}
+                        onClick={() =>
+                            chayns.dialog.alert(
+                                '"ListItem (with image, clickable)" clicked'
+                            )
+                        }
                         notExpandable
                     />
                     <ListItem
@@ -64,7 +75,11 @@ export default class ListExample extends Component {
                         subtitle={<i>italic subtitle</i>}
                         notExpandable
                     />
-                    <Tooltip content={{ text: 'Tooltip' }} position={Tooltip.position.TOP_CENTER} ref={this.tooltipRef}>
+                    <Tooltip
+                        content={{ text: 'Tooltip' }}
+                        position={Tooltip.position.TOP_CENTER}
+                        ref={this.tooltipRef}
+                    >
                         <ListItem
                             title="ListItem (accordion-style, with image, without indicator)"
                             subtitle="Description"
@@ -117,10 +132,16 @@ export default class ListExample extends Component {
                         subtitle="Description"
                         style={{
                             head: {
-                                backgroundColor: chayns.utils.colors.get(100, '#49516a'),
+                                backgroundColor: chayns.utils.colors.get(
+                                    100,
+                                    '#49516a'
+                                ),
                             },
                             body: {
-                                backgroundColor: chayns.utils.colors.get(70, '#5b6c7f'),
+                                backgroundColor: chayns.utils.colors.get(
+                                    70,
+                                    '#5b6c7f'
+                                ),
                             },
                         }}
                     >
@@ -155,7 +176,7 @@ export default class ListExample extends Component {
                         }}
                         // image="https://chayns.tobit.com/storage/59143-10991/Images/icon-72.png"
                         icon="fa fa-rocket"
-                        right={(
+                        right={
                             <div
                                 style={{
                                     height: '100%',
@@ -164,11 +185,9 @@ export default class ListExample extends Component {
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <ContextMenu
-                                    items={contextMenuItems}
-                                />
+                                <ContextMenu items={contextMenuItems} />
                             </div>
-                        )}
+                        }
                     >
                         {`
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
@@ -187,7 +206,7 @@ export default class ListExample extends Component {
                         title="ListItem (button controlled)"
                         subtitle="Description"
                         image="http://broken url.png"
-                        right={(
+                        right={
                             <div
                                 style={{
                                     height: '100%',
@@ -197,18 +216,23 @@ export default class ListExample extends Component {
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <ContextMenu
-                                    items={[{
-                                        icon: 'ts-plus',
-                                        onClick: () => chayns.dialog.alert('Create'),
-                                        text: 'Create',
-                                    }, {
-                                        icon: 'ts-trash',
-                                        onClick: () => chayns.dialog.alert('Delete'),
-                                        text: 'Delete',
-                                    }]}
+                                    items={[
+                                        {
+                                            icon: 'ts-plus',
+                                            onClick: () =>
+                                                chayns.dialog.alert('Create'),
+                                            text: 'Create',
+                                        },
+                                        {
+                                            icon: 'ts-trash',
+                                            onClick: () =>
+                                                chayns.dialog.alert('Delete'),
+                                            text: 'Delete',
+                                        },
+                                    ]}
                                 />
                             </div>
-                        )}
+                        }
                     >
                         {`
                             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
@@ -233,8 +257,15 @@ export default class ListExample extends Component {
                         subtitle="Leo Benz"
                         image="https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg"
                         circle
-                        right={['09:04', <Icon key="icon" icon="fa fa-paperclip"/>]}
-                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        right={[
+                            '09:04',
+                            <Icon key="icon" icon="fa fa-paperclip" />,
+                        ]}
+                        hoverItem={
+                            chayns.env.isMobile ? null : (
+                                <ContextMenu items={contextMenuItems} />
+                            )
+                        }
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
@@ -243,37 +274,59 @@ export default class ListExample extends Component {
                         image="https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg"
                         circle
                         right={['09:02', <Badge key="badge">5</Badge>]}
-                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        hoverItem={
+                            chayns.env.isMobile ? null : (
+                                <ContextMenu items={contextMenuItems} />
+                            )
+                        }
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Meeting Tuesday"
                         subtitle="Fatima Chalis"
-                        images={['https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
+                        images={[
+                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg',
+                        ]}
                         circle
                         right={['08:41']}
-                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        hoverItem={
+                            chayns.env.isMobile ? null : (
+                                <ContextMenu items={contextMenuItems} />
+                            )
+                        }
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Development Team"
                         subtitle="Rosie: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore"
-                        images={['https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg',
+                        images={[
+                            'https://tsimg.space/v1/images/e9da66fe-8b5b-e911-80d7-0025905a8161.jpg',
                             'https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
-                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
+                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg',
+                        ]}
                         circle
                         right={['08:01']}
-                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        hoverItem={
+                            chayns.env.isMobile ? null : (
+                                <ContextMenu items={contextMenuItems} />
+                            )
+                        }
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                     <ListItem
                         title="Design Team"
                         subtitle="Fatima: Hello! Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt"
-                        images={['https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
-                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg']}
+                        images={[
+                            'https://tsimg.space/v1/images/81fb0afc-8c5b-e911-80d7-0025905a8161.jpg',
+                            'https://tsimg.space/v1/images/dbb54058-8c5b-e911-80d7-0025905a8161.jpg',
+                        ]}
                         circle
                         right={['07:59', <Badge key="badge">2</Badge>]}
-                        hoverItem={chayns.env.isMobile ? null : <ContextMenu items={contextMenuItems}/>}
+                        hoverItem={
+                            chayns.env.isMobile ? null : (
+                                <ContextMenu items={contextMenuItems} />
+                            )
+                        }
                         onLongPress={chayns.env.isMobile ? onLongPress : null}
                     />
                 </List>

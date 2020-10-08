@@ -26,13 +26,16 @@ import {
 import { isString } from '../../utils/is';
 
 const getHsvColor = (color) => {
-    if (isString(color)) { // HEX(A)
+    if (isString(color)) {
+        // HEX(A)
         return hexStringToHsv(color);
     }
-    if (color.r !== undefined) { // RGB(A) (0-255)
+    if (color.r !== undefined) {
+        // RGB(A) (0-255)
         return rgbToHsv(color);
     }
-    if (color.h !== undefined) { // HSV(A)
+    if (color.h !== undefined) {
+        // HSV(A)
         return color;
     }
     return {
@@ -56,45 +59,64 @@ const ColorPicker = forwardRef((props, reference) => {
         x: 0,
         y: 0,
     });
-    const [colorModel, setColorModel] = useState(props.defaultColorModel
-        || (props.transparency
-            ? ColorPicker.colorModels.RGB
-            : ColorPicker.colorModels.HEX
-        ));
+    const [colorModel, setColorModel] = useState(
+        props.defaultColorModel ||
+            (props.transparency
+                ? ColorPicker.colorModels.RGB
+                : ColorPicker.colorModels.HEX)
+    );
 
     // effects (lifecycle methods)
     useEffect(() => {
         setColor(getHsvColor(props.color));
     }, [props.color]);
 
-    const closeBubble = useCallback(async (event) => {
-        const rect = bubbleContentRef.current.getBoundingClientRect();
-        const yOffset = chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0;
+    const closeBubble = useCallback(
+        async (event) => {
+            const rect = bubbleContentRef.current.getBoundingClientRect();
+            const yOffset = chayns.env.isApp
+                ? (await chayns.getWindowMetrics()).pageYOffset
+                : 0;
 
-        // Hide bubble and remove event listeners if click was outside of the bubble
-        if (event.pageX < rect.left || event.pageX > rect.right || event.pageY < rect.top + yOffset || event.pageY > rect.bottom + yOffset) {
-            document.removeEventListener('click', closeBubble);
-            window.removeEventListener('blur', closeBubble);
-            bubbleRef.current.hide();
-            if (props.onBlur) {
-                props.onBlur(color);
+            // Hide bubble and remove event listeners if click was outside of the bubble
+            if (
+                event.pageX < rect.left ||
+                event.pageX > rect.right ||
+                event.pageY < rect.top + yOffset ||
+                event.pageY > rect.bottom + yOffset
+            ) {
+                document.removeEventListener('click', closeBubble);
+                window.removeEventListener('blur', closeBubble);
+                bubbleRef.current.hide();
+                if (props.onBlur) {
+                    props.onBlur(color);
+                }
+                if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
+                    chayns.allowRefreshScroll();
+                }
             }
-            if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
-                chayns.allowRefreshScroll();
-            }
-        }
-    }, [bubbleContentRef, bubbleRef]);
+        },
+        [bubbleContentRef, bubbleRef]
+    );
 
     const openBubble = useCallback(async () => {
         if (props.inline) return;
         const ref = props.children ? childrenRef : linkRef;
         const rect = ref.current.getBoundingClientRect();
 
-        let newX = rect.left + (rect.width / 2);
-        let newY = rect.bottom + (chayns.env.isApp ? (await chayns.getWindowMetrics()).pageYOffset : 0);
+        let newX = rect.left + rect.width / 2;
+        let newY =
+            rect.bottom +
+            (chayns.env.isApp
+                ? (await chayns.getWindowMetrics()).pageYOffset
+                : 0);
 
         if (props.removeParentSpace) {
-            const parentRect = (props.parent || document.getElementsByClassName('tapp')[0] || document.body).getBoundingClientRect();
+            const parentRect = (
+                props.parent ||
+                document.getElementsByClassName('tapp')[0] ||
+                document.body
+            ).getBoundingClientRect();
             newX -= parentRect.left;
             newY -= parentRect.top;
         }
@@ -113,15 +135,20 @@ const ColorPicker = forwardRef((props, reference) => {
         }
     }, [props.children, childrenRef, linkRef, setCoordinates, bubbleRef]);
 
-    const onChange = useCallback((newColor) => {
-        setColor(newColor);
-        if (props.onChange) {
-            props.onChange(newColor);
-        }
-    }, [setColor, props.onChange]);
+    const onChange = useCallback(
+        (newColor) => {
+            setColor(newColor);
+            if (props.onChange) {
+                props.onChange(newColor);
+            }
+        },
+        [setColor, props.onChange]
+    );
 
     const onColorModelToggle = useCallback(() => {
-        setColorModel((colorModel + 1) % Object.keys(ColorPicker.colorModels).length);
+        setColorModel(
+            (colorModel + 1) % Object.keys(ColorPicker.colorModels).length
+        );
     }, [setColorModel, colorModel]);
 
     const rgb255 = hsvToRgb(color);
@@ -139,7 +166,10 @@ const ColorPicker = forwardRef((props, reference) => {
                 key="div"
                 ref={childrenRef}
             >
-                <div ref={bubbleContentRef} className="cc__color-picker__bubble-content">
+                <div
+                    ref={bubbleContentRef}
+                    className="cc__color-picker__bubble-content"
+                >
                     <ColorArea
                         color={color}
                         onChange={onChange}
@@ -183,27 +213,22 @@ const ColorPicker = forwardRef((props, reference) => {
             key="div"
             ref={childrenRef}
         >
-            {
-                props.children
-                || [
-                    <div
-                        key="circle"
-                        className="cc__color-picker__color-circle"
-                        style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
-                    />,
-                    <div
-                        key="link"
-                        className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
-                        ref={linkRef}
-                    >
-                        {
-                            colorModel === ColorPicker.colorModels.RGB
-                                ? rgbToRgbString(rgb255, props.transparency)
-                                : rgbToHexString(rgb255, props.transparency)
-                        }
-                    </div>,
-                ]
-            }
+            {props.children || [
+                <div
+                    key="circle"
+                    className="cc__color-picker__color-circle"
+                    style={{ backgroundColor: rgbToRgbString(rgb255, true) }}
+                />,
+                <div
+                    key="link"
+                    className="cc__color-picker__color-link chayns__color--headline chayns__border-color--headline"
+                    ref={linkRef}
+                >
+                    {colorModel === ColorPicker.colorModels.RGB
+                        ? rgbToRgbString(rgb255, props.transparency)
+                        : rgbToHexString(rgb255, props.transparency)}
+                </div>,
+            ]}
         </div>,
         <Bubble
             ref={bubbleRef}
@@ -214,7 +239,10 @@ const ColorPicker = forwardRef((props, reference) => {
             style={props.bubbleStyle}
             key="bubble"
         >
-            <div ref={bubbleContentRef} className="cc__color-picker__bubble-content">
+            <div
+                ref={bubbleContentRef}
+                className="cc__color-picker__bubble-content"
+            >
                 <ColorArea
                     color={color}
                     onChange={onChange}
@@ -272,8 +300,10 @@ ColorPicker.propTypes = {
     onChangeEnd: PropTypes.func,
     onBlur: PropTypes.func,
     transparency: PropTypes.bool,
-    parent: typeof Element !== 'undefined' ? PropTypes.instanceOf(Element) : () => {
-    },
+    parent:
+        typeof Element !== 'undefined'
+            ? PropTypes.instanceOf(Element)
+            : () => {},
     className: PropTypes.string,
     style: PropTypes.object,
     bubbleClassName: PropTypes.string,

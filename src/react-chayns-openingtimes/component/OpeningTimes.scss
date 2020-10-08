@@ -2,255 +2,260 @@ $animationDurationDesktop: 300ms;
 $animationDurationMobile: 300ms;
 
 .cc__opening_times {
-  .flex {
-    flex-flow: row wrap;
-    display: flex;
+    .flex {
+        flex-flow: row wrap;
+        display: flex;
 
-    .flex__left {
-      flex: 1;
-      padding: 3px 0 0;
+        .flex__left {
+            flex: 1;
+            padding: 3px 0 0;
+        }
+
+        .flex__middle {
+            text-align: right;
+            display: flex;
+
+            .inline__block {
+                display: inline-block;
+            }
+        }
     }
 
-    .flex__middle {
-      text-align: right;
-      display: flex;
+    .time__span {
+        margin-left: 30px;
+        width: 140px;
+        max-height: 29px;
+        display: flex;
+        transition-duration: 1500ms;
 
-      .inline__block {
-        display: inline-block;
-      }
-    }
-  }
+        &:nth-of-type(2):before {
+            content: '&';
+            position: absolute;
+            transform: translate(-20px, 1px);
+        }
 
-  .time__span {
-    margin-left: 30px;
-    width: 140px;
-    max-height: 29px;
-    display: flex;
-    transition-duration: 1500ms;
+        span {
+            width: 30px;
+            text-align: center;
+        }
 
-    &:nth-of-type(2):before {
-      content: "&";
-      position: absolute;
-      transform: translate(-20px, 1px);
-    }
+        &--input {
+            float: right;
+            width: 100px;
+            text-align: center;
 
-    span {
-      width: 30px;
-      text-align: center;
-    }
+            input {
+                text-align: center;
+                width: 100%;
+            }
+        }
 
-    &--input {
-      float: right;
-      width: 100px;
-      text-align: center;
-
-      input {
-        text-align: center;
-        width: 100%;
-      }
+        &--button {
+            min-width: 25px;
+        }
     }
 
-    &--button {
-      min-width: 25px;
-    }
-  }
+    .times {
+        margin: 5px 0;
 
-  .times {
-    margin: 5px 0;
+        &--disabled {
+            .flex__middle,
+            .flex__right {
+                opacity: 0.2;
+                pointer-events: none;
+            }
+        }
 
-    &--disabled {
-      .flex__middle, .flex__right {
-        opacity: .2;
-        pointer-events: none;
-      }
-    }
+        transition: all 0.2s;
 
-    transition: all .2s;
+        .flex__middle {
+            span {
+                float: right;
+                width: 30px;
+                text-align: center;
+            }
+        }
 
-    .flex__middle {
-      span {
-        float: right;
-        width: 30px;
-        text-align: center;
-      }
-    }
-
-    .flex__right {
-      width: 20px;
-      height: 20px;
-      padding: 1.5px 0 0 1px;
-      font-size: 11px;
-      margin: 4px 0 4px 3px;
-      align-self: flex-end
-    }
-  }
-
-  .openingTimesIcon {
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-
-    &.add {
-      transform: rotate(0deg);
+        .flex__right {
+            width: 20px;
+            height: 20px;
+            padding: 1.5px 0 0 1px;
+            font-size: 11px;
+            margin: 4px 0 4px 3px;
+            align-self: flex-end;
+        }
     }
 
-    &.remove {
-      transform: rotate(45deg);
-    }
-  }
+    .openingTimesIcon {
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
 
-  .choosebutton {
-    min-height: 1px;
-  }
+        &.add {
+            transform: rotate(0deg);
+        }
+
+        &.remove {
+            transform: rotate(45deg);
+        }
+    }
+
+    .choosebutton {
+        min-height: 1px;
+    }
 }
 
 @mixin mobile {
-  .flex__middle {
-    flex-direction: column;
-  }
-
-  .time__span:nth-of-type(2):before {
-    content: "";
-  }
-
-  .times {
-    &.multiple {
-      .flex__middle {
-        .time__span {
-          &:nth-child(2) {
-            animation: fadeInHeight $animationDurationMobile;
-          }
-        }
-      }
+    .flex__middle {
+        flex-direction: column;
     }
 
-    &.isRemoving {
-      .flex__middle {
-        .time__span {
-          &:nth-child(2) {
-            animation: fadeOutHeight $animationDurationMobile;
-          }
-        }
-      }
+    .time__span:nth-of-type(2):before {
+        content: '';
     }
-  }
+
+    .times {
+        &.multiple {
+            .flex__middle {
+                .time__span {
+                    &:nth-child(2) {
+                        animation: fadeInHeight $animationDurationMobile;
+                    }
+                }
+            }
+        }
+
+        &.isRemoving {
+            .flex__middle {
+                .time__span {
+                    &:nth-child(2) {
+                        animation: fadeOutHeight $animationDurationMobile;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @mixin desktopAnimation {
-  .cc__opening_times {
-    .times {
-      &.multiple--animations {
-        .flex__middle {
-          .time__span {
-            &:first-child {
-              animation: slideFromRight $animationDurationMobile;
+    .cc__opening_times {
+        .times {
+            &.multiple--animations {
+                .flex__middle {
+                    .time__span {
+                        &:first-child {
+                            animation: slideFromRight $animationDurationMobile;
+                        }
+
+                        &:nth-child(2) {
+                            animation: fadeInOpacity $animationDurationMobile;
+
+                            &:before {
+                                // IE and Edge compatibility
+                                animation: fadeInOpacity
+                                    $animationDurationMobile;
+                            }
+                        }
+                    }
+                }
             }
 
-            &:nth-child(2) {
-              animation: fadeInOpacity $animationDurationMobile;
+            &.isRemoving {
+                .flex__middle {
+                    .time__span {
+                        &:first-child {
+                            animation: slideToRight $animationDurationMobile;
+                        }
 
-              &:before { // IE and Edge compatibility
-                animation: fadeInOpacity $animationDurationMobile;
-              }
+                        &:nth-child(2) {
+                            animation: fadeOutOpacity $animationDurationMobile;
+
+                            &:before {
+                                // IE and Edge compatibility
+                                animation: fadeOutOpacity
+                                    $animationDurationMobile;
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-
-      &.isRemoving {
-        .flex__middle {
-          .time__span {
-            &:first-child {
-              animation: slideToRight $animationDurationMobile;
-            }
-
-            &:nth-child(2) {
-              animation: fadeOutOpacity $animationDurationMobile;
-
-              &:before { // IE and Edge compatibility
-                animation: fadeOutOpacity $animationDurationMobile;
-              }
-            }
-          }
-        }
-      }
     }
-  }
 }
 
 @media screen and (min-width: 491px) {
-  .chayns--desktop {
-    @include desktopAnimation;
-  }
+    .chayns--desktop {
+        @include desktopAnimation;
+    }
 }
-
 
 @media screen and(max-width: 490px) {
-  .cc__opening_times {
-    @include mobile;
-  }
+    .cc__opening_times {
+        @include mobile;
+    }
 }
 
-.chayns--mobile .cc__opening_times, .cc__opening_times.cc__opening_times--force-mobile {
-  @include mobile;
+.chayns--mobile .cc__opening_times,
+.cc__opening_times.cc__opening_times--force-mobile {
+    @include mobile;
 }
 
 @keyframes slideFromRight {
-  from {
-    transform: translateX(140px);
-  }
-  to {
-    transform: translateX(0);
-  }
+    from {
+        transform: translateX(140px);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
 @keyframes slideToRight {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(170px);
-  }
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(170px);
+    }
 }
 
 @keyframes fadeInOpacity {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOutOpacity {
-  0% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
+    0% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
 @keyframes fadeInHeight {
-  from {
-    height: 0;
-    overflow: hidden;
-  }
-  to {
-    height: 29px;
-    overflow: hidden;
-  }
+    from {
+        height: 0;
+        overflow: hidden;
+    }
+    to {
+        height: 29px;
+        overflow: hidden;
+    }
 }
 
 @keyframes fadeOutHeight {
-  from {
-    max-height: 29px;
-    overflow: hidden;
-  }
-  to {
-    max-height: 0;
-    overflow: hidden;
-  }
+    from {
+        max-height: 29px;
+        overflow: hidden;
+    }
+    to {
+        max-height: 0;
+        overflow: hidden;
+    }
 }

@@ -2,7 +2,10 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Input from '../../react-chayns-input/component/Input';
 
-import { getTimeStringMinutes, getTimeStringFromMinutes } from '../../utils/dateTimeHelper';
+import {
+    getTimeStringMinutes,
+    getTimeStringFromMinutes,
+} from '../../utils/dateTimeHelper';
 import { checkTimeSpan } from '../utils/checkTimeSpan';
 import { validateTimeSpan } from '../utils/validateTimeSpan';
 
@@ -61,105 +64,141 @@ function generateTimePart(digits, type) {
     return '00';
 }
 
-const TimeSpan = React.memo(({ startTime, endTime, onChange, childrenRef, isInvalid, disabled }) => {
-    const [time, setTime] = useState({
-        startTime,
-        endTime,
-    });
+const TimeSpan = React.memo(
+    ({ startTime, endTime, onChange, childrenRef, isInvalid, disabled }) => {
+        const [time, setTime] = useState({
+            startTime,
+            endTime,
+        });
 
-    const handleChange = useCallback((inputField) => (value) => setTime((currentState) => {
-        let newState = currentState;
-        // Apply input value only if chars are valid
-        if (checkInputChars(value)) {
-            newState = { ...currentState };
+        const handleChange = useCallback(
+            (inputField) => (value) =>
+                setTime((currentState) => {
+                    let newState = currentState;
+                    // Apply input value only if chars are valid
+                    if (checkInputChars(value)) {
+                        newState = { ...currentState };
 
-            if (inputField === 'start') {
-                newState.startTime = value;
-            } else {
-                newState.endTime = value;
+                        if (inputField === 'start') {
+                            newState.startTime = value;
+                        } else {
+                            newState.endTime = value;
+                        }
+                    }
+
+                    window.setTimeout(() => {
+                        // call in non-blocking way
+                        // Call onChange if time string is valid
+                        onChange(newState.startTime, newState.endTime);
+                    }, 0);
+
+                    return newState;
+                }),
+            [onChange, setTime]
+        );
+
+        const handleStartChange = useMemo(() => handleChange('start'), [
+            handleChange,
+        ]);
+        const handleEndChange = useMemo(() => handleChange('end'), [
+            handleChange,
+        ]);
+
+        useEffect(() => {
+            if (validateTimeSpan(startTime, endTime)) {
+                setTime({
+                    startTime,
+                    endTime,
+                });
             }
-        }
+        }, [startTime, endTime, setTime]);
 
-        window.setTimeout(() => { // call in non-blocking way
-            // Call onChange if time string is valid
-            onChange(newState.startTime, newState.endTime);
-        }, 0);
+        const handleAutoFormat = useCallback(
+            (inputField) => () =>
+                setTime((currentState) => {
+                    const newState = { ...currentState };
+                    const val =
+                        inputField === 'start'
+                            ? newState.startTime
+                            : newState.endTime;
+                    const inspectResult = inspectTimeStr(val);
 
-        return newState;
-    }), [onChange, setTime]);
+                    let minutePart = generateTimePart(
+                        inspectResult.right,
+                        'minutes'
+                    );
+                    let hourPart = generateTimePart(
+                        inspectResult.left,
+                        'hours'
+                    );
 
-    const handleStartChange = useMemo(() => handleChange('start'), [handleChange]);
-    const handleEndChange = useMemo(() => handleChange('end'), [handleChange]);
+                    if (parseInt(minutePart, 10) > 59) minutePart = '59';
+                    if (parseInt(hourPart, 10) > 23) hourPart = '23';
 
-    useEffect(() => {
-        if (validateTimeSpan(startTime, endTime)) {
-            setTime({
-                startTime,
-                endTime,
-            });
-        }
-    }, [startTime, endTime, setTime]);
+                    const timeStr = `${hourPart}:${minutePart}`;
 
-    const handleAutoFormat = useCallback((inputField) => () => setTime((currentState) => {
-        const newState = { ...currentState };
-        const val = inputField === 'start' ? newState.startTime : newState.endTime;
-        const inspectResult = inspectTimeStr(val);
+                    if (inputField === 'start') {
+                        newState.startTime = timeStr;
+                    } else {
+                        newState.endTime = timeStr;
+                    }
 
-        let minutePart = generateTimePart(inspectResult.right, 'minutes');
-        let hourPart = generateTimePart(inspectResult.left, 'hours');
+                    if (newState.startTime === newState.endTime) {
+                        newState.endTime = getTimeStringFromMinutes(
+                            getTimeStringMinutes(newState.endTime + 60)
+                        );
+                    }
 
-        if (parseInt(minutePart, 10) > 59) minutePart = '59';
-        if (parseInt(hourPart, 10) > 23) hourPart = '23';
+                    window.setTimeout(() => {
+                        // call in non-blocking way
+                        // Call onChange if time string is valid
+                        onChange(newState.startTime, newState.endTime);
+                    }, 0);
 
-        const timeStr = `${hourPart}:${minutePart}`;
+                    return newState;
+                }),
+            [setTime, onChange]
+        );
 
-        if (inputField === 'start') {
-            newState.startTime = timeStr;
-        } else {
-            newState.endTime = timeStr;
-        }
+        const handleStartAutoFormat = useMemo(() => handleAutoFormat('start'), [
+            handleAutoFormat,
+        ]);
+        const handleEndAutoFormat = useMemo(() => handleAutoFormat('end'), [
+            handleAutoFormat,
+        ]);
 
-        if (newState.startTime === newState.endTime) {
-            newState.endTime = getTimeStringFromMinutes(getTimeStringMinutes(newState.endTime + 60));
-        }
+        const timeSpanValid = checkTimeSpan(time.startTime, time.endTime);
 
-        window.setTimeout(() => { // call in non-blocking way
-            // Call onChange if time string is valid
-            onChange(newState.startTime, newState.endTime);
-        }, 0);
-
-        return newState;
-    }), [setTime, onChange]);
-
-    const handleStartAutoFormat = useMemo(() => handleAutoFormat('start'), [handleAutoFormat]);
-    const handleEndAutoFormat = useMemo(() => handleAutoFormat('end'), [handleAutoFormat]);
-
-    const timeSpanValid = checkTimeSpan(time.startTime, time.endTime);
-
-    return (
-        <div className={`${disabled ? 'time--disabled' : 'time--active'} time__span`} ref={childrenRef}>
-            <div className="time__span--input">
-                <Input
-                    value={time.startTime}
-                    onChange={handleStartChange}
-                    onBlur={handleStartAutoFormat}
-                    onEnter={handleStartAutoFormat}
-                    invalid={!timeSpanValid || isInvalid}
-                />
+        return (
+            <div
+                className={`${
+                    disabled ? 'time--disabled' : 'time--active'
+                } time__span`}
+                ref={childrenRef}
+            >
+                <div className="time__span--input">
+                    <Input
+                        value={time.startTime}
+                        onChange={handleStartChange}
+                        onBlur={handleStartAutoFormat}
+                        onEnter={handleStartAutoFormat}
+                        invalid={!timeSpanValid || isInvalid}
+                    />
+                </div>
+                <span>-</span>
+                <div className="time__span--input">
+                    <Input
+                        value={time.endTime}
+                        onChange={handleEndChange}
+                        onBlur={handleEndAutoFormat}
+                        onEnter={handleEndAutoFormat}
+                        invalid={!timeSpanValid || isInvalid}
+                    />
+                </div>
             </div>
-            <span>-</span>
-            <div className="time__span--input">
-                <Input
-                    value={time.endTime}
-                    onChange={handleEndChange}
-                    onBlur={handleEndAutoFormat}
-                    onEnter={handleEndAutoFormat}
-                    invalid={!timeSpanValid || isInvalid}
-                />
-            </div>
-        </div>
-    );
-});
+        );
+    }
+);
 
 TimeSpan.OFF = 0;
 

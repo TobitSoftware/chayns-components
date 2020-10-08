@@ -7,11 +7,14 @@ export default class PriceFormatter extends DecimalFormatter {
         sign: '',
     };
 
-    constructor(currencySign = '', {
-        decimalSeparator = ',',
-        thousandSeparator = '.',
-        currencyBefore = null,
-    } = {}) {
+    constructor(
+        currencySign = '',
+        {
+            decimalSeparator = ',',
+            thousandSeparator = '.',
+            currencyBefore = null,
+        } = {}
+    ) {
         super({
             decimalSeparator,
             thousandSeparator,
@@ -19,7 +22,8 @@ export default class PriceFormatter extends DecimalFormatter {
         });
 
         this.currency.sign = currencySign;
-        this.currency.before = (currencyBefore === null) ? (currencySign !== '€') : !!currencyBefore;
+        this.currency.before =
+            currencyBefore === null ? currencySign !== '€' : !!currencyBefore;
     }
 
     format(value) {
@@ -66,7 +70,10 @@ export default class PriceFormatter extends DecimalFormatter {
                     newValue = newValue.slice(0, -1);
                 }
 
-                newSelection.start = Math.min(newSelection.start, newValue.length);
+                newSelection.start = Math.min(
+                    newSelection.start,
+                    newValue.length
+                );
                 newSelection.end = Math.min(newSelection.end, newValue.length);
             }
         }
@@ -88,7 +95,10 @@ export default class PriceFormatter extends DecimalFormatter {
     }
 
     validate(value, selection) {
-        const { value: newValue, selection: newSelection } = this.removeCurrencySign(value, selection);
+        const {
+            value: newValue,
+            selection: newSelection,
+        } = this.removeCurrencySign(value, selection);
 
         return super.validate(newValue, newSelection);
     }

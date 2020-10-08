@@ -1,9 +1,10 @@
 const IMMEDIATE = 0;
 
-const requestAnimationFrame = window.requestAnimationFrame
-    || window.setImmediate
+const requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.setImmediate ||
     // eslint-disable-next-line func-names
-    || function (c) {
+    function (c) {
         return setTimeout(c, IMMEDIATE);
     };
 

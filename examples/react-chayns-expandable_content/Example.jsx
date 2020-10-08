@@ -34,17 +34,11 @@ export default class Example extends Component {
         return (
             <div>
                 <div>
-                    <Button onClick={this.toggle}>Toggle</Button>
-                    {' '}
-                    <Button onClick={this.open}>Open</Button>
-                    {' '}
+                    <Button onClick={this.toggle}>Toggle</Button>{' '}
+                    <Button onClick={this.open}>Open</Button>{' '}
                     <Button onClick={this.close}>Close</Button>
                 </div>
-                <ExpandableContent
-                    open={open}
-                >
-                    Test opened
-                </ExpandableContent>
+                <ExpandableContent open={open}>Test opened</ExpandableContent>
             </div>
         );
     }

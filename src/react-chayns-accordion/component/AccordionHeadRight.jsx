@@ -36,12 +36,7 @@ export default class AccordionHeadRight extends PureComponent {
     }
 
     render() {
-        const {
-            right,
-            onSearch,
-            onSearchEnter,
-            state,
-        } = this.props;
+        const { right, onSearch, onSearchEnter, state } = this.props;
 
         if (!(right || onSearch || onSearchEnter)) {
             return null;
@@ -53,9 +48,7 @@ export default class AccordionHeadRight extends PureComponent {
 
         if (!(onSearch || onSearchEnter || rightHasState)) {
             return (
-                <div className="accordion__head__right">
-                    {closeChildren}
-                </div>
+                <div className="accordion__head__right">{closeChildren}</div>
             );
         }
 
@@ -68,9 +61,7 @@ export default class AccordionHeadRight extends PureComponent {
                     in={state === CLOSE}
                     unmountOnExit
                 >
-                    <div>
-                        {closeChildren}
-                    </div>
+                    <div>{closeChildren}</div>
                 </CSSTransition>
                 <CSSTransition
                     key="open"

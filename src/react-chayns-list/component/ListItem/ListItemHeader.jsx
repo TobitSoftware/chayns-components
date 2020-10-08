@@ -33,34 +33,40 @@ const ListItemHeader = ({
     ...otherProps
 }) => {
     const timeout = useRef(null);
-    const onStart = useCallback((event) => {
-        if (event.type === 'mousedown' && onMouseDown) {
-            onMouseDown(event);
-        } else if (event.type === 'touchstart' && onTouchStart) {
-            onTouchStart(event);
-        }
-        if (onLongPress) {
-            timeout.current = setTimeout(() => {
-                onLongPress(event);
-            }, longPressTimeout);
-        }
-    }, [onMouseDown, onTouchStart, onLongPress]);
-    const onEnd = useCallback((event) => {
-        if (event.type === 'mousemove' && onMouseMove) {
-            onMouseMove(event);
-        } else if (event.type === 'mouseup' && onMouseUp) {
-            onMouseUp(event);
-        } else if (event.type === 'touchmove' && onTouchMove) {
-            onTouchMove(event);
-        } else if (event.type === 'touchend' && onTouchEnd) {
-            onTouchEnd(event);
-        } else if (event.type === 'touchcancel' && onTouchCancel) {
-            onTouchCancel(event);
-        }
-        if (onLongPress) {
-            clearTimeout(timeout.current);
-        }
-    }, [onMouseUp, onTouchEnd, onTouchCancel, onLongPress]);
+    const onStart = useCallback(
+        (event) => {
+            if (event.type === 'mousedown' && onMouseDown) {
+                onMouseDown(event);
+            } else if (event.type === 'touchstart' && onTouchStart) {
+                onTouchStart(event);
+            }
+            if (onLongPress) {
+                timeout.current = setTimeout(() => {
+                    onLongPress(event);
+                }, longPressTimeout);
+            }
+        },
+        [onMouseDown, onTouchStart, onLongPress]
+    );
+    const onEnd = useCallback(
+        (event) => {
+            if (event.type === 'mousemove' && onMouseMove) {
+                onMouseMove(event);
+            } else if (event.type === 'mouseup' && onMouseUp) {
+                onMouseUp(event);
+            } else if (event.type === 'touchmove' && onTouchMove) {
+                onTouchMove(event);
+            } else if (event.type === 'touchend' && onTouchEnd) {
+                onTouchEnd(event);
+            } else if (event.type === 'touchcancel' && onTouchCancel) {
+                onTouchCancel(event);
+            }
+            if (onLongPress) {
+                clearTimeout(timeout.current);
+            }
+        },
+        [onMouseUp, onTouchEnd, onTouchCancel, onLongPress]
+    );
 
     return (
         <div
@@ -95,74 +101,81 @@ const ListItemHeader = ({
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
                     }}
                 >
-                    {
-                        images.map((img, index) => {
-                            if (index > 2) return null;
-                            return (
-                                <div
-                                    key={img}
-                                    className="list-item__image"
-                                    style={{
-                                        backgroundImage: `url(${img})`,
-                                    }}
-                                />
-                            );
-                        })
-                    }
+                    {images.map((img, index) => {
+                        if (index > 2) return null;
+                        return (
+                            <div
+                                key={img}
+                                className="list-item__image"
+                                style={{
+                                    backgroundImage: `url(${img})`,
+                                }}
+                            />
+                        );
+                    })}
                 </div>
             )}
             {icon && (
                 <Icon
-                    className={classnames('list-item__icon chayns__background-color--102 chayns__color--headline', {
-                        'list-item__icon--circle': circle,
-                    })}
+                    className={classnames(
+                        'list-item__icon chayns__background-color--102 chayns__color--headline',
+                        {
+                            'list-item__icon--circle': circle,
+                        }
+                    )}
                     icon={icon}
                 />
             )}
             {(title || subtitle) && (
                 <div className="list-item__titles">
-                    {title && (
-                        Array.isArray(right) && right.length > 0 ? (
+                    {title &&
+                        (Array.isArray(right) && right.length > 0 ? (
                             <div className="list-item__title-wrapper">
-                                <div className="list-item__title ellipsis">{title}</div>
-                                <div className="list-item__right" style={typeof right[0] === 'string' ? { opacity: 0.75 } : null}>{right[0]}</div>
+                                <div className="list-item__title ellipsis">
+                                    {title}
+                                </div>
+                                <div
+                                    className="list-item__right"
+                                    style={
+                                        typeof right[0] === 'string'
+                                            ? { opacity: 0.75 }
+                                            : null
+                                    }
+                                >
+                                    {right[0]}
+                                </div>
                             </div>
                         ) : (
                             <div className="list-item__title ellipsis">
                                 {title}
                             </div>
-                        )
-
-                    )}
-                    {subtitle && (
-                        Array.isArray(right) && right.length > 1 ? (
+                        ))}
+                    {subtitle &&
+                        (Array.isArray(right) && right.length > 1 ? (
                             <div className="list-item__subtitle-wrapper">
-                                <div className="list-item__subtitle ellipsis">{subtitle}</div>
-                                <div className="list-item__right">{right[1]}</div>
+                                <div className="list-item__subtitle ellipsis">
+                                    {subtitle}
+                                </div>
+                                <div className="list-item__right">
+                                    {right[1]}
+                                </div>
                             </div>
                         ) : (
                             <div className="list-item__subtitle ellipsis">
                                 {subtitle}
                             </div>
-                        )
-                    )}
+                        ))}
                 </div>
             )}
-            <div className="list-item__spacer"/>
-            {right && (
-                !Array.isArray(right) && (
-                    <div className="list-item__right">
-                        {right}
-                    </div>
-                )
+            <div className="list-item__spacer" />
+            {right && !Array.isArray(right) && (
+                <div className="list-item__right">{right}</div>
             )}
-            {
-                hoverItem && (
-                    <div className="list-item__hover-item" tabIndex={-1}>
-                        {hoverItem}
-                    </div>
-                )
-            }
+            {hoverItem && (
+                <div className="list-item__hover-item" tabIndex={-1}>
+                    {hoverItem}
+                </div>
+            )}
         </div>
     );
 };

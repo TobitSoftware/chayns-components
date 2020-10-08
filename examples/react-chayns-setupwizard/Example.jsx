@@ -47,13 +47,15 @@ export default class SetupWizardExample extends Component {
                         notComplete={this.notComplete}
                         title="Wizard"
                         initialStep={2}
-                        description={'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n'
-                        + 'labore\n'
-                        + 'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n'
-                        + 'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'}
+                        description={
+                            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n' +
+                            'labore\n' +
+                            'et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea\n' +
+                            'rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+                        }
                     >
                         <SetupWizardItem title="Intro" required>
-                            <Step1/>
+                            <Step1 />
                         </SetupWizardItem>
                         {chayns.env.user.isAuthenticated && (
                             <SetupWizardItem
@@ -63,14 +65,14 @@ export default class SetupWizardExample extends Component {
                                     notComplete: <Badge>Not done</Badge>,
                                 }}
                             >
-                                <Step2/>
+                                <Step2 />
                             </SetupWizardItem>
                         )}
                         <SetupWizardItem title="Input required" required>
-                            <Step3 notComplete={notComplete}/>
+                            <Step3 notComplete={notComplete} />
                         </SetupWizardItem>
                         <SetupWizardItem title="Finish">
-                            <Step4/>
+                            <Step4 />
                         </SetupWizardItem>
                     </SetupWizard>
                 </div>
@@ -80,9 +82,10 @@ export default class SetupWizardExample extends Component {
         return (
             <React.Fragment>
                 <h1> Ready </h1>
-                <Button onClick={() => {
-                    this.setState({ ready: false });
-                }}
+                <Button
+                    onClick={() => {
+                        this.setState({ ready: false });
+                    }}
                 >
                     Reload
                 </Button>

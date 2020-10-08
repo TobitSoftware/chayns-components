@@ -33,7 +33,9 @@ class SetupWizard extends Component {
         this.resetToStep = this.resetToStep.bind(this);
         this.ready = this.ready.bind(this);
         this.notComplete = this.notComplete.bind(this);
-        this.allRequiredStepsCompleted = this.allRequiredStepsCompleted.bind(this);
+        this.allRequiredStepsCompleted = this.allRequiredStepsCompleted.bind(
+            this
+        );
     }
 
     getChildContext() {
@@ -71,7 +73,10 @@ class SetupWizard extends Component {
             });
             this.allRequiredStepsCompleted();
         } else if (!value && this.completedSteps.indexOf(selectedStep) >= 0) {
-            this.completedSteps.splice(this.completedSteps.indexOf(selectedStep), 1);
+            this.completedSteps.splice(
+                this.completedSteps.indexOf(selectedStep),
+                1
+            );
             this.setState({
                 completedSteps: this.completedSteps,
             });
@@ -86,9 +91,11 @@ class SetupWizard extends Component {
     stepEnabled = (value, step) => {
         const { enabledSteps } = this.state;
         const index = enabledSteps.indexOf(step);
-        if (value && index < 0) { // enable step
+        if (value && index < 0) {
+            // enable step
             enabledSteps.push(step);
-        } else if (!value && index >= 0) { // disable step
+        } else if (!value && index >= 0) {
+            // disable step
             enabledSteps.splice(index, 1);
         }
         this.setState({ enabledSteps });
@@ -131,25 +138,27 @@ class SetupWizard extends Component {
      * @param step: the chosen step
      */
     toStep = (step) => {
-        const {
-            children,
-            numberOfSteps,
-            operationMode,
-        } = this.props;
-        const {
-            currentStep,
-            enabledSteps,
-            requiredSteps,
-        } = this.state;
+        const { children, numberOfSteps, operationMode } = this.props;
+        const { currentStep, enabledSteps, requiredSteps } = this.state;
 
-        if (((numberOfSteps || (Array.isArray(children) && children.length)) - 1) >= step) {
-            if (requiredSteps.indexOf(currentStep) < 0 || this.completedSteps.indexOf(currentStep) >= 0 || !isDisabled(enabledSteps, step)) {
+        if (
+            (numberOfSteps || (Array.isArray(children) && children.length)) -
+                1 >=
+            step
+        ) {
+            if (
+                requiredSteps.indexOf(currentStep) < 0 ||
+                this.completedSteps.indexOf(currentStep) >= 0 ||
+                !isDisabled(enabledSteps, step)
+            ) {
                 for (let i = 0; i <= step; i += 1) {
                     this.stepEnabled(
                         operationMode === SetupWizard.operationMode.DEFAULT
                             ? true
-                            : operationMode === SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED && i === step,
-                        i,
+                            : operationMode ===
+                                  SetupWizard.operationMode
+                                      .ONLY_CURRENT_STEP_ENABLED && i === step,
+                        i
                     );
                 }
                 this.setState({
@@ -169,7 +178,9 @@ class SetupWizard extends Component {
      */
     resetToStep = (step) => {
         const { enabledSteps } = this.state;
-        this.completedSteps = this.completedSteps.filter((s) => !(step <= s && s < enabledSteps));
+        this.completedSteps = this.completedSteps.filter(
+            (s) => !(step <= s && s < enabledSteps)
+        );
         this.setState({
             enabledSteps: enabledSteps.filter((s) => s <= step),
             currentStep: step,
@@ -180,7 +191,12 @@ class SetupWizard extends Component {
     ready = () => {
         const { ready } = this.props;
         const { currentStep, requiredSteps } = this.state;
-        if (!(requiredSteps.indexOf(currentStep) >= 0 && this.completedSteps.indexOf(currentStep) === -1)) {
+        if (
+            !(
+                requiredSteps.indexOf(currentStep) >= 0 &&
+                this.completedSteps.indexOf(currentStep) === -1
+            )
+        ) {
             if (ready) {
                 ready();
             }
@@ -217,38 +233,40 @@ class SetupWizard extends Component {
             disableShowStep,
         } = this.props;
         const {
-            maxProgress, currentStep, completedSteps, requiredSteps, enabledSteps, operationMode,
+            maxProgress,
+            currentStep,
+            completedSteps,
+            requiredSteps,
+            enabledSteps,
+            operationMode,
         } = this.state;
 
         let visibleIndex = -1;
 
         return (
             <div style={style} className={className}>
-                {title && (
-                    <h1>
-                        {title}
-                    </h1>
-                )}
+                {title && <h1>{title}</h1>}
                 {description && (
-                    <p dangerouslySetInnerHTML={{ __html: description }}/>
+                    <p dangerouslySetInnerHTML={{ __html: description }} />
                 )}
-                <SetupWizardContext.Provider value={{
-                    maxProgress,
-                    completedSteps,
-                    requiredSteps,
-                    currentStep,
-                    contentStyle,
-                    enabledSteps,
-                    operationMode,
-                    stepComplete: this.stepComplete,
-                    stepEnabled: this.stepEnabled,
-                    stepRequired: this.stepRequired,
-                    previousStep: this.previousStep,
-                    nextStep: this.nextStep,
-                    toStep: this.toStep,
-                    resetToStep: this.resetToStep,
-                    notComplete: this.notComplete,
-                }}
+                <SetupWizardContext.Provider
+                    value={{
+                        maxProgress,
+                        completedSteps,
+                        requiredSteps,
+                        currentStep,
+                        contentStyle,
+                        enabledSteps,
+                        operationMode,
+                        stepComplete: this.stepComplete,
+                        stepEnabled: this.stepEnabled,
+                        stepRequired: this.stepRequired,
+                        previousStep: this.previousStep,
+                        nextStep: this.nextStep,
+                        toStep: this.toStep,
+                        resetToStep: this.resetToStep,
+                        notComplete: this.notComplete,
+                    }}
                 >
                     {children.map((child, index) => {
                         if (child.type === SetupItem) {
@@ -257,7 +275,10 @@ class SetupWizard extends Component {
                             }
                             return React.cloneElement(child, {
                                 step: index,
-                                showStep: child && !disableShowStep ? visibleIndex : null,
+                                showStep:
+                                    child && !disableShowStep
+                                        ? visibleIndex
+                                        : null,
                                 // eslint-disable-next-line react/no-array-index-key
                                 key: index,
                             });

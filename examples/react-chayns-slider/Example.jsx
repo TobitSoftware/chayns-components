@@ -8,7 +8,9 @@ const SliderExample = () => {
     const [value, setValue] = useState(100);
     const [startValue, setStartValue] = useState(30);
     const [endValue, setEndValue] = useState(70);
-    const [hueSliderColor, setHueSliderColor] = useState(hexStringToHsv(chayns.env.site.color));
+    const [hueSliderColor, setHueSliderColor] = useState(
+        hexStringToHsv(chayns.env.site.color)
+    );
 
     return (
         <div>
@@ -17,7 +19,7 @@ const SliderExample = () => {
                     position={Tooltip.position.BOTTOM_CENTER}
                     minWidth={150}
                     content={{
-                        html: <Slider/>,
+                        html: <Slider />,
                     }}
                     bindListeners
                 >
@@ -28,13 +30,15 @@ const SliderExample = () => {
                 <Tooltip
                     position={Tooltip.position.BOTTOM_CENTER}
                     content={{
-                        html: <Slider
-                            vertical
-                            style={{
-                                maxHeight: '100px',
-                                marginBottom: '20px',
-                            }}
-                        />,
+                        html: (
+                            <Slider
+                                vertical
+                                style={{
+                                    maxHeight: '100px',
+                                    marginBottom: '20px',
+                                }}
+                            />
+                        ),
                     }}
                     minWidth="auto"
                     bindListeners
@@ -42,8 +46,8 @@ const SliderExample = () => {
                     <p>Tooltip with Slider (vertical)</p>
                 </Tooltip>
             </div>
-            <Slider interval/>
-            <Slider/>
+            <Slider interval />
+            <Slider />
             <Slider
                 showLabel
                 interval
@@ -113,10 +117,16 @@ const SliderExample = () => {
                 valueFormatter={(v) => `${Math.round(v)}.000 €`}
                 thumbWidth={90}
             />
-            <Slider showLabel disabled interval startValue={startValue} endValue={endValue}/>
-            <Slider showLabel disabled value={value} min={50} max={150}/>
-            <Slider vertical interval/>
-            <Slider vertical/>
+            <Slider
+                showLabel
+                disabled
+                interval
+                startValue={startValue}
+                endValue={endValue}
+            />
+            <Slider showLabel disabled value={value} min={50} max={150} />
+            <Slider vertical interval />
+            <Slider vertical />
             <Slider
                 vertical
                 showLabel
@@ -141,8 +151,22 @@ const SliderExample = () => {
                 }}
                 step={10}
             />
-            <Slider vertical showLabel disabled interval startValue={startValue} endValue={endValue}/>
-            <Slider vertical showLabel disabled value={value} min={50} max={150}/>
+            <Slider
+                vertical
+                showLabel
+                disabled
+                interval
+                startValue={startValue}
+                endValue={endValue}
+            />
+            <Slider
+                vertical
+                showLabel
+                disabled
+                value={value}
+                min={50}
+                max={150}
+            />
 
             <h2>HueSlider</h2>
             <HueSlider

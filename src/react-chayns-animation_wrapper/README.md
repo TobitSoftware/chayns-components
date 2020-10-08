@@ -1,6 +1,7 @@
 # AnimationWrapper
 
-The AnimationWrapper-Component is part of the `chayns-components`-Package. You can install it with the following command:
+The AnimationWrapper-Component is part of the `chayns-components`-Package. You
+can install it with the following command:
 
     npm install -S chayns-components@latest
 
@@ -18,8 +19,8 @@ You can now use the component as follows:
 <AnimationWrapper>
     <div className="content__card content__card--warning">
         <p>
-            Aktuell werden keine Bestellungen angenommen. 
-            Wir sind ab 17:00 Uhr wieder für Dich da. 
+            Aktuell werden keine Bestellungen angenommen. Wir sind ab 17:00 Uhr
+            wieder für Dich da.
         </p>
     </div>
 </AnimationWrapper>
@@ -29,7 +30,7 @@ You can now use the component as follows:
 
 You can set the following props on a AnimationWrapper element:
 
-| Property        | Description                                                        | Type            | Default |
-| --------------- | ------------------------------------------------------------------ | --------------- |---------|
-| animationTime   | Duration of animation in seconds                                   | number          | 0.2     |
-| setAutoTime     | Time util height is set to auto in ms                              | number          | 400     |
+| Property      | Description                           | Type   | Default |
+| ------------- | ------------------------------------- | ------ | ------- |
+| animationTime | Duration of animation in seconds      | number | 0.2     |
+| setAutoTime   | Time util height is set to auto in ms | number | 400     |

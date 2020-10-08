@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-const DEFAULT_HINT_TEXT = 'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.';
+const DEFAULT_HINT_TEXT =
+    'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.';
 
 export const HINT_POSITIONS = {
     NONE: 0,
@@ -12,10 +13,14 @@ export const HINT_POSITIONS = {
 
 const OpeningTimesHint = ({ content, position }) => (
     <div
-        className={classnames('content__card content__card--warning cc__opening-times__hint', {
-            'cc__opening-times__hint--top': position === HINT_POSITIONS.TOP,
-            'cc__opening-times__hint--bottom': position === HINT_POSITIONS.BOTTOM,
-        })}
+        className={classnames(
+            'content__card content__card--warning cc__opening-times__hint',
+            {
+                'cc__opening-times__hint--top': position === HINT_POSITIONS.TOP,
+                'cc__opening-times__hint--bottom':
+                    position === HINT_POSITIONS.BOTTOM,
+            }
+        )}
     >
         {content || DEFAULT_HINT_TEXT}
     </div>

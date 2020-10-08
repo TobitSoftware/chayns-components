@@ -1,11 +1,11 @@
-# SmallWaitCursor #
+# SmallWaitCursor
 
-The SmallWaitCursor-Component is part of the *chayns-components*-Package. You can install it with the following command:
+The SmallWaitCursor-Component is part of the _chayns-components_-Package. You
+can install it with the following command:
 
     npm install -S chayns-components@latest
 
-
-## Usage ##
+## Usage
 
 You have to import the components and styles first:
 
@@ -13,24 +13,20 @@ You have to import the components and styles first:
 import { SmallWaitCursor } from 'chayns-components';
 ```
 
-
 You can now use the components as followed:
 
 ```jsx harmony
-<SmallWaitCursor
-    show
-/>
+<SmallWaitCursor show />
 ```
 
-
-## Props ##
+## Props
 
 You can set the following props on a AmountControl element:
 
-| Property       | Description                                                                                                  | Type     | Default |
-|----------------|--------------------------------------------------------------------------------------------------------------|----------|---------|
-| show           | Renders the WaitCursor                                                                                       | bool     | false   |
-| style          | style-object of the wrapper                                                                                  | object   | null    |
-| showBackground | Renders the WaitCursor with a background                                                                     | bool     | true    |
-| inline         | Renders the WaitCursor as inline-block (only works with showBackground: false)                               | bool     | false   |
-| className      | Add additional classes to the wait cursor root element                                                       | string   | null    |
+| Property       | Description                                                                    | Type   | Default |
+| -------------- | ------------------------------------------------------------------------------ | ------ | ------- |
+| show           | Renders the WaitCursor                                                         | bool   | false   |
+| style          | style-object of the wrapper                                                    | object | null    |
+| showBackground | Renders the WaitCursor with a background                                       | bool   | true    |
+| inline         | Renders the WaitCursor as inline-block (only works with showBackground: false) | bool   | false   |
+| className      | Add additional classes to the wait cursor root element                         | string | null    |

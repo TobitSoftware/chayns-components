@@ -28,9 +28,12 @@ export default class ExampleList extends Component {
     }
 
     handleOpen(id) {
-        chayns.appendUrlParameter({
-            component: String(id),
-        }, true);
+        chayns.appendUrlParameter(
+            {
+                component: String(id),
+            },
+            true
+        );
 
         chayns.showBackButton(() => {
             this.setState({
@@ -39,8 +42,7 @@ export default class ExampleList extends Component {
         });
 
         this.setState({
-            open: String(id)
-                .toLowerCase(),
+            open: String(id).toLowerCase(),
             searchValue: '',
         });
     }
@@ -57,7 +59,7 @@ export default class ExampleList extends Component {
 
         return (
             <List className="examples">
-                {!open && (<h1>ChaynsComponents</h1>)}
+                {!open && <h1>ChaynsComponents</h1>}
                 {!open && (
                     <Input
                         icon="fa fa-search"

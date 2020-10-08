@@ -1,11 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 /* global google */
-import React, {
-    PureComponent,
-    Children,
-    cloneElement,
-    createRef,
-} from 'react';
+import React, { PureComponent, Children, cloneElement, createRef } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -72,9 +67,13 @@ class GoogleMap extends PureComponent {
 
         if (!children) return null;
 
-        return Children.map(children, (c) => (c ? cloneElement(c, {
-            __map: this.map,
-        }) : c));
+        return Children.map(children, (c) =>
+            c
+                ? cloneElement(c, {
+                      __map: this.map,
+                  })
+                : c
+        );
     }
 
     render() {

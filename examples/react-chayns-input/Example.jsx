@@ -298,7 +298,7 @@ const InputExample = () => {
                     design={Input.BORDER_DESIGN}
                     dynamic
                     value={userName}
-                    right={(
+                    right={
                         <Button
                             disabled={!userName}
                             style={{
@@ -308,7 +308,7 @@ const InputExample = () => {
                         >
                             Weiter
                         </Button>
-                    )}
+                    }
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
@@ -321,7 +321,7 @@ const InputExample = () => {
                     design={Input.BORDER_DESIGN}
                     dynamic
                     value={date}
-                    right={(
+                    right={
                         <Icon
                             icon="fa fa-calendar-day"
                             style={{
@@ -330,23 +330,32 @@ const InputExample = () => {
                                 fontSize: '1.5em',
                             }}
                             onClick={() => {
-                                chayns.dialog.advancedDate({
-                                    monthSelect: true,
-                                    yearSelect: true,
-                                    preSelect: new Date(date).getTime() / 1000,
-                                })
+                                chayns.dialog
+                                    .advancedDate({
+                                        monthSelect: true,
+                                        yearSelect: true,
+                                        preSelect:
+                                            new Date(date).getTime() / 1000,
+                                    })
                                     .then((value) => {
                                         if (value.buttonType === 1) {
-                                            setDate(DateInfo.getRelativeDateString(value.selectedDates[0].timestamp * 1000, {
-                                                showTime: false,
-                                                showDate: true,
-                                                language: chayns.env.language,
-                                            }));
+                                            setDate(
+                                                DateInfo.getRelativeDateString(
+                                                    value.selectedDates[0]
+                                                        .timestamp * 1000,
+                                                    {
+                                                        showTime: false,
+                                                        showDate: true,
+                                                        language:
+                                                            chayns.env.language,
+                                                    }
+                                                )
+                                            );
                                         }
                                     });
                             }}
                         />
-                    )}
+                    }
                 />
             </div>
         </div>

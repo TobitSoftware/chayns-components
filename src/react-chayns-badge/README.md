@@ -1,6 +1,7 @@
 # Badge
 
-The Badge is part of the _chayns-components_ package. It can be installed via npm:
+The Badge is part of the _chayns-components_ package. It can be installed via
+npm:
 
     npm install -S chayns-components@latest
 
@@ -32,4 +33,6 @@ Additional props will be passed on to the badge div.
 
 ## Example
 
-You can take a look at the **examples** folder in the **react-chayns-badge** repository. There you can find an appropriate way of implementing the **Badge** to your chayns-Tapp.
+You can take a look at the **examples** folder in the **react-chayns-badge**
+repository. There you can find an appropriate way of implementing the **Badge**
+to your chayns-Tapp.

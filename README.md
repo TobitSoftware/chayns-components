@@ -1,19 +1,23 @@
-[![npm](https://img.shields.io/npm/v/chayns-components.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components) 
+[![npm](https://img.shields.io/npm/v/chayns-components.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components)
 [![npm downloads](https://img.shields.io/npm/dm/chayns-components.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components)
-[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/blob/master/LICENSE) 
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls) 
+[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/blob/master/LICENSE)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls)
 [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls?q=is%3Apr+is%3Aclosed)
-[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/graphs/contributors) 
+[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/graphs/contributors)
 
-# chayns-components #
+# chayns-components
 
-## Installation ##
+## Installation
 
-The ChaynsComponents can be installed directly from npm by using the following package:
+The ChaynsComponents can be installed directly from npm by using the following
+package:
 
     npm install -S chayns-components@latest
-    
-The corresponding styles are included in our [chayns CSS API](https://github.com/TobitSoftware/chayns-css). Also, you have to load our [chayns JS API](https://github.com/TobitSoftware/chayns-js) to use the components.
+
+The corresponding styles are included in our
+[chayns CSS API](https://github.com/TobitSoftware/chayns-css). Also, you have to
+load our [chayns JS API](https://github.com/TobitSoftware/chayns-js) to use the
+components.
 
 ```HTML
 <!-- css styles -->
@@ -21,11 +25,14 @@ The corresponding styles are included in our [chayns CSS API](https://github.com
 
 <!-- js api -->
 <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
-``` 
+```
 
-The chayns-components are [tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking). To use tree-shaking, follow [this instruction](./tree-shaking.md).
+The chayns-components are
+[tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking). To use
+tree-shaking, follow [this instruction](./tree-shaking.md).
 
-## Components Overview ##
+## Components Overview
+
 The following components are part of this package:
 
 <!---
@@ -34,8 +41,9 @@ The following components are part of this package:
     start and end tag.
 -->
 <!--- start component list -->
+
 | Component                                                                | Description                 | Readme File                                              |
-|--------------------------------------------------------------------------|-----------------------------|----------------------------------------------------------|
+| ------------------------------------------------------------------------ | --------------------------- | -------------------------------------------------------- |
 | [react-chayns-accordion](/src/react-chayns-accordion/)                   | Accordion Component         | [Readme](/src/react-chayns-accordion/README.md)          |
 | [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/)           | AmountControl Component     | [Readme](/src/react-chayns-amountcontrol/README.md)      |
 | [react-chayns-animation_wrapper](/src/react-chayns-animation_wrapper/)   | AnimationWrapper Component  | [Readme](/src/react-chayns-animation_wrapper/README.md)  |
@@ -81,25 +89,27 @@ The following components are part of this package:
 | [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
 | [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
 | [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
+
 <!--- end component list -->
 
-## Internal Components ##
+## Internal Components
 
-| Component                                                          | Description                                     | Readme File                                           |
-|--------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------|
-| [react-chayns-textstring](/src/react-chayns-textstring/)           | TextString Component                            | [Readme](/src/react-chayns-textstring/README.md)      |
+| Component                                                | Description          | Readme File                                      |
+| -------------------------------------------------------- | -------------------- | ------------------------------------------------ |
+| [react-chayns-textstring](/src/react-chayns-textstring/) | TextString Component | [Readme](/src/react-chayns-textstring/README.md) |
 
-## Utility Functions ##
+## Utility Functions
 
-| Function                                                           | Description                                               |
-|--------------------------------------------------------------------|-----------------------------------------------------------|
-| [imageUpload](/src/utils/imageUpload.js)                           | Function to upload images to tsimg.cloud                  |
-| [isTobitEmployee](/src/utils/tobitEmployee.js)                     | Get the information if user is an tobit employee          |
-| [createLinks](/src/utils/createLinks.js)                           | Creates a string with links from a string with URLs       |
-| [removeHtml](/src/utils/removeHtml.js)                             | Removes HTML Tags from a string                           |
-| [ColorUtils](/src/utils/color/README.md)                           | Utility functions to convert color values (hex, rgb, hsv) |
-| [equalizer](/src/utils/equalizer.js)                               | Utility functions to equalize the width of html elements  |
+| Function                                       | Description                                               |
+| ---------------------------------------------- | --------------------------------------------------------- |
+| [imageUpload](/src/utils/imageUpload.js)       | Function to upload images to tsimg.cloud                  |
+| [isTobitEmployee](/src/utils/tobitEmployee.js) | Get the information if user is an tobit employee          |
+| [createLinks](/src/utils/createLinks.js)       | Creates a string with links from a string with URLs       |
+| [removeHtml](/src/utils/removeHtml.js)         | Removes HTML Tags from a string                           |
+| [ColorUtils](/src/utils/color/README.md)       | Utility functions to convert color values (hex, rgb, hsv) |
+| [equalizer](/src/utils/equalizer.js)           | Utility functions to equalize the width of html elements  |
 
-## Development ##
+## Development
 
-We moved the development section to the [CONTRIBUTING.md](/CONTRIBUTING.md) file.
+We moved the development section to the [CONTRIBUTING.md](/CONTRIBUTING.md)
+file.

@@ -7,7 +7,12 @@ import Week from './Week';
 export default class User extends PureComponent {
     render() {
         const {
-            entries, groups, onClick, focus, groupFocus, weekWidth,
+            entries,
+            groups,
+            onClick,
+            focus,
+            groupFocus,
+            weekWidth,
         } = this.props;
         return (
             <div className="calendar__content_userEntries">
@@ -29,11 +34,13 @@ export default class User extends PureComponent {
 
 User.propTypes = {
     entries: PropTypes.arrayOf(PropTypes.array),
-    groups: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        color: PropTypes.string,
-    })),
+    groups: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            color: PropTypes.string,
+        })
+    ),
     onClick: PropTypes.func,
     focus: PropTypes.objectOf(Date),
     groupFocus: PropTypes.number,

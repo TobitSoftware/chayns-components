@@ -7,11 +7,9 @@ export default class BadgeExample extends PureComponent {
     render() {
         return (
             <div>
+                <Badge>30</Badge>
                 <Badge>
-                    30
-                </Badge>
-                <Badge>
-                    <Icon icon="ts-chayns"/>
+                    <Icon icon="ts-chayns" />
                 </Badge>
                 <Badge style={{ color: 'white', backgroundColor: 'red' }}>
                     1

@@ -15,9 +15,7 @@ const Month = ({
     activateAll,
 }) => (
     <div className={`month__item ${className || ''}`}>
-        <div className="month__title">
-            {title || ''}
-        </div>
+        <div className="month__title">{title || ''}</div>
         <MonthTable
             onDateSelect={onDateSelect}
             startDate={startDate}
@@ -47,13 +45,15 @@ Month.propTypes = {
                 backgroundColor: PropTypes.string,
             }),
         }),
-        PropTypes.arrayOf(PropTypes.shape({
-            dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
-            style: PropTypes.shape({
-                color: PropTypes.string,
-                backgroundColor: PropTypes.string,
-            }),
-        })),
+        PropTypes.arrayOf(
+            PropTypes.shape({
+                dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+                style: PropTypes.shape({
+                    color: PropTypes.string,
+                    backgroundColor: PropTypes.string,
+                }),
+            })
+        ),
     ]),
 };
 

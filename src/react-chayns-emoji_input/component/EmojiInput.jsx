@@ -4,11 +4,15 @@ import classNames from 'classnames';
 import loadOptionalDependency from '../../utils/loadOptionalDependency';
 
 function requireEmojione(returnPromise) {
-    return loadOptionalDependency('emojione', 'emojione', [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js',
-    ], [
-        'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css',
-    ], returnPromise);
+    return loadOptionalDependency(
+        'emojione',
+        'emojione',
+        ['https://cdn.jsdelivr.net/npm/emojione@3.1.7/lib/js/emojione.min.js'],
+        [
+            'https://cdn.jsdelivr.net/npm/emojione@3.1.7/extras/css/emojione.min.css',
+        ],
+        returnPromise
+    );
 }
 
 export default class EmojiInput extends Component {
@@ -26,7 +30,8 @@ export default class EmojiInput extends Component {
             emojione.ascii = true; // eslint-disable-line no-param-reassign
             emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
             emojione.blacklistChars = '*,#'; // eslint-disable-line no-param-reassign
-            emojione.imagePathPNG = 'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/'; // eslint-disable-line no-param-reassign
+            emojione.imagePathPNG =
+                'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/'; // eslint-disable-line no-param-reassign
         });
     }
 
@@ -38,7 +43,9 @@ export default class EmojiInput extends Component {
         const { placeholder, disabled, value } = this.props;
 
         if (value.trim() === '') {
-            this.placeholder.classList.remove('emoji-input__placeholder--hidden');
+            this.placeholder.classList.remove(
+                'emoji-input__placeholder--hidden'
+            );
         } else {
             this.placeholder.classList.add('emoji-input__placeholder--hidden');
         }
@@ -63,17 +70,28 @@ export default class EmojiInput extends Component {
         if (typeof window.getSelection !== 'undefined') {
             const sel = window.getSelection();
 
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+            if (
+                sel.anchorNode &&
+                (sel.anchorNode.nodeType === 3 ||
+                    !sel.anchorNode.classList.contains('icon-smile-o'))
+            ) {
                 const range = sel.getRangeAt(0);
                 const preCaretRange = range.cloneRange();
                 preCaretRange.selectNodeContents(element);
                 preCaretRange.setEnd(range.endContainer, range.endOffset);
                 caretOffset = preCaretRange.toString().length;
             }
-        } else if (typeof document.selection !== 'undefined' && document.selection.type !== 'Control') {
+        } else if (
+            typeof document.selection !== 'undefined' &&
+            document.selection.type !== 'Control'
+        ) {
             const sel = document.selection;
 
-            if (sel.anchorNode && (sel.anchorNode.nodeType === 3 || !sel.anchorNode.classList.contains('icon-smile-o'))) {
+            if (
+                sel.anchorNode &&
+                (sel.anchorNode.nodeType === 3 ||
+                    !sel.anchorNode.classList.contains('icon-smile-o'))
+            ) {
                 const textRange = document.selection.createRange();
                 const preCaretTextRange = document.body.createTextRange();
                 preCaretTextRange.moveToElementText(element);
@@ -95,14 +113,22 @@ export default class EmojiInput extends Component {
             for (let i = 0; i < childNodes.length; i += 1) {
                 let curNode = childNodes[i];
 
-                if (chayns.env.isIOS && curNode.nodeName.toUpperCase() === 'I') {
+                if (
+                    chayns.env.isIOS &&
+                    curNode.nodeName.toUpperCase() === 'I'
+                ) {
                     // eslint-disable-next-line prefer-destructuring
                     curNode = curNode.childNodes[0];
                 }
 
-                if (curNode === anchorNode
-                    || (curNode.wholeText === anchorNode.wholeText && curNode.nextElementSibling === anchorNode.nextElementSibling
-                        && curNode.previousElementSibling === anchorNode.previousElementSibling)) {
+                if (
+                    curNode === anchorNode ||
+                    (curNode.wholeText === anchorNode.wholeText &&
+                        curNode.nextElementSibling ===
+                            anchorNode.nextElementSibling &&
+                        curNode.previousElementSibling ===
+                            anchorNode.previousElementSibling)
+                ) {
                     activeChildNode = curNode.nodeType === 1 ? i + 1 : i;
                     break;
                 }
@@ -128,8 +154,13 @@ export default class EmojiInput extends Component {
                 const cursorNode = inputChildNodes[activeNode];
 
                 if (cursorNode) {
-                    if (cursorNode.nodeType === 1 || cursorNode.length < cursorPos) {
-                        const nextSibling = cursorNode.nextSibling ? cursorNode.nextSibling.nextSibling : undefined;
+                    if (
+                        cursorNode.nodeType === 1 ||
+                        cursorNode.length < cursorPos
+                    ) {
+                        const nextSibling = cursorNode.nextSibling
+                            ? cursorNode.nextSibling.nextSibling
+                            : undefined;
 
                         if (nextSibling && nextSibling.nodeType === 3) {
                             range.setStart(nextSibling, 0);
@@ -169,7 +200,8 @@ export default class EmojiInput extends Component {
         let lineIndex = 0;
         let curChild = elem.firstChild;
 
-        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
+        const isInDavid =
+            navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
 
         while (curChild !== null) {
             if (curChild.nodeType === 1) {
@@ -182,7 +214,11 @@ export default class EmojiInput extends Component {
                         lineIndex += 1;
                         break;
                     case 'BR':
-                        if (chayns.env.browser.name.toLowerCase() !== 'chrome' || isInDavid) {
+                        if (
+                            chayns.env.browser.name.toLowerCase() !==
+                                'chrome' ||
+                            isInDavid
+                        ) {
                             textLines[lineIndex] += '\n';
                         }
                         break;
@@ -234,10 +270,17 @@ export default class EmojiInput extends Component {
     };
 
     handleKeyUp = (event) => {
-        if (chayns.env.browser.name.toLowerCase() === 'ie' && event.keyCode !== 16) {
+        if (
+            chayns.env.browser.name.toLowerCase() === 'ie' &&
+            event.keyCode !== 16
+        ) {
             this.handleInput(event);
         }
-        if (chayns.env.browser.name.toLowerCase() === 'edge' && event.keyCode === 13 && event.shiftKey) {
+        if (
+            chayns.env.browser.name.toLowerCase() === 'edge' &&
+            event.keyCode === 13 &&
+            event.shiftKey
+        ) {
             this.handleInput(event);
         }
     };
@@ -286,29 +329,40 @@ export default class EmojiInput extends Component {
             newText = emojione.toImage(newText);
         }
 
-        newText = newText.replace(/(<img[^<]*)\/>/g, '$1>')
+        newText = newText
+            .replace(/(<img[^<]*)\/>/g, '$1>')
             .replace(/&#153;/g, '™')
             .replace(/&copy;/g, '©')
             .replace(/&reg;/g, '®');
 
         const lines = newText.split('\n');
-        const isInDavid = navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
+        const isInDavid =
+            navigator.userAgent.toLowerCase().indexOf('david client') >= 0;
 
         if (chayns.env.browser.name.toLowerCase() === 'chrome' && !isInDavid) {
-            if (lines[lines.length - 1] === '' && this.lastKeyPressed === 8 && lines.length > 1) {
+            if (
+                lines[lines.length - 1] === '' &&
+                this.lastKeyPressed === 8 &&
+                lines.length > 1
+            ) {
                 lines[lines.length - 1] = '<br>';
             }
 
             result = lines.join('\n');
         } else {
-            if (lines.length === 1 && chayns.env.browser.name.toLowerCase() === 'edge' && lines[0] === '') {
+            if (
+                lines.length === 1 &&
+                chayns.env.browser.name.toLowerCase() === 'edge' &&
+                lines[0] === ''
+            ) {
                 lines[0] = '<br>';
             }
 
             result = lines.join('<br>');
         }
 
-        return result.replace(String.fromCharCode(160), String.fromCharCode(32))
+        return result
+            .replace(String.fromCharCode(160), String.fromCharCode(32))
             .replace(/&nbsp;/gm, String.fromCharCode(32))
             .replace(/&amp;/gm, String.fromCharCode(38));
     };
@@ -325,7 +379,9 @@ export default class EmojiInput extends Component {
             this.activeNode = this.getActiveChildNode();
             const activeElem = inputDiv.childNodes[this.activeNode];
             if (activeElem) {
-                this.cursorPos = EmojiInput.getCaretCharacterOffsetWithin(activeElem);
+                this.cursorPos = EmojiInput.getCaretCharacterOffsetWithin(
+                    activeElem
+                );
 
                 const { scrollTop, scrollHeight } = inputDiv.scrollTop;
 
@@ -340,12 +396,7 @@ export default class EmojiInput extends Component {
     };
 
     render() {
-        const {
-            hideBorder,
-            disabled,
-            style,
-            id,
-        } = this.props;
+        const { hideBorder, disabled, style, id } = this.props;
 
         const messageInputClasses = classNames('emoji-input__message-input', {
             'emoji-input__message-input--hide-border': hideBorder,
