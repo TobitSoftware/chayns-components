@@ -24,6 +24,7 @@ const SearchBox = ({
     inputDefaultValue,
     onChange,
     className,
+    autoSelectFirst,
     ...otherProps
 }) => {
     const getItem = useCallback((key) => {
@@ -37,11 +38,13 @@ const SearchBox = ({
     const value = valueProp !== null ? valueProp : valueState;
     const [inputValueState, setInputValueState] = useState((inputDefaultValue !== null ? inputDefaultValue : getItem(value)[listValue]) || '');
     const inputValue = inputValueProp !== null ? inputValueProp : inputValueState;
+    const [focusIndex, setFocusIndex] = useState(autoSelectFirst ? 0 : null);
 
     const inputBoxRef = useRef(null);
+    const inputRef = useRef(null);
 
-    const onItemClick = useCallback((e) => {
-        const selection = e.target.id;
+    const onItemClick = useCallback((e, item) => {
+        const selection = item?.[listKey] || e?.target.id;
         setValueState(selection);
         setInputValueState(getItem(selection)[listValue]);
         if (onSelect && list && list.length > 0 && listKey && selection !== null && selection !== undefined) {
@@ -54,7 +57,8 @@ const SearchBox = ({
     const inputOnChange = useCallback((input) => {
         if (onChange) onChange(input);
         setInputValueState(input);
-    }, [onChange]);
+        setFocusIndex(autoSelectFirst ? 0 : null);
+    }, [autoSelectFirst, onChange]);
 
     const filteredList = list?.filter((item) => (item[listValue].toLowerCase()
         .indexOf(inputValue.toLowerCase()) >= 0) && (showListWithoutInput || inputValue))
@@ -68,6 +72,54 @@ const SearchBox = ({
             return aValue.localeCompare(bValue);
         });
 
+    const updateIndex = useCallback((index) => {
+        const listLength = filteredList.length;
+        if (index >= listLength) return;
+        if (index < 0 || typeof index !== 'number') return;
+        setFocusIndex(index);
+        const item = filteredList[index];
+        const elem = document.getElementById(`${item[listKey]}`);
+        if (elem) {
+            if (typeof elem.scrollIntoViewIfNeeded === 'function') {
+                elem.scrollIntoViewIfNeeded(false);
+            } else if (typeof elem.scrollIntoView === 'function') {
+                elem.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [filteredList, listKey]);
+
+    const handleKeyDown = useCallback((ev) => {
+        if (!filteredList) return;
+
+        switch (ev.keyCode) {
+            case 40: // Arrow down
+                ev.preventDefault();
+                if (focusIndex === null) {
+                    updateIndex(0);
+                } else {
+                    updateIndex(focusIndex + 1);
+                }
+                break;
+            case 38: // Arrow up
+                ev.preventDefault();
+                if (focusIndex === null) {
+                    updateIndex(0);
+                } else {
+                    updateIndex(focusIndex - 1);
+                }
+                break;
+            case 13: // Enter
+                if (focusIndex !== null && filteredList[focusIndex]) {
+                    onItemClick(ev, filteredList[focusIndex]);
+                    inputRef.current.ref.blur();
+                    updateIndex(null);
+                }
+                break;
+            default:
+                break;
+        }
+    }, [filteredList, focusIndex, onItemClick, updateIndex]);
+
     return (
         <InputBox
             value={inputValue}
@@ -77,12 +129,19 @@ const SearchBox = ({
             ref={inputBoxRef}
             disabled={disabled}
             className={classNames(className, { 'cc__search-box--disabled': disabled })}
+            onKeyDown={handleKeyDown}
+            inputRef={(ref) => inputRef.current = ref}
         >
-            {filteredList?.length > 0 && filteredList.map((item) => (
+            {filteredList && filteredList.map((item, index) => (
                 <div
                     key={item[listKey]}
                     id={item[listKey]}
-                    className={classNames('cc__search-box__item ellipsis', { 'cc__search-box__item--selected': value === item[listKey] })}
+                    className={classNames(
+                        'cc__search-box__item ellipsis',
+                        {
+                            'cc__search-box__item--selected': value === item[listKey] || index === focusIndex,
+                        },
+                    )}
                     onClick={onItemClick}
                 >
                     {
@@ -117,6 +176,7 @@ SearchBox.propTypes = {
     showListWithoutInput: PropTypes.bool,
     inputDefaultValue: PropTypes.string,
     onChange: PropTypes.func,
+    autoSelectFirst: PropTypes.bool,
 };
 
 SearchBox.defaultProps = {
@@ -133,6 +193,7 @@ SearchBox.defaultProps = {
     inputDefaultValue: null,
     onChange: null,
     list: null,
+    autoSelectFirst: false,
 };
 
 SearchBox.displayName = 'SearchBox';

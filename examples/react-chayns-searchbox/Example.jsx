@@ -74,6 +74,7 @@ const SearchBoxExample = () => {
                     design={Input.BORDER_DESIGN}
                     dynamic
                     style={{ width: '100%' }}
+                    autoSelectFirst
                 />
             </div>
         </div>

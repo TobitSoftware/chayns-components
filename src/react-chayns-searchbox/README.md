@@ -34,6 +34,7 @@ You can set the following props on a ColorPicker element:
 | showListWithoutInput  | Shows the list if there is no user input      | Boolean       |
 | inputDefaultValue     | Default value for the input                   | String        |
 | onChange              | Input onChange callback                       | Function      |
+| autoSelectFirst       | Autoselect the first entry in result list     | bool          |
 
 All other props are passing on the InputBox component.
 
