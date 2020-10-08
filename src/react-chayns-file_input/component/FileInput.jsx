@@ -90,12 +90,10 @@ export default class FileInput extends PureComponent {
             item.onClick(event);
         }
         if (item.onChange) {
-            if (this.isInIframeDialog) {
-                this.fileInputRefs[index].click();
-            } else if (this.needAppCall) {
+            if (this.needAppCall && !this.isInIframeDialog) {
                 const compatibilityEvent = await fileInputCall(); // TODO remove in future version
                 this.onChange(compatibilityEvent, item, index);
-            } else if (!hasMemoryAccess) {
+            } else if (!hasMemoryAccess && !this.isInIframeDialog) {
                 chayns
                     .invokeCall(
                         {
@@ -131,6 +129,8 @@ export default class FileInput extends PureComponent {
                                 });
                         }
                     });
+            } else if (!this.needAppCall && !chayns.env.isDesktop) {
+                this.fileInputRefs[index].click();
             }
         }
     };
