@@ -22,7 +22,7 @@
         "build-storybook": "build-storybook",
         "build:examples": "npm run build:sass && node ./examples/utils/generateReactList && webpack --config ./webpack/dev.babel.js --env.prod",
         "build:js": "cross-env NODE_ENV=production rollup -c",
-        "build:lib:es": "cross-env BABEL_ENV=es babel src -d lib",
+        "build:lib:es": "babel src/ --out-dir lib/ --ignore \"src/**/*.stories.js\",\"src/**/*.stories.jsx\"",
         "build:md": "node ./examples/utils/generateMarkdownList",
         "build:sass": "node-sass src/ -o ./src && node-sass src/ -o ./lib",
         "dev": "npm link && npm run watch",
@@ -32,7 +32,7 @@
         "start": "node ./examples/utils/generateReactList && concurrently --kill-others \"npm run watch:sass\" \"npm run webpack\"",
         "storybook": "start-storybook -p 6006",
         "watch": "run-p watch:sass watch:js",
-        "watch:js": "babel -w src/ --out-dir lib/",
+        "watch:js": "npm run build:lib:es -- -w",
         "watch:sass": "npm run build:sass && node-sass src/ -o ./src -w",
         "webpack": "webpack-dev-server --config ./webpack/dev.babel.js"
     },
