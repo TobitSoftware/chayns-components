@@ -16,7 +16,13 @@ export default class FileInput extends PureComponent {
         this.fileInputRefs = [];
         this.needAppCall = !supportsFileInput();
         this.isInIframeDialog = isInIframeDialog();
-        this.state = { hasMemoryAccess: !(chayns.env.isAndroid && (chayns.env.isApp || chayns.env.isMyChaynsApp) && (chayns.env.myChaynsAppVersion || chayns.env.appVersion) >= 6244) };
+        this.state = {
+            hasMemoryAccess: !(
+                chayns.env.isAndroid
+                && (chayns.env.isApp || chayns.env.isMyChaynsApp)
+                && (chayns.env.myChaynsAppVersion || chayns.env.appVersion) >= 6244
+            ),
+        };
     }
 
     onDragEnter = (event, item, index) => {
@@ -36,22 +42,39 @@ export default class FileInput extends PureComponent {
         if (files && files.length > 0) {
             const invalidFiles = [];
             const validFiles = [];
-            Object.keys(files)
-                .forEach((fileIndex) => {
-                    const file = files[fileIndex];
-                    if (!this.checkFileType(file.type, item.types)) {
-                        invalidFiles.push(file);
-                        chayns.dialog.alert('', errorMessages.wrongFileType);
-                    } else if (item.maxNumberOfFiles > 0 && validFiles.length >= item.maxNumberOfFiles) {
-                        invalidFiles.push(file);
-                        chayns.dialog.alert('', errorMessages.tooMuchFiles.replace('##NUMBER##', item.maxNumberOfFiles));
-                    } else if (item.maxFileSize > 0 && file.size > item.maxFileSize) {
-                        chayns.dialog.alert('', errorMessages.fileTooBig.replace('##SIZE##', `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`));
-                        invalidFiles.push(file);
-                    } else {
-                        validFiles.push(file);
-                    }
-                });
+            Object.keys(files).forEach((fileIndex) => {
+                const file = files[fileIndex];
+                if (!this.checkFileType(file.type, item.types)) {
+                    invalidFiles.push(file);
+                    chayns.dialog.alert('', errorMessages.wrongFileType);
+                } else if (
+                    item.maxNumberOfFiles > 0
+                    && validFiles.length >= item.maxNumberOfFiles
+                ) {
+                    invalidFiles.push(file);
+                    chayns.dialog.alert(
+                        '',
+                        errorMessages.tooMuchFiles.replace(
+                            '##NUMBER##',
+                            item.maxNumberOfFiles,
+                        ),
+                    );
+                } else if (
+                    item.maxFileSize > 0
+                    && file.size > item.maxFileSize
+                ) {
+                    chayns.dialog.alert(
+                        '',
+                        errorMessages.fileTooBig.replace(
+                            '##SIZE##',
+                            `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`,
+                        ),
+                    );
+                    invalidFiles.push(file);
+                } else {
+                    validFiles.push(file);
+                }
+            });
             item.onChange(validFiles, invalidFiles);
         }
         this.fileInputRefs[index].value = null;
@@ -67,21 +90,37 @@ export default class FileInput extends PureComponent {
             item.onClick(event);
         }
         if (item.onChange) {
-            if (this.needAppCall && !this.isInIframeDialog) {
+            if (this.isInIframeDialog) {
+                this.fileInputRefs[index].click();
+            } else if (this.needAppCall) {
                 const compatibilityEvent = await fileInputCall(); // TODO remove in future version
                 this.onChange(compatibilityEvent, item, index);
             } else if (!hasMemoryAccess) {
-                chayns.invokeCall({
-                    action: 239,
-                }, true)
+                chayns
+                    .invokeCall(
+                        {
+                            action: 239,
+                        },
+                        true,
+                    )
                     .then((result) => {
                         if (result.status === 1) {
                             this.setState({ hasMemoryAccess: true });
                             this.fileInputRefs[index].click();
-                        } else if (result.status === 2 && errorMessages.temporaryNoPermission) {
-                            chayns.dialog.alert('', errorMessages.temporaryNoPermission);
-                        } else if (result.status === 3 && errorMessages.permanentNoPermission) {
-                            chayns.dialog.alert('', errorMessages.permanentNoPermission)
+                        } else if (
+                            result.status === 2
+                            && errorMessages.temporaryNoPermission
+                        ) {
+                            chayns.dialog.alert(
+                                '',
+                                errorMessages.temporaryNoPermission,
+                            );
+                        } else if (
+                            result.status === 3
+                            && errorMessages.permanentNoPermission
+                        ) {
+                            chayns.dialog
+                                .alert('', errorMessages.permanentNoPermission)
                                 .then(() => {
                                     chayns.invokeCall({
                                         action: 239,
@@ -112,7 +151,12 @@ export default class FileInput extends PureComponent {
 
             const fileTypeMatch = fileType.match(/(.)+\//g);
             const typeMatch = type.match(/(.)+\//g);
-            if (type.match(/\/\*/g) && fileTypeMatch && typeMatch && fileTypeMatch[0] === typeMatch[0]) {
+            if (
+                type.match(/\/\*/g)
+                && fileTypeMatch
+                && typeMatch
+                && fileTypeMatch[0] === typeMatch[0]
+            ) {
                 return true;
             }
         }
@@ -120,80 +164,78 @@ export default class FileInput extends PureComponent {
     };
 
     render() {
-        const {
-            items,
-            className,
-            style,
-            disabled,
-        } = this.props;
+        const { items, className, style, disabled } = this.props;
 
         const { hasMemoryAccess } = this.state;
 
         return (
             <div
-                className={classNames('cc__file-input', 'cc__file-input--custom', className, { 'cc__file-input--disabled': disabled })}
+                className={classNames(
+                    'cc__file-input',
+                    'cc__file-input--custom',
+                    className,
+                    { 'cc__file-input--disabled': disabled },
+                )}
                 style={style}
             >
-                {
-                    items.map((item, index) => (
-                        <div
-                            className={classNames('cc__file-input__split', item.className, { 'cc__file-input__split--disabled': item.disabled })}
-                            style={item.style}
-                            key={`item${index}`}
-                        >
-                            {
-                                item.content && item.content.children
-                                    ? item.content.children
-                                    : (
-                                        <div
-                                            className="cc__file-input--placeholder"
-                                            ref={(ref) => this.itemRefs[index] = ref}
-                                            onClick={(event) => this.onClick(event, item, index)}
-                                        >
-                                            {
-                                                item.onChange && (!this.needAppCall || this.isInIframeDialog)
-                                                    ? (
-                                                        <input
-                                                            style={!hasMemoryAccess ? { display: 'none' } : null}
-                                                            title=""
-                                                            multiple={item.maxNumberOfFiles !== 1}
-                                                            directory={item.directory ? '' : null}
-                                                            webkitdirectory={item.directory ? '' : null}
-                                                            className="cc__file-input__input"
-                                                            type="file"
-                                                            onChange={(event) => this.onChange(event, item, index)}
-                                                            accept={item.types}
-                                                            onDragEnter={(event) => this.onDragEnter(event, item, index)}
-                                                            onDragLeave={() => this.onDragLeave(index)}
-                                                            ref={(ref) => this.fileInputRefs[index] = ref}
-                                                        />
-                                                    )
-                                                    : null
-                                            }
-                                            <span className="cc__file-input__icon">
-                                                <Icon
-                                                    icon={
-                                                        item.content && item.content.icon
-                                                            ? item.content.icon
-                                                            : 'fa fa-upload'
-                                                    }
-                                                />
-                                            </span>
-                                            <div
-                                                className="cc__file-input__message"
-                                            >
-                                                {
-                                                    item.content && item.content.text
-                                                        ? item.content.text
-                                                        : 'Datei hochladen'
-                                                }
-                                            </div>
-                                        </div>
-                                    )
-                            }
-                        </div>
-                    ))
-                }
+                {items.map((item, index) => (
+                    <div
+                        className={classNames(
+                            'cc__file-input__split',
+                            item.className,
+                            { 'cc__file-input__split--disabled': item.disabled },
+                        )}
+                        style={item.style}
+                        key={`item${index}`}
+                    >
+                        {item.content && item.content.children ? (
+                            item.content.children
+                        ) : (
+                            <div
+                                className="cc__file-input--placeholder"
+                                ref={(ref) => (this.itemRefs[index] = ref)}
+                                onClick={(event) => this.onClick(event, item, index)}
+                            >
+                                {item.onChange && (!this.needAppCall || this.isInIframeDialog) ? (
+                                    <input
+                                        style={
+                                            !hasMemoryAccess
+                                                ? { display: 'none' }
+                                                : null
+                                        }
+                                        title=""
+                                        multiple={item.maxNumberOfFiles !== 1}
+                                        directory={item.directory ? '' : null}
+                                        webkitdirectory={
+                                            item.directory ? '' : null
+                                        }
+                                        className="cc__file-input__input"
+                                        type="file"
+                                        onChange={(event) => this.onChange(event, item, index)}
+                                        accept={item.types}
+                                        onDragEnter={(event) => this.onDragEnter(event, item, index)}
+                                        onDragLeave={() => this.onDragLeave(index)}
+                                        ref={(ref) => (this.fileInputRefs[index] = ref)}
+                                    />
+                                ) : null}
+                                <span className="cc__file-input__icon">
+                                    <Icon
+                                        icon={
+                                            item.content && item.content.icon
+                                                ? item.content.icon
+                                                : 'fa fa-upload'
+                                        }
+                                    />
+                                </span>
+                                <div className="cc__file-input__message">
+                                    {item.content && item.content.text
+                                        ? item.content.text
+                                        : 'Datei hochladen'}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
         );
     }
@@ -274,7 +316,8 @@ FileInput.defaultProps = {
         tooMuchFiles: 'Du kannst nur ##NUMBER## Dateien hochladen.',
         fileTooBig: 'Es sind nur Dateien bis ##SIZE## erlaubt.',
         wrongFileType: 'Mindestens eine Datei hat das falsche Dateiformat.',
-        permanentNoPermission: 'Bitte überprüfe die Einstellungen Deiner App und erlaube den Dateizugriff auf Deinem Gerät.',
+        permanentNoPermission:
+            'Bitte überprüfe die Einstellungen Deiner App und erlaube den Dateizugriff auf Deinem Gerät.',
         temporaryNoPermission: null,
     },
     items: [
