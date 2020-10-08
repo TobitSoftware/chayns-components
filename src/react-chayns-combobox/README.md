@@ -24,26 +24,26 @@ You can now use the component as follows:
     listValue="name"
 />
 ```
-
+If the component is used in an iframe dialog, native HTML dialogs are used instead of the chayns select dialogs.
 
 ## Props ##
 
 You can set the following props on a ComboBox element:
 
-| Property        | Description                                                                                   | Type     | Default |
-|-----------------|-----------------------------------------------------------------------------------------------|----------|---------|
-| onSelect        | Callback that will be triggered when items were selected.                                     | function |         |
-| disabled        | If true, the ComboBox will be disabled.                                                       | bool     | false   |
-| label           | A non-chooseable text shown inside the ComboBox.                                              | string   |         |
-| list            | An array containing elements to select from.                                                  | array    |         |
-| listKey         | The identifier of the list items. It is required for the dialog to work.                      | string   |         |
-| listValue       | The value of the list items. It is shown in the dialog for each item.                         | string   |         |
-| className       | Add additional classes to the button and overlay                                              | string   |         |
-| stopPropagation | Stops the click propagation to parent elements                                                | bool     | false   |
-| defaultValue    | The defaultValue of the ComboBox (does not work in combination with label- and value-prop)    | string   |         |
-| value           | The value of the ComboBox (does not work in combination with label-prop)                      | string   |         |
-| parent          | The parent of the ComboBox overlay                                                            | node     | tapp    |
-| style           | Styles applied to the ComboBox button and overlay                                             | object   | null    |
+| Property        | Description                                                                                   | Type     | Default | use in iframe-Dialog |
+|-----------------|-----------------------------------------------------------------------------------------------|----------|---------|----------------------|
+| onSelect        | Callback that will be triggered when items were selected.                                     | function |         | 🗸                    |
+| disabled        | If true, the ComboBox will be disabled.                                                       | bool     | false   | 🗸                    |
+| label           | A non-chooseable text shown inside the ComboBox.                                              | string   |         | 🗸                    |
+| list            | An array containing elements to select from.                                                  | array    |         | 🗸                    |
+| listKey         | The identifier of the list items. It is required for the dialog to work.                      | string   |         | 🗸                    |
+| listValue       | The value of the list items. It is shown in the dialog for each item.                         | string   |         | 🗸                    |
+| className       | Add additional classes to the button and overlay                                              | string   |         | 🗸                    |
+| stopPropagation | Stops the click propagation to parent elements                                                | bool     | false   | 🗸                    |
+| defaultValue    | The defaultValue of the ComboBox (does not work in combination with label- and value-prop)    | string   |         | 🗸                    |
+| value           | The value of the ComboBox (does not work in combination with label-prop)                      | string   |         | x                    |
+| parent          | The parent of the ComboBox overlay                                                            | node     | tapp    | x                    |
+| style           | Styles applied to the ComboBox button and overlay                                             | object   | null    | x                    |
 
 
 ## Example ##

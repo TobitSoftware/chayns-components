@@ -1,58 +1,35 @@
 .cc__combo-box {
-  display: flex;
-  justify-content: space-between;
-
-  &__icon {
-    margin-left: 8px;
-  }
-
-  &--disabled {
+    display: flex;
+    justify-content: space-between; }
+.cc__combo-box__icon {
+    margin-left: 8px; }
+.cc__combo-box--disabled {
     opacity: 0.6;
-    pointer-events: none;
-  }
-
-  &__overlay {
+    pointer-events: none; }
+.cc__combo-box__overlay {
     position: absolute;
     overflow-x: hidden;
     overflow-y: auto;
     max-height: 300px;
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .20);
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
     border-width: 1px;
-    border-style: solid;
-
-    &__item {
-      padding: 2px 8px;
-      cursor: pointer;
-      user-select: none;
-
-      &:hover {
-        background-color: rgba(128, 128, 128, 0.5); //IE fallback
-        background-color: var(--chayns-color--106);
-      }
-    }
-
-    &.fade {
-      &-enter, &-appear {
-        opacity: 0;
-      }
-
-      &-enter.fade-enter-active, &-appear.fade-appear-active {
-        opacity: 1;
-        transition: opacity 200ms;
-      }
-
-      &-exit {
-        opacity: 1;
-      }
-
-      &-exit.fade-exit-active {
-        opacity: 0.01;
-        transition: opacity 200ms;
-      }
-
-      &-exit-done {
-        display: none;
-      }
-    }
-  }
-}
+    border-style: solid; }
+.cc__combo-box__overlay__item {
+    padding: 2px 8px;
+    cursor: pointer;
+    user-select: none; }
+.cc__combo-box__overlay__item:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+    background-color: var(--chayns-color--106); }
+.cc__combo-box__overlay.fade-enter, .cc__combo-box__overlay.fade-appear {
+    opacity: 0; }
+.cc__combo-box__overlay.fade-enter.fade-enter-active, .cc__combo-box__overlay.fade-appear.fade-appear-active {
+    opacity: 1;
+    transition: opacity 200ms; }
+.cc__combo-box__overlay.fade-exit {
+    opacity: 1; }
+.cc__combo-box__overlay.fade-exit.fade-exit-active {
+    opacity: 0.01;
+    transition: opacity 200ms; }
+.cc__combo-box__overlay.fade-exit-done {
+    display: none; }
