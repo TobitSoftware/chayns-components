@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import TagInput from '../../react-chayns-tag_input/component/TagInput';
-import PersonFinderView from './PersonFinderView';
+import { isString } from '../../utils/is';
 import PersonsContext from './data/persons/PersonsContext';
 import { convertPersonForReturn } from './data/persons/PersonsConverter';
-import { isString } from '../../utils/is';
+import PersonFinderView from './PersonFinderView';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {

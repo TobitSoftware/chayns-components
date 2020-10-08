@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useRef } from 'react';
 import Icon from '../../../react-chayns-icon/component/Icon';
 
 const ListItemHeader = ({
@@ -33,40 +33,36 @@ const ListItemHeader = ({
     ...otherProps
 }) => {
     const timeout = useRef(null);
-    const onStart = useCallback(
-        (event) => {
-            if (event.type === 'mousedown' && onMouseDown) {
-                onMouseDown(event);
-            } else if (event.type === 'touchstart' && onTouchStart) {
-                onTouchStart(event);
-            }
-            if (onLongPress) {
-                timeout.current = setTimeout(() => {
-                    onLongPress(event);
-                }, longPressTimeout);
-            }
-        },
-        [onMouseDown, onTouchStart, onLongPress]
-    );
-    const onEnd = useCallback(
-        (event) => {
-            if (event.type === 'mousemove' && onMouseMove) {
-                onMouseMove(event);
-            } else if (event.type === 'mouseup' && onMouseUp) {
-                onMouseUp(event);
-            } else if (event.type === 'touchmove' && onTouchMove) {
-                onTouchMove(event);
-            } else if (event.type === 'touchend' && onTouchEnd) {
-                onTouchEnd(event);
-            } else if (event.type === 'touchcancel' && onTouchCancel) {
-                onTouchCancel(event);
-            }
-            if (onLongPress) {
-                clearTimeout(timeout.current);
-            }
-        },
-        [onMouseUp, onTouchEnd, onTouchCancel, onLongPress]
-    );
+
+    const onStart = (event) => {
+        if (event.type === 'mousedown' && onMouseDown) {
+            onMouseDown(event);
+        } else if (event.type === 'touchstart' && onTouchStart) {
+            onTouchStart(event);
+        }
+        if (onLongPress) {
+            timeout.current = setTimeout(() => {
+                onLongPress(event);
+            }, longPressTimeout);
+        }
+    };
+
+    const onEnd = (event) => {
+        if (event.type === 'mousemove' && onMouseMove) {
+            onMouseMove(event);
+        } else if (event.type === 'mouseup' && onMouseUp) {
+            onMouseUp(event);
+        } else if (event.type === 'touchmove' && onTouchMove) {
+            onTouchMove(event);
+        } else if (event.type === 'touchend' && onTouchEnd) {
+            onTouchEnd(event);
+        } else if (event.type === 'touchcancel' && onTouchCancel) {
+            onTouchCancel(event);
+        }
+        if (onLongPress) {
+            clearTimeout(timeout.current);
+        }
+    };
 
     return (
         <div

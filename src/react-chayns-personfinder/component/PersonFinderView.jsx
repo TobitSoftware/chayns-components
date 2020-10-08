@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import PersonFinderResults from './PersonFinderResults';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
-import WaitCursor from './WaitCursor';
 import getListLength from '../utils/getListLength';
 import getSelectedListItem from '../utils/getSelectedListItem';
+import PersonFinderResults from './PersonFinderResults';
+import WaitCursor from './WaitCursor';
 
 const LAZY_LOADING_SPACE = 100;
 

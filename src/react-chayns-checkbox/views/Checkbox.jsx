@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-associated-control,react/forbid-prop-types */
-import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import React from 'react';
 import stopPropagationListener from '../../utils/stopPropagationListener';
 
 const CHECKBOX_LABEL_STYLE = { display: 'inline' };
@@ -52,6 +51,7 @@ const Checkbox = React.forwardRef((props, ref) => {
                 className={labelClassName}
                 onClick={stopPropagation ? stopPropagationListener : null}
                 htmlFor={id}
+                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={dangerouslySetLabel}
             >
                 {!dangerouslySetLabel ? children || label || '' : null}
@@ -62,9 +62,13 @@ const Checkbox = React.forwardRef((props, ref) => {
 
 Checkbox.propTypes = {
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     className: PropTypes.string,
-    labelStyle: PropTypes.object,
+    labelStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     labelClassName: PropTypes.string,
     label: PropTypes.oneOfType([
         PropTypes.node,
@@ -78,6 +82,7 @@ Checkbox.propTypes = {
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
     disabled: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types
     dangerouslySetLabel: PropTypes.object,
     stopPropagation: PropTypes.bool,
 };

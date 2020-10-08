@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
-import isTobitEmployee from '../../utils/tobitEmployee';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import getTappWidth from '../../utils/tappWidth';
+import isTobitEmployee from '../../utils/tobitEmployee';
 
 export default class TextString extends Component {
     static getTextString(stringName, language, fallback = null) {
@@ -484,8 +483,8 @@ TextString.propTypes = {
     children: PropTypes.node.isRequired,
     useDangerouslySetInnerHTML: PropTypes.bool,
     language: PropTypes.string,
-    fallback:
-        PropTypes.string /* eslint-disable-line react/no-unused-prop-types */, // used by setTextStrings
+    // eslint-disable-next-line react/no-unused-prop-types
+    fallback: PropTypes.string, // used by setTextStrings
     setProps: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.object,

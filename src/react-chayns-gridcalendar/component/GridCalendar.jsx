@@ -1,12 +1,9 @@
-/* eslint-disable */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Groups from './content/Groups';
 import Navigator from './content/Navigator';
 import User from './content/User';
-import Groups from './content/Groups';
-import { GridCalendar } from '../../index';
 
 const WEEK_WIDTH = 50;
 
@@ -122,6 +119,7 @@ export default class ProgressCalendar extends Component {
 
     shouldComponentUpdate(nextProps) {
         const { focus, data, columns, groups, startTime, endTime } = this.props;
+
         for (const i in nextProps.data) {
             if (nextProps.data.length !== data.length) {
                 this.entries = this.getEntries(
@@ -200,6 +198,7 @@ export default class ProgressCalendar extends Component {
         if (weekEnd < dateTime) {
             buffer = 1;
         }
+        // eslint-disable-next-line no-restricted-syntax
         for (const i in this.weeks) {
             if (
                 this.weeks[i][0] <= entry.date.getTime() &&
@@ -249,6 +248,7 @@ export default class ProgressCalendar extends Component {
         for (i; i < (isDesktop ? 2 : 1); i += 1) {
             const days = [];
             let j = 0;
+            // eslint-disable-next-line no-restricted-syntax
             for (j in columns.names) {
                 if (i === 0) {
                     days.push({
@@ -302,12 +302,14 @@ export default class ProgressCalendar extends Component {
         const convertedEntries = [];
         const weeks = this.getWeeks(startTime, endTime);
         let i;
+        // eslint-disable-next-line
         for (i in data) {
             const entries = ProgressCalendar.sortEntries(data[i].entries);
             const userEntries = [];
             let kIndex = 0;
             let j;
             if (entries) {
+                // eslint-disable-next-line
                 for (j in weeks) {
                     let m = 0;
                     const weekEntries = [];
@@ -337,6 +339,7 @@ export default class ProgressCalendar extends Component {
                                 let l;
                                 if (groups.length > 0) {
                                     let isGrouped = false;
+                                    // eslint-disable-next-line no-restricted-syntax
                                     for (l in groups) {
                                         if (
                                             entries[k].groupId === groups[l].id
@@ -473,7 +476,9 @@ export default class ProgressCalendar extends Component {
             // eslint-disable-next-line no-return-assign
             <div
                 className="calendar__content_weeks"
-                ref={(ref) => (this.content = ref)}
+                ref={(ref) => {
+                    this.content = ref;
+                }}
             >
                 <div
                     className="calendar__content_wrapper"
@@ -609,7 +614,9 @@ ProgressCalendar.propTypes = {
     startTime: PropTypes.objectOf(Date).isRequired,
     endTime: PropTypes.objectOf(Date).isRequired,
     className: PropTypes.string,
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 ProgressCalendar.defaultProps = {

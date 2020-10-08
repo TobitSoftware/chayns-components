@@ -1,9 +1,8 @@
-/* eslint-disable react/forbid-prop-types */
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SetupWizardContext from './setupWizardContext';
-import SetupItem from './SetupItem';
+import React, { Component } from 'react';
 import { isDisabled } from '../utils/setupWizardHelper';
+import SetupItem from './SetupItem';
+import SetupWizardContext from './setupWizardContext';
 
 /**
  * ############################
@@ -247,6 +246,7 @@ class SetupWizard extends Component {
             <div style={style} className={className}>
                 {title && <h1>{title}</h1>}
                 {description && (
+                    // eslint-disable-next-line react/no-danger
                     <p dangerouslySetInnerHTML={{ __html: description }} />
                 )}
                 <SetupWizardContext.Provider
@@ -304,8 +304,12 @@ SetupWizard.propTypes = {
     ready: PropTypes.func,
     notComplete: PropTypes.func,
     className: PropTypes.string,
-    style: PropTypes.object,
-    contentStyle: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+    contentStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     title: PropTypes.string,
     description: PropTypes.node,
     numberOfSteps: PropTypes.number,

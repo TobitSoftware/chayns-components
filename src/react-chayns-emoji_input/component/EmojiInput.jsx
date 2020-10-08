@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import loadOptionalDependency from '../../utils/loadOptionalDependency';
 
 function requireEmojione(returnPromise) {
@@ -27,11 +27,13 @@ export default class EmojiInput extends Component {
     constructor(props) {
         super(props);
         requireEmojione().then((emojione) => {
-            emojione.ascii = true; // eslint-disable-line no-param-reassign
-            emojione.imageTitleTag = false; // eslint-disable-line no-param-reassign
-            emojione.blacklistChars = '*,#'; // eslint-disable-line no-param-reassign
+            /* eslint-disable no-param-reassign */
+            emojione.ascii = true;
+            emojione.imageTitleTag = false;
+            emojione.blacklistChars = '*,#';
             emojione.imagePathPNG =
-                'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/'; // eslint-disable-line no-param-reassign
+                'https://sub54.tobit.com/frontend/assets/emojione/3.1/png/64/';
+            /* eslint-enable no-param-reassign */
         });
     }
 
@@ -407,6 +409,7 @@ export default class EmojiInput extends Component {
         return (
             <div className="emoji-input notranslate">
                 <div
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: '<br />' }}
                     ref={(ref) => {
                         this.input = ref;

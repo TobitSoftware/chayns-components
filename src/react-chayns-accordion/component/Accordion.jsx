@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import requestAnimationFrame from '../../utils/requestAnimationFrame';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
-import AccordionHeadRight from './AccordionHeadRight';
 import { isFunction, isString } from '../../utils/is';
+import requestAnimationFrame from '../../utils/requestAnimationFrame';
+import AccordionHeadRight from './AccordionHeadRight';
 
 const CLOSE = 1;
 
@@ -252,6 +251,17 @@ export default class Accordion extends PureComponent {
         } = this.props;
 
         const { currentState } = this.state;
+
+        let titleComponent = null;
+
+        if (head) {
+            if (head.open) {
+                titleComponent = currentState === OPEN ? head.open : head.close;
+            } else {
+                titleComponent = head;
+            }
+        }
+
         return (
             <div
                 className={classNames('accordion', 'react-accordion', {
@@ -301,14 +311,7 @@ export default class Accordion extends PureComponent {
                                 : null),
                         }}
                     >
-                        {/* eslint-disable-next-line no-nested-ternary */}
-                        {head
-                            ? head.open
-                                ? currentState === OPEN
-                                    ? head.open
-                                    : head.close
-                                : head
-                            : null}
+                        {titleComponent}
                     </div>
                     <AccordionHeadRight
                         right={right}
@@ -349,7 +352,8 @@ Accordion.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.object,
     ]),
-    // eslint-disable-next-line react/require-default-props
+
+    // eslint-disable-next-line react/forbid-prop-types
     headCustomAttributes: PropTypes.object,
     children: PropTypes.node.isRequired,
     right: PropTypes.oneOfType([
@@ -364,8 +368,12 @@ Accordion.propTypes = {
     dataGroup: PropTypes.string,
     className: PropTypes.string,
     id: PropTypes.string,
-    style: PropTypes.object,
-    styleBody: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+    styleBody: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
     defaultOpened: PropTypes.bool,

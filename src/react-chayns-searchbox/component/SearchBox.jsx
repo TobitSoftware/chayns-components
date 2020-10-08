@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import './SearchBox.scss';
+import PropTypes from 'prop-types';
+import React, { useCallback, useRef, useState } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
+import './SearchBox.scss';
 
 const SearchBox = ({
     list,
@@ -173,7 +173,9 @@ const SearchBox = ({
                 'cc__search-box--disabled': disabled,
             })}
             onKeyDown={handleKeyDown}
-            inputRef={(ref) => (inputRef.current = ref)}
+            inputRef={(ref) => {
+                inputRef.current = ref;
+            }}
         >
             {filteredList &&
                 filteredList.map((item, index) => (

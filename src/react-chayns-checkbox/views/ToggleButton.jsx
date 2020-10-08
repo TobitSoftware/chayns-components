@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control,react/forbid-prop-types */
-import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import React from 'react';
 import stopPropagationListener from '../../utils/stopPropagationListener';
 
 const SWITCH_LABEL_STYLE = { marginRight: '10px' };
@@ -50,6 +50,7 @@ const ToggleButton = React.forwardRef((props, ref) => {
                 key="label"
                 className={labelClassName}
                 htmlFor={id}
+                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={dangerouslySetLabel}
                 style={modifiedLabelStyle}
                 onClick={stopPropagation ? stopPropagationListener : null}
