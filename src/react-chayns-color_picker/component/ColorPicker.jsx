@@ -1,21 +1,18 @@
-/* eslint-disable react/forbid-prop-types */
-import React, {
-    useState,
-    useEffect,
-    useRef,
-    useCallback,
-    useImperativeHandle,
-    forwardRef,
-} from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import './ColorPicker.scss';
-import Bubble from '../../react-chayns-bubble/component/Bubble';
-import ColorArea from './colorArea/ColorArea';
-import HueSlider from './hueSlider/HueSlider';
-import TransparencySlider from './transparencySlider/TransparencySlider';
-import ColorInput from './colorInput/ColorInput';
+/**
+ * @component
+ */
 
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, {
+    forwardRef,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from 'react';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
 import {
     hexStringToHsv,
     hsvToRgb,
@@ -24,6 +21,11 @@ import {
     rgbToRgbString,
 } from '../../utils/color';
 import { isString } from '../../utils/is';
+import ColorArea from './colorArea/ColorArea';
+import ColorInput from './colorInput/ColorInput';
+import './ColorPicker.scss';
+import HueSlider from './hueSlider/HueSlider';
+import TransparencySlider from './transparencySlider/TransparencySlider';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -46,6 +48,9 @@ const getHsvColor = (color) => {
     };
 };
 
+/**
+ * A RGB color picker.
+ */
 const ColorPicker = forwardRef((props, reference) => {
     // references
     const bubbleRef = useRef(null);
@@ -279,7 +284,14 @@ const ColorPicker = forwardRef((props, reference) => {
 });
 
 ColorPicker.propTypes = {
+    /**
+     * Display the color picker without a bubble.
+     */
     inline: PropTypes.bool,
+
+    /**
+     * The current color. Either a HEX-string, an HSV(A)- or RGB(A)-object.
+     */
     color: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.shape({
@@ -295,22 +307,86 @@ ColorPicker.propTypes = {
             a: PropTypes.number,
         }).isRequired,
     ]).isRequired,
+
+    /**
+     * The bubble position. The possible values are listed under the
+     * `Bubble`-component.
+     */
     bubblePosition: PropTypes.number,
+
+    /**
+     * Will be called when changing the color.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * Will be called after the color was changed.
+     */
     onChangeEnd: PropTypes.func,
+
+    /**
+     * Will be called when the picker loses focus.
+     */
     onBlur: PropTypes.func,
+
+    /**
+     * Wether the picker should show a transparency slider.
+     */
     transparency: PropTypes.bool,
+
+    /**
+     * The parent node the bubble should be rendered into.
+     */
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
             : () => {},
+
+    /**
+     * The classname that will be set on the children wrapper.
+     */
     className: PropTypes.string,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be assigned to the children wrapper
+     * element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A classname string that will be applied to the Bubble component.
+     */
     bubbleClassName: PropTypes.string,
-    bubbleStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the Bubble component.
+     */
+    bubbleStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * Displays an input to type in the color.
+     */
     input: PropTypes.bool,
+
+    /**
+     * The color model that is used by default.
+     */
     defaultColorModel: PropTypes.number,
+
+    /**
+     * Children // TODO
+     */
     children: PropTypes.node,
+
+    /**
+     * Removes space from the parent to the page borders from the tooltip
+     * position. This is only needed if the parent is padded from the page and
+     * has a relative positioning.
+     */
     removeParentSpace: PropTypes.bool,
 };
 

@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
@@ -12,6 +16,9 @@ const OPEN = 2;
 
 let rqAnimationFrame;
 
+/**
+ * Displays a container that can be opened to reveal it's content.
+ */
 export default class Accordion extends PureComponent {
     constructor(props) {
         super(props);
@@ -339,6 +346,12 @@ export default class Accordion extends PureComponent {
 Accordion.dataGroups = {};
 
 Accordion.propTypes = {
+    /**
+     * The component that should be displayed in the accordion head when it is
+     * closed. Can be a `string`, React node or object like this: `{ open:
+     * OpenComponent, close: CloseComponent }`. If an object is provided, the
+     * components will be swapped based on the opening state.
+     */
     head: PropTypes.oneOfType([
         PropTypes.node.isRequired,
         PropTypes.shape({
@@ -346,16 +359,41 @@ Accordion.propTypes = {
             close: PropTypes.node.isRequired,
         }).isRequired,
     ]).isRequired,
+
+    /**
+     * Allows text to wrap inside of the head.
+     */
     headMultiline: PropTypes.bool,
+
+    /**
+     * Additional classnames to be applied to the head. Can be specified as a
+     * `string`, `string[]` or `{[key: string]: boolean}`, which will be passed
+     * to the [`classnames`](https://www.npmjs.com/package/classnames) function.
+     */
     headClassNames: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.object,
     ]),
 
-    // eslint-disable-next-line react/forbid-prop-types
-    headCustomAttributes: PropTypes.object,
+    /**
+     * Custom HTML attributes that will be added to the `<div>` that contains
+     * the head component.
+     */
+    headCustomAttributes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+
+    /**
+     * The content the Accordion reveals when it is open. To get proper spacing
+     * inside of the Accordion body, supply a `<div>` with the classname
+     * `accordion__content` applied to it.
+     */
     children: PropTypes.node.isRequired,
+
+    /**
+     * Component that will be shown on the right side of the component.
+     * Typically a badge. If you want different components for the open and
+     * closed state, supply an object: `{ open: ..., closed: ... }`.
+     */
     right: PropTypes.oneOfType([
         PropTypes.node.isRequired,
         PropTypes.shape({
@@ -363,38 +401,150 @@ Accordion.propTypes = {
             close: PropTypes.node,
         }).isRequired,
     ]),
+
+    /**
+     * Render the Accordion content, even if it is closed.
+     */
     renderClosed: PropTypes.bool,
+
+    /**
+     * Enables the wrapped Accordion style. Use this if the Accordion is nested
+     * inside of another Accordion.
+     */
     isWrapped: PropTypes.bool,
+
+    /**
+     * A string identifier for a group of Accordions. Only one Accordion of a
+     * group that have the same `dataGroup`-prop can be open.
+     */
     dataGroup: PropTypes.string,
+
+    /**
+     * A classname that will be applied to the outer most `<div>`-wrapper of the
+     * Accordion.
+     */
     className: PropTypes.string,
+
+    /**
+     * An HTML id that will be applied to the outer most `<div>`-wrapper.
+     */
     id: PropTypes.string,
+
+    /**
+     * A React style object that will be applied to the outer most
+     * `<div>`-wrapper of the Accordion.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * A React style object that will be applied to the body of the Accordion.
+     */
     styleBody: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * A callback that is called when the Accordion gets opened.
+     */
     onOpen: PropTypes.func,
+
+    /**
+     * A callback that is called when the Accordion gets closed.
+     */
     onClose: PropTypes.func,
+
+    /**
+     * Wether the Accordion should be opened by default (when it first gets
+     * rendered).
+     */
     defaultOpened: PropTypes.bool,
+
+    /**
+     * A function that receives the ref of the outer most `<div>`-element of the
+     * Accordion.
+     */
     reference: PropTypes.func,
+
+    /**
+     * Wether the Accordion should adjust its height in the opened state.
+     */
     autogrow: PropTypes.bool,
+
+    /**
+     * Control the open state.
+     */
     open: PropTypes.bool,
+
+    /**
+     * The icon that is displayed to the left of the Accordion head. Supply a
+     * FontAwesome string like `"fa fa-plane"` or a React component.
+     */
     icon: PropTypes.oneOfType([
         PropTypes.object,
         PropTypes.string,
         PropTypes.node,
     ]),
+
+    /**
+     * Disable the icon rotation.
+     */
     noRotate: PropTypes.bool,
+
+    /**
+     * Disable the opening and closing logic. The Accordion will be stuck in one
+     * state.
+     */
     fixed: PropTypes.bool,
+
+    /**
+     * Remove the Accordion to the left of the head.
+     */
     noIcon: PropTypes.bool,
+
+    /**
+     * A callback that will be called when the text in the search field on the
+     * right changes. This will also enable the search field.
+     */
     onSearch: PropTypes.func,
+
+    /**
+     * A callback that will be called when the enter-key is pressed in the
+     * search field.
+     */
     onSearchEnter: PropTypes.func,
+
+    /**
+     * The placeholder for the search field.
+     */
     searchPlaceholder: PropTypes.string,
+
+    /**
+     * The value for the search field (for making a controlled input).
+     */
     searchValue: PropTypes.string,
+
+    /**
+     * Remove content from the Accordion body when it is closing.
+     */
     removeContentClosed: PropTypes.bool,
+
+    /**
+     * Add a click listener for the Accordion head.
+     */
     onClick: PropTypes.func,
+
+    /**
+     * Disables the Accordion, which changes the style and removes any
+     * interactions.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * When set, the open-prop updates and onChange does not update the internal
+     * state.
+     */
     controlled: PropTypes.bool,
 };
 

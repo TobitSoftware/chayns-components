@@ -1,7 +1,15 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useCallback, useState } from 'react';
 
+/**
+ * A small, round container element to display a value, typically a number. Used
+ * mostly in the right position of `Accordion` or `ListItem` components.
+ */
 const Badge = forwardRef(
     ({ children, className, style, badgeRef, ...other }, ref) => {
         const [minWidth, setMinWidth] = useState();
@@ -36,10 +44,26 @@ const Badge = forwardRef(
 export default Badge;
 
 Badge.propTypes = {
+    /**
+     * A React node that is displayed inside of the Badge.
+     */
     children: PropTypes.node.isRequired,
+
+    /**
+     * A classname that is applied to the Badge `<div>`-element.
+     */
     className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the Badge `<div>`-element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * Retrieves the ref to the Badge `<div>`-element.
+     */
     badgeRef: PropTypes.func,
 };
 
