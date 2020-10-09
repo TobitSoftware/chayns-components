@@ -7,3 +7,27 @@
     rel="stylesheet"
     href="https://dev-cats.github.io/code-snippets/JetBrainsMono.css"
 />
+
+<script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
+
+<script>
+    chayns.ready.then(() => {
+        chayns.invokeCall({ action: 238, value: { hide: true } });
+        chayns.hideTitleImage();
+        chayns.disallowRefreshScroll();
+        chayns.invokeCall({
+            action: 101,
+            value: {
+                tappId: chayns.env.site.tapp.id,
+                viewMode: 4,
+            },
+        });
+
+        chayns.getWindowMetrics().then(({ frameY, windowHeight }) => {
+            chayns.setHeight({
+                height: windowHeight - frameY,
+                forceHeight: true,
+            });
+        });
+    });
+</script>

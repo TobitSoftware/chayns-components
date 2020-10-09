@@ -8,7 +8,7 @@ export const parameters = {
 
 export const decorators = [
     (Story) => (
-        <div className="tapp">
+        <div className="tapp" style={{ margin: 0, padding: 0 }}>
             <Story />
         </div>
     ),

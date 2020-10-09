@@ -29,5 +29,5 @@ export const chaynsTheme = create({
     brandTitle: 'chayns-components',
     brandUrl: 'https://chayns.org/',
     brandImage:
-        'https://tsimg.cloud/130-49351/6d46626032852d21c3b2a170f40dd8a70be40fbe_w400.png',
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
 });
