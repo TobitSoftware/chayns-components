@@ -1,7 +1,10 @@
-/* eslint-disable react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class Bubble extends PureComponent {
@@ -104,22 +107,65 @@ Bubble.position = {
 };
 
 Bubble.propTypes = {
+    /**
+     * The children that will be rendered inside of the bubble.
+     */
     children: PropTypes.node,
+
+    /**
+     * A classname string that will be set on the children wrapper element.
+     */
     className: PropTypes.string,
-    style: PropTypes.object,
-    position:
-        PropTypes.number /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */,
+
+    /**
+     * A React style object that will be applied to the children wrapper
+     * element.
+     */
+    style: PropTypes.PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * This specifies where the bubble will appear relative to its coordinates.
+     * Possible values are: `0` for top left, `1` for bottom left, `2` for bottom
+     * right, `3` for top right, `4` for top center and `5` for bottom center.
+     */
+    position: PropTypes.oneOf([0, 1, 2, 3, 4, 5]),
+
+    /**
+     * A DOM element into which the `Bubble`-component will render.
+     */
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
             : () => {},
+
+    /**
+     * The coordinates where the Bubble will point to. Is provided in an object
+     * format that should look like this: `{ x: <number>, y: <number> }`
+     */
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     }),
+
+    /**
+     * A callback that will be called when the mouse enters the Bubble.
+     */
     onMouseEnter: PropTypes.func,
+
+    /**
+     * A callback that will be called when the mouse leaves the Bubble.
+     */
     onMouseLeave: PropTypes.func,
-    topDivStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be supplied to the outer most element of
+     * the Bubble.
+     */
+    topDivStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 Bubble.defaultProps = {

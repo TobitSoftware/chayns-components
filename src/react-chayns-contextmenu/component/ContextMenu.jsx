@@ -1,11 +1,20 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,prefer-destructuring,react/no-array-index-key,react/forbid-prop-types */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-import Icon from '../../react-chayns-icon/component/Icon';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
+import Icon from '../../react-chayns-icon/component/Icon';
 import { isFunction } from '../../utils/is';
 
+/**
+ * A context menu with several action items that is opened by clicking an icon.
+ *
+ * To open or close the context menu imperatively, call the `show` or `hide`
+ * methods on its reference.
+ */
 export default class ContextMenu extends Component {
     constructor(props) {
         super(props);
@@ -290,11 +299,25 @@ ContextMenu.positionOnChildren = {
 };
 
 ContextMenu.propTypes = {
+    /**
+     * This callback will be called when the `ContextMenu` is shown and the user
+     * clicks away from it.
+     */
     onLayerClick: PropTypes.func,
+
+    /**
+     * The coordinates at which the context menu will get rendered.
+     */
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     }),
+
+    /**
+     * The action items inside of the context menu. Their shape should look like
+     * this: `{ className: <string>, onClick: <function>, text: <string>,
+     * icon: <string> }`.
+     */
     items: PropTypes.arrayOf(
         PropTypes.shape({
             className: PropTypes.string,
@@ -307,24 +330,98 @@ ContextMenu.propTypes = {
             ]),
         })
     ),
-    position: PropTypes.number, // 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right
-    positionOnChildren: PropTypes.number, // 0 = left, 1 = center, 2 = right
+
+    /**
+     * This specifies where the menu will appear relative to the components
+     * provided in the `children`-prop. Possible values are: `0` for top left,
+     * `1` for bottom left, `2` for bottom right, `3` for top right, `4` for top
+     * center and `5` for bottom center.
+     */
+    position: PropTypes.number,
+
+    /**
+     * The position of the arrow relative to the children. Possible values are
+     * `0` for left, `1` for center and `2` for right.
+     */
+    positionOnChildren: PropTypes.number,
+
+    /**
+     * Specifies the DOM node the context menu will be rendered into.
+     */
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
             : () => {},
+
+    /**
+     * The React node that the context menu refers to.
+     */
     children: PropTypes.node,
+
+    /**
+     * Called when the `onclick`-event is triggered on the children.
+     */
     onChildrenClick: PropTypes.func,
-    childrenStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the children wrapper.
+     */
+    childrenStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * A classname string that will be applied to the children wrapper.
+     */
     childrenClassName: PropTypes.string,
+
+    /**
+     * Wether to stop propagation of click events on the children elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * The minimum width of the context menu.
+     */
     minWidth: PropTypes.number,
+
+    /**
+     * The maximum width of the context menu.
+     */
     maxWidth: PropTypes.number,
+
+    /**
+     * Adds a white background to the children wrapper, for when it would
+     * otherwise be difficult to view (e.g. on images or video).
+     */
     showTriggerBackground: PropTypes.bool,
+
+    /**
+     * A classname string applied to the Bubble component.
+     */
     className: PropTypes.string,
+
+    /**
+     * A React style object that is applied to the Bubble component.
+     */
     style: PropTypes.object,
+
+    /**
+     * Removes the parent padding to the page borders from the context menu
+     * position. This is needed when the parent is padded and relatively
+     * positioned.
+     */
     removeParentSpace: PropTypes.bool,
+
+    /**
+     * Disables the use of a dialog on mobile.
+     */
     disableDialog: PropTypes.bool,
+
+    /**
+     * Adjust the distance of the arrow and the end of the children. This only
+     * applies if `positionOnChildren` is set to left (`0`) or right (`2`).
+     */
     arrowDistance: PropTypes.number,
 };
 

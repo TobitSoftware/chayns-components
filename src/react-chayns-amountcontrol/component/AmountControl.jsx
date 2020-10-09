@@ -1,10 +1,16 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-
-import ControlButton from './ControlButton';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import AmountInput from './AmountInput';
+import ControlButton from './ControlButton';
 
+/**
+ * A number input that can easily be incremented and decremented.
+ */
 export default class AmountControl extends PureComponent {
     constructor(props) {
         super(props);
@@ -223,33 +229,150 @@ export default class AmountControl extends PureComponent {
 }
 
 AmountControl.propTypes = {
+    /**
+     * This text will be shown in the button when the `amount`-prop is 0.
+     */
     buttonText: PropTypes.string,
+
+    /**
+     * This component works as a controlled input and this prop defines its
+     * current state.
+     */
     amount: PropTypes.number,
+
+    /**
+     * This callback will be called when the amount is changed by the user.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * Alias for onChange.
+     */
     onInput: PropTypes.func,
+
+    /**
+     * Called when the user clicks the increment-button.
+     */
     onAdd: PropTypes.func,
+
+    /**
+     * Called when the user clicks the decrement-button.
+     */
     onRemove: PropTypes.func,
+
+    /**
+     * Disables any interaction and switches to a disabled style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Disables the input field and forces the user to use the buttons to
+     * control the value.
+     */
     disableInput: PropTypes.bool,
+
+    /**
+     * Disables the increment-button and disables the ability to increment the
+     * value.
+     */
     disableAdd: PropTypes.bool,
+
+    /**
+     * Disables the decrement-button and disables the ability to decrement the
+     * value.
+     */
     disableRemove: PropTypes.bool,
+
+    /**
+     * A classname that is applied to the wrapper of the component.
+     */
     className: PropTypes.string,
+
+    /**
+     * Shows an input field once the amount is greater than 10.
+     */
     autoInput: PropTypes.bool,
+
+    /**
+     * A function that returns the content of the button.
+     */
     buttonFormatHandler: PropTypes.func,
+
+    /**
+     * Wether to show the input.
+     */
     showInput: PropTypes.bool,
+
+    /**
+     * Displays an icon on the left side of the button if the amount is 0.
+     * Supply a FontAwesome-string like `"fa fa-plane"`.
+     */
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * The icon shown on the increment-button.
+     */
     plusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * The icon shown on the decrement-button.
+     */
     minusIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * The icon the reset the amount to 0.
+     */
     removeIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * The color of the remove icon.
+     */
     removeColor: PropTypes.string,
+
+    /**
+     * The color of the icon in the increment-button.
+     */
     addColor: PropTypes.string,
+
+    /**
+     * The color of the icon to the left of the button.
+     */
     iconColor: PropTypes.string,
+
+    /**
+     * Multiple `AmountControl` with the same `equalize`-prop will sync their
+     * width.
+     */
     equalize: PropTypes.string,
+
+    /**
+     * Enables the input autofocus.
+     */
     focusOnClick: PropTypes.bool,
+
+    /**
+     * The width of the AmountControl content.
+     */
     contentWidth: PropTypes.number,
+
+    /**
+     * The minimum value of the AmountControl (the input field is not validated).
+     */
     min: PropTypes.number,
+
+    /**
+     * The maximum value of the AmountControl (the input field is not validated).
+     */
     max: PropTypes.number,
+
+    /**
+     * Stop propagation of click events to parent components.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * Always show the increment and decrement buttons.
+     */
     hasAlwaysControls: PropTypes.bool,
 };
 

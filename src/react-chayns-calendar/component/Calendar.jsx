@@ -1,11 +1,13 @@
-/* eslint-disable react/no-array-index-key,jsx-a11y/click-events-have-key-events,no-underscore-dangle,react/forbid-prop-types */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+/**
+ * @component
+ */
 
-import Month from './Month';
-import areDatesEqual from '../utils/areDatesEqual';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
+import areDatesEqual from '../utils/areDatesEqual';
+import Month from './Month';
 
 const TODAY = new Date();
 const MONTH_NAMES = {
@@ -43,6 +45,10 @@ function getMonthNames(language = chayns.env.language) {
     return MONTH_NAMES[language] || MONTH_NAMES.de;
 }
 
+/**
+ * Displays a grid calendar with the ability to react to user interaction
+ * and highlight certain dates.
+ */
 export default class Calendar extends Component {
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
 
@@ -88,16 +94,19 @@ export default class Calendar extends Component {
             });
         }
 
+        // eslint-disable-next-line no-underscore-dangle
         const _leftHidden = new Date(
             _focus.getFullYear(),
             _focus.getMonth() - 2,
             1
         );
+        // eslint-disable-next-line no-underscore-dangle
         const _rightShown = new Date(
             _focus.getFullYear(),
             _focus.getMonth() - 1,
             1
         );
+        // eslint-disable-next-line no-underscore-dangle
         const _rightHidden = new Date(
             _focus.getFullYear(),
             _focus.getMonth() + 1,
@@ -297,15 +306,19 @@ export default class Calendar extends Component {
          * @type {null}
          * @private
          */
+        // eslint-disable-next-line no-underscore-dangle
         const _startDate = startDate || null;
+        // eslint-disable-next-line no-underscore-dangle
         const _activated =
             activatedProp && activatedProp.length > 0 ? activatedProp : null;
+        // eslint-disable-next-line no-underscore-dangle
         const _highlighted = highlighted || null;
 
         return months.map((month) => {
             const activated = [];
             const tempDates = [];
             const tempObj = [];
+            // eslint-disable-next-line no-underscore-dangle
             let _selected;
             let tempHighlighted = [];
 
@@ -435,10 +448,13 @@ export default class Calendar extends Component {
     }
 
     render() {
+        // eslint-disable-next-line no-underscore-dangle
         const _navigateLeft = !this.getNavigateLeft();
+        // eslint-disable-next-line no-underscore-dangle
         const _navigateRight = !this.getNavigateRight();
         const { style, className } = this.props;
         const { animate, translate } = this.state;
+        // eslint-disable-next-line no-underscore-dangle
         const _months = this.renderMonths();
 
         return (
@@ -494,11 +510,37 @@ export default class Calendar extends Component {
 }
 
 Calendar.propTypes = {
+    /**
+     * Defines the first month that will be displayed.
+     */
     startDate: PropTypes.instanceOf(Date),
+
+    /**
+     * Defines the last month that will be displayed.
+     */
     endDate: PropTypes.instanceOf(Date),
+
+    /**
+     * This callback is called when the user clicks on a date in the calendar.
+     */
     onDateSelect: PropTypes.func,
+
+    /**
+     * The currently selected date as a JavaScript `Date` element.
+     */
     selected: PropTypes.instanceOf(Date),
+
+    /**
+     * This array defines the active dates. Has no effect when `activeAll` is
+     * true.
+     */
     activated: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
+
+    /**
+     * This prop is used to highlight dates. It takes object in the form of
+     * `{ dates: [...<date objects>], color: '<css color>' }`, either supplied
+     * directly or in an array.
+     */
     highlighted: PropTypes.oneOfType([
         PropTypes.shape({
             dates: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
@@ -511,8 +553,22 @@ Calendar.propTypes = {
             })
         ),
     ]),
+
+    /**
+     * Activate all dates.
+     */
     activateAll: PropTypes.bool,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that is applied to the root `<div>`-element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * A classname that is applied to the root `<div>`-element.
+     */
     className: PropTypes.string,
 };
 
