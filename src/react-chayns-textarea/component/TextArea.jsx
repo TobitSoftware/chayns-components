@@ -38,7 +38,7 @@ const TextArea = ({
 
             ref.current.style.height = `${newHeight}px`;
         }
-    }, [offset]);
+    }, [currentHeight, offset]);
 
     // update in value prop
     useEffect(() => {

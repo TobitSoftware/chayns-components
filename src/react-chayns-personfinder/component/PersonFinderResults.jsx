@@ -86,6 +86,7 @@ PersonFinderResults.propTypes = {
         identifier: PropTypes.string,
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
+        // eslint-disable-next-line react/forbid-prop-types
         groups: PropTypes.array,
         filter: PropTypes.func,
     }).isRequired,

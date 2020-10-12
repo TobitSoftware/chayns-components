@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
@@ -221,7 +222,7 @@ SliderButton.propTypes = {
     ),
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.any,
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
             text: PropTypes.string,
         })
     ),

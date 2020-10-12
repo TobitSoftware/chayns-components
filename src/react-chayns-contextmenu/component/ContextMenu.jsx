@@ -236,6 +236,7 @@ export default class ContextMenu extends Component {
                     ...style,
                 }}
                 key="bubble"
+                /* eslint-disable-next-line no-return-assign */
                 ref={(ref) => (this.bubble = ref)}
                 className={className}
             >
@@ -253,6 +254,7 @@ export default class ContextMenu extends Component {
                                 item.onClick(e);
                             }}
                             key={
+                                // eslint-disable-next-line react/no-array-index-key
                                 (item.text.props && item.text.props.stringName
                                     ? item.text.props.stringName
                                     : item.text) + index
@@ -273,6 +275,7 @@ export default class ContextMenu extends Component {
             coordinates ? null : (
                 <div
                     key="cc__contextMenu__children"
+                    /* eslint-disable-next-line no-return-assign */
                     ref={(ref) => (this.childrenNode = ref)}
                     onClick={this.onChildrenClick}
                     style={childrenStyle}
@@ -404,6 +407,7 @@ ContextMenu.propTypes = {
     /**
      * A React style object that is applied to the Bubble component.
      */
+    // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
 
     /**

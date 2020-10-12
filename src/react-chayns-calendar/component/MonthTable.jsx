@@ -212,6 +212,7 @@ MonthTable.propTypes = {
     highlighted: PropTypes.arrayOf(
         PropTypes.shape({
             dates: PropTypes.arrayOf(Date).isRequired,
+            // eslint-disable-next-line react/forbid-prop-types
             style: PropTypes.object,
         })
     ),

@@ -120,6 +120,7 @@ export default class ProgressCalendar extends Component {
     shouldComponentUpdate(nextProps) {
         const { focus, data, columns, groups, startTime, endTime } = this.props;
 
+        // eslint-disable-next-line guard-for-in,no-restricted-syntax
         for (const i in nextProps.data) {
             if (nextProps.data.length !== data.length) {
                 this.entries = this.getEntries(

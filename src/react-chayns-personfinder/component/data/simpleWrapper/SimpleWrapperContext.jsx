@@ -1,4 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/forbid-prop-types,react-hooks/exhaustive-deps */
 import React, { createContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 

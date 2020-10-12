@@ -177,7 +177,14 @@ const PersonFinderStateProvider = ({
                 hasMore,
             });
         },
-        [skipPersons, take, enablePersons, includeOwn, uacId]
+        [
+            enablePersons,
+            uacId,
+            state.hasMore.personsRelated,
+            skipPersons,
+            take,
+            includeOwn,
+        ]
     );
 
     const loadUacPersons = useCallback(
@@ -210,7 +217,7 @@ const PersonFinderStateProvider = ({
                 hasMore,
             });
         },
-        [uacId, locationId]
+        [uacId, state.hasMore.personsRelated, locationId, skipPersons, take]
     );
 
     const loadSites = useCallback(
@@ -234,6 +241,7 @@ const PersonFinderStateProvider = ({
         [skipSites, take, enableSites]
     );
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const onChange = useCallback(
         debounce(async (value) => {
             if (value.length < 3) return;

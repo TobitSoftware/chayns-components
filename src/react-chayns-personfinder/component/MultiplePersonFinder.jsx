@@ -288,6 +288,7 @@ MultiplePersonFinder.propTypes = {
     onInput: PropTypes.func,
     context: PropTypes.shape({
         Provider: PropTypes.func,
+        // eslint-disable-next-line react/forbid-prop-types
         Consumer: PropTypes.object,
         ObjectMapping: PropTypes.shape({
             showName: PropTypes.string,

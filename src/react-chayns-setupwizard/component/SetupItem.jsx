@@ -25,6 +25,7 @@ const SetupItem = ({
 }) => {
     useEffect(() => {
         stepRequired(required, step);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const disabled = isDisabled(enabledSteps, step) || disabledProp;
