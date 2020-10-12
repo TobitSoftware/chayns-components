@@ -42,6 +42,7 @@ The component got the following properties:
 | preventTriggerStyle   | Prevent underline for children node.                                                                                                                                 | bool   | false   | false    |
 | hideOnChildrenLeave   | Hide Tooltip on children leave, also if the cursor is over the bubble.                                                                                               | bool   | false   | false    |
 | removeParentSpace     | Removes space from the parent to the page borders from tooltip position. It's only needed if the parent has space to the page borders and it's position is relative. | bool   | false   | false    |
+| isIOS                 | Needed for server side rendering if chayns is not defined.                                                                                                           | bool   | false   | false    |
 
 Also, you can call the methods show() and hide() on the reference of the
 tooltip.

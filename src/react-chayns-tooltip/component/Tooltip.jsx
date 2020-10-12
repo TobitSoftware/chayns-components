@@ -100,7 +100,7 @@ export default class Tooltip extends Component {
                     : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
-        if (chayns.env.isApp) {
+        if (typeof chayns !== 'undefined' && chayns.env.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
         }
@@ -145,9 +145,12 @@ export default class Tooltip extends Component {
             minWidth,
             maxWidth,
             hideOnChildrenLeave,
+            isIOS,
         } = this.props;
 
         const { position, x, y } = this.state;
+
+        const ios = typeof chayns !== 'undefined' ? chayns.env.isIOS : isIOS;
 
         return [
             position !== null ? (
@@ -189,10 +192,10 @@ export default class Tooltip extends Component {
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
                 onMouseEnter={
-                    !chayns.env.isIOS && bindListeners ? this.show : null
+                    !ios && bindListeners ? this.show : null
                 }
                 onMouseLeave={bindListeners ? this.hide : null}
-                onClick={chayns.env.isIOS && bindListeners ? this.show : null}
+                onClick={ios && bindListeners ? this.show : null}
             >
                 {children}
             </div>,
@@ -235,6 +238,7 @@ Tooltip.propTypes = {
     preventTriggerStyle: PropTypes.bool,
     hideOnChildrenLeave: PropTypes.bool,
     removeParentSpace: PropTypes.bool,
+    isIOS: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {
@@ -243,7 +247,7 @@ Tooltip.defaultProps = {
     position: null,
     minWidth: 100,
     maxWidth: 250,
-    removeIcon: chayns.env.isIOS,
+    removeIcon: typeof chayns !== 'undefined' ? chayns.env.isIOS : false,
     parent: null,
     coordinates: null,
     childrenStyle: null,
@@ -251,6 +255,7 @@ Tooltip.defaultProps = {
     preventTriggerStyle: false,
     hideOnChildrenLeave: false,
     removeParentSpace: false,
+    isIOS: typeof chayns !== 'undefined' ? chayns.env.isIOS : false,
 };
 
 Tooltip.displayName = 'Tooltip';
