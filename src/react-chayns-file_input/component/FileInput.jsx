@@ -1,13 +1,18 @@
-// eslint-disable-next-line max-len
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/no-unused-prop-types,no-return-assign,react/no-array-index-key,react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import Icon from '../../react-chayns-icon/component/Icon';
-import supportsFileInput from '../utils/supportsFileInput';
-import fileInputCall from '../utils/fileInputCall';
-import { isFunction } from '../../utils/is';
+/**
+ * @component
+ */
 
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import Icon from '../../react-chayns-icon/component/Icon';
+import { isFunction } from '../../utils/is';
+import fileInputCall from '../utils/fileInputCall';
+import supportsFileInput from '../utils/supportsFileInput';
+
+/**
+ * A file input that accepts specified file types via upload or drag and drop.
+ */
 export default class FileInput extends PureComponent {
     constructor(props) {
         super(props);
@@ -178,6 +183,7 @@ export default class FileInput extends PureComponent {
                             { 'cc__file-input__split--disabled': item.disabled }
                         )}
                         style={item.style}
+                        // eslint-disable-next-line react/no-array-index-key
                         key={`item${index}`}
                     >
                         {item.content && item.content.children ? (
@@ -185,7 +191,9 @@ export default class FileInput extends PureComponent {
                         ) : (
                             <div
                                 className="cc__file-input--placeholder"
-                                ref={(ref) => (this.itemRefs[index] = ref)}
+                                ref={(ref) => {
+                                    this.itemRefs[index] = ref;
+                                }}
                                 onClick={(event) =>
                                     this.onClick(event, item, index)
                                 }
@@ -215,9 +223,9 @@ export default class FileInput extends PureComponent {
                                         onDragLeave={() =>
                                             this.onDragLeave(index)
                                         }
-                                        ref={(ref) =>
-                                            (this.fileInputRefs[index] = ref)
-                                        }
+                                        ref={(ref) => {
+                                            this.fileInputRefs[index] = ref;
+                                        }}
                                     />
                                 ) : null}
                                 <span className="cc__file-input__icon">
@@ -270,10 +278,32 @@ FileInput.typePresets = {
 };
 
 FileInput.propTypes = {
+    /**
+     * A classname string that is applied to the root element.
+     */
     className: PropTypes.string,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that is applied to the root element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * Disables any interaction with the component and renders it in a disabled
+     * style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Custom error messages for the component.
+     */
     errorMessages: PropTypes.shape({
         tooMuchFiles: PropTypes.string,
         fileTooBig: PropTypes.string,
@@ -281,6 +311,10 @@ FileInput.propTypes = {
         permanentNoPermission: PropTypes.string,
         temporaryNoPermission: PropTypes.string,
     }),
+
+    /**
+     * The different fields that will be shown in the file input.
+     */
     items: PropTypes.arrayOf(
         PropTypes.shape({
             types: PropTypes.arrayOf(PropTypes.string),
@@ -290,7 +324,9 @@ FileInput.propTypes = {
             onClick: PropTypes.func,
             onChange: PropTypes.func,
             className: PropTypes.string,
-            style: PropTypes.object,
+            style: PropTypes.objectOf(
+                PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+            ),
             disabled: PropTypes.bool,
             content: PropTypes.oneOfType([
                 PropTypes.shape({
