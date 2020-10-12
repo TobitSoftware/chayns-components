@@ -30,7 +30,7 @@
         "generate-docs": "node ./scripts/generateDocs",
         "lint": "eslint ./src --ext js,jsx",
         "prepublishOnly": "npm run lint & npm run build",
-        "start": "node ./examples/utils/generateReactList && concurrently --kill-others \"npm run watch:sass\" \"npm run webpack\"",
+        "start": "node ./examples/utils/generateReactList && run-p watch:sass webpack",
         "storybook": "start-storybook -p 6006",
         "watch": "run-p watch:sass watch:js",
         "watch:js": "npm run build:lib:es -- -w",
