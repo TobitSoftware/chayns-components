@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { isString } from '../../utils/is';
 import MultiplePersonFinder from './MultiplePersonFinder';
 
@@ -8,7 +8,6 @@ class SimplePersonFinder extends Component {
         super(props);
 
         if (isString(props.defaultValue)) {
-            // eslint-disable-next-line no-console
             console.warn(
                 '[chayns components] PersonFinder: defaultValue is a String. Please consider using an object for defaultValue.'
             );

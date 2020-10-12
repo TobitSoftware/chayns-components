@@ -1,9 +1,27 @@
-/* eslint-disable react/forbid-prop-types */
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 
+/**
+ * You can import the Button-component like this:
+ *
+ * ```jsx
+ * import { Button } from 'chayns-components';
+ * ```
+ *
+ * and use it like this:
+ *
+ * ```jsx
+ * <Button onClick={() => {console.log("I have been clicked!")}}>
+ *     Click Me!
+ * </Button>
+ * ```
+ */
 const Button = forwardRef((props, ref) => {
     const {
         chooseButton,
@@ -58,14 +76,49 @@ const Button = forwardRef((props, ref) => {
 export default Button;
 
 Button.propTypes = {
+    /**
+     * String or components that are rendered inside of the button.
+     */
     children: PropTypes.node.isRequired,
+
+    /**
+     * Renders the button on the "ChooseButton"-style. Alternatively use the `ChooseButton`-component.
+     */
     chooseButton: PropTypes.bool,
+
+    /**
+     * Renders the button as disabled and disables click events.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Will be called after the button has been clicked with the event as the first parameter.
+     */
     onClick: PropTypes.func,
+
+    /**
+     * String of classnames that should be added to the button.
+     */
     className: PropTypes.string,
+
+    /**
+     * An optional icon that is displayed on the left of the button. Supply a FontAwesome icon like this: "fa fa-plane"
+     */
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * Render the button in a secondary style.
+     */
     secondary: PropTypes.bool,
+
+    /**
+     * Stop the event propagation on click.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * Set the type for the native button HTML element.
+     */
     type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 

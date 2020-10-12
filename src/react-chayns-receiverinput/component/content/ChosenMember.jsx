@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import React, { Component } from 'react';
 import Icon from '../../../react-chayns-icon/component/Icon';
 
 export default class ChosenMember extends Component {
@@ -21,9 +20,14 @@ export default class ChosenMember extends Component {
     render() {
         const { personId, siteId, fixed, name } = this.props;
 
-        // eslint-disable-next-line no-nested-ternary
-        const memberId =
-            siteId !== null ? siteId : personId !== null ? personId : null;
+        let memberId = null;
+
+        if (siteId !== null) {
+            memberId = siteId;
+        } else if (personId !== null) {
+            memberId = personId;
+        }
+
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
         return (

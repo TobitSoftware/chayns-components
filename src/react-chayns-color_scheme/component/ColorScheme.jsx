@@ -1,20 +1,20 @@
-/* eslint-disable react/forbid-prop-types,no-restricted-syntax */
-import React, { memo, useMemo } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import { getAvailableColorList, getColorFromPalette } from '@chayns/colors';
+import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import { hexStringToRgb } from '../../utils/color';
 
+/**
+ * This component adjusts the color scheme for all children components.
+ */
 const ColorScheme = (props) => {
-    // eslint-disable-next-line prefer-const
-    let {
-        color,
-        colorMode,
-        secondaryColor,
-        children,
-        style,
-        cssVariables,
-        ...otherProps
-    } = props;
+    let { color, colorMode, secondaryColor } = props;
+
+    const { children, style, cssVariables, ...otherProps } = props;
+
     if (color !== null || secondaryColor !== null || colorMode !== null) {
         if (typeof chayns !== 'undefined') {
             if (color === null) {
@@ -52,7 +52,7 @@ const ColorScheme = (props) => {
                 '--chayns-bg-rgb': `${bgRgbColor.r}, ${bgRgbColor.g}, ${bgRgbColor.b}`,
             };
 
-            // eslint-disable-next-line no-unused-vars
+            // eslint-disable-next-line no-restricted-syntax
             for (const colorName of getAvailableColorList()) {
                 const hexColor = getColorFromPalette(colorName, {
                     color,
@@ -81,12 +81,40 @@ const ColorScheme = (props) => {
 };
 
 ColorScheme.propTypes = {
+    /**
+     * The color to use for child components in hex format.
+     */
     color: PropTypes.string,
+
+    /**
+     * A secondary color to use for child components in hex format.
+     */
     secondaryColor: PropTypes.string,
+
+    /**
+     * A color mode to use for child components.
+     */
     colorMode: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * Children of the component.
+     */
     children: PropTypes.node.isRequired,
-    style: PropTypes.object,
-    cssVariables: PropTypes.object,
+
+    /**
+     * Styles to be set on the wrapper `<div>`-element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * An object of CSS variables that should be set on the `<div>`-wrapper.
+     * Should look like this: `{ "--my-css-var": 100 }`.
+     */
+    cssVariables: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 ColorScheme.defaultProps = {
@@ -99,4 +127,4 @@ ColorScheme.defaultProps = {
 
 ColorScheme.displayName = 'ColorScheme';
 
-export default memo(ColorScheme);
+export default ColorScheme;

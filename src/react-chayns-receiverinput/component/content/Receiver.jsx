@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
-import React, { Component } from 'react';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
-
+import React, { Component } from 'react';
 import { getGroupImage, handleImageError } from '../../utils/image';
 import { getTextstring } from '../../utils/textstring';
 
@@ -98,13 +97,14 @@ export default class Receiver extends Component {
             name,
         } = this.props;
 
-        // eslint-disable-next-line no-nested-ternary
-        const memberId =
-            showIdInPopup && siteId !== null
-                ? siteId
-                : showIdInPopup && personId !== null
-                ? personId
-                : null;
+        let memberId = null;
+
+        if (showIdInPopup && siteId !== null) {
+            memberId = siteId;
+        } else if (showIdInPopup && personId !== null) {
+            memberId = personId;
+        }
+
         const memberName = memberId !== null ? `${name} (${memberId})` : name;
 
         return (

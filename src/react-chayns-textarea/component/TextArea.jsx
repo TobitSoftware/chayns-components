@@ -1,6 +1,6 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 const DEFAULT_STYLE = {
     width: '100%',
@@ -58,8 +58,8 @@ const TextArea = ({
                 }
 
                 node.setAttribute('row', '1');
-                node.style.overflow =
-                    'hidden'; /* eslint-disable-line no-param-reassign */
+                // eslint-disable-next-line no-param-reassign
+                node.style.overflow = 'hidden';
 
                 if (autogrow) {
                     setOffset(node.offsetHeight - node.clientHeight);
@@ -72,7 +72,7 @@ const TextArea = ({
                 reference(node);
             }
         },
-        [reference, setOffset, required, autogrow]
+        [reference, required, autogrow, grow]
     );
 
     // autogrows on change and pass value to onChange-prop
@@ -145,7 +145,9 @@ TextArea.defaultProps = {
 };
 
 TextArea.propTypes = {
-    style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     disabled: PropTypes.bool,
     className: PropTypes.string,
     placeholder: PropTypes.string,

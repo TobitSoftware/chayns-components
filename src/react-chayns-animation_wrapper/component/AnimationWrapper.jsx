@@ -1,7 +1,14 @@
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import './animation-wrapper.scss';
 
+/**
+ * A wrapper that animates its children in.
+ */
 const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
     const [height, setHeight] = useState(0);
     const childrenRef = useRef(0);
@@ -57,8 +64,20 @@ const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
 };
 
 AnimationWrapper.propTypes = {
+    /**
+     * The children that should be animated.
+     */
     children: PropTypes.node,
+
+    /**
+     * The duration of the animation in seconds.
+     */
     animationTime: PropTypes.number,
+
+    /**
+     * The time until the height of the content is set to auto to reflect
+     * changes in children size.
+     */
     setAutoTime: PropTypes.number,
 };
 

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Tag from './Tag';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import getInputSize from '../utils/getInputSize';
+import Tag from './Tag';
 
 const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
@@ -175,8 +175,9 @@ TagInput.propTypes = {
     onChange: PropTypes.func,
     placeholder: PropTypes.string,
     className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 TagInput.defaultProps = {

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 let currentId = 0;
 const PREFIX = 'CC_RB_';
@@ -90,8 +90,9 @@ RadioButton.propTypes = {
     ]),
     className: PropTypes.string,
     stopPropagation: PropTypes.bool,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 RadioButton.defaultProps = {
