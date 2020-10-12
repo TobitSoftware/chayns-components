@@ -1,12 +1,19 @@
-/* eslint-disable react/no-redundant-should-component-update,react/forbid-prop-types */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import { library } from '@fortawesome/fontawesome-svg-core';
-import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { isFunction, isString } from '../../utils/is';
 
 let displayedIconWarning = false;
+
+/**
+ * Displays a FontAwesome icon.
+ */
 export default class Icon extends Component {
     constructor(props) {
         super(props);
@@ -98,6 +105,12 @@ export default class Icon extends Component {
 }
 
 Icon.propTypes = {
+    /**
+     * The icon to display. Supply a string like this: `fa fa-plane`. Search for
+     * icons and their strings on https://fontawesome.com/icons/. For backwards
+     * compatibility you can also specify an icon object from the
+     * `@fortawesome`-packages, but this should not be used going forward.
+     */
     icon: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.shape({
@@ -105,10 +118,34 @@ Icon.propTypes = {
             prefix: PropTypes.string.isRequired,
         }).isRequired,
     ]).isRequired,
+
+    /**
+     * A classname string that will be applied to the HTML element of the icon.
+     */
     className: PropTypes.string,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be applied ot the `<i>`-element of the
+     * icon.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A callback that is called for the `onclick`-event on the icon.
+     */
     onClick: PropTypes.func,
+
+    /**
+     * Disables any user interaction on the icon and renders it in a disabled
+     * style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
 };
 
