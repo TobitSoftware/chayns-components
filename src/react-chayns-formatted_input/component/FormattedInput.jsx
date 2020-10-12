@@ -1,8 +1,20 @@
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import Formatter from '../utils/Formatter';
 
+/**
+ * A text input that automatically formats its input with a formatter. Since
+ * this component is based on the `Input`-component, it takes any of the
+ * `Input`-components props, which are not listed here.
+ *
+ * This component only works as an uncontrolled component, meaning that it does
+ * not take a `value`-prop.
+ */
 export default class FormattedInput extends Component {
     lastSend = null;
 
@@ -109,10 +121,21 @@ export default class FormattedInput extends Component {
 }
 
 FormattedInput.propTypes = {
+    /**
+     * An instance of a formatter that will be used to format the value of the
+     * input.
+     */
     initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
+
+    /**
+     * The function that will be called on change.
+     */
     onChange: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    defaultValue: PropTypes.any,
+
+    /**
+     * The initial value of the input.
+     */
+    defaultValue: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 };
 
 FormattedInput.defaultProps = {
