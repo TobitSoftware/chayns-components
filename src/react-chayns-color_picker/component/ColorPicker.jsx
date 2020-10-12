@@ -177,7 +177,7 @@ const ColorPicker = forwardRef(
             );
         }, [setColorModel, colorModel]);
 
-        const rgb255 = hsvToRgb(color);
+        const rgb255 = hsvToRgb(colorState);
 
         useImperativeHandle(reference, () => ({
             show: openBubble,
@@ -272,28 +272,28 @@ const ColorPicker = forwardRef(
                     className="cc__color-picker__bubble-content"
                 >
                     <ColorArea
-                        color={color}
-                        onChange={onChange}
+                        color={colorState}
+                        onChange={onChangeCallback}
                         onChangeEnd={onChangeEnd}
                     />
                     <HueSlider
-                        color={color}
-                        onChange={onChange}
+                        color={colorState}
+                        onChange={onChangeCallback}
                         onChangeEnd={onChangeEnd}
                         showTooltip={false}
                     />
                     {transparency && (
                         <TransparencySlider
-                            color={color}
-                            onChange={onChange}
+                            color={colorState}
+                            onChange={onChangeCallback}
                             onChangeEnd={onChangeEnd}
                         />
                     )}
                     {input && (
                         <ColorInput
-                            color={color}
+                            color={colorState}
                             onChange={(value) => {
-                                onChange(value);
+                                onChangeCallback(value);
                                 onChangeEnd(value);
                             }}
                             onModelToggle={onColorModelToggle}
