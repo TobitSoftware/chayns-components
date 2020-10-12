@@ -27,6 +27,7 @@ const ListItem = ({
     noContentClass,
     onOpen,
     imageBorderColor,
+    left,
     ...props
 }) => (
     <div
@@ -56,6 +57,7 @@ const ListItem = ({
             onTouchEnd={onTouchEnd}
             onTouchCancel={onTouchCancel}
             imageBorderColor={imageBorderColor}
+            left={left}
             {...headerProps}
         />
     </div>
@@ -99,6 +101,10 @@ ListItem.propTypes = {
     noContentClass: PropTypes.bool,
     onOpen: PropTypes.func,
     imageBorderColor: PropTypes.string,
+    left: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]),
 };
 
 ListItem.defaultProps = {
@@ -126,6 +132,7 @@ ListItem.defaultProps = {
     noContentClass: null,
     onOpen: null,
     imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
+    left: null,
 };
 
 ListItem.displayName = 'ListItem';
