@@ -24,21 +24,24 @@ component.
 
 You can set the following props on a ColorPicker element:
 
-| Property             | Description                               | Type          |
-| -------------------- | ----------------------------------------- | ------------- |
-| className            | ClassName set on the wrapper              | String        |
-| onSelect             | Callback which will be called on select   | Function      |
-| disabled             | Disables the SearchBox                    | Boolean       |
-| stopPropagation      | Calls stopPropagation on events           | Boolean       |
-| defaultValue         | Default value of the SearchBox (key)      | String/Number |
-| parent               | Parent element of the overlay             | Node          |
-| style                | Styles set on the wrapper                 | Object        |
-| value                | Controlled value of the SearchBox (key)   | String/Number |
-| inputValue           | Controlled value for the input            | String        |
-| showListWithoutInput | Shows the list if there is no user input  | Boolean       |
-| inputDefaultValue    | Default value for the input               | String        |
-| onChange             | Input onChange callback                   | Function      |
-| autoSelectFirst      | Autoselect the first entry in result list | bool          |
+| Property             | Description                                                                | Type          |
+| -------------------- | -------------------------------------------------------------------------- | ------------- |
+| className            | ClassName set on the wrapper                                               | String        |
+| onSelect             | Callback which will be called on select                                    | Function      |
+| disabled             | Disables the SearchBox                                                     | Boolean       |
+| stopPropagation      | Calls stopPropagation on events                                            | Boolean       |
+| defaultValue         | Default value of the SearchBox (key)                                       | String/Number |
+| parent               | Parent element of the overlay                                              | Node          |
+| style                | Styles set on the wrapper                                                  | Object        |
+| value                | Controlled value of the SearchBox (key)                                    | String/Number |
+| inputValue           | Controlled value for the input                                             | String        |
+| showListWithoutInput | Shows the list if there is no user input                                   | Boolean       |
+| inputDefaultValue    | Default value for the input                                                | String        |
+| onChange             | Input onChange callback                                                    | Function      |
+| autoSelectFirst      | Autoselect the first entry in result list                                  | Boolean       |
+| list                 | An array containing elements to select from.                               | Array         |
+| listKey              | The name of the identifier of the list items.                              | String        |
+| listValue            | The name of the shown value property of the list items.                    | String        |
 
 All other props are passing on the InputBox component.
 
