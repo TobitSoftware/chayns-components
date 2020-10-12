@@ -29,6 +29,8 @@ import { {{ name }} } from 'chayns-components';
 <{{ name }} {...} />
 ```
 
+{{ docs }}
+
 ## Props
 
 The `{{ name }}`-component takes the following props:

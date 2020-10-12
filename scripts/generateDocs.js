@@ -11,29 +11,44 @@ const { kebabCase } = require('lodash');
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
-const componentRegex = /^\/\*\*.*@component.*?\*\//s;
+const componentRegex = /^\/\*\*.*@component(?: \{(.*?)\})?.*?\*\//s;
 const jsGlob = 'src/**/*.{js,jsx}';
 
 glob(jsGlob).then(async (paths) => {
-    const filePromises = paths.map(async (path) => {
-        const content = await readFileAsync(path, { encoding: 'utf-8' });
+    const filePromises = paths.map(async (filePath) => {
+        const content = await readFileAsync(filePath, { encoding: 'utf-8' });
 
-        return { path, content };
+        return { filePath, content };
     });
 
     const files = await Promise.all(filePromises);
 
-    const componentFiles = files.filter((file) =>
-        componentRegex.test(file.content)
-    );
+    const componentFiles = files
+        .filter((file) => componentRegex.test(file.content))
+        .map((file) => {
+            const matches = componentRegex.exec(file.content);
 
-    const components = componentFiles.map((file) => {
-        const info = docGen.parse(file.content, null, null, {
+            return {
+                ...file,
+                docsPath: matches[1] ? matches[1] : null,
+            };
+        });
+
+    const componentPromises = componentFiles.map(async (file) => {
+        const { content, docsPath, filePath } = file;
+
+        const info = docGen.parse(content, null, null, {
             cwd: path.resolve('src'),
         });
 
-        return { ...file, info };
+        const docs = docsPath
+            ? await readFileAsync(path.join(filePath, '../', docsPath))
+            : '';
+
+        return { ...file, info, docs };
     });
+
+    const components = await Promise.all(componentPromises);
 
     const template = await readFileAsync(
         path.join(__dirname, 'docgen-templates', 'component.md'),
@@ -91,11 +106,12 @@ glob(jsGlob).then(async (paths) => {
             description,
             propTable,
             propDescriptions,
+            docs: component.docs,
         });
 
         if (!prettierOptions) {
             prettierOptions = await prettier.resolveConfig(
-                path.resolve(component.path)
+                path.resolve(component.filePath)
             );
         }
 
