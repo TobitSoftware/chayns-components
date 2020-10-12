@@ -18,7 +18,7 @@ export default class FileInput extends PureComponent {
             hasMemoryAccess: !(
                 chayns.env.isAndroid &&
                 (chayns.env.isApp || chayns.env.isMyChaynsApp) &&
-                chayns.env.appVersion >= 6244
+                (chayns.env.isMyChaynsApp || chayns.env.appVersion) >= 6244
             ),
         };
     }
