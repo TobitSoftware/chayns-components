@@ -1,14 +1,17 @@
+/**
+ * @component
+ */
+
 /* global google */
-import React, { PureComponent, createRef } from 'react';
-import PropTypes from 'prop-types';
 import Coordinates from 'coordinate-parser';
+import PropTypes from 'prop-types';
+import React, { createRef, PureComponent } from 'react';
 import Input from '../../react-chayns-input/component/Input';
-import GoogleMap from './GoogleMap/GoogleMap';
-import AutocompleteItem from './AutocompleteItem';
-import { PositionProps } from './GoogleMap/PropTypes';
-import debounce from '../../utils/debounce';
-import './styles.scss';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+import debounce from '../../utils/debounce';
+import AutocompleteItem from './AutocompleteItem';
+import GoogleMap from './GoogleMap/GoogleMap';
+import './styles.scss';
 
 /** Uses the `toJSON()` method to return a human readable-object */
 const toLiteral = (value) => JSON.parse(JSON.stringify(value));
@@ -18,12 +21,18 @@ const COORDS = 2;
 
 const noop = () => {};
 
+/**
+ * A location input with a map and text input.
+ *
+ * This requires the Google Maps JavaScript API with the places library enabled.
+ * You can find more information about the Maps API
+ * [here](https://developers.google.com/maps/documentation/javascript/overview).
+ */
 export default class PositionInput extends PureComponent {
     constructor(props) {
         super(props);
 
         if (!window.google) {
-            // eslint-disable-next-line max-len
             throw new Error(
                 'The google maps JS API could not be found. Did you forget to include the script? See https://developers.google.com/maps/documentation/javascript/get-api-key for more details.'
             );
@@ -221,11 +230,35 @@ export default class PositionInput extends PureComponent {
 }
 
 PositionInput.propTypes = {
-    defaultPosition: PositionProps.isRequired,
+    /**
+     * The position that will be used as a starting point.
+     */
+    defaultPosition: PropTypes.shape({
+        lat: PropTypes.number.isRequired,
+        lng: PropTypes.number.isRequired,
+    }).isRequired,
+
+    /**
+     * This will be called when the position selection changes.
+     */
     onPositionChange: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    mapOptions: PropTypes.object,
+
+    /**
+     * An object with options for the Google Map. These options are documented
+     * [here](https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions).
+     */
+    mapOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+
+    /**
+     * A render function for creating a custom input overlay. It receives the
+     * currently selected position as its first argument and an onChange-method
+     * as its second argument.
+     */
     children: PropTypes.func,
+
+    /**
+     * A DOM element that the overlay should be rendered into.
+     */
     parent: PropTypes.node,
 };
 
@@ -243,7 +276,6 @@ PositionInput.defaultProps = {
             },
         ],
     },
-    // eslint-disable-next-line react/display-name
     children: (value, onChange) => (
         <Input placeholder="Position" value={value} onChange={onChange} />
     ),
