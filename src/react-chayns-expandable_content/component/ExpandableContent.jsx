@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
+/**
+ * @component
+ */
 
-import isInteger from '../../utils/isInteger';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import insertStyle from '../../utils/insertStyle';
+import isInteger from '../../utils/isInteger';
 
 const CLOSED = 0;
 const PRE_CLOSING = 4;
@@ -28,6 +31,9 @@ const DEFAULT_TIMEOUTS = {
     closing: DEFAULT_CLOSE_TIMEOUT,
 };
 
+/**
+ * A component collapses or expands its children based on the `open`-prop.
+ */
 export default class ExpandableContent extends Component {
     static getMaxHeight(state, style) {
         if (state === PRE_CLOSING) {
@@ -187,24 +193,55 @@ export default class ExpandableContent extends Component {
 }
 
 ExpandableContent.propTypes = {
+    /**
+     * An object of classname strings that should be applied in the different
+     * states.
+     */
     classNames: PropTypes.shape({
         opening: PropTypes.string,
         opened: PropTypes.string,
         closing: PropTypes.string,
         closed: PropTypes.string,
     }),
+
+    /**
+     * This controls the animation timeouts for opening and closing.
+     */
     timeout: PropTypes.shape({
         opening: PropTypes.number,
         closing: PropTypes.number,
     }),
+
+    /**
+     * Wether the content should be visible. If changed, a height transition
+     * will start.
+     */
     open: PropTypes.bool.isRequired,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object that is passed to the wrapper `<div>`-element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * A classname string that is applied to the wrapper element.
+     */
     className: PropTypes.string,
+
+    /**
+     * The children of the component.
+     */
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
+
+    /**
+     * Wether the content should be removed when the component is closed and the
+     * content would not be visible anyways.
+     */
     removeContentClosed: PropTypes.bool,
 };
 
