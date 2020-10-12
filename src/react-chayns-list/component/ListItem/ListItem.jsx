@@ -1,8 +1,16 @@
+/**
+ * @component
+ */
+
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ListItemHeader from './ListItemHeader';
 
+/**
+ * The items in a list to display related data in a structured format. Should be
+ * used inside of a `List` component.
+ */
 const ListItem = ({
     title,
     subtitle,
@@ -23,7 +31,6 @@ const ListItem = ({
     onTouchEnd,
     onTouchCancel,
     longPressTimeout,
-    notExpandable,
     noContentClass,
     onOpen,
     imageBorderColor,
@@ -62,42 +69,146 @@ const ListItem = ({
 );
 
 ListItem.propTypes = {
+    /**
+     * A string or `ReactNode` that will be rendered as the title of the list
+     * item.
+     */
     title: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]).isRequired,
+
+    /**
+     * A string or `ReactNode` that will be rendered as the subtitle of the list
+     * item.
+     */
     subtitle: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+
+    /**
+     * The URL to an image that will be shown on the left of the list item.
+     */
     image: PropTypes.string,
+
+    /**
+     * An array of URLs for creating a puzzle of images on the left hand of the
+     * image item.
+     */
     images: PropTypes.arrayOf(PropTypes.string),
+
+    /**
+     * An icon to show on the left side of the list item.
+     */
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * A classname string that will be applied ot the outer-most `<div>`-element
+     * of the list item.
+     */
     className: PropTypes.string,
+
+    /**
+     * An `onClick`-listener for the list item header.
+     */
     onClick: PropTypes.func,
+
+    /**
+     * A `ReactNode` that should be displayed on the right side of the list
+     * item.
+     */
     right: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+
+    /**
+     * A React style object that will be applied to the outer-most
+     * `<div>`-element of the list item.
+     *
+     * `style.body` and `style.head` will be applied to the body and head parts
+     * of the list item accordingly.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
-    // eslint-disable-next-line react/forbid-prop-types
-    headerProps: PropTypes.object,
+
+    /**
+     * Any additional props that will be applied to the head of the list item.
+     */
+    headerProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+
+    /**
+     * Wether the image should be in a circular shape rather than a rectangle.
+     */
     circle: PropTypes.bool,
+
+    /**
+     * A ReactNode that is shown on the right side of the list item on hover.
+     */
     hoverItem: PropTypes.node,
+
+    /**
+     * This function will be called when the user long-presses on the list item
+     * header.
+     */
     onLongPress: PropTypes.func,
+
+    /**
+     * A callback for the `mousedown`-event on the list item header.
+     */
     onMouseDown: PropTypes.func,
+
+    /**
+     * A callback for the `mousemove`-event on the list item header.
+     */
     onMouseMove: PropTypes.func,
+
+    /**
+     * A callback for the `mouseup`-event on the list item header.
+     */
     onMouseUp: PropTypes.func,
+
+    /**
+     * A callback for the `touchstart`-event on the list item header.
+     */
     onTouchStart: PropTypes.func,
+
+    /**
+     * A callback for the `touchmove`-event on the list item header.
+     */
     onTouchMove: PropTypes.func,
+
+    /**
+     * A callback for the `touchend`-event on the list item header.
+     */
     onTouchEnd: PropTypes.func,
+
+    /**
+     * A callback for the `touchcancel`-event on the list item header.
+     */
     onTouchCancel: PropTypes.func,
+
+    /**
+     * Control the time after which a press is considered a long press.
+     */
     longPressTimeout: PropTypes.number,
-    notExpandable: PropTypes.bool,
+
+    /**
+     * Wether the default classname for the children container should be
+     * removed, which removes the padding around the list item content.
+     */
     noContentClass: PropTypes.bool,
+
+    /**
+     * This function will be called when the list item is opening.
+     */
     onOpen: PropTypes.func,
+
+    /**
+     * A CSS color that will be applied to the border of the image.
+     */
     imageBorderColor: PropTypes.string,
 };
 
@@ -122,7 +233,6 @@ ListItem.defaultProps = {
     onTouchEnd: null,
     onTouchCancel: null,
     longPressTimeout: 450,
-    notExpandable: null,
     noContentClass: null,
     onOpen: null,
     imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
