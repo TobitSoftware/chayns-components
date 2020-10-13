@@ -223,7 +223,7 @@ SliderButton.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            text: PropTypes.string,
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         })
     ),
     onChange: PropTypes.func,
