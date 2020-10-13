@@ -1,15 +1,12 @@
-/* eslint-disable react/no-array-index-key,max-len */
-import React, { Component } from 'react';
-import throttle from 'lodash.throttle';
-import isEqual from 'lodash.isequal';
 import classNames from 'classnames';
+import isEqual from 'lodash.isequal';
+import throttle from 'lodash.throttle';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
 import { getMemberCount } from '../utils/member';
-
-import ReceiverSearchPopup from './content/ReceiverSearchPopup';
 import ChosenMember from './content/ChosenMember';
+import ReceiverSearchPopup from './content/ReceiverSearchPopup';
 
 export default class ReceiverInput extends Component {
     defaultState = {
