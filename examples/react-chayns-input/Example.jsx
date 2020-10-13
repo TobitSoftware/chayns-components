@@ -7,6 +7,9 @@ import Icon from '../../src/react-chayns-icon/component/Icon';
 import DateInfo from '../../src/react-chayns-dateinfo/component/DateInfo';
 
 const InputExample = () => {
+    // eslint-disable-next-line no-control-regex
+    const mailRegexp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
     const [userName, setUserName] = useState('');
     const [date, setDate] = useState('');
 
@@ -181,6 +184,32 @@ const InputExample = () => {
                     noDeleteIcon
                     onIconClick={console.log}
                     dynamic
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <Input
+                    placeholder="Vorname"
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    onKeyUp={onKeyUp}
+                    onEnter={onEnter}
+                    design={Input.BORDER_DESIGN}
+                    dynamic={Input.BOTTOM_DYNAMIC}
+                    required
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <Input
+                    placeholder="eMail"
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    onKeyUp={onKeyUp}
+                    onEnter={onEnter}
+                    design={Input.BORDER_DESIGN}
+                    dynamic={Input.BOTTOM_DYNAMIC}
+                    required
+                    regExp={new RegExp(mailRegexp)}
+                    invalidMessage="Die eMail Adresse ist nicht gültig."
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>

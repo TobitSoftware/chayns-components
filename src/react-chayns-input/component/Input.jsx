@@ -15,11 +15,7 @@ export default class Input extends PureComponent {
                 (!props.regExp ||
                     !props.value ||
                     props.value.match(props.regExp)) &&
-                !(
-                    isNullOrWhiteSpace(props.value) &&
-                    isNullOrWhiteSpace(props.defaultValue) &&
-                    props.required
-                ),
+                !(props.value === '' && props.required),
             initial: true,
             right: false,
             value: props.value || props.defaultValue || '',
@@ -134,6 +130,8 @@ export default class Input extends PureComponent {
             disabled,
             design,
             clearIcon,
+            required,
+            invalidMessage,
             right: rightProp,
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
@@ -155,8 +153,12 @@ export default class Input extends PureComponent {
                             !isNullOrWhiteSpace(value) ||
                             (initial && !isNullOrWhiteSpace(defaultValue)),
                         'input--disabled': disabled,
-                        'input--dynamic': dynamic,
+                        'input--dynamic':
+                            dynamic && dynamic !== Input.BOTTOM_DYNAMIC,
+                        'input--bottom-dynamic':
+                            dynamic === Input.BOTTOM_DYNAMIC,
                         'input--border-design--invalid': !valid || invalid,
+                        'input--border-design--required': required,
                         'input--border_has-icon': icon,
                         'input--border_has-right': rightProp,
                     })}
@@ -194,7 +196,13 @@ export default class Input extends PureComponent {
                                 <div className="space">
                                     {isString(value) ? value : stateValue}
                                 </div>
-                                <div className="ellipsis">{placeholder}</div>
+                                <div className="ellipsis">
+                                    {(invalid || !valid) &&
+                                    invalidMessage &&
+                                    (value || stateValue || defaultValue)
+                                        ? invalidMessage
+                                        : placeholder}
+                                </div>
                             </label>
                         )}
                     </div>
@@ -323,6 +331,10 @@ export default class Input extends PureComponent {
 Input.DEFAULT_DESIGN = 0;
 Input.BORDER_DESIGN = 1;
 
+Input.MOVING_DYNAMIC = true;
+Input.NO_DYNAMIC = false;
+Input.BOTTOM_DYNAMIC = 2;
+
 Input.propTypes = {
     className: PropTypes.string,
     onKeyUp: PropTypes.func,
@@ -342,7 +354,7 @@ Input.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     onIconClick: PropTypes.func,
     wrapperRef: PropTypes.func,
-    dynamic: PropTypes.bool,
+    dynamic: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
     customProps: PropTypes.object,
     id: PropTypes.string,
     stopPropagation: PropTypes.bool,
@@ -352,6 +364,7 @@ Input.propTypes = {
     design: PropTypes.number,
     iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     right: PropTypes.node,
+    invalidMessage: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -383,6 +396,7 @@ Input.defaultProps = {
     design: Input.DEFAULT_DESIGN,
     iconLeft: null,
     right: null,
+    invalidMessage: null,
 };
 
 Input.displayName = 'Input';

@@ -37,7 +37,7 @@ The following properties can be set on the Input-Component
 | invalid         | Marks the input as invalid                                                                                                                    | bool           | false         |
 | icon            | Icon shown on the right side (only dynamic input and border-design)                                                                           | string/object  |               |
 | onIconClick     | Icon onClick Event (only dynamic input)                                                                                                       | func           | clear value   |
-| dynamic         | Use dynamic input                                                                                                                             | bool           | false         |
+| dynamic         | Use dynamic input (`Input.NO_DYNAMIC`,`Input.MOVING_DYNAMIC`,`Input.BOTTOM_DYNAMIC`(only border-design))                                      | bool/number    | false         |
 | customProps     | CustomProps for the html input element                                                                                                        | object         |               |
 | stopPropagation | Stops the click propagation to parent elements                                                                                                | bool           | false         |
 | required        | Input is invalid if there is no value                                                                                                         | bool           | false         |
@@ -46,6 +46,7 @@ The following properties can be set on the Input-Component
 | iconLeft        | Icon on the left side of the input (only border-design)                                                                                       | string/object  | null          |
 | clearIcon       | Shows a clear-icon instead of the icon on the right side while there is a value                                                               | bool           | false         |
 | right           | A node that will be rendered on the right side of the input. (Only border design)                                                             | node           | null          |
+| invalidMessage  | A message that will be shown instead of the placeholder (Only border design with bottom-dynamic)                                              | string         | null          |
 
 Note: The functions onEnter, onChange and onBlur return three values: the input
 value, if the input is valid and the event.
