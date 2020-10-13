@@ -1,12 +1,17 @@
-/* eslint-disable no-return-assign */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classnames from 'classnames';
-
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import ReactResizeDetector from 'react-resize-detector';
-
 import ScrollViewHelper from './ScrollViewHelper';
 
+/**
+ * A scrollable container with a custom scrollbar that looks great on every
+ * device.
+ */
 export default class ScrollView extends Component {
     constructor(props) {
         super(props);
@@ -133,15 +138,41 @@ export default class ScrollView extends Component {
 }
 
 ScrollView.propTypes = {
+    /**
+     * The contents of the `ScrollView`.
+     */
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the outer-most container.
+     * Specify a `height` or `maxHeight` here.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A classname string that will be applied to the outer-most container.
+     */
     className: PropTypes.string,
+
+    /**
+     * A HTML id that will be applied to the scroll container.
+     */
     scrollElementId: PropTypes.string,
+
+    /**
+     * A function that receives the reference to the scroll container element as
+     * its first argument.
+     */
     scrollElementRef: PropTypes.func,
+
+    /**
+     * The `onScroll`-listener for the scroll container.
+     */
     onScroll: PropTypes.func,
 };
 
