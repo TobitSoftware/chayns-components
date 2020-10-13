@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState } from 'react';
@@ -5,6 +9,9 @@ import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 import './SearchBox.scss';
 
+/**
+ * An autocomplete input to search through a list of entries.
+ */
 const SearchBox = ({
     list,
     disabled,
@@ -203,23 +210,89 @@ const SearchBox = ({
 };
 
 SearchBox.propTypes = {
+    /**
+     * A callback that will be invoked when a value was selected.
+     */
     onSelect: PropTypes.func,
+
+    /**
+     * Disables any user interaction and renders the search box in a disabled
+     * style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * An array of items to select from.
+     */
     list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])),
+
+    /**
+     * The property name of a unique identifier in the `list` items.
+     */
     listKey: PropTypes.string.isRequired,
+
+    /**
+     * The property name of the name of the `list` items that will be shown in
+     * the dropdown.
+     */
     listValue: PropTypes.string.isRequired,
+
+    /**
+     * A classname string that will be set on the container component.
+     */
     className: PropTypes.string,
+
+    /**
+     * The default value of the search box as a key to one of the list items.
+     */
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * A DOM element into which the overlay will be rendered.
+     */
     parent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+
+    /**
+     * A React style object that will be applied to the outer-most container.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * The current value of the search box as a key to one of the list items.
+     */
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * The current value of the text input.
+     */
     inputValue: PropTypes.string,
+
+    /**
+     * Wether the list should be shown if there is no user input.
+     */
     showListWithoutInput: PropTypes.bool,
+
+    /**
+     * The default value of the input field. Has no effect when used with the
+     * `inputValue`-prop.
+     */
     inputDefaultValue: PropTypes.string,
+
+    /**
+     * The `onChange`-callback for the input element.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * Wether the first list item should be automatically selected.
+     */
     autoSelectFirst: PropTypes.bool,
 };
 
