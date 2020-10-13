@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import SharingBarItem from './SharingBarItem';
 import {
     getAvailableShareProviders,
     getDefaultShareLink,
@@ -18,6 +17,7 @@ function SharingBar({
     className,
     stopPropagation,
     style,
+    children,
 }) {
     const [sharingProvider, setSharingProvider] = useState([]);
 
@@ -37,17 +37,13 @@ function SharingBar({
     }
 
     if (mobileShare) {
-        return (
-            <SharingBarItem
-                icon={mobileShare.icon}
-                name={mobileShare.name}
-                provider={mobileShare}
-                key={mobileShare.id}
-                link={link}
-                linkText={linkText}
-                stopPropagation={stopPropagation}
-            />
-        );
+        const onClick = (e) => {
+            share(mobileShare, link, linkText);
+
+            if (stopPropagation) e.stopPropagation();
+        };
+
+        return <div onClick={onClick}>{children}</div>;
     }
 
     const sharingItems = [];
@@ -73,8 +69,7 @@ function SharingBar({
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />
-                <span className="sharing-bar__text">Teilen</span>
+                {children}
             </ContextMenu>
         </div>
     );
@@ -86,6 +81,7 @@ SharingBar.propTypes = {
     className: PropTypes.string,
     stopPropagation: PropTypes.bool,
     style: PropTypes.string,
+    children: PropTypes.node,
 };
 
 SharingBar.defaultProps = {
@@ -94,6 +90,10 @@ SharingBar.defaultProps = {
     className: null,
     stopPropagation: false,
     style: null,
+    children: [
+        <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />,
+        <span className="sharing-bar__text">Teilen</span>,
+    ],
 };
 
 SharingBar.displayName = 'SharingBar';

@@ -29,6 +29,7 @@ The following properties can be set on the SharingBar-Component
 | linkText        | A message added in front of the shared link             | String |                          |
 | className       | Additional CSS-Classes that should be set to the button | String |                          |
 | stopPropagation | Stops the click propagation to parent elements          | bool   | false                    |
+| children        | Children elements                                       | node   | share icon with text     |
 
 ## Examples
 
