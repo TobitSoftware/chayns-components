@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 
 const DEFAULT_STYLE = {
     width: '100%',
@@ -26,19 +26,11 @@ const TextArea = ({
 }) => {
     const ref = useRef(null);
     const [offset, setOffset] = useState(0);
-    const [currentHeight, setCurrentHeight] = useState(0);
 
     const grow = useCallback(() => {
         ref.current.style.height = '0px';
-
-        const newHeight = ref.current.scrollHeight + offset;
-
-        if (newHeight > 0 && newHeight !== currentHeight) {
-            setCurrentHeight(newHeight);
-
-            ref.current.style.height = `${newHeight}px`;
-        }
-    }, [currentHeight, offset]);
+        ref.current.style.height = `${ref.current.scrollHeight + offset}px`;
+    }, [offset]);
 
     // update in value prop
     useEffect(() => {
@@ -113,7 +105,7 @@ const TextArea = ({
             placeholder={placeholder}
             style={style}
             defaultValue={defaultValue}
-            onChange={onChange || autogrow ? handleChange : null}
+            onChange={handleChange}
             onBlur={onBlur ? handleBlur : null}
             onKeyUp={onKeyUp}
             onKeyDown={onKeyDown}
