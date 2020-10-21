@@ -103,7 +103,12 @@ export default class FormattedInput extends Component {
 
     render() {
         const { value } = this.state;
-        const { defaultValue, initialFormatter, ...props } = this.props;
+        const {
+            defaultValue,
+            initialFormatter,
+            inputRef,
+            ...props
+        } = this.props;
 
         if (!(initialFormatter instanceof Formatter)) {
             return null;
@@ -114,6 +119,10 @@ export default class FormattedInput extends Component {
                 {...props}
                 inputRef={(ref) => {
                     this.input = ref;
+
+                    if (inputRef) {
+                        inputRef(ref);
+                    }
                 }}
                 value={value}
                 onChange={this.handleInputChange}
@@ -128,6 +137,7 @@ FormattedInput.propTypes = {
     initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
     onChange: PropTypes.func,
     onEnter: PropTypes.func,
+    inputRef: PropTypes.func,
     // eslint-disable-next-line react/forbid-prop-types
     defaultValue: PropTypes.any,
 };
@@ -136,6 +146,7 @@ FormattedInput.defaultProps = {
     onChange: null,
     onEnter: null,
     defaultValue: null,
+    inputRef: null,
 };
 
 FormattedInput.displayName = 'FormattedInput';
