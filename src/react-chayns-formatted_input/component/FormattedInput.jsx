@@ -86,6 +86,21 @@ export default class FormattedInput extends Component {
         this.handleChangeEvent(parsedValue, ...args);
     };
 
+    handleEnter = (value, ...args) => {
+        const { onEnter } = this.props;
+        if (onEnter) {
+            const { formatter } = this;
+
+            if (!(formatter instanceof Formatter)) {
+                return;
+            }
+
+            const parsedValue = formatter.parse(value);
+
+            onEnter(parsedValue, ...args);
+        }
+    };
+
     render() {
         const { value } = this.state;
         const { defaultValue, initialFormatter, ...props } = this.props;
@@ -103,6 +118,7 @@ export default class FormattedInput extends Component {
                 value={value}
                 onChange={this.handleInputChange}
                 onBlur={this.handleChange}
+                onEnter={this.handleEnter}
             />
         );
     }
@@ -111,12 +127,14 @@ export default class FormattedInput extends Component {
 FormattedInput.propTypes = {
     initialFormatter: PropTypes.instanceOf(Formatter).isRequired,
     onChange: PropTypes.func,
+    onEnter: PropTypes.func,
     // eslint-disable-next-line react/forbid-prop-types
     defaultValue: PropTypes.any,
 };
 
 FormattedInput.defaultProps = {
     onChange: null,
+    onEnter: null,
     defaultValue: null,
 };
 
