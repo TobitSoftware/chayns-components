@@ -5,11 +5,12 @@ export default class IntegerFormatter extends Formatter {
 
     /* eslint-disable-next-line class-methods-use-this */
     format(value) {
-        if (value === null) {
+        const parsed = this.parse(value);
+        if (!parsed && parsed !== 0) {
             return '';
         }
 
-        return String(parseInt(value, 10));
+        return String(parsed);
     }
 
     /* eslint-disable-next-line class-methods-use-this */
