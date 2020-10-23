@@ -1,7 +1,7 @@
 <div align="center"><h1>Checkbox</h1></div>
 
 Checkboxes allow users to complete tasks that involve making choices such as
-selecting options. Can be styled as a switch, avisual toggle between two
+selecting options. Can be styled as a switch, a visual toggle between two
 mutually exclusive states — on and off.
 
 ## Usage
