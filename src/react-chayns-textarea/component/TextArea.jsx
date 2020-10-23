@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -7,6 +11,9 @@ const DEFAULT_STYLE = {
     paddingBottom: '12px',
 };
 
+/**
+ * A multiline text input that can automatically grow with its content.
+ */
 const TextArea = ({
     style: styleProp,
     className,
@@ -127,6 +134,87 @@ const TextArea = ({
     );
 };
 
+TextArea.propTypes = {
+    /**
+     * A React style object that will be applied to the text area.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * Wether the component ignores any user interaction and is rendered with a
+     * disabled style.
+     */
+    disabled: PropTypes.bool,
+
+    /**
+     * A classname string that will be applied to the `<textarea>`-element.
+     */
+    className: PropTypes.string,
+
+    /**
+     * A placeholder, that will be displayed if the text area is empty.
+     */
+    placeholder: PropTypes.string,
+
+    /**
+     * Wether the text area is required for a form to complete. Renders the text
+     * area with an error style when its empty.
+     */
+    required: PropTypes.bool,
+
+    /**
+     * A callback that is invoked when the value of the `<textarea>` changes.
+     */
+    onChange: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the text area loses focus.
+     */
+    onBlur: PropTypes.func,
+
+    /**
+     * The default value of the text area. Has no effect when the `value` prop
+     * is used.
+     */
+    defaultValue: PropTypes.string,
+
+    /**
+     * The current text value of the area.
+     */
+    value: PropTypes.string,
+
+    /**
+     * A callback that will be called when the `keyup`-event is fired from the
+     * `<textarea>`-element.
+     */
+    onKeyUp: PropTypes.func,
+
+    /**
+     * A callback that will be called when the `keydown`-event is fired from the
+     * `<textarea>`-element.
+     */
+    onKeyDown: PropTypes.func,
+
+    /**
+     * Wether the text area should automatically grow with its content.
+     */
+    autogrow: PropTypes.bool,
+
+    /**
+     * A function that will be invoked with a reference to the
+     * `<textarea>`-element or `null`.
+     */
+    reference: PropTypes.func,
+
+    /**
+     * Wether click events should be stopped from propagating to parent
+     * elements.
+     */
+    stopPropagation: PropTypes.bool,
+};
+
 TextArea.defaultProps = {
     style: null,
     className: null,
@@ -142,25 +230,6 @@ TextArea.defaultProps = {
     reference: null,
     disabled: false,
     stopPropagation: false,
-};
-
-TextArea.propTypes = {
-    style: PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    ),
-    disabled: PropTypes.bool,
-    className: PropTypes.string,
-    placeholder: PropTypes.string,
-    required: PropTypes.bool,
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-    defaultValue: PropTypes.string,
-    value: PropTypes.string,
-    onKeyUp: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    autogrow: PropTypes.bool,
-    reference: PropTypes.func,
-    stopPropagation: PropTypes.bool,
 };
 
 TextArea.displayName = 'TextArea';
