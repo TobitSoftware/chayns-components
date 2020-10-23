@@ -80,6 +80,11 @@ export default class Icon extends Component {
 }
 
 Icon.propTypes = {
+    /**
+     * The icon should be given in by a string or array. Fontawesome and TS icons are supported by default.
+     * Support for fontawesome objects will be removed in the next major release,
+     * therefore it should not be used.
+     */
     icon: PropTypes.oneOfType([
         PropTypes.string.isRequired,
         PropTypes.shape({
@@ -87,7 +92,7 @@ Icon.propTypes = {
             prefix: PropTypes.string.isRequired,
         }).isRequired,
         PropTypes.arrayOf(PropTypes.string.isRequired),
-    ]),
+    ]).isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
     onClick: PropTypes.func,
@@ -101,7 +106,6 @@ Icon.defaultProps = {
     onClick: undefined,
     disabled: false,
     stopPropagation: false,
-    icon: null,
 };
 
 Icon.displayName = 'Icon';
