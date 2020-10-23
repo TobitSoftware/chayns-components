@@ -1,104 +1,106 @@
-[![npm](https://img.shields.io/npm/v/chayns-components.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components)
-[![npm downloads](https://img.shields.io/npm/dm/chayns-components.svg?style=flat-square)](https://www.npmjs.com/package/chayns-components)
-[![license](https://img.shields.io/github/license/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/blob/master/LICENSE)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls)
-[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/pulls?q=is%3Apr+is%3Aclosed)
-[![GitHub contributors](https://img.shields.io/github/contributors/TobitSoftware/chayns-components.svg?style=flat-square)](https://github.com/TobitSoftware/chayns-components/graphs/contributors)
+<div align="center">
+    <h1>
+        <img src="https://raw.githubusercontent.com/TobitSoftware/chayns-components/master/assets/logo.png" width="600px" alt="chayns-components" />
+    </h1>
+    <p>A set of beautiful React components for developing chayns® applications.</p>
+    <div>
+        <img src="https://img.shields.io/npm/dm/chayns-components.svg?style=for-the-badge" alt="" />
+        <img src="https://img.shields.io/npm/v/chayns-components?style=for-the-badge" alt="" />
+        <img src="https://img.shields.io/github/license/TobitSoftware/chayns-components?style=for-the-badge" alt="" />
+        <img src="https://img.shields.io/github/contributors/TobitSoftware/chayns-components?style=for-the-badge" alt="" />
+    </div>
+</div>
 
-# chayns-components
+---
 
 ## Installation
 
-The ChaynsComponents can be installed directly from npm by using the following
-package:
+First you should install the `chayns-components` package into your project:
 
-    npm install -S chayns-components@latest
+```bash
+# Yarn
+yarn add chayns-components
 
-The corresponding styles are included in our
-[chayns CSS API](https://github.com/TobitSoftware/chayns-css). Also, you have to
-load our [chayns JS API](https://github.com/TobitSoftware/chayns-js) to use the
-components.
+# NPM
+npm install chayns-components
+```
 
-```HTML
-<!-- css styles -->
-<script src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js" version="4.2"></script>
+The styles to our components are provided via the
+[`chayns-css`](https://github.com/TobitSoftware/chayns-css) library and some of
+the components also rely on the
+[`chayns-js`](https://github.com/TobitSoftware/chayns-js) API, so you should
+include these in your HTML:
 
-<!-- js api -->
+```html
+<!-- CSS styles -->
+<script
+    src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js"
+    version="4.2"
+></script>
+
+<!-- JS api -->
 <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
 ```
 
-The chayns-components are
-[tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking). To use
-tree-shaking, follow [this instruction](./tree-shaking.md).
+By default, the whole library is imported when using any component. If you care
+about your bundle size you should follow our
+[tree-shaking guide](./tree-shaking.md).
 
 ## Components Overview
 
 The following components are part of this package:
 
-<!---
-    the component list is automatically generated using the entries
-    from the components.json-file. Do not change anything inside the
-    start and end tag.
--->
-<!--- start component list -->
-
-| Component                                                                | Description                 | Readme File                                              |
-| ------------------------------------------------------------------------ | --------------------------- | -------------------------------------------------------- |
-| [react-chayns-accordion](/src/react-chayns-accordion/)                   | Accordion Component         | [Readme](/src/react-chayns-accordion/README.md)          |
-| [react-chayns-amountcontrol](/src/react-chayns-amountcontrol/)           | AmountControl Component     | [Readme](/src/react-chayns-amountcontrol/README.md)      |
-| [react-chayns-animation_wrapper](/src/react-chayns-animation_wrapper/)   | AnimationWrapper Component  | [Readme](/src/react-chayns-animation_wrapper/README.md)  |
-| [react-chayns-badge](/src/react-chayns-badge/)                           | Badge Component             | [Readme](/src/react-chayns-badge/README.md)              |
-| [react-chayns-bubble](/src/react-chayns-bubble/)                         | Bubble Component            | [Readme](/src/react-chayns-bubble/README.md)             |
-| [react-chayns-button](/src/react-chayns-button/)                         | Button Component            | [Readme](/src/react-chayns-button/README.md)             |
-| [react-chayns-calendar](/src/react-chayns-calendar/)                     | Calendar Component          | [Readme](/src/react-chayns-calendar/README.md)           |
-| [react-chayns-checkbox](/src/react-chayns-checkbox/)                     | Checkbox Component          | [Readme](/src/react-chayns-checkbox/README.md)           |
-| [react-chayns-color_picker](/src/react-chayns-color_picker/)             | ColorPicker Component       | [Readme](/src/react-chayns-color_picker/README.md)       |
-| [react-chayns-color_scheme](/src/react-chayns-color_scheme/)             | ColorScheme Component       | [Readme](/src/react-chayns-color_scheme/README.md)       |
-| [react-chayns-combobox](/src/react-chayns-combobox/)                     | ComboBox Component          | [Readme](/src/react-chayns-combobox/README.md)           |
-| [react-chayns-contextmenu](/src/react-chayns-contextmenu/)               | ContextMenu Component       | [Readme](/src/react-chayns-contextmenu/README.md)        |
-| [react-chayns-dateinfo](/src/react-chayns-dateinfo/)                     | DateInfo Component          | [Readme](/src/react-chayns-dateinfo/README.md)           |
-| [react-chayns-emoji_input](/src/react-chayns-emoji_input/)               | EmojiInput Component        | [Readme](/src/react-chayns-emoji_input/README.md)        |
-| [react-chayns-expandable_content](/src/react-chayns-expandable_content/) | ExpandableContent Component | [Readme](/src/react-chayns-expandable_content/README.md) |
-| [react-chayns-file_input](/src/react-chayns-file_input/)                 | FileInput Component         | [Readme](/src/react-chayns-file_input/README.md)         |
-| [react-chayns-filterbutton](/src/react-chayns-filterbutton/)             | FilterButton Component      | [Readme](/src/react-chayns-filterbutton/README.md)       |
-| [react-chayns-formatted_input](/src/react-chayns-formatted_input/)       | FormattedInput Component    | [Readme](/src/react-chayns-formatted_input/README.md)    |
-| [react-chayns-gallery](/src/react-chayns-gallery/)                       | Gallery Component           | [Readme](/src/react-chayns-gallery/README.md)            |
-| [react-chayns-gridcalendar](/src/react-chayns-gridcalendar/)             | Grid-Calendar Component     | [Readme](/src/react-chayns-gridcalendar/README.md)       |
-| [react-chayns-icon](/src/react-chayns-icon/)                             | Icon Component              | [Readme](/src/react-chayns-icon/README.md)               |
-| [react-chayns-image_accordion](/src/react-chayns-image_accordion/)       | ImageAccordion Component    | [Readme](/src/react-chayns-image_accordion/README.md)    |
-| [react-chayns-input](/src/react-chayns-input/)                           | Input Component             | [Readme](/src/react-chayns-input/README.md)              |
-| [react-chayns-input_box](/src/react-chayns-input_box/)                   | InputBox Component          | [Readme](/src/react-chayns-input_box/README.md)          |
-| [react-chayns-list](/src/react-chayns-list/)                             | List Component              | [Readme](/src/react-chayns-list/README.md)               |
-| [react-chayns-modeswitch](/src/react-chayns-modeswitch/)                 | ModeSwitch Component        | [Readme](/src/react-chayns-modeswitch/README.md)         |
-| [react-chayns-openingtimes](/src/react-chayns-openingtimes/)             | OpeningTimes Component      | [Readme](/src/react-chayns-openingtimes/README.md)       |
-| [react-chayns-personfinder](/src/react-chayns-personfinder/)             | PersonFinder Component      | [Readme](/src/react-chayns-personfinder/README.md)       |
-| [react-chayns-position_input](/src/react-chayns-position_input/)         | PositionInput Component     | [Readme](/src/react-chayns-position_input/README.md)     |
-| [react-chayns-progress_bar](/src/react-chayns-progress_bar/)             | ProgressBar Component       | [Readme](/src/react-chayns-progress_bar/README.md)       |
-| [react-chayns-radiobutton](/src/react-chayns-radiobutton/)               | RadioButton Component       | [Readme](/src/react-chayns-radiobutton/README.md)        |
-| [react-chayns-receiverinput](/src/react-chayns-receiverinput/)           | ReceiverInput Component     | [Readme](/src/react-chayns-receiverinput/README.md)      |
-| [react-chayns-rfid_input](/src/react-chayns-rfid_input/)                 | RFID Input Component        | [Readme](/src/react-chayns-rfid_input/README.md)         |
-| [react-chayns-scrollview](/src/react-chayns-scrollview/)                 | ScrollView Component        | [Readme](/src/react-chayns-scrollview/README.md)         |
-| [react-chayns-searchbox](/src/react-chayns-searchbox/)                   | SearchBox Component         | [Readme](/src/react-chayns-searchbox/README.md)          |
-| [react-chayns-selectbutton](/src/react-chayns-selectbutton/)             | SelectButton Component      | [Readme](/src/react-chayns-selectbutton/README.md)       |
-| [react-chayns-selectlist](/src/react-chayns-selectlist/)                 | SelectList Component        | [Readme](/src/react-chayns-selectlist/README.md)         |
-| [react-chayns-setupwizard](/src/react-chayns-setupwizard/)               | SetupWizard Component       | [Readme](/src/react-chayns-setupwizard/README.md)        |
-| [react-chayns-sharingbar](/src/react-chayns-sharingbar/)                 | SharingBar Component        | [Readme](/src/react-chayns-sharingbar/README.md)         |
-| [react-chayns-slider](/src/react-chayns-slider/)                         | Slider Component            | [Readme](/src/react-chayns-slider/README.md)             |
-| [react-chayns-sliderbutton](/src/react-chayns-sliderbutton/)             | SliderButton Component      | [Readme](/src/react-chayns-sliderbutton/README.md)       |
-| [react-chayns-smallwaitcursor](/src/react-chayns-smallwaitcursor/)       | SmallWaitCursor Component   | [Readme](/src/react-chayns-smallwaitcursor/README.md)    |
-| [react-chayns-tag_input](/src/react-chayns-tag_input/)                   | TagInput Component          | [Readme](/src/react-chayns-tag_input/README.md)          |
-| [react-chayns-textarea](/src/react-chayns-textarea/)                     | TextArea Component          | [Readme](/src/react-chayns-textarea/README.md)           |
-| [react-chayns-tooltip](/src/react-chayns-tooltip/)                       | Tooltip Component           | [Readme](/src/react-chayns-tooltip/README.md)            |
-
-<!--- end component list -->
-
-## Internal Components
-
-| Component                                                | Description          | Readme File                                      |
-| -------------------------------------------------------- | -------------------- | ------------------------------------------------ |
-| [react-chayns-textstring](/src/react-chayns-textstring/) | TextString Component | [Readme](/src/react-chayns-textstring/README.md) |
+| Component                                                              | Description                                                                                                                                                                                                                                                                                                |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Accordion&nbsp;›](docs/components/accordion.md)                       | Displays a container that can be opened to reveal it's content.                                                                                                                                                                                                                                            |
+| [AnimationWrapper&nbsp;›](docs/components/animation-wrapper.md)        | A wrapper that animates its children in.                                                                                                                                                                                                                                                                   |
+| [AmountControl&nbsp;›](docs/components/amount-control.md)              | A number input that can easily be incremented and decremented.                                                                                                                                                                                                                                             |
+| [Badge&nbsp;›](docs/components/badge.md)                               | A small, round container element to display a value, typically a number. Used mostly in the right position of `Accordion` or `ListItem` components.                                                                                                                                                        |
+| [Bubble&nbsp;›](docs/components/bubble.md)                             |
+| [Button&nbsp;›](docs/components/button.md)                             | You can import the Button-component like this: `jsx import { Button } from 'chayns-components'; ` and use it like this: `jsx <Button onClick={() => {console.log("I have been clicked!")}}> Click Me! </Button> `                                                                                          |
+| [Calendar&nbsp;›](docs/components/calendar.md)                         | Displays a grid calendar with the ability to react to user interaction and highlight certain dates.                                                                                                                                                                                                        |
+| [Checkbox&nbsp;›](docs/components/checkbox.md)                         | A `<input type="checkbox">` component. Can also act as a switch.                                                                                                                                                                                                                                           |
+| [ColorPicker&nbsp;›](docs/components/color-picker.md)                  | A RGB color picker.                                                                                                                                                                                                                                                                                        |
+| [ColorScheme&nbsp;›](docs/components/color-scheme.md)                  | This component adjusts the color scheme for all children components.                                                                                                                                                                                                                                       |
+| [ContextMenu&nbsp;›](docs/components/context-menu.md)                  | A context menu with several action items that is opened by clicking an icon. To open or close the context menu imperatively, call the `show` or `hide` methods on its reference.                                                                                                                           |
+| [DateInfo&nbsp;›](docs/components/date-info.md)                        | Formats a date or date range to be easily readable and reveals the absolute date on hover.                                                                                                                                                                                                                 |
+| [EmojiInput&nbsp;›](docs/components/emoji-input.md)                    | A text field that allows emojis to be put in. > This component does not work with Internet Explorer.                                                                                                                                                                                                       |
+| [ExpandableContent&nbsp;›](docs/components/expandable-content.md)      | A component collapses or expands its children based on the `open`-prop.                                                                                                                                                                                                                                    |
+| [FileInput&nbsp;›](docs/components/file-input.md)                      | A file input that accepts specified file types via upload or drag and drop.                                                                                                                                                                                                                                |
+| [FilterButton&nbsp;›](docs/components/filter-button.md)                | A chip-like component that is used to filter lists. Usually used in a group of 2 or more.                                                                                                                                                                                                                  |
+| [FormattedInput&nbsp;›](docs/components/formatted-input.md)            | A text input that automatically formats its input with a formatter. Since this component is based on the `Input`-component, it takes any of the `Input`-components props, which are not listed here. This component only works as an uncontrolled component, meaning that it does not take a `value`-prop. |
+| [Gallery&nbsp;›](docs/components/gallery.md)                           | An image gallery that displays up to four images by default. Also supports reordering and deletion of images and blurred image previews for images loaded from `tsimg.cloud`.                                                                                                                              |
+| [Icon&nbsp;›](docs/components/icon.md)                                 | Displays a FontAwesome icon.                                                                                                                                                                                                                                                                               |
+| [ImageAccordion&nbsp;›](docs/components/image-accordion.md)            | An accordion that has a big image and appears in a grid. Should be used inside of an `ImageAccordionGroup`.                                                                                                                                                                                                |
+| [ImageAccordionGroup&nbsp;›](docs/components/image-accordion-group.md) | Groups several `ImageAccordion` components together, so only one of them can be open at a time.                                                                                                                                                                                                            |
+| [Input&nbsp;›](docs/components/input.md)                               | A text input that can be validated and decorated with different designs.                                                                                                                                                                                                                                   |
+| [List&nbsp;›](docs/components/list.md)                                 | The wrapper for the `ListItem`-component to create lists.                                                                                                                                                                                                                                                  |
+| [OpeningTimes&nbsp;›](docs/components/opening-times.md)                | An input for opening times.                                                                                                                                                                                                                                                                                |
+| [PersonFinder&nbsp;›](docs/components/person-finder.md)                | An autocomplete search for persons that can be customized to work with arbitrary data.                                                                                                                                                                                                                     |
+| [PositionInput&nbsp;›](docs/components/position-input.md)              | A location input with a map and text input. This requires the Google Maps JavaScript API with the places library enabled. You can find more information about the Maps API [here](https://developers.google.com/maps/documentation/javascript/overview).                                                   |
+| [ProgressBar&nbsp;›](docs/components/progress-bar.md)                  | An animated progress bar that can show an actions progress or an indeterminate state like a loading spinner.                                                                                                                                                                                               |
+| [RadioButton&nbsp;›](docs/components/radio-button.md)                  | A radio button that allows to select one of multiple options.                                                                                                                                                                                                                                              |
+| [RfidInput&nbsp;›](docs/components/rfid-input.md)                      | A component to take in an RFID signal.                                                                                                                                                                                                                                                                     |
+| [ScrollView&nbsp;›](docs/components/scroll-view.md)                    | A scrollable container with a custom scrollbar that looks great on every device.                                                                                                                                                                                                                           |
+| [SearchBox&nbsp;›](docs/components/search-box.md)                      | An autocomplete input to search through a list of entries.                                                                                                                                                                                                                                                 |
+| [SelectButton&nbsp;›](docs/components/select-button.md)                | A choose button that opens a selection dialog when clicked.                                                                                                                                                                                                                                                |
+| [SelectItem&nbsp;›](docs/components/select-item.md)                    | A radio button that expands its content when selected. Should be used inside of a `SelectList`.                                                                                                                                                                                                            |
+| [SelectList&nbsp;›](docs/components/select-list.md)                    | A vertical list of radio buttons that reveal content when selected.                                                                                                                                                                                                                                        |
+| [SetupWizardItem&nbsp;›](docs/components/setup-wizard-item.md)         | An item that represents one step in a `SetupWizard`.                                                                                                                                                                                                                                                       |
+| [SetupWizard&nbsp;›](docs/components/setup-wizard.md)                  | A set of steps the user has to go through sequentially.                                                                                                                                                                                                                                                    |
+| [SharingBar&nbsp;›](docs/components/sharing-bar.md)                    | A context menu for sharing a link and some text on various platforms.                                                                                                                                                                                                                                      |
+| [Slider&nbsp;›](docs/components/slider.md)                             | A horizontal track with a thumb that can be moved between a minimum and a maximum value.                                                                                                                                                                                                                   |
+| [SliderButton&nbsp;›](docs/components/slider-button.md)                | A linear set of buttons which are mutually exclusive.                                                                                                                                                                                                                                                      |
+| [SmallWaitCursor&nbsp;›](docs/components/small-wait-cursor.md)         | A small circular loading indicator.                                                                                                                                                                                                                                                                        |
+| [TagInput&nbsp;›](docs/components/tag-input.md)                        | A text input that allows values to be grouped as tags.                                                                                                                                                                                                                                                     |
+| [TextArea&nbsp;›](docs/components/text-area.md)                        | A multiline text input that can automatically grow with its content.                                                                                                                                                                                                                                       |
+| [TextString&nbsp;›](docs/components/text-string.md)                    | Loads text strings from our database and displays them. Handles replacements and changing the string via `CTRL` + `Click` (only internal).                                                                                                                                                                 |
+| [Tooltip&nbsp;›](docs/components/tooltip.md)                           | Wraps a child component and displays a message when the child is hovered or clicked on. Allows to be shown imperatively by calling `.show()` or `.hide()` on its reference.                                                                                                                                |
+| [ListItem&nbsp;›](docs/components/list-item.md)                        | The items in a list to display related data in a structured format. Should be used inside of a `List` component.                                                                                                                                                                                           |
 
 ## Utility Functions
+
+We also provide a set of common utility functions:
 
 | Function                                       | Description                                               |
 | ---------------------------------------------- | --------------------------------------------------------- |
@@ -111,5 +113,5 @@ The following components are part of this package:
 
 ## Development
 
-We moved the development section to the [CONTRIBUTING.md](/CONTRIBUTING.md)
-file.
+If you want to contribute to `chayns-components`, check out the
+[CONTRIBUTING.md](/CONTRIBUTING.md) file.
