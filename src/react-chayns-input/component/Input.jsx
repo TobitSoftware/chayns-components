@@ -444,7 +444,8 @@ Input.propTypes = {
 
     /**
      * When active the placeholder will not disappear on input but rather slide
-     * to the right of the input field to act more like a label.
+     * to the right of the input field to act more like a label. The option can
+     * also be `Input.BOTTOM_DYNAMIC` when the border-design is active.
      */
     dynamic: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 
@@ -497,6 +498,12 @@ Input.propTypes = {
      * input when the border-design is active.
      */
     right: PropTypes.node,
+
+    /**
+     * An error message that will be shown instead of the placeholder when the
+     * border-design is active and the `dynamic`-prop is set to
+     * `Input.BOTTOM_DYNAMIC`.
+     */
     invalidMessage: PropTypes.string,
 };
 
