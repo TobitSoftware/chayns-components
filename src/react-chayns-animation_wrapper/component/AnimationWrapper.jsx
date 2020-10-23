@@ -7,7 +7,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import './animation-wrapper.scss';
 
 /**
- * A wrapper that animates its children in.
+ * The AnimationWrapper provides an eye-catching initial animation to its
+ * children.
  */
 const AnimationWrapper = ({ children, animationTime, setAutoTime }) => {
     const [height, setHeight] = useState(0);

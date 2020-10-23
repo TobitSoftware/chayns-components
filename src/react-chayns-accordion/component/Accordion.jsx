@@ -17,7 +17,8 @@ const OPEN = 2;
 let rqAnimationFrame;
 
 /**
- * Displays a container that can be opened to reveal it's content.
+ * Accordions are collapsible sections that are toggled by interacting with a
+ * permanently visible header.
  */
 export default class Accordion extends PureComponent {
     constructor(props) {

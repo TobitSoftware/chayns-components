@@ -11,7 +11,7 @@ import fileInputCall from '../utils/fileInputCall';
 import supportsFileInput from '../utils/supportsFileInput';
 
 /**
- * A file input that accepts specified file types via upload or drag and drop.
+ * Accepts specified file types via dialog or drag and drop.
  */
 export default class FileInput extends PureComponent {
     constructor(props) {

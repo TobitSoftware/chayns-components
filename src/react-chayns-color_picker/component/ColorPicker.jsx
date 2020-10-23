@@ -49,7 +49,8 @@ const getHsvColor = (color) => {
 };
 
 /**
- * A RGB color picker.
+ * Lets a user choose a color for text, shapes, marking tools, and other
+ * elements.
  */
 const ColorPicker = forwardRef(
     (

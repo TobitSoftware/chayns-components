@@ -20,9 +20,7 @@ function requireEmojione(returnPromise) {
 }
 
 /**
- * A text field that allows emojis to be put in.
- *
- * > This component does not work with Internet Explorer.
+ * A text input that allows emojis to be put in.
  */
 export default class EmojiInput extends Component {
     lastKeyPressed = null;
