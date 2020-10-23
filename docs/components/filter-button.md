@@ -34,21 +34,21 @@ import { FilterButton } from 'chayns-components';
 
 The `FilterButton`-component takes the following props:
 
-| Name                                | Type                     | Default                               | Required |
-| ----------------------------------- | ------------------------ | ------------------------------------- | :------: |
-| [label](#label)                     | `string                  | ReactNode                             | element` |  |  |
-| [count](#count)                     | `number`                 |                                       |          |
-| [onChange](#onchange)               | `function`               |                                       |          |
-| [checked](#checked)                 | `boolean`                | `false`                               |          |
-| [name](#name)                       | `string`                 |                                       |          |
-| [value](#value)                     | `any`                    |                                       |          |
-| [icon](#icon)                       | `string                  | { iconName: string, prefix: string }` |          |  |
-| [className](#classname)             | `string`                 |                                       |          |
-| [style](#style)                     | `{ [key: string]: string | number }`                             |          |  |
-| [id](#id)                           | `string`                 |                                       |          |
-| [disabled](#disabled)               | `boolean`                | `false`                               |          |
-| [stopPropagation](#stoppropagation) | `boolean`                | `false`                               |          |
-| [small](#small)                     | `boolean`                | `false`                               |          |
+| Name                                | Type                                             | Default | Required |
+| ----------------------------------- | ------------------------------------------------ | ------- | :------: |
+| [label](#label)                     | `string \| ReactNode \| element`                 |         |          |
+| [count](#count)                     | `number`                                         |         |          |
+| [onChange](#onchange)               | `function`                                       |         |          |
+| [checked](#checked)                 | `boolean`                                        | `false` |          |
+| [name](#name)                       | `string`                                         |         |          |
+| [value](#value)                     | `any`                                            |         |          |
+| [icon](#icon)                       | `string \| { iconName: string, prefix: string }` |         |          |
+| [className](#classname)             | `string`                                         |         |          |
+| [style](#style)                     | `{ [key: string]: string \| number }`            |         |          |
+| [id](#id)                           | `string`                                         |         |          |
+| [disabled](#disabled)               | `boolean`                                        | `false` |          |
+| [stopPropagation](#stoppropagation) | `boolean`                                        | `false` |          |
+| [small](#small)                     | `boolean`                                        | `false` |          |
 
 ### `label`
 

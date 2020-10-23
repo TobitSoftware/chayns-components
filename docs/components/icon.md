@@ -33,14 +33,14 @@ import { Icon } from 'chayns-components';
 
 The `Icon`-component takes the following props:
 
-| Name                                | Type                     | Default                              |    Required    |
-| ----------------------------------- | ------------------------ | ------------------------------------ | :------------: |
-| [icon](#icon)                       | `string                  | { iconName: string, prefix: string } | Array<string>` |  | ✓ |
-| [className](#classname)             | `string`                 | `''`                                 |                |
-| [style](#style)                     | `{ [key: string]: number | string }`                            |                |  |
-| [onClick](#onclick)                 | `function`               |                                      |                |
-| [disabled](#disabled)               | `boolean`                | `false`                              |                |
-| [stopPropagation](#stoppropagation) | `boolean`                | `false`                              |                |
+| Name                                | Type                                                              | Default | Required |
+| ----------------------------------- | ----------------------------------------------------------------- | ------- | :------: |
+| [icon](#icon)                       | `string \| { iconName: string, prefix: string } \| Array<string>` |         |    ✓     |
+| [className](#classname)             | `string`                                                          | `''`    |          |
+| [style](#style)                     | `{ [key: string]: number \| string }`                             |         |          |
+| [onClick](#onclick)                 | `function`                                                        |         |          |
+| [disabled](#disabled)               | `boolean`                                                         | `false` |          |
+| [stopPropagation](#stoppropagation) | `boolean`                                                         | `false` |          |
 
 ### `icon`
 

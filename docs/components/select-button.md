@@ -33,24 +33,24 @@ import { SelectButton } from 'chayns-components';
 
 The `SelectButton`-component takes the following props:
 
-| Name                                    | Type                     | Default        | Required |
-| --------------------------------------- | ------------------------ | -------------- | :------: |
-| [onSelect](#onselect)                   | `function`               |                |          |
-| [title](#title)                         | `string`                 | `''`           |          |
-| [description](#description)             | `string`                 | `''`           |          |
-| [disabled](#disabled)                   | `boolean`                | `false`        |          |
-| [label](#label)                         | `string`                 | `'Select'`     |          |
-| [list](#list)                           | `Array<object>`          |                |    ✓     |
-| [listKey](#listkey)                     | `string`                 | `'name'`       |          |
-| [listValue](#listvalue)                 | `string`                 | `'value'`      |          |
-| [selectedFlag](#selectedflag)           | `string`                 | `'isSelected'` |          |
-| [multiSelect](#multiselect)             | `boolean`                | `false`        |          |
-| [quickFind](#quickfind)                 | `boolean`                | `false`        |          |
-| [className](#classname)                 | `string`                 |                |          |
-| [style](#style)                         | `{ [key: string]: number | string }`      |          |  |
-| [showSelection](#showselection)         | `boolean                 | number`        |  `true`  |  |
-| [showListSelection](#showlistselection) | `boolean`                | `true`         |          |
-| [stopPropagation](#stoppropagation)     | `boolean`                | `false`        |          |
+| Name                                    | Type                                  | Default        | Required |
+| --------------------------------------- | ------------------------------------- | -------------- | :------: |
+| [onSelect](#onselect)                   | `function`                            |                |          |
+| [title](#title)                         | `string`                              | `''`           |          |
+| [description](#description)             | `string`                              | `''`           |          |
+| [disabled](#disabled)                   | `boolean`                             | `false`        |          |
+| [label](#label)                         | `string`                              | `'Select'`     |          |
+| [list](#list)                           | `Array<object>`                       |                |    ✓     |
+| [listKey](#listkey)                     | `string`                              | `'name'`       |          |
+| [listValue](#listvalue)                 | `string`                              | `'value'`      |          |
+| [selectedFlag](#selectedflag)           | `string`                              | `'isSelected'` |          |
+| [multiSelect](#multiselect)             | `boolean`                             | `false`        |          |
+| [quickFind](#quickfind)                 | `boolean`                             | `false`        |          |
+| [className](#classname)                 | `string`                              |                |          |
+| [style](#style)                         | `{ [key: string]: number \| string }` |                |          |
+| [showSelection](#showselection)         | `boolean \| number`                   | `true`         |          |
+| [showListSelection](#showlistselection) | `boolean`                             | `true`         |          |
+| [stopPropagation](#stoppropagation)     | `boolean`                             | `false`        |          |
 
 ### `onSelect`
 

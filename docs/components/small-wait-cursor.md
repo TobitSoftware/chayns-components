@@ -33,13 +33,13 @@ import { SmallWaitCursor } from 'chayns-components';
 
 The `SmallWaitCursor`-component takes the following props:
 
-| Name                              | Type                     | Default   | Required |
-| --------------------------------- | ------------------------ | --------- | :------: |
-| [show](#show)                     | `boolean`                | `false`   |          |
-| [style](#style)                   | `{ [key: string]: number | string }` |          |  |
-| [showBackground](#showbackground) | `boolean`                | `true`    |          |
-| [inline](#inline)                 | `boolean`                | `false`   |          |
-| [className](#classname)           | `string`                 |           |          |
+| Name                              | Type                                  | Default | Required |
+| --------------------------------- | ------------------------------------- | ------- | :------: |
+| [show](#show)                     | `boolean`                             | `false` |          |
+| [style](#style)                   | `{ [key: string]: number \| string }` |         |          |
+| [showBackground](#showbackground) | `boolean`                             | `true`  |          |
+| [inline](#inline)                 | `boolean`                             | `false` |          |
+| [className](#classname)           | `string`                              |         |          |
 
 ### `show`
 

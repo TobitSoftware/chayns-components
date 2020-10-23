@@ -33,22 +33,22 @@ import { TextArea } from 'chayns-components';
 
 The `TextArea`-component takes the following props:
 
-| Name                                | Type                     | Default   | Required |
-| ----------------------------------- | ------------------------ | --------- | :------: |
-| [style](#style)                     | `{ [key: string]: string | number }` |          |  |
-| [disabled](#disabled)               | `boolean`                | `false`   |          |
-| [className](#classname)             | `string`                 |           |          |
-| [placeholder](#placeholder)         | `string`                 |           |          |
-| [required](#required)               | `boolean`                |           |          |
-| [onChange](#onchange)               | `function`               |           |          |
-| [onBlur](#onblur)                   | `function`               |           |          |
-| [defaultValue](#defaultvalue)       | `string`                 |           |          |
-| [value](#value)                     | `string`                 |           |          |
-| [onKeyUp](#onkeyup)                 | `function`               |           |          |
-| [onKeyDown](#onkeydown)             | `function`               |           |          |
-| [autogrow](#autogrow)               | `boolean`                |           |          |
-| [reference](#reference)             | `function`               |           |          |
-| [stopPropagation](#stoppropagation) | `boolean`                | `false`   |          |
+| Name                                | Type                                  | Default | Required |
+| ----------------------------------- | ------------------------------------- | ------- | :------: |
+| [style](#style)                     | `{ [key: string]: string \| number }` |         |          |
+| [disabled](#disabled)               | `boolean`                             | `false` |          |
+| [className](#classname)             | `string`                              |         |          |
+| [placeholder](#placeholder)         | `string`                              |         |          |
+| [required](#required)               | `boolean`                             |         |          |
+| [onChange](#onchange)               | `function`                            |         |          |
+| [onBlur](#onblur)                   | `function`                            |         |          |
+| [defaultValue](#defaultvalue)       | `string`                              |         |          |
+| [value](#value)                     | `string`                              |         |          |
+| [onKeyUp](#onkeyup)                 | `function`                            |         |          |
+| [onKeyDown](#onkeydown)             | `function`                            |         |          |
+| [autogrow](#autogrow)               | `boolean`                             |         |          |
+| [reference](#reference)             | `function`                            |         |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false` |          |
 
 ### `style`
 

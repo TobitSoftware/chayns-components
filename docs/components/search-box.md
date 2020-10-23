@@ -33,24 +33,24 @@ import { SearchBox } from 'chayns-components';
 
 The `SearchBox`-component takes the following props:
 
-| Name                                          | Type                     | Default    | Required |
-| --------------------------------------------- | ------------------------ | ---------- | :------: |
-| [onSelect](#onselect)                         | `function`               |            |          |
-| [disabled](#disabled)                         | `boolean`                | `false`    |          |
-| [list](#list)                                 | `Array<object>`          |            |          |
-| [listKey](#listkey)                           | `string`                 |            |    ✓     |
-| [listValue](#listvalue)                       | `string`                 |            |    ✓     |
-| [className](#classname)                       | `string`                 |            |          |
-| [defaultValue](#defaultvalue)                 | `string                  | number`    |          |  |
-| [stopPropagation](#stoppropagation)           | `boolean`                | `false`    |          |
-| [parent](#parent)                             | `function                | ReactNode` |          |  |
-| [style](#style)                               | `{ [key: string]: string | number }`  |          |  |
-| [value](#value)                               | `string                  | number`    |          |  |
-| [inputValue](#inputvalue)                     | `string`                 |            |          |
-| [showListWithoutInput](#showlistwithoutinput) | `boolean`                | `false`    |          |
-| [inputDefaultValue](#inputdefaultvalue)       | `string`                 |            |          |
-| [onChange](#onchange)                         | `function`               |            |          |
-| [autoSelectFirst](#autoselectfirst)           | `boolean`                | `false`    |          |
+| Name                                          | Type                                  | Default | Required |
+| --------------------------------------------- | ------------------------------------- | ------- | :------: |
+| [onSelect](#onselect)                         | `function`                            |         |          |
+| [disabled](#disabled)                         | `boolean`                             | `false` |          |
+| [list](#list)                                 | `Array<object>`                       |         |          |
+| [listKey](#listkey)                           | `string`                              |         |    ✓     |
+| [listValue](#listvalue)                       | `string`                              |         |    ✓     |
+| [className](#classname)                       | `string`                              |         |          |
+| [defaultValue](#defaultvalue)                 | `string \| number`                    |         |          |
+| [stopPropagation](#stoppropagation)           | `boolean`                             | `false` |          |
+| [parent](#parent)                             | `function \| ReactNode`               |         |          |
+| [style](#style)                               | `{ [key: string]: string \| number }` |         |          |
+| [value](#value)                               | `string \| number`                    |         |          |
+| [inputValue](#inputvalue)                     | `string`                              |         |          |
+| [showListWithoutInput](#showlistwithoutinput) | `boolean`                             | `false` |          |
+| [inputDefaultValue](#inputdefaultvalue)       | `string`                              |         |          |
+| [onChange](#onchange)                         | `function`                            |         |          |
+| [autoSelectFirst](#autoselectfirst)           | `boolean`                             | `false` |          |
 
 ### `onSelect`
 

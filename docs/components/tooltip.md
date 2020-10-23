@@ -35,23 +35,23 @@ import { Tooltip } from 'chayns-components';
 
 The `Tooltip`-component takes the following props:
 
-| Name                                        | Type                                                                                               | Default                                                    | Required |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | :------: |
-| [content](#content)                         | `{ text: string, headline: string, imageUrl: string, buttonText: string, buttonOnClick: function } | { html: ReactNode }`                                       |          | ✓ |
-| [children](#children)                       | `ReactNode`                                                                                        |                                                            |          |
-| [bindListeners](#bindlisteners)             | `boolean`                                                                                          | `false`                                                    |          |
-| [position](#position)                       | `number`                                                                                           |                                                            |          |
-| [minWidth](#minwidth)                       | `number`                                                                                           | `100`                                                      |          |
-| [maxWidth](#maxwidth)                       | `number`                                                                                           | `250`                                                      |          |
-| [removeIcon](#removeicon)                   | `boolean`                                                                                          | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
-| [parent](#parent)                           | `custom`                                                                                           |                                                            |          |
-| [coordinates](#coordinates)                 | `{ x: number, y: number }`                                                                         |                                                            |          |
-| [childrenStyle](#childrenstyle)             | `{ [key: string]: string                                                                           | number }`                                                  |          |  |
-| [childrenClassNames](#childrenclassnames)   | `string`                                                                                           |                                                            |          |
-| [preventTriggerStyle](#preventtriggerstyle) | `boolean`                                                                                          | `false`                                                    |          |
-| [hideOnChildrenLeave](#hideonchildrenleave) | `boolean`                                                                                          | `false`                                                    |          |
-| [removeParentSpace](#removeparentspace)     | `boolean`                                                                                          | `false`                                                    |          |
-| [isIOS](#isios)                             | `boolean`                                                                                          | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
+| Name                                        | Type                                                                                                                       | Default                                                    | Required |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | :------: |
+| [content](#content)                         | `{ text: string, headline: string, imageUrl: string, buttonText: string, buttonOnClick: function } \| { html: ReactNode }` |                                                            |    ✓     |
+| [children](#children)                       | `ReactNode`                                                                                                                |                                                            |          |
+| [bindListeners](#bindlisteners)             | `boolean`                                                                                                                  | `false`                                                    |          |
+| [position](#position)                       | `number`                                                                                                                   |                                                            |          |
+| [minWidth](#minwidth)                       | `number`                                                                                                                   | `100`                                                      |          |
+| [maxWidth](#maxwidth)                       | `number`                                                                                                                   | `250`                                                      |          |
+| [removeIcon](#removeicon)                   | `boolean`                                                                                                                  | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
+| [parent](#parent)                           | `custom`                                                                                                                   |                                                            |          |
+| [coordinates](#coordinates)                 | `{ x: number, y: number }`                                                                                                 |                                                            |          |
+| [childrenStyle](#childrenstyle)             | `{ [key: string]: string \| number }`                                                                                      |                                                            |          |
+| [childrenClassNames](#childrenclassnames)   | `string`                                                                                                                   |                                                            |          |
+| [preventTriggerStyle](#preventtriggerstyle) | `boolean`                                                                                                                  | `false`                                                    |          |
+| [hideOnChildrenLeave](#hideonchildrenleave) | `boolean`                                                                                                                  | `false`                                                    |          |
+| [removeParentSpace](#removeparentspace)     | `boolean`                                                                                                                  | `false`                                                    |          |
+| [isIOS](#isios)                             | `boolean`                                                                                                                  | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
 
 ### `content`
 

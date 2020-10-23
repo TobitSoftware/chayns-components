@@ -33,14 +33,14 @@ import { ColorScheme } from 'chayns-components';
 
 The `ColorScheme`-component takes the following props:
 
-| Name                              | Type                     | Default   | Required |
-| --------------------------------- | ------------------------ | --------- | :------: |
-| [color](#color)                   | `string`                 |           |          |
-| [secondaryColor](#secondarycolor) | `string`                 |           |          |
-| [colorMode](#colormode)           | `string                  | number`   |          |  |
-| [children](#children)             | `ReactNode`              |           |    ✓     |
-| [style](#style)                   | `{ [key: string]: string | number }` |   `{}`   |  |
-| [cssVariables](#cssvariables)     | `{ [key: string]: string | number }` |   `{}`   |  |
+| Name                              | Type                                  | Default | Required |
+| --------------------------------- | ------------------------------------- | ------- | :------: |
+| [color](#color)                   | `string`                              |         |          |
+| [secondaryColor](#secondarycolor) | `string`                              |         |          |
+| [colorMode](#colormode)           | `string \| number`                    |         |          |
+| [children](#children)             | `ReactNode`                           |         |    ✓     |
+| [style](#style)                   | `{ [key: string]: string \| number }` | `{}`    |          |
+| [cssVariables](#cssvariables)     | `{ [key: string]: string \| number }` | `{}`    |          |
 
 ### `color`
 

@@ -33,36 +33,36 @@ import { AmountControl } from 'chayns-components';
 
 The `AmountControl`-component takes the following props:
 
-| Name                                        | Type       | Default |    Required     |
-| ------------------------------------------- | ---------- | ------- | :-------------: |
-| [buttonText](#buttontext)                   | `string`   |         |                 |
-| [amount](#amount)                           | `number`   | `0`     |                 |
-| [onChange](#onchange)                       | `function` |         |                 |
-| [onInput](#oninput)                         | `function` |         |                 |
-| [onAdd](#onadd)                             | `function` |         |                 |
-| [onRemove](#onremove)                       | `function` |         |                 |
-| [disabled](#disabled)                       | `boolean`  | `false` |                 |
-| [disableInput](#disableinput)               | `boolean`  | `false` |                 |
-| [disableAdd](#disableadd)                   | `boolean`  | `false` |                 |
-| [disableRemove](#disableremove)             | `boolean`  | `false` |                 |
-| [className](#classname)                     | `string`   | `''`    |                 |
-| [autoInput](#autoinput)                     | `boolean`  | `false` |                 |
-| [buttonFormatHandler](#buttonformathandler) | `function` |         |                 |
-| [showInput](#showinput)                     | `boolean`  | `false` |                 |
-| [icon](#icon)                               | `string    | object` |                 |  |
-| [plusIcon](#plusicon)                       | `string    | object` | `'fa fa-plus'`  |  |
-| [minusIcon](#minusicon)                     | `string    | object` | `'fa fa-minus'` |  |
-| [removeIcon](#removeicon)                   | `string    | object` | `'fa fa-minus'` |  |
-| [removeColor](#removecolor)                 | `string`   |         |                 |
-| [addColor](#addcolor)                       | `string`   |         |                 |
-| [iconColor](#iconcolor)                     | `string`   |         |                 |
-| [equalize](#equalize)                       | `string`   |         |                 |
-| [focusOnClick](#focusonclick)               | `boolean`  | `true`  |                 |
-| [contentWidth](#contentwidth)               | `number`   |         |                 |
-| [min](#min)                                 | `number`   |         |                 |
-| [max](#max)                                 | `number`   |         |                 |
-| [stopPropagation](#stoppropagation)         | `boolean`  | `false` |                 |
-| [hasAlwaysControls](#hasalwayscontrols)     | `boolean`  | `false` |                 |
+| Name                                        | Type               | Default         | Required |
+| ------------------------------------------- | ------------------ | --------------- | :------: |
+| [buttonText](#buttontext)                   | `string`           |                 |          |
+| [amount](#amount)                           | `number`           | `0`             |          |
+| [onChange](#onchange)                       | `function`         |                 |          |
+| [onInput](#oninput)                         | `function`         |                 |          |
+| [onAdd](#onadd)                             | `function`         |                 |          |
+| [onRemove](#onremove)                       | `function`         |                 |          |
+| [disabled](#disabled)                       | `boolean`          | `false`         |          |
+| [disableInput](#disableinput)               | `boolean`          | `false`         |          |
+| [disableAdd](#disableadd)                   | `boolean`          | `false`         |          |
+| [disableRemove](#disableremove)             | `boolean`          | `false`         |          |
+| [className](#classname)                     | `string`           | `''`            |          |
+| [autoInput](#autoinput)                     | `boolean`          | `false`         |          |
+| [buttonFormatHandler](#buttonformathandler) | `function`         |                 |          |
+| [showInput](#showinput)                     | `boolean`          | `false`         |          |
+| [icon](#icon)                               | `string \| object` |                 |          |
+| [plusIcon](#plusicon)                       | `string \| object` | `'fa fa-plus'`  |          |
+| [minusIcon](#minusicon)                     | `string \| object` | `'fa fa-minus'` |          |
+| [removeIcon](#removeicon)                   | `string \| object` | `'fa fa-minus'` |          |
+| [removeColor](#removecolor)                 | `string`           |                 |          |
+| [addColor](#addcolor)                       | `string`           |                 |          |
+| [iconColor](#iconcolor)                     | `string`           |                 |          |
+| [equalize](#equalize)                       | `string`           |                 |          |
+| [focusOnClick](#focusonclick)               | `boolean`          | `true`          |          |
+| [contentWidth](#contentwidth)               | `number`           |                 |          |
+| [min](#min)                                 | `number`           |                 |          |
+| [max](#max)                                 | `number`           |                 |          |
+| [stopPropagation](#stoppropagation)         | `boolean`          | `false`         |          |
+| [hasAlwaysControls](#hasalwayscontrols)     | `boolean`          | `false`         |          |
 
 ### `buttonText`
 

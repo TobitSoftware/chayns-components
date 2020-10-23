@@ -34,15 +34,15 @@ import { SelectItem } from 'chayns-components';
 
 The `SelectItem`-component takes the following props:
 
-| Name                          | Type        | Default    | Required |
-| ----------------------------- | ----------- | ---------- | :------: |
-| [id](#id)                     | `number`    |            |          |
-| [className](#classname)       | `string`    | `''`       |          |
-| [disabled](#disabled)         | `boolean`   | `false`    |          |
-| [children](#children)         | `ReactNode` |            |          |
-| [name](#name)                 | `string     | ReactNode` |   `''`   |  |
-| [value](#value)               | `object     | array`     |          |  |
-| [tooltipProps](#tooltipprops) | `object`    |            |          |
+| Name                          | Type                  | Default | Required |
+| ----------------------------- | --------------------- | ------- | :------: |
+| [id](#id)                     | `number`              |         |          |
+| [className](#classname)       | `string`              | `''`    |          |
+| [disabled](#disabled)         | `boolean`             | `false` |          |
+| [children](#children)         | `ReactNode`           |         |          |
+| [name](#name)                 | `string \| ReactNode` | `''`    |          |
+| [value](#value)               | `object \| array`     |         |          |
+| [tooltipProps](#tooltipprops) | `object`              |         |          |
 
 ### `id`
 

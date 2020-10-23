@@ -57,21 +57,21 @@ const FirstStep = withSetupWizardContext(
 
 The `SetupWizard`-component takes the following props:
 
-| Name                                                    | Type                     | Default                             | Required |
-| ------------------------------------------------------- | ------------------------ | ----------------------------------- | :------: |
-| [children](#children)                                   | `ReactNode`              |                                     |          |
-| [ready](#ready)                                         | `function`               |                                     |          |
-| [notComplete](#notcomplete)                             | `function`               |                                     |          |
-| [className](#classname)                                 | `string`                 |                                     |          |
-| [style](#style)                                         | `{ [key: string]: string | number }`                           |          |  |
-| [contentStyle](#contentstyle)                           | `{ [key: string]: string | number }`                           |          |  |
-| [title](#title)                                         | `string`                 |                                     |          |
-| [description](#description)                             | `ReactNode`              |                                     |          |
-| [numberOfSteps](#numberofsteps)                         | `number`                 |                                     |          |
-| [allRequiredStepsCompleted](#allrequiredstepscompleted) | `function`               |                                     |          |
-| [initialStep](#initialstep)                             | `number`                 | `0`                                 |          |
-| [disableShowStep](#disableshowstep)                     | `boolean`                | `false`                             |          |
-| [operationMode](#operationmode)                         | `enum`                   | `SetupWizard.operationMode.DEFAULT` |          |
+| Name                                                    | Type                                  | Default                             | Required |
+| ------------------------------------------------------- | ------------------------------------- | ----------------------------------- | :------: |
+| [children](#children)                                   | `ReactNode`                           |                                     |          |
+| [ready](#ready)                                         | `function`                            |                                     |          |
+| [notComplete](#notcomplete)                             | `function`                            |                                     |          |
+| [className](#classname)                                 | `string`                              |                                     |          |
+| [style](#style)                                         | `{ [key: string]: string \| number }` |                                     |          |
+| [contentStyle](#contentstyle)                           | `{ [key: string]: string \| number }` |                                     |          |
+| [title](#title)                                         | `string`                              |                                     |          |
+| [description](#description)                             | `ReactNode`                           |                                     |          |
+| [numberOfSteps](#numberofsteps)                         | `number`                              |                                     |          |
+| [allRequiredStepsCompleted](#allrequiredstepscompleted) | `function`                            |                                     |          |
+| [initialStep](#initialstep)                             | `number`                              | `0`                                 |          |
+| [disableShowStep](#disableshowstep)                     | `boolean`                             | `false`                             |          |
+| [operationMode](#operationmode)                         | `enum`                                | `SetupWizard.operationMode.DEFAULT` |          |
 
 ### `children`
 

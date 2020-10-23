@@ -33,17 +33,17 @@ import { RfidInput } from 'chayns-components';
 
 The `RfidInput`-component takes the following props:
 
-| Name                        | Type                     | Default           | Required |
-| --------------------------- | ------------------------ | ----------------- | :------: |
-| [className](#classname)     | `string`                 |                   |          |
-| [style](#style)             | `{ [key: string]: string | number }`         |          |  |
-| [placeholder](#placeholder) | `string`                 | `'Kartennummer'`  |          |
-| [confirmNode](#confirmnode) | `ReactNode               | Array<ReactNode>` |  `'OK'`  |  |
-| [enableScan](#enablescan)   | `boolean`                | `false`           |          |
-| [scanText](#scantext)       | `string`                 | `'Scannen'`       |          |
-| [value](#value)             | `string`                 |                   |    ✓     |
-| [onInput](#oninput)         | `function`               |                   |    ✓     |
-| [onConfirm](#onconfirm)     | `function`               |                   |    ✓     |
+| Name                        | Type                                  | Default          | Required |
+| --------------------------- | ------------------------------------- | ---------------- | :------: |
+| [className](#classname)     | `string`                              |                  |          |
+| [style](#style)             | `{ [key: string]: string \| number }` |                  |          |
+| [placeholder](#placeholder) | `string`                              | `'Kartennummer'` |          |
+| [confirmNode](#confirmnode) | `ReactNode \| Array<ReactNode>`       | `'OK'`           |          |
+| [enableScan](#enablescan)   | `boolean`                             | `false`          |          |
+| [scanText](#scantext)       | `string`                              | `'Scannen'`      |          |
+| [value](#value)             | `string`                              |                  |    ✓     |
+| [onInput](#oninput)         | `function`                            |                  |    ✓     |
+| [onConfirm](#onconfirm)     | `function`                            |                  |    ✓     |
 
 ### `className`
 

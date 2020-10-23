@@ -31,17 +31,17 @@ import { Bubble } from 'chayns-components';
 
 The `Bubble`-component takes the following props:
 
-| Name                          | Type                       | Default   | Required |
-| ----------------------------- | -------------------------- | --------- | :------: |
-| [children](#children)         | `ReactNode`                |           |          |
-| [className](#classname)       | `string`                   |           |          |
-| [style](#style)               | `{ [key: string]: string   | number }` |          |  |
-| [position](#position)         | `enum`                     | `0`       |          |
-| [parent](#parent)             | `custom`                   |           |          |
-| [coordinates](#coordinates)   | `{ x: number, y: number }` |           |          |
-| [onMouseEnter](#onmouseenter) | `function`                 |           |          |
-| [onMouseLeave](#onmouseleave) | `function`                 |           |          |
-| [topDivStyle](#topdivstyle)   | `{ [key: string]: string   | number }` |          |  |
+| Name                          | Type                                  | Default | Required |
+| ----------------------------- | ------------------------------------- | ------- | :------: |
+| [children](#children)         | `ReactNode`                           |         |          |
+| [className](#classname)       | `string`                              |         |          |
+| [style](#style)               | `{ [key: string]: string \| number }` |         |          |
+| [position](#position)         | `enum`                                | `0`     |          |
+| [parent](#parent)             | `custom`                              |         |          |
+| [coordinates](#coordinates)   | `{ x: number, y: number }`            |         |          |
+| [onMouseEnter](#onmouseenter) | `function`                            |         |          |
+| [onMouseLeave](#onmouseleave) | `function`                            |         |          |
+| [topDivStyle](#topdivstyle)   | `{ [key: string]: string \| number }` |         |          |
 
 ### `children`
 

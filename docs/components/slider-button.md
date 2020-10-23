@@ -33,16 +33,16 @@ import { SliderButton } from 'chayns-components';
 
 The `SliderButton`-component takes the following props:
 
-| Name                              | Type                     | Default              |   Required    |
-| --------------------------------- | ------------------------ | -------------------- | :-----------: |
-| [className](#classname)           | `string`                 |                      |               |
-| [style](#style)                   | `{ [key: string]: string | number }`            |               |  |
-| [items](#items)                   | `Array<{ id: string      | number, text: string | ReactNode }>` | `[ { id: 0, text: 'Auf', }, { id: 1, text: 'Stopp', }, { id: 2, text: 'Zu', }, ]` |  |
-| [onChange](#onchange)             | `function`               |                      |               |
-| [onDragStop](#ondragstop)         | `function`               |                      |               |
-| [onDragStart](#ondragstart)       | `function`               |                      |               |
-| [selectedItemId](#selecteditemid) | `number`                 | `0`                  |               |
-| [disabled](#disabled)             | `boolean`                | `false`              |               |
+| Name                              | Type                                                         | Default                                                                           | Required |
+| --------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------- | :------: |
+| [className](#classname)           | `string`                                                     |                                                                                   |          |
+| [style](#style)                   | `{ [key: string]: string \| number }`                        |                                                                                   |          |
+| [items](#items)                   | `Array<{ id: string \| number, text: string \| ReactNode }>` | `[ { id: 0, text: 'Auf', }, { id: 1, text: 'Stopp', }, { id: 2, text: 'Zu', }, ]` |          |
+| [onChange](#onchange)             | `function`                                                   |                                                                                   |          |
+| [onDragStop](#ondragstop)         | `function`                                                   |                                                                                   |          |
+| [onDragStart](#ondragstart)       | `function`                                                   |                                                                                   |          |
+| [selectedItemId](#selecteditemid) | `number`                                                     | `0`                                                                               |          |
+| [disabled](#disabled)             | `boolean`                                                    | `false`                                                                           |          |
 
 ### `className`
 

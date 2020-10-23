@@ -87,28 +87,28 @@ If not, add it or specify the `parent`-prop on the `PersonFinder`.
 
 The `PersonFinder`-component takes the following props:
 
-| Name                                | Type                                                                                             | Default          | Required |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------ | ---------------- | :------: |
-| [placeholder](#placeholder)         | `string`                                                                                         | `''`             |          |
-| [multiple](#multiple)               | `boolean`                                                                                        | `false`          |          |
-| [showPersons](#showpersons)         | `boolean`                                                                                        | `true`           |          |
-| [showSites](#showsites)             | `boolean`                                                                                        | `false`          |          |
-| [uacId](#uacid)                     | `number`                                                                                         |                  |          |
-| [locationId](#locationid)           | `number`                                                                                         |                  |          |
-| [reducerFunction](#reducerfunction) | `function`                                                                                       |                  |          |
-| [context](#context)                 | `{ Provider: function, Consumer: object }`                                                       | `PersonsContext` |          |
-| [onChange](#onchange)               | `function`                                                                                       |                  |          |
-| [disableFriends](#disablefriends)   | `boolean`                                                                                        | `false`          |          |
-| [className](#classname)             | `string`                                                                                         |                  |          |
-| [defaultValue](#defaultvalue)       | `{ name: string, firstName: string, lastName: string, siteId: string, personId: string }         | string`          |          |  |
-| [defaultValues](#defaultvalues)     | `Array<{ name: string, firstName: string, lastName: string, siteId: string, personId: string }>` | `[]`             |          |
-| [onAdd](#onadd)                     | `function`                                                                                       |                  |          |
-| [onRemove](#onremove)               | `function`                                                                                       |                  |          |
-| [onInput](#oninput)                 | `function`                                                                                       |                  |          |
-| [contextProps](#contextprops)       | `object`                                                                                         |                  |          |
-| [max](#max)                         | `number`                                                                                         |                  |          |
-| [values](#values)                   | `array`                                                                                          |                  |          |
-| [value](#value)                     | `string`                                                                                         |                  |          |
+| Name                                | Type                                                                                                | Default          | Required |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------- | :------: |
+| [placeholder](#placeholder)         | `string`                                                                                            | `''`             |          |
+| [multiple](#multiple)               | `boolean`                                                                                           | `false`          |          |
+| [showPersons](#showpersons)         | `boolean`                                                                                           | `true`           |          |
+| [showSites](#showsites)             | `boolean`                                                                                           | `false`          |          |
+| [uacId](#uacid)                     | `number`                                                                                            |                  |          |
+| [locationId](#locationid)           | `number`                                                                                            |                  |          |
+| [reducerFunction](#reducerfunction) | `function`                                                                                          |                  |          |
+| [context](#context)                 | `{ Provider: function, Consumer: object }`                                                          | `PersonsContext` |          |
+| [onChange](#onchange)               | `function`                                                                                          |                  |          |
+| [disableFriends](#disablefriends)   | `boolean`                                                                                           | `false`          |          |
+| [className](#classname)             | `string`                                                                                            |                  |          |
+| [defaultValue](#defaultvalue)       | `{ name: string, firstName: string, lastName: string, siteId: string, personId: string } \| string` |                  |          |
+| [defaultValues](#defaultvalues)     | `Array<{ name: string, firstName: string, lastName: string, siteId: string, personId: string }>`    | `[]`             |          |
+| [onAdd](#onadd)                     | `function`                                                                                          |                  |          |
+| [onRemove](#onremove)               | `function`                                                                                          |                  |          |
+| [onInput](#oninput)                 | `function`                                                                                          |                  |          |
+| [contextProps](#contextprops)       | `object`                                                                                            |                  |          |
+| [max](#max)                         | `number`                                                                                            |                  |          |
+| [values](#values)                   | `array`                                                                                             |                  |          |
+| [value](#value)                     | `string`                                                                                            |                  |          |
 
 ### `placeholder`
 

@@ -33,14 +33,14 @@ import { ScrollView } from 'chayns-components';
 
 The `ScrollView`-component takes the following props:
 
-| Name                                  | Type                     | Default           | Required |
-| ------------------------------------- | ------------------------ | ----------------- | :------: |
-| [children](#children)                 | `ReactNode               | Array<ReactNode>` |          |  |
-| [style](#style)                       | `{ [key: string]: number | string }`         |          |  |
-| [className](#classname)               | `string`                 |                   |          |
-| [scrollElementId](#scrollelementid)   | `string`                 |                   |          |
-| [scrollElementRef](#scrollelementref) | `function`               |                   |          |
-| [onScroll](#onscroll)                 | `function`               |                   |          |
+| Name                                  | Type                                  | Default | Required |
+| ------------------------------------- | ------------------------------------- | ------- | :------: |
+| [children](#children)                 | `ReactNode \| Array<ReactNode>`       |         |          |
+| [style](#style)                       | `{ [key: string]: number \| string }` |         |          |
+| [className](#classname)               | `string`                              |         |          |
+| [scrollElementId](#scrollelementid)   | `string`                              |         |          |
+| [scrollElementRef](#scrollelementref) | `function`                            |         |          |
+| [onScroll](#onscroll)                 | `function`                            |         |          |
 
 ### `children`
 

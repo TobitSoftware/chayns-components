@@ -33,11 +33,11 @@ import { List } from 'chayns-components';
 
 The `List`-component takes the following props:
 
-| Name                            | Type       | Default           | Required |
-| ------------------------------- | ---------- | ----------------- | :------: |
-| [className](#classname)         | `string`   |                   |          |
-| [children](#children)           | `ReactNode | Array<ReactNode>` |          |  |
-| [notExpandable](#notexpandable) | `boolean`  | `false`           |          |
+| Name                            | Type                            | Default | Required |
+| ------------------------------- | ------------------------------- | ------- | :------: |
+| [className](#classname)         | `string`                        |         |          |
+| [children](#children)           | `ReactNode \| Array<ReactNode>` |         |          |
+| [notExpandable](#notexpandable) | `boolean`                       | `false` |          |
 
 ### `className`
 

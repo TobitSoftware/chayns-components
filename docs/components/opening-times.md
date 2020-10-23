@@ -38,7 +38,7 @@ The `OpeningTimes`-component takes the following props:
 | [times](#times)               | `Array<{ weekDay: number, start: string, end: string, disabled: boolean }>` |                                  |    ✓     |
 | [onChange](#onchange)         | `function`                                                                  |                                  |          |
 | [className](#classname)       | `string`                                                                    |                                  |          |
-| [style](#style)               | `{ [key: string]: string                                                    | number }`                        |          |  |
+| [style](#style)               | `{ [key: string]: string \| number }`                                       |                                  |          |
 | [forceMobile](#forcemobile)   | `boolean`                                                                   | `false`                          |          |
 | [hintPosition](#hintposition) | `enum`                                                                      | `OpeningTimes.hintPositions.TOP` |          |
 | [hintText](#hinttext)         | `string`                                                                    | `''`                             |          |

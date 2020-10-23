@@ -34,32 +34,32 @@ import { ListItem } from 'chayns-components';
 
 The `ListItem`-component takes the following props:
 
-| Name                                  | Type                     | Default                                     | Required |
-| ------------------------------------- | ------------------------ | ------------------------------------------- | :------: |
-| [title](#title)                       | `ReactNode               | Array<ReactNode>`                           |          | ✓ |
-| [subtitle](#subtitle)                 | `ReactNode               | Array<ReactNode>`                           |          |  |
-| [image](#image)                       | `string`                 |                                             |          |
-| [images](#images)                     | `Array<string>`          |                                             |          |
-| [icon](#icon)                         | `string                  | object`                                     |          |  |
-| [className](#classname)               | `string`                 |                                             |          |
-| [onClick](#onclick)                   | `function`               |                                             |          |
-| [right](#right)                       | `ReactNode               | Array<ReactNode>`                           |          |  |
-| [style](#style)                       | `{ [key: string]: string | number }`                                   |          |  |
-| [headerProps](#headerprops)           | `object`                 |                                             |          |
-| [circle](#circle)                     | `boolean`                | `false`                                     |          |
-| [hoverItem](#hoveritem)               | `ReactNode`              |                                             |          |
-| [onLongPress](#onlongpress)           | `function`               |                                             |          |
-| [onMouseDown](#onmousedown)           | `function`               |                                             |          |
-| [onMouseMove](#onmousemove)           | `function`               |                                             |          |
-| [onMouseUp](#onmouseup)               | `function`               |                                             |          |
-| [onTouchStart](#ontouchstart)         | `function`               |                                             |          |
-| [onTouchMove](#ontouchmove)           | `function`               |                                             |          |
-| [onTouchEnd](#ontouchend)             | `function`               |                                             |          |
-| [onTouchCancel](#ontouchcancel)       | `function`               |                                             |          |
-| [longPressTimeout](#longpresstimeout) | `number`                 | `450`                                       |          |
-| [noContentClass](#nocontentclass)     | `boolean`                |                                             |          |
-| [onOpen](#onopen)                     | `function`               |                                             |          |
-| [imageBorderColor](#imagebordercolor) | `string`                 | `'rgba(var(--chayns-color-rgb--009), .08)'` |          |
+| Name                                  | Type                                  | Default                                     | Required |
+| ------------------------------------- | ------------------------------------- | ------------------------------------------- | :------: |
+| [title](#title)                       | `ReactNode \| Array<ReactNode>`       |                                             |    ✓     |
+| [subtitle](#subtitle)                 | `ReactNode \| Array<ReactNode>`       |                                             |          |
+| [image](#image)                       | `string`                              |                                             |          |
+| [images](#images)                     | `Array<string>`                       |                                             |          |
+| [icon](#icon)                         | `string \| object`                    |                                             |          |
+| [className](#classname)               | `string`                              |                                             |          |
+| [onClick](#onclick)                   | `function`                            |                                             |          |
+| [right](#right)                       | `ReactNode \| Array<ReactNode>`       |                                             |          |
+| [style](#style)                       | `{ [key: string]: string \| number }` |                                             |          |
+| [headerProps](#headerprops)           | `object`                              |                                             |          |
+| [circle](#circle)                     | `boolean`                             | `false`                                     |          |
+| [hoverItem](#hoveritem)               | `ReactNode`                           |                                             |          |
+| [onLongPress](#onlongpress)           | `function`                            |                                             |          |
+| [onMouseDown](#onmousedown)           | `function`                            |                                             |          |
+| [onMouseMove](#onmousemove)           | `function`                            |                                             |          |
+| [onMouseUp](#onmouseup)               | `function`                            |                                             |          |
+| [onTouchStart](#ontouchstart)         | `function`                            |                                             |          |
+| [onTouchMove](#ontouchmove)           | `function`                            |                                             |          |
+| [onTouchEnd](#ontouchend)             | `function`                            |                                             |          |
+| [onTouchCancel](#ontouchcancel)       | `function`                            |                                             |          |
+| [longPressTimeout](#longpresstimeout) | `number`                              | `450`                                       |          |
+| [noContentClass](#nocontentclass)     | `boolean`                             |                                             |          |
+| [onOpen](#onopen)                     | `function`                            |                                             |          |
+| [imageBorderColor](#imagebordercolor) | `string`                              | `'rgba(var(--chayns-color-rgb--009), .08)'` |          |
 
 ### `title`
 

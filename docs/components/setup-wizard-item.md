@@ -33,12 +33,12 @@ import { SetupWizardItem } from 'chayns-components';
 
 The `SetupWizardItem`-component takes the following props:
 
-| Name                  | Type       | Default                                          | Required |
-| --------------------- | ---------- | ------------------------------------------------ | :------: |
-| [step](#step)         | `number`   |                                                  |    ✓     |
-| [title](#title)       | `string`   |                                                  |    ✓     |
-| [required](#required) | `boolean`  | `false`                                          |          |
-| [right](#right)       | `ReactNode | { complete: ReactNode, notComplete: ReactNode }` |          |  |
+| Name                  | Type                                                           | Default | Required |
+| --------------------- | -------------------------------------------------------------- | ------- | :------: |
+| [step](#step)         | `number`                                                       |         |    ✓     |
+| [title](#title)       | `string`                                                       |         |    ✓     |
+| [required](#required) | `boolean`                                                      | `false` |          |
+| [right](#right)       | `ReactNode \| { complete: ReactNode, notComplete: ReactNode }` |         |          |
 
 ### `step`
 

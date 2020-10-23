@@ -34,16 +34,16 @@ import { TextString } from 'chayns-components';
 
 The `TextString`-component takes the following props:
 
-| Name                                                      | Type                     | Default   | Required  |
-| --------------------------------------------------------- | ------------------------ | --------- | :-------: |
-| [stringName](#stringname)                                 | `string`                 |           |           |
-| [replacements](#replacements)                             | `{ [key: string]: string | number }` |   `{}`    |  |
-| [children](#children)                                     | `ReactNode`              |           |     ✓     |
-| [useDangerouslySetInnerHTML](#usedangerouslysetinnerhtml) | `boolean`                | `false`   |           |
-| [language](#language)                                     | `string`                 |           |           |
-| [fallback](#fallback)                                     | `string`                 | `''`      |           |
-| [setProps](#setprops)                                     | `{ [key: string]: object | string    | number }` | `{}` |  |
-| [preventNoTranslate](#preventnotranslate)                 | `boolean`                | `false`   |           |
+| Name                                                      | Type                                            | Default | Required |
+| --------------------------------------------------------- | ----------------------------------------------- | ------- | :------: |
+| [stringName](#stringname)                                 | `string`                                        |         |          |
+| [replacements](#replacements)                             | `{ [key: string]: string \| number }`           | `{}`    |          |
+| [children](#children)                                     | `ReactNode`                                     |         |    ✓     |
+| [useDangerouslySetInnerHTML](#usedangerouslysetinnerhtml) | `boolean`                                       | `false` |          |
+| [language](#language)                                     | `string`                                        |         |          |
+| [fallback](#fallback)                                     | `string`                                        | `''`    |          |
+| [setProps](#setprops)                                     | `{ [key: string]: object \| string \| number }` | `{}`    |          |
+| [preventNoTranslate](#preventnotranslate)                 | `boolean`                                       | `false` |          |
 
 ### `stringName`
 

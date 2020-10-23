@@ -33,39 +33,39 @@ import { Accordion } from 'chayns-components';
 
 The `Accordion`-component takes the following props:
 
-| Name                                          | Type                     | Default                                |  Required  |
-| --------------------------------------------- | ------------------------ | -------------------------------------- | :--------: |
-| [head](#head)                                 | `ReactNode               | { open: ReactNode, close: ReactNode }` |            | ✓ |
-| [headMultiline](#headmultiline)               | `boolean`                | `false`                                |            |
-| [headClassNames](#headclassnames)             | `string                  | Array<string>                          |  object`   |  |  |
-| [headCustomAttributes](#headcustomattributes) | `object`                 |                                        |            |
-| [children](#children)                         | `ReactNode`              |                                        |     ✓      |
-| [right](#right)                               | `ReactNode               | { open: ReactNode, close: ReactNode }` |            |  |
-| [renderClosed](#renderclosed)                 | `boolean`                | `false`                                |            |
-| [isWrapped](#iswrapped)                       | `boolean`                | `false`                                |            |
-| [dataGroup](#datagroup)                       | `string`                 |                                        |            |
-| [className](#classname)                       | `string`                 | `''`                                   |            |
-| [id](#id)                                     | `string`                 |                                        |            |
-| [style](#style)                               | `{ [key: string]: string | number }`                              |            |  |
-| [styleBody](#stylebody)                       | `{ [key: string]: string | number }`                              |            |  |
-| [onOpen](#onopen)                             | `function`               |                                        |            |
-| [onClose](#onclose)                           | `function`               |                                        |            |
-| [defaultOpened](#defaultopened)               | `boolean`                |                                        |            |
-| [reference](#reference)                       | `function`               |                                        |            |
-| [autogrow](#autogrow)                         | `boolean`                | `false`                                |            |
-| [open](#open)                                 | `boolean`                |                                        |            |
-| [icon](#icon)                                 | `object                  | string                                 | ReactNode` | `'ts-angle-right'` |  |
-| [noRotate](#norotate)                         | `boolean`                | `false`                                |            |
-| [fixed](#fixed)                               | `boolean`                | `false`                                |            |
-| [noIcon](#noicon)                             | `boolean`                | `false`                                |            |
-| [onSearch](#onsearch)                         | `function`               |                                        |            |
-| [onSearchEnter](#onsearchenter)               | `function`               |                                        |            |
-| [searchPlaceholder](#searchplaceholder)       | `string`                 | `''`                                   |            |
-| [searchValue](#searchvalue)                   | `string`                 |                                        |            |
-| [removeContentClosed](#removecontentclosed)   | `boolean`                | `false`                                |            |
-| [onClick](#onclick)                           | `function`               |                                        |            |
-| [disabled](#disabled)                         | `boolean`                | `false`                                |            |
-| [controlled](#controlled)                     | `boolean`                | `false`                                |            |
+| Name                                          | Type                                                 | Default            | Required |
+| --------------------------------------------- | ---------------------------------------------------- | ------------------ | :------: |
+| [head](#head)                                 | `ReactNode \| { open: ReactNode, close: ReactNode }` |                    |    ✓     |
+| [headMultiline](#headmultiline)               | `boolean`                                            | `false`            |          |
+| [headClassNames](#headclassnames)             | `string \| Array<string> \| object`                  |                    |          |
+| [headCustomAttributes](#headcustomattributes) | `object`                                             |                    |          |
+| [children](#children)                         | `ReactNode`                                          |                    |    ✓     |
+| [right](#right)                               | `ReactNode \| { open: ReactNode, close: ReactNode }` |                    |          |
+| [renderClosed](#renderclosed)                 | `boolean`                                            | `false`            |          |
+| [isWrapped](#iswrapped)                       | `boolean`                                            | `false`            |          |
+| [dataGroup](#datagroup)                       | `string`                                             |                    |          |
+| [className](#classname)                       | `string`                                             | `''`               |          |
+| [id](#id)                                     | `string`                                             |                    |          |
+| [style](#style)                               | `{ [key: string]: string \| number }`                |                    |          |
+| [styleBody](#stylebody)                       | `{ [key: string]: string \| number }`                |                    |          |
+| [onOpen](#onopen)                             | `function`                                           |                    |          |
+| [onClose](#onclose)                           | `function`                                           |                    |          |
+| [defaultOpened](#defaultopened)               | `boolean`                                            |                    |          |
+| [reference](#reference)                       | `function`                                           |                    |          |
+| [autogrow](#autogrow)                         | `boolean`                                            | `false`            |          |
+| [open](#open)                                 | `boolean`                                            |                    |          |
+| [icon](#icon)                                 | `object \| string \| ReactNode`                      | `'ts-angle-right'` |          |
+| [noRotate](#norotate)                         | `boolean`                                            | `false`            |          |
+| [fixed](#fixed)                               | `boolean`                                            | `false`            |          |
+| [noIcon](#noicon)                             | `boolean`                                            | `false`            |          |
+| [onSearch](#onsearch)                         | `function`                                           |                    |          |
+| [onSearchEnter](#onsearchenter)               | `function`                                           |                    |          |
+| [searchPlaceholder](#searchplaceholder)       | `string`                                             | `''`               |          |
+| [searchValue](#searchvalue)                   | `string`                                             |                    |          |
+| [removeContentClosed](#removecontentclosed)   | `boolean`                                            | `false`            |          |
+| [onClick](#onclick)                           | `function`                                           |                    |          |
+| [disabled](#disabled)                         | `boolean`                                            | `false`            |          |
+| [controlled](#controlled)                     | `boolean`                                            | `false`            |          |
 
 ### `head`
 

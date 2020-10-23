@@ -34,36 +34,36 @@ import { Slider } from 'chayns-components';
 
 The `Slider`-component takes the following props:
 
-| Name                                    | Type                     | Default                                                                                             |        Required        |
-| --------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------- | :--------------------: |
-| [min](#min)                             | `number`                 | `0`                                                                                                 |                        |
-| [max](#max)                             | `number`                 | `100`                                                                                               |                        |
-| [step](#step)                           | `number`                 |                                                                                                     |                        |
-| [defaultValue](#defaultvalue)           | `number`                 | `0`                                                                                                 |                        |
-| [value](#value)                         | `number`                 |                                                                                                     |                        |
-| [style](#style)                         | `{ [key: string]: number | string }`                                                                                           |                        |  |
-| [className](#classname)                 | `string`                 |                                                                                                     |                        |
-| [showLabel](#showlabel)                 | `boolean`                | `false`                                                                                             |                        |
-| [valueFormatter](#valueformatter)       | `function`               | `(value1, value2) => value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)` |                        |
-| [labelStyle](#labelstyle)               | `{ [key: string]: number | string }`                                                                                           | `{ minWidth: '50px' }` |  |
-| [onChangeStart](#onchangestart)         | `function`               |                                                                                                     |                        |
-| [onChange](#onchange)                   | `function`               |                                                                                                     |                        |
-| [onChangeEnd](#onchangeend)             | `function`               |                                                                                                     |                        |
-| [thumbStyle](#thumbstyle)               | `{ [key: string]: number | string }`                                                                                           |                        |  |
-| [disabled](#disabled)                   | `boolean`                | `false`                                                                                             |                        |
-| [vertical](#vertical)                   | `boolean`                | `false`                                                                                             |                        |
-| [interval](#interval)                   | `boolean`                | `false`                                                                                             |                        |
-| [minInterval](#mininterval)             | `number`                 |                                                                                                     |                        |
-| [maxInterval](#maxinterval)             | `number`                 |                                                                                                     |                        |
-| [defaultStartValue](#defaultstartvalue) | `number`                 | `0`                                                                                                 |                        |
-| [defaultEndValue](#defaultendvalue)     | `number`                 | `0`                                                                                                 |                        |
-| [startValue](#startvalue)               | `number`                 |                                                                                                     |                        |
-| [endValue](#endvalue)                   | `number`                 |                                                                                                     |                        |
-| [trackStyle](#trackstyle)               | `{ [key: string]: number | string }`                                                                                           |                        |  |
-| [innerTrackStyle](#innertrackstyle)     | `{ [key: string]: number | string }`                                                                                           |                        |  |
-| [showValueInThumb](#showvalueinthumb)   | `boolean`                | `false`                                                                                             |                        |
-| [scaleOnDown](#scaleondown)             | `boolean`                |                                                                                                     |                        |
-| [thumbWidth](#thumbwidth)               | `number`                 | `20`                                                                                                |                        |
+| Name                                    | Type                                  | Default                                                                                             | Required |
+| --------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------- | :------: |
+| [min](#min)                             | `number`                              | `0`                                                                                                 |          |
+| [max](#max)                             | `number`                              | `100`                                                                                               |          |
+| [step](#step)                           | `number`                              |                                                                                                     |          |
+| [defaultValue](#defaultvalue)           | `number`                              | `0`                                                                                                 |          |
+| [value](#value)                         | `number`                              |                                                                                                     |          |
+| [style](#style)                         | `{ [key: string]: number \| string }` |                                                                                                     |          |
+| [className](#classname)                 | `string`                              |                                                                                                     |          |
+| [showLabel](#showlabel)                 | `boolean`                             | `false`                                                                                             |          |
+| [valueFormatter](#valueformatter)       | `function`                            | `(value1, value2) => value2 ? `${Math.round(value1)} - ${Math.round(value2)}` : Math.round(value1)` |          |
+| [labelStyle](#labelstyle)               | `{ [key: string]: number \| string }` | `{ minWidth: '50px' }`                                                                              |          |
+| [onChangeStart](#onchangestart)         | `function`                            |                                                                                                     |          |
+| [onChange](#onchange)                   | `function`                            |                                                                                                     |          |
+| [onChangeEnd](#onchangeend)             | `function`                            |                                                                                                     |          |
+| [thumbStyle](#thumbstyle)               | `{ [key: string]: number \| string }` |                                                                                                     |          |
+| [disabled](#disabled)                   | `boolean`                             | `false`                                                                                             |          |
+| [vertical](#vertical)                   | `boolean`                             | `false`                                                                                             |          |
+| [interval](#interval)                   | `boolean`                             | `false`                                                                                             |          |
+| [minInterval](#mininterval)             | `number`                              |                                                                                                     |          |
+| [maxInterval](#maxinterval)             | `number`                              |                                                                                                     |          |
+| [defaultStartValue](#defaultstartvalue) | `number`                              | `0`                                                                                                 |          |
+| [defaultEndValue](#defaultendvalue)     | `number`                              | `0`                                                                                                 |          |
+| [startValue](#startvalue)               | `number`                              |                                                                                                     |          |
+| [endValue](#endvalue)                   | `number`                              |                                                                                                     |          |
+| [trackStyle](#trackstyle)               | `{ [key: string]: number \| string }` |                                                                                                     |          |
+| [innerTrackStyle](#innertrackstyle)     | `{ [key: string]: number \| string }` |                                                                                                     |          |
+| [showValueInThumb](#showvalueinthumb)   | `boolean`                             | `false`                                                                                             |          |
+| [scaleOnDown](#scaleondown)             | `boolean`                             |                                                                                                     |          |
+| [thumbWidth](#thumbwidth)               | `number`                              | `20`                                                                                                |          |
 
 ### `min`
 

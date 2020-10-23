@@ -33,16 +33,16 @@ import { TagInput } from 'chayns-components';
 
 The `TagInput`-component takes the following props:
 
-| Name                        | Type                      | Default   | Required |
-| --------------------------- | ------------------------- | --------- | :------: |
-| [tags](#tags)               | `Array<{ text: string }>` |           |          |
-| [value](#value)             | `string`                  | `''`      |          |
-| [onAddTag](#onaddtag)       | `function`                |           |          |
-| [onRemoveTag](#onremovetag) | `function`                |           |          |
-| [onChange](#onchange)       | `function`                |           |          |
-| [placeholder](#placeholder) | `string`                  |           |          |
-| [className](#classname)     | `string`                  |           |          |
-| [style](#style)             | `{ [key: string]: string  | number }` |          |  |
+| Name                        | Type                                  | Default | Required |
+| --------------------------- | ------------------------------------- | ------- | :------: |
+| [tags](#tags)               | `Array<{ text: string }>`             |         |          |
+| [value](#value)             | `string`                              | `''`    |          |
+| [onAddTag](#onaddtag)       | `function`                            |         |          |
+| [onRemoveTag](#onremovetag) | `function`                            |         |          |
+| [onChange](#onchange)       | `function`                            |         |          |
+| [placeholder](#placeholder) | `string`                              |         |          |
+| [className](#classname)     | `string`                              |         |          |
+| [style](#style)             | `{ [key: string]: string \| number }` |         |          |
 
 ### `tags`
 

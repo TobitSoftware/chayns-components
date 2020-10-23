@@ -33,18 +33,18 @@ import { RadioButton } from 'chayns-components';
 
 The `RadioButton`-component takes the following props:
 
-| Name                                | Type                     | Default   | Required |
-| ----------------------------------- | ------------------------ | --------- | :------: |
-| [id](#id)                           | `string`                 |           |          |
-| [name](#name)                       | `string`                 |           |          |
-| [checked](#checked)                 | `boolean`                |           |          |
-| [onChange](#onchange)               | `function`               |           |          |
-| [disabled](#disabled)               | `boolean`                | `false`   |          |
-| [children](#children)               | `ReactNode`              |           |          |
-| [value](#value)                     | `string                  | number    | boolean` |  |  |
-| [className](#classname)             | `string`                 |           |          |
-| [stopPropagation](#stoppropagation) | `boolean`                | `false`   |          |
-| [style](#style)                     | `{ [key: string]: string | number }` |          |  |
+| Name                                | Type                                  | Default | Required |
+| ----------------------------------- | ------------------------------------- | ------- | :------: |
+| [id](#id)                           | `string`                              |         |          |
+| [name](#name)                       | `string`                              |         |          |
+| [checked](#checked)                 | `boolean`                             |         |          |
+| [onChange](#onchange)               | `function`                            |         |          |
+| [disabled](#disabled)               | `boolean`                             | `false` |          |
+| [children](#children)               | `ReactNode`                           |         |          |
+| [value](#value)                     | `string \| number \| boolean`         |         |          |
+| [className](#classname)             | `string`                              |         |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false` |          |
+| [style](#style)                     | `{ [key: string]: string \| number }` |         |          |
 
 ### `id`
 

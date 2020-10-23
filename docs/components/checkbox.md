@@ -33,22 +33,22 @@ import { Checkbox } from 'chayns-components';
 
 The `Checkbox`-component takes the following props:
 
-| Name                                        | Type                     | Default           | Required |
-| ------------------------------------------- | ------------------------ | ----------------- | :------: |
-| [style](#style)                             | `{ [key: string]: string | number }`         |          |  |
-| [className](#classname)                     | `string`                 |                   |          |
-| [labelStyle](#labelstyle)                   | `{ [key: string]: string | number }`         |          |  |
-| [labelClassName](#labelclassname)           | `string`                 |                   |          |
-| [label](#label)                             | `ReactNode               | Array<ReactNode>` |          |  |
-| [children](#children)                       | `ReactNode               | Array<ReactNode>` |          |  |
-| [onChange](#onchange)                       | `function`               |                   |          |
-| [toggleButton](#togglebutton)               | `boolean`                | `false`           |          |
-| [checked](#checked)                         | `boolean`                |                   |          |
-| [defaultChecked](#defaultchecked)           | `boolean`                |                   |          |
-| [disabled](#disabled)                       | `boolean`                | `false`           |          |
-| [dangerouslySetLabel](#dangerouslysetlabel) | `{ __html: string }`     |                   |          |
-| [stopPropagation](#stoppropagation)         | `boolean`                | `false`           |          |
-| [id](#id)                                   | `number                  | string`           |          |  |
+| Name                                        | Type                                  | Default | Required |
+| ------------------------------------------- | ------------------------------------- | ------- | :------: |
+| [style](#style)                             | `{ [key: string]: string \| number }` |         |          |
+| [className](#classname)                     | `string`                              |         |          |
+| [labelStyle](#labelstyle)                   | `{ [key: string]: string \| number }` |         |          |
+| [labelClassName](#labelclassname)           | `string`                              |         |          |
+| [label](#label)                             | `ReactNode \| Array<ReactNode>`       |         |          |
+| [children](#children)                       | `ReactNode \| Array<ReactNode>`       |         |          |
+| [onChange](#onchange)                       | `function`                            |         |          |
+| [toggleButton](#togglebutton)               | `boolean`                             | `false` |          |
+| [checked](#checked)                         | `boolean`                             |         |          |
+| [defaultChecked](#defaultchecked)           | `boolean`                             |         |          |
+| [disabled](#disabled)                       | `boolean`                             | `false` |          |
+| [dangerouslySetLabel](#dangerouslysetlabel) | `{ __html: string }`                  |         |          |
+| [stopPropagation](#stoppropagation)         | `boolean`                             | `false` |          |
+| [id](#id)                                   | `number \| string`                    |         |          |
 
 ### `style`
 

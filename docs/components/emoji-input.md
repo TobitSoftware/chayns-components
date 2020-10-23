@@ -35,18 +35,18 @@ import { EmojiInput } from 'chayns-components';
 
 The `EmojiInput`-component takes the following props:
 
-| Name                        | Type                     | Default   | Required |
-| --------------------------- | ------------------------ | --------- | :------: |
-| [placeholder](#placeholder) | `string`                 |           |    ✓     |
-| [onInput](#oninput)         | `function`               |           |    ✓     |
-| [value](#value)             | `string`                 |           |    ✓     |
-| [id](#id)                   | `string`                 |           |    ✓     |
-| [hideBorder](#hideborder)   | `boolean`                | `false`   |          |
-| [onKeyDown](#onkeydown)     | `function`               |           |          |
-| [disabled](#disabled)       | `boolean`                | `false`   |          |
-| [style](#style)             | `{ [key: string]: string | number }` |          |  |
-| [onFocus](#onfocus)         | `function`               |           |          |
-| [onBlur](#onblur)           | `function`               |           |          |
+| Name                        | Type                                  | Default | Required |
+| --------------------------- | ------------------------------------- | ------- | :------: |
+| [placeholder](#placeholder) | `string`                              |         |    ✓     |
+| [onInput](#oninput)         | `function`                            |         |    ✓     |
+| [value](#value)             | `string`                              |         |    ✓     |
+| [id](#id)                   | `string`                              |         |    ✓     |
+| [hideBorder](#hideborder)   | `boolean`                             | `false` |          |
+| [onKeyDown](#onkeydown)     | `function`                            |         |          |
+| [disabled](#disabled)       | `boolean`                             | `false` |          |
+| [style](#style)             | `{ [key: string]: string \| number }` |         |          |
+| [onFocus](#onfocus)         | `function`                            |         |          |
+| [onBlur](#onblur)           | `function`                            |         |          |
 
 ### `placeholder`
 

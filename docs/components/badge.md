@@ -34,12 +34,12 @@ import { Badge } from 'chayns-components';
 
 The `Badge`-component takes the following props:
 
-| Name                    | Type                     | Default   | Required |
-| ----------------------- | ------------------------ | --------- | :------: |
-| [children](#children)   | `ReactNode`              |           |    ✓     |
-| [className](#classname) | `string`                 | `''`      |          |
-| [style](#style)         | `{ [key: string]: string | number }` |          |  |
-| [badgeRef](#badgeref)   | `function`               |           |          |
+| Name                    | Type                                  | Default | Required |
+| ----------------------- | ------------------------------------- | ------- | :------: |
+| [children](#children)   | `ReactNode`                           |         |    ✓     |
+| [className](#classname) | `string`                              | `''`    |          |
+| [style](#style)         | `{ [key: string]: string \| number }` |         |          |
+| [badgeRef](#badgeref)   | `function`                            |         |          |
 
 ### `children`
 

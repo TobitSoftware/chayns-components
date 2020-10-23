@@ -34,20 +34,20 @@ import { DateInfo } from 'chayns-components';
 
 The `DateInfo`-component takes the following props:
 
-| Name                                          | Type        | Default               | Required |
-| --------------------------------------------- | ----------- | --------------------- | :------: |
-| [children](#children)                         | `ReactNode` | `<div />`             |          |
-| [language](#language)                         | `string`    | `(chayns.env.language |          | navigator.language |  | 'de') .substring(0, 2) .toLowerCase()` |  |
-| [date](#date)                                 | `string     | number                |  Date`   |  | ✓ |
-| [date2](#date2)                               | `string     | number                |  Date`   |  |  |
-| [showTime](#showtime)                         | `boolean`   |                       |          |
-| [showDate](#showdate)                         | `boolean`   |                       |          |
-| [writeDay](#writeday)                         | `boolean`   | `false`               |          |
-| [writeMonth](#writemonth)                     | `boolean`   |                       |          |
-| [noTitle](#notitle)                           | `boolean`   | `false`               |          |
-| [useToday](#usetoday)                         | `boolean`   |                       |          |
-| [useTomorrowYesterday](#usetomorrowyesterday) | `boolean`   |                       |          |
-| [hideYear](#hideyear)                         | `boolean`   | `false`               |          |
+| Name                                          | Type                       | Default                                                                                   | Required |
+| --------------------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------- | :------: |
+| [children](#children)                         | `ReactNode`                | `<div />`                                                                                 |          |
+| [language](#language)                         | `string`                   | `(chayns.env.language \|\| navigator.language \|\| 'de') .substring(0, 2) .toLowerCase()` |          |
+| [date](#date)                                 | `string \| number \| Date` |                                                                                           |    ✓     |
+| [date2](#date2)                               | `string \| number \| Date` |                                                                                           |          |
+| [showTime](#showtime)                         | `boolean`                  |                                                                                           |          |
+| [showDate](#showdate)                         | `boolean`                  |                                                                                           |          |
+| [writeDay](#writeday)                         | `boolean`                  | `false`                                                                                   |          |
+| [writeMonth](#writemonth)                     | `boolean`                  |                                                                                           |          |
+| [noTitle](#notitle)                           | `boolean`                  | `false`                                                                                   |          |
+| [useToday](#usetoday)                         | `boolean`                  |                                                                                           |          |
+| [useTomorrowYesterday](#usetomorrowyesterday) | `boolean`                  |                                                                                           |          |
+| [hideYear](#hideyear)                         | `boolean`                  | `false`                                                                                   |          |
 
 ### `children`
 

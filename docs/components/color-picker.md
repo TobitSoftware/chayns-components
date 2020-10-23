@@ -33,24 +33,24 @@ import { ColorPicker } from 'chayns-components';
 
 The `ColorPicker`-component takes the following props:
 
-| Name                                    | Type                     | Default                                        |                    Required                     |
-| --------------------------------------- | ------------------------ | ---------------------------------------------- | :---------------------------------------------: |
-| [inline](#inline)                       | `boolean`                | `false`                                        |                                                 |
-| [color](#color)                         | `string                  | { r: number, g: number, b: number, a: number } | { h: number, s: number, v: number, a: number }` |  | ✓ |
-| [bubblePosition](#bubbleposition)       | `number`                 | `Bubble.position.BOTTOM_CENTER`                |                                                 |
-| [onChange](#onchange)                   | `function`               |                                                |                                                 |
-| [onChangeEnd](#onchangeend)             | `function`               |                                                |                                                 |
-| [onBlur](#onblur)                       | `function`               |                                                |                                                 |
-| [transparency](#transparency)           | `boolean`                | `false`                                        |                                                 |
-| [parent](#parent)                       | `custom`                 |                                                |                                                 |
-| [className](#classname)                 | `string`                 |                                                |                                                 |
-| [style](#style)                         | `{ [key: string]: number | string }`                                      |                                                 |  |
-| [bubbleClassName](#bubbleclassname)     | `string`                 |                                                |                                                 |
-| [bubbleStyle](#bubblestyle)             | `{ [key: string]: number | string }`                                      |                                                 |  |
-| [input](#input)                         | `boolean`                | `false`                                        |                                                 |
-| [defaultColorModel](#defaultcolormodel) | `number`                 |                                                |                                                 |
-| [children](#children)                   | `ReactNode`              |                                                |                                                 |
-| [removeParentSpace](#removeparentspace) | `boolean`                | `false`                                        |                                                 |
+| Name                                    | Type                                                                                                         | Default                         | Required |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------- | :------: |
+| [inline](#inline)                       | `boolean`                                                                                                    | `false`                         |          |
+| [color](#color)                         | `string \| { r: number, g: number, b: number, a: number } \| { h: number, s: number, v: number, a: number }` |                                 |    ✓     |
+| [bubblePosition](#bubbleposition)       | `number`                                                                                                     | `Bubble.position.BOTTOM_CENTER` |          |
+| [onChange](#onchange)                   | `function`                                                                                                   |                                 |          |
+| [onChangeEnd](#onchangeend)             | `function`                                                                                                   |                                 |          |
+| [onBlur](#onblur)                       | `function`                                                                                                   |                                 |          |
+| [transparency](#transparency)           | `boolean`                                                                                                    | `false`                         |          |
+| [parent](#parent)                       | `custom`                                                                                                     |                                 |          |
+| [className](#classname)                 | `string`                                                                                                     |                                 |          |
+| [style](#style)                         | `{ [key: string]: number \| string }`                                                                        |                                 |          |
+| [bubbleClassName](#bubbleclassname)     | `string`                                                                                                     |                                 |          |
+| [bubbleStyle](#bubblestyle)             | `{ [key: string]: number \| string }`                                                                        |                                 |          |
+| [input](#input)                         | `boolean`                                                                                                    | `false`                         |          |
+| [defaultColorModel](#defaultcolormodel) | `number`                                                                                                     |                                 |          |
+| [children](#children)                   | `ReactNode`                                                                                                  |                                 |          |
+| [removeParentSpace](#removeparentspace) | `boolean`                                                                                                    | `false`                         |          |
 
 ### `inline`
 

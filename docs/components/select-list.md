@@ -33,15 +33,15 @@ import { SelectList } from 'chayns-components';
 
 The `SelectList`-component takes the following props:
 
-| Name                          | Type                     | Default           | Required |
-| ----------------------------- | ------------------------ | ----------------- | :------: |
-| [onChange](#onchange)         | `function`               |                   |          |
-| [defaultValue](#defaultvalue) | `string                  | number`           |          |  |
-| [value](#value)               | `string                  | number`           |          |  |
-| [children](#children)         | `ReactNode               | Array<ReactNode>` |          |  |
-| [selectFirst](#selectfirst)   | `boolean`                |                   |          |
-| [className](#classname)       | `string`                 |                   |          |
-| [style](#style)               | `{ [key: string]: number | string }`         |          |  |
+| Name                          | Type                                  | Default | Required |
+| ----------------------------- | ------------------------------------- | ------- | :------: |
+| [onChange](#onchange)         | `function`                            |         |          |
+| [defaultValue](#defaultvalue) | `string \| number`                    |         |          |
+| [value](#value)               | `string \| number`                    |         |          |
+| [children](#children)         | `ReactNode \| Array<ReactNode>`       |         |          |
+| [selectFirst](#selectfirst)   | `boolean`                             |         |          |
+| [className](#classname)       | `string`                              |         |          |
+| [style](#style)               | `{ [key: string]: number \| string }` |         |          |
 
 ### `onChange`
 

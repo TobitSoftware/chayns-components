@@ -34,17 +34,17 @@ import { Calendar } from 'chayns-components';
 
 The `Calendar`-component takes the following props:
 
-| Name                          | Type                                   | Default                                       | Required |
-| ----------------------------- | -------------------------------------- | --------------------------------------------- | :------: |
-| [startDate](#startdate)       | `Date`                                 |                                               |          |
-| [endDate](#enddate)           | `Date`                                 |                                               |          |
-| [onDateSelect](#ondateselect) | `function`                             |                                               |          |
-| [selected](#selected)         | `Date`                                 | `new Date()`                                  |          |
-| [activated](#activated)       | `Array<Date>`                          |                                               |          |
-| [highlighted](#highlighted)   | `{ dates: Array<Date>, color: string } | Array<{ dates: Array<Date>, color: string }>` |          |  |
-| [activateAll](#activateall)   | `boolean`                              | `true`                                        |          |
-| [style](#style)               | `{ [key: string]: string               | number }`                                     |          |  |
-| [className](#classname)       | `string`                               |                                               |          |
+| Name                          | Type                                                                                    | Default      | Required |
+| ----------------------------- | --------------------------------------------------------------------------------------- | ------------ | :------: |
+| [startDate](#startdate)       | `Date`                                                                                  |              |          |
+| [endDate](#enddate)           | `Date`                                                                                  |              |          |
+| [onDateSelect](#ondateselect) | `function`                                                                              |              |          |
+| [selected](#selected)         | `Date`                                                                                  | `new Date()` |          |
+| [activated](#activated)       | `Array<Date>`                                                                           |              |          |
+| [highlighted](#highlighted)   | `{ dates: Array<Date>, color: string } \| Array<{ dates: Array<Date>, color: string }>` |              |          |
+| [activateAll](#activateall)   | `boolean`                                                                               | `true`       |          |
+| [style](#style)               | `{ [key: string]: string \| number }`                                                   |              |          |
+| [className](#classname)       | `string`                                                                                |              |          |
 
 ### `startDate`
 

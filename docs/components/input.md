@@ -33,37 +33,37 @@ import { Input } from 'chayns-components';
 
 The `Input`-component takes the following props:
 
-| Name                                | Type                     | Default                | Required |
-| ----------------------------------- | ------------------------ | ---------------------- | :------: |
-| [className](#classname)             | `string`                 | `''`                   |          |
-| [onKeyUp](#onkeyup)                 | `function`               |                        |          |
-| [onKeyDown](#onkeydown)             | `function`               |                        |          |
-| [onEnter](#onenter)                 | `function`               |                        |          |
-| [onChange](#onchange)               | `function`               |                        |          |
-| [onBlur](#onblur)                   | `function`               |                        |          |
-| [onFocus](#onfocus)                 | `function`               |                        |          |
-| [regExp](#regexp)                   | `RegExp`                 |                        |          |
-| [style](#style)                     | `{ [key: string]: number | string }`              |   `{}`   |  |
-| [placeholder](#placeholder)         | `string`                 | `''`                   |          |
-| [value](#value)                     | `string                  | number`                |          |  |
-| [defaultValue](#defaultvalue)       | `string                  | number`                |          |  |
-| [invalid](#invalid)                 | `boolean`                | `false`                |          |
-| [type](#type)                       | `string`                 | `'text'`               |          |
-| [inputRef](#inputref)               | `function`               |                        |          |
-| [icon](#icon)                       | `string                  | object`                |          |  |
-| [onIconClick](#oniconclick)         | `function`               |                        |          |
-| [wrapperRef](#wrapperref)           | `function`               |                        |          |
-| [dynamic](#dynamic)                 | `boolean                 | number`                | `false`  |  |
-| [customProps](#customprops)         | `object`                 |                        |          |
-| [id](#id)                           | `string`                 |                        |          |
-| [stopPropagation](#stoppropagation) | `boolean`                | `false`                |          |
-| [required](#required)               | `boolean`                | `false`                |          |
-| [disabled](#disabled)               | `boolean`                | `false`                |          |
-| [clearIcon](#clearicon)             | `boolean`                | `false`                |          |
-| [design](#design)                   | `number`                 | `Input.DEFAULT_DESIGN` |          |
-| [iconLeft](#iconleft)               | `string                  | object`                |          |  |
-| [right](#right)                     | `ReactNode`              |                        |          |
-| [invalidMessage](#invalidmessage)   | `string`                 |                        |          |
+| Name                                | Type                                  | Default                | Required |
+| ----------------------------------- | ------------------------------------- | ---------------------- | :------: |
+| [className](#classname)             | `string`                              | `''`                   |          |
+| [onKeyUp](#onkeyup)                 | `function`                            |                        |          |
+| [onKeyDown](#onkeydown)             | `function`                            |                        |          |
+| [onEnter](#onenter)                 | `function`                            |                        |          |
+| [onChange](#onchange)               | `function`                            |                        |          |
+| [onBlur](#onblur)                   | `function`                            |                        |          |
+| [onFocus](#onfocus)                 | `function`                            |                        |          |
+| [regExp](#regexp)                   | `RegExp`                              |                        |          |
+| [style](#style)                     | `{ [key: string]: number \| string }` | `{}`                   |          |
+| [placeholder](#placeholder)         | `string`                              | `''`                   |          |
+| [value](#value)                     | `string \| number`                    |                        |          |
+| [defaultValue](#defaultvalue)       | `string \| number`                    |                        |          |
+| [invalid](#invalid)                 | `boolean`                             | `false`                |          |
+| [type](#type)                       | `string`                              | `'text'`               |          |
+| [inputRef](#inputref)               | `function`                            |                        |          |
+| [icon](#icon)                       | `string \| object`                    |                        |          |
+| [onIconClick](#oniconclick)         | `function`                            |                        |          |
+| [wrapperRef](#wrapperref)           | `function`                            |                        |          |
+| [dynamic](#dynamic)                 | `boolean \| number`                   | `false`                |          |
+| [customProps](#customprops)         | `object`                              |                        |          |
+| [id](#id)                           | `string`                              |                        |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false`                |          |
+| [required](#required)               | `boolean`                             | `false`                |          |
+| [disabled](#disabled)               | `boolean`                             | `false`                |          |
+| [clearIcon](#clearicon)             | `boolean`                             | `false`                |          |
+| [design](#design)                   | `number`                              | `Input.DEFAULT_DESIGN` |          |
+| [iconLeft](#iconleft)               | `string \| object`                    |                        |          |
+| [right](#right)                     | `ReactNode`                           |                        |          |
+| [invalidMessage](#invalidmessage)   | `string`                              |                        |          |
 
 ### `className`
 
