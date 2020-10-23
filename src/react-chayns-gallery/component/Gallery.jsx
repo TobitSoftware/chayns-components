@@ -1,13 +1,21 @@
-/* eslint-disable no-param-reassign,no-await-in-loop,no-return-assign,react/no-array-index-key */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-import Image from './Image';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { isString } from '../../utils/is';
 import { getDataUrlFromFile } from '../utils/getDataUrl';
 import './Gallery.scss';
+import Image from './Image';
 import ImageContainer from './ImageContainer';
-import { isString } from '../../utils/is';
 
+/**
+ * An image gallery that displays up to four images by default. Also supports
+ * reordering and deletion of images and blurred image previews for images
+ * loaded from `tsimg.cloud`.
+ */
 export default class Gallery extends Component {
     static getBigImageUrls(images) {
         return images.map((image) => {
@@ -265,10 +273,12 @@ export default class Gallery extends Component {
                                         index === active,
                                 })}
                                 id={`image${index}`}
+                                // eslint-disable-next-line react/no-array-index-key
                                 key={`imageDiv${index}`}
                             >
                                 <ImageContainer tools={tools}>
                                     <Image
+                                        // eslint-disable-next-line react/no-array-index-key
                                         key={`image${index}`}
                                         preventParams={preventParams}
                                         image={image.url || image.file || image}
@@ -320,6 +330,9 @@ export default class Gallery extends Component {
 }
 
 Gallery.propTypes = {
+    /**
+     * An array of strings or File objects that will be the image sources.
+     */
     images: PropTypes.arrayOf(
         PropTypes.oneOfType([
             PropTypes.shape({
@@ -332,17 +345,65 @@ Gallery.propTypes = {
             PropTypes.instanceOf(File),
         ]).isRequired
     ).isRequired,
+
+    /**
+     * A function that is called when an Image is clicked.
+     */
     onClick: PropTypes.func,
+
+    /**
+     * A function that is called when an image is deleted in deletion mode.
+     */
     onDelete: PropTypes.func,
+
+    /**
+     * Wether the deletion mode is active.
+     */
     deleteMode: PropTypes.bool,
+
+    /**
+     * The height of the gallery as a number of pixels or CSS string.
+     */
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    /**
+     * The width of the gallery as a number of pixels or CSS string.
+     */
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    /**
+     * A classname string that will be applied to the root container.
+     */
     className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object that is applied to the root container.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * Wether drag mode is active.
+     */
     dragMode: PropTypes.bool,
+
+    /**
+     * Called after the user finished reordering the array. Receives the new
+     * array as its first parameter.
+     */
     onDragEnd: PropTypes.func,
+
+    /**
+     * This will be forwarded to the `Image`-component. It prevents parameters
+     * of the loaded image. E.g. supply `{ width: true }` to prevent the
+     * `width`-parameter on the loaded image.
+     */
     preventParams: PropTypes.bool,
 };
 

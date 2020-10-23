@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
-
-import isDescendant from '../../utils/isDescendant';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Input from '../../react-chayns-input/component/Input';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
-import Input from '../../react-chayns-input/component/Input';
+import isDescendant from '../../utils/isDescendant';
 
 export default class InputBox extends Component {
     references = {

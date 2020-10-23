@@ -1,9 +1,15 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Component } from 'react';
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import { isNumber } from '../../utils/is';
 
+/**
+ * A choose button that opens a selection dialog when clicked.
+ */
 export default class SelectButton extends Component {
     constructor(props) {
         super(props);
@@ -147,22 +153,89 @@ export default class SelectButton extends Component {
 }
 
 SelectButton.propTypes = {
+    /**
+     * A callback that is invoked when the selection has changed.
+     */
     onSelect: PropTypes.func,
+
+    /**
+     * A string that will be shown as a title in the selection dialog.
+     */
     title: PropTypes.string,
+
+    /**
+     * A string that will be shown as a description in the selection dialog.
+     */
     description: PropTypes.string,
+
+    /**
+     * Disables any user interaction and renders the button in a disabled style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * The content of the button.
+     */
     label: PropTypes.string,
-    list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+
+    /**
+     * An array of items to select from. Items are provided in an object shape.
+     */
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+
+    /**
+     * The property name of the list item objects that will uniquely identify
+     * each one.
+     */
     listKey: PropTypes.string,
+
+    /**
+     * The property name of the list item objects that will be shown as its name
+     * in the selection dialog.
+     */
     listValue: PropTypes.string,
-    multiSelect: PropTypes.bool,
-    quickFind: PropTypes.bool,
-    className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
-    showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-    showListSelection: PropTypes.bool,
+
+    /**
+     * The property name of the list item objects that mark an item as selected.
+     */
     selectedFlag: PropTypes.string,
+
+    /**
+     * Wether multiple options can be selected.
+     */
+    multiSelect: PropTypes.bool,
+
+    /**
+     * Wether a search field should be shown in the selection dialog.
+     */
+    quickFind: PropTypes.bool,
+
+    /**
+     * A classname string that will be applied to the button.
+     */
+    className: PropTypes.string,
+
+    /**
+     * A React style object that will be applied ot the button
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * Wether the current selection should be shown in the button. Use a number
+     * to specify the maximum amount of items selected.
+     */
+    showSelection: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+
+    /**
+     * Wether the current selection should be shown in the dialog list.
+     */
+    showListSelection: PropTypes.bool,
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
 };
 

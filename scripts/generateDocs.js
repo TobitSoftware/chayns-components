@@ -7,44 +7,53 @@ const docGen = require('react-docgen');
 const path = require('path');
 const prettier = require('prettier');
 const { kebabCase } = require('lodash');
+const { outputFile } = require('fs-extra');
 
 const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
 
-const componentRegex = /^\/\*\*.*@component.*?\*\//s;
+const componentRegex = /^\/\*\*.*@component(?: \{(.*?)\})?.*?\*\//s;
 const jsGlob = 'src/**/*.{js,jsx}';
 
 glob(jsGlob).then(async (paths) => {
-    const filePromises = paths.map(async (path) => {
-        const content = await readFileAsync(path, { encoding: 'utf-8' });
+    const filePromises = paths.map(async (filePath) => {
+        const content = await readFileAsync(filePath, { encoding: 'utf-8' });
 
-        return { path, content };
+        return { filePath, content };
     });
 
     const files = await Promise.all(filePromises);
 
-    const componentFiles = files.filter((file) =>
-        componentRegex.test(file.content)
-    );
+    const componentFiles = files
+        .filter((file) => componentRegex.test(file.content))
+        .map((file) => {
+            const matches = componentRegex.exec(file.content);
 
-    const components = componentFiles.map((file) => {
-        const info = docGen.parse(file.content, null, null, {
+            return {
+                ...file,
+                docsPath: matches[1] ? matches[1] : null,
+            };
+        });
+
+    const componentPromises = componentFiles.map(async (file) => {
+        const { content, docsPath, filePath } = file;
+
+        const info = docGen.parse(content, null, null, {
             cwd: path.resolve('src'),
         });
 
-        return { ...file, info };
+        const docs = docsPath
+            ? await readFileAsync(path.join(filePath, '../', docsPath))
+            : '';
+
+        return { ...file, info, docs };
     });
+
+    const components = await Promise.all(componentPromises);
 
     const template = await readFileAsync(
         path.join(__dirname, 'docgen-templates', 'component.md'),
         { encoding: 'utf-8' }
     );
-
-    const docsPath = path.resolve('docs');
-
-    if (!fs.existsSync(docsPath)) {
-        fs.mkdirSync(docsPath);
-    }
 
     let prettierOptions = null;
 
@@ -58,32 +67,43 @@ glob(jsGlob).then(async (paths) => {
 
         let propDescriptions = '';
 
-        for (const [propName, propInfo] of Object.entries(props)) {
-            const {
-                description: propDescription,
-                type,
-                required,
-                defaultValue,
-            } = propInfo;
+        if (props) {
+            Object.entries(props).forEach(([propName, propInfo], index) => {
+                const {
+                    description: propDescription,
+                    type,
+                    required,
+                    defaultValue,
+                } = propInfo;
 
-            const typeString = `\`${formatType(type)}\``;
-            const formattedDescription = propDescription.replace(
-                /\r\n|\r|\n/g,
-                ' '
-            );
-            let defaultValueString = '';
+                if (!propDescription) return;
 
-            if (defaultValue) {
-                defaultValueString = `\`${defaultValue.value}\``;
-            }
+                const typeString = `\`${formatType(type)}\``;
+                const formattedDescription = propDescription.replace(
+                    /\r\n|\r|\n/g,
+                    ' '
+                );
+                let defaultValueString = '';
 
-            const requiredString = required ? '✓' : '';
+                if (defaultValue) {
+                    if (!['undefined', 'null'].includes(defaultValue.value)) {
+                        defaultValueString = `\`${defaultValue.value}\``.replace(
+                            /[\r\n]+/g,
+                            ' '
+                        );
+                    }
+                }
 
-            propTable += `| [${propName}](#${propName.toLowerCase()}) | ${typeString} | ${defaultValueString} | ${requiredString} |\n`;
+                const requiredString = required ? '✓' : '';
 
-            propDescriptions += `\n### \`${propName}\`\n\n\`\`\`ts\n${propName}${
-                required ? '' : '?'
-            }: ${formatType(type)}\n\`\`\`\n\n${formattedDescription}`;
+                propTable += `| [${propName}](#${propName.toLowerCase()}) | ${typeString} | ${defaultValueString} | ${requiredString} |\n`;
+
+                propDescriptions += `${
+                    index > 0 ? '---\n\n' : ''
+                }### \`${propName}\`\n\n\`\`\`ts\n${propName}${
+                    required ? '' : '?'
+                }: ${formatType(type)}\n\`\`\`\n\n${formattedDescription}\n\n`;
+            });
         }
 
         const templateWithReplacements = replace(template, {
@@ -91,11 +111,12 @@ glob(jsGlob).then(async (paths) => {
             description,
             propTable,
             propDescriptions,
+            docs: component.docs,
         });
 
         if (!prettierOptions) {
             prettierOptions = await prettier.resolveConfig(
-                path.resolve(component.path)
+                path.resolve(component.filePath)
             );
         }
 
@@ -105,8 +126,8 @@ glob(jsGlob).then(async (paths) => {
             parser: 'markdown',
         });
 
-        await writeFileAsync(
-            path.resolve(`docs/${kebabCase(displayName)}.md`),
+        await outputFile(
+            path.resolve(`docs/components/${kebabCase(displayName)}.md`),
             formattedDocs
         );
     });
@@ -131,7 +152,7 @@ function formatType(type) {
             return type.value.map((t) => formatType(t)).join(' | ');
         case 'shape': {
             const objectEntries = Object.entries(type.value)
-                .map(([name, t]) => `${name}: <${formatType(t)}>`)
+                .map(([name, t]) => `${name}: ${formatType(t)}`)
                 .join(', ');
 
             return `{ ${objectEntries} }`;
@@ -139,13 +160,15 @@ function formatType(type) {
         case 'arrayOf':
             return `Array<${formatType(type.value)}>`;
         case 'objectOf':
-            return `{ [string]: ${formatType(type.value)} }`;
+            return `{ [key: string]: ${formatType(type.value)} }`;
         case 'func':
             return 'function';
         case 'bool':
             return 'boolean';
         case 'node':
             return 'ReactNode';
+        case 'instanceOf':
+            return type.value;
         default:
             return `${type.name}`;
     }

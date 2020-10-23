@@ -1,7 +1,15 @@
-import React from 'react';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import React from 'react';
 
+/**
+ * An accordion that has a big image and appears in a grid. Should be used
+ * inside of an `ImageAccordionGroup`.
+ */
 export default class ImageAccordion extends React.PureComponent {
     render() {
         const { open, prevOpen, disabled, children } = this.props;

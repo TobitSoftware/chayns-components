@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -10,6 +14,9 @@ const KEY_ENTER = 13;
 
 const BIGGEST_LETTER = 'm';
 
+/**
+ * A text input that allows values to be grouped as tags.
+ */
 export default class TagInput extends Component {
     constructor(props) {
         super(props);
@@ -164,17 +171,53 @@ export default class TagInput extends Component {
 }
 
 TagInput.propTypes = {
+    /**
+     * An array of the current tags.
+     */
     tags: PropTypes.arrayOf(
         PropTypes.shape({
             text: PropTypes.string,
         })
     ),
+
+    /**
+     * The text value of the tag input.
+     */
     value: PropTypes.string,
+
+    /**
+     * A callback that is invoked when the user adds a new tag (hits the
+     * `enter`-key).
+     */
     onAddTag: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user removes a tag.
+     */
     onRemoveTag: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user changes the text inside the tag
+     * input.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * A placeholder that is shown when the tag input is empty (does neither
+     * container a tag or text).
+     */
     placeholder: PropTypes.string,
+
+    /**
+     * A classname string that will be applied to the outer-most wrapper of the
+     * input.
+     */
     className: PropTypes.string,
+
+    /**
+     * A React style object that will be applied to the outer-most wrapper of
+     * the input.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),

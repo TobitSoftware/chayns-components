@@ -1,9 +1,16 @@
-import React, { Component } from 'react';
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import SelectListContext from './selectListContext';
 
 const ANIMATION_TIMEOUT = 500;
 
+/**
+ * A vertical list of radio buttons that reveal content when selected.
+ */
 export default class SelectList extends Component {
     constructor(props) {
         super(props);
@@ -119,17 +126,46 @@ SelectList.maxId = 0;
 SelectList.contextType = SelectListContext;
 
 SelectList.propTypes = {
+    /**
+     * A callback that is invoked when the selected item changes.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * Specifies the `SelectItem` that is selected by default with its `id`.
+     */
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * The currently selected `SelectItem` by its `id`.
+     */
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * The children elements of the list. Should contain `SelectItem`
+     * components.
+     */
     children: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+
+    /**
+     * Wether the first entry should be selected by default. **(deprecated)**
+     */
     selectFirst: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
 };
 
 SelectList.defaultProps = {

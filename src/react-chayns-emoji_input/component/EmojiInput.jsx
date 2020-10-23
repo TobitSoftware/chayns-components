@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -15,6 +19,11 @@ function requireEmojione(returnPromise) {
     );
 }
 
+/**
+ * A text field that allows emojis to be put in.
+ *
+ * > This component does not work with Internet Explorer.
+ */
 export default class EmojiInput extends Component {
     lastKeyPressed = null;
 
@@ -436,16 +445,59 @@ export default class EmojiInput extends Component {
     }
 }
 EmojiInput.propTypes = {
+    /**
+     * Text that will be shown as a placeholder when the input is empty.
+     */
     placeholder: PropTypes.string.isRequired,
+
+    /**
+     * This is called when the text changes. There is an additional key on the
+     * `event.target` property called `pureInnerText` which contains the full
+     * text without any of the emoji elements. This is the text you should store
+     * in your local state and pass to this input as the `value`-prop.
+     */
     onInput: PropTypes.func.isRequired,
+
+    /**
+     * The value of the input.
+     */
     value: PropTypes.string.isRequired,
+
+    /**
+     * The HTML id to give to the input element.
+     */
     id: PropTypes.string.isRequired,
+
+    /**
+     * Hides the bottom border of the input.
+     */
     hideBorder: PropTypes.bool,
+
+    /**
+     * This will be called on the `keydown`-event of the input element.
+     */
     onKeyDown: PropTypes.func,
+
+    /**
+     * Disables any interaction with the input and changes to a disabled style.
+     */
     disabled: PropTypes.bool,
-    // eslint-disable-next-line react/forbid-prop-types
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be passed to the input element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * This function will be called when the input element receives focus.
+     */
     onFocus: PropTypes.func,
+
+    /**
+     * This function will be called when the input element loses focus.
+     */
     onBlur: PropTypes.func,
 };
 

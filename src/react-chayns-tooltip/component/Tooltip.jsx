@@ -1,11 +1,19 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,prefer-destructuring,react/forbid-prop-types */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import Bubble from '../../react-chayns-bubble/component/Bubble';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
-import Bubble from '../../react-chayns-bubble/component/Bubble';
 
+/**
+ * Wraps a child component and displays a message when the child is hovered or
+ * clicked on. Allows to be shown imperatively by calling `.show()` or `.hide()`
+ * on its reference.
+ */
 export default class Tooltip extends Component {
     constructor(props) {
         super(props);
@@ -191,9 +199,7 @@ export default class Tooltip extends Component {
                 ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
-                onMouseEnter={
-                    !ios && bindListeners ? this.show : null
-                }
+                onMouseEnter={!ios && bindListeners ? this.show : null}
                 onMouseLeave={bindListeners ? this.hide : null}
                 onClick={ios && bindListeners ? this.show : null}
             >
@@ -206,6 +212,11 @@ export default class Tooltip extends Component {
 Tooltip.position = Bubble.position;
 
 Tooltip.propTypes = {
+    /**
+     * The content of the tooltip. Either specify an object with the accepted
+     * properties or render custom elements by passing an object like so:
+     * `{ html: <div /> }`.
+     */
     content: PropTypes.oneOfType([
         PropTypes.shape({
             text: PropTypes.string.isRequired,
@@ -218,26 +229,91 @@ Tooltip.propTypes = {
             html: PropTypes.node.isRequired,
         }),
     ]).isRequired,
+
+    /**
+     * The `ReactNode` the tooltip should refer to. If the `children` node is a
+     * `<span>` or `<p>` element, it will be decorated with a dotted underline.
+     */
     children: PropTypes.node,
+
+    /**
+     * Wether `mouseover` and `mouseleave` listeners should be added to the
+     * children elements, which makes the tooltip automatically appear on hover.
+     */
     bindListeners: PropTypes.bool,
-    position:
-        PropTypes.number /** 0 = top left, 1 = bottom left, 2 = bottom right, 3 = top right */,
+
+    /**
+     * The position of the tooltip. `0` is top left, `1` is bottom left, `2` is
+     * bottom right and `3` is top right.
+     */
+    position: PropTypes.number,
+
+    /**
+     * The minimum width of the tooltip.
+     */
     minWidth: PropTypes.number,
+
+    /**
+     * The maximum width of the tooltip.
+     */
     maxWidth: PropTypes.number,
+
+    /**
+     * Wether the close icon in the top right corner of the tooltip should be
+     * shown.
+     */
     removeIcon: PropTypes.bool,
+
+    /**
+     * A DOM node the tooltip should be rendered into.
+     */
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
             : () => {},
+
+    /**
+     * An object with coordinates at which the tooltip should point.
+     */
     coordinates: PropTypes.shape({
         x: PropTypes.number.isRequired,
         y: PropTypes.number.isRequired,
     }),
-    childrenStyle: PropTypes.object,
+
+    /**
+     * A React style object that is applied to the children.
+     */
+    childrenStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * A classname string that should be applied to the children.
+     */
     childrenClassNames: PropTypes.string,
+
+    /**
+     * Prevent adding an underline to the children.
+     */
     preventTriggerStyle: PropTypes.bool,
+
+    /**
+     * Hide the tooltip when the cursor leaves the children, even if the cursor
+     * is over the bubble.
+     */
     hideOnChildrenLeave: PropTypes.bool,
+
+    /**
+     * Removes any padding of the page from the tooltip position. This is only
+     * needed when the parent is padded to the page and is relatively
+     * positioned.
+     */
     removeParentSpace: PropTypes.bool,
+
+    /**
+     * Wether the target device is iOS (only relevant during serverside
+     * rendering).
+     */
     isIOS: PropTypes.bool,
 };
 

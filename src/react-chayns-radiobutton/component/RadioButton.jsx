@@ -1,9 +1,16 @@
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 let currentId = 0;
 const PREFIX = 'CC_RB_';
 
+/**
+ * A radio button that allows to select one of multiple options.
+ */
 export default class RadioButton extends Component {
     constructor() {
         super();
@@ -77,19 +84,62 @@ export default class RadioButton extends Component {
 }
 
 RadioButton.propTypes = {
+    /**
+     * The HTML id of the `<input>`-element.
+     */
     id: PropTypes.string,
+
+    /**
+     * Multiple radio buttons with the same name belong to one group. Only one
+     * radio button in a group can be active at a time.
+     */
     name: PropTypes.string,
+
+    /**
+     * Wether the radio button is currently active.
+     */
     checked: PropTypes.bool,
+
+    /**
+     * A function that is called when the radio button gets checked. Receives
+     * the `value`-prop as its first argument.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * Disables any user interaction and renders the radio button in a disabled
+     * style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * A string or `ReactNode` that will be the label.
+     */
     children: PropTypes.node,
+
+    /**
+     * A value that will be sent to the `onChange`-callback as its first
+     * argument.
+     */
     value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
         PropTypes.bool,
     ]),
+
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * A React style object that will be applied to the container element.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),

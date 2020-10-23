@@ -1,9 +1,17 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import AutoProgressBar from './AutoProgressBar';
 
+/**
+ * An animated progress bar that can show an actions progress or an
+ * indeterminate state like a loading spinner.
+ */
 const ProgressBar = ({ children, value, ready }) => {
     const className = useMemo(
         () =>
@@ -38,8 +46,20 @@ const ProgressBar = ({ children, value, ready }) => {
 };
 
 ProgressBar.propTypes = {
+    /**
+     * The progress in percent (`0` - `100`).
+     */
     value: PropTypes.number,
+
+    /**
+     * A label that is shown beneath the progress bar.
+     */
     children: PropTypes.node,
+
+    /**
+     * When toggled on it will hide the progress bar in an animated transition
+     * and only show its children.
+     */
     ready: PropTypes.bool,
 };
 

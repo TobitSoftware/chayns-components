@@ -1,7 +1,15 @@
-import React, { PureComponent } from 'react';
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import text from '../constants/text';
 
+/**
+ * Formats a date or date range to be easily readable and reveals the absolute
+ * date on hover.
+ */
 export default class DateInfo extends PureComponent {
     static getRelativeDateString = (date, options = { language: 'de' }) => {
         const dateObj = new Date(date);
@@ -281,25 +289,82 @@ export default class DateInfo extends PureComponent {
 }
 
 DateInfo.propTypes = {
+    /**
+     * The node the text is written into.
+     */
     children: PropTypes.node,
+
+    /**
+     * The language of the text as an
+     * [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+     * string.
+     */
     language: PropTypes.string,
+
+    /**
+     * The date that should be formatted. If a date range is supplied, this
+     * should be the earier date. You can supply a date as the number of
+     * milliseconds since 1970, ISO-8601 string or via a JavaScript
+     * `Date`-object,
+     */
     date: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
         PropTypes.instanceOf(Date),
     ]).isRequired,
+
+    /**
+     * The later date for a date range.
+     */
     date2: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
         PropTypes.instanceOf(Date),
     ]),
+
+    /**
+     * Wether the formatted text should show the time.
+     */
     showTime: PropTypes.bool,
+
+    /**
+     * Wether the formatted text should show the date.
+     */
     showDate: PropTypes.bool,
+
+    /**
+     * Wether the day of the week should be written out.
+     */
     writeDay: PropTypes.bool,
+
+    /**
+     * Determines how to write the month. If `true`, the whole name will be
+     * written out ("december"), if false only the number will be displayed
+     * ("12."), otherwise it will show the short form of the month ("dec.").
+     */
     writeMonth: PropTypes.bool,
+
+    /**
+     * Set this to true if the `title`-attribute should not be added to the
+     * children.
+     */
     noTitle: PropTypes.bool,
+
+    /**
+     * Wether the component should say "today" if the date matches today.
+     */
     useToday: PropTypes.bool,
+
+    /**
+     * Wether the component should use "tomorrow" and "yesterday".
+     */
     useTomorrowYesterday: PropTypes.bool,
+
+    /**
+     * When `true` the year will be omitted from the output, if `null` the year
+     * will be shortened ("20" for 2020). When this is false, the full year will
+     * be shown.
+     */
     hideYear: PropTypes.bool,
 };
 

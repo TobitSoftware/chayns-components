@@ -1,13 +1,15 @@
+/**
+ * @component {./docs.md}
+ */
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { isDisabled } from '../utils/setupWizardHelper';
-import SetupItem from './SetupItem';
+import SetupWizardItem from './SetupItem';
 import SetupWizardContext from './setupWizardContext';
 
 /**
- * ############################
- * # HARRY, YOU ARE A WIZARD! #
- * ############################
+ * A set of steps the user has to go through sequentially.
  */
 class SetupWizard extends Component {
     constructor(props) {
@@ -269,7 +271,7 @@ class SetupWizard extends Component {
                     }}
                 >
                     {children.map((child, index) => {
-                        if (child.type === SetupItem) {
+                        if (child.type === SetupWizardItem) {
                             if (child) {
                                 visibleIndex += 1;
                             }
@@ -297,29 +299,78 @@ SetupWizard.operationMode = {
 };
 
 SetupWizard.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node,
-    ]),
+    /**
+     * An array of `SetupWizardItem` components.
+     */
+    children: PropTypes.node,
+
+    /**
+     * A callback that is invoked after `nextStep` is called when the last step
+     * is active and all required steps are completed.
+     */
     ready: PropTypes.func,
+
+    /**
+     * A callback that is invoked after `nextStep` is called but some required
+     * steps are not completed.
+     */
     notComplete: PropTypes.func,
+
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
+
+    /**
+     * A React style object that will be applied to the container element.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * A React style object that will be applied to the content elements.
+     */
     contentStyle: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * The title of the wizard.
+     */
     title: PropTypes.string,
+
+    /**
+     * The description of the wizard. Can be a `string` or a `ReactNode`.
+     */
     description: PropTypes.node,
+
+    /**
+     * The number of steps in the wizard.
+     */
     numberOfSteps: PropTypes.number,
+
+    /**
+     * A callback that is invoked when all required steps have been completed.
+     */
     allRequiredStepsCompleted: PropTypes.func,
+
+    /**
+     * The initial step of the wizard.
+     */
     initialStep: PropTypes.number,
+
+    /**
+     * Removes the number that is displayed in front of the title.
+     */
     disableShowStep: PropTypes.bool,
-    operationMode: PropTypes.oneOf([
-        SetupWizard.operationMode.DEFAULT,
-        SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED,
-    ]),
+
+    /**
+     * Specifies the mode of the wizard. `0` is the regular behavior, `1` means
+     * that all steps except the current one will be disabled and the user
+     * cannot manually navigate between steps.
+     */
+    operationMode: PropTypes.oneOf([0, 1]),
 };
 
 SetupWizard.defaultProps = {

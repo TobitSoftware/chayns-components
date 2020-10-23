@@ -1,19 +1,24 @@
-/* eslint-disable react/forbid-prop-types */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-import Day from './Day';
-import TimeSpan from './TimeSpan';
-import './OpeningTimes.scss';
-
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {
-    getTimeStringMinutes,
     getTimeStringFromMinutes,
+    getTimeStringMinutes,
 } from '../../utils/dateTimeHelper';
-import validateOpeningTimes from '../utils/validateOpeningTimes';
-import OpeningTimesHint, { HINT_POSITIONS } from './OpeningTimesHint';
 import debounce from '../../utils/debounce';
+import validateOpeningTimes from '../utils/validateOpeningTimes';
+import Day from './Day';
+import './OpeningTimes.scss';
+import OpeningTimesHint, { HINT_POSITIONS } from './OpeningTimesHint';
+import TimeSpan from './TimeSpan';
 
+/**
+ * An input for opening times.
+ */
 class OpeningTimes extends Component {
     constructor(props) {
         super(props);
@@ -299,6 +304,9 @@ OpeningTimes.weekdays = [
 ];
 
 OpeningTimes.propTypes = {
+    /**
+     * An array of the timespans that are opening hours.
+     */
     times: PropTypes.arrayOf(
         PropTypes.shape({
             weekDay: PropTypes.number.isRequired,
@@ -307,15 +315,43 @@ OpeningTimes.propTypes = {
             disabled: PropTypes.bool,
         })
     ).isRequired,
+
+    /**
+     * Called after the user has changed the opening times. Receives the
+     * modified times as its first parameter.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * A classname string that will be applied to the root container.
+     */
     className: PropTypes.string,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the root container.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
+
+    /**
+     * Wether to force a mobile view.
+     */
     forceMobile: PropTypes.bool,
+
+    /**
+     * The hint position. Possible values are `OpeningTimes.hintPositions.NONE`,
+     * `OpeningTimes.hintPositions.TOP` and `OpeningTimes.hintPositions.BOTTOM`.
+     */
     hintPosition: PropTypes.oneOf([
         OpeningTimes.hintPositions.NONE,
         OpeningTimes.hintPositions.TOP,
         OpeningTimes.hintPositions.BOTTOM,
     ]),
+
+    /**
+     * The text to be shown inside of the hint.
+     */
     hintText: PropTypes.string,
 };
 

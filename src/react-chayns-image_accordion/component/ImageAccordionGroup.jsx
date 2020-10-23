@@ -1,8 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-import ImageAccordionHead from './ImageAccordionHead';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ExpandableContent from '../../react-chayns-expandable_content/component/ExpandableContent';
+import ImageAccordionHead from './ImageAccordionHead';
 
 function listToMatrix(list, count) {
     const matrix = [];
@@ -21,6 +25,10 @@ function listToMatrix(list, count) {
     return matrix;
 }
 
+/**
+ * Groups several `ImageAccordion` components together, so only one of them can
+ * be open at a time.
+ */
 export default class ImageAccordionGroup extends React.Component {
     constructor(props) {
         super(props);
@@ -268,10 +276,31 @@ ImageAccordionGroup.dataGroups = {};
 ImageAccordionGroup.index = -1;
 
 ImageAccordionGroup.propTypes = {
-    children: PropTypes.instanceOf(Array),
+    /**
+     * A list of `ImageAccordion` components, that are contained in this group.
+     */
+    children: PropTypes.node,
+
+    /**
+     * An id that identifies this group. Accordions in groups that share the
+     * same `dataGroup` close each other.
+     */
     dataGroup: PropTypes.string,
+
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
-    reference: PropTypes.string,
+
+    /**
+     * A function that receives a reference to the root containers DOM node.
+     */
+    reference: PropTypes.func,
+
+    /**
+     * A callback that is invoked when one of the `ImageAccordion` components in
+     * this group opens.
+     */
     onHeadOpen: PropTypes.func,
 };
 

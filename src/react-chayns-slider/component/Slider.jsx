@@ -1,7 +1,10 @@
-/* eslint-disable react/forbid-prop-types,no-nested-ternary */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import { isNumber } from '../../utils/is';
 import './slider.scss';
 
@@ -9,6 +12,10 @@ function preventDefault(e) {
     e.preventDefault();
 }
 
+/**
+ * A horizontal track with a thumb that can be moved between a minimum and a
+ * maximum value.
+ */
 export default class Slider extends PureComponent {
     constructor(props) {
         super(props);
@@ -106,8 +113,19 @@ export default class Slider extends PureComponent {
                               prevProps.min,
                               prevProps.max
                           );
-                start = start > max ? max : start < min ? min : start;
-                end = end > max ? max : end < min ? min : end;
+
+                if (start > max) {
+                    start = max;
+                } else if (start < min) {
+                    start = min;
+                }
+
+                if (end > max) {
+                    end = max;
+                } else if (end < min) {
+                    end = min;
+                }
+
                 this.leftPercent = ((start - min) / (max - min)) * 100;
                 this.rightPercent = ((end - min) / (max - min)) * 100;
                 if (vertical) {
@@ -124,7 +142,13 @@ export default class Slider extends PureComponent {
                               prevProps.min,
                               prevProps.max
                           );
-                v = v > max ? max : v < min ? min : v;
+
+                if (v > max) {
+                    v = max;
+                } else if (v < min) {
+                    v = min;
+                }
+
                 this.percent = ((v - min) / (max - min)) * 100;
                 if (vertical) {
                     this.percent = 100 - this.percent;
@@ -740,33 +764,157 @@ export default class Slider extends PureComponent {
 }
 
 Slider.propTypes = {
+    /**
+     * The minimum value of the slider.
+     */
     min: PropTypes.number,
+
+    /**
+     * The maximum value of the slider.
+     */
     max: PropTypes.number,
+
+    /**
+     * The amount of steps that the slider should be divided into.
+     */
     step: PropTypes.number,
+
+    /**
+     * A default value for the slider.
+     */
     defaultValue: PropTypes.number,
+
+    /**
+     * The current value of the slider.
+     */
     value: PropTypes.number,
-    style: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to root element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A classname string that will be applied to the root element.
+     */
     className: PropTypes.string,
+
+    /**
+     * Wether the label should be shown. Only applies to horizontal sliders.
+     */
     showLabel: PropTypes.bool,
+
+    /**
+     * A function to format the current value for display in the label.
+     */
     valueFormatter: PropTypes.func,
-    labelStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the label.
+     */
+    labelStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A callback that is invoked when the user starts changing the value.
+     */
     onChangeStart: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user changes the value of the slider.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user stops changing the slider value.
+     */
     onChangeEnd: PropTypes.func,
-    thumbStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the thumb.
+     */
+    thumbStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * Wether to ignore any user interaction and render the slider with a
+     * disabled style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Wether the slider should be vertical instead of horizontal.
+     */
     vertical: PropTypes.bool,
+
+    /**
+     * Wether the slider should select a range instead of a single value. This
+     * will add a second thumb for the user to adjust.
+     */
     interval: PropTypes.bool,
+
+    /**
+     * The minimum range that can be selected by the two thumbs.
+     */
     minInterval: PropTypes.number,
+
+    /**
+     * The maximum range that can be selected by the two thumbs.
+     */
     maxInterval: PropTypes.number,
+
+    /**
+     * The default value for the left thumb.
+     */
     defaultStartValue: PropTypes.number,
+
+    /**
+     * The default value for the right thumb.
+     */
     defaultEndValue: PropTypes.number,
+
+    /**
+     * The current value of the left thumb.
+     */
     startValue: PropTypes.number,
+
+    /**
+     * The current value of the right thumb.
+     */
     endValue: PropTypes.number,
-    trackStyle: PropTypes.object,
-    innerTrackStyle: PropTypes.object,
+
+    /**
+     * A React style object that will be applied to the track.
+     */
+    trackStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * A React style object that will be applied ot the inner track.
+     */
+    innerTrackStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * Wether the current value should be shown inside the thumb.
+     */
     showValueInThumb: PropTypes.bool,
+
+    /**
+     * Wether the slider should be scaled when the user grabs it on mobile
+     * devices.
+     */
     scaleOnDown: PropTypes.bool,
+
+    /**
+     * The width of the thumb.
+     */
     thumbWidth: PropTypes.number,
 };
 

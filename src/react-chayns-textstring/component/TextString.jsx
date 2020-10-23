@@ -1,9 +1,17 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import getTappWidth from '../../utils/tappWidth';
 import isTobitEmployee from '../../utils/tobitEmployee';
 
+/**
+ * Loads text strings from our database and displays them. Handles replacements
+ * and changing the string via `CTRL` + `Click` (only internal).
+ */
 export default class TextString extends Component {
     static getTextString(stringName, language, fallback = null) {
         let lang = TextString.languages.find(
@@ -476,15 +484,46 @@ TextString.languages = [
 ];
 
 TextString.propTypes = {
+    /**
+     * The string id of the text you want to display.
+     */
     stringName: PropTypes.string,
+
+    /**
+     * An map of replacements in the form of an object with the string that
+     * should be replaced as its key and the replacement as its value.
+     */
     replacements: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * The child node the text should be rendered into.
+     */
     children: PropTypes.node.isRequired,
+
+    /**
+     * Wether the component should render HTML content in the string.
+     */
     useDangerouslySetInnerHTML: PropTypes.bool,
+
+    /**
+     * The language of the string, provided as a
+     * [ISO 639-1](https://de.wikipedia.org/wiki/ISO_639#ISO_639-1) code. Please
+     * note that the language has to be loaded beforehand for this to work.
+     */
     language: PropTypes.string,
-    // eslint-disable-next-line react/no-unused-prop-types
-    fallback: PropTypes.string, // used by setTextStrings
+
+    /**
+     * A fallback string that will be displayed if the main string failed to
+     * load.
+     */
+    fallback: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
+
+    /**
+     * The string names of the children props, e.g. placeholder or accordion
+     * head.
+     */
     setProps: PropTypes.objectOf(
         PropTypes.oneOfType([
             PropTypes.object,
@@ -492,6 +531,11 @@ TextString.propTypes = {
             PropTypes.number,
         ])
     ),
+
+    /**
+     * Prevents setting the `no-translate` class to the children when the
+     * language of the text string matches the current language of the user.
+     */
     preventNoTranslate: PropTypes.bool,
 };
 

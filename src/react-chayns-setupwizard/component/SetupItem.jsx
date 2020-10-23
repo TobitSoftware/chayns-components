@@ -1,11 +1,18 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
-import withSetupWizardContext from './withSetupWizardContext';
+import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import { isDisabled } from '../utils/setupWizardHelper';
 import SetupItemRight from './SetupItemRight';
+import withSetupWizardContext from './withSetupWizardContext';
 
-const SetupItem = ({
+/**
+ * An item that represents one step in a `SetupWizard`.
+ */
+const SetupWizardItem = ({
     step,
     showStep,
     title,
@@ -80,9 +87,16 @@ const SetupItem = ({
     );
 };
 
-SetupItem.propTypes = {
+SetupWizardItem.propTypes = {
+    /**
+     * The index of the step (`0`-based).
+     */
     step: PropTypes.number.isRequired,
     showStep: PropTypes.number,
+
+    /**
+     * The title of the step.
+     */
     title: PropTypes.string.isRequired,
     toStep: PropTypes.func.isRequired,
     stepRequired: PropTypes.func.isRequired,
@@ -90,13 +104,22 @@ SetupItem.propTypes = {
     ready: PropTypes.bool,
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    // eslint-disable-next-line react/forbid-prop-types
-    contentStyle: PropTypes.object,
+    contentStyle: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     children: PropTypes.element,
+
+    /**
+     * Wether the step is required to continue the wizard.
+     */
     required: PropTypes.bool,
     enabledSteps: PropTypes.arrayOf(PropTypes.number),
     completedSteps: PropTypes.arrayOf(PropTypes.number),
     currentStep: PropTypes.number,
+
+    /**
+     * A component that is shown on the right hand of the accordion head.
+     */
     right: PropTypes.oneOfType([
         PropTypes.node.isRequired,
         PropTypes.shape({
@@ -106,7 +129,7 @@ SetupItem.propTypes = {
     ]),
 };
 
-SetupItem.defaultProps = {
+SetupWizardItem.defaultProps = {
     showStep: null,
     open: false,
     ready: false,
@@ -121,6 +144,6 @@ SetupItem.defaultProps = {
     right: null,
 };
 
-SetupItem.displayName = 'SetupItem';
+SetupWizardItem.displayName = 'SetupWizardItem';
 
-export default withSetupWizardContext(SetupItem);
+export default withSetupWizardContext(SetupWizardItem);

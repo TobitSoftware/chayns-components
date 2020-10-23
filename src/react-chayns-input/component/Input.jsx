@@ -1,11 +1,17 @@
-/* eslint-disable react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import { isNullOrWhiteSpace, isString } from '../../utils/is';
-import Button from '../../react-chayns-button/component/Button';
 
+/**
+ * A text input that can be validated and decorated with different designs.
+ */
 export default class Input extends PureComponent {
     constructor(props) {
         super(props);
@@ -336,33 +342,160 @@ Input.NO_DYNAMIC = false;
 Input.BOTTOM_DYNAMIC = 2;
 
 Input.propTypes = {
+    /**
+     * A classname string that will be applied to the `<input>`-element
+     */
     className: PropTypes.string,
+
+    /**
+     * A callback for the `keyup`-event on the input.
+     */
     onKeyUp: PropTypes.func,
+
+    /**
+     * A callback for the `keyup`-event on the input.
+     */
     onKeyDown: PropTypes.func,
+
+    /**
+     * A callback for when the users presses the Enter-key while the input
+     * is focused.
+     */
     onEnter: PropTypes.func,
+
+    /**
+     * Called when the inputs content was changed. If the `regExp`-prop is set,
+     * this callback receives a second argument indicating wether the input is
+     * valid or not.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * A callback for the `blur`-event on the input.
+     */
     onBlur: PropTypes.func,
+
+    /**
+     * A callback for the `focus`-event on the input.
+     */
     onFocus: PropTypes.func,
+
+    /**
+     * A regular expression that will check if the input is valid. If the input
+     * is not valid, this component will show it to the user.
+     */
     regExp: PropTypes.instanceOf(RegExp),
-    style: PropTypes.object,
+
+    /**
+     * A React style object that is applied to the `<input>`-element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    ),
+
+    /**
+     * An animated placeholder that is shown when the input is empty.
+     */
     placeholder: PropTypes.string,
+
+    /**
+     * The current value of the input field.
+     */
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * The initial value of the input field. Has no effect when using the
+     * `value`-prop.
+     */
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * Wether the input should be marked as invalid.
+     */
     invalid: PropTypes.bool,
+
+    /**
+     * The input type that is set on the `<input>`-element (e.g. `text`,
+     * `password`, etc.)
+     */
     type: PropTypes.string,
+
+    /**
+     * A funtion that receives the reference to the `<input>`-element.
+     */
     inputRef: PropTypes.func,
+
+    /**
+     * An icon that will be shown on the right side of the input. Only applies
+     * when `dynamic` is `true` or the border-design is active.
+     */
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * The `onClick`-callback for the `icon`.
+     */
     onIconClick: PropTypes.func,
+
+    /**
+     * A function that will receive the reference to the wrapper element. This
+     * only has an effect if `dynamic` is `true`.
+     */
     wrapperRef: PropTypes.func,
+
+    /**
+     * When active the placeholder will not disappear on input but rather slide
+     * to the right of the input field to act more like a label.
+     */
     dynamic: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-    customProps: PropTypes.object,
+
+    /**
+     * Any additional props that will be forwarded to the `<input>`-element.
+     */
+    customProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+
+    /**
+     * A HTML id that will be applied to the `<input>`-element.
+     */
     id: PropTypes.string,
+
+    /**
+     * Wether to stop propagation of click events to parent elements.
+     */
     stopPropagation: PropTypes.bool,
+
+    /**
+     * Wether to mark an empty input as invalid.
+     */
     required: PropTypes.bool,
+
+    /**
+     * Disables any user interaction with the input and renders it with a
+     * disabled style.
+     */
     disabled: PropTypes.bool,
+
+    /**
+     * Wether to show a clear icon on the right side of the input when it is not
+     * empty.
+     */
     clearIcon: PropTypes.bool,
+
+    /**
+     * The design of the input. Use either `Input.DEFAULT_DESIGN` or
+     * `Input.BORDER_DESIGN`.
+     */
     design: PropTypes.number,
+
+    /**
+     * An icon that will be shown on the left side of the input when the
+     * border-design is active.
+     */
     iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+
+    /**
+     * A string or `ReactNode` that will be rendered on the right side of the
+     * input when the border-design is active.
+     */
     right: PropTypes.node,
     invalidMessage: PropTypes.string,
 };
