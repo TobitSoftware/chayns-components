@@ -114,7 +114,6 @@ glob(jsGlob).then(async (paths) => {
 
         const formattedDocs = prettier.format(templateWithReplacements, {
             ...prettierOptions,
-            semi: false,
             parser: 'markdown',
         });
 
