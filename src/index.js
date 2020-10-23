@@ -65,7 +65,10 @@ export { default as ScrollView } from './react-chayns-scrollview/component/Scrol
 export { default as ResultSelection } from './react-chayns-searchbox/component/result-selection/ResultSelection';
 export { default as SearchBox } from './react-chayns-searchbox/component/SearchBox';
 export { default as SelectButton } from './react-chayns-selectbutton/component/SelectButton';
-export { default as SelectListItem } from './react-chayns-selectlist/component/SelectItem';
+export {
+    default as SelectItem,
+    default as SelectListItem,
+} from './react-chayns-selectlist/component/SelectItem';
 export { default as SelectList } from './react-chayns-selectlist/component/SelectList';
 export { default as SetupWizardItem } from './react-chayns-setupwizard/component/SetupItem';
 export { default as SetupWizard } from './react-chayns-setupwizard/component/SetupWizard';
