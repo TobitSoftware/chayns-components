@@ -1,22 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-restricted-syntax */
 const glob = require('fast-glob');
-const fs = require('fs');
-const { promisify } = require('util');
 const docGen = require('react-docgen');
 const path = require('path');
 const prettier = require('prettier');
 const { kebabCase } = require('lodash');
-const { outputFile } = require('fs-extra');
-
-const readFileAsync = promisify(fs.readFile);
+const { outputFile, readFile } = require('fs-extra');
 
 const componentRegex = /^\/\*\*.*@component(?: \{(.*?)\})?.*?\*\//s;
 const jsGlob = 'src/**/*.{js,jsx}';
 
 glob(jsGlob).then(async (paths) => {
     const filePromises = paths.map(async (filePath) => {
-        const content = await readFileAsync(filePath, { encoding: 'utf-8' });
+        const content = await readFile(filePath, { encoding: 'utf-8' });
 
         return { filePath, content };
     });
@@ -42,7 +38,7 @@ glob(jsGlob).then(async (paths) => {
         });
 
         const docs = docsPath
-            ? await readFileAsync(path.join(filePath, '../', docsPath))
+            ? await readFile(path.join(filePath, '../', docsPath))
             : '';
 
         return { ...file, info, docs };
@@ -50,7 +46,7 @@ glob(jsGlob).then(async (paths) => {
 
     const components = await Promise.all(componentPromises);
 
-    const template = await readFileAsync(
+    const template = await readFile(
         path.join(__dirname, 'docgen-templates', 'component.md'),
         { encoding: 'utf-8' }
     );
@@ -131,6 +127,33 @@ glob(jsGlob).then(async (paths) => {
             formattedDocs
         );
     });
+
+    const readmeTemplate = await readFile(
+        path.join(__dirname, 'docgen-templates', 'readme-template.md'),
+        { encoding: 'utf-8' }
+    );
+
+    const componentList = components.reduce(
+        (prev, { info: { displayName, description } }) => {
+            const outputPath = `docs/components/${kebabCase(displayName)}.md`;
+            const descriptionWithoutLinebreaks = description.replace(
+                /\r\n|\r|\n/g,
+                ' '
+            );
+
+            // return `${prev}#### [❯ ${displayName}](${outputPath})\n\n${descriptionWithoutLinebreaks}\n\n`;
+
+            return `${prev}[${displayName}&nbsp;›](${outputPath}) | ${descriptionWithoutLinebreaks}\n`;
+        },
+        'Component | Description \n --- | --- \n'
+    );
+
+    const formattedReadme = prettier.format(
+        replace(readmeTemplate, { componentList }),
+        { ...prettierOptions, parser: 'markdown' }
+    );
+
+    await outputFile(path.resolve('README.md'), formattedReadme);
 });
 
 function replace(input, replacementMap) {
