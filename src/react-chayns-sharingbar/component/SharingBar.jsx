@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
+import Icon from '../../react-chayns-icon/component/Icon';
+import share from './sharingActions';
+import './sharingBar.scss';
 import SharingBarItem from './SharingBarItem';
 import {
     getAvailableShareProviders,
     getDefaultShareLink,
 } from './sharingHelper';
-import Icon from '../../react-chayns-icon/component/Icon';
-import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
-import share from './sharingActions';
 
-import './sharingBar.scss';
-
+/**
+ * A context menu for sharing a link and some text on various platforms.
+ */
 function SharingBar({
     link: linkProp,
     linkText,
@@ -81,11 +87,33 @@ function SharingBar({
 }
 
 SharingBar.propTypes = {
+    /**
+     * The link that should be shared.
+     */
     link: PropTypes.string,
+
+    /**
+     * A text that will be added in front of the shared link.
+     */
     linkText: PropTypes.string,
+
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
+
+    /**
+     * Wether click events should be prevented from propagating to parent
+     * elements.
+     */
     stopPropagation: PropTypes.bool,
-    style: PropTypes.string,
+
+    /**
+     * A React style object that will be applied to the container element.
+     */
+    style: PropTypes.objectOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 };
 
 SharingBar.defaultProps = {
