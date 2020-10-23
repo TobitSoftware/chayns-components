@@ -1,8 +1,15 @@
+/**
+ * @component
+ */
+
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import './SliderButton.scss';
 
+/**
+ * A linear set of buttons which are mutually exclusive.
+ */
 const SliderButton = (props) => {
     const {
         className,
@@ -215,20 +222,52 @@ const SliderButton = (props) => {
 };
 
 SliderButton.propTypes = {
+    /**
+     * A classname string that will be applied to the container element.
+     */
     className: PropTypes.string,
+
+    /**
+     * A React style objec that will be applied to the container element.
+     */
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * An array of option items.
+     */
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.any,
+            id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
             text: PropTypes.string,
         })
     ),
+
+    /**
+     * A callback that is invoked when the selection changes.
+     */
     onChange: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user starts dragging the control.
+     */
     onDragStop: PropTypes.func,
+
+    /**
+     * A callback that is invoked when the user stops dragging.
+     */
     onDragStart: PropTypes.func,
+
+    /**
+     * The `id` of the item that should be selected.
+     */
     selectedItemId: PropTypes.number,
+
+    /**
+     * Wether the `SliderButton` should ignore user interaction and be rendered
+     * in a disabled style.
+     */
     disabled: PropTypes.bool,
 };
 
