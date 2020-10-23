@@ -311,7 +311,8 @@ Tooltip.propTypes = {
     removeParentSpace: PropTypes.bool,
 
     /**
-     * Wether the target device is iOS when serverside rendering.
+     * Wether the target device is iOS (only relevant during serverside
+     * rendering).
      */
     isIOS: PropTypes.bool,
 };
