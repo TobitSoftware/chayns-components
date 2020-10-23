@@ -1,19 +1,13 @@
 /* eslint-disable react/no-redundant-should-component-update,react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isFunction, isString } from '../../utils/is';
+import { isString } from '../../utils/is';
 
 let displayedIconWarning = false;
 export default class Icon extends Component {
     constructor(props) {
         super(props);
-        const { icon } = props;
-        if (!isString(icon) && icon && icon.prefix && icon.iconName) {
-            library.add(icon);
-        }
         this.onClick = this.onClick.bind(this);
     }
 
@@ -27,20 +21,6 @@ export default class Icon extends Component {
                 '[chayns components] Icon: You are still using fortawesome SVG-icons. Consider changing to fontawesome-font-icons. https://github.com/TobitSoftware/chayns-components/blob/master/src/react-chayns-icon/README.md#deprecated'
             );
         }
-    }
-
-    shouldComponentUpdate(nextProps) {
-        const { icon } = this.props;
-        if (
-            icon !== nextProps.icon &&
-            nextProps.icon &&
-            !isString(nextProps.icon) &&
-            nextProps.icon.prefix &&
-            nextProps.icon.iconName
-        ) {
-            library.add(nextProps.icon);
-        }
-        return true;
     }
 
     onClick(e) {
@@ -57,43 +37,45 @@ export default class Icon extends Component {
             onClick,
             disabled,
             stopPropagation,
+            style,
             ...other
         } = this.props;
 
-        const classes = classNames('react-chayns-icon', className, {
-            [icon]: isString(icon),
-            'react-chayns-icon--clickable': onClick,
-            'react-chayns-icon--disabled': disabled,
-        });
-
-        if (isString(icon)) {
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-            return <i className={classes} onClick={this.onClick} {...other} />;
-        }
-
-        if (!icon) {
-            return null;
-        }
-
-        if (isFunction(onClick)) {
+        if (Array.isArray(icon)) {
             return (
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-                <span className={classes} onClick={this.onClick}>
-                    <FontAwesomeIcon
-                        icon={[icon.prefix, icon.iconName]}
-                        {...other}
-                    />
+                <span
+                    className={`fa-stack ${className}`}
+                    style={{
+                        height: '1em',
+                        width: '1.4em',
+                        lineHeight: '1em',
+                        ...style,
+                    }}
+                >
+                    {icon.map((s) => (
+                        <i
+                            key={s}
+                            className={`${s} fa-stack-1x`}
+                            onClick={this.onClick}
+                            {...other}
+                        />
+                    ))}
                 </span>
             );
         }
 
-        return (
-            <FontAwesomeIcon
-                icon={[icon.prefix, icon.iconName]}
-                className={classes}
-                {...other}
-            />
-        );
+        let iconName = icon;
+        if (typeof icon === 'object') {
+            iconName = `${icon.prefix} fa-${icon.iconName}`;
+        }
+        if (!isString(iconName)) return null;
+
+        const classes = classNames('react-chayns-icon', iconName, className, {
+            'react-chayns-icon--clickable': onClick,
+            'react-chayns-icon--disabled': disabled,
+        });
+
+        return <i className={classes} onClick={this.onClick} {...other} />;
     }
 }
 
@@ -104,7 +86,8 @@ Icon.propTypes = {
             iconName: PropTypes.string.isRequired,
             prefix: PropTypes.string.isRequired,
         }).isRequired,
-    ]).isRequired,
+        PropTypes.arrayOf(PropTypes.string.isRequired),
+    ]),
     className: PropTypes.string,
     style: PropTypes.object,
     onClick: PropTypes.func,
@@ -118,6 +101,7 @@ Icon.defaultProps = {
     onClick: undefined,
     disabled: false,
     stopPropagation: false,
+    icon: null,
 };
 
 Icon.displayName = 'Icon';

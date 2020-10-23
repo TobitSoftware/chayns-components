@@ -49,6 +49,10 @@ export default class IconExample extends PureComponent {
                 <i className="fas fa-coffee" />
                 <i className="fal fa-coffee" />
                 <i className="fab fa-twitter" />
+                <Icon
+                    icon={['fa fa-slash fa-rotate-90', 'fa fa-clock']}
+                    className="test"
+                />
                 <br />
                 <a
                     href="https://design.chayns.net/IconsundSymbole"

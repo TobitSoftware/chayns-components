@@ -50,8 +50,26 @@ export default class ContextMenuExample extends Component {
             {
                 className: null,
                 onClick: console.log,
-                text: 'Coffee',
-                icon: 'fa fa-coffee',
+                text: 'Verschieben',
+                icon: 'fa fa-sort-alt',
+            },
+            {
+                className: null,
+                onClick: console.log,
+                text: 'Begrenzung anpassen',
+                icon: 'fa fa-clock',
+            },
+            {
+                className: null,
+                onClick: console.log,
+                text: 'Begrenzung aufheben',
+                icon: ['fa fa-clock', 'fa fa-slash fa-rotate-90'],
+            },
+            {
+                className: null,
+                onClick: console.log,
+                text: 'Entfernen',
+                icon: 'fa fa-trash',
             },
             {
                 className: null,
