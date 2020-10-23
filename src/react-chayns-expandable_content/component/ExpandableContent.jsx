@@ -32,7 +32,7 @@ const DEFAULT_TIMEOUTS = {
 };
 
 /**
- * A component collapses or expands its children based on the `open`-prop.
+ * A collapsible section that reveals its children with a height transition.
  */
 export default class ExpandableContent extends Component {
     static getMaxHeight(state, style) {

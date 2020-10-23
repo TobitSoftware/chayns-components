@@ -1,7 +1,6 @@
 <div align="center"><h1>Calendar</h1></div>
 
-Displays a grid calendar with the ability to react to user interaction and
-highlight certain dates.
+An interactive grid calendar that can highlight specified dates.
 
 ## Usage
 

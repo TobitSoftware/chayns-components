@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 import React, { forwardRef, useCallback, useState } from 'react';
 
 /**
- * A small, round container element to display a value, typically a number. Used
- * mostly in the right position of `Accordion` or `ListItem` components.
+ * Badges are small, circular containers used to decorate other components with
+ * glancable information.
  */
 const Badge = forwardRef(
     ({ children, className, style, badgeRef, ...other }, ref) => {

@@ -1,5 +1,5 @@
 /**
- * @component
+ * @component {./docs.md}
  */
 
 import classNames from 'classnames';
@@ -10,10 +10,8 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import { isFunction } from '../../utils/is';
 
 /**
- * A context menu with several action items that is opened by clicking an icon.
- *
- * To open or close the context menu imperatively, call the `show` or `hide`
- * methods on its reference.
+ * Gives people access to additional functionality related to onscreen items
+ * without cluttering the interface.
  */
 export default class ContextMenu extends Component {
     constructor(props) {

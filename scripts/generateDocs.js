@@ -74,18 +74,14 @@ glob(jsGlob).then(async (paths) => {
 
                 if (!propDescription) return;
 
-                const typeString = `\`${formatType(type)}\``;
-                const formattedDescription = propDescription.replace(
-                    /\r\n|\r|\n/g,
-                    ' '
-                );
+                const typeString = escapeCharacters(`\`${formatType(type)}\``);
+                const formattedDescription = removeLineBreaks(propDescription);
                 let defaultValueString = '';
 
                 if (defaultValue) {
                     if (!['undefined', 'null'].includes(defaultValue.value)) {
-                        defaultValueString = `\`${defaultValue.value}\``.replace(
-                            /[\r\n]+/g,
-                            ' '
+                        defaultValueString = escapeCharacters(
+                            removeLineBreaks(`\`${defaultValue.value}\``)
                         );
                     }
                 }
@@ -195,4 +191,12 @@ function formatType(type) {
         default:
             return `${type.name}`;
     }
+}
+
+function escapeCharacters(input) {
+    return input.replace(/\|/g, '\\|');
+}
+
+function removeLineBreaks(input) {
+    return input.replace(/\r\n|\r|\n/g, ' ');
 }

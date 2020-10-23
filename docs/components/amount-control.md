@@ -1,6 +1,7 @@
 <div align="center"><h1>AmountControl</h1></div>
 
-A number input that can easily be incremented and decremented.
+The AmountContrl is a three-segment control used to increase or decrease an
+incremental value.
 
 ## Usage
 

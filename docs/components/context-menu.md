@@ -1,9 +1,7 @@
 <div align="center"><h1>ContextMenu</h1></div>
 
-A context menu with several action items that is opened by clicking an icon.
-
-To open or close the context menu imperatively, call the `show` or `hide`
-methods on its reference.
+Gives people access to additional functionality related to onscreen items
+without cluttering the interface.
 
 ## Usage
 
@@ -31,6 +29,11 @@ import { ContextMenu } from 'chayns-components';
 
 <ContextMenu {...} />
 ```
+
+## Methods
+
+To open or close the context menu imperatively, call the `show()` and `hide()`
+on its reference.
 
 ## Props
 

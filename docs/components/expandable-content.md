@@ -1,6 +1,6 @@
 <div align="center"><h1>ExpandableContent</h1></div>
 
-A component collapses or expands its children based on the `open`-prop.
+A collapsible section that reveals its children with a height transition.
 
 ## Usage
 

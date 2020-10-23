@@ -1,6 +1,6 @@
 <div align="center"><h1>AnimationWrapper</h1></div>
 
-A wrapper that animates its children in.
+The AnimationWrapper provides an eye-catching initial animation to its children.
 
 ## Usage
 

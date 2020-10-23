@@ -1,6 +1,7 @@
 <div align="center"><h1>Accordion</h1></div>
 
-Displays a container that can be opened to reveal it's content.
+Accordions are collapsible sections that are toggled by interacting with a
+permanently visible header.
 
 ## Usage
 

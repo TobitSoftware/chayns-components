@@ -1,22 +1,7 @@
 <div align="center"><h1>Button</h1></div>
 
-You can import the Button-component like this:
-
-```jsx
-import { Button } from 'chayns-components';
-```
-
-and use it like this:
-
-```jsx
-<Button
-    onClick={() => {
-        console.log('I have been clicked!');
-    }}
->
-    Click Me!
-</Button>
-```
+Buttons initiate actions, can include a title or an icon and come with a set of
+predefined styles.
 
 ## Usage
 

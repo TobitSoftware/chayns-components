@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import { hexStringToRgb } from '../../utils/color';
 
 /**
- * This component adjusts the color scheme for all children components.
+ * Adjusts the color scheme for all child components.
  */
 const ColorScheme = (props) => {
     let { color, colorMode, secondaryColor } = props;

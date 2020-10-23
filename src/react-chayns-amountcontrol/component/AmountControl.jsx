@@ -9,7 +9,8 @@ import AmountInput from './AmountInput';
 import ControlButton from './ControlButton';
 
 /**
- * A number input that can easily be incremented and decremented.
+ * The AmountContrl is a three-segment control used to increase or decrease an
+ * incremental value.
  */
 export default class AmountControl extends PureComponent {
     constructor(props) {

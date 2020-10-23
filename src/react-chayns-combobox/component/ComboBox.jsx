@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
-import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import isInIframeDialog from '../utils/isInIframeDialog';
-import HTMLSelectComboBox from './HTMLSelectComboBox';
-import DialogSelectComboBox from './DialogSelectComboBox';
 import './ComboBox.scss';
+import DialogSelectComboBox from './DialogSelectComboBox';
+import HTMLSelectComboBox from './HTMLSelectComboBox';
 
 /**
- * A custom select component that allows the user to select one of a list of
- * options.
+ * A button with a dropdown that contains a scrollable list of distinct values
+ * from which people can choose.
  */
 const ComboBox = ({
     className,
@@ -28,36 +28,34 @@ const ComboBox = ({
 
     return (
         <>
-            {iframeDialogView
-                ? (
-                    <HTMLSelectComboBox
-                        className={className}
-                        label={label}
-                        list={list}
-                        disabled={disabled}
-                        listValue={listValue}
-                        listKey={listKey}
-                        stopPropagation={stopPropagation}
-                        defaultValue={defaultValue}
-                        onSelect={onSelect}
-                    />
-                )
-                : (
-                    <DialogSelectComboBox
-                        className={className}
-                        label={label}
-                        list={list}
-                        disabled={disabled}
-                        listValue={listValue}
-                        listKey={listKey}
-                        stopPropagation={stopPropagation}
-                        defaultValue={defaultValue}
-                        parent={parent}
-                        onSelect={onSelect}
-                        style={style}
-                        value={value}
-                    />
-                )}
+            {iframeDialogView ? (
+                <HTMLSelectComboBox
+                    className={className}
+                    label={label}
+                    list={list}
+                    disabled={disabled}
+                    listValue={listValue}
+                    listKey={listKey}
+                    stopPropagation={stopPropagation}
+                    defaultValue={defaultValue}
+                    onSelect={onSelect}
+                />
+            ) : (
+                <DialogSelectComboBox
+                    className={className}
+                    label={label}
+                    list={list}
+                    disabled={disabled}
+                    listValue={listValue}
+                    listKey={listKey}
+                    stopPropagation={stopPropagation}
+                    defaultValue={defaultValue}
+                    parent={parent}
+                    onSelect={onSelect}
+                    style={style}
+                    value={value}
+                />
+            )}
         </>
     );
 };

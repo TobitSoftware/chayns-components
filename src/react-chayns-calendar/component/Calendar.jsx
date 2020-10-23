@@ -46,8 +46,7 @@ function getMonthNames(language = chayns.env.language) {
 }
 
 /**
- * Displays a grid calendar with the ability to react to user interaction
- * and highlight certain dates.
+ * An interactive grid calendar that can highlight specified dates.
  */
 export default class Calendar extends Component {
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;

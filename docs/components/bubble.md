@@ -1,5 +1,8 @@
 <div align="center"><h1>Bubble</h1></div>
 
+A floating bubble that is primarily used to power the `ContextMenu` and
+`Tooltip` components.
+
 ## Usage
 
 You should have the `chayns-components` package installed. If that is not the

@@ -1,6 +1,6 @@
 <div align="center"><h1>FileInput</h1></div>
 
-A file input that accepts specified file types via upload or drag and drop.
+Accepts specified file types via dialog or drag and drop.
 
 ## Usage
 

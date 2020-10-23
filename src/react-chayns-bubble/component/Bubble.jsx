@@ -7,6 +7,10 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
+/**
+ * A floating bubble that is primarily used to power the `ContextMenu` and
+ * `Tooltip` components.
+ */
 export default class Bubble extends PureComponent {
     static isPositionBottom(position) {
         const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;

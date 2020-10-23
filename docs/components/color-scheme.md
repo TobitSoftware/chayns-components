@@ -1,6 +1,6 @@
 <div align="center"><h1>ColorScheme</h1></div>
 
-This component adjusts the color scheme for all children components.
+Adjusts the color scheme for all child components.
 
 ## Usage
 

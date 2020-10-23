@@ -1,7 +1,7 @@
 <div align="center"><h1>Badge</h1></div>
 
-A small, round container element to display a value, typically a number. Used
-mostly in the right position of `Accordion` or `ListItem` components.
+Badges are small, circular containers used to decorate other components with
+glancable information.
 
 ## Usage
 

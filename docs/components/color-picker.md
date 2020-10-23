@@ -1,6 +1,6 @@
 <div align="center"><h1>ColorPicker</h1></div>
 
-A RGB color picker.
+Lets a user choose a color for text, shapes, marking tools, and other elements.
 
 ## Usage
 

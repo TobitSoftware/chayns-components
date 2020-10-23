@@ -1,6 +1,8 @@
 <div align="center"><h1>Checkbox</h1></div>
 
-A `<input type="checkbox">` component. Can also act as a switch.
+Checkboxes allow users to complete tasks that involve making choices such as
+selecting options. Can be styled as a switch, avisual toggle between two
+mutually exclusive states — on and off.
 
 ## Usage
 
