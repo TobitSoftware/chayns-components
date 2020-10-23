@@ -9,7 +9,6 @@ import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';
 import Icon from '../../react-chayns-icon/component/Icon';
 import share from './sharingActions';
 import './sharingBar.scss';
-import SharingBarItem from './SharingBarItem';
 import {
     getAvailableShareProviders,
     getDefaultShareLink,
@@ -110,6 +109,10 @@ SharingBar.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * The children nodes of the `SharingBar`.
+     */
     children: PropTypes.node,
 };
 
