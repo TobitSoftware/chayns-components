@@ -41,7 +41,9 @@ logs
 node_modules/
 npm-debug.log*
 out/
+package-lock.json
 pids
 typings/
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
