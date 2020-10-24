@@ -4,6 +4,7 @@
 
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import { isServer } from '../../utils/isServer';
 import text from '../constants/text';
 
 /**
@@ -200,11 +201,19 @@ export default class DateInfo extends PureComponent {
 
     constructor(props) {
         super(props);
-        let language =
-            props.language ||
-            (chayns.env.language || navigator.language || 'de')
+        let { language } = props;
+
+        if (!language && isServer()) {
+            language = 'de';
+        } else {
+            language = (
+                chayns.env.language ||
+                window.navigator.language ||
+                'de'
+            )
                 .substring(0, 2)
                 .toLowerCase();
+        }
 
         if (
             !(
@@ -370,9 +379,11 @@ DateInfo.propTypes = {
 
 DateInfo.defaultProps = {
     children: <div />,
-    language: (chayns.env.language || navigator.language || 'de')
-        .substring(0, 2)
-        .toLowerCase(),
+    language: isServer()
+        ? 'de'
+        : (chayns.env.language || navigator.language || 'de')
+              .substring(0, 2)
+              .toLowerCase(),
     date2: null,
     showTime: null,
     showDate: null,

@@ -1,4 +1,5 @@
 import EventEmitter from '../../../../utils/events/EventEmitter';
+import { isServer } from '../../../../utils/isServer';
 import { fetchFriends, setFriend } from './PersonsApi';
 
 class FriendsHelper {
@@ -9,14 +10,22 @@ class FriendsHelper {
     static #eventEmitter = new EventEmitter();
 
     static init = async () => {
-        await window.chayns.ready;
-        if (window.chayns.env.user && window.chayns.env.user.isAuthenticated) {
-            const raw = await fetchFriends().catch(() => []);
-            FriendsHelper.#friends = raw.map(FriendsHelper.convertFriend);
-            FriendsHelper.#friends.forEach((e) => {
-                FriendsHelper.#friendsObject[e.personId] = e;
-            });
-            FriendsHelper.#eventEmitter.emit('update', FriendsHelper.#friends);
+        if (!isServer()) {
+            await window.chayns.ready;
+            if (
+                window.chayns.env.user &&
+                window.chayns.env.user.isAuthenticated
+            ) {
+                const raw = await fetchFriends().catch(() => []);
+                FriendsHelper.#friends = raw.map(FriendsHelper.convertFriend);
+                FriendsHelper.#friends.forEach((e) => {
+                    FriendsHelper.#friendsObject[e.personId] = e;
+                });
+                FriendsHelper.#eventEmitter.emit(
+                    'update',
+                    FriendsHelper.#friends
+                );
+            }
         }
     };
 

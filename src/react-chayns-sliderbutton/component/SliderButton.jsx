@@ -122,7 +122,9 @@ const SliderButton = (props) => {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         firstItem = firstItemRef.current;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         marker = markerRef.current;
 
         if (selectedItemId) {
@@ -136,6 +138,7 @@ const SliderButton = (props) => {
             const i = items.findIndex((item) => item.id === selectedItemId);
             setMarkerIndex(i);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedItemId]);
 
     useEffect(() => {

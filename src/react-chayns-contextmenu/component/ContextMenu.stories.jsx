@@ -21,13 +21,11 @@ BasicExample.args = {
     items: [
         {
             className: null,
-            onClick: console.log,
             text: 'Coffee',
             icon: 'fa fa-coffee',
         },
         {
             className: null,
-            onClick: console.log,
             text: 'Tobit',
             icon: 'ts-tobit',
         },

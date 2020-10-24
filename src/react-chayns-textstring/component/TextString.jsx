@@ -5,6 +5,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { isServer } from '../../utils/isServer';
 import getTappWidth from '../../utils/tappWidth';
 import isTobitEmployee from '../../utils/tobitEmployee';
 
@@ -436,9 +437,11 @@ export default class TextString extends Component {
 
 TextString.textStrings = {};
 
-TextString.language = (chayns.env.language || navigator.language || 'de')
-    .substring(0, 2)
-    .toLowerCase();
+TextString.language = isServer()
+    ? 'de'
+    : (chayns.env.language || navigator.language || 'de')
+          .substring(0, 2)
+          .toLowerCase();
 
 TextString.languages = [
     {

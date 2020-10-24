@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { isString } from '../../utils/is';
+import { isServer } from '../../utils/isServer';
 import { getDataUrlFromFile } from '../utils/getDataUrl';
 import './Gallery.scss';
 import Image from './Image';
@@ -333,18 +334,21 @@ Gallery.propTypes = {
     /**
      * An array of strings or File objects that will be the image sources.
      */
-    images: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-            PropTypes.shape({
-                url: PropTypes.string.isRequired,
-            }),
-            PropTypes.shape({
-                file: PropTypes.instanceOf(File).isRequired,
-            }),
-            PropTypes.string,
-            PropTypes.instanceOf(File),
-        ]).isRequired
-    ).isRequired,
+
+    images: isServer() // eslint-disable-line react/require-default-props
+        ? PropTypes.array.isRequired
+        : PropTypes.arrayOf(
+              PropTypes.oneOfType([
+                  PropTypes.shape({
+                      url: PropTypes.string.isRequired,
+                  }),
+                  PropTypes.shape({
+                      file: PropTypes.instanceOf(File).isRequired,
+                  }),
+                  PropTypes.string,
+                  PropTypes.instanceOf(File),
+              ]).isRequired
+          ).isRequired,
 
     /**
      * A function that is called when an Image is clicked.
