@@ -1,15 +1,13 @@
 module.exports = (api) => {
-    const isProduction = api.env('production');
+    api.cache(true);
 
     return {
-        presets: [
-            ['@babel/preset-env', { modules: false }],
-            '@babel/preset-react',
-        ],
+        presets: [['@babel/env', { modules: false }], '@babel/react'],
         plugins: [
-            '@babel/plugin-transform-runtime',
-            '@babel/plugin-proposal-class-properties',
-            isProduction && 'optimize-clsx',
-        ].filter(Boolean),
+            '@babel/transform-runtime',
+            'optimize-clsx',
+            'dev-expression',
+            '@babel/proposal-class-properties',
+        ],
     };
 };
