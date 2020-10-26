@@ -3,7 +3,6 @@ const babel = require('gulp-babel');
 const clean = require('gulp-clean');
 const sass = require('gulp-sass');
 const concatCss = require('gulp-concat-css');
-const replace = require('gulp-replace');
 const path = require('path');
 const pkg = require('./package.json');
 
@@ -12,8 +11,6 @@ const jsSource = [
     '!src/**/*.{stories,spec,test}.{js,jsx}',
 ];
 const cssSource = 'src/**/*.{css,scss}';
-
-const cssImportRegex = /import\s+?["'].*?.s?css["'];?/g;
 
 /** ======================
  ========= CLEAN =========
@@ -32,7 +29,11 @@ const esmDestination = path.dirname(pkg.module);
 gulp.task('transpile-esm', () =>
     gulp
         .src(jsSource)
-        .pipe(babel(getBabelConfig({ renameSCSS: true })))
+        .pipe(
+            babel({
+                presets: [['./babelPreset.js', { renameSCSS: true }]],
+            })
+        )
         .pipe(gulp.dest(esmDestination))
 );
 
@@ -51,7 +52,13 @@ const cjsDestination = path.dirname(pkg.main);
 gulp.task('transpile-cjs', () =>
     gulp
         .src(jsSource)
-        .pipe(babel(getBabelConfig({ renameSCSS: true, cjs: true })))
+        .pipe(
+            babel({
+                presets: [
+                    ['./babelPreset.js', { cjs: true, renameSCSS: true }],
+                ],
+            })
+        )
         .pipe(gulp.dest(cjsDestination))
 );
 
@@ -68,8 +75,11 @@ gulp.task('build-cjs', gulp.parallel('transpile-cjs', 'compile-scss-cjs'));
 gulp.task('transpile-esm-split-css', () =>
     gulp
         .src(jsSource)
-        .pipe(replace(cssImportRegex, ''))
-        .pipe(babel(getBabelConfig({ cjs: true })))
+        .pipe(
+            babel({
+                presets: [['./babelPreset.js', { cjs: true, removeCSS: true }]],
+            })
+        )
         .pipe(gulp.dest('split-css/'))
 );
 
@@ -87,6 +97,21 @@ gulp.task(
 );
 
 /** ======================
+ = resolveAbsoluteImport =
+ ====================== */
+
+gulp.task('compile-resolve-import', () =>
+    gulp
+        .src('src/**/resolveAbsoluteImport.js')
+        .pipe(
+            babel({
+                presets: [['./babelPreset.js', { cjs: true }]],
+            })
+        )
+        .pipe(gulp.dest('lib/'))
+);
+
+/** ======================
  ========= BUILD =========
  ====================== */
 
@@ -99,24 +124,3 @@ gulp.task(
 );
 
 // =======================
-
-function getBabelConfig({ renameSCSS = false, cjs = false } = {}) {
-    return {
-        presets: [
-            ['@babel/env', { modules: cjs ? 'cjs' : false }],
-            '@babel/react',
-        ],
-        plugins: [
-            '@babel/transform-runtime',
-            'optimize-clsx',
-            '@babel/proposal-class-properties',
-            renameSCSS && [
-                'transform-rename-import',
-                {
-                    original: '^(.+)\\.scss$',
-                    replacement: '$1.css',
-                },
-            ],
-        ].filter(Boolean),
-    };
-}
