@@ -18,6 +18,11 @@
     "sideEffects": false,
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
+    "files": [
+        "lib/",
+        "dist/",
+        "split-css.js"
+    ],
     "scripts": {
         "build": "run-p build-lib build-umd",
         "build-lib": "gulp build",
