@@ -31,7 +31,7 @@ gulp.task('transpile-esm', () =>
         .src(jsSource)
         .pipe(
             babel({
-                presets: [['./babelPreset.js', { renameSCSS: true }]],
+                presets: [['./babelPreset.js', { cssImports: 'rename' }]],
             })
         )
         .pipe(gulp.dest(esmDestination))
@@ -55,7 +55,7 @@ gulp.task('transpile-cjs', () =>
         .pipe(
             babel({
                 presets: [
-                    ['./babelPreset.js', { cjs: true, renameSCSS: true }],
+                    ['./babelPreset.js', { cjs: true, cssImports: 'rename' }],
                 ],
             })
         )
@@ -69,18 +69,20 @@ gulp.task('compile-scss-cjs', () =>
 gulp.task('build-cjs', gulp.parallel('transpile-cjs', 'compile-scss-cjs'));
 
 /** ======================
- ===== ESM CSS-SPLIT =====
+ ===== CJS CSS-SPLIT =====
  ====================== */
 
-gulp.task('transpile-esm-split-css', () =>
+gulp.task('transpile-cjs-split-css', () =>
     gulp
         .src(jsSource)
         .pipe(
             babel({
-                presets: [['./babelPreset.js', { cjs: true, removeCSS: true }]],
+                presets: [
+                    ['./babelPreset.js', { cjs: true, cssImports: 'remove' }],
+                ],
             })
         )
-        .pipe(gulp.dest('split-css/'))
+        .pipe(gulp.dest('dist/cjs-split-css/'))
 );
 
 gulp.task('bundle-css', () =>
@@ -92,8 +94,8 @@ gulp.task('bundle-css', () =>
 );
 
 gulp.task(
-    'build-esm-split-css',
-    gulp.parallel('transpile-esm-split-css', 'bundle-css')
+    'build-cjs-split-css',
+    gulp.parallel('transpile-cjs-split-css', 'bundle-css')
 );
 
 /** ======================
@@ -119,7 +121,12 @@ gulp.task(
     'build',
     gulp.series(
         'clean',
-        gulp.parallel('build-esm', 'build-cjs', 'build-esm-split-css')
+        gulp.parallel(
+            'build-esm',
+            'build-cjs',
+            'build-cjs-split-css',
+            'compile-resolve-import'
+        )
     )
 );
 

@@ -4,5 +4,5 @@
  * and will be removed with the next major version.
  */
 module.exports = function resolveAbsoluteImport() {
-    return 'chayns-components';
+    return 'chayns-components/dist/esm/index.js';
 };
