@@ -54,6 +54,16 @@ module.exports = async function generateDocs() {
 
     let prettierOptions = null;
 
+    components.sort((a, b) => {
+        if (a.info.displayName < b.info.displayName) {
+            return -1;
+        }
+        if (a.info.displayName > b.info.displayName) {
+            return 1;
+        }
+        return 0;
+    });
+
     components.forEach(async (component) => {
         const { displayName, description, props } = component.info;
 
