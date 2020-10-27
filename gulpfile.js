@@ -49,6 +49,30 @@ gulp.task('compile-scss-esm', () =>
 gulp.task('build-esm', gulp.parallel('transpile-esm', 'compile-scss-esm'));
 
 /** ======================
+ ====== ESM TO lib/ ======
+ ====================== */
+
+gulp.task('transpile-esm-to-lib', () =>
+    gulp
+        .src(jsSource)
+        .pipe(
+            babel({
+                presets: [['./babelPreset.js', { cssImports: 'rename' }]],
+            })
+        )
+        .pipe(gulp.dest('lib/'))
+);
+
+gulp.task('compile-scss-esm-to-lib', () =>
+    gulp.src(cssSource).pipe(sass()).pipe(gulp.dest('lib/'))
+);
+
+gulp.task(
+    'build-esm-to-lib',
+    gulp.parallel('transpile-esm-to-lib', 'compile-scss-esm-to-lib')
+);
+
+/** ======================
  ========== CJS ==========
  ====================== */
 
@@ -131,6 +155,7 @@ gulp.task(
         'clean',
         gulp.parallel(
             gulp.series('build-esm', 'compile-resolve-import'),
+            'build-esm-to-lib',
             'build-cjs',
             'build-cjs-split-css',
             'build-umd',
