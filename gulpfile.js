@@ -4,8 +4,10 @@ const clean = require('gulp-clean');
 const sass = require('gulp-sass');
 const concatCss = require('gulp-concat-css');
 const path = require('path');
+const shell = require('gulp-shell');
 const pkg = require('./package.json');
 const generateImportTransformer = require('./scripts/generate-import-transformer/generateImportTransformer');
+const generateDocs = require('./scripts/generate-docs/generateDocs');
 
 const jsSource = [
     'src/**/*.{js,jsx}',
@@ -102,10 +104,22 @@ gulp.task(
 );
 
 /** ======================
+ ========== UMD ==========
+ ====================== */
+
+gulp.task('build-umd', shell.task('rollup -c', { quiet: true }));
+
+/** ======================
+ ===== GENERATE DOCS =====
+ ====================== */
+
+gulp.task('generate-docs', generateDocs);
+
+/** ======================
  = resolveAbsoluteImport =
  ====================== */
 
-gulp.task('compile-resolve-import', () => generateImportTransformer());
+gulp.task('compile-resolve-import', generateImportTransformer);
 
 /** ======================
  ========= BUILD =========
@@ -118,7 +132,9 @@ gulp.task(
         gulp.parallel(
             gulp.series('build-esm', 'compile-resolve-import'),
             'build-cjs',
-            'build-cjs-split-css'
+            'build-cjs-split-css',
+            'build-umd',
+            'generate-docs'
         )
     )
 );
