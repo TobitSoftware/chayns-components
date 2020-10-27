@@ -1,6 +1,6 @@
 <div align="center"><h1>AmountControl</h1></div>
 
-The AmountContrl is a three-segment control used to increase or decrease an
+The AmountControl is a three-segment control used to increase or decrease an
 incremental value.
 
 ## Usage

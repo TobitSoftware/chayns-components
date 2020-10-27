@@ -35,25 +35,25 @@ import { Gallery } from 'chayns-components';
 
 The `Gallery`-component takes the following props:
 
-| Name                                | Type                                                         | Default | Required |
-| ----------------------------------- | ------------------------------------------------------------ | ------- | :------: |
-| [images](#images)                   | `Array<{ url: string } \| { file: File } \| string \| File>` |         |    ✓     |
-| [onClick](#onclick)                 | `function`                                                   |         |          |
-| [onDelete](#ondelete)               | `function`                                                   |         |          |
-| [deleteMode](#deletemode)           | `boolean`                                                    | `false` |          |
-| [height](#height)                   | `number \| string`                                           |         |          |
-| [width](#width)                     | `number \| string`                                           |         |          |
-| [className](#classname)             | `string`                                                     |         |          |
-| [style](#style)                     | `{ [key: string]: string \| number }`                        | `{}`    |          |
-| [stopPropagation](#stoppropagation) | `boolean`                                                    | `false` |          |
-| [dragMode](#dragmode)               | `boolean`                                                    | `false` |          |
-| [onDragEnd](#ondragend)             | `function`                                                   |         |          |
-| [preventParams](#preventparams)     | `boolean`                                                    | `false` |          |
+| Name                                | Type                                  | Default | Required |
+| ----------------------------------- | ------------------------------------- | ------- | :------: |
+| [images](#images)                   | `custom`                              |         |          |
+| [onClick](#onclick)                 | `function`                            |         |          |
+| [onDelete](#ondelete)               | `function`                            |         |          |
+| [deleteMode](#deletemode)           | `boolean`                             | `false` |          |
+| [height](#height)                   | `number \| string`                    |         |          |
+| [width](#width)                     | `number \| string`                    |         |          |
+| [className](#classname)             | `string`                              |         |          |
+| [style](#style)                     | `{ [key: string]: string \| number }` | `{}`    |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false` |          |
+| [dragMode](#dragmode)               | `boolean`                             | `false` |          |
+| [onDragEnd](#ondragend)             | `function`                            |         |          |
+| [preventParams](#preventparams)     | `boolean`                             | `false` |          |
 
 ### `images`
 
 ```ts
-images: Array<{ url: string } | { file: File } | string | File>
+images?: custom
 ```
 
 An array of strings or File objects that will be the image sources.
