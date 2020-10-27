@@ -5,6 +5,7 @@ const sass = require('gulp-sass');
 const concatCss = require('gulp-concat-css');
 const path = require('path');
 const pkg = require('./package.json');
+const generateImportTransformer = require('./scripts/generate-import-transformer/generateImportTransformer');
 
 const jsSource = [
     'src/**/*.{js,jsx}',
@@ -17,7 +18,9 @@ const cssSource = 'src/**/*.{css,scss}';
  ====================== */
 
 gulp.task('clean', () =>
-    gulp.src(['dist/', 'split-css/'], { allowEmpty: true }).pipe(clean())
+    gulp
+        .src(['dist/', 'split-css/', 'lib/'], { allowEmpty: true })
+        .pipe(clean())
 );
 
 /** ======================
@@ -102,16 +105,7 @@ gulp.task(
  = resolveAbsoluteImport =
  ====================== */
 
-gulp.task('compile-resolve-import', () =>
-    gulp
-        .src('src/**/resolveAbsoluteImport.js')
-        .pipe(
-            babel({
-                presets: [['./babelPreset.js', { cjs: true }]],
-            })
-        )
-        .pipe(gulp.dest('lib/'))
-);
+gulp.task('compile-resolve-import', () => generateImportTransformer());
 
 /** ======================
  ========= BUILD =========
@@ -122,12 +116,9 @@ gulp.task(
     gulp.series(
         'clean',
         gulp.parallel(
-            'build-esm',
+            gulp.series('build-esm', 'compile-resolve-import'),
             'build-cjs',
-            'build-cjs-split-css',
-            'compile-resolve-import'
+            'build-cjs-split-css'
         )
     )
 );
-
-// =======================
