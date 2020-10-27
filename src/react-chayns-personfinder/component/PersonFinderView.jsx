@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
+import { isServer } from '../../utils/isServer';
 import getListLength from '../utils/getListLength';
 import getSelectedListItem from '../utils/getSelectedListItem';
 import PersonFinderResults from './PersonFinderResults';
@@ -300,7 +301,7 @@ PersonFinderView.defaultProps = {
     onLoadMore: null,
     selectedValue: false,
     boxClassName: null,
-    parent: document.querySelector('.tapp'),
+    parent: isServer() ? null : document.querySelector('.tapp'),
     boxRef: null,
     showWaitCursor: false,
     onChange: null,

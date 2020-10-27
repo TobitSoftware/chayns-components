@@ -10,7 +10,8 @@ const { outputFile, readFile } = require('fs-extra');
 const componentRegex = /^\/\*\*.*@component(?: \{(.*?)\})?.*?\*\//s;
 const jsGlob = 'src/**/*.{js,jsx}';
 
-glob(jsGlob).then(async (paths) => {
+module.exports = async function generateDocs() {
+    const paths = await glob(jsGlob);
     const filePromises = paths.map(async (filePath) => {
         const content = await readFile(filePath, { encoding: 'utf-8' });
 
@@ -47,7 +48,7 @@ glob(jsGlob).then(async (paths) => {
     const components = await Promise.all(componentPromises);
 
     const template = await readFile(
-        path.join(__dirname, 'docgen-templates', 'component.md'),
+        path.join(__dirname, 'templates', 'component.md'),
         { encoding: 'utf-8' }
     );
 
@@ -59,7 +60,7 @@ glob(jsGlob).then(async (paths) => {
         let propTable = `
 | Name | Type | Default | Required |
 | ---- | ---- | ------- | :------: |
-        `;
+            `;
 
         let propDescriptions = '';
 
@@ -124,7 +125,7 @@ glob(jsGlob).then(async (paths) => {
     });
 
     const readmeTemplate = await readFile(
-        path.join(__dirname, 'docgen-templates', 'readme-template.md'),
+        path.join(__dirname, 'templates', 'readme-template.md'),
         { encoding: 'utf-8' }
     );
 
@@ -149,7 +150,7 @@ glob(jsGlob).then(async (paths) => {
     );
 
     await outputFile(path.resolve('README.md'), formattedReadme);
-});
+};
 
 function replace(input, replacementMap) {
     let returnValue = input;

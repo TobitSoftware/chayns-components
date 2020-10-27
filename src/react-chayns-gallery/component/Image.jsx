@@ -1,16 +1,17 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/forbid-prop-types */
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';
+import { isString } from '../../utils/is';
+import { isServer } from '../../utils/isServer';
+import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
 import {
     getImageMetaDataFromApi,
     getImageMetaDataFromPreview,
 } from '../utils/getImageMetaData';
-import { getDataUrlFromBase64, getDataUrlFromFile } from '../utils/getDataUrl';
-import './Image.scss';
-import { isString } from '../../utils/is';
 import getOrientation from '../utils/getOrientation';
+import './Image.scss';
 
 export default class Image extends PureComponent {
     constructor(props) {
@@ -225,8 +226,11 @@ Image.format = {
 Image.imageMetaData = {};
 
 Image.propTypes = {
-    image: PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string])
-        .isRequired,
+    // eslint-disable-next-line react/require-default-props
+    image: isServer()
+        ? PropTypes.any.isRequired
+        : PropTypes.oneOfType([PropTypes.instanceOf(File), PropTypes.string])
+              .isRequired,
     onClick: PropTypes.func,
     moreImages: PropTypes.number,
     className: PropTypes.string,

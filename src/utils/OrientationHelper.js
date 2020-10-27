@@ -1,11 +1,13 @@
+import { isServer } from './isServer';
+
 const ORIENTATION_PORTRAIT = 0;
 const ORIENTATION_LANDSCAPE = 1;
 
-const HTML = document.documentElement;
+const HTML = isServer() ? undefined : document.documentElement;
 
 class OrientationHelper {
     constructor() {
-        if (chayns.env.isMobile || chayns.env.isApp) {
+        if (!isServer() && (chayns.env.isMobile || chayns.env.isApp)) {
             window.addEventListener('orientationchange', this.update);
             this.update();
         }

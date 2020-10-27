@@ -23,15 +23,13 @@ export { default as ExpandableContent } from './react-chayns-expandable_content/
 export { default as FileInput } from './react-chayns-file_input/component/FileInput';
 export { default as FilterButton } from './react-chayns-filterbutton/component/FilterButton';
 export { default as FormattedInput } from './react-chayns-formatted_input/component/FormattedInput';
-export {
-    DecimalFormatter,
-    Formatter,
-    FORMAT_DECIMAL,
-    FORMAT_INTEGER,
-    FORMAT_PRICE,
-    IntegerFormatter,
-    PriceFormatter,
-} from './react-chayns-formatted_input/utils/index';
+export { default as DecimalFormatter } from './react-chayns-formatted_input/utils/DecimalFormatter';
+export { default as Formatter } from './react-chayns-formatted_input/utils/Formatter';
+export { default as FORMAT_DECIMAL } from './react-chayns-formatted_input/utils/instances/formatDecimal';
+export { default as FORMAT_INTEGER } from './react-chayns-formatted_input/utils/instances/formatInteger';
+export { default as FORMAT_PRICE } from './react-chayns-formatted_input/utils/instances/formatPrice';
+export { default as IntegerFormatter } from './react-chayns-formatted_input/utils/IntegerFormatter';
+export { default as PriceFormatter } from './react-chayns-formatted_input/utils/PriceFormatter';
 export { default as Gallery } from './react-chayns-gallery/component/Gallery';
 export { default as Image } from './react-chayns-gallery/component/Image';
 export { default as ImageContainer } from './react-chayns-gallery/component/ImageContainer';
@@ -65,10 +63,7 @@ export { default as ScrollView } from './react-chayns-scrollview/component/Scrol
 export { default as ResultSelection } from './react-chayns-searchbox/component/result-selection/ResultSelection';
 export { default as SearchBox } from './react-chayns-searchbox/component/SearchBox';
 export { default as SelectButton } from './react-chayns-selectbutton/component/SelectButton';
-export {
-    default as SelectItem,
-    default as SelectListItem,
-} from './react-chayns-selectlist/component/SelectItem';
+export { default as SelectListItem } from './react-chayns-selectlist/component/SelectItem';
 export { default as SelectList } from './react-chayns-selectlist/component/SelectList';
 export { default as SetupWizardItem } from './react-chayns-setupwizard/component/SetupItem';
 export { default as SetupWizard } from './react-chayns-setupwizard/component/SetupWizard';
@@ -80,7 +75,6 @@ export { default as TagInput } from './react-chayns-tag_input/component/TagInput
 export { default as TextArea } from './react-chayns-textarea/component/TextArea';
 export { default as TextString } from './react-chayns-textstring/component/TextString';
 export { default as Tooltip } from './react-chayns-tooltip/component/Tooltip';
-export { default as resolveAbsoluteImport } from './utils/babel/resolveAbsoluteImport';
 export { default as createLinks } from './utils/createLinks';
 export { default as equalizer } from './utils/equalizer';
 export { default as imageUpload } from './utils/imageUpload';

@@ -1,12 +1,15 @@
+import { isServer } from '../../utils/isServer';
+
 let lastPageY;
 
-const requestAnimationFrameFallback =
-    window.requestAnimationFrame.bind(window) ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    ((c) => setTimeout(c, 0));
+const requestAnimationFrameFallback = isServer()
+    ? (c) => setTimeout(c, 0)
+    : window.requestAnimationFrame.bind(window) ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      ((c) => setTimeout(c, 0));
 
 export default class ScrollViewHelper {
     constructor(el, { wrapper, content, bar }) {
@@ -15,7 +18,9 @@ export default class ScrollViewHelper {
         this.wrapper = wrapper;
         this.content = content;
 
-        this.direction = window.getComputedStyle(this.target).direction;
+        this.direction = isServer()
+            ? undefined
+            : window.getComputedStyle(this.target).direction;
 
         if (this.direction === 'rtl') {
             this.content.classList.add('rtl');

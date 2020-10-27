@@ -1,4 +1,5 @@
 .cache
+.DS_store
 .env
 .eslintcache
 .grunt
@@ -43,6 +44,7 @@ npm-debug.log*
 out/
 package-lock.json
 pids
+split-css/
 typings/
 yarn-debug.log*
 yarn-error.log*

@@ -511,6 +511,7 @@ export default class ReceiverInput extends Component {
                     groupId={r.groupId}
                     userId={r.userId}
                     name={r.name}
+                    // eslint-disable-next-line react/no-array-index-key
                     key={i}
                 />
             );

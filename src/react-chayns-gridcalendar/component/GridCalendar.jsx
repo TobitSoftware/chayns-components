@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { isServer } from '../../utils/isServer';
 import Groups from './content/Groups';
 import Navigator from './content/Navigator';
 import User from './content/User';
@@ -8,7 +9,7 @@ import User from './content/User';
 const WEEK_WIDTH = 50;
 
 let focusWeek;
-let isDesktop = window.innerWidth > 450;
+let isDesktop = isServer() ? false : window.innerWidth > 450;
 
 export default class ProgressCalendar extends Component {
     static dateInterval(dateStart, dateEnd) {
@@ -104,10 +105,12 @@ export default class ProgressCalendar extends Component {
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchEnd = this.handleTouchEnd.bind(this);
 
-        window.addEventListener('orientationchange', () => {
-            isDesktop = window.screen.availWidth > 450;
-            this.forceUpdate();
-        });
+        if (!isServer()) {
+            window.addEventListener('orientationchange', () => {
+                isDesktop = window.screen.availWidth > 450;
+                this.forceUpdate();
+            });
+        }
     }
 
     componentDidMount() {
@@ -624,7 +627,7 @@ ProgressCalendar.defaultProps = {
     data: null,
     columns: {
         names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],
-        highlightedColor: chayns.env.site.color,
+        highlightedColor: isServer() ? undefined : chayns.env.site.color,
     },
     groups: [],
     focus: new Date(),
