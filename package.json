@@ -15,7 +15,9 @@
     },
     "license": "MIT",
     "author": "Tobit.Software",
-    "sideEffects": false,
+    "sideEffects": [
+        "*.css"
+    ],
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "files": [
@@ -126,8 +128,8 @@
         "webpack-dev-server": "^3.11.0"
     },
     "peerDependencies": {
-        "react": "^16.8.0",
-        "react-dom": "^16.8.0"
+        "react": ">=16.8.0",
+        "react-dom": ">=16.8.0"
     },
     "optionalDependencies": {
         "emojione": "^3.1.7"
