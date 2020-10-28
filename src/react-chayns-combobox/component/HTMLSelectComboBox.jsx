@@ -20,21 +20,36 @@ export default class HTMLSelectComboBox extends PureComponent {
 
     render() {
         const {
-            className, label, list, disabled, listValue, listKey, stopPropagation, defaultValue,
+            className,
+            label,
+            list,
+            disabled,
+            listValue,
+            listKey,
+            stopPropagation,
+            defaultValue,
         } = this.props;
         return (
-            <div className={classNames('select', className, { 'select--disabled': disabled })}>
+            <div
+                className={classNames('select', className, {
+                    'select--disabled': disabled,
+                })}
+            >
                 <select
                     disabled={disabled}
                     onChange={this.onSelect}
                     defaultValue={label ? 'ComboBoxLabel' : defaultValue}
-                    onClick={stopPropagation ? (event) => event.stopPropagation() : null}
-                >
-                    {
-                        label
-                            ? <option value="ComboBoxLabel" disabled>{label}</option>
+                    onClick={
+                        stopPropagation
+                            ? (event) => event.stopPropagation()
                             : null
                     }
+                >
+                    {label ? (
+                        <option value="ComboBoxLabel" disabled>
+                            {label}
+                        </option>
+                    ) : null}
                     {list.map((item) => (
                         <option key={item[listKey]} value={item[listKey]}>
                             {item[listValue]}
