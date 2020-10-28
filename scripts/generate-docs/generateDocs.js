@@ -4,7 +4,7 @@ const glob = require('fast-glob');
 const docGen = require('react-docgen');
 const path = require('path');
 const prettier = require('prettier');
-const { kebabCase } = require('lodash');
+const { paramCase } = require('param-case');
 const { outputFile, readFile } = require('fs-extra');
 
 const componentRegex = /^\/\*\*.*@component(?: \{(.*?)\})?.*?\*\//s;
@@ -129,7 +129,7 @@ module.exports = async function generateDocs() {
         });
 
         await outputFile(
-            path.resolve(`docs/components/${kebabCase(displayName)}.md`),
+            path.resolve(`docs/components/${paramCase(displayName)}.md`),
             formattedDocs
         );
     });
@@ -141,7 +141,7 @@ module.exports = async function generateDocs() {
 
     const componentList = components.reduce(
         (prev, { info: { displayName, description } }) => {
-            const outputPath = `docs/components/${kebabCase(displayName)}.md`;
+            const outputPath = `docs/components/${paramCase(displayName)}.md`;
             const descriptionWithoutLinebreaks = description.replace(
                 /\r\n|\r|\n/g,
                 ' '
