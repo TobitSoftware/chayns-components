@@ -9,7 +9,7 @@ import { Input } from '../../../src';
 export default class ExampleList extends Component {
     state = {
         open: null,
-        searchValue: '',
+        searchValue: 'VideoPlayer',
     };
 
     constructor(props) {

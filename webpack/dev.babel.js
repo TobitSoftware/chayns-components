@@ -8,8 +8,8 @@ const ROOT_PATH = path.resolve('.');
 let sslCert;
 let sslKey;
 try {
-    sslCert = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.crt'));
-    sslKey = fs.readFileSync(path.join(__dirname, 'ssl', 'ssl.key'));
+    sslCert = fs.readFileSync('//fs1/ssl/tobitag.crt');
+    sslKey = fs.readFileSync('//fs1/ssl/tobitag.key');
 } catch (err) {
     sslCert = null;
     sslKey = null;

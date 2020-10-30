@@ -1,0 +1,17 @@
+.video-player {
+    position: relative;
+    video {
+        width: 100%;
+    }
+
+    .icon-wrapper {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+
+        .react-chayns-icon {
+            font-size: 30px;
+            color: white;
+        }
+    }
+}

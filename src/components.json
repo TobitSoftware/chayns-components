@@ -280,5 +280,11 @@
         "title": "SearchBox",
         "example": "react-chayns-searchbox/Example.jsx",
         "readme": true
+    },
+    {
+        "id": "react-chayns-videoplayer",
+        "title": "VideoPlayer",
+        "example": "react-chayns-videoplayer/Example.jsx",
+        "readme": true
     }
 ]

@@ -81,6 +81,7 @@ export { default as TextArea } from './react-chayns-textarea/component/TextArea'
 export { default as TextString } from './react-chayns-textstring/component/TextString';
 export { default as Tooltip } from './react-chayns-tooltip/component/Tooltip';
 export { default as resolveAbsoluteImport } from './utils/babel/resolveAbsoluteImport';
+export { default as VideoPlayer } from './react-chayns-videoplayer/component/VideoPlayer';
 export { default as createLinks } from './utils/createLinks';
 export { default as equalizer } from './utils/equalizer';
 export { default as imageUpload } from './utils/imageUpload';
