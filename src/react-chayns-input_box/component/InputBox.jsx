@@ -1,225 +1,136 @@
+import { useRect } from '@reach/rect';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
-import isDescendant from '../../utils/isDescendant';
 
-export default class InputBox extends Component {
-    references = {
-        box: null,
-        wrapper: null,
-    };
+const InputBox = ({
+    inputComponent: InputComponent,
+    children,
+    parent,
+    inputRef,
+    onFocus,
+    className,
+    overlayProps,
+    boxClassName,
+    style,
+    onBlur,
+    ...props
+}) => {
+    const wrapperRef = useRef();
+    const boxRef = useRef();
 
-    constructor(props) {
-        super(props);
+    const [isHidden, setIsHidden] = useState(true);
 
-        this.setWrapperRef = this.setRef.bind(this, 'wrapper');
-        this.setBoxRef = this.setBoxRef.bind(this);
-        this.handleBlur = this.handleBlur.bind(this);
-        this.handleFocus = this.handleFocus.bind(this);
-        this.updatePosition = this.updatePosition.bind(this);
-        this.blur = this.blur.bind(this);
-        this.focus = this.focus.bind(this);
-        this.handleKeyDown = this.handleKeyDown.bind(this);
+    const rect = useRect(wrapperRef);
 
-        this.state = {
-            hidden: true,
-            position: null,
+    useEffect(() => {
+        function handleBlur(event) {
+            if (isHidden) return;
+
+            if (
+                wrapperRef.current?.contains(event.target) ||
+                boxRef.current?.contains(event.target)
+            ) {
+                return;
+            }
+
+            setIsHidden(true);
+
+            if (onBlur && isFunction(onBlur)) {
+                onBlur(event);
+            }
+        }
+
+        function hide() {
+            setIsHidden(true);
+        }
+
+        function handleKeyDown({ keyCode, target }) {
+            if (keyCode === 9 && wrapperRef.current?.contains(target)) {
+                hide();
+            }
+        }
+
+        document.addEventListener('mousedown', handleBlur);
+        document.addEventListener('touchstart', handleBlur);
+
+        window.addEventListener('blur', hide);
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleBlur);
+            document.removeEventListener('touchstart', handleBlur);
+
+            window.removeEventListener('blur', hide);
+            window.removeEventListener('keydown', handleKeyDown);
         };
-    }
+    }, [isHidden, onBlur]);
 
-    componentDidMount() {
-        document.addEventListener('mousedown', this.handleBlur);
-        document.addEventListener('touchstart', this.handleBlur);
-
-        window.addEventListener('blur', this.blur);
-        window.addEventListener('keydown', this.handleKeyDown);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleBlur);
-        document.removeEventListener('touchstart', this.handleBlur);
-
-        window.removeEventListener('blur', this.blur);
-        window.removeEventListener('keydown', this.handleKeyDown);
-    }
-
-    setRef(name, ref) {
-        this.references[name] = ref;
-    }
-
-    setBoxRef(ref) {
-        const { overlayProps } = this.props;
-
-        this.references.box = ref;
-
-        if (overlayProps && overlayProps.ref) {
-            overlayProps.ref(ref);
-        }
-    }
-
-    handleBlur(e) {
-        const { hidden } = this.state;
-        const { onBlur } = this.props;
-        if (hidden) {
-            return;
-        }
-
-        if (
-            e.target === this.references.wrapper ||
-            e.target === this.references.box
-        ) {
-            return;
-        }
-
-        if (
-            isDescendant(this.references.wrapper, e.target) ||
-            isDescendant(this.references.box, e.target)
-        ) {
-            return;
-        }
-
-        this.setState({
-            hidden: true,
-        });
-
-        if (onBlur && isFunction(onBlur)) {
-            onBlur(e);
-        }
-    }
-
-    blur() {
-        this.setState({
-            hidden: true,
-        });
-    }
-
-    async handleFocus(e) {
-        const { onFocus } = this.props;
-
-        await this.updatePosition();
-
-        this.setState({
-            hidden: false,
-        });
+    function handleFocus(e) {
+        setIsHidden(false);
 
         if (onFocus) {
             return onFocus(e);
         }
-
         return null;
     }
 
-    focus() {
-        this.setState({
-            hidden: false,
-        });
+    const setBoxRef = useCallback(
+        (node) => {
+            boxRef.current = node;
+
+            if (overlayProps?.ref) {
+                overlayProps.ref(node);
+            }
+        },
+        [overlayProps]
+    );
+
+    if (!InputComponent) {
+        return null;
     }
 
-    handleKeyDown({ keyCode, target }) {
-        if (keyCode === 9 && isDescendant(this.references.wrapper, target)) {
-            this.blur();
-        }
-    }
-
-    async updatePosition() {
-        let { parent } = this.props;
-        parent =
-            parent ||
-            document.getElementsByClassName('tapp')[0] ||
-            document.body;
-        const parentRect = parent.getBoundingClientRect();
-
-        if (!this.references.wrapper) {
-            this.setState({
-                position: null,
-            });
-            return;
-        }
-
-        const rect = this.references.wrapper.getBoundingClientRect();
-        let { bottom } = rect;
-
-        if (chayns.env.isApp) {
-            const { pageYOffset } = await chayns.getWindowMetrics();
-            bottom += pageYOffset;
-        } else {
-            bottom -= parentRect.top;
-        }
-
-        this.setState({
-            position: {
-                width: rect.width,
-                left: rect.left - parentRect.left,
-                bottom,
-            },
-        });
-    }
-
-    render() {
-        const {
-            inputComponent: InputComponent,
-            children,
-            parent,
-            inputRef,
-            onFocus,
-            className,
-            overlayProps,
-            boxClassName,
-            style,
-            ...props
-        } = this.props;
-        const { hidden, position } = this.state;
-
-        if (!InputComponent) {
-            return null;
-        }
-
-        return (
-            <div
-                style={{
-                    display: 'inline-block',
-                    ...style,
-                }}
-                className={classnames('cc__input-box', className)}
-                ref={this.setWrapperRef}
-            >
-                <InputComponent
-                    {...props}
-                    ref={inputRef}
-                    onFocus={this.handleFocus}
-                />
-                <TappPortal parent={parent}>
-                    {!!(position && !hidden && children) && (
-                        <div
-                            onClick={(e) => e.preventDefault()}
-                            className={classnames(
-                                'cc__input-box__overlay',
-                                'scrollbar',
-                                boxClassName
-                            )}
-                            style={
-                                position
-                                    ? {
-                                          width: `${position.width}px`,
-                                          top: `${position.bottom}px`,
-                                          left: `${position.left}px`,
-                                      }
-                                    : null
-                            }
-                            {...overlayProps}
-                            ref={this.setBoxRef}
-                        >
-                            {children}
-                        </div>
-                    )}
-                </TappPortal>
-            </div>
-        );
-    }
-}
+    return (
+        <div
+            style={{
+                display: 'inline-block',
+                ...style,
+            }}
+            className={classnames('cc__input-box', className)}
+            ref={wrapperRef}
+        >
+            <InputComponent {...props} ref={inputRef} onFocus={handleFocus} />
+            <TappPortal parent={parent}>
+                {!!(rect && !isHidden && children) && (
+                    <div
+                        onClick={(e) => e.preventDefault()}
+                        className={classnames(
+                            'cc__input-box__overlay',
+                            'scrollbar',
+                            boxClassName
+                        )}
+                        style={
+                            rect
+                                ? {
+                                      width: `${rect.width}px`,
+                                      top: `${rect.bottom}px`,
+                                      left: `${rect.left}px`,
+                                  }
+                                : null
+                        }
+                        {...overlayProps}
+                        ref={setBoxRef}
+                    >
+                        {children}
+                    </div>
+                )}
+            </TappPortal>
+        </div>
+    );
+};
 
 InputBox.propTypes = {
     onBlur: PropTypes.func,
@@ -257,3 +168,5 @@ InputBox.defaultProps = {
 };
 
 InputBox.displayName = 'InputBox';
+
+export default InputBox;

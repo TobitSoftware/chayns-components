@@ -1,38 +1,37 @@
-import React, { PureComponent } from 'react';
-
+import React, { useState } from 'react';
 import { Input } from '../../src/index';
 import InputBox from '../../src/react-chayns-input_box/component/InputBox';
 
-export default class InputBoxExample extends PureComponent {
-    state = {
-        value: '',
-    };
+const InputBoxExample = () => {
+    const [value, setValue] = useState('');
 
-    constructor(props) {
-        super(props);
-
-        this.onChange = this.onChange.bind(this);
-    }
-
-    onChange(value) {
-        this.setState({
-            value,
-        });
-    }
-
-    render() {
-        const { value } = this.state;
-
-        return (
+    return (
+        <div>
             <InputBox
                 type="password"
                 inputComponent={Input}
                 value={value}
-                onChange={this.onChange}
+                onChange={setValue}
                 placeholder="input"
             >
                 {`Password: ${value}`}
             </InputBox>
-        );
-    }
-}
+            <div style={{ height: 20 }} />
+            <div style={{ height: 300, padding: '20px 0', overflowY: 'auto' }}>
+                <div style={{ height: 500 }}>
+                    <InputBox
+                        type="password"
+                        inputComponent={Input}
+                        value={value}
+                        onChange={setValue}
+                        placeholder="input"
+                    >
+                        {`Password: ${value}`}
+                    </InputBox>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default InputBoxExample;
