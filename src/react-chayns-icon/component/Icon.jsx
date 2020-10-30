@@ -2,9 +2,9 @@
  * @component
  */
 
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { isString } from '../../utils/is';
 
 let displayedIconWarning = false;
@@ -82,7 +82,14 @@ export default class Icon extends Component {
             'react-chayns-icon--disabled': disabled,
         });
 
-        return <i className={classes} onClick={this.onClick} {...other} />;
+        return (
+            <i
+                className={classes}
+                style={style}
+                onClick={this.onClick}
+                {...other}
+            />
+        );
     }
 }
 
