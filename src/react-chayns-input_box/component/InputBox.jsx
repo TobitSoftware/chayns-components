@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
+import { isServer } from '../../utils/isServer';
 
 const InputBox = ({
     inputComponent: InputComponent,
@@ -21,6 +22,40 @@ const InputBox = ({
 }) => {
     const wrapperRef = useRef();
     const boxRef = useRef();
+
+    const [parentElement, setParentElement] = useState(() =>
+        isServer() ? null : document.createElement('div')
+    );
+
+    useEffect(
+        function populateParentElement() {
+            if (!parentElement) {
+                setParentElement(document.createElement('div'));
+            }
+        },
+        [parentElement]
+    );
+
+    useEffect(
+        // eslint-disable-next-line consistent-return
+        function mountParentDiv() {
+            if (parentElement) {
+                parentElement.style.position = 'absolute';
+                parentElement.style.top = 0;
+                parentElement.style.right = 0;
+                parentElement.style.bottom = 0;
+                parentElement.style.left = 0;
+                parentElement.style.pointerEvents = 'none';
+
+                document.body.appendChild(parentElement);
+
+                return () => {
+                    parentElement.remove();
+                };
+            }
+        },
+        [parentElement]
+    );
 
     const [isHidden, setIsHidden] = useState(true);
 
@@ -93,6 +128,14 @@ const InputBox = ({
         return null;
     }
 
+    const positionStyles = rect
+        ? {
+              width: `${rect.width}px`,
+              top: `${rect.bottom}px`,
+              left: `${rect.left}px`,
+          }
+        : null;
+
     return (
         <div
             style={{
@@ -103,7 +146,7 @@ const InputBox = ({
             ref={wrapperRef}
         >
             <InputComponent {...props} ref={inputRef} onFocus={handleFocus} />
-            <TappPortal parent={parent}>
+            <TappPortal parent={parentElement}>
                 {!!(rect && !isHidden && children) && (
                     <div
                         onClick={(e) => e.preventDefault()}
@@ -112,15 +155,11 @@ const InputBox = ({
                             'scrollbar',
                             boxClassName
                         )}
-                        style={
-                            rect
-                                ? {
-                                      width: `${rect.width}px`,
-                                      top: `${rect.bottom}px`,
-                                      left: `${rect.left}px`,
-                                  }
-                                : null
-                        }
+                        style={{
+                            ...positionStyles,
+                            pointerEvents: 'auto',
+                            ...overlayProps?.style,
+                        }}
                         {...overlayProps}
                         ref={setBoxRef}
                     >
