@@ -1,30 +1,51 @@
 import { useRect } from '@reach/rect';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from 'react';
+import Overlay from '../../components/overlay/Overlay';
 import Input from '../../react-chayns-input/component/Input';
-import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import { isFunction } from '../../utils/is';
 
-const InputBox = ({
-    inputComponent: InputComponent,
-    children,
-    parent,
-    inputRef,
-    onFocus,
-    className,
-    overlayProps,
-    boxClassName,
-    style,
-    onBlur,
-    ...props
-}) => {
+const InputBox = React.forwardRef((props, ref) => {
+    const {
+        inputComponent: InputComponent,
+        children,
+        parent,
+        inputRef,
+        onFocus,
+        className,
+        overlayProps,
+        boxClassName,
+        style,
+        onBlur,
+        ...restProps
+    } = props;
+
     const wrapperRef = useRef();
     const boxRef = useRef();
 
     const [isHidden, setIsHidden] = useState(true);
 
     const rect = useRect(wrapperRef);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            focus() {
+                setIsHidden(false);
+            },
+            blur() {
+                setIsHidden(true);
+            },
+        }),
+        []
+    );
 
     useEffect(() => {
         function handleBlur(event) {
@@ -93,6 +114,14 @@ const InputBox = ({
         return null;
     }
 
+    const positionStyles = rect
+        ? {
+              width: `${rect.width}px`,
+              top: `${rect.bottom}px`,
+              left: `${rect.left}px`,
+          }
+        : null;
+
     return (
         <div
             style={{
@@ -102,8 +131,12 @@ const InputBox = ({
             className={classnames('cc__input-box', className)}
             ref={wrapperRef}
         >
-            <InputComponent {...props} ref={inputRef} onFocus={handleFocus} />
-            <TappPortal parent={parent}>
+            <InputComponent
+                {...restProps}
+                ref={inputRef}
+                onFocus={handleFocus}
+            />
+            <Overlay parent={parent}>
                 {!!(rect && !isHidden && children) && (
                     <div
                         onClick={(e) => e.preventDefault()}
@@ -112,25 +145,20 @@ const InputBox = ({
                             'scrollbar',
                             boxClassName
                         )}
-                        style={
-                            rect
-                                ? {
-                                      width: `${rect.width}px`,
-                                      top: `${rect.bottom}px`,
-                                      left: `${rect.left}px`,
-                                  }
-                                : null
-                        }
+                        style={{
+                            ...positionStyles,
+                            ...overlayProps?.style,
+                        }}
                         {...overlayProps}
                         ref={setBoxRef}
                     >
                         {children}
                     </div>
                 )}
-            </TappPortal>
+            </Overlay>
         </div>
     );
-};
+});
 
 InputBox.propTypes = {
     onBlur: PropTypes.func,
