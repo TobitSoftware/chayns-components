@@ -4,102 +4,83 @@
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
+
+let currentId = 0;
 
 /**
  * A floating bubble that is primarily used to power the `ContextMenu` and
  * `Tooltip` components.
  */
-export default class Bubble extends PureComponent {
-    static isPositionBottom(position) {
-        const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;
+const Bubble = React.forwardRef((props, ref) => {
+    const {
+        position,
+        parent,
+        topDivStyle,
+        onMouseEnter,
+        onMouseLeave,
+        className,
+        children,
+        style,
+        coordinates,
+    } = props;
 
-        return (
-            [BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT].indexOf(position) !== -1
-        );
-    }
+    const bubbleRef = useRef();
+    const [key] = useState(() => `cc__bubble${++currentId}`);
 
-    constructor(props) {
-        super(props);
+    const timeoutRef = useRef();
 
-        this.key = Math.random().toString();
-        this.bubbleNode = React.createRef();
+    useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
-        this.state = {
-            isActive: false,
-            isHidden: true,
-        };
-    }
+    const [isActive, setIsActive] = useState(false);
+    const [isHidden, setIsHidden] = useState(true);
 
-    componentWillUnmount() {
-        clearTimeout(this.timeout);
-    }
+    useImperativeHandle(
+        ref,
+        () => ({
+            show() {
+                setIsHidden(false);
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = setTimeout(() => setIsActive(true));
+            },
+            hide() {
+                setIsActive(false);
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = setTimeout(() => setIsHidden(true), 500);
+            },
+        }),
+        []
+    );
 
-    show = () => {
-        clearTimeout(this.timeout);
+    const bubbleClasses = classNames(
+        `cc__bubble cc__bubble--position${position}`,
+        isActive && 'cc__bubble--active',
+        isHidden && 'cc__bubble--hide'
+    );
 
-        this.setState({ isHidden: false });
+    const { x, y } = coordinates;
 
-        this.timeout = setTimeout(() => {
-            this.setState({ isActive: true });
-        });
-    };
-
-    hide = () => {
-        clearTimeout(this.timeout);
-
-        this.setState({ isActive: false });
-
-        this.timeout = setTimeout(() => {
-            this.setState({ isHidden: true });
-        }, 500);
-    };
-
-    render() {
-        const {
-            position,
-            parent,
-            children,
-            coordinates: { x, y },
-            style,
-            className,
-            onMouseEnter,
-            onMouseLeave,
-            topDivStyle,
-        } = this.props;
-
-        const { isActive, isHidden } = this.state;
-
-        const bubbleClasses = classNames(
-            `cc__bubble cc__bubble--position${position}`,
-            {
-                'cc__bubble--active': isActive,
-                'cc__bubble--hide': isHidden,
-            }
-        );
-
-        return (
-            <TappPortal parent={parent}>
+    return (
+        <TappPortal parent={parent}>
+            <div
+                className={bubbleClasses}
+                style={{ top: `${y}px`, left: `${x}px`, ...topDivStyle }}
+                ref={bubbleRef}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                key={key}
+            >
                 <div
-                    className={bubbleClasses}
-                    style={{ top: `${y}px`, left: `${x}px`, ...topDivStyle }}
-                    ref={this.bubbleNode}
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                    key={`cc__bubble${this.key}`}
+                    className={classNames('cc__bubble__overlay', className)}
+                    style={style}
                 >
-                    <div
-                        className={classNames('cc__bubble__overlay', className)}
-                        style={style}
-                    >
-                        {children}
-                    </div>
+                    {children}
                 </div>
-            </TappPortal>
-        );
-    }
-}
+            </div>
+        </TappPortal>
+    );
+});
 
 Bubble.position = {
     TOP_LEFT: 0,
@@ -108,6 +89,12 @@ Bubble.position = {
     TOP_RIGHT: 3,
     TOP_CENTER: 4,
     BOTTOM_CENTER: 5,
+};
+
+Bubble.isPositionBottom = (position) => {
+    const { BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT } = Bubble.position;
+
+    return [BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT].includes(position);
 };
 
 Bubble.propTypes = {
@@ -185,3 +172,5 @@ Bubble.defaultProps = {
 };
 
 Bubble.displayName = 'Bubble';
+
+export default Bubble;
