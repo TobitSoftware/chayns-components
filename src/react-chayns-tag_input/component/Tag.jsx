@@ -1,7 +1,6 @@
-import React, { PureComponent } from 'react';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
-
+import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Tag extends PureComponent {

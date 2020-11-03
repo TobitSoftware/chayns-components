@@ -45,7 +45,7 @@
         "abortcontroller-polyfill": "^1.5.0",
         "boxen": "^4.2.0",
         "chalk": "^4.1.0",
-        "classnames": "^2.2.6",
+        "clsx": "^1.1.1",
         "coordinate-parser": "^1.0.7",
         "lodash.debounce": "^4.0.8",
         "lodash.isequal": "^4.5.0",

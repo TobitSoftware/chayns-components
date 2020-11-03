@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import ContextMenu from '../../react-chayns-contextmenu/component/ContextMenu';

@@ -2,9 +2,9 @@
  * @component
  */
 
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 const DEFAULT_STYLE = {
     width: '100%',

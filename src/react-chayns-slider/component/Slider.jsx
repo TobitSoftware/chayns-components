@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { isNumber } from '../../utils/is';

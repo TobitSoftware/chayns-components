@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import equalizer from '../../utils/equalizer';
-
+import React, { PureComponent } from 'react';
 import Input from '../../react-chayns-input/component/Input';
+import equalizer from '../../utils/equalizer';
 
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 

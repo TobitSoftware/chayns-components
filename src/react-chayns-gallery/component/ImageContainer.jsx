@@ -1,10 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import './ImageContainer.scss';
+import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 import { isString } from '../../utils/is';
+import './ImageContainer.scss';
 
 export default class ImageContainer extends PureComponent {
     render() {

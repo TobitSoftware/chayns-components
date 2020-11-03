@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,class-methods-use-this */
-import React, { Component } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
+import React, { Component } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
+import RadioButton from '../../react-chayns-radiobutton/component/RadioButton';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 
 export default class ModeSwitch extends Component {

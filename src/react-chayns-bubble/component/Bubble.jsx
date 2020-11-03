@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,no-return-assign,react/forbid-prop-types */
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';

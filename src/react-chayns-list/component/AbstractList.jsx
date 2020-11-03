@@ -1,6 +1,6 @@
-import React from 'react';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import React from 'react';
 
 const AbstractList = ({ className, children }) => (
     <div className={classnames('cc__list', className)}>{children}</div>

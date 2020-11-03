@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';

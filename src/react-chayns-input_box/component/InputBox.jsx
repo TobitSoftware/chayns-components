@@ -1,5 +1,5 @@
 import { useRect } from '@reach/rect';
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, {
     useCallback,

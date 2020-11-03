@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import Icon from '../../../react-chayns-icon/component/Icon';

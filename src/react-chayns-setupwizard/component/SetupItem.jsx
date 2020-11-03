@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { isDisabled } from '../utils/setupWizardHelper';

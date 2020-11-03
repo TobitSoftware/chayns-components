@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 
-import React, { useCallback } from 'react';
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
 

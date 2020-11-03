@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class ControlButton extends PureComponent {

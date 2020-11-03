@@ -2,7 +2,7 @@
  * @component
  */
 
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ListItemHeader from './ListItemHeader';

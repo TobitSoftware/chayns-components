@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
-
-import ExpandableContext from './ExpandableContext';
+import React, { Component } from 'react';
 import AbstractList from '../AbstractList';
+import ExpandableContext from './ExpandableContext';
 
 export default class ExpandableList extends Component {
     constructor(props) {

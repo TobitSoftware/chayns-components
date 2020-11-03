@@ -2,7 +2,7 @@
  * @component
  */
 
-import classNames from 'classnames';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { forwardRef } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';

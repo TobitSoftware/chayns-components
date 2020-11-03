@@ -1,7 +1,7 @@
 /* eslint-disable max-len,react/forbid-prop-types */
-import React, { Component } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { Component } from 'react';
 import { hexStringToRgb } from '../../../utils/color';
 
 export default class Week extends Component {

@@ -1,6 +1,6 @@
-import React from 'react';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import React from 'react';
 
 const DEFAULT_HINT_TEXT =
     'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.';

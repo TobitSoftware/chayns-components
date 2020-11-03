@@ -2,7 +2,7 @@
  * @component
  */
 
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';

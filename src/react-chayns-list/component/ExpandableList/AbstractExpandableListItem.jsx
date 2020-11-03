@@ -1,9 +1,8 @@
-import React, { PureComponent } from 'react';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
-
-import connectExpandableContext from './connectExpandableContext';
+import React, { PureComponent } from 'react';
 import ExpandableContent from '../../../react-chayns-expandable_content/component/ExpandableContent';
+import connectExpandableContext from './connectExpandableContext';
 import ExpandableContext from './ExpandableContext';
 
 let maxId = 1;

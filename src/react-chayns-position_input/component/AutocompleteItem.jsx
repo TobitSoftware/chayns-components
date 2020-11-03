@@ -1,6 +1,6 @@
-import React from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React from 'react';
 
 const AutocompleteItem = ({ index, onClick, address }) => (
     <div

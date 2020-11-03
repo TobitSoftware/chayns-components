@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Button from '../../react-chayns-button/component/Button';
+import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import isDescendant from '../../utils/isDescendant';
-import Icon from '../../react-chayns-icon/component/Icon';
 
 const DialogSelectComboBox = ({
     className,

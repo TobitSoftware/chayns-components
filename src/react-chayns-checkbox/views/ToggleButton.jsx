@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control,react/forbid-prop-types */
-import classnames from 'classnames';
+import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import stopPropagationListener from '../../utils/stopPropagationListener';

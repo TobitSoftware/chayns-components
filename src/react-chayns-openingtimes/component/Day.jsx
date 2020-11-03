@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import TimeSpan from './TimeSpan';
+import React, { Component } from 'react';
+import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 import Icon from '../../react-chayns-icon/component/Icon';
-import ChooseButton from '../../react-chayns-button/component/ChooseButton';
 import checkDay from '../utils/checkDay';
+import TimeSpan from './TimeSpan';
 
 const PLACEHOLDER_STYLE = { width: 23 };
 

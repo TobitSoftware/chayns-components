@@ -1,11 +1,10 @@
-import React from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import WaitCursor from './WaitCursor';
+import React from 'react';
+import Divider from './Divider';
 import LoadMore from './LoadMore';
 import PersonFinderResultItem from './PersonFinderResultItem';
-import Divider from './Divider';
+import WaitCursor from './WaitCursor';
 
 const ResultItemList = ({
     className,

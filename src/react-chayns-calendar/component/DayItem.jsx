@@ -1,8 +1,7 @@
 /* eslint-disable react/no-array-index-key, jsx-a11y/click-events-have-key-events,react/forbid-prop-types,no-underscore-dangle */
-import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
+import React, { PureComponent } from 'react';
 import areDatesEqual from '../utils/areDatesEqual';
 
 class DayItem extends PureComponent {

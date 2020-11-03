@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { PureComponent } from 'react';
 
 export default class Groups extends PureComponent {
     render() {
