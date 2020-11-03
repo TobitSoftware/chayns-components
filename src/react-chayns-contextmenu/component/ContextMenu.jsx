@@ -18,283 +18,269 @@ import Icon from '../../react-chayns-icon/component/Icon';
  * Gives people access to additional functionality related to onscreen items
  * without cluttering the interface.
  */
-const ContextMenu = React.forwardRef(
-    (
-        {
-            parent,
-            position: userPosition,
-            minWidth,
-            maxWidth,
-            className,
-            items,
-            stopPropagation,
-            childrenStyle,
-            childrenClassName,
-            showTriggerBackground,
-            children,
-            style,
-            onChildrenClick,
-            disableDialog,
-            onLayerClick,
-            removeParentSpace,
-            coordinates,
-            positionOnChildren,
-            arrowDistance,
-        },
-        ref
-    ) => {
-        const bubbleRef = useRef();
-        const childrenRef = useRef();
+const ContextMenu = React.forwardRef((props, ref) => {
+    const {
+        parent,
+        position: userPosition,
+        minWidth,
+        maxWidth,
+        className,
+        items,
+        stopPropagation,
+        childrenStyle,
+        childrenClassName,
+        showTriggerBackground,
+        children,
+        style,
+        onChildrenClick,
+        disableDialog,
+        onLayerClick,
+        removeParentSpace,
+        coordinates,
+        positionOnChildren,
+        arrowDistance,
+    } = props;
 
-        const [isBubbleShown, setIsBubbleShown] = useState(false);
-        const [position, setPosition] = useState(null);
-        const [x, setX] = useState(0);
-        const [y, setY] = useState(0);
+    const bubbleRef = useRef();
+    const childrenRef = useRef();
 
-        /**
-         * Sync bubble with `isBubbleShown` state
-         */
-        useEffect(() => {
-            if (!bubbleRef.current) return;
+    const [isBubbleShown, setIsBubbleShown] = useState(false);
+    const [position, setPosition] = useState(null);
+    const [x, setX] = useState(0);
+    const [y, setY] = useState(0);
 
-            if (isBubbleShown) {
-                bubbleRef.current.show();
-            } else {
-                bubbleRef.current.hide();
-            }
-        }, [isBubbleShown]);
+    /**
+     * Sync bubble with `isBubbleShown` state
+     */
+    useEffect(() => {
+        if (!bubbleRef.current) return;
 
-        /**
-         * Update position of the bubble
-         */
-        useEffect(() => {
-            let newX = coordinates?.x || 0;
-            let top = coordinates?.y || 0;
-            let bottom = coordinates?.y || 0;
+        if (isBubbleShown) {
+            bubbleRef.current.show();
+        } else {
+            bubbleRef.current.hide();
+        }
+    }, [isBubbleShown]);
 
-            if (!coordinates && childrenRef.current) {
-                const rect = childrenRef.current.getBoundingClientRect();
-                if (
-                    positionOnChildren === ContextMenu.positionOnChildren.LEFT
-                ) {
-                    newX = rect.left + arrowDistance;
-                } else if (
-                    positionOnChildren === ContextMenu.positionOnChildren.CENTER
-                ) {
-                    newX = rect.left + rect.width / 2;
-                } else if (
-                    positionOnChildren === ContextMenu.positionOnChildren.RIGHT
-                ) {
-                    newX = rect.left + rect.width - arrowDistance;
-                }
-                top = rect.top;
-                bottom = rect.bottom;
-            }
+    /**
+     * Update position of the bubble
+     */
+    useEffect(() => {
+        let newX = coordinates?.x || 0;
+        let top = coordinates?.y || 0;
+        let bottom = coordinates?.y || 0;
 
-            let newPosition = userPosition;
-
-            if (newPosition === null) {
-                const shouldBeLeft = newX > window.innerWidth / 2;
-                const shouldBeTop = (top + bottom) / 2 > window.innerHeight / 2;
-
-                if (shouldBeLeft && shouldBeTop) {
-                    newPosition = ContextMenu.position.TOP_LEFT;
-                } else if (!shouldBeLeft && shouldBeTop) {
-                    newPosition = ContextMenu.position.TOP_RIGHT;
-                } else if (shouldBeLeft && !shouldBeTop) {
-                    newPosition = ContextMenu.position.BOTTOM_LEFT;
-                } else {
-                    newPosition = ContextMenu.position.BOTTOM_RIGHT;
-                }
-            }
-
-            let newY = Bubble.isPositionBottom(newPosition) ? bottom : top;
-
-            if (removeParentSpace) {
-                const parentRect = (
-                    parent ||
-                    document.getElementsByClassName('tapp')[0] ||
-                    document.body
-                ).getBoundingClientRect();
-                newX -= parentRect.left;
-                newY -= parentRect.top;
-            }
-
-            if (chayns.env.isApp) {
-                chayns.getWindowMetrics().then(({ pageYOffset }) => {
-                    setPosition(newPosition);
-                    setX(newX);
-                    setY(newY + pageYOffset);
-                });
-            } else {
-                setPosition(newPosition);
-                setX(newX);
-                setY(newY);
-            }
-        }, [
-            arrowDistance,
-            coordinates,
-            parent,
-            positionOnChildren,
-            removeParentSpace,
-            userPosition,
-            isBubbleShown,
-        ]);
-
-        /**
-         * Show the menu, either by opening a dialog or by showing the bubble.
-         */
-        const show = useCallback(async () => {
-            if (
-                !disableDialog &&
-                (chayns.env.isMobile || chayns.env.isTablet)
+        if (!coordinates && childrenRef.current) {
+            const rect = childrenRef.current.getBoundingClientRect();
+            if (positionOnChildren === ContextMenu.positionOnChildren.LEFT) {
+                newX = rect.left + arrowDistance;
+            } else if (
+                positionOnChildren === ContextMenu.positionOnChildren.CENTER
             ) {
-                const { buttonType, selection } = await chayns.dialog.select({
-                    type: 2,
-                    list: items.map(({ text, icon }, index) => ({
-                        name: text,
-                        value: index,
-                        icon:
-                            typeof icon === 'string'
-                                ? icon
-                                : `fa-${icon.iconName}`,
-                    })),
-                    buttons: [],
-                });
+                newX = rect.left + rect.width / 2;
+            } else if (
+                positionOnChildren === ContextMenu.positionOnChildren.RIGHT
+            ) {
+                newX = rect.left + rect.width - arrowDistance;
+            }
+            top = rect.top;
+            bottom = rect.bottom;
+        }
 
-                if (buttonType === 1 && selection?.[0]) {
-                    items[selection[0].value].onClick();
-                } else if (buttonType === -1 && onLayerClick) {
-                    onLayerClick();
-                }
+        let newPosition = userPosition;
+
+        if (newPosition === null) {
+            const shouldBeLeft = newX > window.innerWidth / 2;
+            const shouldBeTop = (top + bottom) / 2 > window.innerHeight / 2;
+
+            if (shouldBeLeft && shouldBeTop) {
+                newPosition = ContextMenu.position.TOP_LEFT;
+            } else if (!shouldBeLeft && shouldBeTop) {
+                newPosition = ContextMenu.position.TOP_RIGHT;
+            } else if (shouldBeLeft && !shouldBeTop) {
+                newPosition = ContextMenu.position.BOTTOM_LEFT;
             } else {
-                setIsBubbleShown(true);
-            }
-        }, [disableDialog, items, onLayerClick]);
-
-        const hide = useCallback(() => {
-            setIsBubbleShown(false);
-        }, []);
-
-        /**
-         * Expose the `show` and `hide` methods via ref.
-         */
-        useImperativeHandle(ref, () => ({ show, hide }), [hide, show]);
-
-        useEffect(() => {
-            window.addEventListener('blur', hide);
-
-            return () => {
-                window.removeEventListener('blur', hide);
-            };
-        }, [hide]);
-
-        /**
-         * Hides the bubble when is it opened and the page is clicked.
-         */
-        // eslint-disable-next-line consistent-return
-        useEffect(() => {
-            if (isBubbleShown) {
-                const handleLayerClick = (event) => {
-                    if (isBubbleShown) {
-                        if (onLayerClick) {
-                            onLayerClick(event);
-                        } else {
-                            hide();
-                        }
-                    }
-                };
-
-                document.addEventListener('click', handleLayerClick);
-
-                return () => {
-                    return document.removeEventListener(
-                        'click',
-                        handleLayerClick
-                    );
-                };
-            }
-        }, [hide, isBubbleShown, onLayerClick]);
-
-        function handleChildrenClick(event) {
-            if (onChildrenClick) {
-                onChildrenClick(event);
-            } else {
-                show();
-            }
-            if (stopPropagation) {
-                event.stopPropagation();
+                newPosition = ContextMenu.position.BOTTOM_RIGHT;
             }
         }
 
-        return (
-            <>
-                <Bubble
-                    coordinates={{ x, y }}
-                    parent={parent}
-                    position={position}
-                    style={{
-                        minWidth,
-                        maxWidth,
-                        ...style,
-                    }}
-                    key="bubble"
-                    ref={bubbleRef}
-                    className={className}
-                >
-                    <ul>
-                        {items.map((item, index) => (
-                            <li
-                                className={classNames(
-                                    'context-menu__item',
-                                    item.className
-                                )}
-                                onClick={(e) => {
-                                    if (stopPropagation) {
-                                        e.stopPropagation();
-                                    }
-                                    item.onClick(e);
-                                }}
-                                key={
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    (item.text.props &&
-                                    item.text.props.stringName
-                                        ? item.text.props.stringName
-                                        : item.text) + index
-                                }
-                            >
-                                {item.icon ? (
-                                    <div className="context-menu__item__icon">
-                                        <Icon icon={item.icon} />
-                                    </div>
-                                ) : null}
-                                <div className="context-menu__item__text">
-                                    {item.text}
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </Bubble>
-                {!coordinates && (
-                    <div
-                        key="cc__contextMenu__children"
-                        ref={childrenRef}
-                        onClick={handleChildrenClick}
-                        style={childrenStyle}
-                        className={classNames(
-                            childrenClassName,
-                            'accordion--no-trigger',
-                            'context-menu__children',
-                            { 'image-tool': showTriggerBackground }
-                        )}
-                    >
-                        {children}
-                    </div>
-                )}
-            </>
-        );
+        let newY = Bubble.isPositionBottom(newPosition) ? bottom : top;
+
+        if (removeParentSpace) {
+            const parentRect = (
+                parent ||
+                document.getElementsByClassName('tapp')[0] ||
+                document.body
+            ).getBoundingClientRect();
+            newX -= parentRect.left;
+            newY -= parentRect.top;
+        }
+
+        if (chayns.env.isApp) {
+            chayns.getWindowMetrics().then(({ pageYOffset }) => {
+                setPosition(newPosition);
+                setX(newX);
+                setY(newY + pageYOffset);
+            });
+        } else {
+            setPosition(newPosition);
+            setX(newX);
+            setY(newY);
+        }
+    }, [
+        arrowDistance,
+        coordinates,
+        parent,
+        positionOnChildren,
+        removeParentSpace,
+        userPosition,
+        isBubbleShown,
+    ]);
+
+    /**
+     * Show the menu, either by opening a dialog or by showing the bubble.
+     */
+    const show = useCallback(async () => {
+        if (!disableDialog && (chayns.env.isMobile || chayns.env.isTablet)) {
+            const { buttonType, selection } = await chayns.dialog.select({
+                type: 2,
+                list: items.map(({ text, icon }, index) => ({
+                    name: text,
+                    value: index,
+                    icon:
+                        typeof icon === 'string' ? icon : `fa-${icon.iconName}`,
+                })),
+                buttons: [],
+            });
+
+            if (buttonType === 1 && selection?.[0]) {
+                items[selection[0].value].onClick();
+            } else if (buttonType === -1 && onLayerClick) {
+                onLayerClick();
+            }
+        } else {
+            setIsBubbleShown(true);
+        }
+    }, [disableDialog, items, onLayerClick]);
+
+    const hide = useCallback(() => {
+        setIsBubbleShown(false);
+    }, []);
+
+    /**
+     * Expose the `show` and `hide` methods via ref.
+     */
+    useImperativeHandle(ref, () => ({ show, hide }), [hide, show]);
+
+    useEffect(() => {
+        window.addEventListener('blur', hide);
+
+        return () => {
+            window.removeEventListener('blur', hide);
+        };
+    }, [hide]);
+
+    /**
+     * Hides the bubble when is it opened and the page is clicked.
+     */
+    // eslint-disable-next-line consistent-return
+    useEffect(() => {
+        if (isBubbleShown) {
+            const handleLayerClick = (event) => {
+                if (isBubbleShown) {
+                    if (onLayerClick) {
+                        onLayerClick(event);
+                    } else {
+                        hide();
+                    }
+                }
+            };
+
+            document.addEventListener('click', handleLayerClick);
+
+            return () => {
+                return document.removeEventListener('click', handleLayerClick);
+            };
+        }
+    }, [hide, isBubbleShown, onLayerClick]);
+
+    function handleChildrenClick(event) {
+        if (onChildrenClick) {
+            onChildrenClick(event);
+        } else {
+            show();
+        }
+        if (stopPropagation) {
+            event.stopPropagation();
+        }
     }
-);
+
+    return (
+        <>
+            <Bubble
+                coordinates={{ x, y }}
+                parent={parent}
+                position={position}
+                style={{
+                    minWidth,
+                    maxWidth,
+                    ...style,
+                }}
+                key="bubble"
+                ref={bubbleRef}
+                className={className}
+            >
+                <ul>
+                    {items.map((item, index) => (
+                        <li
+                            className={classNames(
+                                'context-menu__item',
+                                item.className
+                            )}
+                            onClick={(e) => {
+                                if (stopPropagation) {
+                                    e.stopPropagation();
+                                }
+                                item.onClick(e);
+                            }}
+                            key={
+                                // eslint-disable-next-line react/no-array-index-key
+                                (item.text.props && item.text.props.stringName
+                                    ? item.text.props.stringName
+                                    : item.text) + index
+                            }
+                        >
+                            {item.icon ? (
+                                <div className="context-menu__item__icon">
+                                    <Icon icon={item.icon} />
+                                </div>
+                            ) : null}
+                            <div className="context-menu__item__text">
+                                {item.text}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </Bubble>
+            {!coordinates && (
+                <div
+                    key="cc__contextMenu__children"
+                    ref={childrenRef}
+                    onClick={handleChildrenClick}
+                    style={childrenStyle}
+                    className={classNames(
+                        childrenClassName,
+                        'accordion--no-trigger',
+                        'context-menu__children',
+                        { 'image-tool': showTriggerBackground }
+                    )}
+                >
+                    {children}
+                </div>
+            )}
+        </>
+    );
+});
 
 ContextMenu.position = Bubble.position;
 
