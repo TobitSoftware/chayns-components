@@ -35,7 +35,9 @@ const SearchBox = ({
             if (key === null || key === undefined) {
                 return {};
             }
-            return list.find((item) => String(item[listKey]) === String(key));
+            const res =  list.find((item) => String(item[listKey]) === String(key));
+
+            return res === undefined ? {} : res;
         },
         [list, listKey]
     );
