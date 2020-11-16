@@ -44,6 +44,7 @@ export default class SelectButton extends Component {
             title,
             description,
             list,
+            selectAllButton,
             onSelect,
             stopPropagation,
         } = this.props;
@@ -52,6 +53,7 @@ export default class SelectButton extends Component {
         chayns.dialog
             .select({
                 title,
+                selectAllButton,
                 message: description,
                 quickfind: quickFind,
                 multiselect: multiSelect,
@@ -211,6 +213,15 @@ SelectButton.propTypes = {
     quickFind: PropTypes.bool,
 
     /**
+     * Adds a checkbox with the given text of this property which allows you to
+     * enable and disable all elements of the select list at the same time.
+     * Based on the list items isSelected state the checkbox is enabled or
+     * disabled. If all elements of the list are selected, the checkbox will be
+     * checked.
+     */
+    selectAllButton: PropTypes.string,
+
+    /**
      * A classname string that will be applied to the button.
      */
     className: PropTypes.string,
@@ -246,6 +257,7 @@ SelectButton.defaultProps = {
     description: '',
     label: 'Select',
     showSelection: true,
+    selectAllButton: null,
     className: null,
     onSelect: null,
     disabled: false,
