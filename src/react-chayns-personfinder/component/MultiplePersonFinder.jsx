@@ -168,7 +168,6 @@ class MultiplePersonFinder extends Component {
         this.onChange(newValues);
 
         if (this.boxRef) {
-            this.boxRef.updatePosition();
             setImmediate(this.boxRef.focus);
         }
     }
