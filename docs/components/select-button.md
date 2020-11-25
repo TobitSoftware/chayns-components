@@ -46,6 +46,7 @@ The `SelectButton`-component takes the following props:
 | [selectedFlag](#selectedflag)           | `string`                              | `'isSelected'` |          |
 | [multiSelect](#multiselect)             | `boolean`                             | `false`        |          |
 | [quickFind](#quickfind)                 | `boolean`                             | `false`        |          |
+| [selectAllButton](#selectallbutton)     | `string`                              |                |          |
 | [className](#classname)                 | `string`                              |                |          |
 | [style](#style)                         | `{ [key: string]: number \| string }` |                |          |
 | [showSelection](#showselection)         | `boolean \| number`                   | `true`         |          |
@@ -160,6 +161,19 @@ quickFind?: boolean
 ```
 
 Wether a search field should be shown in the selection dialog.
+
+---
+
+### `selectAllButton`
+
+```ts
+selectAllButton?: string
+```
+
+Adds a checkbox with the given text of this property which allows you to enable
+and disable all elements of the select list at the same time. Based on the list
+items isSelected state the checkbox is enabled or disabled. If all elements of
+the list are selected, the checkbox will be checked.
 
 ---
 
