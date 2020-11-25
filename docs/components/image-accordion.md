@@ -36,4 +36,3 @@ The `ImageAccordion`-component takes the following props:
 
 | Name | Type | Default | Required |
 | ---- | ---- | ------- | :------: |
-

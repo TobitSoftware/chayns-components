@@ -111,7 +111,7 @@ We also provide a set of common utility functions:
 | [ColorUtils](/src/utils/color/README.md)       | Utility functions to convert color values (hex, rgb, hsv) |
 | [equalizer](/src/utils/equalizer.js)           | Utility functions to equalize the width of html elements  |
 
-## Development
+## Contributing
 
 If you want to contribute to `chayns-components`, check out the
 [CONTRIBUTING.md](/CONTRIBUTING.md) file.
