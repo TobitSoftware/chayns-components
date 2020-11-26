@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const clean = require('gulp-clean');
 const sass = require('gulp-sass');
+const sourcemaps = require('gulp-sourcemaps');
 const concatCss = require('gulp-concat-css');
 const path = require('path');
 const shell = require('gulp-shell');
@@ -35,10 +36,16 @@ gulp.task('transpile-esm', () =>
     gulp
         .src(jsSource)
         .pipe(
+            sourcemaps.init({
+                loadMaps: true,
+            })
+        )
+        .pipe(
             babel({
                 presets: [['./babelPreset.js', { cssImports: 'rename' }]],
             })
         )
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(esmDestination))
 );
 
@@ -56,10 +63,16 @@ gulp.task('transpile-esm-to-lib', () =>
     gulp
         .src(jsSource)
         .pipe(
+            sourcemaps.init({
+                loadMaps: true,
+            })
+        )
+        .pipe(
             babel({
                 presets: [['./babelPreset.js', { cssImports: 'rename' }]],
             })
         )
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('lib/'))
 );
 
@@ -82,12 +95,18 @@ gulp.task('transpile-cjs', () =>
     gulp
         .src(jsSource)
         .pipe(
+            sourcemaps.init({
+                loadMaps: true,
+            })
+        )
+        .pipe(
             babel({
                 presets: [
                     ['./babelPreset.js', { cjs: true, cssImports: 'rename' }],
                 ],
             })
         )
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(cjsDestination))
 );
 
@@ -105,12 +124,18 @@ gulp.task('transpile-cjs-split-css', () =>
     gulp
         .src(jsSource)
         .pipe(
+            sourcemaps.init({
+                loadMaps: true,
+            })
+        )
+        .pipe(
             babel({
                 presets: [
                     ['./babelPreset.js', { cjs: true, cssImports: 'remove' }],
                 ],
             })
         )
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/cjs-split-css/'))
 );
 
