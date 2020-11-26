@@ -18,6 +18,7 @@ const commonOptions = {
         format: 'umd',
         name: 'ChaynsComponents',
         globals: { react: 'React', 'react-dom': 'ReactDOM' },
+        sourcemap: true,
     },
     external: ['react', 'react-dom'],
     plugins: [
