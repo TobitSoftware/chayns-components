@@ -1,4 +1,7 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
+/**
+ * @component
+ */
+
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import isInIframeDialog from '../utils/isInIframeDialog';
@@ -81,7 +84,7 @@ ComboBox.propTypes = {
     /**
      * An array of values to select from.
      */
-    list: PropTypes.array.isRequired,
+    list: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 
     /**
      * The name of the property on the list objects that uniquely identifies an
