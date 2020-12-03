@@ -9,8 +9,10 @@ class FriendsHelper {
 
     static #eventEmitter = new EventEmitter();
 
+    static #initialized = false;
+
     static init = async () => {
-        if (!isServer()) {
+        if (!isServer() && !this.#initialized) {
             await window.chayns.ready;
             if (
                 window.chayns.env.user &&
@@ -26,6 +28,7 @@ class FriendsHelper {
                     FriendsHelper.#friends
                 );
             }
+            this.#initialized = true;
         }
     };
 
@@ -78,7 +81,5 @@ class FriendsHelper {
         isFriend: true,
     });
 }
-
-FriendsHelper.init();
 
 export default FriendsHelper;
