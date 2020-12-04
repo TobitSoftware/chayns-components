@@ -44,7 +44,7 @@ const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
                 {hasRelations && <Relation relation={data} />}
                 {!hasRelations && (
                     <div className="identifier">
-                        {`(${data[orm.identifier]})`}
+                        {`(${data[orm.subtitle || orm.identifier]})`}
                     </div>
                 )}
             </div>
