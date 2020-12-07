@@ -7,6 +7,7 @@ We are open to and grateful for any contributions made by the community.
 -   [Local Development](#local-development)
 -   [Storybook](#storybook)
 -   [Pull Requests](#pull-requests)
+-   [Publishing a New Version](#publishing-a-new-version)
 
 ## Local Development
 
@@ -65,3 +66,14 @@ and add the desired features yourself. Follow these steps:
 3. Create a pull request from your fork to the master branch of this repository
 
 > Please avoid including unrelated commits to your pull request.
+
+## Publishing a New Version
+
+> The following is only relevant for core contributors (members of the
+> TobitSoftware GitHub organization).
+
+To publish a new version of the `chayns-components`-package simply push a new
+Git-tag to the repository.
+
+`npm version` will create a tag automatically, so use this command to increase
+the version and push the created tag to publish a new version to npm.
