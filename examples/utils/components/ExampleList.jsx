@@ -69,6 +69,7 @@ export default class ExampleList extends Component {
                         customProps={{
                             autoFocus: true,
                         }}
+                        clearIcon
                         dynamic
                     />
                 )}
