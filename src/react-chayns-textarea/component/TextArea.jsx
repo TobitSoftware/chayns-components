@@ -19,6 +19,7 @@ const TextArea = ({
     className,
     placeholder,
     defaultValue,
+    design,
     onChange,
     autogrow,
     onBlur,
@@ -101,6 +102,7 @@ const TextArea = ({
         'input',
         {
             'input--disabled': disabled,
+            'input--border-design': design === TextArea.BORDER_DESIGN,
         },
         className
     );
@@ -125,6 +127,9 @@ const TextArea = ({
         />
     );
 };
+
+TextArea.DEFAULT_DESIGN = 0;
+TextArea.BORDER_DESIGN = 1;
 
 TextArea.propTypes = {
     /**
@@ -155,6 +160,12 @@ TextArea.propTypes = {
      * area with an error style when its empty.
      */
     required: PropTypes.bool,
+
+    /**
+     * The design of the input. Use either `TextArea.DEFAULT_DESIGN` or
+     * `TextArea.BORDER_DESIGN`.
+     */
+    design: PropTypes.number,
 
     /**
      * A callback that is invoked when the value of the `<textarea>` changes.
@@ -211,6 +222,7 @@ TextArea.defaultProps = {
     style: null,
     className: null,
     placeholder: null,
+    design: TextArea.DEFAULT_DESIGN,
     required: null,
     onChange: null,
     onBlur: null,

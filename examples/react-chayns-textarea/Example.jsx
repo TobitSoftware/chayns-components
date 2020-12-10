@@ -40,6 +40,16 @@ const TextAreaExample = () => {
                 defaultValue="Test"
                 autogrow
             />
+            <TextArea
+                stopPropagation
+                placeholder="Input"
+                onChange={(data) => {
+                    console.log(data);
+                }}
+                defaultValue="Test"
+                design={TextArea.BORDER_DESIGN}
+                autogrow
+            />
         </div>
     );
 };
