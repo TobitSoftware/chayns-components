@@ -7,7 +7,7 @@ import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/
 const customData = [
     {
         email: 'herrmann.muster@uni-muenster.de',
-        displayName: 'Herrmann Muster',
+        displayName: 'Herrmann Muster\u200b',
         imageUrl: 'https://sub60.tobit.com/u/-1',
         shortHand: 'HM',
         firstName: 'Herrmann',
@@ -15,7 +15,7 @@ const customData = [
     },
     {
         email: 'max.muster@tobit.software',
-        displayName: 'Max Muster',
+        displayName: 'Max Muster\u200b',
         imageUrl: 'https://sub60.tobit.com/u/-1',
         shortHand: 'MM',
         firstName: 'Max',
@@ -333,7 +333,7 @@ export default class PersonFinderExample extends PureComponent {
                     onChange={PersonFinderExample.handleSelect}
                     defaultValues={[
                         {
-                            displayName: 'Herrmann Muster',
+                            displayName: 'Herrmann Muster\u200b',
                             email: 'herrmann.muster@uni-muenster.de',
                         },
                         {

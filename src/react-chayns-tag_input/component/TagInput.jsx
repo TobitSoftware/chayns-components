@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import Input from '../../react-chayns-input/component/Input';
 import getInputSize from '../utils/getInputSize';
 import Tag from './Tag';
+import replaceVcid from '../../utils/replaceVcid';
 
 const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
@@ -151,7 +152,7 @@ export default class TagInput extends Component {
                             onDelete={this.handleTagRemove}
                             selected={selectedIndex === index}
                         >
-                            {tag.text}
+                            {replaceVcid(tag.text)}
                         </Tag>
                     ))}
                 <div className="cc__tag-input__input">

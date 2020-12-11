@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
+import replaceVcid from '../../utils/replaceVcid';
 
 const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
     const handleClick = useCallback(() => {
@@ -34,7 +35,9 @@ const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
             ) : null}
             <div className="text">
                 <div className="title">
-                    <div className="name">{data[orm.showName]}</div>
+                    <div className="name">
+                        {replaceVcid(data[orm.showName])}
+                    </div>
                     {hasRelations && (
                         <div className="identifier">
                             {`(${data[orm.identifier]})`}
