@@ -57,6 +57,7 @@ const ObjectMapping = {
     search: ['fullName', 'firstName', 'lastName', 'personId'],
     relations: 'relations',
     imageUrl: 'imageUrl',
+    verified: 'verificationState',
 };
 
 const PersonFinderContext = createContext({

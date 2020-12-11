@@ -6,6 +6,7 @@ import { isString } from '../../utils/is';
 import PersonsContext from './data/persons/PersonsContext';
 import { convertPersonForReturn } from './data/persons/PersonsConverter';
 import PersonFinderView from './PersonFinderView';
+import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
 
 class MultiplePersonFinder extends Component {
     constructor(props) {
@@ -60,8 +61,19 @@ class MultiplePersonFinder extends Component {
                 const value = context.ValueConverter
                     ? context.ValueConverter(v)
                     : v;
+
+                let text = value[context.ObjectMapping.showName];
+                if (context.ObjectMapping.verified) {
+                    text = (
+                        <VerificationIcon
+                            name={text}
+                            verified={value[context.ObjectMapping.verified]}
+                        />
+                    );
+                }
+
                 return {
-                    text: value[context.ObjectMapping.showName],
+                    text,
                     value,
                 };
             });
@@ -147,7 +159,14 @@ class MultiplePersonFinder extends Component {
         const newValues = [
             ...values,
             {
-                text: name,
+                text: orm.verified ? (
+                    <VerificationIcon
+                        name={name}
+                        verified={value[orm.verified]}
+                    />
+                ) : (
+                    name
+                ),
                 value: outValue,
             },
         ];

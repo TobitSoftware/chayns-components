@@ -32,6 +32,7 @@ export const convertPerson = (relation) => {
         isFriend: FriendsHelper.isFriend(
             relation.personId || relation.PersonID
         ),
+        verificationState: !!relation.verificationState,
     };
 };
 

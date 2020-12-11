@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
-import replaceVcid from '../../utils/replaceVcid';
+import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
 
 const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
     const handleClick = useCallback(() => {
@@ -36,7 +36,14 @@ const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
             <div className="text">
                 <div className="title">
                     <div className="name">
-                        {replaceVcid(data[orm.showName])}
+                        {orm.verified ? (
+                            <VerificationIcon
+                                name={data[orm.showName]}
+                                verified={data[orm.verified]}
+                            />
+                        ) : (
+                            data[orm.showName]
+                        )}
                     </div>
                     {hasRelations && (
                         <div className="identifier">

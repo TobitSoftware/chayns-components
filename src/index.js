@@ -75,6 +75,7 @@ export { default as TagInput } from './react-chayns-tag_input/component/TagInput
 export { default as TextArea } from './react-chayns-textarea/component/TextArea';
 export { default as TextString } from './react-chayns-textstring/component/TextString';
 export { default as Tooltip } from './react-chayns-tooltip/component/Tooltip';
+export { default as VerificationIcon } from './react-chayns-verification_icon/component/VerificationIcon';
 export { default as createLinks } from './utils/createLinks';
 export { default as equalizer } from './utils/equalizer';
 export { default as imageUpload } from './utils/imageUpload';
