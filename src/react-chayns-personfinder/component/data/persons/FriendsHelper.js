@@ -79,6 +79,7 @@ class FriendsHelper {
         personId: friend.personId,
         imageUrl: `https://sub60.tobit.com/u/${friend.personId}?size=40`,
         isFriend: true,
+        verificationState: !!friend.verificationState,
     });
 }
 
