@@ -11,6 +11,7 @@ import React, {
 import Overlay from '../../components/overlay/Overlay';
 import Input from '../../react-chayns-input/component/Input';
 import { isFunction } from '../../utils/is';
+import { isServer } from '../../utils/isServer';
 
 const InputBox = React.forwardRef((props, ref) => {
     const {
@@ -114,11 +115,14 @@ const InputBox = React.forwardRef((props, ref) => {
         return null;
     }
 
+    const parentElement = !isServer() ? parent || document.body : null;
+    const parentRect = parentElement?.getBoundingClientRect();
+
     const positionStyles = rect
         ? {
               width: `${rect.width}px`,
-              top: `${rect.bottom}px`,
-              left: `${rect.left}px`,
+              top: `${rect.bottom - (parentRect?.top ?? 0)}px`,
+              left: `${rect.left - (parentRect?.left ?? 0)}px`,
           }
         : null;
 
