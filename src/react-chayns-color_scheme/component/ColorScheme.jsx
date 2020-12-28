@@ -14,6 +14,9 @@ const ColorScheme = (props) => {
     let { color, colorMode, secondaryColor } = props;
 
     const { children, style, cssVariables, ...otherProps } = props;
+    delete otherProps.color;
+    delete otherProps.colorMode;
+    delete otherProps.secondaryColor;
 
     if (color !== null || secondaryColor !== null || colorMode !== null) {
         if (typeof chayns !== 'undefined') {
@@ -72,6 +75,9 @@ const ColorScheme = (props) => {
 
     return (
         <div
+            data-colormode={colorMode}
+            data-color={color}
+            data-secondarycolor={secondaryColor}
             style={{ ...style, ...colorStyles, ...cssVariables }}
             {...otherProps}
         >
