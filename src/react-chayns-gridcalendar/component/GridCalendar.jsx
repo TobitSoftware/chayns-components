@@ -171,6 +171,33 @@ export default class ProgressCalendar extends Component {
         }
     }
 
+    handleTouchStart(event) {
+        this.swipeX = event.touches[0].clientX;
+    }
+
+    handleTouchMove(event) {
+        this.moveSwipeX = event.touches[0].clientX;
+    }
+
+    handleTouchEnd(leftHidden, rightHidden) {
+        if (this.swipeX && this.moveSwipeX) {
+            if (this.moveSwipeX >= this.swipeX + 60) {
+                if (!leftHidden) {
+                    this.onNavigateLeft();
+                }
+                this.swipeX = null;
+                this.moveSwipeX = null;
+                // this.move=null;
+            } else if (this.moveSwipeX <= this.swipeX - 60) {
+                if (!rightHidden) {
+                    this.onNavigateRight();
+                }
+                this.swipeX = null;
+                this.moveSwipeX = null;
+            }
+        }
+    }
+
     onNavigateLeft() {
         const { onNavigateLeft } = this.props;
         const { week } = this.state;
@@ -388,33 +415,6 @@ export default class ProgressCalendar extends Component {
             convertedEntries.push({ entries: userEntries, userId: data[i].id });
         }
         return convertedEntries;
-    }
-
-    handleTouchStart(event) {
-        this.swipeX = event.touches[0].clientX;
-    }
-
-    handleTouchMove(event) {
-        this.moveSwipeX = event.touches[0].clientX;
-    }
-
-    handleTouchEnd(leftHidden, rightHidden) {
-        if (this.swipeX && this.moveSwipeX) {
-            if (this.moveSwipeX >= this.swipeX + 60) {
-                if (!leftHidden) {
-                    this.onNavigateLeft();
-                }
-                this.swipeX = null;
-                this.moveSwipeX = null;
-                // this.move=null;
-            } else if (this.moveSwipeX <= this.swipeX - 60) {
-                if (!rightHidden) {
-                    this.onNavigateRight();
-                }
-                this.swipeX = null;
-                this.moveSwipeX = null;
-            }
-        }
     }
 
     groupOnClick(event, group) {

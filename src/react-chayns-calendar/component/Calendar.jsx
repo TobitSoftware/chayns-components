@@ -78,6 +78,37 @@ export default class Calendar extends Component {
         this.setMonths(active);
     }
 
+    /*
+     TODO: DER KALENDAR MUSS SICH MIT POSITION VON HANDLE TOUCH MOVE BEWEGEN
+     */
+
+    handleTouchStart(event) {
+        this.swipeX = event.touches[0].clientX;
+    }
+
+    handleTouchMove(event) {
+        // console.log('ELEMENT',this.calendarMonths.offsetWidth);
+        // this.move = -1*(this.swipeX-event.touches[0].clientX);
+        // this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}px)`;
+
+        this.moveSwipeX = event.touches[0].clientX;
+    }
+
+    handleTouchEnd() {
+        if (this.swipeX && this.moveSwipeX) {
+            if (this.moveSwipeX >= this.swipeX + 60) {
+                this.navigateLeftOnClick();
+                this.swipeX = null;
+                this.moveSwipeX = null;
+                // this.move=null;
+            } else if (this.moveSwipeX <= this.swipeX - 60) {
+                this.navigateRightOnClick();
+                this.swipeX = null;
+                this.moveSwipeX = null;
+            }
+        }
+    }
+
     setMonths(_focus, translate) {
         const { setTimeout } = window;
 
@@ -251,37 +282,6 @@ export default class Calendar extends Component {
         const newFocus = new Date(focus.getFullYear(), focus.getMonth() - 1, 1);
 
         this.setMonths(newFocus, 25);
-    }
-
-    /*
-     TODO: DER KALENDAR MUSS SICH MIT POSITION VON HANDLE TOUCH MOVE BEWEGEN
-     */
-
-    handleTouchStart(event) {
-        this.swipeX = event.touches[0].clientX;
-    }
-
-    handleTouchMove(event) {
-        // console.log('ELEMENT',this.calendarMonths.offsetWidth);
-        // this.move = -1*(this.swipeX-event.touches[0].clientX);
-        // this.calendarMonths.style.transform= `translateX(${-1*(this.swipeX-event.touches[0].clientX)}px)`;
-
-        this.moveSwipeX = event.touches[0].clientX;
-    }
-
-    handleTouchEnd() {
-        if (this.swipeX && this.moveSwipeX) {
-            if (this.moveSwipeX >= this.swipeX + 60) {
-                this.navigateLeftOnClick();
-                this.swipeX = null;
-                this.moveSwipeX = null;
-                // this.move=null;
-            } else if (this.moveSwipeX <= this.swipeX - 60) {
-                this.navigateRightOnClick();
-                this.swipeX = null;
-                this.moveSwipeX = null;
-            }
-        }
     }
 
     renderMonths() {

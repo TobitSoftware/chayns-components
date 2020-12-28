@@ -32,10 +32,6 @@ export default class TagInput extends Component {
         };
     }
 
-    setInputRef(ref) {
-        this.input = ref;
-    }
-
     handleChange(...value) {
         const { onChange } = this.props;
 
@@ -107,6 +103,10 @@ export default class TagInput extends Component {
         if (this.input) {
             this.input.focus();
         }
+    }
+
+    setInputRef(ref) {
+        this.input = ref;
     }
 
     focus() {

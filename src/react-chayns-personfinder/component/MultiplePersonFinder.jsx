@@ -42,46 +42,6 @@ class MultiplePersonFinder extends Component {
         }
     }
 
-    onChange(values) {
-        const { onChange } = this.props;
-        const retVal = values.map((v) => v.value);
-        if (onChange) {
-            if (retVal.length > 0 && retVal[0].type === 'PERSON') {
-                onChange(retVal.map(convertPersonForReturn));
-            } else {
-                onChange(retVal);
-            }
-        }
-    }
-
-    getValues() {
-        const { values: valuesProps, context } = this.props;
-        if (valuesProps) {
-            return valuesProps.map((v) => {
-                const value = context.ValueConverter
-                    ? context.ValueConverter(v)
-                    : v;
-
-                let text = value[context.ObjectMapping.showName];
-                if (context.ObjectMapping.verified) {
-                    text = (
-                        <VerificationIcon
-                            name={text}
-                            verified={value[context.ObjectMapping.verified]}
-                        />
-                    );
-                }
-
-                return {
-                    text,
-                    value,
-                };
-            });
-        }
-        const { values: valuesState } = this.state;
-        return valuesState;
-    }
-
     handleOnChange(inputValue, ...other) {
         const { onInput, max } = this.props;
         const newInputValue =
@@ -189,6 +149,46 @@ class MultiplePersonFinder extends Component {
         if (this.boxRef) {
             setImmediate(this.boxRef.focus);
         }
+    }
+
+    onChange(values) {
+        const { onChange } = this.props;
+        const retVal = values.map((v) => v.value);
+        if (onChange) {
+            if (retVal.length > 0 && retVal[0].type === 'PERSON') {
+                onChange(retVal.map(convertPersonForReturn));
+            } else {
+                onChange(retVal);
+            }
+        }
+    }
+
+    getValues() {
+        const { values: valuesProps, context } = this.props;
+        if (valuesProps) {
+            return valuesProps.map((v) => {
+                const value = context.ValueConverter
+                    ? context.ValueConverter(v)
+                    : v;
+
+                let text = value[context.ObjectMapping.showName];
+                if (context.ObjectMapping.verified) {
+                    text = (
+                        <VerificationIcon
+                            name={text}
+                            verified={value[context.ObjectMapping.verified]}
+                        />
+                    );
+                }
+
+                return {
+                    text,
+                    value,
+                };
+            });
+        }
+        const { values: valuesState } = this.state;
+        return valuesState;
     }
 
     clear() {
@@ -311,6 +311,7 @@ MultiplePersonFinder.propTypes = {
         ObjectMapping: PropTypes.shape({
             showName: PropTypes.string,
             identifier: PropTypes.string,
+            verified: PropTypes.string,
         }),
         ValueConverter: PropTypes.func,
     }).isRequired,

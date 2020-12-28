@@ -74,6 +74,8 @@ PersonFinderResultItem.propTypes = {
         showName: PropTypes.string,
         imageUrl: PropTypes.string,
         relations: PropTypes.string,
+        subtitle: PropTypes.string,
+        verified: PropTypes.string,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
