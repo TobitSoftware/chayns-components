@@ -40,7 +40,7 @@ The `PositionInput`-component takes the following props:
 | Name                                  | Type                           | Default                                                                                                                                                           | Required |
 | ------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
 | [defaultPosition](#defaultposition)   | `{ lat: number, lng: number }` |                                                                                                                                                                   |    ✓     |
-| [onPositionChange](#onpositionchange) | `function`                     | `() => {}`                                                                                                                                                        |          |
+| [onPositionChange](#onpositionchange) | `function`                     | `(position, address) => {}`                                                                                                                                                        |          |
 | [mapOptions](#mapoptions)             | `object`                       | `{ zoom: 15, gestureHandling: 'greedy', disableDefaultUI: true, styles: [ { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }], }, ], }` |          |
 | [children](#children)                 | `function`                     | `(value, onChange) => ( <Input placeholder="Position" value={value} onChange={onChange} /> )`                                                                     |          |
 | [parent](#parent)                     | `ReactNode`                    |                                                                                                                                                                   |          |
@@ -56,9 +56,16 @@ The position that will be used as a starting point.
 ---
 
 ### `onPositionChange`
-
+Get the position and the address of the place as parameters.
 ```ts
 onPositionChange?: function
+
+interface Position {
+lat: float,
+lng: float
+}
+
+function onPositionChange(position: Position, address: string){...}
 ```
 
 This will be called when the position selection changes.

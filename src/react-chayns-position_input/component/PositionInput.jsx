@@ -58,15 +58,21 @@ export default class PositionInput extends PureComponent {
 
         this.getAddresses = debounce(this.getAddresses, 500);
 
-        this.setAddress(props.defaultPosition);
+        this.setAddress(props.defaultPosition, false);
     }
 
-    setAddress = (position) => {
+    setAddress = (position, triggerChange = true) => {
+        const { onPositionChange } = this.props;
+
         this.geocoder.geocode({ location: position }, (result, status) => {
             if (status === google.maps.GeocoderStatus.OK) {
                 this.setState({
                     value: result[0].formatted_address,
                 });
+
+                if (triggerChange){
+                    onPositionChange(position, result[0].formatted_address)
+                }
             }
         });
     };
@@ -76,9 +82,10 @@ export default class PositionInput extends PureComponent {
         const { currentInputType } = this.state;
 
         const center = toLiteral(map.getCenter());
-        onPositionChange(center);
 
         if (currentInputType === COORDS) {
+            onPositionChange(center);
+
             this.setState({
                 value: `${center.lat.toFixed(4)}  ${center.lng.toFixed(4)}`,
             });
@@ -101,7 +108,7 @@ export default class PositionInput extends PureComponent {
                 lng,
             };
             this.mapRef.current.panTo(position);
-            onPositionChange(position);
+            onPositionChange(position, value);
 
             this.setState({
                 currentInputType: COORDS,
@@ -125,7 +132,7 @@ export default class PositionInput extends PureComponent {
                 value: `${value.lat.toFixed(4)}  ${value.lng.toFixed(4)}`,
             });
         } else {
-            this.setAddress(value);
+            this.setAddress(value, false);
         }
     };
 
@@ -164,7 +171,7 @@ export default class PositionInput extends PureComponent {
 
                 const position = toLiteral(results[0].geometry.location);
                 this.mapRef.current.panTo(position);
-                onPositionChange(position);
+                onPositionChange(position, value);
             }
         });
     };
@@ -211,15 +218,15 @@ export default class PositionInput extends PureComponent {
                                 }}
                             >
                                 {!!value &&
-                                    currentInputType === ADDRESS &&
-                                    addresses.map((a, index) => (
-                                        <AutocompleteItem
-                                            index={index}
-                                            address={a}
-                                            onClick={this.selectAddress}
-                                            key={a}
-                                        />
-                                    ))}
+                                currentInputType === ADDRESS &&
+                                addresses.map((a, index) => (
+                                    <AutocompleteItem
+                                        index={index}
+                                        address={a}
+                                        onClick={this.selectAddress}
+                                        key={a}
+                                    />
+                                ))}
                             </div>
                         </TappPortal>
                     </div>
