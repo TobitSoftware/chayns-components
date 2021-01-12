@@ -82,18 +82,24 @@ export default class TextString extends Component {
     }
 
     static changeTextString(stringName, text, language) {
+        const body = {
+            stringName,
+        };
+
+        body[`text${language}`] = text;
         return new Promise((resolve, reject) => {
-            fetch('https://chayns1.tobit.com/TappApi/LangRes/TextString', {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    Accept: 'application/x-www-form-urlencoded',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `StringName=${stringName}&Text=${encodeURIComponent(
-                    text
-                )}&Language=${language}`,
-            }).then((response) => {
+            fetch(
+                'https://webapi.tobit.com/TextStringService/v1.0/V2/LangStrings',
+                {
+                    method: 'put',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
+                    },
+                    body: JSON.stringify(body),
+                }
+            ).then((response) => {
                 if (response.status === 200) {
                     resolve(response.json());
                 } else {
@@ -239,44 +245,47 @@ export default class TextString extends Component {
     }
 
     selectLanguageToChange(stringName) {
-        const { language } = this.props;
+        const { language, useDangerouslySetInnerHTML } = this.props;
 
-        chayns.dialog
-            .select({
-                title: `TextString bearbeiten: ${stringName}`,
-                message: `Wähle die Sprache: (angezeigt wird ${
-                    TextString.languages.find(
-                        (l) => l.code === (language || TextString.language)
-                    ).name
-                })`,
-                quickfind: 0,
-                multiselect: 0,
-                list: TextString.languages,
-            })
-            .then((data) => {
-                if (
-                    data.buttonType === 1 &&
-                    data.selection &&
-                    data.selection.length > 0
-                ) {
-                    const lang = data.selection[0];
-                    // language is already selected
-                    if (
-                        lang.value ===
+        if (useDangerouslySetInnerHTML) {
+            chayns.dialog
+                .select({
+                    title: `TextString bearbeiten: ${stringName}`,
+                    message: `Wähle die Sprache: (angezeigt wird ${
                         TextString.languages.find(
                             (l) => l.code === (language || TextString.language)
-                        ).value
+                        ).name
+                    })`,
+                    quickfind: 0,
+                    multiselect: 0,
+                    list: TextString.languages,
+                })
+                .then((data) => {
+                    if (
+                        data.buttonType === 1 &&
+                        data.selection &&
+                        data.selection.length > 0
                     ) {
-                        this.changeStringDialog(stringName, lang);
-                    } else {
-                        // Get lib
-                        let library = null;
-                        let middle = 'langRes';
-                        const globalLang = TextString.languages.find(
-                            (l) => l.code === TextString.language
-                        ).value;
-                        Object.keys(TextString.textStrings[globalLang]).forEach(
-                            (lib) => {
+                        const lang = data.selection[0];
+                        // language is already selected
+                        if (
+                            lang.value ===
+                            TextString.languages.find(
+                                (l) =>
+                                    l.code === (language || TextString.language)
+                            ).value
+                        ) {
+                            this.changeStringDialog(stringName, lang);
+                        } else {
+                            // Get lib
+                            let library = null;
+                            let middle = 'langRes';
+                            const globalLang = TextString.languages.find(
+                                (l) => l.code === TextString.language
+                            ).value;
+                            Object.keys(
+                                TextString.textStrings[globalLang]
+                            ).forEach((lib) => {
                                 if (
                                     TextString.textStrings[globalLang][lib][
                                         stringName
@@ -288,75 +297,57 @@ export default class TextString extends Component {
                                         TextString.textStrings[globalLang][lib]
                                             .middle;
                                 }
-                            }
-                        );
-                        TextString.loadLibrary(
-                            library,
-                            middle,
-                            TextString.languages.find(
-                                (l) => l.value === lang.value
-                            ).code
-                        ).then(() => {
-                            this.changeStringDialog(stringName, lang);
-                        });
+                            });
+                            TextString.loadLibrary(
+                                library,
+                                middle,
+                                TextString.languages.find(
+                                    (l) => l.value === lang.value
+                                ).code
+                            ).then(() => {
+                                this.changeStringDialog(stringName, lang);
+                            });
+                        }
                     }
-                }
+                });
+        } else {
+            chayns.dialog.iFrame({
+                url:
+                    'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+                buttons: [],
+                input: { textstring: stringName },
             });
+        }
     }
 
     changeStringDialog(stringName, lang) {
-        const { useDangerouslySetInnerHTML } = this.props;
-
         const string = TextString.getTextString(
             stringName,
             TextString.languages.find((l) => l.value === lang.value).code
         );
         if (string) {
-            if (useDangerouslySetInnerHTML) {
-                chayns.register({ apiDialogs: true });
-                chayns.dialog
-                    .iFrame({
-                        width: getTappWidth() + 76,
-                        url:
-                            'https://frontend.tobit.com/dialog-html-editor/v1.0/',
-                        input: string,
-                        title: stringName,
-                        message: `Sprache: ${lang.name}`,
-                        buttons: [
-                            {
-                                text: 'Speichern',
-                                buttonType: 1,
-                            },
-                            {
-                                text: 'Abbrechen',
-                                buttonType: -1,
-                            },
-                        ],
-                    })
-                    .then((result) => {
-                        this.changeStringResult(result, lang);
-                    });
-            } else {
-                chayns.dialog
-                    .input({
-                        title: stringName,
-                        message: `Sprache: ${lang.name}`,
-                        text: string,
-                        buttons: [
-                            {
-                                text: 'Speichern',
-                                buttonType: 1,
-                            },
-                            {
-                                text: 'Abbrechen',
-                                buttonType: -1,
-                            },
-                        ],
-                    })
-                    .then((result) => {
-                        this.changeStringResult(result, lang);
-                    });
-            }
+            chayns.register({ apiDialogs: true });
+            chayns.dialog
+                .iFrame({
+                    width: getTappWidth() + 76,
+                    url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
+                    input: string,
+                    title: stringName,
+                    message: `Sprache: ${lang.name}`,
+                    buttons: [
+                        {
+                            text: 'Speichern',
+                            buttonType: 1,
+                        },
+                        {
+                            text: 'Abbrechen',
+                            buttonType: -1,
+                        },
+                    ],
+                })
+                .then((result) => {
+                    this.changeStringResult(result, lang);
+                });
         } else {
             chayns.dialog.alert(stringName, 'Der TextString existiert nicht.');
         }
@@ -413,15 +404,13 @@ export default class TextString extends Component {
                 ? { dangerouslySetInnerHTML: { __html: textString } }
                 : null),
             ...textStringProps,
-            ...(!preventNoTranslate &&
-            (!language || language === TextString.language)
-                ? {
-                      className: classNames(
-                          'no-translate',
-                          children.props.className
-                      ),
-                  }
-                : null),
+            ...(!preventNoTranslate && {
+                className: classNames(
+                    'no-translate',
+                    'notranslate',
+                    children.props.className
+                ),
+            }),
         };
 
         if (textString) {
@@ -439,7 +428,12 @@ TextString.textStrings = {};
 
 TextString.language = isServer()
     ? 'de'
-    : (chayns.env.language || navigator.language || 'de')
+    : (
+          chayns.env.parameters.translang ||
+          chayns.env.language ||
+          navigator.language ||
+          'de'
+      )
           .substring(0, 2)
           .toLowerCase();
 
