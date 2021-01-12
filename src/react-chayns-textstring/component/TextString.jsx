@@ -23,9 +23,10 @@ export default class TextString extends Component {
         const strings =
             textStrings[lang] || textStrings[Object.keys(textStrings)[0]];
         if (!strings) return fallback;
-        const result = Object.keys(strings)
-            .map((lib) => strings[lib][stringName] || null)
-            .filter((x) => x !== null)[0];
+        const result =
+            Object.keys(strings)
+                .map((lib) => strings[lib][stringName] || null)
+                .filter((x) => x !== null)[0] || null;
         return result !== null ? result : fallback;
     }
 
