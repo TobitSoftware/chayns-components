@@ -385,7 +385,6 @@ export default class TextString extends Component {
         const {
             children,
             useDangerouslySetInnerHTML,
-            language,
             preventNoTranslate,
         } = this.props;
         const { textString, textStringProps } = this.state;
@@ -498,7 +497,7 @@ TextString.propTypes = {
     /**
      * The child node the text should be rendered into.
      */
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
 
     /**
      * Wether the component should render HTML content in the string.
@@ -545,6 +544,7 @@ TextString.defaultProps = {
     fallback: '',
     setProps: {},
     preventNoTranslate: false,
+    children: <p />,
 };
 
 TextString.displayName = 'TextString';
