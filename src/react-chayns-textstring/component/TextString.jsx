@@ -151,7 +151,7 @@ export default class TextString extends Component {
         });
 
         this.state = {
-            textString: string?.replace(string, replacements) || null,
+            textString: TextString.replace(string, replacements) || null,
             textStringProps,
         };
 
