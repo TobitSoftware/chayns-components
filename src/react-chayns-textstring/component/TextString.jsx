@@ -125,12 +125,34 @@ export default class TextString extends Component {
         return textString;
     }
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        const { stringName, language, setProps, replacements } = props;
+
+        let string = TextString.getTextString(stringName, language);
+
+        const textStringProps = {};
+
+        Object.keys(setProps).forEach((prop) => {
+            if (prop !== 'fallback') {
+                string = TextString.getTextString(setProps[prop]);
+                if (string) {
+                    textStringProps[prop] = TextString.replace(
+                        string,
+                        replacements
+                    );
+                } else if (setProps.fallback && setProps.fallback[prop]) {
+                    textStringProps[prop] = TextString.replace(
+                        setProps.fallback[prop],
+                        replacements
+                    );
+                }
+            }
+        });
 
         this.state = {
-            textString: null,
-            textStringProps: {},
+            textString: string || null,
+            textStringProps,
         };
 
         this.childrenOnClick = this.childrenOnClick.bind(this);
