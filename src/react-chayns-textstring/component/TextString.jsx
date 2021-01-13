@@ -149,10 +149,9 @@ export default class TextString extends Component {
                 }
             }
         });
-        let replacedTextstring = TextString.getTextString(stringName, language);
 
         this.state = {
-            textString: replacedTextstring || null,
+            textString: string?.replace(string, replacements) || null,
             textStringProps,
         };
 
