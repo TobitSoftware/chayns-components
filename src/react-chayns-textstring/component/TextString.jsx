@@ -102,7 +102,7 @@ export default class TextString extends Component {
                 }
             ).then((response) => {
                 if (response.status === 200) {
-                    resolve(response.json());
+                    resolve({ ResultCode: 0 });
                 } else {
                     reject(response.statusText);
                 }
