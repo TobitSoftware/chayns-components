@@ -9,6 +9,8 @@ import { isServer } from '../../utils/isServer';
 import getTappWidth from '../../utils/tappWidth';
 import isTobitEmployee from '../../utils/tobitEmployee';
 
+const CHAYNS_RES_URL = 'https://chayns-res.tobit.com/LangStrings';
+
 /**
  * Loads text strings from our database and displays them. Handles replacements
  * and changing the string via `CTRL` + `Click` (only internal).
@@ -30,56 +32,42 @@ export default class TextString extends Component {
         return result !== null ? result : fallback;
     }
 
-    static loadLibrary(projectName, middle = 'langRes', language) {
-        return new Promise((resolve, reject) => {
-            let lang = TextString.languages.find(
-                (l) => l.code === (language || TextString.language)
+    static async loadLibrary(projectName, middle = 'langRes', language) {
+        let lang = TextString.languages.find(
+            (l) => l.code === (language || TextString.language)
+        );
+        lang = lang ? lang.value : 'Ger';
+
+        if (
+            TextString.textStrings[lang] &&
+            TextString.textStrings[lang][projectName]
+        ) {
+            return;
+        }
+        try {
+            const response = await fetch(
+                `${CHAYNS_RES_URL}/${projectName}/${projectName}${middle}_${lang}.json`
             );
-            lang = lang ? lang.value : 'Ger';
-            if (
-                !(
-                    TextString.textStrings[lang] &&
-                    TextString.textStrings[lang][projectName]
-                )
-            ) {
-                fetch(
-                    `https://chayns-res.tobit.com/LangStrings/${projectName}/${projectName}${middle}_${lang}.json`
-                )
-                    .then((response) => {
-                        if (response.status === 200) {
-                            response
-                                .json()
-                                .then((json) => {
-                                    TextString.textStrings[lang] = {
-                                        ...TextString.textStrings[lang],
-                                        [projectName]: {
-                                            ...json,
-                                            ...{ middle },
-                                        },
-                                    };
-                                    if (window.debugLevel >= 3) {
-                                        // eslint-disable-next-line no-console
-                                        console.debug(
-                                            'TextString Storage',
-                                            TextString.textStrings
-                                        );
-                                    }
-                                    resolve();
-                                })
-                                .catch((e) => {
-                                    reject(e);
-                                });
-                        } else {
-                            reject(response.statusText);
-                        }
-                    })
-                    .catch((e) => {
-                        reject(e);
-                    });
-            } else {
-                resolve();
+            if (response.status !== 200) {
+                console.error(response.statusText);
+                return;
             }
-        });
+
+            const json = await response.json();
+            TextString.textStrings[lang] = {
+                ...TextString.textStrings[lang],
+                [projectName]: {
+                    ...json,
+                    ...{ middle },
+                },
+            };
+            if (window.debugLevel >= 3) {
+                // eslint-disable-next-line no-console
+                console.debug('TextString Storage', TextString.textStrings);
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     static changeTextString(stringName, text, language) {
