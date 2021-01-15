@@ -115,9 +115,15 @@ export default class TextString extends Component {
 
     constructor(props) {
         super(props);
-        const { stringName, language, setProps, replacements } = props;
+        const {
+            stringName,
+            language,
+            setProps,
+            replacements,
+            fallback,
+        } = props;
 
-        let string = TextString.getTextString(stringName, language);
+        let string = TextString.getTextString(stringName, language, fallback);
 
         const textStringProps = {};
 
