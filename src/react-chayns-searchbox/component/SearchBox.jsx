@@ -4,7 +4,7 @@
 
 import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 import './SearchBox.scss';
@@ -35,7 +35,9 @@ const SearchBox = ({
             if (key === null || key === undefined) {
                 return {};
             }
-            const res =  list.find((item) => String(item[listKey]) === String(key));
+            const res = list.find(
+                (item) => String(item[listKey]) === String(key)
+            );
 
             return res === undefined ? {} : res;
         },
@@ -49,6 +51,15 @@ const SearchBox = ({
             ? inputDefaultValue
             : getItem(value)[listValue]) || ''
     );
+
+    useEffect(() => {
+        setInputValueState(
+            (inputDefaultValue !== null
+                ? inputDefaultValue
+                : getItem(value)[listValue]) || ''
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value, list]);
     const inputValue =
         inputValueProp !== null ? inputValueProp : inputValueState;
     const [focusIndex, setFocusIndex] = useState(autoSelectFirst ? 0 : null);
