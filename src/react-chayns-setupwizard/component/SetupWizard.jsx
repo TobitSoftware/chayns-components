@@ -285,7 +285,7 @@ class SetupWizard extends Component {
                     }}
                 >
                     {children.map((child, index) => {
-                        if (child.type === SetupWizardItem) {
+                        if (child && child.type === SetupWizardItem) {
                             if (child) {
                                 visibleIndex += 1;
                             }
