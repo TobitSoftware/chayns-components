@@ -130,8 +130,22 @@ class SetupWizard extends Component {
      * Go one step forward
      */
     nextStep = () => {
+        const { children, numberOfSteps } = this.props;
         const { currentStep } = this.state;
-        this.toStep(currentStep + 1);
+
+        let next = currentStep + 1;
+        for (
+            ;
+            (numberOfSteps || (Array.isArray(children) && children.length)) >
+            next;
+            next += 1
+        ) {
+            if (children[next]) {
+                this.toStep(next);
+                return;
+            }
+        }
+        this.toStep(next);
     };
 
     /**
