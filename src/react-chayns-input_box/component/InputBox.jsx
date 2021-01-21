@@ -25,6 +25,7 @@ const InputBox = React.forwardRef((props, ref) => {
         boxClassName,
         style,
         onBlur,
+        renderInline,
         ...restProps
     } = props;
 
@@ -79,7 +80,7 @@ const InputBox = React.forwardRef((props, ref) => {
         document.addEventListener('mousedown', handleBlur);
         document.addEventListener('touchstart', handleBlur);
 
-        window.addEventListener('blur', hide);
+        // window.addEventListener('blur', hide);
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
@@ -140,26 +141,30 @@ const InputBox = React.forwardRef((props, ref) => {
                 ref={inputRef}
                 onFocus={handleFocus}
             />
-            <Overlay parent={parent}>
-                {!!(rect && !isHidden && children) && (
-                    <div
-                        onClick={(e) => e.preventDefault()}
-                        className={classnames(
-                            'cc__input-box__overlay',
-                            'scrollbar',
-                            boxClassName
-                        )}
-                        style={{
-                            ...positionStyles,
-                            ...overlayProps?.style,
-                        }}
-                        {...overlayProps}
-                        ref={setBoxRef}
-                    >
-                        {children}
-                    </div>
-                )}
-            </Overlay>
+            {renderInline ? (
+                children
+            ) : (
+                <Overlay parent={parent}>
+                    {!!(rect && !isHidden && children) && (
+                        <div
+                            onClick={(e) => e.preventDefault()}
+                            className={classnames(
+                                'cc__input-box__overlay',
+                                'scrollbar',
+                                boxClassName
+                            )}
+                            style={{
+                                ...positionStyles,
+                                ...overlayProps?.style,
+                            }}
+                            {...overlayProps}
+                            ref={setBoxRef}
+                        >
+                            {children}
+                        </div>
+                    )}
+                </Overlay>
+            )}
         </div>
     );
 });
@@ -184,6 +189,7 @@ InputBox.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+    renderInline: PropTypes.bool,
 };
 
 InputBox.defaultProps = {
@@ -197,6 +203,7 @@ InputBox.defaultProps = {
     inputRef: null,
     overlayProps: null,
     style: null,
+    renderInline: false,
 };
 
 InputBox.displayName = 'InputBox';

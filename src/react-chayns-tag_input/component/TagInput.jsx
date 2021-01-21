@@ -32,6 +32,14 @@ export default class TagInput extends Component {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        const { value, triggerEventOnValueChange } = this.props;
+
+        if (triggerEventOnValueChange && value !== prevProps.value) {
+            this.handleChange(value);
+        }
+    }
+
     handleChange(...value) {
         const { onChange } = this.props;
 
@@ -221,6 +229,7 @@ TagInput.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+    triggerEventOnValueChange: PropTypes.bool,
 };
 
 TagInput.defaultProps = {
@@ -232,6 +241,7 @@ TagInput.defaultProps = {
     value: '',
     className: null,
     style: null,
+    triggerEventOnValueChange: false,
 };
 
 TagInput.displayName = 'TagInput';
