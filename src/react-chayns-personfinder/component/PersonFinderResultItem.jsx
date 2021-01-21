@@ -39,7 +39,7 @@ const PersonFinderResultItem = ({
                     style={{ backgroundImage: `url(${data[orm.imageUrl]})` }}
                 />
             ) : null}
-            <div className="text">
+            <div className="text" style={{ justifyContent: 'center' }}>
                 <div className="title">
                     <div className="name">
                         {orm.verified ? (
@@ -51,16 +51,16 @@ const PersonFinderResultItem = ({
                             data[orm.showName]
                         )}
                     </div>
-                    {hasRelations && (
+                    {hasRelations && orm.subtitle && (
                         <div className="identifier">
-                            {`(${data[orm.identifier]})`}
+                            {`(${data[orm.subtitle]})`}
                         </div>
                     )}
                 </div>
                 {hasRelations && <Relation relation={data} />}
-                {!hasRelations && (
+                {!hasRelations && orm.subtitle && (
                     <div className="identifier">
-                        {`(${data[orm.subtitle || orm.identifier]})`}
+                        {`(${data[orm.subtitle]})`}
                     </div>
                 )}
             </div>
@@ -87,7 +87,11 @@ PersonFinderResultItem.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     isFocused: PropTypes.bool.isRequired,
-    roundIcons: PropTypes.bool.isRequired,
+    roundIcons: PropTypes.bool,
+};
+
+PersonFinderResultItem.defaultProps = {
+    roundIcons: false,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';

@@ -25,6 +25,7 @@ const ObjectMapping = {
                 de: 'Freunde',
                 en: 'friends',
             },
+            roundIcons: true,
             show: (value) => !value,
         },
         {
@@ -33,6 +34,7 @@ const ObjectMapping = {
                 de: 'Personen',
                 en: 'persons',
             },
+            roundIcons: true,
             show: (value) => value && value.length >= 3,
         },
         {
@@ -41,6 +43,7 @@ const ObjectMapping = {
                 de: 'Sites',
                 en: 'friends',
             },
+            roundIcons: false,
             show: (value) => value && value.length >= 3,
         },
         {
@@ -49,6 +52,7 @@ const ObjectMapping = {
                 de: 'Weitere Personen',
                 en: 'further friends',
             },
+            roundIcons: true,
             show: (value) => value && value.length >= 3,
         },
     ],

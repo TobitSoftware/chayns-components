@@ -13,7 +13,6 @@ const PersonFinderResults = ({
     onSelect,
     focusIndex,
     noBackground,
-    roundIcons,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -26,7 +25,7 @@ const PersonFinderResults = ({
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, lang, show }) => {
+        return orm.groups.map(({ key: group, lang, show, roundIcons }) => {
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
@@ -86,7 +85,7 @@ const PersonFinderResults = ({
                 showWaitCursor={showWaitCursor}
                 onClick={handleClick}
                 focusIndex={focusIndex}
-                roundIcons={roundIcons}
+                roundIcons={orm.roundIcons}
             />
         </div>
     );
@@ -100,6 +99,7 @@ PersonFinderResults.propTypes = {
         // eslint-disable-next-line react/forbid-prop-types
         groups: PropTypes.array,
         filter: PropTypes.func,
+        roundIcons: PropTypes.bool,
     }).isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
@@ -118,7 +118,6 @@ PersonFinderResults.propTypes = {
     ]),
     focusIndex: PropTypes.number,
     noBackground: PropTypes.bool,
-    roundIcons: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
@@ -129,7 +128,6 @@ PersonFinderResults.defaultProps = {
     showWaitCursor: false,
     focusIndex: null,
     noBackground: false,
-    roundIcons: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

@@ -27,9 +27,13 @@ const DICTIONARY = {
         de: 'Mehr anzeigen',
         en: ' load more',
     },
-    LIVING_IN: {
-        de: 'wohnt in',
-        en: ' living in',
+    COMMON_SITE: {
+        de: 'gemeinsame Site',
+        en: 'common site',
+    },
+    COMMON_SITES: {
+        de: 'gemeinsame Sites',
+        en: 'common sites',
     },
 };
 
