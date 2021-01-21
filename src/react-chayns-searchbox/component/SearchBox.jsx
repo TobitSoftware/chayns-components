@@ -18,7 +18,6 @@ const SearchBox = ({
     listValue,
     listKey,
     defaultValue,
-    parent,
     onSelect,
     value: valueProp,
     stopPropagation,

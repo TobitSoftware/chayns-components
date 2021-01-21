@@ -38,7 +38,9 @@ const Overlay = ({ parent, children }) => {
         [parentElement]
     );
 
-    return ReactDOM.createPortal(children, parent || parentElement);
+    return isServer()
+        ? null
+        : ReactDOM.createPortal(children, parent || parentElement);
 };
 
 Overlay.propTypes = {
