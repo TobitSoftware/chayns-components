@@ -157,6 +157,8 @@ class PersonFinderView extends Component {
             hasMore,
             onLoadMore,
             showWaitCursor: waitCursor,
+            noBackground,
+            roundIcons,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -178,6 +180,8 @@ class PersonFinderView extends Component {
                     showWaitCursor={waitCursor}
                     hasMore={hasMore}
                     focusIndex={focusIndex}
+                    noBackground={noBackground}
+                    roundIcons={roundIcons}
                 />
             );
         }
@@ -291,6 +295,8 @@ PersonFinderView.propTypes = {
     onChange: PropTypes.func,
     autoSelectFirst: PropTypes.bool,
     onKeyDown: PropTypes.func,
+    noBackground: PropTypes.bool,
+    roundIcons: PropTypes.bool,
 };
 
 PersonFinderView.defaultProps = {
@@ -307,6 +313,8 @@ PersonFinderView.defaultProps = {
     onChange: null,
     autoSelectFirst: false,
     onKeyDown: null,
+    noBackground: false,
+    roundIcons: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';

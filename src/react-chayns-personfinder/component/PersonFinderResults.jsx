@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'clsx';
 import ResultItemList from './ResultItemList';
 
 const PersonFinderResults = ({
@@ -11,6 +12,8 @@ const PersonFinderResults = ({
     showWaitCursor,
     onSelect,
     focusIndex,
+    noBackground,
+    roundIcons,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -43,7 +46,9 @@ const PersonFinderResults = ({
             }
             return (
                 <div
-                    className="cc__person-finder__results"
+                    className={classNames('cc__person-finder__results', {
+                        'no-background': noBackground,
+                    })}
                     key={`resultList_${group}`}
                 >
                     <ResultItemList
@@ -56,6 +61,7 @@ const PersonFinderResults = ({
                         showWaitCursor={showWaitCursor[group]}
                         onClick={handleClick}
                         focusIndex={groupFocusIndex}
+                        roundIcons={roundIcons}
                     />
                 </div>
             );
@@ -63,7 +69,11 @@ const PersonFinderResults = ({
     }
 
     return (
-        <div className="cc__person-finder__results">
+        <div
+            className={classNames('cc__person-finder__results', {
+                'no-background': noBackground,
+            })}
+        >
             <ResultItemList
                 data={
                     typeof orm.filter === 'function'
@@ -76,6 +86,7 @@ const PersonFinderResults = ({
                 showWaitCursor={showWaitCursor}
                 onClick={handleClick}
                 focusIndex={focusIndex}
+                roundIcons={roundIcons}
             />
         </div>
     );
@@ -106,6 +117,8 @@ PersonFinderResults.propTypes = {
         PropTypes.bool,
     ]),
     focusIndex: PropTypes.number,
+    noBackground: PropTypes.bool,
+    roundIcons: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
@@ -115,6 +128,8 @@ PersonFinderResults.defaultProps = {
     hasMore: false,
     showWaitCursor: false,
     focusIndex: null,
+    noBackground: false,
+    roundIcons: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

@@ -142,7 +142,7 @@ const InputBox = React.forwardRef((props, ref) => {
                 onFocus={handleFocus}
             />
             {renderInline ? (
-                children
+                <div style={{ marginTop: 20 }}>{children}</div>
             ) : (
                 <Overlay parent={parent}>
                     {!!(rect && !isHidden && children) && (

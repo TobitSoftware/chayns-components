@@ -7,7 +7,13 @@ import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
 import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
 
-const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
+const PersonFinderResultItem = ({
+    onClick,
+    data,
+    orm,
+    isFocused,
+    roundIcons,
+}) => {
     const handleClick = useCallback(() => {
         onClick({
             relation: data,
@@ -29,7 +35,7 @@ const PersonFinderResultItem = ({ onClick, data, orm, isFocused }) => {
         >
             {orm.imageUrl ? (
                 <div
-                    className="img"
+                    className={classNames('img', { circle: roundIcons })}
                     style={{ backgroundImage: `url(${data[orm.imageUrl]})` }}
                 />
             ) : null}
@@ -81,6 +87,7 @@ PersonFinderResultItem.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     isFocused: PropTypes.bool.isRequired,
+    roundIcons: PropTypes.bool.isRequired,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';
