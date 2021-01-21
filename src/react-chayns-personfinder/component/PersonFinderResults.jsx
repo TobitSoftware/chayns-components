@@ -25,7 +25,7 @@ const PersonFinderResults = ({
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, lang, show, roundIcons }) => {
+        return orm.groups.map(({ key: group, show, roundIcons }) => {
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
@@ -54,7 +54,6 @@ const PersonFinderResults = ({
                         data={groupData}
                         orm={orm}
                         group={group}
-                        separator={lang[chayns.env.language] || lang.en}
                         hasMore={hasMore[group]}
                         onLoadMore={onLoadMore}
                         showWaitCursor={showWaitCursor[group]}
