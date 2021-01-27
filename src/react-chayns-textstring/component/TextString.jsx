@@ -158,10 +158,6 @@ export default class TextString extends Component {
         this.selectLanguageToChange = this.selectLanguageToChange.bind(this);
     }
 
-    componentDidMount() {
-        this.setTextStrings(this.props);
-    }
-
     componentDidUpdate(prevProps) {
         const { replacements, stringName } = this.props;
 
