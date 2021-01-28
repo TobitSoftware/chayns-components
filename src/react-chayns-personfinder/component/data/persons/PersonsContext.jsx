@@ -62,7 +62,6 @@ const ObjectMapping = {
                 de: 'Gruppen',
                 en: 'groups',
             },
-            show: (value) => value && value.length >= 3,
             filter: (inputValue) => (e) =>
                 e.name &&
                 e.name
