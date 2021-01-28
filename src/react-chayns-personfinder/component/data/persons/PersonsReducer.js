@@ -4,21 +4,25 @@ export const initialState = {
         personsRelated: [],
         sites: [],
         friends: [],
+        groups: [],
     },
     showWaitCursor: {
         personsRelated: false,
         sites: false,
         personsUnrelated: false,
+        groups: false,
     },
     isLoading: {
         personsRelated: false,
         sites: false,
         personsUnrelated: false,
+        groups: false,
     },
     hasMore: {
         personsRelated: true,
         sites: true,
         personsUnrelated: false,
+        groups: false,
     },
 };
 
@@ -106,6 +110,17 @@ export const reducer = (state = initialState, action) => {
                 showWaitCursor: { ...state.showWaitCursor, friends: false },
                 isLoading: { ...state.isLoading, friends: false },
                 hasMore: { ...state.hasMore, friends: false },
+            };
+        case 'RECEIVE_GROUPS':
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    groups: action.data,
+                },
+                showWaitCursor: { ...state.showWaitCursor, groups: false },
+                isLoading: { ...state.isLoading, groups: false },
+                hasMore: { ...state.hasMore, groups: false },
             };
         case 'ADD_FRIEND':
             return {

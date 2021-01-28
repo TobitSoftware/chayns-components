@@ -362,6 +362,7 @@ export default class PersonFinderExample extends PureComponent {
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
                     showSites
+                    showUacGroups
                     multiple
                 />
                 <PersonFinder

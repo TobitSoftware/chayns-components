@@ -205,6 +205,7 @@ class MultiplePersonFinder extends Component {
         const {
             showPersons,
             showSites,
+            showUacGroups,
             className,
             defaultValue,
             showId,
@@ -232,6 +233,7 @@ class MultiplePersonFinder extends Component {
                                   showPersons &&
                                   !disableFriends &&
                                   !props.uacId,
+                              enableUacGroups: showUacGroups,
                               reducerFunction: props.reducerFunction,
                           }
                         : null)}

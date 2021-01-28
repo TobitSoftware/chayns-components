@@ -25,13 +25,15 @@ const PersonFinderResults = ({
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, show, roundIcons }) => {
+        return orm.groups.map(({ key: group, show, roundIcons, filter }) => {
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
             const groupData =
-                typeof orm.filter === 'function'
-                    ? (data[group] || []).filter(orm.filter(inputValue))
+                typeof (filter || orm.filter) === 'function'
+                    ? (data[group] || []).filter(
+                          (filter || orm.filter)(inputValue)
+                      )
                     : data[group] || [];
             const groupLength = groupData.length;
             length += groupLength;

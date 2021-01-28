@@ -136,10 +136,12 @@ class PersonFinderView extends Component {
         const { data, orm, value } = this.props;
         return Array.isArray(orm.groups)
             ? orm.groups.some(
-                  ({ key: group, show }) =>
+                  ({ key: group, show, filter }) =>
                       (typeof show !== 'function' || show(value)) &&
                       Array.isArray(data[group]) &&
-                      data[group].length
+                      (typeof filter !== 'function'
+                          ? data[group].length
+                          : data[group].filter(filter).length)
               )
             : !!(
                   (Array.isArray(data) && data.length) ||
@@ -163,6 +165,7 @@ class PersonFinderView extends Component {
         const { focusIndex } = this.state;
 
         const hasEntries = this.hasEntries();
+        console.log('hasEntries', hasEntries, this.props.placeholder, data);
 
         if (!selectedValue && hasEntries) {
             return (
