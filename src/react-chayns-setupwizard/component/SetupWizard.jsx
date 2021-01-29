@@ -51,9 +51,21 @@ class SetupWizard extends Component {
     }
 
     componentDidMount() {
-        const { initialStep } = this.props;
+        const { initialStep, operationMode } = this.props;
         if (initialStep > 0) {
             this.toStep(initialStep); // needed to enable all steps until the initial step
+
+            for (let i = 0; i <= initialStep; i += 1) {
+                this.stepEnabled(
+                    operationMode === SetupWizard.operationMode.DEFAULT
+                        ? true
+                        : operationMode ===
+                              SetupWizard.operationMode
+                                  .ONLY_CURRENT_STEP_ENABLED &&
+                              i === initialStep,
+                    i
+                );
+            }
         }
     }
 
@@ -166,15 +178,13 @@ class SetupWizard extends Component {
                 this.completedSteps.indexOf(currentStep) >= 0 ||
                 !isDisabled(enabledSteps, step)
             ) {
-                for (let i = 0; i <= step; i += 1) {
-                    this.stepEnabled(
-                        operationMode === SetupWizard.operationMode.DEFAULT
-                            ? true
-                            : operationMode ===
-                                  SetupWizard.operationMode
-                                      .ONLY_CURRENT_STEP_ENABLED && i === step,
-                        i
-                    );
+                if (
+                    operationMode ===
+                    SetupWizard.operationMode.ONLY_CURRENT_STEP_ENABLED
+                ) {
+                    this.setState({ enabledSteps: [step] });
+                } else {
+                    this.stepEnabled(true, step);
                 }
                 this.setState({
                     currentStep: step,
@@ -192,12 +202,16 @@ class SetupWizard extends Component {
      * @param step: the chosen step
      */
     resetToStep = (step) => {
-        const { enabledSteps } = this.state;
+        let { enabledSteps } = this.state;
         this.completedSteps = this.completedSteps.filter(
             (s) => !(step <= s && s < enabledSteps)
         );
+        enabledSteps = enabledSteps.filter((s) => s <= step);
+        if (!enabledSteps.includes(step)) {
+            enabledSteps.push(step);
+        }
         this.setState({
-            enabledSteps: enabledSteps.filter((s) => s <= step),
+            enabledSteps,
             currentStep: step,
             completedSteps: this.completedSteps,
         });
