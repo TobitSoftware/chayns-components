@@ -9,6 +9,9 @@ import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import { isNullOrWhiteSpace, isString } from '../../utils/is';
 
+let currentId = 0;
+const PREFIX = 'CC_INPUT_';
+
 /**
  * A text input that can be validated and decorated with different designs.
  */
@@ -27,7 +30,7 @@ export default class Input extends PureComponent {
             value: props.value || props.defaultValue || '',
         };
 
-        this.id = Math.random().toString();
+        this.id = `${PREFIX}${currentId++}`;
 
         this.setRef = this.setRef.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);

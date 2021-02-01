@@ -8,14 +8,16 @@ import checkDay from '../utils/checkDay';
 import TimeSpan from './TimeSpan';
 
 const PLACEHOLDER_STYLE = { width: 23 };
+const PREFIX = 'CC_TIMESPAN_';
+let currentId = 0;
 
 class Day extends Component {
     constructor(props) {
         super(props);
 
         this.onDayActivation = this.onDayActivation.bind(this);
-        this.timeSpanKey1 = Math.random().toString();
-        this.timeSpanKey2 = Math.random().toString();
+        this.timeSpanKey1 = `${PREFIX}${currentId++}`;
+        this.timeSpanKey2 = `${PREFIX}${currentId++}`;
 
         this.state = { isRemoving: false, animations: false };
     }

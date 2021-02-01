@@ -9,6 +9,9 @@ import Bubble from '../../react-chayns-bubble/component/Bubble';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 
+let currentId = 0;
+const PREFIX = 'CC_TOOLTIP_';
+
 /**
  * Wraps a child component and displays a message when the child is hovered or
  * clicked on. Allows to be shown imperatively by calling `.show()` or `.hide()`
@@ -25,7 +28,7 @@ export default class Tooltip extends Component {
         this.getContent = this.getContent.bind(this);
         this.getPosition = this.getPosition.bind(this);
 
-        this.tooltipKey = Math.random().toString();
+        this.tooltipKey = `${PREFIX}${currentId++}`;
 
         this.bubble = React.createRef();
         this.childrenWrapper = React.createRef();
