@@ -219,7 +219,10 @@ class MultiplePersonFinder extends Component {
         const { inputValue, selectedValue } = this.state;
 
         return (
-            <div className={classNames('cc__person-finder', className)}>
+            <div
+                className={classNames('cc__person-finder', className)}
+                style={props.renderInline ? { height: '100%' } : undefined}
+            >
                 <Context.Provider
                     // backward compatibility for previous props
                     {...(Context.Provider === PersonsContext.Provider
@@ -281,6 +284,7 @@ MultiplePersonFinder.propTypes = {
     onChange: PropTypes.func,
     showPersons: PropTypes.bool,
     showSites: PropTypes.bool,
+    showUacGroups: PropTypes.bool,
     disableFriends: PropTypes.bool,
     className: PropTypes.string,
     defaultValue: PropTypes.oneOfType([
@@ -329,6 +333,7 @@ MultiplePersonFinder.defaultProps = {
     onChange: null,
     showPersons: true,
     showSites: false,
+    showUacGroups: false,
     disableFriends: false,
     defaultValue: null,
     className: null,

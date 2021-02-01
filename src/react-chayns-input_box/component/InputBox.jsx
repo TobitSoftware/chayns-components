@@ -26,6 +26,7 @@ const InputBox = React.forwardRef((props, ref) => {
         style,
         onBlur,
         renderInline,
+        hideInput,
         ...restProps
     } = props;
 
@@ -130,19 +131,35 @@ const InputBox = React.forwardRef((props, ref) => {
     return (
         <div
             style={{
-                display: 'inline-block',
+                display: renderInline ? 'flex' : 'inline-block',
+                ...(renderInline
+                    ? { height: '100%', flexDirection: 'column' }
+                    : {}),
                 ...style,
             }}
-            className={classnames('cc__input-box', className)}
+            className={classnames(
+                { 'cc__input-box': !renderInline },
+                className
+            )}
             ref={wrapperRef}
         >
-            <InputComponent
-                {...restProps}
-                ref={inputRef}
-                onFocus={handleFocus}
-            />
+            {!hideInput && (
+                <InputComponent
+                    {...restProps}
+                    ref={inputRef}
+                    onFocus={handleFocus}
+                />
+            )}
             {renderInline ? (
-                <div style={{ marginTop: 20 }}>{children}</div>
+                <div
+                    className="cc__input-box--inline-wrapper"
+                    style={{
+                        marginTop: !hideInput ? 20 : 0,
+                        overflow: 'hidden auto',
+                    }}
+                >
+                    {children}
+                </div>
             ) : (
                 <Overlay parent={parent}>
                     {!!(rect && !isHidden && children) && (
@@ -190,6 +207,7 @@ InputBox.propTypes = {
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
     renderInline: PropTypes.bool,
+    hideInput: PropTypes.bool,
 };
 
 InputBox.defaultProps = {
@@ -204,6 +222,7 @@ InputBox.defaultProps = {
     overlayProps: null,
     style: null,
     renderInline: false,
+    hideInput: false,
 };
 
 InputBox.displayName = 'InputBox';
