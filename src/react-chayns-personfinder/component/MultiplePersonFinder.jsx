@@ -221,7 +221,11 @@ class MultiplePersonFinder extends Component {
         return (
             <div
                 className={classNames('cc__person-finder', className)}
-                style={props.renderInline ? { minHeight: 0 } : undefined}
+                style={
+                    props.renderInline
+                        ? { minHeight: 0, width: '100%' }
+                        : undefined
+                }
             >
                 <Context.Provider
                     // backward compatibility for previous props

@@ -143,13 +143,16 @@ const InputBox = React.forwardRef((props, ref) => {
             )}
             ref={wrapperRef}
         >
-            {!hideInput && (
-                <InputComponent
-                    {...restProps}
-                    ref={inputRef}
-                    onFocus={handleFocus}
-                />
-            )}
+            <InputComponent
+                {...restProps}
+                style={
+                    renderInline && hideInput
+                        ? { position: 'absolute', visibility: 'hidden' }
+                        : undefined
+                }
+                ref={inputRef}
+                onFocus={handleFocus}
+            />
             {renderInline ? (
                 <div
                     className="cc__input-box--inline-wrapper scrollbar"
