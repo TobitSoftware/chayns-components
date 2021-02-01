@@ -152,7 +152,7 @@ const InputBox = React.forwardRef((props, ref) => {
             )}
             {renderInline ? (
                 <div
-                    className="cc__input-box--inline-wrapper"
+                    className="cc__input-box--inline-wrapper scrollbar"
                     style={{
                         marginTop: !hideInput ? 20 : 0,
                         overflow: 'hidden auto',
