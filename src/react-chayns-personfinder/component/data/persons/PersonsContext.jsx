@@ -144,7 +144,7 @@ const PersonFinderStateProvider = ({
                 type: 'GROUP',
                 id,
                 name: showName,
-                imageUrl: `https://sub60.tobit.com/l/${chayns.env.site.id}?size=40`,
+                imageUrl: `https://sub60.tobit.com/l/${chayns.env.site.id}?size=100`,
             }));
             dispatch({
                 type: 'RECEIVE_GROUPS',

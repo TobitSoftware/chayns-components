@@ -376,7 +376,7 @@ export default class PersonFinderExample extends PureComponent {
                             id: '59140-09519',
                             name: 'BamBoo! Ahaus',
                             imageUrl:
-                                'https://sub60.tobit.com/l/59140-09519?size=40',
+                                'https://sub60.tobit.com/l/59140-09519?size=100',
                             siteId: '59140-09519',
                             locationId: 1,
                         },
