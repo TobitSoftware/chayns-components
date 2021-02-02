@@ -165,7 +165,6 @@ class PersonFinderView extends Component {
         const { focusIndex } = this.state;
 
         const hasEntries = this.hasEntries();
-        console.log('hasEntries', hasEntries, this.props.placeholder, data);
 
         if (!selectedValue && hasEntries) {
             return (
