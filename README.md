@@ -42,10 +42,6 @@ include these in your HTML:
 <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
 ```
 
-By default, the whole library is imported when using any component. If you care
-about your bundle size you should follow our
-[tree-shaking guide](./tree-shaking.md).
-
 ## Components Overview
 
 The following components are part of this package:
