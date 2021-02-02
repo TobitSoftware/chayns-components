@@ -5,6 +5,7 @@ import ResultItemList from './ResultItemList';
 
 const PersonFinderResults = ({
     data,
+    tags,
     orm,
     value: inputValue,
     hasMore,
@@ -13,6 +14,7 @@ const PersonFinderResults = ({
     onSelect,
     focusIndex,
     noBackground,
+    filterSelected,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -29,12 +31,19 @@ const PersonFinderResults = ({
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
-            const groupData =
+            let groupData =
                 typeof (filter || orm.filter) === 'function'
                     ? (data[group] || []).filter(
                           (filter || orm.filter)(inputValue)
                       )
                     : data[group] || [];
+            if (filterSelected) {
+                groupData = groupData.filter(({ type, id }) => {
+                    return tags.every(
+                        ({ value }) => type !== value.type || id !== value.id
+                    );
+                });
+            }
             const groupLength = groupData.length;
             length += groupLength;
             let groupFocusIndex = null;
@@ -106,6 +115,11 @@ PersonFinderResults.propTypes = {
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     ]),
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.shape({}),
+        })
+    ),
     value: PropTypes.string,
     onSelect: PropTypes.func,
     onLoadMore: PropTypes.func.isRequired,
@@ -119,16 +133,19 @@ PersonFinderResults.propTypes = {
     ]),
     focusIndex: PropTypes.number,
     noBackground: PropTypes.bool,
+    filterSelected: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
     data: [],
+    tags: [],
     value: '',
     onSelect: null,
     hasMore: false,
     showWaitCursor: false,
     focusIndex: null,
     noBackground: false,
+    filterSelected: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

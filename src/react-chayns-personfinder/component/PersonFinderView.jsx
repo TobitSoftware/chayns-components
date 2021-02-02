@@ -133,16 +133,30 @@ class PersonFinderView extends Component {
     };
 
     hasEntries = () => {
-        const { data, orm, value } = this.props;
+        const { data, orm, value, tags, filterSelected } = this.props;
+        const filterValues = ({ type, id }) => {
+            return tags.every(
+                ({ value: tagValue }) =>
+                    type !== tagValue.type || id !== tagValue.id
+            );
+        };
         return Array.isArray(orm.groups)
-            ? orm.groups.some(
-                  ({ key: group, show, filter }) =>
-                      (typeof show !== 'function' || show(value)) &&
-                      Array.isArray(data[group]) &&
-                      (typeof filter !== 'function'
-                          ? data[group].length
-                          : data[group].filter(filter).length)
-              )
+            ? orm.groups.some(({ key: group, show, filter }) => {
+                  if (typeof show === 'function' && !show(value)) {
+                      return false;
+                  }
+                  if (!Array.isArray(data[group])) {
+                      return false;
+                  }
+                  let items = data[group];
+                  if (filter === 'function') {
+                      items = items.filter(filter);
+                  }
+                  if (filterSelected) {
+                      items = items.filter(filterValues);
+                  }
+                  return items.length;
+              })
             : !!(
                   (Array.isArray(data) && data.length) ||
                   Object.values(data).some((d) => Array.isArray(d) && d.length)
@@ -154,12 +168,14 @@ class PersonFinderView extends Component {
             onSelect,
             selectedValue,
             data,
+            tags,
             orm,
             value,
             hasMore,
             onLoadMore,
             showWaitCursor: waitCursor,
             noBackground,
+            filterSelected,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -172,6 +188,7 @@ class PersonFinderView extends Component {
                     key="results"
                     onSelect={onSelect}
                     data={data}
+                    tags={tags}
                     orm={orm}
                     value={value}
                     onLoadMore={async (type) => {
@@ -182,6 +199,7 @@ class PersonFinderView extends Component {
                     hasMore={hasMore}
                     focusIndex={focusIndex}
                     noBackground={noBackground}
+                    filterSelected={filterSelected}
                 />
             );
         }
@@ -271,6 +289,11 @@ PersonFinderView.propTypes = {
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     ]),
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.shape({}),
+        })
+    ),
     autoLoading: PropTypes.bool,
     hasMore: PropTypes.oneOfType([
         PropTypes.objectOf(PropTypes.bool),
@@ -296,11 +319,13 @@ PersonFinderView.propTypes = {
     autoSelectFirst: PropTypes.bool,
     onKeyDown: PropTypes.func,
     noBackground: PropTypes.bool,
+    filterSelected: PropTypes.bool,
 };
 
 PersonFinderView.defaultProps = {
     value: '',
     data: [],
+    tags: [],
     autoLoading: false,
     hasMore: false,
     onLoadMore: null,
@@ -313,6 +338,7 @@ PersonFinderView.defaultProps = {
     autoSelectFirst: false,
     onKeyDown: null,
     noBackground: false,
+    filterSelected: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';
