@@ -381,7 +381,7 @@ DateInfo.defaultProps = {
     children: <div />,
     language: isServer()
         ? 'de'
-        : (chayns.env.language || navigator.language || 'de')
+        : (window.chayns?.env.language || navigator.language || 'de')
               .substring(0, 2)
               .toLowerCase(),
     date2: null,
