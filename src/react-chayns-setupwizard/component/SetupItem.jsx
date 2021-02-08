@@ -29,11 +29,28 @@ const SetupWizardItem = ({
     toStep,
     stepRequired,
     right,
+    stepEnabled,
+    stepComplete,
 }) => {
     useEffect(() => {
         stepRequired(required, step);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        const disabled = isDisabled(enabledSteps, step);
+        if (disabled && !disabledProp && readyProp) {
+            stepEnabled(true, step);
+            stepComplete(true, step);
+        }
+    }, [
+        enabledSteps,
+        disabledProp,
+        readyProp,
+        step,
+        stepComplete,
+        stepEnabled,
+    ]);
 
     const disabled = isDisabled(enabledSteps, step) || disabledProp;
     const open = step === currentStep || openProp;
@@ -116,6 +133,8 @@ SetupWizardItem.propTypes = {
     enabledSteps: PropTypes.arrayOf(PropTypes.number),
     completedSteps: PropTypes.arrayOf(PropTypes.number),
     currentStep: PropTypes.number,
+    stepEnabled: PropTypes.func.isRequired,
+    stepComplete: PropTypes.func.isRequired,
 
     /**
      * A component that is shown on the right hand of the accordion head.
