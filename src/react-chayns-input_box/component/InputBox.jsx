@@ -81,7 +81,7 @@ const InputBox = React.forwardRef((props, ref) => {
         document.addEventListener('mousedown', handleBlur);
         document.addEventListener('touchstart', handleBlur);
 
-        // window.addEventListener('blur', hide);
+        window.addEventListener('blur', hide);
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
