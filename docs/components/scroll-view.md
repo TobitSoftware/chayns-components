@@ -1,4 +1,8 @@
-<div align="center"><h1>ScrollView</h1></div>
+<h1 align="center">ScrollView</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-scrollview/component/ScrollView.jsx">Source</a>
+</p>
 
 A scrollable container with a custom scrollbar that looks great on every device.
 

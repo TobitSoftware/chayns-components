@@ -1,4 +1,8 @@
-<div align="center"><h1>ContextMenu</h1></div>
+<h1 align="center">ContextMenu</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-contextmenu/component/ContextMenu.jsx">Source</a>
+</p>
 
 Gives people access to additional functionality related to onscreen items
 without cluttering the interface.

@@ -1,4 +1,8 @@
-<div align="center"><h1>Icon</h1></div>
+<h1 align="center">Icon</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-icon/component/Icon.jsx">Source</a>
+</p>
 
 Displays a FontAwesome icon.
 

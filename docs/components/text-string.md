@@ -1,4 +1,8 @@
-<div align="center"><h1>TextString</h1></div>
+<h1 align="center">TextString</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-textstring/component/TextString.jsx">Source</a>
+</p>
 
 Loads text strings from our database and displays them. Handles replacements and
 changing the string via `CTRL` + `Click` (only internal).
@@ -38,7 +42,7 @@ The `TextString`-component takes the following props:
 | --------------------------------------------------------- | ----------------------------------------------- | ------- | :------: |
 | [stringName](#stringname)                                 | `string`                                        |         |          |
 | [replacements](#replacements)                             | `{ [key: string]: string \| number }`           | `{}`    |          |
-| [children](#children)                                     | `ReactNode`                                     |         |    ✓     |
+| [children](#children)                                     | `ReactNode`                                     | `<p />` |          |
 | [useDangerouslySetInnerHTML](#usedangerouslysetinnerhtml) | `boolean`                                       | `false` |          |
 | [language](#language)                                     | `string`                                        |         |          |
 | [fallback](#fallback)                                     | `string`                                        | `''`    |          |
@@ -69,7 +73,7 @@ replaced as its key and the replacement as its value.
 ### `children`
 
 ```ts
-children: ReactNode;
+children?: ReactNode
 ```
 
 The child node the text should be rendered into.

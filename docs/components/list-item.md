@@ -1,4 +1,8 @@
-<div align="center"><h1>ListItem</h1></div>
+<h1 align="center">ListItem</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-list/component/ListItem/ListItem.jsx">Source</a>
+</p>
 
 The items in a list to display related data in a structured format. Should be
 used inside of a `List` component.

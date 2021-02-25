@@ -1,4 +1,8 @@
-<div align="center"><h1>ComboBox</h1></div>
+<h1 align="center">ComboBox</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-combobox/component/ComboBox.jsx">Source</a>
+</p>
 
 A button with a dropdown that contains a scrollable list of distinct values from
 which people can choose.

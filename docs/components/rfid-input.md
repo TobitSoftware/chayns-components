@@ -1,4 +1,8 @@
-<div align="center"><h1>RfidInput</h1></div>
+<h1 align="center">RfidInput</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-rfid_input/component/RfidInput.jsx">Source</a>
+</p>
 
 A component to take in an RFID signal.
 

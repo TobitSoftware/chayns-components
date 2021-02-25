@@ -1,4 +1,8 @@
-<div align="center"><h1>Bubble</h1></div>
+<h1 align="center">Bubble</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-bubble/component/Bubble.jsx">Source</a>
+</p>
 
 A floating bubble that is primarily used to power the `ContextMenu` and
 `Tooltip` components.

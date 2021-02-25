@@ -115,6 +115,7 @@ module.exports = async function generateDocs() {
             propTable,
             propDescriptions,
             docs: component.docs,
+            relativePath: `/${component.filePath}`,
         });
 
         if (!prettierOptions) {

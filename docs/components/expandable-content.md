@@ -1,4 +1,8 @@
-<div align="center"><h1>ExpandableContent</h1></div>
+<h1 align="center">ExpandableContent</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-expandable_content/component/ExpandableContent.jsx">Source</a>
+</p>
 
 A collapsible section that reveals its children with a height transition.
 

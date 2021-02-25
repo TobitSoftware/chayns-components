@@ -1,4 +1,8 @@
-<div align="center"><h1>Input</h1></div>
+<h1 align="center">Input</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-input/component/Input.jsx">Source</a>
+</p>
 
 A text input that can be validated and decorated with different designs.
 

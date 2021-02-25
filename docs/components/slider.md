@@ -1,4 +1,8 @@
-<div align="center"><h1>Slider</h1></div>
+<h1 align="center">Slider</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-slider/component/Slider.jsx">Source</a>
+</p>
 
 A horizontal track with a thumb that can be moved between a minimum and a
 maximum value.

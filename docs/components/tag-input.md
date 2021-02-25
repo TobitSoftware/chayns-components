@@ -1,4 +1,8 @@
-<div align="center"><h1>TagInput</h1></div>
+<h1 align="center">TagInput</h1>
+
+<p align="center">
+    <a href="/src/react-chayns-tag_input/component/TagInput.jsx">Source</a>
+</p>
 
 A text input that allows values to be grouped as tags.
 
