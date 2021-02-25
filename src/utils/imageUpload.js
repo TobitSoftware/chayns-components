@@ -1,5 +1,14 @@
-import { isString } from './is';
-
+/**
+ * Uploads an image to the tsimg cloud service.
+ *
+ * @export
+ * @param {string | File} file A URL as a string or a `File` object that should be uploaded.
+ * @param {string} referenceId
+ * @param {string} personId A person is that should be associated with the uploaded image.
+ * @param {string} siteId A site id that should be associated with the uploaded image.
+ * @param {string} [url='https://api.tsimg.cloud/image']
+ * @return {object} The response data for the image upload.
+ */
 export default async function imageUpload(
     file,
     referenceId,
@@ -7,51 +16,45 @@ export default async function imageUpload(
     siteId,
     url = 'https://api.tsimg.cloud/image'
 ) {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-        try {
-            const headers = {
-                Accept: 'application/json',
-            };
-            if (referenceId) {
-                headers['X-Reference-Id'] = referenceId;
-            }
-            if (personId) {
-                headers['X-Person-Id'] = personId;
-            }
-            if (siteId) {
-                headers['X-Site-Id'] = siteId;
-            }
-            if (chayns.env.user.isAuthenticated) {
-                headers.Authorization = `bearer ${chayns.env.user.tobitAccessToken}`;
-            }
+    const headers = new Headers({ Accept: 'application/json' });
 
-            const uploadFunction = async (body) => {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body,
-                    headers,
-                });
-                if (response.status >= 200 && response.status < 300) {
-                    resolve(response.json());
-                } else {
-                    reject(response.status);
-                }
-            };
+    if (referenceId) headers.set('X-Reference-Id', referenceId);
+    if (personId) headers.set('X-Person-Id', personId);
+    if (siteId) headers.set('X-Site-Id', siteId);
 
-            if (isString(file)) {
-                headers['Content-Type'] = 'application/json';
-                uploadFunction(JSON.stringify({ url: file }));
-            } else {
-                headers['Content-Type'] = 'image/*';
+    /** @type {string | ArrayBuffer} */
+    let body;
 
-                const reader = new FileReader();
-                reader.onload = (e) => uploadFunction(e.target.result);
-                reader.onerror = reject;
-                reader.readAsArrayBuffer(file);
-            }
-        } catch (err) {
-            reject(err);
-        }
+    if (typeof file === 'string') {
+        headers.set('Content-Type', 'application/json');
+        body = JSON.stringify({ url: file });
+    } else {
+        headers.set('Content-Type', 'image/*');
+        body = await getFileArrayBuffer(file);
+    }
+
+    const response = await fetch(url, { method: 'POST', body, headers });
+
+    if (response.ok) {
+        return response.json();
+    }
+
+    throw Error(
+        `Uploading the image failed with status code ${response.status}.`
+    );
+}
+
+/**
+ * Returns the array buffer for an input file.
+ *
+ * @param {File} file The input `File` object.
+ * @return {Promise<string | ArrayBuffer>}
+ */
+function getFileArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
     });
 }
