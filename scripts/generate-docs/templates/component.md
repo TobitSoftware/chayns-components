@@ -1,4 +1,8 @@
-<div align="center"><h1>{{ name }}</h1></div>
+<h1 align="center">{{ name }}</h1>
+
+<p align="center">
+    <a href="{{ relativePath }}">Source</a>
+</p>
 
 {{ description }}
 
