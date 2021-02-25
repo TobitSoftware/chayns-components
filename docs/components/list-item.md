@@ -1,7 +1,7 @@
 <h1 align="center">ListItem</h1>
 
 <p align="center">
-    <a href="src/react-chayns-list/component/ListItem/ListItem.jsx">Source</a>
+    <a href="/src/react-chayns-list/component/ListItem/ListItem.jsx">Source</a>
 </p>
 
 The items in a list to display related data in a structured format. Should be

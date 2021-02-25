@@ -1,7 +1,7 @@
 <h1 align="center">ContextMenu</h1>
 
 <p align="center">
-    <a href="src/react-chayns-contextmenu/component/ContextMenu.jsx">Source</a>
+    <a href="/src/react-chayns-contextmenu/component/ContextMenu.jsx">Source</a>
 </p>
 
 Gives people access to additional functionality related to onscreen items

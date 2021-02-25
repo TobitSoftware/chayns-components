@@ -1,7 +1,7 @@
 <h1 align="center">EmojiInput</h1>
 
 <p align="center">
-    <a href="src/react-chayns-emoji_input/component/EmojiInput.jsx">Source</a>
+    <a href="/src/react-chayns-emoji_input/component/EmojiInput.jsx">Source</a>
 </p>
 
 A text input that allows emojis to be put in.

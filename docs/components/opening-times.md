@@ -1,7 +1,7 @@
 <h1 align="center">OpeningTimes</h1>
 
 <p align="center">
-    <a href="src/react-chayns-openingtimes/component/OpeningTimes.jsx">Source</a>
+    <a href="/src/react-chayns-openingtimes/component/OpeningTimes.jsx">Source</a>
 </p>
 
 An input for opening times.

@@ -1,7 +1,7 @@
 <h1 align="center">AmountControl</h1>
 
 <p align="center">
-    <a href="src/react-chayns-amountcontrol/component/AmountControl.jsx">Source</a>
+    <a href="/src/react-chayns-amountcontrol/component/AmountControl.jsx">Source</a>
 </p>
 
 The AmountControl is a three-segment control used to increase or decrease an

@@ -1,7 +1,7 @@
 <h1 align="center">PositionInput</h1>
 
 <p align="center">
-    <a href="src/react-chayns-position_input/component/PositionInput.jsx">Source</a>
+    <a href="/src/react-chayns-position_input/component/PositionInput.jsx">Source</a>
 </p>
 
 A location input with a map and text input.

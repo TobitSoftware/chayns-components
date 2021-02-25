@@ -1,7 +1,7 @@
 <h1 align="center">DateInfo</h1>
 
 <p align="center">
-    <a href="src/react-chayns-dateinfo/component/DateInfo.jsx">Source</a>
+    <a href="/src/react-chayns-dateinfo/component/DateInfo.jsx">Source</a>
 </p>
 
 Formats a date or date range to be easily readable and reveals the absolute date

@@ -1,7 +1,7 @@
 <h1 align="center">PersonFinder</h1>
 
 <p align="center">
-    <a href="src/react-chayns-personfinder/component/PersonFinder.jsx">Source</a>
+    <a href="/src/react-chayns-personfinder/component/PersonFinder.jsx">Source</a>
 </p>
 
 An autocomplete search for persons that can be customized to work with arbitrary

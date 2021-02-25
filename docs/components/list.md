@@ -1,7 +1,7 @@
 <h1 align="center">List</h1>
 
 <p align="center">
-    <a href="src/react-chayns-list/component/List.jsx">Source</a>
+    <a href="/src/react-chayns-list/component/List.jsx">Source</a>
 </p>
 
 The wrapper for the `ListItem`-component to create lists.

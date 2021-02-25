@@ -1,7 +1,7 @@
 <h1 align="center">TextString</h1>
 
 <p align="center">
-    <a href="src/react-chayns-textstring/component/TextString.jsx">Source</a>
+    <a href="/src/react-chayns-textstring/component/TextString.jsx">Source</a>
 </p>
 
 Loads text strings from our database and displays them. Handles replacements and

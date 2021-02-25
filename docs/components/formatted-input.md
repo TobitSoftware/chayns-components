@@ -1,7 +1,7 @@
 <h1 align="center">FormattedInput</h1>
 
 <p align="center">
-    <a href="src/react-chayns-formatted_input/component/FormattedInput.jsx">Source</a>
+    <a href="/src/react-chayns-formatted_input/component/FormattedInput.jsx">Source</a>
 </p>
 
 A text input that automatically formats its input with a formatter. Since this

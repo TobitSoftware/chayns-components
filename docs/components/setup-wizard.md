@@ -1,7 +1,7 @@
 <h1 align="center">SetupWizard</h1>
 
 <p align="center">
-    <a href="src/react-chayns-setupwizard/component/SetupWizard.jsx">Source</a>
+    <a href="/src/react-chayns-setupwizard/component/SetupWizard.jsx">Source</a>
 </p>
 
 A set of steps the user has to go through sequentially.

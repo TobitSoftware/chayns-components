@@ -1,7 +1,7 @@
 <h1 align="center">SelectList</h1>
 
 <p align="center">
-    <a href="src/react-chayns-selectlist/component/SelectList.jsx">Source</a>
+    <a href="/src/react-chayns-selectlist/component/SelectList.jsx">Source</a>
 </p>
 
 A vertical list of radio buttons that reveal content when selected.

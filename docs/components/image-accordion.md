@@ -1,7 +1,7 @@
 <h1 align="center">ImageAccordion</h1>
 
 <p align="center">
-    <a href="src/react-chayns-image_accordion/component/ImageAccordion.jsx">Source</a>
+    <a href="/src/react-chayns-image_accordion/component/ImageAccordion.jsx">Source</a>
 </p>
 
 An accordion that has a big image and appears in a grid. Should be used inside

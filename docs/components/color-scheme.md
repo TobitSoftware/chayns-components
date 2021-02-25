@@ -1,7 +1,7 @@
 <h1 align="center">ColorScheme</h1>
 
 <p align="center">
-    <a href="src/react-chayns-color_scheme/component/ColorScheme.jsx">Source</a>
+    <a href="/src/react-chayns-color_scheme/component/ColorScheme.jsx">Source</a>
 </p>
 
 Adjusts the color scheme for all child components.

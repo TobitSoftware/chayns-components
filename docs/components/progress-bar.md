@@ -1,7 +1,7 @@
 <h1 align="center">ProgressBar</h1>
 
 <p align="center">
-    <a href="src/react-chayns-progress_bar/component/ProgressBar.jsx">Source</a>
+    <a href="/src/react-chayns-progress_bar/component/ProgressBar.jsx">Source</a>
 </p>
 
 An animated progress bar that can show an actions progress or an indeterminate

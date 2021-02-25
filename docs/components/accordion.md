@@ -1,7 +1,7 @@
 <h1 align="center">Accordion</h1>
 
 <p align="center">
-    <a href="src/react-chayns-accordion/component/Accordion.jsx">Source</a>
+    <a href="/src/react-chayns-accordion/component/Accordion.jsx">Source</a>
 </p>
 
 Accordions are collapsible sections that are toggled by interacting with a

@@ -1,7 +1,7 @@
 <h1 align="center">TextArea</h1>
 
 <p align="center">
-    <a href="src/react-chayns-textarea/component/TextArea.jsx">Source</a>
+    <a href="/src/react-chayns-textarea/component/TextArea.jsx">Source</a>
 </p>
 
 A multiline text input that can automatically grow with its content.

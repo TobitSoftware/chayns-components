@@ -1,7 +1,7 @@
 <h1 align="center">Calendar</h1>
 
 <p align="center">
-    <a href="src/react-chayns-calendar/component/Calendar.jsx">Source</a>
+    <a href="/src/react-chayns-calendar/component/Calendar.jsx">Source</a>
 </p>
 
 An interactive grid calendar that can highlight specified dates.

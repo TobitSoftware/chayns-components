@@ -1,7 +1,7 @@
 <h1 align="center">SetupWizardItem</h1>
 
 <p align="center">
-    <a href="src/react-chayns-setupwizard/component/SetupItem.jsx">Source</a>
+    <a href="/src/react-chayns-setupwizard/component/SetupItem.jsx">Source</a>
 </p>
 
 An item that represents one step in a `SetupWizard`.

@@ -1,7 +1,7 @@
 <h1 align="center">SelectItem</h1>
 
 <p align="center">
-    <a href="src/react-chayns-selectlist/component/SelectItem.jsx">Source</a>
+    <a href="/src/react-chayns-selectlist/component/SelectItem.jsx">Source</a>
 </p>
 
 A radio button that expands its content when selected. Should be used inside of

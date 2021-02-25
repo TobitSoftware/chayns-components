@@ -1,7 +1,7 @@
 <h1 align="center">Checkbox</h1>
 
 <p align="center">
-    <a href="src/react-chayns-checkbox/component/Checkbox.jsx">Source</a>
+    <a href="/src/react-chayns-checkbox/component/Checkbox.jsx">Source</a>
 </p>
 
 Checkboxes allow users to complete tasks that involve making choices such as

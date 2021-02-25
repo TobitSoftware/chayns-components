@@ -1,7 +1,7 @@
 <h1 align="center">SelectButton</h1>
 
 <p align="center">
-    <a href="src/react-chayns-selectbutton/component/SelectButton.jsx">Source</a>
+    <a href="/src/react-chayns-selectbutton/component/SelectButton.jsx">Source</a>
 </p>
 
 A choose button that opens a selection dialog when clicked.

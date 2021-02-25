@@ -1,7 +1,7 @@
 <h1 align="center">AnimationWrapper</h1>
 
 <p align="center">
-    <a href="src/react-chayns-animation_wrapper/component/AnimationWrapper.jsx">Source</a>
+    <a href="/src/react-chayns-animation_wrapper/component/AnimationWrapper.jsx">Source</a>
 </p>
 
 The AnimationWrapper provides an eye-catching initial animation to its children.

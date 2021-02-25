@@ -1,7 +1,7 @@
 <h1 align="center">RadioButton</h1>
 
 <p align="center">
-    <a href="src/react-chayns-radiobutton/component/RadioButton.jsx">Source</a>
+    <a href="/src/react-chayns-radiobutton/component/RadioButton.jsx">Source</a>
 </p>
 
 A radio button that allows to select one of multiple options.

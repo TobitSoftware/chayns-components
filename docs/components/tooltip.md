@@ -1,7 +1,7 @@
 <h1 align="center">Tooltip</h1>
 
 <p align="center">
-    <a href="src/react-chayns-tooltip/component/Tooltip.jsx">Source</a>
+    <a href="/src/react-chayns-tooltip/component/Tooltip.jsx">Source</a>
 </p>
 
 Wraps a child component and displays a message when the child is hovered or

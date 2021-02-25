@@ -1,7 +1,7 @@
 <h1 align="center">Badge</h1>
 
 <p align="center">
-    <a href="src/react-chayns-badge/component/Badge.jsx">Source</a>
+    <a href="/src/react-chayns-badge/component/Badge.jsx">Source</a>
 </p>
 
 Badges are small, circular containers used to decorate other components with

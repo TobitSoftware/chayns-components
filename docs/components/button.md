@@ -1,7 +1,7 @@
 <h1 align="center">Button</h1>
 
 <p align="center">
-    <a href="src/react-chayns-button/component/Button.jsx">Source</a>
+    <a href="/src/react-chayns-button/component/Button.jsx">Source</a>
 </p>
 
 Buttons initiate actions, can include a title or an icon and come with a set of

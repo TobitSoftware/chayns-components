@@ -1,7 +1,7 @@
 <h1 align="center">ImageAccordionGroup</h1>
 
 <p align="center">
-    <a href="src/react-chayns-image_accordion/component/ImageAccordionGroup.jsx">Source</a>
+    <a href="/src/react-chayns-image_accordion/component/ImageAccordionGroup.jsx">Source</a>
 </p>
 
 Groups several `ImageAccordion` components together, so only one of them can be
