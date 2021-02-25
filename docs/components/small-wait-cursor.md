@@ -1,4 +1,8 @@
-<div align="center"><h1>SmallWaitCursor</h1></div>
+<h1 align="center">SmallWaitCursor</h1>
+
+<p align="center">
+    <a href="src/react-chayns-smallwaitcursor/component/SmallWaitCursor.jsx">Source</a>
+</p>
 
 A small circular loading indicator.
 

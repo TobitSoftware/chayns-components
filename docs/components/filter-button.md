@@ -1,4 +1,8 @@
-<div align="center"><h1>FilterButton</h1></div>
+<h1 align="center">FilterButton</h1>
+
+<p align="center">
+    <a href="src/react-chayns-filterbutton/component/FilterButton.jsx">Source</a>
+</p>
 
 A chip-like component that is used to filter lists. Usually used in a group of 2
 or more.

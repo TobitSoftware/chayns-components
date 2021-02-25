@@ -1,4 +1,8 @@
-<div align="center"><h1>Checkbox</h1></div>
+<h1 align="center">Checkbox</h1>
+
+<p align="center">
+    <a href="src/react-chayns-checkbox/component/Checkbox.jsx">Source</a>
+</p>
 
 Checkboxes allow users to complete tasks that involve making choices such as
 selecting options. Can be styled as a switch, a visual toggle between two

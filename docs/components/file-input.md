@@ -1,4 +1,8 @@
-<div align="center"><h1>FileInput</h1></div>
+<h1 align="center">FileInput</h1>
+
+<p align="center">
+    <a href="src/react-chayns-file_input/component/FileInput.jsx">Source</a>
+</p>
 
 Accepts specified file types via dialog or drag and drop.
 

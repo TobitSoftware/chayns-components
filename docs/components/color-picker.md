@@ -1,4 +1,8 @@
-<div align="center"><h1>ColorPicker</h1></div>
+<h1 align="center">ColorPicker</h1>
+
+<p align="center">
+    <a href="src/react-chayns-color_picker/component/ColorPicker.jsx">Source</a>
+</p>
 
 Lets a user choose a color for text, shapes, marking tools, and other elements.
 

@@ -1,4 +1,8 @@
-<div align="center"><h1>SearchBox</h1></div>
+<h1 align="center">SearchBox</h1>
+
+<p align="center">
+    <a href="src/react-chayns-searchbox/component/SearchBox.jsx">Source</a>
+</p>
 
 An autocomplete input to search through a list of entries.
 

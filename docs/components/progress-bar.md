@@ -1,4 +1,8 @@
-<div align="center"><h1>ProgressBar</h1></div>
+<h1 align="center">ProgressBar</h1>
+
+<p align="center">
+    <a href="src/react-chayns-progress_bar/component/ProgressBar.jsx">Source</a>
+</p>
 
 An animated progress bar that can show an actions progress or an indeterminate
 state like a loading spinner.

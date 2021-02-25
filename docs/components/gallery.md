@@ -1,4 +1,8 @@
-<div align="center"><h1>Gallery</h1></div>
+<h1 align="center">Gallery</h1>
+
+<p align="center">
+    <a href="src/react-chayns-gallery/component/Gallery.jsx">Source</a>
+</p>
 
 An image gallery that displays up to four images by default. Also supports
 reordering and deletion of images and blurred image previews for images loaded

@@ -1,4 +1,8 @@
-<div align="center"><h1>SliderButton</h1></div>
+<h1 align="center">SliderButton</h1>
+
+<p align="center">
+    <a href="src/react-chayns-sliderbutton/component/SliderButton.jsx">Source</a>
+</p>
 
 A linear set of buttons which are mutually exclusive.
 

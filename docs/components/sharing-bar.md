@@ -1,4 +1,8 @@
-<div align="center"><h1>SharingBar</h1></div>
+<h1 align="center">SharingBar</h1>
+
+<p align="center">
+    <a href="src/react-chayns-sharingbar/component/SharingBar.jsx">Source</a>
+</p>
 
 A context menu for sharing a link and some text on various platforms.
 

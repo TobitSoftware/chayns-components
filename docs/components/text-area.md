@@ -1,4 +1,8 @@
-<div align="center"><h1>TextArea</h1></div>
+<h1 align="center">TextArea</h1>
+
+<p align="center">
+    <a href="src/react-chayns-textarea/component/TextArea.jsx">Source</a>
+</p>
 
 A multiline text input that can automatically grow with its content.
 
@@ -33,22 +37,23 @@ import { TextArea } from 'chayns-components';
 
 The `TextArea`-component takes the following props:
 
-| Name                                | Type                                  | Default | Required |
-| ----------------------------------- | ------------------------------------- | ------- | :------: |
-| [style](#style)                     | `{ [key: string]: string \| number }` |         |          |
-| [disabled](#disabled)               | `boolean`                             | `false` |          |
-| [className](#classname)             | `string`                              |         |          |
-| [placeholder](#placeholder)         | `string`                              |         |          |
-| [required](#required)               | `boolean`                             |         |          |
-| [onChange](#onchange)               | `function`                            |         |          |
-| [onBlur](#onblur)                   | `function`                            |         |          |
-| [defaultValue](#defaultvalue)       | `string`                              |         |          |
-| [value](#value)                     | `string`                              |         |          |
-| [onKeyUp](#onkeyup)                 | `function`                            |         |          |
-| [onKeyDown](#onkeydown)             | `function`                            |         |          |
-| [autogrow](#autogrow)               | `boolean`                             |         |          |
-| [reference](#reference)             | `function`                            |         |          |
-| [stopPropagation](#stoppropagation) | `boolean`                             | `false` |          |
+| Name                                | Type                                  | Default                   | Required |
+| ----------------------------------- | ------------------------------------- | ------------------------- | :------: |
+| [style](#style)                     | `{ [key: string]: string \| number }` |                           |          |
+| [disabled](#disabled)               | `boolean`                             | `false`                   |          |
+| [className](#classname)             | `string`                              |                           |          |
+| [placeholder](#placeholder)         | `string`                              |                           |          |
+| [required](#required)               | `boolean`                             |                           |          |
+| [design](#design)                   | `number`                              | `TextArea.DEFAULT_DESIGN` |          |
+| [onChange](#onchange)               | `function`                            |                           |          |
+| [onBlur](#onblur)                   | `function`                            |                           |          |
+| [defaultValue](#defaultvalue)       | `string`                              |                           |          |
+| [value](#value)                     | `string`                              |                           |          |
+| [onKeyUp](#onkeyup)                 | `function`                            |                           |          |
+| [onKeyDown](#onkeydown)             | `function`                            |                           |          |
+| [autogrow](#autogrow)               | `boolean`                             |                           |          |
+| [reference](#reference)             | `function`                            |                           |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false`                   |          |
 
 ### `style`
 
@@ -99,6 +104,17 @@ required?: boolean
 
 Wether the text area is required for a form to complete. Renders the text area
 with an error style when its empty.
+
+---
+
+### `design`
+
+```ts
+design?: number
+```
+
+The design of the input. Use either `TextArea.DEFAULT_DESIGN` or
+`TextArea.BORDER_DESIGN`.
 
 ---
 
