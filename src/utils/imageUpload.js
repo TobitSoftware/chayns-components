@@ -53,7 +53,13 @@ export default async function imageUpload(
 function getFileArrayBuffer(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
+        reader.onload = (e) => {
+            if (e.target?.result) {
+                resolve(e.target.result);
+            } else {
+                reject(Error('Could not get array buffer.'));
+            }
+        };
         reader.onerror = reject;
         reader.readAsArrayBuffer(file);
     });
