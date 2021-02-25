@@ -7,7 +7,7 @@
  * @param {string} personId A person is that should be associated with the uploaded image.
  * @param {string} siteId A site id that should be associated with the uploaded image.
  * @param {string} [url='https://api.tsimg.cloud/image']
- * @return {object} The response data for the image upload.
+ * @return {Promise<object>} The response data for the image upload.
  */
 export default async function imageUpload(
     file,
