@@ -443,6 +443,7 @@ TextString.language = isServer()
     ? 'de'
     : (
           chayns.env.parameters.translang ||
+          chayns.env.site.translang ||
           chayns.env.language ||
           navigator.language ||
           'de'
