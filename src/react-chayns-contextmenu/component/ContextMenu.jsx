@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import Icon from '../../react-chayns-icon/component/Icon';
+import TextString from '../../react-chayns-textstring/component/TextString';
 
 /**
  * Gives people access to additional functionality related to onscreen items
@@ -245,6 +246,7 @@ const ContextMenu = React.forwardRef((props, ref) => {
                             }}
                             key={
                                 // eslint-disable-next-line react/no-array-index-key
+                                item.stringName ||
                                 (item.text.props && item.text.props.stringName
                                     ? item.text.props.stringName
                                     : item.text) + index
@@ -255,9 +257,17 @@ const ContextMenu = React.forwardRef((props, ref) => {
                                     <Icon icon={item.icon} />
                                 </div>
                             ) : null}
-                            <div className="context-menu__item__text">
-                                {item.text}
-                            </div>
+                            {item.stringName ? (
+                                <TextString stringName={item.stringName}>
+                                    <div className="context-menu__item__text">
+                                        {item.text}
+                                    </div>
+                                </TextString>
+                            ) : (
+                                <div className="context-menu__item__text">
+                                    {item.text}
+                                </div>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -308,7 +318,7 @@ ContextMenu.propTypes = {
     /**
      * The action items inside of the context menu. Their shape should look like
      * this: `{ className: <string>, onClick: <function>, text: <string>,
-     * icon: <string> }`.
+     * icon: <string> }, stringName: <string>`.
      */
     items: PropTypes.arrayOf(
         PropTypes.shape({
@@ -316,6 +326,7 @@ ContextMenu.propTypes = {
             onClick: PropTypes.func,
             text: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
                 .isRequired,
+            stringName: PropTypes.string,
             icon: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.instanceOf(Object),
