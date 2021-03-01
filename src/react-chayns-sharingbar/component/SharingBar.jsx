@@ -13,6 +13,7 @@ import {
     getAvailableShareProviders,
     getDefaultShareLink,
 } from './sharingHelper';
+import TextString from '../../react-chayns-textstring/component/TextString';
 
 /**
  * A context menu for sharing a link and some text on various platforms.
@@ -26,11 +27,17 @@ function SharingBar({
     children,
 }) {
     const [sharingProvider, setSharingProvider] = useState([]);
+    const [textStringsLoaded, setTextStringsLoaded] = useState(false);
 
     useEffect(() => {
         getAvailableShareProviders().then((provider) => {
             setSharingProvider(provider.filter((item) => item.available));
         });
+        if (!children) {
+            TextString.loadLibrary('ChaynsComponents').then(() => {
+                setTextStringsLoaded(true);
+            });
+        }
     }, []);
 
     const mobileShare = sharingProvider.find(
@@ -64,18 +71,28 @@ function SharingBar({
                         e.stopPropagation();
                     share(x, link, linkText);
                 },
-                text: x.name,
+                stringName: x.name,
                 icon: x.icon,
             });
         });
-
+    if (!children && !textStringsLoaded) return null;
     return (
         <div className={classNames('sharing-bar', className)} style={style}>
             <ContextMenu
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                {children}
+                {children || [
+                    <Icon
+                        icon="fal fa-share-alt"
+                        className="sharing-bar__icon"
+                    />,
+                    <TextString
+                        stringName={'txt_chayns_components_sharingbar_share'}
+                    >
+                        <span className="sharing-bar__text" />
+                    </TextString>,
+                ]}
             </ContextMenu>
         </div>
     );
@@ -122,10 +139,7 @@ SharingBar.defaultProps = {
     className: null,
     stopPropagation: false,
     style: null,
-    children: [
-        <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />,
-        <span className="sharing-bar__text">Teilen</span>,
-    ],
+    children: null,
 };
 
 SharingBar.displayName = 'SharingBar';

@@ -1,4 +1,7 @@
 /* eslint-disable max-len */
+
+import TextString from '../../react-chayns-textstring/component/TextString';
+
 export const shareOptions = {
     COPY: 0,
     MAIL: 1,
@@ -14,7 +17,7 @@ export const shareProvider = [
     {
         id: shareOptions.WHATSAPP,
         providerId: 1,
-        name: 'WhatsApp',
+        name: 'txt_chayns_components_sharingbar_whatsapp',
         androidIdentifier: 'com.whatsapp',
         icon: 'fab fa-whatsapp',
         url: 'https://api.whatsapp.com/send?text={url}',
@@ -23,7 +26,7 @@ export const shareProvider = [
     {
         id: shareOptions.COPY,
         providerId: -1,
-        name: 'Zwischenablage',
+        name: 'txt_chayns_components_sharingbar_copy',
         androidIdentifier: null,
         icon: 'fa fa-copy',
         url: null,
@@ -32,7 +35,7 @@ export const shareProvider = [
     {
         id: shareOptions.MAIL,
         providerId: 0,
-        name: 'Mail',
+        name: 'txt_chayns_components_sharingbar_mail',
         androidIdentifier: null,
         icon: 'fa fa-envelope',
         url: 'mailto:?body={url}',
@@ -41,7 +44,7 @@ export const shareProvider = [
     {
         id: shareOptions.FACEBOOK,
         providerId: 2,
-        name: 'Facebook',
+        name: 'txt_chayns_components_sharingbar_facebook',
         androidIdentifier: 'com.facebook.katana',
         icon: 'fab fa-facebook-f',
         url:
@@ -51,7 +54,7 @@ export const shareProvider = [
     {
         id: shareOptions.TWITTER,
         providerId: 5,
-        name: 'Twitter',
+        name: 'txt_chayns_components_sharingbar_twitter',
         androidIdentifier: null,
         icon: 'fab fa-twitter',
         url:
@@ -61,7 +64,7 @@ export const shareProvider = [
     {
         id: shareOptions.QRCODE,
         providerId: 6,
-        name: 'QR-Code',
+        name: 'txt_chayns_components_sharingbar_qrcode',
         androidIdentifier: null,
         icon: 'fas fa-qrcode',
         url:
@@ -71,7 +74,7 @@ export const shareProvider = [
     {
         id: shareOptions.CUSTOM_CHAYNS,
         providerId: -1,
-        name: 'Share',
+        name: 'txt_chayns_components_sharingbar_share',
         androidIdentifier: null,
         icon: 'fal fa-share-alt',
         url: null,
@@ -80,7 +83,7 @@ export const shareProvider = [
     {
         id: shareOptions.CUSTOM_ALL,
         providerId: -1,
-        name: 'Share',
+        name: 'txt_chayns_components_sharingbar_share',
         androidIdentifier: null,
         icon: 'fal fa-share-alt',
         url: null,
