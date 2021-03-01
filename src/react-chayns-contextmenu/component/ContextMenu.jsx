@@ -145,8 +145,10 @@ const ContextMenu = React.forwardRef((props, ref) => {
         if (!disableDialog && (chayns.env.isMobile || chayns.env.isTablet)) {
             const { buttonType, selection } = await chayns.dialog.select({
                 type: 2,
-                list: items.map(({ text, icon }, index) => ({
-                    name: text,
+                list: items.map(({ text, icon, stringName }, index) => ({
+                    name: stringName
+                        ? TextString.getTextString(stringName, null, text)
+                        : text,
                     value: index,
                     icon:
                         typeof icon === 'string' ? icon : `fa-${icon.iconName}`,

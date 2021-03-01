@@ -39,7 +39,6 @@ function SharingBar({
             });
         }
     }, []);
-
     const mobileShare = sharingProvider.find(
         (app) => app.id === 10 || app.id === 11
     );
@@ -49,6 +48,17 @@ function SharingBar({
         link = getDefaultShareLink();
     }
 
+    if (!children && !textStringsLoaded) {
+        return null;
+    }
+
+    const indicator = children || [
+        <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />,
+        <TextString stringName={'txt_chayns_components_sharingbar_share'}>
+            <span className="sharing-bar__text" />
+        </TextString>,
+    ];
+
     if (mobileShare) {
         const onClick = (e) => {
             share(mobileShare, link, linkText);
@@ -56,7 +66,7 @@ function SharingBar({
             if (stopPropagation) e.stopPropagation();
         };
 
-        return <div onClick={onClick}>{children}</div>;
+        return <div onClick={onClick}>{indicator}</div>;
     }
 
     const sharingItems = [];
@@ -75,24 +85,13 @@ function SharingBar({
                 icon: x.icon,
             });
         });
-    if (!children && !textStringsLoaded) return null;
     return (
         <div className={classNames('sharing-bar', className)} style={style}>
             <ContextMenu
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
             >
-                {children || [
-                    <Icon
-                        icon="fal fa-share-alt"
-                        className="sharing-bar__icon"
-                    />,
-                    <TextString
-                        stringName={'txt_chayns_components_sharingbar_share'}
-                    >
-                        <span className="sharing-bar__text" />
-                    </TextString>,
-                ]}
+                {indicator}
             </ContextMenu>
         </div>
     );

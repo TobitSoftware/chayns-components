@@ -35,11 +35,13 @@ function copyToClipboard(link) {
     document.body.removeChild(aux);
 }
 
-function webShareApi(link, linkText) {
-    navigator.share({
-        url: link,
-        text: linkText,
-    });
+async function webShareApi(link, linkText) {
+    try {
+        await navigator.share({
+            url: link,
+            text: linkText,
+        });
+    } catch (ignored) {}
 }
 
 export default function share(provider, link, linkText) {
