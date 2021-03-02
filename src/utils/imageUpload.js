@@ -22,6 +22,13 @@ export default async function imageUpload(
     if (personId) headers.set('X-Person-Id', personId);
     if (siteId) headers.set('X-Site-Id', siteId);
 
+    if (chayns.env.user.isAuthenticated) {
+        headers.set(
+            'Authorization',
+            `bearer ${chayns.env.user.tobitAccessToken}`
+        );
+    }
+
     /** @type {string | ArrayBuffer} */
     let body;
 
