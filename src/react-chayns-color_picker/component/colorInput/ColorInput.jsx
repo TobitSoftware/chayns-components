@@ -4,14 +4,16 @@ import './ColorInput.scss';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
-import getRgb255String from '../../../utils/color/rgb/getRgb255String';
-import rgb1ToRgb255 from '../../../utils/color/rgb/rgb1ToRgb255';
-import hsvToRgb1 from '../../../utils/color/hsv/hsvToRgb1';
-import getHexString from '../../../utils/color/hex/getHexString';
-import rgb255ToHex from '../../../utils/color/rgb/rgb255ToHex';
-import rgb1ToHsv from '../../../utils/color/rgb/rgb1ToHsv';
-import rgb255ToRgb1 from '../../../utils/color/rgb/rgb255ToRgb1';
-import hexToRgb255 from '../../../utils/color/hex/hexToRgb255';
+import {
+    getRgb255String,
+    rgb1ToRgb255,
+    hsvToRgb1,
+    rgb1ToHsv,
+    rgb255ToRgb1,
+    hexToRgb255,
+    rgb1ToHex,
+    rgb255ToHex,
+} from '@chayns/colors';
 
 export default class ColorInput extends Component {
     constructor(props) {
@@ -34,20 +36,16 @@ export default class ColorInput extends Component {
 
     getInputValue = () => {
         const { color, transparency, colorModel } = this.props;
-
+        const colorcopy = { h: color.h, s: color.s, v: color.v };
+        if (transparency) {
+            colorcopy.a = color.a;
+        }
         if (colorModel) {
             // rgb(a)
-            return getRgb255String(
-                rgb1ToRgb255(hsvToRgb1(color)),
-                transparency
-            );
+            return getRgb255String(rgb1ToRgb255(hsvToRgb1(colorcopy)));
         }
-
         // hex(a)
-        return getHexString(
-            rgb255ToHex(rgb1ToRgb255(hsvToRgb1(color))),
-            transparency
-        );
+        return rgb255ToHex(rgb1ToRgb255(hsvToRgb1(colorcopy)));
     };
 
     setColor = () => {

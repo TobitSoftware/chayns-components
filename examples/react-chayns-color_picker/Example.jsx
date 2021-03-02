@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ColorPicker } from '../../src/index';
 import Bubble from '../../src/react-chayns-bubble/component/Bubble';
-import { hsvToHexString, hsvToRgb } from '../../src/utils/color/hsv';
+import { hsvToHexString, hsvToRgb } from '../../src/utils/color/index';
 import Input from '../../src/react-chayns-input/component/Input';
 import HueSlider from '../../src/react-chayns-color_picker/component/hueSlider/HueSlider';
 import { hexStringToHsv } from '../../src/utils/color';
@@ -112,6 +112,23 @@ const ColorPickerExample = () => {
                 <Input
                     style={{
                         marginLeft: '5px',
+                    }}
+                />
+            </div>
+            <div>
+                <h2>Inline ColorPicker with transparency</h2>
+                <ColorPicker
+                    transparency
+                    inline
+                    input
+                    color={color}
+                    onChange={(c) => {
+                        const selectedColor = hsvToHexString(c);
+                        console.log(selectedColor);
+                    }}
+                    onChangeEnd={(c) => {
+                        console.log(c);
+                        setColor(c);
                     }}
                 />
             </div>

@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
-        "@chayns/colors": "^1.0.0",
+        "@chayns/colors": "^1.0.1",
         "@reach/rect": "^0.11.2",
         "abortcontroller-polyfill": "^1.5.0",
         "boxen": "^4.2.0",

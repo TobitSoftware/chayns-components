@@ -2,10 +2,13 @@
  * @component
  */
 
-import { getAvailableColorList, getColorFromPalette } from '@chayns/colors';
+import {
+    getAvailableColorList,
+    getColorFromPalette,
+    hexToRgb255,
+} from '@chayns/colors';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
-import { hexStringToRgb } from '../../utils/color';
 
 /**
  * Adjusts the color scheme for all child components.
@@ -41,8 +44,8 @@ const ColorScheme = (props) => {
 
     const colorStyles = useMemo(() => {
         if (color) {
-            const primaryRgbColor = hexStringToRgb(color);
-            const bgRgbColor = hexStringToRgb(
+            const primaryRgbColor = hexToRgb255(color);
+            const bgRgbColor = hexToRgb255(
                 getColorFromPalette('100', {
                     color,
                     secondaryColor,
@@ -63,7 +66,7 @@ const ColorScheme = (props) => {
                     colorMode,
                 });
                 styles[`--chayns-color--${colorName}`] = hexColor;
-                const rgbColor = hexStringToRgb(hexColor);
+                const rgbColor = hexToRgb255(hexColor);
                 styles[
                     `--chayns-color-rgb--${colorName}`
                 ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
