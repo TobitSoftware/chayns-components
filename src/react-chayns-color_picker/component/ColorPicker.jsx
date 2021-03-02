@@ -107,6 +107,7 @@ const ColorPicker = forwardRef(
 
                 // Hide bubble and remove event listeners if click was outside of the bubble
                 if (
+                    event.type === 'blur' ||
                     event.pageX < rect.left ||
                     event.pageX > rect.right ||
                     event.pageY < rect.top + yOffset ||
@@ -155,7 +156,9 @@ const ColorPicker = forwardRef(
 
             bubbleRef.current.show();
             // Add event listeners to hide the bubble
-            document.addEventListener('click', closeBubble);
+            document.addEventListener('click', closeBubble, {
+                capture: true,
+            });
             window.addEventListener('blur', closeBubble);
             if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
                 chayns.disallowRefreshScroll();

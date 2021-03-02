@@ -11,9 +11,9 @@ import {
     rgb1ToHsv,
     rgb255ToRgb1,
     hexToRgb255,
-    rgb1ToHex,
     rgb255ToHex,
 } from '@chayns/colors';
+import { isNumber } from '../../../utils/is';
 
 export default class ColorInput extends Component {
     constructor(props) {
@@ -38,7 +38,7 @@ export default class ColorInput extends Component {
         const { color, transparency, colorModel } = this.props;
         const colorcopy = { h: color.h, s: color.s, v: color.v };
         if (transparency) {
-            colorcopy.a = color.a;
+            colorcopy.a = isNumber(color.a) ? color.a : 1;
         }
         if (colorModel) {
             // rgb(a)
