@@ -27,6 +27,7 @@ const SearchBox = ({
     onChange,
     className,
     autoSelectFirst,
+    highlightInputInResult,
     ...otherProps
 }) => {
     const getItem = useCallback(
@@ -207,7 +208,7 @@ const SearchBox = ({
                         })}
                         onClick={onItemClick}
                     >
-                        {inputValue ? (
+                        {highlightInputInResult && inputValue ? (
                             <ResultSelection
                                 text={item[listValue]}
                                 search={inputValue}
@@ -306,6 +307,11 @@ SearchBox.propTypes = {
      * Wether the first list item should be automatically selected.
      */
     autoSelectFirst: PropTypes.bool,
+
+    /**
+     * Whether the search term should be marked in the selection
+     */
+    highlightInputInResult: PropTypes.bool,
 };
 
 SearchBox.defaultProps = {
@@ -323,6 +329,7 @@ SearchBox.defaultProps = {
     onChange: null,
     list: null,
     autoSelectFirst: false,
+    highlightInputInResult: true,
 };
 
 SearchBox.displayName = 'SearchBox';

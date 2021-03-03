@@ -77,6 +77,22 @@ const SearchBoxExample = () => {
                     autoSelectFirst
                 />
             </div>
+            <div style={{ marginBottom: '20px' }}>
+                <SearchBox
+                    placeholder="Land"
+                    list={countries}
+                    onSelect={(value) => {
+                        console.log(value);
+                    }}
+                    listKey="code"
+                    listValue="name"
+                    design={Input.BORDER_DESIGN}
+                    dynamic
+                    style={{ width: '100%' }}
+                    autoSelectFirst
+                    highlightInputInResult={false}
+                />
+            </div>
         </div>
     );
 };
