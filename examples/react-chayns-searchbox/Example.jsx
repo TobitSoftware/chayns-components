@@ -76,6 +76,8 @@ const SearchBoxExample = () => {
                     dynamic
                     style={{ width: '100%' }}
                     autoSelectFirst
+                    showListWithoutInput
+                    addInputToList
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
@@ -93,6 +95,7 @@ const SearchBoxExample = () => {
                     autoSelectFirst
                     highlightInputInResult={false}
                     showListWithoutInput
+                    addInputToList
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
@@ -110,6 +113,7 @@ const SearchBoxExample = () => {
                     autoSelectFirst
                     highlightInputInResult={false}
                     showListWithoutInput
+                    addInputToList
                 />
             </div>
         </div>
