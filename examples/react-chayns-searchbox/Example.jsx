@@ -96,6 +96,12 @@ const SearchBoxExample = () => {
                     highlightInputInResult={false}
                     showListWithoutInput
                     addInputToList
+                    right={
+                        <i
+                            style={{ padding: '8px' }}
+                            className="fa fa-chevron-down"
+                        />
+                    }
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
