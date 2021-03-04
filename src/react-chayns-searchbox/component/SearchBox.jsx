@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 import './SearchBox.scss';
+import { isNumber, isString } from '../../utils/is';
 
 /**
  * An autocomplete input to search through a list of entries.
@@ -32,14 +33,50 @@ const SearchBox = ({
 }) => {
     const getItem = useCallback(
         (key) => {
+            let defaultReturnValue = {};
+            if (list.length > 0) {
+                if (isString(list[0])) {
+                    defaultReturnValue = '';
+                } else if (isNumber(list[0])) {
+                    defaultReturnValue = 0;
+                }
+            }
             if (key === null || key === undefined) {
-                return {};
+                return defaultReturnValue;
             }
             const res = list.find(
-                (item) => String(item[listKey]) === String(key)
+                (item) => String(getKey(item)) === String(key) || item === key
             );
 
-            return res === undefined ? {} : res;
+            return res === undefined ? defaultReturnValue : res;
+        },
+        [list, listKey]
+    );
+    const getValue = useCallback(
+        (stringOrObjectOrNumber) => {
+            if (
+                isString(stringOrObjectOrNumber) ||
+                isNumber(stringOrObjectOrNumber)
+            ) {
+                return stringOrObjectOrNumber;
+            } else {
+                return stringOrObjectOrNumber[listValue];
+            }
+        },
+        [list, listValue]
+    );
+    const getKey = useCallback(
+        (stringOrObjectOrNumber) => {
+            if (
+                isString(stringOrObjectOrNumber) ||
+                isNumber(stringOrObjectOrNumber)
+            ) {
+                return stringOrObjectOrNumber;
+            } else if (!listKey || !stringOrObjectOrNumber) {
+                return null;
+            } else {
+                return stringOrObjectOrNumber[listKey];
+            }
         },
         [list, listKey]
     );
@@ -49,14 +86,14 @@ const SearchBox = ({
     const [inputValueState, setInputValueState] = useState(
         (inputDefaultValue !== null
             ? inputDefaultValue
-            : getItem(value)[listValue]) || ''
+            : getValue(getItem(value))) || ''
     );
 
     useEffect(() => {
         setInputValueState(
             (inputDefaultValue !== null
                 ? inputDefaultValue
-                : getItem(value)[listValue]) || ''
+                : getValue(getItem(value))) || ''
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, list]);
@@ -66,17 +103,15 @@ const SearchBox = ({
 
     const inputBoxRef = useRef(null);
     const inputRef = useRef(null);
-
     const onItemClick = useCallback(
         (e, item) => {
-            const selection = item?.[listKey] || e?.target.id;
+            const selection = getKey(item) || e?.target.id;
             setValueState(selection);
-            setInputValueState(getItem(selection)[listValue]);
+            setInputValueState(getValue(getItem(selection)));
             if (
                 onSelect &&
                 list &&
                 list.length > 0 &&
-                listKey &&
                 selection !== null &&
                 selection !== undefined
             ) {
@@ -90,7 +125,7 @@ const SearchBox = ({
             setInputValueState,
             getItem,
             listValue,
-            listKey,
+            getKey,
             onSelect,
             list,
             stopPropagation,
@@ -110,21 +145,28 @@ const SearchBox = ({
     const filteredList = list
         ?.filter(
             (item) =>
-                item[listValue]
+                String(getValue(item))
                     .toLowerCase()
-                    .indexOf(inputValue.toLowerCase()) >= 0 &&
+                    .indexOf(String(inputValue).toLowerCase()) >= 0 &&
                 (showListWithoutInput || inputValue)
         )
         .sort((a, b) => {
-            const aValue = a[listValue].toLowerCase();
-            const bValue = b[listValue].toLowerCase();
-            const aStartsWith = aValue.startsWith(inputValue.toLowerCase());
-            const bStartsWith = bValue.startsWith(inputValue.toLowerCase());
+            let aValue = getValue(a);
+            let bValue = getValue(b);
+            aValue = isString(aValue) ? aValue.toLowerCase() : aValue;
+            bValue = isString(bValue) ? bValue.toLowerCase() : bValue;
+            const aStartsWith = String(aValue).startsWith(
+                String(inputValue).toLowerCase()
+            );
+            const bStartsWith = String(bValue).startsWith(
+                String(inputValue).toLowerCase()
+            );
             if (aStartsWith && !bStartsWith) return -1;
             if (!aStartsWith && bStartsWith) return 1;
-            return aValue.localeCompare(bValue);
+            if (isString(aValue) || isString(bValue))
+                return aValue.localeCompare(bValue);
+            return aValue - bValue;
         });
-
     const updateIndex = useCallback(
         (index) => {
             const listLength = filteredList.length;
@@ -132,7 +174,7 @@ const SearchBox = ({
             if (index < 0 || typeof index !== 'number') return;
             setFocusIndex(index);
             const item = filteredList[index];
-            const elem = document.getElementById(`${item[listKey]}`);
+            const elem = document.getElementById(`${getKey(item)}`);
             if (elem) {
                 if (typeof elem.scrollIntoViewIfNeeded === 'function') {
                     elem.scrollIntoViewIfNeeded(false);
@@ -141,7 +183,7 @@ const SearchBox = ({
                 }
             }
         },
-        [filteredList, listKey]
+        [filteredList, getKey]
     );
 
     const handleKeyDown = useCallback(
@@ -186,6 +228,7 @@ const SearchBox = ({
                 !inputValue && inputDefaultValue ? inputDefaultValue : undefined
             }
             onChange={inputOnChange}
+            customProps={{ autocomplete: 'off' }}
             {...otherProps}
             ref={inputBoxRef}
             disabled={disabled}
@@ -200,21 +243,21 @@ const SearchBox = ({
             {filteredList &&
                 filteredList.map((item, index) => (
                     <div
-                        key={item[listKey]}
-                        id={item[listKey]}
+                        key={getKey(item)}
+                        id={getKey(item)}
                         className={classNames('cc__search-box__item ellipsis', {
                             'cc__search-box__item--selected':
-                                value === item[listKey] || index === focusIndex,
+                                value === getKey(item) || index === focusIndex,
                         })}
                         onClick={onItemClick}
                     >
                         {highlightInputInResult && inputValue ? (
                             <ResultSelection
-                                text={item[listValue]}
+                                text={getValue(item)}
                                 search={inputValue}
                             />
                         ) : (
-                            item[listValue]
+                            getValue(item)
                         )}
                     </div>
                 ))}
@@ -237,7 +280,11 @@ SearchBox.propTypes = {
     /**
      * An array of items to select from.
      */
-    list: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.object])),
+    list: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.number),
+    ]),
 
     /**
      * The property name of a unique identifier in the `list` items.
