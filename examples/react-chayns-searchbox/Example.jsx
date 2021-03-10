@@ -7,6 +7,8 @@ import { fontSizes, fontSizesPx } from '../utils/exampleData/fontSizes';
 
 const SearchBoxExample = () => {
     const [pizzaValue, setPizzaValue] = useState(null);
+    const [fontSizeNumber, setFontSizeNumber] = useState(20);
+    const [fontSizeString, setFontSizeString] = useState('20px');
 
     return (
         <div style={{ marginBottom: '500px' }}>
@@ -82,13 +84,13 @@ const SearchBoxExample = () => {
             </div>
             <div style={{ marginBottom: '20px' }}>
                 <SearchBox
-                    placeholder="Schriftgröße"
                     list={fontSizes}
                     onSelect={(value) => {
                         console.log(value);
+                        setFontSizeNumber(value);
+                        setFontSizeString(value + 'px');
                     }}
-                    listKey="code"
-                    listValue="name"
+                    value={fontSizeNumber}
                     design={Input.BORDER_DESIGN}
                     dynamic
                     style={{ width: '100%' }}
@@ -110,9 +112,10 @@ const SearchBoxExample = () => {
                     list={fontSizesPx}
                     onSelect={(value) => {
                         console.log(value);
+                        setFontSizeNumber(value.substring(0, value.length - 2));
+                        setFontSizeString(value);
                     }}
-                    listKey="code"
-                    listValue="name"
+                    value={fontSizeString}
                     design={Input.BORDER_DESIGN}
                     dynamic
                     style={{ width: '100%' }}

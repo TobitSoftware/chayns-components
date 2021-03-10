@@ -209,15 +209,18 @@ const SearchBox = ({
             return aValue - bValue;
         });
 
-    if (addInputToList && !isItemExisting(inputValueState)) {
-        if (list.length > 0) {
-            if (isString(list[0])) {
-                filteredList.push(inputValueState);
-            } else if (isNumber(list[0])) {
-                filteredList.push(Number(inputValueState));
-            } else {
-                filteredList.push({ [listValue]: inputValueState });
-            }
+    if (
+        addInputToList &&
+        !isItemExisting(inputValueState) &&
+        list.length > 0 &&
+        String(inputValueState)
+    ) {
+        if (isString(list[0])) {
+            filteredList.push(inputValueState);
+        } else if (isNumber(list[0])) {
+            filteredList.push(Number(inputValueState));
+        } else {
+            filteredList.push({ [listValue]: inputValueState });
         }
     }
 
@@ -283,6 +286,12 @@ const SearchBox = ({
             }
             onChange={inputOnChange}
             customProps={{ autocomplete: 'off' }}
+            type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
+            onBlur={() => {
+                if (addInputToList) {
+                    onItemClick(null, inputValueState);
+                }
+            }}
             {...otherProps}
             ref={inputBoxRef}
             disabled={disabled}
@@ -293,7 +302,6 @@ const SearchBox = ({
             inputRef={(ref) => {
                 inputRef.current = ref;
             }}
-            type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
         >
             {filteredList &&
                 filteredList.map((item, index) => (
@@ -344,13 +352,13 @@ SearchBox.propTypes = {
     /**
      * The property name of a unique identifier in the `list` items.
      */
-    listKey: PropTypes.string.isRequired,
+    listKey: PropTypes.string,
 
     /**
      * The property name of the name of the `list` items that will be shown in
      * the dropdown.
      */
-    listValue: PropTypes.string.isRequired,
+    listValue: PropTypes.string,
 
     /**
      * A classname string that will be set on the container component.
@@ -439,6 +447,8 @@ SearchBox.defaultProps = {
     autoSelectFirst: false,
     highlightInputInResult: true,
     addInputToList: false,
+    listKey: 'key',
+    listValue: 'value',
 };
 
 SearchBox.displayName = 'SearchBox';
