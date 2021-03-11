@@ -26,6 +26,7 @@ import ColorInput from './colorInput/ColorInput';
 import './ColorPicker.scss';
 import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
+import isDescendant from '../../utils/isDescendant';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -100,18 +101,10 @@ const ColorPicker = forwardRef(
 
         const closeBubble = useCallback(
             async (event) => {
-                const rect = bubbleContentRef.current.getBoundingClientRect();
-                const yOffset = chayns.env.isApp
-                    ? (await chayns.getWindowMetrics()).pageYOffset
-                    : 0;
-
                 // Hide bubble and remove event listeners if click was outside of the bubble
                 if (
                     event.type === 'blur' ||
-                    event.pageX < rect.left ||
-                    event.pageX > rect.right ||
-                    event.pageY < rect.top + yOffset ||
-                    event.pageY > rect.bottom + yOffset
+                    !isDescendant(bubbleContentRef.current, event.target)
                 ) {
                     document.removeEventListener('click', closeBubble);
                     window.removeEventListener('blur', closeBubble);
