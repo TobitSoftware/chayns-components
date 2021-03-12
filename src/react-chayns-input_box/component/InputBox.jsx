@@ -44,8 +44,11 @@ const InputBox = React.forwardRef((props, ref) => {
             blur() {
                 setIsHidden(true);
             },
+            getHiddenState() {
+                return isHidden;
+            },
         }),
-        []
+        [isHidden]
     );
 
     useEffect(() => {

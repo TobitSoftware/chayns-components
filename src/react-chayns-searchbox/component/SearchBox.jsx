@@ -31,6 +31,7 @@ const SearchBox = ({
     highlightInputInResult,
     addInputToList,
     emptyKey,
+    hasOpenCloseIcon,
     ...otherProps
 }) => {
     const getValue = useCallback(
@@ -41,11 +42,10 @@ const SearchBox = ({
                 !stringOrObjectOrNumber
             ) {
                 return stringOrObjectOrNumber;
-            } else {
-                return stringOrObjectOrNumber[listValue];
             }
+            return stringOrObjectOrNumber[listValue];
         },
-        [list, listValue]
+        [listValue]
     );
 
     const getKey = useCallback(
@@ -55,17 +55,17 @@ const SearchBox = ({
                 isNumber(stringOrObjectOrNumber)
             ) {
                 return stringOrObjectOrNumber;
-            } else if (!listKey || !stringOrObjectOrNumber) {
-                return null;
-            } else {
-                const key = stringOrObjectOrNumber[listKey];
-                if (!key && addInputToList) {
-                    return stringOrObjectOrNumber[listValue];
-                }
-                return key;
             }
+            if (!listKey || !stringOrObjectOrNumber) {
+                return null;
+            }
+            const key = stringOrObjectOrNumber[listKey];
+            if (!key && addInputToList) {
+                return stringOrObjectOrNumber[listValue];
+            }
+            return key;
         },
-        [list, listKey, addInputToList]
+        [listKey, addInputToList, listValue]
     );
 
     const getItemByKey = useCallback(
@@ -98,7 +98,7 @@ const SearchBox = ({
 
             return res === undefined ? defaultReturnValue : res;
         },
-        [list, listKey, addInputToList, listValue]
+        [addInputToList, list, listValue, getKey]
     );
 
     const isItemExisting = useCallback(
@@ -112,7 +112,7 @@ const SearchBox = ({
                     String(item) === String(value)
             );
         },
-        [getValue]
+        [getValue, list]
     );
 
     const [valueState, setValueState] = useState(defaultValue);
@@ -178,15 +178,13 @@ const SearchBox = ({
             if (inputBoxRef.current) inputBoxRef.current.blur();
         },
         [
-            setValueState,
-            setInputValueState,
-            getItemByKey,
-            listValue,
             getKey,
+            getValue,
+            getItemByKey,
+            addInputToList,
             onSelect,
             list,
             stopPropagation,
-            inputBoxRef,
         ]
     );
 
@@ -228,12 +226,15 @@ const SearchBox = ({
     );
 
     useEffect(() => {
+        const inputValueString = Number.isNaN(inputValue)
+            ? ''
+            : String(inputValue);
         const returnList = list
             ?.filter(
                 (item) =>
                     String(getValue(item))
                         .toLowerCase()
-                        .indexOf(String(inputValue).toLowerCase()) >= 0 &&
+                        .indexOf(inputValueString.toLowerCase()) >= 0 &&
                     (showListWithoutInput || inputValue)
             )
             .sort((a, b) => {
@@ -242,10 +243,10 @@ const SearchBox = ({
                 aValue = isString(aValue) ? aValue.toLowerCase() : aValue;
                 bValue = isString(bValue) ? bValue.toLowerCase() : bValue;
                 const aStartsWith = String(aValue).startsWith(
-                    String(inputValue).toLowerCase()
+                    inputValueString.toLowerCase()
                 );
                 const bStartsWith = String(bValue).startsWith(
-                    String(inputValue).toLowerCase()
+                    inputValueString.toLowerCase()
                 );
                 if (aStartsWith && !bStartsWith) return -1;
                 if (!aStartsWith && bStartsWith) return 1;
@@ -256,21 +257,29 @@ const SearchBox = ({
 
         if (
             addInputToList &&
-            !isItemExisting(inputValueState) &&
+            !isItemExisting(inputValue) &&
             list.length > 0 &&
-            String(inputValueState)
+            inputValueString
         ) {
             if (isString(list[0])) {
-                returnList.push(inputValueState);
+                returnList.push(inputValue);
             } else if (isNumber(list[0])) {
-                returnList.push(Number(inputValueState));
+                returnList.push(Number(inputValue));
             } else {
-                returnList.push({ [listValue]: inputValueState });
+                returnList.push({ [listValue]: inputValue });
             }
         }
-
         setFilteredList(returnList);
-    }, [inputValue]);
+    }, [
+        inputValue,
+        addInputToList,
+        list,
+        isItemExisting,
+        inputValueState,
+        getValue,
+        showListWithoutInput,
+        listValue,
+    ]);
 
     useEffect(() => {
         let index = filteredList.findIndex(
@@ -282,7 +291,7 @@ const SearchBox = ({
             index = null;
         }
         setFocusIndex(index || (autoSelectFirst ? 0 : null));
-    }, [filteredList]);
+    }, [autoSelectFirst, emptyKey, filteredList, getKey, inputValue, value]);
 
     useEffect(() => {
         const item = filteredList[focusIndex];
@@ -294,7 +303,7 @@ const SearchBox = ({
                 elem.scrollIntoView({ behavior: 'smooth' });
             }
         }
-    }, [focusIndex]);
+    }, [filteredList, focusIndex, getKey]);
 
     return (
         <InputBox
@@ -310,6 +319,22 @@ const SearchBox = ({
                     onItemClick(null, inputValueState);
                 }
             }}
+            right={
+                hasOpenCloseIcon && (
+                    <i
+                        style={{ padding: '8px' }}
+                        className="fa fa-chevron-down"
+                        onClick={(event) => {
+                            if (inputBoxRef.current.getHiddenState()) {
+                                inputBoxRef.current.focus();
+                            } else {
+                                inputBoxRef.current.blur();
+                            }
+                            event.stopPropagation();
+                        }}
+                    />
+                )
+            }
             {...otherProps}
             ref={inputBoxRef}
             disabled={disabled}
@@ -323,35 +348,29 @@ const SearchBox = ({
             emptyValue={getValue(getItemByKey(emptyKey))}
         >
             {filteredList &&
-                filteredList.map((item, index) => {
-                    return (
-                        <div
-                            key={getKey(item)}
-                            id={getKey(item)}
-                            className={classNames(
-                                'cc__search-box__item ellipsis',
-                                {
-                                    'cc__search-box__item--selected':
-                                        (!(!inputValue && emptyKey) &&
-                                            value === getKey(item)) ||
-                                        index === focusIndex ||
-                                        (!inputValue &&
-                                            emptyKey === getKey(item)),
-                                }
-                            )}
-                            onClick={onItemClick}
-                        >
-                            {highlightInputInResult && inputValue ? (
-                                <ResultSelection
-                                    text={getValue(item)}
-                                    search={inputValue}
-                                />
-                            ) : (
-                                getValue(item)
-                            )}
-                        </div>
-                    );
-                })}
+                filteredList.map((item, index) => (
+                    <div
+                        key={getKey(item)}
+                        id={getKey(item)}
+                        className={classNames('cc__search-box__item ellipsis', {
+                            'cc__search-box__item--selected':
+                                (!(!inputValue && emptyKey) &&
+                                    value === getKey(item)) ||
+                                index === focusIndex ||
+                                (!inputValue && emptyKey === getKey(item)),
+                        })}
+                        onClick={onItemClick}
+                    >
+                        {highlightInputInResult && inputValue ? (
+                            <ResultSelection
+                                text={getValue(item)}
+                                search={inputValue}
+                            />
+                        ) : (
+                            getValue(item)
+                        )}
+                    </div>
+                ))}
         </InputBox>
     );
 };
@@ -461,6 +480,11 @@ SearchBox.propTypes = {
      * The key of the default value if nothing is selected or typed into the input.
      */
     emptyKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * Whether the input should have a small icon to open and close the result list.
+     */
+    hasOpenCloseIcon: PropTypes.bool,
 };
 
 SearchBox.defaultProps = {
@@ -483,6 +507,7 @@ SearchBox.defaultProps = {
     listKey: 'key',
     listValue: 'value',
     emptyKey: null,
+    hasOpenCloseIcon: false,
 };
 
 SearchBox.displayName = 'SearchBox';

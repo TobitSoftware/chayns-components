@@ -88,7 +88,7 @@ const SearchBoxExample = () => {
                     onSelect={(value) => {
                         console.log(value);
                         setFontSizeNumber(value);
-                        setFontSizeString(value + 'px');
+                        setFontSizeString(`${value}px`);
                     }}
                     value={fontSizeNumber}
                     design={Input.BORDER_DESIGN}
@@ -98,13 +98,8 @@ const SearchBoxExample = () => {
                     highlightInputInResult={false}
                     showListWithoutInput
                     addInputToList
-                    right={
-                        <i
-                            style={{ padding: '8px' }}
-                            className="fa fa-chevron-down"
-                        />
-                    }
                     emptyKey={15}
+                    hasOpenCloseIcon
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
