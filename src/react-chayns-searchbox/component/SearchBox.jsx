@@ -9,7 +9,6 @@ import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 import './SearchBox.scss';
 import { isNumber, isString } from '../../utils/is';
-import { isObject } from '@chayns/colors/cjs/utils/is';
 
 /**
  * An autocomplete input to search through a list of entries.
@@ -31,6 +30,7 @@ const SearchBox = ({
     autoSelectFirst,
     highlightInputInResult,
     addInputToList,
+    emptyKey,
     ...otherProps
 }) => {
     const getValue = useCallback(
@@ -47,6 +47,7 @@ const SearchBox = ({
         },
         [list, listValue]
     );
+
     const getKey = useCallback(
         (stringOrObjectOrNumber) => {
             if (
@@ -66,6 +67,7 @@ const SearchBox = ({
         },
         [list, listKey, addInputToList]
     );
+
     const getItemByKey = useCallback(
         (key) => {
             let defaultReturnValue = {};
@@ -98,6 +100,7 @@ const SearchBox = ({
         },
         [list, listKey, addInputToList, listValue]
     );
+
     const isItemExisting = useCallback(
         (value) => {
             if (!value && value !== 0) {
@@ -114,6 +117,7 @@ const SearchBox = ({
 
     const [valueState, setValueState] = useState(defaultValue);
     const value = valueProp !== null ? valueProp : valueState;
+
     const [inputValueState, setInputValueState] = useState(
         (inputDefaultValue !== null
             ? inputDefaultValue
@@ -135,20 +139,32 @@ const SearchBox = ({
     const inputBoxRef = useRef(null);
     const inputRef = useRef(null);
 
+    const [filteredList, setFilteredList] = useState([]);
+
+    const inputOnChange = useCallback(
+        (input) => {
+            if (onChange) onChange(input);
+            setInputValueState(input);
+        },
+        [setInputValueState, onChange]
+    );
+
     const onItemClick = useCallback(
         (e, item) => {
             const selection = getKey(item) || e?.target.id;
             setValueState(selection);
             const itemValue = getValue(getItemByKey(selection));
+            let newInputValueState;
             if (addInputToList && !itemValue) {
                 if (list.length >= 0 && isNumber(list[0])) {
-                    setInputValueState(Number(selection));
+                    newInputValueState = Number(selection);
                 } else {
-                    setInputValueState(selection);
+                    newInputValueState = selection;
                 }
             } else {
-                setInputValueState(itemValue);
+                newInputValueState = itemValue;
             }
+            setInputValueState(newInputValueState);
             if (
                 onSelect &&
                 list &&
@@ -174,75 +190,6 @@ const SearchBox = ({
         ]
     );
 
-    const inputOnChange = useCallback(
-        (input) => {
-            if (onChange) onChange(input);
-            setInputValueState(input);
-            setFocusIndex(autoSelectFirst ? 0 : null);
-        },
-        [autoSelectFirst, onChange]
-    );
-
-    const filteredList = list
-        ?.filter(
-            (item) =>
-                String(getValue(item))
-                    .toLowerCase()
-                    .indexOf(String(inputValue).toLowerCase()) >= 0 &&
-                (showListWithoutInput || inputValue)
-        )
-        .sort((a, b) => {
-            let aValue = getValue(a);
-            let bValue = getValue(b);
-            aValue = isString(aValue) ? aValue.toLowerCase() : aValue;
-            bValue = isString(bValue) ? bValue.toLowerCase() : bValue;
-            const aStartsWith = String(aValue).startsWith(
-                String(inputValue).toLowerCase()
-            );
-            const bStartsWith = String(bValue).startsWith(
-                String(inputValue).toLowerCase()
-            );
-            if (aStartsWith && !bStartsWith) return -1;
-            if (!aStartsWith && bStartsWith) return 1;
-            if (isString(aValue) || isString(bValue))
-                return aValue.localeCompare(bValue);
-            return aValue - bValue;
-        });
-
-    if (
-        addInputToList &&
-        !isItemExisting(inputValueState) &&
-        list.length > 0 &&
-        String(inputValueState)
-    ) {
-        if (isString(list[0])) {
-            filteredList.push(inputValueState);
-        } else if (isNumber(list[0])) {
-            filteredList.push(Number(inputValueState));
-        } else {
-            filteredList.push({ [listValue]: inputValueState });
-        }
-    }
-
-    const updateIndex = useCallback(
-        (index) => {
-            const listLength = filteredList.length;
-            if (index >= listLength) return;
-            if (index < 0 || typeof index !== 'number') return;
-            setFocusIndex(index);
-            const item = filteredList[index];
-            const elem = document.getElementById(`${getKey(item)}`);
-            if (elem) {
-                if (typeof elem.scrollIntoViewIfNeeded === 'function') {
-                    elem.scrollIntoViewIfNeeded(false);
-                } else if (typeof elem.scrollIntoView === 'function') {
-                    elem.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        },
-        [filteredList, getKey]
-    );
-
     const handleKeyDown = useCallback(
         (ev) => {
             if (!filteredList) return;
@@ -251,32 +198,103 @@ const SearchBox = ({
                 case 40: // Arrow down
                     ev.preventDefault();
                     if (focusIndex === null) {
-                        updateIndex(0);
+                        setFocusIndex(0);
+                    } else if (focusIndex >= filteredList.length - 1) {
+                        setFocusIndex(filteredList.length - 1);
                     } else {
-                        updateIndex(focusIndex + 1);
+                        setFocusIndex(focusIndex + 1);
                     }
                     break;
                 case 38: // Arrow up
                     ev.preventDefault();
-                    if (focusIndex === null) {
-                        updateIndex(0);
+                    if (focusIndex === null || focusIndex <= 0) {
+                        setFocusIndex(0);
                     } else {
-                        updateIndex(focusIndex - 1);
+                        setFocusIndex(focusIndex - 1);
                     }
                     break;
                 case 13: // Enter
                     if (focusIndex !== null && filteredList[focusIndex]) {
                         onItemClick(ev, filteredList[focusIndex]);
                         inputRef.current.ref.blur();
-                        updateIndex(null);
+                        setFocusIndex(null);
                     }
                     break;
                 default:
                     break;
             }
         },
-        [filteredList, focusIndex, onItemClick, updateIndex]
+        [filteredList, focusIndex, onItemClick]
     );
+
+    useEffect(() => {
+        const returnList = list
+            ?.filter(
+                (item) =>
+                    String(getValue(item))
+                        .toLowerCase()
+                        .indexOf(String(inputValue).toLowerCase()) >= 0 &&
+                    (showListWithoutInput || inputValue)
+            )
+            .sort((a, b) => {
+                let aValue = getValue(a);
+                let bValue = getValue(b);
+                aValue = isString(aValue) ? aValue.toLowerCase() : aValue;
+                bValue = isString(bValue) ? bValue.toLowerCase() : bValue;
+                const aStartsWith = String(aValue).startsWith(
+                    String(inputValue).toLowerCase()
+                );
+                const bStartsWith = String(bValue).startsWith(
+                    String(inputValue).toLowerCase()
+                );
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+                if (isString(aValue) || isString(bValue))
+                    return aValue.localeCompare(bValue);
+                return aValue - bValue;
+            });
+
+        if (
+            addInputToList &&
+            !isItemExisting(inputValueState) &&
+            list.length > 0 &&
+            String(inputValueState)
+        ) {
+            if (isString(list[0])) {
+                returnList.push(inputValueState);
+            } else if (isNumber(list[0])) {
+                returnList.push(Number(inputValueState));
+            } else {
+                returnList.push({ [listValue]: inputValueState });
+            }
+        }
+
+        setFilteredList(returnList);
+    }, [inputValue]);
+
+    useEffect(() => {
+        let index = filteredList.findIndex(
+            (item) =>
+                (!(!inputValue && emptyKey) && value === getKey(item)) ||
+                (!inputValue && emptyKey === getKey(item))
+        );
+        if (index < 0) {
+            index = null;
+        }
+        setFocusIndex(index || (autoSelectFirst ? 0 : null));
+    }, [filteredList]);
+
+    useEffect(() => {
+        const item = filteredList[focusIndex];
+        const elem = document.getElementById(`${getKey(item)}`);
+        if (elem) {
+            if (typeof elem.scrollIntoViewIfNeeded === 'function') {
+                elem.scrollIntoViewIfNeeded(false);
+            } else if (typeof elem.scrollIntoView === 'function') {
+                elem.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [focusIndex]);
 
     return (
         <InputBox
@@ -285,7 +303,7 @@ const SearchBox = ({
                 !inputValue && inputDefaultValue ? inputDefaultValue : undefined
             }
             onChange={inputOnChange}
-            customProps={{ autocomplete: 'off' }}
+            customProps={{ autoComplete: 'off' }}
             type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
             onBlur={() => {
                 if (addInputToList) {
@@ -302,28 +320,38 @@ const SearchBox = ({
             inputRef={(ref) => {
                 inputRef.current = ref;
             }}
+            emptyValue={getValue(getItemByKey(emptyKey))}
         >
             {filteredList &&
-                filteredList.map((item, index) => (
-                    <div
-                        key={getKey(item)}
-                        id={getKey(item)}
-                        className={classNames('cc__search-box__item ellipsis', {
-                            'cc__search-box__item--selected':
-                                value === getKey(item) || index === focusIndex,
-                        })}
-                        onClick={onItemClick}
-                    >
-                        {highlightInputInResult && inputValue ? (
-                            <ResultSelection
-                                text={getValue(item)}
-                                search={inputValue}
-                            />
-                        ) : (
-                            getValue(item)
-                        )}
-                    </div>
-                ))}
+                filteredList.map((item, index) => {
+                    return (
+                        <div
+                            key={getKey(item)}
+                            id={getKey(item)}
+                            className={classNames(
+                                'cc__search-box__item ellipsis',
+                                {
+                                    'cc__search-box__item--selected':
+                                        (!(!inputValue && emptyKey) &&
+                                            value === getKey(item)) ||
+                                        index === focusIndex ||
+                                        (!inputValue &&
+                                            emptyKey === getKey(item)),
+                                }
+                            )}
+                            onClick={onItemClick}
+                        >
+                            {highlightInputInResult && inputValue ? (
+                                <ResultSelection
+                                    text={getValue(item)}
+                                    search={inputValue}
+                                />
+                            ) : (
+                                getValue(item)
+                            )}
+                        </div>
+                    );
+                })}
         </InputBox>
     );
 };
@@ -428,6 +456,11 @@ SearchBox.propTypes = {
      * Allows also values which are not in the list.
      */
     addInputToList: PropTypes.bool,
+
+    /**
+     * The key of the default value if nothing is selected or typed into the input.
+     */
+    emptyKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 SearchBox.defaultProps = {
@@ -449,6 +482,7 @@ SearchBox.defaultProps = {
     addInputToList: false,
     listKey: 'key',
     listValue: 'value',
+    emptyKey: null,
 };
 
 SearchBox.displayName = 'SearchBox';

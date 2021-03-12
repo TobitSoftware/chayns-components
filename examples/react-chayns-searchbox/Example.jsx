@@ -104,6 +104,7 @@ const SearchBoxExample = () => {
                             className="fa fa-chevron-down"
                         />
                     }
+                    emptyKey={15}
                 />
             </div>
             <div style={{ marginBottom: '20px' }}>
