@@ -387,6 +387,18 @@ const InputExample = () => {
                     }
                 />
             </div>
+            <div style={{ marginBottom: '20px' }}>
+                <Input
+                    placeholder="Placeholder"
+                    onBlur={onBlur}
+                    onKeyUp={onKeyUp}
+                    onEnter={onEnter}
+                    onChange={onChange}
+                    design={Input.BORDER_DESIGN}
+                    dynamic
+                    emptyValue="EmptyValue"
+                />
+            </div>
         </div>
     );
 };

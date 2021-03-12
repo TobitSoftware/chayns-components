@@ -101,7 +101,7 @@ export default class Input extends PureComponent {
     }
 
     callValidated(value, callback, event) {
-        const { regExp, required } = this.props;
+        const { regExp, required, emptyValue } = this.props;
 
         const valid =
             !(required && !value) && !(regExp && !value.match(regExp));
@@ -141,6 +141,7 @@ export default class Input extends PureComponent {
             clearIcon,
             required,
             invalidMessage,
+            emptyValue,
             right: rightProp,
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
@@ -200,7 +201,7 @@ export default class Input extends PureComponent {
                             disabled={disabled}
                             {...customProps}
                         />
-                        {placeholder && (
+                        {placeholder && !emptyValue && (
                             <label htmlFor={id || this.id}>
                                 <div className="space">
                                     {isString(value) ? value : stateValue}
@@ -214,6 +215,19 @@ export default class Input extends PureComponent {
                                 </div>
                             </label>
                         )}
+                        {emptyValue &&
+                            !(value || stateValue || defaultValue) && (
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        color: 'var(--chayns-color--text)',
+                                    }}
+                                >
+                                    {emptyValue}
+                                </div>
+                            )}
                     </div>
                     {rightProp}
                     {icon && (
@@ -508,6 +522,12 @@ Input.propTypes = {
      * `Input.BOTTOM_DYNAMIC`.
      */
     invalidMessage: PropTypes.string,
+
+    /**
+     * Default value if nothing is typed into the input. Only for border design
+     * and not compatible with placeholder.
+     */
+    emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 Input.defaultProps = {
@@ -540,6 +560,7 @@ Input.defaultProps = {
     iconLeft: null,
     right: null,
     invalidMessage: null,
+    emptyValue: null,
 };
 
 Input.displayName = 'Input';
