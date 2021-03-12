@@ -275,7 +275,6 @@ const SearchBox = ({
         addInputToList,
         list,
         isItemExisting,
-        inputValueState,
         getValue,
         showListWithoutInput,
         listValue,
@@ -316,7 +315,7 @@ const SearchBox = ({
             type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
             onBlur={() => {
                 if (addInputToList) {
-                    onItemClick(null, inputValueState);
+                    onItemClick(null, inputValue);
                 }
             }}
             right={
