@@ -9,6 +9,7 @@ const SearchBoxExample = () => {
     const [pizzaValue, setPizzaValue] = useState(null);
     const [fontSizeNumber, setFontSizeNumber] = useState(20);
     const [fontSizeString, setFontSizeString] = useState('20px');
+    const [inputValue, setInputValue] = useState('');
 
     return (
         <div style={{ marginBottom: '500px' }}>
@@ -89,6 +90,7 @@ const SearchBoxExample = () => {
                         console.log(value);
                         setFontSizeNumber(value);
                         setFontSizeString(`${value}px`);
+                        setInputValue('');
                     }}
                     value={fontSizeNumber}
                     design={Input.BORDER_DESIGN}
@@ -104,12 +106,36 @@ const SearchBoxExample = () => {
             </div>
             <div style={{ marginBottom: '20px' }}>
                 <SearchBox
+                    list={fontSizes}
+                    onSelect={(value) => {
+                        console.log(value);
+                        setFontSizeNumber(value);
+                        setFontSizeString(`${value}px`);
+                        setInputValue('');
+                    }}
+                    value=""
+                    inputValue={inputValue}
+                    onChange={setInputValue}
+                    design={Input.BORDER_DESIGN}
+                    dynamic
+                    style={{ width: '100%' }}
+                    autoSelectFirst
+                    highlightInputInResult={false}
+                    showListWithoutInput
+                    addInputToList
+                    emptyKey={fontSizeNumber}
+                    hasOpenCloseIcon
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <SearchBox
                     placeholder="Schriftgröße"
                     list={fontSizesPx}
                     onSelect={(value) => {
                         console.log(value);
                         setFontSizeNumber(value.substring(0, value.length - 2));
                         setFontSizeString(value);
+                        setInputValue('');
                     }}
                     value={fontSizeString}
                     design={Input.BORDER_DESIGN}

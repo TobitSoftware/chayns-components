@@ -216,7 +216,11 @@ export default class Input extends PureComponent {
                             </label>
                         )}
                         {emptyValue &&
-                            !(value || stateValue || defaultValue) && (
+                            !(
+                                value ||
+                                (value === null && stateValue) ||
+                                defaultValue
+                            ) && (
                                 <div
                                     style={{
                                         position: 'absolute',
