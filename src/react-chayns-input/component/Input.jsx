@@ -101,7 +101,7 @@ export default class Input extends PureComponent {
     }
 
     callValidated(value, callback, event) {
-        const { regExp, required, emptyValue } = this.props;
+        const { regExp, required } = this.props;
 
         const valid =
             !(required && !value) && !(regExp && !value.match(regExp));
@@ -295,6 +295,9 @@ export default class Input extends PureComponent {
                     />
                     {placeholder && (
                         <label
+                            style={{
+                                paddingRight: icon ? '30px' : null,
+                            }}
                             htmlFor={id || this.id}
                             className={classNames({
                                 'input--invalid': !valid || invalid,

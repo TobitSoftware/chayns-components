@@ -154,7 +154,14 @@ const InputExample = () => {
                     required
                 />
             </div>
-            <div style={{ marginBottom: '20px' }}>
+            <div
+                style={{
+                    marginBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <div>Flex div with space-between</div>
                 <Input
                     required
                     placeholder="regexp & required"
@@ -186,7 +193,14 @@ const InputExample = () => {
                     dynamic
                 />
             </div>
-            <div style={{ marginBottom: '20px' }}>
+            <div
+                style={{
+                    marginBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <div>Flex div with space-between</div>
                 <Input
                     placeholder="Vorname"
                     onBlur={onBlur}
@@ -291,7 +305,14 @@ const InputExample = () => {
                     disabled
                 />
             </div>
-            <div style={{ marginBottom: '20px' }}>
+            <div
+                style={{
+                    marginBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <div>Flex div with space-between</div>
                 <Input
                     placeholder="Name (invalid)"
                     onBlur={onBlur}
@@ -340,7 +361,14 @@ const InputExample = () => {
                     }
                 />
             </div>
-            <div style={{ marginBottom: '20px' }}>
+            <div
+                style={{
+                    marginBottom: '20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <div>Flex div with space-between</div>
                 <Input
                     placeholder="Geburtstag"
                     onBlur={onBlur}
