@@ -9,6 +9,7 @@ import InputBox from '../../react-chayns-input_box/component/InputBox';
 import ResultSelection from './result-selection/ResultSelection';
 import './SearchBox.scss';
 import { isNumber, isString } from '../../utils/is';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 /**
  * An autocomplete input to search through a list of entries.
@@ -320,9 +321,9 @@ const SearchBox = ({
             }}
             right={
                 hasOpenCloseIcon && (
-                    <i
+                    <Icon
                         style={{ padding: '8px' }}
-                        className="fa fa-chevron-down"
+                        icon="fa fa-chevron-down"
                         onClick={(event) => {
                             if (inputBoxRef.current.getHiddenState()) {
                                 inputBoxRef.current.focus();
