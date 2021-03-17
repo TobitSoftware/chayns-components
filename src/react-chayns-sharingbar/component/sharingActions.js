@@ -41,7 +41,9 @@ async function webShareApi(link, linkText) {
             url: link,
             text: linkText,
         });
-    } catch (ignored) {}
+    } catch (ignored) {
+        // do nothing
+    }
 }
 
 export default function share(provider, link, linkText) {

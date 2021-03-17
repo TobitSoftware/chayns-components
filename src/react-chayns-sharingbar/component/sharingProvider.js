@@ -1,7 +1,3 @@
-/* eslint-disable max-len */
-
-import TextString from '../../react-chayns-textstring/component/TextString';
-
 export const shareOptions = {
     COPY: 0,
     MAIL: 1,

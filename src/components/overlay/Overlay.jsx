@@ -12,20 +12,17 @@ const Overlay = ({ parent, children }) => {
         return null;
     });
 
-    useEffect(
-        function populateParentElement() {
-            if (parent) {
-                setParentElement(null);
-            } else if (!parentElement) {
-                setParentElement(document.createElement('div'));
-            }
-        },
-        [parent, parentElement]
-    );
+    useEffect(() => {
+        if (parent) {
+            setParentElement(null);
+        } else if (!parentElement) {
+            setParentElement(document.createElement('div'));
+        }
+    }, [parent, parentElement]);
 
     useEffect(
         // eslint-disable-next-line consistent-return
-        function mountParentDiv() {
+        () => {
             if (parentElement) {
                 parentElement.className = 'cc_overlay-parent';
                 document.body.appendChild(parentElement);

@@ -201,9 +201,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
             document.addEventListener('click', handleLayerClick);
 
-            return () => {
-                return document.removeEventListener('click', handleLayerClick);
-            };
+            return () =>
+                document.removeEventListener('click', handleLayerClick);
         }
     }, [hide, isBubbleShown, onLayerClick]);
 

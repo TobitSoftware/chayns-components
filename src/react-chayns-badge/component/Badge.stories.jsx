@@ -16,30 +16,20 @@ BasicExample.args = {
     children: 12,
 };
 
-export const InAccordionHead = (args) => {
-    return (
-        <Accordion
-            head="The Badge is on the right -->"
-            right={<Badge {...args} />}
-        >
-            <div />
-        </Accordion>
-    );
-};
+export const InAccordionHead = (args) => (
+    <Accordion head="The Badge is on the right -->" right={<Badge {...args} />}>
+        <div />
+    </Accordion>
+);
 InAccordionHead.args = {
     children: 12,
 };
 
-export const WithText = (args) => {
-    return (
-        <Accordion
-            head="The Badge is on the right -->"
-            right={<Badge {...args} />}
-        >
-            <div />
-        </Accordion>
-    );
-};
+export const WithText = (args) => (
+    <Accordion head="The Badge is on the right -->" right={<Badge {...args} />}>
+        <div />
+    </Accordion>
+);
 WithText.args = {
     children: '12 remaining',
 };

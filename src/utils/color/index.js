@@ -8,9 +8,7 @@ import {
     rgb255ToHex,
 } from '@chayns/colors';
 
-const hsvToRgbString = (hsv) => {
-    return getRgb255String(hsvToRgb255(hsv));
-};
+const hsvToRgbString = (hsv) => getRgb255String(hsvToRgb255(hsv));
 
 export {
     hexToHsv as hexStringToHsv,

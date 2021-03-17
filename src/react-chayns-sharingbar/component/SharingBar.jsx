@@ -38,7 +38,7 @@ function SharingBar({
                 setTextStringsLoaded(true);
             });
         }
-    }, []);
+    }, [children]);
     const mobileShare = sharingProvider.find(
         (app) => app.id === 10 || app.id === 11
     );
@@ -54,7 +54,7 @@ function SharingBar({
 
     const indicator = children || [
         <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />,
-        <TextString stringName={'txt_chayns_components_sharingbar_share'}>
+        <TextString stringName="txt_chayns_components_sharingbar_share">
             <span className="sharing-bar__text" />
         </TextString>,
     ];

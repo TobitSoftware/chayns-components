@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './ColorInput.scss';
-import Input from '../../../react-chayns-input/component/Input';
-import Icon from '../../../react-chayns-icon/component/Icon';
-import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import {
     getRgb255String,
     rgb1ToRgb255,
@@ -13,6 +10,9 @@ import {
     hexToRgb255,
     rgb255ToHex,
 } from '@chayns/colors';
+import Input from '../../../react-chayns-input/component/Input';
+import Icon from '../../../react-chayns-icon/component/Icon';
+import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import { isNumber } from '../../../utils/is';
 
 export default class ColorInput extends Component {
@@ -132,6 +132,7 @@ ColorInput.propTypes = {
         h: PropTypes.number.isRequired,
         s: PropTypes.number.isRequired,
         v: PropTypes.number.isRequired,
+        a: PropTypes.number,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
     colorModel: PropTypes.number.isRequired,
