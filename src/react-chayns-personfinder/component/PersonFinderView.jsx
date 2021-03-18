@@ -134,12 +134,11 @@ class PersonFinderView extends Component {
 
     hasEntries = () => {
         const { data, orm, value, tags, filterSelected } = this.props;
-        const filterValues = ({ type, id }) => {
-            return tags.every(
+        const filterValues = ({ type, id }) =>
+            tags.every(
                 ({ value: tagValue }) =>
                     type !== tagValue.type || id !== tagValue.id
             );
-        };
         return Array.isArray(orm.groups)
             ? orm.groups.some(({ key: group, show, filter }) => {
                   if (typeof show === 'function' && !show(value)) {

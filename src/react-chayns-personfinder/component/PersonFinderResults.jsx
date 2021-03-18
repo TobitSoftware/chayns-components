@@ -38,11 +38,11 @@ const PersonFinderResults = ({
                       )
                     : data[group] || [];
             if (filterSelected) {
-                groupData = groupData.filter(({ type, id }) => {
-                    return tags.every(
+                groupData = groupData.filter(({ type, id }) =>
+                    tags.every(
                         ({ value }) => type !== value.type || id !== value.id
-                    );
-                });
+                    )
+                );
             }
             const groupLength = groupData.length;
             length += groupLength;
