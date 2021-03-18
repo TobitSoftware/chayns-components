@@ -225,7 +225,6 @@ export default class PersonFinderExample extends PureComponent {
                 <h2>Multiple PersonFinders</h2>
                 <PersonFinder
                     hasOpenCloseIcon
-                    max={3}
                     placeholder="Empfänger"
                     showPersons
                     multiple
@@ -394,8 +393,9 @@ export default class PersonFinderExample extends PureComponent {
                     ref={(ref) => {
                         this.multipleUserFinder = ref;
                     }}
-                    placeholder="Users (multiple)"
+                    placeholder="Users (3)"
                     multiple
+                    max={3}
                 />
                 <Button onClick={this.clear}>Clear all</Button>
             </div>
