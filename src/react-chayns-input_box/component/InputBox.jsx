@@ -12,6 +12,7 @@ import Overlay from '../../components/overlay/Overlay';
 import Input from '../../react-chayns-input/component/Input';
 import { isFunction } from '../../utils/is';
 import { isServer } from '../../utils/isServer';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 const InputBox = React.forwardRef((props, ref) => {
     const {
@@ -25,6 +26,7 @@ const InputBox = React.forwardRef((props, ref) => {
         boxClassName,
         style,
         onBlur,
+        hasOpenCloseIcon,
         ...restProps
     } = props;
 
@@ -129,6 +131,25 @@ const InputBox = React.forwardRef((props, ref) => {
           }
         : null;
 
+    if (hasOpenCloseIcon) {
+        const toggle = (event) => {
+            setIsHidden(!isHidden);
+            event.stopPropagation();
+        };
+        if (restProps.design === Input.BORDER_DESIGN) {
+            restProps.right = (
+                <Icon
+                    icon="fa fa-chevron-down"
+                    style={{ padding: '8px' }}
+                    onClick={toggle}
+                />
+            );
+        } else {
+            restProps.icon = 'fa fa-chevron-down';
+            restProps.onIconClick = toggle;
+        }
+    }
+
     return (
         <div
             style={{
@@ -187,6 +208,7 @@ InputBox.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+    hasOpenCloseIcon: PropTypes.bool,
 };
 
 InputBox.defaultProps = {
@@ -200,6 +222,7 @@ InputBox.defaultProps = {
     inputRef: null,
     overlayProps: null,
     style: null,
+    hasOpenCloseIcon: false,
 };
 
 InputBox.displayName = 'InputBox';

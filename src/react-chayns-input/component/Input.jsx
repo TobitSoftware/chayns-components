@@ -218,7 +218,8 @@ export default class Input extends PureComponent {
                         {emptyValue &&
                             !(
                                 value ||
-                                (value === null && stateValue) ||
+                                ((value === null || value === undefined) &&
+                                    stateValue) ||
                                 defaultValue
                             ) && (
                                 <div
@@ -253,7 +254,7 @@ export default class Input extends PureComponent {
             );
         }
 
-        if (dynamic) {
+        if (dynamic || icon) {
             return (
                 <div
                     className={classNames('input-group', className, {

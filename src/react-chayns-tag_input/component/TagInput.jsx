@@ -133,7 +133,7 @@ export default class TagInput extends Component {
             `${value || tags.length > 0 ? value : placeholder}${BIGGEST_LETTER}`
         );
         const inputStyle = {
-            width: `${width}px`,
+            width: `${width + 20}px`,
             minWidth: '20px',
         };
 

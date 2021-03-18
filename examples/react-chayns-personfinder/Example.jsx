@@ -224,6 +224,7 @@ export default class PersonFinderExample extends PureComponent {
 
                 <h2>Multiple PersonFinders</h2>
                 <PersonFinder
+                    hasOpenCloseIcon
                     max={3}
                     placeholder="Empfänger"
                     showPersons

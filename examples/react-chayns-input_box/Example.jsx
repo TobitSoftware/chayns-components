@@ -13,6 +13,7 @@ const InputBoxExample = () => {
                 value={value}
                 onChange={setValue}
                 placeholder="input"
+                hasOpenCloseIcon
             >
                 {`Password: ${value}`}
             </InputBox>

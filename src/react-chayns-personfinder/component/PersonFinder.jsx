@@ -169,6 +169,11 @@ PersonFinder.propTypes = {
      * The value for the
      */
     value: PropTypes.string,
+
+    /**
+     * Adds a small chevron icon to show / hide the results
+     */
+    hasOpenCloseIcon: PropTypes.bool,
 };
 
 PersonFinder.defaultProps = {
@@ -192,6 +197,7 @@ PersonFinder.defaultProps = {
     max: null,
     values: null,
     value: null,
+    hasOpenCloseIcon: false,
 };
 
 PersonFinder.displayName = 'PersonFinder';
