@@ -99,6 +99,11 @@ export default class PersonFinderExample extends PureComponent {
         } = this.state;
         return (
             <div style={{ marginBottom: '500px' }}>
+                {chayns.env.user.isAuthenticated || (
+                    <div className="content__card content__card--warning">
+                        You have to be logged in to use the PersonFinder.
+                    </div>
+                )}
                 <h2>Simple PersonFinders</h2>
                 <PersonFinder
                     onChange={console.log}
