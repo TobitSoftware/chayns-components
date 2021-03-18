@@ -11,24 +11,33 @@ class FriendsHelper {
 
     static #initialized = false;
 
+    static #loading = false;
+
     static init = async () => {
-        if (!isServer() && !this.#initialized) {
-            await window.chayns.ready;
-            if (
-                window.chayns.env.user &&
-                window.chayns.env.user.isAuthenticated
-            ) {
-                const raw = await fetchFriends().catch(() => []);
-                FriendsHelper.#friends = raw.map(FriendsHelper.convertFriend);
-                FriendsHelper.#friends.forEach((e) => {
-                    FriendsHelper.#friendsObject[e.personId] = e;
-                });
-                FriendsHelper.#eventEmitter.emit(
-                    'update',
-                    FriendsHelper.#friends
-                );
+        if (!isServer() && !this.#initialized && !this.#loading) {
+            try {
+                this.#loading = true;
+                await window.chayns.ready;
+                if (
+                    window.chayns.env.user &&
+                    window.chayns.env.user.isAuthenticated
+                ) {
+                    const raw = await fetchFriends().catch(() => []);
+                    FriendsHelper.#friends = raw.map(
+                        FriendsHelper.convertFriend
+                    );
+                    FriendsHelper.#friends.forEach((e) => {
+                        FriendsHelper.#friendsObject[e.personId] = e;
+                    });
+                    FriendsHelper.#eventEmitter.emit(
+                        'update',
+                        FriendsHelper.#friends
+                    );
+                }
+                this.#initialized = true;
+            } finally {
+                this.#loading = false;
             }
-            this.#initialized = true;
         }
     };
 
