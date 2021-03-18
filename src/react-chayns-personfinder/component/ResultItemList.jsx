@@ -17,6 +17,7 @@ const ResultItemList = ({
     onLoadMore,
     onClick,
     focusIndex,
+    roundIcons,
 }) => {
     if (!data || data.length === 0) {
         return null;
@@ -43,6 +44,7 @@ const ResultItemList = ({
                     orm={orm}
                     onClick={onClick}
                     isFocused={focusIndex !== null && focusIndex === index}
+                    roundIcons={roundIcons}
                 />
             ))}
             {hasMore && showWaitCursor && (
@@ -80,6 +82,7 @@ ResultItemList.propTypes = {
     onClick: PropTypes.func,
     className: PropTypes.string,
     focusIndex: PropTypes.number,
+    roundIcons: PropTypes.bool,
 };
 
 ResultItemList.defaultProps = {
@@ -92,6 +95,7 @@ ResultItemList.defaultProps = {
     onLoadMore: null,
     className: null,
     focusIndex: null,
+    roundIcons: false,
 };
 
 ResultItemList.displayName = 'ResultItemList';

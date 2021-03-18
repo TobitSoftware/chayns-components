@@ -7,7 +7,10 @@ const HTML = isServer() ? undefined : document.documentElement;
 
 class OrientationHelper {
     constructor() {
-        if (!isServer() && (chayns.env.isMobile || chayns.env.isApp)) {
+        if (
+            !isServer() &&
+            (window.chayns?.env.isMobile || window.chayns?.env.isApp)
+        ) {
             window.addEventListener('orientationchange', this.update);
             this.update();
         }

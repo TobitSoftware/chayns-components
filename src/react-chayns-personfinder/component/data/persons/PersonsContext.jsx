@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { reducer as PersonsReducer, initialState } from './PersonsReducer';
 import { fetchPersons, fetchUacPersons, fetchSites } from './PersonsApi';
+import { fetchGroups } from '../uacGroups/UacGroupApi';
 import {
     convertPerson,
     convertPersons,
@@ -25,6 +26,7 @@ const ObjectMapping = {
                 de: 'Freunde',
                 en: 'friends',
             },
+            roundIcons: true,
             show: (value) => !value,
         },
         {
@@ -33,6 +35,7 @@ const ObjectMapping = {
                 de: 'Personen',
                 en: 'persons',
             },
+            roundIcons: true,
             show: (value) => value && value.length >= 3,
         },
         {
@@ -41,6 +44,7 @@ const ObjectMapping = {
                 de: 'Sites',
                 en: 'friends',
             },
+            roundIcons: false,
             show: (value) => value && value.length >= 3,
         },
         {
@@ -49,7 +53,20 @@ const ObjectMapping = {
                 de: 'Weitere Personen',
                 en: 'further friends',
             },
+            roundIcons: true,
             show: (value) => value && value.length >= 3,
+        },
+        {
+            key: 'groups',
+            lang: {
+                de: 'Gruppen',
+                en: 'groups',
+            },
+            filter: (inputValue) => (e) =>
+                e.name &&
+                e.name
+                    .toLowerCase()
+                    .startsWith((inputValue || '').toLowerCase()),
         },
     ],
     showName: 'name',
@@ -90,6 +107,7 @@ const PersonFinderStateProvider = ({
     enablePersons,
     enableSites,
     enableFriends,
+    enableUacGroups,
     includeOwn,
     locationId,
     uacId,
@@ -116,6 +134,24 @@ const PersonFinderStateProvider = ({
 
         return () => FriendsHelper.removeUpdateListener(friendsListener);
     }, [enableFriends]);
+
+    useEffect(() => {
+        (async () => {
+            if (!enableUacGroups) return;
+
+            let groups = await fetchGroups();
+            groups = groups.map(({ id, showName }) => ({
+                type: 'GROUP',
+                id,
+                name: showName,
+                imageUrl: `https://sub60.tobit.com/l/${chayns.env.site.id}?size=100`,
+            }));
+            dispatch({
+                type: 'RECEIVE_GROUPS',
+                data: groups,
+            });
+        })();
+    }, [enableUacGroups]);
 
     const loadPersons = useCallback(
         async (inputValue, clear = false) => {
@@ -282,7 +318,7 @@ const PersonFinderStateProvider = ({
             value={{
                 ...state,
                 data,
-                autoLoading: !enableSites && enablePersons,
+                autoLoading: !enableUacGroups && !enableSites && enablePersons,
                 dispatch,
                 onLoadMore,
                 onChange,
@@ -304,6 +340,7 @@ PersonFinderStateProvider.propTypes = {
     enablePersons: PropTypes.bool,
     enableSites: PropTypes.bool,
     enableFriends: PropTypes.bool,
+    enableUacGroups: PropTypes.bool,
     includeOwn: PropTypes.bool,
     locationId: PropTypes.number,
     uacId: PropTypes.number,
@@ -316,6 +353,7 @@ PersonFinderStateProvider.defaultProps = {
     enablePersons: true,
     enableSites: false,
     enableFriends: true,
+    enableUacGroups: false,
     includeOwn: false,
     locationId: null,
     uacId: null,

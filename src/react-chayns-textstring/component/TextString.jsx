@@ -442,9 +442,9 @@ TextString.textStrings = {};
 TextString.language = isServer()
     ? 'de'
     : (
-          chayns.env.parameters.translang ||
-          chayns.env.site.translang ||
-          chayns.env.language ||
+          window.chayns?.env.parameters.translang ||
+          window.chayns?.env.site.translang ||
+          window.chayns?.env.language ||
           navigator.language ||
           'de'
       )

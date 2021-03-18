@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'clsx';
 import ResultItemList from './ResultItemList';
 
 const PersonFinderResults = ({
     data,
+    tags,
     orm,
     value: inputValue,
     hasMore,
@@ -11,6 +13,8 @@ const PersonFinderResults = ({
     showWaitCursor,
     onSelect,
     focusIndex,
+    noBackground,
+    filterSelected,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -23,14 +27,23 @@ const PersonFinderResults = ({
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, lang, show }) => {
+        return orm.groups.map(({ key: group, show, roundIcons, filter }) => {
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
-            const groupData =
-                typeof orm.filter === 'function'
-                    ? (data[group] || []).filter(orm.filter(inputValue))
+            let groupData =
+                typeof (filter || orm.filter) === 'function'
+                    ? (data[group] || []).filter(
+                          (filter || orm.filter)(inputValue)
+                      )
                     : data[group] || [];
+            if (filterSelected) {
+                groupData = groupData.filter(({ type, id }) => {
+                    return tags.every(
+                        ({ value }) => type !== value.type || id !== value.id
+                    );
+                });
+            }
             const groupLength = groupData.length;
             length += groupLength;
             let groupFocusIndex = null;
@@ -43,19 +56,21 @@ const PersonFinderResults = ({
             }
             return (
                 <div
-                    className="cc__person-finder__results"
+                    className={classNames('cc__person-finder__results', {
+                        'no-background': noBackground,
+                    })}
                     key={`resultList_${group}`}
                 >
                     <ResultItemList
                         data={groupData}
                         orm={orm}
                         group={group}
-                        separator={lang[chayns.env.language] || lang.en}
                         hasMore={hasMore[group]}
                         onLoadMore={onLoadMore}
                         showWaitCursor={showWaitCursor[group]}
                         onClick={handleClick}
                         focusIndex={groupFocusIndex}
+                        roundIcons={roundIcons}
                     />
                 </div>
             );
@@ -63,7 +78,11 @@ const PersonFinderResults = ({
     }
 
     return (
-        <div className="cc__person-finder__results">
+        <div
+            className={classNames('cc__person-finder__results', {
+                'no-background': noBackground,
+            })}
+        >
             <ResultItemList
                 data={
                     typeof orm.filter === 'function'
@@ -76,6 +95,7 @@ const PersonFinderResults = ({
                 showWaitCursor={showWaitCursor}
                 onClick={handleClick}
                 focusIndex={focusIndex}
+                roundIcons={orm.roundIcons}
             />
         </div>
     );
@@ -89,11 +109,17 @@ PersonFinderResults.propTypes = {
         // eslint-disable-next-line react/forbid-prop-types
         groups: PropTypes.array,
         filter: PropTypes.func,
+        roundIcons: PropTypes.bool,
     }).isRequired,
     data: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.objectOf(PropTypes.arrayOf(PropTypes.object)),
     ]),
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.shape({}),
+        })
+    ),
     value: PropTypes.string,
     onSelect: PropTypes.func,
     onLoadMore: PropTypes.func.isRequired,
@@ -106,15 +132,20 @@ PersonFinderResults.propTypes = {
         PropTypes.bool,
     ]),
     focusIndex: PropTypes.number,
+    noBackground: PropTypes.bool,
+    filterSelected: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
     data: [],
+    tags: [],
     value: '',
     onSelect: null,
     hasMore: false,
     showWaitCursor: false,
     focusIndex: null,
+    noBackground: false,
+    filterSelected: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

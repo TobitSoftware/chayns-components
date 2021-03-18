@@ -627,7 +627,9 @@ ProgressCalendar.defaultProps = {
     data: null,
     columns: {
         names: ['Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.', 'So.'],
-        highlightedColor: isServer() ? undefined : chayns.env.site.color,
+        highlightedColor: isServer()
+            ? undefined
+            : window.chayns?.env.site.color,
     },
     groups: [],
     focus: new Date(),

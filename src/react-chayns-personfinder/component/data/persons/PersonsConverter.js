@@ -65,7 +65,7 @@ export const convertSites = (sites) =>
         type: 'SITE',
         id: site.siteId,
         name: site.locationName,
-        imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=40`,
+        imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=100`,
         siteId: site.siteId,
         locationId: site.locationId,
     }));

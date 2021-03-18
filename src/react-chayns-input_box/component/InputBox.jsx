@@ -27,6 +27,8 @@ const InputBox = React.forwardRef((props, ref) => {
         style,
         onBlur,
         hasOpenCloseIcon,
+        renderInline,
+        hideInput,
         ...restProps
     } = props;
 
@@ -153,37 +155,60 @@ const InputBox = React.forwardRef((props, ref) => {
     return (
         <div
             style={{
-                display: 'inline-block',
+                display: renderInline ? 'flex' : 'inline-block',
+                ...(renderInline
+                    ? { height: '100%', flexDirection: 'column' }
+                    : {}),
                 ...style,
             }}
-            className={classnames('cc__input-box', className)}
+            className={classnames(
+                { 'cc__input-box': !renderInline },
+                className
+            )}
             ref={wrapperRef}
         >
             <InputComponent
                 {...restProps}
+                style={
+                    renderInline && hideInput
+                        ? { position: 'absolute', visibility: 'hidden' }
+                        : undefined
+                }
                 ref={inputRef}
                 onFocus={handleFocus}
             />
-            <Overlay parent={parent}>
-                {!!(rect && !isHidden && children) && (
-                    <div
-                        onClick={(e) => e.preventDefault()}
-                        className={classnames(
-                            'cc__input-box__overlay',
-                            'scrollbar',
-                            boxClassName
-                        )}
-                        style={{
-                            ...positionStyles,
-                            ...overlayProps?.style,
-                        }}
-                        {...overlayProps}
-                        ref={setBoxRef}
-                    >
-                        {children}
-                    </div>
-                )}
-            </Overlay>
+            {renderInline ? (
+                <div
+                    className="cc__input-box--inline-wrapper scrollbar"
+                    style={{
+                        marginTop: !hideInput ? 20 : 0,
+                        overflow: 'hidden auto',
+                    }}
+                >
+                    {children}
+                </div>
+            ) : (
+                <Overlay parent={parent}>
+                    {!!(rect && !isHidden && children) && (
+                        <div
+                            onClick={(e) => e.preventDefault()}
+                            className={classnames(
+                                'cc__input-box__overlay',
+                                'scrollbar',
+                                boxClassName
+                            )}
+                            style={{
+                                ...positionStyles,
+                                ...overlayProps?.style,
+                            }}
+                            {...overlayProps}
+                            ref={setBoxRef}
+                        >
+                            {children}
+                        </div>
+                    )}
+                </Overlay>
+            )}
         </div>
     );
 });
@@ -209,6 +234,8 @@ InputBox.propTypes = {
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
     hasOpenCloseIcon: PropTypes.bool,
+    renderInline: PropTypes.bool,
+    hideInput: PropTypes.bool,
 };
 
 InputBox.defaultProps = {
@@ -223,6 +250,8 @@ InputBox.defaultProps = {
     overlayProps: null,
     style: null,
     hasOpenCloseIcon: false,
+    renderInline: false,
+    hideInput: false,
 };
 
 InputBox.displayName = 'InputBox';
