@@ -53,8 +53,15 @@ function SharingBar({
     }
 
     const indicator = children || [
-        <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />,
-        <TextString stringName="txt_chayns_components_sharingbar_share">
+        <Icon
+            key="icon"
+            icon="fal fa-share-alt"
+            className="sharing-bar__icon"
+        />,
+        <TextString
+            key="textstring"
+            stringName="txt_chayns_components_sharingbar_share"
+        >
             <span className="sharing-bar__text" />
         </TextString>,
     ];

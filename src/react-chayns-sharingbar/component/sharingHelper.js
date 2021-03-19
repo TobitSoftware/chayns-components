@@ -75,21 +75,36 @@ export function getAvailableShareProviders() {
 }
 
 export function getDefaultShareLink() {
+    let shareLink;
     if (chayns.env.isChaynsWeb) {
-        return chayns.env.site.url;
-    }
-    const tapp = chayns.env.site.tapps.find(
-        (element) => element.id === chayns.env.site.tapp.id
-    );
-
-    let shareLink = `http://${
-        chayns.env.site.domain || `chayns.net/${chayns.env.site.id}`
-    }/`;
-
-    if (tapp) {
-        shareLink += tapp.customUrl || `tapp/index/${tapp.id}`;
+        shareLink = chayns.env.site.url.replace(
+            /^(https:\/\/)(chayns.net\/[0-9]{5}-[0-9]{5})/,
+            `$1${chayns.env.site.domain}`
+        ); // replace chayns.net/{{siteId}} with domain
     } else {
-        shareLink += `tapp/index/${chayns.env.site.tapp.id}`;
+        const tapp = chayns.env.site.tapps.find(
+            (element) => element.id === chayns.env.site.tapp.id
+        );
+
+        shareLink = `http://${
+            chayns.env.site.domain || `chayns.net/${chayns.env.site.id}`
+        }/`;
+
+        if (tapp) {
+            shareLink += tapp.customUrl || `tapp/index/${tapp.id}`;
+        } else {
+            shareLink += `tapp/index/${chayns.env.site.tapp.id}`;
+        }
+    }
+
+    const ignoreParams = ['v', 'deviceColorMode'];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const ignoreParam of ignoreParams) {
+        shareLink = shareLink.replace(
+            new RegExp(`/(\\?.*)(${ignoreParam}(?:)[^&]*)/`),
+            '$1'
+        );
     }
 
     return shareLink;
