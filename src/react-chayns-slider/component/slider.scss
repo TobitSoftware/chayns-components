@@ -20,8 +20,8 @@
                 height: 100%;
                 flex-direction: row;
 
-                .chayns-design--1 &,
-                .chayns-design--2 & {
+                .chayns-general-component-design--1 &,
+                .chayns-general-component-design--2 & {
                     margin: 0;
                 }
 
@@ -31,11 +31,11 @@
                     height: 100% !important;
                     width: 10px;
 
-                    .chayns-design--1 & {
+                    .chayns-general-component-design--1 & {
                         width: 8px;
                     }
 
-                    .chayns-design--2 & {
+                    .chayns-general-component-design--2 & {
                         width: 6px;
                     }
 
@@ -74,8 +74,8 @@
         justify-content: center;
         margin: 0 11px;
 
-        .chayns-design--1 &,
-        .chayns-design--2 & {
+        .chayns-general-component-design--1 &,
+        .chayns-general-component-design--2 & {
             margin: 0;
         }
 
@@ -99,7 +99,7 @@
                         line-height: 30px;
                         transform: translateY(-38px);
 
-                        .chayns-design--1 & {
+                        .chayns-general-component-design--1 & {
                             transform: translateY(-34px);
                             border: none;
                         }
@@ -133,11 +133,11 @@
             transition: height 0.2s cubic-bezier(0.45, 0, 0.3, 1.35);
             height: 10px;
 
-            .chayns-design--1 & {
+            .chayns-general-component-design--1 & {
                 height: 8px;
             }
 
-            .chayns-design--2 & {
+            .chayns-general-component-design--2 & {
                 height: 6px;
             }
 
@@ -161,7 +161,7 @@
                 position: relative;
             }
 
-            .chayns-design--1 & {
+            .chayns-general-component-design--1 & {
                 &:hover .cc__new-slider__bar__thumb__dot[data-value] {
                     &:before {
                         transform: scale(1) rotate(-45deg);
@@ -200,7 +200,7 @@
                 white-space: nowrap;
                 position: relative;
 
-                .chayns-design--1 & {
+                .chayns-general-component-design--1 & {
                     height: 24px;
                     min-width: 24px;
                     border: 2px solid var(--chayns-color--408);
@@ -233,8 +233,10 @@
                     }
                 }
 
-                .chayns-design--2 &[data-value],
-                .chayns-design--2 .cc__new-slider--vertical & {
+                .chayns-general-component-design--2 &[data-value],
+                .chayns-general-component-design--2
+                    .cc__new-slider--vertical
+                    & {
                     background-color: var(--chayns-color--408);
 
                     &:after {
