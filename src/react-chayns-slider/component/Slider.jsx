@@ -496,6 +496,15 @@ export default class Slider extends PureComponent {
                 if (showValueInThumb) {
                     this.leftDot.current.innerText = valueFormatter(left);
                     this.rightDot.current.innerText = valueFormatter(right);
+                } else {
+                    this.leftDot.current.setAttribute(
+                        'data-value',
+                        valueFormatter(left)
+                    );
+                    this.rightDot.current.setAttribute(
+                        'data-value',
+                        valueFormatter(right)
+                    );
                 }
             } else {
                 const value = this.getRealValue(percent, min, max);
@@ -504,6 +513,11 @@ export default class Slider extends PureComponent {
                 }
                 if (showValueInThumb) {
                     this.dot.current.innerText = valueFormatter(value);
+                } else {
+                    this.dot.current.setAttribute(
+                        'data-value',
+                        valueFormatter(value)
+                    );
                 }
             }
         }
@@ -655,9 +669,15 @@ export default class Slider extends PureComponent {
                     <div
                         className="cc__new-slider__bar__thumb-wrapper"
                         style={{
-                            [this.width]: `calc(100% - ${thumbWidth - 20}px`,
-                            [this.marginLeft]: `${thumbWidth / 2 - 10}px`,
-                            [this.marginRight]: `${thumbWidth / 2 - 10}px`,
+                            [this.width]: `calc(100% - ${
+                                (thumbWidth || 20) - 20
+                            }px`,
+                            [this.marginLeft]: `${
+                                (thumbWidth || 20) / 2 - 10
+                            }px`,
+                            [this.marginRight]: `${
+                                (thumbWidth || 20) / 2 - 10
+                            }px`,
                         }}
                     >
                         {interval ? (
@@ -671,7 +691,9 @@ export default class Slider extends PureComponent {
                                 >
                                     <div
                                         style={{
-                                            minWidth: thumbWidth,
+                                            ...(thumbWidth && {
+                                                minWidth: thumbWidth,
+                                            }),
                                             ...(thumbStyle && thumbStyle.left),
                                         }}
                                         className="cc__new-slider__bar__thumb__dot"
@@ -687,7 +709,9 @@ export default class Slider extends PureComponent {
                                 >
                                     <div
                                         style={{
-                                            minWidth: thumbWidth,
+                                            ...(thumbWidth && {
+                                                minWidth: thumbWidth,
+                                            }),
                                             ...(thumbStyle && thumbStyle.right),
                                         }}
                                         className="cc__new-slider__bar__thumb__dot"
@@ -704,7 +728,9 @@ export default class Slider extends PureComponent {
                             >
                                 <div
                                     style={{
-                                        minWidth: thumbWidth,
+                                        ...(thumbWidth && {
+                                            minWidth: thumbWidth,
+                                        }),
                                         ...thumbStyle,
                                     }}
                                     className="cc__new-slider__bar__thumb__dot"
@@ -949,7 +975,7 @@ Slider.defaultProps = {
     innerTrackStyle: null,
     showValueInThumb: false,
     scaleOnDown: null,
-    thumbWidth: 20,
+    thumbWidth: null,
 };
 
 Slider.displayName = 'Slider';
