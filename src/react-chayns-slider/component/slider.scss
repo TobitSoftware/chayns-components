@@ -20,11 +20,24 @@
                 height: 100%;
                 flex-direction: row;
 
+                .chayns-general-component-design--1 &,
+                .chayns-general-component-design--2 & {
+                    margin: 0;
+                }
+
                 &__track {
                     left: 50%;
                     transform: translate(-50%, -50%);
+                    height: 100% !important;
                     width: 10px;
-                    height: 100%;
+
+                    .chayns-general-component-design--1 & {
+                        width: 8px;
+                    }
+
+                    .chayns-general-component-design--2 & {
+                        width: 6px;
+                    }
 
                     &__inner {
                         bottom: 0;
@@ -54,12 +67,17 @@
 
     &__bar {
         flex: 1;
-        margin: 0 11px;
         position: relative;
         height: 30px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        margin: 0 11px;
+
+        .chayns-general-component-design--1 &,
+        .chayns-general-component-design--2 & {
+            margin: 0;
+        }
 
         &--down {
             .cc__new-slider__bar {
@@ -77,9 +95,14 @@
                         font-size: 100%;
                         height: 30px;
                         padding: 0 15px;
-                        transform: translateY(-42px);
                         box-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
                         line-height: 30px;
+                        transform: translateY(-38px);
+
+                        .chayns-general-component-design--1 & {
+                            transform: translateY(-34px);
+                            border: none;
+                        }
                     }
                 }
             }
@@ -104,11 +127,19 @@
             position: absolute;
             overflow: hidden;
             border-radius: 100px;
-            height: 10px;
             width: 100%;
             transform: translateY(-50%);
             cursor: pointer;
             transition: height 0.2s cubic-bezier(0.45, 0, 0.3, 1.35);
+            height: 10px;
+
+            .chayns-general-component-design--1 & {
+                height: 8px;
+            }
+
+            .chayns-general-component-design--2 & {
+                height: 6px;
+            }
 
             &__inner {
                 height: 100%;
@@ -120,7 +151,7 @@
             position: absolute;
             top: 50%;
             min-width: 30px;
-            height: 30px;
+            min-height: 30px;
             padding: 5px;
             transform: translate(-50%, -50%);
             cursor: pointer;
@@ -128,6 +159,22 @@
             &-wrapper {
                 width: 100%;
                 position: relative;
+            }
+
+            .chayns-general-component-design--1 & {
+                &:hover .cc__new-slider__bar__thumb__dot[data-value] {
+                    &:before {
+                        transform: scale(1) rotate(-45deg);
+                        opacity: 1;
+                        bottom: 150%;
+                    }
+
+                    &:after {
+                        transform: scale(1);
+                        opacity: 1;
+                        bottom: 170%;
+                    }
+                }
             }
 
             &__dot {
@@ -141,7 +188,7 @@
                 padding: 0 8px;
                 font-size: 85%;
                 display: flex;
-                align-items: flex-end;
+                align-items: center;
                 justify-content: center;
                 vertical-align: middle;
                 line-height: 20px;
@@ -151,6 +198,56 @@
                 transition-timing-function: cubic-bezier(0.4, 0, 0.3, 1.35);
                 color: #222;
                 white-space: nowrap;
+                position: relative;
+
+                .chayns-general-component-design--1 & {
+                    height: 24px;
+                    min-width: 24px;
+                    border: 2px solid var(--chayns-color--408);
+
+                    &[data-value] {
+                        &:before {
+                            content: '';
+                            width: 32px;
+                            height: 32px;
+                            transform: scale(0) rotate(-45deg);
+                            opacity: 0;
+                            border-radius: 50% 50% 50% 0;
+                            background-color: var(--chayns-color--408);
+                            position: absolute;
+                            bottom: 0;
+                            transition: transform 0.2s ease, opacity 0.3s,
+                                bottom 0.2s ease-out;
+                        }
+
+                        &:after {
+                            content: attr(data-value);
+                            transform: scale(0);
+                            opacity: 0;
+                            color: #ffffff;
+                            position: absolute;
+                            bottom: 0;
+                            transition: transform 0.2s ease, opacity 0.3s,
+                                bottom 0.2s ease-out;
+                        }
+                    }
+                }
+
+                .chayns-general-component-design--2 &[data-value],
+                .chayns-general-component-design--2
+                    .cc__new-slider--vertical
+                    & {
+                    background-color: var(--chayns-color--408);
+
+                    &:after {
+                        content: '';
+                        border-radius: 100%;
+                        background-color: white;
+                        position: absolute;
+                        height: 6px;
+                        width: 6px;
+                    }
+                }
             }
         }
     }
