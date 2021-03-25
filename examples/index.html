@@ -15,12 +15,21 @@
         ></script>
     </head>
     <body>
+        <script>
+            const s = document.createElement("script");
+            s.type = "text/javascript";
+            if(location.href.includes("isStaging")){
+                s.src = "https://api.chayns-static.space/js/staging/v4.0/chayns.min.js";
+            }else{
+                s.src = "https://api.chayns-static.space/js/v4.0/chayns.min.js";
+            }
+            document.body.append(s);
+        </script>
+
         <div id="app" class="tapp"></div>
         <div id="portal-example"></div>
 
         <script src="https://polyfillsvc.tobit.com/polyfill.min.js?flags=gated&features=default,Object.assign,fetch,Array.prototype.forEach"></script>
-        <!-- chayns js -->
-        <script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.4.2/js/swiper.min.js"></script>
     </body>
 </html>
