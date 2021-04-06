@@ -50,6 +50,10 @@ const ContextMenu = React.forwardRef((props, ref) => {
     const [x, setX] = useState(0);
     const [y, setY] = useState(0);
 
+    const itemsHaveIcons = items.some(({ icon }) =>
+        typeof icon === 'string' ? icon : icon?.iconName
+    );
+
     /**
      * Sync bubble with `isBubbleShown` state
      */
@@ -143,6 +147,11 @@ const ContextMenu = React.forwardRef((props, ref) => {
      */
     const show = useCallback(async () => {
         if (!disableDialog && (chayns.env.isMobile || chayns.env.isTablet)) {
+            const iconFallback = items.some(({ icon }) =>
+                typeof icon === 'string' ? icon : icon?.iconName
+            )
+                ? ' '
+                : '';
             const { buttonType, selection } = await chayns.dialog.select({
                 type: 2,
                 list: items.map(({ text, icon, stringName }, index) => ({
@@ -151,7 +160,10 @@ const ContextMenu = React.forwardRef((props, ref) => {
                         : text,
                     value: index,
                     icon:
-                        typeof icon === 'string' ? icon : `fa-${icon.iconName}`,
+                        (typeof icon === 'string'
+                            ? icon
+                            : icon?.iconName && `fa-${icon?.iconName}`) ||
+                        iconFallback,
                 })),
                 buttons: [],
             });
@@ -253,9 +265,9 @@ const ContextMenu = React.forwardRef((props, ref) => {
                                     : item.text) + index
                             }
                         >
-                            {item.icon ? (
+                            {item.icon || itemsHaveIcons ? (
                                 <div className="context-menu__item__icon">
-                                    <Icon icon={item.icon} />
+                                    {item.icon && <Icon icon={item.icon} />}
                                 </div>
                             ) : null}
                             {item.stringName ? (
