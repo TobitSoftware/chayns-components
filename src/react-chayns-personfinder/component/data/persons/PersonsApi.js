@@ -63,7 +63,7 @@ export const fetchPersons = async (value, skip, take) => {
     }
     let result = [];
     const response = await fetchHelper('persons', {
-        url: `${RELATIONS_SERVER_URL}person?query=${value}&skip=${skip}&take=${take}`,
+        url: `${RELATIONS_SERVER_URL}v2/person?query=${value}&skip=${skip}&take=${take}`,
         config: {
             method: 'GET',
             headers: {
@@ -74,7 +74,7 @@ export const fetchPersons = async (value, skip, take) => {
     });
 
     if (response.ok) {
-        result = response.status !== 204 ? await response.json() : [];
+        result = response.status !== 204 ? (await response.json()).list : [];
     } else {
         console.error(
             '[chayns components] Personfinder: failed to fetch persons',

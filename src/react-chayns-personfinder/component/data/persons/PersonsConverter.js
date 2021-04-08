@@ -9,7 +9,7 @@ export const convertPerson = (relation) => {
         relation.UserFullName ||
         [
             relation.firstName || relation.firstname,
-            relation.lastName || relation.lastname,
+            relation.lastName || relation.lastname
         ]
             .join(' ')
             .trim();
@@ -32,7 +32,7 @@ export const convertPerson = (relation) => {
         isFriend: FriendsHelper.isFriend(
             relation.personId || relation.PersonID
         ),
-        verificationState: !!relation.verificationState,
+        verificationState: !!relation.verificationState
     };
 };
 
@@ -56,7 +56,7 @@ export const convertPersons = (persons) => {
 
     return {
         personsUnrelated: unrelated,
-        personsRelated: related,
+        personsRelated: related
     };
 };
 
@@ -67,5 +67,5 @@ export const convertSites = (sites) =>
         name: site.locationName,
         imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=100`,
         siteId: site.siteId,
-        locationId: site.locationId,
+        locationId: site.locationId
     }));

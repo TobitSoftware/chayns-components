@@ -8,7 +8,7 @@ const Relation = ({ relation }) => {
             relation.relationCount === 1 ? 'COMMON_SITE' : 'COMMON_SITES'
         );
         return (
-            <span className="relation">
+            <span className='relation'>
                 {`${relation.relationCount} ${text}`}
             </span>
         );
@@ -19,7 +19,7 @@ const Relation = ({ relation }) => {
 
 Relation.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
-    relation: PropTypes.object.isRequired,
+    relation: PropTypes.object.isRequired
 };
 
 Relation.displayName = 'Relation';
