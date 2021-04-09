@@ -43,27 +43,27 @@ on its reference.
 
 The `ContextMenu`-component takes the following props:
 
-| Name                                            | Type                                                                                                 | Default                         | Required |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------- | :------: |
-| [onLayerClick](#onlayerclick)                   | `function`                                                                                           |                                 |          |
-| [coordinates](#coordinates)                     | `{ x: number, y: number }`                                                                           |                                 |          |
-| [items](#items)                                 | `Array<{ className: string, onClick: function, text: string \| ReactNode, icon: string \| Object }>` | `[]`                            |          |
-| [position](#position)                           | `number`                                                                                             |                                 |          |
-| [positionOnChildren](#positiononchildren)       | `number`                                                                                             | `1`                             |          |
-| [parent](#parent)                               | `custom`                                                                                             |                                 |          |
-| [children](#children)                           | `ReactNode`                                                                                          | `<Icon icon="ts-ellipsis_v" />` |          |
-| [onChildrenClick](#onchildrenclick)             | `function`                                                                                           |                                 |          |
-| [childrenStyle](#childrenstyle)                 | `{ [key: string]: string \| number }`                                                                |                                 |          |
-| [childrenClassName](#childrenclassname)         | `string`                                                                                             |                                 |          |
-| [stopPropagation](#stoppropagation)             | `boolean`                                                                                            | `false`                         |          |
-| [minWidth](#minwidth)                           | `number`                                                                                             |                                 |          |
-| [maxWidth](#maxwidth)                           | `number`                                                                                             |                                 |          |
-| [showTriggerBackground](#showtriggerbackground) | `boolean`                                                                                            | `false`                         |          |
-| [className](#classname)                         | `string`                                                                                             |                                 |          |
-| [style](#style)                                 | `object`                                                                                             |                                 |          |
-| [removeParentSpace](#removeparentspace)         | `boolean`                                                                                            | `false`                         |          |
-| [disableDialog](#disabledialog)                 | `boolean`                                                                                            | `false`                         |          |
-| [arrowDistance](#arrowdistance)                 | `number`                                                                                             | `0`                             |          |
+| Name                                            | Type                                                                                                                     | Default                         | Required |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | :------: |
+| [onLayerClick](#onlayerclick)                   | `function`                                                                                                               |                                 |          |
+| [coordinates](#coordinates)                     | `{ x: number, y: number }`                                                                                               |                                 |          |
+| [items](#items)                                 | `Array<{ className: string, onClick: function, text: string \| ReactNode, stringName: string, icon: string \| Object }>` | `[]`                            |          |
+| [position](#position)                           | `number`                                                                                                                 |                                 |          |
+| [positionOnChildren](#positiononchildren)       | `number`                                                                                                                 | `1`                             |          |
+| [parent](#parent)                               | `custom`                                                                                                                 |                                 |          |
+| [children](#children)                           | `ReactNode`                                                                                                              | `<Icon icon="ts-ellipsis_v" />` |          |
+| [onChildrenClick](#onchildrenclick)             | `function`                                                                                                               |                                 |          |
+| [childrenStyle](#childrenstyle)                 | `{ [key: string]: string \| number }`                                                                                    |                                 |          |
+| [childrenClassName](#childrenclassname)         | `string`                                                                                                                 |                                 |          |
+| [stopPropagation](#stoppropagation)             | `boolean`                                                                                                                | `false`                         |          |
+| [minWidth](#minwidth)                           | `number`                                                                                                                 |                                 |          |
+| [maxWidth](#maxwidth)                           | `number`                                                                                                                 |                                 |          |
+| [showTriggerBackground](#showtriggerbackground) | `boolean`                                                                                                                | `false`                         |          |
+| [className](#classname)                         | `string`                                                                                                                 |                                 |          |
+| [style](#style)                                 | `object`                                                                                                                 |                                 |          |
+| [removeParentSpace](#removeparentspace)         | `boolean`                                                                                                                | `false`                         |          |
+| [disableDialog](#disabledialog)                 | `boolean`                                                                                                                | `false`                         |          |
+| [arrowDistance](#arrowdistance)                 | `number`                                                                                                                 | `0`                             |          |
 
 ### `onLayerClick`
 
@@ -89,11 +89,11 @@ The coordinates at which the context menu will get rendered.
 ### `items`
 
 ```ts
-items?: Array<{ className: string, onClick: function, text: string | ReactNode, icon: string | Object }>
+items?: Array<{ className: string, onClick: function, text: string | ReactNode, stringName: string, icon: string | Object }>
 ```
 
 The action items inside of the context menu. Their shape should look like this:
-`{ className: <string>, onClick: <function>, text: <string>, icon: <string> }`.
+`{ className: <string>, onClick: <function>, text: <string>, icon: <string> }, stringName: <string>`.
 
 ---
 

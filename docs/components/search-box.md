@@ -37,24 +37,28 @@ import { SearchBox } from 'chayns-components';
 
 The `SearchBox`-component takes the following props:
 
-| Name                                          | Type                                  | Default | Required |
-| --------------------------------------------- | ------------------------------------- | ------- | :------: |
-| [onSelect](#onselect)                         | `function`                            |         |          |
-| [disabled](#disabled)                         | `boolean`                             | `false` |          |
-| [list](#list)                                 | `Array<object>`                       |         |          |
-| [listKey](#listkey)                           | `string`                              |         |    ✓     |
-| [listValue](#listvalue)                       | `string`                              |         |    ✓     |
-| [className](#classname)                       | `string`                              |         |          |
-| [defaultValue](#defaultvalue)                 | `string \| number`                    |         |          |
-| [stopPropagation](#stoppropagation)           | `boolean`                             | `false` |          |
-| [parent](#parent)                             | `function \| ReactNode`               |         |          |
-| [style](#style)                               | `{ [key: string]: string \| number }` |         |          |
-| [value](#value)                               | `string \| number`                    |         |          |
-| [inputValue](#inputvalue)                     | `string`                              |         |          |
-| [showListWithoutInput](#showlistwithoutinput) | `boolean`                             | `false` |          |
-| [inputDefaultValue](#inputdefaultvalue)       | `string`                              |         |          |
-| [onChange](#onchange)                         | `function`                            |         |          |
-| [autoSelectFirst](#autoselectfirst)           | `boolean`                             | `false` |          |
+| Name                                              | Type                                              | Default   | Required |
+| ------------------------------------------------- | ------------------------------------------------- | --------- | :------: |
+| [onSelect](#onselect)                             | `function`                                        |           |          |
+| [disabled](#disabled)                             | `boolean`                                         | `false`   |          |
+| [list](#list)                                     | `Array<object> \| Array<string> \| Array<number>` |           |          |
+| [listKey](#listkey)                               | `string`                                          | `'key'`   |          |
+| [listValue](#listvalue)                           | `string`                                          | `'value'` |          |
+| [className](#classname)                           | `string`                                          |           |          |
+| [defaultValue](#defaultvalue)                     | `string \| number`                                |           |          |
+| [stopPropagation](#stoppropagation)               | `boolean`                                         | `false`   |          |
+| [parent](#parent)                                 | `function \| ReactNode`                           |           |          |
+| [style](#style)                                   | `{ [key: string]: string \| number }`             |           |          |
+| [value](#value)                                   | `string \| number`                                |           |          |
+| [inputValue](#inputvalue)                         | `string`                                          |           |          |
+| [showListWithoutInput](#showlistwithoutinput)     | `boolean`                                         | `false`   |          |
+| [inputDefaultValue](#inputdefaultvalue)           | `string`                                          |           |          |
+| [onChange](#onchange)                             | `function`                                        |           |          |
+| [autoSelectFirst](#autoselectfirst)               | `boolean`                                         | `false`   |          |
+| [highlightInputInResult](#highlightinputinresult) | `boolean`                                         | `true`    |          |
+| [addInputToList](#addinputtolist)                 | `boolean`                                         | `false`   |          |
+| [emptyKey](#emptykey)                             | `string \| number`                                |           |          |
+| [hasOpenCloseIcon](#hasopencloseicon)             | `boolean`                                         | `false`   |          |
 
 ### `onSelect`
 
@@ -79,7 +83,7 @@ Disables any user interaction and renders the search box in a disabled style.
 ### `list`
 
 ```ts
-list?: Array<object>
+list?: Array<object> | Array<string> | Array<number>
 ```
 
 An array of items to select from.
@@ -89,7 +93,7 @@ An array of items to select from.
 ### `listKey`
 
 ```ts
-listKey: string;
+listKey?: string
 ```
 
 The property name of a unique identifier in the `list` items.
@@ -99,7 +103,7 @@ The property name of a unique identifier in the `list` items.
 ### `listValue`
 
 ```ts
-listValue: string;
+listValue?: string
 ```
 
 The property name of the name of the `list` items that will be shown in the
@@ -215,3 +219,44 @@ autoSelectFirst?: boolean
 ```
 
 Wether the first list item should be automatically selected.
+
+---
+
+### `highlightInputInResult`
+
+```ts
+highlightInputInResult?: boolean
+```
+
+Whether the search term should be marked in the selection
+
+---
+
+### `addInputToList`
+
+```ts
+addInputToList?: boolean
+```
+
+Whether the input value should be added to the end of the result list. Allows
+also values which are not in the list.
+
+---
+
+### `emptyKey`
+
+```ts
+emptyKey?: string | number
+```
+
+The key of the default value if nothing is selected or typed into the input.
+
+---
+
+### `hasOpenCloseIcon`
+
+```ts
+hasOpenCloseIcon?: boolean
+```
+
+Whether the input should have a small icon to open and close the result list.

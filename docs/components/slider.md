@@ -67,7 +67,7 @@ The `Slider`-component takes the following props:
 | [innerTrackStyle](#innertrackstyle)     | `{ [key: string]: number \| string }` |                                                                                                     |          |
 | [showValueInThumb](#showvalueinthumb)   | `boolean`                             | `false`                                                                                             |          |
 | [scaleOnDown](#scaleondown)             | `boolean`                             |                                                                                                     |          |
-| [thumbWidth](#thumbwidth)               | `number`                              | `20`                                                                                                |          |
+| [thumbWidth](#thumbwidth)               | `number`                              |                                                                                                     |          |
 
 ### `min`
 

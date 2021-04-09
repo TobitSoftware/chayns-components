@@ -68,6 +68,7 @@ The `Input`-component takes the following props:
 | [iconLeft](#iconleft)               | `string \| object`                    |                        |          |
 | [right](#right)                     | `ReactNode`                           |                        |          |
 | [invalidMessage](#invalidmessage)   | `string`                              |                        |          |
+| [emptyValue](#emptyvalue)           | `string \| number`                    |                        |          |
 
 ### `className`
 
@@ -368,3 +369,14 @@ invalidMessage?: string
 
 An error message that will be shown instead of the placeholder when the
 border-design is active and the `dynamic`-prop is set to `Input.BOTTOM_DYNAMIC`.
+
+---
+
+### `emptyValue`
+
+```ts
+emptyValue?: string | number
+```
+
+Default value if nothing is typed into the input. Only for border design and not
+compatible with placeholder.

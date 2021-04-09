@@ -37,14 +37,14 @@ import { SharingBar } from 'chayns-components';
 
 The `SharingBar`-component takes the following props:
 
-| Name                                | Type                                  | Default                                                                                                                  | Required |
-| ----------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | :------: |
-| [link](#link)                       | `string`                              |                                                                                                                          |          |
-| [linkText](#linktext)               | `string`                              | `''`                                                                                                                     |          |
-| [className](#classname)             | `string`                              |                                                                                                                          |          |
-| [stopPropagation](#stoppropagation) | `boolean`                             | `false`                                                                                                                  |          |
-| [style](#style)                     | `{ [key: string]: string \| number }` |                                                                                                                          |          |
-| [children](#children)               | `ReactNode`                           | `[ <Icon icon="fal fa-share-alt" className="sharing-bar__icon" />, <span className="sharing-bar__text">Teilen</span>, ]` |          |
+| Name                                | Type                                  | Default | Required |
+| ----------------------------------- | ------------------------------------- | ------- | :------: |
+| [link](#link)                       | `string`                              |         |          |
+| [linkText](#linktext)               | `string`                              | `''`    |          |
+| [className](#classname)             | `string`                              |         |          |
+| [stopPropagation](#stoppropagation) | `boolean`                             | `false` |          |
+| [style](#style)                     | `{ [key: string]: string \| number }` |         |          |
+| [children](#children)               | `ReactNode`                           |         |          |
 
 ### `link`
 
