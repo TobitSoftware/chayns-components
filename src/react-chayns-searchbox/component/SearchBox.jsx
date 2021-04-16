@@ -18,6 +18,7 @@ const SearchBox = ({
     disabled,
     listValue,
     listKey,
+    sortKey,
     defaultValue,
     onSelect,
     value: valueProp,
@@ -45,6 +46,20 @@ const SearchBox = ({
             return stringOrObjectOrNumber[listValue];
         },
         [listValue]
+    );
+
+    const getSortValue = useCallback(
+        (stringOrObjectOrNumber) => {
+            if (
+                isString(stringOrObjectOrNumber) ||
+                isNumber(stringOrObjectOrNumber) ||
+                !stringOrObjectOrNumber
+            ) {
+                return stringOrObjectOrNumber;
+            }
+            return stringOrObjectOrNumber[sortKey ?? listValue];
+        },
+        [sortKey, listValue]
     );
 
     const getKey = useCallback(
@@ -237,8 +252,8 @@ const SearchBox = ({
                     (showListWithoutInput || inputValue)
             )
             .sort((a, b) => {
-                let aValue = getValue(a);
-                let bValue = getValue(b);
+                let aValue = getSortValue(a);
+                let bValue = getSortValue(b);
                 aValue = isString(aValue) ? aValue.toLowerCase() : aValue;
                 bValue = isString(bValue) ? bValue.toLowerCase() : bValue;
                 const aStartsWith = String(aValue).startsWith(
@@ -390,6 +405,11 @@ SearchBox.propTypes = {
     listValue: PropTypes.string,
 
     /**
+     * The property name to use for sorting the list. Default is listValue
+     */
+    sortKey: PropTypes.string,
+
+    /**
      * A classname string that will be set on the container component.
      */
     className: PropTypes.string,
@@ -488,6 +508,7 @@ SearchBox.defaultProps = {
     addInputToList: false,
     listKey: 'key',
     listValue: 'value',
+    sortKey: null,
     emptyKey: null,
     hasOpenCloseIcon: false,
 };
