@@ -8,15 +8,16 @@ import Relation from './result-item/Relation';
 import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
 
 const PersonFinderResultItem = ({
-                                    onClick,
-                                    data,
-                                    orm,
-                                    isFocused,
-                                    roundIcons
-                                }) => {
+    onClick,
+    data,
+    orm,
+    isFocused,
+    roundIcons,
+    hideFriendsIcon,
+}) => {
     const handleClick = useCallback(() => {
         onClick({
-            relation: data
+            relation: data,
         });
     }, [onClick, data]);
 
@@ -31,9 +32,9 @@ const PersonFinderResultItem = ({
     return (
         <div
             className={classNames('result-item', {
-                'result-item--focused': isFocused
+                'result-item--focused': isFocused,
             })}
-            tabIndex='-1'
+            tabIndex="-1"
             onClick={handleClick}
         >
             {orm.imageUrl ? (
@@ -42,9 +43,9 @@ const PersonFinderResultItem = ({
                     style={{ backgroundImage: `url(${data[orm.imageUrl]})` }}
                 />
             ) : null}
-            <div className='text' style={{ justifyContent: 'center' }}>
-                <div className='title'>
-                    <div className='name'>
+            <div className="text" style={{ justifyContent: 'center' }}>
+                <div className="title">
+                    <div className="name">
                         {orm.verified ? (
                             <VerificationIcon
                                 name={data[orm.showName]}
@@ -55,19 +56,19 @@ const PersonFinderResultItem = ({
                         )}
                     </div>
                     {hasRelations && orm.subtitle && (
-                        <div className='identifier'>
+                        <div className="identifier">
                             {`(${data[orm.subtitle]})`}
                         </div>
                     )}
                 </div>
                 {hasRelations && <Relation relation={data} />}
                 {!hasRelations && orm.subtitle && (
-                    <div className='identifier'>
+                    <div className="identifier">
                         {`(${data[orm.subtitle]})`}
                     </div>
                 )}
             </div>
-            {data.personId && (
+            {data.personId && !hideFriendsIcon && (
                 <FriendsIndicator
                     personId={data.personId}
                     name={data[orm.showName]}
@@ -84,17 +85,19 @@ PersonFinderResultItem.propTypes = {
         imageUrl: PropTypes.string,
         relations: PropTypes.string,
         subtitle: PropTypes.string,
-        verified: PropTypes.string
+        verified: PropTypes.string,
     }).isRequired,
     onClick: PropTypes.func.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     data: PropTypes.object.isRequired,
     isFocused: PropTypes.bool.isRequired,
-    roundIcons: PropTypes.bool
+    roundIcons: PropTypes.bool,
+    hideFriendsIcon: PropTypes.bool,
 };
 
 PersonFinderResultItem.defaultProps = {
-    roundIcons: false
+    roundIcons: false,
+    hideFriendsIcon: false,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';

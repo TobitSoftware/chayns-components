@@ -175,6 +175,7 @@ class PersonFinderView extends Component {
             showWaitCursor: waitCursor,
             noBackground,
             filterSelected,
+            hideFriendsIcon,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -199,6 +200,7 @@ class PersonFinderView extends Component {
                     focusIndex={focusIndex}
                     noBackground={noBackground}
                     filterSelected={filterSelected}
+                    hideFriendsIcon={hideFriendsIcon}
                 />
             );
         }
@@ -319,6 +321,7 @@ PersonFinderView.propTypes = {
     onKeyDown: PropTypes.func,
     noBackground: PropTypes.bool,
     filterSelected: PropTypes.bool,
+    hideFriendsIcon: PropTypes.bool,
 };
 
 PersonFinderView.defaultProps = {
@@ -338,6 +341,7 @@ PersonFinderView.defaultProps = {
     onKeyDown: null,
     noBackground: false,
     filterSelected: false,
+    hideFriendsIcon: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';

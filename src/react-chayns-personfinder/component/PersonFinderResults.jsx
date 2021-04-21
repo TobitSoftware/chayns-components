@@ -15,6 +15,7 @@ const PersonFinderResults = ({
     focusIndex,
     noBackground,
     filterSelected,
+    hideFriendsIcon,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -71,6 +72,7 @@ const PersonFinderResults = ({
                         onClick={handleClick}
                         focusIndex={groupFocusIndex}
                         roundIcons={roundIcons}
+                        hideFriendsIcon={hideFriendsIcon}
                     />
                 </div>
             );
@@ -134,6 +136,7 @@ PersonFinderResults.propTypes = {
     focusIndex: PropTypes.number,
     noBackground: PropTypes.bool,
     filterSelected: PropTypes.bool,
+    hideFriendsIcon: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
@@ -146,6 +149,7 @@ PersonFinderResults.defaultProps = {
     focusIndex: null,
     noBackground: false,
     filterSelected: false,
+    hideFriendsIcon: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';
