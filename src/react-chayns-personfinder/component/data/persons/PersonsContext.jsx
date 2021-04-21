@@ -5,13 +5,20 @@ import React, {
     useReducer,
     useCallback,
     useContext,
+    useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { reducer as PersonsReducer, initialState } from './PersonsReducer';
-import { fetchPersons, fetchUacPersons, fetchSites } from './PersonsApi';
+import {
+    fetchPersons,
+    fetchUacPersons,
+    fetchSites,
+    fetchKnownPersons,
+} from './PersonsApi';
 import { fetchGroups } from '../uacGroups/UacGroupApi';
 import {
+    convertKnownPerson,
     convertPerson,
     convertPersons,
     convertSites,
@@ -68,6 +75,14 @@ const ObjectMapping = {
                     .toLowerCase()
                     .startsWith((inputValue || '').toLowerCase()),
         },
+        {
+            key: 'knownPersons',
+            lang: {
+                de: 'Bekannte Personen',
+                en: 'known persons',
+            },
+            roundIcons: true,
+        },
     ],
     showName: 'name',
     identifier: 'id',
@@ -108,6 +123,7 @@ const PersonFinderStateProvider = ({
     enableSites,
     enableFriends,
     enableUacGroups,
+    enableKnownPersons,
     includeOwn,
     locationId,
     uacId,
@@ -117,6 +133,9 @@ const PersonFinderStateProvider = ({
     const skipPersons =
         state.data.personsUnrelated.length + state.data.personsRelated.length;
     const skipSites = state.data.sites.length;
+    const skipKnownPersons = state.data.knownPersons.length;
+    const knownPersonsInitialized = useRef(false);
+    const uacGroupsInitialized = useRef(false);
 
     useEffect(() => {
         if (!enableFriends) return undefined;
@@ -137,7 +156,7 @@ const PersonFinderStateProvider = ({
 
     useEffect(() => {
         (async () => {
-            if (!enableUacGroups) return;
+            if (!enableUacGroups || uacGroupsInitialized.current) return;
 
             let groups = await fetchGroups();
             groups = groups.map(({ id, showName }) => ({
@@ -150,6 +169,7 @@ const PersonFinderStateProvider = ({
                 type: 'RECEIVE_GROUPS',
                 data: groups,
             });
+            uacGroupsInitialized.current = true;
         })();
     }, [enableUacGroups]);
 
@@ -280,14 +300,46 @@ const PersonFinderStateProvider = ({
         [skipSites, take, enableSites]
     );
 
+    const loadKnownPersons = useCallback(
+        async (value, clear = false) => {
+            if (!enableKnownPersons) return;
+
+            dispatch({
+                type: 'REQUEST_KNOWN_PERSONS',
+                showWaitCursor: true,
+                clear,
+            });
+
+            const persons = await fetchKnownPersons(
+                value,
+                skipKnownPersons,
+                take
+            );
+
+            dispatch({
+                type: 'RECEIVE_KNOWN_PERSONS',
+                data: convertKnownPerson(persons),
+                hasMore: persons.length === take,
+            });
+        },
+        [skipKnownPersons, take, enableKnownPersons]
+    );
+
+    useEffect(() => {
+        if (knownPersonsInitialized.current) return;
+
+        loadKnownPersons('');
+        knownPersonsInitialized.current = true;
+    }, [loadKnownPersons]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onChange = useCallback(
         debounce(async (value) => {
-            if (value.length < 3) return;
             await Promise.all([
                 loadPersons(value, true),
                 loadUacPersons(value, true),
                 loadSites(value, true),
+                loadKnownPersons(value, true),
             ]);
         }, 500),
         [take]
@@ -296,11 +348,18 @@ const PersonFinderStateProvider = ({
     const onLoadMore = useCallback(
         async (type, value) => {
             const promises = [];
-            if (!type || type !== 'sites') promises.push(loadPersons(value));
+            if (!type || (type !== 'sites' && type !== 'knownPersons'))
+                promises.push(loadPersons(value));
             if (!type || type === 'sites') promises.push(loadSites(value));
+            if (
+                !type ||
+                type === 'knownPersons' ||
+                (!enablePersons && type === 'default')
+            )
+                promises.push(loadKnownPersons(value));
             await Promise.all(promises);
         },
-        [loadPersons, loadSites]
+        [loadPersons, loadSites, loadKnownPersons, enablePersons]
     );
 
     const unreducedData = {
@@ -318,7 +377,11 @@ const PersonFinderStateProvider = ({
             value={{
                 ...state,
                 data,
-                autoLoading: !enableUacGroups && !enableSites && enablePersons,
+                autoLoading:
+                    !enableUacGroups &&
+                    !enableSites &&
+                    ((enablePersons && !enableKnownPersons) ||
+                        (!enablePersons && enableKnownPersons)),
                 dispatch,
                 onLoadMore,
                 onChange,
@@ -341,6 +404,7 @@ PersonFinderStateProvider.propTypes = {
     enableSites: PropTypes.bool,
     enableFriends: PropTypes.bool,
     enableUacGroups: PropTypes.bool,
+    enableKnownPersons: PropTypes.bool,
     includeOwn: PropTypes.bool,
     locationId: PropTypes.number,
     uacId: PropTypes.number,
@@ -354,6 +418,7 @@ PersonFinderStateProvider.defaultProps = {
     enableSites: false,
     enableFriends: true,
     enableUacGroups: false,
+    enableKnownPersons: false,
     includeOwn: false,
     locationId: null,
     uacId: null,

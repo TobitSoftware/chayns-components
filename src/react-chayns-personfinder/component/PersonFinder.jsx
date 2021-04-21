@@ -61,6 +61,16 @@ PersonFinder.propTypes = {
     showSites: PropTypes.bool,
 
     /**
+     * Whether the `PersonFinder` should show uac groups of the current site
+     */
+    showUacGroups: PropTypes.bool,
+
+    /**
+     * Whether the `PersonFinder` should show known users of the current site
+     */
+    showKnownPersons: PropTypes.bool,
+
+    /**
      * The id of a UAC group to search persons in.
      */
     uacId: PropTypes.number,
@@ -183,6 +193,8 @@ PersonFinder.defaultProps = {
     disableFriends: false,
     className: null,
     showSites: false,
+    showUacGroups: false,
+    showKnownPersons: false,
     uacId: null,
     locationId: null,
     reducerFunction: null,

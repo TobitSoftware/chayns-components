@@ -9,7 +9,7 @@ export const convertPerson = (relation) => {
         relation.UserFullName ||
         [
             relation.firstName || relation.firstname,
-            relation.lastName || relation.lastname
+            relation.lastName || relation.lastname,
         ]
             .join(' ')
             .trim();
@@ -28,11 +28,11 @@ export const convertPerson = (relation) => {
         relationCount: relation.relationCount,
         imageUrl: `https://sub60.tobit.com/u/${
             relation.personId || relation.PersonID
-        }?size=50`,
+        }?size=100`,
         isFriend: FriendsHelper.isFriend(
             relation.personId || relation.PersonID
         ),
-        verificationState: !!relation.verificationState
+        verificationState: !!relation.verificationState,
     };
 };
 
@@ -56,7 +56,7 @@ export const convertPersons = (persons) => {
 
     return {
         personsUnrelated: unrelated,
-        personsRelated: related
+        personsRelated: related,
     };
 };
 
@@ -67,5 +67,18 @@ export const convertSites = (sites) =>
         name: site.locationName,
         imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=100`,
         siteId: site.siteId,
-        locationId: site.locationId
+        locationId: site.locationId,
+    }));
+
+export const convertKnownPerson = (knownPersons) =>
+    knownPersons.map((person) => ({
+        type: 'KNOWN_PERSON',
+        id: person.personId,
+        name: [person.firstname, person.lastname].join(' ').trim(),
+        userId: Number.parseInt(person.id, 10),
+        personId: person.personId,
+        fullName: [person.firstname, person.lastname].join(' ').trim(),
+        firstName: person.firstname,
+        lastName: person.lastname,
+        imageUrl: `https://sub60.tobit.com/u/${person.personId}?size=100`,
     }));

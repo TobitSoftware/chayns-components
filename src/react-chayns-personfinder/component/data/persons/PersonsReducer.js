@@ -5,24 +5,28 @@ export const initialState = {
         sites: [],
         friends: [],
         groups: [],
+        knownPersons: [],
     },
     showWaitCursor: {
         personsRelated: false,
         sites: false,
         personsUnrelated: false,
         groups: false,
+        knownPersons: false,
     },
     isLoading: {
         personsRelated: false,
         sites: false,
         personsUnrelated: false,
         groups: false,
+        knownPersons: false,
     },
     hasMore: {
         personsRelated: true,
         sites: true,
         personsUnrelated: false,
         groups: false,
+        knownPersons: false,
     },
 };
 
@@ -67,6 +71,18 @@ export const reducer = (state = initialState, action) => {
                 isLoading: { ...state.isLoading, friends: true },
             };
         }
+        case 'REQUEST_KNOWN_PERSONS':
+            return {
+                ...state,
+                data: action.clear
+                    ? { ...state.data, knownPersons: [] }
+                    : state.data,
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    knownPersons: action.showWaitCursor,
+                },
+                isLoading: { ...state.isLoading, knownPersons: true },
+            };
         case 'RECEIVE_PERSONS':
             return {
                 ...state,
@@ -121,6 +137,20 @@ export const reducer = (state = initialState, action) => {
                 showWaitCursor: { ...state.showWaitCursor, groups: false },
                 isLoading: { ...state.isLoading, groups: false },
                 hasMore: { ...state.hasMore, groups: false },
+            };
+        case 'RECEIVE_KNOWN_PERSONS':
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    knownPersons: [...state.data.knownPersons, ...action.data],
+                },
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    knownPersons: false,
+                },
+                isLoading: { ...state.isLoading, knownPersons: false },
+                hasMore: { ...state.hasMore, knownPersons: action.hasMore },
             };
         case 'ADD_FRIEND':
             return {

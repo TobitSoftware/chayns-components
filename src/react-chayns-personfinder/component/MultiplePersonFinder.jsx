@@ -206,6 +206,7 @@ class MultiplePersonFinder extends Component {
             showPersons,
             showSites,
             showUacGroups,
+            showKnownPersons,
             className,
             defaultValue,
             showId,
@@ -241,6 +242,7 @@ class MultiplePersonFinder extends Component {
                                   !disableFriends &&
                                   !props.uacId,
                               enableUacGroups: showUacGroups,
+                              enableKnownPersons: showKnownPersons,
                               reducerFunction: props.reducerFunction,
                           }
                         : null)}
@@ -289,6 +291,7 @@ MultiplePersonFinder.propTypes = {
     showPersons: PropTypes.bool,
     showSites: PropTypes.bool,
     showUacGroups: PropTypes.bool,
+    showKnownPersons: PropTypes.bool,
     disableFriends: PropTypes.bool,
     className: PropTypes.string,
     defaultValue: PropTypes.oneOfType([
@@ -338,6 +341,7 @@ MultiplePersonFinder.defaultProps = {
     showPersons: true,
     showSites: false,
     showUacGroups: false,
+    showKnownPersons: false,
     disableFriends: false,
     defaultValue: null,
     className: null,

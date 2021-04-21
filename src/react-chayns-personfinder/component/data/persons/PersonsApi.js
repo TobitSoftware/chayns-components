@@ -140,3 +140,36 @@ export const fetchSites = async (value, skip, take) => {
 
     return result;
 };
+
+export const fetchKnownPersons = async (value, skip, take) => {
+    if (!chayns.env.user.isAuthenticated) {
+        chayns.login();
+
+        return Promise.reject(new Error('Not authenticated'));
+    }
+    let result = [];
+    let url = `https://sub50.tobit.com/backend/${chayns.env.site.locationId}/User?sortByDate=true&skip=${skip}&limit=${take}`;
+    if (value) {
+        url += `&q=${value}`;
+    }
+    const response = await fetchHelper('knownPersons', {
+        url,
+        config: {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+            },
+        },
+    });
+
+    if (response.ok) {
+        result = response.status !== 204 ? await response.json() : [];
+    } else {
+        console.error(
+            '[chayns components] Personfinder: failed to fetch known persons',
+            response.status
+        );
+    }
+    return result;
+};
