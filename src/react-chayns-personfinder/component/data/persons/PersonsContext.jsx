@@ -195,7 +195,11 @@ const PersonFinderStateProvider = ({
                 clear,
             });
 
-            const persons = await fetchPersons(value, skipPersons, take);
+            const persons = await fetchPersons(
+                value,
+                clear ? 0 : skipPersons,
+                take
+            );
             const convertedPersons = convertPersons(persons);
             if (value.match(/^[0-9]{3}-[0-9]{5}$/g)) {
                 const user = convertPerson(
@@ -269,7 +273,7 @@ const PersonFinderStateProvider = ({
 
             const persons = await fetchUacPersons(uacId, locationId)(
                 value,
-                skipPersons,
+                clear ? 0 : skipPersons,
                 take
             );
             const convertedPersons = convertPersons(persons);
@@ -297,7 +301,7 @@ const PersonFinderStateProvider = ({
                 clear,
             });
 
-            const sites = await fetchSites(value, skipSites, take);
+            const sites = await fetchSites(value, clear ? 0 : skipSites, take);
 
             dispatch({
                 type: 'RECEIVE_SITES',
@@ -320,7 +324,7 @@ const PersonFinderStateProvider = ({
 
             const persons = await fetchKnownPersons(
                 value,
-                skipKnownPersons,
+                clear ? 0 : skipKnownPersons,
                 take
             );
 
