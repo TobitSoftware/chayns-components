@@ -342,7 +342,15 @@ const PersonFinderStateProvider = ({
                 loadKnownPersons(value, true),
             ]);
         }, 500),
-        [take]
+        [
+            take,
+            enableKnownPersons,
+            enableFriends,
+            enablePersons,
+            enableSites,
+            enableUacGroups,
+            enableKnownPersons,
+        ]
     );
 
     const onLoadMore = useCallback(
