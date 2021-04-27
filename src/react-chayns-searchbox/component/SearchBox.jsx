@@ -290,6 +290,7 @@ const SearchBox = ({
         list,
         isItemExisting,
         getValue,
+        getSortValue,
         showListWithoutInput,
         listValue,
     ]);
