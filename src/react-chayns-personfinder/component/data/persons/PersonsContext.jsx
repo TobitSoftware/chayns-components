@@ -371,7 +371,11 @@ const PersonFinderStateProvider = ({
     );
 
     const unreducedData = {
-        ...state.data,
+        personsRelated: enablePersons ? state.data.personsRelated : [],
+        personsUnrelated: enablePersons ? state.data.personsUnrelated : [],
+        sites: enableSites ? state.data.sites : [],
+        groups: enableUacGroups ? state.data.groups : [],
+        knownPersons: enableKnownPersons ? state.data.knownPersons : [],
         friends: enableFriends ? FriendsHelper.getFriendsList() : [],
     };
 
