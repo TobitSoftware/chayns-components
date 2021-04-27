@@ -136,6 +136,7 @@ const PersonFinderStateProvider = ({
     const skipKnownPersons = state.data.knownPersons.length;
     const knownPersonsInitialized = useRef(false);
     const uacGroupsInitialized = useRef(false);
+    const valueRef = useRef('');
 
     useEffect(() => {
         if (!enableFriends) return undefined;
@@ -335,6 +336,7 @@ const PersonFinderStateProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onChange = useCallback(
         debounce(async (value) => {
+            valueRef.current = value;
             await Promise.all([
                 loadPersons(value, true),
                 loadUacPersons(value, true),
@@ -352,6 +354,13 @@ const PersonFinderStateProvider = ({
             enableKnownPersons,
         ]
     );
+
+    useEffect(() => {
+        if (valueRef.current) {
+            onChange(valueRef.current);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enablePersons, enableSites, enableKnownPersons]);
 
     const onLoadMore = useCallback(
         async (type, value) => {
