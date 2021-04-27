@@ -219,9 +219,9 @@ class PersonFinderView extends Component {
         }
 
         if (!selectedValue && renderInline) {
-            return inputValue
-                ? `Für Deine Suche "${inputValue}" gab es keine Ergebnisse`
-                : undefined;
+            return inputValue ? (
+                <div className="cc__person-finder__no-results">{`Für Deine Suche "${inputValue}" gab es keine Ergebnisse`}</div>
+            ) : undefined;
         }
 
         return null;
