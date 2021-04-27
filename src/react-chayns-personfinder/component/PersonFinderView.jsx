@@ -183,6 +183,8 @@ class PersonFinderView extends Component {
             noBackground,
             filterSelected,
             hideFriendsIcon,
+            renderInline,
+            inputValue,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -214,6 +216,12 @@ class PersonFinderView extends Component {
 
         if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
             return <WaitCursor key="wait-cursor" />;
+        }
+
+        if (!selectedValue && renderInline) {
+            return inputValue
+                ? `Für Deine Suche "${inputValue}" gab es keine Ergebnisse`
+                : undefined;
         }
 
         return null;
