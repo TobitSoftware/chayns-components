@@ -133,7 +133,14 @@ class PersonFinderView extends Component {
     };
 
     hasEntries = () => {
-        const { data, orm, value, tags, filterSelected } = this.props;
+        const {
+            data,
+            orm,
+            value,
+            tags,
+            filterSelected,
+            inputValue,
+        } = this.props;
         const filterValues = ({ type, id }) =>
             tags.every(
                 ({ value: tagValue }) =>
@@ -148,8 +155,8 @@ class PersonFinderView extends Component {
                       return false;
                   }
                   let items = data[group];
-                  if (filter === 'function') {
-                      items = items.filter(filter);
+                  if (typeof filter === 'function') {
+                      items = items.filter(filter(inputValue));
                   }
                   if (filterSelected) {
                       items = items.filter(filterValues);
@@ -322,6 +329,7 @@ PersonFinderView.propTypes = {
     noBackground: PropTypes.bool,
     filterSelected: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
+    inputValue: PropTypes.string,
 };
 
 PersonFinderView.defaultProps = {
@@ -342,6 +350,7 @@ PersonFinderView.defaultProps = {
     noBackground: false,
     filterSelected: false,
     hideFriendsIcon: false,
+    inputValue: '',
 };
 
 PersonFinderView.displayName = 'PersonFinderView';

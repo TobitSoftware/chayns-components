@@ -268,6 +268,7 @@ class MultiplePersonFinder extends Component {
                                     isString(valueProp) ? valueProp : inputValue
                                 }
                                 tags={this.getValues()}
+                                inputValue={inputValue}
                                 selectedValue={
                                     selectedValue ||
                                     (max && this.getValues().length >= max)
