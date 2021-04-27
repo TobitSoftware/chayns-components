@@ -6,6 +6,7 @@ import React, {
     useCallback,
     useContext,
     useRef,
+    useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
@@ -34,7 +35,13 @@ const ObjectMapping = {
                 en: 'friends',
             },
             roundIcons: true,
-            show: (value) => !value,
+            filter: (inputValue) => (e) =>
+                inputValue
+                    ? e.name &&
+                      e.name
+                          .toLowerCase()
+                          .startsWith((inputValue || '').toLowerCase())
+                    : true,
         },
         {
             key: 'personsRelated',
@@ -136,7 +143,7 @@ const PersonFinderStateProvider = ({
     const skipKnownPersons = state.data.knownPersons.length;
     const knownPersonsInitialized = useRef(false);
     const uacGroupsInitialized = useRef(false);
-    const valueRef = useRef('');
+    const [lastValue, setLastValue] = useState('');
 
     useEffect(() => {
         if (!enableFriends) return undefined;
@@ -336,7 +343,7 @@ const PersonFinderStateProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onChange = useCallback(
         debounce(async (value) => {
-            valueRef.current = value;
+            setLastValue(value);
             await Promise.all([
                 loadPersons(value, true),
                 loadUacPersons(value, true),
@@ -356,8 +363,9 @@ const PersonFinderStateProvider = ({
     );
 
     useEffect(() => {
-        if (valueRef.current) {
-            onChange(valueRef.current);
+        // only trigger when enablePersons, enableSite or enableKnownPersons props change
+        if (lastValue) {
+            onChange(lastValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [enablePersons, enableSites, enableKnownPersons]);
@@ -385,7 +393,15 @@ const PersonFinderStateProvider = ({
         sites: enableSites ? state.data.sites : [],
         groups: enableUacGroups ? state.data.groups : [],
         knownPersons: enableKnownPersons ? state.data.knownPersons : [],
-        friends: enableFriends ? FriendsHelper.getFriendsList() : [],
+        friends:
+            enableFriends &&
+            (lastValue.length < 3 ||
+                (!enablePersons &&
+                    !enableSites &&
+                    !enableUacGroups &&
+                    !enableKnownPersons))
+                ? FriendsHelper.getFriendsList()
+                : [],
     };
 
     const data =

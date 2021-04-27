@@ -238,7 +238,10 @@ class MultiplePersonFinder extends Component {
                               enableSites: showSites,
                               enablePersons: showPersons,
                               enableFriends:
-                                  showPersons &&
+                                  (showPersons ||
+                                      (!showSites &&
+                                          !showKnownPersons &&
+                                          !showUacGroups)) &&
                                   !disableFriends &&
                                   !props.uacId,
                               enableUacGroups: showUacGroups,
