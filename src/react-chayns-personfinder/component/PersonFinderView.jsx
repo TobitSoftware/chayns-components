@@ -338,6 +338,7 @@ PersonFinderView.propTypes = {
     filterSelected: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
     inputValue: PropTypes.string,
+    renderInline: PropTypes.bool,
 };
 
 PersonFinderView.defaultProps = {
@@ -359,6 +360,7 @@ PersonFinderView.defaultProps = {
     filterSelected: false,
     hideFriendsIcon: false,
     inputValue: '',
+    renderInline: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';
