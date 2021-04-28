@@ -11,6 +11,42 @@ import isTobitEmployee from '../../utils/tobitEmployee';
 
 const CHAYNS_RES_URL = 'https://webapi.tobit.com/TextStringService/v1.0';
 
+const promises = {};
+const loadLibrary = async (projectName, middle, lang) => {
+    // middle has to be removed in next major version
+    if (
+        TextString.textStrings[lang] &&
+        TextString.textStrings[lang][projectName]
+    ) {
+        return;
+    }
+    try {
+        const response = await fetch(
+            `${CHAYNS_RES_URL}/LangStrings/${projectName}?language=${lang}`
+        );
+        if (response.status !== 200) {
+            console.error(response.statusText);
+            return;
+        }
+
+        const json = await response.json();
+        TextString.textStrings[lang] = {
+            ...TextString.textStrings[lang],
+            [projectName]: {
+                ...json,
+            },
+        };
+        if (window.debugLevel >= 3) {
+            // eslint-disable-next-line no-console
+            console.debug('TextString Storage', TextString.textStrings);
+        }
+    } catch (e) {
+        console.error(e);
+    } finally {
+        delete promises[lang][projectName];
+    }
+};
+
 /**
  * Loads text strings from our database and displays them. Handles replacements
  * and changing the string via `CTRL` + `Click` (only internal).
@@ -18,7 +54,9 @@ const CHAYNS_RES_URL = 'https://webapi.tobit.com/TextStringService/v1.0';
 export default class TextString extends Component {
     static getTextString(stringName, language, fallback = null) {
         let lang = TextString.languages.find(
-            (l) => l.code === (language || TextString.language || chayns.env.site.translang)
+            (l) =>
+                l.code ===
+                (language || TextString.language || chayns.env.site.translang)
         );
         lang = lang ? lang.value : 'Ger';
         const { textStrings } = TextString;
@@ -32,66 +70,40 @@ export default class TextString extends Component {
         return result !== null ? result : fallback;
     }
 
-    static async loadLibrary(projectName, middle, language) { // middle has to be removed in next major version
+    static async loadLibrary(projectName, middle, language) {
         let lang = TextString.languages.find(
-            (l) => l.code === (language || TextString.language || chayns.env.site.translang)
+            (l) =>
+                l.code ===
+                (language || TextString.language || chayns.env.site.translang)
         );
         lang = lang ? lang.value : 'Ger';
 
-        if (
-            TextString.textStrings[lang] &&
-            TextString.textStrings[lang][projectName]
-        ) {
-            return;
-        }
-        try {
-            const response = await fetch(
-                `${CHAYNS_RES_URL}/LangStrings/${projectName}?language=${lang}`
-            );
-            if (response.status !== 200) {
-                console.error(response.statusText);
-                return;
-            }
+        let promise = promises[lang] && promises[lang][projectName];
+        if (promise) return promise;
 
-            const json = await response.json();
-            TextString.textStrings[lang] = {
-                ...TextString.textStrings[lang],
-                [projectName]: {
-                    ...json
-                }
-            };
-            if (window.debugLevel >= 3) {
-                // eslint-disable-next-line no-console
-                console.debug('TextString Storage', TextString.textStrings);
-            }
-        } catch (e) {
-            console.error(e);
-        }
+        if (!promises[lang]) promises[lang] = {};
+
+        promise = loadLibrary(projectName, middle, lang);
+        promises[lang][projectName] = promise;
+        return promise;
     }
 
     static changeTextString(stringName, text, language) {
         const body = {
-            stringName
+            stringName,
         };
 
-        body[
-            `text${language}`
-            ] = text;
+        body[`text${language}`] = text;
         return new Promise((resolve, reject) => {
-            fetch(
-                `${CHAYNS_RES_URL}/V2/LangStrings`,
-                {
-                    method: 'put',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        Authorization:
-                            `Bearer ${chayns.env.user.tobitAccessToken}`
-
-                    },
-                    body: JSON.stringify(body)
-                }
-            ).then((response) => {
+            fetch(`${CHAYNS_RES_URL}/V2/LangStrings`, {
+                method: 'put',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${chayns.env.user.tobitAccessToken}`,
+                },
+                body: JSON.stringify(body),
+            }).then((response) => {
                 if (response.status === 200) {
                     resolve({ ResultCode: 0 });
                 } else {
@@ -123,7 +135,7 @@ export default class TextString extends Component {
             language,
             setProps,
             replacements,
-            fallback
+            fallback,
         } = props;
 
         let string = TextString.getTextString(stringName, language, fallback);
@@ -150,7 +162,7 @@ export default class TextString extends Component {
         this.state = {
             textString:
                 (string && TextString.replace(string, replacements)) || null,
-            textStringProps
+            textStringProps,
         };
 
         this.childrenOnClick = this.childrenOnClick.bind(this);
@@ -178,17 +190,17 @@ export default class TextString extends Component {
             language,
             fallback,
             setProps,
-            replacements
+            replacements,
         } = props;
 
         let string = TextString.getTextString(stringName, language);
         if (string) {
             this.setState({
-                textString: TextString.replace(string, replacements)
+                textString: TextString.replace(string, replacements),
             });
         } else {
             this.setState({
-                textString: TextString.replace(fallback, replacements)
+                textString: TextString.replace(fallback, replacements),
             });
         }
 
@@ -215,8 +227,7 @@ export default class TextString extends Component {
     childrenOnClick() {
         isTobitEmployee()
             .then(this.selectStringToChange)
-            .catch(() => {
-            });
+            .catch(() => {});
     }
 
     selectStringToChange() {
@@ -226,20 +237,16 @@ export default class TextString extends Component {
             const stringList = [];
             if (stringName) {
                 stringList.push({
-                    name:
-                        `children: ${stringName}`
-                    ,
-                    value: stringName
+                    name: `children: ${stringName}`,
+                    value: stringName,
                 });
             }
 
             Object.keys(setProps).forEach((key) => {
                 if (key !== 'fallback') {
                     stringList.push({
-                        name:
-                            `${key}: ${setProps[key]}`
-                        ,
-                        value: setProps[key]
+                        name: `${key}: ${setProps[key]}`,
+                        value: setProps[key],
                     });
                 }
             });
@@ -250,7 +257,7 @@ export default class TextString extends Component {
                     message: 'Wähle den TextString, den du ändern möchtest:',
                     quickfind: 0,
                     multiselect: 0,
-                    list: stringList
+                    list: stringList,
                 })
                 .then((data) => {
                     if (
@@ -272,19 +279,15 @@ export default class TextString extends Component {
         if (useDangerouslySetInnerHTML) {
             chayns.dialog
                 .select({
-                    title:
-                        `TextString bearbeiten: ${stringName}`
-                    ,
-                    message:
-                        `Wähle die Sprache: (angezeigt wird ${
-                            TextString.languages.find(
-                                (l) => l.code === (language || TextString.language)
-                            ).name
-                        })`
-                    ,
+                    title: `TextString bearbeiten: ${stringName}`,
+                    message: `Wähle die Sprache: (angezeigt wird ${
+                        TextString.languages.find(
+                            (l) => l.code === (language || TextString.language)
+                        ).name
+                    })`,
                     quickfind: 0,
                     multiselect: 0,
-                    list: TextString.languages
+                    list: TextString.languages,
                 })
                 .then((data) => {
                     if (
@@ -315,7 +318,7 @@ export default class TextString extends Component {
                                 if (
                                     TextString.textStrings[globalLang][lib][
                                         stringName
-                                        ]
+                                    ]
                                 ) {
                                     library = lib;
                                     // eslint-disable-next-line prefer-destructuring
@@ -341,7 +344,7 @@ export default class TextString extends Component {
                 url:
                     'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
                 buttons: [],
-                input: { textstring: stringName }
+                input: { textstring: stringName },
             });
         }
     }
@@ -359,19 +362,17 @@ export default class TextString extends Component {
                     url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
                     input: string,
                     title: stringName,
-                    message:
-                        `Sprache: ${lang.name}`
-                    ,
+                    message: `Sprache: ${lang.name}`,
                     buttons: [
                         {
                             text: 'Speichern',
-                            buttonType: 1
+                            buttonType: 1,
                         },
                         {
                             text: 'Abbrechen',
-                            buttonType: -1
-                        }
-                    ]
+                            buttonType: -1,
+                        },
+                    ],
                 })
                 .then((result) => {
                     this.changeStringResult(result, lang);
@@ -412,7 +413,7 @@ export default class TextString extends Component {
         const {
             children,
             useDangerouslySetInnerHTML,
-            preventNoTranslate
+            preventNoTranslate,
         } = this.props;
         const { textString, textStringProps } = this.state;
 
@@ -425,7 +426,7 @@ export default class TextString extends Component {
                     } else if (children.props.onClick) {
                         children.props.onClick(e);
                     }
-                }
+                },
             },
             ...(useDangerouslySetInnerHTML
                 ? { dangerouslySetInnerHTML: { __html: textString } }
@@ -436,8 +437,8 @@ export default class TextString extends Component {
                     'no-translate',
                     'notranslate',
                     children.props.className
-                )
-            })
+                ),
+            }),
         };
 
         if (textString) {
@@ -456,61 +457,61 @@ TextString.textStrings = {};
 TextString.language = isServer()
     ? 'de'
     : (
-        window.chayns?.env.parameters.translang ||
-        window.chayns?.env.site.translang ||
-        window.chayns?.env.language ||
-        navigator.language ||
-        'de'
-    )
-        .substring(0, 2)
-        .toLowerCase();
+          window.chayns?.env.parameters.translang ||
+          window.chayns?.env.site.translang ||
+          window.chayns?.env.language ||
+          navigator.language ||
+          'de'
+      )
+          .substring(0, 2)
+          .toLowerCase();
 
 TextString.languages = [
     {
         name: 'Deutsch',
         value: 'Ger',
-        code: 'de'
+        code: 'de',
     },
     {
         name: 'Englisch',
         value: 'Eng',
-        code: 'en'
+        code: 'en',
     },
     {
         name: 'Französisch',
         value: 'Fra',
-        code: 'fr'
+        code: 'fr',
     },
     {
         name: 'Niederländisch',
         value: 'Ned',
-        code: 'nl'
+        code: 'nl',
     },
     {
         name: 'Italienisch',
         value: 'Ita',
-        code: 'it'
+        code: 'it',
     },
     {
         name: 'Portugiesisch',
         value: 'Pt',
-        code: 'pt'
+        code: 'pt',
     },
     {
         name: 'Spanisch',
         value: 'Es',
-        code: 'es'
+        code: 'es',
     },
     {
         name: 'Türkisch',
         value: 'Tr',
-        code: 'tr'
+        code: 'tr',
     },
     {
         name: 'Polnisch',
         value: 'Pl',
-        code: 'pl'
-    }
+        code: 'pl',
+    },
 ];
 
 TextString.propTypes = {
@@ -558,7 +559,7 @@ TextString.propTypes = {
         PropTypes.oneOfType([
             PropTypes.object,
             PropTypes.string,
-            PropTypes.number
+            PropTypes.number,
         ])
     ),
 
@@ -568,7 +569,7 @@ TextString.propTypes = {
      class to the children when the
      * language of the text string matches the current language of the user.
      */
-    preventNoTranslate: PropTypes.bool
+    preventNoTranslate: PropTypes.bool,
 };
 
 TextString.defaultProps = {
@@ -579,7 +580,7 @@ TextString.defaultProps = {
     fallback: '',
     setProps: {},
     preventNoTranslate: false,
-    children: <p />
+    children: <p />,
 };
 
 TextString.displayName = 'TextString';
