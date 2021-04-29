@@ -44,6 +44,7 @@ The `SearchBox`-component takes the following props:
 | [list](#list)                                     | `Array<object> \| Array<string> \| Array<number>` |           |          |
 | [listKey](#listkey)                               | `string`                                          | `'key'`   |          |
 | [listValue](#listvalue)                           | `string`                                          | `'value'` |          |
+| [sortKey](#sortkey)                               | `string`                                          |           |          |
 | [className](#classname)                           | `string`                                          |           |          |
 | [defaultValue](#defaultvalue)                     | `string \| number`                                |           |          |
 | [stopPropagation](#stoppropagation)               | `boolean`                                         | `false`   |          |
@@ -108,6 +109,16 @@ listValue?: string
 
 The property name of the name of the `list` items that will be shown in the
 dropdown.
+
+---
+
+### `sortKey`
+
+```ts
+sortKey?: string
+```
+
+The property name to use for sorting the list. Default is listValue
 
 ---
 

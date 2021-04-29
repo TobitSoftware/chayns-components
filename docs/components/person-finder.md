@@ -97,6 +97,8 @@ The `PersonFinder`-component takes the following props:
 | [multiple](#multiple)                 | `boolean`                                                                                           | `false`          |          |
 | [showPersons](#showpersons)           | `boolean`                                                                                           | `true`           |          |
 | [showSites](#showsites)               | `boolean`                                                                                           | `false`          |          |
+| [showUacGroups](#showuacgroups)       | `boolean`                                                                                           | `false`          |          |
+| [showKnownPersons](#showknownpersons) | `boolean`                                                                                           | `false`          |          |
 | [uacId](#uacid)                       | `number`                                                                                            |                  |          |
 | [locationId](#locationid)             | `number`                                                                                            |                  |          |
 | [reducerFunction](#reducerfunction)   | `function`                                                                                          |                  |          |
@@ -152,6 +154,26 @@ showSites?: boolean
 ```
 
 Wether the `PersonFinder` should show sites in its autocomplete window.
+
+---
+
+### `showUacGroups`
+
+```ts
+showUacGroups?: boolean
+```
+
+Whether the `PersonFinder` should show uac groups of the current site
+
+---
+
+### `showKnownPersons`
+
+```ts
+showKnownPersons?: boolean
+```
+
+Whether the `PersonFinder` should show known users of the current site
 
 ---
 

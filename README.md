@@ -94,6 +94,7 @@ The following components are part of this package:
 | [TextArea&nbsp;›](docs/components/text-area.md)                        | A multiline text input that can automatically grow with its content.                                                                                                                                                                                                                                       |
 | [TextString&nbsp;›](docs/components/text-string.md)                    | Loads text strings from our database and displays them. Handles replacements and changing the string via `CTRL` + `Click` (only internal).                                                                                                                                                                 |
 | [Tooltip&nbsp;›](docs/components/tooltip.md)                           | Wraps a child component and displays a message when the child is hovered or clicked on. Allows to be shown imperatively by calling `.show()` or `.hide()` on its reference.                                                                                                                                |
+| [VerificationIcon&nbsp;›](docs/components/verification-icon.md)        |
 
 ## Utility Functions
 
