@@ -230,7 +230,23 @@ const SearchBox = ({
                         onItemClick(ev, filteredList[focusIndex]);
                         inputRef.current.ref.blur();
                         setFocusIndex(null);
+                    } else if (filteredList.length === 1) {
+                        onItemClick(ev, filteredList[0]);
+                        inputRef.current.ref.blur();
+                        setFocusIndex(null);
                     }
+                    break;
+                case 9: // Tabulator
+                    if (filteredList.length === 1) {
+                        onItemClick(ev, filteredList[0]);
+                        inputRef.current.ref.blur();
+                        setFocusIndex(null);
+                    }
+                    break;
+                case 27: // Escape
+                    inputRef.current.ref.blur();
+                    if (inputBoxRef.current) inputBoxRef.current.blur();
+                    setFocusIndex(null);
                     break;
                 default:
                     break;
@@ -331,6 +347,19 @@ const SearchBox = ({
             onBlur={() => {
                 if (addInputToList) {
                     onItemClick(null, inputValue);
+                } else if (filteredList.length === 1) {
+                    // select only matching item
+                    onItemClick(null, filteredList[0]);
+                } else {
+                    // select exact match (ignore case)
+                    const item = list.find(
+                        (i) =>
+                            i[listValue]?.toLowerCase() ===
+                            inputValue?.toLowerCase()
+                    );
+                    if (item) {
+                        onItemClick(null, item);
+                    }
                 }
             }}
             {...otherProps}
