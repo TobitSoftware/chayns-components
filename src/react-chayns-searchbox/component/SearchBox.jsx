@@ -188,7 +188,7 @@ const SearchBox = ({
             ) {
                 onSelect(getItemByKey(selection));
             }
-            if (stopPropagation) e.stopPropagation();
+            if (stopPropagation) e?.stopPropagation();
             if (inputBoxRef.current) inputBoxRef.current.blur();
         },
         [
