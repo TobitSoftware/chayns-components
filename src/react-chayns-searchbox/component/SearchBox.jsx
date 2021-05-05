@@ -190,6 +190,7 @@ const SearchBox = ({
             }
             if (stopPropagation) e?.stopPropagation();
             if (inputBoxRef.current) inputBoxRef.current.blur();
+            if (inputRef.current) inputRef.current.ref?.blur();
         },
         [
             getKey,
