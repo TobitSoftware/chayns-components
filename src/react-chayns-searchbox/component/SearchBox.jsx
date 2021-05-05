@@ -165,7 +165,7 @@ const SearchBox = ({
 
     const onItemClick = useCallback(
         (e, item) => {
-            const selection = getKey(item) || e?.target.id;
+            const selection = getKey(item) ?? e?.target.id;
             setValueState(selection);
             const itemValue = getValue(getItemByKey(selection));
             let newInputValueState;
@@ -346,6 +346,7 @@ const SearchBox = ({
             customProps={{ autoComplete: 'off' }}
             type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
             onBlur={() => {
+                console.log('onblur');
                 if (addInputToList) {
                     onItemClick(null, inputValue);
                 } else if (filteredList.length === 1) {
@@ -360,6 +361,9 @@ const SearchBox = ({
                     );
                     if (item) {
                         onItemClick(null, item);
+                    } else {
+                        console.log('Sda', inputRef);
+                        inputRef.current?.blur();
                     }
                 }
             }}
