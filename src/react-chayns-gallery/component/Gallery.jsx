@@ -192,10 +192,11 @@ export default class Gallery extends Component {
             preventParams,
             stopPropagation,
             onClick,
+            smallTiles
         } = this.props;
         const { style: propStyle } = this.props;
         const style = { ...propStyle };
-        const defaultMode = !dragMode && !deleteMode;
+        const defaultMode = !dragMode && !deleteMode && !smallTiles;
         const { active, dropzone: dropzoneId, images } = this.state;
 
         let styleHeight;
@@ -409,6 +410,12 @@ Gallery.propTypes = {
      * `width`-parameter on the loaded image.
      */
     preventParams: PropTypes.bool,
+
+    /**
+     * This option changes the layout to the layout known from delete- and
+     * drag-mode without activating this modes.
+     */
+    smallTiles: PropTypes.bool,
 };
 
 Gallery.defaultProps = {
@@ -423,6 +430,7 @@ Gallery.defaultProps = {
     dragMode: false,
     onDragEnd: null,
     preventParams: false,
+    smallTiles: false,
 };
 
 Gallery.displayName = 'Gallery';

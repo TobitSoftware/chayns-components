@@ -13,8 +13,8 @@ export default class GalleryExample extends Component {
                 'https://tsimg.cloud/72975-12914/e087202f5badd652fd015d39df83c35065941fe5.png',
                 'https://tsimg.space/v1/images/6ffbd340-a77b-e811-80d6-0025905a8161.jpg',
                 'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg',
-                'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg',
-            ],
+                'https://tsimg.space/v1/images/59a25b31-3997-e811-80d6-0025905a8161.jpg'
+            ]
         };
     }
 
@@ -32,6 +32,8 @@ export default class GalleryExample extends Component {
                         this.setState({ images: imgs });
                     }}
                 />
+                <Gallery style={{ marginBottom: '30px' }} images={images} smallTiles />
+                <Gallery style={{ marginBottom: '30px' }} images={images} deleteMode />
                 <Gallery style={{ marginBottom: '30px' }} images={images} />
                 <Gallery
                     style={{ marginBottom: '30px' }}
@@ -40,7 +42,7 @@ export default class GalleryExample extends Component {
                         images[1],
                         images[2],
                         images[3],
-                        images[4],
+                        images[4]
                     ]}
                 />
                 <Gallery
@@ -66,7 +68,7 @@ export default class GalleryExample extends Component {
                     style={{
                         width: '100px',
                         height: '100px',
-                        marginBottom: '30px',
+                        marginBottom: '30px'
                     }}
                     styleLandscape={{ borderRadius: '10px' }}
                     stylePortrait={{ border: '3px solid black' }}
@@ -78,7 +80,7 @@ export default class GalleryExample extends Component {
                         { icon: 'fa fa-rocket', onClick: console.log },
                         { icon: 'ts-tobit', onClick: console.log },
                         { icon: 'ts-wrong', onClick: console.log },
-                        { icon: 'ts-check', onClick: console.log },
+                        { icon: 'ts-check', onClick: console.log }
                     ]}
                     style={{ marginBottom: '30px' }}
                 >
