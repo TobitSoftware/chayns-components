@@ -111,7 +111,22 @@ const DialogSelectComboBox = ({
                         }
                     });
             } else {
-                setPosition(e.target.getBoundingClientRect());
+                const parentElement = parent || document.querySelector('.tapp');
+                if (
+                    parentElement &&
+                    window.getComputedStyle(parentElement).position ===
+                        'relative'
+                ) {
+                    const rect = e.target.getBoundingClientRect();
+                    const parentRect = parentElement.getBoundingClientRect();
+                    setPosition({
+                        bottom: rect.bottom - parentRect.top,
+                        left: rect.left - parentRect.left,
+                        width: rect.width,
+                    });
+                } else {
+                    setPosition(e.target.getBoundingClientRect());
+                }
                 setShowOverlay(!showOverlay);
             }
         },
@@ -127,6 +142,7 @@ const DialogSelectComboBox = ({
             listValue,
             select,
             value,
+            parent,
         ]
     );
 
