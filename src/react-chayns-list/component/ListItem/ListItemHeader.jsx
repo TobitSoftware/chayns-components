@@ -124,11 +124,11 @@ const ListItemHeader = ({
             )}
             {(title || subtitle) && (
                 <div className="list-item__titles">
-                    {title &&
+                    {(title || (Array.isArray(right) && right.length > 0)) &&
                         (Array.isArray(right) && right.length > 0 ? (
                             <div className="list-item__title-wrapper">
                                 <div className="list-item__title ellipsis">
-                                    {title}
+                                    {title || ''}
                                 </div>
                                 <div
                                     className="list-item__right"
@@ -146,7 +146,7 @@ const ListItemHeader = ({
                                 {title}
                             </div>
                         ))}
-                    {subtitle &&
+                    {(subtitle || (Array.isArray(right) && right.length > 1)) &&
                         (Array.isArray(right) && right.length > 1 ? (
                             <div className="list-item__subtitle-wrapper">
                                 <div className="list-item__subtitle ellipsis">
