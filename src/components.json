@@ -280,5 +280,11 @@
         "title": "SearchBox",
         "example": "react-chayns-searchbox/Example.jsx",
         "readme": true
+    },
+    {
+        "id": "react-chayns-signature",
+        "title": "Signature",
+        "example": "react-chayns-signature/Example.jsx",
+        "readme": true
     }
 ]

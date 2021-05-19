@@ -69,6 +69,7 @@ export { default as SetupWizardItem } from './react-chayns-setupwizard/component
 export { default as SetupWizard } from './react-chayns-setupwizard/component/SetupWizard';
 export { default as withSetupWizardContext } from './react-chayns-setupwizard/component/withSetupWizardContext';
 export { default as SharingBar } from './react-chayns-sharingbar/component/SharingBar';
+export { default as Signature } from './react-chayns-signature/component/Signature';
 export { default as Slider } from './react-chayns-slider/component/Slider';
 export { default as SliderButton } from './react-chayns-sliderbutton/component/SliderButton';
 export { default as SmallWaitCursor } from './react-chayns-smallwaitcursor/component/SmallWaitCursor';
