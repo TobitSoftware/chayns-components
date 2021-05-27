@@ -8,7 +8,7 @@ import {
     rgb1ToHsv,
     rgb255ToRgb1,
     hexToRgb255,
-    rgb255ToHex,
+    rgb255ToHex
 } from '@chayns/colors';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
@@ -20,7 +20,7 @@ export default class ColorInput extends Component {
         super(props);
 
         this.state = {
-            inputValue: this.getInputValue(),
+            inputValue: this.getInputValue()
         };
     }
 
@@ -50,7 +50,7 @@ export default class ColorInput extends Component {
 
     setColor = () => {
         this.setState({
-            inputValue: this.getInputValue(),
+            inputValue: this.getInputValue()
         });
     };
 
@@ -61,13 +61,13 @@ export default class ColorInput extends Component {
             const matches = value.match(RGB_REGEX);
             if (matches) {
                 const rgb = {
-                    r: matches[1],
-                    g: matches[2],
-                    b: matches[3],
-                    a: matches[4] !== undefined ? matches[4] : 255,
+                    r: parseInt(matches[1], 10),
+                    g: parseInt(matches[2], 10),
+                    b: parseInt(matches[3], 10),
+                    a: matches[4] !== undefined ? parseFloat(matches[4]) : 255
                 };
                 const hsv = rgb1ToHsv(rgb255ToRgb1(rgb));
-                if (onChange) {
+                if (onChange && hsv) {
                     onChange(hsv);
                 }
             }
@@ -76,7 +76,7 @@ export default class ColorInput extends Component {
             const matches = value.match(HEX_REGEX);
             if (matches) {
                 const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
-                if (onChange) {
+                if (onChange && hsv) {
                     onChange(hsv);
                 }
             }
@@ -107,7 +107,7 @@ export default class ColorInput extends Component {
         }
 
         return (
-            <div className="cc__color-input">
+            <div className='cc__color-input'>
                 <Input
                     regExp={regex}
                     placeholder={placeholder}
@@ -118,8 +118,8 @@ export default class ColorInput extends Component {
                     customProps={{ spellCheck: 'false' }}
                 />
                 <Icon
-                    className="chayns__color--headline cc__color-input__exchange-icon"
-                    icon="fa fa-exchange-alt"
+                    className='chayns__color--headline cc__color-input__exchange-icon'
+                    icon='fa fa-exchange-alt'
                     onClick={onModelToggle}
                 />
             </div>
@@ -132,12 +132,12 @@ ColorInput.propTypes = {
         h: PropTypes.number.isRequired,
         s: PropTypes.number.isRequired,
         v: PropTypes.number.isRequired,
-        a: PropTypes.number,
+        a: PropTypes.number
     }).isRequired,
     onChange: PropTypes.func.isRequired,
     colorModel: PropTypes.number.isRequired,
     onModelToggle: PropTypes.func.isRequired,
-    transparency: PropTypes.bool.isRequired,
+    transparency: PropTypes.bool.isRequired
 };
 
 ColorInput.displayName = 'ColorInput';
