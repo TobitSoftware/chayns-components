@@ -96,7 +96,9 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
         if (newPosition === null) {
             const shouldBeLeft = newX > window.innerWidth / 2;
-            const shouldBeTop = (top + bottom) / 2 > window.innerHeight / 2;
+            const shouldBeTop =
+                (top + bottom) / 2 >
+                (document.body.offsetHeight || window.innerHeight) / 2;
 
             if (shouldBeLeft && shouldBeTop) {
                 newPosition = ContextMenu.position.TOP_LEFT;
