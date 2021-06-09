@@ -36,7 +36,7 @@ const loadLibrary = async (projectName, middle, lang) => {
                 ...json,
             },
         };
-        if (window.debugLevel >= 3) {
+        if (!isServer() && window.debugLevel >= 3) {
             // eslint-disable-next-line no-console
             console.debug('TextString Storage', TextString.textStrings);
         }
@@ -130,13 +130,8 @@ export default class TextString extends Component {
 
     constructor(props) {
         super(props);
-        const {
-            stringName,
-            language,
-            setProps,
-            replacements,
-            fallback,
-        } = props;
+        const { stringName, language, setProps, replacements, fallback } =
+            props;
 
         let string = TextString.getTextString(stringName, language, fallback);
 
@@ -185,13 +180,8 @@ export default class TextString extends Component {
     }
 
     setTextStrings(props) {
-        const {
-            stringName,
-            language,
-            fallback,
-            setProps,
-            replacements,
-        } = props;
+        const { stringName, language, fallback, setProps, replacements } =
+            props;
 
         let string = TextString.getTextString(stringName, language);
         if (string) {
@@ -341,8 +331,7 @@ export default class TextString extends Component {
                 });
         } else {
             chayns.dialog.iFrame({
-                url:
-                    'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+                url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
                 buttons: [],
                 input: { textstring: stringName },
             });
@@ -410,11 +399,8 @@ export default class TextString extends Component {
     }
 
     render() {
-        const {
-            children,
-            useDangerouslySetInnerHTML,
-            preventNoTranslate,
-        } = this.props;
+        const { children, useDangerouslySetInnerHTML, preventNoTranslate } =
+            this.props;
         const { textString, textStringProps } = this.state;
 
         const childrenProps = {
