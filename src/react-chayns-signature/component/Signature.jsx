@@ -1,3 +1,7 @@
+/**
+ * @component
+ */
+
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -7,6 +11,9 @@ import {
 } from '../api/signature';
 import Button from '../../react-chayns-button/component/Button';
 
+/**
+ * A component to let the user subscribe
+ */
 const Signature = ({ onSubscribe }) => {
     const [signatureUrl, setSignatureUrl] = useState(undefined);
     const [subscribed, setSubscribed] = useState(false);
@@ -99,11 +106,16 @@ const Signature = ({ onSubscribe }) => {
 };
 
 Signature.propTypes = {
+    /**
+     * callback which is called when the user subscribes
+     */
     onSubscribe: PropTypes.func,
 };
 
 Signature.defaultProps = {
     onSubscribe: null,
 };
+
+Signature.displayName = 'Signature';
 
 export default Signature;

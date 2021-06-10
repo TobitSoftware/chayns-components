@@ -53,6 +53,7 @@ The `Gallery`-component takes the following props:
 | [dragMode](#dragmode)               | `boolean`                             | `false` |          |
 | [onDragEnd](#ondragend)             | `function`                            |         |          |
 | [preventParams](#preventparams)     | `boolean`                             | `false` |          |
+| [smallTiles](#smalltiles)           | `boolean`                             | `false` |          |
 
 ### `images`
 
@@ -174,3 +175,14 @@ preventParams?: boolean
 This will be forwarded to the `Image`-component. It prevents parameters of the
 loaded image. E.g. supply `{ width: true }` to prevent the `width`-parameter on
 the loaded image.
+
+---
+
+### `smallTiles`
+
+```ts
+smallTiles?: boolean
+```
+
+This option changes the layout to the layout known from delete- and drag-mode
+without activating this modes.
