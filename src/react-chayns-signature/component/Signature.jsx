@@ -13,9 +13,6 @@ const Signature = ({ onSubscribe }) => {
 
     useEffect(() => {
         getUserSignature().then(setSignatureUrl);
-
-        if (!chayns.env.user.isAuthenticated) {
-        }
     }, []);
 
     const editSignature = useCallback(async () => {
