@@ -19,6 +19,9 @@ const ResultItemList = ({
     focusIndex,
     roundIcons,
     hideFriendsIcon,
+    onRemoveTag,
+    showCheckbox,
+    tags,
 }) => {
     if (!data || data.length === 0) {
         return null;
@@ -47,6 +50,9 @@ const ResultItemList = ({
                     isFocused={focusIndex !== null && focusIndex === index}
                     roundIcons={roundIcons}
                     hideFriendsIcon={hideFriendsIcon}
+                    tags={tags}
+                    onRemoveTag={onRemoveTag}
+                    showCheckbox={showCheckbox}
                 />
             ))}
             {hasMore && showWaitCursor && (
@@ -86,6 +92,13 @@ ResultItemList.propTypes = {
     focusIndex: PropTypes.number,
     roundIcons: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.shape({}),
+        })
+    ),
+    showCheckbox: PropTypes.bool,
 };
 
 ResultItemList.defaultProps = {
@@ -100,6 +113,8 @@ ResultItemList.defaultProps = {
     focusIndex: null,
     roundIcons: false,
     hideFriendsIcon: false,
+    tags: [],
+    showCheckbox: false,
 };
 
 ResultItemList.displayName = 'ResultItemList';
