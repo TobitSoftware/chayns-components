@@ -2,6 +2,8 @@ import FriendsHelper from './FriendsHelper';
 
 export const convertPerson = (relation) => {
     if ('siteId' in relation) return { type: 'SITE', ...relation };
+    if ('type' in relation && relation.type === 'GROUP')
+        return { type: 'GROUP', ...relation };
     // due to inconsistent naming of the backends
     const fullName =
         relation.fullName ||
