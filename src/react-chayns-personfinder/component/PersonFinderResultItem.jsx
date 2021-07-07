@@ -6,6 +6,7 @@ import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
 import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
+import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
 const PersonFinderResultItem = ({
     onClick,
@@ -14,12 +15,23 @@ const PersonFinderResultItem = ({
     isFocused,
     roundIcons,
     hideFriendsIcon,
+    showCheckbox,
+    tags,
+    onRemoveTag,
 }) => {
+    const selectedValue = tags?.find(
+        ({ value }) => value[orm.identifier] === data[orm.identifier]
+    );
+
     const handleClick = useCallback(() => {
-        onClick({
-            relation: data,
-        });
-    }, [onClick, data]);
+        if (selectedValue) {
+            onRemoveTag(selectedValue);
+        } else {
+            onClick({
+                relation: data,
+            });
+        }
+    }, [onClick, data, selectedValue, onRemoveTag]);
 
     let hasRelations =
         orm.relations && Array.isArray(data[orm.relations])
@@ -37,6 +49,14 @@ const PersonFinderResultItem = ({
             tabIndex="-1"
             onClick={handleClick}
         >
+            {showCheckbox ? (
+                <Checkbox
+                    checked={!!selectedValue}
+                    onChange={handleClick}
+                    stopPropagation
+                    className="checkbox"
+                />
+            ) : null}
             {orm.imageUrl ? (
                 <div
                     className={classNames('img', { circle: roundIcons })}
@@ -93,11 +113,20 @@ PersonFinderResultItem.propTypes = {
     isFocused: PropTypes.bool.isRequired,
     roundIcons: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
+    tags: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.shape({}),
+        })
+    ),
+    showCheckbox: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
 };
 
 PersonFinderResultItem.defaultProps = {
     roundIcons: false,
     hideFriendsIcon: false,
+    tags: [],
+    showCheckbox: false,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';

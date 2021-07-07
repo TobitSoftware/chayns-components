@@ -12,10 +12,12 @@ const PersonFinderResults = ({
     onLoadMore,
     showWaitCursor,
     onSelect,
+    onRemoveTag,
     focusIndex,
     noBackground,
     filterSelected,
     hideFriendsIcon,
+    showCheckbox,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -70,9 +72,12 @@ const PersonFinderResults = ({
                         onLoadMore={onLoadMore}
                         showWaitCursor={showWaitCursor[group]}
                         onClick={handleClick}
+                        onRemoveTag={onRemoveTag}
                         focusIndex={groupFocusIndex}
                         roundIcons={roundIcons}
                         hideFriendsIcon={hideFriendsIcon}
+                        tags={tags}
+                        showCheckbox={showCheckbox}
                     />
                 </div>
             );
@@ -137,6 +142,8 @@ PersonFinderResults.propTypes = {
     noBackground: PropTypes.bool,
     filterSelected: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
+    showCheckbox: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
 };
 
 PersonFinderResults.defaultProps = {
@@ -150,6 +157,7 @@ PersonFinderResults.defaultProps = {
     noBackground: false,
     filterSelected: false,
     hideFriendsIcon: false,
+    showCheckbox: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

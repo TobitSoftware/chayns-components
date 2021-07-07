@@ -50,14 +50,8 @@ class PersonFinderView extends Component {
 
     handleKeyDown = (ev) => {
         const { focusIndex } = this.state;
-        const {
-            onSelect,
-            data,
-            orm,
-            value,
-            onKeyDown,
-            autoSelectFirst,
-        } = this.props;
+        const { onSelect, data, orm, value, onKeyDown, autoSelectFirst } =
+            this.props;
 
         if (onKeyDown) {
             onKeyDown(ev);
@@ -133,14 +127,8 @@ class PersonFinderView extends Component {
     };
 
     hasEntries = () => {
-        const {
-            data,
-            orm,
-            value,
-            tags,
-            filterSelected,
-            inputValue,
-        } = this.props;
+        const { data, orm, value, tags, filterSelected, inputValue } =
+            this.props;
         const filterValues = ({ type, id }) =>
             tags.every(
                 ({ value: tagValue }) =>
@@ -172,6 +160,7 @@ class PersonFinderView extends Component {
     renderChildren() {
         const {
             onSelect,
+            onRemoveTag,
             selectedValue,
             data,
             tags,
@@ -185,6 +174,7 @@ class PersonFinderView extends Component {
             hideFriendsIcon,
             renderInline,
             inputValue,
+            showCheckbox,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -196,6 +186,7 @@ class PersonFinderView extends Component {
                 <PersonFinderResults
                     key="results"
                     onSelect={onSelect}
+                    onRemoveTag={onRemoveTag}
                     data={data}
                     tags={tags}
                     orm={orm}
@@ -210,6 +201,7 @@ class PersonFinderView extends Component {
                     noBackground={noBackground}
                     filterSelected={filterSelected}
                     hideFriendsIcon={hideFriendsIcon}
+                    showCheckbox={showCheckbox}
                 />
             );
         }
@@ -339,6 +331,8 @@ PersonFinderView.propTypes = {
     hideFriendsIcon: PropTypes.bool,
     inputValue: PropTypes.string,
     renderInline: PropTypes.bool,
+    showCheckbox: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
 };
 
 PersonFinderView.defaultProps = {
@@ -361,6 +355,7 @@ PersonFinderView.defaultProps = {
     hideFriendsIcon: false,
     inputValue: '',
     renderInline: false,
+    showCheckbox: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';
