@@ -332,6 +332,7 @@ PersonFinderView.propTypes = {
     inputValue: PropTypes.string,
     renderInline: PropTypes.bool,
     showCheckbox: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
 };
 
 PersonFinderView.defaultProps = {

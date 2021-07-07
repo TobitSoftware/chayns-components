@@ -6,7 +6,7 @@ import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
 import Relation from './result-item/Relation';
 import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
-import { Checkbox } from '../../index';
+import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
 
 const PersonFinderResultItem = ({
     onClick,

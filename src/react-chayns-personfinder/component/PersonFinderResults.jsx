@@ -143,6 +143,7 @@ PersonFinderResults.propTypes = {
     filterSelected: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
     showCheckbox: PropTypes.bool,
+    onRemoveTag: PropTypes.func.isRequired,
 };
 
 PersonFinderResults.defaultProps = {
