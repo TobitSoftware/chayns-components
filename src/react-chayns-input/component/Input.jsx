@@ -142,6 +142,7 @@ export default class Input extends PureComponent {
             required,
             invalidMessage,
             emptyValue,
+            autoComplete,
             right: rightProp,
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
@@ -199,6 +200,7 @@ export default class Input extends PureComponent {
                                     : null
                             }
                             disabled={disabled}
+                            autoComplete={autoComplete}
                             {...customProps}
                         />
                         {placeholder && !emptyValue && (
@@ -292,6 +294,7 @@ export default class Input extends PureComponent {
                                 : null
                         }
                         disabled={disabled}
+                        autoComplete={autoComplete}
                         {...customProps}
                     />
                     {placeholder && (
@@ -353,6 +356,7 @@ export default class Input extends PureComponent {
                 }
                 required
                 disabled={disabled}
+                autoComplete={autoComplete}
                 {...customProps}
             />
         );
@@ -536,6 +540,11 @@ Input.propTypes = {
      * and not compatible with placeholder.
      */
     emptyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+    /**
+     * Sets the autocomplete attribute
+     */
+    autoComplete: PropTypes.string,
 };
 
 Input.defaultProps = {
@@ -569,6 +578,7 @@ Input.defaultProps = {
     right: null,
     invalidMessage: null,
     emptyValue: null,
+    autoComplete: 'off',
 };
 
 Input.displayName = 'Input';
