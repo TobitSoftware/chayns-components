@@ -277,7 +277,6 @@ export default class Accordion extends PureComponent {
                     'accordion--wrapped': isWrapped === true,
                     'accordion--open': currentState === OPEN,
                     'accordion--disabled': disabled,
-                    'accordion--fixed': fixed,
                     [className]: className,
                 })}
                 ref={(ref) => {
@@ -294,14 +293,21 @@ export default class Accordion extends PureComponent {
                     onClick={this.handleAccordionClick}
                     {...headCustomAttributes}
                 >
-                    {noIcon ? null : (
+                    {noIcon && !fixed ? null : (
                         <div
                             className={classNames('accordion__head__icon', {
-                                'accordion__head__icon--no-rotate': noRotate,
+                                'accordion__head__icon--no-rotate':
+                                    noRotate || fixed,
                             })}
                         >
                             {isString(icon) || icon.iconName ? (
-                                <Icon icon={icon} />
+                                <Icon
+                                    icon={
+                                        fixed && icon === 'ts-angle-right'
+                                            ? 'fa fa-horizontal-rule'
+                                            : icon
+                                    }
+                                />
                             ) : (
                                 icon
                             )}
@@ -310,7 +316,9 @@ export default class Accordion extends PureComponent {
                     <div
                         className="accordion__head__title"
                         style={{
-                            ...(noIcon ? { paddingLeft: '10px' } : null),
+                            ...(noIcon && !fixed
+                                ? { paddingLeft: '10px' }
+                                : null),
                             ...(head &&
                             !isString(head.open) &&
                             isString(head.close) &&
