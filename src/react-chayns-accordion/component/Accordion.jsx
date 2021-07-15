@@ -307,6 +307,11 @@ export default class Accordion extends PureComponent {
                                             ? 'fa fa-horizontal-rule'
                                             : icon
                                     }
+                                    className={
+                                        fixed && icon === 'ts-angle-right'
+                                            ? 'accordion--fixed__head__icon'
+                                            : null
+                                    }
                                 />
                             ) : (
                                 icon
