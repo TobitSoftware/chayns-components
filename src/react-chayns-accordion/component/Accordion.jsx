@@ -277,6 +277,7 @@ export default class Accordion extends PureComponent {
                     'accordion--wrapped': isWrapped === true,
                     'accordion--open': currentState === OPEN,
                     'accordion--disabled': disabled,
+                    'accordion--fixed': fixed,
                     [className]: className,
                 })}
                 ref={(ref) => {
@@ -289,6 +290,7 @@ export default class Accordion extends PureComponent {
                 <div
                     className={classNames('accordion__head', headClassNames, {
                         accordion__head__multiline: headMultiline,
+                        'accordion__head--no-padding': fixed,
                     })}
                     onClick={this.handleAccordionClick}
                     {...headCustomAttributes}
