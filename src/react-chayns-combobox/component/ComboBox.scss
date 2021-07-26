@@ -1,5 +1,6 @@
 .cc__combo-box {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
     &__icon {
@@ -19,6 +20,7 @@
         box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
         border-width: 1px;
         border-style: solid;
+        z-index: 1;
 
         &__item {
             padding: 2px 8px;
