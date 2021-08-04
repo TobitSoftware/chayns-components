@@ -53,9 +53,9 @@ export default class TagInput extends Component {
     }
 
     handleKeyUp(event) {
-        const { value } = this.props;
+        const { value, disableRemove } = this.props;
 
-        if (event.keyCode === KEY_BACKSPACE && !value) {
+        if (event.keyCode === KEY_BACKSPACE && !value && !disableRemove) {
             this.handleRemoveLast();
             return;
         }
@@ -133,6 +133,7 @@ export default class TagInput extends Component {
             value,
             className,
             style,
+            disableRemove,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -158,6 +159,7 @@ export default class TagInput extends Component {
                             value={tag}
                             onDelete={this.handleTagRemove}
                             selected={selectedIndex === index}
+                            disableRemove={disableRemove}
                         >
                             {tag.text}
                         </Tag>
@@ -230,6 +232,10 @@ TagInput.propTypes = {
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
     triggerEventOnValueChange: PropTypes.bool,
+    /**
+     * Prevents removal of selected users and hides remove icon.
+     */
+    disableRemove: PropTypes.bool,
 };
 
 TagInput.defaultProps = {
@@ -242,6 +248,7 @@ TagInput.defaultProps = {
     className: null,
     style: null,
     triggerEventOnValueChange: false,
+    disableRemove: false,
 };
 
 TagInput.displayName = 'TagInput';

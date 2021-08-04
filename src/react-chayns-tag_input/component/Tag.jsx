@@ -13,20 +13,23 @@ export default class Tag extends PureComponent {
     };
 
     render() {
-        const { children, selected } = this.props;
+        const { children, selected, disableRemove } = this.props;
 
         return (
             <div
                 className={classnames('cc__tag', {
                     'cc__tag--selected': selected,
                 })}
+                style={disableRemove ? { paddingRight: 10 } : undefined}
             >
                 {children}
-                <Icon
-                    className="icon"
-                    icon="fa fa-times"
-                    onClick={this.handleDelete}
-                />
+                {!disableRemove && (
+                    <Icon
+                        className="icon"
+                        icon="fa fa-times"
+                        onClick={this.handleDelete}
+                    />
+                )}
             </div>
         );
     }
@@ -41,11 +44,13 @@ Tag.propTypes = {
     ]).isRequired,
     onDelete: PropTypes.func,
     selected: PropTypes.bool,
+    disableRemove: PropTypes.bool,
 };
 
 Tag.defaultProps = {
     onDelete: null,
     selected: false,
+    disableRemove: false,
 };
 
 Tag.displayName = 'Tag';
