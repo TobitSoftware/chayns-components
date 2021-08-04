@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'clsx';
 import ResultItemList from './ResultItemList';
+import PersonsContext from './data/persons/PersonsContext';
 
 const PersonFinderResults = ({
     data,
@@ -28,18 +29,36 @@ const PersonFinderResults = ({
         [onSelect]
     );
 
+    const users = new Map();
+
     let length = 0;
     if (Array.isArray(orm.groups)) {
         return orm.groups.map(({ key: group, show, roundIcons, filter }) => {
             if (typeof show === 'function' && !show(inputValue)) {
                 return null;
             }
-            let groupData =
+
+            // Prevent duplicates from knownPersons and persons
+            let groupData = [];
+            if (
+                orm === PersonsContext.ObjectMapping &&
+                ['knownPersons', 'personsRelated', 'personsUnrelated'].includes(
+                    group
+                )
+            ) {
+                (data[group] || []).forEach((value) => {
+                    if (users.has(value.id)) return;
+                    users.set(value.id, true);
+                    groupData.push(value);
+                });
+            } else {
+                groupData = data[group] || [];
+            }
+
+            groupData =
                 typeof (filter || orm.filter) === 'function'
-                    ? (data[group] || []).filter(
-                          (filter || orm.filter)(inputValue)
-                      )
-                    : data[group] || [];
+                    ? groupData.filter((filter || orm.filter)(inputValue))
+                    : groupData;
             if (filterSelected) {
                 groupData = groupData.filter(({ type, id }) =>
                     tags.every(
