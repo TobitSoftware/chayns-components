@@ -118,6 +118,11 @@ const InputBox = React.forwardRef((props, ref) => {
         [overlayProps]
     );
 
+    const toggle = useCallback((event) => {
+        setIsHidden((hidden) => !hidden);
+        event.stopPropagation();
+    }, []);
+
     if (!InputComponent) {
         return null;
     }
@@ -132,25 +137,6 @@ const InputBox = React.forwardRef((props, ref) => {
               left: `${rect.left - (parentRect?.left ?? 0)}px`,
           }
         : null;
-
-    if (hasOpenCloseIcon) {
-        const toggle = (event) => {
-            setIsHidden(!isHidden);
-            event.stopPropagation();
-        };
-        if (restProps.design === Input.BORDER_DESIGN) {
-            restProps.right = (
-                <Icon
-                    icon="fa fa-chevron-down"
-                    style={{ padding: '8px' }}
-                    onClick={toggle}
-                />
-            );
-        } else {
-            restProps.icon = 'fa fa-chevron-down';
-            restProps.onIconClick = toggle;
-        }
-    }
 
     return (
         <div
@@ -169,6 +155,8 @@ const InputBox = React.forwardRef((props, ref) => {
         >
             <InputComponent
                 {...restProps}
+                icon={hasOpenCloseIcon ? 'fa fa-chevron-down' : restProps.icon}
+                onIconClick={hasOpenCloseIcon ? toggle : restProps.onIconClick}
                 style={
                     renderInline && hideInput
                         ? { position: 'absolute', visibility: 'hidden' }
