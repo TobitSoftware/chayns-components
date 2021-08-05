@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import { Button, PersonFinder } from '../../src';
+import { Button, TagInput, PersonFinder } from '../../src';
 import UacGroupContext from '../../src/react-chayns-personfinder/component/data/uacGroups/UacGroupContext';
 import SimpleWrapperContext from '../../src/react-chayns-personfinder/component/data/simpleWrapper/SimpleWrapperContext';
 
@@ -90,13 +90,8 @@ export default class PersonFinderExample extends PureComponent {
     };
 
     render() {
-        const {
-            data,
-            hasMore,
-            moreReceiver,
-            controlledValues,
-            value,
-        } = this.state;
+        const { data, hasMore, moreReceiver, controlledValues, value } =
+            this.state;
         return (
             <div style={{ marginBottom: '500px' }}>
                 {chayns.env.user.isAuthenticated || (
@@ -178,6 +173,8 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="User/Site"
                     onChange={PersonFinderExample.handleSelect}
                     showSites
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -186,6 +183,8 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="UAC 1"
                     uacId={1}
                     onChange={PersonFinderExample.handleSelect}
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -265,6 +264,8 @@ export default class PersonFinderExample extends PureComponent {
                         console.log('onkeydown personfinder', ...e);
                     }}
                     autoSelectFirst
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     values={controlledValues}
@@ -285,6 +286,8 @@ export default class PersonFinderExample extends PureComponent {
                         this.setState({ controlledValues });
                     }}
                     placeholder="Controlled PersonFinder"
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     autoSelectFirst
@@ -346,6 +349,8 @@ export default class PersonFinderExample extends PureComponent {
                             email: 'bill.tester@tobit.software',
                         },
                     ]}
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -357,6 +362,8 @@ export default class PersonFinderExample extends PureComponent {
                     onAdd={(group) => console.log('add group', group)}
                     onRemove={PersonFinderExample.handleRemove}
                     onChange={PersonFinderExample.handleSelect}
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -369,6 +376,8 @@ export default class PersonFinderExample extends PureComponent {
                     showSites
                     showUacGroups
                     multiple
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -394,6 +403,8 @@ export default class PersonFinderExample extends PureComponent {
                     multiple
                     parent={document.body}
                     boxClassName="custom-personfinder-overlay"
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
                     ref={(ref) => {
@@ -402,6 +413,8 @@ export default class PersonFinderExample extends PureComponent {
                     placeholder="Users (3)"
                     multiple
                     max={3}
+                    design={TagInput.BORDER_DESIGN}
+                    style={{ margin: '8px 0' }}
                 />
                 <Button onClick={this.clear}>Clear all</Button>
             </div>
