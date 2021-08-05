@@ -134,6 +134,7 @@ export default class TagInput extends Component {
             className,
             style,
             disableRemove,
+            design,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -149,7 +150,10 @@ export default class TagInput extends Component {
         return (
             <div
                 onClick={this.handleClick}
-                className={classNames(className, 'cc__tag-input input')}
+                className={classNames(className, 'cc__tag-input input', {
+                    'cc__tag-input--border-design':
+                        design === Input.BORDER_DESIGN,
+                })}
                 style={style}
             >
                 {tags &&
@@ -179,6 +183,9 @@ export default class TagInput extends Component {
         );
     }
 }
+
+TagInput.DEFAULT_DESIGN = 0;
+TagInput.BORDER_DESIGN = 1;
 
 TagInput.propTypes = {
     /**
@@ -236,6 +243,11 @@ TagInput.propTypes = {
      * Prevents removal of selected users and hides remove icon.
      */
     disableRemove: PropTypes.bool,
+    /**
+     * The design of the input. Use either `TagInput.DEFAULT_DESIGN` or
+     * `TagInput.BORDER_DESIGN`.
+     */
+    design: PropTypes.number,
 };
 
 TagInput.defaultProps = {
@@ -249,6 +261,7 @@ TagInput.defaultProps = {
     style: null,
     triggerEventOnValueChange: false,
     disableRemove: false,
+    design: TagInput.DEFAULT_DESIGN,
 };
 
 TagInput.displayName = 'TagInput';
