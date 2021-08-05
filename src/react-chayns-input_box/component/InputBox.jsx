@@ -12,7 +12,6 @@ import Overlay from '../../components/overlay/Overlay';
 import Input from '../../react-chayns-input/component/Input';
 import { isFunction } from '../../utils/is';
 import { isServer } from '../../utils/isServer';
-import Icon from '../../react-chayns-icon/component/Icon';
 
 const InputBox = React.forwardRef((props, ref) => {
     const {
