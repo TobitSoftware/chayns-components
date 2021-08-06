@@ -14,7 +14,6 @@ import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import { isNumber } from '../../../utils/is';
-import ColorPicker from '../ColorPicker';
 
 class ColorInput extends Component {
     constructor(props) {
@@ -136,12 +135,12 @@ export default function withColorInput({ showAllColorModels, ...props }) {
         return [
             <ColorInput
                 {...props}
-                colorModel={ColorPicker.colorModels.HEX}
+                colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
                 hideSwitchIcon
             />,
             <ColorInput
                 {...props}
-                colorModel={ColorPicker.colorModels.RGB}
+                colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
                 hideSwitchIcon
             />,
         ];
