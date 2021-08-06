@@ -52,6 +52,23 @@ const ColorPickerExample = () => {
                     marginTop: '20px',
                 }}
             />
+            <h2>ColorPicker with transparency and all colorModels</h2>
+            <ColorPicker
+                color={color}
+                bubblePosition={Bubble.position.BOTTOM_RIGHT}
+                onChange={console.log}
+                onChangeEnd={(c) => {
+                    console.log(hsvToHexString(c));
+                    setColor(c);
+                }}
+                transparency
+                input
+                style={{
+                    marginBottom: '30px',
+                    marginTop: '20px',
+                }}
+                showAllColorModels
+            />
             <h2>ColorPicker without transparency</h2>
             <ColorPicker
                 color={color}

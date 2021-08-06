@@ -8,19 +8,20 @@ import {
     rgb1ToHsv,
     rgb255ToRgb1,
     hexToRgb255,
-    rgb255ToHex
+    rgb255ToHex,
 } from '@chayns/colors';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import { isNumber } from '../../../utils/is';
+import ColorPicker from '../ColorPicker';
 
-export default class ColorInput extends Component {
+class ColorInput extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            inputValue: this.getInputValue()
+            inputValue: this.getInputValue(),
         };
     }
 
@@ -50,7 +51,7 @@ export default class ColorInput extends Component {
 
     setColor = () => {
         this.setState({
-            inputValue: this.getInputValue()
+            inputValue: this.getInputValue(),
         });
     };
 
@@ -64,7 +65,7 @@ export default class ColorInput extends Component {
                     r: parseInt(matches[1], 10),
                     g: parseInt(matches[2], 10),
                     b: parseInt(matches[3], 10),
-                    a: matches[4] !== undefined ? parseFloat(matches[4]) : 255
+                    a: matches[4] !== undefined ? parseFloat(matches[4]) : 255,
                 };
                 const hsv = rgb1ToHsv(rgb255ToRgb1(rgb));
                 if (onChange && hsv) {
@@ -84,7 +85,8 @@ export default class ColorInput extends Component {
     };
 
     render() {
-        const { onModelToggle, colorModel, transparency } = this.props;
+        const { onModelToggle, colorModel, transparency, hideSwitchIcon } =
+            this.props;
         const { inputValue } = this.state;
         let placeholder;
         let regex;
@@ -107,7 +109,7 @@ export default class ColorInput extends Component {
         }
 
         return (
-            <div className='cc__color-input'>
+            <div className="cc__color-input">
                 <Input
                     regExp={regex}
                     placeholder={placeholder}
@@ -117,27 +119,60 @@ export default class ColorInput extends Component {
                     onEnter={this.onBlur}
                     customProps={{ spellCheck: 'false' }}
                 />
-                <Icon
-                    className='chayns__color--headline cc__color-input__exchange-icon'
-                    icon='fa fa-exchange-alt'
-                    onClick={onModelToggle}
-                />
+                {!hideSwitchIcon && (
+                    <Icon
+                        className="chayns__color--headline cc__color-input__exchange-icon"
+                        icon="fa fa-exchange-alt"
+                        onClick={onModelToggle}
+                    />
+                )}
             </div>
         );
     }
 }
+
+export default function withColorInput({ showAllColorModels, ...props }) {
+    if (showAllColorModels) {
+        return [
+            <ColorInput
+                {...props}
+                colorModel={ColorPicker.colorModels.HEX}
+                hideSwitchIcon
+            />,
+            <ColorInput
+                {...props}
+                colorModel={ColorPicker.colorModels.RGB}
+                hideSwitchIcon
+            />,
+        ];
+    }
+    return <ColorInput {...props} />;
+}
+
+withColorInput.propTypes = {
+    showAllColorModels: PropTypes.bool,
+};
+
+withColorInput.defaultProps = {
+    showAllColorModels: false,
+};
 
 ColorInput.propTypes = {
     color: PropTypes.shape({
         h: PropTypes.number.isRequired,
         s: PropTypes.number.isRequired,
         v: PropTypes.number.isRequired,
-        a: PropTypes.number
+        a: PropTypes.number,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
     colorModel: PropTypes.number.isRequired,
     onModelToggle: PropTypes.func.isRequired,
-    transparency: PropTypes.bool.isRequired
+    transparency: PropTypes.bool.isRequired,
+    hideSwitchIcon: PropTypes.bool,
+};
+
+ColorInput.defaultProps = {
+    hideSwitchIcon: false,
 };
 
 ColorInput.displayName = 'ColorInput';

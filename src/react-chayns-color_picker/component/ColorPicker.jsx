@@ -72,6 +72,7 @@ const ColorPicker = forwardRef(
             bubblePosition,
             bubbleClassName,
             bubbleStyle,
+            showAllColorModels,
         },
         reference
     ) => {
@@ -108,7 +109,9 @@ const ColorPicker = forwardRef(
                 ) {
                     document.removeEventListener('click', closeBubble);
                     window.removeEventListener('blur', closeBubble);
-                    bubbleRef.current.hide();
+                    if (bubbleRef.current) {
+                        bubbleRef.current.hide();
+                    }
                     if (onBlur) {
                         onBlur(color);
                     }
@@ -221,6 +224,7 @@ const ColorPicker = forwardRef(
                                 onModelToggle={onColorModelToggle}
                                 colorModel={colorModel}
                                 transparency={transparency}
+                                showAllColorModels={showAllColorModels}
                             />
                         )}
                     </div>
@@ -296,6 +300,7 @@ const ColorPicker = forwardRef(
                             onModelToggle={onColorModelToggle}
                             colorModel={colorModel}
                             transparency={transparency}
+                            showAllColorModels={showAllColorModels}
                         />
                     )}
                 </div>
@@ -409,6 +414,11 @@ ColorPicker.propTypes = {
      * has a relative positioning.
      */
     removeParentSpace: PropTypes.bool,
+
+    /**
+     * Shows all color models
+     */
+    showAllColorModels: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -427,6 +437,7 @@ ColorPicker.defaultProps = {
     defaultColorModel: null,
     children: null,
     removeParentSpace: false,
+    showAllColorModels: false,
 };
 
 ColorPicker.colorModels = {
