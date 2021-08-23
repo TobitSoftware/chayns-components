@@ -34,8 +34,10 @@ export default class Input extends PureComponent {
 
         this.setRef = this.setRef.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onPaste = this.onPaste.bind(this);
         this.callValidated = this.callValidated.bind(this);
         this.onIconClick = this.onIconClick.bind(this);
     }
@@ -61,6 +63,14 @@ export default class Input extends PureComponent {
         }
     }
 
+    onKeyPress(e) {
+        const { type } = this.props;
+
+        if (type === 'number' && e.code.startsWith('Key')) {
+            e.preventDefault();
+        }
+    }
+
     onBlur(e) {
         const { onBlur } = this.props;
         this.callValidated(e.target.value, onBlur, e);
@@ -70,6 +80,16 @@ export default class Input extends PureComponent {
         const { onChange } = this.props;
         this.setState({ value: e.target.value });
         this.callValidated(e.target.value, onChange, e);
+    }
+
+    onPaste(e) {
+        const { type } = this.props;
+        if (type === 'number') {
+            const data = e.clipboardData.getData('text/plain');
+            if (!/^[0-9.,]*$/.test(data)) {
+                e.preventDefault();
+            }
+        }
     }
 
     onIconClick(e) {
@@ -190,6 +210,8 @@ export default class Input extends PureComponent {
                             onKeyDown={onKeyDown}
                             onBlur={this.onBlur}
                             onChange={this.onChange}
+                            onKeyPress={this.onKeyPress}
+                            onPaste={this.onPaste}
                             onFocus={onFocus}
                             type={type || 'text'}
                             id={id || this.id}
