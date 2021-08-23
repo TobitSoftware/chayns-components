@@ -31,7 +31,12 @@ class ColorInput extends Component {
     }
 
     onChange = (value) => {
+        const { onChange } = this.props;
         this.setState({ inputValue: value });
+        const hsv = this.valueToHsv(value);
+        if (onChange && hsv) {
+            onChange(hsv);
+        }
     };
 
     getInputValue = () => {
@@ -54,8 +59,8 @@ class ColorInput extends Component {
         });
     };
 
-    onBlur = (value) => {
-        const { colorModel, onChange } = this.props;
+    valueToHsv = (value) => {
+        const { colorModel } = this.props;
         if (colorModel) {
             // rgb(a)
             const matches = value.match(RGB_REGEX);
@@ -64,11 +69,11 @@ class ColorInput extends Component {
                     r: parseInt(matches[1], 10),
                     g: parseInt(matches[2], 10),
                     b: parseInt(matches[3], 10),
-                    a: matches[4] !== undefined ? parseFloat(matches[4]) : 255,
+                    a: matches[4] !== undefined ? parseFloat(matches[4]) : 1,
                 };
                 const hsv = rgb1ToHsv(rgb255ToRgb1(rgb));
-                if (onChange && hsv) {
-                    onChange(hsv);
+                if (hsv) {
+                    return hsv;
                 }
             }
         } else {
@@ -76,10 +81,20 @@ class ColorInput extends Component {
             const matches = value.match(HEX_REGEX);
             if (matches) {
                 const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
-                if (onChange && hsv) {
-                    onChange(hsv);
+                if (hsv) {
+                    return hsv;
                 }
             }
+        }
+        return null;
+    };
+
+    onBlur = (value) => {
+        const { onChangeEnd } = this.props;
+        this.setState({ inputValue: value });
+        const hsv = this.valueToHsv(value);
+        if (onChangeEnd && hsv) {
+            onChangeEnd(hsv);
         }
     };
 
@@ -117,6 +132,9 @@ class ColorInput extends Component {
                     onBlur={this.onBlur}
                     onEnter={this.onBlur}
                     customProps={{ spellCheck: 'false' }}
+                    design={Input.BORDER_DESIGN}
+                    dynamic={Input.NO_DYNAMIC}
+                    className="cc__color-input__input"
                 />
                 {!hideSwitchIcon && (
                     <Icon
@@ -164,6 +182,7 @@ ColorInput.propTypes = {
         a: PropTypes.number,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
+    onChangeEnd: PropTypes.func.isRequired,
     colorModel: PropTypes.number.isRequired,
     onModelToggle: PropTypes.func.isRequired,
     transparency: PropTypes.bool.isRequired,

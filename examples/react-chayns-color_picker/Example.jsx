@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 
 import { ColorPicker } from '../../src/index';
 import Bubble from '../../src/react-chayns-bubble/component/Bubble';
-import { hsvToHexString, hsvToRgb } from '../../src/utils/color/index';
+import {
+    hsvToHexString,
+    hsvToRgb,
+    hexStringToHsv,
+} from '../../src/utils/color/index';
 import Input from '../../src/react-chayns-input/component/Input';
 import HueSlider from '../../src/react-chayns-color_picker/component/hueSlider/HueSlider';
-import { hexStringToHsv } from '../../src/utils/color';
 
 const ColorPickerExample = () => {
     const [color, setColor] = useState(hexStringToHsv(chayns.env.site.color));
@@ -24,12 +27,16 @@ const ColorPickerExample = () => {
             <ColorPicker
                 color={color}
                 bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                onChange={console.log}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
                 onChangeEnd={(c) => {
-                    console.log(hsvToHexString(c));
+                    console.log('onChangeEnd', hsvToHexString(c));
                     setColor(c);
                 }}
-                onBlur={console.log}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
+                }}
                 transparency
                 style={{
                     marginBottom: '30px',
@@ -40,10 +47,15 @@ const ColorPickerExample = () => {
             <ColorPicker
                 color={color}
                 bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                onChange={console.log}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
                 onChangeEnd={(c) => {
-                    console.log(hsvToHexString(c));
+                    console.log('onChangeEnd', hsvToHexString(c));
                     setColor(c);
+                }}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
                 }}
                 transparency
                 input
@@ -56,10 +68,15 @@ const ColorPickerExample = () => {
             <ColorPicker
                 color={color}
                 bubblePosition={Bubble.position.BOTTOM_RIGHT}
-                onChange={console.log}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
                 onChangeEnd={(c) => {
-                    console.log(hsvToHexString(c));
+                    console.log('onChangeEnd', hsvToHexString(c));
                     setColor(c);
+                }}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
                 }}
                 transparency
                 input
@@ -73,9 +90,15 @@ const ColorPickerExample = () => {
             <ColorPicker
                 color={color}
                 bubblePosition={Bubble.position.BOTTOM_RIGHT}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
                 onChangeEnd={(c) => {
-                    console.log(hsvToRgb(c));
+                    console.log('onChangeEnd', hsvToHexString(c));
                     setColor(c);
+                }}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
                 }}
                 style={{
                     marginBottom: '30px',
@@ -86,9 +109,15 @@ const ColorPickerExample = () => {
             <ColorPicker
                 color={color}
                 bubblePosition={Bubble.position.BOTTOM_RIGHT}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
                 onChangeEnd={(c) => {
-                    console.log(hsvToRgb(c));
+                    console.log('onChangeEnd', hsvToHexString(c));
                     setColor(c);
+                }}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
                 }}
                 input
                 style={{
@@ -108,13 +137,14 @@ const ColorPickerExample = () => {
                     color={color}
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={(c) => {
-                        const selectedColor = hsvToHexString(c);
-                        console.log(selectedColor);
-                        setChildrenColor(selectedColor);
+                        console.log('onChange', hsvToHexString(c));
                     }}
                     onChangeEnd={(c) => {
-                        console.log(c);
+                        console.log('onChangeEnd', hsvToHexString(c));
                         setColor(c);
+                    }}
+                    onBlur={(e) => {
+                        console.log('onBlur', e);
                     }}
                     input
                 >
@@ -140,12 +170,14 @@ const ColorPickerExample = () => {
                     input
                     color={color}
                     onChange={(c) => {
-                        const selectedColor = hsvToHexString(c);
-                        console.log(selectedColor);
+                        console.log('onChange', hsvToHexString(c));
                     }}
                     onChangeEnd={(c) => {
-                        console.log(c);
+                        console.log('onChangeEnd', hsvToHexString(c));
                         setColor(c);
+                    }}
+                    onBlur={(e) => {
+                        console.log('onBlur', e);
                     }}
                 />
             </div>
@@ -156,12 +188,14 @@ const ColorPickerExample = () => {
                     input
                     color={color}
                     onChange={(c) => {
-                        const selectedColor = hsvToHexString(c);
-                        console.log(selectedColor);
+                        console.log('onChange', hsvToHexString(c));
                     }}
                     onChangeEnd={(c) => {
-                        console.log(c);
+                        console.log('onChangeEnd', hsvToHexString(c));
                         setColor(c);
+                    }}
+                    onBlur={(e) => {
+                        console.log('onBlur', e);
                     }}
                 />
             </div>
@@ -170,12 +204,14 @@ const ColorPickerExample = () => {
                 <HueSlider
                     color={hueSliderColor}
                     onChange={(c) => {
-                        console.log(c);
-                        setHueSliderColor(c);
+                        console.log('onChange', hsvToHexString(c));
                     }}
                     onChangeEnd={(c) => {
-                        console.log(c);
+                        console.log('onChangeEnd', hsvToHexString(c));
                         setColor(c);
+                    }}
+                    onBlur={(e) => {
+                        console.log('onBlur', e);
                     }}
                 />
             </div>

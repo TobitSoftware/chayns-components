@@ -217,10 +217,8 @@ const ColorPicker = forwardRef(
                         {input && (
                             <ColorInput
                                 color={colorState}
-                                onChange={(value) => {
-                                    onChangeCallback(value);
-                                    onChangeEnd(value);
-                                }}
+                                onChange={onChangeCallback}
+                                onChangeEnd={onChangeEnd}
                                 onModelToggle={onColorModelToggle}
                                 colorModel={colorModel}
                                 transparency={transparency}
@@ -293,10 +291,8 @@ const ColorPicker = forwardRef(
                     {input && (
                         <ColorInput
                             color={colorState}
-                            onChange={(value) => {
-                                onChangeCallback(value);
-                                onChangeEnd(value);
-                            }}
+                            onChange={onChangeCallback}
+                            onChangeEnd={onChangeEnd}
                             onModelToggle={onColorModelToggle}
                             colorModel={colorModel}
                             transparency={transparency}
