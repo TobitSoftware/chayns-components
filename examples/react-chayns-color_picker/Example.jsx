@@ -138,6 +138,7 @@ const ColorPickerExample = () => {
                     bubblePosition={Bubble.position.BOTTOM_RIGHT}
                     onChange={(c) => {
                         console.log('onChange', hsvToHexString(c));
+                        setChildrenColor(hsvToHexString(c));
                     }}
                     onChangeEnd={(c) => {
                         console.log('onChangeEnd', hsvToHexString(c));
@@ -205,6 +206,7 @@ const ColorPickerExample = () => {
                     color={hueSliderColor}
                     onChange={(c) => {
                         console.log('onChange', hsvToHexString(c));
+                        setHueSliderColor(c);
                     }}
                     onChangeEnd={(c) => {
                         console.log('onChangeEnd', hsvToHexString(c));

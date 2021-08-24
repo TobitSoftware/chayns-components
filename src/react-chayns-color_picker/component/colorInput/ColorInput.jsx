@@ -22,15 +22,26 @@ class ColorInput extends Component {
         this.state = {
             inputValue: this.getInputValue(),
         };
+
+        this.latestPropColor = this.getInputValue();
+        this.isTyping = false;
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps !== this.props) {
+        const { color, colorModel, transparency } = this.props;
+        this.latestPropColor = prevProps.color;
+        if (
+            (prevProps.color !== color && !this.isTyping) ||
+            prevProps.colorModel !== colorModel ||
+            prevProps.transparency !== transparency
+        ) {
             this.setColor();
+            this.isTyping = false;
         }
     }
 
     onChange = (value) => {
+        this.isTyping = true;
         const { onChange } = this.props;
         this.setState({ inputValue: value });
         const hsv = this.valueToHsv(value);
@@ -90,6 +101,7 @@ class ColorInput extends Component {
     };
 
     onBlur = (value) => {
+        this.isTyping = false;
         const { onChangeEnd } = this.props;
         this.setState({ inputValue: value });
         const hsv = this.valueToHsv(value);
