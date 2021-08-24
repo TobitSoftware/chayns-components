@@ -184,6 +184,10 @@ PersonFinder.propTypes = {
      * Adds a small chevron icon to show / hide the results
      */
     hasOpenCloseIcon: PropTypes.bool,
+    /**
+     * Removes already selected entries from search results
+     */
+    filterSelected: PropTypes.bool,
 };
 
 PersonFinder.defaultProps = {
@@ -210,6 +214,7 @@ PersonFinder.defaultProps = {
     values: null,
     value: null,
     hasOpenCloseIcon: false,
+    filterSelected: false,
 };
 
 PersonFinder.displayName = 'PersonFinder';
