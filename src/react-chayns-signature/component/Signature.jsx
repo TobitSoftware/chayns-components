@@ -43,23 +43,29 @@ const Signature = ({ onSubscribe, disabled }) => {
             if (success) {
                 setSignatureUrl(value);
             }
-            return success;
+            return {
+                success,
+                value: value || null,
+            };
         }
 
-        return false;
+        return {
+            success: false,
+            value: null,
+        };
     }, []);
 
     const onButtonClick = useCallback(async () => {
         if (!signatureUrl) {
-            const success = await editSignature();
+            const { success, value } = await editSignature();
 
             if (success) {
                 setSubscribed(true);
-                onSubscribe?.();
+                onSubscribe?.(value);
             }
         } else {
             setSubscribed(true);
-            onSubscribe?.();
+            onSubscribe?.(signatureUrl);
         }
     }, [signatureUrl, editSignature, onSubscribe]);
 
