@@ -14,7 +14,7 @@ import Button from '../../react-chayns-button/component/Button';
 /**
  * A component to let the user subscribe
  */
-const Signature = ({ onSubscribe }) => {
+const Signature = ({ onSubscribe, disabled }) => {
     const [signatureUrl, setSignatureUrl] = useState(undefined);
     const [subscribed, setSubscribed] = useState(false);
 
@@ -88,7 +88,9 @@ const Signature = ({ onSubscribe }) => {
     if (!subscribed || !signatureUrl) {
         return (
             <div>
-                <Button onClick={onButtonClick}>Unterschreiben</Button>
+                <Button onClick={onButtonClick} disabled={disabled}>
+                    Unterschreiben
+                </Button>
             </div>
         );
     }
@@ -107,12 +109,17 @@ const Signature = ({ onSubscribe }) => {
 
 Signature.propTypes = {
     /**
+     * whether the subscribe button is disabled
+     */
+    disabled: PropTypes.bool,
+    /**
      * callback which is called when the user subscribes
      */
     onSubscribe: PropTypes.func,
 };
 
 Signature.defaultProps = {
+    disabled: false,
     onSubscribe: null,
 };
 
