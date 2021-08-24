@@ -1,6 +1,5 @@
 const SERVER_URL =
-    'https://chaynssvcqa.tobit.com/AccountService/v1.0/General/PersonKeyValue/signature';
-// const SERVER_URL = 'https://webapi.tobit.com/AccountService/v1.0/General/PersonKeyValue/signature';
+    'https://webapi.tobit.com/AccountService/v1.0/General/PersonKeyValue/signature';
 
 export const getUserSignature = async () => {
     if (!chayns.env.user.isAuthenticated) {
