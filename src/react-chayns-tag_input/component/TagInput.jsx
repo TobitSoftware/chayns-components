@@ -193,7 +193,7 @@ TagInput.propTypes = {
      */
     tags: PropTypes.arrayOf(
         PropTypes.shape({
-            text: PropTypes.string,
+            text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
         })
     ),
 
