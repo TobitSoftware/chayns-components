@@ -14,7 +14,7 @@ import Button from '../../react-chayns-button/component/Button';
 /**
  * A component to let the user subscribe
  */
-const Signature = ({ onSubscribe, disabled }) => {
+const Signature = ({ onSubscribe, disabled, onEdit }) => {
     const [signatureUrl, setSignatureUrl] = useState(undefined);
     const [subscribed, setSubscribed] = useState(false);
 
@@ -42,6 +42,7 @@ const Signature = ({ onSubscribe, disabled }) => {
                 : await deleteUserSignature();
             if (success) {
                 setSignatureUrl(value);
+                onEdit?.(value);
             }
             return {
                 success,
@@ -122,11 +123,16 @@ Signature.propTypes = {
      * callback which is called when the user subscribes
      */
     onSubscribe: PropTypes.func,
+    /**
+     * callback which is called when the user edits his subscription
+     */
+    onEdit: PropTypes.func,
 };
 
 Signature.defaultProps = {
     disabled: false,
     onSubscribe: null,
+    onEdit: null,
 };
 
 Signature.displayName = 'Signature';
