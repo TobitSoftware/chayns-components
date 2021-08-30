@@ -9,6 +9,7 @@ const SignatureExample = () => (
                 duration: 3000,
             })
         }
+        onEdit={(e) => console.log('edit', e)}
     />
 );
 
