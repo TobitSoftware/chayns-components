@@ -213,7 +213,7 @@ const ContextMenu = React.forwardRef((props, ref) => {
                 }
             };
 
-            document.addEventListener('click', handleLayerClick);
+            document.addEventListener('click', handleLayerClick, true);
 
             return () =>
                 document.removeEventListener('click', handleLayerClick);
