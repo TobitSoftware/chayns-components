@@ -14,12 +14,13 @@ import Button from '../../react-chayns-button/component/Button';
 /**
  * A component to let the user subscribe
  */
-const Signature = ({ onSubscribe, disabled, onEdit }) => {
+const Signature = ({ onSubscribe, skipLoadAndSave, disabled, onEdit }) => {
     const [signatureUrl, setSignatureUrl] = useState(undefined);
     const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
-        getUserSignature().then(setSignatureUrl);
+        if (!skipLoadAndSave) getUserSignature().then(setSignatureUrl);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const editSignature = useCallback(async () => {
@@ -37,9 +38,12 @@ const Signature = ({ onSubscribe, disabled, onEdit }) => {
         });
 
         if (buttonType === chayns.dialog.buttonType.POSITIVE) {
-            const success = value
-                ? await putUserSignature(value)
-                : await deleteUserSignature();
+            let success = true;
+            if (!skipLoadAndSave) {
+                success = value
+                    ? await putUserSignature(value)
+                    : await deleteUserSignature();
+            }
             if (success) {
                 setSignatureUrl(value);
                 onEdit?.(value);
@@ -54,7 +58,7 @@ const Signature = ({ onSubscribe, disabled, onEdit }) => {
             success: false,
             value: null,
         };
-    }, []);
+    }, [skipLoadAndSave, onEdit]);
 
     const onButtonClick = useCallback(async () => {
         if (!signatureUrl) {
@@ -120,6 +124,10 @@ Signature.propTypes = {
      */
     disabled: PropTypes.bool,
     /**
+     * disables loading and saving of the signature
+     */
+    skipLoadAndSave: PropTypes.bool,
+    /**
      * callback which is called when the user subscribes
      */
     onSubscribe: PropTypes.func,
@@ -131,6 +139,7 @@ Signature.propTypes = {
 
 Signature.defaultProps = {
     disabled: false,
+    skipLoadAndSave: false,
     onSubscribe: null,
     onEdit: null,
 };
