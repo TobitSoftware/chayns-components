@@ -3,6 +3,12 @@ import FilterButton from '../../src/react-chayns-filterbutton/component/FilterBu
 
 const items = [
     {
+        icon: 'fal fa-globe',
+        count: 41,
+        label: 'Alle',
+        rectangular: true,
+    },
+    {
         icon: 'ts-tobit',
         count: 33,
         label: 'Tobit.Software',
