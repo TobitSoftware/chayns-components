@@ -26,19 +26,21 @@ const items = [
 ];
 
 const FilterButtonExample = () => {
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState([0]);
 
     const toggleItem = (index) => {
-        if (selected === index) {
-            setSelected(0);
+        const newSelected = [...selected];
+        if (newSelected.includes(index)) {
+            newSelected.splice(newSelected.indexOf(index), 1);
         } else {
-            setSelected(index);
+            newSelected.push(index);
         }
+        setSelected(newSelected);
     };
 
     return items.map((item, index) => (
         <FilterButton
-            checked={selected === index}
+            checked={selected.includes(index)}
             onChange={() => {
                 toggleItem(index);
             }}
