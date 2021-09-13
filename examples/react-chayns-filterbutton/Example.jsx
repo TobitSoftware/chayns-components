@@ -3,6 +3,12 @@ import FilterButton from '../../src/react-chayns-filterbutton/component/FilterBu
 
 const items = [
     {
+        icon: 'fal fa-globe',
+        count: 41,
+        label: 'Alle',
+        rectangular: true,
+    },
+    {
         icon: 'ts-tobit',
         count: 33,
         label: 'Tobit.Software',
@@ -20,21 +26,19 @@ const items = [
 ];
 
 const FilterButtonExample = () => {
-    const [selected, setSelected] = useState([0]);
+    const [selected, setSelected] = useState(0);
 
     const toggleItem = (index) => {
-        const newSelected = [...selected];
-        if (newSelected.includes(index)) {
-            newSelected.splice(newSelected.indexOf(index), 1);
+        if (selected === index) {
+            setSelected(0);
         } else {
-            newSelected.push(index);
+            setSelected(index);
         }
-        setSelected(newSelected);
     };
 
     return items.map((item, index) => (
         <FilterButton
-            checked={selected.includes(index)}
+            checked={selected === index}
             onChange={() => {
                 toggleItem(index);
             }}

@@ -31,6 +31,7 @@ const FilterButton = ({
     disabled,
     stopPropagation,
     small,
+    rectangular,
 }) => {
     const htmlId = useRef(id || `${PREFIX}${(currentId += 1)}`);
 
@@ -50,6 +51,7 @@ const FilterButton = ({
                 'button--filter--active': checked,
                 'chayns__color--headline': checked && !className,
                 'button--filter--small': small,
+                'button--filter--rectangular': rectangular,
             })}
             style={style}
             htmlFor={htmlId.current}
@@ -176,6 +178,11 @@ FilterButton.propTypes = {
      * Shrinks the filter button in size.
      */
     small: PropTypes.bool,
+
+    /**
+     * Changes the filter button shape to that of a button.
+     */
+    rectangular: PropTypes.bool,
 };
 
 FilterButton.defaultProps = {
@@ -192,6 +199,7 @@ FilterButton.defaultProps = {
     disabled: false,
     stopPropagation: false,
     small: false,
+    rectangular: false,
 };
 
 FilterButton.displayName = 'FilterButton';

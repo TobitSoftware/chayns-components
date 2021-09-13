@@ -55,6 +55,13 @@
         transition: opacity 0.08s;
     }
 
+    &--rectangular {
+        &::before,
+        &::after {
+            border-radius: 3px;
+        }
+    }
+
     &--disabled {
         opacity: 0.5;
         cursor: default;
