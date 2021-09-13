@@ -97,14 +97,14 @@ const InputBox = React.forwardRef((props, ref) => {
         };
     }, [isHidden, onBlur]);
 
-    function handleFocus(e) {
+    const handleFocus = (e) => {
         setIsHidden(false);
 
         if (onFocus) {
             return onFocus(e);
         }
         return null;
-    }
+    };
 
     const setBoxRef = useCallback(
         (node) => {

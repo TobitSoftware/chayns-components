@@ -22,15 +22,14 @@ const SelectListItem = ({
     disabled,
     name,
 }) => {
-    const { selectListSelectedId, changeListItem, selectListId } = useContext(
-        SelectListContext
-    );
+    const { selectListSelectedId, changeListItem, selectListId } =
+        useContext(SelectListContext);
 
-    function handleChange() {
+    const handleChange = () => {
         if (changeListItem) {
             changeListItem(id, value);
         }
-    }
+    };
 
     const checked = id === selectListSelectedId;
 
