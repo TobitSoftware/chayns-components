@@ -175,7 +175,7 @@ const DialogSelectComboBox = ({
                     ? label
                     : getItem(value !== null ? value : selected)[listValue]}
             </div>
-            <Icon className="cc__combo-box__icon" icon="fa fa-caret-down" />
+            <Icon className="cc__combo-box__icon" icon="fa fa-chevron-down" />
         </Button>,
         <TappPortal parent={parent} key="combobox-portal">
             <CSSTransition
