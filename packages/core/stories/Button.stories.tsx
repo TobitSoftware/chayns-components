@@ -7,8 +7,8 @@ export default {
   title: 'Example/Button',
   component: Button,
   args: {
-    children: 'Hello',
-  }
+    children: 'Click me!',
+  },
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = Button

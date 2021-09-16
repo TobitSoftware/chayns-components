@@ -4,6 +4,9 @@ import { chaynsTheme } from './chaynsTheme';
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     theme: chaynsTheme,
+    controls: {
+        expanded: true,
+    }
 };
 
 export const decorators = [

@@ -27,6 +27,6 @@ export const chaynsTheme = create({
     inputBorderRadius: 2,
 
     brandTitle: 'chayns-components',
-    brandUrl: 'https://chayns.org/',
+    brandUrl: 'https://chayns.net/',
     brandImage: 'https://chayns.space/77896-21884/chayns_components.png',
 });

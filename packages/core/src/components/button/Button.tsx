@@ -2,6 +2,9 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 type ButtonProps = {
+    /**
+     * The children of the button
+     */
     children: JSX.Element
 };
 
