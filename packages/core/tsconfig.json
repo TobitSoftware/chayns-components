@@ -3,6 +3,7 @@
         "allowSyntheticDefaultImports": true,
         "declaration": true,
         "esModuleInterop": true,
+        "emitDeclarationOnly": true,
         "forceConsistentCasingInFileNames": true,
         "importsNotUsedAsValues": "error",
         "isolatedModules": true,
