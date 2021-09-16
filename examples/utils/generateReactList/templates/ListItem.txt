@@ -1,8 +1,0 @@
-        <ExampleContainer
-            headline="##headline##"
-            id="##id##"
-            examplePath="##examplePath##"
-            readme={##readme##}
-        >
-            <##importName## />
-        </ExampleContainer>
