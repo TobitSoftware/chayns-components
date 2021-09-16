@@ -1,5 +1,1 @@
-export const test = (): string => {
-    return 'Hello world';
-};
-
-console.debug(test());
+export { default as Button } from './components/button/Button';

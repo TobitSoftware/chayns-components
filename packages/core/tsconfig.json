@@ -19,6 +19,6 @@
         "strict": true,
         "outDir": "lib"
     },
-    "exclude": ["node_modules"],
-    "include": ["./**/*.ts", "./**/*.tsx"]
+    "exclude": ["node_modules", "./src/stories"],
+    "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }
