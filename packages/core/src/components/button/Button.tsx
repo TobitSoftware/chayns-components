@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
 type ButtonProps = {
@@ -26,7 +26,7 @@ type ButtonProps = {
     /**
      * Function to be executed when the button is clicked
      */
-    onClick: () => void;
+    onClick: MouseEventHandler<HTMLButtonElement>;
     /**
      * Stops event propagation on click
      */
@@ -58,12 +58,12 @@ const Button: FC<ButtonProps> = ({
     onClick,
     shouldStopPropagation,
 }) => {
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
         }
 
-        onClick();
+        onClick(event);
     };
 
     const buttonClasses = clsx('button ellipsis', className);
