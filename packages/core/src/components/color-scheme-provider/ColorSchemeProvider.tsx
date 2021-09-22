@@ -54,13 +54,9 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     cssVariables = {},
     secondaryColor,
     style = {},
-    ...otherProps
 }) => {
     const [colors, setColors] = useState<Colors>({});
     const [themeColors, setThemeColors] = useState<Colors>({});
-
-    // console.debug('theme', theme);
-    console.debug('otherProps', otherProps);
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
