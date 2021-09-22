@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { FC } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 type ButtonProps = {
     /**
@@ -34,25 +34,19 @@ type ButtonProps = {
 };
 
 const StyledButton = styled.button<ButtonProps>`
-    background-color: ${(props) => props.theme['408']};
+    background-color: ${({ isSecondary, theme }) => (isSecondary ? theme['202'] : theme['408'])};
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
-    color: white;
+    color: ${({ isSecondary, theme }) => (isSecondary ? theme['text'] : 'white')};
     cursor: pointer;
     display: inline-block;
     line-height: 1.15;
     min-height: 30px;
+    opacity: ${(props) => (props.disabled ? '0.5' : '1')};
     padding: 7px 12px;
     user-select: none;
-
-    ${(props) =>
-        props.isSecondary &&
-        css`
-            background-color: ${(props) => props.theme['202']};
-            box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-            color: ${(props) => props.theme['text']};
-        `}
+    transition: opacity 0.3s ease;
 `;
 
 const Button: FC<ButtonProps> = ({
@@ -64,7 +58,7 @@ const Button: FC<ButtonProps> = ({
     onClick,
     shouldStopPropagation,
 }) => {
-    const handleClick = (event: React.MouseEvent) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
         }
