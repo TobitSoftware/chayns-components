@@ -7,8 +7,6 @@ export default {
     component: Button,
     args: {
         children: 'Click me!',
-        className: '',
-        icon: '',
         isDisabled: false,
         isSecondary: false,
         shouldStopPropagation: false,

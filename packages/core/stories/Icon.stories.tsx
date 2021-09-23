@@ -7,8 +7,6 @@ export default {
     component: Icon,
     args: {
         icons: [],
-        className: '',
-        color: '',
         isDisabled: false,
         shouldStopPropagation: false,
         size: 24,
