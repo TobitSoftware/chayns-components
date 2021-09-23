@@ -1,7 +1,7 @@
 name: Publish to NPM (v5)
 
-#on:
-#  workflow_dispatch:
+on:
+ workflow_dispatch:
 #  push:
 #    tags:
 #      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
