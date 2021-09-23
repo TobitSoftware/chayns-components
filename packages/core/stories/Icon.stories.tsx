@@ -6,7 +6,7 @@ export default {
     title: 'Core/Icon',
     component: Icon,
     args: {
-        icons: [],
+        icons: ['ts-chayns'],
         isDisabled: false,
         shouldStopPropagation: false,
         size: 24,
@@ -24,5 +24,6 @@ General.args = {
 };
 
 StackedIcon.args = {
-    icons: ['fa fa-camera', 'fa fa-ban fa-stack-2x'],
+    icons: ['fa fa-circle fa-stack-2x', 'fa fa-french-fries fa-inverse'],
+    size: 64,
 };

@@ -14,9 +14,8 @@ type IconProps = {
     color?: string;
     /**
      * The FontAwesome or tobit icons to render. Multiple icons are stacked.
-     * But that' s only possible with FontAwesome icons.
      */
-    icons: string[];
+    icons: [string, ...string[]];
     /**
      * Disables the icon so that it cannot be clicked anymore
      */
@@ -48,6 +47,7 @@ const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     display: inline-flex;
     height: ${({ size }) => `${size}px`};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
+    position: relative;
     transition: opacity 0.3s ease;
     width: ${({ size }) => `${size}px`};
 `;
@@ -110,18 +110,16 @@ const Icon: FC<IconProps> = ({
             size={size}
         >
             {icons.map((icon) => {
-                const iconClasses = clsx(
-                    icon,
-                    shouldUseStackedIcon && !/fa-stack-[\d]x/.test(icon) ? 'fa-stack-1x' : '',
-                    className
-                );
-
                 const stackSizeFactor = getStackSizeFactor(icon);
+
+                const iconClasses = clsx(icon, className, {
+                    'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
+                });
 
                 return (
                     <StyledIcon
                         className={iconClasses}
-                        color={color}
+                        color={icon.includes('fa-inverse') ? 'white' : color}
                         fontSize={((stackSizeFactor || 1) / maxStackSizeFactor) * size}
                         isStacked={shouldUseStackedIcon}
                         key={icon}
