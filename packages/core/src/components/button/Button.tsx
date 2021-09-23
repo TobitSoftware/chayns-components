@@ -43,7 +43,7 @@ const StyledButton = styled.button<ButtonProps>`
     display: inline-block;
     line-height: 1.15;
     min-height: 30px;
-    opacity: ${(props) => (props.disabled ? '0.5' : '1')};
+    opacity: ${(props) => (props.disabled ? 0.5 : 1)};
     padding: 7px 12px;
     user-select: none;
     transition: opacity 0.3s ease;
@@ -58,7 +58,7 @@ const Button: FC<ButtonProps> = ({
     onClick,
     shouldStopPropagation,
 }) => {
-    const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
         }
@@ -66,7 +66,7 @@ const Button: FC<ButtonProps> = ({
         onClick(event);
     };
 
-    const buttonClasses = clsx('button ellipsis', className);
+    const buttonClasses = clsx('beta-chayns-button ellipsis', className);
 
     return (
         <StyledButton
