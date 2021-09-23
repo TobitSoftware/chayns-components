@@ -12,6 +12,7 @@ import Overlay from '../../components/overlay/Overlay';
 import Input from '../../react-chayns-input/component/Input';
 import { isFunction } from '../../utils/is';
 import { isServer } from '../../utils/isServer';
+import Icon from '../../react-chayns-icon/component/Icon';
 
 const InputBox = React.forwardRef((props, ref) => {
     const {
@@ -137,6 +138,30 @@ const InputBox = React.forwardRef((props, ref) => {
           }
         : null;
 
+    let { right, icon, onIconClick } = restProps;
+
+    if (hasOpenCloseIcon) {
+        if (
+            restProps.design === Input.BORDER_DESIGN &&
+            InputComponent.displayName === Input.displayName
+        ) {
+            right = (
+                <Icon
+                    icon="fa fa-chevron-down"
+                    style={{
+                        padding: '10px',
+                        alignItems: 'center',
+                        alignSelf: 'stretch',
+                    }}
+                    onClick={toggle}
+                />
+            );
+        } else {
+            icon = 'fa fa-chevron-down';
+            onIconClick = toggle;
+        }
+    }
+
     return (
         <div
             style={{
@@ -154,8 +179,9 @@ const InputBox = React.forwardRef((props, ref) => {
         >
             <InputComponent
                 {...restProps}
-                icon={hasOpenCloseIcon ? 'fa fa-chevron-down' : restProps.icon}
-                onIconClick={hasOpenCloseIcon ? toggle : restProps.onIconClick}
+                right={right}
+                icon={icon}
+                onIconClick={onIconClick}
                 style={
                     renderInline && hideInput
                         ? { position: 'absolute', visibility: 'hidden' }
