@@ -50,7 +50,7 @@ const GlobalStyle = createGlobalStyle`
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
     color = '#005EB8',
-    colorMode = 0,
+    colorMode = ColorMode.Classic,
     cssVariables = {},
     secondaryColor,
     style = {},
@@ -67,7 +67,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         availableColors.forEach((colorName: string) => {
             const hexColor = getColorFromPalette(colorName, {
                 color,
-                colorMode: colorMode,
+                colorMode,
                 secondaryColor,
             });
 
@@ -75,14 +75,18 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 // console.debug('textColor', hexColor);
             }
 
-            const rgbColor = hexToRgb255(hexColor);
+            if (hexColor) {
+                const rgbColor = hexToRgb255(hexColor);
 
-            newColors[`--chayns-color--${colorName}`] = hexColor;
-            newThemeColors[colorName] = hexColor;
+                newColors[`--chayns-color--${colorName}`] = hexColor;
+                newThemeColors[colorName] = hexColor;
 
-            newColors[
-                `--chayns-color-rgb--${colorName}`
-            ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                if (rgbColor) {
+                    newColors[
+                        `--chayns-color-rgb--${colorName}`
+                    ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                }
+            }
         });
 
         setColors(newColors);
