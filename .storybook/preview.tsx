@@ -1,6 +1,6 @@
-import React, { BaseSyntheticEvent, useEffect } from 'react';
+import { BaseSyntheticEvent, useEffect } from 'react';
 import ColorSchemeProvider from '../packages/core/src/components/color-scheme-provider/ColorSchemeProvider';
-import { action as brokenAction } from "@storybook/addon-actions";
+import { action as brokenAction } from '@storybook/addon-actions';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -60,8 +60,8 @@ export const decorators = [
                 });
 
                 return constructedAction(...fixedArgs);
-            }
-        }
+            };
+        };
 
         if (context.parameters.actions.argTypesRegex) {
             const regex = new RegExp(context.parameters.actions.argTypesRegex);
