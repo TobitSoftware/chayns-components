@@ -9,6 +9,10 @@ type IconProps = {
      */
     className?: string;
     /**
+     * The color of the icon
+     */
+    color?: string;
+    /**
      * The FontAwesome or tobit icons to render. Multiple icons are stacked.
      * But that' s only possible with FontAwesome icons.
      */
@@ -49,7 +53,7 @@ const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
 `;
 
 const StyledIcon = styled.i<StyledIconProps>`
-    color: ${({ theme }) => theme['headline']};
+    color: ${({ color, theme }) => color || theme['headline']};
     display: ${({ isStacked }) => (isStacked ? undefined : 'inline-flex')};
     font-size: ${({ fontSize }) => `${fontSize}px`};
 
@@ -63,6 +67,7 @@ const StyledIcon = styled.i<StyledIconProps>`
 
 const Icon: FC<IconProps> = ({
     className,
+    color,
     icons,
     isDisabled,
     onClick,
@@ -116,6 +121,7 @@ const Icon: FC<IconProps> = ({
                 return (
                     <StyledIcon
                         className={iconClasses}
+                        color={color}
                         fontSize={((stackSizeFactor || 1) / maxStackSizeFactor) * size}
                         isStacked={shouldUseStackedIcon}
                         key={icon}
