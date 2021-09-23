@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - feature/v5
-#    tags:
-#      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
+    tags:
+      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 jobs:
   build:
