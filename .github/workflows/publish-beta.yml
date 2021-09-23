@@ -1,0 +1,22 @@
+name: Publish to NPM (v5)
+
+#on:
+#  workflow_dispatch:
+#  push:
+#    tags:
+#      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.19.0'
+          registry-url: https://registry.npmjs.org/
+      - run: npm install
+      - run: lerna bootstrap
+      - run: lerna publish --dist-tag beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
