@@ -181,33 +181,36 @@ class PersonFinderView extends Component {
 
         const hasEntries = this.hasEntries();
 
-        if (!selectedValue && hasEntries) {
-            return (
-                <PersonFinderResults
-                    key="results"
-                    onSelect={onSelect}
-                    onRemoveTag={onRemoveTag}
-                    data={data}
-                    tags={tags}
-                    orm={orm}
-                    value={value}
-                    onLoadMore={async (type) => {
-                        if (!onLoadMore) return;
-                        await onLoadMore(type, value);
-                    }}
-                    showWaitCursor={waitCursor}
-                    hasMore={hasMore}
-                    focusIndex={focusIndex}
-                    noBackground={noBackground}
-                    filterSelected={filterSelected}
-                    hideFriendsIcon={hideFriendsIcon}
-                    showCheckbox={showCheckbox}
-                />
-            );
-        }
+        const showResults = !selectedValue && hasEntries;
+        const showWaitCursor =
+            waitCursor === true || Object.values(waitCursor).some((x) => x);
 
-        if (waitCursor === true || Object.values(waitCursor).some((x) => x)) {
-            return <WaitCursor key="wait-cursor" />;
+        if (showResults || showWaitCursor) {
+            return [
+                showResults && (
+                    <PersonFinderResults
+                        key="results"
+                        onSelect={onSelect}
+                        onRemoveTag={onRemoveTag}
+                        data={data}
+                        tags={tags}
+                        orm={orm}
+                        value={value}
+                        onLoadMore={async (type) => {
+                            if (!onLoadMore) return;
+                            await onLoadMore(type, value);
+                        }}
+                        showWaitCursor={waitCursor}
+                        hasMore={hasMore}
+                        focusIndex={focusIndex}
+                        noBackground={noBackground}
+                        filterSelected={filterSelected}
+                        hideFriendsIcon={hideFriendsIcon}
+                        showCheckbox={showCheckbox}
+                    />
+                ),
+                showWaitCursor && <WaitCursor key="wait-cursor" />,
+            ];
         }
 
         if (!selectedValue && renderInline) {

@@ -33,97 +33,114 @@ const PersonFinderResults = ({
 
     let length = 0;
     if (Array.isArray(orm.groups)) {
-        return orm.groups.map(({ key: group, show, roundIcons, filter }) => {
-            if (typeof show === 'function' && !show(inputValue)) {
-                return null;
-            }
-
-            // Prevent duplicates from knownPersons and persons
-            let groupData = [];
-            if (
-                orm === PersonsContext.ObjectMapping &&
-                ['knownPersons', 'personsRelated', 'personsUnrelated'].includes(
-                    group
-                )
-            ) {
-                (data[group] || []).forEach((value) => {
-                    if (users.has(value.id)) return;
-                    users.set(value.id, true);
-                    groupData.push(value);
-                });
-            } else {
-                groupData = data[group] || [];
-            }
-
-            groupData =
-                typeof (filter || orm.filter) === 'function'
-                    ? groupData.filter((filter || orm.filter)(inputValue))
-                    : groupData;
-            if (filterSelected) {
-                groupData = groupData.filter(({ type, id }) =>
-                    tags.every(
-                        ({ value }) => type !== value.type || id !== value.id
-                    )
-                );
-            }
-            const groupLength = groupData.length;
-            length += groupLength;
-            let groupFocusIndex = null;
-            if (
-                length - groupLength <= focusIndex &&
-                focusIndex < length &&
-                focusIndex !== null
-            ) {
-                groupFocusIndex = focusIndex - (length - groupLength);
-            }
-            return (
+        return (
+            <div
+                className={classNames('cc__person-finder__results', {
+                    'no-background': noBackground,
+                })}
+                key="resultList"
+            >
                 <div
-                    className={classNames('cc__person-finder__results', {
-                        'no-background': noBackground,
+                    className={classNames('cc__person-finder__results-list', {
+                        'cc__person-finder__results-list--noTransition':
+                            focusIndex !== null,
                     })}
-                    key={`resultList_${group}`}
                 >
-                    <ResultItemList
-                        data={groupData}
-                        orm={orm}
-                        group={group}
-                        hasMore={hasMore[group]}
-                        onLoadMore={onLoadMore}
-                        showWaitCursor={showWaitCursor[group]}
-                        onClick={handleClick}
-                        onRemoveTag={onRemoveTag}
-                        focusIndex={groupFocusIndex}
-                        roundIcons={roundIcons}
-                        hideFriendsIcon={hideFriendsIcon}
-                        tags={tags}
-                        showCheckbox={showCheckbox}
-                    />
+                    {orm.groups.map(
+                        ({ key: group, show, roundIcons, filter }) => {
+                            if (
+                                typeof show === 'function' &&
+                                !show(inputValue)
+                            ) {
+                                return null;
+                            }
+
+                            // Prevent duplicates from knownPersons and persons
+                            let groupData = [];
+                            if (
+                                orm === PersonsContext.ObjectMapping &&
+                                [
+                                    'knownPersons',
+                                    'personsRelated',
+                                    'personsUnrelated',
+                                ].includes(group)
+                            ) {
+                                (data[group] || []).forEach((value) => {
+                                    if (users.has(value.id)) return;
+                                    users.set(value.id, true);
+                                    groupData.push(value);
+                                });
+                            } else {
+                                groupData = data[group] || [];
+                            }
+
+                            groupData =
+                                typeof (filter || orm.filter) === 'function'
+                                    ? groupData.filter(
+                                          (filter || orm.filter)(inputValue)
+                                      )
+                                    : groupData;
+                            if (filterSelected) {
+                                groupData = groupData.filter(({ type, id }) =>
+                                    tags.every(
+                                        ({ value }) =>
+                                            type !== value.type ||
+                                            id !== value.id
+                                    )
+                                );
+                            }
+                            const groupLength = groupData.length;
+                            length += groupLength;
+                            let groupFocusIndex = null;
+                            if (
+                                length - groupLength <= focusIndex &&
+                                focusIndex < length &&
+                                focusIndex !== null
+                            ) {
+                                groupFocusIndex =
+                                    focusIndex - (length - groupLength);
+                            }
+                            return (
+                                <ResultItemList
+                                    key={group}
+                                    data={groupData}
+                                    orm={orm}
+                                    group={group}
+                                    hasMore={hasMore[group]}
+                                    onLoadMore={onLoadMore}
+                                    showWaitCursor={showWaitCursor[group]}
+                                    onClick={handleClick}
+                                    onRemoveTag={onRemoveTag}
+                                    focusIndex={groupFocusIndex}
+                                    roundIcons={roundIcons}
+                                    hideFriendsIcon={hideFriendsIcon}
+                                    tags={tags}
+                                    showCheckbox={showCheckbox}
+                                    inputValue={inputValue}
+                                />
+                            );
+                        }
+                    )}
                 </div>
-            );
-        });
+            </div>
+        );
     }
 
     return (
-        <div
-            className={classNames('cc__person-finder__results', {
-                'no-background': noBackground,
-            })}
-        >
-            <ResultItemList
-                data={
-                    typeof orm.filter === 'function'
-                        ? data.filter(orm.filter(inputValue))
-                        : data
-                }
-                orm={orm}
-                hasMore={hasMore}
-                onLoadMore={onLoadMore}
-                showWaitCursor={showWaitCursor}
-                onClick={handleClick}
-                focusIndex={focusIndex}
-                roundIcons={orm.roundIcons}
-            />
-        </div>
+        <ResultItemList
+            data={
+                typeof orm.filter === 'function'
+                    ? data.filter(orm.filter(inputValue))
+                    : data
+            }
+            orm={orm}
+            hasMore={hasMore}
+            onLoadMore={onLoadMore}
+            showWaitCursor={showWaitCursor}
+            onClick={handleClick}
+            focusIndex={focusIndex}
+            roundIcons={orm.roundIcons}
+        />
     );
 };
 

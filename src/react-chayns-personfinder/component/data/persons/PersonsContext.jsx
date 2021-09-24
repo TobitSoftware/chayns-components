@@ -25,6 +25,7 @@ import {
     convertSites,
 } from './PersonsConverter';
 import FriendsHelper from './FriendsHelper';
+import simplifyString from '../../../../utils/simplifyString';
 
 const ObjectMapping = {
     groups: [
@@ -38,9 +39,9 @@ const ObjectMapping = {
             filter: (inputValue) => (e) =>
                 inputValue
                     ? e.name &&
-                      e.name
-                          .toLowerCase()
-                          .startsWith((inputValue || '').toLowerCase())
+                      simplifyString(e.name).includes(
+                          simplifyString(inputValue)
+                      )
                     : true,
         },
         {
@@ -347,13 +348,17 @@ const PersonFinderStateProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onChange = useCallback(
         debounce(async (value) => {
-            setLastValue(value);
-            await Promise.all([
-                loadPersons(value, true),
-                loadUacPersons(value, true),
-                loadSites(value, true),
-                loadKnownPersons(value, true),
-            ]);
+            try {
+                setLastValue(value);
+                await Promise.all([
+                    loadPersons(value, true),
+                    loadUacPersons(value, true),
+                    loadSites(value, true),
+                    loadKnownPersons(value, true),
+                ]);
+            } catch (err) {
+                console.error(err);
+            }
         }, 500),
         [
             take,
@@ -397,16 +402,21 @@ const PersonFinderStateProvider = ({
         sites: enableSites ? state.data.sites : [],
         groups: enableUacGroups ? state.data.groups : [],
         knownPersons: enableKnownPersons ? state.data.knownPersons : [],
-        friends:
-            enableFriends &&
-            (lastValue.length < 3 ||
-                (!enablePersons &&
-                    !enableSites &&
-                    !enableUacGroups &&
-                    !enableKnownPersons))
-                ? FriendsHelper.getFriendsList()
-                : [],
+        friends: enableFriends ? FriendsHelper.getFriendsList() : [],
     };
+
+    unreducedData.personsRelated = unreducedData.personsRelated.filter(
+        (person) =>
+            !unreducedData.friends.find(
+                (friend) => friend.personId === person.personId
+            )
+    );
+    unreducedData.personsUnrelated = unreducedData.personsUnrelated.filter(
+        (person) =>
+            !unreducedData.friends.find(
+                (friend) => friend.personId === person.personId
+            )
+    );
 
     const data =
         typeof reducerFunction === 'function'

@@ -18,11 +18,11 @@ const PersonFinderResultItem = ({
     showCheckbox,
     tags,
     onRemoveTag,
+    inputValue,
 }) => {
     const selectedValue = tags?.find(
         ({ value }) => value[orm.identifier] === data[orm.identifier]
     );
-
     const handleClick = useCallback(() => {
         if (selectedValue) {
             onRemoveTag(selectedValue);
@@ -87,6 +87,10 @@ const PersonFinderResultItem = ({
                         {`(${data[orm.subtitle]})`}
                     </div>
                 )}
+                {!hasRelations &&
+                    !orm.subtitle &&
+                    data.isFriend &&
+                    inputValue && <div className="identifier">befreundet</div>}
             </div>
             {data.personId && !hideFriendsIcon && (
                 <FriendsIndicator
@@ -120,6 +124,7 @@ PersonFinderResultItem.propTypes = {
     ),
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
+    inputValue: PropTypes.string,
 };
 
 PersonFinderResultItem.defaultProps = {
@@ -127,6 +132,7 @@ PersonFinderResultItem.defaultProps = {
     hideFriendsIcon: false,
     tags: [],
     showCheckbox: false,
+    inputValue: '',
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';
