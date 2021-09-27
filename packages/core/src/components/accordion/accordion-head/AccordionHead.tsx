@@ -47,7 +47,7 @@ const StyledTitleWrapper = styled.div`
     flex: 1 1 auto;
     height: 100%;
     overflow: hidden;
-    padding-right: 10px;
+    margin-right: 10px;
     position: relative;
 `;
 
@@ -56,6 +56,7 @@ const StyledMotionTitle = styled(motion.div)`
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
+    width: 100%;
 `;
 
 const StyledRightWrapper = styled.div`
@@ -123,7 +124,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         key={isOpen && !isWrapped ? 'accordionHeadTitleBig' : 'accordionHeadTitle'}
                         style={{
                             fontSize: isOpen && !isWrapped ? '1.3rem' : undefined,
-                            whiteSpace: isOpen || isAnimating ? 'normal' : 'nowrap',
+                            fontWeight: isOpen && isWrapped ? 700 : 'normal',
+                            whiteSpace: isOpen && !isWrapped ? 'normal' : 'nowrap',
                         }}
                     >
                         {title}
