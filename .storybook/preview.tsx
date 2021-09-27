@@ -77,7 +77,7 @@ export const decorators = [
         // endregion
 
         return (
-            <div className="tapp" style={{ margin: 0, padding: 0 }}>
+            <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
                 <ColorSchemeProvider colorMode={colorMode}>
                     <Story />
                 </ColorSchemeProvider>
