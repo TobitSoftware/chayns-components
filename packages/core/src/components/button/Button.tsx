@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { FC, MouseEventHandler } from 'react';
+import React, { FC, MouseEventHandler, ReactNode } from 'react';
 import styled from 'styled-components';
 import Icon from '../icon/Icon';
 
@@ -7,7 +7,7 @@ type ButtonProps = {
     /**
      * The label of the button
      */
-    children: JSX.Element;
+    children: ReactNode;
     /**
      * Additional class names for the button element
      */

@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 enum ColorMode {
@@ -12,7 +12,7 @@ type ColorSchemeProviderProps = {
     /**
      * The content of the application or the components for which the styles should be set
      */
-    children: JSX.Element;
+    children: ReactNode;
     /**
      * The hex color to be used for the children
      */
