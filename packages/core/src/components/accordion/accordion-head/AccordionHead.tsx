@@ -105,6 +105,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     return (
         <StyledMotionAccordionHead
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
+            className="beta-chayns-accordion-head"
             initial={false}
             onClick={handleClick}
         >

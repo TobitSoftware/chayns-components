@@ -1,17 +1,9 @@
-import React, {
-    FC,
-    MouseEventHandler,
-    ReactNode,
-    useCallback,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import React, { FC, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
-import AccordionHead from './accordion-head/AccordionHead';
 import AccordionBody from './accordion-body/AccordionBody';
 import AccordionContent from './accordion-content/AccordionContent';
-import { motion, MotionConfig } from 'framer-motion';
+import AccordionHead from './accordion-head/AccordionHead';
 
 type AccordionProps = {
     /**
@@ -57,8 +49,8 @@ const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !isWrapped &&
         css`
             background-color: rgba(${({ theme }) => theme['100-rgb']}, 0.85);
-            border-radius: 3px;
-            box-shadow: 0 2px 6px 0 rgb(0 0 0 / 15%);
+            border-radius: 3px; // ToDo: Add correct border-radius here
+            box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
         `}
 
     margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
@@ -104,7 +96,12 @@ const Accordion: FC<AccordionProps> = ({
 
     return (
         <MotionConfig transition={{ duration: 0.25 }}>
-            <StyledAccordion isOpen={isOpen} isWrapped={isWrapped} ref={accordionRef}>
+            <StyledAccordion
+                className="beta-chayns-accordion"
+                isOpen={isOpen}
+                isWrapped={isWrapped}
+                ref={accordionRef}
+            >
                 <AccordionHead
                     icon={icon}
                     isOpen={isOpen}
@@ -113,6 +110,9 @@ const Accordion: FC<AccordionProps> = ({
                     right={right}
                     title={title}
                 />
+                <AnimatePresence initial={false}>
+                    {isOpen && <AccordionBody>{items}</AccordionBody>}
+                </AnimatePresence>
             </StyledAccordion>
         </MotionConfig>
     );
@@ -143,7 +143,12 @@ const getBodyItems = (children: ReactNode) => {
 
             if (isAccordion(child)) {
                 if (contentItems.length > 0) {
-                    items.push(<AccordionContent>{contentItems}</AccordionContent>);
+                    items.push(
+                        <AccordionContent key={`accordionContent__${items.length}`}>
+                            {contentItems}
+                        </AccordionContent>
+                    );
+
                     contentItems = [];
                 }
                 items.push(child);
@@ -153,13 +158,17 @@ const getBodyItems = (children: ReactNode) => {
         });
 
         if (contentItems.length > 0) {
-            items.push(<AccordionContent>{contentItems}</AccordionContent>);
+            items.push(
+                <AccordionContent key={`accordionContent__${items.length}`}>
+                    {contentItems}
+                </AccordionContent>
+            );
         }
     } else {
         if (isAccordion(children)) {
             items.push(children);
         } else {
-            contentItems.push(<AccordionContent>{children}</AccordionContent>);
+            items.push(<AccordionContent key="accordionContent">{children}</AccordionContent>);
         }
     }
 

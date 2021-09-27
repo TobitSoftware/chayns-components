@@ -10,7 +10,7 @@ const StyledAccordionContent = styled.div<AccordionContentProps>`
 `;
 
 const AccordionContent: FC<AccordionContentProps> = ({ children, isWrapped }) => (
-    <StyledAccordionContent className="accordion-content" isWrapped={isWrapped}>
+    <StyledAccordionContent className="beta-chayns-accordion-content" isWrapped={isWrapped}>
         {children}
     </StyledAccordionContent>
 );
