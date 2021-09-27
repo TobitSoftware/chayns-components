@@ -62,8 +62,15 @@ export const fetchPersons = async (value, skip, take) => {
         return Promise.reject(new Error('Not authenticated'));
     }
     let result = [];
+    let url = `${RELATIONS_SERVER_URL}v2/person`;
+    if (value.match(/^[A-NP-Z0-9]{3}-[A-NP-Z0-9]{5}$/)) {
+        url += `?personId=${value}`;
+    } else {
+        url += `?skip=${skip}&take=${take}&query=${value}`;
+    }
+
     const response = await fetchHelper('persons', {
-        url: `${RELATIONS_SERVER_URL}v2/person?query=${value}&skip=${skip}&take=${take}`,
+        url,
         config: {
             method: 'GET',
             headers: {

@@ -38,10 +38,11 @@ const ObjectMapping = {
             roundIcons: true,
             filter: (inputValue) => (e) =>
                 inputValue
-                    ? e.name &&
-                      simplifyString(e.name).includes(
-                          simplifyString(inputValue)
-                      )
+                    ? (e.name &&
+                          simplifyString(e.name).includes(
+                              simplifyString(inputValue)
+                          )) ||
+                      (e.personId && e.personId === inputValue)
                     : true,
         },
         {
@@ -202,17 +203,6 @@ const PersonFinderStateProvider = ({
                 take
             );
             const convertedPersons = convertPersons(persons);
-            if (value.match(/^[0-9]{3}-[0-9]{5}$/g)) {
-                const user = convertPerson(
-                    await chayns.getUser({ personId: value })
-                );
-                if (user.id !== null) {
-                    convertedPersons.personsRelated = [
-                        user,
-                        ...convertedPersons.personsRelated,
-                    ];
-                }
-            }
             const hasMore = {
                 personsRelated: convertedPersons.personsRelated.length === take,
                 personsUnrelated: persons.length === take,
