@@ -1,5 +1,5 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import AccordionBody from './accordion-body/AccordionBody';
 import AccordionContent from './accordion-content/AccordionContent';
@@ -83,7 +83,7 @@ const Accordion: FC<AccordionProps> = ({
     const handleHeadClick = useCallback(() => {
         if (!isOpen && typeof group === 'string') {
             const customEvent = new CustomEvent<AccordionOpenData>('accordionOpen', {
-                detail: { group: group, ref: accordionRef },
+                detail: { group, ref: accordionRef },
             });
 
             document.body.dispatchEvent(customEvent);
@@ -92,10 +92,29 @@ const Accordion: FC<AccordionProps> = ({
         setIsOpen(!isOpen);
     }, [group, isOpen]);
 
+    const handleAccordionOpen = useCallback(
+        ({ detail }: CustomEvent<AccordionOpenData>) => {
+            if (isOpen && group === detail.group && accordionRef.current !== detail.ref.current) {
+                setIsOpen(false);
+            }
+        },
+        [group, isOpen]
+    );
+
+    useEffect(() => {
+        // @ts-expect-error: Type is correct here because its a custom event
+        document.body.addEventListener('accordionOpen', handleAccordionOpen);
+
+        return () => {
+            // @ts-expect-error: Type is correct here because its a custom event
+            document.body.removeEventListener('accordionOpen', handleAccordionOpen);
+        };
+    }, [handleAccordionOpen]);
+
     const items = useMemo(() => getBodyItems(children), [children]);
 
     return (
-        <MotionConfig transition={{ duration: 0.25 }}>
+        <MotionConfig transition={{ duration: 0.3 }}>
             <StyledAccordion
                 className="beta-chayns-accordion"
                 isOpen={isOpen}
