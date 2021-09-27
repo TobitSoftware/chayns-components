@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Accordion from '../src/components/accordion/Accordion';
+import Badge from '../src/components/badge/Badge';
 
 export default {
     title: 'Core/Accordion',
@@ -57,6 +58,8 @@ export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
 
 export const WrappedAccordions = Template.bind({});
 
+export const AccordionWithBadge = Template.bind({});
+
 General.args = {
     children: `Ja. Öffne das Menü über das entsprechende Symbol oben links auf der Seite, tippe auf
             Deinen Namen und wähle dann den Bereich „chaynsID“. Hier kannst Du Deine persönlichen
@@ -90,4 +93,12 @@ WrappedAccordions.args = {
         </>
     ),
     title: 'calling codes',
+};
+
+AccordionWithBadge.args = {
+    children: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+    eos et accusam et justo duo dolores et ea rebum.`,
+    right: <Badge>noch 10.000 Euro</Badge>,
+    title: 'Bonus Aktion',
 };

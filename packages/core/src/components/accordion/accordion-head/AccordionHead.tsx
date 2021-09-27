@@ -60,7 +60,12 @@ const StyledMotionTitle = styled(motion.div)`
 `;
 
 const StyledRightWrapper = styled.div`
+    display: flex;
     flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 5px;
+    overflow: hidden;
 `;
 
 const AccordionHead: FC<AccordionHeadProps> = ({
