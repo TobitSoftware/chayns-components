@@ -85,6 +85,9 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                     newColors[
                         `--chayns-color-rgb--${colorName}`
                     ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                    newThemeColors[
+                        `${colorName}-rgb`
+                    ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
                 }
             }
         });
