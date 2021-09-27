@@ -31,12 +31,16 @@
   "bugs": {
     "url": "https://github.com/TobitSoftware/chayns-components/issues"
   },
+  "eslintConfig": {
+    "extends": "@chayns-toolkit"
+  },
   "devDependencies": {
     "@babel/cli": "^7.15.4",
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
+    "@chayns-toolkit/eslint-config": "^1.6.4",
     "@types/react": "^17.0.21",
     "@types/styled-components": "^5.1.14",
     "babel-loader": "^8.2.2",
