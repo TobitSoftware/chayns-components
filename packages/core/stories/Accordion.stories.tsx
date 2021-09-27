@@ -55,17 +55,39 @@ export const General = Template.bind({});
 
 export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
 
+export const WrappedAccordions = Template.bind({});
+
 General.args = {
-    children: (
-        <p>
-            Ja. Öffne das Menü über das entsprechende Symbol oben links auf der Seite, tippe auf
+    children: `Ja. Öffne das Menü über das entsprechende Symbol oben links auf der Seite, tippe auf
             Deinen Namen und wähle dann den Bereich „chaynsID“. Hier kannst Du Deine persönlichen
             Daten anpassen. Bitte beachte, dass Deine chaynsID Dir persönlich gehört. Sie ist wie
             Dein Personalausweis. Du kannst sie nicht gemeinsam mit anderen Personen nutzen. Deshalb
             kannst Du Deine persönlichen Daten zwar korrigieren, aber nicht für eine andere Person
             überschreiben. Wenn Du eine chaynsID für eine andere Person benötigst, kannst Du für sie
-            eine anlegen.
-        </p>
-    ),
+            eine anlegen.`,
     title: 'Kann ich meine Daten im chayns Konto nachträglich ändern?',
+};
+
+WrappedAccordions.args = {
+    children: (
+        <>
+            Die Domain für das Smartphone-Zeitalter: Mit chayns calling codes lassen sich einfach
+            Informationen und Anwendungen aufrufen und sogar komplexe Funktionen direkt ausführen.
+            Damit können Personen z.B. einfach per QR-Code-Scan ein Fahrrad reservieren, ihr
+            Lieblingsgetränk an den Tisch bestellen oder am Markt ihre Einkäufe mit ihrer chaynsID
+            bezahlen.
+            <Accordion group="callingCodes" isWrapped title="Rückverfolgung">
+                Für die Rückverfolgung eventueller Infektionsketten können alle calling code-Scans
+                für bis zu 4 Wochen gespeichert werden. Über den Namen oder die chaynsID der Person
+                lassen sich so alle Kontakte herausfinden, die im Zeitraum den selben Code wie die
+                erkrankte Person gescannt haben.
+            </Accordion>
+            <Accordion group="callingCodes" isWrapped title="Meine Codes">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum.
+            </Accordion>
+        </>
+    ),
+    title: 'calling codes',
 };

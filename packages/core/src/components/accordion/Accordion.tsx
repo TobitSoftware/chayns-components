@@ -54,13 +54,15 @@ const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         `}
 
     margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
-    margin-top: 10px;
+
     transition: background-color 0.2s ease, border-radius 0.2s ease, box-shadow 0.2s ease,
         margin-bottom 0.2s ease;
 
     ${({ isWrapped }) =>
         !isWrapped &&
         css`
+            margin-top: 10px;
+
             &:hover {
                 background-color: rgba(${({ theme }) => theme['100-rgb']}, 0.85);
             }
@@ -111,10 +113,10 @@ const Accordion: FC<AccordionProps> = ({
         };
     }, [handleAccordionOpen]);
 
-    const items = useMemo(() => getBodyItems(children), [children]);
+    const items = useMemo(() => getBodyItems(children, { isWrapped }), [children, isWrapped]);
 
     return (
-        <MotionConfig transition={{ duration: 0.3 }}>
+        <MotionConfig transition={{ duration: 0.25 }}>
             <StyledAccordion
                 className="beta-chayns-accordion"
                 isOpen={isOpen}
@@ -142,17 +144,33 @@ Accordion.displayName = 'Accordion';
 export default Accordion;
 
 //region Utils
-const isAccordion = (maybeAccordion: ReactNode) =>
-    maybeAccordion &&
+const isAccordion = (maybeAccordion: ReactNode): boolean =>
+    maybeAccordion !== null &&
+    maybeAccordion !== undefined &&
     typeof maybeAccordion !== 'boolean' &&
     typeof maybeAccordion !== 'string' &&
     typeof maybeAccordion !== 'number' &&
     'type' in maybeAccordion &&
     maybeAccordion?.type === Accordion;
 
-const getBodyItems = (children: ReactNode) => {
+interface GetBodyItemsOptions {
+    isWrapped?: boolean;
+}
+
+const getBodyItems = (children: ReactNode, { isWrapped }: GetBodyItemsOptions) => {
     const items: ReactNode[] = [];
     let contentItems: ReactNode[] = [];
+
+    if (
+        children &&
+        typeof children !== 'boolean' &&
+        typeof children !== 'string' &&
+        typeof children !== 'number' &&
+        'type' in children &&
+        children?.type === React.Fragment
+    ) {
+        children = children.props.children;
+    }
 
     if (Array.isArray(children)) {
         children.forEach((child) => {
@@ -163,7 +181,10 @@ const getBodyItems = (children: ReactNode) => {
             if (isAccordion(child)) {
                 if (contentItems.length > 0) {
                     items.push(
-                        <AccordionContent key={`accordionContent__${items.length}`}>
+                        <AccordionContent
+                            key={`accordionContent__${items.length}`}
+                            isWrapped={isWrapped}
+                        >
                             {contentItems}
                         </AccordionContent>
                     );
@@ -178,7 +199,7 @@ const getBodyItems = (children: ReactNode) => {
 
         if (contentItems.length > 0) {
             items.push(
-                <AccordionContent key={`accordionContent__${items.length}`}>
+                <AccordionContent key={`accordionContent__${items.length}`} isWrapped={isWrapped}>
                     {contentItems}
                 </AccordionContent>
             );
@@ -187,7 +208,11 @@ const getBodyItems = (children: ReactNode) => {
         if (isAccordion(children)) {
             items.push(children);
         } else {
-            items.push(<AccordionContent key="accordionContent">{children}</AccordionContent>);
+            items.push(
+                <AccordionContent key="accordionContent" isWrapped={isWrapped}>
+                    {children}
+                </AccordionContent>
+            );
         }
     }
 
