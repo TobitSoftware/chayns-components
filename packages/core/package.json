@@ -26,7 +26,8 @@
   "scripts": {
     "build": "npm run build:js && npm run build:types",
     "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
-    "build:types": "tsc"
+    "build:types": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "bugs": {
     "url": "https://github.com/TobitSoftware/chayns-components/issues"
