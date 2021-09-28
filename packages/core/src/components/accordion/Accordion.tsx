@@ -20,6 +20,11 @@ type AccordionProps = {
      */
     isDefaultOpen?: boolean;
     /**
+     * This can be used so that the Accordion cannot be opened or closed.
+     * In addition, in this case the icon is exchanged to mark the Accordions.
+     */
+    isFixed?: boolean;
+    /**
      * This value must be set for nested Accordions. This adjusts the style of
      * the head and the padding of the content.
      */
@@ -74,6 +79,7 @@ const Accordion: FC<AccordionProps> = ({
     group,
     icon,
     isDefaultOpen = false,
+    isFixed,
     isWrapped,
     right,
     title,
@@ -126,6 +132,7 @@ const Accordion: FC<AccordionProps> = ({
                 <AccordionHead
                     icon={icon}
                     isOpen={isOpen}
+                    isFixed={isFixed}
                     isWrapped={isWrapped}
                     onClick={handleHeadClick}
                     right={right}

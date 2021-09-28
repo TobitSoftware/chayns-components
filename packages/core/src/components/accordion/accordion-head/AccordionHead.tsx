@@ -1,12 +1,4 @@
-import React, {
-    FC,
-    MouseEventHandler,
-    ReactNode,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, MouseEventHandler, ReactNode, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Icon from '../../icon/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -14,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 type AccordionHeadProps = {
     icon?: string;
     isOpen: boolean;
+    isFixed?: boolean;
     isWrapped?: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
     right?: ReactNode;
@@ -25,9 +18,13 @@ interface HeadHeight {
     open?: number;
 }
 
-const StyledMotionAccordionHead = styled(motion.div)`
+type StyledMotionAccordionHeadProps = {
+    onClick?: MouseEventHandler<HTMLDivElement>;
+};
+
+const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordionHeadProps>`
     align-items: center;
-    cursor: pointer;
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
     overflow: hidden;
     padding: 4px 0;
@@ -71,6 +68,7 @@ const StyledRightWrapper = styled.div`
 const AccordionHead: FC<AccordionHeadProps> = ({
     icon,
     isOpen,
+    isFixed,
     isWrapped,
     onClick,
     right,
@@ -80,22 +78,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         closed: undefined,
         open: undefined,
     });
-    const [isAnimating, setIsAnimating] = useState(false);
-
     const titleWrapperRef = useRef<HTMLDivElement>(null);
-    const animatingTimeoutRef = useRef<number | undefined>(undefined);
-
-    const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
-        (event) => {
-            window.clearTimeout(animatingTimeoutRef.current);
-
-            setIsAnimating(true);
-            onClick(event);
-
-            animatingTimeoutRef.current = window.setTimeout(setIsAnimating, 300, false);
-        },
-        [onClick]
-    );
 
     useEffect(() => {
         setHeadHeight(
@@ -112,10 +95,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             className="beta-chayns-accordion-head"
             initial={false}
-            onClick={handleClick}
+            onClick={!isFixed ? onClick : undefined}
         >
-            <StyledMotionIconWrapper animate={{ rotate: isOpen ? 90 : 0 }} initial={false}>
-                <Icon icons={[icon ?? 'ts-angle-right']} />
+            <StyledMotionIconWrapper
+                animate={{ rotate: isOpen || isFixed ? 90 : 0 }}
+                initial={false}
+            >
+                <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
             </StyledMotionIconWrapper>
             <StyledTitleWrapper ref={titleWrapperRef}>
                 <AnimatePresence initial={false}>

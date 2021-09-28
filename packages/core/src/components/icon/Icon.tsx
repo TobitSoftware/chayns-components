@@ -42,10 +42,12 @@ type StyledIconProps = Omit<IconProps, 'icons'> & {
 };
 
 const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
+    align-items: center;
     cursor: ${({ isDisabled, onClick }) =>
         typeof onClick === 'function' && !isDisabled ? 'pointer' : 'default'};
     display: inline-flex;
     height: ${({ size }) => `${size}px`};
+    justify-content: center;
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     position: relative;
     transition: opacity 0.3s ease;
