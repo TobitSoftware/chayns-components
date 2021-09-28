@@ -17,6 +17,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: lerna bootstrap
-      - run: lerna publish from-package --dist-tag beta --yes
+      - run: lerna publish from-package --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
