@@ -16,44 +16,40 @@ const Template: ComponentStory<typeof Accordion> = ({ children, ...args }) => (
 
 const MultipleAccordionsTemplate: ComponentStory<typeof Accordion> = () => (
     <>
+        <Accordion group="root" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr">
+            <AccordionContent>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.
+            </AccordionContent>
+        </Accordion>
         <Accordion
             group="root"
-            title="Wie genau sind Schnelltests und muss ich selbst etwas dabei beachten?"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         >
             <AccordionContent>
-                Mit so genannten PoC Schnelltests können Corona-Infektionen ziemlich gut
-                nachgewiesen werden. Ihre Genauigkeit hängt von der Art des Tests und der
-                fachgerechten Durchführung ab. Aber auch Du kannst etwas zur Genauigkeit Deines
-                Ergebnisses beitragen: Da Nahrungsmittel, Zahncreme oder Mundwasser das Ergebnis
-                beeinflussen können, solltest Du mindestens 15 Minuten vor dem Test nichts davon in
-                Deinem Mund gehabt haben. Einige Teststellen bieten auch so genannte „Lollitests“
-                unter fachlicher Aufsicht an. Zu beachten ist dabei, dass sie zwar angenehmer als
-                die üblichen Nasen-/Rachen-Abstrichtests sind, aber auch fehleranfälliger.
-                Insbesondere Nahrungsmittel können vermehrt falsch positive Ergebnisse hervor rufen.
-                Umgekehrt können auch tatsächliche Infektionen eher unentdeckt bleiben, wenn die
-                Tests nicht fachgerecht angewendet werden. Mindestens 90 Sekunden intensives
-                Lutschen sind für ein qualifiziertes Ergebnis Voraussetzung. Schnelltests, die mit
-                einem Nasen-/Rachenabstrich durchgeführt werden, können auch keine Hundertprozentige
-                Sicherheit gewährleisten, sind aber weniger fehleranfällig. Im Interesse einer
-                wirksamen Pandemiebekämpfung empfehlen wir im Zweifel den genaueren Test zu wählen.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet.
             </AccordionContent>
         </Accordion>
-        <Accordion group="root" title="Kann ich einen Termin auch wieder absagen?">
+        <Accordion
+            group="root"
+            title="At vero eos et accusam et justo duo dolores et ea rebum sit amet dolor"
+        >
             <AccordionContent>
-                Ja. Das geht genauso einfach wie die Buchung. Auf Deiner Terminbestätigungsseite
-                findest Du den Punkt „Absagen“.
-            </AccordionContent>
-        </Accordion>
-        <Accordion group="root" title="Kann ich mich mehrmals testen lassen?">
-            <AccordionContent>
-                Ja. Bei Teststellen, die bei corona.chayns.de angeschlossen sind, kannst Du Dich so
-                oft testen lassen, wie Du magst. Und zwar grundsätzlich kostenlos! Es war wohl eine
-                missverständliche Formulierung der Bundesregierung, die für Verunsicherung gesorgt
-                hat. (Sie hat es ja auch gerade nicht leicht, sich richtig zu erklären...). Bei der
-                Aussage, jeder Bundesbürger könne sich ab sofort mindestens einmal pro Woche
-                kostenlos auf Corona testen lassen, ging es um das Versprechen. Man hat dadurch also
-                ganz offiziell einen Rechtsanspruch. Und dank der vielen Teststellen, die ihre
-                Kapazitäten dynamisch anpassen, wird er auch locker erfüllt.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua.
             </AccordionContent>
         </Accordion>
     </>
@@ -70,46 +66,48 @@ export const AccordionWithBadge = Template.bind({});
 General.args = {
     children: (
         <AccordionContent>
-            Ja. Öffne das Menü über das entsprechende Symbol oben links auf der Seite, tippe auf
-            Deinen Namen und wähle dann den Bereich „chaynsID“. Hier kannst Du Deine persönlichen
-            Daten anpassen. Bitte beachte, dass Deine chaynsID Dir persönlich gehört. Sie ist wie
-            Dein Personalausweis. Du kannst sie nicht gemeinsam mit anderen Personen nutzen. Deshalb
-            kannst Du Deine persönlichen Daten zwar korrigieren, aber nicht für eine andere Person
-            überschreiben. Wenn Du eine chaynsID für eine andere Person benötigst, kannst Du für sie
-            eine anlegen.
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum.
         </AccordionContent>
     ),
-    title: 'Kann ich meine Daten im chayns Konto nachträglich ändern?',
+    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr',
 };
 
 WrappedAccordions.args = {
     children: (
         <>
             <AccordionContent>
-                Die Domain für das Smartphone-Zeitalter: Mit chayns calling codes lassen sich
-                einfach Informationen und Anwendungen aufrufen und sogar komplexe Funktionen direkt
-                ausführen. Damit können Personen z.B. einfach per QR-Code-Scan ein Fahrrad
-                reservieren, ihr Lieblingsgetränk an den Tisch bestellen oder am Markt ihre Einkäufe
-                mit ihrer chaynsID bezahlen.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                ipsum dolor sit amet.
             </AccordionContent>
-            <Accordion group="callingCodes" isWrapped title="Rückverfolgung">
-                <AccordionContent>
-                    Für die Rückverfolgung eventueller Infektionsketten können alle calling
-                    code-Scans für bis zu 4 Wochen gespeichert werden. Über den Namen oder die
-                    chaynsID der Person lassen sich so alle Kontakte herausfinden, die im Zeitraum
-                    den selben Code wie die erkrankte Person gescannt haben.
-                </AccordionContent>
-            </Accordion>
-            <Accordion group="callingCodes" isWrapped title="Meine Codes">
+            <Accordion group="wrapped" isWrapped title="At vero eos et accusam">
                 <AccordionContent>
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                    vero eos et accusam et justo duo dolores et ea rebum.
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                </AccordionContent>
+            </Accordion>
+            <Accordion group="wrapped" isWrapped title="Justo duo dolores et ea rebum">
+                <AccordionContent>
+                    At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                    gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                    dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </AccordionContent>
             </Accordion>
         </>
     ),
-    title: 'calling codes',
+    title: 'Lorem ipsum dolor sit amet',
 };
 
 AccordionWithBadge.args = {
@@ -120,6 +118,6 @@ AccordionWithBadge.args = {
             accusam et justo duo dolores et ea rebum.
         </AccordionContent>
     ),
-    right: <Badge>noch 10.000 Euro</Badge>,
-    title: 'Bonus Aktion',
+    right: <Badge>10.000 Euro</Badge>,
+    title: 'Lorem ipsum dolor sit amet',
 };
