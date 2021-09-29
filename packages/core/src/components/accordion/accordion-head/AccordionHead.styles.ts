@@ -23,7 +23,7 @@ export const StyledMotionIconWrapper = styled(motion.div)`
     width: 25px;
 `;
 
-export const StyledTitleWrapper = styled.div`
+export const StyledMotionTitleWrapper = styled(motion.div)`
     align-self: flex-start;
     flex: 1 1 auto;
     height: 100%;

@@ -6,18 +6,19 @@ import {
     StyledMotionIconWrapper,
     StyledMotionTitle,
     StyledRightWrapper,
-    StyledTitleWrapper,
+    StyledMotionTitleWrapper,
 } from './AccordionHead.styles';
 import { getAccordionHeadHeight } from '../utils';
 
 type AccordionHeadProps = {
     icon?: string;
     isOpen: boolean;
-    isFixed?: boolean;
+    isFixed: boolean;
+    isTitleGreyed: boolean;
     isWrapped: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
     right?: ReactNode;
-    title: string;
+    title: ReactNode;
 };
 
 interface HeadHeight {
@@ -29,6 +30,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     icon,
     isOpen,
     isFixed,
+    isTitleGreyed,
     isWrapped,
     onClick,
     right,
@@ -41,13 +43,15 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const titleWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setHeadHeight(
-            getAccordionHeadHeight({
-                isWrapped,
-                title,
-                width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
-            })
-        );
+        if (typeof title === 'string') {
+            setHeadHeight(
+                getAccordionHeadHeight({
+                    isWrapped,
+                    title,
+                    width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
+                })
+            );
+        }
     }, [isWrapped, title]);
 
     return (
@@ -55,15 +59,20 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             className="beta-chayns-accordion-head"
             initial={false}
-            onClick={!isFixed ? onClick : undefined}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: isOpen || isFixed ? 90 : 0 }}
                 initial={false}
+                onClick={!isFixed ? onClick : undefined}
             >
                 <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
             </StyledMotionIconWrapper>
-            <StyledTitleWrapper ref={titleWrapperRef}>
+            <StyledMotionTitleWrapper
+                animate={{ opacity: isTitleGreyed ? 0.5 : 1 }}
+                initial={false}
+                onClick={!isFixed ? onClick : undefined}
+                ref={titleWrapperRef}
+            >
                 <AnimatePresence initial={false}>
                     <StyledMotionTitle
                         animate={{ opacity: 1, scale: 1 }}
@@ -80,7 +89,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         {title}
                     </StyledMotionTitle>
                 </AnimatePresence>
-            </StyledTitleWrapper>
+            </StyledMotionTitleWrapper>
             {right && <StyledRightWrapper>{right}</StyledRightWrapper>}
         </StyledMotionAccordionHead>
     );

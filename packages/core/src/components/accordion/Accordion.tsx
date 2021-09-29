@@ -32,6 +32,10 @@ type AccordionProps = {
      */
     isFixed?: boolean;
     /**
+     * This will gray out the title of the Accordion to indicate hidden content, for example.
+     */
+    isTitleGreyed?: boolean;
+    /**
      * This value must be set for nested Accordions. This adjusts the style of
      * the head and the padding of the content.
      */
@@ -43,7 +47,7 @@ type AccordionProps = {
     /**
      * Title of the Accordion displayed in the head
      */
-    title: string;
+    title: ReactNode;
 };
 
 interface AccordionOpenData {
@@ -56,7 +60,8 @@ const Accordion: FC<AccordionProps> = ({
     group,
     icon,
     isDefaultOpen = false,
-    isFixed,
+    isFixed = false,
+    isTitleGreyed = false,
     isWrapped = false,
     right,
     title,
@@ -109,6 +114,7 @@ const Accordion: FC<AccordionProps> = ({
                         icon={icon}
                         isOpen={isOpen}
                         isFixed={isFixed}
+                        isTitleGreyed={isTitleGreyed}
                         isWrapped={isWrapped}
                         onClick={handleHeadClick}
                         right={right}
