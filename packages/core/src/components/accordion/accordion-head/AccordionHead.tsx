@@ -1,7 +1,14 @@
+import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import Icon from '../../icon/Icon';
-import { AnimatePresence, motion } from 'framer-motion';
+import {
+    StyledMotionAccordionHead,
+    StyledMotionIconWrapper,
+    StyledMotionTitle,
+    StyledRightWrapper,
+    StyledTitleWrapper,
+} from './AccordionHead.styles';
+import { getAccordionHeadHeight } from '../utils';
 
 type AccordionHeadProps = {
     icon?: string;
@@ -17,53 +24,6 @@ interface HeadHeight {
     closed?: number;
     open?: number;
 }
-
-type StyledMotionAccordionHeadProps = {
-    onClick?: MouseEventHandler<HTMLDivElement>;
-};
-
-const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordionHeadProps>`
-    align-items: center;
-    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
-    display: flex;
-    overflow: hidden;
-    padding: 4px 0;
-`;
-
-const StyledMotionIconWrapper = styled(motion.div)`
-    align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-    height: 25px;
-    justify-content: center;
-    width: 25px;
-`;
-
-const StyledTitleWrapper = styled.div`
-    align-self: flex-start;
-    flex: 1 1 auto;
-    height: 100%;
-    overflow: hidden;
-    margin-right: 10px;
-    position: relative;
-`;
-
-const StyledMotionTitle = styled(motion.div)`
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transform-origin: top left;
-    user-select: none;
-    width: 100%;
-`;
-
-const StyledRightWrapper = styled.div`
-    display: flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    justify-content: center;
-    margin-right: 5px;
-    overflow: hidden;
-`;
 
 const AccordionHead: FC<AccordionHeadProps> = ({
     icon,
@@ -132,50 +92,3 @@ const AccordionHead: FC<AccordionHeadProps> = ({
 AccordionHead.displayName = 'AccordionHead';
 
 export default AccordionHead;
-
-//region Utils
-interface GetAccordionHeadHeightOptions {
-    isWrapped?: boolean;
-    title: string;
-    width: number;
-}
-
-interface GetAccordionHeadHeightResult {
-    closed: number;
-    open: number;
-}
-
-const getAccordionHeadHeight = ({
-    isWrapped,
-    title,
-    width,
-}: GetAccordionHeadHeightOptions): GetAccordionHeadHeightResult => {
-    const element = document.createElement('div');
-
-    element.style.fontSize = '1rem';
-    element.style.opacity = '0';
-    element.style.pointerEvents = 'none';
-    element.style.whiteSpace = 'nowrap';
-    element.style.width = `${width}px`;
-
-    element.innerText = title;
-
-    document.body.appendChild(element);
-
-    const closedHeight = Math.max(element.clientHeight + 8, 33);
-
-    if (isWrapped) {
-        element.style.fontWeight = 'bold';
-    } else {
-        element.style.fontSize = '1.3rem';
-    }
-
-    element.style.whiteSpace = 'normal';
-
-    const openHeight = Math.max(element.clientHeight + 8, 33);
-
-    document.body.removeChild(element);
-
-    return { closed: closedHeight, open: openHeight };
-};
-//endregion

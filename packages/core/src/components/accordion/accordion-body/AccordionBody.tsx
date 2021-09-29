@@ -1,14 +1,7 @@
-import { motion } from 'framer-motion';
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import { StyledMotionAccordionBody } from './AccordionBody.styles';
 
-type AccordionBodyProps = {};
-
-const StyledMotionAccordionBody = styled(motion.div)`
-    overflow: hidden;
-`;
-
-const AccordionBody: FC<AccordionBodyProps> = ({ children }) => (
+const AccordionBody: FC = ({ children }) => (
     <StyledMotionAccordionBody
         animate={{ height: 'auto', opacity: 1 }}
         className="beta-chayns-accordion-body"

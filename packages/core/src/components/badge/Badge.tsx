@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import clsx from 'clsx';
+import { StyledBadge } from './Badge.styles';
 
 type BadgeProps = {
     /**
@@ -12,16 +12,6 @@ type BadgeProps = {
      */
     className?: string;
 };
-
-const StyledBadge = styled.div`
-    background-color: ${({ theme }) => theme['secondary-202']};
-    border-radius: 15px;
-    color: ${({ theme }) => theme['007']};
-    font-size: 0.8rem;
-    min-width: 1.65rem;
-    padding: 2px 7px;
-    text-align: center;
-`;
 
 const Badge: FC<BadgeProps> = ({ children, className }) => {
     const badgeClasses = clsx('beta-chayns-badge ellipsis', className);
