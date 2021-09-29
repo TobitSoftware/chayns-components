@@ -26,7 +26,7 @@ export const getAccordionHeadHeight = ({
 
     document.body.appendChild(element);
 
-    const closedHeight = Math.max(element.clientHeight + 8, 33);
+    const closedHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);
 
     if (isWrapped) {
         element.style.fontWeight = 'bold';
@@ -36,7 +36,7 @@ export const getAccordionHeadHeight = ({
 
     element.style.whiteSpace = 'normal';
 
-    const openHeight = Math.max(element.clientHeight + 8, 33);
+    const openHeight = Math.max(element.clientHeight + 8, isWrapped ? 40 : 33);
 
     document.body.removeChild(element);
 

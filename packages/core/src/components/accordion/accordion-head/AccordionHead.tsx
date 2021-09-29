@@ -14,15 +14,15 @@ type AccordionHeadProps = {
     icon?: string;
     isOpen: boolean;
     isFixed?: boolean;
-    isWrapped?: boolean;
+    isWrapped: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
     right?: ReactNode;
     title: string;
 };
 
 interface HeadHeight {
-    closed?: number;
-    open?: number;
+    closed: number;
+    open: number;
 }
 
 const AccordionHead: FC<AccordionHeadProps> = ({
@@ -35,8 +35,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     title,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
-        closed: undefined,
-        open: undefined,
+        closed: isWrapped ? 40 : 33,
+        open: isWrapped ? 40 : 33,
     });
     const titleWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -73,12 +73,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                             scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3,
                         }}
                         initial={{ opacity: 0, scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
+                        isOpen={isOpen}
+                        isWrapped={isWrapped}
                         key={isOpen && !isWrapped ? 'accordionHeadTitleBig' : 'accordionHeadTitle'}
-                        style={{
-                            fontSize: isOpen && !isWrapped ? '1.3rem' : undefined,
-                            fontWeight: isOpen && isWrapped ? 700 : 'normal',
-                            whiteSpace: isOpen && !isWrapped ? 'normal' : 'nowrap',
-                        }}
                     >
                         {title}
                     </StyledMotionTitle>

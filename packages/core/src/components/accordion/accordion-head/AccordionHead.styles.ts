@@ -32,11 +32,22 @@ export const StyledTitleWrapper = styled.div`
     position: relative;
 `;
 
-export const StyledMotionTitle = styled(motion.div)`
+interface StyledMotionTitleProps {
+    isOpen: boolean;
+    isWrapped: boolean;
+}
+
+export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
+    align-items: center;
+    display: flex;
+    font-size: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '1.3rem' : undefined)};
+    font-weight: ${({ isOpen, isWrapped }) => (isOpen && isWrapped ? 700 : 'normal')};
+    height: ${({ isWrapped }) => (isWrapped ? '100%' : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
+    white-space: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? 'normal' : 'nowrap')};
     width: 100%;
 `;
 
