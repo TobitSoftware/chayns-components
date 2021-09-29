@@ -168,6 +168,8 @@ const getBodyItems = (children: ReactNode, { isWrapped }: GetBodyItemsOptions) =
     const items: ReactNode[] = [];
     let contentItems: ReactNode[] = [];
 
+    console.debug('getBodyItems', { children, isWrapped });
+
     if (
         children &&
         typeof children !== 'boolean' &&
