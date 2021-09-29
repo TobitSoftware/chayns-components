@@ -1,11 +1,18 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import AccordionBody from './accordion-body/AccordionBody';
-import AccordionContent from './accordion-content/AccordionContent';
 import AccordionHead from './accordion-head/AccordionHead';
 
+export const AccordionContext = React.createContext({ isWrapped: false });
+
+AccordionContext.displayName = 'AccordionContext';
+
 type AccordionProps = {
+    /**
+     * The content of the accordion body
+     */
+    children: ReactNode;
     /**
      * Defines the group of the Accordion. Accordions with the same group are
      * automatically closed when an Accordion of the group is opened.
@@ -80,7 +87,7 @@ const Accordion: FC<AccordionProps> = ({
     icon,
     isDefaultOpen = false,
     isFixed,
-    isWrapped,
+    isWrapped = false,
     right,
     title,
 }) => {
@@ -119,8 +126,6 @@ const Accordion: FC<AccordionProps> = ({
         };
     }, [handleAccordionOpen]);
 
-    const items = useMemo(() => getBodyItems(children, { isWrapped }), [children, isWrapped]);
-
     return (
         <MotionConfig transition={{ duration: 0.25 }}>
             <StyledAccordion
@@ -129,18 +134,20 @@ const Accordion: FC<AccordionProps> = ({
                 isWrapped={isWrapped}
                 ref={accordionRef}
             >
-                <AccordionHead
-                    icon={icon}
-                    isOpen={isOpen}
-                    isFixed={isFixed}
-                    isWrapped={isWrapped}
-                    onClick={handleHeadClick}
-                    right={right}
-                    title={title}
-                />
-                <AnimatePresence initial={false}>
-                    {isOpen && <AccordionBody>{items}</AccordionBody>}
-                </AnimatePresence>
+                <AccordionContext.Provider value={{ isWrapped }}>
+                    <AccordionHead
+                        icon={icon}
+                        isOpen={isOpen}
+                        isFixed={isFixed}
+                        isWrapped={isWrapped}
+                        onClick={handleHeadClick}
+                        right={right}
+                        title={title}
+                    />
+                    <AnimatePresence initial={false}>
+                        {isOpen && <AccordionBody>{children}</AccordionBody>}
+                    </AnimatePresence>
+                </AccordionContext.Provider>
             </StyledAccordion>
         </MotionConfig>
     );
@@ -149,82 +156,3 @@ const Accordion: FC<AccordionProps> = ({
 Accordion.displayName = 'Accordion';
 
 export default Accordion;
-
-//region Utils
-const isAccordion = (maybeAccordion: ReactNode): boolean =>
-    maybeAccordion !== null &&
-    maybeAccordion !== undefined &&
-    typeof maybeAccordion !== 'boolean' &&
-    typeof maybeAccordion !== 'string' &&
-    typeof maybeAccordion !== 'number' &&
-    'type' in maybeAccordion &&
-    maybeAccordion?.type === Accordion;
-
-interface GetBodyItemsOptions {
-    isWrapped?: boolean;
-}
-
-const getBodyItems = (children: ReactNode, { isWrapped }: GetBodyItemsOptions) => {
-    const items: ReactNode[] = [];
-    let contentItems: ReactNode[] = [];
-
-    console.debug('getBodyItems', { children, isWrapped });
-
-    if (
-        children &&
-        typeof children !== 'boolean' &&
-        typeof children !== 'string' &&
-        typeof children !== 'number' &&
-        'type' in children &&
-        children?.type === React.Fragment
-    ) {
-        children = children.props.children;
-    }
-
-    if (Array.isArray(children)) {
-        children.forEach((child) => {
-            if (!child) {
-                return;
-            }
-
-            if (isAccordion(child)) {
-                if (contentItems.length > 0) {
-                    items.push(
-                        <AccordionContent
-                            key={`accordionContent__${items.length}`}
-                            isWrapped={isWrapped}
-                        >
-                            {contentItems}
-                        </AccordionContent>
-                    );
-
-                    contentItems = [];
-                }
-                items.push(child);
-            } else {
-                contentItems.push(child as JSX.Element);
-            }
-        });
-
-        if (contentItems.length > 0) {
-            items.push(
-                <AccordionContent key={`accordionContent__${items.length}`} isWrapped={isWrapped}>
-                    {contentItems}
-                </AccordionContent>
-            );
-        }
-    } else {
-        if (isAccordion(children)) {
-            items.push(children);
-        } else {
-            items.push(
-                <AccordionContent key="accordionContent" isWrapped={isWrapped}>
-                    {children}
-                </AccordionContent>
-            );
-        }
-    }
-
-    return items;
-};
-//endregion
