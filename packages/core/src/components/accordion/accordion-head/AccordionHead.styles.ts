@@ -1,14 +1,8 @@
 import { motion } from 'framer-motion';
-import type { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
-type StyledMotionAccordionHeadProps = {
-    onClick?: MouseEventHandler<HTMLDivElement>;
-};
-
-export const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordionHeadProps>`
+export const StyledMotionAccordionHead = styled(motion.div)`
     align-items: center;
-    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
     overflow: hidden;
     padding: 4px 0;
@@ -16,6 +10,7 @@ export const StyledMotionAccordionHead = styled(motion.div)<StyledMotionAccordio
 
 export const StyledMotionIconWrapper = styled(motion.div)`
     align-items: center;
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
     flex: 0 0 auto;
     height: 25px;
@@ -25,6 +20,7 @@ export const StyledMotionIconWrapper = styled(motion.div)`
 
 export const StyledMotionTitleWrapper = styled(motion.div)`
     align-self: flex-start;
+    cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     flex: 1 1 auto;
     height: 100%;
     overflow: hidden;
