@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const StyledMotionAccordionHead = styled(motion.div)`
     align-items: center;
+    color: ${({ theme }) => theme['text']};
     display: flex;
     overflow: hidden;
     padding: 4px 0;

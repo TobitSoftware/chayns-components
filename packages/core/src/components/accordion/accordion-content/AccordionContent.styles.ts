@@ -5,5 +5,6 @@ type StyledAccordionContentProps = {
 };
 
 export const StyledAccordionContent = styled.div<StyledAccordionContentProps>`
+    color: ${({ theme }) => theme['text']};
     padding: ${({ isWrapped }) => (isWrapped ? '0 9px 18px 26px' : '0 9px 9px 10px')};
 `;
