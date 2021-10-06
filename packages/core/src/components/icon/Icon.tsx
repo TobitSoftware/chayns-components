@@ -25,6 +25,10 @@ export type IconProps = {
      */
     onClick?: MouseEventHandler<HTMLSpanElement>;
     /**
+     * Function to be executed when the icon is double clicked
+     */
+    onDoubleClick?: MouseEventHandler<HTMLSpanElement>;
+    /**
      * Size of the icon in pixel
      */
     size?: number;
@@ -40,16 +44,27 @@ const Icon: FC<IconProps> = ({
     icons,
     isDisabled,
     onClick,
+    onDoubleClick,
     size = 15,
     shouldStopPropagation,
 }) => {
-    const handleClick: MouseEventHandler<HTMLElement | HTMLSpanElement> = (event) => {
+    const handleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
         if (shouldStopPropagation) {
             event.stopPropagation();
         }
 
         if (typeof onClick === 'function') {
             onClick(event);
+        }
+    };
+
+    const handleDoubleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
+        if (shouldStopPropagation) {
+            event.stopPropagation();
+        }
+
+        if (typeof onDoubleClick === 'function') {
+            onDoubleClick(event);
         }
     };
 
@@ -76,6 +91,7 @@ const Icon: FC<IconProps> = ({
             className={wrapperClasses}
             isDisabled={isDisabled}
             onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
             size={size}
         >
             {icons.map((icon) => {
