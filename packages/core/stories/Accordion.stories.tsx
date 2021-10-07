@@ -118,6 +118,6 @@ AccordionWithBadge.args = {
             accusam et justo duo dolores et ea rebum.
         </AccordionContent>
     ),
-    right: <Badge>10.000 Euro</Badge>,
+    rightElement: <Badge>10.000 Euro</Badge>,
     title: 'Lorem ipsum dolor sit amet',
 };

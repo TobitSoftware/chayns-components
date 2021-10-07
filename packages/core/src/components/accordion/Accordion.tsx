@@ -43,7 +43,7 @@ type AccordionProps = {
     /**
      * Content to be displayed on the right side in the head of the Accordion
      */
-    right?: ReactNode;
+    rightElement?: ReactNode;
     /**
      * Title of the Accordion displayed in the head
      */
@@ -63,7 +63,7 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isTitleGreyed = false,
     isWrapped = false,
-    right,
+    rightElement,
     title,
 }) => {
     const [isOpen, setIsOpen] = useState(isDefaultOpen);
@@ -117,7 +117,7 @@ const Accordion: FC<AccordionProps> = ({
                         isTitleGreyed={isTitleGreyed}
                         isWrapped={isWrapped}
                         onClick={handleHeadClick}
-                        right={right}
+                        rightElement={rightElement}
                         title={title}
                     />
                     <AnimatePresence initial={false}>

@@ -17,7 +17,7 @@ type AccordionHeadProps = {
     isTitleGreyed: boolean;
     isWrapped: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
-    right?: ReactNode;
+    rightElement?: ReactNode;
     title: ReactNode;
 };
 
@@ -33,7 +33,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     isTitleGreyed,
     isWrapped,
     onClick,
-    right,
+    rightElement,
     title,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
@@ -90,7 +90,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                     </StyledMotionTitle>
                 </AnimatePresence>
             </StyledMotionTitleWrapper>
-            {right && <StyledRightWrapper>{right}</StyledRightWrapper>}
+            {rightElement && <StyledRightWrapper>{rightElement}</StyledRightWrapper>}
         </StyledMotionAccordionHead>
     );
 };

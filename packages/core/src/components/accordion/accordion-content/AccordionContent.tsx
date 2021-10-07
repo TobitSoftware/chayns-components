@@ -1,15 +1,8 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { AccordionContext } from '../Accordion';
 import { StyledAccordionContent } from './AccordionContent.styles';
 
-type AccordionContentProps = {
-    /**
-     * The content of the accordion body
-     */
-    children: ReactNode;
-};
-
-const AccordionContent: FC<AccordionContentProps> = ({ children }) => (
+const AccordionContent: FC = ({ children }) => (
     <AccordionContext.Consumer>
         {({ isWrapped }) => (
             <StyledAccordionContent className="beta-chayns-accordion-content" isWrapped={isWrapped}>
