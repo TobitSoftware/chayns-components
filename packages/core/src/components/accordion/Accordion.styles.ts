@@ -1,16 +1,20 @@
 import styled, { css } from 'styled-components';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-type StyledMotionAccordionProps = {
+type StyledMotionAccordionProps = WithTheme<{
     isOpen: boolean;
     isWrapped: boolean;
-};
+}>;
 
 export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
     ${({ isOpen, isWrapped }) =>
         isOpen &&
         !isWrapped &&
         css`
-            background-color: rgba(${({ theme }) => theme['100-rgb']}, 0.85);
+            background-color: rgba(
+                ${({ theme }: StyledMotionAccordionProps) => theme['100-rgb']},
+                0.85
+            );
             border-radius: 3px; // ToDo: Add correct border-radius here
             box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
         `}
@@ -25,7 +29,10 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
             margin-top: 10px;
 
             &:hover {
-                background-color: rgba(${({ theme }) => theme['100-rgb']}, 0.85);
+                background-color: rgba(
+                    ${({ theme }: StyledMotionAccordionProps) => theme['100-rgb']},
+                    0.85
+                );
             }
         `}
 `;

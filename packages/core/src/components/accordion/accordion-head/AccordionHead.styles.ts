@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+
+type StyledMotionAccordionHeadProps = WithTheme<unknown>;
 
 export const StyledMotionAccordionHead = styled(motion.div)`
     align-items: center;
-    color: ${({ theme }) => theme['text']};
+    color: ${({ theme }: StyledMotionAccordionHeadProps) => theme.text};
     display: flex;
     overflow: hidden;
     padding: 4px 0;

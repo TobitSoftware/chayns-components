@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
+import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
 
-interface StyledListItemHeadProps {
+type StyledListItemHeadProps = WithTheme<{
     isClickable: boolean;
-}
+}>;
 
 export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
     align-items: center;
-    color: ${({ theme }) => theme['text']};
+    color: ${({ theme }: StyledListItemHeadProps) => theme.text};
     display: flex;
     height: 64px;
     padding: 12px 9px;
@@ -28,10 +29,13 @@ export const StyledMotionListItemHeadIndicator = styled(motion.div)`
     width: 26px;
 `;
 
+type StyledListItemHeadIconProps = WithTheme<unknown>;
+
 export const StyledListItemHeadIcon = styled.div`
     align-items: center;
-    background-color: rgba(${({ theme }) => theme['text-rgb']}, 0.1);
-    box-shadow: 0 0 0 1px rgba(${({ theme }) => theme['009-rgb']}, 0.08) inset;
+    background-color: rgba(${({ theme }: StyledListItemHeadIconProps) => theme['text-rgb']}, 0.1);
+    box-shadow: 0 0 0 1px
+        rgba(${({ theme }: StyledListItemHeadIconProps) => theme['009-rgb']}, 0.08) inset;
     display: flex;
     flex: 0 0 auto;
     height: 40px;
@@ -40,14 +44,18 @@ export const StyledListItemHeadIcon = styled.div`
     width: 40px;
 `;
 
-interface StyledListItemHeadImageWrapperProps {
+type StyledListItemHeadImageWrapperProps = WithTheme<{
     shouldShowRoundImage?: boolean;
-}
+}>;
 
 export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImageWrapperProps>`
-    background-color: rgba(${({ theme }) => theme['text-rgb']}, 0.1);
+    background-color: rgba(
+        ${({ theme }: StyledListItemHeadImageWrapperProps) => theme['text-rgb']},
+        0.1
+    );
     border-radius: ${({ shouldShowRoundImage }) => (shouldShowRoundImage ? '50%' : undefined)};
-    box-shadow: 0 0 0 1px rgba(${({ theme }) => theme['009-rgb']}, 0.08) inset;
+    box-shadow: 0 0 0 1px
+        rgba(${({ theme }: StyledListItemHeadImageWrapperProps) => theme['009-rgb']}, 0.08) inset;
     flex: 0 0 auto;
     height: 40px;
     margin-right: 10px;
@@ -60,12 +68,6 @@ export const StyledListItemHeadImage = styled.img`
     object-fit: cover;
     width: 100%;
 `;
-
-export const StyledListItemHeadImagePartLeft = styled.img``;
-
-export const StyledListItemHeadImagePartTopRight = styled.img``;
-
-export const StyledListItemHeadImagePartBottomRight = styled.img``;
 
 export const StyledListItemHeadContent = styled.div`
     display: flex;

@@ -23,9 +23,6 @@
     "url": "https://github.com/TobitSoftware/chayns-components/issues"
   },
   "homepage": "https://github.com/TobitSoftware/chayns-components#readme",
-  "eslintConfig": {
-    "extends": "@chayns-toolkit"
-  },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.5",
@@ -39,6 +36,7 @@
     "@storybook/react": "^6.3.9",
     "@types/uuid": "^8.3.1",
     "babel-loader": "^8.2.2",
+    "eslint": "^7.32.0",
     "lerna": "^4.0.0",
     "prettier": "^2.4.1",
     "react": "^17.0.2",

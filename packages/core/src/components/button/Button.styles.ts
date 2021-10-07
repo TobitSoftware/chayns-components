@@ -1,16 +1,19 @@
 import styled from 'styled-components';
 import type { ButtonProps } from './Button';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-type StyledButtonProps = ButtonProps & {
-    hasIcon: boolean;
-};
+type StyledButtonProps = ButtonProps &
+    WithTheme<{
+        hasIcon: boolean;
+    }>;
 
 export const StyledButton = styled.button<StyledButtonProps>`
-    background-color: ${({ isSecondary, theme }) => (isSecondary ? theme['202'] : theme['408'])};
+    background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
+        isSecondary ? theme['202'] : theme['408']};
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
-    color: ${({ isSecondary, theme }) => (isSecondary ? theme['text'] : 'white')};
+    color: ${({ isSecondary, theme }: StyledButtonProps) => (isSecondary ? theme.text : 'white')};
     cursor: pointer;
     display: inline-block;
     line-height: 1.15;

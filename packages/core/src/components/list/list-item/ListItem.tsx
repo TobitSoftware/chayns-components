@@ -76,7 +76,7 @@ const ListItem: FC<ListItemProps> = ({
                 onClick(event);
             }
         },
-        [isExpandable, onClick]
+        [isExpandable, onClick, updateOpenItemUuid, uuid]
     );
 
     useEffect(() => {

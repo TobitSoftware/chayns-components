@@ -35,9 +35,13 @@ type ColorSchemeProviderProps = {
     style?: { [key: string]: string | number };
 };
 
-interface Colors {
+export interface Theme {
     [key: string]: string;
 }
+
+export type WithTheme<T> = T & {
+    theme: Theme;
+};
 
 const GlobalStyle = createGlobalStyle`
     .ellipsis {
@@ -55,14 +59,14 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     secondaryColor,
     style = {},
 }) => {
-    const [colors, setColors] = useState<Colors>({});
-    const [themeColors, setThemeColors] = useState<Colors>({});
+    const [colors, setColors] = useState<Theme>({});
+    const [themeColors, setThemeColors] = useState<Theme>({});
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
 
-        const newColors: Colors = {};
-        const newThemeColors: Colors = {};
+        const newColors: Theme = {};
+        const newThemeColors: Theme = {};
 
         availableColors.forEach((colorName: string) => {
             const hexColor = getColorFromPalette(colorName, {
