@@ -11,7 +11,7 @@ type StyledIconProps = Omit<IconProps, 'icons'> & {
 export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     align-items: center;
     cursor: ${({ isDisabled, onClick }) =>
-        typeof onClick === 'function' && !isDisabled ? 'pointer' : 'default'};
+        typeof onClick === 'function' && !isDisabled ? 'pointer' : 'inherit'};
     display: inline-flex;
     height: ${({ size }) => `${size}px`};
     justify-content: center;

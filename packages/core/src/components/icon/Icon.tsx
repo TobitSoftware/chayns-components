@@ -21,11 +21,11 @@ export type IconProps = {
      */
     isDisabled?: boolean;
     /**
-     * Function to be executed when the icon is clicked
+     * Function to be executed when the icon was clicked
      */
     onClick?: MouseEventHandler<HTMLSpanElement>;
     /**
-     * Function to be executed when the icon is double clicked
+     * Function to be executed when the icon was double clicked
      */
     onDoubleClick?: MouseEventHandler<HTMLSpanElement>;
     /**
@@ -90,8 +90,8 @@ const Icon: FC<IconProps> = ({
         <StyledIconWrapper
             className={wrapperClasses}
             isDisabled={isDisabled}
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
+            onClick={typeof onClick === 'function' ? handleClick : undefined}
+            onDoubleClick={typeof onDoubleClick === 'function' ? handleDoubleClick : undefined}
             size={size}
         >
             {icons.map((icon) => {
