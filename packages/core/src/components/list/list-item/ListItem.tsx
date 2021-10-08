@@ -13,6 +13,11 @@ type ListItemProps = {
      */
     children?: ReactNode;
     /**
+     * Element that is displayed when hovering over the `ListItem` on the right
+     * side. On mobile devices, this element is not displayed.
+     */
+    hoverItem?: ReactNode;
+    /**
      * The FontAwesome or tobit icons to render like an image on the left side
      * of the header. Multiple icons are stacked. See the `Icon` component
      * documentation for more information.
@@ -50,6 +55,7 @@ type ListItemProps = {
 
 const ListItem: FC<ListItemProps> = ({
     children,
+    hoverItem,
     icons,
     images,
     onClick,
@@ -97,6 +103,7 @@ const ListItem: FC<ListItemProps> = ({
                 isOpen={isOpen}
             >
                 <ListItemHead
+                    hoverItem={hoverItem}
                     icons={icons}
                     images={images}
                     isAnyItemExpandable={isAnyItemExpandable}

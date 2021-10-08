@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Badge } from '../src';
+import { Badge, Icon } from '../src';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
 import ListItem from '../src/components/list/list-item/ListItem';
@@ -19,6 +19,8 @@ export const ListItemsWithImage = Template.bind({});
 export const ListItemsWithGridImage = Template.bind({});
 
 export const ListItemsWithRightElements = Template.bind({});
+
+export const ListItemsWithHoverItem = Template.bind({});
 
 export const ListItemsWithIcon = Template.bind({});
 
@@ -120,6 +122,23 @@ ListItemsWithRightElements.args = {
         <ListItem
             images={[locationImages[1]]}
             rightElements={['07:51 Uhr']}
+            subtitle="Dolor sit ipsum amet"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+    ],
+};
+
+ListItemsWithHoverItem.args = {
+    children: [
+        <ListItem
+            hoverItem={<Icon icons={['far fa-arrows-v']} />}
+            images={[locationImages[0]]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            hoverItem={<Icon icons={['far fa-arrows-v']} />}
+            images={[locationImages[1]]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,

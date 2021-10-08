@@ -13,10 +13,12 @@ import {
     StyledListItemHeadTitle,
     StyledListItemHeadTitleText,
     StyledListItemHeadTopRightElement,
+    StyledMotionListItemHeadHoverItem,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
 
 type ListItemHeadProps = {
+    hoverItem?: ReactNode;
     icons?: [string, ...string[]];
     images?: string[];
     isAnyItemExpandable: boolean;
@@ -30,6 +32,7 @@ type ListItemHeadProps = {
 };
 
 const ListItemHead: FC<ListItemHeadProps> = ({
+    hoverItem,
     icons,
     images,
     isAnyItemExpandable,
@@ -42,10 +45,15 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     title,
 }) => {
     const [hasLoadedImage, setHasLoadedImage] = useState(false);
+    const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
     const handleImageLoaded = useCallback(() => {
         setHasLoadedImage(true);
     }, []);
+
+    const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
+
+    const handleMouseLeave = useCallback(() => setShouldShowHoverItem(false), []);
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
@@ -88,6 +96,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             className="beta-chayns-list-item-head"
             isClickable={typeof onClick === 'function' || isExpandable}
             onClick={onClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
             {isAnyItemExpandable && (
                 <StyledMotionListItemHeadIndicator
@@ -122,6 +132,19 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>
+            {hoverItem && (
+                <StyledMotionListItemHeadHoverItem
+                    animate={{
+                        marginLeft: shouldShowHoverItem ? 8 : 0,
+                        opacity: shouldShowHoverItem ? 1 : 0,
+                        width: shouldShowHoverItem ? 'auto' : 0,
+                    }}
+                    initial={false}
+                    transition={{ duration: 0.1 }}
+                >
+                    {hoverItem}
+                </StyledMotionListItemHeadHoverItem>
+            )}
         </StyledListItemHead>
     );
 };

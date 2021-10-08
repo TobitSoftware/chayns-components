@@ -125,3 +125,7 @@ export const StyledListItemHeadBottomRightElement = styled.div`
     margin-left: 8px;
     font-size: 85%;
 `;
+
+export const StyledMotionListItemHeadHoverItem = styled(motion.div)`
+    overflow: hidden;
+`;
