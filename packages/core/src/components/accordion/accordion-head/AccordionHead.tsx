@@ -1,14 +1,15 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode, useEffect, useRef, useState } from 'react';
 import Icon from '../../icon/Icon';
+import { getAccordionHeadHeight } from '../utils';
 import {
     StyledMotionAccordionHead,
     StyledMotionIconWrapper,
     StyledMotionTitle,
-    StyledRightWrapper,
     StyledMotionTitleWrapper,
+    StyledRightWrapper,
+    StyledTitleElementWrapper,
 } from './AccordionHead.styles';
-import { getAccordionHeadHeight } from '../utils';
 
 type AccordionHeadProps = {
     icon?: string;
@@ -18,7 +19,8 @@ type AccordionHeadProps = {
     isWrapped: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
     rightElement?: ReactNode;
-    title: ReactNode;
+    title: string;
+    titleElement?: ReactNode;
 };
 
 interface HeadHeight {
@@ -35,6 +37,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     onClick,
     rightElement,
     title,
+    titleElement,
 }) => {
     const [headHeight, setHeadHeight] = useState<HeadHeight>({
         closed: isWrapped ? 40 : 33,
@@ -43,15 +46,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     const titleWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (typeof title === 'string') {
-            setHeadHeight(
-                getAccordionHeadHeight({
-                    isWrapped,
-                    title,
-                    width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
-                })
-            );
-        }
+        setHeadHeight(
+            getAccordionHeadHeight({
+                isWrapped,
+                title,
+                width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
+            })
+        );
     }, [isWrapped, title]);
 
     return (
@@ -89,6 +90,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         {title}
                     </StyledMotionTitle>
                 </AnimatePresence>
+                {titleElement && (
+                    <StyledTitleElementWrapper>{titleElement}</StyledTitleElementWrapper>
+                )}
             </StyledMotionTitleWrapper>
             {rightElement && <StyledRightWrapper>{rightElement}</StyledRightWrapper>}
         </StyledMotionAccordionHead>

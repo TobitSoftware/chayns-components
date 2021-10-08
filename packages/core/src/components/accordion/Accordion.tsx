@@ -47,7 +47,11 @@ type AccordionProps = {
     /**
      * Title of the Accordion displayed in the head
      */
-    title: ReactNode;
+    title: string;
+    /**
+     * Additional elements to be displayed in the header next to the title.
+     */
+    titleElement?: ReactNode;
 };
 
 interface AccordionOpenData {
@@ -65,6 +69,7 @@ const Accordion: FC<AccordionProps> = ({
     isWrapped = false,
     rightElement,
     title,
+    titleElement,
 }) => {
     const [isOpen, setIsOpen] = useState(isDefaultOpen);
 
@@ -102,7 +107,7 @@ const Accordion: FC<AccordionProps> = ({
     }, [handleAccordionOpen]);
 
     return (
-        <MotionConfig transition={{ duration: 0.25 }}>
+        <MotionConfig transition={{ duration: 3 }}>
             <StyledAccordion
                 className="beta-chayns-accordion"
                 isOpen={isOpen}
@@ -119,6 +124,7 @@ const Accordion: FC<AccordionProps> = ({
                         onClick={handleHeadClick}
                         rightElement={rightElement}
                         title={title}
+                        titleElement={titleElement}
                     />
                     <AnimatePresence initial={false}>
                         {isOpen && <AccordionBody>{children}</AccordionBody>}

@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import Badge from '../src/components/badge/Badge';
@@ -63,6 +63,8 @@ export const WrappedAccordions = Template.bind({});
 
 export const AccordionWithBadge = Template.bind({});
 
+export const AccordionWithTitleElement = Template.bind({});
+
 General.args = {
     children: (
         <AccordionContent>
@@ -120,4 +122,16 @@ AccordionWithBadge.args = {
     ),
     rightElement: <Badge>10.000 Euro</Badge>,
     title: 'Lorem ipsum dolor sit amet',
+};
+
+AccordionWithTitleElement.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum.
+        </AccordionContent>
+    ),
+    title: 'Lorem ipsum dolor sit amet',
+    titleElement: <Icon icons={['fa fa-download']} />,
 };

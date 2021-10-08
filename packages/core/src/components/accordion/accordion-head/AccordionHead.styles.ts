@@ -25,6 +25,7 @@ export const StyledMotionIconWrapper = styled(motion.div)`
 export const StyledMotionTitleWrapper = styled(motion.div)`
     align-self: flex-start;
     cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
+    display: flex;
     flex: 1 1 auto;
     height: 100%;
     overflow: hidden;
@@ -39,7 +40,6 @@ interface StyledMotionTitleProps {
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     align-items: center;
-    display: flex;
     font-size: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '1.3rem' : undefined)};
     font-weight: ${({ isOpen, isWrapped }) => (isOpen && isWrapped ? 700 : 'normal')};
     height: ${({ isWrapped }) => (isWrapped ? '100%' : undefined)};
@@ -48,7 +48,13 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     transform-origin: top left;
     user-select: none;
     white-space: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? 'normal' : 'nowrap')};
-    width: 100%;
+    //width: 100%;
+`;
+
+export const StyledTitleElementWrapper = styled.div`
+    align-items: center;
+    display: flex;
+    margin-left: 8px;
 `;
 
 export const StyledRightWrapper = styled.div`
