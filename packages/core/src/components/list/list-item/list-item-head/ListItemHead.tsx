@@ -3,12 +3,16 @@ import GridImage from '../../../grid-image/GridImage';
 import Icon from '../../../icon/Icon';
 import {
     StyledListItemHead,
+    StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
     StyledListItemHeadIcon,
     StyledListItemHeadImage,
     StyledListItemHeadImageWrapper,
     StyledListItemHeadSubtitle,
+    StyledListItemHeadSubtitleText,
     StyledListItemHeadTitle,
+    StyledListItemHeadTitleText,
+    StyledListItemHeadTopRightElement,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
 
@@ -95,10 +99,26 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             )}
             {iconOrImageElement}
             <StyledListItemHeadContent isIconOrImageGiven={iconOrImageElement !== undefined}>
-                <StyledListItemHeadTitle className="ellipsis">{title}</StyledListItemHeadTitle>
+                <StyledListItemHeadTitle>
+                    <StyledListItemHeadTitleText className="ellipsis">
+                        {title}
+                    </StyledListItemHeadTitleText>
+                    {rightElements?.[0] && (
+                        <StyledListItemHeadTopRightElement>
+                            {rightElements?.[0]}
+                        </StyledListItemHeadTopRightElement>
+                    )}
+                </StyledListItemHeadTitle>
                 {subtitle && (
-                    <StyledListItemHeadSubtitle className="ellipsis">
-                        {subtitle}
+                    <StyledListItemHeadSubtitle>
+                        <StyledListItemHeadSubtitleText className="ellipsis">
+                            {subtitle}
+                        </StyledListItemHeadSubtitleText>
+                        {rightElements?.[1] && (
+                            <StyledListItemHeadBottomRightElement>
+                                {rightElements?.[1]}
+                            </StyledListItemHeadBottomRightElement>
+                        )}
                     </StyledListItemHeadSubtitle>
                 )}
             </StyledListItemHeadContent>

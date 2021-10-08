@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Badge } from '../src';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
 import ListItem from '../src/components/list/list-item/ListItem';
@@ -17,6 +18,8 @@ export const ListItemsWithImage = Template.bind({});
 
 export const ListItemsWithGridImage = Template.bind({});
 
+export const ListItemsWithRightElements = Template.bind({});
+
 export const ListItemsWithIcon = Template.bind({});
 
 export const ExpandableListItems = Template.bind({});
@@ -29,6 +32,8 @@ const images = [
     'https://tsimg.cloud/77896-21884/25399416f38c1d960f521a3530c8a2bc70a88bb9.png',
     'https://tsimg.cloud/77896-21884/fce5e30f68c75c8c524cc9ac0887832f263b79ff.png',
 ];
+
+const locationImages = ['https://sub60.tobit.com/l/1', 'https://sub60.tobit.com/l/3'];
 
 const otherImages = [
     'https://tsimg.cloud/77896-21884/436c7140eb430a0fa486aa737a953626cc83c22a.jpg',
@@ -99,6 +104,23 @@ ListItemsWithGridImage.args = {
             images={otherImages}
             subtitle="Dolor sit ipsum amet"
             shouldShowRoundImage
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+    ],
+};
+
+ListItemsWithRightElements.args = {
+    children: [
+        <ListItem
+            images={[locationImages[0]]}
+            rightElements={['09:01 Uhr', <Badge>3</Badge>]}
+            subtitle="Sadipscing elitr dolor sit"
+            title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />,
+        <ListItem
+            images={[locationImages[1]]}
+            rightElements={['07:51 Uhr']}
+            subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,
     ],

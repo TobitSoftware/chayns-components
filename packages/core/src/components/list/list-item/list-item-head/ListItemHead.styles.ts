@@ -88,10 +88,40 @@ export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentPro
     min-width: 0;
 `;
 
-export const StyledListItemHeadTitle = styled.div``;
+export const StyledListItemHeadTitle = styled.div`
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const StyledListItemHeadTitleText = styled.span`
+    flex: 1 1 auto;
+    min-width: 0;
+`;
 
 export const StyledListItemHeadSubtitle = styled.div`
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
     margin-top: 2px;
-    font-size: 85%;
     opacity: 0.75;
+`;
+
+export const StyledListItemHeadSubtitleText = styled.span`
+    flex: 1 1 auto;
+    font-size: 85%;
+    min-width: 0;
+`;
+
+export const StyledListItemHeadTopRightElement = styled.div`
+    flex: 0 0 auto;
+    font-size: 85%;
+    margin-left: 8px;
+    opacity: 0.75;
+`;
+
+export const StyledListItemHeadBottomRightElement = styled.div`
+    flex: 0 0 auto;
+    margin-left: 8px;
+    font-size: 85%;
 `;
