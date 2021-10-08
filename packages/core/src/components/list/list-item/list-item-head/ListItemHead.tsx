@@ -1,4 +1,13 @@
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, {
+    FC,
+    MouseEventHandler,
+    ReactNode,
+    TouchEventHandler,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import GridImage from '../../../grid-image/GridImage';
 import Icon from '../../../icon/Icon';
 import {
@@ -25,6 +34,7 @@ type ListItemHeadProps = {
     isExpandable: boolean;
     isOpen: boolean;
     onClick?: MouseEventHandler<HTMLDivElement>;
+    onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: [ReactNode, ...ReactNode[]];
     subtitle?: ReactNode;
     shouldShowRoundImage?: boolean;
@@ -39,6 +49,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     isExpandable,
     isOpen,
     onClick,
+    onLongPress,
     rightElements,
     subtitle,
     shouldShowRoundImage,
@@ -47,6 +58,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const [hasLoadedImage, setHasLoadedImage] = useState(false);
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
+    const longPressTimeoutRef = useRef<number>();
+
     const handleImageLoaded = useCallback(() => {
         setHasLoadedImage(true);
     }, []);
@@ -54,6 +67,21 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
     const handleMouseLeave = useCallback(() => setShouldShowHoverItem(false), []);
+
+    const handleTouchStart = useCallback<TouchEventHandler<HTMLDivElement>>(
+        (event) => {
+            longPressTimeoutRef.current = window.setTimeout(() => {
+                if (typeof onLongPress === 'function') {
+                    onLongPress(event);
+                }
+            });
+        },
+        [onLongPress]
+    );
+
+    const handleTouchEnd = useCallback(() => {
+        clearTimeout(longPressTimeoutRef.current);
+    }, []);
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
@@ -98,6 +126,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             onClick={onClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onTouchStart={typeof onLongPress === 'function' ? handleTouchStart : undefined}
+            onTouchEnd={typeof onLongPress === 'function' ? handleTouchEnd : undefined}
         >
             {isAnyItemExpandable && (
                 <StyledMotionListItemHeadIndicator

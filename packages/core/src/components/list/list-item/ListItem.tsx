@@ -1,5 +1,13 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useContext, useEffect } from 'react';
+import React, {
+    FC,
+    MouseEventHandler,
+    ReactNode,
+    TouchEventHandler,
+    useCallback,
+    useContext,
+    useEffect,
+} from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
@@ -34,6 +42,11 @@ type ListItemProps = {
      */
     onClick?: MouseEventHandler<HTMLDivElement>;
     /**
+     * Function to be executed when the header of the `ListItem` is pressed for
+     * 400 milliseconds.
+     */
+    onLongPress?: TouchEventHandler<HTMLDivElement>;
+    /**
      * Elements that are displayed on the right side of the header. If multiple
      * elements are specified, they are displayed one below the other.
      */
@@ -59,6 +72,7 @@ const ListItem: FC<ListItemProps> = ({
     icons,
     images,
     onClick,
+    onLongPress,
     rightElements,
     subtitle,
     shouldShowRoundImage,
@@ -110,6 +124,7 @@ const ListItem: FC<ListItemProps> = ({
                     isExpandable={isExpandable}
                     isOpen={isOpen}
                     onClick={handleHeadClick}
+                    onLongPress={onLongPress}
                     rightElements={rightElements}
                     subtitle={subtitle}
                     shouldShowRoundImage={shouldShowRoundImage}
