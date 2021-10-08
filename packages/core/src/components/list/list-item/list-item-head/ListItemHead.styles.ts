@@ -58,23 +58,33 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
         rgba(${({ theme }: StyledListItemHeadImageWrapperProps) => theme['009-rgb']}, 0.08) inset;
     flex: 0 0 auto;
     height: 40px;
-    margin-right: 10px;
     overflow: hidden;
     width: 40px;
 `;
 
-export const StyledListItemHeadImage = styled.img`
+type StyledListItemHeadImageProps = {
+    isHidden: boolean;
+};
+
+export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
     height: 100%;
     object-fit: cover;
+    opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
+    transition: opacity 0.4s ease;
     width: 100%;
 `;
 
-export const StyledListItemHeadContent = styled.div`
+type StyledListItemHeadContentProps = {
+    isIconOrImageGiven: boolean;
+};
+
+export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentProps>`
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
     justify-content: center;
     line-height: normal;
+    margin-left: ${({ isIconOrImageGiven }) => (isIconOrImageGiven ? '10px' : undefined)};
     min-width: 0;
 `;
 

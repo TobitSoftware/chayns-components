@@ -1,8 +1,7 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import List from '../src/components/list/List';
-import ListItem from '../src/components/list/list-item/ListItem';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
+import ListItem from '../src/components/list/list-item/ListItem';
 
 export default {
     title: 'Core/List',
@@ -16,7 +15,7 @@ export const General = Template.bind({});
 
 export const ListItemsWithImage = Template.bind({});
 
-export const ListItemsWithPuzzleImage = Template.bind({});
+export const ListItemsWithGridImage = Template.bind({});
 
 export const ListItemsWithIcon = Template.bind({});
 
@@ -88,7 +87,7 @@ ListItemsWithImage.args = {
     ],
 };
 
-ListItemsWithPuzzleImage.args = {
+ListItemsWithGridImage.args = {
     children: [
         <ListItem
             images={images}

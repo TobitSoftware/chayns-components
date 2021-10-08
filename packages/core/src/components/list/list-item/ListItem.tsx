@@ -2,9 +2,9 @@ import { AnimatePresence, MotionConfig } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode, useCallback, useContext, useEffect } from 'react';
 import { useUuid } from '../../../hooks/uuid';
 import { ListContext } from '../List';
-import { StyledListItem } from './ListItem.styles';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
+import { StyledListItem } from './ListItem.styles';
 
 type ListItemProps = {
     /**
@@ -87,7 +87,7 @@ const ListItem: FC<ListItemProps> = ({
         }
 
         return undefined;
-    }, [incrementExpandableItemCount]);
+    }, [children, incrementExpandableItemCount]);
 
     return (
         <MotionConfig transition={{ duration: 0.25 }}>

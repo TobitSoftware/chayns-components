@@ -3,4 +3,8 @@ export { default as AccordionContent } from './components/accordion/accordion-co
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
+export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
+export { default as List } from './components/list/List';
+export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
+export { default as ListItem } from './components/list/list-item/ListItem';

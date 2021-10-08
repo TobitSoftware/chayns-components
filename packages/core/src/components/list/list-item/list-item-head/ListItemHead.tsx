@@ -1,4 +1,6 @@
-import React, { FC, MouseEventHandler, ReactNode } from 'react';
+import React, { FC, MouseEventHandler, ReactNode, useCallback, useMemo, useState } from 'react';
+import GridImage from '../../../grid-image/GridImage';
+import Icon from '../../../icon/Icon';
 import {
     StyledListItemHead,
     StyledListItemHeadContent,
@@ -9,7 +11,6 @@ import {
     StyledListItemHeadTitle,
     StyledMotionListItemHeadIndicator,
 } from './ListItemHead.styles';
-import Icon from '../../../icon/Icon';
 
 type ListItemHeadProps = {
     icons?: [string, ...string[]];
@@ -36,6 +37,48 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     shouldShowRoundImage,
     title,
 }) => {
+    const [hasLoadedImage, setHasLoadedImage] = useState(false);
+
+    const handleImageLoaded = useCallback(() => {
+        setHasLoadedImage(true);
+    }, []);
+
+    const iconOrImageElement = useMemo(() => {
+        if (icons) {
+            return (
+                <StyledListItemHeadIcon>
+                    <Icon icons={icons} size={22} />
+                </StyledListItemHeadIcon>
+            );
+        }
+
+        if (images && images[0] && images[1] && images[2]) {
+            const gridImages: [string, string, string] = [images[0], images[1], images[2]];
+
+            return (
+                <GridImage
+                    images={gridImages}
+                    shouldShowRoundImage={shouldShowRoundImage}
+                    size={40}
+                />
+            );
+        }
+
+        if (images && images[0]) {
+            return (
+                <StyledListItemHeadImageWrapper shouldShowRoundImage={shouldShowRoundImage}>
+                    <StyledListItemHeadImage
+                        isHidden={!hasLoadedImage}
+                        onLoad={handleImageLoaded}
+                        src={images[0]}
+                    />
+                </StyledListItemHeadImageWrapper>
+            );
+        }
+
+        return undefined;
+    }, [handleImageLoaded, hasLoadedImage, icons, images, shouldShowRoundImage]);
+
     return (
         <StyledListItemHead
             className="beta-chayns-list-item-head"
@@ -50,17 +93,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
                 </StyledMotionListItemHeadIndicator>
             )}
-            {icons && (
-                <StyledListItemHeadIcon>
-                    <Icon icons={icons} size={22} />
-                </StyledListItemHeadIcon>
-            )}
-            {images && !icons && (
-                <StyledListItemHeadImageWrapper shouldShowRoundImage={shouldShowRoundImage}>
-                    <StyledListItemHeadImage src={images[0]} />
-                </StyledListItemHeadImageWrapper>
-            )}
-            <StyledListItemHeadContent>
+            {iconOrImageElement}
+            <StyledListItemHeadContent isIconOrImageGiven={iconOrImageElement !== undefined}>
                 <StyledListItemHeadTitle className="ellipsis">{title}</StyledListItemHeadTitle>
                 {subtitle && (
                     <StyledListItemHeadSubtitle className="ellipsis">
