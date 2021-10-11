@@ -100,14 +100,14 @@ const ListItem: FC<ListItemProps> = ({
     );
 
     useEffect(() => {
-        if (children) {
+        if (isExpandable) {
             // The incrementExpandableItemCount function returns an cleanup
             // function to decrement expandableItemCount if component unmounts
             return incrementExpandableItemCount();
         }
 
         return undefined;
-    }, [children, incrementExpandableItemCount]);
+    }, [incrementExpandableItemCount, isExpandable]);
 
     return (
         <MotionConfig transition={{ duration: 0.25 }}>

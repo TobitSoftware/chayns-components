@@ -74,7 +74,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 if (typeof onLongPress === 'function') {
                     onLongPress(event);
                 }
-            });
+            }, 400);
         },
         [onLongPress]
     );
