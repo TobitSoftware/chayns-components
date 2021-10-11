@@ -1,4 +1,4 @@
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
     MouseEventHandler,
@@ -121,33 +121,31 @@ const ListItem: FC<ListItemProps> = ({
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
     return (
-        <MotionConfig transition={{ duration: 0.3 }}>
-            <StyledListItem
-                className="beta-chayns-list-item"
-                isClickable={typeof onClick === 'function' || isExpandable}
+        <StyledListItem
+            className="beta-chayns-list-item"
+            isClickable={typeof onClick === 'function' || isExpandable}
+            isOpen={isOpen}
+        >
+            <ListItemHead
+                hoverItem={hoverItem}
+                icons={icons}
+                images={images}
+                isAnyItemExpandable={isAnyItemExpandable}
+                isExpandable={isExpandable}
                 isOpen={isOpen}
-            >
-                <ListItemHead
-                    hoverItem={hoverItem}
-                    icons={icons}
-                    images={images}
-                    isAnyItemExpandable={isAnyItemExpandable}
-                    isExpandable={isExpandable}
-                    isOpen={isOpen}
-                    onClick={handleHeadClick}
-                    onLongPress={onLongPress}
-                    rightElements={rightElements}
-                    subtitle={subtitle}
-                    shouldShowRoundImage={shouldShowRoundImage}
-                    title={title}
-                />
-                {isExpandable && (
-                    <AnimatePresence initial={false}>
-                        {isOpen && <ListItemBody>{children}</ListItemBody>}
-                    </AnimatePresence>
-                )}
-            </StyledListItem>
-        </MotionConfig>
+                onClick={handleHeadClick}
+                onLongPress={onLongPress}
+                rightElements={rightElements}
+                subtitle={subtitle}
+                shouldShowRoundImage={shouldShowRoundImage}
+                title={title}
+            />
+            {isExpandable && (
+                <AnimatePresence initial={false}>
+                    {isOpen && <ListItemBody>{children}</ListItemBody>}
+                </AnimatePresence>
+            )}
+        </StyledListItem>
     );
 };
 

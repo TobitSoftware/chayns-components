@@ -134,6 +134,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 <StyledMotionListItemHeadIndicator
                     animate={{ rotate: isOpen ? 90 : 0 }}
                     initial={false}
+                    transition={{ type: 'tween' }}
                 >
                     {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
                 </StyledMotionListItemHeadIndicator>
@@ -174,7 +175,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                         width: shouldShowHoverItem ? 'auto' : 0,
                     }}
                     initial={false}
-                    transition={{ duration: 0.1 }}
+                    transition={{ duration: 0.15, type: 'tween' }}
                 >
                     {hoverItem}
                 </StyledMotionListItemHeadHoverItem>

@@ -1,4 +1,4 @@
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import React, { FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import AccordionBody from './accordion-body/AccordionBody';
@@ -87,30 +87,24 @@ const Accordion: FC<AccordionProps> = ({
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
     return (
-        <MotionConfig transition={{ duration: 0.3 }}>
-            <StyledAccordion
-                className="beta-chayns-accordion"
-                isOpen={isOpen}
-                isWrapped={isWrapped}
-            >
-                <AccordionContext.Provider value={{ isWrapped }}>
-                    <AccordionHead
-                        icon={icon}
-                        isOpen={isOpen}
-                        isFixed={isFixed}
-                        isTitleGreyed={isTitleGreyed}
-                        isWrapped={isWrapped}
-                        onClick={handleHeadClick}
-                        rightElement={rightElement}
-                        title={title}
-                        titleElement={titleElement}
-                    />
-                    <AnimatePresence initial={false}>
-                        {isOpen && <AccordionBody>{children}</AccordionBody>}
-                    </AnimatePresence>
-                </AccordionContext.Provider>
-            </StyledAccordion>
-        </MotionConfig>
+        <StyledAccordion className="beta-chayns-accordion" isOpen={isOpen} isWrapped={isWrapped}>
+            <AccordionContext.Provider value={{ isWrapped }}>
+                <AccordionHead
+                    icon={icon}
+                    isOpen={isOpen}
+                    isFixed={isFixed}
+                    isTitleGreyed={isTitleGreyed}
+                    isWrapped={isWrapped}
+                    onClick={handleHeadClick}
+                    rightElement={rightElement}
+                    title={title}
+                    titleElement={titleElement}
+                />
+                <AnimatePresence initial={false}>
+                    {isOpen && <AccordionBody>{children}</AccordionBody>}
+                </AnimatePresence>
+            </AccordionContext.Provider>
+        </StyledAccordion>
     );
 };
 

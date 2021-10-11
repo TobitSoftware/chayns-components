@@ -60,11 +60,13 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             className="beta-chayns-accordion-head"
             initial={false}
+            transition={{ type: 'tween' }}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: isOpen || isFixed ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
+                transition={{ type: 'tween' }}
             >
                 <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
             </StyledMotionIconWrapper>
@@ -73,6 +75,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
                 ref={titleWrapperRef}
+                transition={{ type: 'tween' }}
             >
                 <AnimatePresence initial={false}>
                     <StyledMotionTitle
@@ -86,6 +89,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         isOpen={isOpen}
                         isWrapped={isWrapped}
                         key={isOpen && !isWrapped ? 'accordionHeadTitleBig' : 'accordionHeadTitle'}
+                        transition={{ type: 'tween' }}
                     >
                         {title}
                     </StyledMotionTitle>

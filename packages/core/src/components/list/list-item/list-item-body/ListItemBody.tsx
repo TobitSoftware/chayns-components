@@ -7,6 +7,7 @@ const ListItemBody: FC = ({ children }) => (
         className="beta-chayns-accordion-body"
         exit={{ height: 0, opacity: 0 }}
         initial={{ height: 0, opacity: 0 }}
+        transition={{ type: 'tween' }}
     >
         {children}
     </StyledMotionListItemBody>
