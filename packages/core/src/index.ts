@@ -4,6 +4,7 @@ export { default as AccordionGroup } from './components/accordion/accordion-grou
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
+export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
 export { default as List } from './components/list/List';
