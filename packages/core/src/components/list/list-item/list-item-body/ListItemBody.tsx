@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import { StyledMotionListItemBody } from './ListItemBody.styles';
 
-type ListItemBodyProps = {};
-
-const ListItemBody: FC<ListItemBodyProps> = ({ children }) => (
+const ListItemBody: FC = ({ children }) => (
     <StyledMotionListItemBody
         animate={{ height: 'auto', opacity: 1 }}
         className="beta-chayns-accordion-body"
