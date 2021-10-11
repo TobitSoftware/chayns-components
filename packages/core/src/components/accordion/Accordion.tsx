@@ -87,7 +87,7 @@ const Accordion: FC<AccordionProps> = ({
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
     return (
-        <MotionConfig transition={{ duration: 0.35 }}>
+        <MotionConfig transition={{ duration: 0.3 }}>
             <StyledAccordion
                 className="beta-chayns-accordion"
                 isOpen={isOpen}

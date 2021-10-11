@@ -13,7 +13,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
             background-color: rgba(${({ theme }: StyledListItemProps) => theme['100-rgb']}, 0.85);
         `}
 
-    transition: background-color 0.35s ease;
+    transition: background-color 0.3s ease;
 
     ${({ isClickable }) =>
         isClickable &&

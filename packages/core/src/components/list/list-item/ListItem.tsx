@@ -121,7 +121,7 @@ const ListItem: FC<ListItemProps> = ({
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
     return (
-        <MotionConfig transition={{ duration: 0.35 }}>
+        <MotionConfig transition={{ duration: 0.3 }}>
             <StyledListItem
                 className="beta-chayns-list-item"
                 isClickable={typeof onClick === 'function' || isExpandable}

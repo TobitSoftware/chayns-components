@@ -59,6 +59,7 @@ export const StyledListItemHeadImageWrapper = styled.div<StyledListItemHeadImage
     flex: 0 0 auto;
     height: 40px;
     overflow: hidden;
+    transition: border-radius 0.3s ease;
     width: 40px;
 `;
 

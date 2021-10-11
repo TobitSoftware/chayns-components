@@ -13,6 +13,7 @@ export const StyledGridImage = styled.div<StyledGridImageProps>`
     height: ${({ size }) => size}px;
     overflow: hidden;
     position: relative;
+    transition: border-radius 0.3s ease;
     width: ${({ size }) => size}px;
 `;
 
