@@ -75,10 +75,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 secondaryColor,
             });
 
-            if (colorName === 'text') {
-                // console.debug('textColor', hexColor);
-            }
-
             if (hexColor) {
                 const rgbColor = hexToRgb255(hexColor);
 
