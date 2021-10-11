@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionAccordionHeadProps = WithTheme<unknown>;
@@ -39,7 +39,6 @@ interface StyledMotionTitleProps {
 }
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
-    align-items: center;
     font-size: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '1.3rem' : undefined)};
     font-weight: ${({ isOpen, isWrapped }) => (isOpen && isWrapped ? 700 : 'normal')};
     height: ${({ isWrapped }) => (isWrapped ? '100%' : undefined)};
@@ -48,7 +47,13 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     transform-origin: top left;
     user-select: none;
     white-space: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? 'normal' : 'nowrap')};
-    //width: 100%;
+
+    ${({ isWrapped }) =>
+        isWrapped &&
+        css`
+            align-items: center;
+            display: flex;
+        `}
 `;
 
 export const StyledTitleElementWrapper = styled.div`

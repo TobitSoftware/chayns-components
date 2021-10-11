@@ -1,6 +1,8 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { useUuid } from '../../hooks/uuid';
 import AccordionBody from './accordion-body/AccordionBody';
+import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { StyledAccordion } from './Accordion.styles';
 
@@ -13,11 +15,6 @@ type AccordionProps = {
      * The content of the accordion body
      */
     children: ReactNode;
-    /**
-     * Defines the group of the Accordion. Accordions with the same group are
-     * automatically closed when an Accordion of the group is opened.
-     */
-    group?: string;
     /**
      * The icon that is displayed in front of the title
      */
@@ -54,14 +51,8 @@ type AccordionProps = {
     titleElement?: ReactNode;
 };
 
-interface AccordionOpenData {
-    group: string;
-    ref: React.RefObject<HTMLDivElement>;
-}
-
 const Accordion: FC<AccordionProps> = ({
     children,
-    group,
     icon,
     isDefaultOpen = false,
     isFixed = false,
@@ -71,48 +62,36 @@ const Accordion: FC<AccordionProps> = ({
     title,
     titleElement,
 }) => {
-    const [isOpen, setIsOpen] = useState(isDefaultOpen);
+    const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
 
-    const accordionRef = useRef<HTMLDivElement>(null);
+    const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen);
+
+    const uuid = useUuid();
+
+    const isInGroup = typeof updateOpenAccordionUuid === 'function';
+
+    const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
     const handleHeadClick = useCallback(() => {
-        if (!isOpen && typeof group === 'string') {
-            const customEvent = new CustomEvent<AccordionOpenData>('accordionOpen', {
-                detail: { group, ref: accordionRef },
-            });
-
-            document.body.dispatchEvent(customEvent);
+        if (typeof updateOpenAccordionUuid === 'function') {
+            updateOpenAccordionUuid(uuid);
         }
 
-        setIsOpen(!isOpen);
-    }, [group, isOpen]);
-
-    const handleAccordionOpen = useCallback(
-        ({ detail }: CustomEvent<AccordionOpenData>) => {
-            if (isOpen && group === detail.group && accordionRef.current !== detail.ref.current) {
-                setIsOpen(false);
-            }
-        },
-        [group, isOpen]
-    );
+        setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
+    }, [updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
-        // @ts-expect-error: Type is correct here because its a custom event
-        document.body.addEventListener('accordionOpen', handleAccordionOpen);
-
-        return () => {
-            // @ts-expect-error: Type is correct here because its a custom event
-            document.body.removeEventListener('accordionOpen', handleAccordionOpen);
-        };
-    }, [handleAccordionOpen]);
+        if (isDefaultOpen && typeof updateOpenAccordionUuid === 'function') {
+            updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
+        }
+    }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
     return (
-        <MotionConfig transition={{ duration: 3 }}>
+        <MotionConfig transition={{ duration: 0.35 }}>
             <StyledAccordion
                 className="beta-chayns-accordion"
                 isOpen={isOpen}
                 isWrapped={isWrapped}
-                ref={accordionRef}
             >
                 <AccordionContext.Provider value={{ isWrapped }}>
                     <AccordionHead

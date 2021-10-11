@@ -20,8 +20,8 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         `}
 
     margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
-    transition: background-color 0.2s ease, border-radius 0.2s ease, box-shadow 0.2s ease,
-        margin-bottom 0.2s ease;
+    transition: background-color 0.35s ease, border-radius 0.35s ease, box-shadow 0.35s ease,
+        margin-bottom 0.35s ease;
 
     ${({ isWrapped }) =>
         !isWrapped &&
