@@ -38,6 +38,10 @@ type ListItemProps = {
      */
     images?: string[];
     /**
+     * This can be used to automatically expand the `ListItem` during the first render.
+     */
+    isDefaultOpen?: boolean;
+    /**
      * Function to be executed when the header of the `ListItem` was clicked
      */
     onClick?: MouseEventHandler<HTMLDivElement>;
@@ -71,6 +75,7 @@ const ListItem: FC<ListItemProps> = ({
     hoverItem,
     icons,
     images,
+    isDefaultOpen,
     onClick,
     onLongPress,
     rightElements,
@@ -109,8 +114,14 @@ const ListItem: FC<ListItemProps> = ({
         return undefined;
     }, [incrementExpandableItemCount, isExpandable]);
 
+    useEffect(() => {
+        if (isDefaultOpen) {
+            updateOpenItemUuid(uuid, { shouldOnlyOpen: true });
+        }
+    }, [isDefaultOpen, updateOpenItemUuid, uuid]);
+
     return (
-        <MotionConfig transition={{ duration: 0.25 }}>
+        <MotionConfig transition={{ duration: 0.35 }}>
             <StyledListItem
                 className="beta-chayns-list-item"
                 isClickable={typeof onClick === 'function' || isExpandable}

@@ -35,7 +35,11 @@ const images = [
     'https://tsimg.cloud/77896-21884/fce5e30f68c75c8c524cc9ac0887832f263b79ff.png',
 ];
 
-const locationImages = ['https://sub60.tobit.com/l/1', 'https://sub60.tobit.com/l/3'];
+const locationImages = [
+    'https://sub60.tobit.com/l/1',
+    'https://sub60.tobit.com/l/2',
+    'https://sub60.tobit.com/l/3',
+];
 
 const otherImages = [
     'https://tsimg.cloud/77896-21884/436c7140eb430a0fa486aa737a953626cc83c22a.jpg',
@@ -121,7 +125,13 @@ ListItemsWithRightElements.args = {
         />,
         <ListItem
             images={[locationImages[1]]}
-            rightElements={['07:51 Uhr']}
+            rightElements={['07:51 Uhr', undefined]}
+            subtitle="Dolor sit ipsum amet"
+            title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
+        />,
+        <ListItem
+            images={[locationImages[2]]}
+            rightElements={[<Badge>123</Badge>]}
             subtitle="Dolor sit ipsum amet"
             title="Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet"
         />,

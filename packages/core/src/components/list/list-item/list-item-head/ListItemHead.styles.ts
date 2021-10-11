@@ -126,6 +126,11 @@ export const StyledListItemHeadBottomRightElement = styled.div`
     font-size: 85%;
 `;
 
+export const StyledListItemHeadRightElement = styled.div`
+    flex: 0 0 auto;
+    margin-left: 8px;
+`;
+
 export const StyledMotionListItemHeadHoverItem = styled(motion.div)`
     overflow: hidden;
 `;

@@ -4,7 +4,7 @@ interface IListContext {
     incrementExpandableItemCount: () => () => void;
     isAnyItemExpandable: boolean;
     openItemUuid: string | undefined;
-    updateOpenItemUuid: (uuid: string) => void;
+    updateOpenItemUuid: (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 }
 
 export const ListContext = React.createContext<IListContext>({
@@ -28,9 +28,9 @@ const List: FC<ListProps> = ({ children }) => {
     const [expandableItemCount, setExpandableItemCount] = useState<number>(0);
 
     const updateOpenItemUuid = useCallback<IListContext['updateOpenItemUuid']>(
-        (uuid) => {
+        (uuid, { shouldOnlyOpen } = {}) => {
             setOpenItemUuid((currentOpenItemUuid) => {
-                if (currentOpenItemUuid === uuid) {
+                if (currentOpenItemUuid === uuid && shouldOnlyOpen !== true) {
                     return undefined;
                 }
 
