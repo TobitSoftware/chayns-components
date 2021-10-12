@@ -164,7 +164,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         useEffect(() => {
             if (isContentShown) {
                 document.addEventListener('click', handleDocumentClick, true);
-                document.addEventListener('blur', handleHide);
+                window.addEventListener('blur', handleHide);
 
                 if (typeof onShow === 'function') {
                     onShow();
@@ -175,7 +175,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
             return () => {
                 document.removeEventListener('click', handleDocumentClick, true);
-                document.removeEventListener('blur', handleHide);
+                window.removeEventListener('blur', handleHide);
             };
         }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
 
