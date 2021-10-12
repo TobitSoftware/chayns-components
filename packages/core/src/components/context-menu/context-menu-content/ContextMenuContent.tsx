@@ -25,7 +25,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
         const percentageOffsetY = isTopRightAlignment || isTopLeftAlignment ? -100 : 0;
 
         const anchorOffsetX = isBottomLeftAlignment || isTopLeftAlignment ? 21 : -21;
-        const anchorOffsetY = isBottomLeftAlignment || isTopLeftAlignment ? -21 : 21;
+        const anchorOffsetY = isTopRightAlignment || isTopLeftAlignment ? -21 : 21;
 
         const exitAndInitialY = isTopLeftAlignment || isTopRightAlignment ? -16 : 16;
 
