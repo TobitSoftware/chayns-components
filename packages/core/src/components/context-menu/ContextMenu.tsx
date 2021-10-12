@@ -58,6 +58,14 @@ type ContextMenuProps = {
      * The items that will be displayed in the content of the `ContextMenu`.
      */
     items: ContextMenuItem[];
+    /**
+     * Function to be executed when the content of the Context menu has been hidden.
+     */
+    onHide?: VoidFunction;
+    /**
+     * Function to be executed when the content of the Context menu has been shown.
+     */
+    onShow?: VoidFunction;
 };
 
 const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
@@ -68,6 +76,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             container = document.body,
             coordinates,
             items,
+            onHide,
+            onShow,
         },
         ref
     ) => {
@@ -142,20 +152,32 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             [handleHide]
         );
 
-        useImperativeHandle(ref, () => ({
-            hide: handleHide,
-            show: handleShow,
-        }));
+        useImperativeHandle(
+            ref,
+            () => ({
+                hide: handleHide,
+                show: handleShow,
+            }),
+            [handleHide, handleShow]
+        );
 
         useEffect(() => {
             if (isContentShown) {
                 document.addEventListener('click', handleDocumentClick, true);
+                document.addEventListener('blur', handleHide);
+
+                if (typeof onShow === 'function') {
+                    onShow();
+                }
+            } else if (typeof onHide === 'function') {
+                onHide();
             }
 
             return () => {
                 document.removeEventListener('click', handleDocumentClick, true);
+                document.removeEventListener('blur', handleHide);
             };
-        }, [handleDocumentClick, isContentShown]);
+        }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
 
         const portal = useMemo(
             () =>
