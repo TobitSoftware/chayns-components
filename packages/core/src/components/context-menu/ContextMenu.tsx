@@ -1,10 +1,11 @@
 import { AnimatePresence } from 'framer-motion';
 import React, {
-    FC,
+    forwardRef,
     MouseEventHandler,
     ReactNode,
     useCallback,
     useEffect,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -22,10 +23,15 @@ export type ContextMenuCoordinates = {
 };
 
 export type ContextMenuItem = {
-    icons: [string, ...string[]];
+    icons: string[];
     key: string;
     onClick: MouseEventHandler<HTMLDivElement>;
     text: string;
+};
+
+type ContextMenuRef = {
+    hide: VoidFunction;
+    show: VoidFunction;
 };
 
 type ContextMenuProps = {
@@ -54,121 +60,145 @@ type ContextMenuProps = {
     items: ContextMenuItem[];
 };
 
-const ContextMenu: FC<ContextMenuProps> = ({
-    alignment,
-    children = <Icon icons={['ts-ellipsis_v']} />,
-    container = document.body,
-    coordinates,
-    items,
-}) => {
-    const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
-        x: 0,
-        y: 0,
-    });
-    const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
-        ContextMenuAlignment.TopLeft
-    );
-    const [isContentShown, setIsContentShown] = useState(false);
-
-    const uuid = useUuid();
-
-    const contextMenuContentRef = useRef<HTMLDivElement>(null);
-    const contextMenuRef = useRef<HTMLSpanElement>(null);
-
-    const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (contextMenuRef.current) {
-            const rootElement = document.querySelector('.tapp') || document.body;
-
-            const {
-                x,
-                y,
-                height: childrenHeight,
-                width: childrenWidth,
-            } = contextMenuRef.current.getBoundingClientRect();
-
-            setInternalCoordinates({ x: x + childrenWidth / 2, y: y + childrenHeight / 2 });
-
-            const { height, width } = rootElement.getBoundingClientRect();
-
-            if (x < width / 2) {
-                if (y < height / 2) {
-                    setInternalAlignment(ContextMenuAlignment.BottomRight);
-                } else {
-                    setInternalAlignment(ContextMenuAlignment.TopRight);
-                }
-            } else if (y < height / 2) {
-                setInternalAlignment(ContextMenuAlignment.BottomLeft);
-            } else {
-                setInternalAlignment(ContextMenuAlignment.TopLeft);
-            }
-        }
-
-        setIsContentShown((currentIsContentShown) => !currentIsContentShown);
-    }, []);
-
-    const handleDocumentClick = useCallback<EventListener>((event) => {
-        if (!contextMenuContentRef.current?.contains(event.target as Node)) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        setIsContentShown(false);
-    }, []);
-
-    useEffect(() => {
-        if (isContentShown) {
-            document.addEventListener('click', handleDocumentClick, true);
-        }
-
-        return () => {
-            document.removeEventListener('click', handleDocumentClick, true);
-        };
-    }, [handleDocumentClick, isContentShown]);
-
-    const portal = useMemo(
-        () =>
-            createPortal(
-                <AnimatePresence initial={false}>
-                    {isContentShown && (
-                        <ContextMenuContent
-                            coordinates={coordinates ?? internalCoordinates}
-                            items={items}
-                            key={`contextMenu_${uuid}`}
-                            alignment={alignment ?? internalAlignment}
-                            ref={contextMenuContentRef}
-                        />
-                    )}
-                </AnimatePresence>,
-                container
-            ),
-        [
-            container,
-            coordinates,
-            internalCoordinates,
-            internalAlignment,
-            isContentShown,
-            items,
+const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
+    (
+        {
             alignment,
-            uuid,
-        ]
-    );
+            children = <Icon icons={['ts-ellipsis_v']} />,
+            container = document.body,
+            coordinates,
+            items,
+        },
+        ref
+    ) => {
+        const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
+            x: 0,
+            y: 0,
+        });
+        const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
+            ContextMenuAlignment.TopLeft
+        );
+        const [isContentShown, setIsContentShown] = useState(false);
 
-    return (
-        <>
-            <StyledContextMenu
-                className="beta-chayns-context-menu"
-                onClick={handleClick}
-                ref={contextMenuRef}
-            >
-                {children}
-            </StyledContextMenu>
-            {portal}
-        </>
-    );
-};
+        const uuid = useUuid();
+
+        const contextMenuContentRef = useRef<HTMLDivElement>(null);
+        const contextMenuRef = useRef<HTMLSpanElement>(null);
+
+        const handleHide = useCallback(() => {
+            setIsContentShown(false);
+        }, []);
+
+        const handleShow = useCallback(() => {
+            if (contextMenuRef.current) {
+                const rootElement = document.querySelector('.tapp') || document.body;
+
+                const {
+                    x,
+                    y,
+                    height: childrenHeight,
+                    width: childrenWidth,
+                } = contextMenuRef.current.getBoundingClientRect();
+
+                setInternalCoordinates({ x: x + childrenWidth / 2, y: y + childrenHeight / 2 });
+
+                const { height, width } = rootElement.getBoundingClientRect();
+
+                if (x < width / 2) {
+                    if (y < height / 2) {
+                        setInternalAlignment(ContextMenuAlignment.BottomRight);
+                    } else {
+                        setInternalAlignment(ContextMenuAlignment.TopRight);
+                    }
+                } else if (y < height / 2) {
+                    setInternalAlignment(ContextMenuAlignment.BottomLeft);
+                } else {
+                    setInternalAlignment(ContextMenuAlignment.TopLeft);
+                }
+
+                setIsContentShown(true);
+            }
+        }, []);
+
+        const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
+            (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
+                handleShow();
+            },
+            [handleShow]
+        );
+
+        const handleDocumentClick = useCallback<EventListener>(
+            (event) => {
+                if (!contextMenuContentRef.current?.contains(event.target as Node)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                handleHide();
+            },
+            [handleHide]
+        );
+
+        useImperativeHandle(ref, () => ({
+            hide: handleHide,
+            show: handleShow,
+        }));
+
+        useEffect(() => {
+            if (isContentShown) {
+                document.addEventListener('click', handleDocumentClick, true);
+            }
+
+            return () => {
+                document.removeEventListener('click', handleDocumentClick, true);
+            };
+        }, [handleDocumentClick, isContentShown]);
+
+        const portal = useMemo(
+            () =>
+                createPortal(
+                    <AnimatePresence initial={false}>
+                        {isContentShown && (
+                            <ContextMenuContent
+                                coordinates={coordinates ?? internalCoordinates}
+                                items={items}
+                                key={`contextMenu_${uuid}`}
+                                alignment={alignment ?? internalAlignment}
+                                ref={contextMenuContentRef}
+                            />
+                        )}
+                    </AnimatePresence>,
+                    container
+                ),
+            [
+                container,
+                coordinates,
+                internalCoordinates,
+                internalAlignment,
+                isContentShown,
+                items,
+                alignment,
+                uuid,
+            ]
+        );
+
+        return (
+            <>
+                <StyledContextMenu
+                    className="beta-chayns-context-menu"
+                    onClick={handleClick}
+                    ref={contextMenuRef}
+                >
+                    {children}
+                </StyledContextMenu>
+                {portal}
+            </>
+        );
+    }
+);
 
 ContextMenu.displayName = 'ContextMenu';
 

@@ -29,7 +29,7 @@ import {
 
 type ListItemHeadProps = {
     hoverItem?: ReactNode;
-    icons?: [string, ...string[]];
+    icons?: string[];
     images?: string[];
     isAnyItemExpandable: boolean;
     isExpandable: boolean;
@@ -94,7 +94,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
         }
 
         if (images && images[0] && images[1] && images[2]) {
-            const gridImages: [string, string, string] = [images[0], images[1], images[2]];
+            const gridImages = [images[0], images[1], images[2]];
 
             return (
                 <GridImage

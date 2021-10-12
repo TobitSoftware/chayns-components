@@ -15,7 +15,7 @@ export type IconProps = {
     /**
      * The FontAwesome or tobit icons to render. Multiple icons are stacked.
      */
-    icons: [string, ...string[]];
+    icons: string[];
     /**
      * Disables the icon so that it cannot be clicked anymore
      */

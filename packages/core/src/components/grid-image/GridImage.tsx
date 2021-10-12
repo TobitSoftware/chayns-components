@@ -11,7 +11,7 @@ type GridImageProps = {
      * The images to be displayed in the `GridImage`. Only the first three
      * images are displayed.
      */
-    images: [string, string, string, ...string[]];
+    images: string[];
     /**
      * Images of users should always be displayed in a round shape. Therefore
      * this property can be set to true.

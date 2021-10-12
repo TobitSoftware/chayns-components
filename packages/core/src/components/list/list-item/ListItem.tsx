@@ -30,7 +30,7 @@ type ListItemProps = {
      * of the header. Multiple icons are stacked. See the `Icon` component
      * documentation for more information.
      */
-    icons?: [string, ...string[]];
+    icons?: string[];
     /**
      * A list of image URLs that are displayed on the left side of the header.
      * If multiple URLs are passed, the image is assembled from the first three
