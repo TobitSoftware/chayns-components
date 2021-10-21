@@ -77,12 +77,14 @@ export const StyledListItemHeadImage = styled.img<StyledListItemHeadImageProps>`
 
 type StyledListItemHeadContentProps = {
     isIconOrImageGiven: boolean;
+    isOpen: boolean;
 };
 
 export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentProps>`
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
+    font-weight: ${({ isOpen }) => (isOpen ? 'bold' : 'normal')};
     justify-content: center;
     line-height: normal;
     margin-left: ${({ isIconOrImageGiven }) => (isIconOrImageGiven ? '10px' : undefined)};

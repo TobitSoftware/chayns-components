@@ -140,7 +140,10 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 </StyledMotionListItemHeadIndicator>
             )}
             {iconOrImageElement}
-            <StyledListItemHeadContent isIconOrImageGiven={iconOrImageElement !== undefined}>
+            <StyledListItemHeadContent
+                isIconOrImageGiven={iconOrImageElement !== undefined}
+                isOpen={isOpen}
+            >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleText className="ellipsis">
                         {title}
