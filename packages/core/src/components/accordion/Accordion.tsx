@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import React, { FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { useUuid } from '../../hooks/uuid';
 import AccordionBody from './accordion-body/AccordionBody';
@@ -89,20 +89,22 @@ const Accordion: FC<AccordionProps> = ({
     return (
         <StyledAccordion className="beta-chayns-accordion" isOpen={isOpen} isWrapped={isWrapped}>
             <AccordionContext.Provider value={{ isWrapped }}>
-                <AccordionHead
-                    icon={icon}
-                    isOpen={isOpen}
-                    isFixed={isFixed}
-                    isTitleGreyed={isTitleGreyed}
-                    isWrapped={isWrapped}
-                    onClick={handleHeadClick}
-                    rightElement={rightElement}
-                    title={title}
-                    titleElement={titleElement}
-                />
-                <AnimatePresence initial={false}>
-                    {isOpen && <AccordionBody>{children}</AccordionBody>}
-                </AnimatePresence>
+                <MotionConfig transition={{ type: 'tween' }}>
+                    <AccordionHead
+                        icon={icon}
+                        isOpen={isOpen}
+                        isFixed={isFixed}
+                        isTitleGreyed={isTitleGreyed}
+                        isWrapped={isWrapped}
+                        onClick={handleHeadClick}
+                        rightElement={rightElement}
+                        title={title}
+                        titleElement={titleElement}
+                    />
+                    <AnimatePresence initial={false}>
+                        {isOpen && <AccordionBody>{children}</AccordionBody>}
+                    </AnimatePresence>
+                </MotionConfig>
             </AccordionContext.Provider>
         </StyledAccordion>
     );

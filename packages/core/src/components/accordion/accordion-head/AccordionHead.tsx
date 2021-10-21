@@ -1,14 +1,15 @@
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode, useEffect, useRef, useState } from 'react';
 import Icon from '../../icon/Icon';
 import { getAccordionHeadHeight } from '../utils';
 import {
     StyledMotionAccordionHead,
+    StyledMotionContentWrapper,
     StyledMotionIconWrapper,
     StyledMotionTitle,
+    StyledMotionTitleElementWrapper,
     StyledMotionTitleWrapper,
-    StyledRightWrapper,
-    StyledTitleElementWrapper,
+    StyledRightElementWrapper,
 } from './AccordionHead.styles';
 
 type AccordionHeadProps = {
@@ -60,45 +61,46 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
             className="beta-chayns-accordion-head"
             initial={false}
-            transition={{ type: 'tween' }}
         >
             <StyledMotionIconWrapper
                 animate={{ rotate: isOpen || isFixed ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
-                transition={{ type: 'tween' }}
             >
                 <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
             </StyledMotionIconWrapper>
-            <StyledMotionTitleWrapper
+            <StyledMotionContentWrapper
                 animate={{ opacity: isTitleGreyed ? 0.5 : 1 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
                 ref={titleWrapperRef}
-                transition={{ type: 'tween' }}
             >
-                <AnimatePresence initial={false}>
-                    <StyledMotionTitle
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{
-                            opacity: 0,
-                            position: 'absolute',
-                            scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3,
-                        }}
-                        initial={{ opacity: 0, scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
-                        isOpen={isOpen}
-                        isWrapped={isWrapped}
-                        key={isOpen && !isWrapped ? 'accordionHeadTitleBig' : 'accordionHeadTitle'}
-                        transition={{ type: 'tween' }}
-                    >
-                        {title}
-                    </StyledMotionTitle>
-                </AnimatePresence>
-                {titleElement && (
-                    <StyledTitleElementWrapper>{titleElement}</StyledTitleElementWrapper>
-                )}
-            </StyledMotionTitleWrapper>
-            {rightElement && <StyledRightWrapper>{rightElement}</StyledRightWrapper>}
+                <AnimateSharedLayout>
+                    <StyledMotionTitleWrapper>
+                        <AnimatePresence initial={false}>
+                            <StyledMotionTitle
+                                animate={{ scale: 1 }}
+                                initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
+                                isOpen={isOpen}
+                                isWrapped={isWrapped}
+                                key={
+                                    isOpen && !isWrapped
+                                        ? 'accordionHeadTitleBig'
+                                        : 'accordionHeadTitle'
+                                }
+                            >
+                                {title}
+                            </StyledMotionTitle>
+                        </AnimatePresence>
+                    </StyledMotionTitleWrapper>
+                    {titleElement && (
+                        <StyledMotionTitleElementWrapper layout>
+                            {titleElement}
+                        </StyledMotionTitleElementWrapper>
+                    )}
+                </AnimateSharedLayout>
+            </StyledMotionContentWrapper>
+            {rightElement && <StyledRightElementWrapper>{rightElement}</StyledRightElementWrapper>}
         </StyledMotionAccordionHead>
     );
 };

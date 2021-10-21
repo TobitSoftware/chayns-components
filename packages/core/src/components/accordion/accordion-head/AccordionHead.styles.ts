@@ -22,7 +22,7 @@ export const StyledMotionIconWrapper = styled(motion.div)`
     width: 25px;
 `;
 
-export const StyledMotionTitleWrapper = styled(motion.div)`
+export const StyledMotionContentWrapper = styled(motion.div)`
     align-self: flex-start;
     cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};
     display: flex;
@@ -30,7 +30,12 @@ export const StyledMotionTitleWrapper = styled(motion.div)`
     height: 100%;
     overflow: hidden;
     margin-right: 10px;
-    position: relative;
+`;
+
+export const StyledMotionTitleWrapper = styled(motion.div)`
+    display: grid;
+    flex: 0 1 auto;
+    grid-template-areas: 'header';
 `;
 
 interface StyledMotionTitleProps {
@@ -41,6 +46,7 @@ interface StyledMotionTitleProps {
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
     font-size: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '1.3rem' : undefined)};
     font-weight: ${({ isOpen, isWrapped }) => (isOpen && isWrapped ? 700 : 'normal')};
+    grid-area: header;
     height: ${({ isWrapped }) => (isWrapped ? '100%' : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
@@ -56,13 +62,13 @@ export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
         `}
 `;
 
-export const StyledTitleElementWrapper = styled.div`
+export const StyledMotionTitleElementWrapper = styled(motion.div)`
     align-items: center;
     display: flex;
     margin-left: 8px;
 `;
 
-export const StyledRightWrapper = styled.div`
+export const StyledRightElementWrapper = styled.div`
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
