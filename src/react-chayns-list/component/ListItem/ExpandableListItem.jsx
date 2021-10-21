@@ -11,6 +11,7 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
     const {
         noContentClass,
         className,
+        headerClassName,
         open,
         style,
         onOpen,
@@ -35,6 +36,7 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
                                 }
                             }}
                             {...props}
+                            className={headerClassName}
                         />
                     )}
                 </ExpandableList.Context.Consumer>
@@ -58,6 +60,7 @@ ExpandableListItem.propTypes = {
     ]).isRequired,
     noContentClass: PropTypes.bool,
     className: PropTypes.string,
+    headerClassName: PropTypes.string,
     open: PropTypes.bool,
     style: PropTypes.object,
     onOpen: PropTypes.func,
@@ -69,6 +72,7 @@ ExpandableListItem.propTypes = {
 ExpandableListItem.defaultProps = {
     noContentClass: false,
     className: null,
+    headerClassName: null,
     open: null,
     style: null,
     onOpen: null,
