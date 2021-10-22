@@ -68,11 +68,40 @@ export const StyledMotionTitleElementWrapper = styled(motion.div)`
     margin-left: 8px;
 `;
 
-export const StyledRightElementWrapper = styled.div`
-    display: flex;
+export const StyledRightWrapper = styled.div`
+    display: grid;
     flex: 0 0 auto;
-    flex-direction: column;
-    justify-content: center;
+    grid-template-areas: 'right';
     margin-right: 5px;
     overflow: hidden;
+    position: relative;
+`;
+
+export const StyledMotionRightElementWrapper = styled(motion.div)`
+    align-items: center;
+    display: flex;
+    grid-area: header;
+    justify-content: flex-end;
+`;
+
+type StyledMotionRightInputProps = WithTheme<unknown>;
+
+export const StyledMotionRightInput = styled(motion.input)`
+    border: 1px solid transparent;
+    border-bottom-color: rgba(
+        ${({ theme }: StyledMotionRightInputProps) => theme['headline-rgb']},
+        0.45
+    );
+    grid-area: header;
+    padding: 5px 1px;
+`;
+
+export const StyledMotionRightInputIconWrapper = styled(motion.div)`
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    right: 4px;
+    top: 0;
 `;

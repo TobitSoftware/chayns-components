@@ -1,6 +1,6 @@
+import { action as brokenAction } from '@storybook/addon-actions';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import ColorSchemeProvider from '../packages/core/src/components/color-scheme-provider/ColorSchemeProvider';
-import { action as brokenAction } from '@storybook/addon-actions';
 
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -43,19 +43,20 @@ export const decorators = [
                     }
 
                     return {
-                        type: arg.type,
-                        shiftKey: arg.shiftKey,
-                        screenX: arg.screenX,
-                        screenY: arg.screenY,
-                        pageX: arg.pageX,
-                        pageY: arg.pageY,
-                        metaKey: arg.metaKey,
-                        movementX: arg.movementX,
-                        movementY: arg.movementY,
+                        altKey: arg.altKey,
                         clientX: arg.clientX,
                         clientY: arg.clientY,
                         ctrlKey: arg.ctrlKey,
-                        altKey: arg.altKey,
+                        metaKey: arg.metaKey,
+                        movementX: arg.movementX,
+                        movementY: arg.movementY,
+                        pageX: arg.pageX,
+                        pageY: arg.pageY,
+                        screenX: arg.screenX,
+                        screenY: arg.screenY,
+                        shiftKey: arg.shiftKey,
+                        type: arg.type,
+                        value: arg.type === 'change' ? arg.target.value : undefined,
                     };
                 });
 

@@ -60,6 +60,10 @@ export const AccordionWithBadge = Template.bind({});
 
 export const AccordionWithTitleElement = Template.bind({});
 
+export const AccordionWithSearch = Template.bind({});
+
+export const AccordionWithBadgeAndSearch = Template.bind({});
+
 General.args = {
     children: (
         <AccordionContent>
@@ -129,4 +133,32 @@ AccordionWithTitleElement.args = {
     ),
     title: 'Lorem ipsum dolor sit amet',
     titleElement: <Icon icons={['fa fa-download']} />,
+};
+
+AccordionWithSearch.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum.
+        </AccordionContent>
+    ),
+    onSearchChange: () => {},
+    searchIcon: ['fa fa-search'],
+    searchPlaceholder: 'Suchen',
+    title: 'Lorem ipsum dolor sit amet',
+};
+
+AccordionWithBadgeAndSearch.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum.
+        </AccordionContent>
+    ),
+    onSearchChange: () => {},
+    rightElement: <Badge>124</Badge>,
+    searchPlaceholder: 'Suchen',
+    title: 'Lorem ipsum dolor sit amet',
 };

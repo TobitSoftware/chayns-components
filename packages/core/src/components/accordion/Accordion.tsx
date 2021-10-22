@@ -1,5 +1,13 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+    ChangeEventHandler,
+    FC,
+    ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import { useUuid } from '../../hooks/uuid';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
@@ -38,9 +46,23 @@ type AccordionProps = {
      */
     isWrapped?: boolean;
     /**
+     * Function that is executed when the text of the search in the accordion
+     * head changes. When this function is given, the search field is displayed
+     * in the Accordion Head.
+     */
+    onSearchChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
      * Content to be displayed on the right side in the head of the Accordion
      */
     rightElement?: ReactNode;
+    /**
+     * Icon to be displayed on the right side in the search input
+     */
+    searchIcon?: string[];
+    /**
+     * The placeholder to be used for the search
+     */
+    searchPlaceholder?: string;
     /**
      * Title of the Accordion displayed in the head
      */
@@ -58,7 +80,10 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isTitleGreyed = false,
     isWrapped = false,
+    onSearchChange,
     rightElement,
+    searchIcon,
+    searchPlaceholder,
     title,
     titleElement,
 }) => {
@@ -97,7 +122,10 @@ const Accordion: FC<AccordionProps> = ({
                         isTitleGreyed={isTitleGreyed}
                         isWrapped={isWrapped}
                         onClick={handleHeadClick}
+                        onSearchChange={onSearchChange}
                         rightElement={rightElement}
+                        searchIcon={searchIcon}
+                        searchPlaceholder={searchPlaceholder}
                         title={title}
                         titleElement={titleElement}
                     />
