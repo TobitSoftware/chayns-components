@@ -3,8 +3,7 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const RELATIONS_SERVER_URL = 'https://relations.chayns.net/relations/';
 const ADMIN_SERVER_URL = 'https://sub50.tobit.com/backend/';
-const SITE_SERVER_URL =
-    'https://chayns2.tobit.com/SiteSearchApi/location/search/';
+const SITE_SERVER_URL = 'https://relations.chayns.net/relations/location/';
 const FRIENDS_SERVER_URL =
     'https://webapi.tobit.com/AccountService/v1.0/chayns/friends';
 
@@ -127,17 +126,18 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
 export const fetchSites = async (value, skip, take) => {
     let result = [];
     const response = await fetchHelper('sites', {
-        url: `${SITE_SERVER_URL}${value}/?skip=${skip}&take=${take}`,
+        url: `${SITE_SERVER_URL}?query=${value}&skip=${skip}&take=${take}`,
         config: {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
+                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
             },
         },
     });
 
     if (response.ok) {
-        result = response.status !== 204 ? await response.json() : [];
+        result = response.status !== 204 ? (await response.json()).list : [];
     } else {
         console.error(
             '[chayns components] Personfinder: failed to fetch sites',

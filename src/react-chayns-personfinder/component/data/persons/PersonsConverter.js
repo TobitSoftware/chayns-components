@@ -66,7 +66,7 @@ export const convertSites = (sites) =>
     sites.map((site) => ({
         type: 'SITE',
         id: site.siteId,
-        name: site.locationName,
+        name: site.name,
         imageUrl: `https://sub60.tobit.com/l/${site.siteId}?size=100`,
         siteId: site.siteId,
         locationId: site.locationId,
