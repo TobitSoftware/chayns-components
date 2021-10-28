@@ -84,16 +84,18 @@ export const StyledMotionRightElementWrapper = styled(motion.div)`
     justify-content: flex-end;
 `;
 
-type StyledMotionRightInputProps = WithTheme<unknown>;
+type StyledMotionRightInputProps = WithTheme<{
+    hasIcon: boolean;
+}>;
 
-export const StyledMotionRightInput = styled(motion.input)`
+export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInputProps>`
     border: 1px solid transparent;
     border-bottom-color: rgba(
         ${({ theme }: StyledMotionRightInputProps) => theme['headline-rgb']},
         0.45
     );
     grid-area: header;
-    padding: 5px 1px;
+    padding: ${({ hasIcon }) => (hasIcon ? '5px 23px 5px 1px' : '5px 1px')};
 `;
 
 export const StyledMotionRightInputIconWrapper = styled(motion.div)`

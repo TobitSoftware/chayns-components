@@ -61,7 +61,10 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         closed: isWrapped ? 40 : 33,
         open: isWrapped ? 40 : 33,
     });
+
     const titleWrapperRef = useRef<HTMLDivElement>(null);
+
+    const hasSearchIcon = Array.isArray(searchIcon);
 
     useEffect(() => {
         setHeadHeight(
@@ -126,13 +129,14 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     animate={{ opacity: 1, width: 'auto' }}
                                     autoComplete="off"
                                     exit={{ opacity: 0, width: 0 }}
+                                    hasIcon={hasSearchIcon}
                                     initial={{ opacity: 0, width: 0 }}
                                     key="rightInput"
                                     onChange={onSearchChange}
                                     placeholder={searchPlaceholder}
                                     type="text"
                                 />
-                                {Array.isArray(searchIcon) && (
+                                {hasSearchIcon && (
                                     <StyledMotionRightInputIconWrapper
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
