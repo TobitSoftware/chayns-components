@@ -86,6 +86,10 @@ const ListItemHeader = ({
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
                         backgroundImage: `url(${image})`,
                     }}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        chayns.openImage(image);
+                    }}
                 />
             )}
             {images && (
@@ -95,6 +99,10 @@ const ListItemHeader = ({
                     })}
                     style={{
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
+                    }}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        chayns.openImage(images);
                     }}
                 >
                     {images.map((img, index) => {

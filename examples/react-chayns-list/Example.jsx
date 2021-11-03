@@ -165,7 +165,7 @@ export default class ListExample extends Component {
                         Content
                     </ListItem>
                     <ListItem
-                        title="ListItem (accordion-style, with image, with ContextMenu)"
+                        title="ListItem (accordion-style, with icon, with ContextMenu)"
                         subtitle="Description"
                         open={open1}
                         onOpen={() => {
