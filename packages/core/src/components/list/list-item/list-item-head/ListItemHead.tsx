@@ -36,6 +36,7 @@ type ListItemHeadProps = {
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: [ReactNode, ...ReactNode[]];
     subtitle?: ReactNode;
+    left?: ReactNode;
     shouldShowRoundImage?: boolean;
     title: ReactNode;
 };
@@ -53,6 +54,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     subtitle,
     shouldShowRoundImage,
     title,
+    left,
 }) => {
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
@@ -108,6 +110,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
                 </StyledMotionListItemHeadIndicator>
             )}
+            {left}
             {iconOrImageElement}
             <StyledListItemHeadContent
                 isIconOrImageGiven={iconOrImageElement !== undefined}
