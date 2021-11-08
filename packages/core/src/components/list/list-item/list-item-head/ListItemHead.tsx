@@ -10,11 +10,11 @@ import React, {
 } from 'react';
 import GridImage from '../../../grid-image/GridImage';
 import Icon from '../../../icon/Icon';
+import ListItemIcon from './list-item-icon/ListItemIcon';
 import {
     StyledListItemHead,
     StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
-    StyledListItemHeadIcon,
     StyledListItemHeadImage,
     StyledListItemHeadImageWrapper,
     StyledListItemHeadRightElement,
@@ -86,11 +86,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
-            return (
-                <StyledListItemHeadIcon>
-                    <Icon icons={icons} size={22} />
-                </StyledListItemHeadIcon>
-            );
+            return <ListItemIcon icons={icons} />;
         }
 
         if (images && images[0] && images[1] && images[2]) {

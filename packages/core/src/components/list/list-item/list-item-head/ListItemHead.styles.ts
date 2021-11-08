@@ -29,21 +29,6 @@ export const StyledMotionListItemHeadIndicator = styled(motion.div)`
     width: 26px;
 `;
 
-type StyledListItemHeadIconProps = WithTheme<unknown>;
-
-export const StyledListItemHeadIcon = styled.div`
-    align-items: center;
-    background-color: rgba(${({ theme }: StyledListItemHeadIconProps) => theme['text-rgb']}, 0.1);
-    box-shadow: 0 0 0 1px
-        rgba(${({ theme }: StyledListItemHeadIconProps) => theme['009-rgb']}, 0.08) inset;
-    display: flex;
-    flex: 0 0 auto;
-    height: 40px;
-    justify-content: center;
-    margin-right: 10px;
-    width: 40px;
-`;
-
 type StyledListItemHeadImageWrapperProps = WithTheme<{
     shouldShowRoundImage?: boolean;
 }>;
