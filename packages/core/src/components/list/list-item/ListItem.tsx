@@ -51,6 +51,11 @@ type ListItemProps = {
      */
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     /**
+     * Elements that are displayed on the left side of the header. If multiple
+     * elements are specified, they are displayed one aside the other.
+     */
+    leftElements?: [ReactNode, ...ReactNode[]];
+    /**
      * Elements that are displayed on the right side of the header. If multiple
      * elements are specified, they are displayed one below the other.
      */
@@ -78,6 +83,7 @@ const ListItem: FC<ListItemProps> = ({
     isDefaultOpen,
     onClick,
     onLongPress,
+    leftElements,
     rightElements,
     subtitle,
     shouldShowRoundImage,
@@ -135,6 +141,7 @@ const ListItem: FC<ListItemProps> = ({
                 isOpen={isOpen}
                 onClick={handleHeadClick}
                 onLongPress={onLongPress}
+                leftElements={leftElements}
                 rightElements={rightElements}
                 subtitle={subtitle}
                 shouldShowRoundImage={shouldShowRoundImage}
