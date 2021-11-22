@@ -107,14 +107,20 @@ class PersonFinderView extends Component {
 
         const { lazyLoading } = this.state;
 
-        const { value, autoLoading, onLoadMore } = this.props;
+        const { value, autoLoading, onLoadMore, hasMore, data } = this.props;
         const { scrollTop, offsetHeight, scrollHeight } = this.resultList;
 
         if (
             onLoadMore &&
             autoLoading &&
             !lazyLoading &&
-            scrollHeight - scrollTop - offsetHeight <= LAZY_LOADING_SPACE
+            scrollHeight - scrollTop - offsetHeight <= LAZY_LOADING_SPACE &&
+            Object.keys(hasMore).some((key) => {
+                if (data[key].length === 0) {
+                    return false;
+                }
+                return hasMore[key] === true;
+            })
         ) {
             this.setState({
                 lazyLoading: true,
@@ -184,7 +190,6 @@ class PersonFinderView extends Component {
         const showResults = !selectedValue && hasEntries;
         const showWaitCursor =
             waitCursor === true || Object.values(waitCursor).some((x) => x);
-
         if (showResults || showWaitCursor) {
             return [
                 showResults && (

@@ -244,7 +244,6 @@ const PersonFinderStateProvider = ({
                     1
                 );
             }
-
             dispatch({
                 type: 'RECEIVE_PERSONS',
                 data: convertedPersons,
@@ -384,15 +383,20 @@ const PersonFinderStateProvider = ({
     const onLoadMore = useCallback(
         async (type, value) => {
             const promises = [];
-            if (!type || (type !== 'sites' && type !== 'knownPersons'))
+            if (!type || (type !== 'sites' && type !== 'knownPersons')) {
                 promises.push(loadPersons(value));
-            if (!type || type === 'sites') promises.push(loadSites(value));
+            }
+            if (!type || type === 'sites') {
+                promises.push(loadSites(value));
+            }
             if (
                 !type ||
                 type === 'knownPersons' ||
                 (!enablePersons && type === 'default')
-            )
+            ) {
                 promises.push(loadKnownPersons(value));
+            }
+
             await Promise.all(promises);
         },
         [loadPersons, loadSites, loadKnownPersons, enablePersons]
