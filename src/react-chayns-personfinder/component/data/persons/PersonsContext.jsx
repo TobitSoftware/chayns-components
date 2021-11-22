@@ -231,6 +231,18 @@ const PersonFinderStateProvider = ({
                 ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())
             ) {
                 convertedPersons.personsRelated.unshift(ownUser);
+            } else if (
+                !includeOwn &&
+                convertedPersons.personsRelated.some(
+                    (user) => user.personId === ownUser.personId
+                )
+            ) {
+                convertedPersons.personsRelated.splice(
+                    convertedPersons.personsRelated.findIndex(
+                        (user) => user.personId === ownUser.personId
+                    ),
+                    1
+                );
             }
 
             dispatch({
