@@ -14,7 +14,14 @@ import Button from '../../react-chayns-button/component/Button';
 /**
  * A component to let the user subscribe
  */
-const Signature = ({ onSubscribe, skipLoadAndSave, disabled, onEdit }) => {
+const Signature = ({
+    buttonText,
+    buttonWrapperClassName,
+    onSubscribe,
+    skipLoadAndSave,
+    disabled,
+    onEdit,
+}) => {
     const [signatureUrl, setSignatureUrl] = useState(undefined);
     const [subscribed, setSubscribed] = useState(false);
 
@@ -98,9 +105,9 @@ const Signature = ({ onSubscribe, skipLoadAndSave, disabled, onEdit }) => {
 
     if (!subscribed || !signatureUrl) {
         return (
-            <div>
+            <div className={buttonWrapperClassName}>
                 <Button onClick={onButtonClick} disabled={disabled}>
-                    Unterschreiben
+                    {buttonText}
                 </Button>
             </div>
         );
@@ -120,6 +127,14 @@ const Signature = ({ onSubscribe, skipLoadAndSave, disabled, onEdit }) => {
 
 Signature.propTypes = {
     /**
+     * The text shown in the button
+     */
+    buttonText: PropTypes.string,
+    /**
+     * the className to use on the button wrapping div
+     */
+    buttonWrapperClassName: PropTypes.string,
+    /**
      * whether the subscribe button is disabled
      */
     disabled: PropTypes.bool,
@@ -138,6 +153,8 @@ Signature.propTypes = {
 };
 
 Signature.defaultProps = {
+    buttonText: 'Unterschreiben',
+    buttonWrapperClassName: null,
     disabled: false,
     skipLoadAndSave: false,
     onSubscribe: null,
