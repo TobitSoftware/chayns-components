@@ -1,0 +1,17 @@
+.cc__signature {
+    position: relative;
+    cursor: pointer;
+
+    & &--icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 32px;
+        width: 32px;
+        background-color: #fff;
+        color: var(--chayns-color--secondary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

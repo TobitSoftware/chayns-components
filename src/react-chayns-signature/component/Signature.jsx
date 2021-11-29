@@ -16,6 +16,8 @@ import {
     deleteUserSignature,
 } from '../api/signature';
 import Button from '../../react-chayns-button/component/Button';
+import Icon from '../../react-chayns-icon/component/Icon';
+import './signature.scss';
 
 /**
  * A component to let the user subscribe
@@ -78,6 +80,18 @@ const Signature = forwardRef(
             };
         }, [skipLoadAndSave, onEdit]);
 
+        const deleteSignature = useCallback(async () => {
+            await deleteUserSignature();
+            let success = true;
+            if (!skipLoadAndSave) {
+                success = await deleteUserSignature();
+            }
+            if (success) {
+                setSignatureUrl(null);
+                onEdit?.(null);
+            }
+        }, [skipLoadAndSave, onEdit]);
+
         const onButtonClick = useCallback(async () => {
             if (!signatureUrl) {
                 const { success, value } = await editSignature();
@@ -94,17 +108,7 @@ const Signature = forwardRef(
 
         useImperativeHandle(ref, () => ({
             edit: editSignature,
-            delete: async () => {
-                await deleteUserSignature();
-                let success = true;
-                if (!skipLoadAndSave) {
-                    success = await deleteUserSignature();
-                }
-                if (success) {
-                    setSignatureUrl(null);
-                    onEdit?.(null);
-                }
-            },
+            delete: deleteSignature,
         }));
 
         if (!chayns.env.user.isAuthenticated) {
@@ -140,12 +144,17 @@ const Signature = forwardRef(
         }
 
         return (
-            <div>
+            <div className="cc__signature">
                 <img
                     src={signatureUrl}
                     alt="signature"
                     style={{ maxHeight: 130 }}
                     onClick={editSignature}
+                />
+                <Icon
+                    icon="ts-wrong"
+                    className="cc__signature--icon chayns__color--secondaryi"
+                    onClick={deleteSignature}
                 />
             </div>
         );
