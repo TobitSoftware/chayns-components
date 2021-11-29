@@ -32,6 +32,7 @@ const Signature = forwardRef(
             disabled,
             onEdit,
             forceInitialShow,
+            showDeleteIcon,
         },
         ref
     ) => {
@@ -151,11 +152,13 @@ const Signature = forwardRef(
                     style={{ maxHeight: 130 }}
                     onClick={editSignature}
                 />
-                <Icon
-                    icon="ts-wrong"
-                    className="cc__signature--icon chayns__color--secondaryi"
-                    onClick={deleteSignature}
-                />
+                {showDeleteIcon && (
+                    <Icon
+                        icon="ts-wrong"
+                        className="cc__signature--icon chayns__color--secondaryi"
+                        onClick={deleteSignature}
+                    />
+                )}
             </div>
         );
     }
@@ -190,6 +193,10 @@ Signature.propTypes = {
      * Forces to show signature on initial render
      */
     forceInitialShow: PropTypes.bool,
+    /**
+     * whether the icon to delete the signature should be shown
+     */
+    showDeleteIcon: PropTypes.bool,
 };
 
 Signature.defaultProps = {
@@ -200,6 +207,7 @@ Signature.defaultProps = {
     onSubscribe: null,
     onEdit: null,
     forceInitialShow: false,
+    showDeleteIcon: false,
 };
 
 Signature.displayName = 'Signature';
