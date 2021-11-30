@@ -149,7 +149,13 @@ const Signature = forwardRef(
                 <img
                     src={signatureUrl}
                     alt="signature"
-                    style={{ maxHeight: 130 }}
+                    style={{
+                        maxHeight: 130,
+                        filter:
+                            chayns.env.site.colorMode === 1
+                                ? 'invert(1)'
+                                : undefined,
+                    }}
                     onClick={editSignature}
                 />
                 {showDeleteIcon && (

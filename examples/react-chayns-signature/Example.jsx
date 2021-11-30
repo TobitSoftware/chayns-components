@@ -27,6 +27,7 @@ const SignatureExample = () => {
             <Signature
                 ref={ref}
                 forceShowSignature
+                showDeleteIcon
                 onSubscribe={() =>
                     chayns.dialog.toast({
                         description: 'Unterschrieben',
