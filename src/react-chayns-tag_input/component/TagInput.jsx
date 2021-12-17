@@ -79,11 +79,11 @@ export default class TagInput extends Component {
         }
     }
 
-    handleTagRemove(tag) {
+    handleTagRemove(tag, ev) {
         const { onRemoveTag } = this.props;
 
         if (onRemoveTag) {
-            onRemoveTag(tag);
+            onRemoveTag(tag, ev);
         }
     }
 
