@@ -25,14 +25,17 @@ const SimpleWrapperStateProvider = ({
         }
     }, [onLoadMore, isLoading]);
 
-    const onChange = useCallback(async (value) => {
-        setIsLoading(true);
-        try {
-            await onInput(value);
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
+    const onChange = useCallback(
+        async (value) => {
+            setIsLoading(true);
+            try {
+                await onInput(value);
+            } finally {
+                setIsLoading(false);
+            }
+        },
+        [onInput]
+    );
 
     return (
         <SimpleWrapperContext.Provider
