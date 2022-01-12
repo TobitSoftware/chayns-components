@@ -8,7 +8,7 @@ import clsx from 'clsx';
 
 const VerificationIcon = ({ name, design, verified }) => {
     if (!verified) {
-        return name;
+        return name || null;
     }
 
     const className = clsx({

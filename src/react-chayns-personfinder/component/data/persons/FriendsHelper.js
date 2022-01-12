@@ -80,9 +80,13 @@ class FriendsHelper {
     static convertFriend = (friend) => ({
         type: 'PERSON',
         id: friend.personId,
-        name: friend.fullName,
+        name:
+            friend.fullName ||
+            [friend.firstName, friend.lastName].join(' ').trim(),
         userId: friend.userId,
-        fullName: friend.fullName,
+        fullName:
+            friend.fullName ||
+            [friend.firstName, friend.lastName].join(' ').trim(),
         firstName: friend.firstName,
         lastName: friend.lastName,
         personId: friend.personId,
