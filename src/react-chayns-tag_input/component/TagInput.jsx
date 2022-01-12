@@ -135,6 +135,7 @@ export default class TagInput extends Component {
             style,
             disableRemove,
             design,
+            max,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -168,17 +169,23 @@ export default class TagInput extends Component {
                             {tag.text}
                         </Tag>
                     ))}
-                <div className="cc__tag-input__input">
-                    <Input
-                        {...props}
-                        inputRef={this.setInputRef}
-                        value={value}
-                        onChange={this.handleChange}
-                        onKeyUp={this.handleKeyUp}
-                        placeholder={!tags || !tags.length ? placeholder : null}
-                        style={inputStyle}
-                    />
-                </div>
+                {max && tags && max === tags?.length ? (
+                    false
+                ) : (
+                    <div className="cc__tag-input__input">
+                        <Input
+                            {...props}
+                            inputRef={this.setInputRef}
+                            value={value}
+                            onChange={this.handleChange}
+                            onKeyUp={this.handleKeyUp}
+                            placeholder={
+                                !tags || !tags.length ? placeholder : null
+                            }
+                            style={inputStyle}
+                        />
+                    </div>
+                )}
             </div>
         );
     }
@@ -248,6 +255,10 @@ TagInput.propTypes = {
      * `TagInput.BORDER_DESIGN`.
      */
     design: PropTypes.number,
+    /**
+     * The maximum number of tags selected at once.
+     */
+    max: PropTypes.number,
 };
 
 TagInput.defaultProps = {
@@ -262,6 +273,7 @@ TagInput.defaultProps = {
     triggerEventOnValueChange: false,
     disableRemove: false,
     design: TagInput.DEFAULT_DESIGN,
+    max: null,
 };
 
 TagInput.displayName = 'TagInput';

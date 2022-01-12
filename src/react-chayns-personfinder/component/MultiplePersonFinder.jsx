@@ -259,6 +259,7 @@ class MultiplePersonFinder extends Component {
                             <PersonFinderView
                                 {...props}
                                 {...ctx}
+                                max={max}
                                 orm={Context.ObjectMapping}
                                 inputComponent={TagInput}
                                 inputRef={(ref) => {
