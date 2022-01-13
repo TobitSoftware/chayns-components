@@ -1,0 +1,31 @@
+@keyframes multiline {
+    0%,
+    99% {
+        white-space: pre-wrap;
+    }
+    100% {
+        white-space: nowrap;
+    }
+}
+
+.list-item__header--multiline {
+    .list-item__titles {
+        max-height: 40px;
+        overflow: hidden;
+        transition: max-height 0.5s;
+
+        .list-item--expanded & {
+            max-height: 200px;
+        }
+
+        .list-item__title,
+        .list-item__subtitle {
+            .list-item--expanded & {
+                white-space: pre-wrap;
+                animation: none;
+            }
+
+            animation: multiline 0.5s;
+        }
+    }
+}

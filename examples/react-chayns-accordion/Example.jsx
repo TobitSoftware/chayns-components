@@ -112,6 +112,13 @@ export default class AccordionExample extends Component {
                     </div>
                 </Accordion>
                 <Accordion
+                    headCustomAttributes={{ style: { height: 'fit-content' } }}
+                    head="Accordion with a very long, breaking title. Lorem ipsum dolor sit amet"
+                    headMultiline
+                >
+                    <div className="accordion__content">Hello World</div>
+                </Accordion>
+                <Accordion
                     head="Accordion with only search"
                     headClassNames={[
                         'chayns__color--100',

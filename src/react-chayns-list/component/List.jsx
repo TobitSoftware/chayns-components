@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import AbstractList from './AbstractList';
 import ExpandableList from './ExpandableList/ExpandableList';
+import './List.scss';
 
 /**
  * The wrapper for the `ListItem`-component to create lists.
