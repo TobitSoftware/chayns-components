@@ -30,6 +30,10 @@ const ListItemHeader = ({
     defaultOpen,
     images,
     imageBorderColor,
+    // eslint-disable-next-line react/prop-types
+    headMultiline,
+    // eslint-disable-next-line react/prop-types
+    headerClassName,
     ...otherProps
 }) => {
     const timeout = useRef(null);

@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import classNames from 'clsx';
 import AbstractExpandableListItem from '../ExpandableList/AbstractExpandableListItem';
 import ExpandableListHeader from './ExpandableListHeader';
 import ExpandableList from '../ExpandableList/ExpandableList';
@@ -18,7 +17,6 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
         onOpen,
         onClose,
         defaultOpen,
-        headMultiline,
     } = props;
 
     return (
@@ -38,9 +36,8 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
                                 }
                             }}
                             {...props}
-                            className={classNames(headerClassName, {
-                                'list-item__header--multiline': headMultiline,
-                            })}
+                            open={open === null ? c.open : open}
+                            className={headerClassName}
                         />
                     )}
                 </ExpandableList.Context.Consumer>

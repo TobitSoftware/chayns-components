@@ -35,6 +35,9 @@ const ListItem = ({
     onOpen,
     imageBorderColor,
     left,
+    headMultiline,
+    // eslint-disable-next-line react/prop-types
+    notExpandable,
     ...props
 }) => (
     <div
