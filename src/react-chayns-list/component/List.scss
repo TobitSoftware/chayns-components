@@ -12,7 +12,7 @@
     .list-item__titles {
         max-height: 40px;
         overflow: hidden;
-        transition: max-height 0.5s;
+        transition: max-height 0.1s;
 
         .list-item--expanded & {
             max-height: 200px;
@@ -25,7 +25,7 @@
                 animation: none;
             }
 
-            animation: multiline 0.5s;
+            animation: multiline 0.1s;
         }
     }
 }
