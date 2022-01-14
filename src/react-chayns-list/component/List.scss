@@ -10,12 +10,7 @@
 
 .list-item__header--multiline {
     .list-item__titles {
-        max-height: 40px;
-        overflow: hidden;
-        transition: max-height 0.1s;
-
         .list-item--expanded & {
-            max-height: 200px;
         }
 
         .list-item__title,
