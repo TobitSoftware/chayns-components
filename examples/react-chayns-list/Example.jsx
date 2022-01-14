@@ -125,13 +125,6 @@ export default class ListExample extends Component {
                             console.log('onClose', ...e);
                             this.setState({ open3: false });
                         }}
-                        headerProps={{
-                            style: {
-                                transition: 'max-height 300ms',
-                                maxHeight: open3 ? '150px' : '40px',
-                                overflow: 'hidden',
-                            },
-                        }}
                     >
                         Content
                     </ListItem>
