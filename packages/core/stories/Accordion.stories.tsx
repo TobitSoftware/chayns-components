@@ -64,6 +64,8 @@ export const AccordionWithSearch = Template.bind({});
 
 export const AccordionWithBadgeAndSearch = Template.bind({});
 
+export const DisabledAccordion = Template.bind({});
+
 General.args = {
     children: (
         <AccordionContent>
@@ -160,5 +162,17 @@ AccordionWithBadgeAndSearch.args = {
     onSearchChange: () => {},
     rightElement: <Badge>124</Badge>,
     searchPlaceholder: 'Suchen',
+    title: 'Lorem ipsum dolor sit amet',
+};
+
+DisabledAccordion.args = {
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum.
+        </AccordionContent>
+    ),
+    isDisabled: true,
     title: 'Lorem ipsum dolor sit amet',
 };

@@ -32,6 +32,10 @@ type AccordionProps = {
      */
     isDefaultOpen?: boolean;
     /**
+     * This will disable the Accordion so that it cannot be opened and will gray out the title.
+     */
+    isDisabled?: boolean;
+    /**
      * This can be used so that the Accordion cannot be opened or closed.
      * In addition, in this case the icon is exchanged to mark the Accordions.
      */
@@ -77,6 +81,7 @@ const Accordion: FC<AccordionProps> = ({
     children,
     icon,
     isDefaultOpen = false,
+    isDisabled = false,
     isFixed = false,
     isTitleGreyed = false,
     isWrapped = false,
@@ -98,12 +103,16 @@ const Accordion: FC<AccordionProps> = ({
     const isOpen = isInGroup ? openAccordionUuid === uuid : isAccordionOpen;
 
     const handleHeadClick = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         if (typeof updateOpenAccordionUuid === 'function') {
             updateOpenAccordionUuid(uuid);
         }
 
         setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
-    }, [updateOpenAccordionUuid, uuid]);
+    }, [isDisabled, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (isDefaultOpen && typeof updateOpenAccordionUuid === 'function') {
@@ -119,7 +128,7 @@ const Accordion: FC<AccordionProps> = ({
                         icon={icon}
                         isOpen={isOpen}
                         isFixed={isFixed}
-                        isTitleGreyed={isTitleGreyed}
+                        isTitleGreyed={isTitleGreyed || isDisabled}
                         isWrapped={isWrapped}
                         onClick={handleHeadClick}
                         onSearchChange={onSearchChange}
