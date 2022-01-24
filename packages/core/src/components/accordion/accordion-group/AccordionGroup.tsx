@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 
@@ -20,11 +20,21 @@ type AccordionGroupProps = {
      * automatically closed when an `Accordion` of the group is opened.
      */
     children: ReactNode;
+    /**
+     * Function that is executed when all accordions in group are closed.
+     */
+    onClose?: VoidFunction;
+    /**
+     * Function that is executed when any accordion in group will be opened.
+     */
+    onOpen?: VoidFunction;
 };
 
-const AccordionGroup: FC<AccordionGroupProps> = ({ children }) => {
+const AccordionGroup: FC<AccordionGroupProps> = ({ children, onClose, onOpen }) => {
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
+
+    const isInitialRenderRef = useRef(true);
 
     const updateOpenAccordionUuid = useCallback<IUpdateOpenAccordionUuid>(
         (uuid, { shouldOnlyOpen } = {}) => {
@@ -38,6 +48,18 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children }) => {
         },
         [setOpenAccordionUuid]
     );
+
+    useEffect(() => {
+        if (isInitialRenderRef.current) {
+            isInitialRenderRef.current = false;
+        } else if (typeof openAccordionUuid === 'string') {
+            if (typeof onOpen === 'function') {
+                onOpen();
+            }
+        } else if (typeof onClose === 'function') {
+            onClose();
+        }
+    }, [onClose, onOpen, openAccordionUuid]);
 
     const providerValue = useMemo<IAccordionGroupContext>(
         () => ({
