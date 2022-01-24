@@ -89,6 +89,7 @@ type StyledMotionRightInputProps = WithTheme<{
 }>;
 
 export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInputProps>`
+    background-color: transparent;
     border: 1px solid transparent;
     border-bottom-color: rgba(
         ${({ theme }: StyledMotionRightInputProps) => theme['headline-rgb']},

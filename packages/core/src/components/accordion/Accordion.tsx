@@ -6,6 +6,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
@@ -50,6 +51,14 @@ type AccordionProps = {
      */
     isWrapped?: boolean;
     /**
+     * Function that is executed when the accordion will be closed.
+     */
+    onClose?: VoidFunction;
+    /**
+     * Function that is executed when the accordion will be opened.
+     */
+    onOpen?: VoidFunction;
+    /**
      * Function that is executed when the text of the search in the accordion
      * head changes. When this function is given, the search field is displayed
      * in the Accordion Head.
@@ -85,6 +94,8 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isTitleGreyed = false,
     isWrapped = false,
+    onClose,
+    onOpen,
     onSearchChange,
     rightElement,
     searchIcon,
@@ -97,6 +108,8 @@ const Accordion: FC<AccordionProps> = ({
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen);
 
     const uuid = useUuid();
+
+    const isInitialRenderRef = useRef(true);
 
     const isInGroup = typeof updateOpenAccordionUuid === 'function';
 
@@ -113,6 +126,18 @@ const Accordion: FC<AccordionProps> = ({
 
         setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
     }, [isDisabled, updateOpenAccordionUuid, uuid]);
+
+    useEffect(() => {
+        if (isInitialRenderRef.current) {
+            isInitialRenderRef.current = false;
+        } else if (isOpen) {
+            if (typeof onOpen === 'function') {
+                onOpen();
+            }
+        } else if (typeof onClose === 'function') {
+            onClose();
+        }
+    }, [isOpen, onClose, onOpen]);
 
     useEffect(() => {
         if (isDefaultOpen && typeof updateOpenAccordionUuid === 'function') {

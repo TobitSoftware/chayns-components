@@ -126,7 +126,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                         {typeof onSearchChange === 'function' && isOpen ? (
                             <>
                                 <StyledMotionRightInput
-                                    animate={{ opacity: 1, width: 'auto' }}
+                                    animate={{ opacity: 1, width: '165px' }}
                                     autoComplete="off"
                                     exit={{ opacity: 0, width: 0 }}
                                     hasIcon={hasSearchIcon}
