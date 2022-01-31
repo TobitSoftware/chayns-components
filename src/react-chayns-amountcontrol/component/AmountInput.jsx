@@ -140,7 +140,7 @@ export default class AmountInput extends PureComponent {
                 onEnter={this.onInputBlur}
                 customProps={{
                     'data-cc-equalize-width': equalize,
-                    readOnly: isReadonly,
+                    readOnly: chayns.env.isIOS ? undefined : isReadonly,
                 }}
                 inputRef={this.setRef}
                 style={{
