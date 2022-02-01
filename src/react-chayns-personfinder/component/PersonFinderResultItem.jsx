@@ -4,9 +4,10 @@ import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import FriendsIndicator from './result-item/FriendsIndicator';
-import Relation from './result-item/Relation';
 import VerificationIcon from '../../react-chayns-verification_icon/component/VerificationIcon';
 import Checkbox from '../../react-chayns-checkbox/component/Checkbox';
+import getText from '../utils/getText';
+import { personIdRegex } from '../../utils/constants';
 
 const PersonFinderResultItem = ({
     onClick,
@@ -39,6 +40,26 @@ const PersonFinderResultItem = ({
             : false;
     if (data.relationCount !== undefined && data.relationCount !== null) {
         hasRelations = true;
+    }
+
+    const subtitleParts = [];
+    if (
+        typeof data[orm.identifier] === 'string' &&
+        data[orm.identifier].match(personIdRegex) &&
+        inputValue
+    ) {
+        subtitleParts.push(`chaynsID: ${data[orm.identifier]}`);
+    }
+    if (hasRelations) {
+        subtitleParts.push(
+            `${data.relationCount} ${getText(
+                data.relationCount === 1 ? 'COMMON_SITE' : 'COMMON_SITES'
+            )}`
+        );
+    } else if (orm.subtitle) {
+        subtitleParts.push(`(${data[orm.subtitle]})`);
+    } else if (data.isFriend && inputValue) {
+        subtitleParts.push('befreundet');
     }
 
     return (
@@ -81,16 +102,7 @@ const PersonFinderResultItem = ({
                         </div>
                     )}
                 </div>
-                {hasRelations && <Relation relation={data} />}
-                {!hasRelations && orm.subtitle && (
-                    <div className="identifier">
-                        {`(${data[orm.subtitle]})`}
-                    </div>
-                )}
-                {!hasRelations &&
-                    !orm.subtitle &&
-                    data.isFriend &&
-                    inputValue && <div className="identifier">befreundet</div>}
+                <span className="relation">{subtitleParts.join(' - ')}</span>
             </div>
             {data.personId && !hideFriendsIcon && (
                 <FriendsIndicator
