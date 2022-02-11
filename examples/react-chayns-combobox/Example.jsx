@@ -24,6 +24,29 @@ const pizza = [
     },
 ];
 
+const htmlElements = [
+    {
+        id: 'p',
+        name: <p>Default Text</p>,
+    },
+    {
+        id: 'h1',
+        name: <h1>Headline 1</h1>,
+    },
+    {
+        id: 'h2',
+        name: <h2>Headline 2</h2>,
+    },
+    {
+        id: 'h3',
+        name: <h3>Headline 3</h3>,
+    },
+    {
+        id: 'footer',
+        name: <footer>Footer</footer>,
+    },
+];
+
 const longList = [];
 
 for (let i = 0; i < 100; i += 1) {
@@ -94,6 +117,15 @@ const ComboBoxExample = () => {
                     }}
                     listKey="key"
                     listValue="value"
+                />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+                <ComboBox
+                    label="HTML Elements"
+                    list={htmlElements}
+                    onSelect={console.log}
+                    listKey="id"
+                    listValue="name"
                 />
             </div>
         </div>
