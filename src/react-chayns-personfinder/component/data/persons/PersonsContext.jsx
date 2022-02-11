@@ -39,8 +39,8 @@ const ObjectMapping = {
             filter: (inputValue) => (e) =>
                 inputValue
                     ? (e.name &&
-                          simplifyString(e.name).includes(
-                              simplifyString(inputValue)
+                          ` ${simplifyString(e.name)}`.includes(
+                              ` ${simplifyString(inputValue)}`
                           )) ||
                       (e.personId && e.personId === inputValue)
                     : true,
