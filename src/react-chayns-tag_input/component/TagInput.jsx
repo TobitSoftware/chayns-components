@@ -301,7 +301,7 @@ TagInput.defaultProps = {
     disableRemove: false,
     design: TagInput.DEFAULT_DESIGN,
     max: null,
-    addTagOnBlur: true,
+    addTagOnBlur: false,
 };
 
 TagInput.displayName = 'TagInput';
