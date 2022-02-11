@@ -12,5 +12,4 @@ export default function simplifyString(string) {
     str = str.replace(/(.)\1+/g, '$1'); // removes duplicates
     str = str.trim(); // trim string
     return str;
-    return str;
 }

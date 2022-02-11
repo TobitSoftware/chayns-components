@@ -78,7 +78,15 @@ const TextArea = ({
                 reference(node);
             }
         },
-        [reference, required, autogrow, grow]
+        [
+            reference,
+            required,
+            styleProp?.overflow,
+            styleProp?.overflowX,
+            styleProp?.overflowY,
+            autogrow,
+            grow,
+        ]
     );
 
     // autogrows on change and pass value to onChange-prop
