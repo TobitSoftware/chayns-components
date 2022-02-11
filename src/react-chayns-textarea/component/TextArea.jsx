@@ -58,8 +58,14 @@ const TextArea = ({
                 }
 
                 node.setAttribute('row', '1');
-                // eslint-disable-next-line no-param-reassign
-                node.style.overflow = 'hidden';
+                if (
+                    !styleProp?.overflow &&
+                    !styleProp?.overflowX &&
+                    !styleProp?.overflowY
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    node.style.overflow = 'hidden';
+                }
 
                 if (autogrow) {
                     setOffset(node.offsetHeight - node.clientHeight);

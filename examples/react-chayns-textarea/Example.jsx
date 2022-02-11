@@ -50,6 +50,39 @@ const TextAreaExample = () => {
                 design={TextArea.BORDER_DESIGN}
                 autogrow
             />
+            <h2>With scrollbar</h2>
+            <TextArea
+                onChange={console.log}
+                style={{ maxHeight: '100px', overflowY: 'scroll' }}
+                placeholder="autogrow, className: scrollbar, max-height: 100px; overflow-y: scroll;"
+                className="scrollbar"
+                autogrow
+            />
+            <TextArea
+                onChange={console.log}
+                style={{ height: '100px', overflowY: 'scroll' }}
+                placeholder="className: scrollbar, height: 100px; overflow-y: scroll;"
+                className="scrollbar"
+            />
+            <TextArea
+                onChange={console.log}
+                style={{ maxHeight: '100px', overflowY: 'scroll' }}
+                placeholder="autogrow, className: scrollbar, max-height: 100px; overflow-y: scroll;"
+                className="scrollbar"
+                autogrow
+                design={TextArea.BORDER_DESIGN}
+            />
+            <TextArea
+                onChange={console.log}
+                style={{
+                    height: '100px',
+                    overflowY: 'scroll',
+                    marginTop: '10px',
+                }}
+                placeholder="className: scrollbar, height: 100px; overflow-y: scroll;"
+                className="scrollbar"
+                design={TextArea.BORDER_DESIGN}
+            />
         </div>
     );
 };
