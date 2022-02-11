@@ -156,6 +156,7 @@ export default class TagInput extends Component {
             disableRemove,
             design,
             max,
+            addTagOnBlur,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -204,7 +205,7 @@ export default class TagInput extends Component {
                                 !tags || !tags.length ? placeholder : null
                             }
                             style={inputStyle}
-                            onBlur={this.handleBlur}
+                            onBlur={addTagOnBlur ? this.handleBlur : undefined}
                         />
                     </div>
                 )}
@@ -281,6 +282,10 @@ TagInput.propTypes = {
      * The maximum number of tags selected at once.
      */
     max: PropTypes.number,
+    /**
+     * Adds a tag on blur
+     */
+    addTagOnBlur: PropTypes.bool,
 };
 
 TagInput.defaultProps = {
@@ -296,6 +301,7 @@ TagInput.defaultProps = {
     disableRemove: false,
     design: TagInput.DEFAULT_DESIGN,
     max: null,
+    addTagOnBlur: true,
 };
 
 TagInput.displayName = 'TagInput';
