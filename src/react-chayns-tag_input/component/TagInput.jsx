@@ -11,6 +11,7 @@ import Tag from './Tag';
 
 const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
+const KEY_COMMA = 188;
 
 const BIGGEST_LETTER = 'm';
 
@@ -25,6 +26,7 @@ export default class TagInput extends Component {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleTagRemove = this.handleTagRemove.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
         this.state = {
@@ -52,6 +54,12 @@ export default class TagInput extends Component {
         }
     }
 
+    handleKeyDown = (event) => {
+        if (event.keyCode === KEY_COMMA) {
+            event.preventDefault();
+        }
+    };
+
     handleKeyUp(event) {
         const { value, disableRemove } = this.props;
 
@@ -60,7 +68,7 @@ export default class TagInput extends Component {
             return;
         }
 
-        if (event.keyCode !== KEY_ENTER || !value) {
+        if (![KEY_ENTER, KEY_COMMA].includes(event.keyCode) || !value) {
             return;
         }
 
@@ -110,6 +118,18 @@ export default class TagInput extends Component {
     handleClick() {
         if (this.input) {
             this.input.focus();
+        }
+    }
+
+    handleBlur() {
+        const { value } = this.props;
+
+        if (value) {
+            const tag = {
+                text: value,
+            };
+
+            this.handleTagAdd(tag);
         }
     }
 
@@ -179,10 +199,12 @@ export default class TagInput extends Component {
                             value={value}
                             onChange={this.handleChange}
                             onKeyUp={this.handleKeyUp}
+                            onKeyDown={this.handleKeyDown}
                             placeholder={
                                 !tags || !tags.length ? placeholder : null
                             }
                             style={inputStyle}
+                            onBlur={this.handleBlur}
                         />
                     </div>
                 )}
