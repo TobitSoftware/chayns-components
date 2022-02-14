@@ -187,7 +187,7 @@ const ColorPicker = forwardRef(
             return (
                 <div
                     className={classNames('cc__color-picker', className)}
-                    style={style}
+                    style={{ width: '333px', ...style }}
                     onClick={openBubble}
                     key="div"
                     ref={childrenRef}
@@ -263,7 +263,7 @@ const ColorPicker = forwardRef(
                 position={bubblePosition}
                 parent={parent}
                 className={bubbleClassName}
-                style={bubbleStyle}
+                style={{ width: '322px', ...bubbleStyle }}
                 key="bubble"
             >
                 <div

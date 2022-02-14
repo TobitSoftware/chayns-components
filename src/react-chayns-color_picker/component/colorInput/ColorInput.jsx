@@ -14,6 +14,7 @@ import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import { isNumber } from '../../../utils/is';
+import { Accordion } from '../../../index';
 
 class ColorInput extends Component {
     constructor(props) {
@@ -162,20 +163,49 @@ class ColorInput extends Component {
 
 export default function withColorInput({ showAllColorModels, ...props }) {
     if (showAllColorModels) {
-        return [
-            <ColorInput
-                {...props}
-                colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
-                hideSwitchIcon
-            />,
-            <ColorInput
-                {...props}
-                colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
-                hideSwitchIcon
-            />,
-        ];
+        return (
+            <Accordion
+                head={'Erweitert'}
+                style={{
+                    marginBottom: 0,
+                    marginTop: 0,
+                    backgroundColor: 'transparent',
+                }}
+                dataGroup="cc_color-picker"
+                icon="ts-angle-right"
+            >
+                <div className="accordion__content cc__color-input-accordion">
+                    <ColorInput
+                        {...props}
+                        colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
+                        hideSwitchIcon
+                        className="test567"
+                    />
+                    <ColorInput
+                        {...props}
+                        colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
+                        hideSwitchIcon
+                        className="test567"
+                    />
+                </div>
+            </Accordion>
+        );
     }
-    return <ColorInput {...props} />;
+    return (
+        <Accordion
+            head={'Erweitert'}
+            style={{
+                marginBottom: 0,
+                marginTop: 0,
+                backgroundColor: 'transparent',
+            }}
+            dataGroup="cc_color-picker"
+            defaultOpened
+            icon="ts-angle-right"
+        >
+            <ColorInput {...props} />
+        </Accordion>
+    );
 }
 
 withColorInput.propTypes = {
