@@ -11,4 +11,10 @@
     &__input {
         width: 100%;
     }
+    &__accordion {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 300px;
+    }
 }

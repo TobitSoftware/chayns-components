@@ -174,18 +174,16 @@ export default function withColorInput({ showAllColorModels, ...props }) {
                 dataGroup="cc_color-picker"
                 icon="ts-angle-right"
             >
-                <div className="accordion__content cc__color-input-accordion">
+                <div className="accordion__content cc__color-input__accordion">
                     <ColorInput
                         {...props}
                         colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
                         hideSwitchIcon
-                        className="test567"
                     />
                     <ColorInput
                         {...props}
                         colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
                         hideSwitchIcon
-                        className="test567"
                     />
                 </div>
             </Accordion>
