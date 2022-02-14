@@ -27,6 +27,7 @@ import './ColorPicker.scss';
 import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
 import isDescendant from '../../utils/isDescendant';
+import ColorSelection from './colorSelection/ColorSelection';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -73,6 +74,9 @@ const ColorPicker = forwardRef(
             bubbleClassName,
             bubbleStyle,
             showAllColorModels,
+            customColorsArray,
+            showCustomColors,
+            showGlobalColors,
         },
         reference
     ) => {
@@ -93,6 +97,16 @@ const ColorPicker = forwardRef(
                 (transparency
                     ? ColorPicker.colorModels.RGB
                     : ColorPicker.colorModels.HEX)
+        );
+
+        const [customColorsState, setCustomColorsState] = useState(
+            [
+                { r: 255, g: 255, b: 255, a: 0 },
+                { r: 255, g: 0, b: 0, a: 0.25 },
+                { r: 0, g: 255, b: 0, a: 0.5 },
+                { r: 255, g: 0, b: 0, a: 0.75 },
+                { r: 255, g: 0, b: 0, a: 1 },
+            ].map((c) => getHsvColor(c))
         );
 
         // effects (lifecycle methods)
@@ -225,6 +239,13 @@ const ColorPicker = forwardRef(
                                 showAllColorModels={showAllColorModels}
                             />
                         )}
+                        <ColorSelection
+                            customColorsArray={customColorsState}
+                            showCustomColors
+                            showGlobalColors
+                            color={colorState}
+                            onChange={onChangeCallback}
+                        />
                     </div>
                 </div>
             );
@@ -299,11 +320,34 @@ const ColorPicker = forwardRef(
                             showAllColorModels={showAllColorModels}
                         />
                     )}
+                    <ColorSelection
+                        customColorsArray={customColorsState}
+                        showCustomColors
+                        showGlobalColors
+                        color={colorState}
+                        onChange={onChangeCallback}
+                    />
                 </div>
             </Bubble>,
         ];
     }
 );
+
+const colorPropType = PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.shape({
+        r: PropTypes.number.isRequired,
+        g: PropTypes.number.isRequired,
+        b: PropTypes.number.isRequired,
+        a: PropTypes.number,
+    }).isRequired,
+    PropTypes.shape({
+        h: PropTypes.number.isRequired,
+        s: PropTypes.number.isRequired,
+        v: PropTypes.number.isRequired,
+        a: PropTypes.number,
+    }).isRequired,
+]);
 
 ColorPicker.propTypes = {
     /**
@@ -314,21 +358,7 @@ ColorPicker.propTypes = {
     /**
      * The current color. Either a HEX-string, an HSV(A)- or RGB(A)-object.
      */
-    color: PropTypes.oneOfType([
-        PropTypes.string.isRequired,
-        PropTypes.shape({
-            r: PropTypes.number.isRequired,
-            g: PropTypes.number.isRequired,
-            b: PropTypes.number.isRequired,
-            a: PropTypes.number,
-        }).isRequired,
-        PropTypes.shape({
-            h: PropTypes.number.isRequired,
-            s: PropTypes.number.isRequired,
-            v: PropTypes.number.isRequired,
-            a: PropTypes.number,
-        }).isRequired,
-    ]).isRequired,
+    color: colorPropType.isRequired,
 
     /**
      * The bubble position. The possible values are listed under the
@@ -415,6 +445,21 @@ ColorPicker.propTypes = {
      * Shows all color models
      */
     showAllColorModels: PropTypes.bool,
+
+    /**
+     * An array of custom selectable colors
+     */
+    customColorsArray: PropTypes.arrayOf(colorPropType),
+
+    /**
+     * Shows custom colors
+     */
+    showCustomColors: PropTypes.bool,
+
+    /**
+     * Shows global colors
+     */
+    showGlobalColors: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -434,6 +479,9 @@ ColorPicker.defaultProps = {
     children: null,
     removeParentSpace: false,
     showAllColorModels: false,
+    customColorsArray: null,
+    showCustomColors: false,
+    showGlobalColors: false,
 };
 
 ColorPicker.colorModels = {

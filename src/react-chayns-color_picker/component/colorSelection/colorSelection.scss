@@ -1,0 +1,38 @@
+.cc_color-selection {
+    &__color:hover {
+    }
+    &__color:before {
+        content: '';
+        opacity: 1;
+        background-color: #ffffff;
+        background-image: linear-gradient(45deg, #a0a0a0 25%, transparent 25%),
+            linear-gradient(-45deg, #a0a0a0 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #a0a0a0 75%),
+            linear-gradient(-45deg, transparent 75%, #a0a0a0 75%);
+        background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+        background-size: 8px 8px;
+        background-repeat: repeat;
+        border: none;
+        height: inherit;
+        width: inherit;
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        border-radius: inherit;
+        transform: none;
+    }
+    &__color:after {
+        content: '';
+        opacity: 1;
+        background-color: inherit;
+        border: rgba(0, 0, 0, 0.25) 1px solid;
+        height: inherit;
+        width: inherit;
+        top: 0;
+        left: 0;
+        position: absolute;
+        overflow: hidden;
+        border-radius: inherit;
+    }
+}
