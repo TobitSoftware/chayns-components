@@ -167,14 +167,13 @@ export default function withColorInput({ showAllColorModels, ...props }) {
             <Accordion
                 head={'Erweitert'}
                 style={{
-                    marginBottom: 0,
-                    marginTop: 0,
                     backgroundColor: 'transparent',
+                    border: 'none',
                 }}
                 dataGroup="cc_color-picker"
                 icon="ts-angle-right"
             >
-                <div className="accordion__content cc__color-input__accordion">
+                <div className="cc__color-input__accordion">
                     <ColorInput
                         {...props}
                         colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
@@ -193,9 +192,8 @@ export default function withColorInput({ showAllColorModels, ...props }) {
         <Accordion
             head={'Erweitert'}
             style={{
-                marginBottom: 0,
-                marginTop: 0,
                 backgroundColor: 'transparent',
+                border: 'none',
             }}
             dataGroup="cc_color-picker"
             defaultOpened

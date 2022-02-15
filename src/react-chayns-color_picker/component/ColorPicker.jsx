@@ -15,6 +15,7 @@ import React, {
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import {
     hexStringToHsv,
+    hsvToHexString,
     hsvToRgb,
     rgbToHexString,
     rgbToHsv,
@@ -28,6 +29,7 @@ import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
 import isDescendant from '../../utils/isDescendant';
 import ColorSelection from './colorSelection/ColorSelection';
+import clsx from 'clsx';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -77,6 +79,7 @@ const ColorPicker = forwardRef(
             customColorsArray,
             showCustomColors,
             showGlobalColors,
+            onCreateCustomColor,
         },
         reference
     ) => {
@@ -100,13 +103,9 @@ const ColorPicker = forwardRef(
         );
 
         const [customColorsState, setCustomColorsState] = useState(
-            [
-                { r: 255, g: 255, b: 255, a: 0 },
-                { r: 255, g: 0, b: 0, a: 0.25 },
-                { r: 0, g: 255, b: 0, a: 0.5 },
-                { r: 255, g: 0, b: 0, a: 0.75 },
-                { r: 255, g: 0, b: 0, a: 1 },
-            ].map((c) => getHsvColor(c))
+            customColorsArray
+                ? customColorsArray.map((c) => getHsvColor(c))
+                : []
         );
 
         // effects (lifecycle methods)
@@ -185,6 +184,19 @@ const ColorPicker = forwardRef(
             [setColor, onChange]
         );
 
+        const onCreateCustomColorCallback = useCallback(
+            (newColor) => {
+                setCustomColorsState((prev) => [
+                    ...prev,
+                    getHsvColor(newColor),
+                ]);
+                if (onCreateCustomColor) {
+                    onCreateCustomColor(newColor);
+                }
+            },
+            [setCustomColorsState, onCreateCustomColor]
+        );
+
         const onColorModelToggle = useCallback(() => {
             setColorModel(
                 (colorModel + 1) % Object.keys(ColorPicker.colorModels).length
@@ -201,7 +213,7 @@ const ColorPicker = forwardRef(
             return (
                 <div
                     className={classNames('cc__color-picker', className)}
-                    style={{ width: '333px', ...style }}
+                    style={{ width: '322px', ...style }}
                     onClick={openBubble}
                     key="div"
                     ref={childrenRef}
@@ -215,37 +227,75 @@ const ColorPicker = forwardRef(
                             onChange={onChangeCallback}
                             onChangeEnd={onChangeEnd}
                         />
-                        <HueSlider
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                            showTooltip={false}
-                        />
-                        {transparency && (
-                            <TransparencySlider
-                                color={colorState}
-                                onChange={onChangeCallback}
-                                onChangeEnd={onChangeEnd}
-                            />
-                        )}
-                        {input && (
-                            <ColorInput
-                                color={colorState}
-                                onChange={onChangeCallback}
-                                onChangeEnd={onChangeEnd}
-                                onModelToggle={onColorModelToggle}
-                                colorModel={colorModel}
-                                transparency={transparency}
-                                showAllColorModels={showAllColorModels}
-                            />
-                        )}
-                        <ColorSelection
-                            customColorsArray={customColorsState}
-                            showCustomColors
-                            showGlobalColors
-                            color={colorState}
-                            onChange={onChangeCallback}
-                        />
+                        <div style={{ padding: '0 11px' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <div
+                                    style={{}}
+                                    className={clsx({
+                                        'cc__color-picker__slider-container__with-transparency':
+                                            transparency,
+                                        'cc__color-picker__slider-container__without-transparency':
+                                            !transparency,
+                                    })}
+                                >
+                                    <HueSlider
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                        showTooltip={false}
+                                    />
+                                    {transparency && (
+                                        <TransparencySlider
+                                            color={colorState}
+                                            onChange={onChangeCallback}
+                                            onChangeEnd={onChangeEnd}
+                                        />
+                                    )}
+                                </div>
+                                {transparency && (
+                                    <div
+                                        className="cc__color-picker__color-square"
+                                        style={{
+                                            backgroundColor:
+                                                hsvToHexString(color),
+                                        }}
+                                    />
+                                )}
+                            </div>
+
+                            <div
+                                style={{
+                                    margin: inline && '10px 11px 0',
+                                }}
+                            >
+                                {input && (
+                                    <ColorInput
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                        onModelToggle={onColorModelToggle}
+                                        colorModel={colorModel}
+                                        transparency={transparency}
+                                        showAllColorModels={showAllColorModels}
+                                    />
+                                )}
+                                <ColorSelection
+                                    customColorsArray={customColorsState}
+                                    showCustomColors={showCustomColors}
+                                    showGlobalColors={showGlobalColors}
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onCreateCustomColor={
+                                        onCreateCustomColorCallback
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -296,43 +346,78 @@ const ColorPicker = forwardRef(
                         onChange={onChangeCallback}
                         onChangeEnd={onChangeEnd}
                     />
-                    <HueSlider
-                        color={colorState}
-                        onChange={onChangeCallback}
-                        onChangeEnd={onChangeEnd}
-                        showTooltip={false}
-                    />
-                    {transparency && (
-                        <TransparencySlider
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                        />
-                    )}
-                    {input && (
-                        <ColorInput
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                            onModelToggle={onColorModelToggle}
-                            colorModel={colorModel}
-                            transparency={transparency}
-                            showAllColorModels={showAllColorModels}
-                        />
-                    )}
-                    <ColorSelection
-                        customColorsArray={customColorsState}
-                        showCustomColors
-                        showGlobalColors
-                        color={colorState}
-                        onChange={onChangeCallback}
-                    />
+                    <div style={{ padding: '0 11px' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <div
+                                style={{}}
+                                className={clsx({
+                                    'cc__color-picker__slider-container__with-transparency':
+                                        transparency,
+                                    'cc__color-picker__slider-container__without-transparency':
+                                        !transparency,
+                                })}
+                            >
+                                <HueSlider
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onChangeEnd={onChangeEnd}
+                                    showTooltip={false}
+                                />
+                                {transparency && (
+                                    <TransparencySlider
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                    />
+                                )}
+                            </div>
+                            {transparency && (
+                                <div
+                                    className="cc__color-picker__color-square"
+                                    style={{
+                                        backgroundColor: hsvToHexString(color),
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <div
+                            style={{
+                                marginBottom: '5px',
+                            }}
+                        >
+                            {input && (
+                                <ColorInput
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onChangeEnd={onChangeEnd}
+                                    onModelToggle={onColorModelToggle}
+                                    colorModel={colorModel}
+                                    transparency={transparency}
+                                    showAllColorModels={showAllColorModels}
+                                />
+                            )}
+                            <ColorSelection
+                                customColorsArray={customColorsState}
+                                showCustomColors={showCustomColors}
+                                showGlobalColors={showGlobalColors}
+                                color={colorState}
+                                onChange={onChangeCallback}
+                                onCreateCustomColor={
+                                    onCreateCustomColorCallback
+                                }
+                            />
+                        </div>
+                    </div>
                 </div>
             </Bubble>,
         ];
     }
 );
-
 const colorPropType = PropTypes.oneOfType([
     PropTypes.string.isRequired,
     PropTypes.shape({
@@ -460,6 +545,11 @@ ColorPicker.propTypes = {
      * Shows global colors
      */
     showGlobalColors: PropTypes.bool,
+
+    /**
+     * Will be called when a custom color is added
+     */
+    onCreateCustomColor: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
@@ -482,6 +572,7 @@ ColorPicker.defaultProps = {
     customColorsArray: null,
     showCustomColors: false,
     showGlobalColors: false,
+    onCreateCustomColor: null,
 };
 
 ColorPicker.colorModels = {

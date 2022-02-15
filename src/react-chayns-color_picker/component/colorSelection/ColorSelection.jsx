@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Icon } from '../../../index';
 import { hsvToRgb, hsvToRgbString, hsvToHexString } from '../../../utils/color';
@@ -11,6 +11,7 @@ const ColorSelection = ({
     showCustomColors,
     showGlobalColors,
     onChange,
+    onCreateCustomColor,
 }) => {
     const globalColors = [
         '#F44336FF',
@@ -39,8 +40,9 @@ const ColorSelection = ({
         flexWrap: 'wrap',
     };
     const accordionStyle = {
+        border: 'none',
         marginBottom: 0,
-        // marginTop: 0,
+        marginTop: '5px',
         backgroundColor: 'transparent',
     };
 
@@ -50,10 +52,16 @@ const ColorSelection = ({
         }
     };
 
+    const onCreateCustomColorHandler = (value) => {
+        if (onCreateCustomColor && value) {
+            onCreateCustomColor(value);
+        }
+    };
+
     const colorAlreadyExists = customColorsArray.find(
         (c) => hsvToHexString(c) === hsvToHexString(color)
     );
-    const colorWithoutOpacity = { ...color, a: null };
+    const colorWithoutOpacity = { ...color, a: 1 };
 
     return (
         <div className="cc_color-selection">
@@ -76,7 +84,10 @@ const ColorSelection = ({
                                     border:
                                         hsvToHexString(c).toLowerCase() ===
                                         hsvToHexString(color).toLowerCase()
-                                            ? `${hsvToHexString(c)} 1px solid`
+                                            ? `${hsvToHexString({
+                                                  ...c,
+                                                  a: 1,
+                                              })} 1px solid`
                                             : '',
                                     position: 'relative',
                                 }}
@@ -117,7 +128,10 @@ const ColorSelection = ({
                                     border:
                                         hsvToHexString(c).toLowerCase() ===
                                         hsvToHexString(color).toLowerCase()
-                                            ? `${hsvToHexString(c)} 1px solid`
+                                            ? `${hsvToHexString({
+                                                  ...c,
+                                                  a: 1,
+                                              })} 1px solid`
                                             : '',
                                     position: 'relative',
                                 }}
@@ -136,40 +150,40 @@ const ColorSelection = ({
                                 />
                             </div>
                         ))}
-                        <div
-                            style={{
-                                cursor: colorAlreadyExists
-                                    ? 'default'
-                                    : 'pointer',
-                                width: '22px',
-                                height: '22px',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: '50%',
-                                border: `${hsvToHexString(
-                                    colorWithoutOpacity
-                                )} 1px solid`,
-                                margin: '4px',
-                                filter: 'drop-shadow(0 0 1px #000000)',
-                                opacity: colorAlreadyExists ? 0 : 1,
-                                transition: 'opacity 0.25s',
-                            }}
-                            onClick={() => {
-                                if (!colorAlreadyExists) {
-                                    // TODO Send Callback
-                                }
-                            }}
-                        >
-                            <Icon
-                                icon="fal fa-plus"
+                        {!colorAlreadyExists && (
+                            <div
                                 style={{
-                                    fontSize: '14px',
-                                    lineHeight: 1,
-                                    color: hsvToHexString(colorWithoutOpacity),
+                                    cursor: 'pointer',
+                                    width: '22px',
+                                    height: '22px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: '50%',
+                                    border: `${hsvToHexString(
+                                        colorWithoutOpacity
+                                    )} 1px solid`,
+                                    margin: '4px',
+                                    filter: 'drop-shadow(0 0 1px #000000)',
                                 }}
-                            />
-                        </div>
+                                onClick={() => {
+                                    if (!colorAlreadyExists) {
+                                        onCreateCustomColorHandler(color);
+                                    }
+                                }}
+                            >
+                                <Icon
+                                    icon="fal fa-plus"
+                                    style={{
+                                        fontSize: '14px',
+                                        lineHeight: 1,
+                                        color: hsvToHexString(
+                                            colorWithoutOpacity
+                                        ),
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </Accordion>
             )}
@@ -204,6 +218,7 @@ ColorSelection.propTypes = {
         a: PropTypes.number,
     }).isRequired,
     onChange: PropTypes.func.isRequired,
+    onCreateCustomColor: PropTypes.func.isRequired,
 };
 
 ColorSelection.defaultProps = {
