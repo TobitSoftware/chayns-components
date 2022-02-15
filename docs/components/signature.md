@@ -37,9 +37,56 @@ import { Signature } from 'chayns-components';
 
 The `Signature`-component takes the following props:
 
-| Name                        | Type       | Default | Required |
-| --------------------------- | ---------- | ------- | :------: |
-| [onSubscribe](#onsubscribe) | `function` |         |          |
+| Name                                              | Type       | Default            | Required |
+| ------------------------------------------------- | ---------- | ------------------ | :------: |
+| [buttonText](#buttontext)                         | `string`   | `'Unterschreiben'` |          |
+| [buttonWrapperClassName](#buttonwrapperclassname) | `string`   |                    |          |
+| [disabled](#disabled)                             | `boolean`  | `false`            |          |
+| [skipLoadAndSave](#skiploadandsave)               | `boolean`  | `false`            |          |
+| [onSubscribe](#onsubscribe)                       | `function` |                    |          |
+| [onEdit](#onedit)                                 | `function` |                    |          |
+| [forceInitialShow](#forceinitialshow)             | `boolean`  | `false`            |          |
+| [showDeleteIcon](#showdeleteicon)                 | `boolean`  | `false`            |          |
+
+### `buttonText`
+
+```ts
+buttonText?: string
+```
+
+The text shown in the button
+
+---
+
+### `buttonWrapperClassName`
+
+```ts
+buttonWrapperClassName?: string
+```
+
+the className to use on the button wrapping div
+
+---
+
+### `disabled`
+
+```ts
+disabled?: boolean
+```
+
+whether the subscribe button is disabled
+
+---
+
+### `skipLoadAndSave`
+
+```ts
+skipLoadAndSave?: boolean
+```
+
+disables loading and saving of the signature
+
+---
 
 ### `onSubscribe`
 
@@ -48,3 +95,33 @@ onSubscribe?: function
 ```
 
 callback which is called when the user subscribes
+
+---
+
+### `onEdit`
+
+```ts
+onEdit?: function
+```
+
+callback which is called when the user edits his subscription
+
+---
+
+### `forceInitialShow`
+
+```ts
+forceInitialShow?: boolean
+```
+
+Forces to show signature on initial render
+
+---
+
+### `showDeleteIcon`
+
+```ts
+showDeleteIcon?: boolean
+```
+
+whether the icon to delete the signature should be shown

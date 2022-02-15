@@ -199,4 +199,4 @@ Shrinks the filter button in size.
 rectangular?: boolean
 ```
 
-Makes the filter button rectangular.
+Changes the filter button shape to that of a button.

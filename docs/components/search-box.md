@@ -60,6 +60,7 @@ The `SearchBox`-component takes the following props:
 | [addInputToList](#addinputtolist)                 | `boolean`                                         | `false`   |          |
 | [emptyKey](#emptykey)                             | `string \| number`                                |           |          |
 | [hasOpenCloseIcon](#hasopencloseicon)             | `boolean`                                         | `false`   |          |
+| [onBlur](#onblur)                                 | `function`                                        |           |          |
 
 ### `onSelect`
 
@@ -271,3 +272,13 @@ hasOpenCloseIcon?: boolean
 ```
 
 Whether the input should have a small icon to open and close the result list.
+
+---
+
+### `onBlur`
+
+```ts
+onBlur?: function
+```
+
+A callback that will be invoked when the user leaves the input.

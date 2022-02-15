@@ -116,6 +116,7 @@ The `PersonFinder`-component takes the following props:
 | [values](#values)                     | `array`                                                                                             |                  |          |
 | [value](#value)                       | `string`                                                                                            |                  |          |
 | [hasOpenCloseIcon](#hasopencloseicon) | `boolean`                                                                                           | `false`          |          |
+| [filterSelected](#filterselected)     | `boolean`                                                                                           | `false`          |          |
 
 ### `placeholder`
 
@@ -351,3 +352,13 @@ hasOpenCloseIcon?: boolean
 ```
 
 Adds a small chevron icon to show / hide the results
+
+---
+
+### `filterSelected`
+
+```ts
+filterSelected?: boolean
+```
+
+Removes already selected entries from search results
