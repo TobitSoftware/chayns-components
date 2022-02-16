@@ -35,7 +35,7 @@
         "format": "prettier . --ignore-path .gitignore --write",
         "generate-docs": "gulp generate-docs",
         "lint": "eslint ./src --ext js,jsx",
-        "lint-staged": "lint-staged",
+        "lint-staged": "lint-staged --allow-empty",
         "prepublishOnly": "npm run lint & npm run build",
         "storybook": "start-storybook -p 6006",
         "prepare": "husky install"

@@ -3,3 +3,4 @@
 
 npm run lint-staged
 npm run generate-docs
+git add **/*.md
