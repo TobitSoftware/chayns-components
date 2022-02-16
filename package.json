@@ -35,8 +35,10 @@
         "format": "prettier . --ignore-path .gitignore --write",
         "generate-docs": "gulp generate-docs",
         "lint": "eslint ./src --ext js,jsx",
+        "lint-staged": "lint-staged",
         "prepublishOnly": "npm run lint & npm run build",
-        "storybook": "start-storybook -p 6006"
+        "storybook": "start-storybook -p 6006",
+        "prepare": "husky install"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
@@ -99,7 +101,7 @@
         "gulp-sass": "^4.1.0",
         "gulp-shell": "^0.8.0",
         "html-webpack-plugin": "^5.0.0-alpha.14",
-        "husky": "^4.3.0",
+        "husky": "^7.0.0",
         "lint-staged": "^10.5.2",
         "node-sass": "^5.0.0",
         "param-case": "^3.0.3",
