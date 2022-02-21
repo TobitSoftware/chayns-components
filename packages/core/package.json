@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/core",
-    "version": "5.0.0-beta.25",
+    "version": "5.0.0-beta.26",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
@@ -33,25 +33,25 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.15.7",
-        "@babel/core": "^7.15.8",
-        "@babel/preset-env": "^7.15.8",
-        "@babel/preset-react": "^7.14.5",
-        "@babel/preset-typescript": "^7.15.0",
-        "@types/react": "^17.0.27",
-        "@types/react-dom": "^17.0.9",
-        "@types/styled-components": "^5.1.15",
-        "@types/uuid": "^8.3.1",
-        "babel-loader": "^8.2.2",
+        "@babel/cli": "^7.17.3",
+        "@babel/core": "^7.17.5",
+        "@babel/preset-env": "^7.16.11",
+        "@babel/preset-react": "^7.16.7",
+        "@babel/preset-typescript": "^7.16.7",
+        "@types/react": "^17.0.39",
+        "@types/react-dom": "^17.0.11",
+        "@types/styled-components": "^5.1.23",
+        "@types/uuid": "^8.3.4",
+        "babel-loader": "^8.2.3",
         "lerna": "^4.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "typescript": "^4.4.3"
+        "typescript": "^4.5.5"
     },
     "dependencies": {
         "clsx": "^1.1.1",
-        "framer-motion": "^4.1.17",
-        "styled-components": "^5.3.1",
+        "framer-motion": "^6.2.6",
+        "styled-components": "^5.3.3",
         "uuid": "^8.3.2"
     },
     "peerDependencies": {

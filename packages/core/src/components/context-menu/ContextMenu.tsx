@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import React, {
     forwardRef,
+    MouseEvent,
     MouseEventHandler,
     ReactNode,
     useCallback,
@@ -25,7 +26,7 @@ export type ContextMenuCoordinates = {
 export type ContextMenuItem = {
     icons: string[];
     key: string;
-    onClick: MouseEventHandler<HTMLDivElement>;
+    onClick: (event?: MouseEvent<HTMLDivElement>) => void;
     text: string;
 };
 
@@ -92,6 +93,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const uuid = useUuid();
 
+        // ToDo: Replace with hook if new chayns api is ready
         const contextMenuContentRef = useRef<HTMLDivElement>(null);
         const contextMenuRef = useRef<HTMLSpanElement>(null);
 
@@ -99,8 +101,25 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             setIsContentShown(false);
         }, []);
 
-        const handleShow = useCallback(() => {
-            if (contextMenuRef.current) {
+        const handleShow = useCallback(async () => {
+            const { isMobile, isTablet } = chayns.env;
+
+            if (isMobile || isTablet) {
+                // ToDo: Replace with new api function if new api is ready
+                const { buttonType, selection } = await chayns.dialog.select({
+                    buttons: [],
+                    list: items.map(({ icons, text }, index) => ({
+                        name: text,
+                        value: index,
+                        icon: icons[0],
+                    })),
+                    type: 2,
+                });
+
+                if (buttonType === 1 && typeof selection[0]?.value === 'number') {
+                    items[selection[0].value]?.onClick();
+                }
+            } else if (contextMenuRef.current) {
                 const rootElement = document.querySelector('.tapp') || document.body;
 
                 const {
@@ -135,7 +154,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 event.preventDefault();
                 event.stopPropagation();
 
-                handleShow();
+                void handleShow();
             },
             [handleShow]
         );

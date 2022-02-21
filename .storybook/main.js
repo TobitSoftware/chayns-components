@@ -11,4 +11,17 @@ module.exports = {
             },
         },
     ],
+    webpackFinal: async (config) => {
+        /**
+         * This webpack rule is needed so that the storybook can handle the "mjs" files
+         * of the "framer-motion" package in version 5 or higher.
+         */
+        config.module.rules.push({
+            include: /node_modules/,
+            test: /\.mjs$/,
+            type: 'javascript/auto',
+        });
+
+        return config;
+    },
 };

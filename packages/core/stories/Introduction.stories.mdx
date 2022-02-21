@@ -46,3 +46,35 @@ yarn add @chayns-components/person-finder
 > **Information:** The styles for the components are supplied directly by the package in the new
 > version.
 
+<h2 style={{ marginTop: '32px' }}>Contribution</h2>
+
+<p style={{ fontSize: '1.1rem' }}>
+    First you need to install all the dependencies of the main project and the sub-projects
+    and link them. Just use the following commands:
+</p>
+
+```bash
+# NPM
+npm install
+lerna bootstrap
+
+# Yarn
+yarn install
+lerna bootstrap
+```
+
+<p style={{ fontSize: '1.1rem' }}>
+    Then use one of the following commands to launch the local version of the storybook
+    and develop in it:
+</p>
+
+```bash
+# NPM
+npm run storybook
+
+# Yarn
+yarn run storybook
+```
+
+> **Information:** The local storybook is started via port 6006 of your localhost.
+> You can reach this at the following URL: `http://localhost:6006/`
