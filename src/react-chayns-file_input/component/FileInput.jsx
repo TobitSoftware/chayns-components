@@ -38,6 +38,16 @@ export default class FileInput extends PureComponent {
         this.itemRefs[index].classList.remove('cc__file-input--hover');
     };
 
+    onError = (item, errorMessage, onFulfilled = () => {}) => {
+        const { showErrorDialog } = this.props;
+        if (showErrorDialog) {
+            chayns.dialog.alert('', errorMessage).then(onFulfilled);
+        }
+        if (item.onError) {
+            item.onError(errorMessage);
+        }
+    };
+
     onChange = (event, item, index) => {
         const { errorMessages } = this.props;
         const { files } = event.target;
@@ -49,14 +59,14 @@ export default class FileInput extends PureComponent {
                 const file = files[fileIndex];
                 if (!this.checkFileType(file.type, item.types)) {
                     invalidFiles.push(file);
-                    chayns.dialog.alert('', errorMessages.wrongFileType);
+                    this.onError(item, errorMessages.wrongFileType);
                 } else if (
                     item.maxNumberOfFiles > 0 &&
                     validFiles.length >= item.maxNumberOfFiles
                 ) {
                     invalidFiles.push(file);
-                    chayns.dialog.alert(
-                        '',
+                    this.onError(
+                        item,
                         errorMessages.tooMuchFiles.replace(
                             '##NUMBER##',
                             item.maxNumberOfFiles
@@ -66,8 +76,8 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    chayns.dialog.alert(
-                        '',
+                    this.onError(
+                        item,
                         errorMessages.fileTooBig.replace(
                             '##SIZE##',
                             `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`
@@ -108,24 +118,26 @@ export default class FileInput extends PureComponent {
                             result.status === 2 &&
                             errorMessages.temporaryNoPermission
                         ) {
-                            chayns.dialog.alert(
-                                '',
+                            this.onError(
+                                item,
                                 errorMessages.temporaryNoPermission
                             );
                         } else if (
                             result.status === 3 &&
                             errorMessages.permanentNoPermission
                         ) {
-                            chayns.dialog
-                                .alert('', errorMessages.permanentNoPermission)
-                                .then(() => {
+                            this.onError(
+                                item,
+                                errorMessages.permanentNoPermission,
+                                () => {
                                     chayns.invokeCall({
                                         action: 239,
                                         value: {
                                             showAppInfo: true,
                                         },
                                     });
-                                });
+                                }
+                            );
                         }
                     });
             }
@@ -313,6 +325,11 @@ FileInput.propTypes = {
     }),
 
     /**
+     * If an alert dialog should be displayed on Error.
+     */
+    showErrorDialog: PropTypes.bool,
+
+    /**
      * The different fields that will be shown in the file input.
      */
     items: PropTypes.arrayOf(
@@ -343,6 +360,7 @@ FileInput.propTypes = {
                     ]),
                 }),
             ]),
+            onError: PropTypes.func,
         })
     ),
 };
@@ -360,6 +378,7 @@ FileInput.defaultProps = {
             'Bitte überprüfe die Einstellungen Deiner App und erlaube den Dateizugriff auf Deinem Gerät.',
         temporaryNoPermission: null,
     },
+    showErrorDialog: true,
     items: [
         {
             types: [FileInput.types.ALL],
@@ -372,6 +391,7 @@ FileInput.defaultProps = {
             style: null,
             disabled: false,
             content: null,
+            onError: null,
         },
     ],
 };
