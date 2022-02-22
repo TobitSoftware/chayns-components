@@ -25,7 +25,7 @@ export type IconProps = {
      */
     onClick?: MouseEventHandler<HTMLSpanElement>;
     /**
-     * Function to be executed when the icon was double clicked
+     * Function to be executed when the icon was double-clicked
      */
     onDoubleClick?: MouseEventHandler<HTMLSpanElement>;
     /**
