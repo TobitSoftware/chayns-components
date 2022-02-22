@@ -26,23 +26,21 @@ yarn add @chayns-components/emoji-input
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
-> library, the styles are delivered directly with the components. There is no need to load an
-> extra stylesheet anymore.
+> library, the styles are delivered directly with the components. There is no need to load an extra
+> stylesheet anymore.
 
 ## Usage
 
 You can use the component in your project as in the following example.
 
 ```typescript jsx
-import { Button } from '@chayns-components/core';
+import { Button } from '@chayns-components/';
 
 const handleButtonClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     // Your code
 };
 
-<Button onClick={handleButtonClick}>
-    Click me!
-</Button>
+<Button onClick={handleButtonClick}>Click me!</Button>;
 ```
 
 ## Components Overview

@@ -1,33 +1,29 @@
-import React, {FC, MouseEventHandler, ReactNode, useState, useCallback} from 'react';
-import {AnimatePresence, MotionConfig} from 'framer-motion';
-import {useUuid} from "../hooks/uuid";
-import classNames from 'clsx';
-import {IS_EDGE_WITH_CHROMIUM, SKIN_TONE_REGEX} from "./utils";
+import clsx from 'clsx';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import React, { FC, ReactNode, useCallback, useRef, useState } from 'react';
+import { useUuid } from '../hooks/uuid';
+import { SKIN_TONE_REGEX } from './utils';
 
-export type EMOJI_INPUT_MODE = {
-    NORMAL: 0,
-    PURE: 1,
-    ONLY_BUTTON: 2,
-    ONLY_INPUT: 3,
-};
-export type POPUP_POSITION = {
-    LEFT_TOP: 0,
-    CENTER_TOP: 1,
-    RIGHT_TOP: 2,
-    LEFT_BOTTOM: 3,
-    CENTER_BOTTOM: 4,
-    RIGHT_BOTTOM: 5,
-};
+export enum EmojiInputMode {
+    Normal,
+    Pure,
+    OnlyButton,
+    OnlyInput,
+}
 
-export type EmojiInputElement = {
+export enum PopupPosition {
+    LeftTop,
+    CenterTop,
+    RightTop,
+    LeftBottom,
+    CenterBottom,
+}
+
+export type EmojiInputProps = {
     /**
-     * Additional styles for input element
+     * value in the Input
      */
-    style?: object;
-    /**
-     * Additional class names for the button element
-     */
-    className?: string;
+    value?: string;
     /**
      * placeholder shown left
      */
@@ -37,127 +33,128 @@ export type EmojiInputElement = {
      */
     isDisabled?: boolean;
     /**
-     * on KeyDown
+     * on KeyUp
      */
-    onKeyDown: React.KeyboardEventHandler<HTMLDivElement>;
+    onKeyUp: (value?: KeyboardEvent) => void;
     /**
      * on Focus
      */
-    onFocus: React.ChangeEventHandler;
+    onFocus: (event?: MouseEvent) => void;
     /**
      * on Blur
      */
-    onBlur: React.ChangeEventHandler;
+    onBlur: (event?: MouseEvent) => void;
     /**
      * Function, that returns current input on every change in input (KeyDown)
      */
-    onChange?: React.KeyboardEventHandler<HTMLDivElement>;
+    onInput?: (event?: KeyboardEvent) => void;
     /**
      * Mode and Design of the Input
      */
-    mode?: EMOJI_INPUT_MODE;
+    mode?: EmojiInputMode;
     /**
      * Position where the Popup should be shown
      */
-    popupPosition?: POPUP_POSITION;
+    popupPosition?: PopupPosition;
     /**
      * Element shown right from Emoji-Button
      */
     right?: ReactNode;
+    /**
+     * is Multiline Input allowed
+     */
+    multiLine?: boolean;
 };
 
-export const EmojiInput: FC<EmojiInputElement> = ({
-                                                      style,
-                                                      className,
-                                                      placeholder,
-                                                      isDisabled,
-                                                      onKeyDown,
-                                                      onFocus,
-                                                      onBlur,
-                                                      onChange,
-                                                      mode,
-                                                      popupPosition,
-                                                      right
-                                                  }) => {
-
-    const [value, setValue] = useState('');
+export const EmojiInput: FC<EmojiInputProps> = ({
+    value,
+    placeholder,
+    isDisabled,
+    onKeyUp,
+    onFocus,
+    onBlur,
+    onInput,
+    mode,
+    popupPosition,
+    right,
+    multiLine = false,
+}) => {
+    const inputRef = useRef<HTMLDivElement>(null);
     const [showPopup, setShowPopup] = useState(false);
     const [focus, setFocus] = useState(false);
     const uuid = useUuid();
 
-    const handleInput = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-        setValue(value.replace(SKIN_TONE_REGEX, ''));
-        if (typeof onChange === 'function') {
-            onChange(event);
+    const handleInput = useCallback(
+        (event) => {
+            console.log(value);
+            value = event?.target?.innerHTML?.replace(SKIN_TONE_REGEX, '') || '';
+            if (typeof onInput === 'function') {
+                onInput(event);
+            }
+        },
+        [onInput]
+    );
+
+    const handleKeyUp = useCallback((event) => {
+        if (typeof onKeyUp === 'function') {
+            onKeyUp(event);
         }
     }, []);
 
-    const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.keyCode === 13 && chayns.env.isIOS) { // TODO env => hooks
-            // add '<br><br>'
-            event.preventDefault();
-        }
-
-        if (typeof onKeyDown === 'function') {
-            onKeyDown(event);
-        }
-    }, []);
-
-    const handleKeyUp = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (chayns.env.browser.name.toLowerCase() === 'ie' && event.keyCode !== 16) { // TODO env => hooks
-            handleInput(event);
-        }
-
-        if (
-            chayns.env.browser.name.toLowerCase() === 'edge' // TODO env => hooks
-            && !(IS_EDGE_WITH_CHROMIUM.test(navigator.userAgent))
-            && event.keyCode === 13
-            && event.shiftKey
-        ) {
-            handleInput(event);
-        }
-    }, []);
-
-    const handleFocus = useCallback((event: React.ChangeEvent) => {
+    const handleFocus = useCallback((event) => {
         setFocus(true);
         if (typeof onFocus === 'function') {
             onFocus(event);
         }
     }, []);
 
-    const handleBlur = useCallback((event: React.ChangeEvent) => {
+    const handleBlur = useCallback((event) => {
         setFocus(false);
         if (typeof onBlur === 'function') {
             onBlur(event);
         }
     }, []);
 
+    const insertHTMLAtCursorPosition = (text: string) => {
+        if (document.activeElement === inputRef?.current) {
+            document.execCommand('insertHTML', false, text);
+        } else {
+            updateDOM(value + text);
+        }
+
+        const event = document.createEvent('HTMLEvents');
+        event.initEvent('input', true);
+        inputRef?.current?.dispatchEvent(event);
+    };
+    const updateDOM = (value: string) => {};
+
     return (
-        <MotionConfig transition={{type: 'tween'}}>
+        <MotionConfig transition={{ type: 'tween' }}>
             <div className="input__input-wrapper">
                 <div
-                    id={uuid}
-
-                    style={{...{width: '100%'}, ...style}}
-                    className={classNames('input', className, {
+                    className={clsx('input', {
                         'input--disabled': isDisabled,
                     })}
-
+                    ref={inputRef}
+                    dangerouslySetInnerHTML={{ __html: value || '' }}
+                    id={uuid}
                     contentEditable={!isDisabled}
                     onKeyUp={handleKeyUp}
-                    onKeyDown={handleKeyDown}
                     onInput={handleInput}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     dir="auto"
-
-                    dangerouslySetInnerHTML={{ __html: value }}
                 />
+                <div
+                    className={clsx('emoji-input__wrapper__placeholder', {
+                        'emoji-input__wrapper__placeholder--hidden': value !== '' || focus,
+                    })}
+                >
+                    {placeholder}
+                </div>
                 {right}
             </div>
-            <AnimatePresence initial={false}>
-                {showPopup && <></>}
-            </AnimatePresence>
+            <AnimatePresence initial={false}>{showPopup && <></>}</AnimatePresence>
         </MotionConfig>
     );
 };
