@@ -1,14 +1,16 @@
-import clsx from 'clsx';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
-import React, { FC, ReactNode, useCallback, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { useUuid } from '../hooks/uuid';
-import { SKIN_TONE_REGEX } from './utils';
+import { EmojiButton } from './emoji-button/EmojiButton';
+import {
+    StyledDivInput,
+    StyledEmojiInputWrapper,
+    StyledPlaceholder,
+    StyledRightElement,
+} from './EmojiInput.styles';
 
-export enum EmojiInputMode {
+export enum DesignMode {
     Normal,
-    Pure,
-    OnlyButton,
-    OnlyInput,
+    BorderDesign,
 }
 
 export enum PopupPosition {
@@ -27,23 +29,23 @@ export type EmojiInputProps = {
     /**
      * placeholder shown left
      */
-    placeholder?: string;
+    placeholder: string;
     /**
      * input & button cannot be clicked and color changes to gray
      */
-    isDisabled?: boolean;
+    isDisabled: boolean;
     /**
      * on KeyUp
      */
-    onKeyUp: (value?: KeyboardEvent) => void;
+    onKeyUp?: (value?: KeyboardEvent) => void;
     /**
      * on Focus
      */
-    onFocus: (event?: MouseEvent) => void;
+    onFocus?: (event?: MouseEvent) => void;
     /**
      * on Blur
      */
-    onBlur: (event?: MouseEvent) => void;
+    onBlur?: (event?: MouseEvent) => void;
     /**
      * Function, that returns current input on every change in input (KeyDown)
      */
@@ -51,43 +53,46 @@ export type EmojiInputProps = {
     /**
      * Mode and Design of the Input
      */
-    mode?: EmojiInputMode;
+    design: DesignMode;
+    /**
+     * Mode and Design of the Input
+     */
+    showEmojiButton: boolean;
     /**
      * Position where the Popup should be shown
      */
-    popupPosition?: PopupPosition;
+    popupPosition: PopupPosition;
     /**
      * Element shown right from Emoji-Button
      */
     right?: ReactNode;
-    /**
-     * is Multiline Input allowed
-     */
-    multiLine?: boolean;
 };
 
 export const EmojiInput: FC<EmojiInputProps> = ({
     value,
-    placeholder,
-    isDisabled,
+    placeholder = '',
+    isDisabled = false,
     onKeyUp,
     onFocus,
     onBlur,
     onInput,
-    mode,
-    popupPosition,
+    design = DesignMode.Normal,
+    showEmojiButton = true,
+    popupPosition = PopupPosition.LeftTop,
     right,
-    multiLine = false,
 }) => {
-    const inputRef = useRef<HTMLDivElement>(null);
-    const [showPopup, setShowPopup] = useState(false);
     const [focus, setFocus] = useState(false);
+    const inputRef = useRef<HTMLDivElement>(null);
     const uuid = useUuid();
+    useEffect(() => {
+        const oldValue = inputRef.current?.innerHTML;
+        if (oldValue !== value) {
+        }
+    }, [value]);
 
     const handleInput = useCallback(
         (event) => {
-            console.log(value);
-            value = event?.target?.innerHTML?.replace(SKIN_TONE_REGEX, '') || '';
+            // event?.target?.innerHTML?.replace(SKIN_TONE_REGEX, '') ;
             if (typeof onInput === 'function') {
                 onInput(event);
             }
@@ -115,6 +120,7 @@ export const EmojiInput: FC<EmojiInputProps> = ({
         }
     }, []);
 
+    /*
     const insertHTMLAtCursorPosition = (text: string) => {
         if (document.activeElement === inputRef?.current) {
             document.execCommand('insertHTML', false, text);
@@ -126,35 +132,40 @@ export const EmojiInput: FC<EmojiInputProps> = ({
         event.initEvent('input', true);
         inputRef?.current?.dispatchEvent(event);
     };
-    const updateDOM = (value: string) => {};
+    */
 
+    //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
+    //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
+    /*const handlePreventLoseInputFocus = (event) => {
+        if (
+            event?.target?.classList?.contains('prevent-lose-focus') ||
+            event?.target?.parentElement?.classList?.contains('prevent-lose-focus')
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    };*/
     return (
-        <MotionConfig transition={{ type: 'tween' }}>
-            <div className="input__input-wrapper">
-                <div
-                    className={clsx('input', {
-                        'input--disabled': isDisabled,
-                    })}
-                    ref={inputRef}
-                    dangerouslySetInnerHTML={{ __html: value || '' }}
-                    id={uuid}
-                    contentEditable={!isDisabled}
-                    onKeyUp={handleKeyUp}
-                    onInput={handleInput}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    dir="auto"
-                />
-                <div
-                    className={clsx('emoji-input__wrapper__placeholder', {
-                        'emoji-input__wrapper__placeholder--hidden': value !== '' || focus,
-                    })}
-                >
-                    {placeholder}
+        <StyledEmojiInputWrapper translate="no" design={design}>
+            <StyledDivInput
+                design={design}
+                dangerouslySetInnerHTML={{ __html: '' }}
+                ref={inputRef}
+                id={uuid}
+                contentEditable={!isDisabled}
+                onKeyUp={handleKeyUp}
+                onInput={handleInput}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                dir="auto"
+            />
+            <StyledPlaceholder isHidden={value !== '' || focus}>{placeholder}</StyledPlaceholder>
+            {showEmojiButton && (
+                <div className="prevent-lose-focus">
+                    <EmojiButton />
                 </div>
-                {right}
-            </div>
-            <AnimatePresence initial={false}>{showPopup && <></>}</AnimatePresence>
-        </MotionConfig>
+            )}
+            <StyledRightElement className="prevent-lose-focus">{right}</StyledRightElement>
+        </StyledEmojiInputWrapper>
     );
 };

@@ -1,12 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { EmojiInput, EmojiInputMode } from '../src/components/EmojiInput';
+import { DesignMode, EmojiInput } from '../src/components/EmojiInput';
 
 export default {
     title: 'EmojiInput/EmojiInput',
     component: EmojiInput,
     args: {
         placeholder: 'Platzhalter',
-        mode: EmojiInputMode.Normal,
+        design: DesignMode.Normal,
+        right: <div>AAAAAA</div>,
     },
 } as ComponentMeta<typeof EmojiInput>;
 

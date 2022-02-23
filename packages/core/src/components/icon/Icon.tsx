@@ -75,7 +75,7 @@ const Icon: FC<IconProps> = ({
 
     let maxStackSizeFactor = 1;
 
-    icons.forEach((icon) => {
+    icons?.forEach((icon) => {
         const stackSizeFactor = getStackSizeFactor(icon);
 
         if (stackSizeFactor && stackSizeFactor > maxStackSizeFactor) {
@@ -83,7 +83,7 @@ const Icon: FC<IconProps> = ({
         }
     });
 
-    const shouldUseStackedIcon = icons.length > 1;
+    const shouldUseStackedIcon = icons?.length > 1;
 
     const wrapperClasses = clsx(
         'beta-chayns-icon',
@@ -100,7 +100,7 @@ const Icon: FC<IconProps> = ({
             onMouseDown={onMouseDown}
             size={size}
         >
-            {icons.map((icon) => {
+            {icons?.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
                 const iconClasses = clsx(icon, className, {
