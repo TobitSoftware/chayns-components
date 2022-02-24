@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useMemo } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 
 enum ColorMode {
@@ -59,10 +59,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     secondaryColor,
     style = {},
 }) => {
-    const [colors, setColors] = useState<Theme>({});
-    const [themeColors, setThemeColors] = useState<Theme>({});
-
-    useEffect(() => {
+    const [colors, themeColors] = useMemo(() => {
         const availableColors = getAvailableColorList();
 
         const newColors: Theme = {};
@@ -92,11 +89,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
-        console.debug('newColors', newColors);
-        console.debug('newThemeColors', newThemeColors);
-
-        setColors(newColors);
-        setThemeColors(newThemeColors);
+        return [newColors, newThemeColors];
     }, [color, colorMode, secondaryColor]);
 
     return (

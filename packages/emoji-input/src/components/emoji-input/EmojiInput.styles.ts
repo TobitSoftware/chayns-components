@@ -11,8 +11,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     position: relative;
     width: 100%;
 
-    ${({ design, theme }) => {
-        console.debug('theme', theme);
+    ${({ design, theme }: StyledEmojiInputProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ButtonProps } from './Button';
 
@@ -8,10 +8,6 @@ type StyledButtonProps = ButtonProps &
     }>;
 
 export const StyledButton = styled.button<StyledButtonProps>`
-    ${({ theme }) => {
-        console.debug('theme', theme);
-        return css``;
-    }}
     background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
         isSecondary ? theme['202'] : theme['408']};
     border-radius: 3px;

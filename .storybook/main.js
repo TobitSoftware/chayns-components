@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
     stories: ['../packages/**/*.stories.mdx', '../packages/**/*.stories.@(js|jsx|ts|tsx)'],
     addons: [
@@ -21,6 +23,14 @@ module.exports = {
             test: /\.mjs$/,
             type: 'javascript/auto',
         });
+
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            'styled-components': path.resolve(
+                __dirname,
+                '../packages/core/node_modules/styled-components'
+            ),
+        };
 
         return config;
     },

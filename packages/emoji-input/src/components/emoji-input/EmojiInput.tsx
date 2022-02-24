@@ -152,7 +152,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }; */
 
     return (
-        <StyledEmojiInput translate="no" design={design}>
+        <StyledEmojiInput className="beta-chayns-emoji-input" translate="no" design={design}>
             <StyledEditableDiv
                 design={design}
                 dangerouslySetInnerHTML={{ __html: '' }}
