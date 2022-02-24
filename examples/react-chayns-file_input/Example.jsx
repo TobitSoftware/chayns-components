@@ -9,6 +9,7 @@ import Gallery from '../../src/react-chayns-gallery/component/Gallery';
 const FileInputExample = () => {
     const [images, setImages] = useState([]);
     const [displayPath, setDisplayPath] = useState('');
+    const [errorMessage, setErrorMessage] = useState();
 
     const onChange = useCallback(
         (validFiles) => {
@@ -109,6 +110,39 @@ const FileInputExample = () => {
                     },
                 ]}
             />
+            <h2>
+                FileInput with alert disabled and errorMessage displayed
+                differently
+            </h2>
+            <p>
+                upload anything but image, more than one file or file bigger
+                than 4MB, to see the effect
+            </p>
+            <FileInput
+                style={{ marginBottom: '20px' }}
+                stopPropagation
+                showErrorDialog={false}
+                items={[
+                    {
+                        types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
+                        maxFileSize: 4194304, // max file size is 4 MB
+                        maxNumberOfFiles: 1, // limit for number of files
+                        onChange: (validFiles, invalidFiles) => {
+                            if (invalidFiles.length === 0) {
+                                setErrorMessage('');
+                            }
+                            onChange(validFiles)
+                        },
+                        content: { text: 'Bild hochladen' },
+                        onError: setErrorMessage,
+                    },
+                ]}
+            />
+            {errorMessage && (
+                <div className="content__card content__card--warning">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     );
 };
