@@ -6,7 +6,8 @@ export default {
     title: 'EmojiInput/EmojiInput',
     component: EmojiInput,
     args: {
-        placeholder: 'Placeholder',
+        placeholder: 'Platzhalter',
+        right: <div>AAAAAA</div>,
     },
 } as ComponentMeta<typeof EmojiInput>;
 
@@ -14,11 +15,10 @@ const Template: ComponentStory<typeof EmojiInput> = (args) => <EmojiInput {...ar
 
 export const NormalDesign = Template.bind({});
 
-export const BorderDesign = Template.bind({});
-
 NormalDesign.args = {
     design: DesignMode.Normal,
 };
+export const BorderDesign = Template.bind({});
 
 BorderDesign.args = {
     design: DesignMode.BorderDesign,

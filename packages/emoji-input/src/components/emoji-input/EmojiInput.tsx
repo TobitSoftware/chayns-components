@@ -12,41 +12,33 @@ import {
 
 export type EmojiInputProps = {
     /**
-     * value in the Input
+     * Mode and Design of the Input
      */
-    value?: string;
-    /**
-     * placeholder shown left
-     */
-    placeholder: string;
+    design: DesignMode;
     /**
      * input & button cannot be clicked and color changes to gray
      */
     isDisabled: boolean;
     /**
-     * on KeyUp
+     * on Blur
      */
-    onKeyUp?: (value?: KeyboardEvent) => void;
+    onBlur?: (event?: MouseEvent) => void;
     /**
      * on Focus
      */
     onFocus?: (event?: MouseEvent) => void;
     /**
-     * on Blur
-     */
-    onBlur?: (event?: MouseEvent) => void;
-    /**
      * Function, that returns current input on every change in input (KeyDown)
      */
     onInput?: (event?: KeyboardEvent) => void;
     /**
-     * Mode and Design of the Input
+     * on KeyUp
      */
-    design: DesignMode;
+    onKeyUp?: (value?: KeyboardEvent) => void;
     /**
-     * Mode and Design of the Input
+     * placeholder shown left
      */
-    showEmojiButton: boolean;
+    placeholder: string;
     /**
      * Position where the Popup should be shown
      */
@@ -55,20 +47,28 @@ export type EmojiInputProps = {
      * Element shown right from Emoji-Button
      */
     right?: ReactNode;
+    /**
+     * Mode and Design of the Input
+     */
+    showEmojiButton: boolean;
+    /**
+     * value in the Input
+     */
+    value?: string;
 };
 
 const EmojiInput: FC<EmojiInputProps> = ({
-    value,
-    placeholder = '',
-    isDisabled = false,
-    onKeyUp,
-    onFocus,
-    onBlur,
-    onInput,
     design = DesignMode.Normal,
-    showEmojiButton = true,
+    isDisabled = false,
+    onBlur,
+    onFocus,
+    onInput,
+    onKeyUp,
+    placeholder = '',
     popupPosition = PopupPosition.TopLeft,
     right,
+    showEmojiButton = true,
+    value = '',
 }) => {
     const [hasFocus, setHasFocus] = useState(false);
 
@@ -154,24 +154,25 @@ const EmojiInput: FC<EmojiInputProps> = ({
     return (
         <StyledEmojiInput className="beta-chayns-emoji-input" translate="no" design={design}>
             <StyledEditableDiv
-                design={design}
-                dangerouslySetInnerHTML={{ __html: '' }}
-                ref={inputRef}
-                id={uuid}
                 contentEditable={!isDisabled}
-                onKeyUp={handleKeyUp}
-                onInput={handleInput}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
+                dangerouslySetInnerHTML={{ __html: '' }}
+                design={design}
                 dir="auto"
+                id={uuid}
+                isDisabled={isDisabled}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+                onInput={handleInput}
+                onKeyUp={handleKeyUp}
+                ref={inputRef}
             />
-            <StyledPlaceholder isHidden={value !== '' || hasFocus}>{placeholder}</StyledPlaceholder>
+            <StyledPlaceholder isHidden={value !== '' || hasFocus} design={design}>
+                {placeholder}
+            </StyledPlaceholder>
             {showEmojiButton && (
-                <div className="prevent-lose-focus">
-                    <EmojiButton />
-                </div>
+                <EmojiButton isDisabled={isDisabled} design={design} /> //className="prevent-lose-focus"
             )}
-            <StyledRightElement className="prevent-lose-focus">{right}</StyledRightElement>
+            <StyledRightElement design={design}>{right}</StyledRightElement>
         </StyledEmojiInput>
     );
 };
