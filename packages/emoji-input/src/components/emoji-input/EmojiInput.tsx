@@ -1,25 +1,14 @@
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import { useUuid } from '../hooks/uuid';
-import { EmojiButton } from './emoji-button/EmojiButton';
+import { useUuid } from '../../hooks/uuid';
+import { EmojiButton } from '../emoji-button/EmojiButton';
+import { DesignMode } from './constants/design';
+import { PopupPosition } from './constants/popup';
 import {
-    StyledDivInput,
-    StyledEmojiInputWrapper,
+    StyledEditableDiv,
+    StyledEmojiInput,
     StyledPlaceholder,
     StyledRightElement,
 } from './EmojiInput.styles';
-
-export enum DesignMode {
-    Normal,
-    BorderDesign,
-}
-
-export enum PopupPosition {
-    LeftTop,
-    CenterTop,
-    RightTop,
-    LeftBottom,
-    CenterBottom,
-}
 
 export type EmojiInputProps = {
     /**
@@ -68,7 +57,7 @@ export type EmojiInputProps = {
     right?: ReactNode;
 };
 
-export const EmojiInput: FC<EmojiInputProps> = ({
+const EmojiInput: FC<EmojiInputProps> = ({
     value,
     placeholder = '',
     isDisabled = false,
@@ -78,21 +67,25 @@ export const EmojiInput: FC<EmojiInputProps> = ({
     onInput,
     design = DesignMode.Normal,
     showEmojiButton = true,
-    popupPosition = PopupPosition.LeftTop,
+    popupPosition = PopupPosition.TopLeft,
     right,
 }) => {
-    const [focus, setFocus] = useState(false);
+    const [hasFocus, setHasFocus] = useState(false);
+
     const inputRef = useRef<HTMLDivElement>(null);
+
     const uuid = useUuid();
+
     useEffect(() => {
         const oldValue = inputRef.current?.innerHTML;
+
         if (oldValue !== value) {
+            // ToDo
         }
     }, [value]);
 
     const handleInput = useCallback(
         (event) => {
-            // event?.target?.innerHTML?.replace(SKIN_TONE_REGEX, '') ;
             if (typeof onInput === 'function') {
                 onInput(event);
             }
@@ -100,25 +93,36 @@ export const EmojiInput: FC<EmojiInputProps> = ({
         [onInput]
     );
 
-    const handleKeyUp = useCallback((event) => {
-        if (typeof onKeyUp === 'function') {
-            onKeyUp(event);
-        }
-    }, []);
+    const handleKeyUp = useCallback(
+        (event) => {
+            if (typeof onKeyUp === 'function') {
+                onKeyUp(event);
+            }
+        },
+        [onKeyUp]
+    );
 
-    const handleFocus = useCallback((event) => {
-        setFocus(true);
-        if (typeof onFocus === 'function') {
-            onFocus(event);
-        }
-    }, []);
+    const handleFocus = useCallback(
+        (event) => {
+            setHasFocus(true);
 
-    const handleBlur = useCallback((event) => {
-        setFocus(false);
-        if (typeof onBlur === 'function') {
-            onBlur(event);
-        }
-    }, []);
+            if (typeof onFocus === 'function') {
+                onFocus(event);
+            }
+        },
+        [onFocus]
+    );
+
+    const handleBlur = useCallback(
+        (event) => {
+            setHasFocus(false);
+
+            if (typeof onBlur === 'function') {
+                onBlur(event);
+            }
+        },
+        [onBlur]
+    );
 
     /*
     const insertHTMLAtCursorPosition = (text: string) => {
@@ -136,7 +140,8 @@ export const EmojiInput: FC<EmojiInputProps> = ({
 
     //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
     //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
-    /*const handlePreventLoseInputFocus = (event) => {
+
+    /* const handlePreventLoseInputFocus = (event) => {
         if (
             event?.target?.classList?.contains('prevent-lose-focus') ||
             event?.target?.parentElement?.classList?.contains('prevent-lose-focus')
@@ -144,10 +149,11 @@ export const EmojiInput: FC<EmojiInputProps> = ({
             event.preventDefault();
             event.stopPropagation();
         }
-    };*/
+    }; */
+
     return (
-        <StyledEmojiInputWrapper translate="no" design={design}>
-            <StyledDivInput
+        <StyledEmojiInput translate="no" design={design}>
+            <StyledEditableDiv
                 design={design}
                 dangerouslySetInnerHTML={{ __html: '' }}
                 ref={inputRef}
@@ -159,13 +165,17 @@ export const EmojiInput: FC<EmojiInputProps> = ({
                 onBlur={handleBlur}
                 dir="auto"
             />
-            <StyledPlaceholder isHidden={value !== '' || focus}>{placeholder}</StyledPlaceholder>
+            <StyledPlaceholder isHidden={value !== '' || hasFocus}>{placeholder}</StyledPlaceholder>
             {showEmojiButton && (
                 <div className="prevent-lose-focus">
                     <EmojiButton />
                 </div>
             )}
             <StyledRightElement className="prevent-lose-focus">{right}</StyledRightElement>
-        </StyledEmojiInputWrapper>
+        </StyledEmojiInput>
     );
 };
+
+EmojiInput.displayName = 'EmojiInput';
+
+export default EmojiInput;

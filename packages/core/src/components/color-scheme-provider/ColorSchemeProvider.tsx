@@ -92,6 +92,9 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
+        console.debug('newColors', newColors);
+        console.debug('newThemeColors', newThemeColors);
+
         setColors(newColors);
         setThemeColors(newThemeColors);
     }, [color, colorMode, secondaryColor]);

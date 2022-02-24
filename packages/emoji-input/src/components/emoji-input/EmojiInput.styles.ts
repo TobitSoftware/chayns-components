@@ -1,24 +1,23 @@
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../../../core/src/components/color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../../../../core/src/components/color-scheme-provider/ColorSchemeProvider';
+import { DesignMode } from './constants/design';
 import type { EmojiInputProps } from './EmojiInput';
-import { DesignMode } from './EmojiInput';
 
-type StyledEmojiInputProps = EmojiInputProps & any;
+type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'design'>>;
 
-export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputProps>`
-    position: relative;
-    display: flex;
+export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     align-items: center;
+    display: flex;
+    position: relative;
     width: 100%;
 
     ${({ design, theme }) => {
+        console.debug('theme', theme);
         switch (design) {
             case DesignMode.BorderDesign:
-                console.log('Border Design', theme);
                 return css`
                     padding-left: 10px;
                     border: 1px solid rgba(160, 160, 160, 0.3);
-                    color: #666;
                     color: ${theme['006']};
                     background-color: ${theme['000']};
                     // padding: 8px 10px;
@@ -28,7 +27,6 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputProps>`
                 `;
             case DesignMode.Normal:
             default:
-                console.log('Normal Design', theme);
                 return css``;
         }
     }}
@@ -36,7 +34,7 @@ export const StyledEmojiInputWrapper = styled.div<StyledEmojiInputProps>`
 
 type StyledDivProps = WithTheme<EmojiInputProps> & any;
 
-export const StyledDivInput = styled.div<StyledDivProps>`
+export const StyledEditableDiv = styled.div<StyledDivProps>`
     flex: 1;
     display: inline-block;
     margin-right: 8px;
@@ -44,7 +42,6 @@ export const StyledDivInput = styled.div<StyledDivProps>`
     ${({ design, theme }) => {
         switch (design) {
             case DesignMode.BorderDesign:
-                console.log('Border Design', theme);
                 return css`
                     position: relative;
                     width: 100%;
@@ -52,7 +49,6 @@ export const StyledDivInput = styled.div<StyledDivProps>`
                 `;
             case DesignMode.Normal:
             default:
-                console.log('Normal Design', theme);
                 return css`
                     cursor: text;
                     padding: 5px 1px;
