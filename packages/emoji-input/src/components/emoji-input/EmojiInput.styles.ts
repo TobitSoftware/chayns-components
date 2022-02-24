@@ -3,7 +3,7 @@ import type { WithTheme } from '../../../../core/src/components/color-scheme-pro
 import { DesignMode } from './constants/design';
 import type { EmojiInputProps } from './EmojiInput';
 
-type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'design'>>;
+type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'design' | 'isDisabled'>>;
 
 export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     align-items: center;
@@ -12,7 +12,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     position: relative;
     width: 100%;
 
-    ${({ design, theme }: StyledEmojiInputProps) => {
+    ${({ design, theme, isDisabled }: StyledEmojiInputProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`
@@ -22,6 +22,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
                     color: ${theme['006']};
                     min-height: 42px;
                     padding: 0 10px;
+                    opacity: ${isDisabled ? '0.6' : '1'};
                 `;
             case DesignMode.Normal:
             default:
@@ -37,8 +38,11 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
     flex: 1;
     font-weight: 400;
     margin-right: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    word-break: break-word;
 
-    ${({ design, theme }: StyledDivProps) => {
+    ${({ design, theme, isDisabled }: StyledDivProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`
@@ -56,11 +60,9 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
                     color: ${theme.text};
                     cursor: text;
                     min-height: 36px;
-                    overflow-x: hidden;
-                    overflow-y: auto;
                     padding: 5px 1px;
                     transition: border-color 0.4s, color 0.4s, font-weight 0.4s;
-                    word-break: break-word;
+                    opacity: ${isDisabled ? '0.6' : '1'};
                 `;
         }
     }}
@@ -68,22 +70,23 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
     ${({ isDisabled }: StyledDivProps) =>
         isDisabled &&
         css`
-            border-bottom-color: #5c646c;
-            color: #e8e8e8;
+            cursor: initial;
         `}
 `;
 
 type StyledPlaceholderProps = {
     isHidden: boolean;
-} & Pick<EmojiInputProps, 'design'>;
+} & Pick<EmojiInputProps, 'design' | 'isDisabled'>;
 export const StyledPlaceholder = styled.div<StyledPlaceholderProps>`
     // transition: left 0.4s ease-out, right 0.4s ease-out, opacity 0.4s ease-out; // fade out to right
     color: #757575;
     font-weight: 400;
     margin-right: 8px;
-    opacity: ${({ isHidden }: StyledPlaceholderProps) => (isHidden ? '0' : '1')};
+    opacity: ${({ isHidden, isDisabled }: StyledPlaceholderProps) =>
+        isHidden ? '0' : isDisabled ? '0.6' : '1'};
     overflow: hidden;
-    padding: 5px 1px;
+    padding: ${({ design }: StyledPlaceholderProps) =>
+        design === DesignMode.Normal ? '6px 1px 5px 1px' : '5px 1px'};
     pointer-events: none;
     position: absolute;
     text-overflow: ellipsis;

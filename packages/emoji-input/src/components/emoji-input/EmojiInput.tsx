@@ -77,10 +77,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const uuid = useUuid();
 
     useEffect(() => {
-        const oldValue = inputRef.current?.innerHTML;
-
-        if (oldValue !== value) {
-            // ToDo
+        if (inputRef.current) {
+            const oldValue = inputRef.current.innerHTML;
+            if (oldValue !== value) {
+                inputRef.current.innerText = value;
+            }
         }
     }, [value]);
 
@@ -152,7 +153,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }; */
 
     return (
-        <StyledEmojiInput className="beta-chayns-emoji-input" translate="no" design={design}>
+        <StyledEmojiInput
+            className="beta-chayns-emoji-input"
+            translate="no"
+            design={design}
+            isDisabled={isDisabled}
+        >
             <StyledEditableDiv
                 contentEditable={!isDisabled}
                 dangerouslySetInnerHTML={{ __html: '' }}
@@ -166,7 +172,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onKeyUp={handleKeyUp}
                 ref={inputRef}
             />
-            <StyledPlaceholder isHidden={value !== '' || hasFocus} design={design}>
+            <StyledPlaceholder
+                isHidden={value !== '' || hasFocus}
+                design={design}
+                isDisabled={isDisabled}
+            >
                 {placeholder}
             </StyledPlaceholder>
             {showEmojiButton && (

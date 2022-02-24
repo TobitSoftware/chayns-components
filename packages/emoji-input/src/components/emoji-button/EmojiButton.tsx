@@ -21,6 +21,12 @@ export const EmojiButton: FC<EmojiButtonProps> = ({ icon, isDisabled, design }) 
                     isDisabled={isDisabled}
                     shouldStopPropagation
                     size={18}
+                    onClick={() => {
+                        if (!isDisabled) {
+                            alert('Emoji Popup');
+                            setShowPopup(!showPopup);
+                        }
+                    }}
                 />
             </StyledEmojiButton>
             <AnimatePresence initial={false}>{showPopup && <></>}</AnimatePresence>

@@ -23,3 +23,20 @@ export const BorderDesign = Template.bind({});
 BorderDesign.args = {
     design: DesignMode.BorderDesign,
 };
+
+const TestTemplate: ComponentStory<typeof EmojiInput> = (args) => (
+    <>
+        <EmojiInput {...args} design={DesignMode.Normal} />
+        <br />
+        <EmojiInput {...args} design={DesignMode.Normal} isDisabled />
+        <br />
+        <EmojiInput {...args} value={'AAAAAAAAA'} design={DesignMode.Normal} isDisabled />
+        <br />
+        <EmojiInput {...args} design={DesignMode.BorderDesign} />
+        <br />
+        <EmojiInput {...args} design={DesignMode.BorderDesign} isDisabled />
+        <br />
+        <EmojiInput {...args} value={'AAAAAAAAA'} design={DesignMode.BorderDesign} isDisabled />
+    </>
+);
+export const TestDesign = TestTemplate.bind({});
