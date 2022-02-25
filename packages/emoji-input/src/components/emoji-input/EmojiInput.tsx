@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
 import { EmojiButton } from '../emoji-button/EmojiButton';
@@ -30,8 +30,9 @@ export type EmojiInputProps = {
     onFocus?: (event?: MouseEvent) => void;
     /**
      * Function, that returns current input on every change in input (KeyDown)
+     * returns HtmlString and event, event is null if Emoji gets injected
      */
-    onInput?: (event?: KeyboardEvent) => void;
+    onInput?: (value: string, event?: KeyboardEvent) => void;
     /**
      * on KeyUp
      */
@@ -74,9 +75,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
 
-    const forceUpdate = useForceUpdate();
+    const forceRender = useForceUpdate();
 
     const uuid = useUuid();
+
+    console.log('render');
 
     useEffect(() => {
         buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
@@ -88,19 +91,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
         };
     }, [isDisabled]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (inputRef.current) {
             const oldValue = inputRef.current.innerHTML;
             if (oldValue !== value) {
                 inputRef.current.innerHTML = value;
+                forceRender();
             }
         }
     }, [value]);
 
     const handleInput = useCallback(
-        (event) => {
+        (htmlString, event) => {
             if (typeof onInput === 'function') {
-                onInput(event);
+                onInput(htmlString, event);
             }
         },
         [onInput]
@@ -117,12 +121,22 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleFocus = useCallback(
         (event) => {
-            forceUpdate();
+            forceRender();
             if (typeof onFocus === 'function') {
                 onFocus(event);
             }
         },
         [onFocus]
+    );
+
+    const handleBlur = useCallback(
+        (event) => {
+            forceRender();
+            if (typeof onBlur === 'function') {
+                onBlur(event);
+            }
+        },
+        [onBlur]
     );
 
     const inputHasFocus = useCallback(
@@ -135,8 +149,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [document.activeElement, inputRef]
     );
     const setInputFocus = useCallback(() => {
+        // ToDo set cursor to end of text
         inputRef.current?.focus();
-        forceUpdate();
+        forceRender();
     }, [inputRef]);
 
     const handlePreventLoseInputFocus = useCallback(
@@ -153,28 +168,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [buttonRef]
     );
 
-    const handleBlur = useCallback(
-        (event) => {
-            forceUpdate();
-            if (typeof onBlur === 'function') {
-                onBlur(event);
-            }
-        },
-        [onBlur]
-    );
-    const handlePaste = useCallback((event) => {}, [onBlur]);
+    const handlePaste = useCallback((event: ClipboardEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const text = event.clipboardData?.getData('text/plain');
+        insertHTMLAtCursorPos(text); // ToDo geht nicht
+        inputRef.current.innerText = text; // Todo geht!!! warum? => daraus code => https://de.reactjs.org/docs/forwarding-refs.html
+    }, []);
 
-    const insertHTMLAtCursorPosition = (text: string) => {
-        if (document.activeElement === inputRef?.current) {
-            document.execCommand('insertHTML', false, text);
-        } else {
-            //updateDOM(value + text);
-        }
+    const getInputValue = useCallback(() => inputRef.current?.innerHTML || '', [inputRef]);
 
-        const event = document.createEvent('HTMLEvents');
-        event.initEvent('input', true);
-        inputRef?.current?.dispatchEvent(event);
-    };
+    const insertHTMLAtCursorPos = useCallback((html) => {
+        document.execCommand('insertHTML', false, html);
+        // handleInput(getInputValue(), null);
+    }, []);
 
     /* COPY from div => change escaped String to html String?
         source.addEventListener('copy', (event) => {
@@ -193,21 +200,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
         >
             <StyledEditableDiv
                 contentEditable={!isDisabled}
-                dangerouslySetInnerHTML={{ __html: '' }}
                 design={design}
                 dir="auto"
                 id={uuid}
                 isDisabled={isDisabled}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
-                onInput={handleInput}
+                onInput={(event) => handleInput(getInputValue(), event)}
                 onKeyUp={handleKeyUp}
                 onPaste={handlePaste}
                 ref={inputRef}
                 showEmojiButton={showEmojiButton}
             />
             <StyledPlaceholder
-                isHidden={value !== '' || inputHasFocus()}
+                isHidden={getInputValue() !== '' || inputHasFocus()}
                 design={design}
                 isDisabled={isDisabled}
             >
@@ -219,16 +225,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     isDisabled={isDisabled}
                     design={design}
                     onClick={() => {
-                        console.log(
-                            inputHasFocus(),
-                            document.activeElement,
-                            inputRef.current,
-                            document.activeElement?.id,
-                            inputRef.current?.id
-                        );
                         if (!inputHasFocus()) {
                             setInputFocus();
                         }
+                    }}
+                    onEmojiInput={(emojiHtml) => {
+                        insertHTMLAtCursorPos(emojiHtml);
                     }}
                 />
             )}

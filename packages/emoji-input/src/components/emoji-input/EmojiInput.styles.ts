@@ -32,7 +32,11 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     }}
 `;
 
-type StyledDivProps = WithTheme<Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton'>>;
+type StyledDivProps = WithTheme<
+    Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton'>
+> & {
+    onPaste: (event: ClipboardEvent) => void;
+};
 
 export const StyledEditableDiv = styled.div<StyledDivProps>`
     cursor: text;
