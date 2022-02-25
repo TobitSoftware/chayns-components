@@ -26,9 +26,14 @@ BorderDesign.args = {
 
 const TestTemplate: ComponentStory<typeof EmojiInput> = (args) => (
     <>
-        <EmojiInput {...args} design={DesignMode.Normal} />
+        <EmojiInput {...args} value={'Test Text [b]BOLT[/b]'} design={DesignMode.Normal} />
         <br />
-        <EmojiInput {...args} design={DesignMode.Normal} right={null} />
+        <EmojiInput
+            {...args}
+            value={'Test Text <strong>BOLT</strong>'}
+            design={DesignMode.Normal}
+            right={null}
+        />
         <br />
         <EmojiInput {...args} design={DesignMode.Normal} right={null} showEmojiButton={false} />
         <br />

@@ -16,5 +16,6 @@ export const StyledEmojiButton = styled.div<StyledEmojiButtonProps>`
         width: auto;
         height: auto;
         padding: 10px 4px;
+        opacity: 1;
     }
 `;

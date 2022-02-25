@@ -63,7 +63,7 @@ const createRange = (node: any, chars: any, range: any | null = null) => {
                 chars.count = 0;
             }
         } else {
-            for (var lp = 0; lp < node.childNodes.length; lp++) {
+            for (let lp = 0; lp < node.childNodes.length; lp++) {
                 range = createRange(node.childNodes[lp], chars, range);
 
                 if (chars.count === 0) {

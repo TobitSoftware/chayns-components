@@ -1,4 +1,5 @@
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react';
+import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
@@ -70,17 +71,28 @@ const EmojiInput: FC<EmojiInputProps> = ({
     showEmojiButton = true,
     value = '',
 }) => {
-    const [hasFocus, setHasFocus] = useState(false);
-
     const inputRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLDivElement>(null);
+
+    const forceUpdate = useForceUpdate();
 
     const uuid = useUuid();
+
+    useEffect(() => {
+        buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
+        if (!isDisabled) {
+            buttonRef.current?.addEventListener('mousedown', handlePreventLoseInputFocus);
+        }
+        return () => {
+            buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
+        };
+    }, [isDisabled]);
 
     useEffect(() => {
         if (inputRef.current) {
             const oldValue = inputRef.current.innerHTML;
             if (oldValue !== value) {
-                inputRef.current.innerText = value;
+                inputRef.current.innerHTML = value;
             }
         }
     }, [value]);
@@ -105,8 +117,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleFocus = useCallback(
         (event) => {
-            setHasFocus(true);
-
+            forceUpdate();
             if (typeof onFocus === 'function') {
                 onFocus(event);
             }
@@ -114,44 +125,65 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [onFocus]
     );
 
+    const inputHasFocus = useCallback(
+        () =>
+            !!(
+                document.activeElement &&
+                inputRef.current &&
+                document.activeElement.id === inputRef.current.id
+            ),
+        [document.activeElement, inputRef]
+    );
+    const setInputFocus = useCallback(() => {
+        inputRef.current?.focus();
+        forceUpdate();
+    }, [inputRef]);
+
+    const handlePreventLoseInputFocus = useCallback(
+        (event: MouseEvent) => {
+            if (
+                inputHasFocus() &&
+                event.target instanceof Node &&
+                buttonRef.current?.contains(event.target)
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        },
+        [buttonRef]
+    );
+
     const handleBlur = useCallback(
         (event) => {
-            setHasFocus(false);
-
+            forceUpdate();
             if (typeof onBlur === 'function') {
                 onBlur(event);
             }
         },
         [onBlur]
     );
+    const handlePaste = useCallback((event) => {}, [onBlur]);
 
-    /*
     const insertHTMLAtCursorPosition = (text: string) => {
         if (document.activeElement === inputRef?.current) {
             document.execCommand('insertHTML', false, text);
         } else {
-            updateDOM(value + text);
+            //updateDOM(value + text);
         }
 
         const event = document.createEvent('HTMLEvents');
         event.initEvent('input', true);
         inputRef?.current?.dispatchEvent(event);
     };
-    */
 
-    //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
-    //  document.body.removeEventListener('mousedown', this.handlePreventLoseInputFocus);
-
-    /* const handlePreventLoseInputFocus = (event) => {
-        if (
-            event?.target?.classList?.contains('prevent-lose-focus') ||
-            event?.target?.parentElement?.classList?.contains('prevent-lose-focus')
-        ) {
+    /* COPY from div => change escaped String to html String?
+        source.addEventListener('copy', (event) => {
+            const selection = document.getSelection();
+            event.clipboardData.setData('text/plain', selection.toString().toUpperCase());
             event.preventDefault();
-            event.stopPropagation();
         }
-    }; */
-
+    });
+    */
     return (
         <StyledEmojiInput
             className="beta-chayns-emoji-input"
@@ -170,18 +202,35 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onFocus={handleFocus}
                 onInput={handleInput}
                 onKeyUp={handleKeyUp}
+                onPaste={handlePaste}
                 ref={inputRef}
                 showEmojiButton={showEmojiButton}
             />
             <StyledPlaceholder
-                isHidden={value !== '' || hasFocus}
+                isHidden={value !== '' || inputHasFocus()}
                 design={design}
                 isDisabled={isDisabled}
             >
                 {placeholder}
             </StyledPlaceholder>
             {showEmojiButton && (
-                <EmojiButton isDisabled={isDisabled} design={design} /> //className="prevent-lose-focus"
+                <EmojiButton
+                    ref={buttonRef}
+                    isDisabled={isDisabled}
+                    design={design}
+                    onClick={() => {
+                        console.log(
+                            inputHasFocus(),
+                            document.activeElement,
+                            inputRef.current,
+                            document.activeElement?.id,
+                            inputRef.current?.id
+                        );
+                        if (!inputHasFocus()) {
+                            setInputFocus();
+                        }
+                    }}
+                />
             )}
             <StyledRightElement design={design}>{right}</StyledRightElement>
         </StyledEmojiInput>

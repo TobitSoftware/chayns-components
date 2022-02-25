@@ -25,7 +25,9 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
                 `;
             case DesignMode.Normal:
             default:
-                return css``;
+                return css`
+                    opacity: ${isDisabled ? '0.6' : '1'};
+                `;
         }
     }}
 `;
@@ -62,7 +64,6 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
                     margin-right: ${showEmojiButton ? '6px' : '0px'};
                     padding: 5px 0px 5px 1px;
                     transition: border-color 0.4s, color 0.4s, font-weight 0.4s;
-                    opacity: ${isDisabled ? '0.6' : '1'};
                     :focus {
                         border-bottom-color: rgba(${theme['headline-rgb']}, 0.9) !important;
                     }
@@ -85,8 +86,7 @@ export const StyledPlaceholder = styled.div<StyledPlaceholderProps>`
     color: #757575;
     font-weight: 400;
     margin-right: 8px;
-    opacity: ${({ isHidden, isDisabled }: StyledPlaceholderProps) =>
-        isHidden ? '0' : isDisabled ? '0.6' : '1'};
+    opacity: ${({ isHidden }: StyledPlaceholderProps) => (isHidden ? '0' : '1')};
     overflow: hidden;
     padding: ${({ design }: StyledPlaceholderProps) =>
         design === DesignMode.Normal ? '6px 1px 5px 1px' : '8px 0 8px 11px'};
