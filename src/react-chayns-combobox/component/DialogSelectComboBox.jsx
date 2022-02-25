@@ -7,6 +7,7 @@ import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import isDescendant from '../../utils/isDescendant';
+import ComboBoxItem from './ComboBoxItem';
 
 const DialogSelectComboBox = ({
     className,
@@ -146,17 +147,6 @@ const DialogSelectComboBox = ({
         ]
     );
 
-    const onItemClick = useCallback(
-        (e) => {
-            select(e.target.id);
-            setShowOverlay(false);
-            if (stopPropagation) {
-                e.stopPropagation();
-            }
-        },
-        [setShowOverlay, stopPropagation, select]
-    );
-
     return [
         <Button
             key="combobox-button"
@@ -198,14 +188,13 @@ const DialogSelectComboBox = ({
                     }}
                 >
                     {list.map((item) => (
-                        <div
+                        <ComboBoxItem
                             key={item[listKey]}
                             id={item[listKey]}
-                            className="cc__combo-box__overlay__item ellipsis"
-                            onClick={onItemClick}
-                        >
-                            {item[listValue]}
-                        </div>
+                            value={item[listValue]}
+                            setShowOverlay={setShowOverlay}
+                            onSelect={select}
+                        />
                     ))}
                 </div>
             </CSSTransition>
