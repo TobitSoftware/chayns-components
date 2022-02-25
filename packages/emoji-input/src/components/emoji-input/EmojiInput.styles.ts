@@ -21,7 +21,6 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
                     border: 1px solid rgba(160, 160, 160, 0.3);
                     color: ${theme['006']};
                     min-height: 42px;
-                    padding: 0 10px;
                     opacity: ${isDisabled ? '0.6' : '1'};
                 `;
             case DesignMode.Normal:
@@ -31,23 +30,23 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     }}
 `;
 
-type StyledDivProps = WithTheme<Pick<EmojiInputProps, 'design' | 'isDisabled'>>;
+type StyledDivProps = WithTheme<Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton'>>;
 
 export const StyledEditableDiv = styled.div<StyledDivProps>`
+    cursor: text;
     display: inline-block;
     flex: 1;
     font-weight: 400;
-    margin-right: 8px;
     overflow-x: hidden;
     overflow-y: auto;
     word-break: break-word;
 
-    ${({ design, theme, isDisabled }: StyledDivProps) => {
+    ${({ design, theme, isDisabled, showEmojiButton }: StyledDivProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`
-                    cursor: text;
-                    padding: 5px 1px;
+                    padding: 8px ${showEmojiButton ? '6px' : '10px'} 8px 11px;
+                    min-height: 42px;
                 `;
             case DesignMode.Normal:
             default:
@@ -60,9 +59,13 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
                     color: ${theme.text};
                     cursor: text;
                     min-height: 36px;
-                    padding: 5px 1px;
+                    margin-right: ${showEmojiButton ? '6px' : '0px'};
+                    padding: 5px 0px 5px 1px;
                     transition: border-color 0.4s, color 0.4s, font-weight 0.4s;
                     opacity: ${isDisabled ? '0.6' : '1'};
+                    :focus {
+                        border-bottom-color: rgba(${theme['headline-rgb']}, 0.9) !important;
+                    }
                 `;
         }
     }}
@@ -86,7 +89,7 @@ export const StyledPlaceholder = styled.div<StyledPlaceholderProps>`
         isHidden ? '0' : isDisabled ? '0.6' : '1'};
     overflow: hidden;
     padding: ${({ design }: StyledPlaceholderProps) =>
-        design === DesignMode.Normal ? '6px 1px 5px 1px' : '5px 1px'};
+        design === DesignMode.Normal ? '6px 1px 5px 1px' : '8px 0 8px 11px'};
     pointer-events: none;
     position: absolute;
     text-overflow: ellipsis;

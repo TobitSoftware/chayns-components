@@ -171,6 +171,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onInput={handleInput}
                 onKeyUp={handleKeyUp}
                 ref={inputRef}
+                showEmojiButton={showEmojiButton}
             />
             <StyledPlaceholder
                 isHidden={value !== '' || hasFocus}

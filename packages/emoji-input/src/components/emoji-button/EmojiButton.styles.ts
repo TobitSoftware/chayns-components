@@ -11,5 +11,10 @@ export const StyledEmojiButton = styled.div<StyledEmojiButtonProps>`
     height: ${({ design }: StyledEmojiButtonProps) =>
         design === DesignMode.BorderDesign ? '42px' : '36px'};
     justify-content: center;
-    width: 30px;
+    margin-right: 4px;
+    span {
+        width: auto;
+        height: auto;
+        padding: 10px 4px;
+    }
 `;
