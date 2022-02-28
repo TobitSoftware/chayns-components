@@ -45,6 +45,21 @@ export const setCurrentCursorPosition = (chars: any, element: any) => {
     }
 };
 
+export const setCursorToEnd = (target: HTMLDivElement) => {
+    const range = document.createRange();
+    const sel = window.getSelection();
+    if (sel && range) {
+        range.selectNodeContents(target);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        target.focus();
+        range.detach();
+
+        target.scrollTop = target.scrollHeight;
+    }
+};
+
 const createRange = (node: any, chars: any, range: any | null = null) => {
     if (!range) {
         range = document.createRange();

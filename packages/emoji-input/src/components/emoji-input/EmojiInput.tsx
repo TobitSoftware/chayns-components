@@ -1,6 +1,8 @@
 import React, { FC, ReactNode, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
+import { bbCodeTextToHTML } from '../../utils/bbCode';
+import { setCursorToEnd } from '../../utils/cursor';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
@@ -103,6 +105,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (htmlString, event) => {
+            console.log(htmlString);
+            const bbCodeHtml = bbCodeTextToHTML(htmlString);
             if (typeof onInput === 'function') {
                 onInput(htmlString, event);
             }
@@ -149,9 +153,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [document.activeElement, inputRef]
     );
     const setInputFocus = useCallback(() => {
-        // ToDo set cursor to end of text
-        inputRef.current?.focus();
-        forceRender();
+        if (inputRef.current) {
+            inputRef.current.focus();
+            setCursorToEnd(inputRef.current);
+            forceRender();
+        }
     }, [inputRef]);
 
     const handlePreventLoseInputFocus = useCallback(
@@ -172,15 +178,13 @@ const EmojiInput: FC<EmojiInputProps> = ({
         event.preventDefault();
         event.stopPropagation();
         const text = event.clipboardData?.getData('text/plain');
-        insertHTMLAtCursorPos(text); // ToDo geht nicht
-        inputRef.current.innerText = text; // Todo geht!!! warum? => daraus code => https://de.reactjs.org/docs/forwarding-refs.html
+        insertHTMLAtCursorPos(text);
     }, []);
 
     const getInputValue = useCallback(() => inputRef.current?.innerHTML || '', [inputRef]);
 
     const insertHTMLAtCursorPos = useCallback((html) => {
         document.execCommand('insertHTML', false, html);
-        // handleInput(getInputValue(), null);
     }, []);
 
     /* COPY from div => change escaped String to html String?
@@ -230,7 +234,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         }
                     }}
                     onEmojiInput={(emojiHtml) => {
-                        insertHTMLAtCursorPos(emojiHtml);
+                        // insertHTMLAtCursorPos(emojiHtml);
                     }}
                 />
             )}
