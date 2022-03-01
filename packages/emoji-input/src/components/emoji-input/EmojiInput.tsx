@@ -106,7 +106,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handleInput = useCallback(
         (htmlString, event) => {
             console.log(htmlString);
+            console.time('bbCodeTextToHTML');
             const bbCodeHtml = bbCodeTextToHTML(htmlString);
+            console.timeEnd('bbCodeTextToHTML');
             if (typeof onInput === 'function') {
                 onInput(htmlString, event);
             }

@@ -80,6 +80,7 @@ type CombinedItem = {
     open: boolean;
     lengthDifferenceBBToTag: number;
     tag: string;
+    bb: string;
     params: string[];
 };
 
@@ -95,7 +96,7 @@ const getCombinedTagList = (text: string): CombinedItem[] => {
     const regExClose = `\\[\/(?:${bbRegExString})\]`;
     const listOpen = text.matchAll(new RegExp(regExOpen, 'gi'));
     const listClose = text.matchAll(new RegExp(regExClose, 'gi'));
-    const combinedList = [
+    let combinedList = [
         ...[...listOpen].map((i) => {
             const value: string = i[0].toLowerCase();
             const BbCodeEntry = BbCodes.find(
@@ -110,16 +111,22 @@ const getCombinedTagList = (text: string): CombinedItem[] => {
                 return null;
             }
             const tag = BbCodeEntry.tag || BbCodeEntry.bb;
+            const params = value.matchAll(/([\w]*?)=\\?["„'](.*?)["“']/gi);
             return {
                 value,
                 index: i.index as number,
                 open: true,
                 tag,
+                bb: BbCodeEntry.bb,
                 lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
-                params: value
-                    .substring(1 + (BbCodeEntry.bb.length || 1), value.length - 1)
-                    .split(' ')
-                    .filter((p: string) => p !== ''),
+                params: [...params].map((p) => {
+                    const split = p.split('=');
+                    return {
+                        together: p,
+                        param: split[0],
+                        value: split[1],
+                    };
+                }),
             };
         }),
         ...[...listClose].map((i) => {
@@ -136,11 +143,12 @@ const getCombinedTagList = (text: string): CombinedItem[] => {
                 index: i.index as number,
                 open: false,
                 tag,
+                bb: BbCodeEntry.bb,
                 lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
             };
         }),
     ];
-    combinedList.filter((c) => c !== null);
+    combinedList = combinedList.filter((c) => c !== null);
     combinedList.sort((c1, c2) => (c1?.index || 0) - (c2?.index || 0));
     return combinedList as CombinedItem[];
 };
@@ -179,10 +187,10 @@ const replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
     let replacementString = '';
     let originalTag = '';
     if (item.open) {
-        replacementString = `<${item.tag}${paramString}>`;
+        replacementString = `<span style="opacity: 0.5">[${item.bb}${paramString}]</span><${item.tag}${paramString}>`;
         originalTag = `[${item.tag}${paramString}]`;
     } else {
-        replacementString = `</${item.tag}>`;
+        replacementString = `</${item.tag}><span style="opacity: 0.5">[/${item.bb}]</span>`;
         originalTag = `[/${item.tag}]`;
     }
     // length difference is set only for next tag, because start & endIndex already set above
@@ -225,7 +233,7 @@ export const bbCodeTextToHTML = (text: string) => {
     invalidTags = [...invalidTags, ...matchingTags.filter((m) => m.close === null)];
     const validTags = matchingTags.filter((m) => m.open !== null && m.close !== null);
     // ToDo tags at start(open) or end(close) are invalid => change to tag in middle???
-
+    console.log(combinedList, validTags, invalidTags);
     let newText = text;
     validTags.forEach((v) => {
         if (v.open !== null && v.close !== null) {
@@ -238,6 +246,6 @@ export const bbCodeTextToHTML = (text: string) => {
         }
     });
     // ToDo show valid & invalid parameters in Tags
-    console.log(newText, totalLengthDifference);
+    console.log(newText);
 };
 export const bbCodeHTMLToText = () => {};
