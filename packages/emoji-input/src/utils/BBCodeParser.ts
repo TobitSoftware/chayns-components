@@ -120,7 +120,6 @@ export default class BBCodeParser {
         combinedList.forEach((c, ci) => {
             if (validTags.find((vt) => vt.open === ci || vt.close === ci)) {
                 newText = this.replaceBbItemWithHTML(newText, c);
-                // console.log(newText, this.totalLengthDifference);
             }
         });
 
@@ -226,15 +225,6 @@ export default class BBCodeParser {
                     const matchOpen = combinedList[possibleMatch.open as number];
                     const nestingMatchOpen = combinedList[nestingMatch.open];
                     const nestingMatchClose = combinedList[nestingMatch.close];
-                    console.log(
-                        '---------------------- nestingPossibleProblem',
-                        nestingMatch,
-                        matchOpen?.index,
-                        combinedItem.index,
-                        ';;;',
-                        nestingMatchOpen?.index,
-                        nestingMatchClose?.index
-                    );
                     if (
                         nestingMatchOpen &&
                         matchOpen &&
@@ -246,7 +236,6 @@ export default class BBCodeParser {
                                 nestingMatchOpen.index < combinedItem.index &&
                                 nestingMatchOpen.index > matchOpen.index))
                     ) {
-                        console.log('---------------------- Problem !!!!!!!!', nestingMatch);
                         /* ToDo not perfect behavior => evtl change ???
                          * input => T[h1]est T[b]e[/h1]xt [b]BO[h1]H1 [b]Test[/b] test[/h1]LT[/b][link]LINK[/link]
                          * output => T[h1]est T<b>e[/h1]xt [b]BO<h1>H1 <b>Test</b> test</h1>LT</b><a>LINK</a>
@@ -272,7 +261,6 @@ export default class BBCodeParser {
             ) {
                 const combinedItem = combinedList[combinedItemIndex] as CombinedItem;
                 if (!combinedItem.open) {
-                    console.log('---- closeTag', combinedItem);
                     // open from first to last
                     let matchingIndex: number | null = null;
                     for (
@@ -281,11 +269,9 @@ export default class BBCodeParser {
                         possibleMatchIndex++
                     ) {
                         const possibleMatch = matchingTags[possibleMatchIndex] as MatchingTag;
-                        console.log('-------------- openTag', possibleMatch);
                         if (isSameUnfinishedTag(possibleMatch, combinedItem)) {
                             // look if invalid Nesting (open Tag between and close outside) => invalid html => don't match
                             if (isValidNesting(possibleMatch, combinedItem)) {
-                                console.log('-------------- Valid !!!!!!!');
                                 matchingIndex = possibleMatchIndex;
                                 break;
                             }
@@ -311,7 +297,6 @@ export default class BBCodeParser {
             ) {
                 const combinedItem = combinedList[combinedItemIndex] as CombinedItem;
                 if (!combinedItem.open) {
-                    console.log('---- closeTag', combinedItem);
                     // open from last to first
                     let matchingIndex: number | null = null;
                     for (
@@ -320,11 +305,9 @@ export default class BBCodeParser {
                         possibleMatchIndex--
                     ) {
                         const possibleMatch = matchingTags[possibleMatchIndex] as MatchingTag;
-                        console.log('-------------- openTag', possibleMatch);
                         if (isSameUnfinishedTag(possibleMatch, combinedItem)) {
                             // look if invalid Nesting (open Tag between and close outside) => invalid html => don't match
                             if (isValidNesting(possibleMatch, combinedItem)) {
-                                console.log('-------------- Valid !!!!!!!');
                                 matchingIndex = possibleMatchIndex;
                                 break;
                             }
