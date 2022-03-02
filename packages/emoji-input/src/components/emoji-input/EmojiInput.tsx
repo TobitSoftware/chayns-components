@@ -1,7 +1,15 @@
-import React, { FC, ReactNode, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import React, {
+    FC,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+} from 'react';
 import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
-import { bbCodeTextToHTML } from '../../utils/bbCode';
+import BBCodeParser, { InvalidTagPos } from '../../utils/BBCodeParser';
 import { setCursorToEnd } from '../../utils/cursor';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
@@ -81,6 +89,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const uuid = useUuid();
 
+    const bbCodeParser = useMemo(() => new BBCodeParser(true, undefined, InvalidTagPos.outer), []);
+    const bbCodeParser2 = useMemo(
+        () => new BBCodeParser(true, undefined, InvalidTagPos.middleTag),
+        []
+    ); // ToDo REMOVE !!!
+    const bbCodeParser3 = useMemo(
+        () => new BBCodeParser(false, undefined, InvalidTagPos.outer),
+        []
+    ); // ToDo REMOVE !!!
+    const bbCodeParser4 = useMemo(
+        () => new BBCodeParser(false, undefined, InvalidTagPos.middleTag),
+        []
+    ); // ToDo REMOVE !!!
+
     console.log('render');
 
     useEffect(() => {
@@ -107,8 +129,19 @@ const EmojiInput: FC<EmojiInputProps> = ({
         (htmlString, event) => {
             console.log(htmlString);
             console.time('bbCodeTextToHTML');
-            const bbCodeHtml = bbCodeTextToHTML(htmlString);
+            //const inputHtmlBBParsed = bbCodeParser.bbCodeTextToHTML(htmlString);
             console.timeEnd('bbCodeTextToHTML');
+
+            console.time('2');
+            //const a2 = bbCodeParser2.bbCodeTextToHTML(htmlString);
+            console.timeEnd('2');
+            console.time('3');
+            const a3 = bbCodeParser3.bbCodeTextToHTML(htmlString);
+            console.timeEnd('3');
+            console.time('4');
+            const a4 = bbCodeParser4.bbCodeTextToHTML(htmlString);
+            console.timeEnd('4');
+
             if (typeof onInput === 'function') {
                 onInput(htmlString, event);
             }

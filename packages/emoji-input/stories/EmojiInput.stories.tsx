@@ -34,7 +34,7 @@ const TestTemplate: ComponentStory<typeof EmojiInput> = (args) => (
         <br />
         <EmojiInput
             {...args}
-            value={'Test Text [b]BO[h1]H1 [b]Test[/b] test[/h1]LT[/b][link]LINK[/link]'}
+            value={'Test Text [b]BO[h1]H1 [b]Te[b]st[/b] test[/h1]LT[/b][link]LINK[/link]'}
             design={DesignMode.Normal}
             right={null}
         />
