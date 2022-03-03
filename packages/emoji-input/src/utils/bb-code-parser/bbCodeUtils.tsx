@@ -78,10 +78,10 @@ export type CombinedItem = {
     value: string;
     index: number;
     open: boolean;
-    lengthDifferenceBBToTag: number;
-    tag: string;
+    lengthDifferenceBBToTag?: number;
+    tag?: string;
     bb: string;
-    params: string[];
+    params?: string[];
 };
 
 export type MatchingTag = {

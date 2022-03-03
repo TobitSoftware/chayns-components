@@ -22,8 +22,13 @@ export default class BBCodeToHTMLParser {
 
         let newText = text;
         combinedList.forEach((c, ci) => {
-            if (validTags.find((vt) => vt.open === ci || vt.close === ci)) {
-                newText = this.replaceBbItemWithHTML(newText, c);
+            const validEntry = validTags.find((vt) => vt.open === ci || vt.close === ci);
+            if (validEntry) {
+                newText = this.replaceBbItemWithHTML(
+                    newText,
+                    c,
+                    `${validEntry.open}${validEntry.close}`
+                );
             }
         });
 
@@ -47,14 +52,11 @@ export default class BBCodeToHTMLParser {
         let combinedList = [
             ...[...listOpen].map((i) => {
                 const value: string = i[0].toLowerCase();
-                const BbCodeEntry = BbCodes.find(
-                    (b) =>
-                        b.bb ===
-                        value
-                            ?.substring(1, value?.length - 1)
-                            .trim()
-                            .split(' ')[0]
-                );
+                const valueBb: string | undefined = value
+                    ?.substring(1, value?.length - 1)
+                    .trim()
+                    .split(' ')[0];
+                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb);
                 if (!BbCodeEntry || value === null) {
                     return null;
                 }
@@ -79,9 +81,11 @@ export default class BBCodeToHTMLParser {
             }),
             ...[...listClose].map((i) => {
                 const value: string = i[0].toLowerCase();
-                const BbCodeEntry = BbCodes.find(
-                    (b) => b.bb === value?.substring(2, value?.length - 1).trim()
-                );
+                const valueBb: string | undefined = value
+                    ?.substring(2, value?.length - 1)
+                    .trim()
+                    .split(' ')[0];
+                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb);
                 if (!BbCodeEntry || value === null) {
                     return null;
                 }
@@ -235,7 +239,7 @@ export default class BBCodeToHTMLParser {
         return validTags;
     };
 
-    private replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
+    private replaceBbItemWithHTML = (text: string, item: CombinedItem, id: string): string => {
         const tagStartIndex = item.index + this.totalLengthDifference;
         let paramLength = 0;
         let paramString = '';
@@ -253,11 +257,11 @@ export default class BBCodeToHTMLParser {
         let replacementString = '';
         let originalTag = '';
         if (item.open) {
-            const shownBbTag = `<span class="bb-parsed" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
+            const shownBbTag = `<span class="open${id}" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
             replacementString = `${this.showBbTags ? shownBbTag : ''}<${item.tag}${paramString}>`;
             originalTag = `[${item.tag}${paramString}]`;
         } else {
-            const shownBbTag = `<span class="bb-parsed" ${this.bbTagStyles}>[/${item.bb}]</span>`;
+            const shownBbTag = `<span class="close${id}" ${this.bbTagStyles}>[/${item.bb}]</span>`;
             replacementString = `</${item.tag}>${this.showBbTags ? shownBbTag : ''}`;
             originalTag = `[/${item.tag}]`;
         }
