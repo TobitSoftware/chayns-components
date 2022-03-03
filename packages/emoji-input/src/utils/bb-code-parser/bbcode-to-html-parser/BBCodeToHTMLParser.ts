@@ -24,16 +24,11 @@ export default class BBCodeToHTMLParser {
         combinedList.forEach((c, ci) => {
             const validEntry = validTags.find((vt) => vt.open === ci || vt.close === ci);
             if (validEntry) {
-                newText = this.replaceBbItemWithHTML(
-                    newText,
-                    c,
-                    `${validEntry.open}${validEntry.close}`
-                );
+                newText = this.replaceBbItemWithHTML(newText, c);
             }
         });
 
         // ToDo show valid & invalid parameters in Tags
-        console.log(newText);
         return newText;
     };
 
@@ -235,11 +230,10 @@ export default class BBCodeToHTMLParser {
         invalidTags = [...invalidTags, ...matchingTags.filter((m) => m.close === null)];
         const validTags = matchingTags.filter((m) => m.open !== null && m.close !== null);
 
-        console.log(combinedList, matchingTags, validTags, invalidTags);
         return validTags;
     };
 
-    private replaceBbItemWithHTML = (text: string, item: CombinedItem, id: string): string => {
+    private replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
         const tagStartIndex = item.index + this.totalLengthDifference;
         let paramLength = 0;
         let paramString = '';
@@ -257,11 +251,11 @@ export default class BBCodeToHTMLParser {
         let replacementString = '';
         let originalTag = '';
         if (item.open) {
-            const shownBbTag = `<span class="open${id}" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
+            const shownBbTag = `<span class="open" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
             replacementString = `${this.showBbTags ? shownBbTag : ''}<${item.tag}${paramString}>`;
             originalTag = `[${item.tag}${paramString}]`;
         } else {
-            const shownBbTag = `<span class="close${id}" ${this.bbTagStyles}>[/${item.bb}]</span>`;
+            const shownBbTag = `<span class="close" ${this.bbTagStyles}>[/${item.bb}]</span>`;
             replacementString = `</${item.tag}>${this.showBbTags ? shownBbTag : ''}`;
             originalTag = `[/${item.tag}]`;
         }

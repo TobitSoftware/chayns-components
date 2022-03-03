@@ -110,8 +110,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
     useLayoutEffect(() => {
         if (inputRef.current) {
             const oldValue = inputRef.current.innerHTML;
-            if (oldValue !== value) {
-                inputRef.current.innerHTML = value;
+            const oldValueBB = bbCodeParser.bbCodeHTMLToText(oldValue);
+            if (oldValueBB !== value) {
+                const newValueHTML = bbCodeParser.bbCodeTextToHTML(value);
+                setInputValue(newValueHTML);
                 forceRender();
             }
         }
@@ -119,22 +121,18 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (htmlString, event) => {
-            console.log(htmlString);
-            console.time('bbCodeTextToHTML');
-            const inputHtmlBBParsed = bbCodeParser.bbCodeTextToHTML(htmlString);
-            console.timeEnd('bbCodeTextToHTML');
-
             console.time('bbCodeHTMLToText');
-            const a2 = bbCodeParser.bbCodeHTMLToText(inputHtmlBBParsed);
+            const bbText = bbCodeParser.bbCodeHTMLToText(htmlString);
             console.timeEnd('bbCodeHTMLToText');
-            console.time('bbCodeHTMLToText2');
-            const a3 = bbCodeParser.bbCodeHTMLToText(
-                'Test Text <span class="open01" style="opacity: 0.5">[b</span><b>BOLT</b><span class="close01" style="opacity: 0.5">[/b]</span><span class="open23" style="opacity: 0.5">[link]</span><a>LINK</a><span class="close23" style="opacity: 0.5">nk]</span>a'
-            );
-            console.timeEnd('bbCodeHTMLToText2');
 
+            console.time('bbCodeTextToHTML');
+            const newHtml = bbCodeParser.bbCodeTextToHTML(bbText);
+            console.timeEnd('bbCodeTextToHTML');
+            console.log(htmlString, newHtml);
+
+            setInputValue(newHtml);
             if (typeof onInput === 'function') {
-                onInput(htmlString, event);
+                onInput(bbText, event);
             }
         },
         [onInput]
@@ -208,6 +206,14 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, []);
 
     const getInputValue = useCallback(() => inputRef.current?.innerHTML || '', [inputRef]);
+    const setInputValue = useCallback(
+        (html: string) => {
+            if (inputRef.current) {
+                inputRef.current.innerHTML = html;
+            }
+        },
+        [inputRef]
+    );
 
     const insertHTMLAtCursorPos = useCallback((html) => {
         document.execCommand('insertHTML', false, html);
