@@ -127,6 +127,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
             console.time('bbCodeHTMLToText');
             const a2 = bbCodeParser.bbCodeHTMLToText(inputHtmlBBParsed);
             console.timeEnd('bbCodeHTMLToText');
+            console.time('bbCodeHTMLToText2');
+            const a3 = bbCodeParser.bbCodeHTMLToText(
+                'Test Text <span class="open01" style="opacity: 0.5">[b</span><b>BOLT</b><span class="close01" style="opacity: 0.5">[/b]</span><span class="open23" style="opacity: 0.5">[link]</span><a>LINK</a><span class="close23" style="opacity: 0.5">nk]</span>a'
+            );
+            console.timeEnd('bbCodeHTMLToText2');
 
             if (typeof onInput === 'function') {
                 onInput(htmlString, event);

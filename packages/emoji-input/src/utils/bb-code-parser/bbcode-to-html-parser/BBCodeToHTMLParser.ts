@@ -45,8 +45,8 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const regExOpen = `\\[(?:${bbRegExString})\[^\\]\]*\]`;
-        const regExClose = `\\[\/(?:${bbRegExString})\]`;
+        const regExOpen = `\\[(?:${bbRegExString})[^\\]]*\\]`;
+        const regExClose = `\\[\/(?:${bbRegExString})\\]`;
         const listOpen = text.matchAll(new RegExp(regExOpen, 'gi'));
         const listClose = text.matchAll(new RegExp(regExClose, 'gi'));
         let combinedList = [
@@ -109,7 +109,7 @@ export default class BBCodeToHTMLParser {
         const addOpenTags = () => {
             combinedList.forEach((c, ci) => {
                 if (c.open) {
-                    matchingTags.push({ tag: c.tag, open: ci, close: null });
+                    matchingTags.push({ tag: c.tag as string, open: ci, close: null });
                 }
             });
         };
@@ -184,10 +184,10 @@ export default class BBCodeToHTMLParser {
                         }
                     }
                     if (matchingIndex !== null) {
-                        matchingTags[matchingIndex].close = combinedItemIndex;
+                        (matchingTags[matchingIndex] as MatchingTag).close = combinedItemIndex;
                     } else {
                         invalidTags.push({
-                            tag: combinedItem.tag,
+                            tag: combinedItem.tag as string,
                             open: null,
                             close: combinedItemIndex,
                         });
@@ -220,10 +220,10 @@ export default class BBCodeToHTMLParser {
                         }
                     }
                     if (matchingIndex !== null) {
-                        matchingTags[matchingIndex].close = combinedItemIndex;
+                        (matchingTags[matchingIndex] as MatchingTag).close = combinedItemIndex;
                     } else {
                         invalidTags.push({
-                            tag: combinedItem.tag,
+                            tag: combinedItem.tag as string,
                             open: null,
                             close: combinedItemIndex,
                         });
@@ -250,7 +250,7 @@ export default class BBCodeToHTMLParser {
         const tagEndIndex =
             tagStartIndex +
             paramLength +
-            (item.tag.length - 1 - item.lengthDifferenceBBToTag) +
+            ((item.tag?.length as number) - 1 - (item.lengthDifferenceBBToTag as number)) +
             (item.open ? 2 : 3);
         // b => [b] oder [/b] => length 3 / 4 (+2 / +3)
 
@@ -267,7 +267,8 @@ export default class BBCodeToHTMLParser {
         }
         // length difference is set only for next tag, because start & endIndex already set above
         this.totalLengthDifference +=
-            item.lengthDifferenceBBToTag + (replacementString.length - originalTag.length);
+            (item.lengthDifferenceBBToTag as number) +
+            (replacementString.length - originalTag.length);
 
         return replaceAt(text, tagStartIndex, tagEndIndex, replacementString);
     };

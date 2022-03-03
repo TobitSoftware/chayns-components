@@ -33,12 +33,7 @@ export default class HTMLToBBCodeParser {
                 tagRegExString += '|';
             }
         });
-        const regExOpenAndClose = `(<span\[^>\]*>\\[(?:${bbRegExString})\[^\\]\]*\\]<\/span><(?:${tagRegExString})\[^>\]*>)|(<\/(?:${tagRegExString})><span\[^>\]*>\\[\/(?:${bbRegExString})\\]<\/span>)`;
-
-        // openClass Regex = /class=\\?["„']open([\d]{2,}?)["“']/gi
-        // closeClass Regex = /class=\\?["„']close([\d]{2,}?)["“']/gi
-        // match bbTag = /\[(?:b|link)[^\]]*]/gi => match tag => (not matchAll) => (?:b|link)
-        // match id = /\d{2,}/gi
+        const regExOpenAndClose = `(<span( [^>]*)* class=["„'](open|close)([\\d]{2,}?)["“'][^>]*>[^<]*<\\/span><(?:${tagRegExString})[^>]*>)|(<\\/(?:${tagRegExString})><span( [^>]*)* class=["„'](open|close)([\\d]{2,}?)["“'][^>]*>[^<]*<\\/span>)`;
 
         const listOpenAndClose = text.matchAll(new RegExp(regExOpenAndClose, 'gi'));
         let combinedList = [...listOpenAndClose].map((i) => {
@@ -52,22 +47,42 @@ export default class HTMLToBBCodeParser {
             const ids: RegExpMatchArray | null = valueClass?.match(/\d{2,}/gi) || null;
             const id: string | null = ids && ids[0] ? ids[0] : null;
 
-            const bbCodeRegEx: string = `(\[(?:${bbRegExString})[^\]]*])|(\[\/(?:${bbRegExString})])`;
-            const valueBbs: RegExpMatchArray | null = value.match(new RegExp(bbCodeRegEx, 'gi'));
-            const valueBb: string | undefined = (valueBbs && valueBbs[0])
-                ?.substring(open ? 1 : 2, value?.length - 1)
-                .trim()
-                .split(' ')[0];
-            console.log(valueBb, id, open, value);
-            if (!valueBb || value === null || open === null || id === null) {
+            let valueTag: string | null = null;
+            if (open) {
+                // last open-Tag
+                const openTagRegEx: string = `<(?:${tagRegExString})[^>]*>`;
+                const valueTags: RegExpMatchArray | null = value.match(
+                    new RegExp(openTagRegEx, 'gi')
+                );
+                valueTag = valueTags && (valueTags[valueTags?.length - 1] as string);
+            } else {
+                // first close-Tag
+                const closeTagRegEx: string = `<\/(?:${tagRegExString})>`;
+                const valueTags: RegExpMatchArray | null = value.match(
+                    new RegExp(closeTagRegEx, 'gi')
+                );
+                valueTag = valueTags && (valueTags[0] as string);
+            }
+            valueTag =
+                valueTag &&
+                (valueTag
+                    .substring(open ? 1 : 2, valueTag.length - 1)
+                    .trim()
+                    .split(' ')[0] as string);
+            const BbCodeEntry = BbCodes.find((b) => (b.tag || b.bb) === valueTag);
+            console.log(valueTag, open, id, value);
+            if (!BbCodeEntry || value === null || open === null || id === null) {
                 return null;
             }
+            const tag = BbCodeEntry.tag || BbCodeEntry.bb;
             return {
                 value,
                 id,
                 index: i.index as number,
                 open,
-                bb: valueBb,
+                bb: BbCodeEntry.bb,
+                tag,
+                lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
             };
         });
         combinedList = combinedList.filter((c) => c !== null);
