@@ -1,116 +1,20 @@
-const defaultHtmlBbCodeParams = ['style'];
-const defaultHtmlBbCodeButtonParams = [
-    'url',
-    'urlParameters',
-    'tappId',
-    'siteId',
-    'locationId',
-    'buttonName',
-    'post',
-    'sendAccessToken',
-];
+import { InvalidTagPos } from '../BBCodeParser';
+import type { CombinedItem, MatchingTag } from '../bbCodeUtils';
+import { BbCodes, replaceAt } from '../bbCodeUtils';
 
-const BbCodes = [
-    {
-        bb: 'b',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'i',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'u',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'd',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'center',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'h1',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'h2',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'h3',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'ul',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'ol',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'li',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'p',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'span',
-        params: defaultHtmlBbCodeParams,
-    },
-    {
-        bb: 'button',
-        params: ['inline', ...defaultHtmlBbCodeButtonParams],
-    },
-    {
-        bb: 'link',
-        tag: 'a',
-        params: defaultHtmlBbCodeParams,
-    },
-];
-
-type CombinedItem = {
-    value: string;
-    index: number;
-    open: boolean;
-    lengthDifferenceBBToTag: number;
-    tag: string;
-    bb: string;
-    params: string[];
-};
-
-type MatchingTag = {
-    tag: string;
-    open: number | null;
-    close: number | null;
-};
-export enum InvalidTagPos {
-    outer,
-    middleTag,
-}
-
-export default class BBCodeParser {
+export default class BBCodeToHTMLParser {
     readonly showBbTags: boolean;
     readonly bbTagStyles: string;
     readonly invalidTagPos: InvalidTagPos;
     private totalLengthDifference: number = 0;
 
-    constructor(
-        showBbTags = false,
-        bbTagStyles = 'style="opacity: 0.5"',
-        invalidTagPos = InvalidTagPos.outer
-    ) {
+    constructor(showBbTags: boolean, bbTagStyles: string, invalidTagPos: InvalidTagPos) {
         this.showBbTags = showBbTags;
         this.bbTagStyles = bbTagStyles;
         this.invalidTagPos = invalidTagPos;
     }
 
-    bbCodeTextToHTML = (text: string) => {
+    bbCodeTextToHTML = (text: string): string => {
         this.totalLengthDifference = 0;
         const combinedList = this.getCombinedTagList(text);
 
@@ -125,10 +29,8 @@ export default class BBCodeParser {
 
         // ToDo show valid & invalid parameters in Tags
         console.log(newText);
+        return newText;
     };
-    bbCodeHTMLToText = () => {};
-
-    // ----------- helper functions -----------
 
     private getCombinedTagList = (text: string): CombinedItem[] => {
         let bbRegExString = '';
@@ -236,7 +138,7 @@ export default class BBCodeParser {
                                 nestingMatchOpen.index < combinedItem.index &&
                                 nestingMatchOpen.index > matchOpen.index))
                     ) {
-                        /* ToDo not perfect behavior => evtl change ???
+                        /* ToDo not perfect behavior with middle mode => evtl change ???
                          * input => T[h1]est T[b]e[/h1]xt [b]BO[h1]H1 [b]Test[/b] test[/h1]LT[/b][link]LINK[/link]
                          * output => T[h1]est T<b>e[/h1]xt [b]BO<h1>H1 <b>Test</b> test</h1>LT</b><a>LINK</a>
                          *  ==> First h1 & /h1 tag is invalid, for last /b could second invalid b be used => h1 would also be valid
@@ -333,15 +235,6 @@ export default class BBCodeParser {
         return validTags;
     };
 
-    private replaceAt = (
-        text: string,
-        startIndex: number,
-        endIndex: number,
-        replacementString: string
-    ) => {
-        return text.substring(0, startIndex) + replacementString + text.substring(endIndex + 1);
-    };
-
     private replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
         const tagStartIndex = item.index + this.totalLengthDifference;
         let paramLength = 0;
@@ -372,6 +265,6 @@ export default class BBCodeParser {
         this.totalLengthDifference +=
             item.lengthDifferenceBBToTag + (replacementString.length - originalTag.length);
 
-        return this.replaceAt(text, tagStartIndex, tagEndIndex, replacementString);
+        return replaceAt(text, tagStartIndex, tagEndIndex, replacementString);
     };
 }

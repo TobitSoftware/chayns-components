@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
-import BBCodeParser, { InvalidTagPos } from '../../utils/BBCodeParser';
+import BBCodeParser, { InvalidTagPos } from '../../utils/bb-code-parser/BBCodeParser';
 import { setCursorToEnd } from '../../utils/cursor';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
@@ -94,14 +94,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
         () => new BBCodeParser(true, undefined, InvalidTagPos.middleTag),
         []
     ); // ToDo REMOVE !!!
-    const bbCodeParser3 = useMemo(
-        () => new BBCodeParser(false, undefined, InvalidTagPos.outer),
-        []
-    ); // ToDo REMOVE !!!
-    const bbCodeParser4 = useMemo(
-        () => new BBCodeParser(false, undefined, InvalidTagPos.middleTag),
-        []
-    ); // ToDo REMOVE !!!
 
     console.log('render');
 
@@ -129,18 +121,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
         (htmlString, event) => {
             console.log(htmlString);
             console.time('bbCodeTextToHTML');
-            //const inputHtmlBBParsed = bbCodeParser.bbCodeTextToHTML(htmlString);
+            const inputHtmlBBParsed = bbCodeParser.bbCodeTextToHTML(htmlString);
             console.timeEnd('bbCodeTextToHTML');
 
-            console.time('2');
-            //const a2 = bbCodeParser2.bbCodeTextToHTML(htmlString);
-            console.timeEnd('2');
-            console.time('3');
-            const a3 = bbCodeParser3.bbCodeTextToHTML(htmlString);
-            console.timeEnd('3');
-            console.time('4');
-            const a4 = bbCodeParser4.bbCodeTextToHTML(htmlString);
-            console.timeEnd('4');
+            console.time('bbCodeHTMLToText');
+            const a2 = bbCodeParser.bbCodeHTMLToText(inputHtmlBBParsed);
+            console.timeEnd('bbCodeHTMLToText');
 
             if (typeof onInput === 'function') {
                 onInput(htmlString, event);
