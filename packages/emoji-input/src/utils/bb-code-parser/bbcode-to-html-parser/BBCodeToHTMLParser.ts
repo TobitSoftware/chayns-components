@@ -252,11 +252,15 @@ export default class BBCodeToHTMLParser {
         let originalTag = '';
         if (item.open) {
             const shownBbTag = `<span class="open" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
-            replacementString = `${this.showBbTags ? shownBbTag : ''}<${item.tag}${paramString}>`;
+            const hideBbTag = `<span class="open"></span>`;
+            replacementString = `${this.showBbTags ? shownBbTag : hideBbTag}<${
+                item.tag
+            }${paramString}>`;
             originalTag = `[${item.tag}${paramString}]`;
         } else {
             const shownBbTag = `<span class="close" ${this.bbTagStyles}>[/${item.bb}]</span>`;
-            replacementString = `</${item.tag}>${this.showBbTags ? shownBbTag : ''}`;
+            const hideBbTag = `<span class="close"></span>`;
+            replacementString = `</${item.tag}>${this.showBbTags ? shownBbTag : hideBbTag}`;
             originalTag = `[/${item.tag}]`;
         }
         // length difference is set only for next tag, because start & endIndex already set above

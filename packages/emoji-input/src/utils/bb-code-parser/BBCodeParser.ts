@@ -10,8 +10,9 @@ export default class BBCodeParser {
     private _BBToHTMLParser: BBCodeToHTMLParser;
     private _HTMLToBBParser: HTMLToBBCodeParser;
 
+    // showBBTags = false => no styles for BB-Tag possible!
     constructor(
-        showBbTags = false,
+        showBbTags = true,
         bbTagStyles = 'style="opacity: 0.5"',
         invalidTagPos = InvalidTagPos.outer
     ) {

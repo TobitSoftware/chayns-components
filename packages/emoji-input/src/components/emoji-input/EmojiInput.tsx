@@ -91,7 +91,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const bbCodeParser = useMemo(() => new BBCodeParser(true, undefined, InvalidTagPos.outer), []);
     const bbCodeParser2 = useMemo(
-        () => new BBCodeParser(true, undefined, InvalidTagPos.middleTag),
+        () => new BBCodeParser(false, undefined, InvalidTagPos.outer),
         []
     ); // ToDo REMOVE !!!
 
@@ -128,7 +128,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
             console.time('bbCodeTextToHTML');
             const newHtml = bbCodeParser.bbCodeTextToHTML(bbText);
             console.timeEnd('bbCodeTextToHTML');
-            console.log(htmlString, newHtml);
+            console.log(htmlString);
+            console.log(newHtml);
+            console.log(bbText);
+
+            console.log('---------------------------------------');
+            const htmlText2 = bbCodeParser2.bbCodeTextToHTML(bbText);
+            console.log(htmlText2);
+            const bbText2 = bbCodeParser2.bbCodeHTMLToText(htmlText2);
+            console.log(bbText2);
 
             setInputValue(newHtml);
             if (typeof onInput === 'function') {
