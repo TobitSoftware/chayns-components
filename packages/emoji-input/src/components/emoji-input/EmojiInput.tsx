@@ -9,7 +9,10 @@ import React, {
 } from 'react';
 import { useForceUpdate } from '../../hooks/forceUpdate';
 import { useUuid } from '../../hooks/uuid';
-import BBCodeParser, { InvalidTagPos } from '../../utils/bb-code-parser/BBCodeParser';
+import BBCodeParser, {
+    BBConvertType,
+    InvalidTagPos,
+} from '../../utils/bb-code-parser/BBCodeParser';
 import {
     getCurrentCursorPosition,
     setCurrentCursorPosition,
@@ -86,6 +89,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     showEmojiButton = true,
     value = '',
 }) => {
+    console.log('render');
+
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -93,13 +98,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const uuid = useUuid();
 
-    const bbCodeParser = useMemo(() => new BBCodeParser(true, undefined, InvalidTagPos.outer), []);
-    const bbCodeParser2 = useMemo(
-        () => new BBCodeParser(false, undefined, InvalidTagPos.outer),
+    const bbCodeParser = useMemo(
+        () =>
+            new BBCodeParser(BBConvertType.hideBBTags_convertable, undefined, InvalidTagPos.outer),
         []
-    ); // ToDo REMOVE !!!
-
-    console.log('render');
+    );
 
     useEffect(() => {
         buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
@@ -113,8 +116,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     useLayoutEffect(() => {
         if (inputRef.current) {
-            const oldValue = inputRef.current.innerHTML;
-            const oldValueBB = bbCodeParser.bbCodeHTMLToText(oldValue);
+            const oldValueBB = bbCodeParser.bbCodeHTMLToText(inputRef.current);
             if (oldValueBB !== value) {
                 const newValueHTML = bbCodeParser.bbCodeTextToHTML(value);
                 setInputValue(newValueHTML);
@@ -126,10 +128,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handleInput = useCallback(
         (htmlString, event) => {
             const cursorPos = getCurrentCursorPosition(inputRef.current);
-            console.log(cursorPos);
             console.time('bbCodeHTMLToText');
-            // const bbText = bbCodeParser.bbCodeHTMLToText(htmlString);
-            const bbText = inputRef.current?.innerText || '';
+            const bbText = bbCodeParser.bbCodeHTMLToText(
+                inputRef.current as HTMLDivElement
+            ) as string;
             console.timeEnd('bbCodeHTMLToText');
 
             console.time('bbCodeTextToHTML');
@@ -137,12 +139,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
             console.timeEnd('bbCodeTextToHTML');
             setInputValue(newHtml);
             setCurrentCursorPosition(cursorPos, inputRef.current);
-
-            console.log('---------------------------------------');
-            const htmlText2 = bbCodeParser2.bbCodeTextToHTML(bbText);
-            console.log(htmlText2);
-            const bbText2 = bbCodeParser2.bbCodeHTMLToText(htmlText2);
-            console.log(bbText2);
 
             if (typeof onInput === 'function') {
                 onInput(bbText, event);

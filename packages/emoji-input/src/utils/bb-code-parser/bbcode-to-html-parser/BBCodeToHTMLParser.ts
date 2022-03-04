@@ -1,16 +1,16 @@
-import { InvalidTagPos } from '../BBCodeParser';
-import type { CombinedItem, MatchingTag, Param, param } from '../bbCodeUtils';
+import { BBConvertType, InvalidTagPos } from '../BBCodeParser';
+import type { CombinedItem, MatchingTag, Param } from '../bbCodeUtils';
 import { BbCodes, replaceAt } from '../bbCodeUtils';
 
 export default class BBCodeToHTMLParser {
-    readonly showBbTags: boolean;
-    readonly bbTagStyles: string;
-    readonly invalidTagPos: InvalidTagPos;
+    private readonly bbConvertType: BBConvertType;
+    private readonly bbTagParams: string;
+    private readonly invalidTagPos: InvalidTagPos;
     private totalLengthDifference: number = 0;
 
-    constructor(showBbTags: boolean, bbTagStyles: string, invalidTagPos: InvalidTagPos) {
-        this.showBbTags = showBbTags;
-        this.bbTagStyles = bbTagStyles;
+    constructor(bbConvertType: BBConvertType, bbTagParams: string, invalidTagPos: InvalidTagPos) {
+        this.bbConvertType = bbConvertType;
+        this.bbTagParams = bbTagParams;
         this.invalidTagPos = invalidTagPos;
     }
 
@@ -74,7 +74,7 @@ export default class BBCodeToHTMLParser {
                             together: p[0],
                             param: param[0],
                             value: param[1],
-                        } as param;
+                        } as Param;
                     }),
                 };
             }),
@@ -257,16 +257,38 @@ export default class BBCodeToHTMLParser {
         let replacementString = '';
         let originalTag = '';
         if (item.open) {
-            const shownBbTag = `<span class="open" ${this.bbTagStyles}>[${item.bb}${paramString}]</span>`;
+            const shownBbTag = `<span class="open" ${this.bbTagParams}>[${item.bb}${paramString}]</span>`;
             const hideBbTag = `<span class="open"></span>`;
-            replacementString = `${this.showBbTags ? shownBbTag : hideBbTag}<${
-                item.tag
-            }${paramString}>`;
+            let bBReplacement;
+            switch (this.bbConvertType) {
+                case BBConvertType.showBBTags:
+                    bBReplacement = shownBbTag;
+                    break;
+                case BBConvertType.hideBBTags_convertable:
+                    bBReplacement = hideBbTag;
+                    break;
+                case BBConvertType.hideBBTags_not_convertable:
+                    bBReplacement = '';
+                    break;
+            }
+            replacementString = `${bBReplacement}<${item.tag}${paramString}>`;
             originalTag = `[${item.tag}${paramString}]`;
         } else {
-            const shownBbTag = `<span class="close" ${this.bbTagStyles}>[/${item.bb}]</span>`;
+            const shownBbTag = `<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
             const hideBbTag = `<span class="close"></span>`;
-            replacementString = `</${item.tag}>${this.showBbTags ? shownBbTag : hideBbTag}`;
+            let bBReplacement;
+            switch (this.bbConvertType) {
+                case BBConvertType.showBBTags:
+                    bBReplacement = shownBbTag;
+                    break;
+                case BBConvertType.hideBBTags_convertable:
+                    bBReplacement = hideBbTag;
+                    break;
+                case BBConvertType.hideBBTags_not_convertable:
+                    bBReplacement = '';
+                    break;
+            }
+            replacementString = `</${item.tag}>${bBReplacement}`;
             originalTag = `[/${item.tag}]`;
         }
         // length difference is set only for next tag, because start & endIndex already set above
