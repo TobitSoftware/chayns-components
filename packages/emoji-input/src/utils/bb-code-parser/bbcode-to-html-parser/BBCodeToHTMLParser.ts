@@ -1,5 +1,5 @@
 import { InvalidTagPos } from '../BBCodeParser';
-import type { CombinedItem, MatchingTag } from '../bbCodeUtils';
+import type { CombinedItem, MatchingTag, Param, param } from '../bbCodeUtils';
 import { BbCodes, replaceAt } from '../bbCodeUtils';
 
 export default class BBCodeToHTMLParser {
@@ -40,8 +40,9 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const regExOpen = `\\[(?:${bbRegExString})[^\\]]*\\]`;
-        const regExClose = `\\[\/(?:${bbRegExString})\\]`;
+        const parameterRegEx = '[\\w]*?=("[^"]*?"|\'[^\']*?\'|„[^„“]*?“)';
+        const regExOpen = `\\[(${bbRegExString})( ${parameterRegEx})*\\]`;
+        const regExClose = `\\[\/(${bbRegExString})\\]`;
         const listOpen = text.matchAll(new RegExp(regExOpen, 'gi'));
         const listClose = text.matchAll(new RegExp(regExClose, 'gi'));
         let combinedList = [
@@ -56,7 +57,7 @@ export default class BBCodeToHTMLParser {
                     return null;
                 }
                 const tag = BbCodeEntry.tag || BbCodeEntry.bb;
-                const params = value.matchAll(/([\w]*?)=\\?["„'](.*?)["“']/gi);
+                const params = value.matchAll(new RegExp(parameterRegEx, 'gi'));
                 return {
                     value,
                     index: i.index as number,
@@ -65,12 +66,15 @@ export default class BBCodeToHTMLParser {
                     bb: BbCodeEntry.bb,
                     lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
                     params: [...params].map((p) => {
-                        const split = p.split('=');
+                        const param = p[0]?.split('=');
+                        if (!param) {
+                            return null;
+                        }
                         return {
-                            together: p,
-                            param: split[0],
-                            value: split[1],
-                        };
+                            together: p[0],
+                            param: param[0],
+                            value: param[1],
+                        } as param;
                     }),
                 };
             }),
@@ -237,9 +241,11 @@ export default class BBCodeToHTMLParser {
         const tagStartIndex = item.index + this.totalLengthDifference;
         let paramLength = 0;
         let paramString = '';
-        item.params?.forEach((p) => {
-            paramLength += p.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
-            paramString += ` ${p}`; // space added here
+        item.params?.forEach((p: Param) => {
+            if (p) {
+                paramLength += p.together.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
+                paramString += ` ${p.together}`; // space added here
+            }
         });
         const tagEndIndex =
             tagStartIndex +

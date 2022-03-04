@@ -74,6 +74,12 @@ export const BbCodes = [
     },
 ];
 
+export type Param = {
+    together: string;
+    param: string;
+    value: string;
+};
+
 export type CombinedItem = {
     value: string;
     index: number;
@@ -81,7 +87,7 @@ export type CombinedItem = {
     lengthDifferenceBBToTag?: number;
     tag?: string;
     bb: string;
-    params?: string[];
+    params?: Param[];
 };
 
 export type MatchingTag = {

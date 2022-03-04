@@ -5,7 +5,6 @@ export default class HTMLToBBCodeParser {
     readonly showBbTags: boolean;
     readonly bbTagStyles: string;
     readonly invalidTagPos: InvalidTagPos;
-    private totalLengthDifference: number = 0;
 
     constructor(showBbTags: boolean, bbTagStyles: string, invalidTagPos: InvalidTagPos) {
         this.showBbTags = showBbTags;
@@ -14,7 +13,6 @@ export default class HTMLToBBCodeParser {
     }
 
     bbCodeHTMLToText = (text: string): string => {
-        this.totalLengthDifference = 0;
         return this.replaceBBCodeHTML(text);
     };
 
