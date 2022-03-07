@@ -18,6 +18,7 @@ export const getCurrentCursorPosition = (parentElement: HTMLDivElement | null): 
 
                     if (node.previousSibling) {
                         node = node.previousSibling;
+                        console.log('node: ', node, node.textContent?.length);
                         charCount += (node.textContent || '').length;
                     } else {
                         node = node.parentNode;
@@ -33,7 +34,26 @@ export const getCurrentCursorPosition = (parentElement: HTMLDivElement | null): 
     }
     return null;
 };
+export const insertBrAtCursor = () => {
+    const sel = window.getSelection();
+    if (sel) {
+        const range = sel.getRangeAt(0);
+        const br = document.createElement('br');
 
+        range.deleteContents();
+
+        range.insertNode(br);
+        var newLine = document.createTextNode('\n');
+
+        range.setStartAfter(br);
+        range.setEndAfter(br);
+
+        range.insertNode(newLine);
+
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+};
 export const setCurrentCursorPosition = (chars: number | null, element: HTMLDivElement | null) => {
     if (element && chars && chars >= 0) {
         const sel = window.getSelection();
@@ -88,7 +108,7 @@ const createRange = (node: any, char: charCount, range: any | null = null) => {
             if (node.textContent && node.textContent.length < char.count) {
                 char.count -= node.textContent.length;
             } else {
-                range.setEnd(node, char.count);
+                range.setEnd(node, char.count); // setEnd
                 char.count = 0;
             }
         } else {

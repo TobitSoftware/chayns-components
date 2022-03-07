@@ -1,4 +1,5 @@
 import BBCodeToHTMLParser from './bbcode-to-html-parser/BBCodeToHTMLParser';
+import bbCodeHTMLToText from './html-to-bbcode-parser/HTMLToBBCodeParser';
 
 export enum InvalidTagPos {
     outer,
@@ -25,9 +26,9 @@ export default class BBCodeParser {
     bbCodeTextToHTML = (text: string): string => {
         return this._BBToHTMLParser.bbCodeTextToHTML(text);
     };
-    bbCodeHTMLToText = (ref: HTMLDivElement): string | null => {
+    bbCodeHTMLToText = (html: string): string | null => {
         if (this.bbConvertType === BBConvertType.showBBTags) {
-            return ref.innerText;
+            return bbCodeHTMLToText(html);
         }
         throw 'BBCodeParser: html content not convertable with this ConvertType';
     };

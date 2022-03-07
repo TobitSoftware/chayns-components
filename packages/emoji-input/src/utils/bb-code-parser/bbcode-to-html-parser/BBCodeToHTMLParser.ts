@@ -251,7 +251,7 @@ export default class BBCodeToHTMLParser {
                 validParamString += ` ${p.together}`;
                 paramStringHTML += ` ${p.together}`; // space added here
             } else {
-                paramStringHTML += ` <span style="color:red">${p.together}</span>`; //` <span class="param" style="color:red">${p.together}</span>`; // space added here
+                paramStringHTML += ` <span class="param" style="color:red">${p.together}</span>`; // space added here
             }
         });
         const tagEndIndex =
@@ -264,7 +264,7 @@ export default class BBCodeToHTMLParser {
         let replacementString = '';
         let originalTag = '';
         if (item.open) {
-            const shownBbTag = `<span ${this.bbTagParams}>[${item.bb}${paramStringHTML}]</span>`; //`<span class="open" ${this.bbTagParams}>[${item.bb}${paramStringHTML}]</span>`;
+            const shownBbTag = `<span class="open" ${this.bbTagParams}>[${item.bb}${paramStringHTML}]</span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
@@ -277,7 +277,7 @@ export default class BBCodeToHTMLParser {
             replacementString = `${bBReplacement}<${item.tag}${validParamString}>`;
             originalTag = `[${item.tag}${paramString}]`;
         } else {
-            const shownBbTag = `<span ${this.bbTagParams}>[/${item.bb}]</span>`; //`<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
+            const shownBbTag = `<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
