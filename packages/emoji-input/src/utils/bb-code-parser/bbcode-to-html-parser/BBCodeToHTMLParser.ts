@@ -1,6 +1,7 @@
+import { replaceAt } from '../../utils';
 import { BBConvertType, InvalidTagPos } from '../BBCodeParser';
 import type { CombinedItem, MatchingTag, Param } from '../bbCodeUtils';
-import { BbCodes, replaceAt } from '../bbCodeUtils';
+import { BbCodes } from '../bbCodeUtils';
 
 export default class BBCodeToHTMLParser {
     private readonly bbConvertType: BBConvertType;
@@ -246,7 +247,6 @@ export default class BBCodeToHTMLParser {
             paramLength += p.together.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
             paramString += ` ${p.together}`;
             const validParam = BbCodes.find((bb) => bb.params.find((pbb) => pbb === p.param));
-            console.log(validParam);
             if (validParam) {
                 validParamString += ` ${p.together}`;
                 paramStringHTML += ` ${p.together}`; // space added here
@@ -276,7 +276,6 @@ export default class BBCodeToHTMLParser {
             }
             replacementString = `${bBReplacement}<${item.tag}${validParamString}>`;
             originalTag = `[${item.tag}${paramString}]`;
-            console.log(paramStringHTML, paramString, validParamString);
         } else {
             const shownBbTag = `<span ${this.bbTagParams}>[/${item.bb}]</span>`; //`<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
             let bBReplacement;

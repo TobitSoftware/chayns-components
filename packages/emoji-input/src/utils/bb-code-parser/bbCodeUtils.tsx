@@ -76,6 +76,11 @@ export const BbCodes = [
         tag: 'a',
         params: defaultHtmlBbCodeParams,
     },
+    {
+        bb: 'lc_mention',
+        tag: 'a',
+        params: ['id'],
+    },
 ];
 
 export type Param = {
@@ -98,13 +103,4 @@ export type MatchingTag = {
     tag: string;
     open: number | null;
     close: number | null;
-};
-
-export const replaceAt = (
-    text: string,
-    startIndex: number,
-    endIndex: number,
-    replacementString: string
-) => {
-    return text.substring(0, startIndex) + replacementString + text.substring(endIndex + 1);
 };

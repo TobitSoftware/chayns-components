@@ -18,6 +18,7 @@ import {
     setCurrentCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
+import { isEnterKey } from '../../utils/key';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
@@ -139,7 +140,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, [value]);
 
     const handleInput = useCallback(
-        (htmlString, event) => {
+        (event) => {
+            console.log(getInputValue());
             const cursorPos = getCurrentCursorPosition(inputRef.current);
             console.time('bbCodeHTMLToText');
             const bbText = bbCodeParser.bbCodeHTMLToText(
@@ -152,6 +154,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
             console.timeEnd('bbCodeTextToHTML');
             setInputValue(newHtml);
             setCurrentCursorPosition(cursorPos, inputRef.current);
+
+            console.log(bbText);
+            console.log(newHtml);
 
             if (typeof onInput === 'function') {
                 onInput(bbText, event);
@@ -168,6 +173,14 @@ const EmojiInput: FC<EmojiInputProps> = ({
         },
         [onKeyUp]
     );
+
+    const handleKeyDown = useCallback((event) => {
+        if (isEnterKey(event)) {
+            event.preventDefault();
+            insertHTMLAtCursorPos('<br>');
+            // forceReRender();
+        }
+    }, []);
 
     const handleFocus = useCallback(
         (event) => {
@@ -224,7 +237,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
         event.preventDefault();
         event.stopPropagation();
         const text = event.clipboardData?.getData('text/plain');
-        insertHTMLAtCursorPos(text);
+        if (text) {
+            insertHTMLAtCursorPos(text);
+        }
     }, []);
 
     const getInputValue = useCallback(() => inputRef.current?.innerHTML || '', [inputRef]);
@@ -237,7 +252,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [inputRef]
     );
 
-    const insertHTMLAtCursorPos = useCallback((html) => {
+    const insertHTMLAtCursorPos = useCallback((html: string) => {
+        /*
+        const cursorPos = getCurrentCursorPosition(inputRef.current);
+        console.log(cursorPos, getInputValue(), html);
+        if (cursorPos) {
+            setInputValue(replaceAt(getInputValue(), cursorPos, cursorPos, html));
+            // setCurrentCursorPosition(cursorPos, inputRef.current);
+        }
+        */
         document.execCommand('insertHTML', false, html);
     }, []);
 
@@ -256,8 +279,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 isDisabled={isDisabled}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
-                onInput={(event) => handleInput(getInputValue(), event)}
+                onInput={handleInput}
                 onKeyUp={handleKeyUp}
+                onKeyDown={handleKeyDown}
                 onPaste={handlePaste}
                 ref={inputRef}
                 showEmojiButton={showEmojiButton}
