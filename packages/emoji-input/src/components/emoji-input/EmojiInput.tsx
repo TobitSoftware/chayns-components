@@ -99,8 +99,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const uuid = useUuid();
 
     const bbCodeParser = useMemo(
-        () =>
-            new BBCodeParser(BBConvertType.hideBBTags_convertable, undefined, InvalidTagPos.outer),
+        () => new BBCodeParser(BBConvertType.showBBTags, undefined, InvalidTagPos.outer),
         []
     );
 
