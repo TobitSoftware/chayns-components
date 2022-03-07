@@ -13,18 +13,22 @@ export const defaultHtmlBbCodeButtonParams = [
 export const BbCodes = [
     {
         bb: 'b',
+        tag: 'strong', //'span style="font-weight: bold"',
         params: defaultHtmlBbCodeParams,
     },
     {
         bb: 'i',
+        tag: 'em',
         params: defaultHtmlBbCodeParams,
     },
     {
         bb: 'u',
+        tag: 'span style="text-decoration: underline"',
         params: defaultHtmlBbCodeParams,
     },
     {
-        bb: 'd',
+        bb: 's',
+        tag: 'span style="text-decoration: line-through"',
         params: defaultHtmlBbCodeParams,
     },
     {

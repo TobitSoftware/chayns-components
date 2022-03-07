@@ -16,7 +16,7 @@ export default class BBCodeParser {
     // showBBTags = false => no styles for BB-Tag possible!
     constructor(
         bbConvertType = BBConvertType.showBBTags,
-        bbTagParams = 'style="opacity: 0.5"',
+        bbTagParams = 'style="opacity: 0.25"',
         invalidTagPos = InvalidTagPos.outer
     ) {
         this.bbConvertType = bbConvertType;

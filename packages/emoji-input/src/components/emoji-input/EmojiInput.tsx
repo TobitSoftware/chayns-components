@@ -102,6 +102,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
         () => new BBCodeParser(BBConvertType.showBBTags, undefined, InvalidTagPos.outer),
         []
     );
+    const bbCodeParser2 = useMemo(
+        () =>
+            new BBCodeParser(
+                BBConvertType.hideBBTags_not_convertable,
+                undefined,
+                InvalidTagPos.outer
+            ),
+        []
+    );
 
     useEffect(() => {
         buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
@@ -120,6 +129,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 const newValueHTML = bbCodeParser.bbCodeTextToHTML(value);
                 setInputValue(newValueHTML);
                 forceRender();
+                console.log(
+                    bbCodeParser2.bbCodeTextToHTML(
+                        'Test Text [b a="" style="asda"]BOLT[/b][link]LINK[/link]'
+                    )
+                );
             }
         }
     }, [value]);
@@ -227,14 +241,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
         document.execCommand('insertHTML', false, html);
     }, []);
 
-    /* COPY from div => change escaped String to html String?
-        source.addEventListener('copy', (event) => {
-            const selection = document.getSelection();
-            event.clipboardData.setData('text/plain', selection.toString().toUpperCase());
-            event.preventDefault();
-        }
-    });
-    */
     return (
         <StyledEmojiInput
             className="beta-chayns-emoji-input"

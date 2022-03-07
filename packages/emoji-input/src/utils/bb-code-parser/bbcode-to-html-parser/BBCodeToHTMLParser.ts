@@ -28,7 +28,6 @@ export default class BBCodeToHTMLParser {
             }
         });
 
-        // ToDo show valid & invalid parameters in Tags
         return newText;
     };
 
@@ -47,12 +46,12 @@ export default class BBCodeToHTMLParser {
         const listClose = text.matchAll(new RegExp(regExClose, 'gi'));
         let combinedList = [
             ...[...listOpen].map((i) => {
-                const value: string = i[0].toLowerCase();
+                const value: string = i[0];
                 const valueBb: string | undefined = value
                     ?.substring(1, value?.length - 1)
                     .trim()
                     .split(' ')[0];
-                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb);
+                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb?.toLowerCase());
                 if (!BbCodeEntry || value === null) {
                     return null;
                 }
@@ -79,12 +78,12 @@ export default class BBCodeToHTMLParser {
                 };
             }),
             ...[...listClose].map((i) => {
-                const value: string = i[0].toLowerCase();
+                const value: string = i[0];
                 const valueBb: string | undefined = value
                     ?.substring(2, value?.length - 1)
                     .trim()
                     .split(' ')[0];
-                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb);
+                const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb?.toLowerCase());
                 if (!BbCodeEntry || value === null) {
                     return null;
                 }
@@ -240,11 +239,19 @@ export default class BBCodeToHTMLParser {
     private replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
         const tagStartIndex = item.index + this.totalLengthDifference;
         let paramLength = 0;
+        let validParamString = '';
         let paramString = '';
+        let paramStringHTML = '';
         item.params?.forEach((p: Param) => {
-            if (p) {
-                paramLength += p.together.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
-                paramString += ` ${p.together}`; // space added here
+            paramLength += p.together.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
+            paramString += ` ${p.together}`;
+            const validParam = BbCodes.find((bb) => bb.params.find((pbb) => pbb === p.param));
+            console.log(validParam);
+            if (validParam) {
+                validParamString += ` ${p.together}`;
+                paramStringHTML += ` ${p.together}`; // space added here
+            } else {
+                paramStringHTML += ` <span style="color:red">${p.together}</span>`; //` <span class="param" style="color:red">${p.together}</span>`; // space added here
             }
         });
         const tagEndIndex =
@@ -257,7 +264,7 @@ export default class BBCodeToHTMLParser {
         let replacementString = '';
         let originalTag = '';
         if (item.open) {
-            const shownBbTag = `<span class="open" ${this.bbTagParams}>[${item.bb}${paramString}]</span>`;
+            const shownBbTag = `<span ${this.bbTagParams}>[${item.bb}${paramStringHTML}]</span>`; //`<span class="open" ${this.bbTagParams}>[${item.bb}${paramStringHTML}]</span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
@@ -267,10 +274,11 @@ export default class BBCodeToHTMLParser {
                     bBReplacement = '';
                     break;
             }
-            replacementString = `${bBReplacement}<${item.tag}${paramString}>`;
+            replacementString = `${bBReplacement}<${item.tag}${validParamString}>`;
             originalTag = `[${item.tag}${paramString}]`;
+            console.log(paramStringHTML, paramString, validParamString);
         } else {
-            const shownBbTag = `<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
+            const shownBbTag = `<span ${this.bbTagParams}>[/${item.bb}]</span>`; //`<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
