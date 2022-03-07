@@ -5,6 +5,7 @@ import React, { PureComponent, Children, cloneElement, createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { toPropTypes, toHandlerName } from './PropTypes';
+import deepEqual from '../../../utils/deepEqual';
 
 const events = [
     'bounds_changed',
@@ -58,6 +59,14 @@ class GoogleMap extends PureComponent {
         // Needed to render initial children correctly
         if (children) {
             this.forceUpdate();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { options } = this.props;
+
+        if (!deepEqual(prevProps.options, options)) {
+            this.map.setOptions(options);
         }
     }
 
