@@ -258,14 +258,10 @@ export default class BBCodeToHTMLParser {
         let originalTag = '';
         if (item.open) {
             const shownBbTag = `<span class="open" ${this.bbTagParams}>[${item.bb}${paramString}]</span>`;
-            const hideBbTag = `<span class="open"></span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
                     bBReplacement = shownBbTag;
-                    break;
-                case BBConvertType.hideBBTags_convertable:
-                    bBReplacement = hideBbTag;
                     break;
                 case BBConvertType.hideBBTags_not_convertable:
                     bBReplacement = '';
@@ -275,14 +271,10 @@ export default class BBCodeToHTMLParser {
             originalTag = `[${item.tag}${paramString}]`;
         } else {
             const shownBbTag = `<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
-            const hideBbTag = `<span class="close"></span>`;
             let bBReplacement;
             switch (this.bbConvertType) {
                 case BBConvertType.showBBTags:
                     bBReplacement = shownBbTag;
-                    break;
-                case BBConvertType.hideBBTags_convertable:
-                    bBReplacement = hideBbTag;
                     break;
                 case BBConvertType.hideBBTags_not_convertable:
                     bBReplacement = '';
