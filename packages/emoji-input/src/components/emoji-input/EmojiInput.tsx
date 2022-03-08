@@ -14,13 +14,13 @@ import BBCodeParser, {
     InvalidTagPos,
 } from '../../utils/bb-code-parser/BBCodeParser';
 import {
-    getCurrentCursorPosition,
-    insertBrAtCursor,
+    getTextSelection,
+    insertHTMLTagAtCursor,
     setCurrentCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
-import { isEnterKey } from '../../utils/key';
-import { addBrToText, formatInputHTML, formatInputText, replaceAt } from '../../utils/utils';
+import { isCursorMovement, isEnterKey } from '../../utils/key';
+import { addBrToText, formatInputHTML, formatInputText } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
@@ -145,9 +145,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (event) => {
-            console.log(getInputValue());
+            // console.log(getInputValue());
 
-            const cursorPos = getCurrentCursorPosition(inputRef.current);
+            const cursorSelection = getTextSelection(inputRef.current);
             const htmlText = formatInputHTML(getInputValue());
             console.time('bbCodeHTMLToText');
             let bbText = bbCodeParser.bbCodeHTMLToText(htmlText) as string;
@@ -158,11 +158,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
             const newHtml = bbCodeParser.bbCodeTextToHTML(addBrToText(bbText));
             console.timeEnd('bbCodeTextToHTML');
             setInputValue(newHtml);
-            setCurrentCursorPosition(cursorPos, inputRef.current);
+            if (cursorSelection) {
+                setCurrentCursorPosition(cursorSelection, inputRef.current);
+            }
 
-            /*         console.log(bbText);
+            /*
+            console.log(bbText);
             console.log(addBrToText(bbText));
-            console.log(newHtml);*/
+            console.log(newHtml);
+            */
 
             if (typeof onInput === 'function') {
                 onInput(bbText, event);
@@ -183,10 +187,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handleKeyDown = useCallback((event) => {
         if (isEnterKey(event)) {
             event.preventDefault();
-            insertBrAtCursor();
+            insertHTMLTagAtCursor('br');
             handleInput(event);
-            // insertHTMLAtCursorPos('<br>');
-            // forceReRender();
+        } else if (isCursorMovement(event)) {
+            // ToDo checkPos
         }
     }, []);
 
@@ -246,7 +250,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
         event.stopPropagation();
         const text = event.clipboardData?.getData('text/plain');
         if (text) {
-            insertHTMLAtCursorPos(text);
+            insertTextAtCursorPos(text);
         }
     }, []);
 
@@ -260,8 +264,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
         [inputRef]
     );
 
-    const insertHTMLAtCursorPos = useCallback((html: string) => {
-        const cursorPos = getCurrentCursorPosition(inputRef.current);
+    const insertTextAtCursorPos = useCallback((html: string) => {
+        /*const cursorPos = getCurrentCursorPosition(inputRef.current);
         console.log(cursorPos, getInputValue(), html);
         if (cursorPos) {
             const inputValue = getInputValue();
@@ -269,9 +273,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
             bbText = replaceAt(bbText, cursorPos, cursorPos - 1, html);
             setInputValue(bbCodeParser.bbCodeTextToHTML(bbText));
             setCurrentCursorPosition(cursorPos, inputRef.current);
-            // forceReRender();
-        }
-        // document.execCommand('insertHTML', false, html);
+            // forceRender();
+        }*/
+        document.execCommand('insertHTML', false, html);
     }, []);
 
     return (
