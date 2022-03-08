@@ -22,9 +22,12 @@ export default class BBCodeToHTMLParser {
         const validTags = this.matchTags(combinedList);
 
         let newText = text;
+        console.log(combinedList, validTags);
         combinedList.forEach((c, ci) => {
             const validEntry = validTags.find((vt) => vt.open === ci || vt.close === ci);
             if (validEntry) {
+                const a = newText;
+                console.log('replaceCombined', a, c);
                 newText = this.replaceBbItemWithHTML(newText, c);
             }
         });
@@ -43,10 +46,11 @@ export default class BBCodeToHTMLParser {
         const parameterRegEx = '[^< ]*?=("[^"<]*?"|\'[^\'<]*?\'|„[^„“<]*?“)';
         const regExOpen = `\\[(${bbRegExString})( ${parameterRegEx})*\\]`;
         const regExClose = `\\[\/(${bbRegExString})\\]`;
-        const listOpen = text.matchAll(new RegExp(regExOpen, 'gi'));
-        const listClose = text.matchAll(new RegExp(regExClose, 'gi'));
+        const listOpen = [...text.matchAll(new RegExp(regExOpen, 'gi'))];
+        const listClose = [...text.matchAll(new RegExp(regExClose, 'gi'))];
+        console.log('openList', listOpen);
         let combinedList = [
-            ...[...listOpen].map((i) => {
+            ...listOpen.map((i) => {
                 const value: string = i[0];
                 const valueBb: string | undefined = value
                     ?.substring(1, value?.length - 1)
@@ -78,7 +82,7 @@ export default class BBCodeToHTMLParser {
                     }),
                 };
             }),
-            ...[...listClose].map((i) => {
+            ...listClose.map((i) => {
                 const value: string = i[0];
                 const valueBb: string | undefined = value
                     ?.substring(2, value?.length - 1)
@@ -118,7 +122,9 @@ export default class BBCodeToHTMLParser {
         ): boolean =>
             possibleMatch.tag === combinedItem.tag &&
             possibleMatch.close === null &&
-            possibleMatch.open !== null;
+            possibleMatch.open !== null &&
+            combinedList[possibleMatch.open]?.index < combinedItem.index; // check if open before close Tag
+
         const isValidNesting = (possibleMatch: MatchingTag, combinedItem: CombinedItem) => {
             for (
                 let nestingMatchIndex = 0;

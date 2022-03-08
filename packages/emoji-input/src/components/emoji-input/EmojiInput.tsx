@@ -20,7 +20,7 @@ import {
     setCursorToEnd,
 } from '../../utils/cursor';
 import { isEnterKey } from '../../utils/key';
-import { replaceAt } from '../../utils/utils';
+import { addBrToText, formatInputHTML, formatInputText, replaceAt } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
@@ -127,8 +127,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     useLayoutEffect(() => {
         if (inputRef.current) {
-            const oldValueBB = bbCodeParser.bbCodeHTMLToText(getInputValue());
+            const html = formatInputHTML(getInputValue());
+            const oldValueBB = bbCodeParser.bbCodeHTMLToText(html);
             if (oldValueBB !== value) {
+                value = formatInputText(addBrToText(value));
                 const newValueHTML = bbCodeParser.bbCodeTextToHTML(value);
                 setInputValue(newValueHTML);
                 forceRender();
@@ -146,19 +148,21 @@ const EmojiInput: FC<EmojiInputProps> = ({
             console.log(getInputValue());
 
             const cursorPos = getCurrentCursorPosition(inputRef.current);
+            const htmlText = formatInputHTML(getInputValue());
             console.time('bbCodeHTMLToText');
-            let bbText = bbCodeParser.bbCodeHTMLToText(getInputValue()) as string;
-            bbText = bbText.replace('&nbsp;', ' ');
+            let bbText = bbCodeParser.bbCodeHTMLToText(htmlText) as string;
             console.timeEnd('bbCodeHTMLToText');
 
+            bbText = formatInputText(bbText);
             console.time('bbCodeTextToHTML');
-            const newHtml = bbCodeParser.bbCodeTextToHTML(bbText);
+            const newHtml = bbCodeParser.bbCodeTextToHTML(addBrToText(bbText));
             console.timeEnd('bbCodeTextToHTML');
             setInputValue(newHtml);
             setCurrentCursorPosition(cursorPos, inputRef.current);
 
-            console.log(bbText);
-            console.log(newHtml);
+            /*         console.log(bbText);
+            console.log(addBrToText(bbText));
+            console.log(newHtml);*/
 
             if (typeof onInput === 'function') {
                 onInput(bbText, event);

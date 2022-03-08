@@ -38,9 +38,21 @@ export const insertBrAtCursor = () => {
     const sel = window.getSelection();
     if (sel) {
         const range = sel.getRangeAt(0);
+        console.log('sel,range: ', sel, range);
         const br = document.createElement('br');
 
-        range.deleteContents();
+        const pNode = sel.focusNode?.parentNode;
+        if (pNode && pNode['tagName'] === 'SPAN') {
+            // ToDo && Cursor at End of Node
+            if (pNode['className'] === 'open') {
+                range.setStart(pNode?.nextSibling as Node, 0);
+            } else if (pNode['className'] === 'close' || pNode['className'] === 'param') {
+                range.selectNode(pNode);
+                range.collapse(false);
+            }
+        } else {
+            range.deleteContents();
+        }
 
         range.insertNode(br);
         //var newLine = document.createTextNode('\n');
@@ -67,8 +79,8 @@ export const setCurrentCursorPosition = (chars: number | null, element: HTMLDivE
             sel.addRange(range);
             range.detach();
 
-            // scroll to cursor if scrollbar ... ???
-            //   element.scrollTop = element.scrollHeight;
+            //  scroll to cursor if scrollbar ... ???
+            //  element.scrollTop = element.scrollHeight;
         }
     }
 };
