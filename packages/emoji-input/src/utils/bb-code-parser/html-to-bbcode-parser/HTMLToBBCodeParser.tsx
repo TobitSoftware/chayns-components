@@ -12,30 +12,30 @@ const bbCodeHTMLToText = (text: string): string => {
             bbRegExString += '|';
         }
     });
-    const parameterRegEx = `[\\w]*?=("[^"]*?"|'[^']*?'|„[^„“]*?“)`;
-    const invalidParameterRegEx = `<span class=["„']param["“'][^>]*>[\\w]*?=("[^"]*?"|\'[^\']*?\'|„[^„“]*?“)<\\/span>`;
-    const regExOpenWithInvalid = `\\[(${bbRegExString})( (${parameterRegEx}|${invalidParameterRegEx}))*\\]`;
-    const regExClose = `\\[\/(${bbRegExString})\\]`;
+    const invalidParamRegExStart = `<span class=["„']param["“'][^>]*>`;
+    const invalidParamRegExEnd = `<\\/span>`;
+    const invalidParamRegEx = `${invalidParamRegExStart}([^<]|<br>)*${invalidParamRegExEnd}`;
 
-    let regExOpenAndClose = `(<span( [^>]*)* class=["„']open["“'][^>]*>(${regExOpenWithInvalid})<\\/span>(<(?:${tagRegExString})[^>]*>)?)|((<\\/(?:${tagRegExString})>)?<span( [^>]*)* class=["„']close["“'][^>]*>(${regExClose})<\\/span>)`;
+    let regExOpen = `<span( [^>]*)* class=["„'](open)["“'][^>]*>((${invalidParamRegEx}|[^<]*|<br>)*)<\\/span>(<(?:${tagRegExString})( [^>]*)*>)?`;
+    let regExClose = `(<\\/(?:${tagRegExString})>)?<span( [^>]*)* class=["„'](close)["“'][^>]*>(([^<]|<br>)*)<\\/span>`;
+    let regExOpenAndClose = `${regExOpen}|${regExClose}`;
 
     const listOpenAndClose = text.matchAll(new RegExp(regExOpenAndClose, 'gi'));
 
     const openAndClosedArray = [...listOpenAndClose];
     console.log('openAndClosedArray: ', openAndClosedArray);
+
     for (let index = 0; index < openAndClosedArray.length; index++) {
         const i = openAndClosedArray[index];
         const value: string = i[0].toLowerCase();
-        let replacement;
-        if (i[9]) {
-            // openTag
+        let replacement = '';
+        if (i[2] === 'open') {
             replacement = i[3];
             replacement = replacement
-                .replace(new RegExp(`<span class=["„']param["“'][^>]*>`, 'gi'), '')
-                .replace(new RegExp('<\\/span>', 'gi'), '');
-        } else if (i[11]) {
-            // closeTag
-            replacement = i[13];
+                .replace(new RegExp(invalidParamRegExStart, 'gi'), '')
+                .replace(new RegExp(invalidParamRegExEnd, 'gi'), '');
+        } else if (i[10] === 'close') {
+            replacement = i[11];
         }
         text = text.replace(value, replacement);
     }

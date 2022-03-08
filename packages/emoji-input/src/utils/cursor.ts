@@ -43,12 +43,12 @@ export const insertBrAtCursor = () => {
         range.deleteContents();
 
         range.insertNode(br);
-        var newLine = document.createTextNode('\n');
+        //var newLine = document.createTextNode('\n');
 
         range.setStartAfter(br);
         range.setEndAfter(br);
 
-        range.insertNode(newLine);
+        //range.insertNode(newLine);
 
         sel.removeAllRanges();
         sel.addRange(range);

@@ -1,4 +1,3 @@
-import { forceReRender } from '@storybook/react';
 import React, {
     FC,
     ReactNode,
@@ -181,7 +180,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
         if (isEnterKey(event)) {
             event.preventDefault();
             insertBrAtCursor();
-            forceReRender();
+            handleInput(event);
             // insertHTMLAtCursorPos('<br>');
             // forceReRender();
         }

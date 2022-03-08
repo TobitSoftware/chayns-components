@@ -40,7 +40,7 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const parameterRegEx = '[\\w]*?=("[^"]*?"|\'[^\']*?\'|„[^„“]*?“)';
+        const parameterRegEx = '[^< ]*?=("[^"<]*?"|\'[^\'<]*?\'|„[^„“<]*?“)';
         const regExOpen = `\\[(${bbRegExString})( ${parameterRegEx})*\\]`;
         const regExClose = `\\[\/(${bbRegExString})\\]`;
         const listOpen = text.matchAll(new RegExp(regExOpen, 'gi'));
