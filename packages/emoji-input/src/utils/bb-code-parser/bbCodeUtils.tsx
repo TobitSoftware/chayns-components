@@ -84,6 +84,7 @@ export const BbCodes = [
 ];
 
 export type Param = {
+    togetherWithSpace: string;
     together: string;
     param: string;
     value: string;

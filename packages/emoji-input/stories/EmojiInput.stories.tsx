@@ -16,6 +16,7 @@ const Template: ComponentStory<typeof EmojiInput> = (args) => <EmojiInput {...ar
 export const NormalDesign = Template.bind({});
 
 NormalDesign.args = {
+    value: 'A[b a="b"]B[/b]',
     design: DesignMode.Normal,
 };
 export const BorderDesign = Template.bind({});
@@ -28,7 +29,9 @@ const TestTemplate: ComponentStory<typeof EmojiInput> = (args) => (
     <>
         <EmojiInput
             {...args}
-            value={'Test Text [b style="color:red" a="b" b="c"]BOLT[/b][link]LINK[/link]'}
+            value={
+                'Test&nbsp;Test Text [b style="color:red" a="b"&nbsp;b="c"]BOLT[/b][link]LINK[/link]'
+            }
             design={DesignMode.Normal}
         />
         <br />

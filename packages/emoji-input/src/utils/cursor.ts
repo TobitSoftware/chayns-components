@@ -33,12 +33,11 @@ export const insertHTMLTagAtCursor = (tag: string) => {
         sel.addRange(range);
     }
 };
-export const setCurrentCursorPosition = (selection: Selection, element: HTMLDivElement | null) => {
-    if (element && selection.end) {
-        console.log('set Cursor Pos: ', selection);
+export const setCursorPosition = (selection: Selection, element: HTMLDivElement | null) => {
+    if (element && selection) {
         const sel = window.getSelection();
 
-        let range = createRange(element, { count: selection.start });
+        let range = createRange(element, selection);
 
         if (range && sel) {
             range.collapse(false);
@@ -51,56 +50,64 @@ export const setCurrentCursorPosition = (selection: Selection, element: HTMLDivE
     }
 };
 
-export const setCursorToEnd = (target: HTMLDivElement | null) => {
-    if (target) {
-        const range = document.createRange();
-        const sel = window.getSelection();
-        if (sel && range) {
-            range.selectNode(target);
-            range.collapse(false);
-            sel.removeAllRanges();
-            sel.addRange(range);
-            target.focus();
-            range.detach();
-
-            target.scrollTop = target.scrollHeight;
-        }
-    }
-};
-
-type charCount = {
-    count: number;
-};
-
-const createRange = (node: any, char: charCount, range: any | null = null) => {
+const createRange = (node: any, selection: Selection, range: any | null = null) => {
     if (!range) {
         range = document.createRange();
-        range.selectNode(node);
-        range.setStart(node, 0);
     }
 
-    if (char.count === 0) {
-        range.setEnd(node, char.count);
-    } else if (node && char.count > 0) {
-        if (node.nodeType === Node.TEXT_NODE) {
-        } else if (node.nodeType === Node.TEXT_NODE) {
-            if (node.textContent && node.textContent.length < char.count) {
-                char.count -= node.textContent.length;
-            } else {
-                range.setEnd(node, char.count);
-                char.count = 0;
-            }
+    if (node.nodeName == 'BR') {
+        if (selection.start > 0) {
+            selection.start--;
         } else {
-            for (let lp = 0; lp < node.childNodes.length; lp++) {
-                range = createRange(node.childNodes[lp], char, range);
-
-                if (char.count === 0) {
-                    break;
-                }
+            range.setStartBefore(node);
+            selection.start = 0;
+        }
+        if (selection.end > 1) {
+            selection.end--;
+        } else {
+            range.setEndAfter(node);
+            selection.end = 0;
+        }
+    } else if (node.nodeName == '#text') {
+        if (selection.start > node.nodeValue.length) {
+            selection.start -= node.nodeValue.length;
+        } else {
+            range.setStart(node, selection.start);
+            selection.start = 0;
+        }
+        if (selection.end > node.nodeValue.length) {
+            selection.end -= node.nodeValue.length;
+        } else {
+            range.setEnd(node, selection.end);
+            selection.end = 0;
+        }
+    } else if (node.childNodes != null) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            const childNode = node.childNodes[i];
+            range = createRange(childNode, selection, range);
+            if (selection.start === 0 && selection.end === 0) {
+                break;
             }
         }
     }
     return range;
+};
+
+export const setCursorToEnd = (node: HTMLDivElement | null) => {
+    if (node?.childNodes?.length) {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        if (sel && range) {
+            const lastNode = node.childNodes[node.childNodes.length - 1] as Node;
+            range.selectNode(lastNode);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+
+            node.focus();
+            node.scrollTop = node.scrollHeight;
+        }
+    }
 };
 
 export type Selection = {
@@ -108,7 +115,7 @@ export type Selection = {
     end: number;
 };
 
-export const getTextSelection = function (element: HTMLDivElement | null): Selection | null {
+export const getCursorPosition = (element: HTMLDivElement | null): Selection | null => {
     if (element) {
         const selection = window.getSelection();
 
@@ -124,7 +131,7 @@ export const getTextSelection = function (element: HTMLDivElement | null): Selec
     return null;
 };
 
-const getTextLength = function (element: HTMLDivElement, node: any, offset: number): number {
+const getTextLength = (element: HTMLDivElement, node: any, offset: number): number => {
     let textLength = 0;
 
     if (node.nodeName == '#text') {
@@ -135,7 +142,6 @@ const getTextLength = function (element: HTMLDivElement, node: any, offset: numb
         }
 
     if (node != element) textLength += getTextLength(element, node.parentNode, getNodeOffset(node));
-
     return textLength;
 };
 
@@ -147,7 +153,6 @@ const getNodeTextLength = (node: any): number => {
     else if (node.childNodes != null)
         for (let i = 0; i < node.childNodes.length; i++)
             textLength += getNodeTextLength(node.childNodes[i]);
-
     return textLength;
 };
 

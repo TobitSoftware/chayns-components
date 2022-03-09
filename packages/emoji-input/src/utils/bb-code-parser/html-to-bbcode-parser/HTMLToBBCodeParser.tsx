@@ -1,7 +1,6 @@
 import { BbCodes } from '../bbCodeUtils';
 
 const bbCodeHTMLToText = (text: string): string => {
-    console.log('text: ', text);
     let tagRegExString = '';
     let bbRegExString = '';
     BbCodes.forEach((c, i) => {
@@ -12,18 +11,17 @@ const bbCodeHTMLToText = (text: string): string => {
             bbRegExString += '|';
         }
     });
-    const invalidParamRegExStart = `<span class=["„']param["“'][^>]*>`;
+    const invalidParamRegExStart = `<span(&nbsp;| )class=["„']param["“'][^>]*>`;
     const invalidParamRegExEnd = `<\\/span>`;
     const invalidParamRegEx = `${invalidParamRegExStart}([^<]|<br>)*${invalidParamRegExEnd}`;
 
-    let regExOpen = `<span( [^>]*)* class=["„'](open)["“'][^>]*>((${invalidParamRegEx}|[^<]*|<br>)*)<\\/span>(<(?:${tagRegExString})( [^>]*)*>)?`;
-    let regExClose = `(<\\/(?:${tagRegExString})>)?<span( [^>]*)* class=["„'](close)["“'][^>]*>(([^<]|<br>)*)<\\/span>`;
+    let regExOpen = `<span( [^>]*)* class=["„'](open)["“'][^>]*>((${invalidParamRegEx}|[^<]*|<br>)*)<\\/span>(<(?:${tagRegExString})((&nbsp;| )[^>]*)*>)?`;
+    let regExClose = `(<\\/(?:${tagRegExString})>)?<span((&nbsp;| )[^>]*)*(&nbsp;| )class=["„'](close)["“'][^>]*>(([^<]|<br>)*)<\\/span>`;
     let regExOpenAndClose = `${regExOpen}|${regExClose}`;
 
     const listOpenAndClose = text.matchAll(new RegExp(regExOpenAndClose, 'gi'));
 
     const openAndClosedArray = [...listOpenAndClose];
-    console.log('openAndClosedArray: ', openAndClosedArray);
 
     for (let index = 0; index < openAndClosedArray.length; index++) {
         const i = openAndClosedArray[index];
@@ -34,8 +32,8 @@ const bbCodeHTMLToText = (text: string): string => {
             replacement = replacement
                 .replace(new RegExp(invalidParamRegExStart, 'gi'), '')
                 .replace(new RegExp(invalidParamRegExEnd, 'gi'), '');
-        } else if (i[10] === 'close') {
-            replacement = i[11];
+        } else if (i[14] === 'close') {
+            replacement = i[15];
         }
         text = text.replace(value, replacement);
     }

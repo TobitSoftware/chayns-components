@@ -22,16 +22,13 @@ export default class BBCodeToHTMLParser {
         const validTags = this.matchTags(combinedList);
 
         let newText = text;
-        console.log(combinedList, validTags);
         combinedList.forEach((c, ci) => {
             const validEntry = validTags.find((vt) => vt.open === ci || vt.close === ci);
             if (validEntry) {
                 const a = newText;
-                console.log('replaceCombined', a, c);
                 newText = this.replaceBbItemWithHTML(newText, c);
             }
         });
-
         return newText;
     };
 
@@ -43,19 +40,16 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const parameterRegEx = '[^< ]*?=("[^"<]*?"|\'[^\'<]*?\'|„[^„“<]*?“)';
-        const regExOpen = `\\[(${bbRegExString})( ${parameterRegEx})*\\]`;
+        const parameterRegEx = '(&nbsp| )[^< ]*?=("[^"<]*?"|\'[^\'<]*?\'|„[^„“<]*?“)';
+        const regExOpen = `\\[(${bbRegExString})(${parameterRegEx})*\\]`;
         const regExClose = `\\[\/(${bbRegExString})\\]`;
         const listOpen = [...text.matchAll(new RegExp(regExOpen, 'gi'))];
         const listClose = [...text.matchAll(new RegExp(regExClose, 'gi'))];
-        console.log('openList', listOpen);
+
         let combinedList = [
             ...listOpen.map((i) => {
                 const value: string = i[0];
-                const valueBb: string | undefined = value
-                    ?.substring(1, value?.length - 1)
-                    .trim()
-                    .split(' ')[0];
+                const valueBb: string | undefined = i[1];
                 const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb?.toLowerCase());
                 if (!BbCodeEntry || value === null) {
                     return null;
@@ -70,12 +64,14 @@ export default class BBCodeToHTMLParser {
                     bb: BbCodeEntry.bb,
                     lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
                     params: [...params].map((p) => {
-                        const param = p[0]?.split('=');
+                        const together = p[0]?.replace(/&nbsp;/gi, '').replace(/ /gi, '');
+                        const param = together?.split('=');
                         if (!param) {
                             return null;
                         }
                         return {
-                            together: p[0],
+                            together,
+                            togetherWithSpace: p[0],
                             param: param[0],
                             value: param[1],
                         } as Param;
@@ -245,24 +241,24 @@ export default class BBCodeToHTMLParser {
 
     private replaceBbItemWithHTML = (text: string, item: CombinedItem): string => {
         const tagStartIndex = item.index + this.totalLengthDifference;
-        let paramLength = 0;
+        let initialParamLength = 0;
         let validParamString = '';
-        let paramString = '';
+        let initialParamString = '';
         let paramStringHTML = '';
         item.params?.forEach((p: Param) => {
-            paramLength += p.together.length + 1; // +1 => space which was cut away via .split(' ') in getCombinedTagList
-            paramString += ` ${p.together}`;
+            initialParamLength += p.togetherWithSpace.length;
+            initialParamString += p.togetherWithSpace;
             const validParam = BbCodes.find((bb) => bb.params.find((pbb) => pbb === p.param));
             if (validParam) {
                 validParamString += ` ${p.together}`;
-                paramStringHTML += ` ${p.together}`; // space added here
+                paramStringHTML += ` ${p.together}`;
             } else {
                 paramStringHTML += ` <span class="param" style="color:red">${p.together}</span>`; // space added here
             }
         });
         const tagEndIndex =
             tagStartIndex +
-            paramLength +
+            initialParamLength +
             ((item.tag?.length as number) - 1 - (item.lengthDifferenceBBToTag as number)) +
             (item.open ? 2 : 3);
         // b => [b] oder [/b] => length 3 / 4 (+2 / +3)
@@ -281,7 +277,7 @@ export default class BBCodeToHTMLParser {
                     break;
             }
             replacementString = `${bBReplacement}<${item.tag}${validParamString}>`;
-            originalTag = `[${item.tag}${paramString}]`;
+            originalTag = `[${item.tag}${initialParamString}]`;
         } else {
             const shownBbTag = `<span class="close" ${this.bbTagParams}>[/${item.bb}]</span>`;
             let bBReplacement;

@@ -26,7 +26,7 @@ export default class BBCodeParser {
     bbCodeTextToHTML = (text: string): string => {
         return this._BBToHTMLParser.bbCodeTextToHTML(text);
     };
-    bbCodeHTMLToText = (html: string): string | null => {
+    bbCodeHTMLToText = (html: string): string => {
         if (this.bbConvertType === BBConvertType.showBBTags) {
             return bbCodeHTMLToText(html);
         }

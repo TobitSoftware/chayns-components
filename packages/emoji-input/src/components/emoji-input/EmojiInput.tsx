@@ -14,13 +14,13 @@ import BBCodeParser, {
     InvalidTagPos,
 } from '../../utils/bb-code-parser/BBCodeParser';
 import {
-    getTextSelection,
+    getCursorPosition,
     insertHTMLTagAtCursor,
-    setCurrentCursorPosition,
+    setCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
 import { isCursorMovement, isEnterKey } from '../../utils/key';
-import { addBrToText, formatInputHTML, formatInputText } from '../../utils/utils';
+import { addBrTag, removeBrTag, replaceNbsp, replaceSpace } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
@@ -127,11 +127,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     useLayoutEffect(() => {
         if (inputRef.current) {
-            const html = formatInputHTML(getInputValue());
+            const html = getInputValue();
             const oldValueBB = bbCodeParser.bbCodeHTMLToText(html);
-            if (oldValueBB !== value) {
-                value = formatInputText(addBrToText(value));
-                const newValueHTML = bbCodeParser.bbCodeTextToHTML(value);
+            const tempValue = replaceSpace(addBrTag(value));
+            if (oldValueBB !== tempValue) {
+                const newValueHTML = bbCodeParser.bbCodeTextToHTML(tempValue);
                 setInputValue(newValueHTML);
                 forceRender();
                 console.log(
@@ -145,31 +145,23 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (event) => {
-            // console.log(getInputValue());
-
-            const cursorSelection = getTextSelection(inputRef.current);
-            const htmlText = formatInputHTML(getInputValue());
+            const cursorSelection = getCursorPosition(inputRef.current);
             console.time('bbCodeHTMLToText');
-            let bbText = bbCodeParser.bbCodeHTMLToText(htmlText) as string;
+            let bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
             console.timeEnd('bbCodeHTMLToText');
 
-            bbText = formatInputText(bbText);
             console.time('bbCodeTextToHTML');
-            const newHtml = bbCodeParser.bbCodeTextToHTML(addBrToText(bbText));
+            const newHtml = bbCodeParser.bbCodeTextToHTML(bbText);
             console.timeEnd('bbCodeTextToHTML');
+
             setInputValue(newHtml);
             if (cursorSelection) {
-                setCurrentCursorPosition(cursorSelection, inputRef.current);
+                setCursorPosition(cursorSelection, inputRef.current);
             }
 
-            /*
-            console.log(bbText);
-            console.log(addBrToText(bbText));
-            console.log(newHtml);
-            */
-
             if (typeof onInput === 'function') {
-                onInput(bbText, event);
+                console.log('onInput', replaceNbsp(removeBrTag(bbText)));
+                onInput(replaceNbsp(removeBrTag(bbText)), event);
             }
         },
         [onInput]
@@ -254,7 +246,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
         }
     }, []);
 
-    const getInputValue = useCallback(() => inputRef.current?.innerHTML || '', [inputRef]);
+    const getInputValue = useCallback(() => {
+        return inputRef.current?.innerHTML as string;
+    }, [inputRef]);
+
     const setInputValue = useCallback(
         (html: string) => {
             if (inputRef.current) {
