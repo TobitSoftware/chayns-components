@@ -498,6 +498,11 @@ TextString.languages = [
         value: 'Pl',
         code: 'pl',
     },
+    {
+        name: 'Ukrainisch',
+        value: 'Uk',
+        code: 'uk',
+    }
 ];
 
 TextString.propTypes = {
