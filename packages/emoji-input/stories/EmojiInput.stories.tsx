@@ -16,7 +16,7 @@ const Template: ComponentStory<typeof EmojiInput> = (args) => <EmojiInput {...ar
 export const NormalDesign = Template.bind({});
 
 NormalDesign.args = {
-    value: 'A[b a="b"]B[/b]',
+    value: 'A[u style="color:blue" test="test"]AAAA[b]AA[/b]AAA[/u]',
     design: DesignMode.Normal,
 };
 export const BorderDesign = Template.bind({});
@@ -30,7 +30,7 @@ const TestTemplate: ComponentStory<typeof EmojiInput> = (args) => (
         <EmojiInput
             {...args}
             value={
-                'Test&nbsp;Test Text [b style="color:red" a="b"&nbsp;b="c"]BOLT[/b][link]LINK[/link]'
+                'Test&nbsp;Test Text [b style="color:red" a="b"&nbsp;test="test"]BOLT[/b][link]LINK[/link]'
             }
             design={DesignMode.Normal}
         />

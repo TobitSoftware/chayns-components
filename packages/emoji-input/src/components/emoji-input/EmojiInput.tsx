@@ -150,8 +150,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
             let bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
             console.timeEnd('bbCodeHTMLToText');
 
+            console.log(bbText);
+
             console.time('bbCodeTextToHTML');
-            const newHtml = bbCodeParser.bbCodeTextToHTML(bbText);
+            const newHtml = bbCodeParser.bbCodeTextToHTML(replaceSpace(bbText));
             console.timeEnd('bbCodeTextToHTML');
 
             setInputValue(newHtml);

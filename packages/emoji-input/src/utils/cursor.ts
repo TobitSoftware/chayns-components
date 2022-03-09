@@ -4,30 +4,32 @@ export const insertHTMLTagAtCursor = (tag: string) => {
     const sel = window.getSelection();
     if (sel) {
         const range = sel.getRangeAt(0);
-        console.log('sel: ', sel);
+        console.log('sel,range: ', sel);
         const newElement = document.createElement(tag);
 
-        const pNode = sel.focusNode?.parentNode;
-        if (pNode && pNode['tagName'] === 'SPAN') {
-            console.log('in HTML TAG');
-            // ToDo && Cursor at End of Node
-            if (pNode['className'] === 'open') {
-                range.setStart(pNode?.nextSibling as Node, 0);
-            } else if (pNode['className'] === 'close' || pNode['className'] === 'param') {
-                range.selectNode(pNode);
-                range.collapse(false);
+        const node = sel.focusNode;
+        const pNode = node?.parentNode;
+        if (range.startContainer === range.endContainer && range.startOffset === range.endOffset) {
+            if (pNode && pNode['tagName'] === 'SPAN') {
+                const currentElemLength = getNodeTextLength(pNode);
+                const cursorSelection = getCursorPosition(pNode as HTMLDivElement);
+
+                if (cursorSelection?.end === currentElemLength) {
+                    if (pNode['className'] === 'open') {
+                        range.setStart(pNode?.nextSibling as Node, 0); // after z.B <strong>
+                    } else if (pNode['className'] === 'close' || pNode['className'] === 'param') {
+                        range.selectNode(pNode);
+                        range.collapse(false);
+                    }
+                }
+                range.insertNode(newElement);
+            } else {
+                range.insertNode(newElement);
+                range.setStartBefore(newElement);
             }
-            range.insertNode(newElement);
         } else {
-            console.log('outside');
-            range.insertNode(newElement);
-            range.setStartBefore(newElement);
-            //range.deleteContents();
+            // ToDo, marked => delete marked => replace with br
         }
-
-        // range.insertNode(newElement);
-
-        //range.setStartAfter(newElement);
 
         sel.removeAllRanges();
         sel.addRange(range);
