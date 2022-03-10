@@ -1,40 +1,64 @@
 // https://stackoverflow.com/questions/6249095/how-to-set-the-caret-cursor-position-in-a-contenteditable-element-div
 
-export const insertHTMLTagAtCursor = (tag: string) => {
-    const sel = window.getSelection();
-    if (sel) {
-        const range = sel.getRangeAt(0);
-        console.log('sel,range: ', sel);
-        const newElement = document.createElement(tag);
+import { replaceAt, replaceNbsp, replaceSpace } from './utils';
 
-        const node = sel.focusNode;
-        const pNode = node?.parentNode;
-        if (range.startContainer === range.endContainer && range.startOffset === range.endOffset) {
-            if (pNode && pNode['tagName'] === 'SPAN') {
-                const currentElemLength = getNodeTextLength(pNode);
-                const cursorSelection = getCursorPosition(pNode as HTMLDivElement);
+export const replaceSelectionWithHTML = (
+    bbText: string,
+    html: string,
+    selection: Selection
+): string => {
+    // change selection in reference
+    let newBBText = replaceNbsp(bbText);
 
-                if (cursorSelection?.end === currentElemLength) {
-                    if (pNode['className'] === 'open') {
-                        range.setStart(pNode?.nextSibling as Node, 0); // after z.B <strong>
-                    } else if (pNode['className'] === 'close' || pNode['className'] === 'param') {
-                        range.selectNode(pNode);
-                        range.collapse(false);
-                    }
-                }
-                range.insertNode(newElement);
-            } else {
-                range.insertNode(newElement);
-                range.setStartBefore(newElement);
-            }
-        } else {
-            // ToDo, marked => delete marked => replace with br
-        }
+    const tempElem = document.createElement('div');
+    tempElem.innerHTML = newBBText;
 
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
+    const replaceIndexStart = getTextWithTagLength(tempElem, { count: selection.start });
+    const replaceIndexEnd = getTextWithTagLength(tempElem, { count: selection.end });
+
+    const replacedText = newBBText.substring(replaceIndexStart, replaceIndexEnd);
+
+    newBBText = replaceAt(newBBText, replaceIndexStart, replaceIndexEnd - 1, html);
+    newBBText = replaceSpace(newBBText);
+
+    tempElem.innerHTML = html;
+    const htmlTextLength = getNodeTextLength(tempElem);
+    const newCursorPos = selection.end + htmlTextLength - replacedText.length;
+    selection.start = newCursorPos;
+    selection.end = newCursorPos;
+
+    return newBBText;
 };
+
+type RemainingLength = {
+    count: number;
+};
+
+const getTextWithTagLength = (node: any, remainingLength: RemainingLength): number => {
+    // change remainingLength in reference
+    let length = 0;
+    if (node.nodeName == '#text') {
+        if (node.nodeValue.length > remainingLength.count) {
+            length += remainingLength.count;
+            remainingLength.count = 0;
+            return length;
+        }
+        length += node.nodeValue.length;
+        remainingLength.count -= node.nodeValue.length;
+    } else if (node.childNodes != null && node.childNodes.length > 0) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            length += getTextWithTagLength(node.childNodes[i], remainingLength);
+            if (remainingLength.count === 0) {
+                return length;
+            }
+        }
+    } else {
+        length += node.outerHTML.length;
+        remainingLength.count--;
+    } // any node without text content
+    return length;
+};
+
 export const setCursorPosition = (selection: Selection, element: HTMLDivElement | null) => {
     if (element && selection) {
         const sel = window.getSelection();
@@ -57,20 +81,7 @@ const createRange = (node: any, selection: Selection, range: any | null = null) 
         range = document.createRange();
     }
 
-    if (node.nodeName == 'BR') {
-        if (selection.start > 0) {
-            selection.start--;
-        } else {
-            range.setStartBefore(node);
-            selection.start = 0;
-        }
-        if (selection.end > 1) {
-            selection.end--;
-        } else {
-            range.setEndAfter(node);
-            selection.end = 0;
-        }
-    } else if (node.nodeName == '#text') {
+    if (node.nodeName == '#text') {
         if (selection.start > node.nodeValue.length) {
             selection.start -= node.nodeValue.length;
         } else {
@@ -83,13 +94,26 @@ const createRange = (node: any, selection: Selection, range: any | null = null) 
             range.setEnd(node, selection.end);
             selection.end = 0;
         }
-    } else if (node.childNodes != null) {
+    } else if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++) {
             const childNode = node.childNodes[i];
             range = createRange(childNode, selection, range);
             if (selection.start === 0 && selection.end === 0) {
                 break;
             }
+        }
+    } else {
+        if (selection.start > 0) {
+            selection.start--;
+        } else {
+            range.setStartBefore(node);
+            selection.start = 0;
+        }
+        if (selection.end > 1) {
+            selection.end--;
+        } else {
+            range.setEndAfter(node);
+            selection.end = 0;
         }
     }
     return range;
@@ -150,11 +174,11 @@ const getTextLength = (element: HTMLDivElement, node: any, offset: number): numb
 const getNodeTextLength = (node: any): number => {
     let textLength = 0;
 
-    if (node.nodeName == 'BR') textLength = 1;
-    else if (node.nodeName == '#text') textLength = node.nodeValue.length;
-    else if (node.childNodes != null)
+    if (node.nodeName == '#text') textLength = node.nodeValue.length;
+    else if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++)
             textLength += getNodeTextLength(node.childNodes[i]);
+    } else textLength++; // any node without text content
     return textLength;
 };
 

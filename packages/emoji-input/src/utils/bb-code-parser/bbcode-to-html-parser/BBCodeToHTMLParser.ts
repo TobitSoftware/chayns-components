@@ -332,7 +332,7 @@ export default class BBCodeToHTMLParser {
         this.totalLengthDifference +=
             (item.lengthDifferenceBBToTag as number) +
             (replacementString.length - originalTag.length);
-        console.log(text, tagStartIndex, tagEndIndex, replacementString);
+
         return replaceAt(text, tagStartIndex, tagEndIndex, replacementString);
     };
 }
