@@ -41,6 +41,10 @@ export type EmojiInputProps = {
      */
     isDisabled: boolean;
     /**
+     * max Height for Scrollbar, default 300px
+     */
+    maxHeight?: string;
+    /**
      * on Blur
      */
     onBlur?: (event?: MouseEvent) => void;

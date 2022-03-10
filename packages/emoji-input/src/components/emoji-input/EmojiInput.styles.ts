@@ -33,7 +33,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
 `;
 
 type StyledDivProps = WithTheme<
-    Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton'>
+    Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton' | 'maxHeight'>
 > & {
     onPaste: (event: ClipboardEvent) => void;
 };
@@ -45,6 +45,23 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto;
+    max-height: ${({ maxHeight }) => maxHeight || '300px'};
+    scrollbar-color: #80808080 transparent;
+    scrollbar-width: thin;
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        cursor: pointer;
+    }
+
+    ::-webkit-scrollbar-button {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+    }
     word-break: break-word;
 
     ${({ design, theme, isDisabled, showEmojiButton }: StyledDivProps) => {
