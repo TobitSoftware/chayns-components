@@ -19,7 +19,8 @@ import {
     setCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
-import { isEnterKey } from '../../utils/key';
+import { isCtrlY, isCtrlZ, isEnterKey } from '../../utils/key';
+import UndoHandler from '../../utils/undoHandler';
 import { addBrTag, removeBrTag, replaceNbsp, replaceSpace } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
 import { DesignMode } from './constants/design';
@@ -98,6 +99,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
 }) => {
     console.log('render');
 
+    let lastKeyCtrlZY = false;
+
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -109,6 +112,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
         () => new BBCodeParser(BBConvertType.showBBTags, undefined, InvalidTagPos.outer),
         []
     );
+    const undoHandler = useMemo(() => new UndoHandler(), []);
     const bbCodeParser2 = useMemo(
         () =>
             new BBCodeParser(
@@ -120,6 +124,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     useEffect(() => {
+        undoHandler.addInputHistory({ bbValue: value, selection: null });
+
         buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
         if (!isDisabled) {
             buttonRef.current?.addEventListener('mousedown', handlePreventLoseInputFocus);
@@ -149,26 +155,35 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (event, addHTML: string | null = null) => {
-            console.time('handleInput');
-            const cursorSelection = getCursorPosition(inputRef.current);
-            let bbText = '';
-            if (cursorSelection) {
-                bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
+            if (!lastKeyCtrlZY) {
+                console.time('handleInput');
+                let cursorSelection = getCursorPosition(inputRef.current);
+                let bbText = '';
+                if (cursorSelection) {
+                    bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
 
-                if (addHTML) {
-                    bbText = replaceSelectionWithHTML(bbText, addHTML, cursorSelection);
+                    if (addHTML) {
+                        const bbTextWithSelection = replaceSelectionWithHTML(
+                            bbText,
+                            addHTML,
+                            cursorSelection
+                        );
+                        bbText = bbTextWithSelection.bb;
+                        cursorSelection = bbTextWithSelection.sel;
+                    }
+                    undoHandler.addInputHistory({ bbValue: bbText, selection: cursorSelection });
+
+                    const newHtml = bbCodeParser.bbCodeTextToHTML(replaceSpace(bbText));
+
+                    setInputValue(newHtml);
+                    setCursorPosition(cursorSelection, inputRef.current);
                 }
+                console.timeEnd('handleInput');
 
-                const newHtml = bbCodeParser.bbCodeTextToHTML(replaceSpace(bbText));
-
-                setInputValue(newHtml);
-                setCursorPosition(cursorSelection, inputRef.current);
-            }
-            console.timeEnd('handleInput');
-
-            if (typeof onInput === 'function') {
-                console.log('onInput', replaceNbsp(removeBrTag(bbText)));
-                onInput(replaceNbsp(removeBrTag(bbText)), event);
+                if (typeof onInput === 'function') {
+                    console.log('onInput', replaceNbsp(removeBrTag(bbText)));
+                    onInput(replaceNbsp(removeBrTag(bbText)), event);
+                }
             }
         },
         [onInput]
@@ -184,9 +199,30 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     const handleKeyDown = useCallback((event) => {
+        lastKeyCtrlZY = false;
+        const ctrlZ = isCtrlZ(event);
+        const ctrlY = isCtrlY(event);
         if (isEnterKey(event)) {
             event.preventDefault();
             handleInput(event, '<br>');
+        } else if (ctrlZ || ctrlY) {
+            lastKeyCtrlZY = true;
+            let newValue = null;
+            if (ctrlZ) {
+                newValue = undoHandler.undoValue();
+            }
+            if (ctrlY) {
+                newValue = undoHandler.redoValue();
+            }
+            if (newValue) {
+                const newHtml = bbCodeParser.bbCodeTextToHTML(replaceSpace(newValue.bbValue));
+                setInputValue(newHtml);
+                if (newValue.selection) {
+                    setCursorPosition(newValue.selection, inputRef.current);
+                } else {
+                    setCursorToEnd(inputRef.current);
+                }
+            }
         }
     }, []);
 

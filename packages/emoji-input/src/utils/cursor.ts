@@ -2,11 +2,16 @@
 
 import { replaceAt, replaceNbsp, replaceSpace } from './utils';
 
+type BbTextWithSelection = {
+    bb: string;
+    sel: Selection;
+};
+
 export const replaceSelectionWithHTML = (
     bbText: string,
     html: string,
     selection: Selection
-): string => {
+): BbTextWithSelection => {
     // change selection in reference
     let newBBText = replaceNbsp(bbText);
 
@@ -24,10 +29,15 @@ export const replaceSelectionWithHTML = (
     tempElem.innerHTML = html;
     const htmlTextLength = getNodeTextLength(tempElem);
     const newCursorPos = selection.end + htmlTextLength - replacedText.length;
-    selection.start = newCursorPos;
-    selection.end = newCursorPos;
+    const newSelection = {
+        start: newCursorPos,
+        end: newCursorPos,
+    };
 
-    return newBBText;
+    return {
+        bb: newBBText,
+        sel: newSelection,
+    };
 };
 
 type RemainingLength = {
@@ -69,9 +79,6 @@ export const setCursorPosition = (selection: Selection, element: HTMLDivElement 
             range.collapse(false);
             sel.removeAllRanges();
             sel.addRange(range);
-
-            //  scroll to cursor if scrollbar ... ???
-            //  element.scrollTop = element.scrollHeight;
         }
     }
 };
@@ -143,7 +150,7 @@ export type Selection = {
 
 export const getCursorPosition = (element: HTMLDivElement | null): Selection | null => {
     if (element) {
-        const selection = window.getSelection();
+        let selection = window.getSelection();
 
         if (selection != null && selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
