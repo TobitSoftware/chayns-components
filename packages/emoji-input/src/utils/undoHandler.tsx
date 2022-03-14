@@ -10,21 +10,26 @@ export default class UndoHandler {
     private currentIndex: number = -1;
 
     addInputHistory = (input: BbValueWithSelection) => {
-        this.inputStack = this.inputStack.splice(0, this.currentIndex + 1); // remove values after currentIndex
+        if (this.currentIndex < this.inputStack.length - 1 && this.currentIndex > -1) {
+            this.inputStack = this.inputStack.splice(0, this.currentIndex + 1); // remove values after currentIndex
+        }
         this.inputStack.push({
             bbValue: input.bbValue,
             selection: !input.selection ? null : { ...input.selection },
         });
-        this.currentIndex++;
-        if (this.inputStack.length > 100000) {
+        this.currentIndex = this.inputStack.length - 1;
+        if (this.inputStack.length > 10000) {
             // Max Steps saved
             this.inputStack.shift();
             this.currentIndex--;
         }
-        console.log('addInput', this.inputStack, this.currentIndex);
     };
-    undoValue = (): BbValueWithSelection | null => {
+    undoValue = (currentInput: BbValueWithSelection): BbValueWithSelection | null => {
         if (this.currentIndex > 0) {
+            const oldInput = this.inputStack[this.currentIndex];
+            if (oldInput && currentInput.bbValue !== oldInput.bbValue) {
+                this.addInputHistory(currentInput);
+            }
             this.currentIndex--;
             return this.inputStack[this.currentIndex] || null;
         }

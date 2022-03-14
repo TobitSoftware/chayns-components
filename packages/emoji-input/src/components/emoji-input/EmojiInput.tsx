@@ -19,7 +19,7 @@ import {
     setCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
-import { isCtrlY, isCtrlZ, isEnterKey } from '../../utils/key';
+import { isCtrlV, isCtrlY, isCtrlZ, isEnterKey, isSpaceKey } from '../../utils/key';
 import UndoHandler from '../../utils/undoHandler';
 import { addBrTag, removeBrTag, replaceNbsp, replaceSpace } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
@@ -100,6 +100,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     console.log('--------------------------------------- render');
 
     let lastKeyCtrlZY = false;
+    let lastKeyCtrlVOrSpace: boolean | null = false;
 
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
@@ -161,7 +162,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 let bbText = '';
                 if (cursorSelection) {
                     bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
-
+                    bbText = replaceSpace(bbText);
                     if (addHTML) {
                         const bbTextWithSelection = replaceSelectionWithHTML(
                             bbText,
@@ -171,7 +172,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         bbText = bbTextWithSelection.bb;
                         cursorSelection = bbTextWithSelection.sel;
                     }
-                    undoHandler.addInputHistory({ bbValue: bbText, selection: cursorSelection });
+                    if (addHTML || lastKeyCtrlVOrSpace) {
+                        undoHandler.addInputHistory({
+                            bbValue: bbText,
+                            selection: cursorSelection,
+                        });
+                    }
                     console.log('bbText: ', bbText);
 
                     const newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
@@ -205,14 +211,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
         lastKeyCtrlZY = false;
         const ctrlZ = isCtrlZ(event);
         const ctrlY = isCtrlY(event);
+        const prevLastKeyCtrlVOrSpace = lastKeyCtrlVOrSpace;
+        lastKeyCtrlVOrSpace = false;
         if (isEnterKey(event)) {
             event.preventDefault();
             handleInput(event, '<br>');
         } else if (ctrlZ || ctrlY) {
+            event.preventDefault();
             lastKeyCtrlZY = true;
             let newValue = null;
             if (ctrlZ) {
-                newValue = undoHandler.undoValue();
+                newValue = undoHandler.undoValue({
+                    bbValue: bbCodeParser.bbCodeHTMLToText(getInputValue()),
+                    selection: getCursorPosition(inputRef.current),
+                });
             }
             if (ctrlY) {
                 newValue = undoHandler.redoValue();
@@ -225,6 +237,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 } else {
                     setCursorToEnd(inputRef.current);
                 }
+            }
+        } else if (isSpaceKey(event) || isCtrlV(event)) {
+            if (prevLastKeyCtrlVOrSpace === false) {
+                lastKeyCtrlVOrSpace = true;
+            } else {
+                lastKeyCtrlVOrSpace = null;
             }
         }
     }, []);
