@@ -31,14 +31,26 @@ export default class UndoHandler {
                 this.addInputHistory(currentInput);
             }
             this.currentIndex--;
-            return this.inputStack[this.currentIndex] || null;
+            const currentItem = this.inputStack[this.currentIndex];
+            return currentItem
+                ? ({
+                      bbValue: currentItem.bbValue,
+                      selection: { ...currentItem.selection },
+                  } as BbValueWithSelection)
+                : null;
         }
         return null;
     };
     redoValue = (): BbValueWithSelection | null => {
         if (this.currentIndex > -1 && this.currentIndex < this.inputStack.length - 1) {
             this.currentIndex++;
-            return this.inputStack[this.currentIndex] || null;
+            const currentItem = this.inputStack[this.currentIndex];
+            return currentItem
+                ? ({
+                      bbValue: currentItem.bbValue,
+                      selection: { ...currentItem.selection },
+                  } as BbValueWithSelection)
+                : null;
         }
         return null;
     };
