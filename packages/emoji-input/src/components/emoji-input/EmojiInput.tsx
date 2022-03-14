@@ -97,7 +97,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     showEmojiButton = true,
     value = '',
 }) => {
-    console.log('render');
+    console.log('--------------------------------------- render');
 
     let lastKeyCtrlZY = false;
 
@@ -124,7 +124,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     useEffect(() => {
-        undoHandler.addInputHistory({ bbValue: value, selection: null });
+        undoHandler.addInputHistory({ bbValue: replaceSpace(addBrTag(value)), selection: null });
 
         buttonRef.current?.removeEventListener('mousedown', handlePreventLoseInputFocus);
         if (!isDisabled) {
@@ -136,7 +136,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, [isDisabled]);
 
     useLayoutEffect(() => {
-        if (inputRef.current) {
+        if (inputRef.current && value) {
             const html = getInputValue();
             const oldValueBB = bbCodeParser.bbCodeHTMLToText(html);
             const tempValue = replaceSpace(addBrTag(value));
@@ -156,7 +156,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handleInput = useCallback(
         (event, addHTML: string | null = null) => {
             if (!lastKeyCtrlZY) {
-                console.time('handleInput');
+                // console.time('handleInput');
                 let cursorSelection = getCursorPosition(inputRef.current);
                 let bbText = '';
                 if (cursorSelection) {
@@ -172,18 +172,21 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         cursorSelection = bbTextWithSelection.sel;
                     }
                     undoHandler.addInputHistory({ bbValue: bbText, selection: cursorSelection });
+                    console.log('bbText: ', bbText);
 
-                    const newHtml = bbCodeParser.bbCodeTextToHTML(replaceSpace(bbText));
+                    const newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
 
                     setInputValue(newHtml);
                     setCursorPosition(cursorSelection, inputRef.current);
                 }
-                console.timeEnd('handleInput');
+                // console.timeEnd('handleInput');
 
                 if (typeof onInput === 'function') {
                     console.log('onInput', replaceNbsp(removeBrTag(bbText)));
-                    onInput(replaceNbsp(removeBrTag(bbText)), event);
+                    // onInput(replaceNbsp(removeBrTag(bbText)), event);
                 }
+
+                console.log('-------------------------------------------------------');
             }
         },
         [onInput]

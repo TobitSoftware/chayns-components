@@ -72,8 +72,7 @@ const getTextWithTagLength = (node: any, remainingLength: RemainingLength): numb
 export const setCursorPosition = (selection: Selection, element: HTMLDivElement | null) => {
     if (element && selection) {
         const sel = window.getSelection();
-
-        let range = createRange(element, selection);
+        let range = createRange(element, element, selection);
 
         if (range && sel) {
             range.collapse(false);
@@ -83,7 +82,7 @@ export const setCursorPosition = (selection: Selection, element: HTMLDivElement 
     }
 };
 
-const createRange = (node: any, selection: Selection, range: any | null = null) => {
+const createRange = (element: any, node: any, selection: Selection, range: any | null = null) => {
     if (!range) {
         range = document.createRange();
     }
@@ -104,7 +103,7 @@ const createRange = (node: any, selection: Selection, range: any | null = null) 
     } else if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++) {
             const childNode = node.childNodes[i];
-            range = createRange(childNode, selection, range);
+            range = createRange(element, childNode, selection, range);
             if (selection.start === 0 && selection.end === 0) {
                 break;
             }
@@ -121,6 +120,7 @@ const createRange = (node: any, selection: Selection, range: any | null = null) 
         } else {
             range.setEndAfter(node);
             selection.end = 0;
+            node.scrollIntoView({ block: 'center' });
         }
     }
     return range;

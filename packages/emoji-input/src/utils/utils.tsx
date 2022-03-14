@@ -7,9 +7,17 @@ export const replaceAt = (
     return text.substring(0, startIndex) + replacementString + text.substring(endIndex + 1);
 };
 export const removeBrTag = (html: string) => {
-    return html.substring(0, html.length - 4); // - <br>
+    if (html.substring(html.length - 4, html.length) === '<br>') {
+        return html.substring(0, html.length - 4); // - <br>
+    }
+    return html;
 };
-export const addBrTag = (text: string) => text + '<br>';
+export const addBrTag = (text: string) => {
+    if (text.substring(text.length - 4, text.length) !== '<br>') {
+        text += '<br>';
+    }
+    return text;
+};
 
 export const replaceSpace = (text: string) => text.replace(/ /gi, '&nbsp;'); // &nbsp; => \xa0
 export const replaceNbsp = (text: string) => text.replace(/&nbsp;/gi, ' ');

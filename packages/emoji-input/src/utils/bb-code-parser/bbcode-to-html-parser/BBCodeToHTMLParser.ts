@@ -46,7 +46,7 @@ export default class BBCodeToHTMLParser {
         const regExClose = `\\[\/(${bbRegExString})\\]`;
         const listOpen = [...text.matchAll(new RegExp(regExOpen, 'gi'))];
         const listClose = [...text.matchAll(new RegExp(regExClose, 'gi'))];
-        console.log(listOpen);
+
         let combinedList = [
             ...listOpen.map((i) => {
                 const value: string = i[0];

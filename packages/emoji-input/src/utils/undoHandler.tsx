@@ -13,7 +13,7 @@ export default class UndoHandler {
         this.inputStack = this.inputStack.splice(0, this.currentIndex + 1); // remove values after currentIndex
         this.inputStack.push({
             bbValue: input.bbValue,
-            selection: { start: input.selection?.start || 0, end: input.selection?.end || 0 },
+            selection: !input.selection ? null : { ...input.selection },
         });
         this.currentIndex++;
         if (this.inputStack.length > 100000) {
