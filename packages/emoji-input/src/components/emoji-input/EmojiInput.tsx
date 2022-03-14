@@ -157,7 +157,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handleInput = useCallback(
         (event, addHTML: string | null = null) => {
             if (!lastKeyCtrlZY) {
-                // console.time('handleInput');
+                console.time('handleInput');
                 let cursorSelection = getCursorPosition(inputRef.current);
                 let bbText = '';
                 if (cursorSelection) {
@@ -185,7 +185,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     setInputValue(newHtml);
                     setCursorPosition(cursorSelection, inputRef.current);
                 }
-                // console.timeEnd('handleInput');
+                console.timeEnd('handleInput');
 
                 if (typeof onInput === 'function') {
                     console.log('onInput', replaceNbsp(removeBrTag(bbText)));
