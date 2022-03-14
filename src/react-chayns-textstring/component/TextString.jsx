@@ -264,78 +264,11 @@ export default class TextString extends Component {
     }
 
     selectLanguageToChange(stringName) {
-        const { language, useDangerouslySetInnerHTML } = this.props;
-
-        if (useDangerouslySetInnerHTML) {
-            chayns.dialog
-                .select({
-                    title: `TextString bearbeiten: ${stringName}`,
-                    message: `Wähle die Sprache: (angezeigt wird ${
-                        TextString.languages.find(
-                            (l) => l.code === (language || TextString.language)
-                        ).name
-                    })`,
-                    quickfind: 0,
-                    multiselect: 0,
-                    list: TextString.languages,
-                })
-                .then((data) => {
-                    if (
-                        data.buttonType === 1 &&
-                        data.selection &&
-                        data.selection.length > 0
-                    ) {
-                        const lang = data.selection[0];
-                        // language is already selected
-                        if (
-                            lang.value ===
-                            TextString.languages.find(
-                                (l) =>
-                                    l.code === (language || TextString.language)
-                            ).value
-                        ) {
-                            this.changeStringDialog(stringName, lang);
-                        } else {
-                            // Get lib
-                            let library = null;
-                            let middle = 'langRes';
-                            const globalLang = TextString.languages.find(
-                                (l) => l.code === TextString.language
-                            ).value;
-                            Object.keys(
-                                TextString.textStrings[globalLang]
-                            ).forEach((lib) => {
-                                if (
-                                    TextString.textStrings[globalLang][lib][
-                                        stringName
-                                    ]
-                                ) {
-                                    library = lib;
-                                    // eslint-disable-next-line prefer-destructuring
-                                    middle =
-                                        TextString.textStrings[globalLang][lib]
-                                            .middle;
-                                }
-                            });
-                            TextString.loadLibrary(
-                                library,
-                                middle,
-                                TextString.languages.find(
-                                    (l) => l.value === lang.value
-                                ).code
-                            ).then(() => {
-                                this.changeStringDialog(stringName, lang);
-                            });
-                        }
-                    }
-                });
-        } else {
-            chayns.dialog.iFrame({
-                url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-                buttons: [],
-                input: { textstring: stringName },
-            });
-        }
+        chayns.dialog.iFrame({
+            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+            buttons: [],
+            input: { textstring: stringName },
+        });
     }
 
     changeStringDialog(stringName, lang) {
@@ -502,7 +435,7 @@ TextString.languages = [
         name: 'Ukrainisch',
         value: 'Uk',
         code: 'uk',
-    }
+    },
 ];
 
 TextString.propTypes = {
