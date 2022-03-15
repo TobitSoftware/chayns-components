@@ -83,10 +83,13 @@ export type EmojiInputProps = {
      */
     value?: string;
 };
+let lastKeyCtrlZY = false;
+let lastKeyCtrlVOrSpace: boolean | null = false;
 
 const EmojiInput: FC<EmojiInputProps> = ({
     design = DesignMode.Normal,
     isDisabled = false,
+    maxHeight,
     onBlur,
     onFocus,
     onInput,
@@ -98,9 +101,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
     value = '',
 }) => {
     console.log('--------------------------------------- render');
-
-    let lastKeyCtrlZY = false;
-    let lastKeyCtrlVOrSpace: boolean | null = false;
 
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
@@ -114,15 +114,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
         []
     );
     const undoHandler = useMemo(() => new UndoHandler(), []);
-    const bbCodeParser2 = useMemo(
-        () =>
-            new BBCodeParser(
-                BBConvertType.hideBBTags_not_convertable,
-                undefined,
-                InvalidTagPos.outer
-            ),
-        []
-    );
 
     useEffect(() => {
         undoHandler.addInputHistory({ bbValue: replaceSpace(addBrTag(value)), selection: null });
@@ -145,11 +136,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 const newValueHTML = bbCodeParser.bbCodeTextToHTML(tempValue);
                 setInputValue(newValueHTML);
                 forceRender();
-                console.log(
-                    bbCodeParser2.bbCodeTextToHTML(
-                        'Test Text [b a="" style="asda"]BOLT[/b][link]LINK[/link]'
-                    )
-                );
             }
         }
     }, [value]);
@@ -178,7 +164,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
                             selection: cursorSelection,
                         });
                     }
-                    console.log('bbText: ', bbText);
 
                     const newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
 
@@ -188,11 +173,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 console.timeEnd('handleInput');
 
                 if (typeof onInput === 'function') {
-                    console.log('onInput', replaceNbsp(removeBrTag(bbText)));
-                    // onInput(replaceNbsp(removeBrTag(bbText)), event);
+                    onInput(replaceNbsp(removeBrTag(bbText)), event);
                 }
 
-                console.log('-------------------------------------------------------');
+                console.log('-----------------------handleInput--------------------------------');
             }
         },
         [onInput]
@@ -333,6 +317,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 dir="auto"
                 id={uuid}
                 isDisabled={isDisabled}
+                maxHeight={maxHeight}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
                 onInput={handleInput}
@@ -345,7 +330,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 spellCheck={true}
             />
             <StyledPlaceholder
-                isHidden={getInputValue() !== '' || inputHasFocus()}
+                isHidden={(!!getInputValue() && getInputValue() !== '<br>') || inputHasFocus()}
                 design={design}
                 isDisabled={isDisabled}
             >
