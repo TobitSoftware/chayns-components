@@ -39,14 +39,13 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const parameterRegEx = `(&nbsp;| )[^<"„“ ;]*?=(["„][^<"„“]*["“])`;
-        // <    => not match br in params
-        // ;    => not match &nbsp; in params
-        const regExOpen = `\\[(${bbRegExString})(${parameterRegEx})*\\]`;
+        const parameterRegEx = `(?:&nbsp;| )(((?:[^<"„“ ](?!&nbsp;))*)?=(?:["„]([^<"„“]*)["“]))`; // < => not match tags(br) in params
+        const regExOpen = `\\[(${bbRegExString})(?:${parameterRegEx})*\\]`;
         const regExClose = `\\[\/(${bbRegExString})\\]`;
+        // @ts-ignore
         const listOpen = [...text.matchAll(new RegExp(regExOpen, 'gi'))];
+        // @ts-ignore
         const listClose = [...text.matchAll(new RegExp(regExClose, 'gi'))];
-
         let combinedList = [
             ...listOpen.map((i) => {
                 const value: string = i[0];
@@ -56,7 +55,8 @@ export default class BBCodeToHTMLParser {
                     return null;
                 }
                 const tag = BbCodeEntry.tag || BbCodeEntry.bb;
-                const params = value.matchAll(new RegExp(parameterRegEx, 'gi'));
+                // @ts-ignore
+                const params = [...value.matchAll(new RegExp(parameterRegEx, 'gi'))];
                 return {
                     value,
                     index: i.index as number,
@@ -64,34 +64,17 @@ export default class BBCodeToHTMLParser {
                     tag,
                     bb: BbCodeEntry.bb,
                     lengthDifferenceBBToTag: tag.length - BbCodeEntry.bb.length,
-                    params: [...params].map((p) => {
-                        let together = p[0];
-                        // important ! => only replace first occurance
-                        if (together.startsWith('&nbsp;')) {
-                            together = together?.replace('&nbsp;', '');
-                        } else if (together.startsWith(' ')) {
-                            together = together?.replace(' ', '');
-                        }
-
-                        const param = together?.split('=');
-                        if (!param) {
-                            return null;
-                        }
-                        return {
-                            together,
-                            togetherWithSpace: p[0],
-                            param: param[0],
-                            value: param[1],
-                        } as Param;
-                    }),
+                    params: params.map((p) => ({
+                        together: p[1],
+                        togetherWithSpace: p[0],
+                        param: p[2],
+                        value: p[3],
+                    })),
                 };
             }),
             ...listClose.map((i) => {
                 const value: string = i[0];
-                const valueBb: string | undefined = value
-                    ?.substring(2, value?.length - 1)
-                    .trim()
-                    .split(' ')[0];
+                const valueBb: string | undefined = i[1];
                 const BbCodeEntry = BbCodes.find((b) => b.bb === valueBb?.toLowerCase());
                 if (!BbCodeEntry || value === null) {
                     return null;
@@ -124,9 +107,10 @@ export default class BBCodeToHTMLParser {
             possibleMatch: MatchingTag,
             combinedItem: CombinedItem
         ): boolean =>
-            possibleMatch.tag === combinedItem.tag &&
-            possibleMatch.close === null &&
             possibleMatch.open !== null &&
+            possibleMatch.close === null &&
+            possibleMatch.tag === combinedItem.tag &&
+            // @ts-ignore
             combinedList[possibleMatch.open]?.index < combinedItem.index; // check if open before close Tag
 
         const isValidNesting = (possibleMatch: MatchingTag, combinedItem: CombinedItem) => {
@@ -294,6 +278,7 @@ export default class BBCodeToHTMLParser {
             }
             let itemTagWithStyles = item.tag as string;
             if (addedStyles) {
+                // @ts-ignore
                 const styleInTag = [...item.tag?.matchAll(/style=["„][^<"„“]*["“]/gi)];
                 if (styleInTag && styleInTag[0]) {
                     const styleIndex = styleInTag[0].index;
@@ -302,14 +287,14 @@ export default class BBCodeToHTMLParser {
                     itemTagWithStyles = replaceAt(
                         itemTagWithStyles,
                         addStylesPos,
-                        addStylesPos - 1,
+                        addStylesPos,
+                        // @ts-ignore
                         `;${addedStyles?.replace(/["„“]/gi, '')}`
                     );
                     validParamString = validParamString.replace(
-                        new RegExp(`(&nbsp;| )style=${addedStyles}`, 'gi'),
+                        new RegExp(`(?:&nbsp;| )style=${addedStyles}`, 'gi'),
                         ''
                     ); // replace with space before
-                    console.log(validParamString, itemTagWithStyles);
                 }
             }
             replacementString = `${bBReplacement}<${itemTagWithStyles}${validParamString}>`;
@@ -333,6 +318,6 @@ export default class BBCodeToHTMLParser {
             (item.lengthDifferenceBBToTag as number) +
             (replacementString.length - originalTag.length);
 
-        return replaceAt(text, tagStartIndex, tagEndIndex, replacementString);
+        return replaceAt(text, tagStartIndex, tagEndIndex + 1, replacementString);
     };
 }

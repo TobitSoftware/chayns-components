@@ -338,6 +338,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onInput={handleInput}
                 onKeyUp={handleKeyUp}
                 onKeyDown={handleKeyDown}
+                // @ts-ignore
                 onPaste={handlePaste}
                 ref={inputRef}
                 showEmojiButton={showEmojiButton}

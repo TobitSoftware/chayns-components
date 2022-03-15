@@ -35,7 +35,7 @@ export default class UndoHandler {
             return currentItem
                 ? ({
                       bbValue: currentItem.bbValue,
-                      selection: { ...currentItem.selection },
+                      selection: currentItem.selection ? { ...currentItem.selection } : null,
                   } as BbValueWithSelection)
                 : null;
         }
@@ -48,7 +48,7 @@ export default class UndoHandler {
             return currentItem
                 ? ({
                       bbValue: currentItem.bbValue,
-                      selection: { ...currentItem.selection },
+                      selection: currentItem.selection ? { ...currentItem.selection } : null,
                   } as BbValueWithSelection)
                 : null;
         }

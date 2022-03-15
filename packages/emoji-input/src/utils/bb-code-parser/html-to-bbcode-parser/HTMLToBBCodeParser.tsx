@@ -20,9 +20,9 @@ const bbCodeHTMLToText = (text: string): string => {
     let regExOpenAndClose = `${regExOpen}|${regExClose}`;
 
     const listOpenAndClose = text.matchAll(new RegExp(regExOpenAndClose, 'gi'));
-
+    // @ts-ignore
     const openAndClosedArray = [...listOpenAndClose];
-    console.log('listopenClose', openAndClosedArray);
+
     for (let index = 0; index < openAndClosedArray.length; index++) {
         const i = openAndClosedArray[index];
         const value: string = i[0].toLowerCase();

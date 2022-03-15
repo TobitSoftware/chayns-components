@@ -4,7 +4,7 @@ export const replaceAt = (
     endIndex: number,
     replacementString: string
 ) => {
-    return text.substring(0, startIndex) + replacementString + text.substring(endIndex + 1);
+    return text.substring(0, startIndex) + replacementString + text.substring(endIndex);
 };
 export const removeBrTag = (html: string) => {
     if (html.substring(html.length - 4, html.length) === '<br>') {

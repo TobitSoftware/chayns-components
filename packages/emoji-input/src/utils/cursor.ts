@@ -12,7 +12,6 @@ export const replaceSelectionWithHTML = (
     html: string,
     selection: Selection
 ): BbTextWithSelection => {
-    // change selection in reference
     let newBBText = replaceNbsp(bbText);
 
     const tempElem = document.createElement('div');
@@ -23,7 +22,7 @@ export const replaceSelectionWithHTML = (
 
     const replacedText = newBBText.substring(replaceIndexStart, replaceIndexEnd);
 
-    newBBText = replaceAt(newBBText, replaceIndexStart, replaceIndexEnd - 1, html);
+    newBBText = replaceAt(newBBText, replaceIndexStart, replaceIndexEnd, html);
     newBBText = replaceSpace(newBBText);
 
     tempElem.innerHTML = html;
