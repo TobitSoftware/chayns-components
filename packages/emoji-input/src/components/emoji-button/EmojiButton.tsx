@@ -9,7 +9,7 @@ export type EmojiButtonProps = {
     icon?: string;
     isDisabled: EmojiInputProps['isDisabled'];
     onClick: MouseEventHandler<HTMLSpanElement>;
-    onEmojiInput: (emojiHtml: string) => void;
+    onEmojiInput: (event: any, emojiHtml: string) => void;
     ref: ForwardedRef<any>;
 };
 
@@ -31,7 +31,8 @@ export const EmojiButton: FC<EmojiButtonProps> = React.forwardRef(
                                 console.log('Emoji Popup');
                                 setShowPopup(!showPopup);
                                 onEmojiInput(
-                                    '<img style="margin: -.2ex 0.15em .2ex; height: 3ex; vertical-align: middle;" alt="😀" src="https://api.chayns-static.space/emojione/4.0/png/64/1f600.png">'
+                                    event,
+                                    '<img style="margin: -.2ex 0.15em .2ex; height: 3ex; width: 3ex; vertical-align: middle;" alt="😀" src="https://api.chayns-static.space/emojione/4.0/png/64/1f600.png">'
                                 );
                             }
                         }}

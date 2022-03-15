@@ -155,7 +155,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, [value]);
 
     const handleInput = useCallback(
-        (event, addHTML: string | null = null) => {
+        (event: any, addHTML: string | null = null) => {
             if (!lastKeyCtrlZY) {
                 console.time('handleInput');
                 let cursorSelection = getCursorPosition(inputRef.current);
@@ -174,7 +174,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     }
                     if (addHTML || lastKeyCtrlVOrSpace) {
                         undoHandler.addInputHistory({
-                            bbValue: bbText,
+                            bbValue: addBrTag(bbText),
                             selection: cursorSelection,
                         });
                     }
@@ -342,6 +342,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onPaste={handlePaste}
                 ref={inputRef}
                 showEmojiButton={showEmojiButton}
+                spellCheck={true}
             />
             <StyledPlaceholder
                 isHidden={getInputValue() !== '' || inputHasFocus()}
@@ -360,8 +361,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
                             setInputFocus();
                         }
                     }}
-                    onEmojiInput={(emojiHtml) => {
-                        // insertHTMLAtCursorPos(emojiHtml);
+                    onEmojiInput={(event: MouseEvent, emojiHtml) => {
+                        handleInput(event, emojiHtml);
                     }}
                 />
             )}

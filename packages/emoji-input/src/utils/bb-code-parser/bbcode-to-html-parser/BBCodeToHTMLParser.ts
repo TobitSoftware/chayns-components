@@ -39,7 +39,7 @@ export default class BBCodeToHTMLParser {
                 bbRegExString += '|';
             }
         });
-        const parameterRegEx = `(?:&nbsp;| )(((?:[^<"„“ ](?!&nbsp;))*)?=(?:["„]([^<"„“]*)["“]))`; // < => not match tags(br) in params
+        const parameterRegEx = `(?:&nbsp;| )(((?:(?!&nbsp;)[^<"„“ ])*)?=(?:["„]([^<"„“]*)["“]))`; // < => not match tags(br) in params
         const regExOpen = `\\[(${bbRegExString})(?:${parameterRegEx})*\\]`;
         const regExClose = `\\[\/(${bbRegExString})\\]`;
         // @ts-ignore

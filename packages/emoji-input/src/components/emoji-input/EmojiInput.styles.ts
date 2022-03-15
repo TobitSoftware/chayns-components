@@ -36,6 +36,7 @@ type StyledDivProps = WithTheme<
     Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton' | 'maxHeight'>
 > & {
     onPaste: (event: ClipboardEvent) => void;
+    spellCheck: boolean;
 };
 
 export const StyledEditableDiv = styled.div<StyledDivProps>`
@@ -64,7 +65,7 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
     }
     word-break: break-word;
 
-    ${({ design, theme, isDisabled, showEmojiButton }: StyledDivProps) => {
+    ${({ design, theme, showEmojiButton }: StyledDivProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`
