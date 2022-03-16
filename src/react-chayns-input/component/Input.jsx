@@ -66,7 +66,7 @@ export default class Input extends PureComponent {
     onKeyPress(e) {
         const { type } = this.props;
 
-        if (type === 'number' && e.code.startsWith('Key')) {
+        if (type === 'number' && e.code && e.code.startsWith('Key')) {
             e.preventDefault();
         }
     }
