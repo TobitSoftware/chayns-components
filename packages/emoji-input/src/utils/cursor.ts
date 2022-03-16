@@ -43,16 +43,59 @@ type RemainingLength = {
     count: number;
 };
 
+interface EscapePair {
+    escaped: string;
+    unescaped: string;
+}
+const escapedChars: EscapePair[] = [
+    { escaped: '&amp;', unescaped: '&' },
+    { escaped: '&lt;', unescaped: '<' },
+    { escaped: '&gt;', unescaped: '>' },
+];
+const getLengthWithUnescapedChars = (
+    text: string,
+    charCountEscaped: number | null = null
+): number => {
+    let escapedText = text;
+    escapedChars.forEach((e) => {
+        escapedText = escapedText.replace(new RegExp(e.unescaped, 'g'), e.escaped);
+    });
+    let escapedRegEx = '(?:';
+    for (let i = 0; i < escapedChars.length; i++) {
+        escapedRegEx += escapedChars[i]?.escaped;
+        if (i !== escapedChars.length - 1) {
+            escapedRegEx += '|';
+        }
+    }
+    escapedRegEx += ')';
+    // @ts-ignore
+    const matches = [...escapedText.matchAll(new RegExp(escapedRegEx, 'g'))];
+    let lengthEscaped = 0;
+    let textIndex = 0; // length unescaped
+    while (
+        textIndex < escapedText.length &&
+        (!charCountEscaped || lengthEscaped < charCountEscaped)
+    ) {
+        const match = matches.find((m) => m.index === textIndex);
+        if (match) {
+            textIndex = textIndex + match[0].length;
+        } else {
+            textIndex++;
+        }
+        lengthEscaped++;
+    }
+    return textIndex;
+};
 const getTextWithTagLength = (node: any, remainingLength: RemainingLength): number => {
     // change remainingLength in reference
     let length = 0;
     if (node.nodeName == '#text') {
         if (node.nodeValue.length > remainingLength.count) {
-            length += remainingLength.count;
+            length += getLengthWithUnescapedChars(node.nodeValue, remainingLength.count);
             remainingLength.count = 0;
             return length;
         }
-        length += node.nodeValue.length;
+        length += getLengthWithUnescapedChars(node.nodeValue);
         remainingLength.count -= node.nodeValue.length;
     } else if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++) {
@@ -129,10 +172,18 @@ export const setCursorToEnd = (node: HTMLDivElement | null) => {
     if (node?.childNodes?.length) {
         const range = document.createRange();
         const sel = window.getSelection();
-        if (sel && range) {
-            const lastNode = node.childNodes[node.childNodes.length - 1] as Node;
-            range.selectNode(lastNode);
-            range.collapse(false);
+        if (sel && range && node.childNodes.length > 0) {
+            let selectedNode = node.childNodes[node.childNodes.length - 1] as Node; // lastNode
+            let collapse = false;
+            if (selectedNode.nodeName == 'BR') {
+                if (node.childNodes.length > 1) {
+                    selectedNode = node.childNodes[node.childNodes.length - 2] as Node;
+                } else {
+                    collapse = true; // select BR but collapse (to start) !
+                }
+            }
+            range.selectNode(selectedNode);
+            range.collapse(collapse);
             sel.removeAllRanges();
             sel.addRange(range);
 
@@ -180,8 +231,9 @@ const getTextLength = (element: HTMLDivElement, node: any, offset: number): numb
 const getNodeTextLength = (node: any): number => {
     let textLength = 0;
 
-    if (node.nodeName == '#text') textLength = node.nodeValue.length;
-    else if (node.childNodes != null && node.childNodes.length > 0) {
+    if (node.nodeName == '#text') {
+        textLength = node.nodeValue.length;
+    } else if (node.childNodes != null && node.childNodes.length > 0) {
         for (let i = 0; i < node.childNodes.length; i++)
             textLength += getNodeTextLength(node.childNodes[i]);
     } else textLength++; // any node without text content

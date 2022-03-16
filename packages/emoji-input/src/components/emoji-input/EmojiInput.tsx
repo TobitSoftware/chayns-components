@@ -85,6 +85,7 @@ export type EmojiInputProps = {
 };
 let lastKeyCtrlZY = false;
 let lastKeyCtrlVOrSpace: boolean | null = false;
+let prevInputHTML: string;
 
 const EmojiInput: FC<EmojiInputProps> = ({
     design = DesignMode.Normal,
@@ -142,11 +143,14 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const handleInput = useCallback(
         (event: any, addHTML: string | null = null) => {
+            console.log('before handleInput:', event, addHTML, lastKeyCtrlZY);
             if (!lastKeyCtrlZY) {
                 console.time('handleInput');
                 let cursorSelection = getCursorPosition(inputRef.current);
                 let bbText = '';
+                let newHtml = '';
                 if (cursorSelection) {
+                    console.log('start handleInput:', cursorSelection, getInputValue());
                     bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
                     bbText = replaceSpace(bbText);
                     if (addHTML) {
@@ -164,18 +168,18 @@ const EmojiInput: FC<EmojiInputProps> = ({
                             selection: cursorSelection,
                         });
                     }
+                    console.log('during handleInput BBCode:', bbText);
 
-                    const newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
-
+                    newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
+                    console.log('a handleInput newHTML:', newHtml);
                     setInputValue(newHtml);
                     setCursorPosition(cursorSelection, inputRef.current);
                 }
                 console.timeEnd('handleInput');
-
-                if (typeof onInput === 'function') {
+                if (typeof onInput === 'function' && newHtml !== prevInputHTML) {
                     onInput(replaceNbsp(removeBrTag(bbText)), event);
                 }
-
+                prevInputHTML = newHtml;
                 console.log('-----------------------handleInput--------------------------------');
             }
         },
@@ -192,6 +196,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     const handleKeyDown = useCallback((event) => {
+        console.log('Keydown', event);
         lastKeyCtrlZY = false;
         const ctrlZ = isCtrlZ(event);
         const ctrlY = isCtrlY(event);

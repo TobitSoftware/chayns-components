@@ -256,6 +256,8 @@ export default class BBCodeToHTMLParser {
                 )}<span class="param" style="color:red">${p.together}</span>`; // space added here
             }
         });
+        validParamString = validParamString.replace(/[„“]/gi, '"');
+
         const tagEndIndex =
             tagStartIndex +
             initialParamLength +
@@ -279,7 +281,7 @@ export default class BBCodeToHTMLParser {
             let itemTagWithStyles = item.tag as string;
             if (addedStyles) {
                 // @ts-ignore
-                const styleInTag = [...item.tag?.matchAll(/style=["„][^<"„“]*["“]/gi)];
+                const styleInTag = [...item.tag?.matchAll(/style="[^<"]*"/gi)];
                 if (styleInTag && styleInTag[0]) {
                     const styleIndex = styleInTag[0].index;
                     const styleElem = styleInTag[0][0];
@@ -289,7 +291,7 @@ export default class BBCodeToHTMLParser {
                         addStylesPos,
                         addStylesPos,
                         // @ts-ignore
-                        `;${addedStyles?.replace(/["„“]/gi, '')}`
+                        `;${addedStyles?.replace(/"/gi, '')}`
                     );
                     validParamString = validParamString.replace(
                         new RegExp(`(?:&nbsp;| )style=${addedStyles}`, 'gi'),
