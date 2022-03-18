@@ -145,7 +145,7 @@ const ColorSelection = ({
                                 <div
                                     style={{
                                         opacity: colorAlreadyExists ? 0.5 : 1,
-                                        '--color': 'transparent', //chayns color text,
+                                        '--color': 'transparent',
                                         color: '#ffffff!important',
                                         border: 'none',
                                         display: 'flex',
