@@ -3,6 +3,47 @@
     align-items: center;
     cursor: pointer;
 
+    &__slider-container__without-transparency {
+        width: 100%;
+    }
+    &__slider-container__with-transparency {
+        // 30px: width of square; 10px: marginLeft of square; 5px: marginRight of square;
+        width: calc(100% - 40px - 10px - 5px);
+    }
+
+    &__color-square {
+        height: 40px;
+        width: 40px;
+        margin: 10px 10px 0 5px;
+        border-radius: 2px;
+
+        &:before {
+            content: '';
+            background-color: #ffffff;
+            background-image: linear-gradient(
+                    45deg,
+                    #a0a0a0 25%,
+                    transparent 25%
+                ),
+                linear-gradient(-45deg, #a0a0a0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #a0a0a0 75%),
+                linear-gradient(-45deg, transparent 75%, #a0a0a0 75%);
+            background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+            background-size: 8px 8px;
+            background-repeat: repeat;
+            width: inherit;
+            height: inherit;
+            position: absolute;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        &:after {
+            content: '';
+            background-color: inherit;
+        }
+    }
+
     &__color-circle {
         width: 15px;
         height: 15px;

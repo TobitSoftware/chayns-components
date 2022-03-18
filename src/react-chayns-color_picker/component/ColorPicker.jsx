@@ -3,6 +3,7 @@
  */
 
 import classNames from 'clsx';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, {
     forwardRef,
@@ -15,6 +16,7 @@ import React, {
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import {
     hexStringToHsv,
+    hsvToHexString,
     hsvToRgb,
     rgbToHexString,
     rgbToHsv,
@@ -27,6 +29,7 @@ import './ColorPicker.scss';
 import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
 import isDescendant from '../../utils/isDescendant';
+import ColorSelection from './colorSelection/ColorSelection';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -73,6 +76,10 @@ const ColorPicker = forwardRef(
             bubbleClassName,
             bubbleStyle,
             showAllColorModels,
+            customColorsArray,
+            showCustomColors,
+            showGlobalColors,
+            onCreateCustomColor,
         },
         reference
     ) => {
@@ -94,6 +101,22 @@ const ColorPicker = forwardRef(
                     ? ColorPicker.colorModels.RGB
                     : ColorPicker.colorModels.HEX)
         );
+
+        const [customColorsState, setCustomColorsState] = useState(
+            customColorsArray
+                ? customColorsArray.map((c) => getHsvColor(c))
+                : []
+        );
+
+        useEffect(() => {
+            if (customColorsArray) {
+                setCustomColorsState(
+                    customColorsArray.map((c) => getHsvColor(c))
+                );
+            } else {
+                setCustomColorsState([]);
+            }
+        }, [customColorsArray]);
 
         // effects (lifecycle methods)
         useEffect(() => {
@@ -124,7 +147,9 @@ const ColorPicker = forwardRef(
         );
 
         const openBubble = useCallback(async () => {
-            if (inline) return;
+            if (inline) {
+                return;
+            }
             const ref = children ? childrenRef : linkRef;
             const rect = ref.current.getBoundingClientRect();
 
@@ -171,6 +196,15 @@ const ColorPicker = forwardRef(
             [setColor, onChange]
         );
 
+        const onCreateCustomColorCallback = useCallback(
+            (newColor) => {
+                if (onCreateCustomColor) {
+                    onCreateCustomColor(newColor);
+                }
+            },
+            [onCreateCustomColor]
+        );
+
         const onColorModelToggle = useCallback(() => {
             setColorModel(
                 (colorModel + 1) % Object.keys(ColorPicker.colorModels).length
@@ -187,7 +221,7 @@ const ColorPicker = forwardRef(
             return (
                 <div
                     className={classNames('cc__color-picker', className)}
-                    style={style}
+                    style={{ width: '322px', ...style }}
                     onClick={openBubble}
                     key="div"
                     ref={childrenRef}
@@ -201,30 +235,75 @@ const ColorPicker = forwardRef(
                             onChange={onChangeCallback}
                             onChangeEnd={onChangeEnd}
                         />
-                        <HueSlider
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                            showTooltip={false}
-                        />
-                        {transparency && (
-                            <TransparencySlider
-                                color={colorState}
-                                onChange={onChangeCallback}
-                                onChangeEnd={onChangeEnd}
-                            />
-                        )}
-                        {input && (
-                            <ColorInput
-                                color={colorState}
-                                onChange={onChangeCallback}
-                                onChangeEnd={onChangeEnd}
-                                onModelToggle={onColorModelToggle}
-                                colorModel={colorModel}
-                                transparency={transparency}
-                                showAllColorModels={showAllColorModels}
-                            />
-                        )}
+                        <div style={{ padding: '0 11px' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <div
+                                    style={{}}
+                                    className={clsx({
+                                        'cc__color-picker__slider-container__with-transparency':
+                                            transparency,
+                                        'cc__color-picker__slider-container__without-transparency':
+                                            !transparency,
+                                    })}
+                                >
+                                    <HueSlider
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                        showTooltip={false}
+                                    />
+                                    {transparency && (
+                                        <TransparencySlider
+                                            color={colorState}
+                                            onChange={onChangeCallback}
+                                            onChangeEnd={onChangeEnd}
+                                        />
+                                    )}
+                                </div>
+                                {transparency && (
+                                    <div
+                                        className="cc__color-picker__color-square"
+                                        style={{
+                                            backgroundColor:
+                                                hsvToHexString(colorState),
+                                        }}
+                                    />
+                                )}
+                            </div>
+
+                            <div
+                                style={{
+                                    margin: inline && '10px 10px 0',
+                                }}
+                            >
+                                {input && (
+                                    <ColorInput
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                        onModelToggle={onColorModelToggle}
+                                        colorModel={colorModel}
+                                        transparency={transparency}
+                                        showAllColorModels={showAllColorModels}
+                                    />
+                                )}
+                                <ColorSelection
+                                    customColorsArray={customColorsState}
+                                    showCustomColors={showCustomColors}
+                                    showGlobalColors={showGlobalColors}
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onCreateCustomColor={
+                                        onCreateCustomColorCallback
+                                    }
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
@@ -263,7 +342,7 @@ const ColorPicker = forwardRef(
                 position={bubblePosition}
                 parent={parent}
                 className={bubbleClassName}
-                style={bubbleStyle}
+                style={{ width: '322px', ...bubbleStyle }}
                 key="bubble"
             >
                 <div
@@ -275,35 +354,94 @@ const ColorPicker = forwardRef(
                         onChange={onChangeCallback}
                         onChangeEnd={onChangeEnd}
                     />
-                    <HueSlider
-                        color={colorState}
-                        onChange={onChangeCallback}
-                        onChangeEnd={onChangeEnd}
-                        showTooltip={false}
-                    />
-                    {transparency && (
-                        <TransparencySlider
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                        />
-                    )}
-                    {input && (
-                        <ColorInput
-                            color={colorState}
-                            onChange={onChangeCallback}
-                            onChangeEnd={onChangeEnd}
-                            onModelToggle={onColorModelToggle}
-                            colorModel={colorModel}
-                            transparency={transparency}
-                            showAllColorModels={showAllColorModels}
-                        />
-                    )}
+                    <div style={{ padding: '0 11px' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <div
+                                style={{}}
+                                className={clsx({
+                                    'cc__color-picker__slider-container__with-transparency':
+                                        transparency,
+                                    'cc__color-picker__slider-container__without-transparency':
+                                        !transparency,
+                                })}
+                            >
+                                <HueSlider
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onChangeEnd={onChangeEnd}
+                                    showTooltip={false}
+                                />
+                                {transparency && (
+                                    <TransparencySlider
+                                        color={colorState}
+                                        onChange={onChangeCallback}
+                                        onChangeEnd={onChangeEnd}
+                                    />
+                                )}
+                            </div>
+                            {transparency && (
+                                <div
+                                    className="cc__color-picker__color-square"
+                                    style={{
+                                        backgroundColor:
+                                            hsvToHexString(colorState),
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <div
+                            style={{
+                                marginBottom: '5px',
+                            }}
+                        >
+                            {input && (
+                                <ColorInput
+                                    color={colorState}
+                                    onChange={onChangeCallback}
+                                    onChangeEnd={onChangeEnd}
+                                    onModelToggle={onColorModelToggle}
+                                    colorModel={colorModel}
+                                    transparency={transparency}
+                                    showAllColorModels={showAllColorModels}
+                                />
+                            )}
+                            <ColorSelection
+                                customColorsArray={customColorsState}
+                                showCustomColors={showCustomColors}
+                                showGlobalColors={showGlobalColors}
+                                color={colorState}
+                                onChange={onChangeCallback}
+                                onCreateCustomColor={
+                                    onCreateCustomColorCallback
+                                }
+                            />
+                        </div>
+                    </div>
                 </div>
             </Bubble>,
         ];
     }
 );
+const colorPropType = PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.shape({
+        r: PropTypes.number.isRequired,
+        g: PropTypes.number.isRequired,
+        b: PropTypes.number.isRequired,
+        a: PropTypes.number,
+    }).isRequired,
+    PropTypes.shape({
+        h: PropTypes.number.isRequired,
+        s: PropTypes.number.isRequired,
+        v: PropTypes.number.isRequired,
+        a: PropTypes.number,
+    }).isRequired,
+]);
 
 ColorPicker.propTypes = {
     /**
@@ -314,21 +452,7 @@ ColorPicker.propTypes = {
     /**
      * The current color. Either a HEX-string, an HSV(A)- or RGB(A)-object.
      */
-    color: PropTypes.oneOfType([
-        PropTypes.string.isRequired,
-        PropTypes.shape({
-            r: PropTypes.number.isRequired,
-            g: PropTypes.number.isRequired,
-            b: PropTypes.number.isRequired,
-            a: PropTypes.number,
-        }).isRequired,
-        PropTypes.shape({
-            h: PropTypes.number.isRequired,
-            s: PropTypes.number.isRequired,
-            v: PropTypes.number.isRequired,
-            a: PropTypes.number,
-        }).isRequired,
-    ]).isRequired,
+    color: colorPropType.isRequired,
 
     /**
      * The bubble position. The possible values are listed under the
@@ -415,6 +539,26 @@ ColorPicker.propTypes = {
      * Shows all color models
      */
     showAllColorModels: PropTypes.bool,
+
+    /**
+     * An array of custom selectable colors
+     */
+    customColorsArray: PropTypes.arrayOf(colorPropType),
+
+    /**
+     * Shows custom colors
+     */
+    showCustomColors: PropTypes.bool,
+
+    /**
+     * Shows global colors
+     */
+    showGlobalColors: PropTypes.bool,
+
+    /**
+     * Will be called when a custom color is added
+     */
+    onCreateCustomColor: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
@@ -434,6 +578,10 @@ ColorPicker.defaultProps = {
     children: null,
     removeParentSpace: false,
     showAllColorModels: false,
+    customColorsArray: null,
+    showCustomColors: false,
+    showGlobalColors: false,
+    onCreateCustomColor: null,
 };
 
 ColorPicker.colorModels = {
