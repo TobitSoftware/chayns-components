@@ -136,42 +136,39 @@ const ColorSelection = ({
                                 </div>
                             </div>
                         ))}
-                        {!colorAlreadyExists && (
-                            <div className="cc_color-selection--wrapper">
+                        <div className="cc_color-selection--wrapper">
+                            <div
+                                className={clsx(
+                                    'cc_color-selection__color--wrapper'
+                                )}
+                            >
                                 <div
-                                    className={clsx(
-                                        'cc_color-selection__color--wrapper'
-                                    )}
+                                    style={{
+                                        opacity: colorAlreadyExists ? 0.5 : 1,
+                                        '--color': 'transparent', //chayns color text,
+                                        color: '#ffffff!important',
+                                        border: 'none',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    className="cc_color-selection__color"
+                                    onClick={() => {
+                                        if (!colorAlreadyExists) {
+                                            onCreateCustomColorHandler(color);
+                                        }
+                                    }}
                                 >
-                                    <div
+                                    <Icon
+                                        icon="fas fa-plus"
                                         style={{
-                                            '--color': 'transparent', //chayns color text,
-                                            color: '#ffffff!important',
-                                            border: 'none',
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
+                                            fontSize: '14px',
+                                            lineHeight: 1,
                                         }}
-                                        className="cc_color-selection__color"
-                                        onClick={() => {
-                                            if (!colorAlreadyExists) {
-                                                onCreateCustomColorHandler(
-                                                    color
-                                                );
-                                            }
-                                        }}
-                                    >
-                                        <Icon
-                                            icon="fas fa-plus"
-                                            style={{
-                                                fontSize: '14px',
-                                                lineHeight: 1,
-                                            }}
-                                        />
-                                    </div>
+                                    />
                                 </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 </Accordion>
             )}
