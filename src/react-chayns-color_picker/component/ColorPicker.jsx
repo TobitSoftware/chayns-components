@@ -3,6 +3,7 @@
  */
 
 import classNames from 'clsx';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, {
     forwardRef,
@@ -29,7 +30,6 @@ import HueSlider from './hueSlider/HueSlider';
 import TransparencySlider from './transparencySlider/TransparencySlider';
 import isDescendant from '../../utils/isDescendant';
 import ColorSelection from './colorSelection/ColorSelection';
-import clsx from 'clsx';
 
 const getHsvColor = (color) => {
     if (isString(color)) {
@@ -108,6 +108,16 @@ const ColorPicker = forwardRef(
                 : []
         );
 
+        useEffect(() => {
+            if (customColorsArray) {
+                setCustomColorsState(
+                    customColorsArray.map((c) => getHsvColor(c))
+                );
+            } else {
+                setCustomColorsState([]);
+            }
+        }, [customColorsArray]);
+
         // effects (lifecycle methods)
         useEffect(() => {
             setColor(getHsvColor(color));
@@ -137,7 +147,9 @@ const ColorPicker = forwardRef(
         );
 
         const openBubble = useCallback(async () => {
-            if (inline) return;
+            if (inline) {
+                return;
+            }
             const ref = children ? childrenRef : linkRef;
             const rect = ref.current.getBoundingClientRect();
 
@@ -186,15 +198,11 @@ const ColorPicker = forwardRef(
 
         const onCreateCustomColorCallback = useCallback(
             (newColor) => {
-                setCustomColorsState((prev) => [
-                    ...prev,
-                    getHsvColor(newColor),
-                ]);
                 if (onCreateCustomColor) {
                     onCreateCustomColor(newColor);
                 }
             },
-            [setCustomColorsState, onCreateCustomColor]
+            [onCreateCustomColor]
         );
 
         const onColorModelToggle = useCallback(() => {

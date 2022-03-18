@@ -16,6 +16,11 @@ const ColorPickerExample = () => {
     const [hueSliderColor, setHueSliderColor] = useState(
         hexStringToHsv(chayns.env.site.color)
     );
+    const [customColorsArray, setCustomColorsArray] = useState([
+        '#ff0000',
+        '#00ff00',
+        '#0000ff',
+    ]);
 
     return (
         <div
@@ -23,6 +28,33 @@ const ColorPickerExample = () => {
                 marginBottom: '300px',
             }}
         >
+            <h2>ColorPicker with custom colors</h2>
+            <ColorPicker
+                color={color}
+                bubblePosition={Bubble.position.BOTTOM_RIGHT}
+                onChange={(c) => {
+                    console.log('onChange', hsvToHexString(c));
+                }}
+                onChangeEnd={(c) => {
+                    console.log('onChangeEnd', hsvToHexString(c));
+                    setColor(c);
+                }}
+                onBlur={(e) => {
+                    console.log('onBlur', e);
+                }}
+                transparency
+                style={{
+                    marginBottom: '30px',
+                    marginTop: '20px',
+                }}
+                onCreateCustomColor={(c) => {
+                    setCustomColorsArray([...customColorsArray, c]);
+                }}
+                showCustomColors
+                showGlobalColors
+                customColorsArray={customColorsArray}
+            />
+
             <h2>ColorPicker with transparency</h2>
             <ColorPicker
                 color={color}
