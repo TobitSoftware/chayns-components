@@ -212,6 +212,13 @@ const ColorPickerExample = () => {
                     onBlur={(e) => {
                         console.log('onBlur', e);
                     }}
+                    onCreateCustomColor={(c) => {
+                        setCustomColorsArray([...customColorsArray, c]);
+                    }}
+                    showCustomColors
+                    showGlobalColors
+                    customColorsArray={customColorsArray}
+                    showAllColorModels
                 />
             </div>
             <div>

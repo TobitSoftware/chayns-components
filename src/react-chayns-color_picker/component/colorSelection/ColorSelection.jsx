@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Icon } from '../../../index';
-import { hsvToRgb, hsvToRgbString, hsvToHexString } from '../../../utils/color';
+import { hsvToHexString } from '../../../utils/color';
 import './colorSelection.scss';
 import { hexToHsv } from '@chayns/colors';
+import clsx from 'clsx';
 
 const ColorSelection = ({
     color,
@@ -14,24 +15,26 @@ const ColorSelection = ({
     onCreateCustomColor,
 }) => {
     const globalColors = [
-        '#F44336FF',
-        '#FF5722FF',
-        '#FF9800FF',
-        '#FFC107FF',
-        '#FFEB3BFF',
-        '#CDDC39FF',
-        '#8BC34AFF',
-        '#4CAF50FF',
-        '#009688FF',
-        '#00BCD4FF',
-        '#03A9F4FF',
-        '#2196F3FF',
-        '#3F51B5FF',
-        '#673AB7FF',
-        '#9C27B0FF',
-        '#E91E63FF',
-        '#FFFFFFFF',
-        '#000000FF',
+        '#000000',
+        '#434343',
+        '#666666',
+        '#999999',
+        '#b7b7b7',
+        '#cccccc',
+        '#d9d9d9',
+        '#efefef',
+        '#f3f3f3',
+        '#ffffff',
+        '#980000',
+        '#ff0000',
+        '#ff9900',
+        '#ffff00',
+        '#00ff00',
+        '#00ffff',
+        '#4a86e8',
+        '#0000ff',
+        '#9900ff',
+        '#ff00ff',
     ].map((c) => hexToHsv(c));
 
     const style = {
@@ -61,7 +64,12 @@ const ColorSelection = ({
     const colorAlreadyExists = customColorsArray.find(
         (c) => hsvToHexString(c) === hsvToHexString(color)
     );
-    const colorWithoutOpacity = { ...color, a: 1 };
+    const colorWithoutOpacity = {
+        ...color,
+        a: 1,
+    };
+
+    const activeColorHex = useMemo(() => hsvToHexString(color), [color]);
 
     return (
         <div className="cc_color-selection">
@@ -71,39 +79,28 @@ const ColorSelection = ({
                     icon="ts-angle-right"
                     style={accordionStyle}
                     dataGroup="cc_color-picker"
+                    isWrapped
                 >
-                    <div className="accordion__content" style={style}>
+                    <div className="cc_color-selection--inner">
                         {globalColors.map((c) => (
-                            <div
-                                style={{
-                                    width: '26px',
-                                    height: '26px',
-                                    margin: '2px',
-                                    padding: '2px',
-                                    borderRadius: '100%',
-                                    border:
-                                        hsvToHexString(c).toLowerCase() ===
-                                        hsvToHexString(color).toLowerCase()
-                                            ? `${hsvToHexString({
-                                                  ...c,
-                                                  a: 1,
-                                              })} 1px solid`
-                                            : '',
-                                    position: 'relative',
-                                }}
-                            >
+                            <div className="cc_color-selection--wrapper">
+                                {activeColorHex === hsvToHexString(c) && (
+                                    <div className="cc_color-selection--active" />
+                                )}
                                 <div
-                                    style={{
-                                        cursor: 'pointer',
-                                        width: '100%',
-                                        height: '100%',
-                                        borderRadius: '100%',
-                                        backgroundColor: hsvToHexString(c),
-                                        position: 'relative',
-                                    }}
-                                    className="cc_color-selection__color"
-                                    onClick={() => onChangeHandler(c)}
-                                />
+                                    className={clsx(
+                                        'cc_color-selection__color--wrapper'
+                                    )}
+                                >
+                                    <div
+                                        style={{
+                                            '--color': hsvToHexString(c),
+                                        }}
+                                        className="cc_color-selection__color"
+                                        onClick={() => onChangeHandler(c)}
+                                    />
+                                    <div className="cc_color-selection__transparency" />
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -115,73 +112,64 @@ const ColorSelection = ({
                     icon="ts-angle-right"
                     style={accordionStyle}
                     dataGroup="cc_color-picker"
+                    isWrapped
                 >
-                    <div className="accordion__content" style={style}>
+                    <div className="cc_color-selection--inner">
                         {customColorsArray.map((c) => (
-                            <div
-                                style={{
-                                    width: '26px',
-                                    height: '26px',
-                                    margin: '2px',
-                                    padding: '2px',
-                                    borderRadius: '100%',
-                                    border:
-                                        hsvToHexString(c).toLowerCase() ===
-                                        hsvToHexString(color).toLowerCase()
-                                            ? `${hsvToHexString({
-                                                  ...c,
-                                                  a: 1,
-                                              })} 1px solid`
-                                            : '',
-                                    position: 'relative',
-                                }}
-                            >
+                            <div className="cc_color-selection--wrapper">
+                                {activeColorHex === hsvToHexString(c) && (
+                                    <div className="cc_color-selection--active" />
+                                )}
                                 <div
-                                    style={{
-                                        cursor: 'pointer',
-                                        width: '100%',
-                                        height: '100%',
-                                        borderRadius: '100%',
-                                        backgroundColor: hsvToHexString(c),
-                                        position: 'relative',
-                                    }}
-                                    className="cc_color-selection__color"
-                                    onClick={() => onChangeHandler(c)}
-                                />
+                                    className={clsx(
+                                        'cc_color-selection__color--wrapper'
+                                    )}
+                                >
+                                    <div
+                                        style={{
+                                            '--color': hsvToHexString(c),
+                                        }}
+                                        className="cc_color-selection__color"
+                                        onClick={() => onChangeHandler(c)}
+                                    />
+                                    <div className="cc_color-selection__transparency" />
+                                </div>
                             </div>
                         ))}
                         {!colorAlreadyExists && (
-                            <div
-                                style={{
-                                    cursor: 'pointer',
-                                    width: '22px',
-                                    height: '22px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: '50%',
-                                    border: `${hsvToHexString(
-                                        colorWithoutOpacity
-                                    )} 1px solid`,
-                                    margin: '4px',
-                                    filter: 'drop-shadow(0 0 1px #000000)',
-                                }}
-                                onClick={() => {
-                                    if (!colorAlreadyExists) {
-                                        onCreateCustomColorHandler(color);
-                                    }
-                                }}
-                            >
-                                <Icon
-                                    icon="fal fa-plus"
-                                    style={{
-                                        fontSize: '14px',
-                                        lineHeight: 1,
-                                        color: hsvToHexString(
-                                            colorWithoutOpacity
-                                        ),
-                                    }}
-                                />
+                            <div className="cc_color-selection--wrapper">
+                                <div
+                                    className={clsx(
+                                        'cc_color-selection__color--wrapper'
+                                    )}
+                                >
+                                    <div
+                                        style={{
+                                            '--color': 'transparent', //chayns color text,
+                                            color: '#ffffff!important',
+                                            border: 'none',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                        className="cc_color-selection__color"
+                                        onClick={() => {
+                                            if (!colorAlreadyExists) {
+                                                onCreateCustomColorHandler(
+                                                    color
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        <Icon
+                                            icon="fas fa-plus"
+                                            style={{
+                                                fontSize: '14px',
+                                                lineHeight: 1,
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>

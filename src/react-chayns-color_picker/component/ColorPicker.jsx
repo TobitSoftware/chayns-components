@@ -270,7 +270,7 @@ const ColorPicker = forwardRef(
                                         className="cc__color-picker__color-square"
                                         style={{
                                             backgroundColor:
-                                                hsvToHexString(color),
+                                                hsvToHexString(colorState),
                                         }}
                                     />
                                 )}
@@ -278,7 +278,7 @@ const ColorPicker = forwardRef(
 
                             <div
                                 style={{
-                                    margin: inline && '10px 11px 0',
+                                    margin: inline && '10px 10px 0',
                                 }}
                             >
                                 {input && (
@@ -388,7 +388,8 @@ const ColorPicker = forwardRef(
                                 <div
                                     className="cc__color-picker__color-square"
                                     style={{
-                                        backgroundColor: hsvToHexString(color),
+                                        backgroundColor:
+                                            hsvToHexString(colorState),
                                     }}
                                 />
                             )}

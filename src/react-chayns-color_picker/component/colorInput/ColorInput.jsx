@@ -165,13 +165,14 @@ export default function withColorInput({ showAllColorModels, ...props }) {
     if (showAllColorModels) {
         return (
             <Accordion
-                head={'Erweitert'}
+                head="Erweitert"
                 style={{
                     backgroundColor: 'transparent',
                     border: 'none',
                 }}
                 dataGroup="cc_color-picker"
                 icon="ts-angle-right"
+                isWrapped
             >
                 <div className="cc__color-input__accordion">
                     <ColorInput
@@ -190,7 +191,8 @@ export default function withColorInput({ showAllColorModels, ...props }) {
     }
     return (
         <Accordion
-            head={'Erweitert'}
+            head="Erweitert"
+            isWrapped
             style={{
                 backgroundColor: 'transparent',
                 border: 'none',
