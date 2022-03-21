@@ -299,7 +299,7 @@ const ColorPicker = forwardRef(
                                     color={colorState}
                                     onChange={(c) => {
                                         onChangeCallback(c);
-                                        onChangeEnd(c);
+                                        onChangeEnd?.(c);
                                     }}
                                     onCreateCustomColor={
                                         onCreateCustomColorCallback
@@ -420,7 +420,7 @@ const ColorPicker = forwardRef(
                                 color={colorState}
                                 onChange={(c) => {
                                     onChangeCallback(c);
-                                    onChangeEnd(c);
+                                    onChangeEnd?.(c);
                                 }}
                                 onCreateCustomColor={
                                     onCreateCustomColorCallback
