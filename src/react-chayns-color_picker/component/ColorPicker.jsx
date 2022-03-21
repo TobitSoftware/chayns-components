@@ -297,7 +297,10 @@ const ColorPicker = forwardRef(
                                     showCustomColors={showCustomColors}
                                     showGlobalColors={showGlobalColors}
                                     color={colorState}
-                                    onChange={onChangeCallback}
+                                    onChange={(c) => {
+                                        onChangeCallback(c);
+                                        onChangeEnd?.(c);
+                                    }}
                                     onCreateCustomColor={
                                         onCreateCustomColorCallback
                                     }
@@ -415,7 +418,10 @@ const ColorPicker = forwardRef(
                                 showCustomColors={showCustomColors}
                                 showGlobalColors={showGlobalColors}
                                 color={colorState}
-                                onChange={onChangeCallback}
+                                onChange={(c) => {
+                                    onChangeCallback(c);
+                                    onChangeEnd?.(c);
+                                }}
                                 onCreateCustomColor={
                                     onCreateCustomColorCallback
                                 }
