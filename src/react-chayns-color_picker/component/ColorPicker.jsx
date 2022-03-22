@@ -80,6 +80,7 @@ const ColorPicker = forwardRef(
             showCustomColors,
             showGlobalColors,
             onCreateCustomColor,
+            onRemoveCustomColor,
         },
         reference
     ) => {
@@ -205,6 +206,15 @@ const ColorPicker = forwardRef(
             [onCreateCustomColor]
         );
 
+        const onRemoveCustomColorCallback = useCallback(
+            (newColor) => {
+                if (onRemoveCustomColor) {
+                    onRemoveCustomColor(newColor);
+                }
+            },
+            [onRemoveCustomColor]
+        );
+
         const onColorModelToggle = useCallback(() => {
             setColorModel(
                 (colorModel + 1) % Object.keys(ColorPicker.colorModels).length
@@ -276,11 +286,7 @@ const ColorPicker = forwardRef(
                                 )}
                             </div>
 
-                            <div
-                                style={{
-                                    margin: inline && '10px 10px 0',
-                                }}
-                            >
+                            <div>
                                 {input && (
                                     <ColorInput
                                         color={colorState}
@@ -303,6 +309,9 @@ const ColorPicker = forwardRef(
                                     }}
                                     onCreateCustomColor={
                                         onCreateCustomColorCallback
+                                    }
+                                    onRemoveCustomColor={
+                                        onRemoveCustomColorCallback
                                     }
                                 />
                             </div>
@@ -424,6 +433,9 @@ const ColorPicker = forwardRef(
                                 }}
                                 onCreateCustomColor={
                                     onCreateCustomColorCallback
+                                }
+                                onRemoveCustomColor={
+                                    onRemoveCustomColorCallback
                                 }
                             />
                         </div>
@@ -565,6 +577,10 @@ ColorPicker.propTypes = {
      * Will be called when a custom color is added
      */
     onCreateCustomColor: PropTypes.func,
+    /**
+     * Will be called when a custom color is removed
+     */
+    onRemoveCustomColor: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
@@ -588,6 +604,7 @@ ColorPicker.defaultProps = {
     showCustomColors: false,
     showGlobalColors: false,
     onCreateCustomColor: null,
+    onRemoveCustomColor: null,
 };
 
 ColorPicker.colorModels = {
