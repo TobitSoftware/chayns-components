@@ -60,6 +60,7 @@ The `ColorPicker`-component takes the following props:
 | [showCustomColors](#showcustomcolors)       | `boolean`                             | `false`                         |          |
 | [showGlobalColors](#showglobalcolors)       | `boolean`                             | `false`                         |          |
 | [onCreateCustomColor](#oncreatecustomcolor) | `function`                            |                                 |          |
+| [onRemoveCustomColor](#onremovecustomcolor) | `function`                            |                                 |          |
 
 ### `inline`
 
@@ -271,3 +272,13 @@ onCreateCustomColor?: function
 ```
 
 Will be called when a custom color is added
+
+---
+
+### `onRemoveCustomColor`
+
+```ts
+onRemoveCustomColor?: function
+```
+
+Will be called when a custom color is removed
