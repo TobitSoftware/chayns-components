@@ -13,6 +13,7 @@ const ColorSelection = ({
     showGlobalColors,
     onChange,
     onCreateCustomColor,
+    onRemoveCustomColor,
 }) => {
     const globalColors = [
         '#000000',
@@ -44,8 +45,6 @@ const ColorSelection = ({
     };
     const accordionStyle = {
         border: 'none',
-        marginBottom: 0,
-        marginTop: '5px',
         backgroundColor: 'transparent',
     };
 
@@ -58,6 +57,11 @@ const ColorSelection = ({
     const onCreateCustomColorHandler = (value) => {
         if (onCreateCustomColor && value) {
             onCreateCustomColor(value);
+        }
+    };
+    const onRemoveCustomColorHandler = (value) => {
+        if (onRemoveCustomColor && value) {
+            onRemoveCustomColor(value);
         }
     };
 
@@ -144,7 +148,7 @@ const ColorSelection = ({
                             >
                                 <div
                                     style={{
-                                        opacity: colorAlreadyExists ? 0.5 : 1,
+                                        opacity: 1,
                                         '--color': 'transparent',
                                         color: '#ffffff!important',
                                         border: 'none',
@@ -156,16 +160,29 @@ const ColorSelection = ({
                                     onClick={() => {
                                         if (!colorAlreadyExists) {
                                             onCreateCustomColorHandler(color);
+                                        } else {
+                                            onRemoveCustomColorHandler(color);
                                         }
                                     }}
                                 >
-                                    <Icon
-                                        icon="fas fa-plus"
-                                        style={{
-                                            fontSize: '14px',
-                                            lineHeight: 1,
-                                        }}
-                                    />
+                                    {!colorAlreadyExists && (
+                                        <Icon
+                                            icon="fas fa-plus"
+                                            style={{
+                                                fontSize: '14px',
+                                                lineHeight: 1,
+                                            }}
+                                        />
+                                    )}
+                                    {colorAlreadyExists && (
+                                        <Icon
+                                            icon="fas fa-trash"
+                                            style={{
+                                                fontSize: '10px',
+                                                lineHeight: 1,
+                                            }}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -204,6 +221,7 @@ ColorSelection.propTypes = {
     }).isRequired,
     onChange: PropTypes.func.isRequired,
     onCreateCustomColor: PropTypes.func.isRequired,
+    onRemoveCustomColor: PropTypes.func.isRequired,
 };
 
 ColorSelection.defaultProps = {
