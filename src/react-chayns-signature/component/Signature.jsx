@@ -18,6 +18,7 @@ import {
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import './signature.scss';
+import TextString from '../../react-chayns-textstring/component/TextString';
 
 /**
  * A component to let the user subscribe
@@ -45,10 +46,20 @@ const Signature = forwardRef(
         }, []);
 
         const editSignature = useCallback(async () => {
+            let saveText = TextString.getTextString(
+                'txt_chayns_components_signature_save'
+            );
+            if (!saveText) {
+                await TextString.loadLibrary('ChaynsComponents');
+                saveText = TextString.getTextString(
+                    'txt_chayns_components_signature_save'
+                );
+            }
+
             const { buttonType, value } = await chayns.dialog.signature({
                 buttons: [
                     {
-                        text: 'Speichern',
+                        text: saveText,
                         buttonType: chayns.dialog.buttonType.POSITIVE,
                     },
                     {
