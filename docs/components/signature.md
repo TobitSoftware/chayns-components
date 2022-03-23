@@ -37,16 +37,16 @@ import { Signature } from 'chayns-components';
 
 The `Signature`-component takes the following props:
 
-| Name                                              | Type       | Default            | Required |
-| ------------------------------------------------- | ---------- | ------------------ | :------: |
-| [buttonText](#buttontext)                         | `string`   | `'Unterschreiben'` |          |
-| [buttonWrapperClassName](#buttonwrapperclassname) | `string`   |                    |          |
-| [disabled](#disabled)                             | `boolean`  | `false`            |          |
-| [skipLoadAndSave](#skiploadandsave)               | `boolean`  | `false`            |          |
-| [onSubscribe](#onsubscribe)                       | `function` |                    |          |
-| [onEdit](#onedit)                                 | `function` |                    |          |
-| [forceInitialShow](#forceinitialshow)             | `boolean`  | `false`            |          |
-| [showDeleteIcon](#showdeleteicon)                 | `boolean`  | `false`            |          |
+| Name                                              | Type       | Default | Required |
+| ------------------------------------------------- | ---------- | ------- | :------: |
+| [buttonText](#buttontext)                         | `string`   |         |          |
+| [buttonWrapperClassName](#buttonwrapperclassname) | `string`   |         |          |
+| [disabled](#disabled)                             | `boolean`  | `false` |          |
+| [skipLoadAndSave](#skiploadandsave)               | `boolean`  | `false` |          |
+| [onSubscribe](#onsubscribe)                       | `function` |         |          |
+| [onEdit](#onedit)                                 | `function` |         |          |
+| [forceInitialShow](#forceinitialshow)             | `boolean`  | `false` |          |
+| [showDeleteIcon](#showdeleteicon)                 | `boolean`  | `false` |          |
 
 ### `buttonText`
 

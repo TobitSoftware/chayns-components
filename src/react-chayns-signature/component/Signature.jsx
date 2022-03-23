@@ -39,27 +39,23 @@ const Signature = forwardRef(
     ) => {
         const [signatureUrl, setSignatureUrl] = useState(undefined);
         const [subscribed, setSubscribed] = useState(() => forceInitialShow);
+        const [, setTextStringsLoaded] = useState(false);
 
         useEffect(() => {
             if (!skipLoadAndSave) getUserSignature().then(setSignatureUrl);
+            TextString.loadLibrary('ChaynsComponents').then(() => {
+                setTextStringsLoaded(true);
+            });
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
 
         const editSignature = useCallback(async () => {
-            let saveText = TextString.getTextString(
-                'txt_chayns_components_signature_save'
-            );
-            if (!saveText) {
-                await TextString.loadLibrary('ChaynsComponents');
-                saveText = TextString.getTextString(
-                    'txt_chayns_components_signature_save'
-                );
-            }
-
             const { buttonType, value } = await chayns.dialog.signature({
                 buttons: [
                     {
-                        text: saveText,
+                        text: TextString.getTextString(
+                            'txt_chayns_components_signature_save'
+                        ),
                         buttonType: chayns.dialog.buttonType.POSITIVE,
                     },
                     {
@@ -149,7 +145,11 @@ const Signature = forwardRef(
             return (
                 <div className={buttonWrapperClassName}>
                     <Button onClick={onButtonClick} disabled={disabled}>
-                        {buttonText}
+                        {buttonText ||
+                            TextString.getTextString(
+                                'txt_chayns_components_signature_button'
+                            ) ||
+                            ''}
                     </Button>
                 </div>
             );
@@ -217,7 +217,7 @@ Signature.propTypes = {
 };
 
 Signature.defaultProps = {
-    buttonText: 'Unterschreiben',
+    buttonText: null,
     buttonWrapperClassName: null,
     disabled: false,
     skipLoadAndSave: false,
