@@ -2,6 +2,8 @@
     &--inner {
         display: flex;
         flex-wrap: wrap;
+        overflow-y: auto;
+        max-height: 90px;
     }
 
     &--wrapper {
@@ -11,8 +13,8 @@
 
     &--active {
         position: absolute;
-        width: 26px;
-        height: 26px;
+        width: 25px;
+        height: 25px;
         top: -2px;
         left: -2px;
         border-radius: 100%;
@@ -23,8 +25,8 @@
         &--wrapper {
             position: relative;
             padding: 2px;
-            width: 22px;
-            height: 22px;
+            width: 21px;
+            height: 21px;
             border-radius: 100%;
             cursor: pointer;
             overflow: hidden;

@@ -118,7 +118,7 @@ const ColorSelection = ({
                     dataGroup="cc_color-picker"
                     isWrapped
                 >
-                    <div className="cc_color-selection--inner">
+                    <div className="cc_color-selection--inner scrollbar">
                         {customColorsArray.map((c) => (
                             <div className="cc_color-selection--wrapper">
                                 {activeColorHex === hsvToHexString(c) && (
