@@ -129,7 +129,7 @@ const ColorPicker = forwardRef(
                 // Hide bubble and remove event listeners if click was outside of the bubble
                 if (
                     event.type === 'blur' ||
-                    !isDescendant(bubbleContentRef.current, event.target)
+                    !(event.target === bubbleContentRef.current || isDescendant(bubbleContentRef.current, event.target))
                 ) {
                     document.removeEventListener('click', closeBubble);
                     window.removeEventListener('blur', closeBubble);
@@ -181,7 +181,7 @@ const ColorPicker = forwardRef(
             document.addEventListener('click', closeBubble, {
                 capture: true,
             });
-            window.addEventListener('blur', closeBubble);
+            // window.addEventListener('blur', closeBubble);
             if (chayns.env.isApp || chayns.env.isMyChaynsApp) {
                 chayns.disallowRefreshScroll();
             }
