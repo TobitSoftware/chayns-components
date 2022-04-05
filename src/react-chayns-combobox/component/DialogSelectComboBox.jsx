@@ -2,6 +2,7 @@
 import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { CSSTransition } from 'react-transition-group';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
@@ -92,7 +93,7 @@ const DialogSelectComboBox = ({
             setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
             if (chayns.env.isMobile) {
                 const items = list.map((item) => ({
-                    name: item[listValue],
+                    name: React.isValidElement(item[listValue]) ? renderToStaticMarkup(item[listValue]) : item[listValue],
                     value: item[listKey],
                     isSelected:
                         item[listKey] === (value !== null ? value : selected),
