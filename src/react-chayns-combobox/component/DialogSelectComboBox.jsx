@@ -164,7 +164,7 @@ const DialogSelectComboBox = ({
                 value === null &&
                 label
                     ? label
-                    : getItem(value !== null ? value : selected)[listValue]}
+                    : (getItem(value !== null ? value : selected) ?? getItem(selected))[listValue]}
             </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-chevron-down" />
         </Button>,
