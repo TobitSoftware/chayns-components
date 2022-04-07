@@ -128,6 +128,14 @@ export default class TextString extends Component {
         return textString;
     }
 
+    static selectLanguageToChange(stringName) {
+        chayns.dialog.iFrame({
+            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+            buttons: [],
+            input: { textstring: stringName },
+        });
+    }
+
     constructor(props) {
         super(props);
         const { stringName, language, setProps, replacements, fallback } =
@@ -165,7 +173,6 @@ export default class TextString extends Component {
         this.changeStringResult = this.changeStringResult.bind(this);
         this.selectStringToChange = this.selectStringToChange.bind(this);
         this.setTextStrings = this.setTextStrings.bind(this);
-        this.selectLanguageToChange = this.selectLanguageToChange.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -255,20 +262,12 @@ export default class TextString extends Component {
                         data.selection &&
                         data.selection.length > 0
                     ) {
-                        this.selectLanguageToChange(data.selection[0].value);
+                        TextString.selectLanguageToChange(data.selection[0].value);
                     }
                 });
         } else {
-            this.selectLanguageToChange(stringName);
+            TextString.selectLanguageToChange(stringName);
         }
-    }
-
-    selectLanguageToChange(stringName) {
-        chayns.dialog.iFrame({
-            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-            buttons: [],
-            input: { textstring: stringName },
-        });
     }
 
     changeStringDialog(stringName, lang) {

@@ -10,11 +10,11 @@ import {
     hexToRgb255,
     rgb255ToHex,
 } from '@chayns/colors';
+import Accordion from '../../../react-chayns-accordion/component/Accordion';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
 import { isNumber } from '../../../utils/is';
-import { Accordion } from '../../../index';
 
 class ColorInput extends Component {
     constructor(props) {

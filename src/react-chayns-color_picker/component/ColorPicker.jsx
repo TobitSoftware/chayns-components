@@ -3,7 +3,6 @@
  */
 
 import classNames from 'clsx';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, {
     forwardRef,
@@ -254,7 +253,7 @@ const ColorPicker = forwardRef(
                             >
                                 <div
                                     style={{}}
-                                    className={clsx({
+                                    className={classNames({
                                         'cc__color-picker__slider-container__with-transparency':
                                             transparency,
                                         'cc__color-picker__slider-container__without-transparency':
@@ -375,7 +374,7 @@ const ColorPicker = forwardRef(
                         >
                             <div
                                 style={{}}
-                                className={clsx({
+                                className={classNames({
                                     'cc__color-picker__slider-container__with-transparency':
                                         transparency,
                                     'cc__color-picker__slider-container__without-transparency':

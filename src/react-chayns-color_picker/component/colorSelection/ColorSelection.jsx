@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Icon } from '../../../index';
-import { hsvToHexString } from '../../../utils/color';
-import './colorSelection.scss';
 import { hexToHsv } from '@chayns/colors';
 import clsx from 'clsx';
+import Accordion from '../../../react-chayns-accordion/component/Accordion';
+import Icon from '../../../react-chayns-icon/component/Icon';
+import { hsvToHexString } from '../../../utils/color';
+import './colorSelection.scss';
 
 const ColorSelection = ({
     color,
@@ -38,11 +39,6 @@ const ColorSelection = ({
         '#ff00ff',
     ].map((c) => hexToHsv(c));
 
-    const style = {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    };
     const accordionStyle = {
         border: 'none',
         backgroundColor: 'transparent',
@@ -68,10 +64,6 @@ const ColorSelection = ({
     const colorAlreadyExists = customColorsArray.find(
         (c) => hsvToHexString(c) === hsvToHexString(color)
     );
-    const colorWithoutOpacity = {
-        ...color,
-        a: 1,
-    };
 
     const activeColorHex = useMemo(() => hsvToHexString(color), [color]);
 
