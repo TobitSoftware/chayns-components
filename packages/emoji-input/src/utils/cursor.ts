@@ -201,10 +201,10 @@ export type Selection = {
 export const getCursorPosition = (element: HTMLDivElement | null): Selection | null => {
     if (element) {
         let selection = window.getSelection();
-
+        console.log('selection', selection);
         if (selection != null && selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
-
+            console.log('range', range);
             return {
                 start: getTextLength(element, range.startContainer, range.startOffset),
                 end: getTextLength(element, range.endContainer, range.endOffset),
