@@ -27,6 +27,7 @@ import { DesignMode } from './constants/design';
 import { PopupPosition } from './constants/popup';
 import {
     StyledEditableDiv,
+    StyledEditableDivContainer,
     StyledEmojiInput,
     StyledPlaceholder,
     StyledRightElement,
@@ -316,24 +317,26 @@ const EmojiInput: FC<EmojiInputProps> = ({
             design={design}
             isDisabled={isDisabled}
         >
-            <StyledEditableDiv
-                contentEditable={!isDisabled}
-                design={design}
-                dir="auto"
-                id={uuid}
-                isDisabled={isDisabled}
-                maxHeight={maxHeight}
-                onBlur={handleBlur}
-                onFocus={handleFocus}
-                onInput={handleInput}
-                onKeyUp={handleKeyUp}
-                onKeyDown={handleKeyDown}
-                // @ts-ignore
-                onPaste={handlePaste}
-                ref={inputRef}
-                showEmojiButton={showEmojiButton}
-                spellCheck={true}
-            />
+            <StyledEditableDivContainer design={design}>
+                <StyledEditableDiv
+                    contentEditable={!isDisabled}
+                    design={design}
+                    dir="auto"
+                    id={uuid}
+                    isDisabled={isDisabled}
+                    maxHeight={maxHeight}
+                    onBlur={handleBlur}
+                    onFocus={handleFocus}
+                    onInput={handleInput}
+                    onKeyUp={handleKeyUp}
+                    onKeyDown={handleKeyDown}
+                    // @ts-ignore
+                    onPaste={handlePaste}
+                    ref={inputRef}
+                    showEmojiButton={showEmojiButton}
+                    spellCheck={true}
+                />
+            </StyledEditableDivContainer>
             <StyledPlaceholder
                 isHidden={(!!getInputValue() && getInputValue() !== '<br>') || inputHasFocus()}
                 design={design}

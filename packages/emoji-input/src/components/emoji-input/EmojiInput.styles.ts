@@ -32,14 +32,42 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     }}
 `;
 
-type StyledDivProps = WithTheme<
+type StyledEditableDivContainerProps = WithTheme<Pick<EmojiInputProps, 'design'>>;
+export const StyledEditableDivContainer = styled.div<StyledEditableDivContainerProps>`
+    display: flex;
+    flex: 1;
+    padding: 5px 0;
+
+    ${({ design, theme }: StyledEditableDivContainerProps) => {
+        switch (design) {
+            case DesignMode.BorderDesign:
+                return css`
+                    min-height: 42px;
+                `;
+            case DesignMode.Normal:
+            default:
+                return css`
+                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.45) !important;
+                    border-radius: 0;
+                    border: 1px solid transparent;
+                    min-height: 36px;
+                    transition: border-color 0.4s, color 0.4s, font-weight 0.4s;
+
+                    :focus {
+                        border-bottom-color: rgba(${theme['headline-rgb']}, 0.9) !important;
+                    }
+                `;
+        }
+    }}
+`;
+
+type StyledEditableDivProps = WithTheme<
     Pick<EmojiInputProps, 'design' | 'isDisabled' | 'showEmojiButton' | 'maxHeight'>
 > & {
     onPaste: (event: ClipboardEvent) => void;
     spellCheck: boolean;
 };
-
-export const StyledEditableDiv = styled.div<StyledDivProps>`
+export const StyledEditableDiv = styled.div<StyledEditableDivProps>`
     cursor: text;
     display: inline-block;
     flex: 1;
@@ -55,45 +83,37 @@ export const StyledEditableDiv = styled.div<StyledDivProps>`
         cursor: pointer;
     }
 
-    ::-webkit-scrollbar-button {
-        background-color: transparent;
-    }
+    //::-webkit-scrollbar-button {
+    //    background-color: transparent;
+    //}
 
     ::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: 20px;
     }
+
     word-break: break-word;
 
-    ${({ design, theme, showEmojiButton }: StyledDivProps) => {
+    ${({ design, theme, showEmojiButton }: StyledEditableDivProps) => {
         switch (design) {
             case DesignMode.BorderDesign:
                 return css`
-                    padding: 8px ${showEmojiButton ? '6px' : '10px'} 8px 11px;
-                    min-height: 42px;
+                    padding: 3px ${showEmojiButton ? '6px' : '10px'} 3px 11px;
                 `;
             case DesignMode.Normal:
             default:
                 return css`
                     background-color: transparent;
-                    border-bottom-color: rgba(${theme['headline-rgb']}, 0.45) !important;
-                    border-radius: 0;
-                    border: 1px solid transparent;
                     box-shadow: none;
                     color: ${theme.text};
                     cursor: text;
-                    min-height: 36px;
                     margin-right: ${showEmojiButton ? '6px' : '0px'};
-                    padding: 5px 0px 5px 1px;
-                    transition: border-color 0.4s, color 0.4s, font-weight 0.4s;
-                    :focus {
-                        border-bottom-color: rgba(${theme['headline-rgb']}, 0.9) !important;
-                    }
+                    padding: 0 0 0 1px;
                 `;
         }
     }}
 
-    ${({ isDisabled }: StyledDivProps) =>
+    ${({ isDisabled }: StyledEditableDivProps) =>
         isDisabled &&
         css`
             cursor: initial;
