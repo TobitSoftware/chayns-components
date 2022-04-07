@@ -75,6 +75,8 @@ export const StyledEditableDiv = styled.div<StyledEditableDivProps>`
     overflow-x: hidden;
     overflow-y: auto;
     max-height: ${({ maxHeight }) => maxHeight || '300px'};
+    user-select: text;
+
     scrollbar-color: #80808080 transparent;
     scrollbar-width: thin;
 
@@ -143,7 +145,7 @@ export const StyledPlaceholder = styled.div<StyledPlaceholderProps>`
 type StyledRightElementProps = Pick<EmojiInputProps, 'design'>;
 export const StyledRightElement = styled.div<StyledRightElementProps>`
     align-items: center;
-    align-self: end;
+    align-self: flex-end;
     display: flex;
     justify-content: center;
     min-height: ${({ design }: StyledRightElementProps) =>

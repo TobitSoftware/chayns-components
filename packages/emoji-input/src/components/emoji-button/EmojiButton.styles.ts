@@ -5,7 +5,7 @@ import type { EmojiInputProps } from '../emoji-input/EmojiInput';
 type StyledEmojiButtonProps = Pick<EmojiInputProps, 'design'>;
 export const StyledEmojiButton = styled.div<StyledEmojiButtonProps>`
     align-items: center;
-    align-self: end;
+    align-self: flex-end;
     display: flex;
     flex: 0;
     height: ${({ design }: StyledEmojiButtonProps) =>
