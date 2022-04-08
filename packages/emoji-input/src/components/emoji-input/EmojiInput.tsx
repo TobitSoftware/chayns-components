@@ -1,5 +1,6 @@
 import React, {
     FC,
+    MutableRefObject,
     ReactNode,
     useCallback,
     useEffect,
@@ -19,7 +20,13 @@ import {
     setCursorPosition,
     setCursorToEnd,
 } from '../../utils/cursor';
-import { isCtrlV, isCtrlY, isCtrlZ, isEnterKey, isSpaceKey } from '../../utils/key';
+import {
+    isCapsShiftCtrlAltEscFKeyNumLock,
+    isCtrlY,
+    isCtrlZ,
+    isEnterKey,
+    isSpaceKey,
+} from '../../utils/key';
 import UndoHandler from '../../utils/undoHandler';
 import { addBrTag, removeBrTag, replaceNbsp, replaceSpace } from '../../utils/utils';
 import { EmojiButton } from '../emoji-button/EmojiButton';
@@ -84,9 +91,6 @@ export type EmojiInputProps = {
      */
     value?: string;
 };
-let lastKeyCtrlZY = false;
-let lastKeyCtrlVOrSpace: boolean | null = false;
-let prevInputHTML: string;
 
 const EmojiInput: FC<EmojiInputProps> = ({
     design = DesignMode.Normal,
@@ -102,7 +106,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
     showEmojiButton = true,
     value = '',
 }) => {
-    console.log('--------------------------------------- render');
+    // console.log('--------------------------------------- render');
+
+    // global variables
+    const lastKeyCtrlZY: MutableRefObject<boolean> = useRef(false);
+    const lastKeySpace: MutableRefObject<boolean | null> = useRef(false);
+    const prevLastKeySpace: MutableRefObject<boolean | null> = useRef(false);
+
+    const prevInputHTML: MutableRefObject<string | undefined> = useRef();
+    const prevInputBbCode: MutableRefObject<string | undefined> = useRef();
 
     const inputRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
@@ -142,16 +154,23 @@ const EmojiInput: FC<EmojiInputProps> = ({
         }
     }, [value]);
 
+    const saveInputStateInHistory = useCallback((inputBbCodeValue: string) => {
+        undoHandler.addInputHistory({
+            bbValue: addBrTag(inputBbCodeValue),
+            selection: getCursorPosition(inputRef.current),
+        });
+    }, []);
+
     const handleInput = useCallback(
         (event: any, addHTML: string | null = null) => {
-            console.log('before handleInput:', event, addHTML, lastKeyCtrlZY);
-            if (!lastKeyCtrlZY) {
+            // console.log('before handleInput:', event, addHTML, lastKeyCtrlZY.current);
+            if (!lastKeyCtrlZY.current) {
                 console.time('handleInput');
                 let cursorSelection = getCursorPosition(inputRef.current);
                 let bbText = '';
                 let newHtml = '';
                 if (cursorSelection) {
-                    console.log('start handleInput:', cursorSelection, getInputValue());
+                    // console.log('start handleInput:', cursorSelection, getInputValue());
                     bbText = bbCodeParser.bbCodeHTMLToText(getInputValue());
                     bbText = replaceSpace(bbText);
                     if (addHTML) {
@@ -163,25 +182,27 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         bbText = bbTextWithSelection.bb;
                         cursorSelection = bbTextWithSelection.sel;
                     }
-                    if (addHTML || lastKeyCtrlVOrSpace) {
+                    prevInputBbCode.current = bbText;
+                    if (addHTML) {
+                        console.log('addHistoryonInput', addHTML, lastKeySpace.current, bbText);
                         undoHandler.addInputHistory({
                             bbValue: addBrTag(bbText),
                             selection: cursorSelection,
                         });
                     }
-                    console.log('during handleInput BBCode:', bbText);
+                    // console.log('during handleInput BBCode:', bbText);
 
                     newHtml = bbCodeParser.bbCodeTextToHTML(addBrTag(bbText));
-                    console.log('a handleInput newHTML:', newHtml);
+                    // console.log('a handleInput newHTML:', newHtml);
                     setInputValue(newHtml);
                     setCursorPosition(cursorSelection, inputRef.current);
                 }
-                console.timeEnd('handleInput');
-                if (typeof onInput === 'function' && newHtml !== prevInputHTML) {
+                //console.timeEnd('handleInput');
+                if (typeof onInput === 'function' && newHtml !== prevInputHTML.current) {
                     onInput(replaceNbsp(removeBrTag(bbText)), event);
                 }
-                prevInputHTML = newHtml;
-                console.log('-----------------------handleInput--------------------------------');
+                prevInputHTML.current = newHtml;
+                // console.log('-----------------------handleInput--------------------------------');
             }
         },
         [onInput]
@@ -197,24 +218,28 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     const handleKeyDown = useCallback((event) => {
-        console.log('Keydown', event);
-        lastKeyCtrlZY = false;
+        // console.log('Keydown', event.key, getInputValue());
+        lastKeyCtrlZY.current = false;
         const ctrlZ = isCtrlZ(event);
         const ctrlY = isCtrlY(event);
-        const prevLastKeyCtrlVOrSpace = lastKeyCtrlVOrSpace;
-        lastKeyCtrlVOrSpace = false;
+        const capsShiftCtrlAltEscFKeyNumLock = isCapsShiftCtrlAltEscFKeyNumLock(event);
+        const space = isSpaceKey(event);
+
         if (isEnterKey(event)) {
             event.preventDefault();
             handleInput(event, '<br>');
         } else if (ctrlZ || ctrlY) {
             event.preventDefault();
-            lastKeyCtrlZY = true;
+            lastKeyCtrlZY.current = true;
             let newValue = null;
             if (ctrlZ) {
-                newValue = undoHandler.undoValue({
-                    bbValue: bbCodeParser.bbCodeHTMLToText(getInputValue()),
-                    selection: getCursorPosition(inputRef.current),
-                });
+                newValue = undoHandler.undoValue(
+                    {
+                        bbValue: bbCodeParser.bbCodeHTMLToText(getInputValue()),
+                        selection: getCursorPosition(inputRef.current),
+                    },
+                    lastKeySpace.current !== false
+                );
             }
             if (ctrlY) {
                 newValue = undoHandler.redoValue();
@@ -228,12 +253,15 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     setCursorToEnd(inputRef.current);
                 }
             }
-        } else if (isSpaceKey(event) || isCtrlV(event)) {
-            if (prevLastKeyCtrlVOrSpace === false) {
-                lastKeyCtrlVOrSpace = true;
-            } else {
-                lastKeyCtrlVOrSpace = null;
+        } else if (space) {
+            console.log('keydown SPACE', lastKeySpace.current);
+            if (lastKeySpace.current === false) {
+                saveInputStateInHistory(getInputValue());
             }
+            lastKeySpace.current = true;
+        } else if (!capsShiftCtrlAltEscFKeyNumLock && !ctrlY && !ctrlZ) {
+            // prevLastKeySpace.current = lastKeySpace.current;
+            lastKeySpace.current = false;
         }
     }, []);
 
@@ -291,7 +319,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     const handlePaste = useCallback((event: ClipboardEvent) => {
         event.preventDefault();
         event.stopPropagation();
-        const text = event.clipboardData?.getData('text/plain');
+        let text = event.clipboardData?.getData('text/plain');
+        text = text?.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
         if (text) {
             handleInput(event, text);
         }
@@ -355,6 +384,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         }
                     }}
                     onEmojiInput={(event: MouseEvent, emojiHtml) => {
+                        lastKeyCtrlZY.current = false;
                         handleInput(event, emojiHtml);
                     }}
                 />
