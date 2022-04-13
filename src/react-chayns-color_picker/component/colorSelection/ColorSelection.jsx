@@ -26,19 +26,19 @@ const ColorSelection = ({
         '#efefef',
         '#f3f3f3',
         '#ffffff',
-        '#F44336',
-        '#FF9800',
-        '#FFEB3B',
+        '#f44336',
+        '#ff9800',
+        '#ffeb3b',
         '#009688',
         '#795548',
-        '#8BC34A',
-        '#4CAF50',
-        '#9C27B0',
-        '#3F51B5',
-        '#03A9F4',
-        '#005EB8',
+        '#8bc34a',
+        '#4caf50',
+        '#9c27b0',
+        '#3f51b5',
+        '#03a9f4',
+        '#005eb8',
         chayns.utils.colors.get(),
-    ].map((c) => hexToHsv(c)), []);
+    ], []);
 
     const onChangeHandler = (value) => {
         if (onChange && value) {
@@ -56,6 +56,7 @@ const ColorSelection = ({
             onRemoveCustomColor(value);
         }
     };
+    const activeColorHex = useMemo(() => hsvToHexString(color), [color]);
 
     const colors = useMemo(() => {
         const colorsArr = [];
@@ -63,31 +64,28 @@ const ColorSelection = ({
             colorsArr.push(...globalColors);
         }
         if (showCustomColors) {
-            colorsArr.push(...customColorsArray);
+            colorsArr.push(...customColorsArray.map((c) => hsvToHexString(c)));
         }
         return [...new Set(colorsArr)];
     }, [showGlobalColors, showCustomColors, globalColors, customColorsArray]);
 
     const colorAlreadyExists = useMemo(() => colors.some(
-        (c) => hsvToHexString(c) === hsvToHexString(color)
-    ), [color, colors]);
+        (c) => c === activeColorHex
+    ), [activeColorHex, colors]);
 
     const isGlobalColor = useMemo(() => {
-        if (color) {
-            return globalColors.some((c) => hsvToHexString(c) === hsvToHexString(color));
+        if (activeColorHex) {
+            return globalColors.some((c) => c === hsvToHexString(activeColorHex));
         }
         return false;
-    }, [color, globalColors]);
+    }, [activeColorHex, globalColors]);
 
-    const activeColorHex = useMemo(() => hsvToHexString(color), [color]);
-
-    console.log(colorAlreadyExists)
     return (
         <div className="cc_color-selection">
             <div className="cc_color-selection--inner scrollbar">
                 {colors.map((c) => (
                     <div className="cc_color-selection--wrapper">
-                        {activeColorHex === hsvToHexString(c) && (
+                        {activeColorHex === c && (
                             <div className="cc_color-selection--active"/>
                         )}
                         <div
@@ -97,10 +95,10 @@ const ColorSelection = ({
                         >
                             <div
                                 style={{
-                                    '--color': hsvToHexString(c),
+                                    '--color': c,
                                 }}
                                 className="cc_color-selection__color"
-                                onClick={() => onChangeHandler(c)}
+                                onClick={() => onChangeHandler(hexToHsv(c))}
                             />
                             <div className="cc_color-selection__transparency"/>
                         </div>
@@ -126,9 +124,9 @@ const ColorSelection = ({
                             onClick={() => {
                                 if (!isGlobalColor) {
                                     if (!colorAlreadyExists) {
-                                        onCreateCustomColorHandler(color);
+                                        onCreateCustomColorHandler(hexToHsv(color));
                                     } else {
-                                        onRemoveCustomColorHandler(color);
+                                        onRemoveCustomColorHandler(hexToHsv(color));
                                     }
                                 }
                             }}
