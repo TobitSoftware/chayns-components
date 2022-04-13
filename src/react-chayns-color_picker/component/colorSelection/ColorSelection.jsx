@@ -71,8 +71,7 @@ const ColorSelection = ({
                 ...customColorsArray
                     .map((c) => hsvToHexString(c).toLowerCase())
                     .filter(
-                        (c) =>
-                            !showGlobalColors || c !== globalColors.includes(c)
+                        (c) => !showGlobalColors || !globalColors.includes(c)
                     )
             );
         }
