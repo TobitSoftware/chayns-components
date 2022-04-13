@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { hexToHsv } from '@chayns/colors';
 import clsx from 'clsx';
-import Accordion from '../../../react-chayns-accordion/component/Accordion';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { hsvToHexString } from '../../../utils/color';
 import './colorSelection.scss';
@@ -16,7 +15,7 @@ const ColorSelection = ({
     onCreateCustomColor,
     onRemoveCustomColor,
 }) => {
-    const globalColors = [
+    const globalColors = useMemo(() => [
         '#000000',
         '#434343',
         '#666666',
@@ -27,22 +26,19 @@ const ColorSelection = ({
         '#efefef',
         '#f3f3f3',
         '#ffffff',
-        '#980000',
-        '#ff0000',
-        '#ff9900',
-        '#ffff00',
-        '#00ff00',
-        '#00ffff',
-        '#4a86e8',
-        '#0000ff',
-        '#9900ff',
-        '#ff00ff',
-    ].map((c) => hexToHsv(c));
-
-    const accordionStyle = {
-        border: 'none',
-        backgroundColor: 'transparent',
-    };
+        '#F44336',
+        '#FF9800',
+        '#FFEB3B',
+        '#009688',
+        '#795548',
+        '#8BC34A',
+        '#4CAF50',
+        '#9C27B0',
+        '#3F51B5',
+        '#03A9F4',
+        '#005EB8',
+        chayns.utils.colors.get(),
+    ].map((c) => hexToHsv(c)), []);
 
     const onChangeHandler = (value) => {
         if (onChange && value) {
@@ -61,126 +57,104 @@ const ColorSelection = ({
         }
     };
 
-    const colorAlreadyExists = customColorsArray.find(
+    const colors = useMemo(() => {
+        const colorsArr = [];
+        if (showGlobalColors) {
+            colorsArr.push(...globalColors);
+        }
+        if (showCustomColors) {
+            colorsArr.push(...customColorsArray);
+        }
+        return [...new Set(colorsArr)];
+    }, [showGlobalColors, showCustomColors, globalColors, customColorsArray]);
+
+    const colorAlreadyExists = useMemo(() => colors.some(
         (c) => hsvToHexString(c) === hsvToHexString(color)
-    );
+    ), [color, colors]);
+
+    const isGlobalColor = useMemo(() => {
+        if (color) {
+            return globalColors.some((c) => hsvToHexString(c) === hsvToHexString(color));
+        }
+        return false;
+    }, [color, globalColors]);
 
     const activeColorHex = useMemo(() => hsvToHexString(color), [color]);
 
+    console.log(colorAlreadyExists)
     return (
         <div className="cc_color-selection">
-            {showGlobalColors && (
-                <Accordion
-                    head="Globale Farben"
-                    icon="ts-angle-right"
-                    style={accordionStyle}
-                    dataGroup="cc_color-picker"
-                    isWrapped
-                >
-                    <div className="cc_color-selection--inner">
-                        {globalColors.map((c) => (
-                            <div className="cc_color-selection--wrapper">
-                                {activeColorHex === hsvToHexString(c) && (
-                                    <div className="cc_color-selection--active" />
-                                )}
-                                <div
-                                    className={clsx(
-                                        'cc_color-selection__color--wrapper'
-                                    )}
-                                >
-                                    <div
-                                        style={{
-                                            '--color': hsvToHexString(c),
-                                        }}
-                                        className="cc_color-selection__color"
-                                        onClick={() => onChangeHandler(c)}
-                                    />
-                                    <div className="cc_color-selection__transparency" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </Accordion>
-            )}
-            {showCustomColors && customColorsArray && (
-                <Accordion
-                    head="Eigene Farben"
-                    icon="ts-angle-right"
-                    style={accordionStyle}
-                    dataGroup="cc_color-picker"
-                    isWrapped
-                >
-                    <div className="cc_color-selection--inner scrollbar">
-                        {customColorsArray.map((c) => (
-                            <div className="cc_color-selection--wrapper">
-                                {activeColorHex === hsvToHexString(c) && (
-                                    <div className="cc_color-selection--active" />
-                                )}
-                                <div
-                                    className={clsx(
-                                        'cc_color-selection__color--wrapper'
-                                    )}
-                                >
-                                    <div
-                                        style={{
-                                            '--color': hsvToHexString(c),
-                                        }}
-                                        className="cc_color-selection__color"
-                                        onClick={() => onChangeHandler(c)}
-                                    />
-                                    <div className="cc_color-selection__transparency" />
-                                </div>
-                            </div>
-                        ))}
-                        <div className="cc_color-selection--wrapper">
+            <div className="cc_color-selection--inner scrollbar">
+                {colors.map((c) => (
+                    <div className="cc_color-selection--wrapper">
+                        {activeColorHex === hsvToHexString(c) && (
+                            <div className="cc_color-selection--active"/>
+                        )}
+                        <div
+                            className={clsx(
+                                'cc_color-selection__color--wrapper'
+                            )}
+                        >
                             <div
-                                className={clsx(
-                                    'cc_color-selection__color--wrapper'
-                                )}
-                            >
-                                <div
-                                    style={{
-                                        opacity: 1,
-                                        '--color': 'transparent',
-                                        color: '#ffffff!important',
-                                        border: 'none',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
-                                    className="cc_color-selection__color"
-                                    onClick={() => {
-                                        if (!colorAlreadyExists) {
-                                            onCreateCustomColorHandler(color);
-                                        } else {
-                                            onRemoveCustomColorHandler(color);
-                                        }
-                                    }}
-                                >
-                                    {!colorAlreadyExists && (
-                                        <Icon
-                                            icon="fas fa-plus"
-                                            style={{
-                                                fontSize: '14px',
-                                                lineHeight: 1,
-                                            }}
-                                        />
-                                    )}
-                                    {colorAlreadyExists && (
-                                        <Icon
-                                            icon="fas fa-trash"
-                                            style={{
-                                                fontSize: '10px',
-                                                lineHeight: 1,
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            </div>
+                                style={{
+                                    '--color': hsvToHexString(c),
+                                }}
+                                className="cc_color-selection__color"
+                                onClick={() => onChangeHandler(c)}
+                            />
+                            <div className="cc_color-selection__transparency"/>
                         </div>
                     </div>
-                </Accordion>
-            )}
+                ))}
+                <div className="cc_color-selection--wrapper">
+                    <div
+                        className={clsx(
+                            'cc_color-selection__color--wrapper'
+                        )}
+                    >
+                        <div
+                            style={{
+                                opacity: isGlobalColor ? 0.5 : 1,
+                                '--color': 'transparent',
+                                color: '#ffffff!important',
+                                border: 'none',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            className="cc_color-selection__color"
+                            onClick={() => {
+                                if (!isGlobalColor) {
+                                    if (!colorAlreadyExists) {
+                                        onCreateCustomColorHandler(color);
+                                    } else {
+                                        onRemoveCustomColorHandler(color);
+                                    }
+                                }
+                            }}
+                        >
+                            {(!colorAlreadyExists || isGlobalColor) && (
+                                <Icon
+                                    icon="fas fa-plus"
+                                    style={{
+                                        fontSize: '14px',
+                                        lineHeight: 1,
+                                    }}
+                                />
+                            )}
+                            {colorAlreadyExists && !isGlobalColor && (
+                                <Icon
+                                    icon="fas fa-trash"
+                                    style={{
+                                        fontSize: '10px',
+                                        lineHeight: 1,
+                                    }}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

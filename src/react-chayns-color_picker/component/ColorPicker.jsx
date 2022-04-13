@@ -97,9 +97,9 @@ const ColorPicker = forwardRef(
         });
         const [colorModel, setColorModel] = useState(
             defaultColorModel ||
-                (transparency
-                    ? ColorPicker.colorModels.RGB
-                    : ColorPicker.colorModels.HEX)
+            (transparency
+                ? ColorPicker.colorModels.RGB
+                : ColorPicker.colorModels.HEX)
         );
 
         const [customColorsState, setCustomColorsState] = useState(
@@ -255,7 +255,7 @@ const ColorPicker = forwardRef(
                                     style={{}}
                                     className={classNames({
                                         'cc__color-picker__slider-container__with-transparency':
-                                            transparency,
+                                        transparency,
                                         'cc__color-picker__slider-container__without-transparency':
                                             !transparency,
                                     })}
@@ -285,35 +285,36 @@ const ColorPicker = forwardRef(
                                 )}
                             </div>
 
-                            <div>
-                                {input && (
-                                    <ColorInput
-                                        color={colorState}
-                                        onChange={onChangeCallback}
-                                        onChangeEnd={onChangeEnd}
-                                        onModelToggle={onColorModelToggle}
-                                        colorModel={colorModel}
-                                        transparency={transparency}
-                                        showAllColorModels={showAllColorModels}
-                                    />
-                                )}
-                                <ColorSelection
-                                    customColorsArray={customColorsState}
-                                    showCustomColors={showCustomColors}
-                                    showGlobalColors={showGlobalColors}
+                        </div>
+
+                        <div>
+                            <ColorSelection
+                                customColorsArray={customColorsState}
+                                showCustomColors={showCustomColors}
+                                showGlobalColors={showGlobalColors}
+                                color={colorState}
+                                onChange={(c) => {
+                                    onChangeCallback(c);
+                                    onChangeEnd?.(c);
+                                }}
+                                onCreateCustomColor={
+                                    onCreateCustomColorCallback
+                                }
+                                onRemoveCustomColor={
+                                    onRemoveCustomColorCallback
+                                }
+                            />
+                            {input && (
+                                <ColorInput
                                     color={colorState}
-                                    onChange={(c) => {
-                                        onChangeCallback(c);
-                                        onChangeEnd?.(c);
-                                    }}
-                                    onCreateCustomColor={
-                                        onCreateCustomColorCallback
-                                    }
-                                    onRemoveCustomColor={
-                                        onRemoveCustomColorCallback
-                                    }
+                                    onChange={onChangeCallback}
+                                    onChangeEnd={onChangeEnd}
+                                    onModelToggle={onColorModelToggle}
+                                    colorModel={colorModel}
+                                    transparency={transparency}
+                                    showAllColorModels={showAllColorModels}
                                 />
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -376,7 +377,7 @@ const ColorPicker = forwardRef(
                                 style={{}}
                                 className={classNames({
                                     'cc__color-picker__slider-container__with-transparency':
-                                        transparency,
+                                    transparency,
                                     'cc__color-picker__slider-container__without-transparency':
                                         !transparency,
                                 })}
@@ -405,39 +406,39 @@ const ColorPicker = forwardRef(
                                 />
                             )}
                         </div>
-                        <div
-                            style={{
-                                marginBottom: '5px',
+                    </div>
+                    <div
+                        style={{
+                            marginBottom: '5px',
+                        }}
+                    >
+                        <ColorSelection
+                            customColorsArray={customColorsState}
+                            showCustomColors={showCustomColors}
+                            showGlobalColors={showGlobalColors}
+                            color={colorState}
+                            onChange={(c) => {
+                                onChangeCallback(c);
+                                onChangeEnd?.(c);
                             }}
-                        >
-                            {input && (
-                                <ColorInput
-                                    color={colorState}
-                                    onChange={onChangeCallback}
-                                    onChangeEnd={onChangeEnd}
-                                    onModelToggle={onColorModelToggle}
-                                    colorModel={colorModel}
-                                    transparency={transparency}
-                                    showAllColorModels={showAllColorModels}
-                                />
-                            )}
-                            <ColorSelection
-                                customColorsArray={customColorsState}
-                                showCustomColors={showCustomColors}
-                                showGlobalColors={showGlobalColors}
+                            onCreateCustomColor={
+                                onCreateCustomColorCallback
+                            }
+                            onRemoveCustomColor={
+                                onRemoveCustomColorCallback
+                            }
+                        />
+                        {input && (
+                            <ColorInput
                                 color={colorState}
-                                onChange={(c) => {
-                                    onChangeCallback(c);
-                                    onChangeEnd?.(c);
-                                }}
-                                onCreateCustomColor={
-                                    onCreateCustomColorCallback
-                                }
-                                onRemoveCustomColor={
-                                    onRemoveCustomColorCallback
-                                }
+                                onChange={onChangeCallback}
+                                onChangeEnd={onChangeEnd}
+                                onModelToggle={onColorModelToggle}
+                                colorModel={colorModel}
+                                transparency={transparency}
+                                showAllColorModels={showAllColorModels}
                             />
-                        </div>
+                        )}
                     </div>
                 </div>
             </Bubble>,
@@ -503,7 +504,8 @@ ColorPicker.propTypes = {
     parent:
         typeof Element !== 'undefined'
             ? PropTypes.instanceOf(Element)
-            : () => {},
+            : () => {
+            },
 
     /**
      * The classname that will be set on the children wrapper.
