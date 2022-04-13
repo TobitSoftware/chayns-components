@@ -132,13 +132,9 @@ const ColorSelection = ({
                             onClick={() => {
                                 if (!isGlobalColor) {
                                     if (!colorAlreadyExists) {
-                                        onCreateCustomColorHandler(
-                                            hexToHsv(color)
-                                        );
+                                        onCreateCustomColorHandler(color);
                                     } else {
-                                        onRemoveCustomColorHandler(
-                                            hexToHsv(color)
-                                        );
+                                        onRemoveCustomColorHandler(color);
                                     }
                                 }
                             }}

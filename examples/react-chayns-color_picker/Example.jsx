@@ -16,7 +16,11 @@ const ColorPickerExample = () => {
     const [hueSliderColor, setHueSliderColor] = useState(
         hexStringToHsv(chayns.env.site.color)
     );
-    const [customColorsArray, setCustomColorsArray] = useState(['#006EB8FF', '#EF9357', '#173112']);
+    const [customColorsArray, setCustomColorsArray] = useState([
+        '#006EB8FF',
+        '#EF9357',
+        '#173112',
+    ]);
 
     return (
         <div
@@ -210,6 +214,13 @@ const ColorPickerExample = () => {
                     }}
                     onCreateCustomColor={(c) => {
                         setCustomColorsArray([...customColorsArray, c]);
+                    }}
+                    onRemoveCustomColor={(c) => {
+                        setCustomColorsArray(
+                            customColorsArray.filter(
+                                (cc) => hsvToHexString(cc) !== hsvToHexString(c)
+                            )
+                        );
                     }}
                     showCustomColors
                     showGlobalColors
