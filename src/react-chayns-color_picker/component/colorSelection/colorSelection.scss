@@ -1,4 +1,6 @@
 .cc_color-selection {
+    padding: 0px 9px;
+    display: flex;
     &--inner {
         display: flex;
         flex-wrap: wrap;
@@ -13,8 +15,8 @@
 
     &--active {
         position: absolute;
-        width: 25px;
-        height: 25px;
+        width: 26px;
+        height: 26px;
         top: -2px;
         left: -2px;
         border-radius: 100%;
@@ -25,8 +27,8 @@
         &--wrapper {
             position: relative;
             padding: 2px;
-            width: 21px;
-            height: 21px;
+            width: 22px;
+            height: 22px;
             border-radius: 100%;
             cursor: pointer;
             overflow: hidden;

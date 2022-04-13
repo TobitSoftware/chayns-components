@@ -169,6 +169,7 @@ export default function withColorInput({ showAllColorModels, ...props }) {
                 style={{
                     backgroundColor: 'transparent',
                     border: 'none',
+                    margin: '0px 11px',
                 }}
                 dataGroup="cc_color-picker"
                 icon="ts-angle-right"
@@ -196,6 +197,7 @@ export default function withColorInput({ showAllColorModels, ...props }) {
             style={{
                 backgroundColor: 'transparent',
                 border: 'none',
+                margin: '0px 11px',
             }}
             dataGroup="cc_color-picker"
             defaultOpened
