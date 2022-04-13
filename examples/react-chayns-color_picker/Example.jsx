@@ -16,11 +16,7 @@ const ColorPickerExample = () => {
     const [hueSliderColor, setHueSliderColor] = useState(
         hexStringToHsv(chayns.env.site.color)
     );
-    const [customColorsArray, setCustomColorsArray] = useState([
-        '#ff0000',
-        '#00ff00',
-        '#0000ff',
-    ]);
+    const [customColorsArray, setCustomColorsArray] = useState(['#006EB8FF', '#EF9357', '#173112']);
 
     return (
         <div
