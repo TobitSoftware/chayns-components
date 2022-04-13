@@ -84,14 +84,11 @@ const ColorSelection = ({
         [activeColorHex, colors]
     );
 
-    const isGlobalColor = useMemo(() => {
-        if (activeColorHex) {
-            return globalColors.some(
-                (c) => c === hsvToHexString(activeColorHex)
-            );
-        }
-        return false;
-    }, [activeColorHex, globalColors]);
+    const isGlobalColor = useMemo(
+        () => globalColors.some((c) => c === activeColorHex),
+        [activeColorHex, globalColors]
+    );
+
     if (!showCustomColors && !showGlobalColors) {
         return null;
     }
