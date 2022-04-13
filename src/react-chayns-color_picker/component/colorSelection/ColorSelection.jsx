@@ -15,30 +15,33 @@ const ColorSelection = ({
     onCreateCustomColor,
     onRemoveCustomColor,
 }) => {
-    const globalColors = useMemo(() => [
-        '#000000',
-        '#434343',
-        '#666666',
-        '#999999',
-        '#b7b7b7',
-        '#cccccc',
-        '#d9d9d9',
-        '#efefef',
-        '#f3f3f3',
-        '#ffffff',
-        '#f44336',
-        '#ff9800',
-        '#ffeb3b',
-        '#009688',
-        '#795548',
-        '#8bc34a',
-        '#4caf50',
-        '#9c27b0',
-        '#3f51b5',
-        '#03a9f4',
-        '#005eb8',
-        chayns.utils.colors.get(),
-    ], []);
+    const globalColors = useMemo(
+        () => [
+            '#000000',
+            '#434343',
+            '#666666',
+            '#999999',
+            '#b7b7b7',
+            '#cccccc',
+            '#d9d9d9',
+            '#efefef',
+            '#f3f3f3',
+            '#ffffff',
+            '#f44336',
+            '#ff9800',
+            '#ffeb3b',
+            '#009688',
+            '#795548',
+            '#8bc34a',
+            '#4caf50',
+            '#9c27b0',
+            '#3f51b5',
+            '#03a9f4',
+            '#005eb8',
+            chayns.utils.colors.get(),
+        ],
+        []
+    );
 
     const onChangeHandler = (value) => {
         if (onChange && value) {
@@ -64,29 +67,41 @@ const ColorSelection = ({
             colorsArr.push(...globalColors);
         }
         if (showCustomColors) {
-            colorsArr.push(...customColorsArray.map((c) => hsvToHexString(c)));
+            colorsArr.push(
+                ...customColorsArray
+                    .map((c) => hsvToHexString(c).toLowerCase())
+                    .filter(
+                        (c) =>
+                            !showGlobalColors || c !== globalColors.includes(c)
+                    )
+            );
         }
-        return [...new Set(colorsArr)];
+        return colorsArr;
     }, [showGlobalColors, showCustomColors, globalColors, customColorsArray]);
 
-    const colorAlreadyExists = useMemo(() => colors.some(
-        (c) => c === activeColorHex
-    ), [activeColorHex, colors]);
+    const colorAlreadyExists = useMemo(
+        () => colors.some((c) => c === activeColorHex),
+        [activeColorHex, colors]
+    );
 
     const isGlobalColor = useMemo(() => {
         if (activeColorHex) {
-            return globalColors.some((c) => c === hsvToHexString(activeColorHex));
+            return globalColors.some(
+                (c) => c === hsvToHexString(activeColorHex)
+            );
         }
         return false;
     }, [activeColorHex, globalColors]);
-
+    if (!showCustomColors && !showGlobalColors) {
+        return null;
+    }
     return (
         <div className="cc_color-selection">
             <div className="cc_color-selection--inner scrollbar">
                 {colors.map((c) => (
                     <div className="cc_color-selection--wrapper">
                         {activeColorHex === c && (
-                            <div className="cc_color-selection--active"/>
+                            <div className="cc_color-selection--active" />
                         )}
                         <div
                             className={clsx(
@@ -100,16 +115,12 @@ const ColorSelection = ({
                                 className="cc_color-selection__color"
                                 onClick={() => onChangeHandler(hexToHsv(c))}
                             />
-                            <div className="cc_color-selection__transparency"/>
+                            <div className="cc_color-selection__transparency" />
                         </div>
                     </div>
                 ))}
                 <div className="cc_color-selection--wrapper">
-                    <div
-                        className={clsx(
-                            'cc_color-selection__color--wrapper'
-                        )}
-                    >
+                    <div className={clsx('cc_color-selection__color--wrapper')}>
                         <div
                             style={{
                                 opacity: isGlobalColor ? 0.5 : 1,
@@ -124,9 +135,13 @@ const ColorSelection = ({
                             onClick={() => {
                                 if (!isGlobalColor) {
                                     if (!colorAlreadyExists) {
-                                        onCreateCustomColorHandler(hexToHsv(color));
+                                        onCreateCustomColorHandler(
+                                            hexToHsv(color)
+                                        );
                                     } else {
-                                        onRemoveCustomColorHandler(hexToHsv(color));
+                                        onRemoveCustomColorHandler(
+                                            hexToHsv(color)
+                                        );
                                     }
                                 }
                             }}
