@@ -1,6 +1,6 @@
 {
     "name": "chayns-components",
-    "version": "4.23.37",
+    "version": "4.23.38",
     "description": "A set of beautiful React components for developing chayns® applications.",
     "keywords": [
         "react",
@@ -36,9 +36,9 @@
         "generate-docs": "gulp generate-docs",
         "lint": "eslint ./src --ext js,jsx",
         "lint-staged": "lint-staged --allow-empty",
+        "prepare": "husky install",
         "prepublishOnly": "npm run lint & npm run build",
-        "storybook": "start-storybook -p 6006",
-        "prepare": "husky install"
+        "storybook": "start-storybook -p 6006"
     },
     "dependencies": {
         "@babel/runtime": "^7.12.5",
