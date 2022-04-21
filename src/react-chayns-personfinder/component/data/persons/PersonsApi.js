@@ -113,6 +113,7 @@ export const fetchUacPersons = (uacId, locationId) => async (value) => {
 
     if (response.ok) {
         result = response.status !== 204 ? await response.json() : [];
+        result = result.map((user) => ({ ...user, userId: Number.parseInt(user.id, 10)}));
     } else {
         console.error(
             '[chayns components] Personfinder: failed to fetch persons',
