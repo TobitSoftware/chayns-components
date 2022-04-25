@@ -95,7 +95,10 @@ const ColorSelection = ({
         <div className="cc_color-selection">
             <div className="cc_color-selection--inner scrollbar">
                 {colors.map((c) => (
-                    <div className="cc_color-selection--wrapper">
+                    <div
+                        key={c}
+                        className="cc_color-selection--wrapper"
+                    >
                         {activeColorHex === c && (
                             <div className="cc_color-selection--active" />
                         )}
