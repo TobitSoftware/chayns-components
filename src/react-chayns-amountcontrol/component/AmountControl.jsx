@@ -156,6 +156,7 @@ export default class AmountControl extends PureComponent {
             max,
             min,
             hasAlwaysControls,
+            showAddButton,
         } = this.props;
         const { tempAmount, tempValue } = this.state;
 
@@ -213,17 +214,19 @@ export default class AmountControl extends PureComponent {
                     tempValue={tempValue}
                     focusOnClick={focusOnClick}
                 />
-                <ControlButton
-                    stopPropagation={stopPropagation}
-                    icon={plusIcon}
-                    onClick={this.addItem}
-                    disabled={disabled || disableAdd || (max && amount >= max)}
-                    className={classNames('cc__amount-control__add', {
-                        'cc__amount-control--icon':
-                            amount > 0 || hasAlwaysControls,
-                    })}
-                    color={addColor}
-                />
+                {showAddButton !== false && (
+                    <ControlButton
+                        stopPropagation={stopPropagation}
+                        icon={plusIcon}
+                        onClick={this.addItem}
+                        disabled={disabled || disableAdd || (max && amount >= max)}
+                        className={classNames('cc__amount-control__add', {
+                            'cc__amount-control--icon':
+                                amount > 0 || hasAlwaysControls,
+                        })}
+                        color={addColor}
+                    />
+                )}
             </div>
         );
     }
@@ -300,9 +303,14 @@ AmountControl.propTypes = {
     buttonFormatHandler: PropTypes.func,
 
     /**
-     * Wether to show the input.
+     * Whether to show the input.
      */
     showInput: PropTypes.bool,
+
+    /**
+     * Whether the add button should be shown/rendered.
+     */
+    showAddButton: PropTypes.bool,
 
     /**
      * Displays an icon on the left side of the button if the amount is 0.
@@ -392,6 +400,7 @@ AmountControl.defaultProps = {
     autoInput: false,
     buttonFormatHandler: undefined,
     showInput: false,
+    showAddButton: true,
     icon: null,
     removeColor: null,
     addColor: null,
