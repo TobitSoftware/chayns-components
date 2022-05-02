@@ -8,6 +8,20 @@ import React, { PureComponent } from 'react';
 import AmountInput from './AmountInput';
 import ControlButton from './ControlButton';
 
+// region icon default values
+// default icon to add one step to the AmountControl
+const DEFAULT_PLUS_ICON = 'fa fa-plus';
+
+// default remove icon when there are more than one item
+const DEFAULT_MINUS_ICON = 'fa fa-minus';
+
+// default remove icon for the last item (value = 1)
+const DEFAULT_REMOVE_ICON = 'fa fa-minus';
+
+// default remove icon when there is only one item available (max = 1)
+const DEFAULT_SINGLE_REMOVE_ICON = 'fa fa-trash-can';
+// endregion
+
 /**
  * The AmountControl is a three-segment control used to increase or decrease an
  * incremental value.
@@ -58,6 +72,7 @@ export default class AmountControl extends PureComponent {
             removeIcon,
             minusIcon,
             hasAlwaysControls,
+            max,
         } = this.props;
         const { tempAmount } = this.state;
 
@@ -69,7 +84,8 @@ export default class AmountControl extends PureComponent {
             return minusIcon;
         }
 
-        return removeIcon;
+        // the default removeIcon will become a trash-can when the max-value is 1
+        return removeIcon ?? (max === 1 ? DEFAULT_SINGLE_REMOVE_ICON : DEFAULT_REMOVE_ICON);
     }
 
     addItem = () => {
@@ -124,6 +140,7 @@ export default class AmountControl extends PureComponent {
             ) {
                 this.setState({
                     tempValue: oldAmount,
+                    tempAmount: oldAmount,
                 });
 
                 return;
@@ -132,12 +149,55 @@ export default class AmountControl extends PureComponent {
         }
     };
 
+    /**
+     * Checks whether the add button should be shown.
+     * @returns {boolean}
+     */
+    isAddButtonShown() {
+        const { showAddButton, max } = this.props;
+
+        // When the showAddButton prop is explicitly set, we will use the value
+        if (showAddButton !== undefined) {
+            return showAddButton;
+        }
+
+        // When using the default value (undefined) and the max prop is set to 1
+        // the add button should be removed (only the remove button will be displayed as trash-can)
+        if (max === 1) {
+            return false;
+        }
+
+        // when we do not have max set or it is greater than 1, we will use the default value (show the add button)
+        return true;
+    }
+
+    /**
+     * Checks whether the input element should be enabled
+     * @returns {boolean}
+     */
+    isInputEnabled() {
+        const { disableInput, max } = this.props;
+
+        // When the disableInput-prop is manually set (not defaultValue: undefined)
+        // this value has precedence over all default behaviour
+        if (disableInput !== undefined) {
+            return !disableInput;
+        }
+
+        // When the max value is only one, the input should be disabled
+        if (max === 1) {
+            return false;
+        }
+
+        // normally the input-field should be shown (default)
+        return true;
+    }
+
     render() {
         const {
             amount,
             buttonText,
             disabled,
-            disableInput,
             disableAdd,
             disableRemove,
             className,
@@ -156,7 +216,6 @@ export default class AmountControl extends PureComponent {
             max,
             min,
             hasAlwaysControls,
-            showAddButton,
         } = this.props;
         const { tempAmount, tempValue } = this.state;
 
@@ -202,7 +261,7 @@ export default class AmountControl extends PureComponent {
                     onAdd={this.addItem}
                     buttonText={buttonText}
                     disabled={disabled}
-                    disableInput={disableInput}
+                    disableInput={!this.isInputEnabled()}
                     buttonFormatHandler={buttonFormatHandler}
                     showInput={
                         tempAmount !== 0 ||
@@ -214,7 +273,7 @@ export default class AmountControl extends PureComponent {
                     tempValue={tempValue}
                     focusOnClick={focusOnClick}
                 />
-                {showAddButton !== false && (
+                {this.isAddButtonShown() && (
                     <ControlButton
                         stopPropagation={stopPropagation}
                         icon={plusIcon}
@@ -393,14 +452,12 @@ AmountControl.defaultProps = {
     onAdd: null,
     onRemove: null,
     disabled: false,
-    disableInput: false,
     disableAdd: false,
     disableRemove: false,
     className: '',
     autoInput: false,
     buttonFormatHandler: undefined,
     showInput: false,
-    showAddButton: true,
     icon: null,
     removeColor: null,
     addColor: null,
@@ -411,10 +468,12 @@ AmountControl.defaultProps = {
     stopPropagation: false,
     min: null,
     max: null,
-    plusIcon: 'fa fa-plus',
-    minusIcon: 'fa fa-minus',
-    removeIcon: 'fa fa-minus',
+    plusIcon: DEFAULT_PLUS_ICON,
+    minusIcon: DEFAULT_MINUS_ICON,
+    removeIcon: undefined,
     hasAlwaysControls: false,
+    disableInput: undefined,
+    showAddButton: undefined,
 };
 
 AmountControl.displayName = 'AmountControl';
