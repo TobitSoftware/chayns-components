@@ -22,6 +22,7 @@ const AmountControlExample = () => {
                 focusOnClick={false}
                 icon="fa fa-shopping-cart"
                 stopPropagation
+                showAddButton={false}
             />
 
             <br />
@@ -140,6 +141,7 @@ const AmountControlExample = () => {
                     amount={amount}
                     onChange={setAmount}
                     buttonText="0,15"
+                    showAddButton={false}
                 />
             </div>
 
