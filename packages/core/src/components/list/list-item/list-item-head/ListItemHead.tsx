@@ -8,15 +8,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import GridImage from '../../../grid-image/GridImage';
 import Icon from '../../../icon/Icon';
+import ListItemIcon from './list-item-icon/ListItemIcon';
+import ListItemImage from './list-item-image/ListItemImage';
 import {
     StyledListItemHead,
     StyledListItemHeadBottomRightElement,
     StyledListItemHeadContent,
-    StyledListItemHeadIcon,
-    StyledListItemHeadImage,
-    StyledListItemHeadImageWrapper,
     StyledListItemHeadRightElement,
     StyledListItemHeadSubtitle,
     StyledListItemHeadSubtitleText,
@@ -38,6 +36,7 @@ type ListItemHeadProps = {
     onLongPress?: TouchEventHandler<HTMLDivElement>;
     rightElements?: [ReactNode, ...ReactNode[]];
     subtitle?: ReactNode;
+    leftElements?: ReactNode;
     shouldShowRoundImage?: boolean;
     title: ReactNode;
 };
@@ -55,15 +54,11 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     subtitle,
     shouldShowRoundImage,
     title,
+    leftElements,
 }) => {
-    const [hasLoadedImage, setHasLoadedImage] = useState(false);
     const [shouldShowHoverItem, setShouldShowHoverItem] = useState(false);
 
     const longPressTimeoutRef = useRef<number>();
-
-    const handleImageLoaded = useCallback(() => {
-        setHasLoadedImage(true);
-    }, []);
 
     const handleMouseEnter = useCallback(() => setShouldShowHoverItem(true), []);
 
@@ -86,39 +81,15 @@ const ListItemHead: FC<ListItemHeadProps> = ({
 
     const iconOrImageElement = useMemo(() => {
         if (icons) {
-            return (
-                <StyledListItemHeadIcon>
-                    <Icon icons={icons} size={22} />
-                </StyledListItemHeadIcon>
-            );
+            return <ListItemIcon icons={icons} />;
         }
 
-        if (images && images[0] && images[1] && images[2]) {
-            const gridImages = [images[0], images[1], images[2]];
-
-            return (
-                <GridImage
-                    images={gridImages}
-                    shouldShowRoundImage={shouldShowRoundImage}
-                    size={40}
-                />
-            );
-        }
-
-        if (images && images[0]) {
-            return (
-                <StyledListItemHeadImageWrapper shouldShowRoundImage={shouldShowRoundImage}>
-                    <StyledListItemHeadImage
-                        isHidden={!hasLoadedImage}
-                        onLoad={handleImageLoaded}
-                        src={images[0]}
-                    />
-                </StyledListItemHeadImageWrapper>
-            );
+        if (images) {
+            return <ListItemImage images={images} shouldShowRoundImage={!!shouldShowRoundImage} />;
         }
 
         return undefined;
-    }, [handleImageLoaded, hasLoadedImage, icons, images, shouldShowRoundImage]);
+    }, [icons, images, shouldShowRoundImage]);
 
     return (
         <StyledListItemHead
@@ -139,6 +110,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                     {isExpandable && <Icon icons={['fa fa-chevron-right']} />}
                 </StyledMotionListItemHeadIndicator>
             )}
+            {leftElements}
             {iconOrImageElement}
             <StyledListItemHeadContent
                 isIconOrImageGiven={iconOrImageElement !== undefined}
