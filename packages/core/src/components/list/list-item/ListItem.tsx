@@ -140,11 +140,9 @@ const ListItem: FC<ListItemProps> = ({
                 shouldShowRoundImage={shouldShowRoundImage}
                 title={title}
             />
-            {isExpandable && (
-                <AnimatePresence initial={false}>
-                    {isOpen && <ListItemBody>{children}</ListItemBody>}
-                </AnimatePresence>
-            )}
+            <AnimatePresence initial={false}>
+                {isExpandable && isOpen && <ListItemBody>{children}</ListItemBody>}
+            </AnimatePresence>
         </StyledListItem>
     );
 };

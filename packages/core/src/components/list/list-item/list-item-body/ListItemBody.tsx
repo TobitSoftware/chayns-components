@@ -4,7 +4,7 @@ import { StyledMotionListItemBody } from './ListItemBody.styles';
 const ListItemBody: FC = ({ children }) => (
     <StyledMotionListItemBody
         animate={{ height: 'auto', opacity: 1 }}
-        className="beta-chayns-accordion-body"
+        className="beta-chayns-list-item-body"
         exit={{ height: 0, opacity: 0 }}
         initial={{ height: 0, opacity: 0 }}
         transition={{ type: 'tween' }}
