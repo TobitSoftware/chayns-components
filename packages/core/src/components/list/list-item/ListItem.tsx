@@ -42,6 +42,10 @@ type ListItemProps = {
      */
     isDefaultOpen?: boolean;
     /**
+     * This overrides the internal opening state of the item and makes it controlled.
+     */
+    isOpen?: boolean;
+    /**
      * Function to be executed when the header of the `ListItem` was clicked
      */
     onClick?: MouseEventHandler<HTMLDivElement>;
@@ -81,6 +85,7 @@ const ListItem: FC<ListItemProps> = ({
     icons,
     images,
     isDefaultOpen,
+    isOpen,
     onClick,
     onLongPress,
     leftElements,
@@ -95,7 +100,7 @@ const ListItem: FC<ListItemProps> = ({
     const uuid = useUuid();
 
     const isExpandable = children !== undefined;
-    const isOpen = openItemUuid === uuid;
+    const isItemOpen = isOpen ?? openItemUuid === uuid;
 
     const handleHeadClick = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
@@ -130,7 +135,7 @@ const ListItem: FC<ListItemProps> = ({
         <StyledListItem
             className="beta-chayns-list-item"
             isClickable={typeof onClick === 'function' || isExpandable}
-            isOpen={isOpen}
+            isOpen={isItemOpen}
         >
             <ListItemHead
                 hoverItem={hoverItem}
@@ -138,7 +143,7 @@ const ListItem: FC<ListItemProps> = ({
                 images={images}
                 isAnyItemExpandable={isAnyItemExpandable}
                 isExpandable={isExpandable}
-                isOpen={isOpen}
+                isOpen={isItemOpen}
                 onClick={handleHeadClick}
                 onLongPress={onLongPress}
                 leftElements={leftElements}
@@ -148,7 +153,7 @@ const ListItem: FC<ListItemProps> = ({
                 title={title}
             />
             <AnimatePresence initial={false}>
-                {isExpandable && isOpen && <ListItemBody>{children}</ListItemBody>}
+                {isExpandable && isItemOpen && <ListItemBody>{children}</ListItemBody>}
             </AnimatePresence>
         </StyledListItem>
     );
