@@ -129,12 +129,13 @@ const InputBox = React.forwardRef((props, ref) => {
 
     const parentElement = !isServer() ? parent || document.body : null;
     const parentRect = parentElement?.getBoundingClientRect();
+    const isParentRelative = parentElement ? ['absolute', 'relative'].includes(getComputedStyle(parentElement).position) : false;
 
     const positionStyles = rect
         ? {
               width: `${rect.width}px`,
-              top: `${rect.bottom - (parentRect?.top ?? 0)}px`,
-              left: `${rect.left - (parentRect?.left ?? 0)}px`,
+              top: `${rect.bottom - (isParentRelative ? (parentRect?.top ?? 0) : 0)}px`,
+              left: `${rect.left - (isParentRelative ? (parentRect?.left ?? 0) : 0)}px`,
           }
         : null;
 
