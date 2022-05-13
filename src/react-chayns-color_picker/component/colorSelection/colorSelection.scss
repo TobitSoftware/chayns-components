@@ -10,15 +10,15 @@
 
     &--wrapper {
         position: relative;
-        margin: 4px;
+        margin: 3px;
     }
 
     &--active {
         position: absolute;
         width: 26px;
         height: 26px;
-        top: -2px;
-        left: -2px;
+        top: -1px;
+        left: -1px;
         border-radius: 100%;
         box-shadow: 0 0 0 1px rgba(var(--chayns-color-rgb--text), 0.75);
     }
@@ -27,17 +27,16 @@
         &--wrapper {
             position: relative;
             padding: 2px;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 100%;
             cursor: pointer;
             overflow: hidden;
-            outline: 1px solid rgba(var(--chayns-color-rgb--text), 0.3);
+            border: 1px solid rgba(var(--chayns-color-rgb--text), 0.3);
         }
     }
 
     &__color {
-        border: 100px solid var(--color);
         background: var(--color);
         inset: 0px;
         position: absolute;
