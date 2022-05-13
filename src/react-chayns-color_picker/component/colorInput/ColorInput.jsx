@@ -72,7 +72,7 @@ class ColorInput extends Component {
     };
 
     valueToHsv = (value) => {
-        const { colorModel } = this.props;
+        const { colorModel, transparency } = this.props;
         if (colorModel) {
             // rgb(a)
             const matches = value.match(RGB_REGEX);
@@ -85,6 +85,9 @@ class ColorInput extends Component {
                 };
                 const hsv = rgb1ToHsv(rgb255ToRgb1(rgb));
                 if (hsv) {
+                    if (!transparency) {
+                        delete hsv.a;
+                    }
                     return hsv;
                 }
             }
@@ -94,6 +97,9 @@ class ColorInput extends Component {
             if (matches) {
                 const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
                 if (hsv) {
+                    if (!transparency) {
+                        delete hsv.a;
+                    }
                     return hsv;
                 }
             }
