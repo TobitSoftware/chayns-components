@@ -383,7 +383,7 @@ const SearchBox = ({
             }}
             emptyValue={getValue(getItemByKey(emptyKey))}
         >
-            {filteredList && filteredList.length &&
+            {filteredList && filteredList.length > 0 &&
                 filteredList.map((item, index) => (
                     <div
                         key={getKey(item)}
