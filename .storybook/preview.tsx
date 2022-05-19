@@ -77,6 +77,13 @@ export const decorators = [
         }
         // endregion
 
+        // Workaround for chayns Dialogs
+        useEffect(() => {
+            if (!new URLSearchParams(location.search).has('isWidget')) {
+                location.href += '&isWidget=true';
+            }
+        }, []);
+
         return (
             <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
                 <ColorSchemeProvider colorMode={colorMode}>

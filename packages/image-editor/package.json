@@ -1,0 +1,63 @@
+{
+    "name": "@chayns-components/image-editor",
+    "version": "5.0.0-beta.25",
+    "description": "A set of beautiful React components for developing your own applications with chayns.",
+    "keywords": [
+        "chayns",
+        "react",
+        "components"
+    ],
+    "author": "Tobit.Software",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/core#readme",
+    "license": "MIT",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "directories": {
+        "lib": "lib",
+        "test": "__tests__"
+    },
+    "files": [
+        "lib"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TobitSoftware/chayns-components.git"
+    },
+    "scripts": {
+        "build": "npm run build:js && npm run build:types",
+        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build:types": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "bugs": {
+        "url": "https://github.com/TobitSoftware/chayns-components/issues"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.17.6",
+        "@babel/core": "^7.17.5",
+        "@babel/preset-env": "^7.16.11",
+        "@babel/preset-react": "^7.16.7",
+        "@babel/preset-typescript": "^7.16.7",
+        "@types/react": "^17.0.39",
+        "@types/react-dom": "^17.0.11",
+        "@types/styled-components": "^5.1.23",
+        "@types/uuid": "^8.3.4",
+        "babel-loader": "^8.2.3",
+        "lerna": "^4.0.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "typescript": "^4.5.5"
+    },
+    "dependencies": {
+        "clsx": "^1.1.1",
+        "styled-components": "^5.3.3",
+        "uuid": "^8.3.2"
+    },
+    "peerDependencies": {
+        "react": ">=16.14.0",
+        "react-dom": ">=16.14.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
