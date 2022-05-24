@@ -27,12 +27,18 @@ type StyledEditButtonProps = { onClick: MouseEventHandler<HTMLDivElement> };
 export const StyledEditButton = styled.div<StyledEditButtonProps>`
     position: absolute;
     right: 17px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: ${({ theme }: StyledImageWrapperProps) =>
+        `rgba(${theme['200-rgb'] || '255,255,255'}, 0.8)`};
     color: ${({ theme }: StyledImageWrapperProps) => theme.headline};
     padding: 5px 7px;
     display: flex;
     cursor: pointer;
     border-radius: 2px;
+
+    &:hover {
+        background-color: ${({ theme }: StyledImageWrapperProps) =>
+            `rgba(${theme['200-rgb'] || '255,255,255'}, 0.9)`};
+    }
 `;
 
 type StyledCreateButtonProps = { onClick: MouseEventHandler<HTMLDivElement> };
@@ -42,9 +48,15 @@ export const StyledCreateButton = styled.div<StyledCreateButtonProps>`
     justify-content: center;
     align-items: center;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: ${({ theme }: StyledImageWrapperProps) =>
+        `rgba(${theme['200-rgb'] || '255,255,255'}, 0.5)`};
     color: ${({ theme }: StyledImageWrapperProps) => theme.headline};
     cursor: pointer;
+
+    &:hover {
+        background-color: ${({ theme }: StyledImageWrapperProps) =>
+            `rgba(${theme['200-rgb'] || '255,255,255'}, 0.8)`};
+    }
 `;
 
 type StyledIconWrapperProps = any;

@@ -85,7 +85,16 @@ export const decorators = [
         }, []);
 
         return (
-            <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
+            <div
+                className="tapp"
+                style={{
+                    margin: 0,
+                    padding: 0,
+                    maxWidth: `${
+                        context?.componentId === 'imageeditor-imageeditor' ? null : '556px'
+                    }`,
+                }}
+            >
                 <ColorSchemeProvider colorMode={colorMode}>
                     <Story />
                 </ColorSchemeProvider>

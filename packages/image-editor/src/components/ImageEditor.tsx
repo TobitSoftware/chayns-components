@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import Icon from '../../../core/src/components/icon/Icon';
+import { buttonType, IframeDialogResult } from '../types/chayns';
 import { ImageEditorAspectRatio } from './constants/aspectRatio';
 import type { MaskType } from './constants/maskType';
 import {
@@ -10,11 +11,17 @@ import {
     StyledImageWrapper,
 } from './ImageEditor.styles';
 
+export enum ImageEditorUserMode {
+    none,
+    admin,
+    user,
+}
+
 export type ImageEditorProps = {
     /**
      * Unique Id to save an load Image Parts
      */
-    uniqueId: string | number;
+    uId: string | number;
     /**
      * ImageUrl to show in Preview
      */
@@ -30,60 +37,58 @@ export type ImageEditorProps = {
     /**
      * Function to be executed when the Image is saved
      */
+    userMode: ImageEditorUserMode;
+    /**
+     * Function to be executed when the Image is saved
+     */
     onConfirm: FunctionStringCallback;
 };
 
-const ImageEditor: FC<ImageEditorProps> = ({
-    uniqueId,
+const ImageEditor: FC<ImageEditorProps> | null = ({
+    uId,
     imageUrl,
     onConfirm,
     ratio = ImageEditorAspectRatio.ratio_16_9,
     maskType,
+    userMode = ImageEditorUserMode.none,
 }) => {
     const openImageEditorDialog = useCallback(() => {
-        chayns.dialog
+        void chayns.dialog
             .iFrame({
-                url: 'https://tobit.software/Willkommen',
+                url:
+                    process.env.NODE_ENV === 'production'
+                        ? 'https://tapp.chayns-static.space/image-editor-dialog/v1/index.html'
+                        : 'https://w-ni-surface.tobit.ag:8080/index.html',
                 waitCursor: true,
                 seamless: true,
                 width: '100vw',
                 fullHeight: true,
                 maxHeight: '100vh',
                 transparent: true,
-                buttons: [
-                    {
-                        text: 'Speichern',
-                        buttonType: 1,
-                    },
-                    {
-                        text: 'Abbrechen',
-                        buttonType: -1,
-                    },
-                ],
+                buttons: [],
                 input: {
-                    uniqueId,
+                    uId,
                     ratio,
                     maskType,
+                    userMode,
                 },
             })
-            .then((data: any) => {
-                if (data?.buttonType === 1 && data.value?.text) {
-                    console.log('result', data.value.text);
-                    onConfirm(data.value.text);
+            .then((data: IframeDialogResult<string>) => {
+                if (data?.buttonType === buttonType.POSITIVE && data.value) {
+                    console.log('result', data.value);
+                    onConfirm(data.value);
                 }
             });
-    }, [uniqueId, maskType, ratio, onConfirm]);
+    }, [uId, ratio, maskType, userMode, onConfirm]);
 
-    return useMemo(
+    const render = useMemo(
         () => (
             <>
-                {uniqueId && (
+                {uId && (
                     <StyledImageWrapper ratio={ratio}>
                         {imageUrl ? (
                             <>
-                                <StyledImage
-                                    src={imageUrl} // get url from space?
-                                />
+                                <StyledImage src={imageUrl} />
                                 <StyledEditButton onClick={openImageEditorDialog}>
                                     <StyledIconWrapper>
                                         <Icon icons={['fas fa-edit']} size={15} />
@@ -103,8 +108,16 @@ const ImageEditor: FC<ImageEditorProps> = ({
                 )}
             </>
         ),
-        [uniqueId, ratio, imageUrl, openImageEditorDialog]
+        [uId, ratio, imageUrl, openImageEditorDialog]
     );
+
+    if (userMode === ImageEditorUserMode.none) {
+        console.error(
+            'image-editor: property userMode must be set (1 = admin, 2 = user). It determines where the status & history is saved and where the images are uploaded!'
+        );
+        return null;
+    }
+    return render;
 };
 ImageEditor.displayName = 'ImageEditor';
 
