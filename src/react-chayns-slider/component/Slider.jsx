@@ -577,6 +577,7 @@ export default class Slider extends PureComponent {
                 if (l) l(value);
             });
         }
+        this.forceUpdate();
     };
 
     setDirection = () => {
@@ -629,7 +630,14 @@ export default class Slider extends PureComponent {
             innerTrackStyle,
             vertical,
             thumbWidth,
+            showDots,
+            min,
+            max,
+            step,
+            valueFormatter,
         } = this.props;
+
+        const breakpoints = showDots && step ? Array(Math.floor((max - min) / step) + 1).fill(0).map((_, i) => min + i * step) : null;
 
         return (
             <div
@@ -638,6 +646,7 @@ export default class Slider extends PureComponent {
                     {
                         'cc__new-slider--disabled': disabled,
                         'cc__new-slider--vertical': vertical,
+                        'cc__new-slider--dots': showDots,
                     },
                     className
                 )}
@@ -651,6 +660,27 @@ export default class Slider extends PureComponent {
                     />
                 ) : null}
                 <div className="cc__new-slider__bar" ref={this.bar}>
+                    {breakpoints ? (
+                        breakpoints.map((breakpoint) => {
+                            const realValue = this.getRealValue(this.percent, min, max);
+                            const value = Math.round(realValue / step) * step;
+                            const left = `${((breakpoint - min) / (max - min)) * 100}%`;
+                            return (
+                                <>
+                                    <div
+                                        className={classNames("cc__new-slider__bar__step__dot", { 'cc__new-slider__bar__step__dot--active': value >= breakpoint })}
+                                        style={{ left }}
+                                    />
+                                    <div
+                                        className={classNames("cc__new-slider__bar__step__dot-label")}
+                                        style={{ left }}
+                                    >
+                                        {valueFormatter(breakpoint)}
+                                    </div>
+                                </>
+                            );
+                        })
+                    ) : null}
                     <div
                         className="cc__new-slider__bar__track chayns__background-color--402"
                         onClick={this.trackDown}
@@ -806,6 +836,11 @@ Slider.propTypes = {
     step: PropTypes.number,
 
     /**
+     * Whether to show dots at the possible breakpoints
+     */
+    showDots: PropTypes.number,
+
+    /**
      * A default value for the slider.
      */
     defaultValue: PropTypes.number,
@@ -948,6 +983,7 @@ Slider.defaultProps = {
     min: 0,
     max: 100,
     step: null,
+    showDots: false,
     defaultValue: 0,
     value: null,
     style: null,

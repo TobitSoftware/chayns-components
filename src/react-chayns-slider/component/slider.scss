@@ -4,6 +4,10 @@
     user-select: none;
     -webkit-user-select: none;
 
+    &--dots {
+        padding-top: 16px;
+    }
+
     &--vertical {
         width: 30px;
         height: 300px;
@@ -77,6 +81,28 @@
         .chayns-general-component-design--1 &,
         .chayns-general-component-design--2 & {
             margin: 0;
+        }
+
+        &__step{
+            &__dot {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: var(--chayns-color--402);
+                transform: translate(-50%, 0);
+
+                &#{&}--active {
+                    background-color: var(--chayns-color--408)
+                }
+
+                &-label {
+                    position: absolute;
+                    font-size: 12px;
+                    transform: translate(-50%, -14px);
+                    top: 0;
+                }
+            }
         }
 
         &--down {
