@@ -35,7 +35,9 @@ export type ImageEditorProps = {
      */
     maskType?: MaskType;
     /**
-     * Function to be executed when the Image is saved
+     * UserMode (Adin or User) determines where the EditorState, History and Images are saved. EditorData is always saved with uId ('uId'.json).
+     * AdminMode saves EditorState & History in site-space (shared for users (with same uId) and only for admins) and image for site at tsgImgCloud.
+     * UserMode saves EditorState & History in private-space (different for every user (even if same uId), not shared) and image for user at tsgImgCloud.
      */
     userMode: ImageEditorUserMode;
     /**

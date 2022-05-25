@@ -8,27 +8,32 @@ export default {
     component: ImageEditor,
     args: {
         ratio: ImageEditorAspectRatio.ratio_16_9,
+        imageUrl:
+            'https://tsimg.cloud/77890-29730/ef1214d1d3e6f4bf5045f23085ff14a508f1a682_fwebp-w1000.jpg',
         maskType: MaskType.None,
         onConfirm: console.log,
+        userMode: ImageEditorUserMode.admin,
     },
 } as ComponentMeta<typeof ImageEditor>;
 
 const Template: ComponentStory<typeof ImageEditor> = (args) => <ImageEditor {...args} />;
 
-export const General = Template.bind({});
+export const AdminMode = Template.bind({});
 
-export const NoImage = Template.bind({});
+AdminMode.args = {
+    uId: 1,
+};
+export const UserMode = Template.bind({});
 
-General.args = {
-    uId: 11111111,
-    imageUrl:
-        'https://tsimg.cloud/77890-29730/ef1214d1d3e6f4bf5045f23085ff14a508f1a682_fwebp-w1000.jpg',
+UserMode.args = {
+    uId: 2,
     userMode: ImageEditorUserMode.user,
 };
 
+export const NoImage = Template.bind({});
+
 NoImage.args = {
-    uId: '222222',
+    uId: 3,
     imageUrl: '',
     ratio: ImageEditorAspectRatio.ratio_4_3,
-    userMode: ImageEditorUserMode.admin,
 };
