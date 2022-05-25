@@ -83,7 +83,7 @@
             margin: 0;
         }
 
-        &__step{
+        &__step {
             &__dot {
                 position: absolute;
                 width: 16px;
@@ -93,7 +93,7 @@
                 transform: translate(-50%, 0);
 
                 &#{&}--active {
-                    background-color: var(--chayns-color--408)
+                    background-color: var(--chayns-color--408);
                 }
 
                 &-label {
@@ -101,6 +101,7 @@
                     font-size: 12px;
                     transform: translate(-50%, -14px);
                     top: 0;
+                    white-space: nowrap;
                 }
             }
         }
