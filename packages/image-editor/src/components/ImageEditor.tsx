@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import Icon from '../../../core/src/components/icon/Icon';
 import { buttonType, IframeDialogResult } from '../types/chayns';
-import { ImageEditorAspectRatio } from './constants/aspectRatio';
+import { ImageEditorAspectRatio, Resolution } from './constants/aspectRatio';
 import type { MaskType } from './constants/maskType';
 import {
     StyledCreateButton,
@@ -19,29 +19,33 @@ export enum ImageEditorUserMode {
 
 export type ImageEditorProps = {
     /**
-     * Unique Id to save an load Image Parts
+     * Unique id to save an load image parts
      */
     uId: string | number;
     /**
-     * ImageUrl to show in Preview
+     * ImageUrl to show in preview
      */
     imageUrl?: string;
     /**
-     * Aspect Ratio for Image to Edit
+     * Aspect ratio for image editor, when not set user can change ratio
      */
     ratio?: ImageEditorAspectRatio | number | null;
+    /**
+     * Resolution for image editor, when not set user can change resolution according to aspect ratio
+     */
+    resolution?: Resolution;
     /**
      * Mask shape to crop resulting Image
      */
     maskType?: MaskType;
     /**
-     * UserMode (Adin or User) determines where the EditorState, History and Images are saved. EditorData is always saved with uId ('uId'.json).
-     * AdminMode saves EditorState & History in site-space (shared for users (with same uId) and only for admins) and image for site at tsgImgCloud.
-     * UserMode saves EditorState & History in private-space (different for every user (even if same uId), not shared) and image for user at tsgImgCloud.
+     * UserMode (Adin or User) determines where the EditorState and History is saved. EditorData is always saved with uId ('uId'.json).
+     * AdminMode saves EditorState & History in site-space (shared for users (with same uId) and only for admins).
+     * UserMode saves EditorState & History in private-space (different for every user (even if same uId), not shared).
      */
     userMode: ImageEditorUserMode;
     /**
-     * Function to be executed when the Image is saved
+     * Function to be executed when the image is saved
      */
     onConfirm: FunctionStringCallback;
 };
@@ -50,7 +54,8 @@ const ImageEditor: FC<ImageEditorProps> | null = ({
     uId,
     imageUrl,
     onConfirm,
-    ratio = ImageEditorAspectRatio.ratio_16_9,
+    ratio,
+    resolution,
     maskType,
     userMode = ImageEditorUserMode.none,
 }) => {
@@ -71,23 +76,27 @@ const ImageEditor: FC<ImageEditorProps> | null = ({
                 input: {
                     uId,
                     ratio,
+                    resolution,
                     maskType,
                     userMode,
+                    imageUrl,
                 },
             })
             .then((data: IframeDialogResult<string>) => {
                 if (data?.buttonType === buttonType.POSITIVE && data.value) {
-                    console.log('result', data.value);
+                    console.warn('result', data.value);
                     onConfirm(data.value);
                 }
             });
-    }, [uId, ratio, maskType, userMode, onConfirm]);
+    }, [uId, ratio, resolution, maskType, userMode, imageUrl, onConfirm]);
 
     const render = useMemo(
         () => (
             <>
                 {uId && (
-                    <StyledImageWrapper ratio={ratio}>
+                    <StyledImageWrapper
+                        ratio={ratio || (!imageUrl ? ImageEditorAspectRatio.ratio_16_9 : null)}
+                    >
                         {imageUrl ? (
                             <>
                                 <StyledImage src={imageUrl} />

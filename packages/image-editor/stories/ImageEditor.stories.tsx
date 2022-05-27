@@ -7,7 +7,6 @@ export default {
     title: 'ImageEditor/ImageEditor',
     component: ImageEditor,
     args: {
-        ratio: ImageEditorAspectRatio.ratio_16_9,
         imageUrl:
             'https://tsimg.cloud/77890-29730/ef1214d1d3e6f4bf5045f23085ff14a508f1a682_fwebp-w1000.jpg',
         maskType: MaskType.None,
