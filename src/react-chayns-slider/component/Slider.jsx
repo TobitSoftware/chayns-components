@@ -75,20 +75,45 @@ export default class Slider extends PureComponent {
     }
 
     componentDidMount() {
-        const stepped = this.getSteppedPercents(this);
-        this.setElements(stepped);
-    }
-
-    componentDidUpdate(prevProps) {
         const {
-            interval,
+            thumbWidth,
+            showValueInThumb,
+            valueFormatter,
             min,
             max,
             vertical,
-            startValue,
-            endValue,
-            value,
         } = this.props;
+        const stepped = this.getSteppedPercents(this);
+        this.setElements(stepped);
+        if (!thumbWidth && showValueInThumb && !vertical) {
+            const $minDot = document.createElement('div');
+            $minDot.innerText = valueFormatter(min);
+            $minDot.classList.add('.cc__new-slider__bar__thumb__dot');
+            $minDot.style.position = 'absolute';
+            $minDot.style.opacity = '0';
+            document.body.appendChild($minDot);
+            this.thumbWidthMin = Math.ceil(
+                $minDot.getBoundingClientRect().width
+            );
+            document.body.removeChild($minDot);
+
+            const $maxDot = document.createElement('div');
+            $maxDot.innerText = valueFormatter(max);
+            $maxDot.classList.add('.cc__new-slider__bar__thumb__dot');
+            $maxDot.style.position = 'absolute';
+            $maxDot.style.opacity = '0';
+            document.body.appendChild($maxDot);
+            this.thumbWidthMax = Math.ceil(
+                $maxDot.getBoundingClientRect().width
+            );
+            document.body.removeChild($maxDot);
+            this.forceUpdate();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { interval, min, max, vertical, startValue, endValue, value } =
+            this.props;
 
         if (
             isNumber(value) ||
@@ -637,7 +662,12 @@ export default class Slider extends PureComponent {
             valueFormatter,
         } = this.props;
 
-        const breakpoints = showDots && step ? Array(Math.floor((max - min) / step) + 1).fill(0).map((_, i) => min + i * step) : null;
+        const breakpoints =
+            showDots && step
+                ? Array(Math.floor((max - min) / step) + 1)
+                      .fill(0)
+                      .map((_, i) => min + i * step)
+                : null;
 
         return (
             <div
@@ -660,27 +690,41 @@ export default class Slider extends PureComponent {
                     />
                 ) : null}
                 <div className="cc__new-slider__bar" ref={this.bar}>
-                    {breakpoints ? (
-                        breakpoints.map((breakpoint) => {
-                            const realValue = this.getRealValue(this.percent, min, max);
-                            const value = Math.round(realValue / step) * step;
-                            const left = `${((breakpoint - min) / (max - min)) * 100}%`;
-                            return (
-                                <>
-                                    <div
-                                        className={classNames("cc__new-slider__bar__step__dot", { 'cc__new-slider__bar__step__dot--active': value >= breakpoint })}
-                                        style={{ left }}
-                                    />
-                                    <div
-                                        className={classNames("cc__new-slider__bar__step__dot-label")}
-                                        style={{ left }}
-                                    >
-                                        {valueFormatter(breakpoint)}
-                                    </div>
-                                </>
-                            );
-                        })
-                    ) : null}
+                    {breakpoints
+                        ? breakpoints.map((breakpoint) => {
+                              const realValue = this.getRealValue(
+                                  this.percent,
+                                  min,
+                                  max
+                              );
+                              const value = Math.round(realValue / step) * step;
+                              const left = `${
+                                  ((breakpoint - min) / (max - min)) * 100
+                              }%`;
+                              return (
+                                  <>
+                                      <div
+                                          className={classNames(
+                                              'cc__new-slider__bar__step__dot',
+                                              {
+                                                  'cc__new-slider__bar__step__dot--active':
+                                                      value >= breakpoint,
+                                              }
+                                          )}
+                                          style={{ left }}
+                                      />
+                                      <div
+                                          className={classNames(
+                                              'cc__new-slider__bar__step__dot-label'
+                                          )}
+                                          style={{ left }}
+                                      >
+                                          {valueFormatter(breakpoint)}
+                                      </div>
+                                  </>
+                              );
+                          })
+                        : null}
                     <div
                         className="cc__new-slider__bar__track chayns__background-color--402"
                         onClick={this.trackDown}
@@ -700,13 +744,20 @@ export default class Slider extends PureComponent {
                         className="cc__new-slider__bar__thumb-wrapper"
                         style={{
                             [this.width]: `calc(100% - ${
-                                (thumbWidth || 20) - 20
+                                this.thumbWidthMax && this.thumbWidthMin
+                                    ? (this.thumbWidthMax +
+                                          this.thumbWidthMin) /
+                                          2 -
+                                      20
+                                    : (thumbWidth || 20) - 20
                             }px`,
                             [this.marginLeft]: `${
-                                (thumbWidth || 20) / 2 - 10
+                                (this.thumbWidthMin || thumbWidth || 20) / 2 -
+                                10
                             }px`,
                             [this.marginRight]: `${
-                                (thumbWidth || 20) / 2 - 10
+                                (this.thumbWidthMax || thumbWidth || 20) / 2 -
+                                10
                             }px`,
                         }}
                     >
