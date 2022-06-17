@@ -147,7 +147,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 setIsContentShown(true);
             }
-        }, []);
+        }, [items]);
 
         const handleClick = useCallback<MouseEventHandler<HTMLDivElement>>(
             (event) => {
