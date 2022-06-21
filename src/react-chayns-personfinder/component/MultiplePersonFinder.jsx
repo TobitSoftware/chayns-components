@@ -57,7 +57,7 @@ class MultiplePersonFinder extends Component {
 
     handleTagRemove(tag, ev) {
         if (this.boxRef && this.boxRef.getHiddenState()) {
-            ev.stopPropagation();
+            ev?.stopPropagation?.();
         }
         const {
             context: { ObjectMapping: orm },
