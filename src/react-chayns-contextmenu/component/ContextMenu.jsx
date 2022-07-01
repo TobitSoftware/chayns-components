@@ -37,6 +37,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
         onChildrenClick,
         disableDialog,
         onLayerClick,
+        onShow,
+        onHide,
         removeParentSpace,
         coordinates,
         positionOnChildren,
@@ -63,9 +65,12 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
         if (isBubbleShown) {
             bubbleRef.current.show();
+            onShow?.();
         } else {
             bubbleRef.current.hide();
+            onHide?.();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isBubbleShown]);
 
     /**
@@ -327,6 +332,16 @@ ContextMenu.propTypes = {
     onLayerClick: PropTypes.func,
 
     /**
+     * This callback will be called when the context menu becomes visible
+     */
+    onShow: PropTypes.func,
+
+    /**
+     *  This callback will be called when the `ContextMenu` hides
+     */
+    onHide: PropTypes.func,
+
+    /**
      * The coordinates at which the context menu will get rendered.
      */
     coordinates: PropTypes.shape({
@@ -450,6 +465,8 @@ ContextMenu.propTypes = {
 
 ContextMenu.defaultProps = {
     onLayerClick: null,
+    onShow: null,
+    onHide: null,
     items: [],
     position: null,
     positionOnChildren: 1,
