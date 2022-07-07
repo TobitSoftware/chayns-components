@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
 import { StyledMotionAccordionBody } from './AccordionBody.styles';
 
 const AccordionBody: FC = ({ children }) => (
@@ -8,7 +9,9 @@ const AccordionBody: FC = ({ children }) => (
         exit={{ height: 0, opacity: 0 }}
         initial={{ height: 0, opacity: 0 }}
     >
-        {children}
+        <AccordionGroupContext.Provider value={{ openAccordionUuid: undefined }}>
+            {children}
+        </AccordionGroupContext.Provider>
     </StyledMotionAccordionBody>
 );
 
