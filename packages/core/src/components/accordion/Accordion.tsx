@@ -146,29 +146,38 @@ const Accordion: FC<AccordionProps> = ({
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
     return (
-        <StyledAccordion className="beta-chayns-accordion" isOpen={isOpen} isWrapped={isWrapped}>
-            <AccordionContext.Provider value={{ isWrapped }}>
-                <MotionConfig transition={{ type: 'tween' }}>
-                    <AccordionHead
-                        icon={icon}
-                        isOpen={isOpen}
-                        isFixed={isFixed}
-                        isTitleGreyed={isTitleGreyed || isDisabled}
-                        isWrapped={isWrapped}
-                        onClick={handleHeadClick}
-                        onSearchChange={onSearchChange}
-                        rightElement={rightElement}
-                        searchIcon={searchIcon}
-                        searchPlaceholder={searchPlaceholder}
-                        title={title}
-                        titleElement={titleElement}
-                    />
-                    <AnimatePresence initial={false}>
-                        {isOpen && <AccordionBody>{children}</AccordionBody>}
-                    </AnimatePresence>
-                </MotionConfig>
-            </AccordionContext.Provider>
-        </StyledAccordion>
+        <AccordionContext.Consumer>
+            {({ isWrapped: isParentWrapped }) => (
+                <StyledAccordion
+                    className="beta-chayns-accordion"
+                    isOpen={isOpen}
+                    isParentWrapped={isParentWrapped}
+                    isWrapped={isWrapped}
+                >
+                    <AccordionContext.Provider value={{ isWrapped }}>
+                        <MotionConfig transition={{ type: 'tween' }}>
+                            <AccordionHead
+                                icon={icon}
+                                isOpen={isOpen}
+                                isFixed={isFixed}
+                                isTitleGreyed={isTitleGreyed || isDisabled}
+                                isWrapped={isWrapped}
+                                onClick={handleHeadClick}
+                                onSearchChange={onSearchChange}
+                                rightElement={rightElement}
+                                searchIcon={searchIcon}
+                                searchPlaceholder={searchPlaceholder}
+                                title={title}
+                                titleElement={titleElement}
+                            />
+                            <AnimatePresence initial={false}>
+                                {isOpen && <AccordionBody>{children}</AccordionBody>}
+                            </AnimatePresence>
+                        </MotionConfig>
+                    </AccordionContext.Provider>
+                </StyledAccordion>
+            )}
+        </AccordionContext.Consumer>
     );
 };
 
