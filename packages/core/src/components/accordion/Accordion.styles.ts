@@ -1,16 +1,18 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { AccordionProps } from './Accordion';
 
 type StyledMotionAccordionProps = WithTheme<{
     isOpen: boolean;
     isParentWrapped: boolean;
-    isWrapped: boolean;
-}>;
+}> &
+    Pick<AccordionProps, 'isWrapped' | 'shouldHideBackground'>;
 
 export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
-    ${({ isOpen, isWrapped }) =>
+    ${({ isOpen, isWrapped, shouldHideBackground }) =>
         isOpen &&
         !isWrapped &&
+        !shouldHideBackground &&
         css`
             background-color: rgba(
                 ${({ theme }: StyledMotionAccordionProps) => theme['100-rgb']},
@@ -34,7 +36,12 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !isWrapped &&
         css`
             margin-top: 10px;
+        `}
 
+    ${({ isWrapped, shouldHideBackground }) =>
+        !isWrapped &&
+        !shouldHideBackground &&
+        css`
             &:hover {
                 background-color: rgba(
                     ${({ theme }: StyledMotionAccordionProps) => theme['100-rgb']},

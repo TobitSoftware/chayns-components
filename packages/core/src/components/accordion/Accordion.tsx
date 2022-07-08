@@ -19,7 +19,7 @@ export const AccordionContext = React.createContext({ isWrapped: false });
 
 AccordionContext.displayName = 'AccordionContext';
 
-type AccordionProps = {
+export type AccordionProps = {
     /**
      * The content of the accordion body
      */
@@ -77,6 +77,10 @@ type AccordionProps = {
      */
     searchPlaceholder?: string;
     /**
+     * This will hide the background color of the accordion
+     */
+    shouldHideBackground?: boolean;
+    /**
      * Title of the Accordion displayed in the head
      */
     title: string;
@@ -100,6 +104,7 @@ const Accordion: FC<AccordionProps> = ({
     rightElement,
     searchIcon,
     searchPlaceholder,
+    shouldHideBackground = false,
     title,
     titleElement,
 }) => {
@@ -152,6 +157,7 @@ const Accordion: FC<AccordionProps> = ({
             isOpen={isOpen}
             isParentWrapped={isParentWrapped}
             isWrapped={isWrapped}
+            shouldHideBackground={shouldHideBackground}
         >
             <AccordionContext.Provider value={{ isWrapped }}>
                 <MotionConfig transition={{ type: 'tween' }}>
