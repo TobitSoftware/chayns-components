@@ -1,8 +1,12 @@
-import React, { FC, ReactNode } from 'react';
 import clsx from 'clsx';
+import React, { FC, ReactNode } from 'react';
 import { StyledBadge } from './Badge.styles';
 
-type BadgeProps = {
+export type BadgeProps = {
+    /**
+     * The background color of the badge
+     */
+    backgroundColor?: string;
     /**
      * The content of the badge
      */
@@ -11,12 +15,24 @@ type BadgeProps = {
      * Additional class names for the badge element
      */
     className?: string;
+    /**
+     * The font color of the badge
+     */
+    fontColor?: string;
 };
 
-const Badge: FC<BadgeProps> = ({ children, className }) => {
+const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor }) => {
     const badgeClasses = clsx('beta-chayns-badge ellipsis', className);
 
-    return <StyledBadge className={badgeClasses}>{children}</StyledBadge>;
+    return (
+        <StyledBadge
+            backgroundColor={backgroundColor}
+            className={badgeClasses}
+            fontColor={fontColor}
+        >
+            {children}
+        </StyledBadge>
+    );
 };
 
 Badge.displayName = 'Badge';

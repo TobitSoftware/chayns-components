@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { BadgeProps } from './Badge';
 
-type StyledBadgeProps = WithTheme<unknown>;
+type StyledBadgeProps = WithTheme<Pick<BadgeProps, 'backgroundColor' | 'fontColor'>>;
 
-export const StyledBadge = styled.div`
-    background-color: ${({ theme }: StyledBadgeProps) => theme['secondary-202']};
+export const StyledBadge = styled.div<StyledBadgeProps>`
+    background-color: ${({ backgroundColor, theme }: StyledBadgeProps) =>
+        backgroundColor ?? theme['secondary-202']};
     border-radius: 15px;
-    color: ${({ theme }: StyledBadgeProps) => theme['007']};
+    color: ${({ fontColor, theme }: StyledBadgeProps) => fontColor ?? theme['007']};
+    display: inline-block;
     font-size: 0.8rem;
     min-width: 1.65rem;
     padding: 2px 7px;
