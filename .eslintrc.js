@@ -4,5 +4,5 @@ module.exports = {
         // We organize imports on commit so this is not needed.
         'import/order': 'off',
     },
-    extends: ['@chayns-toolkit'],
+    extends: ['@chayns-toolkit', 'plugin:storybook/recommended'],
 };
