@@ -13,7 +13,7 @@ export type ButtonProps = {
      */
     className?: string;
     /**
-     * An icon that is displayed on the left hand side of the button text
+     * An icon that is displayed on the left-hand side of the button text
      */
     icon?: string;
     /**
