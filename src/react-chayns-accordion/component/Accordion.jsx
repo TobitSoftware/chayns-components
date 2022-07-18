@@ -580,7 +580,7 @@ Accordion.defaultProps = {
     isWrapped: false,
     renderClosed: false,
     right: null,
-    autogrow: false,
+    autogrow: true,
     open: undefined,
     icon: 'ts-angle-right',
     noRotate: false,
