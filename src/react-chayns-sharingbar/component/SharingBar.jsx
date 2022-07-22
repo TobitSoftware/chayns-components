@@ -73,7 +73,15 @@ function SharingBar({
             if (stopPropagation) e.stopPropagation();
         };
 
-        return <div onClick={onClick}>{indicator}</div>;
+        return (
+            <div
+                className={classNames('sharing-bar', className)}
+                style={style}
+                onClick={onClick}
+            >
+                {indicator}
+            </div>
+        );
     }
 
     const sharingItems = [];
