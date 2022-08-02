@@ -44,6 +44,7 @@ The `ListItem`-component takes the following props:
 | [subtitle](#subtitle)                 | `ReactNode \| Array<ReactNode>`       |                                             |          |
 | [image](#image)                       | `string`                              |                                             |          |
 | [images](#images)                     | `Array<string>`                       |                                             |          |
+| [openImageOnClick](#openImageOnClick) | `boolean`                             | `false`                                     |          |
 | [icon](#icon)                         | `string \| object`                    |                                             |          |
 | [className](#classname)               | `string`                              |                                             |          |
 | [onClick](#onclick)                   | `function`                            |                                             |          |
@@ -104,6 +105,16 @@ images?: Array<string>
 
 An array of URLs for creating a puzzle of images on the left hand of the image
 item.
+
+---
+
+### `openImageOnClick`
+
+```ts
+openImageOnClick?: boolean
+```
+
+Whether the image/images should be opened at full size when clicked. Only works if either image or images is defined
 
 ---
 
