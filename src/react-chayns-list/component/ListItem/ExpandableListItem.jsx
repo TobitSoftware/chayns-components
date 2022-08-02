@@ -36,6 +36,7 @@ const ExpandableListItem = ({ children, onClick, ...props }) => {
                                 }
                             }}
                             {...props}
+                            open={open === null ? c.open : open}
                             className={headerClassName}
                         />
                     )}
@@ -67,6 +68,7 @@ ExpandableListItem.propTypes = {
     onClose: PropTypes.func,
     onClick: PropTypes.func,
     defaultOpen: PropTypes.bool,
+    headMultiline: PropTypes.bool,
 };
 
 ExpandableListItem.defaultProps = {
@@ -79,6 +81,7 @@ ExpandableListItem.defaultProps = {
     onClose: null,
     onClick: null,
     defaultOpen: false,
+    headMultiline: false,
 };
 
 ExpandableListItem.displayName = 'ExpandableListItem';

@@ -10,6 +10,7 @@ import {
     hexToRgb255,
     rgb255ToHex,
 } from '@chayns/colors';
+import Accordion from '../../../react-chayns-accordion/component/Accordion';
 import Input from '../../../react-chayns-input/component/Input';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { HEX_REGEX, RGB_REGEX } from '../../../utils/color/constants';
@@ -71,7 +72,7 @@ class ColorInput extends Component {
     };
 
     valueToHsv = (value) => {
-        const { colorModel } = this.props;
+        const { colorModel, transparency } = this.props;
         if (colorModel) {
             // rgb(a)
             const matches = value.match(RGB_REGEX);
@@ -84,6 +85,9 @@ class ColorInput extends Component {
                 };
                 const hsv = rgb1ToHsv(rgb255ToRgb1(rgb));
                 if (hsv) {
+                    if (!transparency) {
+                        delete hsv.a;
+                    }
                     return hsv;
                 }
             }
@@ -93,6 +97,9 @@ class ColorInput extends Component {
             if (matches) {
                 const hsv = rgb1ToHsv(rgb255ToRgb1(hexToRgb255(matches[1])));
                 if (hsv) {
+                    if (!transparency) {
+                        delete hsv.a;
+                    }
                     return hsv;
                 }
             }
@@ -162,20 +169,49 @@ class ColorInput extends Component {
 
 export default function withColorInput({ showAllColorModels, ...props }) {
     if (showAllColorModels) {
-        return [
-            <ColorInput
-                {...props}
-                colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
-                hideSwitchIcon
-            />,
-            <ColorInput
-                {...props}
-                colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
-                hideSwitchIcon
-            />,
-        ];
+        return (
+            <Accordion
+                head="Erweitert"
+                style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    margin: '0px 11px',
+                }}
+                dataGroup="cc_color-picker"
+                icon="ts-angle-right"
+                isWrapped
+            >
+                <div className="cc__color-input__accordion">
+                    <ColorInput
+                        {...props}
+                        colorModel={0} // Cannot use ColorPicker.colorModel because of dependency cycle
+                        hideSwitchIcon
+                    />
+                    <ColorInput
+                        {...props}
+                        colorModel={1} // Cannot use ColorPicker.colorModel because of dependency cycle
+                        hideSwitchIcon
+                    />
+                </div>
+            </Accordion>
+        );
     }
-    return <ColorInput {...props} />;
+    return (
+        <Accordion
+            head="Erweitert"
+            isWrapped
+            style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                margin: '0px 11px',
+            }}
+            dataGroup="cc_color-picker"
+            defaultOpened
+            icon="ts-angle-right"
+        >
+            <ColorInput {...props} />
+        </Accordion>
+    );
 }
 
 withColorInput.propTypes = {

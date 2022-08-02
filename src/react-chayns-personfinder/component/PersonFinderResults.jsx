@@ -101,23 +101,33 @@ const PersonFinderResults = ({
                                     focusIndex - (length - groupLength);
                             }
                             return (
-                                <ResultItemList
-                                    key={group}
-                                    data={groupData}
-                                    orm={orm}
-                                    group={group}
-                                    hasMore={hasMore[group]}
-                                    onLoadMore={onLoadMore}
-                                    showWaitCursor={showWaitCursor[group]}
-                                    onClick={handleClick}
-                                    onRemoveTag={onRemoveTag}
-                                    focusIndex={groupFocusIndex}
-                                    roundIcons={roundIcons}
-                                    hideFriendsIcon={hideFriendsIcon}
-                                    tags={tags}
-                                    showCheckbox={showCheckbox}
-                                    inputValue={inputValue}
-                                />
+                                <div
+                                    className={classNames(
+                                        'cc__person-finder__results',
+                                        {
+                                            'no-background': noBackground,
+                                        }
+                                    )}
+                                    key={`resultList_${group}`}
+                                >
+                                    <ResultItemList
+                                        key={group}
+                                        data={groupData}
+                                        orm={orm}
+                                        group={group}
+                                        hasMore={hasMore[group]}
+                                        onLoadMore={onLoadMore}
+                                        showWaitCursor={showWaitCursor[group]}
+                                        onClick={handleClick}
+                                        onRemoveTag={onRemoveTag}
+                                        focusIndex={groupFocusIndex}
+                                        roundIcons={roundIcons}
+                                        hideFriendsIcon={hideFriendsIcon}
+                                        tags={tags}
+                                        showCheckbox={showCheckbox}
+                                        inputValue={inputValue}
+                                    />
+                                </div>
                             );
                         }
                     )}
@@ -127,20 +137,26 @@ const PersonFinderResults = ({
     }
 
     return (
-        <ResultItemList
-            data={
-                typeof orm.filter === 'function'
-                    ? data.filter(orm.filter(inputValue))
-                    : data
-            }
-            orm={orm}
-            hasMore={hasMore}
-            onLoadMore={onLoadMore}
-            showWaitCursor={showWaitCursor}
-            onClick={handleClick}
-            focusIndex={focusIndex}
-            roundIcons={orm.roundIcons}
-        />
+        <div
+            className={classNames('cc__person-finder__results', {
+                'no-background': noBackground,
+            })}
+        >
+            <ResultItemList
+                data={
+                    typeof orm.filter === 'function'
+                        ? data.filter(orm.filter(inputValue))
+                        : data
+                }
+                orm={orm}
+                hasMore={hasMore}
+                onLoadMore={onLoadMore}
+                showWaitCursor={showWaitCursor}
+                onClick={handleClick}
+                focusIndex={focusIndex}
+                roundIcons={orm.roundIcons}
+            />
+        </div>
     );
 };
 

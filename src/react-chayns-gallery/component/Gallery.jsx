@@ -32,7 +32,12 @@ export default class Gallery extends Component {
             active: null,
             images: props.images,
             dropzone: null,
+            galleryWidth: null,
         };
+    }
+
+    componentDidMount() {
+        this.setState({ galleryWidth: this.galleryRef.current.offsetWidth });
     }
 
     componentDidUpdate(prevProps) {
@@ -58,8 +63,10 @@ export default class Gallery extends Component {
             : event.pageY;
         this.selectedElement =
             event.target.parentElement.parentElement.parentElement;
-        this.selectedElementStartPosition = this.selectedElement.getBoundingClientRect();
-        this.galleryStartPosition = this.galleryRef.current.getBoundingClientRect();
+        this.selectedElementStartPosition =
+            this.selectedElement.getBoundingClientRect();
+        this.galleryStartPosition =
+            this.galleryRef.current.getBoundingClientRect();
         this.galleryOffsetX = this.galleryStartPosition.left;
         this.galleryOffsetY = this.galleryStartPosition.top;
         this.offsetX = this.pageXStart - this.selectedElementStartPosition.left;
@@ -78,10 +85,8 @@ export default class Gallery extends Component {
             ? event.changedTouches[0]
             : event;
         const { clientWidth: galleryWidth } = this.galleryRef.current;
-        const {
-            clientHeight: itemHeight,
-            clientWidth: itemWidth,
-        } = event.target.parentElement.parentElement.parentElement;
+        const { clientHeight: itemHeight, clientWidth: itemWidth } =
+            event.target.parentElement.parentElement.parentElement;
 
         // move item
         this.selectedElement.style.left = `${
@@ -192,17 +197,24 @@ export default class Gallery extends Component {
             preventParams,
             stopPropagation,
             onClick,
-            smallTiles
+            smallTiles,
         } = this.props;
         const { style: propStyle } = this.props;
         const style = { ...propStyle };
         const defaultMode = !dragMode && !deleteMode && !smallTiles;
-        const { active, dropzone: dropzoneId, images } = this.state;
+        const {
+            active,
+            dropzone: dropzoneId,
+            images,
+            galleryWidth,
+        } = this.state;
 
         let styleHeight;
         if (defaultMode) {
             if (height) {
                 styleHeight = height;
+            } else if (galleryWidth < 420) {
+                styleHeight = galleryWidth;
             } else {
                 styleHeight = 420;
             }

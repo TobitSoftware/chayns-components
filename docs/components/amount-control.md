@@ -47,17 +47,18 @@ The `AmountControl`-component takes the following props:
 | [onAdd](#onadd)                             | `function`         |                 |          |
 | [onRemove](#onremove)                       | `function`         |                 |          |
 | [disabled](#disabled)                       | `boolean`          | `false`         |          |
-| [disableInput](#disableinput)               | `boolean`          | `false`         |          |
+| [disableInput](#disableinput)               | `boolean`          |                 |          |
 | [disableAdd](#disableadd)                   | `boolean`          | `false`         |          |
 | [disableRemove](#disableremove)             | `boolean`          | `false`         |          |
 | [className](#classname)                     | `string`           | `''`            |          |
 | [autoInput](#autoinput)                     | `boolean`          | `false`         |          |
 | [buttonFormatHandler](#buttonformathandler) | `function`         |                 |          |
 | [showInput](#showinput)                     | `boolean`          | `false`         |          |
+| [showAddButton](#showaddbutton)             | `boolean`          |                 |          |
 | [icon](#icon)                               | `string \| object` |                 |          |
 | [plusIcon](#plusicon)                       | `string \| object` | `'fa fa-plus'`  |          |
 | [minusIcon](#minusicon)                     | `string \| object` | `'fa fa-minus'` |          |
-| [removeIcon](#removeicon)                   | `string \| object` | `'fa fa-minus'` |          |
+| [removeIcon](#removeicon)                   | `string \| object` |                 |          |
 | [removeColor](#removecolor)                 | `string`           |                 |          |
 | [addColor](#addcolor)                       | `string`           |                 |          |
 | [iconColor](#iconcolor)                     | `string`           |                 |          |
@@ -207,7 +208,17 @@ A function that returns the content of the button.
 showInput?: boolean
 ```
 
-Wether to show the input.
+Whether to show the input.
+
+---
+
+### `showAddButton`
+
+```ts
+showAddButton?: boolean
+```
+
+Whether the add button should be shown/rendered.
 
 ---
 

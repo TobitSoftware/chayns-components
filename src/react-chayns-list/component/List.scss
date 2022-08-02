@@ -1,0 +1,26 @@
+@keyframes multiline {
+    0%,
+    99% {
+        white-space: pre-wrap;
+    }
+    100% {
+        white-space: nowrap;
+    }
+}
+
+.list-item__header--multiline {
+    .list-item__titles {
+        .list-item--expanded & {
+        }
+
+        .list-item__title,
+        .list-item__subtitle {
+            .list-item--expanded & {
+                white-space: pre-wrap;
+                animation: none;
+            }
+
+            animation: multiline 0.1s;
+        }
+    }
+}

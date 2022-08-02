@@ -1,7 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import classNames from 'clsx';
 import ListItemHeader from './ListItemHeader';
 
 const ExpandableListHeader = ({
@@ -14,29 +15,44 @@ const ExpandableListHeader = ({
     right,
     style,
     headerProps,
+    open,
+    headMultiline,
+    className,
     ...props
-}) => (
-    <ListItemHeader
-        title={title}
-        subtitle={subtitle}
-        onClick={onClick}
-        image={image}
-        icon={icon}
-        right={right}
-        left={
-            !hideIndicator && (
-                <div className="list-item__indicator">
-                    <div className="icon-wrapper">
-                        <i className="ts-icon ts-angle-right" />
-                    </div>
-                </div>
-            )
+}) => {
+    const [wasOpen, setWasOpen] = useState(false);
+    useEffect(() => {
+        if (open) {
+            setWasOpen(true);
         }
-        style={style && style.head ? style.head : null}
-        {...props}
-        {...headerProps}
-    />
-);
+    }, [open]);
+    return (
+        <ListItemHeader
+            title={title}
+            subtitle={subtitle}
+            onClick={onClick}
+            image={image}
+            icon={icon}
+            right={right}
+            left={
+                !hideIndicator && (
+                    <div className="list-item__indicator">
+                        <div className="icon-wrapper">
+                            <i className="ts-icon ts-angle-right" />
+                        </div>
+                    </div>
+                )
+            }
+            style={style && style.head ? style.head : null}
+            open={open}
+            className={classNames(className, {
+                'list-item__header--multiline': headMultiline && wasOpen, // wasOpen fixes jumping on first render
+            })}
+            {...props}
+            {...headerProps}
+        />
+    );
+};
 
 ExpandableListHeader.propTypes = {
     title: PropTypes.oneOfType([
@@ -57,6 +73,9 @@ ExpandableListHeader.propTypes = {
     ]),
     style: PropTypes.object,
     headerProps: PropTypes.object,
+    open: PropTypes.bool,
+    headMultiline: PropTypes.bool,
+    className: PropTypes.string,
 };
 
 ExpandableListHeader.defaultProps = {
@@ -68,6 +87,9 @@ ExpandableListHeader.defaultProps = {
     right: null,
     style: null,
     headerProps: null,
+    open: null,
+    headMultiline: false,
+    className: null,
 };
 
 ExpandableListHeader.displayName = 'ExpandableListHeader';

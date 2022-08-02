@@ -37,24 +37,30 @@ import { ColorPicker } from 'chayns-components';
 
 The `ColorPicker`-component takes the following props:
 
-| Name                                    | Type                                                                                                         | Default                         | Required |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------- | :------: |
-| [inline](#inline)                       | `boolean`                                                                                                    | `false`                         |          |
-| [color](#color)                         | `string \| { r: number, g: number, b: number, a: number } \| { h: number, s: number, v: number, a: number }` |                                 |    ✓     |
-| [bubblePosition](#bubbleposition)       | `number`                                                                                                     | `Bubble.position.BOTTOM_CENTER` |          |
-| [onChange](#onchange)                   | `function`                                                                                                   |                                 |          |
-| [onChangeEnd](#onchangeend)             | `function`                                                                                                   |                                 |          |
-| [onBlur](#onblur)                       | `function`                                                                                                   |                                 |          |
-| [transparency](#transparency)           | `boolean`                                                                                                    | `false`                         |          |
-| [parent](#parent)                       | `custom`                                                                                                     |                                 |          |
-| [className](#classname)                 | `string`                                                                                                     |                                 |          |
-| [style](#style)                         | `{ [key: string]: number \| string }`                                                                        |                                 |          |
-| [bubbleClassName](#bubbleclassname)     | `string`                                                                                                     |                                 |          |
-| [bubbleStyle](#bubblestyle)             | `{ [key: string]: number \| string }`                                                                        |                                 |          |
-| [input](#input)                         | `boolean`                                                                                                    | `false`                         |          |
-| [defaultColorModel](#defaultcolormodel) | `number`                                                                                                     |                                 |          |
-| [children](#children)                   | `ReactNode`                                                                                                  |                                 |          |
-| [removeParentSpace](#removeparentspace) | `boolean`                                                                                                    | `false`                         |          |
+| Name                                        | Type                                  | Default                         | Required |
+| ------------------------------------------- | ------------------------------------- | ------------------------------- | :------: |
+| [inline](#inline)                           | `boolean`                             | `false`                         |          |
+| [color](#color)                             | `custom`                              |                                 |          |
+| [bubblePosition](#bubbleposition)           | `number`                              | `Bubble.position.BOTTOM_CENTER` |          |
+| [onChange](#onchange)                       | `function`                            |                                 |          |
+| [onChangeEnd](#onchangeend)                 | `function`                            |                                 |          |
+| [onBlur](#onblur)                           | `function`                            |                                 |          |
+| [transparency](#transparency)               | `boolean`                             | `false`                         |          |
+| [parent](#parent)                           | `custom`                              |                                 |          |
+| [className](#classname)                     | `string`                              |                                 |          |
+| [style](#style)                             | `{ [key: string]: number \| string }` |                                 |          |
+| [bubbleClassName](#bubbleclassname)         | `string`                              |                                 |          |
+| [bubbleStyle](#bubblestyle)                 | `{ [key: string]: number \| string }` |                                 |          |
+| [input](#input)                             | `boolean`                             | `false`                         |          |
+| [defaultColorModel](#defaultcolormodel)     | `number`                              |                                 |          |
+| [children](#children)                       | `ReactNode`                           |                                 |          |
+| [removeParentSpace](#removeparentspace)     | `boolean`                             | `false`                         |          |
+| [showAllColorModels](#showallcolormodels)   | `boolean`                             | `false`                         |          |
+| [customColorsArray](#customcolorsarray)     | `Array<custom>`                       |                                 |          |
+| [showCustomColors](#showcustomcolors)       | `boolean`                             | `false`                         |          |
+| [showGlobalColors](#showglobalcolors)       | `boolean`                             | `false`                         |          |
+| [onCreateCustomColor](#oncreatecustomcolor) | `function`                            |                                 |          |
+| [onRemoveCustomColor](#onremovecustomcolor) | `function`                            |                                 |          |
 
 ### `inline`
 
@@ -69,9 +75,7 @@ Display the color picker without a bubble.
 ### `color`
 
 ```ts
-color: string |
-    { r: number, g: number, b: number, a: number } |
-    { h: number, s: number, v: number, a: number };
+color?: custom
 ```
 
 The current color. Either a HEX-string, an HSV(A)- or RGB(A)-object.
@@ -218,3 +222,63 @@ removeParentSpace?: boolean
 Removes space from the parent to the page borders from the tooltip position.
 This is only needed if the parent is padded from the page and has a relative
 positioning.
+
+---
+
+### `showAllColorModels`
+
+```ts
+showAllColorModels?: boolean
+```
+
+Shows all color models
+
+---
+
+### `customColorsArray`
+
+```ts
+customColorsArray?: Array<custom>
+```
+
+An array of custom selectable colors
+
+---
+
+### `showCustomColors`
+
+```ts
+showCustomColors?: boolean
+```
+
+Shows custom colors
+
+---
+
+### `showGlobalColors`
+
+```ts
+showGlobalColors?: boolean
+```
+
+Shows global colors
+
+---
+
+### `onCreateCustomColor`
+
+```ts
+onCreateCustomColor?: function
+```
+
+Will be called when a custom color is added
+
+---
+
+### `onRemoveCustomColor`
+
+```ts
+onRemoveCustomColor?: function
+```
+
+Will be called when a custom color is removed

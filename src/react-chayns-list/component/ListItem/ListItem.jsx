@@ -35,6 +35,9 @@ const ListItem = ({
     onOpen,
     imageBorderColor,
     left,
+    headMultiline,
+    // eslint-disable-next-line react/prop-types
+    notExpandable,
     ...props
 }) => (
     <div
@@ -204,7 +207,7 @@ ListItem.propTypes = {
     longPressTimeout: PropTypes.number,
 
     /**
-     * Wether the default classname for the children container should be
+     * Whether the default classname for the children container should be
      * removed, which removes the padding around the list item content.
      */
     noContentClass: PropTypes.bool,
@@ -222,6 +225,10 @@ ListItem.propTypes = {
         PropTypes.node,
         PropTypes.arrayOf(PropTypes.node),
     ]),
+    /**
+     * Whether the head of the list item should be multiline or ellipsis in expanded state
+     */
+    headMultiline: PropTypes.bool,
 };
 
 ListItem.defaultProps = {
@@ -250,6 +257,7 @@ ListItem.defaultProps = {
     onOpen: null,
     imageBorderColor: 'rgba(var(--chayns-color-rgb--009), .08)',
     left: null,
+    headMultiline: false,
 };
 
 ListItem.displayName = 'ListItem';

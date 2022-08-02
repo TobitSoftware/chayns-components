@@ -128,6 +128,14 @@ export default class TextString extends Component {
         return textString;
     }
 
+    static selectLanguageToChange(stringName) {
+        chayns.dialog.iFrame({
+            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+            buttons: [],
+            input: { textstring: stringName },
+        });
+    }
+
     constructor(props) {
         super(props);
         const { stringName, language, setProps, replacements, fallback } =
@@ -165,7 +173,6 @@ export default class TextString extends Component {
         this.changeStringResult = this.changeStringResult.bind(this);
         this.selectStringToChange = this.selectStringToChange.bind(this);
         this.setTextStrings = this.setTextStrings.bind(this);
-        this.selectLanguageToChange = this.selectLanguageToChange.bind(this);
     }
 
     componentDidUpdate(prevProps) {
@@ -255,86 +262,11 @@ export default class TextString extends Component {
                         data.selection &&
                         data.selection.length > 0
                     ) {
-                        this.selectLanguageToChange(data.selection[0].value);
+                        TextString.selectLanguageToChange(data.selection[0].value);
                     }
                 });
         } else {
-            this.selectLanguageToChange(stringName);
-        }
-    }
-
-    selectLanguageToChange(stringName) {
-        const { language, useDangerouslySetInnerHTML } = this.props;
-
-        if (useDangerouslySetInnerHTML) {
-            chayns.dialog
-                .select({
-                    title: `TextString bearbeiten: ${stringName}`,
-                    message: `Wähle die Sprache: (angezeigt wird ${
-                        TextString.languages.find(
-                            (l) => l.code === (language || TextString.language)
-                        ).name
-                    })`,
-                    quickfind: 0,
-                    multiselect: 0,
-                    list: TextString.languages,
-                })
-                .then((data) => {
-                    if (
-                        data.buttonType === 1 &&
-                        data.selection &&
-                        data.selection.length > 0
-                    ) {
-                        const lang = data.selection[0];
-                        // language is already selected
-                        if (
-                            lang.value ===
-                            TextString.languages.find(
-                                (l) =>
-                                    l.code === (language || TextString.language)
-                            ).value
-                        ) {
-                            this.changeStringDialog(stringName, lang);
-                        } else {
-                            // Get lib
-                            let library = null;
-                            let middle = 'langRes';
-                            const globalLang = TextString.languages.find(
-                                (l) => l.code === TextString.language
-                            ).value;
-                            Object.keys(
-                                TextString.textStrings[globalLang]
-                            ).forEach((lib) => {
-                                if (
-                                    TextString.textStrings[globalLang][lib][
-                                        stringName
-                                    ]
-                                ) {
-                                    library = lib;
-                                    // eslint-disable-next-line prefer-destructuring
-                                    middle =
-                                        TextString.textStrings[globalLang][lib]
-                                            .middle;
-                                }
-                            });
-                            TextString.loadLibrary(
-                                library,
-                                middle,
-                                TextString.languages.find(
-                                    (l) => l.value === lang.value
-                                ).code
-                            ).then(() => {
-                                this.changeStringDialog(stringName, lang);
-                            });
-                        }
-                    }
-                });
-        } else {
-            chayns.dialog.iFrame({
-                url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-                buttons: [],
-                input: { textstring: stringName },
-            });
+            TextString.selectLanguageToChange(stringName);
         }
     }
 
@@ -497,6 +429,11 @@ TextString.languages = [
         name: 'Polnisch',
         value: 'Pl',
         code: 'pl',
+    },
+    {
+        name: 'Ukrainisch',
+        value: 'Uk',
+        code: 'uk',
     },
 ];
 

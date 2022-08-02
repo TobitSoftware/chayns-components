@@ -4,11 +4,11 @@ import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
 
 export default class Tag extends PureComponent {
-    handleDelete = () => {
+    handleDelete = (ev) => {
         const { value, onDelete } = this.props;
 
         if (onDelete) {
-            onDelete(value);
+            onDelete(value, ev);
         }
     };
 
@@ -22,7 +22,7 @@ export default class Tag extends PureComponent {
                 })}
                 style={disableRemove ? { paddingRight: 10 } : undefined}
             >
-                {children}
+                <div className="cc__tag__children">{children}</div>
                 {!disableRemove && (
                     <Icon
                         className="icon"

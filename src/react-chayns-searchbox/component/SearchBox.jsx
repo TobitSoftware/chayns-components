@@ -32,6 +32,7 @@ const SearchBox = ({
     highlightInputInResult,
     addInputToList,
     emptyKey,
+    onBlur,
     ...otherProps
 }) => {
     const getValue = useCallback(
@@ -346,6 +347,11 @@ const SearchBox = ({
             customProps={{ autoComplete: 'off' }}
             type={list.length >= 0 && isNumber(list[0]) ? 'number' : 'text'}
             onBlur={() => {
+                // return filtered list on onBlur event
+                if (typeof onBlur === 'function') {
+                    onBlur(filteredList)
+                }
+
                 if (addInputToList) {
                     onItemClick(null, inputValue);
                 } else if (filteredList.length === 1) {
@@ -377,7 +383,7 @@ const SearchBox = ({
             }}
             emptyValue={getValue(getItemByKey(emptyKey))}
         >
-            {filteredList &&
+            {filteredList && filteredList.length > 0 &&
                 filteredList.map((item, index) => (
                     <div
                         key={getKey(item)}
@@ -520,6 +526,11 @@ SearchBox.propTypes = {
      * Whether the input should have a small icon to open and close the result list.
      */
     hasOpenCloseIcon: PropTypes.bool,
+
+    /**
+     * A callback that will be invoked when the user leaves the input.
+     */
+    onBlur: PropTypes.func,
 };
 
 SearchBox.defaultProps = {
@@ -544,6 +555,7 @@ SearchBox.defaultProps = {
     sortKey: null,
     emptyKey: null,
     hasOpenCloseIcon: false,
+    onBlur: null,
 };
 
 SearchBox.displayName = 'SearchBox';

@@ -39,8 +39,8 @@ const ObjectMapping = {
             filter: (inputValue) => (e) =>
                 inputValue
                     ? (e.name &&
-                          simplifyString(e.name).includes(
-                              simplifyString(inputValue)
+                          ` ${simplifyString(e.name)}`.includes(
+                              ` ${simplifyString(inputValue)}`
                           )) ||
                       (e.personId && e.personId === inputValue)
                     : true,
@@ -231,8 +231,19 @@ const PersonFinderStateProvider = ({
                 ownUser.fullName.toLowerCase().startsWith(value.toLowerCase())
             ) {
                 convertedPersons.personsRelated.unshift(ownUser);
+            } else if (
+                !includeOwn &&
+                convertedPersons.personsRelated.some(
+                    (user) => user.personId === ownUser.personId
+                )
+            ) {
+                convertedPersons.personsRelated.splice(
+                    convertedPersons.personsRelated.findIndex(
+                        (user) => user.personId === ownUser.personId
+                    ),
+                    1
+                );
             }
-
             dispatch({
                 type: 'RECEIVE_PERSONS',
                 data: convertedPersons,
@@ -372,15 +383,20 @@ const PersonFinderStateProvider = ({
     const onLoadMore = useCallback(
         async (type, value) => {
             const promises = [];
-            if (!type || (type !== 'sites' && type !== 'knownPersons'))
+            if (!type || (type !== 'sites' && type !== 'knownPersons')) {
                 promises.push(loadPersons(value));
-            if (!type || type === 'sites') promises.push(loadSites(value));
+            }
+            if (!type || type === 'sites') {
+                promises.push(loadSites(value));
+            }
             if (
                 !type ||
                 type === 'knownPersons' ||
                 (!enablePersons && type === 'default')
-            )
+            ) {
                 promises.push(loadKnownPersons(value));
+            }
+
             await Promise.all(promises);
         },
         [loadPersons, loadSites, loadKnownPersons, enablePersons]

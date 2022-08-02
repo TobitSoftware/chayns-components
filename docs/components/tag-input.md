@@ -37,21 +37,25 @@ import { TagInput } from 'chayns-components';
 
 The `TagInput`-component takes the following props:
 
-| Name                        | Type                                  | Default | Required |
-| --------------------------- | ------------------------------------- | ------- | :------: |
-| [tags](#tags)               | `Array<{ text: string }>`             |         |          |
-| [value](#value)             | `string`                              | `''`    |          |
-| [onAddTag](#onaddtag)       | `function`                            |         |          |
-| [onRemoveTag](#onremovetag) | `function`                            |         |          |
-| [onChange](#onchange)       | `function`                            |         |          |
-| [placeholder](#placeholder) | `string`                              |         |          |
-| [className](#classname)     | `string`                              |         |          |
-| [style](#style)             | `{ [key: string]: string \| number }` |         |          |
+| Name                            | Type                                   | Default                   | Required |
+| ------------------------------- | -------------------------------------- | ------------------------- | :------: |
+| [tags](#tags)                   | `Array<{ text: string \| ReactNode }>` |                           |          |
+| [value](#value)                 | `string`                               | `''`                      |          |
+| [onAddTag](#onaddtag)           | `function`                             |                           |          |
+| [onRemoveTag](#onremovetag)     | `function`                             |                           |          |
+| [onChange](#onchange)           | `function`                             |                           |          |
+| [placeholder](#placeholder)     | `string`                               |                           |          |
+| [className](#classname)         | `string`                               |                           |          |
+| [style](#style)                 | `{ [key: string]: string \| number }`  |                           |          |
+| [disableRemove](#disableremove) | `boolean`                              | `false`                   |          |
+| [design](#design)               | `number`                               | `TagInput.DEFAULT_DESIGN` |          |
+| [max](#max)                     | `number`                               |                           |          |
+| [addTagOnBlur](#addtagonblur)   | `boolean`                              | `false`                   |          |
 
 ### `tags`
 
 ```ts
-tags?: Array<{ text: string }>
+tags?: Array<{ text: string | ReactNode }>
 ```
 
 An array of the current tags.
@@ -127,3 +131,44 @@ style?: { [key: string]: string | number }
 
 A React style object that will be applied to the outer-most wrapper of the
 input.
+
+---
+
+### `disableRemove`
+
+```ts
+disableRemove?: boolean
+```
+
+Prevents removal of selected users and hides remove icon.
+
+---
+
+### `design`
+
+```ts
+design?: number
+```
+
+The design of the input. Use either `TagInput.DEFAULT_DESIGN` or
+`TagInput.BORDER_DESIGN`.
+
+---
+
+### `max`
+
+```ts
+max?: number
+```
+
+The maximum number of tags selected at once.
+
+---
+
+### `addTagOnBlur`
+
+```ts
+addTagOnBlur?: boolean
+```
+
+Adds a tag on blur

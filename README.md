@@ -34,8 +34,8 @@ include these in your HTML:
 ```html
 <!-- CSS styles -->
 <script
-    src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js"
-    version="4.2"
+  src="https://api.chayns-static.space/css/v4/compatibility/compatibility.min.js"
+  version="4.2"
 ></script>
 
 <!-- JS api -->

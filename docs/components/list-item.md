@@ -64,6 +64,7 @@ The `ListItem`-component takes the following props:
 | [noContentClass](#nocontentclass)     | `boolean`                             |                                             |          |
 | [onOpen](#onopen)                     | `function`                            |                                             |          |
 | [imageBorderColor](#imagebordercolor) | `string`                              | `'rgba(var(--chayns-color-rgb--009), .08)'` |          |
+| [headMultiline](#headmultiline)       | `boolean`                             | `false`                                     |          |
 
 ### `title`
 
@@ -285,8 +286,8 @@ Control the time after which a press is considered a long press.
 noContentClass?: boolean
 ```
 
-Wether the default classname for the children container should be removed, which
-removes the padding around the list item content.
+Whether the default classname for the children container should be removed,
+which removes the padding around the list item content.
 
 ---
 
@@ -307,3 +308,14 @@ imageBorderColor?: string
 ```
 
 A CSS color that will be applied to the border of the image.
+
+---
+
+### `headMultiline`
+
+```ts
+headMultiline?: boolean
+```
+
+Whether the head of the list item should be multiline or ellipsis in expanded
+state

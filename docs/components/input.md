@@ -69,6 +69,7 @@ The `Input`-component takes the following props:
 | [right](#right)                     | `ReactNode`                           |                        |          |
 | [invalidMessage](#invalidmessage)   | `string`                              |                        |          |
 | [emptyValue](#emptyvalue)           | `string \| number`                    |                        |          |
+| [autoComplete](#autocomplete)       | `string`                              | `'off'`                |          |
 
 ### `className`
 
@@ -380,3 +381,13 @@ emptyValue?: string | number
 
 Default value if nothing is typed into the input. Only for border design and not
 compatible with placeholder.
+
+---
+
+### `autoComplete`
+
+```ts
+autoComplete?: string
+```
+
+Sets the autocomplete attribute

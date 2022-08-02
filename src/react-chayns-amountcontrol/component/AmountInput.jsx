@@ -8,6 +8,15 @@ import equalizer from '../../utils/equalizer';
 const AUTO_HIDE_INPUT_MAX_AMOUNT = 9;
 
 export default class AmountInput extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // the input will be set to readonly when not focused to hopefully prevent autofill
+            isReadonly: true,
+        };
+    }
+
     componentDidMount() {
         const { equalize } = this.props;
 
@@ -38,6 +47,11 @@ export default class AmountInput extends PureComponent {
     };
 
     onInputChange = (value) => {
+        const { isReadonly } = this.state;
+        if (isReadonly) {
+            return;
+        }
+
         let inputValue = value.replace(/[\D\s]+/g, '');
         inputValue = parseInt(inputValue, 10);
 
@@ -57,6 +71,16 @@ export default class AmountInput extends PureComponent {
         let { tempAmount } = this.props;
         tempAmount = tempAmount === null ? 0 : tempAmount;
         onChange(tempAmount);
+
+        this.setState({
+            isReadonly: true,
+        });
+    };
+
+    onInputFocus = () => {
+        this.setState({
+            isReadonly: false,
+        });
     };
 
     setRef = (ref) => {
@@ -93,6 +117,8 @@ export default class AmountInput extends PureComponent {
             stopPropagation,
         } = this.props;
 
+        const { isReadonly } = this.state;
+
         const renderInput =
             !disabled &&
             !disableInput &&
@@ -108,10 +134,14 @@ export default class AmountInput extends PureComponent {
                 value={tempValue.toString()}
                 onChange={this.onInputChange}
                 className="cc__amount-control__input"
+                onFocus={this.onInputFocus}
                 onBlur={this.onInputBlur}
                 disabled={disabled}
                 onEnter={this.onInputBlur}
-                customProps={{ 'data-cc-equalize-width': equalize }}
+                customProps={{
+                    'data-cc-equalize-width': equalize,
+                    readOnly: chayns.env.isIOS ? undefined : isReadonly,
+                }}
                 inputRef={this.setRef}
                 style={{
                     ...{ width: `${contentWidth || 55}px` },

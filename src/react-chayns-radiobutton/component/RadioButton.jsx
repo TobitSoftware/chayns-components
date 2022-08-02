@@ -4,6 +4,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import classNames from 'clsx';
 
 let currentId = 0;
 const PREFIX = 'CC_RB_';
@@ -52,7 +53,7 @@ export default class RadioButton extends Component {
         } = this.props;
 
         return (
-            <div className={className} style={style}>
+            <div className={classNames('cc__radio-button', className)} style={style}>
                 <input
                     {...props}
                     id={id || this.id}

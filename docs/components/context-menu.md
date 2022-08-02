@@ -46,6 +46,8 @@ The `ContextMenu`-component takes the following props:
 | Name                                            | Type                                                                                                                     | Default                         | Required |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | :------: |
 | [onLayerClick](#onlayerclick)                   | `function`                                                                                                               |                                 |          |
+| [onShow](#onshow)                               | `function`                                                                                                               |                                 |          |
+| [onHide](#onhide)                               | `function`                                                                                                               |                                 |          |
 | [coordinates](#coordinates)                     | `{ x: number, y: number }`                                                                                               |                                 |          |
 | [items](#items)                                 | `Array<{ className: string, onClick: function, text: string \| ReactNode, stringName: string, icon: string \| Object }>` | `[]`                            |          |
 | [position](#position)                           | `number`                                                                                                                 |                                 |          |
@@ -73,6 +75,26 @@ onLayerClick?: function
 
 This callback will be called when the `ContextMenu` is shown and the user clicks
 away from it.
+
+---
+
+### `onShow`
+
+```ts
+onShow?: function
+```
+
+This callback will be called when the context menu becomes visible
+
+---
+
+### `onHide`
+
+```ts
+onHide?: function
+```
+
+This callback will be called when the `ContextMenu` hides
 
 ---
 

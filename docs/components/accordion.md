@@ -57,7 +57,7 @@ The `Accordion`-component takes the following props:
 | [onClose](#onclose)                           | `function`                                           |                    |          |
 | [defaultOpened](#defaultopened)               | `boolean`                                            |                    |          |
 | [reference](#reference)                       | `function`                                           |                    |          |
-| [autogrow](#autogrow)                         | `boolean`                                            | `false`            |          |
+| [autogrow](#autogrow)                         | `boolean`                                            | `true`             |          |
 | [open](#open)                                 | `boolean`                                            |                    |          |
 | [icon](#icon)                                 | `object \| string \| ReactNode`                      | `'ts-angle-right'` |          |
 | [noRotate](#norotate)                         | `boolean`                                            | `false`            |          |

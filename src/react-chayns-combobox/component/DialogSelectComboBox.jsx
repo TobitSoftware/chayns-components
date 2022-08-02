@@ -2,11 +2,13 @@
 import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { CSSTransition } from 'react-transition-group';
 import Button from '../../react-chayns-button/component/Button';
 import Icon from '../../react-chayns-icon/component/Icon';
 import TappPortal from '../../react-chayns-tapp_portal/component/TappPortal';
 import isDescendant from '../../utils/isDescendant';
+import ComboBoxItem from './ComboBoxItem';
 
 const DialogSelectComboBox = ({
     className,
@@ -91,7 +93,7 @@ const DialogSelectComboBox = ({
             setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
             if (chayns.env.isMobile) {
                 const items = list.map((item) => ({
-                    name: item[listValue],
+                    name: React.isValidElement(item[listValue]) ? renderToStaticMarkup(item[listValue]) : item[listValue],
                     value: item[listKey],
                     isSelected:
                         item[listKey] === (value !== null ? value : selected),
@@ -146,17 +148,6 @@ const DialogSelectComboBox = ({
         ]
     );
 
-    const onItemClick = useCallback(
-        (e) => {
-            select(e.target.id);
-            setShowOverlay(false);
-            if (stopPropagation) {
-                e.stopPropagation();
-            }
-        },
-        [setShowOverlay, stopPropagation, select]
-    );
-
     return [
         <Button
             key="combobox-button"
@@ -173,7 +164,7 @@ const DialogSelectComboBox = ({
                 value === null &&
                 label
                     ? label
-                    : getItem(value !== null ? value : selected)[listValue]}
+                    : (getItem(value !== null ? value : selected) ?? getItem(selected))[listValue]}
             </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-chevron-down" />
         </Button>,
@@ -198,14 +189,13 @@ const DialogSelectComboBox = ({
                     }}
                 >
                     {list.map((item) => (
-                        <div
+                        <ComboBoxItem
                             key={item[listKey]}
                             id={item[listKey]}
-                            className="cc__combo-box__overlay__item ellipsis"
-                            onClick={onItemClick}
-                        >
-                            {item[listValue]}
-                        </div>
+                            value={item[listValue]}
+                            setShowOverlay={setShowOverlay}
+                            onSelect={select}
+                        />
                     ))}
                 </div>
             </CSSTransition>

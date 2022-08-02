@@ -53,6 +53,7 @@ The `FilterButton`-component takes the following props:
 | [disabled](#disabled)               | `boolean`                                        | `false` |          |
 | [stopPropagation](#stoppropagation) | `boolean`                                        | `false` |          |
 | [small](#small)                     | `boolean`                                        | `false` |          |
+| [rectangular](#rectangular)         | `boolean`                                        | `false` |          |
 
 ### `label`
 
@@ -189,3 +190,13 @@ small?: boolean
 ```
 
 Shrinks the filter button in size.
+
+---
+
+### `rectangular`
+
+```ts
+rectangular?: boolean
+```
+
+Changes the filter button shape to that of a button.

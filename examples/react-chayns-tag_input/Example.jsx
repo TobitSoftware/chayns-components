@@ -61,8 +61,20 @@ export default class TagInputExample extends PureComponent {
                     onAddTag={this.handleTagAdd}
                     onRemoveTag={this.handleTagRemove}
                     onChange={this.handleChange}
-                    placeholder="Input tag and hit ENTER"
+                    placeholder="Input tags separated by commas or hit ENTER after each tag"
                     value={value}
+                />
+                <TagInput
+                    ref={(ref) => {
+                        this.input = ref;
+                    }}
+                    tags={tags}
+                    onAddTag={this.handleTagAdd}
+                    onRemoveTag={this.handleTagRemove}
+                    onChange={this.handleChange}
+                    placeholder="addTagOnBlur"
+                    value={value}
+                    addTagOnBlur
                 />
                 <Button onClick={this.clearValue}>Clear input</Button>
                 <Button onClick={this.clearTags}>Clear tags</Button>

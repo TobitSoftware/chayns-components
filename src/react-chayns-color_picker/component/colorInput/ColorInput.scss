@@ -11,4 +11,16 @@
     &__input {
         width: 100%;
     }
+    &__accordion {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        .cc__color-input {
+            font-size: 0.75rem;
+
+            margin: 0;
+            width: calc(50% - 5px);
+        }
+    }
 }

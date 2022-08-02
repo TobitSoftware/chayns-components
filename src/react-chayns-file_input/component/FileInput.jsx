@@ -38,6 +38,13 @@ export default class FileInput extends PureComponent {
         this.itemRefs[index].classList.remove('cc__file-input--hover');
     };
 
+    onError = (item, errorMessage) => {
+        if (isFunction(item.onError)) {
+            return item.onError(errorMessage);
+        }
+        return chayns.dialog.alert('', errorMessage);
+    }
+
     onChange = (event, item, index) => {
         const { errorMessages } = this.props;
         const { files } = event.target;
@@ -49,14 +56,14 @@ export default class FileInput extends PureComponent {
                 const file = files[fileIndex];
                 if (!this.checkFileType(file.type, item.types)) {
                     invalidFiles.push(file);
-                    chayns.dialog.alert('', errorMessages.wrongFileType);
+                    this.onError(item, errorMessages.wrongFileType);
                 } else if (
                     item.maxNumberOfFiles > 0 &&
                     validFiles.length >= item.maxNumberOfFiles
                 ) {
                     invalidFiles.push(file);
-                    chayns.dialog.alert(
-                        '',
+                    this.onError(
+                        item,
                         errorMessages.tooMuchFiles.replace(
                             '##NUMBER##',
                             item.maxNumberOfFiles
@@ -66,8 +73,8 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    chayns.dialog.alert(
-                        '',
+                    this.onError(
+                        item,
                         errorMessages.fileTooBig.replace(
                             '##SIZE##',
                             `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`
@@ -93,41 +100,21 @@ export default class FileInput extends PureComponent {
                 const compatibilityEvent = await fileInputCall(); // TODO remove in future version
                 this.onChange(compatibilityEvent, item, index);
             } else if (!hasMemoryAccess) {
-                chayns
-                    .invokeCall(
-                        {
-                            action: 239,
+                const result = await chayns.invokeCall({ action: 239 }, true);
+                if (result.status === 1) {
+                    this.setState({ hasMemoryAccess: true });
+                    this.fileInputRefs[index].click();
+                } else if (result.status === 2 && errorMessages.temporaryNoPermission) {
+                    this.onError(item, errorMessages.temporaryNoPermission);
+                } else if (result.status === 3 && errorMessages.permanentNoPermission) {
+                    await this.onError(item, errorMessages.permanentNoPermission);
+                    chayns.invokeCall({
+                        action: 239,
+                        value: {
+                            showAppInfo: true,
                         },
-                        true
-                    )
-                    .then((result) => {
-                        if (result.status === 1) {
-                            this.setState({ hasMemoryAccess: true });
-                            this.fileInputRefs[index].click();
-                        } else if (
-                            result.status === 2 &&
-                            errorMessages.temporaryNoPermission
-                        ) {
-                            chayns.dialog.alert(
-                                '',
-                                errorMessages.temporaryNoPermission
-                            );
-                        } else if (
-                            result.status === 3 &&
-                            errorMessages.permanentNoPermission
-                        ) {
-                            chayns.dialog
-                                .alert('', errorMessages.permanentNoPermission)
-                                .then(() => {
-                                    chayns.invokeCall({
-                                        action: 239,
-                                        value: {
-                                            showAppInfo: true,
-                                        },
-                                    });
-                                });
-                        }
                     });
+                }
             }
         }
     };
@@ -323,6 +310,7 @@ FileInput.propTypes = {
             directory: PropTypes.bool,
             onClick: PropTypes.func,
             onChange: PropTypes.func,
+            onError: PropTypes.func,
             className: PropTypes.string,
             style: PropTypes.objectOf(
                 PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -368,6 +356,7 @@ FileInput.defaultProps = {
             directory: false,
             onClick: null,
             onChange: null,
+            onError: null,
             className: null,
             style: null,
             disabled: false,

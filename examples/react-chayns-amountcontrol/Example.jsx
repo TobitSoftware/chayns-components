@@ -26,6 +26,65 @@ const AmountControlExample = () => {
 
             <br />
 
+            {/* when there is a max value of 1, the add button will be removed and the minus will become a trash-can */}
+            <AmountControl
+                autoInput
+                disabled={false}
+                amount={amount}
+                onChange={setAmount}
+                equalize="group-1"
+                buttonText="0,15"
+                addColor="#20C65A"
+                removeColor="#E71E28"
+                iconColor="#20C65A"
+                focusOnClick={false}
+                icon="fa fa-shopping-cart"
+                stopPropagation
+                max={1}
+            />
+
+            <br />
+
+            {/* when there is a max value of 1, the add-button should be removed, but we override ths behaviour */}
+            <AmountControl
+                autoInput
+                disabled={false}
+                amount={amount}
+                onChange={setAmount}
+                equalize="group-1"
+                buttonText="0,15"
+                addColor="#20C65A"
+                removeColor="#E71E28"
+                iconColor="#20C65A"
+                focusOnClick={false}
+                icon="fa fa-shopping-cart"
+                stopPropagation
+                max={1}
+                showAddButton
+            />
+
+            <br />
+
+            {/* when there is a max value of 1, the input should be disabled, but we override ths behaviour */}
+            <AmountControl
+                autoInput
+                disabled={false}
+                amount={amount}
+                onChange={setAmount}
+                equalize="group-1"
+                buttonText="0,15"
+                addColor="#20C65A"
+                removeColor="#E71E28"
+                iconColor="#20C65A"
+                focusOnClick={false}
+                icon="fa fa-shopping-cart"
+                stopPropagation
+                max={1}
+                disableInput={false}
+            />
+
+            <br />
+
             <AmountControl
                 amount={amount}
                 onChange={setAmount}
@@ -140,6 +199,7 @@ const AmountControlExample = () => {
                     amount={amount}
                     onChange={setAmount}
                     buttonText="0,15"
+                    showAddButton={false}
                 />
             </div>
 

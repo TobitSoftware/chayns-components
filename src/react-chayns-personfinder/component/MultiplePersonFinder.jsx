@@ -55,7 +55,10 @@ class MultiplePersonFinder extends Component {
         }
     }
 
-    handleTagRemove(tag) {
+    handleTagRemove(tag, ev) {
+        if (this.boxRef && this.boxRef.getHiddenState()) {
+            ev?.stopPropagation?.();
+        }
         const {
             context: { ObjectMapping: orm },
             onRemove,
@@ -256,6 +259,7 @@ class MultiplePersonFinder extends Component {
                             <PersonFinderView
                                 {...props}
                                 {...ctx}
+                                max={max}
                                 orm={Context.ObjectMapping}
                                 inputComponent={TagInput}
                                 inputRef={(ref) => {

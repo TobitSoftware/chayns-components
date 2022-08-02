@@ -11,6 +11,7 @@ import Tag from './Tag';
 
 const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
+const KEY_COMMA = 188;
 
 const BIGGEST_LETTER = 'm';
 
@@ -25,6 +26,7 @@ export default class TagInput extends Component {
         this.handleKeyUp = this.handleKeyUp.bind(this);
         this.handleTagRemove = this.handleTagRemove.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
         this.handleClick = this.handleClick.bind(this);
 
         this.state = {
@@ -52,6 +54,12 @@ export default class TagInput extends Component {
         }
     }
 
+    handleKeyDown = (event) => {
+        if (event.keyCode === KEY_COMMA) {
+            event.preventDefault();
+        }
+    };
+
     handleKeyUp(event) {
         const { value, disableRemove } = this.props;
 
@@ -60,7 +68,7 @@ export default class TagInput extends Component {
             return;
         }
 
-        if (event.keyCode !== KEY_ENTER || !value) {
+        if (![KEY_ENTER, KEY_COMMA].includes(event.keyCode) || !value) {
             return;
         }
 
@@ -79,11 +87,11 @@ export default class TagInput extends Component {
         }
     }
 
-    handleTagRemove(tag) {
+    handleTagRemove(tag, ev) {
         const { onRemoveTag } = this.props;
 
         if (onRemoveTag) {
-            onRemoveTag(tag);
+            onRemoveTag(tag, ev);
         }
     }
 
@@ -113,6 +121,18 @@ export default class TagInput extends Component {
         }
     }
 
+    handleBlur() {
+        const { value } = this.props;
+
+        if (value) {
+            const tag = {
+                text: value,
+            };
+
+            this.handleTagAdd(tag);
+        }
+    }
+
     setInputRef(ref) {
         this.input = ref;
     }
@@ -135,6 +155,8 @@ export default class TagInput extends Component {
             style,
             disableRemove,
             design,
+            max,
+            addTagOnBlur,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -168,17 +190,25 @@ export default class TagInput extends Component {
                             {tag.text}
                         </Tag>
                     ))}
-                <div className="cc__tag-input__input">
-                    <Input
-                        {...props}
-                        inputRef={this.setInputRef}
-                        value={value}
-                        onChange={this.handleChange}
-                        onKeyUp={this.handleKeyUp}
-                        placeholder={!tags || !tags.length ? placeholder : null}
-                        style={inputStyle}
-                    />
-                </div>
+                {max && tags && max === tags?.length ? (
+                    false
+                ) : (
+                    <div className="cc__tag-input__input">
+                        <Input
+                            {...props}
+                            inputRef={this.setInputRef}
+                            value={value}
+                            onChange={this.handleChange}
+                            onKeyUp={this.handleKeyUp}
+                            onKeyDown={this.handleKeyDown}
+                            placeholder={
+                                !tags || !tags.length ? placeholder : null
+                            }
+                            style={inputStyle}
+                            onBlur={addTagOnBlur ? this.handleBlur : undefined}
+                        />
+                    </div>
+                )}
             </div>
         );
     }
@@ -248,6 +278,14 @@ TagInput.propTypes = {
      * `TagInput.BORDER_DESIGN`.
      */
     design: PropTypes.number,
+    /**
+     * The maximum number of tags selected at once.
+     */
+    max: PropTypes.number,
+    /**
+     * Adds a tag on blur
+     */
+    addTagOnBlur: PropTypes.bool,
 };
 
 TagInput.defaultProps = {
@@ -262,6 +300,8 @@ TagInput.defaultProps = {
     triggerEventOnValueChange: false,
     disableRemove: false,
     design: TagInput.DEFAULT_DESIGN,
+    max: null,
+    addTagOnBlur: false,
 };
 
 TagInput.displayName = 'TagInput';

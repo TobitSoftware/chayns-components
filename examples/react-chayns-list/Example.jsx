@@ -12,12 +12,13 @@ export default class ListExample extends Component {
         this.state = {
             open1: false,
             open2: false,
+            open3: false,
         };
         this.tooltipRef = React.createRef();
     }
 
     render() {
-        const { open1, open2 } = this.state;
+        const { open1, open2, open3 } = this.state;
 
         const contextMenuItems = [
             {
@@ -104,6 +105,29 @@ export default class ListExample extends Component {
                             Content
                         </ListItem>
                     </Tooltip>
+                    <ListItem
+                        title="ListItem
+                        (accordion-style, long title with break,
+                        with image, without indicator)"
+                        subtitle="Very,
+                        very, very, very, very,
+                        very, very, very, very, very, very, very, very, very, very, very, very, very, very long
+                        description"
+                        image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
+                        headMultiline
+                        hideIndicator
+                        noContentClass
+                        onOpen={(...e) => {
+                            console.log('onOpen', ...e);
+                            this.setState({ open3: true });
+                        }}
+                        onClose={(...e) => {
+                            console.log('onClose', ...e);
+                            this.setState({ open3: false });
+                        }}
+                    >
+                        Content
+                    </ListItem>
                     <ListItem
                         title="ListItem (accordion-style, with image)"
                         subtitle="Description"
@@ -204,14 +228,14 @@ export default class ListExample extends Component {
                             </div>
                         }
                     >
-                        {`
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                        `}
+                        {` 
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut 
+                                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+                                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut 
+                                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+                                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+                            `}
                     </ListItem>
                     <ListItem
                         onClick={() => {
@@ -249,14 +273,14 @@ export default class ListExample extends Component {
                             </div>
                         }
                     >
-                        {`
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                        `}
+                        {` 
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut 
+                                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+                                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+                                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut 
+                                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores 
+                                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+                            `}
                     </ListItem>
                 </List>
                 <Button

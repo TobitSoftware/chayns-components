@@ -7,7 +7,7 @@ export default function isInIframeDialog() {
     for (let i = 0; i < scriptList.length; i++) {
         if (
             scriptList[i]?.src?.search(
-                /\/js\/dialog\/v.*\/dialog-chayns.min.js/
+                /\/js\/dialog(?:\/(?:staging|qa))?\/v.*\/dialog-chayns.min.js/i
             ) >= 0
         ) {
             return true;

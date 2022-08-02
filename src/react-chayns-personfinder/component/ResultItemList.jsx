@@ -71,7 +71,6 @@ ResultItemList.propTypes = {
     showWaitCursor: PropTypes.bool,
     hasMore: PropTypes.bool,
     onClick: PropTypes.func,
-    className: PropTypes.string,
     focusIndex: PropTypes.number,
     roundIcons: PropTypes.bool,
     hideFriendsIcon: PropTypes.bool,
@@ -82,6 +81,7 @@ ResultItemList.propTypes = {
         })
     ),
     showCheckbox: PropTypes.bool,
+    inputValue: PropTypes.string,
 };
 
 ResultItemList.defaultProps = {
@@ -91,12 +91,12 @@ ResultItemList.defaultProps = {
     onClick: null,
     group: 'default',
     onLoadMore: null,
-    className: null,
     focusIndex: null,
     roundIcons: false,
     hideFriendsIcon: false,
     tags: [],
     showCheckbox: false,
+    inputValue: '',
 };
 
 ResultItemList.displayName = 'ResultItemList';

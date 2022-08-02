@@ -11,6 +11,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import Bubble from '../../react-chayns-bubble/component/Bubble';
 import Icon from '../../react-chayns-icon/component/Icon';
 import TextString from '../../react-chayns-textstring/component/TextString';
@@ -36,6 +37,8 @@ const ContextMenu = React.forwardRef((props, ref) => {
         onChildrenClick,
         disableDialog,
         onLayerClick,
+        onShow,
+        onHide,
         removeParentSpace,
         coordinates,
         positionOnChildren,
@@ -62,9 +65,12 @@ const ContextMenu = React.forwardRef((props, ref) => {
 
         if (isBubbleShown) {
             bubbleRef.current.show();
+            onShow?.();
         } else {
             bubbleRef.current.hide();
+            onHide?.();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isBubbleShown]);
 
     /**
@@ -157,8 +163,11 @@ const ContextMenu = React.forwardRef((props, ref) => {
             const { buttonType, selection } = await chayns.dialog.select({
                 type: 2,
                 list: items.map(({ text, icon, stringName }, index) => ({
+                    // eslint-disable-next-line no-nested-ternary
                     name: stringName
                         ? TextString.getTextString(stringName, null, text)
+                        : React.isValidElement(text)
+                        ? renderToStaticMarkup(text)
                         : text,
                     value: index,
                     icon:
@@ -216,7 +225,7 @@ const ContextMenu = React.forwardRef((props, ref) => {
             document.addEventListener('click', handleLayerClick, true);
 
             return () =>
-                document.removeEventListener('click', handleLayerClick);
+                document.removeEventListener('click', handleLayerClick, true);
         }
     }, [hide, isBubbleShown, onLayerClick]);
 
@@ -321,6 +330,16 @@ ContextMenu.propTypes = {
      * clicks away from it.
      */
     onLayerClick: PropTypes.func,
+
+    /**
+     * This callback will be called when the context menu becomes visible
+     */
+    onShow: PropTypes.func,
+
+    /**
+     *  This callback will be called when the `ContextMenu` hides
+     */
+    onHide: PropTypes.func,
 
     /**
      * The coordinates at which the context menu will get rendered.
@@ -446,6 +465,8 @@ ContextMenu.propTypes = {
 
 ContextMenu.defaultProps = {
     onLayerClick: null,
+    onShow: null,
+    onHide: null,
     items: [],
     position: null,
     positionOnChildren: 1,
