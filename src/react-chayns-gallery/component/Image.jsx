@@ -10,7 +10,6 @@ import {
     getImageMetaDataFromApi,
     getImageMetaDataFromPreview,
 } from '../utils/getImageMetaData';
-import getOrientation from '../utils/getOrientation';
 import './Image.scss';
 
 export default class Image extends PureComponent {
@@ -21,8 +20,6 @@ export default class Image extends PureComponent {
             imageUrl: null,
             metaData: null,
             elementDimensions: null,
-            rotate: 0,
-            mirror: false,
         };
         this.imageRef = React.createRef();
     }
@@ -90,11 +87,6 @@ export default class Image extends PureComponent {
                 // get dataUrl, metaData and exifData and set cache
                 const imageUrl = await getDataUrlFromFile(image);
                 const newImage = { imageUrl };
-                const exifData = await getOrientation(image);
-                if (exifData) {
-                    newImage.mirror = exifData.mirrored;
-                    newImage.rotate = exifData.rotation * -1;
-                }
                 if (styleLandscape || stylePortrait) {
                     // get dimensions if needed
                     newImage.metaData = await getImageMetaDataFromPreview(
@@ -124,14 +116,7 @@ export default class Image extends PureComponent {
             preventParams,
         } = this.props;
 
-        const {
-            metaData,
-            imageUrl,
-            ready,
-            elementDimensions,
-            mirror,
-            rotate,
-        } = this.state;
+        const { metaData, imageUrl, ready, elementDimensions } = this.state;
 
         let format = 0;
         if (metaData) {
@@ -184,11 +169,6 @@ export default class Image extends PureComponent {
                             'cc__image--clickable': onClick,
                         })}
                         onLoad={this.onReady}
-                        style={{
-                            transform:
-                                (mirror ? 'scaleX(-1) ' : '') +
-                                (rotate ? `rotateZ(${rotate}deg)` : ''),
-                        }}
                     />
                 ) : null}
                 {!ready && metaData && metaData.preview
