@@ -143,6 +143,21 @@ export default class ListExample extends Component {
                         Content
                     </ListItem>
                     <ListItem
+                        title="ListItem (accordion-style, with image, open image on click)"
+                        subtitle="Description"
+                        image="https://chayns.tobit.com/storage/59143-10608/Images/icon-72.png"
+                        circle
+                        openImageOnClick
+                        onOpen={(...e) => {
+                            console.log('onOpen', ...e);
+                        }}
+                        onClose={(...e) => {
+                            console.log('onClose', ...e);
+                        }}
+                    >
+                        Content
+                    </ListItem>
+                    <ListItem
                         title="ListItem (accordion-style, with Icon)"
                         subtitle="Description"
                         // image="https://chayns.tobit.com/storage/59141-06162/Images/icon-72.png"
@@ -189,7 +204,7 @@ export default class ListExample extends Component {
                         Content
                     </ListItem>
                     <ListItem
-                        title="ListItem (accordion-style, with image, with ContextMenu)"
+                        title="ListItem (accordion-style, with icon, with ContextMenu)"
                         subtitle="Description"
                         open={open1}
                         onOpen={() => {

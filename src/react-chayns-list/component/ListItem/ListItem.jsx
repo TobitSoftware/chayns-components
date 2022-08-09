@@ -104,6 +104,12 @@ ListItem.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
 
     /**
+     * Whether the image/images should be opened at full size when clicked
+     * only works if either image or images is defined
+     */
+    openImageOnClick: PropTypes.bool,
+
+    /**
      * An icon to show on the left side of the list item.
      */
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
@@ -229,6 +235,7 @@ ListItem.defaultProps = {
     subtitle: null,
     image: null,
     images: null,
+    openImageOnClick: false,
     icon: null,
     className: null,
     onClick: null,

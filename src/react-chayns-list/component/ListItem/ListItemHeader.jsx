@@ -30,6 +30,7 @@ const ListItemHeader = ({
     defaultOpen,
     images,
     imageBorderColor,
+    openImageOnClick,
     // eslint-disable-next-line react/prop-types
     headMultiline,
     // eslint-disable-next-line react/prop-types
@@ -90,6 +91,12 @@ const ListItemHeader = ({
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
                         backgroundImage: `url(${image})`,
                     }}
+                    onClick={(event) => {
+                        if (openImageOnClick) {
+                            event.stopPropagation();
+                            chayns.openImage(image);
+                        }
+                    }}
                 />
             )}
             {images && (
@@ -99,6 +106,12 @@ const ListItemHeader = ({
                     })}
                     style={{
                         boxShadow: `0 0 0 1px ${imageBorderColor} inset`,
+                    }}
+                    onClick={(event) => {
+                        if (openImageOnClick) {
+                            event.stopPropagation();
+                            chayns.openImage(images);
+                        }
                     }}
                 >
                     {images.map((img, index) => {
@@ -191,6 +204,7 @@ ListItemHeader.propTypes = {
     ]),
     image: PropTypes.string,
     images: PropTypes.arrayOf(PropTypes.string),
+    openImageOnClick: PropTypes.bool,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string,
     left: PropTypes.oneOfType([
@@ -224,6 +238,7 @@ ListItemHeader.defaultProps = {
     subtitle: null,
     image: null,
     images: null,
+    openImageOnClick: false,
     icon: null,
     className: null,
     left: null,
