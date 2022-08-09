@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { CheckboxProps } from './Checkbox';
 
@@ -12,41 +12,66 @@ export const StyledCheckboxInput = styled.input`
     display: none;
 `;
 
-type StyledCheckboxLabelProps = WithTheme<Pick<CheckboxProps, 'isChecked' | 'isDisabled'>>;
+type StyledCheckboxLabelProps = WithTheme<Omit<CheckboxProps, 'children' | 'onChange'>>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-    padding-left: 20px;
+    padding-left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
 
     &:after {
-        border-right: 2px solid #fff;
-        border-bottom: 2px solid #fff;
+        ${({ isChecked, shouldShowAsSwitch }) =>
+            shouldShowAsSwitch
+                ? css`
+                      background-color: white;
+                      border-radius: 50%;
+                      box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+                      height: 16px;
+                      left: 7px;
+                      transform: translateY(-50%) translateX(${isChecked ? '18px' : 0});
+                      transition: transform 0.2s ease;
+                      width: 16px;
+                  `
+                : css`
+                      border-right: 2px solid #fff;
+                      border-bottom: 2px solid #fff;
+                      height: 10px;
+                      left: 1px;
+                      opacity: ${isChecked ? 1 : 0};
+                      transform: translateY(-50%) rotateZ(37deg);
+                      transition: opacity 0.2s ease;
+                      width: 5.5px;
+                  `}
+
         content: ' ';
-        height: 10px;
-        left: 1px;
-        opacity: ${({ isChecked }) => (isChecked ? 1 : 0)};
         position: absolute;
         top: 50%;
-        transform: translateY(-50%) rotateZ(37deg);
         transform-origin: 100% 100%;
-        transition: opacity 0.2s ease;
-        width: 5.5px;
     }
 
     &:before {
-        background-color: ${({ isChecked, theme }: StyledCheckboxLabelProps) =>
-            isChecked ? theme['408'] : theme['403']};
+        background-color: ${({
+            isChecked,
+            shouldShowAsSwitch,
+            theme,
+        }: StyledCheckboxLabelProps) => {
+            if (shouldShowAsSwitch) {
+                return isChecked ? theme.green : theme.red;
+            }
+
+            return isChecked ? theme['408'] : theme['403'];
+        }};
         border: 1px solid rgba(${({ theme }: StyledCheckboxLabelProps) => theme['409-rgb']}, 0.5);
+        border-radius: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '100px' : 0)};
         content: ' ';
-        height: 15px;
-        left: 0;
+        height: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '13px' : '15px')};
+        left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '10px' : 0)};
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         transition: background-color 0.2s ease;
-        width: 15px;
+        width: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '28px' : '15px')};
     }
 `;
