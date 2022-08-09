@@ -2,6 +2,9 @@ import React, {
     ChangeEvent,
     ChangeEventHandler,
     FC,
+    FocusEventHandler,
+    HTMLInputTypeAttribute,
+    KeyboardEventHandler,
     useCallback,
     useEffect,
     useMemo,
@@ -16,20 +19,44 @@ import {
 
 export type InputProps = {
     /**
+     * Function that is executed when the input field loses focus
+     */
+    onBlur?: FocusEventHandler<HTMLInputElement>;
+    /**
      * Function that is executed when the text of the input changes
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
     /**
+     * Function that is executed when the input field is focused
+     */
+    onFocus?: FocusEventHandler<HTMLInputElement>;
+    /**
+     * Function that is executed when a letter is pressed
+     */
+    onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+    /**
      * Placeholder for the input field
      */
     placeholder?: string;
+    /**
+     * Input type set for input element (e.g. 'text', 'number' or 'password')
+     */
+    type?: HTMLInputTypeAttribute;
     /**
      * Value if the input field should be controlled
      */
     value?: string;
 };
 
-const Input: FC<InputProps> = ({ onChange, placeholder, value }) => {
+const Input: FC<InputProps> = ({
+    onBlur,
+    onChange,
+    onFocus,
+    onKeyDown,
+    placeholder,
+    type = 'text',
+    value,
+}) => {
     const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
 
     const handleInputFieldChange = useCallback(
@@ -60,7 +87,14 @@ const Input: FC<InputProps> = ({ onChange, placeholder, value }) => {
     return (
         <StyledInput className="beta-chayns-input">
             <StyledInputContent>
-                <StyledInputField onChange={handleInputFieldChange} />
+                <StyledInputField
+                    onBlur={onBlur}
+                    onChange={handleInputFieldChange}
+                    onFocus={onFocus}
+                    onKeyDown={onKeyDown}
+                    value={value}
+                    type={type}
+                />
                 <StyledMotionInputLabel
                     animate={{ scale: hasValue ? 0.6 : 1 }}
                     layout
