@@ -44,7 +44,7 @@ The `ListItem`-component takes the following props:
 | [subtitle](#subtitle)                 | `ReactNode \| Array<ReactNode>`       |                                             |          |
 | [image](#image)                       | `string`                              |                                             |          |
 | [images](#images)                     | `Array<string>`                       |                                             |          |
-| [openImageOnClick](#openImageOnClick) | `boolean`                             | `false`                                     |          |
+| [openImageOnClick](#openimageonclick) | `boolean`                             | `false`                                     |          |
 | [icon](#icon)                         | `string \| object`                    |                                             |          |
 | [className](#classname)               | `string`                              |                                             |          |
 | [onClick](#onclick)                   | `function`                            |                                             |          |
@@ -114,7 +114,8 @@ item.
 openImageOnClick?: boolean
 ```
 
-Whether the image/images should be opened at full size when clicked. Only works if either image or images is defined
+Whether the image/images should be opened at full size when clicked only works
+if either image or images is defined
 
 ---
 
