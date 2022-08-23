@@ -138,7 +138,11 @@ export default class Tooltip extends Component {
         }
     }
 
-    hide() {
+    hide(ev) {
+        const { stopPropagation } = this.props;
+        if (ev && stopPropagation) {
+            ev.stopPropagation();
+        }
         if (this.bubble.current) {
             this.bubble.current.hide();
         }
@@ -318,6 +322,11 @@ Tooltip.propTypes = {
      * rendering).
      */
     isIOS: PropTypes.bool,
+
+    /**
+     * Whether to stop propagation for click on close icon
+     */
+    stopPropagation: PropTypes.bool,
 };
 
 Tooltip.defaultProps = {
@@ -335,6 +344,7 @@ Tooltip.defaultProps = {
     hideOnChildrenLeave: false,
     removeParentSpace: false,
     isIOS: typeof chayns !== 'undefined' ? chayns.env.isIOS : false,
+    stopPropagation: false,
 };
 
 Tooltip.displayName = 'Tooltip';

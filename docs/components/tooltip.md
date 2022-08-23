@@ -56,6 +56,7 @@ The `Tooltip`-component takes the following props:
 | [hideOnChildrenLeave](#hideonchildrenleave) | `boolean`                                                                                                                  | `false`                                                    |          |
 | [removeParentSpace](#removeparentspace)     | `boolean`                                                                                                                  | `false`                                                    |          |
 | [isIOS](#isios)                             | `boolean`                                                                                                                  | `typeof chayns !== 'undefined' ? chayns.env.isIOS : false` |          |
+| [stopPropagation](#stoppropagation)         | `boolean`                                                                                                                  | `false`                                                    |          |
 
 ### `content`
 
@@ -211,3 +212,13 @@ isIOS?: boolean
 ```
 
 Wether the target device is iOS (only relevant during serverside rendering).
+
+---
+
+### `stopPropagation`
+
+```ts
+stopPropagation?: boolean
+```
+
+Whether to stop propagation for click on close icon
