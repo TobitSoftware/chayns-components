@@ -12,6 +12,7 @@ const Month = ({
     selected,
     activated,
     highlighted,
+    circleColor,
     activateAll,
 }) => (
     <div className={`month__item ${className || ''}`}>
@@ -23,6 +24,7 @@ const Month = ({
             selected={selected}
             activated={activated}
             highlighted={highlighted}
+            circleColor={circleColor}
             activateAll={activateAll}
         />
     </div>
@@ -55,6 +57,7 @@ Month.propTypes = {
             })
         ),
     ]),
+    circleColor:PropTypes.string,
 };
 
 Month.defaultProps = {
@@ -65,6 +68,7 @@ Month.defaultProps = {
     startDate: null,
     endDate: null,
     highlighted: false,
+    circleColor:null,
     activateAll: true,
     onDateSelect: null,
 };

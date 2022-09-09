@@ -10,7 +10,6 @@ export default class CalendarExample extends Component {
 
     handleDateSelect = (date) => {
         this.setState({ selected: date });
-        console.log(date);
     };
 
     render() {
@@ -56,6 +55,7 @@ export default class CalendarExample extends Component {
                             },
                         },
                     ]}
+                    circleColor='#000000'
                 />
                 <Calendar
                     style={{ margin: '20px 0' }}
