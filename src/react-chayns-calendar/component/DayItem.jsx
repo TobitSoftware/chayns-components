@@ -3,6 +3,7 @@ import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import areDatesEqual from '../utils/areDatesEqual';
+import './DayItem.scss';
 
 class DayItem extends PureComponent {
     constructor(props) {
@@ -28,6 +29,7 @@ class DayItem extends PureComponent {
             selected,
             highlighted,
             highlightStyle,
+            circleColor,
         } = this.props;
 
         let _active = activateAll;
@@ -36,6 +38,7 @@ class DayItem extends PureComponent {
         let _highlighted = false;
         let _onClick = false;
         let _className = 'day__item day-in-month';
+        let _contentClassName = 'day__item__content';
         let _style = null;
 
         if (_active) {
@@ -53,6 +56,8 @@ class DayItem extends PureComponent {
             _selected = true;
         }
 
+
+
         if (highlighted) {
             _active = true;
             _marked = true;
@@ -62,13 +67,13 @@ class DayItem extends PureComponent {
             if (highlightStyle) {
                 _style = highlightStyle;
             }
+
         }
 
         if (inMonth) {
             _className = classNames('day__item day-in-month', {
                 'is-active': _active,
                 'is-deactive': !_active,
-                'is-selected': _selected,
                 'is-marked': _marked,
                 'is-marked-is-highlighted': _marked && _highlighted,
                 'chayns__background-color--80 chayns__color--5':
@@ -77,13 +82,29 @@ class DayItem extends PureComponent {
                     !_active && _marked && !_selected,
             });
 
+            _contentClassName = classNames('day__item__content', {
+                'is-selected': _selected,
+            })
+
             return (
                 <div
                     className={_className}
                     style={_style}
                     onClick={_onClick ? this.onClick : null}
                 >
-                    <div className="day__item__content">{date.getDate()}</div>
+                    {(_selected && circleColor) ?
+                        (
+                            <div
+                                className={_contentClassName}
+                                style={{backgroundColor:circleColor}}
+                            >
+                                {date.getDate()}
+                            </div>
+                        ) :
+                        (
+                            <div className={_contentClassName}>{date.getDate()}</div>
+                        )
+                    }
                 </div>
             );
         }
@@ -105,6 +126,7 @@ DayItem.propTypes = {
     activated: PropTypes.bool,
     highlighted: PropTypes.bool,
     highlightStyle: PropTypes.object,
+    circleColor: PropTypes.string,
 };
 
 DayItem.defaultProps = {
@@ -113,6 +135,7 @@ DayItem.defaultProps = {
     highlighted: false,
     activateAll: null,
     highlightStyle: null,
+    circleColor: null,
     onDateSelect: null,
 };
 

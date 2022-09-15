@@ -38,7 +38,7 @@ import { Calendar } from 'chayns-components';
 The `Calendar`-component takes the following props:
 
 | Name                          | Type                                                                                    | Default      | Required |
-| ----------------------------- | --------------------------------------------------------------------------------------- | ------------ | :------: |
+|-------------------------------| --------------------------------------------------------------------------------------- | ------------ | :------: |
 | [startDate](#startdate)       | `Date`                                                                                  |              |          |
 | [endDate](#enddate)           | `Date`                                                                                  |              |          |
 | [onDateSelect](#ondateselect) | `function`                                                                              |              |          |
@@ -48,6 +48,7 @@ The `Calendar`-component takes the following props:
 | [activateAll](#activateall)   | `boolean`                                                                               | `true`       |          |
 | [style](#style)               | `{ [key: string]: string \| number }`                                                   |              |          |
 | [className](#classname)       | `string`                                                                                |              |          |
+| [circlecolor](#circlecolor)   | `string`                                                                                |              |          |
 
 ### `startDate`
 
@@ -138,3 +139,13 @@ className?: string
 ```
 
 A classname that is applied to the root `<div>`-element.
+
+---
+
+### `circleColor`
+
+```ts
+circleColor?: string
+```
+
+A css color that is applied to the selected date.

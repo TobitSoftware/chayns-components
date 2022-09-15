@@ -149,6 +149,7 @@ export default class MonthTable extends PureComponent {
             activated,
             selected,
             highlighted: highlightedList,
+            circleColor,
             onDateSelect,
         } = this.props;
         const _table = this.createTable();
@@ -192,6 +193,7 @@ export default class MonthTable extends PureComponent {
                                     selected={selected}
                                     highlightStyle={style}
                                     highlighted={highlighted}
+                                    circleColor={circleColor}
                                     onDateSelect={onDateSelect}
                                 />
                             );
@@ -216,12 +218,14 @@ MonthTable.propTypes = {
             style: PropTypes.object,
         })
     ),
+    circleColor: PropTypes.string,
 };
 
 MonthTable.defaultProps = {
     selected: null,
     activated: null,
     highlighted: null,
+    circleColor: null,
     startDate: null,
     activateAll: true,
     onDateSelect: null,

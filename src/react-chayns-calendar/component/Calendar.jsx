@@ -289,6 +289,7 @@ export default class Calendar extends Component {
             startDate,
             activated: activatedProp,
             highlighted,
+            circleColor,
             selected,
             activateAll,
             onDateSelect,
@@ -312,6 +313,8 @@ export default class Calendar extends Component {
             activatedProp && activatedProp.length > 0 ? activatedProp : null;
         // eslint-disable-next-line no-underscore-dangle
         const _highlighted = highlighted || null;
+        // eslint-disable-next-line no-underscore-dangle
+        const _circleColor = circleColor || null;
 
         return months.map((month) => {
             const activated = [];
@@ -439,6 +442,7 @@ export default class Calendar extends Component {
                     selected={_selected}
                     activated={activated}
                     highlighted={tempHighlighted}
+                    circleColor={_circleColor}
                     activateAll={activateAll}
                     key={month.startDate.getTime()}
                 />
@@ -554,6 +558,11 @@ Calendar.propTypes = {
     ]),
 
     /**
+     * Circle color of selected day
+     */
+    circleColor: PropTypes.string,
+
+    /**
      * Activate all dates.
      */
     activateAll: PropTypes.bool,
@@ -579,6 +588,7 @@ Calendar.defaultProps = {
     activateAll: true,
     activated: null,
     highlighted: null,
+    circleColor: null,
     style: null,
     className: null,
 };
