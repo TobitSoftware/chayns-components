@@ -9,6 +9,7 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import { isFunction } from '../../utils/is';
 import fileInputCall from '../utils/fileInputCall';
 import supportsFileInput from '../utils/supportsFileInput';
+import { compressImage } from '../../utils/compressImage';
 
 /**
  * Accepts specified file types via dialog or drag and drop.
@@ -43,17 +44,17 @@ export default class FileInput extends PureComponent {
             return item.onError(errorMessage);
         }
         return chayns.dialog.alert('', errorMessage);
-    }
+    };
 
-    onChange = (event, item, index) => {
+    onChange = async (event, item, index) => {
         const { errorMessages } = this.props;
         const { files } = event.target;
         this.onDragLeave(index);
         if (files && files.length > 0) {
             const invalidFiles = [];
             const validFiles = [];
-            Object.keys(files).forEach((fileIndex) => {
-                const file = files[fileIndex];
+            for (let i = 0, l = files.length; i < l; i++) {
+                const file = files[i];
                 if (!this.checkFileType(file.type, item.types)) {
                     invalidFiles.push(file);
                     this.onError(item, errorMessages.wrongFileType);
@@ -73,18 +74,25 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    this.onError(
-                        item,
-                        errorMessages.fileTooBig.replace(
-                            '##SIZE##',
-                            `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`
-                        )
-                    );
-                    invalidFiles.push(file);
+                    // eslint-disable-next-line no-await-in-loop
+                    await compressImage(file, item.maxFileSize)
+                        .then((result) => validFiles.push(result))
+                        .catch(() => {
+                            this.onError(
+                                item,
+                                errorMessages.fileTooBig.replace(
+                                    '##SIZE##',
+                                    `${Math.ceil(
+                                        item.maxFileSize / (1024 * 1024)
+                                    )} MB`
+                                )
+                            );
+                            invalidFiles.push(file);
+                        });
                 } else {
                     validFiles.push(file);
                 }
-            });
+            }
             item.onChange(validFiles, invalidFiles);
         }
         this.fileInputRefs[index].value = null;
@@ -104,10 +112,19 @@ export default class FileInput extends PureComponent {
                 if (result.status === 1) {
                     this.setState({ hasMemoryAccess: true });
                     this.fileInputRefs[index].click();
-                } else if (result.status === 2 && errorMessages.temporaryNoPermission) {
+                } else if (
+                    result.status === 2 &&
+                    errorMessages.temporaryNoPermission
+                ) {
                     this.onError(item, errorMessages.temporaryNoPermission);
-                } else if (result.status === 3 && errorMessages.permanentNoPermission) {
-                    await this.onError(item, errorMessages.permanentNoPermission);
+                } else if (
+                    result.status === 3 &&
+                    errorMessages.permanentNoPermission
+                ) {
+                    await this.onError(
+                        item,
+                        errorMessages.permanentNoPermission
+                    );
                     chayns.invokeCall({
                         action: 239,
                         value: {
