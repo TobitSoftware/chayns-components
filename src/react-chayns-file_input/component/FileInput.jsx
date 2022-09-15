@@ -9,7 +9,7 @@ import Icon from '../../react-chayns-icon/component/Icon';
 import { isFunction } from '../../utils/is';
 import fileInputCall from '../utils/fileInputCall';
 import supportsFileInput from '../utils/supportsFileInput';
-import { compressImage } from '../../utils/compressImage';
+import compressImage from '../../utils/compressImage';
 
 /**
  * Accepts specified file types via dialog or drag and drop.
