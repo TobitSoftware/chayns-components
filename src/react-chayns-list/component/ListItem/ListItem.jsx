@@ -38,6 +38,7 @@ const ListItem = ({
     headMultiline,
     // eslint-disable-next-line react/prop-types
     notExpandable,
+    openImageOnClick,
     ...props
 }) => (
     <div
@@ -68,6 +69,7 @@ const ListItem = ({
             onTouchCancel={onTouchCancel}
             imageBorderColor={imageBorderColor}
             left={left}
+            openImageOnClick={openImageOnClick}
             {...headerProps}
         />
     </div>
