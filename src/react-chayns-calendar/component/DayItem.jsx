@@ -3,7 +3,6 @@ import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import areDatesEqual from '../utils/areDatesEqual';
-import './DayItem.scss';
 
 class DayItem extends PureComponent {
     constructor(props) {
@@ -56,8 +55,6 @@ class DayItem extends PureComponent {
             _selected = true;
         }
 
-
-
         if (highlighted) {
             _active = true;
             _marked = true;
@@ -67,7 +64,6 @@ class DayItem extends PureComponent {
             if (highlightStyle) {
                 _style = highlightStyle;
             }
-
         }
 
         if (inMonth) {
@@ -84,7 +80,7 @@ class DayItem extends PureComponent {
 
             _contentClassName = classNames('day__item__content', {
                 'is-selected': _selected,
-            })
+            });
 
             return (
                 <div
@@ -92,19 +88,18 @@ class DayItem extends PureComponent {
                     style={_style}
                     onClick={_onClick ? this.onClick : null}
                 >
-                    {(_selected && circleColor) ?
-                        (
-                            <div
-                                className={_contentClassName}
-                                style={{backgroundColor:circleColor}}
-                            >
-                                {date.getDate()}
-                            </div>
-                        ) :
-                        (
-                            <div className={_contentClassName}>{date.getDate()}</div>
-                        )
-                    }
+                    {_selected && circleColor ? (
+                        <div
+                            className={_contentClassName}
+                            style={{ backgroundColor: circleColor }}
+                        >
+                            {date.getDate()}
+                        </div>
+                    ) : (
+                        <div className={_contentClassName}>
+                            {date.getDate()}
+                        </div>
+                    )}
                 </div>
             );
         }

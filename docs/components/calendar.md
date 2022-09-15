@@ -38,17 +38,17 @@ import { Calendar } from 'chayns-components';
 The `Calendar`-component takes the following props:
 
 | Name                          | Type                                                                                    | Default      | Required |
-|-------------------------------| --------------------------------------------------------------------------------------- | ------------ | :------: |
+| ----------------------------- | --------------------------------------------------------------------------------------- | ------------ | :------: |
 | [startDate](#startdate)       | `Date`                                                                                  |              |          |
 | [endDate](#enddate)           | `Date`                                                                                  |              |          |
 | [onDateSelect](#ondateselect) | `function`                                                                              |              |          |
 | [selected](#selected)         | `Date`                                                                                  | `new Date()` |          |
 | [activated](#activated)       | `Array<Date>`                                                                           |              |          |
 | [highlighted](#highlighted)   | `{ dates: Array<Date>, color: string } \| Array<{ dates: Array<Date>, color: string }>` |              |          |
+| [circleColor](#circlecolor)   | `string`                                                                                |              |          |
 | [activateAll](#activateall)   | `boolean`                                                                               | `true`       |          |
 | [style](#style)               | `{ [key: string]: string \| number }`                                                   |              |          |
 | [className](#classname)       | `string`                                                                                |              |          |
-| [circlecolor](#circlecolor)   | `string`                                                                                |              |          |
 
 ### `startDate`
 
@@ -112,6 +112,16 @@ or in an array.
 
 ---
 
+### `circleColor`
+
+```ts
+circleColor?: string
+```
+
+Circle color of selected day
+
+---
+
 ### `activateAll`
 
 ```ts
@@ -139,13 +149,3 @@ className?: string
 ```
 
 A classname that is applied to the root `<div>`-element.
-
----
-
-### `circleColor`
-
-```ts
-circleColor?: string
-```
-
-A css color that is applied to the selected date.
