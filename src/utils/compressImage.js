@@ -1,5 +1,5 @@
-const blobToDataUrl = (blob) => {
-    return new Promise((resolve, reject) => {
+const blobToDataUrl = (blob) =>
+    new Promise((resolve, reject) => {
         const fr = new FileReader();
         fr.onload = (e) => {
             resolve(e.target.result);
@@ -9,7 +9,6 @@ const blobToDataUrl = (blob) => {
         };
         fr.readAsDataURL(blob);
     });
-};
 
 const blobToCanvas = async (blob) => {
     const url = await blobToDataUrl(blob);
@@ -68,6 +67,7 @@ const exportCanvasSized = async (
     }
 
     for (let i = 0; i < 10; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
         await new Promise((resolve) => {
             setTimeout(resolve, 10);
         });
