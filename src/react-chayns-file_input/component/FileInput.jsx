@@ -74,21 +74,28 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    // eslint-disable-next-line no-await-in-loop
-                    await compressImage(file, item.maxFileSize)
-                        .then((result) => validFiles.push(result))
-                        .catch(() => {
-                            this.onError(
-                                item,
-                                errorMessages.fileTooBig.replace(
-                                    '##SIZE##',
-                                    `${Math.ceil(
-                                        item.maxFileSize / (1024 * 1024)
-                                    )} MB`
-                                )
+                    if (file.type?.startsWith('image')) {
+                        try {
+                            // eslint-disable-next-line no-await-in-loop
+                            const result = await compressImage(
+                                file,
+                                item.maxFileSize
                             );
-                            invalidFiles.push(file);
-                        });
+                            validFiles.push(result);
+                            // eslint-disable-next-line no-continue
+                            continue;
+                        } catch {
+                            // fallback to error dialog for too big files
+                        }
+                    }
+                    this.onError(
+                        item,
+                        errorMessages.fileTooBig.replace(
+                            '##SIZE##',
+                            `${Math.ceil(item.maxFileSize / (1024 * 1024))} MB`
+                        )
+                    );
+                    invalidFiles.push(file);
                 } else {
                     validFiles.push(file);
                 }
