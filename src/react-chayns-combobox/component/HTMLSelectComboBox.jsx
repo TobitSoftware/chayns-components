@@ -57,7 +57,6 @@ export default class HTMLSelectComboBox extends PureComponent {
             listValue,
             listKey,
             stopPropagation,
-            defaultValue,
         } = this.props;
 
         const { value } = this.state;
@@ -71,7 +70,6 @@ export default class HTMLSelectComboBox extends PureComponent {
                 <select
                     disabled={disabled}
                     onChange={this.onSelect}
-                    defaultValue={label ? 'ComboBoxLabel' : defaultValue}
                     value={value}
                     onClick={
                         stopPropagation
