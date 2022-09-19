@@ -102,7 +102,9 @@ export default class FileInput extends PureComponent {
             }
             item.onChange(validFiles, invalidFiles);
         }
-        this.fileInputRefs[index].value = null;
+        if (this.fileInputRefs[index]) {
+            this.fileInputRefs[index].value = null;
+        }
     };
 
     onClick = async (event, item, index) => {
