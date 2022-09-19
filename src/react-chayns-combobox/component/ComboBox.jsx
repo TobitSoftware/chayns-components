@@ -41,6 +41,7 @@ const ComboBox = ({
                     listKey={listKey}
                     stopPropagation={stopPropagation}
                     defaultValue={defaultValue}
+                    value={value}
                     onSelect={onSelect}
                 />
             ) : (

@@ -4,17 +4,47 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 export default class HTMLSelectComboBox extends PureComponent {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
+        const { label, defaultValue, value } = props;
+
+        this.state = {
+            controlled: !!value,
+            // eslint-disable-next-line no-nested-ternary
+            value: value
+                ? String(value)
+                : label
+                ? 'ComboBoxLabel'
+                : defaultValue,
+        };
         this.onSelect = this.onSelect.bind(this);
+    }
+
+    componentDidUpdate(prevProps) {
+        const { value } = this.props;
+
+        if (prevProps.value !== value) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({
+                controlled: !!value,
+                value: String(value),
+            });
+        }
     }
 
     onSelect(e) {
         const { onSelect, list, listKey } = this.props;
+        const { controlled } = this.state;
         const selection = e.target.value;
         if (onSelect && list && list.length > 0 && listKey && selection) {
-            onSelect(list.find((item) => String(item[listKey]) === selection));
+            const selectedItem = list.find(
+                (item) => String(item[listKey]) === selection
+            );
+            if (!controlled) {
+                this.setState({ value: String(selectedItem[listKey]) });
+            }
+            onSelect(selectedItem);
         }
     }
 
@@ -29,6 +59,9 @@ export default class HTMLSelectComboBox extends PureComponent {
             stopPropagation,
             defaultValue,
         } = this.props;
+
+        const { value } = this.state;
+
         return (
             <div
                 className={classNames('select', className, {
@@ -39,6 +72,7 @@ export default class HTMLSelectComboBox extends PureComponent {
                     disabled={disabled}
                     onChange={this.onSelect}
                     defaultValue={label ? 'ComboBoxLabel' : defaultValue}
+                    value={value}
                     onClick={
                         stopPropagation
                             ? (event) => event.stopPropagation()
@@ -72,6 +106,7 @@ HTMLSelectComboBox.propTypes = {
     className: PropTypes.string,
     defaultValue: PropTypes.string,
     stopPropagation: PropTypes.bool,
+    value: PropTypes.string,
 };
 
 HTMLSelectComboBox.defaultProps = {
@@ -81,4 +116,5 @@ HTMLSelectComboBox.defaultProps = {
     disabled: false,
     stopPropagation: false,
     defaultValue: null,
+    value: null,
 };
