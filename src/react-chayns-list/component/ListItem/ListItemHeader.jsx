@@ -23,6 +23,7 @@ const ListItemHeader = ({
     onTouchMove,
     onTouchEnd,
     onTouchCancel,
+    onClick,
     notExpandable,
     noContentClass,
     onOpen,
@@ -38,6 +39,7 @@ const ListItemHeader = ({
     ...otherProps
 }) => {
     const timeout = useRef(null);
+    const preventClick = useRef(false);
 
     const onStart = (event) => {
         if (event.type === 'mousedown' && onMouseDown) {
@@ -47,6 +49,7 @@ const ListItemHeader = ({
         }
         if (onLongPress) {
             timeout.current = setTimeout(() => {
+                preventClick.current = true;
                 onLongPress(event);
             }, longPressTimeout);
         }
@@ -66,6 +69,19 @@ const ListItemHeader = ({
         }
         if (onLongPress) {
             clearTimeout(timeout.current);
+            if (event.type === 'mouseup' || event.type === 'touchend') {
+                setTimeout(() => {
+                    preventClick.current = false;
+                }, 150);
+            }
+        }
+    };
+
+    const handleClick = (event) => {
+        if (onLongPress && preventClick.current) {
+            preventClick.current = false;
+        } else if (onClick) {
+            onClick(event);
         }
     };
 
@@ -79,6 +95,7 @@ const ListItemHeader = ({
             onTouchMove={onTouchMove || onLongPress ? onEnd : null}
             onTouchEnd={onTouchEnd || onLongPress ? onEnd : null}
             onTouchCancel={onTouchCancel || onLongPress ? onEnd : null}
+            onClick={handleClick}
             {...otherProps}
         >
             {left}
@@ -225,6 +242,7 @@ ListItemHeader.propTypes = {
     onTouchMove: PropTypes.func,
     onTouchEnd: PropTypes.func,
     onTouchCancel: PropTypes.func,
+    onClick: PropTypes.func,
     longPressTimeout: PropTypes.number,
     notExpandable: PropTypes.bool,
     noContentClass: PropTypes.bool,
@@ -253,6 +271,7 @@ ListItemHeader.defaultProps = {
     onTouchMove: null,
     onTouchEnd: null,
     onTouchCancel: null,
+    onClick: null,
     longPressTimeout: 450,
     notExpandable: null,
     noContentClass: null,
