@@ -188,7 +188,7 @@ $animationDurationMobile: 300ms;
     }
 }
 
-@media screen and(max-width: 490px) {
+@media screen and (max-width: 490px) {
     .cc__opening_times {
         @include mobile;
     }

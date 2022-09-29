@@ -110,7 +110,7 @@ The content of the button.
 ### `list`
 
 ```ts
-list: Array<object>
+list: Array<object>;
 ```
 
 An array of items to select from. Items are provided in an object shape.
