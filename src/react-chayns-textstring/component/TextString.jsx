@@ -12,9 +12,9 @@ import isTobitEmployee from '../../utils/tobitEmployee';
 const CHAYNS_RES_URL = 'https://webapi.tobit.com/TextStringService/v1.0';
 
 const promises = {};
-const loadLibrary = async (projectName, middle, lang) => {
-    // middle has to be removed in next major version
+const loadLibrary = async (projectName, lang, force) => {
     if (
+        !force &&
         TextString.textStrings[lang] &&
         TextString.textStrings[lang][projectName]
     ) {
@@ -70,7 +70,7 @@ export default class TextString extends Component {
         return result !== null ? result : fallback;
     }
 
-    static async loadLibrary(projectName, middle, language) {
+    static async loadLibrary(projectName, middle, language, force = false) {
         let lang = TextString.languages.find(
             (l) =>
                 l.code ===
@@ -83,7 +83,7 @@ export default class TextString extends Component {
 
         if (!promises[lang]) promises[lang] = {};
 
-        promise = loadLibrary(projectName, middle, lang);
+        promise = loadLibrary(projectName, lang, force);
         promises[lang][projectName] = promise;
         return promise;
     }
@@ -262,7 +262,9 @@ export default class TextString extends Component {
                         data.selection &&
                         data.selection.length > 0
                     ) {
-                        TextString.selectLanguageToChange(data.selection[0].value);
+                        TextString.selectLanguageToChange(
+                            data.selection[0].value
+                        );
                     }
                 });
         } else {
