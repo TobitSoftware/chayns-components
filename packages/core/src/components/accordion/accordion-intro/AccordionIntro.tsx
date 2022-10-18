@@ -1,7 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { StyledAccordionIntro } from './AccordionIntro.styles';
 
-const AccordionIntro: FC = ({ children }) => (
+export type AccordionIntroProps = {
+    /**
+     * The content of the accordion content element
+     */
+    children: ReactNode;
+};
+
+const AccordionIntro: FC<AccordionIntroProps> = ({ children }) => (
     <StyledAccordionIntro className="beta-chayns-accordion-intro">{children}</StyledAccordionIntro>
 );
 
