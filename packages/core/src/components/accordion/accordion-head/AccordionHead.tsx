@@ -1,4 +1,4 @@
-import { AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import { AnimatePresence, LayoutGroup } from 'framer-motion';
 import React, {
     ChangeEventHandler,
     FC,
@@ -95,7 +95,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 onClick={!isFixed ? onClick : undefined}
                 ref={titleWrapperRef}
             >
-                <AnimateSharedLayout>
+                <LayoutGroup>
                     <StyledMotionTitleWrapper>
                         <AnimatePresence initial={false}>
                             <StyledMotionTitle
@@ -118,7 +118,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                             {titleElement}
                         </StyledMotionTitleElementWrapper>
                     )}
-                </AnimateSharedLayout>
+                </LayoutGroup>
             </StyledMotionContentWrapper>
             {(typeof onSearchChange === 'function' || rightElement) && (
                 <StyledRightWrapper>
