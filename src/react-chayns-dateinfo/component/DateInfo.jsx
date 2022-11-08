@@ -4,6 +4,7 @@
 
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
+import classNames from 'clsx';
 import { isServer } from '../../utils/isServer';
 import {
     getAbsoluteDateString,
@@ -21,18 +22,37 @@ export default class DateInfo extends PureComponent {
 
     constructor(props) {
         super(props);
-        let { language } = props;
 
-        if (!language && isServer()) {
-            language = 'de';
-        } else {
-            language = (
-                chayns.env.language ||
-                window.navigator.language ||
-                'de'
-            )
-                .substring(0, 2)
-                .toLowerCase();
+        this.setLanguage((language) => {
+            this.state = { language };
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        const { language } = this.props;
+
+        if (prevProps.language !== language) {
+            this.setLanguage((lang) => this.setState({ language: lang }));
+        }
+    }
+
+    setLanguage = (callback) => {
+        let { language } = this.props;
+
+        if (!language) {
+            if (isServer()) {
+                language = 'de';
+            } else {
+                language = (
+                    chayns.env.parameters.translang ||
+                    chayns.env.site.translang ||
+                    chayns.env.language ||
+                    window.navigator.language ||
+                    'de'
+                )
+                    .substring(0, 2)
+                    .toLowerCase();
+            }
         }
 
         if (
@@ -45,8 +65,8 @@ export default class DateInfo extends PureComponent {
             language = 'de';
         }
 
-        this.state = { language };
-    }
+        callback(language);
+    };
 
     render() {
         const { language } = this.state;
@@ -107,10 +127,13 @@ export default class DateInfo extends PureComponent {
             console.warn('[chayns components]: date2 is smaller than date');
         }
 
+        const childElement = Array.isArray(children) ? children[0] : children;
+
         return React.cloneElement(
-            children,
+            childElement,
             noTitle || {
                 title: getAbsoluteDateString(date, { language }),
+                className: classNames(childElement.className, 'notranslate'),
             },
             txt
         );
@@ -199,11 +222,7 @@ DateInfo.propTypes = {
 
 DateInfo.defaultProps = {
     children: <div />,
-    language: isServer()
-        ? 'de'
-        : (window.chayns?.env.language || navigator.language || 'de')
-              .substring(0, 2)
-              .toLowerCase(),
+    language: undefined,
     date2: null,
     showTime: null,
     showDate: null,

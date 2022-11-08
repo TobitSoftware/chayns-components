@@ -49,7 +49,7 @@ The `Icon`-component takes the following props:
 ### `icon`
 
 ```ts
-icon: string | { iconName: string, prefix: string } | Array<string>;
+icon: string | { iconName: string, prefix: string } | Array<string>
 ```
 
 The icon to display. Supply a string or an array of strings like this:

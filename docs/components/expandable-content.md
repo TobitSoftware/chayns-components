@@ -101,7 +101,7 @@ A classname string that is applied to the wrapper element.
 ### `children`
 
 ```ts
-children: ReactNode | Array<ReactNode>;
+children: ReactNode | Array<ReactNode>
 ```
 
 The children of the component.

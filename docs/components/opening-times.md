@@ -50,12 +50,7 @@ The `OpeningTimes`-component takes the following props:
 ### `times`
 
 ```ts
-times: Array<{
-    weekDay: number;
-    start: string;
-    end: string;
-    disabled: boolean;
-}>;
+times: Array<{ weekDay: number, start: string, end: string, disabled: boolean }>
 ```
 
 An array of the timespans that are opening hours.
