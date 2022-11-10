@@ -74,7 +74,10 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    if (file.type?.startsWith('image')) {
+                    if (
+                        file.type?.startsWith('image') &&
+                        file.type !== 'image/svg+xml'
+                    ) {
                         try {
                             // eslint-disable-next-line no-await-in-loop
                             const result = await compressImage(
@@ -278,6 +281,7 @@ FileInput.typePresets = {
         'image/jpeg',
         'image/gif',
         'image/webp',
+        'image/svg+xml',
     ],
     STREAMINGSERVICE: [
         'video/mp4',
