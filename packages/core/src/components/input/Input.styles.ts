@@ -7,6 +7,7 @@ type StyledInputProps = WithTheme<unknown>;
 export const StyledInput = styled.div<StyledInputProps>`
     align-items: center;
     background-color: ${({ theme }: StyledInputProps) => theme['100']};
+    border: 1px solid rgba(160, 160, 160, 0.3);
     border-radius: 3px;
     color: ${({ theme }: StyledInputProps) => theme['006']};
     display: flex;
