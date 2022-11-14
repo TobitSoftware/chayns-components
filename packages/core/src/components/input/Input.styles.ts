@@ -14,6 +14,10 @@ export const StyledInput = styled.div<StyledInputProps>`
     justify-content: space-between;
     min-height: 42px;
     padding: 8px 10px;
+
+    &:not(&:first-child) {
+        margin-top: 8px;
+    }
 `;
 
 export const StyledInputContent = styled.div`
