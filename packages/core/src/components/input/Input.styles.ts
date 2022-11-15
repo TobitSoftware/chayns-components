@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { InputProps } from './Input';
 
-type StyledInputProps = WithTheme<unknown>;
+type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled'>>;
 
 export const StyledInput = styled.div<StyledInputProps>`
     align-items: center;
@@ -13,7 +14,9 @@ export const StyledInput = styled.div<StyledInputProps>`
     display: flex;
     justify-content: space-between;
     min-height: 42px;
+    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     padding: 8px 10px;
+    transition: opacity 0.3s ease;
 
     &:not(&:first-child) {
         margin-top: 8px;

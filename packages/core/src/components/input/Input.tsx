@@ -19,6 +19,10 @@ import {
 
 export type InputProps = {
     /**
+     * Disables the input so that it cannot be changed anymore
+     */
+    isDisabled?: boolean;
+    /**
      * Function that is executed when the input field loses focus
      */
     onBlur?: FocusEventHandler<HTMLInputElement>;
@@ -49,6 +53,7 @@ export type InputProps = {
 };
 
 const Input: FC<InputProps> = ({
+    isDisabled,
     onBlur,
     onChange,
     onFocus,
@@ -85,9 +90,10 @@ const Input: FC<InputProps> = ({
     }, [hasValue]);
 
     return (
-        <StyledInput className="beta-chayns-input">
+        <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
             <StyledInputContent>
                 <StyledInputField
+                    disabled={isDisabled}
                     onBlur={onBlur}
                     onChange={handleInputFieldChange}
                     onFocus={onFocus}
