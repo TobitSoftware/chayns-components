@@ -32,6 +32,7 @@ const DialogSelectComboBox = ({
     const [showOverlay, setShowOverlay] = useState(false);
     const [selected, setSelected] = useState(defaultValue);
     const [minWidth, setMinWidth] = useState('0px');
+    const mounted = useRef(false);
 
     const overlayRef = useRef(null);
     const buttonRef = useRef(null);
@@ -68,6 +69,14 @@ const DialogSelectComboBox = ({
         };
     }, [showOverlay, onHide]);
 
+    useEffect(() => {
+        if (!mounted.current) {
+            mounted.current = true;
+        } else {
+            setSelected(value);
+        }
+    }, [value]);
+
     const select = useCallback(
         (selection) => {
             setSelected(selection);
@@ -93,7 +102,9 @@ const DialogSelectComboBox = ({
             setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
             if (chayns.env.isMobile) {
                 const items = list.map((item) => ({
-                    name: React.isValidElement(item[listValue]) ? renderToStaticMarkup(item[listValue]) : item[listValue],
+                    name: React.isValidElement(item[listValue])
+                        ? renderToStaticMarkup(item[listValue])
+                        : item[listValue],
                     value: item[listKey],
                     isSelected:
                         item[listKey] === (value !== null ? value : selected),
@@ -164,7 +175,8 @@ const DialogSelectComboBox = ({
                 value === null &&
                 label
                     ? label
-                    : (getItem(value !== null ? value : selected) ?? getItem(selected))[listValue]}
+                    : (getItem(value !== null ? value : selected) ??
+                          getItem(selected))[listValue]}
             </div>
             <Icon className="cc__combo-box__icon" icon="fa fa-chevron-down" />
         </Button>,

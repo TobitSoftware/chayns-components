@@ -70,7 +70,7 @@ The `ListItem`-component takes the following props:
 ### `title`
 
 ```ts
-title: ReactNode | Array<ReactNode>
+title: ReactNode | Array<ReactNode>;
 ```
 
 A string or `ReactNode` that will be rendered as the title of the list item.
