@@ -43,7 +43,7 @@ The `Slider`-component takes the following props:
 | [min](#min)                             | `number`                              | `0`                                                                                                 |          |
 | [max](#max)                             | `number`                              | `100`                                                                                               |          |
 | [step](#step)                           | `number`                              |                                                                                                     |          |
-| [showDots](#showdots)                   | `number`                              | `false`                                                                                             |          |
+| [showDots](#showdots)                   | `boolean`                             | `false`                                                                                             |          |
 | [defaultValue](#defaultvalue)           | `number`                              | `0`                                                                                                 |          |
 | [value](#value)                         | `number`                              |                                                                                                     |          |
 | [style](#style)                         | `{ [key: string]: number \| string }` |                                                                                                     |          |
@@ -103,7 +103,7 @@ The amount of steps that the slider should be divided into.
 ### `showDots`
 
 ```ts
-showDots?: number
+showDots?: boolean
 ```
 
 Whether to show dots at the possible breakpoints

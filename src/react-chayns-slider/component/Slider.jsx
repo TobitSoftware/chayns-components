@@ -889,7 +889,7 @@ Slider.propTypes = {
     /**
      * Whether to show dots at the possible breakpoints
      */
-    showDots: PropTypes.number,
+    showDots: PropTypes.bool,
 
     /**
      * A default value for the slider.
