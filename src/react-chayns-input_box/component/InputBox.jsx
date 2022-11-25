@@ -211,7 +211,7 @@ const InputBox = React.forwardRef((props, ref) => {
                 </div>
             ) : (
                 <Overlay parent={parent}>
-                    {!!(rect && !isHidden && children) && (
+                    {!!(rect && children) && (
                         <div
                             onClick={(e) => e.preventDefault()}
                             className={classnames(
@@ -222,6 +222,7 @@ const InputBox = React.forwardRef((props, ref) => {
                             style={{
                                 ...positionStyles,
                                 ...overlayProps?.style,
+                                ...(isHidden ? { display: 'none' } : {}),
                             }}
                             {...overlayProps}
                             ref={setBoxRef}
