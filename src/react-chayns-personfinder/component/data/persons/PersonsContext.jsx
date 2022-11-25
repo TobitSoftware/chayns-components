@@ -137,6 +137,7 @@ const PersonFinderStateProvider = ({
     locationId,
     uacId,
     reducerFunction,
+    onNoResults,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons =
@@ -186,7 +187,7 @@ const PersonFinderStateProvider = ({
     const loadPersons = useCallback(
         async (inputValue, clear = false) => {
             const value = inputValue.trim();
-            if (value.length < 3 || !enablePersons || uacId) return;
+            if (value.length < 3 || !enablePersons || uacId) return false;
 
             dispatch({
                 type: 'REQUEST_PERSONS',
@@ -249,6 +250,8 @@ const PersonFinderStateProvider = ({
                 data: convertedPersons,
                 hasMore,
             });
+
+            return persons.length > 0;
         },
         [
             enablePersons,
@@ -262,7 +265,7 @@ const PersonFinderStateProvider = ({
 
     const loadUacPersons = useCallback(
         async (value, clear = false) => {
-            if (value.length < 3 || !uacId) return;
+            if (value.length < 3 || !uacId) return false;
 
             dispatch({
                 type: 'REQUEST_PERSONS',
@@ -289,13 +292,15 @@ const PersonFinderStateProvider = ({
                 data: convertedPersons,
                 hasMore,
             });
+
+            return persons.length > 0;
         },
         [uacId, state.hasMore.personsRelated, locationId, skipPersons, take]
     );
 
     const loadSites = useCallback(
         async (value, clear = false) => {
-            if (value.length < 3 || !enableSites) return;
+            if (value.length < 3 || !enableSites) return false;
 
             dispatch({
                 type: 'REQUEST_SITES',
@@ -310,13 +315,15 @@ const PersonFinderStateProvider = ({
                 data: convertSites(sites),
                 hasMore: sites.length === take,
             });
+
+            return sites.length > 0;
         },
         [skipSites, take, enableSites]
     );
 
     const loadKnownPersons = useCallback(
         async (value, clear = false) => {
-            if (!enableKnownPersons) return;
+            if (!enableKnownPersons) return false;
 
             dispatch({
                 type: 'REQUEST_KNOWN_PERSONS',
@@ -335,6 +342,8 @@ const PersonFinderStateProvider = ({
                 data: convertKnownPerson(persons),
                 hasMore: persons.length === take,
             });
+
+            return persons.length > 0;
         },
         [skipKnownPersons, take, enableKnownPersons]
     );
@@ -351,12 +360,19 @@ const PersonFinderStateProvider = ({
         debounce(async (value) => {
             try {
                 setLastValue(value);
-                await Promise.all([
+                const result = await Promise.all([
                     loadPersons(value, true),
                     loadUacPersons(value, true),
                     loadSites(value, true),
                     loadKnownPersons(value, true),
                 ]);
+                const filteredFriends = FriendsHelper.getFriendsList().filter(
+                    (v) =>
+                        v.fullName.toLowerCase().startsWith(value.toLowerCase())
+                );
+                if (!result.some((r) => r) && filteredFriends.length === 0) {
+                    onNoResults?.();
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -369,6 +385,7 @@ const PersonFinderStateProvider = ({
             enableSites,
             enableUacGroups,
             enableKnownPersons,
+            onNoResults,
         ]
     );
 
@@ -466,6 +483,7 @@ PersonFinderStateProvider.propTypes = {
     locationId: PropTypes.number,
     uacId: PropTypes.number,
     reducerFunction: PropTypes.func,
+    onNoResults: PropTypes.func,
 };
 
 PersonFinderStateProvider.defaultProps = {
@@ -480,6 +498,7 @@ PersonFinderStateProvider.defaultProps = {
     locationId: null,
     uacId: null,
     reducerFunction: null,
+    onNoResults: null,
 };
 
 export default {
