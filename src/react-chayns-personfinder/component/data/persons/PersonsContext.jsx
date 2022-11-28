@@ -98,7 +98,6 @@ const ObjectMapping = {
                 de: 'Hinzufügen',
                 en: 'Add',
             },
-            show: (value) => value && value.length >= 3,
         },
     ],
     showName: 'name',
