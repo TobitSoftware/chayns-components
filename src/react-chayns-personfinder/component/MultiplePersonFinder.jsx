@@ -250,6 +250,7 @@ class MultiplePersonFinder extends Component {
                               enableUacGroups: showUacGroups,
                               enableKnownPersons: showKnownPersons,
                               reducerFunction: props.reducerFunction,
+                              inputValue,
                           }
                         : null)}
                     {...contextProps}

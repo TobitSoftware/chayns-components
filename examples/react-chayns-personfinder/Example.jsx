@@ -247,6 +247,7 @@ export default class PersonFinderExample extends PureComponent {
                             ],
                         });
                     }}
+                    contextProps={{ addInputToList: true }}
                     onInput={console.log}
                     defaultValues={moreReceiver}
                     onRemove={(value) => {

@@ -92,6 +92,14 @@ const ObjectMapping = {
             },
             roundIcons: true,
         },
+        {
+            key: 'addEntry',
+            lang: {
+                de: 'Hinzufügen',
+                en: 'Add',
+            },
+            show: (value) => value && value.length >= 3,
+        },
     ],
     showName: 'name',
     identifier: 'id',
@@ -137,6 +145,8 @@ const PersonFinderStateProvider = ({
     locationId,
     uacId,
     reducerFunction,
+    inputValue,
+    addInputToList,
 }) => {
     const [state, dispatch] = useReducer(PersonsReducer, initialState);
     const skipPersons =
@@ -409,6 +419,17 @@ const PersonFinderStateProvider = ({
         groups: enableUacGroups ? state.data.groups : [],
         knownPersons: enableKnownPersons ? state.data.knownPersons : [],
         friends: enableFriends ? FriendsHelper.getFriendsList() : [],
+        addEntry: addInputToList
+            ? [
+                  {
+                      type: 'ADD_ENTRY',
+                      id: null,
+                      name: inputValue || 'Hinzufügen',
+                      imageUrl:
+                          'https://tsimg.cloud/77896-21884/938783e27191b684dc079ade85d4f99d251c2326.svg',
+                  },
+              ]
+            : [],
     };
 
     unreducedData.personsRelated = unreducedData.personsRelated.filter(
@@ -466,6 +487,8 @@ PersonFinderStateProvider.propTypes = {
     locationId: PropTypes.number,
     uacId: PropTypes.number,
     reducerFunction: PropTypes.func,
+    addInputToList: PropTypes.bool,
+    inputValue: PropTypes.string,
 };
 
 PersonFinderStateProvider.defaultProps = {
@@ -480,6 +503,8 @@ PersonFinderStateProvider.defaultProps = {
     locationId: null,
     uacId: null,
     reducerFunction: null,
+    addInputToList: false,
+    inputValue: '',
 };
 
 export default {
