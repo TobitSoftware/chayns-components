@@ -425,7 +425,7 @@ const PersonFinderStateProvider = ({
                       id: null,
                       name: inputValue || 'Hinzufügen',
                       imageUrl:
-                          'https://tsimg.cloud/77896-21884/938783e27191b684dc079ade85d4f99d251c2326.svg',
+                          'https://tsimg.cloud/77896-21884/0ef639efc1322459faf298467f6111383ea72c1a.svg',
                   },
               ]
             : [],
