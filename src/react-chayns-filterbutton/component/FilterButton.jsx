@@ -82,7 +82,7 @@ const FilterButton = ({
                     />
                 ) : null}
                 {/* eslint-disable-next-line no-nested-ternary */}
-                {isValue(label) ? label : null}
+                {isValue(label) ? <span>{label}</span> : null}
                 {isValue(count) ? <b>{count}</b> : null}
             </span>
         </label>
