@@ -11,6 +11,8 @@ module.exports = (api, options) => {
             'optimize-clsx',
             'dev-expression',
             ['@babel/proposal-class-properties', { loose: true }],
+            '@babel/plugin-proposal-optional-chaining',
+            '@babel/plugin-proposal-nullish-coalescing-operator',
             cssImports === 'remove' && [
                 'transform-remove-imports',
                 { test: '\\.(scss|css)$' },
