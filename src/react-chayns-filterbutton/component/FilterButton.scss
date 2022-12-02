@@ -10,6 +10,10 @@
     .label {
         position: relative;
         z-index: 5;
+
+        b:not(:first-child) {
+            margin-left: 0.25em;
+        }
     }
 
     &--small {
