@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import type { AccordionProps } from '../Accordion';
 import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
 import { StyledMotionAccordionBody } from './AccordionBody.styles';
 
@@ -6,7 +7,7 @@ export type AccordionBodyProps = {
     /**
      * Maximum height of the element. This automatically makes the content of the element scrollable.
      */
-    maxHeight?: number;
+    maxHeight: AccordionProps['bodyMaxHeight'];
 };
 
 const AccordionBody: FC<AccordionBodyProps> = ({ children, maxHeight }) => (

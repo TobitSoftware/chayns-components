@@ -21,6 +21,11 @@ AccordionContext.displayName = 'AccordionContext';
 
 export type AccordionProps = {
     /**
+     * Maximum height of the accordion body element. This automatically makes the content of the
+     * body element scrollable.
+     */
+    bodyMaxHeight?: number;
+    /**
      * The content of the accordion body
      */
     children: ReactNode;
@@ -91,6 +96,7 @@ export type AccordionProps = {
 };
 
 const Accordion: FC<AccordionProps> = ({
+    bodyMaxHeight,
     children,
     icon,
     isDefaultOpen = false,
@@ -176,7 +182,9 @@ const Accordion: FC<AccordionProps> = ({
                         titleElement={titleElement}
                     />
                     <AnimatePresence initial={false}>
-                        {isOpen && <AccordionBody>{children}</AccordionBody>}
+                        {isOpen && (
+                            <AccordionBody maxHeight={bodyMaxHeight}>{children}</AccordionBody>
+                        )}
                     </AnimatePresence>
                 </MotionConfig>
             </AccordionContext.Provider>
