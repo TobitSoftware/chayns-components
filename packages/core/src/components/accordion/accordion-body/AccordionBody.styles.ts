@@ -1,6 +1,16 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import type { AccordionBodyProps } from './AccordionBody';
 
-export const StyledMotionAccordionBody = styled(motion.div)`
+type StyledMotionAccordionBodyProps = Pick<AccordionBodyProps, 'maxHeight'>;
+
+export const StyledMotionAccordionBody = styled(motion.div)<StyledMotionAccordionBodyProps>`
     overflow: hidden;
+
+    ${({ maxHeight }) =>
+        typeof maxHeight === 'number' &&
+        css`
+            max-height: ${maxHeight}px;
+            overflow-y: scroll;
+        `}
 `;

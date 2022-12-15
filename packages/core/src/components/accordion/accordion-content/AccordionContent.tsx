@@ -7,6 +7,9 @@ export type AccordionContentProps = {
      * The content of the accordion content element
      */
     children: ReactNode;
+    /**
+     * Maximum height of the element. This automatically makes the content of the element scrollable.
+     */
     maxHeight?: number;
 };
 
