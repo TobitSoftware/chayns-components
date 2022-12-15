@@ -66,6 +66,8 @@ export const AccordionWithBadgeAndSearch = Template.bind({});
 
 export const DisabledAccordion = Template.bind({});
 
+export const ScrollableAccordion = Template.bind({});
+
 General.args = {
     children: (
         <AccordionContent>
@@ -210,5 +212,28 @@ DisabledAccordion.args = {
         </AccordionContent>
     ),
     isDisabled: true,
+    title: 'Lorem ipsum dolor sit amet',
+};
+
+ScrollableAccordion.args = {
+    bodyMaxHeight: 200,
+    children: (
+        <AccordionContent>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos
+            et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum.
+        </AccordionContent>
+    ),
+    onBodyScroll: console.debug,
     title: 'Lorem ipsum dolor sit amet',
 };

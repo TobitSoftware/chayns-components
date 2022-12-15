@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, UIEvent } from 'react';
 import { AccordionContext } from '../Accordion';
 import { StyledAccordionContent } from './AccordionContent.styles';
 
@@ -11,15 +11,20 @@ export type AccordionContentProps = {
      * Maximum height of the element. This automatically makes the content of the element scrollable.
      */
     maxHeight?: number;
+    /**
+     * Function that is executed when the element will be scrolled
+     */
+    onScroll?: (event: UIEvent<HTMLDivElement>) => void;
 };
 
-const AccordionContent: FC<AccordionContentProps> = ({ children, maxHeight }) => (
+const AccordionContent: FC<AccordionContentProps> = ({ children, maxHeight, onScroll }) => (
     <AccordionContext.Consumer>
         {({ isWrapped }) => (
             <StyledAccordionContent
                 className="beta-chayns-accordion-content"
                 isWrapped={isWrapped}
                 maxHeight={maxHeight}
+                onScroll={onScroll}
             >
                 {children}
             </StyledAccordionContent>

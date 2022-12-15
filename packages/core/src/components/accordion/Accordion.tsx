@@ -3,9 +3,11 @@ import React, {
     ChangeEventHandler,
     FC,
     ReactNode,
+    UIEvent,
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -56,6 +58,10 @@ export type AccordionProps = {
      */
     isWrapped?: boolean;
     /**
+     * Function that is executed when the accordion body will be scrolled
+     */
+    onBodyScroll?: (event: UIEvent<HTMLDivElement>) => void;
+    /**
      * Function that is executed when the accordion will be closed.
      */
     onClose?: VoidFunction;
@@ -104,6 +110,7 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isTitleGreyed = false,
     isWrapped = false,
+    onBodyScroll,
     onClose,
     onOpen,
     onSearchChange,
@@ -157,6 +164,8 @@ const Accordion: FC<AccordionProps> = ({
         }
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
 
+    const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
+
     return (
         <StyledAccordion
             className="beta-chayns-accordion"
@@ -165,7 +174,7 @@ const Accordion: FC<AccordionProps> = ({
             isWrapped={isWrapped}
             shouldHideBackground={shouldHideBackground}
         >
-            <AccordionContext.Provider value={{ isWrapped }}>
+            <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
                     <AccordionHead
                         icon={icon}
@@ -183,7 +192,9 @@ const Accordion: FC<AccordionProps> = ({
                     />
                     <AnimatePresence initial={false}>
                         {isOpen && (
-                            <AccordionBody maxHeight={bodyMaxHeight}>{children}</AccordionBody>
+                            <AccordionBody maxHeight={bodyMaxHeight} onScroll={onBodyScroll}>
+                                {children}
+                            </AccordionBody>
                         )}
                     </AnimatePresence>
                 </MotionConfig>
