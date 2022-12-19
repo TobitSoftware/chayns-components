@@ -61,7 +61,7 @@ export default class Accordion extends PureComponent {
                 // It's important that the state is accessed inside of the transitionend function
                 // eslint-disable-next-line no-shadow
                 const { currentState } = this.state;
-                if (currentState === OPEN) {
+                if (currentState === OPEN && !this.isClosing) {
                     this.body.style.setProperty(
                         'max-height',
                         'initial',
@@ -179,14 +179,20 @@ export default class Accordion extends PureComponent {
         if (autogrow && body) {
             rqAnimationFrame = requestAnimationFrame(() => {
                 if (this.body) {
+                    this.isClosing = true;
                     this.body.style.removeProperty('max-height');
                 }
 
                 rqAnimationFrame = requestAnimationFrame(() => {
                     if (autogrow && body) {
-                        this.setState({
-                            currentState: CLOSE,
-                        });
+                        this.setState(
+                            {
+                                currentState: CLOSE,
+                            },
+                            () => {
+                                this.isClosing = false;
+                            }
+                        );
 
                         if (onClose && !preventOnClose) {
                             onClose(event);
