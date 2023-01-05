@@ -88,6 +88,7 @@ class MultiplePersonFinder extends Component {
             onAdd,
             context: { ObjectMapping: orm },
             values: valuesProp,
+            hideVerifiedIcon,
         } = this.props;
         const { values: valuesState } = this.state;
 
@@ -122,14 +123,15 @@ class MultiplePersonFinder extends Component {
         const newValues = [
             ...values,
             {
-                text: orm.verified ? (
-                    <VerificationIcon
-                        name={name}
-                        verified={value[orm.verified]}
-                    />
-                ) : (
-                    name
-                ),
+                text:
+                    orm.verified && hideVerifiedIcon !== true ? (
+                        <VerificationIcon
+                            name={name}
+                            verified={value[orm.verified]}
+                        />
+                    ) : (
+                        name
+                    ),
                 value: outValue,
             },
         ];
@@ -343,6 +345,7 @@ MultiplePersonFinder.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     values: PropTypes.array,
     value: PropTypes.string,
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -363,6 +366,7 @@ MultiplePersonFinder.defaultProps = {
     max: null,
     values: null,
     value: null,
+    hideVerifiedIcon: false,
 };
 
 MultiplePersonFinder.displayName = 'MultiplePersonFinder';

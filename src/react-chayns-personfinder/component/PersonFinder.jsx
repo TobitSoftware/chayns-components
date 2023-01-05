@@ -188,6 +188,10 @@ PersonFinder.propTypes = {
      * Removes already selected entries from search results
      */
     filterSelected: PropTypes.bool,
+    /**
+     * Hides the extra icon for verified accounts
+     */
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 PersonFinder.defaultProps = {
@@ -215,6 +219,7 @@ PersonFinder.defaultProps = {
     value: null,
     hasOpenCloseIcon: false,
     filterSelected: false,
+    hideVerifiedIcon: false,
 };
 
 PersonFinder.displayName = 'PersonFinder';
