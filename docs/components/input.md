@@ -66,6 +66,7 @@ The `Input`-component takes the following props:
 | [clearIcon](#clearicon)             | `boolean`                             | `false`                |          |
 | [design](#design)                   | `number`                              | `Input.DEFAULT_DESIGN` |          |
 | [iconLeft](#iconleft)               | `string \| object`                    |                        |          |
+| [left](#left)                       | `ReactNode`                           |                        |          |
 | [right](#right)                     | `ReactNode`                           |                        |          |
 | [invalidMessage](#invalidmessage)   | `string`                              |                        |          |
 | [emptyValue](#emptyvalue)           | `string \| number`                    |                        |          |
@@ -348,6 +349,17 @@ iconLeft?: string | object
 
 An icon that will be shown on the left side of the input when the border-design
 is active.
+
+---
+
+### `left`
+
+```ts
+left?: ReactNode
+```
+
+A string or `ReactNode` that will be rendered on the left side of the input when
+the border-design is active.
 
 ---
 

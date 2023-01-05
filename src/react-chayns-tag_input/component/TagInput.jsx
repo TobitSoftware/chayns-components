@@ -157,6 +157,7 @@ export default class TagInput extends Component {
             design,
             max,
             addTagOnBlur,
+            left,
             ...props
         } = this.props;
         const { selectedIndex } = this.state;
@@ -178,6 +179,7 @@ export default class TagInput extends Component {
                 })}
                 style={style}
             >
+                {left}
                 {tags &&
                     tags.map((tag, index) => (
                         <Tag
@@ -286,6 +288,12 @@ TagInput.propTypes = {
      * Adds a tag on blur
      */
     addTagOnBlur: PropTypes.bool,
+
+    /**
+     * A string or `ReactNode` that will be rendered on the left side of the
+     * tag input.
+     */
+    left: PropTypes.node,
 };
 
 TagInput.defaultProps = {
@@ -302,6 +310,7 @@ TagInput.defaultProps = {
     design: TagInput.DEFAULT_DESIGN,
     max: null,
     addTagOnBlur: false,
+    left: null,
 };
 
 TagInput.displayName = 'TagInput';

@@ -51,6 +51,7 @@ The `TagInput`-component takes the following props:
 | [design](#design)               | `number`                               | `TagInput.DEFAULT_DESIGN` |          |
 | [max](#max)                     | `number`                               |                           |          |
 | [addTagOnBlur](#addtagonblur)   | `boolean`                              | `false`                   |          |
+| [left](#left)                   | `ReactNode`                            |                           |          |
 
 ### `tags`
 
@@ -172,3 +173,13 @@ addTagOnBlur?: boolean
 ```
 
 Adds a tag on blur
+
+---
+
+### `left`
+
+```ts
+left?: ReactNode
+```
+
+A string or `ReactNode` that will be rendered on the left side of the tag input.

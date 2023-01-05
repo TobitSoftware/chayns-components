@@ -117,6 +117,7 @@ The `PersonFinder`-component takes the following props:
 | [value](#value)                       | `string`                                                                                            |                  |          |
 | [hasOpenCloseIcon](#hasopencloseicon) | `boolean`                                                                                           | `false`          |          |
 | [filterSelected](#filterselected)     | `boolean`                                                                                           | `false`          |          |
+| [hideVerifiedIcon](#hideverifiedicon) | `boolean`                                                                                           | `false`          |          |
 
 ### `placeholder`
 
@@ -362,3 +363,13 @@ filterSelected?: boolean
 ```
 
 Removes already selected entries from search results
+
+---
+
+### `hideVerifiedIcon`
+
+```ts
+hideVerifiedIcon?: boolean
+```
+
+Hides the extra icon for verified accounts

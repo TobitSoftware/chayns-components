@@ -163,6 +163,7 @@ export default class Input extends PureComponent {
             invalidMessage,
             emptyValue,
             autoComplete,
+            left,
             right: rightProp,
         } = this.props;
         const { valid, right, initial, value: stateValue } = this.state;
@@ -192,6 +193,7 @@ export default class Input extends PureComponent {
                         'input--border-design--required': required,
                         'input--border_has-icon': icon,
                         'input--border_has-right': rightProp,
+                        'input--border_has-left': left,
                     })}
                     onClick={() => {
                         this.ref.focus();
@@ -201,6 +203,7 @@ export default class Input extends PureComponent {
                     {iconLeft && (
                         <Icon icon={iconLeft} className="input__icon-left" />
                     )}
+                    {left}
                     <div className="input__input-wrapper">
                         <input
                             ref={this.setRef}
@@ -545,6 +548,12 @@ Input.propTypes = {
     iconLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 
     /**
+     * A string or `ReactNode` that will be rendered on the left side of the
+     * input when the border-design is active.
+     */
+    left: PropTypes.node,
+
+    /**
      * A string or `ReactNode` that will be rendered on the right side of the
      * input when the border-design is active.
      */
@@ -597,6 +606,7 @@ Input.defaultProps = {
     clearIcon: false,
     design: Input.DEFAULT_DESIGN,
     iconLeft: null,
+    left: null,
     right: null,
     invalidMessage: null,
     emptyValue: null,
