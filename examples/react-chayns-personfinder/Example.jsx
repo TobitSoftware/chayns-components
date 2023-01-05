@@ -417,6 +417,12 @@ export default class PersonFinderExample extends PureComponent {
                     design={TagInput.BORDER_DESIGN}
                     style={{ margin: '8px 0' }}
                 />
+                <PersonFinder
+                    design={TagInput.BORDER_DESIGN}
+                    multiple
+                    left={<span>An</span>}
+                    hideVerifiedIcon
+                />
                 <Button onClick={this.clear}>Clear all</Button>
             </div>
         );
