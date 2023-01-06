@@ -181,6 +181,7 @@ class PersonFinderView extends Component {
             renderInline,
             inputValue,
             showCheckbox,
+            hideVerifiedIcon,
         } = this.props;
 
         const { focusIndex } = this.state;
@@ -212,6 +213,7 @@ class PersonFinderView extends Component {
                         filterSelected={filterSelected}
                         hideFriendsIcon={hideFriendsIcon}
                         showCheckbox={showCheckbox}
+                        hideVerifiedIcon={hideVerifiedIcon}
                     />
                 ),
                 showWaitCursor && <WaitCursor key="wait-cursor" />,
@@ -341,6 +343,7 @@ PersonFinderView.propTypes = {
     renderInline: PropTypes.bool,
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 PersonFinderView.defaultProps = {
@@ -364,6 +367,7 @@ PersonFinderView.defaultProps = {
     inputValue: '',
     renderInline: false,
     showCheckbox: false,
+    hideVerifiedIcon: false,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';

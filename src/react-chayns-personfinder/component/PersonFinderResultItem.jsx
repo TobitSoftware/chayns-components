@@ -20,6 +20,7 @@ const PersonFinderResultItem = ({
     tags,
     onRemoveTag,
     inputValue,
+    hideVerifiedIcon,
 }) => {
     const selectedValue = tags?.find(
         ({ value }) => value[orm.identifier] === data[orm.identifier]
@@ -87,7 +88,7 @@ const PersonFinderResultItem = ({
             <div className="text" style={{ justifyContent: 'center' }}>
                 <div className="title">
                     <div className="name">
-                        {orm.verified ? (
+                        {orm.verified && hideVerifiedIcon !== true ? (
                             <VerificationIcon
                                 name={data[orm.showName]}
                                 verified={data[orm.verified]}
@@ -137,6 +138,7 @@ PersonFinderResultItem.propTypes = {
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
     inputValue: PropTypes.string,
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 PersonFinderResultItem.defaultProps = {
@@ -145,6 +147,7 @@ PersonFinderResultItem.defaultProps = {
     tags: [],
     showCheckbox: false,
     inputValue: '',
+    hideVerifiedIcon: false,
 };
 
 PersonFinderResultItem.displayName = 'PersonFinderResultItem';

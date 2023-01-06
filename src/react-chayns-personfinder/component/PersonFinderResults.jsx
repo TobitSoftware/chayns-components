@@ -19,6 +19,7 @@ const PersonFinderResults = ({
     filterSelected,
     hideFriendsIcon,
     showCheckbox,
+    hideVerifiedIcon,
 }) => {
     const handleClick = useCallback(
         (value) => {
@@ -126,6 +127,7 @@ const PersonFinderResults = ({
                                         tags={tags}
                                         showCheckbox={showCheckbox}
                                         inputValue={inputValue}
+                                        hideVerifiedIcon={hideVerifiedIcon}
                                     />
                                 </div>
                             );
@@ -155,6 +157,7 @@ const PersonFinderResults = ({
                 onClick={handleClick}
                 focusIndex={focusIndex}
                 roundIcons={orm.roundIcons}
+                hideVerifiedIcon={hideVerifiedIcon}
             />
         </div>
     );
@@ -196,6 +199,7 @@ PersonFinderResults.propTypes = {
     hideFriendsIcon: PropTypes.bool,
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 PersonFinderResults.defaultProps = {
@@ -210,6 +214,7 @@ PersonFinderResults.defaultProps = {
     filterSelected: false,
     hideFriendsIcon: false,
     showCheckbox: false,
+    hideVerifiedIcon: false,
 };
 
 PersonFinderResults.displayName = 'PersonFinderResults';

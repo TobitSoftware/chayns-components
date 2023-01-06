@@ -19,6 +19,7 @@ const ResultItemList = ({
     showCheckbox,
     tags,
     inputValue,
+    hideVerifiedIcon,
 }) => {
     if (!data || data.length === 0) {
         return null;
@@ -38,6 +39,7 @@ const ResultItemList = ({
                 onRemoveTag={onRemoveTag}
                 showCheckbox={showCheckbox}
                 inputValue={inputValue}
+                hideVerifiedIcon={hideVerifiedIcon}
             />
         )),
         hasMore && showWaitCursor && (
@@ -82,6 +84,7 @@ ResultItemList.propTypes = {
     ),
     showCheckbox: PropTypes.bool,
     inputValue: PropTypes.string,
+    hideVerifiedIcon: PropTypes.bool,
 };
 
 ResultItemList.defaultProps = {
@@ -97,6 +100,7 @@ ResultItemList.defaultProps = {
     tags: [],
     showCheckbox: false,
     inputValue: '',
+    hideVerifiedIcon: false,
 };
 
 ResultItemList.displayName = 'ResultItemList';
