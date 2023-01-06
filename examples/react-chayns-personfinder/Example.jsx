@@ -78,6 +78,7 @@ export default class PersonFinderExample extends PureComponent {
         if (this.personFinderOwn3) this.personFinderOwn3.clear();
         if (this.customUserFinder) this.customUserFinder.clear();
         if (this.multipleUserFinder) this.multipleUserFinder.clear();
+        if (this.leftItemFinder) this.leftItemFinder.clear();
         if (this.uacFinder) this.uacFinder.clear();
         if (this.relationFinderUac) this.relationFinderUac.clear();
         if (this.relationFinderUacLocation)
@@ -418,9 +419,12 @@ export default class PersonFinderExample extends PureComponent {
                     style={{ margin: '8px 0' }}
                 />
                 <PersonFinder
+                    ref={(ref) => {
+                        this.leftItemFinder = ref;
+                    }}
                     design={TagInput.BORDER_DESIGN}
                     multiple
-                    left={<span>An</span>}
+                    left={<span style={{ width: '30px' }}>An</span>}
                     hideVerifiedIcon
                 />
                 <Button onClick={this.clear}>Clear all</Button>
