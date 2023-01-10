@@ -55,6 +55,10 @@ export default class TagInput extends Component {
     }
 
     handleKeyDown = (event) => {
+        const { onKeyDown } = this.props;
+        if (onKeyDown) {
+            onKeyDown(event);
+        }
         if (event.keyCode === KEY_COMMA) {
             event.preventDefault();
         }
@@ -294,6 +298,10 @@ TagInput.propTypes = {
      * tag input.
      */
     left: PropTypes.node,
+    /**
+     * A callback for the `keydown`-event.
+     */
+    onKeyDown: PropTypes.func,
 };
 
 TagInput.defaultProps = {
@@ -311,6 +319,7 @@ TagInput.defaultProps = {
     max: null,
     addTagOnBlur: false,
     left: null,
+    onKeyDown: null,
 };
 
 TagInput.displayName = 'TagInput';

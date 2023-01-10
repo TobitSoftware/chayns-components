@@ -52,6 +52,7 @@ The `TagInput`-component takes the following props:
 | [max](#max)                     | `number`                               |                           |          |
 | [addTagOnBlur](#addtagonblur)   | `boolean`                              | `false`                   |          |
 | [left](#left)                   | `ReactNode`                            |                           |          |
+| [onKeyDown](#onkeydown)         | `function`                             |                           |          |
 
 ### `tags`
 
@@ -183,3 +184,13 @@ left?: ReactNode
 ```
 
 A string or `ReactNode` that will be rendered on the left side of the tag input.
+
+---
+
+### `onKeyDown`
+
+```ts
+onKeyDown?: function
+```
+
+A callback for the `keydown`-event.
