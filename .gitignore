@@ -42,7 +42,6 @@ logs
 node_modules/
 npm-debug.log*
 out/
-package-lock.json
 pids
 split-css/
 typings/
