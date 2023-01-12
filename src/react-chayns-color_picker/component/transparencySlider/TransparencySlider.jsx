@@ -46,7 +46,7 @@ export default class TransparencySlider extends PureComponent {
                     onChangeEnd={this.onChangeEnd}
                     min={0}
                     max={1}
-                    value={1 - (color.a || 1)}
+                    value={1 - (color.a ?? 1)}
                 />
             </div>
         );
