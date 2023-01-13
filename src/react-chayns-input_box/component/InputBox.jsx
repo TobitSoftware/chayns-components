@@ -1,10 +1,10 @@
-import { useRect } from '@reach/rect';
 import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, {
     useCallback,
     useEffect,
     useImperativeHandle,
+    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
@@ -36,8 +36,13 @@ const InputBox = React.forwardRef((props, ref) => {
     const boxRef = useRef();
 
     const [isHidden, setIsHidden] = useState(true);
+    const [rect, setRect] = useState(null);
 
-    const rect = useRect(wrapperRef);
+    useLayoutEffect(() => {
+        if (wrapperRef.current) {
+            setRect(wrapperRef.current.getBoundingClientRect());
+        }
+    }, []);
 
     useImperativeHandle(
         ref,

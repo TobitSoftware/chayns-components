@@ -43,7 +43,6 @@
     "dependencies": {
         "@babel/runtime": "^7.20.7",
         "@chayns/colors": "^1.0.4",
-        "@reach/rect": "^0.11.2",
         "abortcontroller-polyfill": "^1.7.5",
         "boxen": "^4.2.0",
         "chalk": "^4.1.2",
