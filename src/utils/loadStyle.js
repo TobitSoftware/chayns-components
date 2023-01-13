@@ -4,7 +4,8 @@ export default function loadStyle(id, src) {
     return new Promise((resolve, reject) => {
         let styleTag = styleMap.get(id);
         if (styleTag) {
-            return resolve();
+            resolve();
+            return;
         }
 
         if (!styleTag) {
@@ -24,7 +25,5 @@ export default function loadStyle(id, src) {
 
         styleTag.onload = resolve;
         styleTag.onerror = reject;
-
-        return null;
     });
 }

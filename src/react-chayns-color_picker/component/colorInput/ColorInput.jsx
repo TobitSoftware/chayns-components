@@ -167,7 +167,7 @@ class ColorInput extends Component {
     }
 }
 
-export default function withColorInput({ showAllColorModels, ...props }) {
+const withColorInput = ({ showAllColorModels, ...props }) => {
     if (showAllColorModels) {
         return (
             <Accordion
@@ -212,7 +212,7 @@ export default function withColorInput({ showAllColorModels, ...props }) {
             <ColorInput {...props} />
         </Accordion>
     );
-}
+};
 
 withColorInput.propTypes = {
     showAllColorModels: PropTypes.bool,
@@ -242,3 +242,5 @@ ColorInput.defaultProps = {
 };
 
 ColorInput.displayName = 'ColorInput';
+
+export default withColorInput;

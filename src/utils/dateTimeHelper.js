@@ -1,12 +1,11 @@
 export const getTimeStringMinutes = (timeStr) => {
-    const regexRes = new RegExp('[0-9]{0,2}:[0-9]{0,2}').exec(timeStr)[0];
+    const regexRes = /[0-9]{0,2}:[0-9]{0,2}/.exec(timeStr)[0];
     const parts = regexRes.split(':');
 
     const hours = parseInt(parts[0], 10) || 0;
     const minutes = parseInt(parts[1], 10) || 0;
-    const totalMin = hours * 60 + minutes;
 
-    return totalMin;
+    return hours * 60 + minutes;
 };
 
 export const getTimeStringFromMinutes = (total) => {

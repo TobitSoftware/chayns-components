@@ -29,38 +29,34 @@ const ComboBox = ({
 }) => {
     const iframeDialogView = useMemo(isInIframeDialog, []);
 
-    return (
-        <>
-            {iframeDialogView ? (
-                <HTMLSelectComboBox
-                    className={className}
-                    label={label}
-                    list={list}
-                    disabled={disabled}
-                    listValue={listValue}
-                    listKey={listKey}
-                    stopPropagation={stopPropagation}
-                    defaultValue={defaultValue}
-                    value={value}
-                    onSelect={onSelect}
-                />
-            ) : (
-                <DialogSelectComboBox
-                    className={className}
-                    label={label}
-                    list={list}
-                    disabled={disabled}
-                    listValue={listValue}
-                    listKey={listKey}
-                    stopPropagation={stopPropagation}
-                    defaultValue={defaultValue}
-                    parent={parent}
-                    onSelect={onSelect}
-                    style={style}
-                    value={value}
-                />
-            )}
-        </>
+    return iframeDialogView ? (
+        <HTMLSelectComboBox
+            className={className}
+            label={label}
+            list={list}
+            disabled={disabled}
+            listValue={listValue}
+            listKey={listKey}
+            stopPropagation={stopPropagation}
+            defaultValue={defaultValue}
+            value={value}
+            onSelect={onSelect}
+        />
+    ) : (
+        <DialogSelectComboBox
+            className={className}
+            label={label}
+            list={list}
+            disabled={disabled}
+            listValue={listValue}
+            listKey={listKey}
+            stopPropagation={stopPropagation}
+            defaultValue={defaultValue}
+            parent={parent}
+            onSelect={onSelect}
+            style={style}
+            value={value}
+        />
     );
 };
 

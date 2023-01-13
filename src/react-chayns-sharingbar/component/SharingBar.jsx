@@ -18,14 +18,14 @@ import TextString from '../../react-chayns-textstring/component/TextString';
 /**
  * A context menu for sharing a link and some text on various platforms.
  */
-function SharingBar({
+const SharingBar = ({
     link: linkProp,
     linkText,
     className,
     stopPropagation,
     style,
     children,
-}) {
+}) => {
     const [sharingProvider, setSharingProvider] = useState([]);
     const [textStringsLoaded, setTextStringsLoaded] = useState(false);
 
@@ -110,7 +110,7 @@ function SharingBar({
             </ContextMenu>
         </div>
     );
-}
+};
 
 SharingBar.propTypes = {
     /**
