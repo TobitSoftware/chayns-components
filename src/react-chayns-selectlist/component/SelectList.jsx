@@ -59,7 +59,7 @@ export default class SelectList extends Component {
             onChange(id, value);
         }
 
-        if (propValue) {
+        if (propValue !== undefined && propValue !== null) {
             return;
         }
 
