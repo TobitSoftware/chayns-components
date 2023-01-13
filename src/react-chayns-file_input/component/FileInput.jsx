@@ -6,6 +6,7 @@ import classNames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import Icon from '../../react-chayns-icon/component/Icon';
+import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallWaitCursor';
 import { isFunction } from '../../utils/is';
 import fileInputCall from '../utils/fileInputCall';
 import supportsFileInput from '../utils/supportsFileInput';
@@ -26,6 +27,7 @@ export default class FileInput extends PureComponent {
                 (chayns.env.isApp || chayns.env.isMyChaynsApp) &&
                 (chayns.env.myChaynsAppVersion || chayns.env.appVersion) >= 6244
             ),
+            isLoading: false,
         };
     }
 
@@ -51,6 +53,7 @@ export default class FileInput extends PureComponent {
         const { files } = event.target;
         this.onDragLeave(index);
         if (files && files.length > 0) {
+            this.setState({ isLoading: true });
             const invalidFiles = [];
             const validFiles = [];
             for (let i = 0, l = files.length; i < l; i++) {
@@ -104,6 +107,7 @@ export default class FileInput extends PureComponent {
                 }
             }
             item.onChange(validFiles, invalidFiles);
+            this.setState({ isLoading: false });
         }
         if (this.fileInputRefs[index]) {
             this.fileInputRefs[index].value = null;
@@ -179,7 +183,7 @@ export default class FileInput extends PureComponent {
     render() {
         const { items, className, style, disabled } = this.props;
 
-        const { hasMemoryAccess } = this.state;
+        const { hasMemoryAccess, isLoading } = this.state;
 
         return (
             <div
@@ -196,7 +200,10 @@ export default class FileInput extends PureComponent {
                         className={classNames(
                             'cc__file-input__split',
                             item.className,
-                            { 'cc__file-input__split--disabled': item.disabled }
+                            {
+                                'cc__file-input__split--disabled':
+                                    item.disabled || isLoading,
+                            }
                         )}
                         style={item.style}
                         // eslint-disable-next-line react/no-array-index-key
@@ -244,20 +251,31 @@ export default class FileInput extends PureComponent {
                                         }}
                                     />
                                 ) : null}
-                                <span className="cc__file-input__icon">
-                                    <Icon
-                                        icon={
-                                            item.content && item.content.icon
-                                                ? item.content.icon
-                                                : 'fa fa-upload'
-                                        }
+                                {!isLoading ? (
+                                    <>
+                                        <span className="cc__file-input__icon">
+                                            <Icon
+                                                icon={
+                                                    item.content &&
+                                                    item.content.icon
+                                                        ? item.content.icon
+                                                        : 'fa fa-upload'
+                                                }
+                                            />
+                                        </span>
+                                        <div className="cc__file-input__message">
+                                            {item.content && item.content.text
+                                                ? item.content.text
+                                                : 'Datei hochladen'}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <SmallWaitCursor
+                                        show
+                                        showBackground={false}
+                                        className="cc__file-input__wait-cursor"
                                     />
-                                </span>
-                                <div className="cc__file-input__message">
-                                    {item.content && item.content.text
-                                        ? item.content.text
-                                        : 'Datei hochladen'}
-                                </div>
+                                )}
                             </div>
                         )}
                     </div>
