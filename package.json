@@ -85,7 +85,7 @@
         "babel-plugin-transform-remove-imports": "^1.7.0",
         "babel-plugin-transform-rename-import": "^2.3.0",
         "babel-regenerator-runtime": "^6.5.0",
-        "chayns-toolkit": "^1.6.4",
+        "chayns-toolkit": "^2.0.1",
         "core-js": "^3.27.1",
         "cssnano": "^4.1.11",
         "eslint": "^7.32.0",
