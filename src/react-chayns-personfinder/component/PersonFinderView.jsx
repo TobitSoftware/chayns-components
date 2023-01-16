@@ -98,6 +98,14 @@ class PersonFinderView extends Component {
                 }
                 break;
             default:
+                // letters, numbers (including numpad) and space
+                if (
+                    (ev.keyCode === 32 ||
+                        (ev.keyCode >= 48 && ev.keyCode <= 106)) &&
+                    this.boxRef.getHiddenState()
+                ) {
+                    this.boxRef.focus();
+                }
                 break;
         }
     };
