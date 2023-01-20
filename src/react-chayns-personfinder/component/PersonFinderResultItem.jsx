@@ -108,6 +108,7 @@ const PersonFinderResultItem = ({
             {data.personId && !hideFriendsIcon && (
                 <FriendsIndicator
                     personId={data.personId}
+                    userId={data.userId}
                     name={data[orm.showName]}
                 />
             )}
