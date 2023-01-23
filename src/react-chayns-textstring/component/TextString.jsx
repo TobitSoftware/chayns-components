@@ -74,8 +74,15 @@ export default class TextString extends Component {
         let lang = TextString.languages.find(
             (l) =>
                 l.code ===
-                (language || TextString.language || chayns.env.site.translang)
+                (language ||
+                    TextString.language ||
+                    chayns.env.parameters.translang ||
+                    chayns.env.site.translang ||
+                    chayns.env.site.language)
         );
+        if (!TextString.language) {
+            TextString.setLanguage(lang ? lang.code : 'de');
+        }
         lang = lang ? lang.value : 'Ger';
 
         let promise = promises[lang] && promises[lang][projectName];
@@ -374,17 +381,7 @@ export default class TextString extends Component {
 
 TextString.textStrings = {};
 
-TextString.language = isServer()
-    ? 'de'
-    : (
-          window.chayns?.env.parameters.translang ||
-          window.chayns?.env.site.translang ||
-          window.chayns?.env.language ||
-          navigator.language ||
-          'de'
-      )
-          .substring(0, 2)
-          .toLowerCase();
+TextString.language = undefined;
 
 TextString.languages = [
     {
