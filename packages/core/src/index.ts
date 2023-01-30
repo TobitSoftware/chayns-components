@@ -6,6 +6,7 @@ export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
 export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
+export type { WithTheme } from './components/color-scheme-provider/ColorSchemeProvider';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
