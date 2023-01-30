@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     StyledTypewriter,
+    StyledTypewriterCursor,
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { getTextByCharCount } from './utils';
+import { getSubTextFromHTML } from './utils';
 
 export type TypewriterProps = {
     /**
@@ -17,7 +18,7 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
     const [shownCharCount, setShownCharCount] = useState(0);
 
     const shownText = useMemo(
-        () => getTextByCharCount({ charCount: shownCharCount, fullText: children }),
+        () => getSubTextFromHTML(children, shownCharCount),
         [children, shownCharCount]
     );
 
@@ -46,7 +47,8 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
     return (
         <StyledTypewriter>
             <StyledTypewriterText shouldUseAbsolutePosition={isAnimatingText}>
-                {shownText}
+                <span dangerouslySetInnerHTML={{ __html: shownText }} />
+                <StyledTypewriterCursor />
             </StyledTypewriterText>
             {isAnimatingText && <StyledTypewriterPseudoText>{children}</StyledTypewriterPseudoText>}
         </StyledTypewriter>
