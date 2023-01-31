@@ -1,4 +1,5 @@
 {
     "packages": ["packages/*"],
-    "version": "5.0.0-beta.50"
+    "version": "5.0.0-beta.50",
+    "useWorkspaces": true
 }
