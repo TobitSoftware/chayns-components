@@ -15,10 +15,9 @@ jobs:
         with:
           node-version: '16.13.2'
           registry-url: https://registry.npmjs.org/
-      - run: node --version
-      - run: npm --version
       - run: npm ci
       - run: lerna bootstrap
+      - run: npm run lerna:build
       - run: lerna publish from-package --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
