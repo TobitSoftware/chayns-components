@@ -1,3 +1,4 @@
+import type { WithTheme } from '@chayns-components/core';
 import styled, { css, keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.div`
@@ -16,11 +17,12 @@ export const StyledTypewriterPseudoText = styled.div`
     user-select: none;
 `;
 
-type StyledTypewriterTextProps = {
+type StyledTypewriterTextProps = WithTheme<{
     isAnimatingText: boolean;
-};
+}>;
 
 export const StyledTypewriterText = styled.div<StyledTypewriterTextProps>`
+    color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
     position: ${({ isAnimatingText }) => (isAnimatingText ? 'absolute' : 'relative')};
 
     ${({ isAnimatingText }) =>
@@ -28,6 +30,7 @@ export const StyledTypewriterText = styled.div<StyledTypewriterTextProps>`
         css`
             &:after {
                 animation: ${blinkAnimation} 1s steps(5, start) infinite;
+                color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
                 content: '▋';
                 margin-left: 0.25rem;
                 opacity: 0.85;
