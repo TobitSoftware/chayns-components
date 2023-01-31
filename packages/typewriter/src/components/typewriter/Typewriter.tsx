@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     StyledTypewriter,
-    StyledTypewriterCursor,
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
@@ -35,7 +34,7 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
 
                 return nextState;
             });
-        }, 25);
+        }, 35);
 
         return () => {
             window.clearInterval(interval);
@@ -46,10 +45,10 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
 
     return (
         <StyledTypewriter>
-            <StyledTypewriterText shouldUseAbsolutePosition={isAnimatingText}>
-                <span dangerouslySetInnerHTML={{ __html: shownText }} />
-                <StyledTypewriterCursor />
-            </StyledTypewriterText>
+            <StyledTypewriterText
+                dangerouslySetInnerHTML={{ __html: shownText }}
+                isAnimatingText={isAnimatingText}
+            />
             {isAnimatingText && <StyledTypewriterPseudoText>{children}</StyledTypewriterPseudoText>}
         </StyledTypewriter>
     );

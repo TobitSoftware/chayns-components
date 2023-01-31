@@ -1,3 +1,13 @@
+/**
+ * This function extracts a part of the text from an HTML text. The HTML elements themselves are
+ * returned in the result. In addition, the function ensures that the closing tag of the Bold HTML
+ * element is also returned for text that is cut off in the middle of a Bold element, for example.
+ *
+ * @param html - The text from which a part should be taken
+ * @param length - The length of the text to be extracted
+ *
+ * @return string - The text part with the specified length - additionally the HTML elements are added
+ */
 export const getSubTextFromHTML = (html: string, length: number): string => {
     const div = document.createElement('div');
 

@@ -1,12 +1,13 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.div`
     position: relative;
 `;
 
-export const StyledTypewriterCursor = styled.span`
-    height: 1em;
-    width: 1em;
+const blinkAnimation = keyframes`
+  100% {
+    visibility: hidden;
+  }
 `;
 
 export const StyledTypewriterPseudoText = styled.div`
@@ -16,10 +17,21 @@ export const StyledTypewriterPseudoText = styled.div`
 `;
 
 type StyledTypewriterTextProps = {
-    shouldUseAbsolutePosition: boolean;
+    isAnimatingText: boolean;
 };
 
 export const StyledTypewriterText = styled.div<StyledTypewriterTextProps>`
-    position: ${({ shouldUseAbsolutePosition }) =>
-        shouldUseAbsolutePosition ? 'absolute' : 'relative'};
+    position: ${({ isAnimatingText }) => (isAnimatingText ? 'absolute' : 'relative')};
+
+    ${({ isAnimatingText }) =>
+        isAnimatingText &&
+        css`
+            &:after {
+                animation: ${blinkAnimation} 1s steps(5, start) infinite;
+                content: '▋';
+                margin-left: 0.25rem;
+                opacity: 0.85;
+                vertical-align: baseline;
+            }
+        `}
 `;
