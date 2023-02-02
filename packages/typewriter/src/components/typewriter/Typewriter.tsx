@@ -44,7 +44,7 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
 
                     return nextState;
                 });
-            }, 35);
+            }, 30);
         }
 
         return () => {

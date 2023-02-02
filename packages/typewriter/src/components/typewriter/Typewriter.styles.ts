@@ -2,6 +2,7 @@ import type { WithTheme } from '@chayns-components/core';
 import styled, { css, keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.span`
+    display: flex;
     position: relative;
 `;
 
@@ -24,6 +25,7 @@ type StyledTypewriterTextProps = WithTheme<{
 export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
     color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
     position: ${({ isAnimatingText }) => (isAnimatingText ? 'absolute' : 'relative')};
+    width: 100%;
 
     ${({ isAnimatingText }) =>
         isAnimatingText &&
