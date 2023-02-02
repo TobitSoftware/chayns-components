@@ -66,3 +66,23 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
 
     return text;
 };
+
+export const getCharactersCount = (html: string): number => {
+    const div = document.createElement('div');
+
+    div.innerHTML = html;
+
+    let count = 0;
+
+    const traverse = (node: Node): void => {
+        if (node.nodeType === 3 && typeof node.textContent === 'string') {
+            count += node.textContent.trim().length;
+        } else if (node.nodeType === 1) {
+            Array.from(node.childNodes).forEach(traverse);
+        }
+    };
+
+    Array.from(div.childNodes).forEach(traverse);
+
+    return count;
+};

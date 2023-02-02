@@ -27,10 +27,10 @@ WithHTMLText.args = {
 
 WithCustomElements.args = {
     children: (
-        <div className="test">
+        <span className="test">
             Hallo, das ist ein Test mit einem Text innerhalb von eigenen Elementen.
             <span style={{ color: 'pink' }}>Mit tollem pinken Text!</span>
-            Und noch weiterem anderen Text
-        </div>
+            Und noch weiterem anderen Text.
+        </span>
     ),
 };
