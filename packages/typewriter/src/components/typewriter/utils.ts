@@ -16,9 +16,9 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
     let text = '';
     let currLength = 0;
 
-    const traverse = (node: Node): boolean => {
-        if (node.nodeType === 3 && typeof node.textContent === 'string') {
-            const nodeText = node.textContent;
+    const traverse = (element: Element): boolean => {
+        if (element.nodeType === 3 && typeof element.textContent === 'string') {
+            const nodeText = element.textContent;
 
             if (currLength + nodeText.length <= length) {
                 text += nodeText;
@@ -28,15 +28,24 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
 
                 return false;
             }
-        } else if (node.nodeType === 1) {
-            const nodeName = node.nodeName.toLowerCase();
+        } else if (element.nodeType === 1) {
+            const nodeName = element.nodeName.toLowerCase();
 
-            text += `<${nodeName}>`;
+            let attributes = '';
 
-            for (let i = 0; i < node.childNodes.length; i++) {
-                const childNode = node.childNodes[i];
+            // @ts-expect-error: Type is correct here
+            // eslint-disable-next-line no-restricted-syntax
+            for (const attribute of element.attributes) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
+                attributes += ` ${attribute.name}="${attribute.value}"`;
+            }
 
-                if (childNode && !traverse(childNode)) {
+            text += `<${nodeName}${attributes}>`;
+
+            for (let i = 0; i < element.childNodes.length; i++) {
+                const childNode = element.childNodes[i];
+
+                if (childNode && !traverse(childNode as Element)) {
                     return false;
                 }
             }
@@ -50,7 +59,7 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
     for (let i = 0; i < div.childNodes.length; i++) {
         const childNode = div.childNodes[i];
 
-        if (childNode && !traverse(childNode)) {
+        if (childNode && !traverse(childNode as Element)) {
             return text;
         }
     }

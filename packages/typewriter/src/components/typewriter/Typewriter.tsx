@@ -1,4 +1,5 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { renderToString } from 'react-dom/server';
 import {
     StyledTypewriter,
     StyledTypewriterPseudoText,
@@ -10,14 +11,16 @@ export type TypewriterProps = {
     /**
      * The text to type
      */
-    children: string;
+    children: ReactElement | string;
 };
 
 const Typewriter: FC<TypewriterProps> = ({ children }) => {
     const [shownCharCount, setShownCharCount] = useState(0);
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
-    const isAnimatingText = shownCharCount !== children.length;
+    const textContent = React.isValidElement(children) ? renderToString(children) : children;
+
+    const isAnimatingText = shownCharCount !== textContent.length;
 
     const handleClick = useCallback(() => {
         setShouldStopAnimation(true);
@@ -27,7 +30,7 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
         let interval: number | undefined;
 
         if (shouldStopAnimation) {
-            setShownCharCount(children.length);
+            setShownCharCount(textContent.length);
         } else {
             setShownCharCount(0);
 
@@ -35,7 +38,7 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
                 setShownCharCount((prevState) => {
                     const nextState = prevState + 1;
 
-                    if (nextState === children.length) {
+                    if (nextState === textContent.length) {
                         window.clearInterval(interval);
                     }
 
@@ -47,11 +50,11 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
         return () => {
             window.clearInterval(interval);
         };
-    }, [children.length, shouldStopAnimation]);
+    }, [shouldStopAnimation, textContent.length]);
 
     const shownText = useMemo(
-        () => getSubTextFromHTML(children, shownCharCount),
-        [children, shownCharCount]
+        () => getSubTextFromHTML(textContent, shownCharCount),
+        [shownCharCount, textContent]
     );
 
     return (
