@@ -7,14 +7,21 @@ import {
 } from './Typewriter.styles';
 import { getSubTextFromHTML } from './utils';
 
+export enum TypewriterSpeed {
+    Slow = 40,
+    Medium = 30,
+    Fast = 20,
+}
+
 export type TypewriterProps = {
     /**
      * The text to type
      */
     children: ReactElement | string;
+    speed?: TypewriterSpeed;
 };
 
-const Typewriter: FC<TypewriterProps> = ({ children }) => {
+const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Medium }) => {
     const [shownCharCount, setShownCharCount] = useState(0);
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
@@ -44,13 +51,13 @@ const Typewriter: FC<TypewriterProps> = ({ children }) => {
 
                     return nextState;
                 });
-            }, 30);
+            }, speed);
         }
 
         return () => {
             window.clearInterval(interval);
         };
-    }, [shouldStopAnimation, textContent.length]);
+    }, [shouldStopAnimation, speed, textContent.length]);
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),

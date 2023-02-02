@@ -1,1 +1,1 @@
-export { default as Typewriter } from './components/typewriter/Typewriter';
+export { default as Typewriter, TypewriterSpeed } from './components/typewriter/Typewriter';
