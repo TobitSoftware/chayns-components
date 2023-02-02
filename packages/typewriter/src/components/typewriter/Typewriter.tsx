@@ -5,7 +5,7 @@ import {
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { getCharactersCount, getSubTextFromHTML } from './utils';
+import { getSubTextFromHTML } from './utils';
 
 export enum TypewriterSpeed {
     Slow = 40,
@@ -27,7 +27,8 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
 
     const textContent = React.isValidElement(children) ? renderToString(children) : children;
 
-    const textLength = useMemo(() => getCharactersCount(textContent), [textContent]);
+    // const textLength = useMemo(() => getCharactersCount(textContent), [textContent]);
+    const textLength = textContent.length;
 
     const isAnimatingText = shownCharCount !== textLength;
 
