@@ -5,7 +5,7 @@ import {
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { getSubTextFromHTML } from './utils';
+import { getCharactersCount, getSubTextFromHTML } from './utils';
 
 export enum TypewriterSpeed {
     Slow = 40,
@@ -27,8 +27,7 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
 
     const textContent = React.isValidElement(children) ? renderToString(children) : children;
 
-    // const textLength = useMemo(() => getCharactersCount(textContent), [textContent]);
-    const textLength = textContent.length;
+    const textLength = useMemo(() => getCharactersCount(textContent), [textContent]);
 
     const isAnimatingText = shownCharCount !== textLength;
 
@@ -40,16 +39,23 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
         let interval: number | undefined;
 
         if (shouldStopAnimation) {
-            setShownCharCount(textLength);
+            setShownCharCount(textContent.length);
         } else {
             setShownCharCount(0);
 
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
-                    const nextState = prevState + 1;
+                    let nextState = prevState + 1;
 
                     if (nextState === textLength) {
                         window.clearInterval(interval);
+
+                        /**
+                         * At this point, the next value for "shownCharCount" is deliberately set to
+                         * the length of the textContent in order to correctly display HTML elements
+                         * after the last letter.
+                         */
+                        nextState = textContent.length;
                     }
 
                     return nextState;
@@ -60,7 +66,7 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
         return () => {
             window.clearInterval(interval);
         };
-    }, [shouldStopAnimation, speed, textLength]);
+    }, [shouldStopAnimation, speed, textContent.length, textLength]);
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
