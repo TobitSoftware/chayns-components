@@ -118,6 +118,7 @@ The `PersonFinder`-component takes the following props:
 | [hasOpenCloseIcon](#hasopencloseicon) | `boolean`                                                                                           | `false`          |          |
 | [filterSelected](#filterselected)     | `boolean`                                                                                           | `false`          |          |
 | [hideVerifiedIcon](#hideverifiedicon) | `boolean`                                                                                           | `false`          |          |
+| [minCharCount](#mincharcount)         | `number`                                                                                            |                  |          |
 
 ### `placeholder`
 
@@ -373,3 +374,13 @@ hideVerifiedIcon?: boolean
 ```
 
 Hides the extra icon for verified accounts
+
+---
+
+### `minCharCount`
+
+```ts
+minCharCount?: number
+```
+
+Minimum number of letters before the result overlay is displayed
