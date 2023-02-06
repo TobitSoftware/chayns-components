@@ -192,6 +192,10 @@ PersonFinder.propTypes = {
      * Hides the extra icon for verified accounts
      */
     hideVerifiedIcon: PropTypes.bool,
+    /**
+     * Minimum number of letters before the result overlay is displayed
+     */
+    minCharCount: PropTypes.number,
 };
 
 PersonFinder.defaultProps = {
@@ -220,6 +224,7 @@ PersonFinder.defaultProps = {
     hasOpenCloseIcon: false,
     filterSelected: false,
     hideVerifiedIcon: false,
+    minCharCount: null,
 };
 
 PersonFinder.displayName = 'PersonFinder';

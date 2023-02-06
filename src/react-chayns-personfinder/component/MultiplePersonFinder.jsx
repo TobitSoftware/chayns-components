@@ -346,6 +346,7 @@ MultiplePersonFinder.propTypes = {
     values: PropTypes.array,
     value: PropTypes.string,
     hideVerifiedIcon: PropTypes.bool,
+    minCharCount: PropTypes.number,
 };
 
 MultiplePersonFinder.defaultProps = {
@@ -367,6 +368,7 @@ MultiplePersonFinder.defaultProps = {
     values: null,
     value: null,
     hideVerifiedIcon: false,
+    minCharCount: null,
 };
 
 MultiplePersonFinder.displayName = 'MultiplePersonFinder';

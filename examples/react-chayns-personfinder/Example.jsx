@@ -426,6 +426,7 @@ export default class PersonFinderExample extends PureComponent {
                     multiple
                     left={<span style={{ width: '30px' }}>An</span>}
                     hideVerifiedIcon
+                    minCharCount={3}
                 />
                 <Button onClick={this.clear}>Clear all</Button>
             </div>

@@ -250,8 +250,12 @@ class PersonFinderView extends Component {
             onChange,
             onKeyDown,
             autoSelectFirst,
+            inputValue,
+            minCharCount,
             ...props
         } = this.props;
+
+        const inputValueLength = inputValue?.length ?? 0;
 
         return (
             <InputBox
@@ -290,6 +294,10 @@ class PersonFinderView extends Component {
                     onChange(...e);
                     this.updateIndex(autoSelectFirst ? 0 : null);
                 }}
+                shouldHideOverlay={
+                    typeof minCharCount === 'number' &&
+                    minCharCount > inputValueLength
+                }
                 {...props}
             >
                 {this.renderChildren()}
@@ -352,6 +360,7 @@ PersonFinderView.propTypes = {
     showCheckbox: PropTypes.bool,
     onRemoveTag: PropTypes.func.isRequired,
     hideVerifiedIcon: PropTypes.bool,
+    minCharCount: PropTypes.number,
 };
 
 PersonFinderView.defaultProps = {
@@ -376,6 +385,7 @@ PersonFinderView.defaultProps = {
     renderInline: false,
     showCheckbox: false,
     hideVerifiedIcon: false,
+    minCharCount: null,
 };
 
 PersonFinderView.displayName = 'PersonFinderView';
