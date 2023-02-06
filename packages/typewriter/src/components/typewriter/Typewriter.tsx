@@ -27,9 +27,9 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
 
     const textContent = React.isValidElement(children) ? renderToString(children) : children;
 
-    const textLength = useMemo(() => getCharactersCount(textContent), [textContent]);
+    const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
-    const isAnimatingText = shownCharCount !== textLength;
+    const isAnimatingText = shownCharCount !== textContent.length;
 
     const handleClick = useCallback(() => {
         setShouldStopAnimation(true);
@@ -47,7 +47,7 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
                 setShownCharCount((prevState) => {
                     let nextState = prevState + 1;
 
-                    if (nextState === textLength) {
+                    if (nextState === charactersCount) {
                         window.clearInterval(interval);
 
                         /**
@@ -66,7 +66,7 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
         return () => {
             window.clearInterval(interval);
         };
-    }, [shouldStopAnimation, speed, textContent.length, textLength]);
+    }, [shouldStopAnimation, speed, textContent.length, charactersCount]);
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
