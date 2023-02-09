@@ -81,7 +81,9 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
                 dangerouslySetInnerHTML={{ __html: shownText }}
                 isAnimatingText={isAnimatingText}
             />
-            {isAnimatingText && <StyledTypewriterPseudoText>{children}</StyledTypewriterPseudoText>}
+            {isAnimatingText && (
+                <StyledTypewriterPseudoText dangerouslySetInnerHTML={{ __html: textContent }} />
+            )}
         </StyledTypewriter>
     );
 };
