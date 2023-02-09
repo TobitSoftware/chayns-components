@@ -27,10 +27,23 @@ WithHTMLText.args = {
 
 WithCustomElements.args = {
     children: (
-        <span className="test">
-            Hallo, das ist ein Test mit einem Text innerhalb von eigenen Elementen.
-            <span style={{ color: 'pink' }}>Mit tollem pinken Text!</span>
-            Und noch weiterem anderen Text.
-        </span>
+        <>
+            Das ist ein Test!
+            <img
+                className="emojione"
+                alt="👍"
+                src="https://api.chayns-static.space/emojione/4.0/png/64/1f44d.png"
+                style={{
+                    display: 'inline-block',
+                    fontSize: 'inherit',
+                    height: '3ex',
+                    lineHeight: 'normal',
+                    margin: '-.2ex 0.15em .2ex',
+                    minHeight: '15px',
+                    minWidth: '15px',
+                    verticalAlign: 'middle',
+                }}
+            />
+        </>
     ),
 };

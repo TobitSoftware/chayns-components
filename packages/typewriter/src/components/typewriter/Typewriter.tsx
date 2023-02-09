@@ -22,12 +22,14 @@ export type TypewriterProps = {
 };
 
 const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Medium }) => {
-    const [shownCharCount, setShownCharCount] = useState(0);
-    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
-
     const textContent = React.isValidElement(children) ? renderToString(children) : children;
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
+
+    const [shownCharCount, setShownCharCount] = useState(
+        charactersCount > 0 ? 0 : textContent.length
+    );
+    const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
     const isAnimatingText = shownCharCount !== textContent.length;
 
@@ -38,7 +40,7 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
     useEffect(() => {
         let interval: number | undefined;
 
-        if (shouldStopAnimation) {
+        if (shouldStopAnimation || charactersCount === 0) {
             setShownCharCount(textContent.length);
         } else {
             setShownCharCount(0);
