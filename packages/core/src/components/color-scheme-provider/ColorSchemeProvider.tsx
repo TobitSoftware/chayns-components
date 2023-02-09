@@ -1,6 +1,7 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { generateFontFaces } from './font';
 
 enum ColorMode {
     Classic,
@@ -44,11 +45,13 @@ export type WithTheme<T> = T & {
 };
 
 const GlobalStyle = createGlobalStyle`
-    .ellipsis {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+  ${generateFontFaces}
+
+  .ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
