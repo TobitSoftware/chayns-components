@@ -15,6 +15,11 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ onSelect }) => {
         Object.keys(unicodeEmoji)[0] as Category
     );
 
+    const handleCategorySelect = useCallback((category: Category) => {
+        setSearchString('');
+        setSelectedCategory(category);
+    }, []);
+
     const handleSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setSearchString(event.target.value);
     }, []);
@@ -22,9 +27,14 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ onSelect }) => {
     return (
         <StyledEmojiPicker>
             <Input onChange={handleSearchChange} placeholder="Suchen" value={searchString} />
-            <EmojiPickerEmojis onSelect={onSelect} selectedCategory={selectedCategory} />
+            <EmojiPickerEmojis
+                onSelect={onSelect}
+                searchString={searchString}
+                selectedCategory={selectedCategory}
+            />
             <EmojiPickerCategories
-                onSelect={setSelectedCategory}
+                onSelect={handleCategorySelect}
+                searchString={searchString}
                 selectedCategory={selectedCategory}
             />
         </StyledEmojiPicker>

@@ -8,27 +8,38 @@ import {
 
 export type EmojiPickerCategoriesProps = {
     onSelect: (category: Category) => void;
+    searchString: string;
     selectedCategory: Category;
 };
 
-const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({ onSelect, selectedCategory }) => {
+const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
+    onSelect,
+    searchString,
+    selectedCategory,
+}) => {
+    const isSearchStringGiven = searchString.trim() !== '';
+
     const categories = useMemo(
         () =>
-            Object.entries(unicodeEmoji).map(([name, items]) => (
-                <StyledMotionEmojiPickerCategory
-                    animate={{
-                        filter: `grayscale(${selectedCategory === name ? 0 : 0.75})`,
-                        opacity: selectedCategory === name ? 1 : 0.5,
-                    }}
-                    initial={false}
-                    key={name}
-                    onClick={() => onSelect(name as Category)}
-                    transition={{ duration: 0.2 }}
-                >
-                    {items[0]?.emoji}
-                </StyledMotionEmojiPickerCategory>
-            )),
-        [onSelect, selectedCategory]
+            Object.entries(unicodeEmoji).map(([name, items]) => {
+                const isSelected = selectedCategory === name && !isSearchStringGiven;
+
+                return (
+                    <StyledMotionEmojiPickerCategory
+                        animate={{
+                            filter: `grayscale(${isSelected ? 0 : 0.75})`,
+                            opacity: isSelected ? 1 : 0.5,
+                        }}
+                        initial={false}
+                        key={name}
+                        onClick={() => onSelect(name as Category)}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {items[0]?.emoji}
+                    </StyledMotionEmojiPickerCategory>
+                );
+            }),
+        [isSearchStringGiven, onSelect, selectedCategory]
     );
 
     return <StyledEmojiPickerCategories>{categories}</StyledEmojiPickerCategories>;
