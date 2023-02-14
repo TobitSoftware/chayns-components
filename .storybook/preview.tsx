@@ -38,7 +38,7 @@ export const decorators = [
 
             return (...args: (BaseSyntheticEvent | any)[]) => {
                 const fixedArgs = args.map((arg) => {
-                    if (!arg || !('type' in arg)) {
+                    if (!arg || typeof arg !== 'object' || !('type' in arg)) {
                         return arg;
                     }
 
