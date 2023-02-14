@@ -55,8 +55,10 @@
         "@chayns-components/core": "^5.0.0-beta.54",
         "@chayns/colors": "^2.0.0",
         "clsx": "^1.2.1",
+        "emojilib": "^3.0.8",
         "framer-motion": "^6.5.1",
         "styled-components": "^5.3.6",
+        "unicode-emoji-json": "^0.4.0",
         "uuid": "^9.0.0"
     },
     "peerDependencies": {
