@@ -4,6 +4,7 @@ export const StyledEmojiPickerEmojis = styled.div`
     display: grid;
     flex: 1 1 auto;
     grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+    grid-template-rows: min-content;
     overflow-y: scroll;
     padding: 10px 0;
 
