@@ -34,6 +34,9 @@ export default class Accordion extends PureComponent {
             currentState,
             showBody: currentState === OPEN,
         };
+        this.ref = (ref) => {
+            this.body = ref;
+        };
     }
 
     componentDidMount() {
@@ -353,9 +356,7 @@ export default class Accordion extends PureComponent {
                 </div>
                 <div
                     className="accordion__body"
-                    ref={(ref) => {
-                        this.body = ref;
-                    }}
+                    ref={this.ref}
                     style={styleBody}
                 >
                     {this.getBody()}
