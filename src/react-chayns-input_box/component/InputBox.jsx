@@ -26,7 +26,6 @@ const InputBox = React.forwardRef((props, ref) => {
         boxClassName,
         style,
         onBlur,
-        shouldHideOverlay,
         hasOpenCloseIcon,
         renderInline,
         hideInput,
@@ -55,10 +54,10 @@ const InputBox = React.forwardRef((props, ref) => {
                 setIsHidden(true);
             },
             getHiddenState() {
-                return isHidden || shouldHideOverlay;
+                return isHidden;
             },
         }),
-        [isHidden, shouldHideOverlay]
+        [isHidden]
     );
 
     useEffect(() => {
@@ -228,9 +227,7 @@ const InputBox = React.forwardRef((props, ref) => {
                             style={{
                                 ...positionStyles,
                                 ...overlayProps?.style,
-                                ...(isHidden || shouldHideOverlay
-                                    ? { display: 'none' }
-                                    : {}),
+                                ...(isHidden ? { display: 'none' } : {}),
                             }}
                             {...overlayProps}
                             ref={setBoxRef}
@@ -264,7 +261,6 @@ InputBox.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
-    shouldHideOverlay: PropTypes.bool,
     hasOpenCloseIcon: PropTypes.bool,
     renderInline: PropTypes.bool,
     hideInput: PropTypes.bool,
@@ -281,7 +277,6 @@ InputBox.defaultProps = {
     inputRef: null,
     overlayProps: null,
     style: null,
-    shouldHideOverlay: false,
     hasOpenCloseIcon: false,
     renderInline: false,
     hideInput: false,

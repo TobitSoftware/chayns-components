@@ -190,11 +190,19 @@ class PersonFinderView extends Component {
             inputValue,
             showCheckbox,
             hideVerifiedIcon,
+            minCharCount,
         } = this.props;
 
         const { focusIndex } = this.state;
 
         const hasEntries = this.hasEntries();
+
+        if (
+            typeof minCharCount === 'number' &&
+            inputValue.length < minCharCount
+        ) {
+            return null;
+        }
 
         const showResults = !selectedValue && hasEntries;
         const showWaitCursor =
@@ -250,12 +258,8 @@ class PersonFinderView extends Component {
             onChange,
             onKeyDown,
             autoSelectFirst,
-            inputValue,
-            minCharCount,
             ...props
         } = this.props;
-
-        const inputValueLength = inputValue?.length ?? 0;
 
         return (
             <InputBox
@@ -294,10 +298,6 @@ class PersonFinderView extends Component {
                     onChange(...e);
                     this.updateIndex(autoSelectFirst ? 0 : null);
                 }}
-                shouldHideOverlay={
-                    typeof minCharCount === 'number' &&
-                    minCharCount > inputValueLength
-                }
                 {...props}
             >
                 {this.renderChildren()}
