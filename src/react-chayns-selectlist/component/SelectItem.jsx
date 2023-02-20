@@ -16,6 +16,7 @@ import SelectListContext from './selectListContext';
 const SelectListItem = ({
     children,
     id,
+    htmlId,
     value,
     className,
     tooltipProps,
@@ -39,6 +40,7 @@ const SelectListItem = ({
                 <Tooltip {...tooltipProps}>
                     <RadioButton
                         style={{ display: 'inline' }}
+                        id={htmlId}
                         name={selectListId}
                         checked={checked}
                         onChange={handleChange}
@@ -49,6 +51,7 @@ const SelectListItem = ({
                 </Tooltip>
             ) : (
                 <RadioButton
+                    id={htmlId}
                     name={selectListId}
                     checked={checked}
                     onChange={handleChange}
@@ -86,6 +89,11 @@ SelectListItem.propTypes = {
     id: PropTypes.number,
 
     /**
+     * The html id which will be used for the input of the radio button
+     */
+    htmlId: PropTypes.string,
+
+    /**
      * A classname string that will be applied to the container element.
      */
     className: PropTypes.string,
@@ -121,6 +129,7 @@ SelectListItem.propTypes = {
 
 SelectListItem.defaultProps = {
     id: null,
+    htmlId: null,
     className: '',
     disabled: false,
     children: null,

@@ -41,6 +41,7 @@ The `SelectItem`-component takes the following props:
 | Name                          | Type                  | Default | Required |
 | ----------------------------- | --------------------- | ------- | :------: |
 | [id](#id)                     | `number`              |         |          |
+| [htmlId](#htmlid)             | `string`              |         |          |
 | [className](#classname)       | `string`              | `''`    |          |
 | [disabled](#disabled)         | `boolean`             | `false` |          |
 | [children](#children)         | `ReactNode`           |         |          |
@@ -57,6 +58,16 @@ id?: number
 The select item id. It identifies the `SelectItem` for the `defaultValue`- and
 `value`-props of the `SelectList`-component and will be given as the first
 argument to the `onChange`-callback of the `SelectList`-component.
+
+---
+
+### `htmlId`
+
+```ts
+htmlId?: string
+```
+
+The html id which will be used for the input of the radio button
 
 ---
 
