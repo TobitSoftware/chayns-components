@@ -9,7 +9,7 @@ export const chaynsTheme = create({
     appBg: '#F1F5F9',
     appContentBg: '#F8FAFC',
     appBorderColor: '#CFD8E3',
-    appBorderRadius: 2,
+    appBorderRadius: 3,
 
     fontBase: '"Roboto", sans-serif',
     fontCode: '"JetBrains Mono", monospace',
@@ -24,7 +24,7 @@ export const chaynsTheme = create({
     inputBg: '#F1F5F9',
     inputBorder: '#CFD8E3',
     inputTextColor: '#364152',
-    inputBorderRadius: 2,
+    inputBorderRadius: 3,
 
     brandTitle: 'chayns-components',
     brandUrl: 'https://chayns.net/',

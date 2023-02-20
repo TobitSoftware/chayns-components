@@ -12,7 +12,7 @@ export const StyledMotionContextMenuContent = styled(
 )<StyledMotionContextMenuContentProps>`
     background-color: ${({ theme }: StyledMotionContextMenuContentProps) => theme['001']};
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
+    border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionContextMenuContentProps) => theme.text};
     position: absolute;
@@ -21,7 +21,7 @@ export const StyledMotionContextMenuContent = styled(
     ::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-right-radius: 2px;
+        border-bottom-right-radius: 3px;
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
         content: '';
