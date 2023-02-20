@@ -1,13 +1,15 @@
-import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
 
-type StyledEmojiPickerProps = WithTheme<unknown>;
+export const emojiPickerSize = {
+    height: 285,
+    width: 350,
+};
 
-export const StyledEmojiPicker = styled.div<StyledEmojiPickerProps>`
-    background-color: ${({ theme }: StyledEmojiPickerProps) => theme['100']};
+export const StyledEmojiPicker = styled.div`
     display: flex;
     flex-direction: column;
-    height: 285px;
+    height: ${emojiPickerSize.height}px;
     padding: 10px 22px;
-    width: 350px;
+    width: ${emojiPickerSize.width}px;
+    user-select: none;
 `;

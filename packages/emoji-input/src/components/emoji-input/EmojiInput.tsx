@@ -1,4 +1,3 @@
-import Icon from '@chayns-components/core/lib/components/icon/Icon';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -10,6 +9,7 @@ import React, {
 } from 'react';
 import { convertAsciiToUnicode } from '../../utils/emoji';
 import { restoreSelection, saveSelection } from '../../utils/selection';
+import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import { StyledEmojiInput, StyledEmojiInputEditor } from './EmojiInput.styles';
 
 export type EmojiInputProps = {
@@ -49,8 +49,8 @@ const EmojiInput: FC<EmojiInputProps> = ({ isDisabled, onChange, placeholder, va
         // ToDo: Trigger "onChange" event
     }, []);
 
-    const handlePopupIconClick = useCallback(() => {
-        console.debug('handlePopupIconClick');
+    const handlePopupSelect = useCallback((emoji: string) => {
+        console.debug('handlePopupSelect', emoji);
     }, []);
 
     useEffect(() => {
@@ -67,7 +67,7 @@ const EmojiInput: FC<EmojiInputProps> = ({ isDisabled, onChange, placeholder, va
                 onInput={handleInput}
                 placeholder={placeholder}
             />
-            <Icon icons={['far fa-smile']} onClick={handlePopupIconClick} size={18} />
+            <EmojiPickerPopup onSelect={handlePopupSelect} />
         </StyledEmojiInput>
     );
 };
