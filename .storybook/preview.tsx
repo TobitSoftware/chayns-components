@@ -31,7 +31,7 @@ export const decorators = [
             }
         }, [colorMode]);
 
-        // region fix SyntheticEvents of react
+        // region fix SyntheticEvents of React
         // This could be removed when the issue https://github.com/storybookjs/storybook/issues/6471 is fixed
         const action: typeof brokenAction = (name, options) => {
             const constructedAction = brokenAction(name, options);
@@ -47,6 +47,7 @@ export const decorators = [
                         clientX: arg.clientX,
                         clientY: arg.clientY,
                         ctrlKey: arg.ctrlKey,
+                        innerHTML: arg.type === 'input' ? arg.target.innerHTML : undefined,
                         metaKey: arg.metaKey,
                         movementX: arg.movementX,
                         movementY: arg.movementY,
