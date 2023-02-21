@@ -36,17 +36,17 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "devDependencies": {
-        "@babel/cli": "^7.20.7",
-        "@babel/core": "^7.20.12",
+        "@babel/cli": "^7.21.0",
+        "@babel/core": "^7.21.0",
         "@babel/preset-env": "^7.20.2",
         "@babel/preset-react": "^7.18.6",
-        "@babel/preset-typescript": "^7.18.6",
+        "@babel/preset-typescript": "^7.21.0",
         "@types/react": "^17.0.53",
-        "@types/react-dom": "^17.0.18",
+        "@types/react-dom": "^17.0.19",
         "@types/styled-components": "^5.1.26",
         "@types/uuid": "^9.0.0",
         "babel-loader": "^8.3.0",
-        "lerna": "^6.4.1",
+        "lerna": "^6.5.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "typescript": "^4.9.5"
@@ -58,7 +58,7 @@
         "emojilib": "^3.0.8",
         "framer-motion": "^6.5.1",
         "styled-components": "^5.3.6",
-        "unicode-emoji-json": "^0.4.0",
+        "unicode-emoji-json": "^0.5.0",
         "uuid": "^9.0.0"
     },
     "peerDependencies": {
