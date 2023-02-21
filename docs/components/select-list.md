@@ -46,6 +46,7 @@ The `SelectList`-component takes the following props:
 | [selectFirst](#selectfirst)   | `boolean`                             |         |          |
 | [className](#classname)       | `string`                              |         |          |
 | [style](#style)               | `{ [key: string]: number \| string }` |         |          |
+| [listId](#listid)             | `string`                              |         |          |
 
 ### `onChange`
 
@@ -114,3 +115,13 @@ style?: { [key: string]: number | string }
 ```
 
 A React style object
+
+---
+
+### `listId`
+
+```ts
+listId?: string
+```
+
+The id used for the html attributes of this select list

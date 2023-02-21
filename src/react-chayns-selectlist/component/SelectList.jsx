@@ -24,7 +24,8 @@ export default class SelectList extends Component {
             selectedId: preselectId || 0,
         };
 
-        this.selectListId = `cc_selectlist__${SelectList.maxId}`;
+        this.selectListId =
+            props.listId || `cc_selectlist__${SelectList.maxId}`;
         SelectList.maxId += 1;
     }
 
@@ -166,6 +167,11 @@ SelectList.propTypes = {
     style: PropTypes.objectOf(
         PropTypes.oneOfType([PropTypes.number, PropTypes.string])
     ),
+
+    /**
+     * The id used for the html attributes of this select list
+     */
+    listId: PropTypes.string,
 };
 
 SelectList.defaultProps = {
@@ -176,6 +182,7 @@ SelectList.defaultProps = {
     selectFirst: null,
     children: null,
     style: null,
+    listId: null,
 };
 
 SelectList.displayName = 'SelectList';
