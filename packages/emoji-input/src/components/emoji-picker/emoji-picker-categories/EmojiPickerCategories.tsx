@@ -30,6 +30,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
                             filter: `grayscale(${isSelected ? 0 : 0.75})`,
                             opacity: isSelected ? 1 : 0.5,
                         }}
+                        className="prevent-lose-focus"
                         initial={false}
                         key={name}
                         onClick={() => onSelect(name as Category)}

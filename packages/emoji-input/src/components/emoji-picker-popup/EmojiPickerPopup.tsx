@@ -119,7 +119,12 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onSelect }) => {
                     </StyledMotionEmojiPickerPopupContent>
                 )}
             </AnimatePresence>
-            <Icon icons={['far fa-smile']} onClick={handlePopupIconClick} size={18} />
+            <Icon
+                className="prevent-lose-focus"
+                icons={['far fa-smile']}
+                onClick={handlePopupIconClick}
+                size={18}
+            />
         </StyledEmojiPickerPopup>
     );
 };

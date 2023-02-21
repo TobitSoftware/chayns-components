@@ -35,7 +35,11 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     germanKeywords?.some((keyword) => keyword.includes(lowerSearchString))
                 ) {
                     searchResults.push(
-                        <StyledEmojiPickerEmoji key={name} onClick={() => onSelect(emoji)}>
+                        <StyledEmojiPickerEmoji
+                            className="prevent-lose-focus"
+                            key={name}
+                            onClick={() => onSelect(emoji)}
+                        >
                             {emoji}
                         </StyledEmojiPickerEmoji>
                     );
