@@ -51,31 +51,31 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onSelect }) => {
                 return;
             }
 
-            const { bottom, left, right, top } = event.currentTarget.getBoundingClientRect();
+            const { height, left, top, width } = event.currentTarget.getBoundingClientRect();
 
             const newPosition: PopupPosition = {};
 
             if (top < emojiPickerSize.height + 16) {
-                newPosition.top = bottom + 12;
+                newPosition.top = 12 + height;
 
                 if (left < emojiPickerSize.width + 16) {
-                    newPosition.left = left - 8;
+                    newPosition.left = -10;
 
                     setAlignment(PopupAlignment.BottomRight);
                 } else {
-                    newPosition.left = right - emojiPickerSize.width + 8;
+                    newPosition.left = 8 + width - emojiPickerSize.width;
 
                     setAlignment(PopupAlignment.BottomLeft);
                 }
             } else {
-                newPosition.top = top - emojiPickerSize.height - 12;
+                newPosition.top = -12 - emojiPickerSize.height;
 
                 if (left < emojiPickerSize.width + 16) {
-                    newPosition.left = left - 8;
+                    newPosition.left = -10;
 
                     setAlignment(PopupAlignment.TopRight);
                 } else {
-                    newPosition.left = right - emojiPickerSize.width + 8;
+                    newPosition.left = 8 + width - emojiPickerSize.width;
 
                     setAlignment(PopupAlignment.TopLeft);
                 }
@@ -111,6 +111,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onSelect }) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: exitAndInitialY }}
                         initial={{ opacity: 0, y: exitAndInitialY }}
+                        key="emojiPickerPopupContent"
                         ref={contentRef}
                         style={position}
                         transition={{ type: 'tween' }}

@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../constants/alignment';
 
-export const StyledEmojiPickerPopup = styled.div``;
+export const StyledEmojiPickerPopup = styled.div`
+    position: relative;
+`;
 
 type StyledMotionEmojiPickerPopupContentProps = WithTheme<{
     alignment: PopupAlignment;
