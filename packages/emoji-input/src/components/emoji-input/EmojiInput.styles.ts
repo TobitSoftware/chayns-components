@@ -30,6 +30,7 @@ type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
+    word-break: break-word;
 
     ${() => {
         if (getIsMobile()) {
