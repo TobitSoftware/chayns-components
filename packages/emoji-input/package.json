@@ -27,10 +27,9 @@
         "url": "git+https://github.com/TobitSoftware/chayns-components.git"
     },
     "scripts": {
-        "build": "npm run build:js && npm run build:types && npm run copy:emojis",
-        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build": "npm run build:js && npm run build:types",
+        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
         "build:types": "tsc",
-        "copy:emojis": "copy \"src/constants/emoji-de-DE.json\" \"lib/constants/emoji-de-DE.json\"",
         "prepublishOnly": "npm run build"
     },
     "bugs": {
@@ -47,7 +46,6 @@
         "@types/styled-components": "^5.1.26",
         "@types/uuid": "^9.0.0",
         "babel-loader": "^8.3.0",
-        "copy": "^0.3.2",
         "lerna": "^6.5.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
