@@ -30,7 +30,7 @@
         "build": "npm run build:js && npm run build:types && npm run copy:emojis",
         "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:types": "tsc",
-        "copy:emojis": "copy \"src\\constants\\emoji-de-DE.json\" \"lib\\constants\\emoji-de-DE.json\"",
+        "copy:emojis": "copy \"src/constants/emoji-de-DE.json\" \"lib/constants/emoji-de-DE.json\"",
         "prepublishOnly": "npm run build"
     },
     "bugs": {
