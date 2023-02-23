@@ -7,6 +7,10 @@ import EmojiPickerEmojis from './emoji-picker-emojis/EmojiPickerEmojis';
 import { StyledEmojiPicker } from './EmojiPicker.styles';
 
 export type EmojiPickerProps = {
+    /**
+     * Function executed when an emoji is selected in the popup
+     * @param {string} emoji - Emoji that was selected
+     */
     onSelect: (emoji: string) => void;
 };
 const EmojiPicker: FC<EmojiPickerProps> = ({ onSelect }) => {

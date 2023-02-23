@@ -10,6 +10,15 @@ import {
 } from './EmojiPickerPopup.styles';
 
 export type EmojiPickerPopupProps = {
+    /**
+     * Function that is executed when the visibility of the popup changes.
+     * @param {boolean} isVisible - Whether the popup is visible or not
+     */
+    onPopupVisibilityChange?: (isVisible: boolean) => void;
+    /**
+     * Function executed when an emoji is selected in the popup
+     * @param {string} emoji - Emoji that was selected
+     */
     onSelect: (emoji: string) => void;
 };
 
@@ -20,7 +29,7 @@ export type PopupPosition = {
     top?: number;
 };
 
-const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onSelect }) => {
+const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onPopupVisibilityChange, onSelect }) => {
     const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [position, setPosition] = useState({} as PopupPosition);
@@ -98,6 +107,12 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onSelect }) => {
             window.removeEventListener('blur', handleHide);
         };
     }, [handleDocumentClick, handleHide, shouldShowPopup]);
+
+    useEffect(() => {
+        if (typeof onPopupVisibilityChange === 'function') {
+            onPopupVisibilityChange(shouldShowPopup);
+        }
+    }, [onPopupVisibilityChange, shouldShowPopup]);
 
     const exitAndInitialY =
         alignment === PopupAlignment.TopLeft || alignment === PopupAlignment.TopRight ? -16 : 16;

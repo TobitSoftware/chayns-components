@@ -14,6 +14,11 @@ export type EmojiInputProps = {
      */
     onInput?: ChangeEventHandler<HTMLDivElement>;
     /**
+     * Function that is executed when the visibility of the popup changes.
+     * @param {boolean} isVisible - Whether the popup is visible or not
+     */
+    onPopupVisibilityChange?: (isVisible: boolean) => void;
+    /**
      * Placeholder for the input field
      */
     placeholder?: string;
@@ -23,7 +28,13 @@ export type EmojiInputProps = {
     value: string;
 };
 
-const EmojiInput: FC<EmojiInputProps> = ({ isDisabled, onInput, placeholder, value }) => {
+const EmojiInput: FC<EmojiInputProps> = ({
+    isDisabled,
+    onInput,
+    onPopupVisibilityChange,
+    placeholder,
+    value,
+}) => {
     const editorRef = useRef<HTMLDivElement>(null);
 
     /**
