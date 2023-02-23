@@ -128,13 +128,19 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
             let offset = endOffset + emoji.length - rangeDistance;
 
-            const { anchorNode } = selection;
+            let { anchorNode } = selection;
 
             if (anchorNode.nodeValue) {
                 anchorNode.nodeValue =
                     anchorNode.nodeValue.substring(0, startOffset) +
                     emoji +
                     anchorNode.nodeValue.substring(endOffset);
+            } else if (anchorNode === editorRef.current) {
+                const newTextNode = document.createTextNode(emoji);
+
+                editorRef.current.appendChild(newTextNode);
+
+                anchorNode = newTextNode;
             }
 
             const newRange = document.createRange();
