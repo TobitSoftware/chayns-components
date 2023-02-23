@@ -77,10 +77,14 @@ const Typewriter: FC<TypewriterProps> = ({ children, speed = TypewriterSpeed.Med
 
     return (
         <StyledTypewriter onClick={handleClick}>
-            <StyledTypewriterText
-                dangerouslySetInnerHTML={{ __html: shownText }}
-                isAnimatingText={isAnimatingText}
-            />
+            {isAnimatingText ? (
+                <StyledTypewriterText
+                    dangerouslySetInnerHTML={{ __html: shownText }}
+                    isAnimatingText
+                />
+            ) : (
+                <StyledTypewriterText>{children}</StyledTypewriterText>
+            )}
             {isAnimatingText && (
                 <StyledTypewriterPseudoText dangerouslySetInnerHTML={{ __html: textContent }} />
             )}

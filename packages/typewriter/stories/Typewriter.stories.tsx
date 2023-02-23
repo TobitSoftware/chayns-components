@@ -28,22 +28,11 @@ WithHTMLText.args = {
 WithCustomElements.args = {
     children: (
         <>
-            Das ist ein Test!
-            <img
-                className="emojione"
-                alt="👍"
-                src="https://api.chayns-static.space/emojione/4.0/png/64/1f44d.png"
-                style={{
-                    display: 'inline-block',
-                    fontSize: 'inherit',
-                    height: '3ex',
-                    lineHeight: 'normal',
-                    margin: '-.2ex 0.15em .2ex',
-                    minHeight: '15px',
-                    minWidth: '15px',
-                    verticalAlign: 'middle',
-                }}
-            />
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            <button onClick={() => alert('Der Button funktioniert')}>Button</button>
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+            sea takimata sanctus est.
         </>
     ),
 };

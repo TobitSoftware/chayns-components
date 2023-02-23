@@ -18,7 +18,7 @@ export const StyledTypewriterPseudoText = styled.span`
 `;
 
 type StyledTypewriterTextProps = WithTheme<{
-    isAnimatingText: boolean;
+    isAnimatingText?: boolean;
 }>;
 
 export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
