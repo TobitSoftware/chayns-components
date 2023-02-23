@@ -1,8 +1,22 @@
-import React, { ChangeEvent, ChangeEventHandler, FC, useCallback, useEffect, useRef } from 'react';
+import React, {
+    ChangeEvent,
+    ChangeEventHandler,
+    FC,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { convertAsciiToUnicode } from '../../utils/emoji';
+import { getIsMobile } from '../../utils/environment';
 import { restoreSelection, saveSelection } from '../../utils/selection';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
-import { StyledEmojiInput, StyledEmojiInputEditor } from './EmojiInput.styles';
+import {
+    StyledEmojiInput,
+    StyledEmojiInputContent,
+    StyledEmojiInputEditor,
+} from './EmojiInput.styles';
 
 export type EmojiInputProps = {
     /**
@@ -23,6 +37,10 @@ export type EmojiInputProps = {
      */
     placeholder?: string;
     /**
+     * Element that is rendered inside the EmojiInput on the right side.
+     */
+    rightElement?: ReactNode;
+    /**
      * Value of the input field
      */
     value: string;
@@ -33,8 +51,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
     onInput,
     onPopupVisibilityChange,
     placeholder,
+    rightElement,
     value,
 }) => {
+    const [isMobile] = useState(getIsMobile());
+
     const editorRef = useRef<HTMLDivElement>(null);
 
     /**
@@ -170,13 +191,21 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     return (
         <StyledEmojiInput isDisabled={isDisabled}>
-            <StyledEmojiInputEditor
-                contentEditable={!isDisabled}
-                onInput={handleInput}
-                placeholder={placeholder}
-                ref={editorRef}
-            />
-            <EmojiPickerPopup onSelect={handlePopupSelect} />
+            <StyledEmojiInputContent>
+                <StyledEmojiInputEditor
+                    contentEditable={!isDisabled}
+                    onInput={handleInput}
+                    placeholder={placeholder}
+                    ref={editorRef}
+                />
+                {!isMobile && (
+                    <EmojiPickerPopup
+                        onSelect={handlePopupSelect}
+                        onPopupVisibilityChange={onPopupVisibilityChange}
+                    />
+                )}
+            </StyledEmojiInputContent>
+            {rightElement}
         </StyledEmojiInput>
     );
 };
