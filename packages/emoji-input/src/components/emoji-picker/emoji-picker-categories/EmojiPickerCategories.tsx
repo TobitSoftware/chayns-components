@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import unicodeEmoji from 'unicode-emoji-json/data-by-group.json';
+import { CATEGORY_EMOJIS } from '../../../constants/categories';
 import type { Category } from '../../../types/category';
 import {
     StyledEmojiPickerCategories,
@@ -21,7 +22,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 
     const categories = useMemo(
         () =>
-            unicodeEmoji.map(({ emojis, slug }) => {
+            unicodeEmoji.map(({ slug }) => {
                 const isSelected = selectedCategory === slug && !isSearchStringGiven;
 
                 return (
@@ -36,7 +37,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
                         onClick={() => onSelect(slug as Category)}
                         transition={{ duration: 0.2 }}
                     >
-                        {emojis[0]?.emoji}
+                        {CATEGORY_EMOJIS[slug as Category]}
                     </StyledMotionEmojiPickerCategory>
                 );
             }),
