@@ -1,10 +1,10 @@
 export type Category =
-    | 'Smileys & Emotion'
-    | 'People & Body'
-    | 'Animals & Nature'
-    | 'Food & Drink'
-    | 'Travel & Places'
-    | 'Activities'
-    | 'Objects'
-    | 'Symbols'
-    | 'Flags';
+    | 'smileys_emotion'
+    | 'people_body'
+    | 'animals_nature'
+    | 'food_drink'
+    | 'travel_places'
+    | 'activities'
+    | 'objects'
+    | 'symbols'
+    | 'flags';

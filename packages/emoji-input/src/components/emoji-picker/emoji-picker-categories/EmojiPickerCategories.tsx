@@ -21,8 +21,8 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 
     const categories = useMemo(
         () =>
-            Object.entries(unicodeEmoji).map(([name, items]) => {
-                const isSelected = selectedCategory === name && !isSearchStringGiven;
+            unicodeEmoji.map(({ emojis, slug }) => {
+                const isSelected = selectedCategory === slug && !isSearchStringGiven;
 
                 return (
                     <StyledMotionEmojiPickerCategory
@@ -32,11 +32,11 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
                         }}
                         className="prevent-lose-focus"
                         initial={false}
-                        key={name}
-                        onClick={() => onSelect(name as Category)}
+                        key={slug}
+                        onClick={() => onSelect(slug as Category)}
                         transition={{ duration: 0.2 }}
                     >
-                        {items[0]?.emoji}
+                        {emojis[0]?.emoji}
                     </StyledMotionEmojiPickerCategory>
                 );
             }),

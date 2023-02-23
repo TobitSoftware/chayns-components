@@ -49,11 +49,13 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
             return searchResults;
         }
 
-        return emojiCategories[selectedCategory].map(({ emoji, name }) => (
-            <StyledEmojiPickerEmoji key={name} onClick={() => onSelect(emoji)}>
-                {emoji}
-            </StyledEmojiPickerEmoji>
-        ));
+        return emojiCategories
+            .find(({ slug }) => slug === selectedCategory)
+            ?.emojis.map(({ emoji, name }) => (
+                <StyledEmojiPickerEmoji key={name} onClick={() => onSelect(emoji)}>
+                    {emoji}
+                </StyledEmojiPickerEmoji>
+            ));
     }, [onSelect, searchString, selectedCategory]);
 
     return <StyledEmojiPickerEmojis>{emojis}</StyledEmojiPickerEmojis>;
