@@ -39,10 +39,31 @@ const InputBox = React.forwardRef((props, ref) => {
     const [rect, setRect] = useState(null);
 
     useLayoutEffect(() => {
-        if (wrapperRef.current) {
-            setRect(wrapperRef.current.getBoundingClientRect());
+        if (wrapperRef.current && !isHidden) {
+            const wrapperRect = wrapperRef.current.getBoundingClientRect();
+
+            const parentElement = !isServer() ? parent || document.body : null;
+            const parentRect = parentElement?.getBoundingClientRect();
+            const isParentRelative = parentElement
+                ? ['absolute', 'relative'].includes(
+                      getComputedStyle(parentElement).position
+                  ) || parentElement === document.body
+                : false;
+
+            setRect({
+                top:
+                    wrapperRect.top -
+                    (isParentRelative ? parentRect?.top ?? 0 : 0),
+                bottom:
+                    wrapperRect.bottom -
+                    (isParentRelative ? parentRect?.top ?? 0 : 0),
+                left:
+                    wrapperRect.left -
+                    (isParentRelative ? parentRect?.left ?? 0 : 0),
+                width: wrapperRect.width,
+            });
         }
-    }, []);
+    }, [isHidden, parent]);
 
     useImperativeHandle(
         ref,
@@ -132,23 +153,11 @@ const InputBox = React.forwardRef((props, ref) => {
         return null;
     }
 
-    const parentElement = !isServer() ? parent || document.body : null;
-    const parentRect = parentElement?.getBoundingClientRect();
-    const isParentRelative = parentElement
-        ? ['absolute', 'relative'].includes(
-              getComputedStyle(parentElement).position
-          ) || parentElement === document.body
-        : false;
-
     const positionStyles = rect
         ? {
-              width: `${rect.width}px`,
-              top: `${
-                  rect.bottom - (isParentRelative ? parentRect?.top ?? 0 : 0)
-              }px`,
-              left: `${
-                  rect.left - (isParentRelative ? parentRect?.left ?? 0 : 0)
-              }px`,
+              width: rect.width,
+              top: rect.bottom,
+              left: rect.left,
           }
         : null;
 
