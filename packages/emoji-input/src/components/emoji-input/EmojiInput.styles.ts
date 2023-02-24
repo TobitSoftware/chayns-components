@@ -22,6 +22,7 @@ type StyledEmojiInputContentProps = {
 };
 
 export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
+    align-items: end;
     border: 1px solid rgba(160, 160, 160, 0.3);
     border-radius: 3px;
     display: flex;
