@@ -8,7 +8,6 @@ type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'isDisabled'>>;
 export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     align-items: center;
     background-color: ${({ theme }: StyledEmojiInputProps) => theme['100']};
-    border: 1px solid rgba(160, 160, 160, 0.3);
     border-radius: 3px;
     display: flex;
     min-height: 42px;
@@ -18,11 +17,25 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     transition: opacity 0.3s ease;
 `;
 
-export const StyledEmojiInputContent = styled.div`
+type StyledEmojiInputContentProps = {
+    isRightElementGiven: boolean;
+};
+
+export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
+    border: 1px solid rgba(160, 160, 160, 0.3);
+    border-radius: 3px;
     display: flex;
     flex: 1 1 auto;
     gap: 10px;
     padding: 8px 10px;
+
+    ${({ isRightElementGiven }) =>
+        isRightElementGiven &&
+        css`
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right-width: 0;
+        `}
 `;
 
 type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
@@ -48,4 +61,11 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
         content: '${({ placeholder }) => placeholder}';
         color: ${({ theme }: StyledEmojiInputEditorProps) => theme['006']};
     }
+`;
+
+export const StyledEmojiInputRightWrapper = styled.div`
+    align-self: stretch;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    overflow: hidden;
 `;

@@ -17,6 +17,7 @@ import {
     StyledEmojiInput,
     StyledEmojiInputContent,
     StyledEmojiInputEditor,
+    StyledEmojiInputRightWrapper,
 } from './EmojiInput.styles';
 
 export type EmojiInputProps = {
@@ -205,7 +206,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     return (
         <StyledEmojiInput isDisabled={isDisabled}>
-            <StyledEmojiInputContent>
+            <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
                     onInput={handleInput}
@@ -220,7 +221,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     />
                 )}
             </StyledEmojiInputContent>
-            {rightElement}
+            {rightElement && (
+                <StyledEmojiInputRightWrapper>{rightElement}</StyledEmojiInputRightWrapper>
+            )}
         </StyledEmojiInput>
     );
 };
