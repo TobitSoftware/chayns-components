@@ -1,6 +1,9 @@
+import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
 
-export const StyledEmojiPickerEmojis = styled.div`
+type StyledEmojiPickerEmojisProps = WithTheme<unknown>;
+
+export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
     display: grid;
     flex: 1 1 auto;
     grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
@@ -23,14 +26,21 @@ export const StyledEmojiPickerEmojis = styled.div`
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(
+            ${({ theme }: StyledEmojiPickerEmojisProps) => theme['text-rgb']},
+            0.15
+        );
         border-radius: 20px;
     }
 
     // Scrollbar styles for Firefox. The above styles are not supported in Firefox, these styles are
     // only supported in Firefox:
     * {
-        scrollbar-color: #80808080 transparent;
+        scrollbar-color: rgba(
+                ${({ theme }: StyledEmojiPickerEmojisProps) => theme['text-rgb']},
+                0.15
+            )
+            transparent;
         scrollbar-width: thin;
     }
 `;

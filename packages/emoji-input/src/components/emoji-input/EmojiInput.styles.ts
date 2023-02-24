@@ -80,14 +80,21 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(
+            ${({ theme }: StyledEmojiInputEditorProps) => theme['text-rgb']},
+            0.15
+        );
         border-radius: 20px;
     }
 
     // Scrollbar styles for Firefox. The above styles are not supported in Firefox, these styles are
     // only supported in Firefox:
     * {
-        scrollbar-color: #80808080 transparent;
+        scrollbar-color: rgba(
+                ${({ theme }: StyledEmojiInputEditorProps) => theme['text-rgb']},
+                0.15
+            )
+            transparent;
         scrollbar-width: thin;
     }
 `;
