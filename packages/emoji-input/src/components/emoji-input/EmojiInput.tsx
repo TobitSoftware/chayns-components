@@ -25,7 +25,7 @@ export type EmojiInputProps = {
     /**
      * Disables the input so that it cannot be changed anymore
      */
-    isDisabled: boolean;
+    isDisabled?: boolean;
     /**
      * Function that is executed when the text of the input changes
      */
