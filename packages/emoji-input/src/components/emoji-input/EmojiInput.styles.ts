@@ -44,6 +44,8 @@ type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
+    max-height: 210px;
+    overflow-y: scroll;
     word-break: break-word;
 
     ${() => {
@@ -61,6 +63,32 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     &:empty:not(:focus):before {
         content: '${({ placeholder }) => placeholder}';
         color: ${({ theme }: StyledEmojiInputEditorProps) => theme['006']};
+    }
+
+    // Styles for custom scrollbar
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-button {
+        background-color: transparent;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 20px;
+    }
+
+    // Scrollbar styles for Firefox. The above styles are not supported in Firefox, these styles are
+    // only supported in Firefox:
+    * {
+        scrollbar-color: #80808080 transparent;
+        scrollbar-width: thin;
     }
 `;
 
