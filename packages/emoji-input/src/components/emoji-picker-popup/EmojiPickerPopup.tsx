@@ -11,6 +11,12 @@ import {
 
 export type EmojiPickerPopupProps = {
     /**
+     * Sets the alignment of the popup to a fixed value. If this value is not set, the component
+     * calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this
+     * value.
+     */
+    alignment?: PopupAlignment;
+    /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
@@ -29,8 +35,14 @@ export type PopupPosition = {
     top?: number;
 };
 
-const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onPopupVisibilityChange, onSelect }) => {
-    const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
+const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
+    alignment,
+    onPopupVisibilityChange,
+    onSelect,
+}) => {
+    const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
+        PopupAlignment.TopLeft
+    );
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [position, setPosition] = useState({} as PopupPosition);
 
@@ -62,38 +74,49 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onPopupVisibilityChange, 
 
             const { height, left, top, width } = event.currentTarget.getBoundingClientRect();
 
-            const newPosition: PopupPosition = {};
+            let newInternalAlignment: PopupAlignment | undefined = alignment;
 
-            if (top < emojiPickerSize.height + 16) {
-                newPosition.top = 12 + height;
-
-                if (left < emojiPickerSize.width + 16) {
-                    newPosition.left = -10;
-
-                    setAlignment(PopupAlignment.BottomRight);
+            if (!newInternalAlignment) {
+                if (top < emojiPickerSize.height + 16) {
+                    if (left < emojiPickerSize.width + 16) {
+                        newInternalAlignment = PopupAlignment.BottomRight;
+                    } else {
+                        newInternalAlignment = PopupAlignment.BottomLeft;
+                    }
+                } else if (left < emojiPickerSize.width + 16) {
+                    newInternalAlignment = PopupAlignment.TopRight;
                 } else {
-                    newPosition.left = 8 + width - emojiPickerSize.width;
-
-                    setAlignment(PopupAlignment.BottomLeft);
-                }
-            } else {
-                newPosition.top = -12 - emojiPickerSize.height;
-
-                if (left < emojiPickerSize.width + 16) {
-                    newPosition.left = -10;
-
-                    setAlignment(PopupAlignment.TopRight);
-                } else {
-                    newPosition.left = 8 + width - emojiPickerSize.width;
-
-                    setAlignment(PopupAlignment.TopLeft);
+                    newInternalAlignment = PopupAlignment.TopLeft;
                 }
             }
 
+            let newPosition: PopupPosition = {};
+
+            switch (newInternalAlignment) {
+                case PopupAlignment.BottomLeft:
+                    newPosition = { left: 8 + width - emojiPickerSize.width, top: 12 + height };
+                    break;
+                case PopupAlignment.BottomRight:
+                    newPosition = { left: -10, top: 12 + height };
+                    break;
+                case PopupAlignment.TopLeft:
+                    newPosition = {
+                        left: 8 + width - emojiPickerSize.width,
+                        top: -12 - emojiPickerSize.height,
+                    };
+                    break;
+                case PopupAlignment.TopRight:
+                    newPosition = { left: -10, top: -12 - emojiPickerSize.height };
+                    break;
+                default:
+                    break;
+            }
+
+            setInternalAlignment(newInternalAlignment);
             setPosition(newPosition);
             setShouldShowPopup(true);
         },
-        [shouldShowPopup]
+        [alignment, shouldShowPopup]
     );
 
     useEffect(() => {
@@ -115,14 +138,17 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({ onPopupVisibilityChange, 
     }, [onPopupVisibilityChange, shouldShowPopup]);
 
     const exitAndInitialY =
-        alignment === PopupAlignment.TopLeft || alignment === PopupAlignment.TopRight ? -16 : 16;
+        internalAlignment === PopupAlignment.TopLeft ||
+        internalAlignment === PopupAlignment.TopRight
+            ? -16
+            : 16;
 
     return (
         <StyledEmojiPickerPopup>
             <AnimatePresence initial={false}>
                 {shouldShowPopup && (
                     <StyledMotionEmojiPickerPopupContent
-                        alignment={alignment}
+                        alignment={internalAlignment}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: exitAndInitialY }}
                         initial={{ opacity: 0, y: exitAndInitialY }}

@@ -8,6 +8,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import type { PopupAlignment } from '../../constants/alignment';
 import { convertAsciiToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { restoreSelection, saveSelection } from '../../utils/selection';
@@ -37,6 +38,12 @@ export type EmojiInputProps = {
      */
     placeholder?: string;
     /**
+     * Sets the alignment of the popup to a fixed value. If this value is not set, the component
+     * calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this
+     * value.
+     */
+    popupAlignment?: PopupAlignment;
+    /**
      * Element that is rendered inside the EmojiInput on the right side.
      */
     rightElement?: ReactNode;
@@ -51,6 +58,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     onInput,
     onPopupVisibilityChange,
     placeholder,
+    popupAlignment,
     rightElement,
     value,
 }) => {
@@ -206,6 +214,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 />
                 {!isMobile && (
                     <EmojiPickerPopup
+                        alignment={popupAlignment}
                         onSelect={handlePopupSelect}
                         onPopupVisibilityChange={onPopupVisibilityChange}
                     />
