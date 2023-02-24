@@ -76,7 +76,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
 
             let newInternalAlignment: PopupAlignment | undefined = alignment;
 
-            if (!newInternalAlignment) {
+            if (typeof newInternalAlignment !== 'number') {
                 if (top < emojiPickerSize.height + 16) {
                     if (left < emojiPickerSize.width + 16) {
                         newInternalAlignment = PopupAlignment.BottomRight;

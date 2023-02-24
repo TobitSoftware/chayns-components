@@ -67,5 +67,6 @@ export const StyledEmojiInputRightWrapper = styled.div`
     align-self: stretch;
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
+    flex: 0 0 auto;
     overflow: hidden;
 `;
