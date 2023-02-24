@@ -47,7 +47,7 @@ export const decorators = [
                         clientX: arg.clientX,
                         clientY: arg.clientY,
                         ctrlKey: arg.ctrlKey,
-                        innerHTML: arg.type === 'input' ? arg.target.innerHTML : undefined,
+                        innerText: arg.type === 'input' ? arg.target.innerText : undefined,
                         metaKey: arg.metaKey,
                         movementX: arg.movementX,
                         movementY: arg.movementY,

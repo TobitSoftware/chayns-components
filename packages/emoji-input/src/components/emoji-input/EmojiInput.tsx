@@ -86,12 +86,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
             return;
         }
 
-        const newHtml = convertAsciiToUnicode(text);
+        const newInnerText = convertAsciiToUnicode(text);
 
-        if (newHtml !== editorRef.current.innerHTML) {
+        if (newInnerText !== editorRef.current.innerText) {
             saveSelection(editorRef.current);
 
-            editorRef.current.innerHTML = newHtml;
+            editorRef.current.innerText = newInnerText;
 
             restoreSelection(editorRef.current);
         }
@@ -107,7 +107,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 return;
             }
 
-            handleUpdateText(editorRef.current.innerHTML);
+            handleUpdateText(editorRef.current.innerText);
 
             if (typeof onInput === 'function') {
                 onInput(event);
@@ -170,7 +170,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
             selection.removeAllRanges();
             selection.addRange(newRange);
         } else {
-            editorRef.current.innerHTML += emoji;
+            editorRef.current.innerText += emoji;
         }
 
         const event = new Event('input', { bubbles: true });
