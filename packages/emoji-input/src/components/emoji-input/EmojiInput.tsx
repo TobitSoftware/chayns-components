@@ -2,6 +2,7 @@ import React, {
     ChangeEvent,
     ChangeEventHandler,
     FC,
+    KeyboardEventHandler,
     ReactNode,
     useCallback,
     useEffect,
@@ -30,6 +31,10 @@ export type EmojiInputProps = {
      */
     onInput?: ChangeEventHandler<HTMLDivElement>;
     /**
+     * Function that is executed when a key is pressed down.
+     */
+    onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
+    /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
@@ -57,6 +62,7 @@ export type EmojiInputProps = {
 const EmojiInput: FC<EmojiInputProps> = ({
     isDisabled,
     onInput,
+    onKeyDown,
     onPopupVisibilityChange,
     placeholder,
     popupAlignment,
@@ -210,6 +216,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
                     onInput={handleInput}
+                    onKeyDown={onKeyDown}
                     placeholder={placeholder}
                     ref={editorRef}
                 />
