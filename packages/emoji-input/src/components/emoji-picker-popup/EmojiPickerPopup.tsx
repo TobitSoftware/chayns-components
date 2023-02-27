@@ -11,6 +11,10 @@ import {
 
 export type EmojiPickerPopupProps = {
     /**
+     * Access token of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    accessToken?: string;
+    /**
      * Sets the alignment of the popup to a fixed value. If this value is not set, the component
      * calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this
      * value.
@@ -21,6 +25,10 @@ export type EmojiPickerPopupProps = {
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
     onPopupVisibilityChange?: (isVisible: boolean) => void;
+    /**
+     * Person id of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    personId?: string;
     /**
      * Function executed when an emoji is selected in the popup
      * @param {string} emoji - Emoji that was selected
@@ -36,9 +44,11 @@ export type PopupPosition = {
 };
 
 const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
+    accessToken,
     alignment,
     onPopupVisibilityChange,
     onSelect,
+    personId,
 }) => {
     const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
         PopupAlignment.TopLeft
@@ -157,7 +167,11 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                         style={position}
                         transition={{ type: 'tween' }}
                     >
-                        <EmojiPicker onSelect={onSelect} />
+                        <EmojiPicker
+                            accessToken={accessToken}
+                            onSelect={onSelect}
+                            personId={personId}
+                        />
                     </StyledMotionEmojiPickerPopupContent>
                 )}
             </AnimatePresence>

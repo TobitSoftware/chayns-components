@@ -20,29 +20,31 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 }) => {
     const isSearchStringGiven = searchString.trim() !== '';
 
-    const categories = useMemo(
-        () =>
-            unicodeEmoji.map(({ slug }) => {
-                const isSelected = selectedCategory === slug && !isSearchStringGiven;
+    const categories = useMemo(() => {
+        const categorySlugs = unicodeEmoji.map(({ slug }) => slug);
 
-                return (
-                    <StyledMotionEmojiPickerCategory
-                        animate={{
-                            filter: `grayscale(${isSelected ? 0 : 0.75})`,
-                            opacity: isSelected ? 1 : 0.5,
-                        }}
-                        className="prevent-lose-focus"
-                        initial={false}
-                        key={slug}
-                        onClick={() => onSelect(slug as Category)}
-                        transition={{ duration: 0.2 }}
-                    >
-                        {CATEGORY_EMOJIS[slug as Category]}
-                    </StyledMotionEmojiPickerCategory>
-                );
-            }),
-        [isSearchStringGiven, onSelect, selectedCategory]
-    );
+        categorySlugs.unshift('history');
+
+        return categorySlugs.map((slug) => {
+            const isSelected = selectedCategory === slug && !isSearchStringGiven;
+
+            return (
+                <StyledMotionEmojiPickerCategory
+                    animate={{
+                        filter: `grayscale(${isSelected ? 0 : 0.75})`,
+                        opacity: isSelected ? 1 : 0.5,
+                    }}
+                    className="prevent-lose-focus"
+                    initial={false}
+                    key={slug}
+                    onClick={() => onSelect(slug as Category)}
+                    transition={{ duration: 0.2 }}
+                >
+                    {CATEGORY_EMOJIS[slug as Category]}
+                </StyledMotionEmojiPickerCategory>
+            );
+        });
+    }, [isSearchStringGiven, onSelect, selectedCategory]);
 
     return <StyledEmojiPickerCategories>{categories}</StyledEmojiPickerCategories>;
 };

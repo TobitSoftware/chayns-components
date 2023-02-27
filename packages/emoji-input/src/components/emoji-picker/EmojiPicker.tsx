@@ -8,12 +8,20 @@ import { StyledEmojiPicker } from './EmojiPicker.styles';
 
 export type EmojiPickerProps = {
     /**
+     * Access token of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    accessToken?: string;
+    /**
      * Function executed when an emoji is selected in the popup
      * @param {string} emoji - Emoji that was selected
      */
     onSelect: (emoji: string) => void;
+    /**
+     * Person id of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    personId?: string;
 };
-const EmojiPicker: FC<EmojiPickerProps> = ({ onSelect }) => {
+const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) => {
     const [searchString, setSearchString] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(emojiCategories[0]?.slug as Category);
 
@@ -30,7 +38,9 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ onSelect }) => {
         <StyledEmojiPicker>
             <Input onChange={handleSearchChange} placeholder="Suchen" value={searchString} />
             <EmojiPickerEmojis
+                accessToken={accessToken}
                 onSelect={onSelect}
+                personId={personId}
                 searchString={searchString}
                 selectedCategory={selectedCategory}
             />

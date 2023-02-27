@@ -23,6 +23,10 @@ import {
 
 export type EmojiInputProps = {
     /**
+     * Access token of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    accessToken?: string;
+    /**
      * Disables the input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
@@ -39,6 +43,10 @@ export type EmojiInputProps = {
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
     onPopupVisibilityChange?: (isVisible: boolean) => void;
+    /**
+     * Person id of the logged-in user. Is needed to load and save the history of the emojis.
+     */
+    personId?: string;
     /**
      * Placeholder for the input field
      */
@@ -60,10 +68,12 @@ export type EmojiInputProps = {
 };
 
 const EmojiInput: FC<EmojiInputProps> = ({
+    accessToken,
     isDisabled,
     onInput,
     onKeyDown,
     onPopupVisibilityChange,
+    personId,
     placeholder,
     popupAlignment,
     rightElement,
@@ -222,9 +232,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 />
                 {!isMobile && (
                     <EmojiPickerPopup
+                        accessToken={accessToken}
                         alignment={popupAlignment}
                         onSelect={handlePopupSelect}
                         onPopupVisibilityChange={onPopupVisibilityChange}
+                        personId={personId}
                     />
                 )}
             </StyledEmojiInputContent>
