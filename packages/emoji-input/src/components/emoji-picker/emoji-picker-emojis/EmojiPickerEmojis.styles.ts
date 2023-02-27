@@ -10,6 +10,7 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
     grid-template-rows: min-content;
     overflow-y: scroll;
     padding: 10px 0;
+    position: relative;
 
     // Styles for custom scrollbar
     ::-webkit-scrollbar {
@@ -43,15 +44,4 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
             transparent;
         scrollbar-width: thin;
     }
-`;
-
-export const StyledEmojiPickerEmoji = styled.div`
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    font-family: 'Noto Color Emoji', 'Roboto Regular', 'Tahoma', serif;
-    font-size: 32px;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
 `;

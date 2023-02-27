@@ -1,3 +1,5 @@
+import emojiList from 'unicode-emoji-json/data-by-emoji.json';
+
 const asciiList: { [key: string]: string } = {
     '*\\0/*': '1f646',
     '*\\O/*': '1f646',
@@ -203,3 +205,19 @@ export const convertAsciiToUnicode = (text: string): string => {
         return (m2 as string) + convert(unicode);
     });
 };
+
+export const addSkinToneToEmoji = (emoji: string, skinTone: string): string =>
+    emoji
+        .split('\u{200D}')
+        .map((rawEmoji) => {
+            const parts = [rawEmoji.replace(/\ufe0f/, '')];
+
+            // @ts-expect-error: Difficult to type external json file
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            if (emojiList[rawEmoji]?.skin_tone_support) {
+                parts.push(skinTone);
+            }
+
+            return parts.join('');
+        })
+        .join('\u{200D}');

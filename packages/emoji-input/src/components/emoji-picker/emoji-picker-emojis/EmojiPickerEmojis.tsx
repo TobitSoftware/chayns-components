@@ -4,7 +4,8 @@ import emojiList from 'unicode-emoji-json/data-by-emoji.json';
 import emojiCategories from 'unicode-emoji-json/data-by-group.json';
 import germanEmojiLib from '../../../constants/emoji-de-DE.json';
 import type { Category } from '../../../types/category';
-import { StyledEmojiPickerEmoji, StyledEmojiPickerEmojis } from './EmojiPickerEmojis.styles';
+import Emoji from './emoji/Emoji';
+import { StyledEmojiPickerEmojis } from './EmojiPickerEmojis.styles';
 
 export type EmojiPickerEmojisProps = {
     onSelect: (emoji: string) => void;
@@ -23,7 +24,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
             const searchResults: JSX.Element[] = [];
 
-            Object.entries(emojiList).forEach(([emoji, { name }]) => {
+            Object.entries(emojiList).forEach(([emoji, { name, skin_tone_support }]) => {
                 // @ts-expect-error: Type is correct here
                 const keywords = emojiLib[emoji] as string[] | undefined;
                 // @ts-expect-error: Type is correct here
@@ -35,13 +36,12 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     germanKeywords?.some((keyword) => keyword.includes(lowerSearchString))
                 ) {
                     searchResults.push(
-                        <StyledEmojiPickerEmoji
-                            className="prevent-lose-focus"
+                        <Emoji
+                            emoji={emoji}
+                            isSkinToneSupported={skin_tone_support}
                             key={name}
-                            onClick={() => onSelect(emoji)}
-                        >
-                            {emoji}
-                        </StyledEmojiPickerEmoji>
+                            onSelect={onSelect}
+                        />
                     );
                 }
             });
@@ -51,10 +51,13 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
         return emojiCategories
             .find(({ slug }) => slug === selectedCategory)
-            ?.emojis.map(({ emoji, name }) => (
-                <StyledEmojiPickerEmoji key={name} onClick={() => onSelect(emoji)}>
-                    {emoji}
-                </StyledEmojiPickerEmoji>
+            ?.emojis.map(({ emoji, name, skin_tone_support }) => (
+                <Emoji
+                    emoji={emoji}
+                    isSkinToneSupported={skin_tone_support}
+                    key={name}
+                    onSelect={onSelect}
+                />
             ));
     }, [onSelect, searchString, selectedCategory]);
 
