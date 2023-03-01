@@ -1,16 +1,26 @@
 import type { WithTheme } from '@chayns-components/core';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-type StyledEmojiPickerEmojisProps = WithTheme<unknown>;
+type StyledEmojiPickerEmojisProps = WithTheme<{
+    shouldPreventScroll: boolean;
+    shouldShowNoContentInfo: boolean;
+}>;
 
 export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
-    display: grid;
+    align-items: center;
+    display: ${({ shouldShowNoContentInfo }) => (shouldShowNoContentInfo ? 'flex' : 'grid')};
     flex: 1 1 auto;
     grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
     grid-template-rows: min-content;
-    overflow-y: scroll;
-    padding: 10px 0;
+    overflow-y: ${({ shouldPreventScroll }) => (shouldPreventScroll ? 'hidden' : 'scroll')};
+    padding: 5px 0 5px 5px;
     position: relative;
+
+    ${({ shouldPreventScroll }) =>
+        shouldPreventScroll &&
+        css`
+            padding-right: 5px;
+        `}
 
     // Styles for custom scrollbar
     ::-webkit-scrollbar {
@@ -44,4 +54,11 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
             transparent;
         scrollbar-width: thin;
     }
+`;
+
+export const StyledEmojiPickerEmojisNoContentInfo = styled.div`
+    font-size: 85%;
+    opacity: 0.85;
+    padding: 0 12.5%;
+    text-align: center;
 `;

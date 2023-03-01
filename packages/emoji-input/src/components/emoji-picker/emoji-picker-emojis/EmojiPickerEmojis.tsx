@@ -1,12 +1,15 @@
 import emojiLib from 'emojilib';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import emojiList from 'unicode-emoji-json/data-by-emoji.json';
 import emojiCategories from 'unicode-emoji-json/data-by-group.json';
 import germanEmojiLib from '../../../constants/emoji-de-DE.json';
 import { useEmojiHistory } from '../../../hooks/emojiHistory';
 import type { Category } from '../../../types/category';
 import Emoji from './emoji/Emoji';
-import { StyledEmojiPickerEmojis } from './EmojiPickerEmojis.styles';
+import {
+    StyledEmojiPickerEmojis,
+    StyledEmojiPickerEmojisNoContentInfo,
+} from './EmojiPickerEmojis.styles';
 
 export type EmojiPickerEmojisProps = {
     accessToken?: string;
@@ -23,6 +26,8 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     searchString,
     selectedCategory,
 }) => {
+    const [shouldPreventScroll, setShouldPreventScroll] = useState(false);
+
     const { addOrUpdateEmojiInHistory, historyEmojis } = useEmojiHistory({
         accessToken,
         personId,
@@ -68,6 +73,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                             emoji={emoji}
                             isSkinToneSupported={skin_tone_support}
                             key={name}
+                            onPopupVisibilityChange={setShouldPreventScroll}
                             onSelect={(e) => handleSelect({ emoji: e, name, skin_tone_support })}
                         />
                     );
@@ -82,6 +88,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                 <Emoji
                     emoji={emoji}
                     key={name}
+                    onPopupVisibilityChange={setShouldPreventScroll}
                     onSelect={(e) => handleSelect({ emoji: e, name, skin_tone_support })}
                     isSkinToneSupported={false}
                 />
@@ -95,12 +102,28 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     emoji={emoji}
                     isSkinToneSupported={skin_tone_support}
                     key={name}
+                    onPopupVisibilityChange={setShouldPreventScroll}
                     onSelect={(e) => handleSelect({ emoji: e, name, skin_tone_support })}
                 />
             ));
     }, [handleSelect, historyEmojis, searchString, selectedCategory]);
 
-    return <StyledEmojiPickerEmojis>{emojis}</StyledEmojiPickerEmojis>;
+    const shouldShowNoContentInfo = !emojis || emojis.length === 0;
+
+    return (
+        <StyledEmojiPickerEmojis
+            shouldPreventScroll={shouldPreventScroll}
+            shouldShowNoContentInfo={shouldShowNoContentInfo}
+        >
+            {emojis}
+            {shouldShowNoContentInfo && (
+                <StyledEmojiPickerEmojisNoContentInfo>
+                    Hier werden die zuletzt verwendeten Emojis angezeigt, die über diese Auswahl
+                    gewählt wurden.
+                </StyledEmojiPickerEmojisNoContentInfo>
+            )}
+        </StyledEmojiPickerEmojis>
+    );
 };
 
 EmojiPickerEmojis.displayName = 'EmojiPickerEmojis';

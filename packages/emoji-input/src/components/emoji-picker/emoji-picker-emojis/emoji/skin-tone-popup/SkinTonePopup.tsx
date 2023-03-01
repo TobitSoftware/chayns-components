@@ -15,6 +15,7 @@ export type SkinTonePopupProps = {
     emoji: string;
     onHidePopup: VoidFunction;
     onSelect: (emojiWithSkinTone: string) => void;
+    overlayPosition: { top: number };
     position: { left: number; top: number };
 };
 
@@ -24,6 +25,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
     emoji,
     onHidePopup,
     onSelect,
+    overlayPosition,
     position,
 }) => {
     const handleOverlayClick = useCallback(
@@ -77,7 +79,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
             >
                 {emojis}
             </StyledSkinTonePopupContent>
-            <StyledSkinTonePopupOverlay onClick={handleOverlayClick} />
+            <StyledSkinTonePopupOverlay onClick={handleOverlayClick} style={overlayPosition} />
         </StyledMotionSkinTonePopup>
     );
 };

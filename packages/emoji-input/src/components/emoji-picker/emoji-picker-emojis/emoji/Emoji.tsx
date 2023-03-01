@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, MouseEvent, useCallback, useState } from 'react';
+import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
 import { AnchorAlignment } from '../../../../constants/alignment';
 import { StyledEmoji } from './Emoji.styles';
 import SkinTonePopup, { SkinTonePopupProps } from './skin-tone-popup/SkinTonePopup';
@@ -8,15 +8,24 @@ import { skinTonePopupContentSize } from './skin-tone-popup/SkinTonePopup.styles
 export type EmojiProps = {
     emoji: string;
     isSkinToneSupported: boolean;
+    onPopupVisibilityChange: (isVisible: boolean) => void;
     onSelect: (emoji: string) => void;
 };
 
-const Emoji: FC<EmojiProps> = ({ emoji, isSkinToneSupported, onSelect }) => {
+const Emoji: FC<EmojiProps> = ({
+    emoji,
+    isSkinToneSupported,
+    onPopupVisibilityChange,
+    onSelect,
+}) => {
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [skinTonePopupAnchorAlignment, setSkinTonePopupAnchorAlignment] = useState(
         AnchorAlignment.Top
     );
     const [skinTonePopupAnchorOffset, setSkinTonePopupAnchorOffset] = useState(0);
+    const [skinTonePopupOverlayPosition, setSkinTonePopupOverlayPosition] = useState<
+        SkinTonePopupProps['overlayPosition']
+    >({ top: 0 });
     const [skinTonePopupPosition, setSkinTonePopupPosition] = useState<
         SkinTonePopupProps['position']
     >({ left: 0, top: 0 });
@@ -61,7 +70,7 @@ const Emoji: FC<EmojiProps> = ({ emoji, isSkinToneSupported, onSelect }) => {
                     skinTonePopupContentSize.width / 2 +
                     elementWidth / 2;
 
-                let top = elementTop - parentTop + elementHeight;
+                let top = elementTop - parentTop + elementHeight + scrollTop;
 
                 const maxLeft = parentWidth - skinTonePopupContentSize.width - 12;
                 const minLeft = 12;
@@ -83,6 +92,7 @@ const Emoji: FC<EmojiProps> = ({ emoji, isSkinToneSupported, onSelect }) => {
                     setSkinTonePopupAnchorAlignment(anchorAlignment);
                     setSkinTonePopupAnchorOffset(anchorOffset);
                     setSkinTonePopupPosition({ left, top });
+                    setSkinTonePopupOverlayPosition({ top: scrollTop });
                     setShouldShowPopup(true);
                 }
             }
@@ -91,6 +101,10 @@ const Emoji: FC<EmojiProps> = ({ emoji, isSkinToneSupported, onSelect }) => {
     );
 
     const handleHidePopup = useCallback(() => setShouldShowPopup(false), []);
+
+    useEffect(() => {
+        onPopupVisibilityChange(shouldShowPopup);
+    }, [onPopupVisibilityChange, shouldShowPopup]);
 
     return (
         <StyledEmoji
@@ -108,6 +122,7 @@ const Emoji: FC<EmojiProps> = ({ emoji, isSkinToneSupported, onSelect }) => {
                         key={emoji}
                         onHidePopup={handleHidePopup}
                         onSelect={onSelect}
+                        overlayPosition={skinTonePopupOverlayPosition}
                         position={skinTonePopupPosition}
                     />
                 )}

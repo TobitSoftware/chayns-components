@@ -83,11 +83,10 @@ export const StyledSkinTonePopupContentEmoji = styled.div`
 `;
 
 export const StyledSkinTonePopupOverlay = styled.div`
-    bottom: 0;
     cursor: default;
+    height: 100%;
     left: 0;
     position: absolute;
-    right: 0;
-    top: 0;
+    width: 100%;
     z-index: 1;
 `;
