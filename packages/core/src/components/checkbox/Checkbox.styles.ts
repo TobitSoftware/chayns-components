@@ -15,6 +15,7 @@ export const StyledCheckboxInput = styled.input`
 type StyledCheckboxLabelProps = WithTheme<Omit<CheckboxProps, 'children' | 'onChange'>>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
+    color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
     cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     padding-left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '48px' : '20px')};
