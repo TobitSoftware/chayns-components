@@ -7,7 +7,6 @@ type StyledEmojiPickerEmojisProps = WithTheme<{
 }>;
 
 export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
-    align-items: center;
     display: ${({ shouldShowNoContentInfo }) => (shouldShowNoContentInfo ? 'flex' : 'grid')};
     flex: 1 1 auto;
     grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
@@ -15,6 +14,12 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
     overflow-y: ${({ shouldPreventScroll }) => (shouldPreventScroll ? 'hidden' : 'scroll')};
     padding: 5px 0 5px 5px;
     position: relative;
+
+    ${({ shouldShowNoContentInfo }) =>
+        shouldShowNoContentInfo &&
+        css`
+            align-items: center;
+        `}
 
     ${({ shouldPreventScroll }) =>
         shouldPreventScroll &&
