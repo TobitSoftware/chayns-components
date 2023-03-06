@@ -12,7 +12,6 @@ import React, {
     useState,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
-import LazyMotionWrapper from '../lazy-motion-wrapper/LazyMotionWrapper';
 import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
@@ -168,41 +167,39 @@ const Accordion: FC<AccordionProps> = ({
     const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
 
     return (
-        <LazyMotionWrapper>
-            <StyledAccordion
-                className="beta-chayns-accordion"
-                isOpen={isOpen}
-                isParentWrapped={isParentWrapped}
-                isWrapped={isWrapped}
-                shouldHideBackground={shouldHideBackground}
-            >
-                <AccordionContext.Provider value={accordionContextProviderValue}>
-                    <MotionConfig transition={{ type: 'tween' }}>
-                        <AccordionHead
-                            icon={icon}
-                            isOpen={isOpen}
-                            isFixed={isFixed}
-                            isTitleGreyed={isTitleGreyed || isDisabled}
-                            isWrapped={isWrapped}
-                            onClick={handleHeadClick}
-                            onSearchChange={onSearchChange}
-                            rightElement={rightElement}
-                            searchIcon={searchIcon}
-                            searchPlaceholder={searchPlaceholder}
-                            title={title}
-                            titleElement={titleElement}
-                        />
-                        <AnimatePresence initial={false}>
-                            {isOpen && (
-                                <AccordionBody maxHeight={bodyMaxHeight} onScroll={onBodyScroll}>
-                                    {children}
-                                </AccordionBody>
-                            )}
-                        </AnimatePresence>
-                    </MotionConfig>
-                </AccordionContext.Provider>
-            </StyledAccordion>
-        </LazyMotionWrapper>
+        <StyledAccordion
+            className="beta-chayns-accordion"
+            isOpen={isOpen}
+            isParentWrapped={isParentWrapped}
+            isWrapped={isWrapped}
+            shouldHideBackground={shouldHideBackground}
+        >
+            <AccordionContext.Provider value={accordionContextProviderValue}>
+                <MotionConfig transition={{ type: 'tween' }}>
+                    <AccordionHead
+                        icon={icon}
+                        isOpen={isOpen}
+                        isFixed={isFixed}
+                        isTitleGreyed={isTitleGreyed || isDisabled}
+                        isWrapped={isWrapped}
+                        onClick={handleHeadClick}
+                        onSearchChange={onSearchChange}
+                        rightElement={rightElement}
+                        searchIcon={searchIcon}
+                        searchPlaceholder={searchPlaceholder}
+                        title={title}
+                        titleElement={titleElement}
+                    />
+                    <AnimatePresence initial={false}>
+                        {isOpen && (
+                            <AccordionBody maxHeight={bodyMaxHeight} onScroll={onBodyScroll}>
+                                {children}
+                            </AccordionBody>
+                        )}
+                    </AnimatePresence>
+                </MotionConfig>
+            </AccordionContext.Provider>
+        </StyledAccordion>
     );
 };
 

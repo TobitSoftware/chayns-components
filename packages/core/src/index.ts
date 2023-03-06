@@ -11,7 +11,6 @@ export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
 export { default as Input } from './components/input/Input';
-export { default as LazyMotionWrapper } from './components/lazy-motion-wrapper/LazyMotionWrapper';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
 export { default as ListItem } from './components/list/list-item/ListItem';

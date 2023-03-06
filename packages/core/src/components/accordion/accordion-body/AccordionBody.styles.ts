@@ -1,10 +1,10 @@
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { AccordionBodyProps } from './AccordionBody';
 
 type StyledMotionAccordionBodyProps = Pick<AccordionBodyProps, 'maxHeight'>;
 
-export const StyledMotionAccordionBody = styled(m.div)<StyledMotionAccordionBodyProps>`
+export const StyledMotionAccordionBody = styled(motion.div)<StyledMotionAccordionBodyProps>`
     overflow: hidden;
 
     ${({ maxHeight }) =>

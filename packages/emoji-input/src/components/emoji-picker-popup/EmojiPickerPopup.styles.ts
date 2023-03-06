@@ -1,5 +1,5 @@
 import type { WithTheme } from '@chayns-components/core';
-import { m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../constants/alignment';
 
@@ -15,7 +15,7 @@ type StyledMotionEmojiPickerPopupContentProps = WithTheme<{
 }>;
 
 export const StyledMotionEmojiPickerPopupContent = styled(
-    m.div
+    motion.div
 )<StyledMotionEmojiPickerPopupContentProps>`
     background-color: ${({ theme }: StyledMotionEmojiPickerPopupContentProps) => theme['001']};
     border: 1px solid rgba(0, 0, 0, 0.1);

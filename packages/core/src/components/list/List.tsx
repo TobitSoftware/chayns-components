@@ -1,5 +1,4 @@
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
-import LazyMotionWrapper from '../lazy-motion-wrapper/LazyMotionWrapper';
 
 interface IListContext {
     incrementExpandableItemCount: () => () => void;
@@ -59,11 +58,7 @@ const List: FC<ListProps> = ({ children }) => {
         [expandableItemCount, incrementExpandableItemCount, openItemUuid, updateOpenItemUuid]
     );
 
-    return (
-        <LazyMotionWrapper>
-            <ListContext.Provider value={providerValue}>{children}</ListContext.Provider>
-        </LazyMotionWrapper>
-    );
+    return <ListContext.Provider value={providerValue}>{children}</ListContext.Provider>;
 };
 
 List.displayName = 'List';

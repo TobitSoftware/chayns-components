@@ -1,4 +1,4 @@
-import { Input, LazyMotionWrapper } from '@chayns-components/core';
+import { Input } from '@chayns-components/core';
 import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import emojiCategories from 'unicode-emoji-json/data-by-group.json';
 import type { Category } from '../../types/category';
@@ -35,23 +35,21 @@ const EmojiPicker: FC<EmojiPickerProps> = ({ accessToken, onSelect, personId }) 
     }, []);
 
     return (
-        <LazyMotionWrapper>
-            <StyledEmojiPicker>
-                <Input onChange={handleSearchChange} placeholder="Suchen" value={searchString} />
-                <EmojiPickerEmojis
-                    accessToken={accessToken}
-                    onSelect={onSelect}
-                    personId={personId}
-                    searchString={searchString}
-                    selectedCategory={selectedCategory}
-                />
-                <EmojiPickerCategories
-                    onSelect={handleCategorySelect}
-                    searchString={searchString}
-                    selectedCategory={selectedCategory}
-                />
-            </StyledEmojiPicker>
-        </LazyMotionWrapper>
+        <StyledEmojiPicker>
+            <Input onChange={handleSearchChange} placeholder="Suchen" value={searchString} />
+            <EmojiPickerEmojis
+                accessToken={accessToken}
+                onSelect={onSelect}
+                personId={personId}
+                searchString={searchString}
+                selectedCategory={selectedCategory}
+            />
+            <EmojiPickerCategories
+                onSelect={handleCategorySelect}
+                searchString={searchString}
+                selectedCategory={selectedCategory}
+            />
+        </StyledEmojiPicker>
     );
 };
 

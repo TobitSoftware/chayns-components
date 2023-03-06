@@ -10,7 +10,6 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import LazyMotionWrapper from '../lazy-motion-wrapper/LazyMotionWrapper';
 import {
     StyledInput,
     StyledInputContent,
@@ -91,29 +90,27 @@ const Input: FC<InputProps> = ({
     }, [hasValue]);
 
     return (
-        <LazyMotionWrapper>
-            <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
-                <StyledInputContent>
-                    <StyledInputField
-                        disabled={isDisabled}
-                        onBlur={onBlur}
-                        onChange={handleInputFieldChange}
-                        onFocus={onFocus}
-                        onKeyDown={onKeyDown}
-                        value={value}
-                        type={type}
-                    />
-                    <StyledMotionInputLabel
-                        animate={{ scale: hasValue ? 0.6 : 1 }}
-                        layout
-                        style={{ ...labelPosition, originX: 1, originY: 1 }}
-                        transition={{ type: 'tween' }}
-                    >
-                        {placeholder}
-                    </StyledMotionInputLabel>
-                </StyledInputContent>
-            </StyledInput>
-        </LazyMotionWrapper>
+        <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
+            <StyledInputContent>
+                <StyledInputField
+                    disabled={isDisabled}
+                    onBlur={onBlur}
+                    onChange={handleInputFieldChange}
+                    onFocus={onFocus}
+                    onKeyDown={onKeyDown}
+                    value={value}
+                    type={type}
+                />
+                <StyledMotionInputLabel
+                    animate={{ scale: hasValue ? 0.6 : 1 }}
+                    layout
+                    style={{ ...labelPosition, originX: 1, originY: 1 }}
+                    transition={{ type: 'tween' }}
+                >
+                    {placeholder}
+                </StyledMotionInputLabel>
+            </StyledInputContent>
+        </StyledInput>
     );
 };
 
