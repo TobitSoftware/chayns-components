@@ -12,6 +12,7 @@ import React, {
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertAsciiToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
+import { getRootFontFamily } from '../../utils/font';
 import { restoreSelection, saveSelection } from '../../utils/selection';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
@@ -80,6 +81,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     value,
 }) => {
     const [isMobile] = useState(getIsMobile());
+    const [rootFontFamily] = useState(getRootFontFamily());
 
     const editorRef = useRef<HTMLDivElement>(null);
 
@@ -225,10 +227,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
             <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
+                    isMobile={isMobile}
                     onInput={handleInput}
                     onKeyDown={onKeyDown}
                     placeholder={placeholder}
                     ref={editorRef}
+                    rootFontFamily={rootFontFamily}
                 />
                 {!isMobile && (
                     <EmojiPickerPopup

@@ -1,6 +1,5 @@
 import type { WithTheme } from '@chayns-components/core';
 import styled, { css } from 'styled-components';
-import { getIsMobile } from '../../utils/environment';
 import type { EmojiInputProps } from './EmojiInput';
 
 type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'isDisabled'>>;
@@ -39,7 +38,10 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
+type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>> & {
+    isMobile: boolean;
+    rootFontFamily: string;
+};
 
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
@@ -48,15 +50,15 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     overflow-y: scroll;
     word-break: break-word;
 
-    ${() => {
-        if (getIsMobile()) {
+    ${({ isMobile, rootFontFamily }) => {
+        if (isMobile) {
             return css`
-                font-family: 'Roboto Regular', 'Tahoma', serif;
+                font-family: ${rootFontFamily};
             `;
         }
 
         return css`
-            font-family: 'Noto Color Emoji', 'Roboto Regular', 'Tahoma', serif;
+            font-family: ${rootFontFamily}, 'Noto Color Emoji';
         `;
     }}
 
