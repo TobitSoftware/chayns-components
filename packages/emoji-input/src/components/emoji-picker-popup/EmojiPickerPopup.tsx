@@ -1,3 +1,4 @@
+import { LazyMotionWrapper } from '@chayns-components/core';
 import Icon from '@chayns-components/core/lib/components/icon/Icon';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
@@ -154,34 +155,36 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
             : 16;
 
     return (
-        <StyledEmojiPickerPopup>
-            <AnimatePresence initial={false}>
-                {shouldShowPopup && (
-                    <StyledMotionEmojiPickerPopupContent
-                        alignment={internalAlignment}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: exitAndInitialY }}
-                        initial={{ opacity: 0, y: exitAndInitialY }}
-                        key="emojiPickerPopupContent"
-                        ref={contentRef}
-                        style={position}
-                        transition={{ type: 'tween' }}
-                    >
-                        <EmojiPicker
-                            accessToken={accessToken}
-                            onSelect={onSelect}
-                            personId={personId}
-                        />
-                    </StyledMotionEmojiPickerPopupContent>
-                )}
-            </AnimatePresence>
-            <Icon
-                className="prevent-lose-focus"
-                icons={['far fa-smile']}
-                onClick={handlePopupIconClick}
-                size={18}
-            />
-        </StyledEmojiPickerPopup>
+        <LazyMotionWrapper>
+            <StyledEmojiPickerPopup>
+                <AnimatePresence initial={false}>
+                    {shouldShowPopup && (
+                        <StyledMotionEmojiPickerPopupContent
+                            alignment={internalAlignment}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: exitAndInitialY }}
+                            initial={{ opacity: 0, y: exitAndInitialY }}
+                            key="emojiPickerPopupContent"
+                            ref={contentRef}
+                            style={position}
+                            transition={{ type: 'tween' }}
+                        >
+                            <EmojiPicker
+                                accessToken={accessToken}
+                                onSelect={onSelect}
+                                personId={personId}
+                            />
+                        </StyledMotionEmojiPickerPopupContent>
+                    )}
+                </AnimatePresence>
+                <Icon
+                    className="prevent-lose-focus"
+                    icons={['far fa-smile']}
+                    onClick={handlePopupIconClick}
+                    size={18}
+                />
+            </StyledEmojiPickerPopup>
+        </LazyMotionWrapper>
     );
 };
 

@@ -1,10 +1,10 @@
 import type { WithTheme } from '@chayns-components/core';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { AnchorAlignment } from '../../../../../constants/alignment';
 import type { SkinTonePopupProps } from './SkinTonePopup';
 
-export const StyledMotionSkinTonePopup = styled(motion.div)`
+export const StyledMotionSkinTonePopup = styled(m.div)`
     z-index: 1;
 `;
 

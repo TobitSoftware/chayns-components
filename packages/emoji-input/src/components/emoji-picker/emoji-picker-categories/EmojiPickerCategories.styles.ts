@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import styled from 'styled-components';
 
 export const StyledEmojiPickerCategories = styled.div`
@@ -10,7 +10,7 @@ export const StyledEmojiPickerCategories = styled.div`
     padding-top: 10px;
 `;
 
-export const StyledMotionEmojiPickerCategory = styled(motion.div)`
+export const StyledMotionEmojiPickerCategory = styled(m.div)`
     cursor: pointer;
     font-family: 'Noto Color Emoji', 'Roboto Regular', 'Tahoma', serif;
     font-size: 20px;

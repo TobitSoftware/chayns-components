@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { ContextMenuAlignment } from '../constants/alignment';
@@ -7,9 +7,7 @@ type StyledMotionContextMenuContentProps = WithTheme<{
     position: ContextMenuAlignment;
 }>;
 
-export const StyledMotionContextMenuContent = styled(
-    motion.div
-)<StyledMotionContextMenuContentProps>`
+export const StyledMotionContextMenuContent = styled(m.div)<StyledMotionContextMenuContentProps>`
     background-color: ${({ theme }: StyledMotionContextMenuContentProps) => theme['001']};
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 3px;

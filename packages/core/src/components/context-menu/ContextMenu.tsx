@@ -14,6 +14,7 @@ import React, {
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import Icon from '../icon/Icon';
+import LazyMotionWrapper from '../lazy-motion-wrapper/LazyMotionWrapper';
 import { ContextMenuAlignment } from './constants/alignment';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
@@ -227,7 +228,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
         );
 
         return (
-            <>
+            <LazyMotionWrapper>
                 <StyledContextMenu
                     className="beta-chayns-context-menu"
                     onClick={handleClick}
@@ -236,7 +237,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                     {children}
                 </StyledContextMenu>
                 {portal}
-            </>
+            </LazyMotionWrapper>
         );
     }
 );

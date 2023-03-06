@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputProps } from './Input';
@@ -38,7 +38,7 @@ export const StyledInputField = styled.input`
     padding: 0;
 `;
 
-export const StyledMotionInputLabel = styled(motion.label)`
+export const StyledMotionInputLabel = styled(m.label)`
     line-height: 1.15;
     pointer-events: none;
     position: absolute;
