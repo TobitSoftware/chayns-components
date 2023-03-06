@@ -14,6 +14,7 @@ export const StyledEmojiPickerEmojis = styled.div<StyledEmojiPickerEmojisProps>`
     overflow-y: ${({ shouldPreventScroll }) => (shouldPreventScroll ? 'hidden' : 'scroll')};
     padding: 5px 0 5px 5px;
     position: relative;
+    width: 100%;
 
     ${({ shouldShowNoContentInfo }) =>
         shouldShowNoContentInfo &&

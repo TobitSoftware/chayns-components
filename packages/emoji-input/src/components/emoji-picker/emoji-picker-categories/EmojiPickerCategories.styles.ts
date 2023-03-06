@@ -8,6 +8,7 @@ export const StyledEmojiPickerCategories = styled.div`
     flex: 0 0 auto;
     justify-content: space-between;
     padding-top: 10px;
+    width: 100%;
 `;
 
 export const StyledMotionEmojiPickerCategory = styled(m.div)`

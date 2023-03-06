@@ -17,6 +17,7 @@ export const StyledInput = styled.div<StyledInputProps>`
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     padding: 8px 10px;
     transition: opacity 0.3s ease;
+    width: 100%;
 
     &:not(&:first-child) {
         margin-top: 8px;

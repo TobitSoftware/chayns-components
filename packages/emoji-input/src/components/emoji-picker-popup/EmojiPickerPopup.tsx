@@ -1,14 +1,15 @@
 import { LazyMotionWrapper } from '@chayns-components/core';
 import Icon from '@chayns-components/core/lib/components/icon/Icon';
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEvent, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { PopupAlignment } from '../../constants/alignment';
-import EmojiPicker from '../emoji-picker/EmojiPicker';
-import { emojiPickerSize } from '../emoji-picker/EmojiPicker.styles';
+import { emojiPickerSize, StyledEmojiPicker } from '../emoji-picker/EmojiPicker.styles';
 import {
     StyledEmojiPickerPopup,
     StyledMotionEmojiPickerPopupContent,
 } from './EmojiPickerPopup.styles';
+
+const EmojiPicker = React.lazy(() => import('../emoji-picker/EmojiPicker'));
 
 export type EmojiPickerPopupProps = {
     /**
@@ -169,11 +170,17 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                             style={position}
                             transition={{ type: 'tween' }}
                         >
-                            <EmojiPicker
-                                accessToken={accessToken}
-                                onSelect={onSelect}
-                                personId={personId}
-                            />
+                            <Suspense
+                                fallback={
+                                    <StyledEmojiPicker>Emojis werden geladen...</StyledEmojiPicker>
+                                }
+                            >
+                                <EmojiPicker
+                                    accessToken={accessToken}
+                                    onSelect={onSelect}
+                                    personId={personId}
+                                />
+                            </Suspense>
                         </StyledMotionEmojiPickerPopupContent>
                     )}
                 </AnimatePresence>
