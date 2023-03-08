@@ -65,6 +65,7 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     &:empty:not(:focus):before {
         content: '${({ placeholder }) => placeholder}';
         color: ${({ theme }: StyledEmojiInputEditorProps) => theme['006']};
+        pointer-events: none;
     }
 
     // Styles for custom scrollbar
