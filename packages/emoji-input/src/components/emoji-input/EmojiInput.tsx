@@ -143,6 +143,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
             const text = event.clipboardData.getData('text/plain');
 
             insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+            const newEvent = new Event('input', { bubbles: true });
+
+            editorRef.current.dispatchEvent(newEvent);
         }
     }, []);
 
