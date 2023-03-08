@@ -1,6 +1,7 @@
 import React, {
     ChangeEvent,
     ChangeEventHandler,
+    ClipboardEvent,
     FC,
     KeyboardEventHandler,
     ReactNode,
@@ -13,6 +14,7 @@ import type { PopupAlignment } from '../../constants/alignment';
 import { convertAsciiToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { getRootFontFamily } from '../../utils/font';
+import { insertTextAtCursorPosition } from '../../utils/insert';
 import { restoreSelection, saveSelection } from '../../utils/selection';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
@@ -129,65 +131,37 @@ const EmojiInput: FC<EmojiInputProps> = ({
     );
 
     /**
-     * This function processes the selection of an emoji via the popup. If the 'contentEditable'
-     * element has the focus, the new emoji is inserted at the cursor position. If not, the emoji
-     * will be appended to the back of the input field content.
-     *
-     * In addition, this function also sets the cursor to the correct position when the input field
-     * has the focus. For this purpose, the current position of the cursor or a selection is read to
-     * calculate the cursor position after inserting the emoji.
+     * This function prevents formatting from being adopted when texts are inserted. To do this, the
+     * plain text is read from the event after the default behavior has been prevented. The plain
+     * text is then inserted at the correct position in the input field using the
+     * 'insertTextAtCursorPosition' function.
+     */
+    const handlePaste = useCallback((event: ClipboardEvent<HTMLDivElement>) => {
+        if (editorRef.current) {
+            event.preventDefault();
+
+            const text = event.clipboardData.getData('text/plain');
+
+            insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+        }
+    }, []);
+
+    /**
+     * This function uses the 'insertTextAtCursorPosition' function to insert the emoji at the
+     * correct position in the editor element.
      *
      * At the end an 'input' event is dispatched, so that the function 'handleInput' is triggered,
      * which in turn executes the 'onInput' function from the props. So this serves to ensure that
      * the event is also passed through to the top when inserting via the popup.
      */
     const handlePopupSelect = useCallback((emoji: string) => {
-        if (!editorRef.current) {
-            return;
+        if (editorRef.current) {
+            insertTextAtCursorPosition({ editorElement: editorRef.current, text: emoji });
+
+            const event = new Event('input', { bubbles: true });
+
+            editorRef.current.dispatchEvent(event);
         }
-
-        const selection = window.getSelection();
-
-        if (selection?.anchorNode && editorRef.current.contains(selection.anchorNode)) {
-            const { endOffset, startOffset } = selection.getRangeAt(0);
-
-            const rangeDistance = endOffset - startOffset;
-
-            let offset = endOffset + emoji.length - rangeDistance;
-
-            let { anchorNode } = selection;
-
-            if (anchorNode.nodeValue) {
-                anchorNode.nodeValue =
-                    anchorNode.nodeValue.substring(0, startOffset) +
-                    emoji +
-                    anchorNode.nodeValue.substring(endOffset);
-            } else if (anchorNode === editorRef.current) {
-                const newTextNode = document.createTextNode(emoji);
-
-                editorRef.current.appendChild(newTextNode);
-
-                anchorNode = newTextNode;
-            }
-
-            const newRange = document.createRange();
-
-            if (anchorNode.nodeValue) {
-                offset = Math.min(offset, anchorNode.nodeValue.length);
-            }
-
-            newRange.setStart(anchorNode, offset);
-            newRange.setEnd(anchorNode, offset);
-
-            selection.removeAllRanges();
-            selection.addRange(newRange);
-        } else {
-            editorRef.current.innerText += emoji;
-        }
-
-        const event = new Event('input', { bubbles: true });
-
-        editorRef.current.dispatchEvent(event);
     }, []);
 
     /**
@@ -230,6 +204,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     isMobile={isMobile}
                     onInput={handleInput}
                     onKeyDown={onKeyDown}
+                    onPaste={handlePaste}
                     placeholder={placeholder}
                     ref={editorRef}
                     rootFontFamily={rootFontFamily}
