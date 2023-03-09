@@ -140,7 +140,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
         if (editorRef.current) {
             event.preventDefault();
 
-            const text = event.clipboardData.getData('text/plain');
+            let text = event.clipboardData.getData('text/plain');
+
+            text = convertAsciiToUnicode(text);
 
             insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 

@@ -23,38 +23,30 @@ export const insertTextAtCursorPosition = ({
     const selection = window.getSelection();
 
     if (selection?.anchorNode && editorElement.contains(selection.anchorNode)) {
-        const { endOffset, startOffset } = selection.getRangeAt(0);
+        const range = selection.getRangeAt(0);
 
-        const rangeDistance = endOffset - startOffset;
+        const textNodes = text.split(/\r\n|\r|\n/).map((part) => document.createTextNode(part));
 
-        let offset = endOffset + text.length - rangeDistance;
+        range.deleteContents();
 
-        let { anchorNode } = selection;
+        textNodes.forEach((textNode, index) => {
+            range.insertNode(textNode);
+            range.setEndAfter(textNode);
+            range.setStartAfter(textNode);
 
-        if (anchorNode.nodeValue) {
-            anchorNode.nodeValue =
-                anchorNode.nodeValue.substring(0, startOffset) +
-                text +
-                anchorNode.nodeValue.substring(endOffset);
-        } else if (anchorNode === editorElement) {
-            const newTextNode = document.createTextNode(text);
+            if (index !== textNodes.length - 1) {
+                const brElement = document.createElement('br');
 
-            editorElement.appendChild(newTextNode);
+                range.insertNode(brElement);
+                range.setEndAfter(brElement);
+                range.setStartAfter(brElement);
+            }
+        });
 
-            anchorNode = newTextNode;
-        }
-
-        const newRange = document.createRange();
-
-        if (anchorNode.nodeValue) {
-            offset = Math.min(offset, anchorNode.nodeValue.length);
-        }
-
-        newRange.setStart(anchorNode, offset);
-        newRange.setEnd(anchorNode, offset);
+        range.collapse(false);
 
         selection.removeAllRanges();
-        selection.addRange(newRange);
+        selection.addRange(range);
     } else {
         // eslint-disable-next-line no-param-reassign
         editorElement.innerText += text;
