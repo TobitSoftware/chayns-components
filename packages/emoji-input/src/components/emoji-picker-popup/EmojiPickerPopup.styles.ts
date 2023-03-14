@@ -23,7 +23,7 @@ export const StyledMotionEmojiPickerPopupContent = styled(
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionEmojiPickerPopupContentProps) => theme.text};
     position: absolute;
-    z-index: 0;
+    z-index: 2;
 
     ::after {
         background-color: inherit;
