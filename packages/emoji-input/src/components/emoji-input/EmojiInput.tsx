@@ -11,7 +11,7 @@ import React, {
     useState,
 } from 'react';
 import type { PopupAlignment } from '../../constants/alignment';
-import { convertAsciiToUnicode } from '../../utils/emoji';
+import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { getRootFontFamily } from '../../utils/font';
 import { insertTextAtCursorPosition } from '../../utils/insert';
@@ -100,7 +100,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
             return;
         }
 
-        const newInnerText = convertAsciiToUnicode(text);
+        const newInnerText = convertEmojisToUnicode(text);
 
         if (newInnerText !== editorRef.current.innerText) {
             saveSelection(editorRef.current);
@@ -142,7 +142,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
             let text = event.clipboardData.getData('text/plain');
 
-            text = convertAsciiToUnicode(text);
+            text = convertEmojisToUnicode(text);
 
             insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 

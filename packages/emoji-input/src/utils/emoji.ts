@@ -126,6 +126,22 @@ const regAscii = new RegExp(
     'gi'
 );
 
+const shortNameList: { [key: string]: string } = {};
+
+let shortnameRegexp = '';
+
+Object.entries(emojiList).forEach(([unicode, { slug }], index) => {
+    const shortname = `:${slug}:`;
+
+    shortNameList[shortname] = unicode;
+    shortnameRegexp += `${index !== 0 ? '|' : ''}${shortname}`;
+});
+
+const regShortnames = new RegExp(
+    `<object[^>]*>.*?</object>|<span[^>]*>.*?</span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(${shortnameRegexp})`,
+    'gi'
+);
+
 const convert = (unicode: string) => {
     if (unicode.indexOf('-') > -1) {
         const parts = [];
@@ -188,22 +204,34 @@ const unescapeHTML = (text: string) => {
     );
 };
 
-export const convertAsciiToUnicode = (text: string): string => {
-    let unicode: string;
+export const convertEmojisToUnicode = (text: string): string => {
+    let result = text;
 
-    return text.replace(regAscii, (entire, m1, m2, m3) => {
-        if (typeof m3 === 'undefined' || m3 === '' || !(unescapeHTML(m3 as string) in asciiList)) {
-            return entire;
+    result = result.replace(regShortnames, (shortname) => {
+        if (shortname) {
+            const unicode = shortNameList[shortname];
+
+            if (unicode) {
+                return unicode;
+            }
         }
 
-        // eslint-disable-next-line no-param-reassign
-        m3 = unescapeHTML(m3 as string);
-
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        unicode = asciiList[m3 as string]!.toUpperCase();
-
-        return (m2 as string) + convert(unicode);
+        return shortname;
     });
+
+    result = result.replace(regAscii, (fullMatch, m1, m2, m3) => {
+        if (typeof m3 === 'string' && m3 !== '') {
+            const unicode = asciiList[unescapeHTML(m3)];
+
+            if (unicode) {
+                return (m2 as string) + convert(unicode.toUpperCase());
+            }
+        }
+
+        return fullMatch;
+    });
+
+    return result;
 };
 
 export const addSkinToneToEmoji = (emoji: string, skinTone: string): string =>
