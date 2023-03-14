@@ -16,16 +16,18 @@ const Template: ComponentStory<typeof Typewriter> = ({ children, ...args }) => (
 
 export const General = Template.bind({});
 
-export const WithHTMLText = Template.bind({});
+export const HTMLText = Template.bind({});
 
-export const WithCustomElements = Template.bind({});
+export const CustomElements = Template.bind({});
 
-WithHTMLText.args = {
+export const MultipleTexts = Template.bind({});
+
+HTMLText.args = {
     children:
         'Lorem ipsum dolor sit amet, <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <s><b>At vero eos et accusam et justo duo dolores et ea rebum.</b></s> Stet clita kasd gubergren, no sea takimata sanctus est. <u>Lorem ipsum</u> dolor sit amet.',
 };
 
-WithCustomElements.args = {
+CustomElements.args = {
     children: (
         <>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
@@ -35,4 +37,8 @@ WithCustomElements.args = {
             sea takimata sanctus est.
         </>
     ),
+};
+
+MultipleTexts.args = {
+    children: ['Also, ...', 'Okay, ...', 'Genau, ...', 'Ja, ...'],
 };
