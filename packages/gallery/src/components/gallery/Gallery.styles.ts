@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-export const StyledGallery = styled.div``;
+export const StyledGallery = styled.div`
+    display: flex;
+`;
 
 export const StyledGalleryItem = styled.div``;
 
