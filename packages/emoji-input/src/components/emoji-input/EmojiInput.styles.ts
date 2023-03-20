@@ -50,6 +50,11 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     overflow-y: scroll;
     word-break: break-word;
 
+    // This fixes a bug where the field is not editable in certain browsers.
+    // This is for example the case on iOS 15 or older.
+    -webkit-user-modify: read-write;
+    -webkit-user-select: text;
+
     ${({ isMobile, rootFontFamily }) => {
         if (isMobile) {
             return css`
