@@ -34,7 +34,7 @@
     },
     "devDependencies": {
         "@babel/cli": "^7.21.0",
-        "@babel/core": "^7.21.0",
+        "@babel/core": "^7.21.3",
         "@babel/preset-env": "^7.20.2",
         "@babel/preset-react": "^7.18.6",
         "@babel/preset-typescript": "^7.21.0",
@@ -52,7 +52,7 @@
         "@chayns/colors": "^2.0.0",
         "clsx": "^1.2.1",
         "framer-motion": "^6.5.1",
-        "styled-components": "^5.3.8",
+        "styled-components": "^5.3.9",
         "uuid": "^9.0.0"
     },
     "peerDependencies": {
