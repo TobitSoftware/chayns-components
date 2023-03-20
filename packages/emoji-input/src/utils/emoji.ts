@@ -66,6 +66,10 @@ const unescapeHTML = (text: string) => {
 export const convertEmojisToUnicode = (text: string): string => {
     let result = text;
 
+    result = result.replace(/https?:\/\/.*?(?=$|\s)/gi, (fullMatch) =>
+        fullMatch.replace(/:/g, '%3A')
+    );
+
     result = result.replace(regShortnames, (shortname) => {
         if (shortname) {
             const unicode = shortNameList[shortname];
@@ -77,6 +81,10 @@ export const convertEmojisToUnicode = (text: string): string => {
 
         return shortname;
     });
+
+    result = result.replace(/https?%3A\/\/.*?(?=$|\s)/gi, (fullMatch) =>
+        fullMatch.replace(/%3A/g, ':')
+    );
 
     result = result.replace(regAscii, (fullMatch, m1, m2, m3) => {
         if (typeof m3 === 'string' && m3 !== '') {
