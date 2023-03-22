@@ -33,7 +33,7 @@ export const postVideo = async ({
 
     const response = await fetch(url, requestInit);
 
-    console.log(response);
+    // console.log(response);
 
     if (response.status === 200 || response.status === 201) {
         try {

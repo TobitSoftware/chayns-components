@@ -16,7 +16,7 @@ import { imageUpload } from '../../utils/imageUpload';
 import { selectFile } from '../../utils/selectFile';
 
 // Types
-import type { ImageUploadResult, OnChange, UploadedFile } from '../../types/files';
+import type { Image, OnChange, UploadedFile } from '../../types/files';
 
 export type GalleryProps = {
     /**
@@ -45,22 +45,22 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
     const [newFiles, setNewFiles] = useState<File[]>();
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
 
-    console.log('uploadedFiles', uploadedFiles);
+    // console.log('uploadedFiles', uploadedFiles);
 
     /**
      * Upload files
      */
     const uploadFiles = useCallback(
-        (filesToUpload: File[]) => {
+        async (filesToUpload: File[]) => {
             if (!filesToUpload) {
                 return;
             }
 
-            console.log('files', filesToUpload);
+            // console.log('files', filesToUpload);
 
             const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
             const images = filesToUpload.filter(({ type }) => type.includes('image/'));
-            const newUploadedFiles: UploadedFile[] = [];
+            let newUploadedFiles: UploadedFile[] = [];
 
             // Upload videos
             videos.forEach((video) => {
@@ -74,24 +74,19 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
             });
 
             // Upload images
-            images.forEach((image) => {
-                void imageUpload({
+            const imageResult: Promise<Image>[] = images.map((image) =>
+                imageUpload({
                     accessToken,
                     isAuthenticated,
                     file: image,
                     personId,
-                }).then((result: ImageUploadResult) => {
-                    if (
-                        typeof result?.base === 'string' &&
-                        typeof result.key === 'string' &&
-                        typeof result.meta?.preview === 'string'
-                    ) {
-                        newUploadedFiles.push({ url: `${result.base}/${result.key}` });
-                    }
-                });
-            });
+                })
+            );
+
+            newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageResult));
 
             console.log('UPLOADED', newUploadedFiles);
+            console.log('UPLOADE2D', newUploadedFiles.length);
             setUploadedFiles(newUploadedFiles);
         },
         [accessToken, isAuthenticated, personId]
@@ -131,7 +126,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
                 return;
             }
 
-            console.log('W', addedFiles);
+            // console.log('W', addedFiles);
 
             const filteredGalleryFiles = addedFiles.filter(({ size }) => size / 1024 / 1024 < 64);
 
@@ -153,7 +148,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
             type: 'image/*, video/*',
         });
 
-        console.log('E', selectedFiles);
+        // console.log('E', selectedFiles);
 
         if (selectedFiles && selectedFiles.length > 0) {
             const filesToArray = [...selectedFiles];
@@ -178,13 +173,19 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
     const galleryItems = useMemo(() => {
         const items: ReactElement[] = [];
 
-        console.log('T', uploadedFiles);
+        // console.log('T', uploadedFiles);
 
+        // console.log('Ttr', uploadedFiles?.length);
         if (uploadedFiles) {
-            console.log('Ttr', uploadedFiles);
+            // console.log('T2', uploadedFiles[0]);
+            // console.log('T22', uploadedFiles);
             // ToDo update onClick for delete
+            for (let i = 0; i === uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                // console.log('fileeee', file);
+            }
             uploadedFiles.forEach((file) => {
-                console.log('fileeee', file);
+                // console.log('fileeee', file);
                 if ('thumbnailUrl' in file) {
                     items.push(
                         <StyledGalleryItem>
@@ -205,7 +206,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
             });
         }
 
-        console.log('items', items);
+        // console.log('items', items);
 
         items.push(
             <StyledGalleryItem>
@@ -216,7 +217,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
         return items;
     }, [openSelectDialog, uploadedFiles]);
 
-    console.log(galleryItems);
+    // console.log(galleryItems);
 
     return <StyledGallery>{galleryItems}</StyledGallery>;
 };
