@@ -5,7 +5,7 @@
 import classnames from 'clsx';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ReactResizeDetector from 'react-resize-detector';
+import ReactResizeDetector from 'react-resize-detector/build/withPolyfill';
 import ScrollViewHelper from './ScrollViewHelper';
 
 /**
