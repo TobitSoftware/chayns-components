@@ -52,7 +52,7 @@
         "lodash.isequal": "^4.5.0",
         "lodash.throttle": "^4.1.1",
         "prop-types": "^15.8.1",
-        "react-resize-detector": "^7.1.2",
+        "react-resize-detector": "^6.7.8",
         "react-transition-group": "4.4.5"
     },
     "devDependencies": {
