@@ -42,10 +42,10 @@ export type GalleryProps = {
 };
 
 const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChange, personId }) => {
-    const [newFiles] = useState<File[]>(files);
+    const [newFiles, setNewFiles] = useState<File[]>();
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
 
-    console.log('updatetFiles', uploadedFiles);
+    console.log('uploadedFiles', uploadedFiles);
 
     /**
      * Upload files
@@ -56,10 +56,10 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
                 return;
             }
 
-            console.log(filesToUpload[0]);
+            console.log('files', filesToUpload);
 
-            const videos = filesToUpload[0].filter(({ type }) => type.includes('video/'));
-            const images = filesToUpload[0].filter(({ type }) => type.includes('image/'));
+            const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
+            const images = filesToUpload.filter(({ type }) => type.includes('image/'));
             const newUploadedFiles: UploadedFile[] = [];
 
             // Upload videos
@@ -91,67 +91,76 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
                 });
             });
 
+            console.log('UPLOADED', newUploadedFiles);
             setUploadedFiles(newUploadedFiles);
         },
         [accessToken, isAuthenticated, personId]
     );
 
     /**
-     * Upload first files
+     * Upload files by props
      */
     useEffect(() => {
-        if (!newFiles) {
+        if (!files) {
             return;
         }
 
-        uploadFiles(newFiles);
+        uploadFiles(files);
 
         // ToDo ignore
     }, []);
 
+    /**
+     * This function adds new data to the existing data list
+     */
+    const handleAdd = useCallback(
+        (filesAdd: File[]) => {
+            if (!filesAdd) {
+                return;
+            }
+
+            uploadFiles(filesAdd);
+            onChange({ files: uploadedFiles ?? [] });
+        },
+        [onChange, uploadFiles, uploadedFiles]
+    );
+
     const handleGalleryFiles = useCallback(
         (addedFiles: File[]) => {
+            if (!addedFiles) {
+                return;
+            }
+
+            console.log('W', addedFiles);
+
             const filteredGalleryFiles = addedFiles.filter(({ size }) => size / 1024 / 1024 < 64);
 
             if (addedFiles.length !== filteredGalleryFiles.length) {
                 return;
             }
 
-            uploadFiles(filteredGalleryFiles);
+            handleAdd(filteredGalleryFiles);
         },
-        [uploadFiles]
-    );
-
-    /**
-     * This function adds new data to the existing data list
-     */
-    const handleAdd = useCallback(
-        (file: File) => {
-            if (!file) {
-                return;
-            }
-
-            uploadFiles([file]);
-            onChange({ files: uploadedFiles ?? [] });
-        },
-        [onChange, uploadFiles, uploadedFiles]
+        [handleAdd]
     );
 
     /**
      * Open a dialog to select files
      */
     const openSelectDialog = useCallback(async () => {
-        const selectedFiles: FileList | undefined = await selectFile({
+        const selectedFiles: File[] = await selectFile({
             multiple: true,
             type: 'image/*, video/*',
         });
 
-        console.log(selectedFiles);
+        console.log('E', selectedFiles);
 
         if (selectedFiles && selectedFiles.length > 0) {
-            handleAdd(Object.values(selectedFiles));
+            const filesToArray = [...selectedFiles];
+
+            handleGalleryFiles(filesToArray);
         }
-    }, [handleAdd]);
+    }, [handleGalleryFiles]);
 
     /**
      * This function deletes a selected file from the data list
@@ -169,13 +178,17 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
     const galleryItems = useMemo(() => {
         const items: ReactElement[] = [];
 
+        console.log('T', uploadedFiles);
+
         if (uploadedFiles) {
+            console.log('Ttr', uploadedFiles);
             // ToDo update onClick for delete
             uploadedFiles.forEach((file) => {
+                console.log('fileeee', file);
                 if ('thumbnailUrl' in file) {
                     items.push(
                         <StyledGalleryItem>
-                            <StyledGalleryItemDelete onClick={handleDelete(file)} />
+                            <StyledGalleryItemDelete />
                             <StyledGalleryItemVideo poster={file.thumbnailUrl}>
                                 <source src={file.url} type="video/mp4" />
                             </StyledGalleryItemVideo>
@@ -184,13 +197,15 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
                 } else {
                     items.push(
                         <StyledGalleryItem>
-                            <StyledGalleryItemDelete onClick={(file) => handleDelete(file)} />
+                            <StyledGalleryItemDelete />
                             <StyledGalleryItemImage src={file.url} />
                         </StyledGalleryItem>
                     );
                 }
             });
         }
+
+        console.log('items', items);
 
         items.push(
             <StyledGalleryItem>
@@ -199,7 +214,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
         );
 
         return items;
-    }, [handleDelete, openSelectDialog, uploadedFiles]);
+    }, [openSelectDialog, uploadedFiles]);
 
     console.log(galleryItems);
 
