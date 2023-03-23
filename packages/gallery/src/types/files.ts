@@ -1,13 +1,3 @@
-export interface ImageUploadResult {
-    base?: string;
-    key?: string;
-    meta?: {
-        preview: string;
-        width: number;
-        height: number;
-    };
-}
-
 export type OnChange = {
     files: UploadedFile[];
 };
@@ -20,9 +10,15 @@ export interface Video {
 }
 
 export interface Image {
-    url: string;
+    key: string;
+    base: string;
+    meta: Meta;
+}
+
+export interface Meta {
+    preview: string;
+    width: string;
+    height: string;
 }
 
 export type UploadedFile = Video | Image;
-
-export type UploadState = 'none' | 'pending' | 'successful' | 'rejected';

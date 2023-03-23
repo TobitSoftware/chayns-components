@@ -1,11 +1,12 @@
 import { VIDEO_STORAGE_BASE_URL } from '../../constants/externalServerUrl';
 import type { ApiFunctionResult } from '../../types/api';
 
-interface PostVideoResult {
+export interface PostVideoResult {
     id: number;
     originalVideoQuality: string;
     thumbnailUrl: string;
     url: string;
+    urlMP4: string;
 }
 
 interface PostVideoOptions {
@@ -33,16 +34,10 @@ export const postVideo = async ({
 
     const response = await fetch(url, requestInit);
 
-    // console.log(response);
+    if (response.status === 202) {
+        const data = (await response.json()) as PostVideoResult;
 
-    if (response.status === 200 || response.status === 201) {
-        try {
-            const data = (await response.json()) as PostVideoResult;
-
-            return { data, status: response.status };
-        } catch (e) {
-            // Do nothing
-        }
+        return { data, status: 202 };
     }
 
     return { status: response.status };

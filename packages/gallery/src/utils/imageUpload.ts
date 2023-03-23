@@ -1,3 +1,5 @@
+import type { Image } from '../types/files';
+
 /**
  * Uploads an image to the tsimg cloud service.
  */
@@ -19,7 +21,7 @@ export const imageUpload = async ({
     personId,
     siteId,
     url = 'https://api.tsimg.cloud/image',
-}: ImageUpload) => {
+}: ImageUpload): Promise<Image> => {
     const headers = new Headers({ Accept: 'application/json' });
 
     if (referenceId) headers.set('X-Reference-Id', referenceId);
@@ -43,7 +45,7 @@ export const imageUpload = async ({
     const response = await fetch(url, { method: 'POST', body, headers });
 
     if (response.ok) {
-        return response.json();
+        return (await response.json()) as Promise<Image>;
     }
 
     throw Error(`Uploading the image failed with status code ${response.status}.`);
