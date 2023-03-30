@@ -8,9 +8,9 @@ import {
 import { getCharactersCount, getSubTextFromHTML } from './utils';
 
 export enum TypewriterResetDelay {
-    Slow = 3000,
-    Medium = 1500,
-    Fast = 750,
+    Slow = 4000,
+    Medium = 2000,
+    Fast = 1000,
 }
 
 export enum TypewriterSpeed {
@@ -29,6 +29,10 @@ export type TypewriterProps = {
      */
     resetDelay?: TypewriterResetDelay;
     /**
+     * Specifies whether the reset of the text should be animated with a backspace animation for multiple texts.
+     */
+    shouldUseResetAnimation?: boolean;
+    /**
      * The speed of the animation. Use the TypewriterSpeed enum for this prop.
      */
     speed?: TypewriterSpeed;
@@ -37,6 +41,7 @@ export type TypewriterProps = {
 const Typewriter: FC<TypewriterProps> = ({
     children,
     resetDelay = TypewriterResetDelay.Medium,
+    shouldUseResetAnimation = false,
     speed = TypewriterSpeed.Medium,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
@@ -74,6 +79,20 @@ const Typewriter: FC<TypewriterProps> = ({
         setShouldStopAnimation(true);
     }, []);
 
+    const handleSetNextChildrenIndex = useCallback(
+        () =>
+            setCurrentChildrenIndex(() => {
+                let newIndex = currentChildrenIndex + 1;
+
+                if (newIndex > childrenCount - 1) {
+                    newIndex = 0;
+                }
+
+                return newIndex;
+            }),
+        [childrenCount, currentChildrenIndex]
+    );
+
     useEffect(() => {
         let interval: number | undefined;
 
@@ -90,15 +109,7 @@ const Typewriter: FC<TypewriterProps> = ({
                         if (areMultipleChildrenGiven) {
                             setTimeout(() => {
                                 setIsResetAnimationActive(false);
-                                setCurrentChildrenIndex((currentIndex) => {
-                                    let newIndex = currentIndex + 1;
-
-                                    if (newIndex > childrenCount - 1) {
-                                        newIndex = 0;
-                                    }
-
-                                    return newIndex;
-                                });
+                                handleSetNextChildrenIndex();
                             }, resetDelay);
                         }
                     }
@@ -122,7 +133,14 @@ const Typewriter: FC<TypewriterProps> = ({
                         nextState = textContent.length;
 
                         if (areMultipleChildrenGiven) {
-                            setTimeout(setIsResetAnimationActive, resetDelay, true);
+                            setTimeout(() => {
+                                if (shouldUseResetAnimation) {
+                                    setIsResetAnimationActive(true);
+                                } else {
+                                    setShownCharCount(0);
+                                    handleSetNextChildrenIndex();
+                                }
+                            }, resetDelay);
                         }
                     }
 
@@ -143,6 +161,8 @@ const Typewriter: FC<TypewriterProps> = ({
         areMultipleChildrenGiven,
         resetDelay,
         childrenCount,
+        handleSetNextChildrenIndex,
+        shouldUseResetAnimation,
     ]);
 
     useEffect(() => {
