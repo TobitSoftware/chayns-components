@@ -138,7 +138,7 @@ const Typewriter: FC<TypewriterProps> = ({
                                     setIsResetAnimationActive(true);
                                 } else {
                                     setShownCharCount(0);
-                                    handleSetNextChildrenIndex();
+                                    setTimeout(handleSetNextChildrenIndex, resetDelay / 2);
                                 }
                             }, resetDelay);
                         }
