@@ -1,7 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,react/forbid-prop-types */
 import classNames from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { CSSTransition } from 'react-transition-group';
 import Button from '../../react-chayns-button/component/Button';
@@ -31,7 +37,7 @@ const DialogSelectComboBox = ({
     });
     const [showOverlay, setShowOverlay] = useState(false);
     const [selected, setSelected] = useState(defaultValue);
-    const [minWidth, setMinWidth] = useState('0px');
+    const [width, setWidth] = useState(null);
     const mounted = useRef(false);
 
     const overlayRef = useRef(null);
@@ -57,6 +63,40 @@ const DialogSelectComboBox = ({
         },
         [list, listKey]
     );
+
+    useLayoutEffect(() => {
+        const resize = () => {
+            let max = 0;
+            const clonedButton = buttonRef.current.cloneNode(true);
+            clonedButton.style.position = 'absolute';
+            clonedButton.style.visibility = 'hidden';
+            clonedButton.style.width = '';
+            clonedButton.style.maxWidth = '';
+            buttonRef.current.parentElement.insertBefore(
+                clonedButton,
+                buttonRef.current
+            );
+            max = Math.max(max, clonedButton.getBoundingClientRect().width);
+            list.forEach((item) => {
+                clonedButton.children[0].innerHTML = React.isValidElement(
+                    item[listValue]
+                )
+                    ? renderToStaticMarkup(item[listValue])
+                    : item[listValue];
+                max = Math.max(max, clonedButton.getBoundingClientRect().width);
+            });
+            buttonRef.current.parentElement.removeChild(clonedButton);
+            setWidth(max);
+        };
+        // check if font awesome is loaded and resize again
+        // required cause calculated width might be wrong before font is loaded
+        if (!document.fonts.check('15px "Font Awesome 6 Pro"')) {
+            document.fonts.addEventListener('loadingdone', () => {
+                resize();
+            });
+        }
+        resize();
+    }, [list, listValue, selected, label]);
 
     useEffect(() => {
         if (showOverlay) {
@@ -99,7 +139,7 @@ const DialogSelectComboBox = ({
             if (stopPropagation) {
                 e.stopPropagation();
             }
-            setMinWidth(`${buttonRef.current.getBoundingClientRect().width}px`);
+
             if (chayns.env.isMobile) {
                 const items = list.map((item) => ({
                     name: React.isValidElement(item[listValue])
@@ -146,7 +186,6 @@ const DialogSelectComboBox = ({
         [
             setPosition,
             setShowOverlay,
-            setMinWidth,
             showOverlay,
             selected,
             stopPropagation,
@@ -168,7 +207,7 @@ const DialogSelectComboBox = ({
             className={classNames('cc__combo-box', className, {
                 'cc__combo-box--disabled': disabled,
             })}
-            style={{ minWidth, ...style }}
+            style={{ width, ...style }}
         >
             <div className="cc__combo-box__label ellipsis">
                 {(selected === null || selected === undefined) &&
