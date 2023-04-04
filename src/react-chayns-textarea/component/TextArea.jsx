@@ -11,6 +11,10 @@ const DEFAULT_STYLE = {
     paddingBottom: '12px',
 };
 
+const BORDER_DESIGN_DEFAULT_STYLE = {
+    width: '100%',
+};
+
 /**
  * A multiline text input that can automatically grow with its content.
  */
@@ -108,7 +112,9 @@ const TextArea = ({
     }, [onBlur]);
 
     const style = {
-        ...DEFAULT_STYLE,
+        ...(design === TextArea.BORDER_DESIGN
+            ? BORDER_DESIGN_DEFAULT_STYLE
+            : DEFAULT_STYLE),
         ...styleProp,
     };
 
