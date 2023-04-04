@@ -1,5 +1,6 @@
 import type { WithTheme } from '@chayns-components/core';
 import styled, { css } from 'styled-components';
+import { getFontFamily } from '../../utils/font';
 import type { EmojiInputProps } from './EmojiInput';
 
 type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'isDisabled'>>;
@@ -38,14 +39,12 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>> & {
-    isMobile: boolean;
-    rootFontFamily: string;
-};
+type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
 
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
+    font-family: ${getFontFamily};
     max-height: 210px;
     overflow-y: scroll;
     word-break: break-word;
@@ -54,18 +53,6 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     // This is for example the case on iOS 15 or older.
     -webkit-user-modify: read-write;
     -webkit-user-select: text;
-
-    ${({ isMobile, rootFontFamily }) => {
-        if (isMobile) {
-            return css`
-                font-family: ${rootFontFamily};
-            `;
-        }
-
-        return css`
-            font-family: ${rootFontFamily}, 'Noto Color Emoji';
-        `;
-    }}
 
     &:empty:not(:focus):before {
         content: '${({ placeholder }) => placeholder}';

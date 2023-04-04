@@ -22,6 +22,8 @@ export const getDeviceType = (): DeviceType => {
     return DeviceType.Desktop;
 };
 
+export const getIsMacOS = () => /Mac OS X/i.test(navigator.userAgent);
+
 export const getIsMobile = (): boolean => {
     const deviceType = getDeviceType();
 
