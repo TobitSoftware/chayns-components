@@ -210,7 +210,9 @@ const DialogSelectComboBox = ({
             style={{ width, ...style }}
         >
             <div className="cc__combo-box__label ellipsis">
-                {(selected === null || selected === undefined) &&
+                {(selected === null ||
+                    selected === undefined ||
+                    !getItem(selected)) &&
                 value === null &&
                 label
                     ? label
