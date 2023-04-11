@@ -53,10 +53,13 @@ const Typewriter: FC<TypewriterProps> = ({
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
 
-    const sortedChildren =
-        Array.isArray(children) && shouldSortChildrenRandomly
-            ? shuffleArray<ReactElement | string>(children)
-            : children;
+    const sortedChildren = useMemo(
+        () =>
+            Array.isArray(children) && shouldSortChildrenRandomly
+                ? shuffleArray<ReactElement | string>(children)
+                : children,
+        [children, shouldSortChildrenRandomly]
+    );
 
     const areMultipleChildrenGiven = Array.isArray(sortedChildren);
     const childrenCount = areMultipleChildrenGiven ? sortedChildren.length : 1;

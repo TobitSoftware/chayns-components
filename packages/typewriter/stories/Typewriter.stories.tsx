@@ -40,5 +40,10 @@ CustomElements.args = {
 };
 
 MultipleTexts.args = {
-    children: ['Also, ...', 'Okay, ...', 'Genau, ...', 'Ja, ...'],
+    children: [
+        'Hmm, ich würde sagen...',
+        'Ich bin mir nicht ganz sicher...',
+        'Lass mich kurz nachdenken...',
+        'Nochmal von vorne...',
+    ],
 };
