@@ -1,21 +1,18 @@
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-
-// Styles
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import { postVideo } from '../../api/video/post';
+import { imageUpload } from '../../utils/imageUpload';
+import { selectFile } from '../../utils/selectFile';
 import {
     StyledGallery,
     StyledGalleryItem,
     StyledGalleryItemAdd,
-    StyledGalleryItemDelete,
+    StyledGalleryItemDeleteButton,
     StyledGalleryItemImage,
     StyledGalleryItemVideo,
 } from './Gallery.styles';
 
-// Functions
-import { postVideo } from '../../api/video/post';
-import { imageUpload } from '../../utils/imageUpload';
-import { selectFile } from '../../utils/selectFile';
-
 // Types
+import { Icon } from '@chayns-components/core';
 import type { Image, OnChange, UploadedFile, Video } from '../../types/files';
 
 export type GalleryProps = {
@@ -23,10 +20,6 @@ export type GalleryProps = {
      * AccessToken of the user
      */
     accessToken: string;
-    /**
-     * Images & videos which should be displayed
-     */
-    files: File[];
     /**
      * If user is authenticated
      */
@@ -41,10 +34,8 @@ export type GalleryProps = {
     personId: string;
 };
 
-const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChange, personId }) => {
-    const [newFiles, setNewFiles] = useState<File[]>();
+const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, personId }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
-    const [items, setItems] = useState<ReactElement[]>([]);
 
     /**
      * Upload files
@@ -85,19 +76,6 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
     );
 
     /**
-     * Upload files by props
-     */
-    useEffect(() => {
-        if (!files) {
-            return;
-        }
-
-        void uploadFiles(files);
-
-        // ToDo ignore
-    }, []);
-
-    /**
      * This function adds new data to the existing data list
      */
     const handleAdd = useCallback(
@@ -112,6 +90,9 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
         [onChange, uploadFiles, uploadedFiles]
     );
 
+    /**
+     * This function handles the incoming files by size
+     */
     const handleGalleryFiles = useCallback(
         (addedFiles: File[]) => {
             if (!addedFiles) {
@@ -148,66 +129,63 @@ const Gallery: FC<GalleryProps> = ({ accessToken, files, isAuthenticated, onChan
     /**
      * This function deletes a selected file from the data list
      */
-    const handleDelete = useCallback((event) => {
-        console.log('Event', event);
+    const handleDelete = useCallback(
+        (key: number | string) => {
+            const filteredFiles = uploadedFiles?.filter((file) => {
+                if ('thumbnailUrl' in file) {
+                    return file.id !== key;
+                }
+                return file.key !== key;
+            });
 
-        // ToDo filter 'items' to remove file
+            setUploadedFiles(filteredFiles ?? []);
 
-        // onChange({ files: uploadedFiles ?? [] });
-    }, []);
+            onChange({ files: uploadedFiles ?? [] });
+        },
+        [onChange, uploadedFiles]
+    );
 
     const galleryItems = useMemo(() => {
-        let newItems: ReactElement[] = items;
+        const newItems: ReactElement[] = [];
 
         if (uploadedFiles) {
-            // ToDo update onClick for delete
             uploadedFiles.forEach((file) => {
-                if ('thumbnailUrl' in file) {
-                    const newItem = (
-                        <StyledGalleryItem key={file.id}>
-                            <StyledGalleryItemDelete onClick={(event) => console.log(event)}>
-                                X
-                            </StyledGalleryItemDelete>
+                newItems.push(
+                    <StyledGalleryItem key={'thumbnailUrl' in file ? file.id : file.key}>
+                        <StyledGalleryItemDeleteButton
+                            onClick={() =>
+                                handleDelete('thumbnailUrl' in file ? file.id : file.key)
+                            }
+                        >
+                            <Icon size={20} icons={['ts-wrong']} />
+                        </StyledGalleryItemDeleteButton>
+                        {'thumbnailUrl' in file ? (
                             <StyledGalleryItemVideo poster={file.thumbnailUrl}>
                                 <source src={file.url} type="video/mp4" />
                             </StyledGalleryItemVideo>
-                        </StyledGalleryItem>
-                    );
-
-                    newItems.push(newItem);
-                } else {
-                    // console.log(newItems.filter(({ key }) => key !== file.key));
-                    const newItem = (
-                        <StyledGalleryItem key={file.key}>
-                            <StyledGalleryItemDelete />
+                        ) : (
                             <StyledGalleryItemImage
                                 draggable={false}
                                 src={`${file.base}/${file.key}`}
                             />
-                        </StyledGalleryItem>
-                    );
-
-                    newItems.push(newItem);
-                }
+                        )}
+                    </StyledGalleryItem>
+                );
             });
         }
 
-        newItems = newItems.filter(({ key }) => key !== 'addButton');
+        const items = newItems.filter(({ key }) => key !== 'addButton');
 
-        const newItem = (
+        items.push(
             <StyledGalleryItem key="addButton">
-                <StyledGalleryItemAdd onClick={openSelectDialog}>+</StyledGalleryItemAdd>
+                <StyledGalleryItemAdd onClick={openSelectDialog}>
+                    <Icon size={50} icons={['ts-gallery']} />
+                </StyledGalleryItemAdd>
             </StyledGalleryItem>
         );
 
-        newItems.push(newItem);
-        setItems(newItems);
-
-        return newItems;
-        // Ignore items because items state is changed here
-    }, [openSelectDialog, uploadedFiles]);
-
-    console.log('ITEMS', galleryItems);
+        return items;
+    }, [handleDelete, openSelectDialog, uploadedFiles]);
 
     return <StyledGallery>{galleryItems}</StyledGallery>;
 };

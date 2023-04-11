@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import { FaIcon } from 'react-icons/fa';
 
 export const StyledGallery = styled.div`
     display: flex;
@@ -13,14 +12,15 @@ export const StyledGalleryItem = styled.div`
     position: relative;
 `;
 
-export const StyledGalleryItemDelete = styled.button`
+export const StyledGalleryItemDeleteButton = styled.button`
+    background-color: white;
+    opacity: 0.7;
     position: absolute;
     top: 0;
     right: 0;
     z-index: 2;
     height: 30px;
     width: 30px;
-    border-radius: 50%;
 `;
 
 export const StyledGalleryItemAdd = styled.button`
@@ -29,10 +29,6 @@ export const StyledGalleryItemAdd = styled.button`
     border: darkslateblue solid 2px;
     border-radius: 2px;
 `;
-
-// const StyledGalleryItemAddIcon = styled(FaIcon)`
-//     font-size: 1.5rem;
-// `;
 
 export const StyledGalleryItemImage = styled.img`
     z-index: 1;
