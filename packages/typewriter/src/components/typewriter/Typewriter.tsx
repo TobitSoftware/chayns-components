@@ -90,7 +90,10 @@ const Typewriter: FC<TypewriterProps> = ({
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
-    const isAnimatingText = shownCharCount !== textContent.length || areMultipleChildrenGiven;
+    const isAnimatingText =
+        shownCharCount !== textContent.length ||
+        areMultipleChildrenGiven ||
+        textContent.length === 0;
 
     const handleClick = useCallback(() => {
         setShouldStopAnimation(true);
@@ -205,7 +208,9 @@ const Typewriter: FC<TypewriterProps> = ({
                 <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
             )}
             {isAnimatingText && (
-                <StyledTypewriterPseudoText dangerouslySetInnerHTML={{ __html: textContent }} />
+                <StyledTypewriterPseudoText
+                    dangerouslySetInnerHTML={{ __html: textContent || '&#8203;' }}
+                />
             )}
         </StyledTypewriter>
     );
