@@ -5,7 +5,7 @@ import {
     StyledTypewriterPseudoText,
     StyledTypewriterText,
 } from './Typewriter.styles';
-import { getCharactersCount, getSubTextFromHTML } from './utils';
+import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
 export enum TypewriterResetDelay {
     Slow = 4000,
@@ -29,6 +29,12 @@ export type TypewriterProps = {
      */
     resetDelay?: TypewriterResetDelay;
     /**
+     * Specifies whether the children should be sorted randomly if there are multiple texts.
+     * This makes the typewriter start with a different text each time and also changes them
+     * in a random order.
+     */
+    shouldSortChildrenRandomly?: boolean;
+    /**
      * Specifies whether the reset of the text should be animated with a backspace animation for multiple texts.
      */
     shouldUseResetAnimation?: boolean;
@@ -41,17 +47,23 @@ export type TypewriterProps = {
 const Typewriter: FC<TypewriterProps> = ({
     children,
     resetDelay = TypewriterResetDelay.Medium,
+    shouldSortChildrenRandomly = false,
     shouldUseResetAnimation = false,
     speed = TypewriterSpeed.Medium,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
 
-    const areMultipleChildrenGiven = Array.isArray(children);
-    const childrenCount = areMultipleChildrenGiven ? children.length : 1;
+    const sortedChildren =
+        Array.isArray(children) && shouldSortChildrenRandomly
+            ? shuffleArray<ReactElement | string>(children)
+            : children;
+
+    const areMultipleChildrenGiven = Array.isArray(sortedChildren);
+    const childrenCount = areMultipleChildrenGiven ? sortedChildren.length : 1;
 
     const textContent = useMemo(() => {
         if (areMultipleChildrenGiven) {
-            const currentChildren = children[currentChildrenIndex];
+            const currentChildren = sortedChildren[currentChildrenIndex];
 
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
@@ -62,8 +74,10 @@ const Typewriter: FC<TypewriterProps> = ({
             return '';
         }
 
-        return React.isValidElement(children) ? renderToString(children) : children;
-    }, [areMultipleChildrenGiven, children, currentChildrenIndex]);
+        return React.isValidElement(sortedChildren)
+            ? renderToString(sortedChildren)
+            : sortedChildren;
+    }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
@@ -185,7 +199,7 @@ const Typewriter: FC<TypewriterProps> = ({
                     isAnimatingText
                 />
             ) : (
-                <StyledTypewriterText>{children}</StyledTypewriterText>
+                <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
             )}
             {isAnimatingText && (
                 <StyledTypewriterPseudoText dangerouslySetInnerHTML={{ __html: textContent }} />
