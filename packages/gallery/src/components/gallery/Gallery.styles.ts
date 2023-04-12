@@ -7,6 +7,10 @@ export const StyledGallery = styled.div`
     flex-wrap: wrap;
     gap: 10px;
     padding: 15px;
+
+    & > * {
+        flex-basis: calc(25% - 7.5px); /* 25% Breite, abzüglich des Lückenabstands */
+    }
 `;
 
 export const StyledGalleryItem = styled.div`
@@ -36,8 +40,8 @@ export const StyledGalleryItemAdd = styled.button<StyledGalleryItemAddProps>`
     background-color: ${({ theme }: StyledGalleryItemAddProps) => theme['101']};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledGalleryItemImageProps) => theme['009-rgb']}, 0.08) inset;
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
 `;
 
 type StyledGalleryItemImageProps = WithTheme<unknown>;
@@ -47,7 +51,7 @@ export const StyledGalleryItemImage = styled.img<StyledGalleryItemImageProps>`
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledGalleryItemImageProps) => theme['009-rgb']}, 0.08) inset;
     z-index: 1;
-    width: 150px;
+    width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 `;
@@ -58,7 +62,7 @@ export const StyledGalleryItemVideo = styled.video<StyledGalleryItemVideoProps>`
     background-color: ${({ theme }: StyledGalleryItemVideoProps) => theme['101']};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledGalleryItemImageProps) => theme['009-rgb']}, 0.08) inset;
-    width: 150px;
+    width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 `;
