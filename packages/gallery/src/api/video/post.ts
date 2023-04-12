@@ -1,6 +1,3 @@
-import { VIDEO_STORAGE_BASE_URL } from '../../constants/externalServerUrl';
-import type { ApiFunctionResult } from '../../types/api';
-
 export interface PostVideoResult {
     id: number;
     originalVideoQuality: string;
@@ -17,7 +14,7 @@ interface PostVideoOptions {
 export const postVideo = async ({
     accessToken,
     file,
-}: PostVideoOptions): Promise<ApiFunctionResult<PostVideoResult>> => {
+}: PostVideoOptions): Promise<PostVideoResult> => {
     const formData = new FormData();
 
     formData.append('files', file);
@@ -30,15 +27,15 @@ export const postVideo = async ({
         body: formData,
     };
 
-    const url = `${VIDEO_STORAGE_BASE_URL}/video?disableIntercom=true`;
+    const url = `https://streamingservice.chayns.space/video?disableIntercom=true`;
 
     const response = await fetch(url, requestInit);
 
-    if (response.status === 202) {
-        const data = (await response.json()) as PostVideoResult;
+    // console.log(await response.json());
 
-        return { data, status: 202 };
+    if (response.status === 202) {
+        return (await response.json()) as PostVideoResult;
     }
 
-    return { status: response.status };
+    throw Error(`Uploading the Video failed with status code ${response.status}.`);
 };

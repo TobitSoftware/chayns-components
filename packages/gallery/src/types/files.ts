@@ -1,7 +1,3 @@
-export type OnChange = {
-    files: UploadedFile[];
-};
-
 export interface Video {
     id: number;
     originalVideoQuality: string;

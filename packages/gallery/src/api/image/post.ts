@@ -1,12 +1,11 @@
-import type { Image } from '../types/files';
+import type { Image } from '../../types/files';
 
 /**
  * Uploads an image to the tsimg cloud service.
  */
-interface ImageUpload {
+interface Post {
     accessToken: string;
     file: File | string;
-    isAuthenticated: boolean;
     referenceId?: string;
     personId: string;
     siteId?: string;
@@ -16,21 +15,18 @@ interface ImageUpload {
 export const imageUpload = async ({
     accessToken,
     file,
-    isAuthenticated,
     referenceId,
     personId,
     siteId,
     url = 'https://api.tsimg.cloud/image',
-}: ImageUpload): Promise<Image> => {
+}: Post): Promise<Image> => {
     const headers = new Headers({ Accept: 'application/json' });
 
     if (referenceId) headers.set('X-Reference-Id', referenceId);
     if (personId) headers.set('X-Person-Id', personId);
     if (siteId) headers.set('X-Site-Id', siteId);
 
-    if (isAuthenticated) {
-        headers.set('Authorization', `bearer ${accessToken}`);
-    }
+    headers.set('Authorization', `bearer ${accessToken}`);
 
     let body: string | ArrayBuffer;
 
