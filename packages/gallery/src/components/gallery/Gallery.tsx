@@ -14,6 +14,7 @@ import {
 // Types
 import { Icon } from '@chayns-components/core';
 import type { Image, OnChange, UploadedFile, Video } from '../../types/files';
+import { filterDuplicates } from '../../utils/filter';
 
 export type GalleryProps = {
     /**
@@ -51,6 +52,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
             let newUploadedFiles: UploadedFile[] = [];
 
             // Upload videos
+            // ToDo fix type of api call
             const videoResult: Promise<Video>[] = videos.map((video) =>
                 postVideo({ accessToken, file: video })
             );
@@ -69,10 +71,15 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
 
             newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageResult));
 
-            console.log('UPLOADED', newUploadedFiles);
-            setUploadedFiles(newUploadedFiles);
+            if (!uploadedFiles) {
+                setUploadedFiles(newUploadedFiles);
+
+                return;
+            }
+
+            setUploadedFiles(filterDuplicates(uploadedFiles, newUploadedFiles));
         },
-        [accessToken, isAuthenticated, personId]
+        [accessToken, isAuthenticated, personId, uploadedFiles]
     );
 
     /**
@@ -146,11 +153,11 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
     );
 
     const galleryItems = useMemo(() => {
-        const newItems: ReactElement[] = [];
+        const items: ReactElement[] = [];
 
         if (uploadedFiles) {
             uploadedFiles.forEach((file) => {
-                newItems.push(
+                items.push(
                     <StyledGalleryItem key={'thumbnailUrl' in file ? file.id : file.key}>
                         <StyledGalleryItemDeleteButton
                             onClick={() =>
@@ -173,8 +180,6 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
                 );
             });
         }
-
-        const items = newItems.filter(({ key }) => key !== 'addButton');
 
         items.push(
             <StyledGalleryItem key="addButton">
