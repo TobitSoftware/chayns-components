@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import { imageUpload } from '../../api/image/post';
 import { postVideo } from '../../api/video/post';
-import { imageUpload } from '../../utils/imageUpload';
-import { selectFile } from '../../utils/selectFile';
+import { convertFileListToArray, filterDuplicateFiles, selectFiles } from '../../utils/file';
 import {
     StyledGallery,
     StyledGalleryItem,
@@ -13,8 +13,7 @@ import {
 
 // Types
 import { Icon } from '@chayns-components/core';
-import type { Image, OnChange, UploadedFile, Video } from '../../types/files';
-import { filterDuplicates } from '../../utils/filter';
+import type { Image, UploadedFile, Video } from '../../types/files';
 
 export type GalleryProps = {
     /**
@@ -22,20 +21,16 @@ export type GalleryProps = {
      */
     accessToken: string;
     /**
-     * If user is authenticated
-     */
-    isAuthenticated: boolean;
-    /**
      *  Function to be executed when files are added or removed
      */
-    onChange: ({ files }: OnChange) => void;
+    onChange: (files: UploadedFile[]) => void;
     /**
      * PersonId of the user
      */
     personId: string;
 };
 
-const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, personId }) => {
+const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
 
     /**
@@ -52,18 +47,17 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
             let newUploadedFiles: UploadedFile[] = [];
 
             // Upload videos
-            // ToDo fix type of api call
             const videoResult: Promise<Video>[] = videos.map((video) =>
                 postVideo({ accessToken, file: video })
             );
 
             newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoResult));
+            newUploadedFiles = newUploadedFiles.flat();
 
             // Upload images
             const imageResult: Promise<Image>[] = images.map((image) =>
                 imageUpload({
                     accessToken,
-                    isAuthenticated,
                     file: image,
                     personId,
                 })
@@ -77,9 +71,9 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
                 return;
             }
 
-            setUploadedFiles(filterDuplicates(uploadedFiles, newUploadedFiles));
+            setUploadedFiles(filterDuplicateFiles(uploadedFiles, newUploadedFiles));
         },
-        [accessToken, isAuthenticated, personId, uploadedFiles]
+        [accessToken, personId, uploadedFiles]
     );
 
     /**
@@ -92,46 +86,47 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
             }
 
             void uploadFiles(filesAdd);
-            onChange({ files: uploadedFiles ?? [] });
+            onChange(uploadedFiles ?? []);
         },
         [onChange, uploadFiles, uploadedFiles]
     );
 
     /**
-     * This function handles the incoming files by size
-     */
-    const handleGalleryFiles = useCallback(
-        (addedFiles: File[]) => {
-            if (!addedFiles) {
-                return;
-            }
-
-            const filteredGalleryFiles = addedFiles.filter(({ size }) => size / 1024 / 1024 < 64);
-
-            if (addedFiles.length !== filteredGalleryFiles.length) {
-                return;
-            }
-
-            handleAdd(filteredGalleryFiles);
-        },
-        [handleAdd]
-    );
-
-    /**
      * Open a dialog to select files
      */
-    const openSelectDialog = useCallback(async () => {
-        const selectedFiles: File[] = await selectFile({
+    const openSelectDialog = useCallback(() => {
+        void selectFiles({
             multiple: true,
             type: 'image/*, video/*',
+        }).then((selectedFiles) => {
+            if (selectedFiles && selectedFiles.length > 0) {
+                const fileArray = convertFileListToArray(selectedFiles);
+
+                // Filters files to use only under 64MB
+                const filteredFileArray = fileArray.filter(({ size, type }) => {
+                    const sizeInMB = size / 1024 / 1024;
+
+                    if (type.includes('video/') && sizeInMB > 500) {
+                        return false;
+                    }
+
+                    return !(type.includes('image/') && sizeInMB > 64);
+                });
+
+                if (fileArray.length !== filteredFileArray.length) {
+                    // ToDo show dialog that some files are to big
+                }
+
+                if (filteredFileArray.length === 0) {
+                    // ToDo show dialog that all files are to big
+
+                    return;
+                }
+
+                handleAdd(filteredFileArray);
+            }
         });
-
-        if (selectedFiles && selectedFiles.length > 0) {
-            const filesToArray = [...selectedFiles];
-
-            handleGalleryFiles(filesToArray);
-        }
-    }, [handleGalleryFiles]);
+    }, [handleAdd]);
 
     /**
      * This function deletes a selected file from the data list
@@ -147,7 +142,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, isAuthenticated, onChange, per
 
             setUploadedFiles(filteredFiles ?? []);
 
-            onChange({ files: uploadedFiles ?? [] });
+            onChange(uploadedFiles ?? []);
         },
         [onChange, uploadedFiles]
     );
