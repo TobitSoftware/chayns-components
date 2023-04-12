@@ -147,6 +147,19 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
         [onChange, uploadedFiles]
     );
 
+    /**
+     * This function shows a selected file
+     */
+    const showFile = useCallback((file: UploadedFile) => {
+        if ('thumbnailUrl' in file) {
+            void chayns.openVideo(file.url);
+
+            return;
+        }
+
+        void chayns.openImage([`${file.base}/${file.key}`], 0);
+    }, []);
+
     const galleryItems = useMemo(() => {
         const items: ReactElement[] = [];
 
@@ -162,11 +175,15 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
                             <Icon size={20} icons={['ts-wrong']} />
                         </StyledGalleryItemDeleteButton>
                         {'thumbnailUrl' in file ? (
-                            <StyledGalleryItemVideo poster={file.thumbnailUrl}>
+                            <StyledGalleryItemVideo
+                                onClick={() => showFile(file)}
+                                poster={file.thumbnailUrl}
+                            >
                                 <source src={file.url} type="video/mp4" />
                             </StyledGalleryItemVideo>
                         ) : (
                             <StyledGalleryItemImage
+                                onClick={() => showFile(file)}
                                 draggable={false}
                                 src={`${file.base}/${file.key}`}
                             />
