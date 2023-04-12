@@ -152,11 +152,15 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
      */
     const showFile = useCallback((file: UploadedFile) => {
         if ('thumbnailUrl' in file) {
+            // @ts-expect-error: Type is correct here
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
             void chayns.openVideo(file.url);
 
             return;
         }
 
+        // @ts-expect-error: Type is correct here
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         void chayns.openImage([`${file.base}/${file.key}`], 0);
     }, []);
 
