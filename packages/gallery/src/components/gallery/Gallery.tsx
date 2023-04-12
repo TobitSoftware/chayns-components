@@ -68,12 +68,16 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
             if (!uploadedFiles) {
                 setUploadedFiles(newUploadedFiles);
 
+                onChange(newUploadedFiles);
+
                 return;
             }
 
             setUploadedFiles(filterDuplicateFiles(uploadedFiles, newUploadedFiles));
+
+            onChange(filterDuplicateFiles(uploadedFiles, newUploadedFiles));
         },
-        [accessToken, personId, uploadedFiles]
+        [accessToken, onChange, personId, uploadedFiles]
     );
 
     /**
@@ -86,9 +90,8 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
             }
 
             void uploadFiles(filesAdd);
-            onChange(uploadedFiles ?? []);
         },
-        [onChange, uploadFiles, uploadedFiles]
+        [uploadFiles]
     );
 
     /**
@@ -142,7 +145,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
 
             setUploadedFiles(filteredFiles ?? []);
 
-            onChange(uploadedFiles ?? []);
+            onChange(filteredFiles ?? []);
         },
         [onChange, uploadedFiles]
     );
@@ -200,13 +203,13 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
         items.push(
             <StyledGalleryItem key="addButton">
                 <StyledGalleryItemAdd onClick={openSelectDialog}>
-                    <Icon size={50} icons={['ts-gallery']} />
+                    <Icon size={40} icons={['fa fa-plus']} />
                 </StyledGalleryItemAdd>
             </StyledGalleryItem>
         );
 
         return items;
-    }, [handleDelete, openSelectDialog, uploadedFiles]);
+    }, [handleDelete, openSelectDialog, showFile, uploadedFiles]);
 
     return <StyledGallery>{galleryItems}</StyledGallery>;
 };
