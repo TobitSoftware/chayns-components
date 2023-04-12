@@ -5,6 +5,8 @@ declare global {
 export interface Chayns {
     dialog: Dialog;
     env: Env;
+    openImage(urls: string | string[], start?: number): Promise<undefined>;
+    openVideo(url: string): Promise<void>;
 }
 
 export interface Dialog {
