@@ -7,12 +7,14 @@ import {
 } from './Typewriter.styles';
 import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
 
+// noinspection JSUnusedGlobalSymbols
 export enum TypewriterResetDelay {
     Slow = 4000,
     Medium = 2000,
     Fast = 1000,
 }
 
+// noinspection JSUnusedGlobalSymbols
 export enum TypewriterSpeed {
     Slow = 40,
     Medium = 30,
@@ -25,6 +27,11 @@ export type TypewriterProps = {
      */
     children: ReactElement | ReactElement[] | string | string[];
     /**
+     * Function that is executed when the typewriter animation has finished. This function will not
+     * be executed if multiple texts are used.
+     */
+    onFinish?: VoidFunction;
+    /**
      * Waiting time before the typewriter resets the content if multiple texts are given
      */
     resetDelay?: TypewriterResetDelay;
@@ -35,7 +42,8 @@ export type TypewriterProps = {
      */
     shouldSortChildrenRandomly?: boolean;
     /**
-     * Specifies whether the reset of the text should be animated with a backspace animation for multiple texts.
+     * Specifies whether the reset of the text should be animated with a backspace animation for
+     * multiple texts.
      */
     shouldUseResetAnimation?: boolean;
     /**
@@ -46,6 +54,7 @@ export type TypewriterProps = {
 
 const Typewriter: FC<TypewriterProps> = ({
     children,
+    onFinish,
     resetDelay = TypewriterResetDelay.Medium,
     shouldSortChildrenRandomly = false,
     shouldUseResetAnimation = false,
@@ -191,6 +200,12 @@ const Typewriter: FC<TypewriterProps> = ({
             setShownCharCount(0);
         }
     }, [charactersCount]);
+
+    useEffect(() => {
+        if (!isAnimatingText && typeof onFinish === 'function') {
+            onFinish();
+        }
+    }, [isAnimatingText, onFinish]);
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
