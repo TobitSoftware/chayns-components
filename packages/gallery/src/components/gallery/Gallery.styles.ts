@@ -8,7 +8,8 @@ export const StyledGalleryView = styled.div``;
 export const StyledGalleryViewGrid = styled.div<{ columns: string }>`
     display: grid;
     grid-template-columns: ${(props) => props.columns};
-    grid-gap: 5px;
+    row-gap: 5px;
+    column-gap: 5px;
 `;
 
 export const StyledGalleryViewItem = styled.div`
@@ -36,7 +37,8 @@ export const StyledGalleryItemWrapper = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 10px;
+    row-gap: 10px;
+    column-gap: 10px;
     padding: 15px;
 
     & > * {
