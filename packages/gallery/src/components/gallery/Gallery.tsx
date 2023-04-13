@@ -354,23 +354,25 @@ const Gallery: FC<GalleryProps> = ({
 
             items.push(
                 <StyledGalleryView>
-                    {file && 'thumbnailUrl' in file ? (
-                        <StyledGalleryItemVideoWrapper>
-                            <StyledGalleryItemPlayIcon>
-                                <Icon size={40} icons={['fa fa-play']} />
-                            </StyledGalleryItemPlayIcon>
-                            <StyledGalleryItemVideo ratio={ratio} poster={file.thumbnailUrl}>
-                                <source src={file.url} type="video/mp4" />
-                            </StyledGalleryItemVideo>
-                        </StyledGalleryItemVideoWrapper>
-                    ) : (
-                        <StyledGalleryItemImage
-                            ratio={ratio}
-                            draggable={false}
-                            src={`${file?.base ?? ''}/${file?.key ?? ''}`}
-                            alt="Media"
-                        />
-                    )}
+                    <StyledGalleryViewItem>
+                        {file && 'thumbnailUrl' in file ? (
+                            <StyledGalleryItemVideoWrapper>
+                                <StyledGalleryItemPlayIcon>
+                                    <Icon size={40} icons={['fa fa-play']} />
+                                </StyledGalleryItemPlayIcon>
+                                <StyledGalleryItemVideo ratio={ratio} poster={file.thumbnailUrl}>
+                                    <source src={file.url} type="video/mp4" />
+                                </StyledGalleryItemVideo>
+                            </StyledGalleryItemVideoWrapper>
+                        ) : (
+                            <StyledGalleryItemImage
+                                ratio={ratio}
+                                draggable={false}
+                                src={`${file?.base ?? ''}/${file?.key ?? ''}`}
+                                alt="Media"
+                            />
+                        )}
+                    </StyledGalleryViewItem>
                 </StyledGalleryView>
             );
         }
