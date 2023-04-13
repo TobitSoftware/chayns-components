@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
-import { imageUpload } from '../../api/image/post';
-import { postVideo } from '../../api/video/post';
+import { imageUpload } from '../../api/image/imageUpload';
+import { videoUpload } from '../../api/video/videoUpload';
 import { convertFileListToArray, filterDuplicateFiles, selectFiles } from '../../utils/file';
 import {
     StyledGallery,
@@ -54,7 +54,7 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onAdd, onRemove, personId }) =
 
             // Upload videos
             const videoResult: Promise<Video>[] = videos.map((video) =>
-                postVideo({ accessToken, file: video })
+                videoUpload({ accessToken, file: video })
             );
 
             newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoResult));

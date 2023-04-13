@@ -11,7 +11,10 @@ interface PostVideoOptions {
     file: File | Blob;
 }
 
-export const postVideo = async ({
+/**
+ * Uploads a video to the chayns.space
+ */
+export const videoUpload = async ({
     accessToken,
     file,
 }: PostVideoOptions): Promise<PostVideoResult> => {
