@@ -17,6 +17,14 @@ export const StyledGalleryItem = styled.div`
     position: relative;
 `;
 
+export const StyledGalleryItemPlayIcon = styled.div`
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
 type StyledGalleryItemDeleteButtonProps = WithTheme<unknown>;
 
 export const StyledGalleryItemDeleteButton = styled.button<StyledGalleryItemDeleteButtonProps>`
@@ -66,3 +74,5 @@ export const StyledGalleryItemVideo = styled.video<StyledGalleryItemVideoProps>`
     aspect-ratio: 1 / 1;
     object-fit: cover;
 `;
+
+export const StyledGalleryItemVideoWrapper = styled.div``;
