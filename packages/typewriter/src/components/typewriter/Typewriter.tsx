@@ -32,6 +32,11 @@ export type TypewriterProps = {
      */
     onFinish?: VoidFunction;
     /**
+     * Pseudo-element to be rendered invisible during animation to define the size of the element
+     * for the typewriter effect. By default, the "children" is used for this purpose.
+     */
+    pseudoChildren?: ReactElement | string;
+    /**
      * Waiting time before the typewriter resets the content if multiple texts are given
      */
     resetDelay?: TypewriterResetDelay;
@@ -55,6 +60,7 @@ export type TypewriterProps = {
 const Typewriter: FC<TypewriterProps> = ({
     children,
     onFinish,
+    pseudoChildren,
     resetDelay = TypewriterResetDelay.Medium,
     shouldSortChildrenRandomly = false,
     shouldUseResetAnimation = false,
@@ -212,22 +218,27 @@ const Typewriter: FC<TypewriterProps> = ({
         [shownCharCount, textContent]
     );
 
-    return (
-        <StyledTypewriter onClick={handleClick}>
-            {isAnimatingText ? (
-                <StyledTypewriterText
-                    dangerouslySetInnerHTML={{ __html: shownText }}
-                    isAnimatingText
-                />
-            ) : (
-                <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
-            )}
-            {isAnimatingText && (
-                <StyledTypewriterPseudoText
-                    dangerouslySetInnerHTML={{ __html: textContent || '&#8203;' }}
-                />
-            )}
-        </StyledTypewriter>
+    return useMemo(
+        () => (
+            <StyledTypewriter onClick={handleClick}>
+                {isAnimatingText ? (
+                    <StyledTypewriterText
+                        dangerouslySetInnerHTML={{ __html: shownText }}
+                        isAnimatingText
+                    />
+                ) : (
+                    <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
+                )}
+                {isAnimatingText && (
+                    <StyledTypewriterPseudoText
+                        dangerouslySetInnerHTML={{
+                            __html: pseudoChildren || textContent || '&#8203;',
+                        }}
+                    />
+                )}
+            </StyledTypewriter>
+        ),
+        [handleClick, isAnimatingText, pseudoChildren, shownText, sortedChildren, textContent]
     );
 };
 
