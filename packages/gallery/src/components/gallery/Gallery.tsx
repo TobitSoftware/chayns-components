@@ -25,11 +25,11 @@ export type GalleryProps = {
     /**
      *  Function to be executed when files are added
      */
-    onAdd: (Files: UploadedFile[]) => void;
+    onAdd?: (Files: UploadedFile[]) => void;
     /**
      *  Function to be executed when a file is removed
      */
-    onRemove: (file: UploadedFile) => void;
+    onRemove?: (file: UploadedFile) => void;
     /**
      * PersonId of the user
      */
@@ -72,7 +72,9 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onAdd, onRemove, personId }) =
             newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageResult));
 
             if (!uploadedFiles) {
-                onAdd(newUploadedFiles);
+                if (onAdd) {
+                    onAdd(newUploadedFiles);
+                }
 
                 setUploadedFiles(newUploadedFiles);
 
@@ -81,7 +83,9 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onAdd, onRemove, personId }) =
 
             const { newUniqueFiles } = filterDuplicateFiles(uploadedFiles, newUploadedFiles);
 
-            onAdd(newUniqueFiles);
+            if (onAdd) {
+                onAdd(newUniqueFiles);
+            }
 
             setUploadedFiles((prevState) =>
                 prevState ? [...prevState, ...newUniqueFiles] : [...newUniqueFiles]
@@ -166,7 +170,9 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onAdd, onRemove, personId }) =
                 return;
             }
 
-            onRemove(deletedFile);
+            if (onRemove) {
+                onRemove(deletedFile);
+            }
         },
         [onRemove, uploadedFiles]
     );
