@@ -29,6 +29,10 @@ export type EmojiInputProps = {
      */
     accessToken?: string;
     /**
+     * HTML id of the input element
+     */
+    inputId?: string;
+    /**
      * Disables the input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
@@ -71,6 +75,7 @@ export type EmojiInputProps = {
 
 const EmojiInput: FC<EmojiInputProps> = ({
     accessToken,
+    inputId,
     isDisabled,
     onInput,
     onKeyDown,
@@ -205,6 +210,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
             <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
+                    id={inputId}
                     onInput={handleInput}
                     onKeyDown={onKeyDown}
                     onPaste={handlePaste}
