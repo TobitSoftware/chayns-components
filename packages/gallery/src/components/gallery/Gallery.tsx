@@ -8,7 +8,9 @@ import {
     StyledGalleryItemAdd,
     StyledGalleryItemDeleteButton,
     StyledGalleryItemImage,
+    StyledGalleryItemPlayIcon,
     StyledGalleryItemVideo,
+    StyledGalleryItemVideoWrapper,
 } from './Gallery.styles';
 
 // Types
@@ -21,16 +23,20 @@ export type GalleryProps = {
      */
     accessToken: string;
     /**
-     *  Function to be executed when files are added or removed
+     *  Function to be executed when files are added
      */
-    onChange: (files: UploadedFile[]) => void;
+    onAdd: (Files: UploadedFile[]) => void;
+    /**
+     *  Function to be executed when a file is removed
+     */
+    onRemove: (file: UploadedFile) => void;
     /**
      * PersonId of the user
      */
     personId: string;
 };
 
-const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
+const Gallery: FC<GalleryProps> = ({ accessToken, onAdd, onRemove, personId }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
 
     /**
@@ -66,18 +72,22 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
             newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageResult));
 
             if (!uploadedFiles) {
-                setUploadedFiles(newUploadedFiles);
+                onAdd(newUploadedFiles);
 
-                onChange(newUploadedFiles);
+                setUploadedFiles(newUploadedFiles);
 
                 return;
             }
 
-            setUploadedFiles(filterDuplicateFiles(uploadedFiles, newUploadedFiles));
+            const { newUniqueFiles } = filterDuplicateFiles(uploadedFiles, newUploadedFiles);
 
-            onChange(filterDuplicateFiles(uploadedFiles, newUploadedFiles));
+            onAdd(newUniqueFiles);
+
+            setUploadedFiles((prevState) =>
+                prevState ? [...prevState, ...newUniqueFiles] : [...newUniqueFiles]
+            );
         },
-        [accessToken, onChange, personId, uploadedFiles]
+        [accessToken, onAdd, personId, uploadedFiles]
     );
 
     /**
@@ -143,11 +153,22 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
                 return file.key !== key;
             });
 
+            const deletedFile = uploadedFiles?.find((file) => {
+                if ('thumbnailUrl' in file) {
+                    return file.id === key;
+                }
+                return file.key === key;
+            });
+
             setUploadedFiles(filteredFiles ?? []);
 
-            onChange(filteredFiles ?? []);
+            if (!deletedFile) {
+                return;
+            }
+
+            onRemove(deletedFile);
         },
-        [onChange, uploadedFiles]
+        [onRemove, uploadedFiles]
     );
 
     /**
@@ -182,12 +203,14 @@ const Gallery: FC<GalleryProps> = ({ accessToken, onChange, personId }) => {
                             <Icon size={20} icons={['ts-wrong']} />
                         </StyledGalleryItemDeleteButton>
                         {'thumbnailUrl' in file ? (
-                            <StyledGalleryItemVideo
-                                onClick={() => showFile(file)}
-                                poster={file.thumbnailUrl}
-                            >
-                                <source src={file.url} type="video/mp4" />
-                            </StyledGalleryItemVideo>
+                            <StyledGalleryItemVideoWrapper onClick={() => showFile(file)}>
+                                <StyledGalleryItemPlayIcon>
+                                    <Icon size={30} icons={['fa fa-play']} />
+                                </StyledGalleryItemPlayIcon>
+                                <StyledGalleryItemVideo poster={file.thumbnailUrl}>
+                                    <source src={file.url} type="video/mp4" />
+                                </StyledGalleryItemVideo>
+                            </StyledGalleryItemVideoWrapper>
                         ) : (
                             <StyledGalleryItemImage
                                 onClick={() => showFile(file)}

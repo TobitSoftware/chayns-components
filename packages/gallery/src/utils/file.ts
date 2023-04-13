@@ -50,10 +50,7 @@ export const convertFileListToArray = (fileList: FileList): File[] => {
     return filesArray;
 };
 
-export const filterDuplicateFiles = (
-    oldFiles: UploadedFile[],
-    newFiles: UploadedFile[]
-): UploadedFile[] => {
+export const filterDuplicateFiles = (oldFiles: UploadedFile[], newFiles: UploadedFile[]) => {
     const seenKeys = new Set<string>();
     const filteredFiles: UploadedFile[] = [];
 
@@ -69,6 +66,8 @@ export const filterDuplicateFiles = (
         filteredFiles.push(file);
     });
 
+    const newUniqueFiles: UploadedFile[] = [];
+
     newFiles.forEach((file) => {
         let key: string;
         if ('id' in file) {
@@ -77,11 +76,35 @@ export const filterDuplicateFiles = (
             key = file.key;
         }
 
-        if (!seenKeys.has(key)) {
+        const oldFile = oldFiles.find((f) => {
+            if ('id' in f && 'id' in file) {
+                return f.id === file.id;
+            }
+
+            if ('key' in f && 'key' in file) {
+                return f.key === file.key;
+            }
+
+            return null;
+        });
+
+        const alreadyAdded = newUniqueFiles.find((f) => {
+            if ('id' in f && 'id' in file) {
+                return f.id === file.id;
+            }
+
+            if ('key' in f && 'key' in file) {
+                return f.key === file.key;
+            }
+
+            return null;
+        });
+
+        if (!oldFile && !alreadyAdded) {
             seenKeys.add(key);
-            filteredFiles.push(file);
+            newUniqueFiles.push(file);
         }
     });
 
-    return filteredFiles;
+    return { filteredFiles, newUniqueFiles };
 };
