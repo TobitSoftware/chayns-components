@@ -218,6 +218,16 @@ const Typewriter: FC<TypewriterProps> = ({
         [shownCharCount, textContent]
     );
 
+    const pseudoTextHTML = useMemo(() => {
+        if (pseudoChildren) {
+            return React.isValidElement(pseudoChildren)
+                ? renderToString(pseudoChildren)
+                : pseudoChildren;
+        }
+
+        return textContent || '&#8203;';
+    }, [pseudoChildren, textContent]);
+
     return useMemo(
         () => (
             <StyledTypewriter onClick={handleClick}>
@@ -231,9 +241,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
-                        dangerouslySetInnerHTML={{
-                            __html: pseudoChildren || textContent || '&#8203;',
-                        }}
+                        dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}
                     />
                 )}
             </StyledTypewriter>
