@@ -34,6 +34,10 @@ export type GalleryProps = {
      */
     accessToken: string;
     /**
+     * Whether drag and drop is allowed or not
+     */
+    allowDragAndDrop: boolean;
+    /**
      *  Whether images and videos can be edited
      */
     editMode?: boolean;
@@ -57,6 +61,7 @@ export type GalleryProps = {
 
 const Gallery: FC<GalleryProps> = ({
     accessToken,
+    allowDragAndDrop = false,
     editMode = false,
     files,
     onAdd,
@@ -251,6 +256,48 @@ const Gallery: FC<GalleryProps> = ({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         void chayns.openImage([`${file.base}/${file.key}`], 0);
     }, []);
+
+    /**
+     * This function shows a selected file
+     */
+    // const showFiles = useCallback((files: UploadedFile[], index: number) => {
+    //     // if ('thumbnailUrl' in file) {
+    //     //     // @ts-expect-error: Type is correct here
+    //     //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    //     //     void chayns.openVideo(file.url);
+    //     //
+    //     //     return;
+    //     // }
+    //     const formattedFiles: string[] = [];
+    //     onClick={() => showFiles(uploadedFiles, index)}
+    //
+    //     files.forEach((file) => {
+    //         if ('thumbnailUrl' in file) {
+    //             formattedFiles.push(file.url);
+    //
+    //             return;
+    //         }
+    //
+    //         formattedFiles.push(`${file.base}/${file.key}`);
+    //     });
+    //     // @ts-expect-error: Type is correct here
+    //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    //     void chayns.openImage([formattedFiles], index);
+    //     // void chayns.openImage([`${file.base}/${file.key}`], 0);
+    // }, []);
+
+    /**
+     * This function handles the drag and drop
+     */
+    const handleDrop = (e: {
+        preventDefault: () => void;
+        dataTransfer: { files: Iterable<File> | ArrayLike<File> };
+    }) => {
+        e.preventDefault();
+        const draggedFiles = Array.from(e.dataTransfer.files);
+
+        void uploadFiles(draggedFiles);
+    };
 
     /**
      * Returns the ratio of the single file
@@ -514,7 +561,12 @@ const Gallery: FC<GalleryProps> = ({
     return (
         <StyledGallery>
             {editMode ? (
-                <StyledGalleryItemWrapper>{galleryItems}</StyledGalleryItemWrapper>
+                <StyledGalleryItemWrapper
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={allowDragAndDrop ? handleDrop : undefined}
+                >
+                    {galleryItems}
+                </StyledGalleryItemWrapper>
             ) : (
                 galleryItems
             )}
