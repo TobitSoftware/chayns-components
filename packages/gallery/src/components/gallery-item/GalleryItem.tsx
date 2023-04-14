@@ -20,8 +20,17 @@ export type GalleryItemProps = {
      *  Whether images and videos can be edited
      */
     isEditMode: boolean;
+    /**
+     *  Ratio of the images and videos
+     */
     ratio: number;
+    /**
+     *  Function to be executed wehen a file is deleted
+     */
     handleDeleteFile: (key: number | string) => void;
+    /**
+     *  Length of the uploaded files
+     */
     remainingItemsLength?: number;
 };
 
