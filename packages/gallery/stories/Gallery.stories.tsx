@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import Gallery from '../src/components/gallery/Gallery';
+import Gallery from '../src/components/Gallery';
 
 export default {
     title: 'Gallery/Gallery',

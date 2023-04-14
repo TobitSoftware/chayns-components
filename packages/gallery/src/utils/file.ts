@@ -1,4 +1,6 @@
-import type { UploadedFile } from '../types/files';
+import { imageUpload } from '../api/image/imageUpload';
+import { videoUpload } from '../api/video/videoUpload';
+import type { Image, UploadedFile, Video } from '../types/files';
 
 interface SelectFilesOptions {
     type: string;
@@ -120,4 +122,61 @@ export const getBaseAndRoute = (url: string) => {
     const route = urlObject.pathname;
 
     return { base, route };
+};
+
+interface UploadFilesOptions {
+    filesToUpload: File[];
+    uploadedFiles: UploadedFile[];
+    accessToken: string;
+    personId: string;
+    onAdd?: (files: UploadedFile[]) => void;
+}
+
+/**
+ * Upload files
+ */
+export const uploadFiles = async ({
+    filesToUpload,
+    onAdd,
+    personId,
+    accessToken,
+    uploadedFiles,
+}: UploadFilesOptions): Promise<UploadedFile[]> => {
+    if (!filesToUpload) {
+        return uploadedFiles;
+    }
+
+    const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
+    const images = filesToUpload.filter(({ type }) => type.includes('image/'));
+    let newUploadedFiles: UploadedFile[] = [];
+
+    // Upload videos
+    const videoUploadPromises: Promise<Video>[] = videos.map((video) =>
+        videoUpload({ accessToken, file: video })
+    );
+
+    newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoUploadPromises));
+    newUploadedFiles = newUploadedFiles.flat();
+
+    // Upload images
+    const imageUploadPromises: Promise<Image>[] = images.map((image) =>
+        imageUpload({
+            accessToken,
+            file: image,
+            personId,
+        })
+    );
+
+    newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageUploadPromises));
+
+    const { newUniqueFiles } = filterDuplicateFiles({
+        oldFiles: uploadedFiles,
+        newFiles: newUploadedFiles,
+    });
+
+    if (onAdd) {
+        onAdd(newUniqueFiles);
+    }
+
+    return newUniqueFiles;
 };

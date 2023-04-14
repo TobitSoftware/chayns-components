@@ -1,16 +1,16 @@
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { imageUpload } from '../../api/image/imageUpload';
-import { videoUpload } from '../../api/video/videoUpload';
-import {
-    convertFileListToArray,
-    filterDuplicateFiles,
-    getBaseAndRoute,
-    selectFiles,
-} from '../../utils/file';
+import React, {
+    DragEvent,
+    FC,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
+import { getBaseAndRoute, uploadFiles } from '../utils/file';
 import {
     StyledGallery,
     StyledGalleryItem,
-    StyledGalleryItemAdd,
     StyledGalleryItemDeleteButton,
     StyledGalleryItemImage,
     StyledGalleryItemPlayIcon,
@@ -26,7 +26,8 @@ import {
 
 // Types
 import { Icon } from '@chayns-components/core';
-import type { Files, Image, UploadedFile, Video } from '../../types/files';
+import type { Files, UploadedFile } from '../types/files';
+import AddFile from './add-file/AddFile';
 
 export type GalleryProps = {
     /**
@@ -101,91 +102,6 @@ const Gallery: FC<GalleryProps> = ({
 
         setUploadedFiles((prevState) => [...prevState, ...externalFiles]);
     }, [files]);
-
-    /**
-     * Upload files
-     */
-    const uploadFiles = useCallback(
-        async (filesToUpload: File[]) => {
-            if (!filesToUpload) {
-                return;
-            }
-
-            const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
-            const images = filesToUpload.filter(({ type }) => type.includes('image/'));
-            let newUploadedFiles: UploadedFile[] = [];
-
-            // Upload videos
-            const videoUploadPromises: Promise<Video>[] = videos.map((video) =>
-                videoUpload({ accessToken, file: video })
-            );
-
-            newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoUploadPromises));
-            newUploadedFiles = newUploadedFiles.flat();
-
-            // Upload images
-            const imageUploadPromises: Promise<Image>[] = images.map((image) =>
-                imageUpload({
-                    accessToken,
-                    file: image,
-                    personId,
-                })
-            );
-
-            newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageUploadPromises));
-
-            const { newUniqueFiles } = filterDuplicateFiles({
-                oldFiles: uploadedFiles,
-                newFiles: newUploadedFiles,
-            });
-
-            if (onAdd) {
-                onAdd(newUniqueFiles);
-            }
-
-            setUploadedFiles((prevState) => [...prevState, ...newUniqueFiles]);
-        },
-        [accessToken, onAdd, personId, uploadedFiles]
-    );
-
-    /**
-     * Open a dialog to select files
-     */
-    const openSelectDialog = useCallback(async () => {
-        const selectedFiles = await selectFiles({
-            multiple: true,
-            type: 'image/*, video/*',
-        });
-
-        if (!selectedFiles || selectedFiles.length <= 0) {
-            return;
-        }
-
-        const fileArray = convertFileListToArray(selectedFiles);
-
-        // Filters files to use only under 64MB
-        const filteredFileArray = fileArray.filter(({ size, type }) => {
-            const sizeInMB = size / 1024 / 1024;
-
-            if (type.includes('video/') && sizeInMB > 500) {
-                return false;
-            }
-
-            return !(type.includes('image/') && sizeInMB > 64);
-        });
-
-        if (fileArray.length !== filteredFileArray.length) {
-            // ToDo show dialog that some files are to big
-        }
-
-        if (filteredFileArray.length === 0) {
-            // ToDo show dialog that all files are to big
-
-            return;
-        }
-
-        void uploadFiles(filteredFileArray);
-    }, [uploadFiles]);
 
     /**
      * This function deletes a selected file from the file list
@@ -264,19 +180,27 @@ const Gallery: FC<GalleryProps> = ({
     /**
      * This function handles the drag and drop
      */
-    const handleDrop = (e: {
-        preventDefault: VoidFunction;
-        dataTransfer: { files: Iterable<File> | ArrayLike<File> };
-    }) => {
-        if (!allowDragAndDrop) {
-            return;
-        }
+    const handleDrop = useCallback(
+        async (e: DragEvent<HTMLDivElement>) => {
+            if (!allowDragAndDrop) {
+                return;
+            }
 
-        e.preventDefault();
-        const draggedFiles = Array.from(e.dataTransfer.files);
+            e.preventDefault();
+            const draggedFiles = Array.from(e.dataTransfer.files);
 
-        void uploadFiles(draggedFiles);
-    };
+            const updatedFiles = await uploadFiles({
+                accessToken,
+                uploadedFiles,
+                filesToUpload: draggedFiles,
+                personId,
+                onAdd,
+            });
+
+            setUploadedFiles((prevState) => [...prevState, ...updatedFiles]);
+        },
+        [accessToken, allowDragAndDrop, onAdd, personId, uploadedFiles]
+    );
 
     /**
      * Returns the ratio of the single file
@@ -332,15 +256,17 @@ const Gallery: FC<GalleryProps> = ({
         });
 
         items.push(
-            <StyledGalleryItem key="addButton">
-                <StyledGalleryItemAdd onClick={() => void openSelectDialog()}>
-                    <Icon size={40} icons={['fa fa-plus']} />
-                </StyledGalleryItemAdd>
-            </StyledGalleryItem>
+            <AddFile
+                setUploadedFiles={setUploadedFiles}
+                uploadedFiles={uploadedFiles}
+                onAdd={onAdd}
+                personId={personId}
+                accessToken={accessToken}
+            />
         );
 
         return items;
-    }, [handleDeleteFile, openSelectDialog, ratio, showFile, uploadedFiles]);
+    }, [accessToken, handleDeleteFile, onAdd, personId, ratio, showFile, uploadedFiles]);
 
     const galleryContent = useMemo(() => {
         const items: ReactElement[] = [];
@@ -513,7 +439,7 @@ const Gallery: FC<GalleryProps> = ({
                 {isEditMode ? (
                     <StyledGalleryItemWrapper
                         onDragOver={(e) => e.preventDefault()}
-                        onDrop={handleDrop}
+                        onDrop={(e) => void handleDrop(e)}
                     >
                         {galleryEditModeContent}
                     </StyledGalleryItemWrapper>
