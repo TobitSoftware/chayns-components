@@ -84,11 +84,11 @@ const Gallery: FC<GalleryProps> = ({
                 });
             }
 
-            const { baseUrl, route } = getBaseAndRoute(file.url);
+            const { base, route } = getBaseAndRoute(file.url);
 
             externalFiles.push({
-                key: baseUrl,
-                base: route,
+                key: route,
+                base,
             });
         });
 

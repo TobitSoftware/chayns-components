@@ -111,9 +111,8 @@ export const filterDuplicateFiles = (oldFiles: UploadedFile[], newFiles: Uploade
 
 export const getBaseAndRoute = (url: string) => {
     const urlObject = new URL(url);
-    const pathArray = urlObject.pathname.split('/');
-    const baseUrl = `${urlObject.origin}/${pathArray[1] ?? ''}`;
-    const route = urlObject.pathname.slice(baseUrl.length);
+    const base = urlObject.origin;
+    const route = urlObject.pathname;
 
-    return { baseUrl, route };
+    return { base, route };
 };
