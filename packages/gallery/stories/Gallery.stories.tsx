@@ -32,5 +32,5 @@ export const General = Template.bind({});
 export const EditMode = Template.bind({});
 
 EditMode.args = {
-    editMode: true,
+    isEditMode: true,
 };

@@ -36,11 +36,11 @@ export type GalleryProps = {
     /**
      * Whether drag and drop is allowed or not
      */
-    allowDragAndDrop: boolean;
+    allowDragAndDrop?: boolean;
     /**
      *  Whether images and videos can be edited
      */
-    editMode?: boolean;
+    isEditMode?: boolean;
     /**
      *  Images and videos which should be displayed
      */
@@ -48,7 +48,7 @@ export type GalleryProps = {
     /**
      *  Function to be executed when files are added
      */
-    onAdd?: (Files: UploadedFile[]) => void;
+    onAdd?: (files: UploadedFile[]) => void;
     /**
      *  Function to be executed when a file is removed
      */
@@ -62,13 +62,13 @@ export type GalleryProps = {
 const Gallery: FC<GalleryProps> = ({
     accessToken,
     allowDragAndDrop = false,
-    editMode = false,
+    isEditMode = false,
     files,
     onAdd,
     onRemove,
     personId,
 }) => {
-    const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>();
+    const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
     /**
      * Merge external files with uploaded files
@@ -87,6 +87,8 @@ const Gallery: FC<GalleryProps> = ({
                     url: file.url,
                     thumbnailUrl: file.url,
                 });
+
+                return;
             }
 
             const { base, route } = getBaseAndRoute(file.url);
@@ -97,9 +99,7 @@ const Gallery: FC<GalleryProps> = ({
             });
         });
 
-        setUploadedFiles((prevState) =>
-            prevState ? [...prevState, ...externalFiles] : [...externalFiles]
-        );
+        setUploadedFiles((prevState) => [...prevState, ...externalFiles]);
     }, [files]);
 
     /**
@@ -116,15 +116,15 @@ const Gallery: FC<GalleryProps> = ({
             let newUploadedFiles: UploadedFile[] = [];
 
             // Upload videos
-            const videoResult: Promise<Video>[] = videos.map((video) =>
+            const videoUploadPromises: Promise<Video>[] = videos.map((video) =>
                 videoUpload({ accessToken, file: video })
             );
 
-            newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoResult));
+            newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoUploadPromises));
             newUploadedFiles = newUploadedFiles.flat();
 
             // Upload images
-            const imageResult: Promise<Image>[] = images.map((image) =>
+            const imageUploadPromises: Promise<Image>[] = images.map((image) =>
                 imageUpload({
                     accessToken,
                     file: image,
@@ -132,110 +132,85 @@ const Gallery: FC<GalleryProps> = ({
                 })
             );
 
-            newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageResult));
+            newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageUploadPromises));
 
-            if (!uploadedFiles) {
-                if (onAdd) {
-                    onAdd(newUploadedFiles);
-                }
-
-                setUploadedFiles(newUploadedFiles);
-
-                return;
-            }
-
-            const { newUniqueFiles } = filterDuplicateFiles(uploadedFiles, newUploadedFiles);
+            const { newUniqueFiles } = filterDuplicateFiles({
+                oldFiles: uploadedFiles,
+                newFiles: newUploadedFiles,
+            });
 
             if (onAdd) {
                 onAdd(newUniqueFiles);
             }
 
-            setUploadedFiles((prevState) =>
-                prevState ? [...prevState, ...newUniqueFiles] : [...newUniqueFiles]
-            );
+            setUploadedFiles((prevState) => [...prevState, ...newUniqueFiles]);
         },
         [accessToken, onAdd, personId, uploadedFiles]
     );
 
     /**
-     * This function adds new data to the existing data list
-     */
-    const handleAdd = useCallback(
-        (filesAdd: File[]) => {
-            if (!filesAdd) {
-                return;
-            }
-
-            void uploadFiles(filesAdd);
-        },
-        [uploadFiles]
-    );
-
-    /**
      * Open a dialog to select files
      */
-    const openSelectDialog = useCallback(() => {
-        void selectFiles({
+    const openSelectDialog = useCallback(async () => {
+        const selectedFiles = await selectFiles({
             multiple: true,
             type: 'image/*, video/*',
-        }).then((selectedFiles) => {
-            if (selectedFiles && selectedFiles.length > 0) {
-                const fileArray = convertFileListToArray(selectedFiles);
-
-                // Filters files to use only under 64MB
-                const filteredFileArray = fileArray.filter(({ size, type }) => {
-                    const sizeInMB = size / 1024 / 1024;
-
-                    if (type.includes('video/') && sizeInMB > 500) {
-                        return false;
-                    }
-
-                    return !(type.includes('image/') && sizeInMB > 64);
-                });
-
-                if (fileArray.length !== filteredFileArray.length) {
-                    // ToDo show dialog that some files are to big
-                }
-
-                if (filteredFileArray.length === 0) {
-                    // ToDo show dialog that all files are to big
-
-                    return;
-                }
-
-                handleAdd(filteredFileArray);
-            }
         });
-    }, [handleAdd]);
+
+        if (!selectedFiles || selectedFiles.length <= 0) {
+            return;
+        }
+
+        const fileArray = convertFileListToArray(selectedFiles);
+
+        // Filters files to use only under 64MB
+        const filteredFileArray = fileArray.filter(({ size, type }) => {
+            const sizeInMB = size / 1024 / 1024;
+
+            if (type.includes('video/') && sizeInMB > 500) {
+                return false;
+            }
+
+            return !(type.includes('image/') && sizeInMB > 64);
+        });
+
+        if (fileArray.length !== filteredFileArray.length) {
+            // ToDo show dialog that some files are to big
+        }
+
+        if (filteredFileArray.length === 0) {
+            // ToDo show dialog that all files are to big
+
+            return;
+        }
+
+        void uploadFiles(filteredFileArray);
+    }, [uploadFiles]);
 
     /**
-     * This function deletes a selected file from the data list
+     * This function deletes a selected file from the file list
      */
-    const handleDelete = useCallback(
+    const handleDeleteFile = useCallback(
         (key: number | string) => {
-            const filteredFiles = uploadedFiles?.filter((file) => {
-                if ('thumbnailUrl' in file) {
-                    return file.id !== key;
+            let fileToDelete: UploadedFile | undefined;
+
+            const filteredFiles = uploadedFiles.filter((file) => {
+                const fileKey = 'thumbnailUrl' in file ? file.id : file.key;
+
+                if (fileKey === key) {
+                    fileToDelete = file;
                 }
-                return file.key !== key;
+
+                return fileKey !== key;
             });
 
-            const deletedFile = uploadedFiles?.find((file) => {
-                if ('thumbnailUrl' in file) {
-                    return file.id === key;
-                }
-                return file.key === key;
-            });
+            setUploadedFiles(filteredFiles);
 
-            setUploadedFiles(filteredFiles ?? []);
-
-            if (!deletedFile) {
+            if (!fileToDelete || !onRemove) {
                 return;
             }
 
-            if (onRemove) {
-                onRemove(deletedFile);
-            }
+            onRemove(fileToDelete);
         },
         [onRemove, uploadedFiles]
     );
@@ -258,7 +233,7 @@ const Gallery: FC<GalleryProps> = ({
     }, []);
 
     /**
-     * This function shows a selected file
+     * This function shows the files
      */
     // const showFiles = useCallback((files: UploadedFile[], index: number) => {
     //     // if ('thumbnailUrl' in file) {
@@ -290,9 +265,13 @@ const Gallery: FC<GalleryProps> = ({
      * This function handles the drag and drop
      */
     const handleDrop = (e: {
-        preventDefault: () => void;
+        preventDefault: VoidFunction;
         dataTransfer: { files: Iterable<File> | ArrayLike<File> };
     }) => {
+        if (!allowDragAndDrop) {
+            return;
+        }
+
         e.preventDefault();
         const draggedFiles = Array.from(e.dataTransfer.files);
 
@@ -302,99 +281,69 @@ const Gallery: FC<GalleryProps> = ({
     /**
      * Returns the ratio of the single file
      */
-    const ratio = useMemo(() => {
-        if (!uploadedFiles) {
-            return 1;
-        }
-
-        const file = uploadedFiles[0];
-
-        if (file && file.ratio && uploadedFiles.length === 1) {
-            if (file.ratio > 1) {
-                return file.ratio;
-            }
-        }
-
-        return 1;
-    }, [uploadedFiles]);
+    const ratio = useMemo(
+        () =>
+            // If the length is 1, the ratio or at least 1 is returned
+            uploadedFiles.length === 1 ? Math.max(uploadedFiles[0]?.ratio ?? 1, 1) : 1,
+        [uploadedFiles]
+    );
 
     /**
      * Returns the number of columns
      */
     const columns = useMemo(() => {
-        if (!uploadedFiles) {
+        const uploadedFilesLength = uploadedFiles.length;
+
+        if (uploadedFilesLength <= 1) {
             return '';
         }
 
-        if (uploadedFiles.length === 2) {
-            return 'repeat(2, 1fr)';
-        }
-
-        if (uploadedFiles.length === 3) {
-            return 'repeat(3, 1fr)';
-        }
-
-        if (uploadedFiles.length >= 4) {
-            return 'repeat(2, 1fr)';
-        }
-
-        return '';
+        return `repeat(${uploadedFilesLength === 3 ? 3 : 2}, 1fr)`;
     }, [uploadedFiles]);
 
-    const galleryItems = useMemo(() => {
-        const items: ReactElement[] = [];
+    const galleryEditModeContent = useMemo(() => {
+        const items: ReactElement[] = uploadedFiles.map((file) => {
+            const fileKey = 'thumbnailUrl' in file ? file.id : file.key;
 
-        if (editMode) {
-            if (uploadedFiles) {
-                uploadedFiles.forEach((file) => {
-                    items.push(
-                        <StyledGalleryItem key={'thumbnailUrl' in file ? file.id : file.key}>
-                            <StyledGalleryItemDeleteButton
-                                onClick={() =>
-                                    handleDelete('thumbnailUrl' in file ? file.id : file.key)
-                                }
-                            >
-                                <Icon size={20} icons={['ts-wrong']} />
-                            </StyledGalleryItemDeleteButton>
-                            {'thumbnailUrl' in file ? (
-                                <StyledGalleryItemVideoWrapper onClick={() => showFile(file)}>
-                                    <StyledGalleryItemPlayIcon>
-                                        <Icon size={30} icons={['fa fa-play']} />
-                                    </StyledGalleryItemPlayIcon>
-                                    <StyledGalleryItemVideo
-                                        ratio={ratio}
-                                        poster={file.thumbnailUrl}
-                                    >
-                                        <source src={file.url} type="video/mp4" />
-                                    </StyledGalleryItemVideo>
-                                </StyledGalleryItemVideoWrapper>
-                            ) : (
-                                <StyledGalleryItemImage
-                                    ratio={ratio}
-                                    onClick={() => showFile(file)}
-                                    draggable={false}
-                                    src={`${file.base}/${file.key}`}
-                                />
-                            )}
-                        </StyledGalleryItem>
-                    );
-                });
-            }
-
-            items.push(
-                <StyledGalleryItem key="addButton">
-                    <StyledGalleryItemAdd onClick={openSelectDialog}>
-                        <Icon size={40} icons={['fa fa-plus']} />
-                    </StyledGalleryItemAdd>
+            return (
+                <StyledGalleryItem key={fileKey}>
+                    <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(fileKey)}>
+                        <Icon size={20} icons={['ts-wrong']} />
+                    </StyledGalleryItemDeleteButton>
+                    {'thumbnailUrl' in file ? (
+                        <StyledGalleryItemVideoWrapper onClick={() => showFile(file)}>
+                            <StyledGalleryItemPlayIcon>
+                                <Icon size={30} icons={['fa fa-play']} />
+                            </StyledGalleryItemPlayIcon>
+                            <StyledGalleryItemVideo ratio={ratio} poster={file.thumbnailUrl}>
+                                <source src={file.url} type="video/mp4" />
+                            </StyledGalleryItemVideo>
+                        </StyledGalleryItemVideoWrapper>
+                    ) : (
+                        <StyledGalleryItemImage
+                            ratio={ratio}
+                            onClick={() => showFile(file)}
+                            draggable={false}
+                            src={`${file.base}/${file.key}`}
+                        />
+                    )}
                 </StyledGalleryItem>
             );
+        });
 
-            return items;
-        }
+        items.push(
+            <StyledGalleryItem key="addButton">
+                <StyledGalleryItemAdd onClick={() => void openSelectDialog()}>
+                    <Icon size={40} icons={['fa fa-plus']} />
+                </StyledGalleryItemAdd>
+            </StyledGalleryItem>
+        );
 
-        if (!uploadedFiles) {
-            return items;
-        }
+        return items;
+    }, [handleDeleteFile, openSelectDialog, ratio, showFile, uploadedFiles]);
+
+    const galleryContent = useMemo(() => {
+        const items: ReactElement[] = [];
 
         if (uploadedFiles.length === 1) {
             const file = uploadedFiles[0];
@@ -556,21 +505,24 @@ const Gallery: FC<GalleryProps> = ({
         }
 
         return items;
-    }, [columns, editMode, handleDelete, openSelectDialog, ratio, showFile, uploadedFiles]);
+    }, [columns, ratio, uploadedFiles]);
 
-    return (
-        <StyledGallery>
-            {editMode ? (
-                <StyledGalleryItemWrapper
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={allowDragAndDrop ? handleDrop : undefined}
-                >
-                    {galleryItems}
-                </StyledGalleryItemWrapper>
-            ) : (
-                galleryItems
-            )}
-        </StyledGallery>
+    return useMemo(
+        () => (
+            <StyledGallery>
+                {isEditMode ? (
+                    <StyledGalleryItemWrapper
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
+                    >
+                        {galleryEditModeContent}
+                    </StyledGalleryItemWrapper>
+                ) : (
+                    galleryContent
+                )}
+            </StyledGallery>
+        ),
+        [galleryContent, galleryEditModeContent, handleDrop, isEditMode]
     );
 };
 

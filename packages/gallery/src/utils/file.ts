@@ -50,7 +50,12 @@ export const convertFileListToArray = (fileList: FileList): File[] => {
     return filesArray;
 };
 
-export const filterDuplicateFiles = (oldFiles: UploadedFile[], newFiles: UploadedFile[]) => {
+interface FilterDuplicateFilesOptions {
+    oldFiles: UploadedFile[];
+    newFiles: UploadedFile[];
+}
+
+export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFilesOptions) => {
     const seenKeys = new Set<string>();
     const filteredFiles: UploadedFile[] = [];
 
