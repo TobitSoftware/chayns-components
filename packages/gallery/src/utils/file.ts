@@ -126,10 +126,8 @@ export const getBaseAndRoute = (url: string) => {
 
 interface UploadFilesOptions {
     filesToUpload: File[];
-    uploadedFiles: UploadedFile[];
     accessToken: string;
     personId: string;
-    onAdd?: (files: UploadedFile[]) => void;
 }
 
 /**
@@ -137,13 +135,11 @@ interface UploadFilesOptions {
  */
 export const uploadFiles = async ({
     filesToUpload,
-    onAdd,
     personId,
     accessToken,
-    uploadedFiles,
 }: UploadFilesOptions): Promise<UploadedFile[]> => {
     if (!filesToUpload) {
-        return uploadedFiles;
+        return [];
     }
 
     const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
@@ -169,14 +165,5 @@ export const uploadFiles = async ({
 
     newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageUploadPromises));
 
-    const { newUniqueFiles } = filterDuplicateFiles({
-        oldFiles: uploadedFiles,
-        newFiles: newUploadedFiles,
-    });
-
-    if (onAdd) {
-        onAdd(newUniqueFiles);
-    }
-
-    return newUniqueFiles;
+    return newUploadedFiles;
 };

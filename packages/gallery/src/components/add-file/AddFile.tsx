@@ -1,14 +1,34 @@
 import { Icon } from '@chayns-components/core';
 import React, { Dispatch, FC, SetStateAction, useCallback } from 'react';
 import type { UploadedFile } from '../../types/files';
-import { convertFileListToArray, selectFiles, uploadFiles } from '../../utils/file';
+import {
+    convertFileListToArray,
+    filterDuplicateFiles,
+    selectFiles,
+    uploadFiles,
+} from '../../utils/file';
 import { StyledAddFile, StyledAddFIleIconWrapper } from './AddFile.styles';
 
 export type AddFileProps = {
+    /**
+     *  Function to add files to the uploaded files
+     */
     setUploadedFiles: Dispatch<SetStateAction<UploadedFile[]>>;
+    /**
+     *  Images and videos which should be displayed
+     */
     uploadedFiles: UploadedFile[];
+    /**
+     *  Function to be executed when files are added
+     */
     onAdd?: (files: UploadedFile[]) => void;
+    /**
+     * PersonId of the user
+     */
     personId: string;
+    /**
+     * AccessToken of the user
+     */
     accessToken: string;
 };
 
@@ -57,13 +77,20 @@ const AddFile: FC<AddFileProps> = ({
 
         const updatedFiles = await uploadFiles({
             filesToUpload: filteredFileArray,
-            uploadedFiles,
-            onAdd,
             personId,
             accessToken,
         });
 
-        setUploadedFiles((prevState) => [...prevState, ...updatedFiles]);
+        const { newUniqueFiles } = filterDuplicateFiles({
+            oldFiles: uploadedFiles,
+            newFiles: updatedFiles,
+        });
+
+        if (onAdd) {
+            onAdd(newUniqueFiles);
+        }
+
+        setUploadedFiles((prevState) => [...prevState, ...newUniqueFiles]);
     }, [accessToken, onAdd, personId, setUploadedFiles, uploadedFiles]);
 
     return (

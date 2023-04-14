@@ -1,33 +1,13 @@
-import React, {
-    DragEvent,
-    FC,
-    ReactElement,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
-import { getBaseAndRoute, uploadFiles } from '../utils/file';
+import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
+import type { Files, UploadedFile } from '../types/files';
+import { filterDuplicateFiles, getBaseAndRoute, uploadFiles } from '../utils/file';
+import AddFile from './add-file/AddFile';
+import GalleryItem from './gallery-item/GalleryItem';
 import {
     StyledGallery,
-    StyledGalleryItem,
-    StyledGalleryItemDeleteButton,
-    StyledGalleryItemImage,
-    StyledGalleryItemPlayIcon,
-    StyledGalleryItemVideo,
-    StyledGalleryItemVideoWrapper,
+    StyledGalleryEditModeWrapper,
     StyledGalleryItemWrapper,
-    StyledGalleryView,
-    StyledGalleryViewGrid,
-    StyledGalleryViewItem,
-    StyledGalleryViewMoreItem,
-    StyledGalleryViewMoreItemNumber,
 } from './Gallery.styles';
-
-// Types
-import { Icon } from '@chayns-components/core';
-import type { Files, UploadedFile } from '../types/files';
-import AddFile from './add-file/AddFile';
 
 export type GalleryProps = {
     /**
@@ -75,29 +55,25 @@ const Gallery: FC<GalleryProps> = ({
      * Merge external files with uploaded files
      */
     useEffect(() => {
-        const externalFiles: UploadedFile[] = [];
-
         if (!files || !Array.isArray(files)) {
             return;
         }
 
-        files.forEach((file) => {
+        const externalFiles: UploadedFile[] = files.map((file) => {
             if ('thumbnailUrl' in file) {
-                externalFiles.push({
+                return {
                     id: file.id,
                     url: file.url,
                     thumbnailUrl: file.url,
-                });
-
-                return;
+                };
             }
 
             const { base, route } = getBaseAndRoute(file.url);
 
-            externalFiles.push({
+            return {
                 key: route,
                 base,
-            });
+            };
         });
 
         setUploadedFiles((prevState) => [...prevState, ...externalFiles]);
@@ -128,54 +104,8 @@ const Gallery: FC<GalleryProps> = ({
 
             onRemove(fileToDelete);
         },
-        [onRemove, uploadedFiles]
+        [onRemove, setUploadedFiles, uploadedFiles]
     );
-
-    /**
-     * This function shows a selected file
-     */
-    const showFile = useCallback((file: UploadedFile) => {
-        if ('thumbnailUrl' in file) {
-            // @ts-expect-error: Type is correct here
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-            void chayns.openVideo(file.url);
-
-            return;
-        }
-
-        // @ts-expect-error: Type is correct here
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        void chayns.openImage([`${file.base}/${file.key}`], 0);
-    }, []);
-
-    /**
-     * This function shows the files
-     */
-    // const showFiles = useCallback((files: UploadedFile[], index: number) => {
-    //     // if ('thumbnailUrl' in file) {
-    //     //     // @ts-expect-error: Type is correct here
-    //     //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    //     //     void chayns.openVideo(file.url);
-    //     //
-    //     //     return;
-    //     // }
-    //     const formattedFiles: string[] = [];
-    //     onClick={() => showFiles(uploadedFiles, index)}
-    //
-    //     files.forEach((file) => {
-    //         if ('thumbnailUrl' in file) {
-    //             formattedFiles.push(file.url);
-    //
-    //             return;
-    //         }
-    //
-    //         formattedFiles.push(`${file.base}/${file.key}`);
-    //     });
-    //     // @ts-expect-error: Type is correct here
-    //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    //     void chayns.openImage([formattedFiles], index);
-    //     // void chayns.openImage([`${file.base}/${file.key}`], 0);
-    // }, []);
 
     /**
      * This function handles the drag and drop
@@ -191,13 +121,22 @@ const Gallery: FC<GalleryProps> = ({
 
             const updatedFiles = await uploadFiles({
                 accessToken,
-                uploadedFiles,
                 filesToUpload: draggedFiles,
                 personId,
-                onAdd,
             });
 
-            setUploadedFiles((prevState) => [...prevState, ...updatedFiles]);
+            const { newUniqueFiles } = filterDuplicateFiles({
+                oldFiles: uploadedFiles,
+                newFiles: updatedFiles,
+            });
+
+            setUploadedFiles((prevState) => [...prevState, ...newUniqueFiles]);
+
+            if (!onAdd) {
+                return;
+            }
+
+            onAdd(newUniqueFiles);
         },
         [accessToken, allowDragAndDrop, onAdd, personId, uploadedFiles]
     );
@@ -225,230 +164,68 @@ const Gallery: FC<GalleryProps> = ({
         return `repeat(${uploadedFilesLength === 3 ? 3 : 2}, 1fr)`;
     }, [uploadedFiles]);
 
-    const galleryEditModeContent = useMemo(() => {
-        const items: ReactElement[] = uploadedFiles.map((file) => {
-            const fileKey = 'thumbnailUrl' in file ? file.id : file.key;
-
-            return (
-                <StyledGalleryItem key={fileKey}>
-                    <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(fileKey)}>
-                        <Icon size={20} icons={['ts-wrong']} />
-                    </StyledGalleryItemDeleteButton>
-                    {'thumbnailUrl' in file ? (
-                        <StyledGalleryItemVideoWrapper onClick={() => showFile(file)}>
-                            <StyledGalleryItemPlayIcon>
-                                <Icon size={30} icons={['fa fa-play']} />
-                            </StyledGalleryItemPlayIcon>
-                            <StyledGalleryItemVideo ratio={ratio} poster={file.thumbnailUrl}>
-                                <source src={file.url} type="video/mp4" />
-                            </StyledGalleryItemVideo>
-                        </StyledGalleryItemVideoWrapper>
-                    ) : (
-                        <StyledGalleryItemImage
-                            ratio={ratio}
-                            onClick={() => showFile(file)}
-                            draggable={false}
-                            src={`${file.base}/${file.key}`}
-                        />
-                    )}
-                </StyledGalleryItem>
-            );
-        });
-
-        items.push(
-            <AddFile
-                setUploadedFiles={setUploadedFiles}
-                uploadedFiles={uploadedFiles}
-                onAdd={onAdd}
-                personId={personId}
-                accessToken={accessToken}
-            />
-        );
-
-        return items;
-    }, [accessToken, handleDeleteFile, onAdd, personId, ratio, showFile, uploadedFiles]);
-
     const galleryContent = useMemo(() => {
-        const items: ReactElement[] = [];
+        const uploadedFilesLength = uploadedFiles.length;
 
-        if (uploadedFiles.length === 1) {
-            const file = uploadedFiles[0];
-
-            items.push(
-                <StyledGalleryView>
-                    <StyledGalleryViewItem>
-                        {file && 'thumbnailUrl' in file ? (
-                            <StyledGalleryItemVideoWrapper>
-                                <StyledGalleryItemPlayIcon>
-                                    <Icon size={40} icons={['fa fa-play']} />
-                                </StyledGalleryItemPlayIcon>
-                                <StyledGalleryItemVideo ratio={ratio} poster={file.thumbnailUrl}>
-                                    <source src={file.url} type="video/mp4" />
-                                </StyledGalleryItemVideo>
-                            </StyledGalleryItemVideoWrapper>
-                        ) : (
-                            <StyledGalleryItemImage
-                                ratio={ratio}
-                                draggable={false}
-                                src={`${file?.base ?? ''}/${file?.key ?? ''}`}
-                                alt="Media"
-                            />
-                        )}
-                    </StyledGalleryViewItem>
-                </StyledGalleryView>
-            );
-        }
-
-        if (uploadedFiles.length === 2 || uploadedFiles.length === 3) {
-            items.push(
-                <StyledGalleryViewGrid columns={columns}>
-                    {uploadedFiles.map((file) => {
-                        if ('thumbnailUrl' in file) {
-                            return (
-                                <StyledGalleryViewItem>
-                                    <StyledGalleryItemVideoWrapper>
-                                        <StyledGalleryItemPlayIcon>
-                                            <Icon size={40} icons={['fa fa-play']} />
-                                        </StyledGalleryItemPlayIcon>
-                                        <StyledGalleryItemVideo
-                                            ratio={ratio}
-                                            poster={file.thumbnailUrl}
-                                        >
-                                            <source src={file.url} type="video/mp4" />
-                                        </StyledGalleryItemVideo>
-                                    </StyledGalleryItemVideoWrapper>
-                                </StyledGalleryViewItem>
-                            );
-                        }
-
-                        return (
-                            <StyledGalleryItemImage
-                                ratio={ratio}
-                                draggable={false}
-                                src={`${file.base}/${file.key}`}
-                                alt="Media"
-                            />
-                        );
-                    })}
-                </StyledGalleryViewGrid>
-            );
-        }
-
-        if (uploadedFiles.length >= 4) {
-            if (uploadedFiles.length === 4) {
-                items.push(
-                    <StyledGalleryViewGrid columns={columns}>
-                        {uploadedFiles.map((file) => {
-                            if ('thumbnailUrl' in file) {
-                                return (
-                                    <StyledGalleryViewItem>
-                                        <StyledGalleryItemVideoWrapper>
-                                            <StyledGalleryItemPlayIcon>
-                                                <Icon size={40} icons={['fa fa-play']} />
-                                            </StyledGalleryItemPlayIcon>
-                                            <StyledGalleryItemVideo
-                                                ratio={ratio}
-                                                poster={file.thumbnailUrl}
-                                            >
-                                                <source src={file.url} type="video/mp4" />
-                                            </StyledGalleryItemVideo>
-                                        </StyledGalleryItemVideoWrapper>
-                                    </StyledGalleryViewItem>
-                                );
-                            }
-
-                            return (
-                                <StyledGalleryItemImage
-                                    ratio={ratio}
-                                    draggable={false}
-                                    src={`${file.base}/${file.key}`}
-                                    alt="Media"
-                                />
-                            );
-                        })}
-                    </StyledGalleryViewGrid>
-                );
-
-                return items;
-            }
-
-            const lastFile = uploadedFiles[3];
+        if (isEditMode) {
+            const items = uploadedFiles.map((file) => (
+                <GalleryItem
+                    uploadedFile={file}
+                    isEditMode
+                    ratio={ratio}
+                    handleDeleteFile={handleDeleteFile}
+                />
+            ));
 
             items.push(
-                <StyledGalleryViewGrid columns={columns}>
-                    {uploadedFiles.slice(0, 3).map((file) => {
-                        if ('thumbnailUrl' in file) {
-                            return (
-                                <StyledGalleryViewItem>
-                                    <StyledGalleryItemVideoWrapper>
-                                        <StyledGalleryItemPlayIcon>
-                                            <Icon size={40} icons={['fa fa-play']} />
-                                        </StyledGalleryItemPlayIcon>
-                                        <StyledGalleryItemVideo
-                                            ratio={ratio}
-                                            poster={file.thumbnailUrl}
-                                        >
-                                            <source src={file.url} type="video/mp4" />
-                                        </StyledGalleryItemVideo>
-                                    </StyledGalleryItemVideoWrapper>
-                                </StyledGalleryViewItem>
-                            );
-                        }
-
-                        return (
-                            <StyledGalleryItemImage
-                                ratio={ratio}
-                                draggable={false}
-                                src={`${file.base}/${file.key}`}
-                                alt="Media"
-                            />
-                        );
-                    })}
-                    <StyledGalleryViewItem>
-                        <StyledGalleryViewMoreItem>
-                            {lastFile && 'thumbnailUrl' in lastFile ? (
-                                <StyledGalleryItemVideo
-                                    ratio={ratio}
-                                    poster={lastFile.thumbnailUrl}
-                                >
-                                    <source src={lastFile.url} type="video/mp4" />
-                                </StyledGalleryItemVideo>
-                            ) : (
-                                <StyledGalleryItemImage
-                                    ratio={ratio}
-                                    draggable={false}
-                                    src={`${lastFile?.base ?? ''}/${lastFile?.key ?? ''}`}
-                                    alt="Media"
-                                />
-                            )}
-                        </StyledGalleryViewMoreItem>
-                        <StyledGalleryViewMoreItemNumber>
-                            <p>{`+ ${uploadedFiles.length - 3}`}</p>
-                        </StyledGalleryViewMoreItemNumber>
-                    </StyledGalleryViewItem>
-                </StyledGalleryViewGrid>
+                <AddFile
+                    setUploadedFiles={setUploadedFiles}
+                    uploadedFiles={uploadedFiles}
+                    onAdd={onAdd}
+                    personId={personId}
+                    accessToken={accessToken}
+                />
             );
+
+            return items;
         }
 
-        return items;
-    }, [columns, ratio, uploadedFiles]);
+        const shortedFiles = uploadedFiles.slice(0, 4);
+
+        return shortedFiles.map((file, index) => (
+            <GalleryItem
+                uploadedFile={file}
+                isEditMode={false}
+                ratio={ratio}
+                handleDeleteFile={handleDeleteFile}
+                remainingItemsLength={
+                    uploadedFilesLength > 4 && index === 3 ? uploadedFilesLength : undefined
+                }
+            />
+        ));
+    }, [accessToken, handleDeleteFile, isEditMode, onAdd, personId, ratio, uploadedFiles]);
 
     return useMemo(
         () => (
             <StyledGallery>
                 {isEditMode ? (
-                    <StyledGalleryItemWrapper
+                    <StyledGalleryEditModeWrapper
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => void handleDrop(e)}
                     >
-                        {galleryEditModeContent}
-                    </StyledGalleryItemWrapper>
+                        {galleryContent}
+                    </StyledGalleryEditModeWrapper>
                 ) : (
-                    galleryContent
+                    <StyledGalleryItemWrapper
+                        columns={columns}
+                        uploadedFileLength={uploadedFiles.length}
+                    >
+                        {galleryContent}
+                    </StyledGalleryItemWrapper>
                 )}
             </StyledGallery>
         ),
-        [galleryContent, galleryEditModeContent, handleDrop, isEditMode]
+        [isEditMode, galleryContent, columns, uploadedFiles.length, handleDrop]
     );
 };
 
