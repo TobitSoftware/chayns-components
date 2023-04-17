@@ -20,7 +20,7 @@ export interface Meta {
 }
 
 export interface ImageUrl {
-    id: number;
+    id?: number;
     url: string;
 }
 
