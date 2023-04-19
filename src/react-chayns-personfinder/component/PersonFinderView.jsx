@@ -264,7 +264,10 @@ class PersonFinderView extends Component {
         return (
             <InputBox
                 onBlur={this.handleOnBlur}
-                parent={parent}
+                parent={
+                    parent ||
+                    (isServer() ? null : document.querySelector('.tapp'))
+                }
                 key="single"
                 ref={(ref) => {
                     if (boxRef) {
@@ -372,7 +375,7 @@ PersonFinderView.defaultProps = {
     onLoadMore: null,
     selectedValue: false,
     boxClassName: null,
-    parent: isServer() ? null : document.querySelector('.tapp'),
+    parent: null,
     boxRef: null,
     showWaitCursor: false,
     onChange: null,
