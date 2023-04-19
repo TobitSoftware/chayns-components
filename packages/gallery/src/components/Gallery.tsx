@@ -1,5 +1,5 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
-import type { Files, UploadedFile } from '../types/files';
+import type { ExternalFile, UploadedFile } from '../types/files';
 import { filterDuplicateFiles, uploadFiles } from '../utils/file';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
@@ -25,7 +25,7 @@ export type GalleryProps = {
     /**
      *  Images and videos which should be displayed
      */
-    files?: Files[];
+    files?: ExternalFile[];
     /**
      *  Function to be executed when files are added
      */
@@ -50,6 +50,12 @@ const Gallery: FC<GalleryProps> = ({
     personId,
 }) => {
     const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+    const [externalFiles, setExternalFiles] = useState<UploadedFile[]>([]);
+
+    const combinedFiles = useMemo(
+        () => [...externalFiles, ...uploadedFiles],
+        [externalFiles, uploadedFiles]
+    );
 
     /**
      * Merge external files with uploaded files
@@ -59,7 +65,7 @@ const Gallery: FC<GalleryProps> = ({
             return;
         }
 
-        const externalFiles: UploadedFile[] = files.map((file) => {
+        const newExternalFiles: UploadedFile[] = files.map((file) => {
             if ('thumbnailUrl' in file) {
                 return {
                     id: file.id,
@@ -74,7 +80,7 @@ const Gallery: FC<GalleryProps> = ({
             };
         });
 
-        setUploadedFiles((prevState) => [...prevState, ...externalFiles]);
+        setExternalFiles(newExternalFiles);
     }, [files]);
 
     /**
@@ -83,6 +89,14 @@ const Gallery: FC<GalleryProps> = ({
     const handleDeleteFile = useCallback(
         (url: string) => {
             let fileToDelete: UploadedFile | undefined;
+
+            const externalFileToDelete = externalFiles.find((file) => file.url === url);
+
+            if (externalFileToDelete && typeof onRemove === 'function') {
+                onRemove(externalFileToDelete);
+
+                return;
+            }
 
             const filteredFiles = uploadedFiles.filter((file) => {
                 const fileUrl = file.url;
@@ -102,7 +116,7 @@ const Gallery: FC<GalleryProps> = ({
 
             onRemove(fileToDelete);
         },
-        [onRemove, setUploadedFiles, uploadedFiles]
+        [externalFiles, onRemove, uploadedFiles]
     );
 
     /**
@@ -145,28 +159,28 @@ const Gallery: FC<GalleryProps> = ({
     const ratio = useMemo(
         () =>
             // If the length is 1, the ratio or at least 1 is returned
-            uploadedFiles.length === 1 ? Math.max(uploadedFiles[0]?.ratio ?? 1, 1) : 1,
-        [uploadedFiles]
+            combinedFiles.length === 1 ? Math.max(combinedFiles[0]?.ratio ?? 1, 1) : 1,
+        [combinedFiles]
     );
 
     /**
      * Returns the number of columns
      */
     const columns = useMemo(() => {
-        const uploadedFilesLength = uploadedFiles.length;
+        const combinedFilesLength = combinedFiles.length;
 
-        if (uploadedFilesLength <= 1) {
+        if (combinedFilesLength <= 1) {
             return '';
         }
 
-        return `repeat(${uploadedFilesLength === 3 ? 3 : 2}, 1fr)`;
-    }, [uploadedFiles]);
+        return `repeat(${combinedFilesLength === 3 ? 3 : 2}, 1fr)`;
+    }, [combinedFiles]);
 
     const galleryContent = useMemo(() => {
-        const uploadedFilesLength = uploadedFiles.length;
+        const combinedFilesLength = combinedFiles.length;
 
         if (isEditMode) {
-            const items = uploadedFiles.map((file) => (
+            const items = combinedFiles.map((file) => (
                 <GalleryItem
                     uploadedFile={file}
                     isEditMode
@@ -188,7 +202,7 @@ const Gallery: FC<GalleryProps> = ({
             return items;
         }
 
-        const shortedFiles = uploadedFiles.slice(0, 4);
+        const shortedFiles = combinedFiles.slice(0, 4);
 
         return shortedFiles.map((file, index) => (
             <GalleryItem
@@ -197,11 +211,20 @@ const Gallery: FC<GalleryProps> = ({
                 ratio={ratio}
                 handleDeleteFile={handleDeleteFile}
                 remainingItemsLength={
-                    uploadedFilesLength > 4 && index === 3 ? uploadedFilesLength : undefined
+                    combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
                 }
             />
         ));
-    }, [accessToken, handleDeleteFile, isEditMode, onAdd, personId, ratio, uploadedFiles]);
+    }, [
+        combinedFiles,
+        isEditMode,
+        uploadedFiles,
+        onAdd,
+        personId,
+        accessToken,
+        ratio,
+        handleDeleteFile,
+    ]);
 
     return useMemo(
         () => (
@@ -216,14 +239,14 @@ const Gallery: FC<GalleryProps> = ({
                 ) : (
                     <StyledGalleryItemWrapper
                         columns={columns}
-                        uploadedFileLength={uploadedFiles.length}
+                        uploadedFileLength={combinedFiles.length}
                     >
                         {galleryContent}
                     </StyledGalleryItemWrapper>
                 )}
             </StyledGallery>
         ),
-        [isEditMode, galleryContent, columns, uploadedFiles.length, handleDrop]
+        [isEditMode, galleryContent, columns, combinedFiles.length, handleDrop]
     );
 };
 

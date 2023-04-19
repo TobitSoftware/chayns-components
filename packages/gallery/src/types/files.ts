@@ -19,6 +19,6 @@ export interface Meta {
     height: string;
 }
 
-export type Files = Omit<Video, 'originalVideoQuality'> | Image;
+export type ExternalFile = Omit<Video, 'originalVideoQuality'> | Image;
 
 export type UploadedFile = Video | Image;
