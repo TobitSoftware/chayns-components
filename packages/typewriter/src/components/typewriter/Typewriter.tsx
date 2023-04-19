@@ -207,13 +207,6 @@ const Typewriter: FC<TypewriterProps> = ({
     ]);
 
     useEffect(() => {
-        if (charactersCount) {
-            setIsResetAnimationActive(false);
-            setShownCharCount(0);
-        }
-    }, [charactersCount]);
-
-    useEffect(() => {
         if (!isAnimatingText && typeof onFinish === 'function') {
             onFinish();
         }
