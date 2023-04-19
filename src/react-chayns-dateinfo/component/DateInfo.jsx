@@ -4,12 +4,12 @@
 
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import classNames from 'clsx';
 import { isServer } from '../../utils/isServer';
 import {
     getAbsoluteDateString,
     getRelativeDateString,
 } from './utils/formatDate';
+import Tooltip from '../../react-chayns-tooltip/component/Tooltip';
 
 /**
  * Formats a date or date range to be easily readable and reveals the absolute
@@ -128,14 +128,29 @@ export default class DateInfo extends PureComponent {
         }
 
         const childElement = Array.isArray(children) ? children[0] : children;
-
-        return React.cloneElement(
+        const newChild = React.cloneElement(
             childElement,
-            noTitle || {
-                title: getAbsoluteDateString(date, { language }),
-                className: classNames(childElement.className, 'notranslate'),
-            },
+            { style: { display: 'inline-block' } },
             txt
+        );
+
+        if (noTitle) {
+            return newChild;
+        }
+
+        return (
+            <Tooltip
+                content={{
+                    html: (
+                        <div style={{ whiteSpace: 'nowrap' }}>
+                            {getAbsoluteDateString(date, { language })}
+                        </div>
+                    ),
+                }}
+                bindListeners
+            >
+                {newChild}
+            </Tooltip>
         );
     }
 }
