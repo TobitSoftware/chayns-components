@@ -27,7 +27,7 @@ export type GalleryItemProps = {
     /**
      *  Function to be executed wehen a file is deleted
      */
-    handleDeleteFile: (key: number | string) => void;
+    handleDeleteFile: (url: string) => void;
     /**
      *  Length of the uploaded files
      */
@@ -41,8 +41,6 @@ const GalleryItem: FC<GalleryItemProps> = ({
     ratio,
     remainingItemsLength,
 }) => {
-    const fileKey = 'thumbnailUrl' in uploadedFile ? uploadedFile.id : uploadedFile.key;
-
     /**
      * This function opens a selected file
      */
@@ -57,13 +55,13 @@ const GalleryItem: FC<GalleryItemProps> = ({
 
         // @ts-expect-error: Type is correct here
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        void chayns.openImage([`${file.base}/${file.key}`], 0);
+        void chayns.openImage([file.url], 0);
     }, []);
 
     return (
         <StyledGalleryItem>
             {isEditMode && (
-                <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(fileKey)}>
+                <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(uploadedFile.url)}>
                     <Icon size={20} icons={['ts-wrong']} />
                 </StyledGalleryItemDeleteButton>
             )}
@@ -81,7 +79,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                     ratio={ratio}
                     onClick={() => openSelectedFile(uploadedFile)}
                     draggable={false}
-                    src={`${uploadedFile.base}/${uploadedFile.key}`}
+                    src={uploadedFile.url}
                 />
             )}
             {remainingItemsLength && (

@@ -7,8 +7,8 @@ export interface Video {
 }
 
 export interface Image {
-    key: string;
-    base: string;
+    id?: string;
+    url: string;
     meta?: Meta;
     ratio?: number;
 }
@@ -19,11 +19,6 @@ export interface Meta {
     height: string;
 }
 
-export interface ImageUrl {
-    id?: number;
-    url: string;
-}
-
-export type Files = Omit<Video, 'originalVideoQuality'> | ImageUrl;
+export type Files = Omit<Video, 'originalVideoQuality'> | Image;
 
 export type UploadedFile = Video | Image;

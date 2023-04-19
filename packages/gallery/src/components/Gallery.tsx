@@ -1,6 +1,6 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import type { Files, UploadedFile } from '../types/files';
-import { filterDuplicateFiles, getBaseAndRoute, uploadFiles } from '../utils/file';
+import { filterDuplicateFiles, uploadFiles } from '../utils/file';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
 import {
@@ -68,11 +68,9 @@ const Gallery: FC<GalleryProps> = ({
                 };
             }
 
-            const { base, route } = getBaseAndRoute(file.url);
-
             return {
-                key: route,
-                base,
+                id: file.id,
+                url: file.url,
             };
         });
 
@@ -83,17 +81,17 @@ const Gallery: FC<GalleryProps> = ({
      * This function deletes a selected file from the file list
      */
     const handleDeleteFile = useCallback(
-        (key: number | string) => {
+        (url: string) => {
             let fileToDelete: UploadedFile | undefined;
 
             const filteredFiles = uploadedFiles.filter((file) => {
-                const fileKey = 'thumbnailUrl' in file ? file.id : file.key;
+                const fileUrl = file.url;
 
-                if (fileKey === key) {
+                if (fileUrl === url) {
                     fileToDelete = file;
                 }
 
-                return fileKey !== key;
+                return fileUrl !== url;
             });
 
             setUploadedFiles(filteredFiles);

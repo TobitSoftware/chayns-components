@@ -1,6 +1,6 @@
 import { imageUpload } from '../api/image/imageUpload';
 import { videoUpload } from '../api/video/videoUpload';
-import type { Image, UploadedFile, Video } from '../types/files';
+import type { Meta, UploadedFile, Video } from '../types/files';
 
 interface SelectFilesOptions {
     type: string;
@@ -62,50 +62,18 @@ export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFile
     const filteredFiles: UploadedFile[] = [];
 
     oldFiles.forEach((file) => {
-        let key: string;
-        if ('id' in file) {
-            key = file.id.toString();
-        } else {
-            key = file.key;
-        }
-
-        seenKeys.add(key);
+        seenKeys.add(file.id?.toString() ?? file.url);
         filteredFiles.push(file);
     });
 
     const newUniqueFiles: UploadedFile[] = [];
 
     newFiles.forEach((file) => {
-        let key: string;
-        if ('id' in file) {
-            key = file.id.toString();
-        } else {
-            key = file.key;
-        }
+        const key = file.id?.toString() ?? file.url;
 
-        const oldFile = oldFiles.find((f) => {
-            if ('id' in f && 'id' in file) {
-                return f.id === file.id;
-            }
+        const oldFile = oldFiles.find((f) => f.id === file.id);
 
-            if ('key' in f && 'key' in file) {
-                return f.key === file.key;
-            }
-
-            return null;
-        });
-
-        const alreadyAdded = newUniqueFiles.find((f) => {
-            if ('id' in f && 'id' in file) {
-                return f.id === file.id;
-            }
-
-            if ('key' in f && 'key' in file) {
-                return f.key === file.key;
-            }
-
-            return null;
-        });
+        const alreadyAdded = newUniqueFiles.find((f) => f.id === file.id);
 
         if (!oldFile && !alreadyAdded) {
             seenKeys.add(key);
@@ -116,13 +84,11 @@ export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFile
     return { filteredFiles, newUniqueFiles };
 };
 
-export const getBaseAndRoute = (url: string) => {
-    const urlObject = new URL(url);
-    const base = urlObject.origin;
-    const route = urlObject.pathname;
-
-    return { base, route };
-};
+export interface UploadedImage {
+    key: string;
+    base: string;
+    meta?: Meta;
+}
 
 interface UploadFilesOptions {
     filesToUpload: File[];
@@ -155,7 +121,7 @@ export const uploadFiles = async ({
     newUploadedFiles = newUploadedFiles.flat();
 
     // Upload images
-    const imageUploadPromises: Promise<Image>[] = images.map((image) =>
+    const imageUploadPromises: Promise<UploadedImage>[] = images.map((image) =>
         imageUpload({
             accessToken,
             file: image,
@@ -163,7 +129,14 @@ export const uploadFiles = async ({
         })
     );
 
-    newUploadedFiles = newUploadedFiles.concat(await Promise.all(imageUploadPromises));
+    const uploadedImages: UploadedImage[] = await Promise.all(imageUploadPromises);
+    const newImages: UploadedFile[] = uploadedImages.map((file) => ({
+        url: `${file.base}/${file.key}`,
+        id: file.key,
+        meta: file.meta,
+    }));
+
+    newUploadedFiles = newUploadedFiles.concat(newImages);
 
     return newUploadedFiles;
 };
