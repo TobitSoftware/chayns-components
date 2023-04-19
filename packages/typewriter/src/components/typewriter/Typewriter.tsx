@@ -41,6 +41,10 @@ export type TypewriterProps = {
      */
     resetDelay?: TypewriterResetDelay;
     /**
+     * Specifies whether the cursor should be forced to animate even if no text is currently animated.
+     */
+    shouldForceCursorAnimation?: boolean;
+    /**
      * Specifies whether the children should be sorted randomly if there are multiple texts.
      * This makes the typewriter start with a different text each time and also changes them
      * in a random order.
@@ -62,6 +66,7 @@ const Typewriter: FC<TypewriterProps> = ({
     onFinish,
     pseudoChildren,
     resetDelay = TypewriterResetDelay.Medium,
+    shouldForceCursorAnimation = false,
     shouldSortChildrenRandomly = false,
     shouldUseResetAnimation = false,
     speed = TypewriterSpeed.Medium,
@@ -107,6 +112,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const isAnimatingText =
         shownCharCount !== textContent.length ||
+        shouldForceCursorAnimation ||
         areMultipleChildrenGiven ||
         textContent.length === 0;
 
@@ -246,7 +252,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoChildren, shownText, sortedChildren, textContent]
+        [handleClick, isAnimatingText, pseudoTextHTML, shownText, sortedChildren]
     );
 };
 
