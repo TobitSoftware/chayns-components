@@ -39,6 +39,6 @@ const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onCli
     );
 };
 
-MentionFinderItem.displayName = 'MentionFinder';
+MentionFinderItem.displayName = 'MentionFinderItem';
 
 export default MentionFinderItem;

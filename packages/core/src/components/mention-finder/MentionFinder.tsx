@@ -39,7 +39,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     const [activeMember, setActiveMember] = useState(members[0]);
 
     const [fullMatch, searchString] = useMemo(() => {
-        const regExpMatchArray = inputValue.match(/@(\w*)/);
+        const regExpMatchArray = inputValue.match(/@(\w*)\S/);
 
         return [regExpMatchArray?.[0], regExpMatchArray?.[1]?.toLowerCase() ?? ''];
     }, [inputValue]);
@@ -111,14 +111,6 @@ const MentionFinder: FC<MentionFinderProps> = ({
     }, []);
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [handleKeyDown]);
-
-    useEffect(() => {
         if (filteredMembers.length > 0) {
             const isActiveMemberShown = filteredMembers.some(({ id }) => id === activeMember?.id);
 
@@ -142,17 +134,28 @@ const MentionFinder: FC<MentionFinderProps> = ({
         [activeMember, filteredMembers, handleMemberClick, handleMemberHover]
     );
 
-    const exitAndInitialY = popupAlignment === MentionFinderPopupAlignment.Bottom ? 16 : -16;
+    const shouldShowPopup = useMemo(() => fullMatch && items.length > 0, [fullMatch, items.length]);
+
+    useEffect(() => {
+        if (shouldShowPopup) {
+            window.addEventListener('keydown', handleKeyDown, true);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown, true);
+        };
+    }, [handleKeyDown, shouldShowPopup]);
 
     return (
         <StyledMentionFinder className="beta-chayns-mention-finder">
             <AnimatePresence initial={false}>
-                {fullMatch && items.length > 0 && (
+                {shouldShowPopup && (
                     <StyledMotionMentionFinderPopup
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: exitAndInitialY }}
-                        initial={{ opacity: 0, y: exitAndInitialY }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 0 }}
                         popupAlignment={popupAlignment}
+                        transition={{ duration: 0.15 }}
                     >
                         {items}
                     </StyledMotionMentionFinderPopup>
