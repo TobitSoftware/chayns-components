@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 export { default as Accordion } from './components/accordion/Accordion';
 export { default as AccordionContent } from './components/accordion/accordion-content/AccordionContent';
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
@@ -16,3 +18,4 @@ export { default as ListItemContent } from './components/list/list-item/list-ite
 export { default as ListItem } from './components/list/list-item/ListItem';
 export { MentionFinderPopupAlignment } from './components/mention-finder/constants/alignment';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
+export type { MentionMember } from './components/mention-finder/MentionFinder';
