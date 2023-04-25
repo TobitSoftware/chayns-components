@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-
+import { MentionFinderPopupAlignment } from '../src/components/mention-finder/constants/alignment';
 import MentionFinder from '../src/components/mention-finder/MentionFinder';
 
 export default {
@@ -45,6 +45,7 @@ export default {
                 name: 'Jannik Test',
             },
         ],
+        popupAlignment: MentionFinderPopupAlignment.Bottom,
     },
 } as ComponentMeta<typeof MentionFinder>;
 
