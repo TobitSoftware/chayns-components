@@ -15,6 +15,7 @@ import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition } from '../../utils/insert';
 import { restoreSelection, saveSelection } from '../../utils/selection';
+import { convertQuotes } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
@@ -105,10 +106,12 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
         const newInnerText = convertEmojisToUnicode(text);
 
-        if (newInnerText !== editorRef.current.innerText) {
+        const convertedQuotes = convertQuotes(newInnerText);
+
+        if (convertedQuotes !== editorRef.current.innerText) {
             saveSelection(editorRef.current);
 
-            editorRef.current.innerText = newInnerText;
+            editorRef.current.innerText = convertedQuotes;
 
             restoreSelection(editorRef.current);
         }
