@@ -14,3 +14,5 @@ export { default as Input } from './components/input/Input';
 export { default as List } from './components/list/List';
 export { default as ListItemContent } from './components/list/list-item/list-item-content/ListItemContent';
 export { default as ListItem } from './components/list/list-item/ListItem';
+export { MentionFinderPopupAlignment } from './components/mention-finder/constants/alignment';
+export { default as MentionFinder } from './components/mention-finder/MentionFinder';
