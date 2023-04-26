@@ -51,6 +51,11 @@ export type TypewriterProps = {
      */
     shouldSortChildrenRandomly?: boolean;
     /**
+     * Specifies whether the animation should use its full height or the height of the current
+     * chunk.
+     */
+    shouldUseAnimationHeight?: boolean;
+    /**
      * Specifies whether the reset of the text should be animated with a backspace animation for
      * multiple texts.
      */
@@ -68,6 +73,7 @@ const Typewriter: FC<TypewriterProps> = ({
     resetDelay = TypewriterResetDelay.Medium,
     shouldForceCursorAnimation = false,
     shouldSortChildrenRandomly = false,
+    shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
     speed = TypewriterSpeed.Medium,
 }) => {
@@ -219,13 +225,17 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
+            if (shouldUseAnimationHeight) {
+                return getSubTextFromHTML(textContent, shownCharCount);
+            }
+
             return React.isValidElement(pseudoChildren)
                 ? renderToString(pseudoChildren)
                 : pseudoChildren;
         }
 
         return textContent || '&#8203;';
-    }, [pseudoChildren, textContent]);
+    }, [pseudoChildren, shouldUseAnimationHeight, shownCharCount, textContent]);
 
     return useMemo(
         () => (
