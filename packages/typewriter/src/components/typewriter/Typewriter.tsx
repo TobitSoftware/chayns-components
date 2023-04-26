@@ -225,13 +225,21 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
+            const pseudoText = React.isValidElement(pseudoChildren)
+                ? renderToString(pseudoChildren)
+                : pseudoChildren;
+
             if (shouldUseAnimationHeight) {
-                return getSubTextFromHTML(textContent, shownCharCount);
+                return getSubTextFromHTML(pseudoText, shownCharCount);
             }
 
             return React.isValidElement(pseudoChildren)
                 ? renderToString(pseudoChildren)
                 : pseudoChildren;
+        }
+
+        if (shouldUseAnimationHeight && textContent) {
+            return getSubTextFromHTML(textContent, shownCharCount);
         }
 
         return textContent || '&#8203;';
