@@ -17,21 +17,16 @@ export const saveSelection = (element: HTMLDivElement) => {
 
     const range = selection.getRangeAt(0);
 
-    console.debug('saveSelection 0', { childNodes: Array.from(element.childNodes), node });
-
     childIndex = Array.from(element.childNodes).indexOf(node as ChildNode);
 
     endOffset = range.endOffset;
     startOffset = range.startOffset;
-
-    console.log('saveSelection 1', { childIndex, endOffset, startOffset });
 };
 
 export const restoreSelection = (element: HTMLDivElement) => {
-    const childNode = element.childNodes[childIndex];
-    const selection = window.getSelection();
+    let childNode = element.childNodes[childIndex];
 
-    console.log('restoreSelection 0', { childNode, childNodes: element.childNodes, childIndex });
+    const selection = window.getSelection();
 
     if (!childNode || !element || !selection) {
         return;
@@ -39,14 +34,28 @@ export const restoreSelection = (element: HTMLDivElement) => {
 
     const range = document.createRange();
 
-    console.log('restoreSelection 1', { childIndex, endOffset, startOffset });
+    if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
+        if (childNode.nextSibling) {
+            childNode = childNode.nextSibling;
 
-    if (childNode.nodeValue) {
-        endOffset = Math.min(endOffset, childNode.nodeValue.length);
-        startOffset = Math.min(startOffset, childNode.nodeValue.length);
+            if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
+                endOffset = childNode.nodeValue.length;
+                startOffset = childNode.nodeValue.length;
+            } else {
+                const textNode = document.createTextNode('');
+
+                childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+
+                childNode = textNode;
+
+                endOffset = 0;
+                startOffset = 0;
+            }
+        } else {
+            endOffset = childNode.nodeValue.length;
+            startOffset = childNode.nodeValue.length;
+        }
     }
-
-    console.log('restoreSelection 2', { childIndex, endOffset, startOffset });
 
     range.setStart(childNode, startOffset);
     range.setEnd(childNode, endOffset);
@@ -55,4 +64,9 @@ export const restoreSelection = (element: HTMLDivElement) => {
     selection.addRange(range);
 
     range.collapse(true);
+};
+
+export const moveSelectionOffset = (distance: number) => {
+    endOffset += distance;
+    startOffset += distance;
 };
