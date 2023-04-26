@@ -1,5 +1,5 @@
 import emojiList from 'unicode-emoji-json/data-by-emoji.json';
-import { asciiList, regAsciiRisky, regShortnames, shortNameList } from '../constants/emoji';
+import { asciiList, regAscii, regShortnames, shortNameList } from '../constants/emoji';
 
 const convert = (unicode: string) => {
     if (unicode.indexOf('-') > -1) {
@@ -86,7 +86,7 @@ export const convertEmojisToUnicode = (text: string): string => {
         fullMatch.replace(/%3A/g, ':')
     );
 
-    result = result.replace(regAsciiRisky, (fullMatch, m1, m2, m3) => {
+    result = result.replace(regAscii, (fullMatch, m1, m2, m3) => {
         if (typeof m3 === 'string' && m3 !== '') {
             const unicode = asciiList[unescapeHTML(m3)];
 
