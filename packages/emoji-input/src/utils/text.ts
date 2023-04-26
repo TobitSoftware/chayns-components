@@ -24,7 +24,7 @@ export const convertBBCodes = (text: string) => {
 
 export const convertQuotes = (text: string) => {
     const regexForQuotes =
-        /(?:\s|^|[\u{1F000}-\u{1F9FF}])"(?=\w)|(?<=\w)"(?=\s|$|[\u{1F000}-\u{1F9FF}])|(?<=\w)"(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?=\^)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?<=[^\w\s\u{1F000}-\u{1F9FF}])|(?<=\w)"(?<=[^\w\s\u{1F000}-\u{1F9FF}])/gu;
+        /(?<=[\s<>]|^)("(?=\w)|(?<=\w)")(?=[\s<>]|$)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?=\^)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?<=[^\w\s\u{1F000}-\u{1F9FF}]))))/gu;
 
     const regexForQuoteStart = /„(\s|$)/g;
 
