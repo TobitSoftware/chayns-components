@@ -1,3 +1,5 @@
+import { moveSelectionOffset, restoreSelection, saveSelection } from './selection';
+
 interface InsertTextAtCursorPositionOptions {
     editorElement: HTMLDivElement;
     text: string;
@@ -22,31 +24,55 @@ export const insertTextAtCursorPosition = ({
 }: InsertTextAtCursorPositionOptions) => {
     const selection = window.getSelection();
 
-    if (selection?.anchorNode && editorElement.contains(selection.anchorNode)) {
-        const range = selection.getRangeAt(0);
+    saveSelection(editorElement);
 
-        const textNodes = text.split(/\r\n|\r|\n/).map((part) => document.createTextNode(part));
+    if (selection?.anchorNode && editorElement.contains(selection.anchorNode)) {
+        let range = selection.getRangeAt(0);
+
+        const parts = text.split(/\r\n|\r|\n/);
+
+        const firstPart = parts.shift();
+
+        const textNodes = parts.map((part) => document.createTextNode(part));
 
         range.deleteContents();
 
-        textNodes.forEach((textNode, index) => {
-            range.insertNode(textNode);
-            range.setEndAfter(textNode);
-            range.setStartAfter(textNode);
+        if (selection.anchorNode.nodeType === Node.TEXT_NODE && firstPart) {
+            selection.anchorNode.nodeValue += firstPart;
 
-            if (index !== textNodes.length - 1) {
-                const brElement = document.createElement('br');
+            moveSelectionOffset(firstPart.length);
+        }
 
-                range.insertNode(brElement);
-                range.setEndAfter(brElement);
-                range.setStartAfter(brElement);
-            }
-        });
+        restoreSelection(editorElement);
 
-        range.collapse(false);
+        if (textNodes.length > 0) {
+            range = selection.getRangeAt(0);
 
-        selection.removeAllRanges();
-        selection.addRange(range);
+            let brElement = document.createElement('br');
+
+            range.insertNode(brElement);
+            range.setEndAfter(brElement);
+            range.setStartAfter(brElement);
+
+            textNodes.forEach((textNode, index) => {
+                range.insertNode(textNode);
+                range.setEndAfter(textNode);
+                range.setStartAfter(textNode);
+
+                if (index !== textNodes.length - 1) {
+                    brElement = document.createElement('br');
+
+                    range.insertNode(brElement);
+                    range.setEndAfter(brElement);
+                    range.setStartAfter(brElement);
+                }
+            });
+
+            range.collapse(false);
+
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
     } else {
         // eslint-disable-next-line no-param-reassign
         editorElement.innerText += text;

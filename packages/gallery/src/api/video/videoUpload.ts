@@ -34,8 +34,6 @@ export const videoUpload = async ({
 
     const response = await fetch(url, requestInit);
 
-    // console.log(await response.json());
-
     if (response.status === 202) {
         return (await response.json()) as PostVideoResult;
     }

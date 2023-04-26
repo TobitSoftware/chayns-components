@@ -60,6 +60,10 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
         pointer-events: none;
     }
 
+    lc_mention {
+        font-weight: bold;
+    }
+
     // Styles for custom scrollbar
     ::-webkit-scrollbar {
         width: 5px;

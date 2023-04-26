@@ -15,7 +15,7 @@ import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition } from '../../utils/insert';
 import { restoreSelection, saveSelection } from '../../utils/selection';
-import { convertQuotes } from '../../utils/text';
+import { convertBBCodes, convertQuotes } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
@@ -99,24 +99,20 @@ const EmojiInput: FC<EmojiInputProps> = ({
      * When updating the HTML, the current cursor position is saved before replacing the content, so
      * that it can be set again afterward.
      */
-    const handleUpdateText = useCallback((text: string) => {
+    const handleUpdateHTML = useCallback((html: string) => {
         if (!editorRef.current) {
             return;
         }
 
-        const newInnerText = convertEmojisToUnicode(text);
+        let newInnerHTML = convertEmojisToUnicode(html);
 
-        const convertedQuotes = convertQuotes(newInnerText);
+        newInnerHTML = convertBBCodes(newInnerHTML);
+        newInnerHTML = convertQuotes(newInnerHTML);
 
-        if (convertedQuotes !== editorRef.current.innerText) {
+        if (newInnerHTML !== editorRef.current.innerHTML) {
             saveSelection(editorRef.current);
 
-            console.debug('TEST', {
-                innerText: editorRef.current.innerText,
-                convertedQuotes,
-            });
-
-            editorRef.current.innerText = convertedQuotes;
+            editorRef.current.innerHTML = newInnerHTML;
 
             restoreSelection(editorRef.current);
         }
@@ -132,13 +128,13 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 return;
             }
 
-            handleUpdateText(editorRef.current.innerText);
+            handleUpdateHTML(editorRef.current.innerHTML);
 
             if (typeof onInput === 'function') {
                 onInput(event);
             }
         },
-        [handleUpdateText, onInput]
+        [handleUpdateHTML, onInput]
     );
 
     /**
@@ -202,8 +198,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, []);
 
     useEffect(() => {
-        handleUpdateText(value);
-    }, [handleUpdateText, value]);
+        handleUpdateHTML(value);
+    }, [handleUpdateHTML, value]);
 
     useEffect(() => {
         document.body.addEventListener('mousedown', handlePreventLoseFocus);
