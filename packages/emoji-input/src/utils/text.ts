@@ -1,6 +1,6 @@
 export const convertQuotes = (text: string) => {
     const regexForQuotes =
-        /(?:\s|^)"(?=\w)|(?<=\w)"(?=\s|$)|(?<=\w)"(?=\w)|(?<=[^\w\s])"(?=\w)|(?<=[^\w\s])"(?=\^)|(?<=[^\w\s])"(?<=[^\w\s])|(?<=\w)"(?<=[^\w\s])/g;
+        /(?:\s|^|[\u{1F000}-\u{1F9FF}])"(?=\w)|(?<=\w)"(?=\s|$|[\u{1F000}-\u{1F9FF}])|(?<=\w)"(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?=\^)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])"(?<=[^\w\s\u{1F000}-\u{1F9FF}])|(?<=\w)"(?<=[^\w\s\u{1F000}-\u{1F9FF}])/gu;
 
     const regexForQuoteStart = /„(\s|$)/g;
 

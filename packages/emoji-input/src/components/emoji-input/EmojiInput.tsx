@@ -111,6 +111,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
         if (convertedQuotes !== editorRef.current.innerText) {
             saveSelection(editorRef.current);
 
+            console.debug('TEST', {
+                innerText: editorRef.current.innerText,
+                convertedQuotes,
+            });
+
             editorRef.current.innerText = convertedQuotes;
 
             restoreSelection(editorRef.current);
