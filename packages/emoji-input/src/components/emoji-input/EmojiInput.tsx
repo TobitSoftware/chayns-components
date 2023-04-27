@@ -1,6 +1,5 @@
 import React, {
     ChangeEvent,
-    ChangeEventHandler,
     ClipboardEvent,
     FC,
     KeyboardEventHandler,
@@ -15,7 +14,7 @@ import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition } from '../../utils/insert';
 import { restoreSelection, saveSelection } from '../../utils/selection';
-import { convertBBCodes } from '../../utils/text';
+import { convertBBCodesToHTML, convertHTMLToBBCodes } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
@@ -38,9 +37,11 @@ export type EmojiInputProps = {
      */
     isDisabled?: boolean;
     /**
-     * Function that is executed when the text of the input changes
+     * Function that is executed when the text of the input changes. In addition to the original
+     * event, the original text is returned as second parameter, in which the internally used HTML
+     * elements have been converted back to BB codes.
      */
-    onInput?: ChangeEventHandler<HTMLDivElement>;
+    onInput?: (event: ChangeEvent<HTMLDivElement>, originalText: string) => void;
     /**
      * Function that is executed when a key is pressed down.
      */
@@ -106,7 +107,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
         let newInnerHTML = convertEmojisToUnicode(html);
 
-        newInnerHTML = convertBBCodes(newInnerHTML);
+        newInnerHTML = convertBBCodesToHTML(newInnerHTML);
         // newInnerHTML = convertQuotes(newInnerHTML);
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
@@ -131,7 +132,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
             handleUpdateHTML(editorRef.current.innerHTML);
 
             if (typeof onInput === 'function') {
-                onInput(event);
+                onInput(event, convertHTMLToBBCodes(editorRef.current.innerHTML));
             }
         },
         [handleUpdateHTML, onInput]

@@ -1,6 +1,10 @@
-import { BB_LC_MENTION_ID_REGEX, BB_LC_MENTION_REGEX } from '../constants/regex';
+import {
+    BB_LC_MENTION_ID_REGEX,
+    BB_LC_MENTION_REGEX,
+    HTML_LC_MENTION_REGEX,
+} from '../constants/regex';
 
-const replaceLcMention = (lcMention: string, text: string) => {
+const replaceWithLcMentionHTML = (lcMention: string, text: string) => {
     let attributes = '';
 
     const idMatches = lcMention.match(BB_LC_MENTION_ID_REGEX);
@@ -14,10 +18,18 @@ const replaceLcMention = (lcMention: string, text: string) => {
     return `<lc_mention contenteditable="false" ${attributes}>${text}</lc_mention>`;
 };
 
-export const convertBBCodes = (text: string) => {
+export const convertBBCodesToHTML = (text: string) => {
     let result = text;
 
-    result = result.replace(BB_LC_MENTION_REGEX, replaceLcMention);
+    result = result.replace(BB_LC_MENTION_REGEX, replaceWithLcMentionHTML);
+
+    return result;
+};
+
+export const convertHTMLToBBCodes = (text: string) => {
+    let result = text;
+
+    result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
 
     return result;
 };
