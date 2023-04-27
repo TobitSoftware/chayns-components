@@ -1,12 +1,8 @@
 import { Icon } from '@chayns-components/core';
 import React, { Dispatch, FC, SetStateAction, useCallback } from 'react';
-import type { UploadedFile } from '../../types/files';
-import {
-    convertFileListToArray,
-    filterDuplicateFiles,
-    selectFiles,
-    uploadFiles,
-} from '../../utils/file';
+import type { UploadedFile } from '../../types/file';
+import { convertFileListToArray, filterDuplicateFiles, selectFiles } from '../../utils/file';
+import { uploadFiles } from '../../utils/upload';
 import { StyledAddFile, StyledAddFIleIconWrapper } from './AddFile.styles';
 
 export type AddFileProps = {

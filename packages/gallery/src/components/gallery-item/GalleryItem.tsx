@@ -1,6 +1,6 @@
 import { Icon } from '@chayns-components/core';
 import React, { FC, useCallback } from 'react';
-import type { UploadedFile } from '../../types/files';
+import type { UploadedFile } from '../../types/file';
 import {
     StyledGalleryItem,
     StyledGalleryItemDeleteButton,

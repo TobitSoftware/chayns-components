@@ -1,6 +1,4 @@
-import { imageUpload } from '../api/image/imageUpload';
-import { videoUpload } from '../api/video/videoUpload';
-import type { Meta, UploadedFile, Video } from '../types/files';
+import type { UploadedFile } from '../types/file';
 
 interface SelectFilesOptions {
     type: string;
@@ -41,6 +39,7 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<nul
 
 export const convertFileListToArray = (fileList: FileList): File[] => {
     const filesArray = [];
+
     for (let i = 0; i < fileList.length; i++) {
         const file = fileList.item(i);
 
@@ -59,6 +58,7 @@ interface FilterDuplicateFilesOptions {
 
 export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFilesOptions) => {
     const seenKeys = new Set<string>();
+
     const filteredFiles: UploadedFile[] = [];
 
     oldFiles.forEach((file) => {
@@ -84,59 +84,19 @@ export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFile
     return { filteredFiles, newUniqueFiles };
 };
 
-export interface UploadedImage {
-    key: string;
-    base: string;
-    meta?: Meta;
-}
+export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-interface UploadFilesOptions {
-    filesToUpload: File[];
-    accessToken: string;
-    personId: string;
-}
+        reader.onload = (e) => {
+            if (e.target?.result) {
+                resolve(e.target.result);
+            } else {
+                reject(Error('Could not get array buffer.'));
+            }
+        };
 
-/**
- * Upload files
- */
-export const uploadFiles = async ({
-    filesToUpload,
-    personId,
-    accessToken,
-}: UploadFilesOptions): Promise<UploadedFile[]> => {
-    if (!filesToUpload) {
-        return [];
-    }
+        reader.onerror = reject;
 
-    const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
-    const images = filesToUpload.filter(({ type }) => type.includes('image/'));
-    let newUploadedFiles: UploadedFile[] = [];
-
-    // Upload videos
-    const videoUploadPromises: Promise<Video>[] = videos.map((video) =>
-        videoUpload({ accessToken, file: video })
-    );
-
-    newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoUploadPromises));
-    newUploadedFiles = newUploadedFiles.flat();
-
-    // Upload images
-    const imageUploadPromises: Promise<UploadedImage>[] = images.map((image) =>
-        imageUpload({
-            accessToken,
-            file: image,
-            personId,
-        })
-    );
-
-    const uploadedImages: UploadedImage[] = await Promise.all(imageUploadPromises);
-    const newImages: UploadedFile[] = uploadedImages.map((file) => ({
-        url: `${file.base}/${file.key}`,
-        id: file.key,
-        meta: file.meta,
-    }));
-
-    newUploadedFiles = newUploadedFiles.concat(newImages);
-
-    return newUploadedFiles;
-};
+        reader.readAsArrayBuffer(file);
+    });

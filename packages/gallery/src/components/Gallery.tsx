@@ -1,6 +1,7 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
-import type { ExternalFile, UploadedFile } from '../types/files';
-import { filterDuplicateFiles, uploadFiles } from '../utils/file';
+import type { ExternalFile, UploadedFile } from '../types/file';
+import { filterDuplicateFiles } from '../utils/file';
+import { uploadFiles } from '../utils/upload';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
 import {
