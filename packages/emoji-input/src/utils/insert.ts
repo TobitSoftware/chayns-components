@@ -1,4 +1,4 @@
-import { moveSelectionOffset, restoreSelection, saveSelection } from './selection';
+import { moveSelectionOffset, restoreSelection, saveSelection, setChildIndex } from './selection';
 
 interface InsertTextAtCursorPositionOptions {
     editorElement: HTMLDivElement;
@@ -37,10 +37,21 @@ export const insertTextAtCursorPosition = ({
 
         range.deleteContents();
 
-        if (selection.anchorNode.nodeType === Node.TEXT_NODE && firstPart) {
-            selection.anchorNode.nodeValue += firstPart;
+        if (firstPart) {
+            if (selection.anchorNode.nodeType === Node.TEXT_NODE) {
+                selection.anchorNode.nodeValue += firstPart;
 
-            moveSelectionOffset(firstPart.length);
+                moveSelectionOffset(firstPart.length);
+            } else if (selection.anchorNode === editorElement) {
+                const textNode = document.createTextNode(firstPart);
+
+                editorElement.appendChild(textNode);
+
+                const textNodeIndex = Array.from(editorElement.childNodes).indexOf(textNode);
+
+                moveSelectionOffset(firstPart.length);
+                setChildIndex(textNodeIndex);
+            }
         }
 
         restoreSelection(editorElement);

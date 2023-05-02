@@ -47,7 +47,16 @@ export const restoreSelection = (element: HTMLDivElement) => {
         return;
     }
 
-    if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
+    if (typeof childNode.nodeValue !== 'string') {
+        const textNode = document.createTextNode('');
+
+        childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+
+        childNode = textNode;
+
+        endOffset = 0;
+        startOffset = 0;
+    } else if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
         if (childNode.nextSibling) {
             childNode = childNode.nextSibling;
 
@@ -84,4 +93,8 @@ export const restoreSelection = (element: HTMLDivElement) => {
 export const moveSelectionOffset = (distance: number) => {
     endOffset += distance;
     startOffset += distance;
+};
+
+export const setChildIndex = (index: number) => {
+    childIndex = index;
 };
