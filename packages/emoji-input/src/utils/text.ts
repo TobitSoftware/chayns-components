@@ -1,4 +1,4 @@
-import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
+import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX, QUOTE_REGEX } from '../constants/regex';
 
 export const convertBBCodesToHTML = (text: string) => {
     let result = text;
@@ -20,12 +20,12 @@ export const convertHTMLToBBCodes = (text: string) => {
 };
 
 export const convertQuotes = (text: string) => {
-    const regexForQuotes =
-        /(?<=[\s<>]|^)("(?=\w)|(?<=\w)")(?=[\s<>]|$)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?=\w)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?=\^)|(?<=[^\w\s\u{1F000}-\u{1F9FF}])(?![^<]*>)("(?![^<]*>[^<]*<\/lc_mention>)(?<=[^\w\s\u{1F000}-\u{1F9FF}]))))/gu;
+    console.log(text);
 
     const regexForQuoteStart = /„(\s|$)/g;
 
-    const formattedQuotes = text.replace(regexForQuotes, (match) => {
+    const formattedQuotes = text.replace(QUOTE_REGEX, (match) => {
+        console.log('match', match);
         if (match.startsWith(' ') || text.startsWith(match)) {
             return match.startsWith(' ')
                 ? ` ${String.fromCharCode(8222)}`
@@ -34,5 +34,6 @@ export const convertQuotes = (text: string) => {
         return String.fromCharCode(8220);
     });
 
-    return formattedQuotes.replace(regexForQuoteStart, '"');
+    return formattedQuotes;
+    // return formattedQuotes.replace(regexForQuoteStart, '"');
 };
