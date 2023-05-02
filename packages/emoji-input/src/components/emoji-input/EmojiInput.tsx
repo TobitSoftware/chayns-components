@@ -111,7 +111,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
         // newInnerHTML = convertQuotes(newInnerHTML);
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
-            saveSelection(editorRef.current);
+            saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
 
             editorRef.current.innerHTML = newInnerHTML;
 

@@ -2,22 +2,37 @@ let childIndex = -1;
 let endOffset = -1;
 let startOffset = -1;
 
-export const saveSelection = (element: HTMLDivElement) => {
+interface SaveSelectionOptions {
+    shouldIgnoreEmptyTextNodes?: boolean;
+}
+
+export const saveSelection = (
+    element: HTMLDivElement,
+    { shouldIgnoreEmptyTextNodes }: SaveSelectionOptions = {}
+) => {
     const selection = window.getSelection();
 
     if (!selection) {
         return;
     }
 
-    const node = selection.anchorNode;
+    const { anchorNode } = selection;
 
-    if (!node) {
+    if (!anchorNode) {
         return;
     }
 
     const range = selection.getRangeAt(0);
 
-    childIndex = Array.from(element.childNodes).indexOf(node as ChildNode);
+    let childNodesArray = Array.from(element.childNodes);
+
+    if (shouldIgnoreEmptyTextNodes) {
+        childNodesArray = childNodesArray.filter(
+            ({ nodeType, nodeValue }) => nodeType !== Node.TEXT_NODE || nodeValue !== ''
+        );
+    }
+
+    childIndex = childNodesArray.indexOf(anchorNode as ChildNode);
 
     endOffset = range.endOffset;
     startOffset = range.startOffset;
@@ -31,8 +46,6 @@ export const restoreSelection = (element: HTMLDivElement) => {
     if (!childNode || !element || !selection) {
         return;
     }
-
-    const range = document.createRange();
 
     if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
         if (childNode.nextSibling) {
@@ -56,6 +69,8 @@ export const restoreSelection = (element: HTMLDivElement) => {
             startOffset = childNode.nodeValue.length;
         }
     }
+
+    const range = document.createRange();
 
     range.setStart(childNode, startOffset);
     range.setEnd(childNode, endOffset);

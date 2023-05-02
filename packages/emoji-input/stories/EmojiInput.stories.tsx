@@ -30,6 +30,7 @@ const Template: ComponentStory<typeof EmojiInput> = ({ ...args }) => (
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
         </p>
         <p>[lc_mention id="MIC-HAEL1"]Michael[/lc_mention]</p>
+        <p>[lc_mention id="DER-PROFI"]Simon[/lc_mention]</p>
         <EmojiInput {...args} />
     </>
 );
