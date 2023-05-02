@@ -62,6 +62,10 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
 
     lc_mention {
         font-weight: bold;
+
+        span {
+            opacity: 0.5;
+        }
     }
 
     // Styles for custom scrollbar

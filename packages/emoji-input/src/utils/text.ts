@@ -1,27 +1,12 @@
-import {
-    BB_LC_MENTION_ID_REGEX,
-    BB_LC_MENTION_REGEX,
-    HTML_LC_MENTION_REGEX,
-} from '../constants/regex';
-
-const replaceWithLcMentionHTML = (lcMention: string, text: string) => {
-    let attributes = '';
-
-    const idMatches = lcMention.match(BB_LC_MENTION_ID_REGEX);
-
-    const match = idMatches?.[1];
-
-    if (match) {
-        attributes += `id="${match}"`;
-    }
-
-    return `<lc_mention contenteditable="false" ${attributes}>${text}</lc_mention>`;
-};
+import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
 
 export const convertBBCodesToHTML = (text: string) => {
     let result = text;
 
-    result = result.replace(BB_LC_MENTION_REGEX, replaceWithLcMentionHTML);
+    result = result.replace(
+        BB_LC_MENTION_REGEX,
+        '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>'
+    );
 
     return result;
 };
