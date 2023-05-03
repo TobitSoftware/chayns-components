@@ -107,8 +107,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
         let newInnerHTML = convertEmojisToUnicode(html);
 
+        newInnerHTML = convertQuotes(newInnerHTML);
         newInnerHTML = convertBBCodesToHTML(newInnerHTML);
         newInnerHTML = convertQuotes(newInnerHTML);
+
+        console.log(newInnerHTML);
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
             saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });

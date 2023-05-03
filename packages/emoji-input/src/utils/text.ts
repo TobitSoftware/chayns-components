@@ -1,4 +1,4 @@
-import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX, QUOTE_REGEX } from '../constants/regex';
+import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
 
 export const convertBBCodesToHTML = (text: string) => {
     let result = text;
@@ -20,20 +20,47 @@ export const convertHTMLToBBCodes = (text: string) => {
 };
 
 export const convertQuotes = (text: string) => {
-    console.log(text);
+    let result = '';
+    let inBrackets = false;
+    let inTags = false;
 
-    const regexForQuoteStart = /„(\s|$)/g;
+    for (let i = 0; i < text.length; i++) {
+        const char = text.charAt(i);
+        const prevChar = i > 0 ? text.charAt(i - 1) : '';
+        const htmlEntity = text.substr(i, 4);
 
-    const formattedQuotes = text.replace(QUOTE_REGEX, (match) => {
-        console.log('match', match);
-        if (match.startsWith(' ') || text.startsWith(match)) {
-            return match.startsWith(' ')
-                ? ` ${String.fromCharCode(8222)}`
-                : String.fromCharCode(8222);
+        if (char === '[') {
+            inBrackets = true;
+            result += char;
+        } else if (char === ']') {
+            inBrackets = false;
+            result += char;
+        } else if (char === '<') {
+            inTags = false;
+            result += char;
+        } else if (char === '>') {
+            inTags = false;
+            result += char;
+        } else if (htmlEntity === '&lt;') {
+            inTags = true;
+            result += '&lt;';
+            i += 3;
+        } else if (htmlEntity === '&gt;') {
+            inTags = false;
+            result += '&gt;';
+            i += 3;
+        } else if (char === '"' && !inBrackets && !inTags) {
+            if (prevChar === ' ' || i === 0) {
+                result += String.fromCharCode(8222);
+            } else if (/[\w.,:;!?"'-]/.test(prevChar)) {
+                result += String.fromCharCode(8220);
+            } else {
+                result += char;
+            }
+        } else {
+            result += char;
         }
-        return String.fromCharCode(8220);
-    });
+    }
 
-    return formattedQuotes;
-    // return formattedQuotes.replace(regexForQuoteStart, '"');
+    return result;
 };
