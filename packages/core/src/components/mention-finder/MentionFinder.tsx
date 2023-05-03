@@ -152,6 +152,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 {shouldShowPopup && (
                     <StyledMotionMentionFinderPopup
                         animate={{ height: 'auto', opacity: 1 }}
+                        className="prevent-lose-focus"
                         exit={{ height: 0, opacity: 0 }}
                         initial={{ height: 0, opacity: 0 }}
                         popupAlignment={popupAlignment}
