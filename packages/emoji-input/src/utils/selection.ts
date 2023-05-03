@@ -28,7 +28,8 @@ export const saveSelection = (
 
     if (shouldIgnoreEmptyTextNodes) {
         childNodesArray = childNodesArray.filter(
-            ({ nodeType, nodeValue }) => nodeType !== Node.TEXT_NODE || nodeValue !== ''
+            ({ nodeType, nodeValue }) =>
+                nodeType !== Node.TEXT_NODE || (nodeValue !== '' && nodeValue !== '\u200B')
         );
     }
 
@@ -43,22 +44,12 @@ export const restoreSelection = (element: HTMLDivElement) => {
 
     const selection = window.getSelection();
 
-    console.debug('restoreSelection', {
-        childIndex,
-        childNode,
-        childNodes: element.childNodes,
-        element,
-        endOffset,
-        selection,
-        startOffset,
-    });
-
     if (!childNode || !element || !selection) {
         return;
     }
 
     if (typeof childNode.nodeValue !== 'string') {
-        const textNode = document.createTextNode('');
+        const textNode = document.createTextNode('\u200B');
 
         childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
@@ -74,7 +65,7 @@ export const restoreSelection = (element: HTMLDivElement) => {
                 endOffset = childNode.nodeValue.length;
                 startOffset = childNode.nodeValue.length;
             } else {
-                const textNode = document.createTextNode('');
+                const textNode = document.createTextNode('\u200B');
 
                 childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
