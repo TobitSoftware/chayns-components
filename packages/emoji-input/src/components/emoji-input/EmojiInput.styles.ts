@@ -36,6 +36,7 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
             border-right-width: 0;
+            padding-right: 0;
         `}
 `;
 

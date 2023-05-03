@@ -14,7 +14,7 @@ import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition } from '../../utils/insert';
 import { restoreSelection, saveSelection } from '../../utils/selection';
-import { convertBBCodesToHTML, convertHTMLToBBCodes, convertQuotes } from '../../utils/text';
+import { convertBBCodesToHTML, convertHTMLToBBCodes } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
@@ -108,7 +108,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
         let newInnerHTML = convertEmojisToUnicode(html);
 
         newInnerHTML = convertBBCodesToHTML(newInnerHTML);
-        newInnerHTML = convertQuotes(newInnerHTML);
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
             saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
