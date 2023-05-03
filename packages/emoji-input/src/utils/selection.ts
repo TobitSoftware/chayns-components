@@ -43,6 +43,16 @@ export const restoreSelection = (element: HTMLDivElement) => {
 
     const selection = window.getSelection();
 
+    console.debug('restoreSelection', {
+        childIndex,
+        childNode,
+        childNodes: element.childNodes,
+        element,
+        endOffset,
+        selection,
+        startOffset,
+    });
+
     if (!childNode || !element || !selection) {
         return;
     }
