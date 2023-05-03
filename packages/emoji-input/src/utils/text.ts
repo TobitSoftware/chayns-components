@@ -1,8 +1,10 @@
 import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
 import { unescapeHTML } from './emoji';
 
-export const convertBBCodesToHTML = (text: string) => {
+export const convertTextToHTML = (text: string) => {
     let result = text;
+
+    result = result.replace(/\n/g, '<br>');
 
     result = result.replace(
         BB_LC_MENTION_REGEX,
@@ -12,12 +14,16 @@ export const convertBBCodesToHTML = (text: string) => {
     return result;
 };
 
-export const convertHTMLToBBCodes = (text: string) => {
+export const convertHTMLToText = (text: string) => {
     let result = text;
 
     result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
 
     result = unescapeHTML(result);
 
-    return result;
+    const element = document.createElement('div');
+
+    element.innerHTML = result;
+
+    return element.textContent;
 };
