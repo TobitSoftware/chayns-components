@@ -38,7 +38,7 @@ const convert = (unicode: string) => {
     return String.fromCharCode(s);
 };
 
-const unescapeHTML = (text: string) => {
+export const unescapeHTML = (text: string) => {
     const unescaped: { [key: string]: string } = {
         '&amp;': '&',
         '&#38;': '&',
