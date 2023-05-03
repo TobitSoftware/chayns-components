@@ -25,5 +25,5 @@ export const convertHTMLToText = (text: string) => {
 
     element.innerHTML = result;
 
-    return element.textContent;
+    return element.innerText;
 };
