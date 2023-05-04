@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { MentionFinderPopupAlignment } from '../src/components/mention-finder/constants/alignment';
+import { MentionFinderPopupAlignment } from '../src';
 import MentionFinder from '../src/components/mention-finder/MentionFinder';
 
 export default {
@@ -43,6 +43,12 @@ export default {
                 imageUrl: 'https://sub60.tobit.com/u/126-52360',
                 info: 'chaynsID: 126-52360',
                 name: 'Jannik Test',
+            },
+            {
+                id: '132-50444',
+                imageUrl: 'https://sub60.tobit.com/u/132-50444',
+                info: 'chaynsID: 132-50444',
+                name: 'Günther Grütze',
             },
         ],
         popupAlignment: MentionFinderPopupAlignment.Bottom,

@@ -39,7 +39,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
     const [activeMember, setActiveMember] = useState(members[0]);
 
     const [fullMatch, searchString] = useMemo(() => {
-        const regExpMatchArray = inputValue.match(/@(\w*)(?:\S|$)/);
+        const regExpMatchArray = inputValue.match(/@(\S*)/);
 
         return [regExpMatchArray?.[0], regExpMatchArray?.[1]?.toLowerCase() ?? ''];
     }, [inputValue]);
