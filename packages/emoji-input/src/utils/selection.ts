@@ -37,6 +37,16 @@ export const saveSelection = (
 
     endOffset = range.endOffset;
     startOffset = range.startOffset;
+
+    console.debug('saveSelection', {
+        anchorNode,
+        childNodesArray,
+        childIndex,
+        element,
+        endOffset,
+        selection,
+        range,
+    });
 };
 
 export const restoreSelection = (element: HTMLDivElement) => {
