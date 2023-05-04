@@ -19,7 +19,8 @@ export const convertHTMLToText = (text: string) => {
 
     result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
 
-    result = result.replace(/\u200B/, '');
+    result = result.replace(/\u200B/g, '');
+    result = result.replace(/<br>/g, '\n');
 
     result = unescapeHTML(result);
 
