@@ -190,7 +190,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
         if (
             element.classList.contains('prevent-lose-focus') ||
-            element.parentElement?.classList.contains('prevent-lose-focus')
+            element.parentElement?.classList.contains('prevent-lose-focus') ||
+            element.parentElement?.parentElement?.classList.contains('prevent-lose-focus')
         ) {
             event.preventDefault();
             event.stopPropagation();
