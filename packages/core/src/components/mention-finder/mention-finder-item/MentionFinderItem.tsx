@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, MouseEvent, useCallback } from 'react';
 import type { MentionMember } from '../MentionFinder';
 import {
     StyledMentionFinderItem,
@@ -16,13 +16,20 @@ export type MentionFinderItemProps = {
 };
 
 const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onClick, onHover }) => {
-    const handleItemClick = useCallback(() => onClick(member), [member, onClick]);
+    const handleItemClick = useCallback(
+        (event: MouseEvent<HTMLDivElement>) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            onClick(member);
+        },
+        [member, onClick]
+    );
 
     const handleItemMouseEnter = useCallback(() => onHover(member), [member, onHover]);
 
     return (
         <StyledMentionFinderItem
-            className="prevent-lose-focus"
             isActive={isActive}
             onClick={handleItemClick}
             onMouseEnter={handleItemMouseEnter}

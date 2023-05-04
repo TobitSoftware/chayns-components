@@ -12,6 +12,11 @@ export const saveSelection = (
 ) => {
     const selection = window.getSelection();
 
+    console.debug('saveSelection 1', {
+        anchorNode: selection?.anchorNode,
+        selection,
+    });
+
     if (!selection) {
         return;
     }
@@ -38,7 +43,7 @@ export const saveSelection = (
     endOffset = range.endOffset;
     startOffset = range.startOffset;
 
-    console.debug('saveSelection', {
+    console.debug('saveSelection 2', {
         anchorNode,
         childNodesArray,
         childIndex,
