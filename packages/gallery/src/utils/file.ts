@@ -1,3 +1,5 @@
+import type { FileItem } from '../types/file';
+
 interface SelectFilesOptions {
     type: string;
     multiple: boolean;
@@ -61,6 +63,20 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
         input.click();
     });
+
+interface FilerDuplicateFileOptions {
+    files: FileItem[];
+    newFile: File;
+}
+
+export const filterDuplicateFile = ({ newFile, files }: FilerDuplicateFileOptions) => {
+    const duplicates = files.filter((fileItem) => {
+        const { file } = fileItem;
+        return file && file.name === newFile.name && file.size === newFile.size;
+    });
+
+    return duplicates.length > 0;
+};
 
 export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
     new Promise((resolve, reject) => {

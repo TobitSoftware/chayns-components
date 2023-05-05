@@ -1,7 +1,7 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { FileItem, Image, Video } from '../types/file';
-import { generatePreviewUrl } from '../utils/file';
+import { filterDuplicateFile, generatePreviewUrl } from '../utils/file';
 import { uploadFile } from '../utils/upload';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
@@ -138,14 +138,13 @@ const Gallery: FC<GalleryProps> = ({
     }, [accessToken, fileItems, personId]);
 
     /**
-     * This function formats and adds file to fileItems
+     * This function formats and adds files to fileItems
      */
     const handleAddFiles = (filesToAdd: File[]) => {
         const newFileItems: FileItem[] = [];
 
         filesToAdd.forEach((file) => {
-            // ToDo check for duplicates
-            if (file) {
+            if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
                 newFileItems.push({
                     id: uuidv4(),
                     file,
