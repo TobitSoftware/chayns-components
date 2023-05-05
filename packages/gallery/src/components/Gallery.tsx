@@ -282,7 +282,7 @@ const Gallery: FC<GalleryProps> = ({
                 }
             />
         ));
-    }, [fileItems, isEditMode, handleAddFiles, ratio, handleDeleteFile]);
+    }, [fileItems, isEditMode, handleAddFiles, handleDeleteFile]);
 
     return useMemo(
         () => (

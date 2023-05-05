@@ -19,3 +19,4 @@ export { default as ListItem } from './components/list/list-item/ListItem';
 export { MentionFinderPopupAlignment } from './components/mention-finder/constants/alignment';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
+export { default as SmallWaitCursor } from './components/small-wait-cursor/SmallWaitCursor';
