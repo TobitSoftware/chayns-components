@@ -4,9 +4,18 @@ import { unescapeHTML } from './emoji';
 export const convertTextToHTML = (text: string) => {
     const element = document.createElement('div');
 
+    element.style.position = 'absolute';
+    element.style.opacity = '0';
+
     element.innerText = text;
 
+    document.body.appendChild(element);
+
     let result = element.innerHTML;
+
+    document.body.removeChild(element);
+
+    result = unescapeHTML(result);
 
     result = result.replace(
         BB_LC_MENTION_REGEX,
@@ -27,7 +36,16 @@ export const convertHTMLToText = (text: string) => {
 
     const element = document.createElement('div');
 
+    element.style.position = 'absolute';
+    element.style.opacity = '0';
+
     element.innerHTML = result;
 
-    return element.innerText;
+    document.body.appendChild(element);
+
+    result = element.innerText;
+
+    document.body.removeChild(element);
+
+    return result;
 };
