@@ -14,7 +14,6 @@ export const saveSelection = (
 
     console.debug('saveSelection 1', {
         anchorNode: selection?.anchorNode,
-        range: selection?.getRangeAt(0),
         selection,
         shouldIgnoreEmptyTextNodes,
     });
