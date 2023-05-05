@@ -109,7 +109,11 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
         newInnerHTML = convertTextToHTML(newInnerHTML);
 
-        console.debug('TEST 3', { html, newInnerHTML });
+        console.debug('handleUpdateHTML', {
+            html,
+            newInnerHTML,
+            isDifferent: newInnerHTML !== editorRef.current.innerHTML,
+        });
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
             saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
@@ -133,7 +137,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
             handleUpdateHTML(editorRef.current.innerHTML);
 
             if (typeof onInput === 'function') {
-                console.debug('RAUS', {
+                console.debug('handleInput', {
                     innerHTML: editorRef.current.innerHTML,
                     text: convertHTMLToText(editorRef.current.innerHTML),
                 });
@@ -206,7 +210,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, []);
 
     useEffect(() => {
-        console.debug('REIN', { text: value });
+        console.debug('useEffect', { text: value });
 
         handleUpdateHTML(value);
     }, [handleUpdateHTML, value]);
