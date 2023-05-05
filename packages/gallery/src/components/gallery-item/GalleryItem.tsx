@@ -5,6 +5,8 @@ import {
     StyledGalleryItem,
     StyledGalleryItemDeleteButton,
     StyledGalleryItemImage,
+    StyledGalleryItemImageWrapper,
+    StyledGalleryItemLoadingIcon,
     StyledGalleryItemMoreItemsIndicator,
     StyledGalleryItemPlayIcon,
     StyledGalleryItemVideo,
@@ -21,10 +23,6 @@ export type GalleryItemProps = {
      */
     isEditMode: boolean;
     /**
-     *  Ratio of the images and videos
-     */
-    ratio: number;
-    /**
      *  Function to be executed wehen a file is deleted
      */
     handleDeleteFile: (id?: string) => void;
@@ -38,13 +36,18 @@ const GalleryItem: FC<GalleryItemProps> = ({
     fileItem,
     handleDeleteFile,
     isEditMode,
-    ratio,
     remainingItemsLength,
 }) => {
     /**
      * This function opens a selected file
      */
     const openSelectedFile = useCallback((file: FileItem) => {
+        if (file.state !== 'uploaded') {
+            // ToDo add dialog that the file is not loaded yet
+
+            return;
+        }
+
         if (file.uploadedFile && 'thumbnailUrl' in file.uploadedFile) {
             // @ts-expect-error: Type is correct here
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -68,19 +71,24 @@ const GalleryItem: FC<GalleryItemProps> = ({
             {fileItem.uploadedFile && 'thumbnailUrl' in fileItem.uploadedFile ? (
                 <StyledGalleryItemVideoWrapper onClick={() => openSelectedFile(fileItem)}>
                     <StyledGalleryItemPlayIcon>
-                        <Icon size={30} icons={['fa fa-play']} />
+                        <Icon size={isEditMode ? 30 : 50} icons={['fa fa-play']} />
                     </StyledGalleryItemPlayIcon>
-                    <StyledGalleryItemVideo ratio={ratio}>
+                    <StyledGalleryItemVideo>
                         <source src={fileItem.uploadedFile?.url} type="video/mp4" />
                     </StyledGalleryItemVideo>
                 </StyledGalleryItemVideoWrapper>
             ) : (
-                <StyledGalleryItemImage
-                    ratio={ratio}
-                    onClick={() => openSelectedFile(fileItem)}
-                    draggable={false}
-                    src={fileItem.uploadedFile?.url ?? fileItem.previewUrl}
-                />
+                <StyledGalleryItemImageWrapper onClick={() => openSelectedFile(fileItem)}>
+                    {fileItem.state !== 'uploaded' && (
+                        <StyledGalleryItemLoadingIcon>
+                            <Icon size={30} icons={['fa fa-loader']} />
+                        </StyledGalleryItemLoadingIcon>
+                    )}
+                    <StyledGalleryItemImage
+                        draggable={false}
+                        src={fileItem.uploadedFile?.url ?? fileItem.previewUrl}
+                    />
+                </StyledGalleryItemImageWrapper>
             )}
             {remainingItemsLength && (
                 <StyledGalleryItemMoreItemsIndicator>

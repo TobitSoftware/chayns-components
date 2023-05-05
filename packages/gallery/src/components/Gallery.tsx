@@ -140,21 +140,24 @@ const Gallery: FC<GalleryProps> = ({
     /**
      * This function formats and adds files to fileItems
      */
-    const handleAddFiles = (filesToAdd: File[]) => {
-        const newFileItems: FileItem[] = [];
+    const handleAddFiles = useCallback(
+        (filesToAdd: File[]) => {
+            const newFileItems: FileItem[] = [];
 
-        filesToAdd.forEach((file) => {
-            if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
-                newFileItems.push({
-                    id: uuidv4(),
-                    file,
-                    state: 'none',
-                });
-            }
-        });
+            filesToAdd.forEach((file) => {
+                if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
+                    newFileItems.push({
+                        id: uuidv4(),
+                        file,
+                        state: 'none',
+                    });
+                }
+            });
 
-        setFileItems((prevState) => [...prevState, ...newFileItems]);
-    };
+            setFileItems((prevState) => [...prevState, ...newFileItems]);
+        },
+        [fileItems]
+    );
 
     /**
      * This function adds external files to fileItems
@@ -218,18 +221,28 @@ const Gallery: FC<GalleryProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [allowDragAndDrop]
+        [allowDragAndDrop, handleAddFiles]
     );
 
     /**
      * Returns the ratio of the single file
      */
-    const ratio = useMemo(
-        () =>
-            // If the length is 1, the ratio or at least 1 is returned
-            fileItems.length === 1 ? Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1) : 1,
-        [fileItems]
-    );
+    const ratio = useMemo(() => {
+        switch (fileItems.length) {
+            case 0:
+                return 0;
+            case 1:
+                return Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1);
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            default:
+                return 1;
+        }
+        // // If the length is 1, the ratio or at least 1 is returned
+        // fileItems.length === 1 ? Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1) : 1,
+    }, [fileItems]);
 
     /**
      * Returns the number of columns
@@ -249,12 +262,7 @@ const Gallery: FC<GalleryProps> = ({
 
         if (isEditMode) {
             const items = fileItems.map((file) => (
-                <GalleryItem
-                    fileItem={file}
-                    isEditMode
-                    ratio={ratio}
-                    handleDeleteFile={handleDeleteFile}
-                />
+                <GalleryItem fileItem={file} isEditMode handleDeleteFile={handleDeleteFile} />
             ));
 
             items.push(<AddFile onAdd={handleAddFiles} />);
@@ -268,14 +276,13 @@ const Gallery: FC<GalleryProps> = ({
             <GalleryItem
                 fileItem={file}
                 isEditMode={false}
-                ratio={ratio}
                 handleDeleteFile={handleDeleteFile}
                 remainingItemsLength={
                     combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
                 }
             />
         ));
-    }, [fileItems, isEditMode, ratio, handleDeleteFile]);
+    }, [fileItems, isEditMode, handleAddFiles, ratio, handleDeleteFile]);
 
     return useMemo(
         () => (
@@ -289,6 +296,7 @@ const Gallery: FC<GalleryProps> = ({
                     </StyledGalleryEditModeWrapper>
                 ) : (
                     <StyledGalleryItemWrapper
+                        ratio={ratio}
                         columns={columns}
                         uploadedFileLength={fileItems.length}
                     >
@@ -297,7 +305,7 @@ const Gallery: FC<GalleryProps> = ({
                 )}
             </StyledGallery>
         ),
-        [isEditMode, galleryContent, columns, fileItems.length, handleDrop]
+        [isEditMode, galleryContent, ratio, columns, fileItems.length, handleDrop]
     );
 };
 
