@@ -26,15 +26,19 @@ export const StyledGalleryItemDeleteButton = styled.button<StyledGalleryItemDele
     align-items: center;
 `;
 
-export const StyledGalleryItemVideoWrapper = styled.div``;
+export const StyledGalleryItemVideoWrapper = styled.div`
+    display: flex;
+    width: 100%;
+`;
 
-type StyledGalleryItemVideoProps = WithTheme<{
-    ratio: number;
-}>;
+export const StyledGalleryItemImageWrapper = styled.div`
+    display: flex;
+    width: 100%;
+`;
 
-type StyledGalleryItemImageProps = WithTheme<{
-    ratio: number;
-}>;
+type StyledGalleryItemVideoProps = WithTheme<unknown>;
+
+type StyledGalleryItemImageProps = WithTheme<unknown>;
 
 export const StyledGalleryItemImage = styled.img<StyledGalleryItemImageProps>`
     background-color: ${({ theme }: StyledGalleryItemImageProps) => theme['101']};
@@ -42,7 +46,6 @@ export const StyledGalleryItemImage = styled.img<StyledGalleryItemImageProps>`
         rgba(${({ theme }: StyledGalleryItemImageProps) => theme['009-rgb']}, 0.08) inset;
     z-index: 1;
     width: 100%;
-    aspect-ratio: ${(props) => props.ratio};
     object-fit: cover;
 `;
 
@@ -51,11 +54,18 @@ export const StyledGalleryItemVideo = styled.video<StyledGalleryItemVideoProps>`
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledGalleryItemVideoProps) => theme['009-rgb']}, 0.08) inset;
     width: 100%;
-    aspect-ratio: ${(props) => props.ratio};
     object-fit: cover;
 `;
 
 export const StyledGalleryItemPlayIcon = styled.div`
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+export const StyledGalleryItemLoadingIcon = styled.div`
     position: absolute;
     z-index: 2;
     top: 50%;

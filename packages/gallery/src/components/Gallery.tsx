@@ -1,7 +1,8 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
-import type { ExternalFile, UploadedFile } from '../types/file';
-import { filterDuplicateFiles } from '../utils/file';
-import { uploadFiles } from '../utils/upload';
+import { v4 as uuidv4 } from 'uuid';
+import type { FileItem, Image, Video } from '../types/file';
+import { filterDuplicateFile, generatePreviewUrl } from '../utils/file';
+import { uploadFile } from '../utils/upload';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
 import {
@@ -26,15 +27,15 @@ export type GalleryProps = {
     /**
      *  Images and videos which should be displayed
      */
-    files?: ExternalFile[];
+    files?: FileItem[];
     /**
      *  Function to be executed when files are added
      */
-    onAdd?: (files: UploadedFile[]) => void;
+    onAdd?: (files: FileItem[]) => void;
     /**
      *  Function to be executed when a file is removed
      */
-    onRemove?: (file: UploadedFile) => void;
+    onRemove?: (file: FileItem) => void;
     /**
      * PersonId of the user
      */
@@ -50,66 +51,152 @@ const Gallery: FC<GalleryProps> = ({
     onRemove,
     personId,
 }) => {
-    const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-    const [externalFiles, setExternalFiles] = useState<UploadedFile[]>([]);
+    const [fileItems, setFileItems] = useState<FileItem[]>([]);
 
-    const combinedFiles = useMemo(
-        () => [...externalFiles, ...uploadedFiles],
-        [externalFiles, uploadedFiles]
+    /**
+     * This function adds a previewUrl to fileItems
+     */
+    const handlePreviewUrlCallback = (previewUrl: string, file: FileItem) => {
+        setFileItems((prevState) =>
+            prevState.map((prevFile) => {
+                if (prevFile.id === file.id) {
+                    return { ...prevFile, previewUrl };
+                }
+                return prevFile;
+            })
+        );
+    };
+
+    /**
+     * This function adds uploaded files to fileItems
+     */
+    const handleUploadFileCallback = (file: FileItem, UploadedFile: Video | Image) => {
+        setFileItems((prevState) =>
+            prevState.map((prevFile) => {
+                if (prevFile.id === file.id) {
+                    return {
+                        ...prevFile,
+                        uploadedFile: UploadedFile,
+                        id: UploadedFile.id,
+                        state: 'uploaded',
+                    };
+                }
+                return prevFile;
+            })
+        );
+    };
+
+    /**
+     * This function returns the fileItems if some files are updated
+     */
+    useEffect(() => {
+        if (onAdd) {
+            onAdd(fileItems);
+        }
+    }, [fileItems, onAdd]);
+
+    /**
+     * Prepares files for previewUrl and upload
+     */
+    useEffect(() => {
+        const filesToGeneratePreview = fileItems.filter(
+            (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state)
+        );
+
+        const filesToUpload = fileItems.filter(
+            (file) => !file.uploadedFile && file.state !== 'uploading'
+        );
+
+        filesToGeneratePreview.forEach((file) => {
+            if (!file.file) {
+                return;
+            }
+
+            generatePreviewUrl({
+                file: file.file,
+                callback: (previewUrl) => handlePreviewUrlCallback(previewUrl, file),
+            });
+        });
+
+        filesToUpload.forEach((file) => {
+            setFileItems((prevState) =>
+                prevState.map((prevFile) => {
+                    if (prevFile.id === file.id) {
+                        return { ...prevFile, state: 'uploading' };
+                    }
+                    return prevFile;
+                })
+            );
+
+            void uploadFile({
+                fileToUpload: file,
+                personId,
+                accessToken,
+                callback: (UploadedFile) => handleUploadFileCallback(file, UploadedFile),
+            });
+        });
+    }, [accessToken, fileItems, personId]);
+
+    /**
+     * This function formats and adds files to fileItems
+     */
+    const handleAddFiles = useCallback(
+        (filesToAdd: File[]) => {
+            const newFileItems: FileItem[] = [];
+
+            filesToAdd.forEach((file) => {
+                if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
+                    newFileItems.push({
+                        id: uuidv4(),
+                        file,
+                        state: 'none',
+                    });
+                }
+            });
+
+            setFileItems((prevState) => [...prevState, ...newFileItems]);
+        },
+        [fileItems]
     );
 
     /**
-     * Merge external files with uploaded files
+     * This function adds external files to fileItems
      */
     useEffect(() => {
-        if (!files || !Array.isArray(files)) {
-            return;
+        if (files) {
+            const newFileItems: FileItem[] = [];
+
+            files.forEach((file) => {
+                newFileItems.push({
+                    id: uuidv4(),
+                    uploadedFile: file.uploadedFile,
+                    file: file.file,
+                    state: file.uploadedFile ? 'uploaded' : 'none',
+                });
+            });
+
+            setFileItems((prevState) => [...prevState, ...newFileItems]);
         }
-
-        const newExternalFiles: UploadedFile[] = files.map((file) => {
-            if ('thumbnailUrl' in file) {
-                return {
-                    id: file.id,
-                    url: file.url,
-                    thumbnailUrl: file.url,
-                };
-            }
-
-            return {
-                id: file.id,
-                url: file.url,
-            };
-        });
-
-        setExternalFiles(newExternalFiles);
     }, [files]);
 
     /**
      * This function deletes a selected file from the file list
      */
     const handleDeleteFile = useCallback(
-        (url: string) => {
-            let fileToDelete: UploadedFile | undefined;
+        (id?: string) => {
+            let fileToDelete: FileItem | undefined;
 
-            const externalFileToDelete = externalFiles.find((file) => file.url === url);
+            const filteredFiles = fileItems.filter((file) => {
+                const fileId = file.id;
 
-            if (externalFileToDelete && typeof onRemove === 'function') {
-                onRemove(externalFileToDelete);
-
-                return;
-            }
-
-            const filteredFiles = uploadedFiles.filter((file) => {
-                const fileUrl = file.url;
-
-                if (fileUrl === url) {
+                if (fileId === id) {
                     fileToDelete = file;
                 }
 
-                return fileUrl !== url;
+                return fileId !== id;
             });
 
-            setUploadedFiles(filteredFiles);
+            setFileItems(filteredFiles);
 
             if (!fileToDelete || !onRemove) {
                 return;
@@ -117,14 +204,14 @@ const Gallery: FC<GalleryProps> = ({
 
             onRemove(fileToDelete);
         },
-        [externalFiles, onRemove, uploadedFiles]
+        [fileItems, onRemove]
     );
 
     /**
      * This function handles the drag and drop
      */
     const handleDrop = useCallback(
-        async (e: DragEvent<HTMLDivElement>) => {
+        (e: DragEvent<HTMLDivElement>) => {
             if (!allowDragAndDrop) {
                 return;
             }
@@ -132,100 +219,70 @@ const Gallery: FC<GalleryProps> = ({
             e.preventDefault();
             const draggedFiles = Array.from(e.dataTransfer.files);
 
-            const updatedFiles = await uploadFiles({
-                accessToken,
-                filesToUpload: draggedFiles,
-                personId,
-            });
-
-            const { newUniqueFiles } = filterDuplicateFiles({
-                oldFiles: uploadedFiles,
-                newFiles: updatedFiles,
-            });
-
-            setUploadedFiles((prevState) => [...prevState, ...newUniqueFiles]);
-
-            if (!onAdd) {
-                return;
-            }
-
-            onAdd(newUniqueFiles);
+            handleAddFiles(draggedFiles);
         },
-        [accessToken, allowDragAndDrop, onAdd, personId, uploadedFiles]
+        [allowDragAndDrop, handleAddFiles]
     );
 
     /**
      * Returns the ratio of the single file
      */
-    const ratio = useMemo(
-        () =>
-            // If the length is 1, the ratio or at least 1 is returned
-            combinedFiles.length === 1 ? Math.max(combinedFiles[0]?.ratio ?? 1, 1) : 1,
-        [combinedFiles]
-    );
+    const ratio = useMemo(() => {
+        switch (fileItems.length) {
+            case 0:
+                return 0;
+            case 1:
+                return Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1);
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            default:
+                return 1;
+        }
+        // // If the length is 1, the ratio or at least 1 is returned
+        // fileItems.length === 1 ? Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1) : 1,
+    }, [fileItems]);
 
     /**
      * Returns the number of columns
      */
     const columns = useMemo(() => {
-        const combinedFilesLength = combinedFiles.length;
+        const combinedFilesLength = fileItems.length;
 
         if (combinedFilesLength <= 1) {
             return '';
         }
 
         return `repeat(${combinedFilesLength === 3 ? 3 : 2}, 1fr)`;
-    }, [combinedFiles]);
+    }, [fileItems.length]);
 
     const galleryContent = useMemo(() => {
-        const combinedFilesLength = combinedFiles.length;
+        const combinedFilesLength = fileItems.length;
 
         if (isEditMode) {
-            const items = combinedFiles.map((file) => (
-                <GalleryItem
-                    uploadedFile={file}
-                    isEditMode
-                    ratio={ratio}
-                    handleDeleteFile={handleDeleteFile}
-                />
+            const items = fileItems.map((file) => (
+                <GalleryItem fileItem={file} isEditMode handleDeleteFile={handleDeleteFile} />
             ));
 
-            items.push(
-                <AddFile
-                    setUploadedFiles={setUploadedFiles}
-                    uploadedFiles={uploadedFiles}
-                    onAdd={onAdd}
-                    personId={personId}
-                    accessToken={accessToken}
-                />
-            );
+            items.push(<AddFile onAdd={handleAddFiles} />);
 
             return items;
         }
 
-        const shortedFiles = combinedFiles.slice(0, 4);
+        const shortedFiles = fileItems.slice(0, 4);
 
         return shortedFiles.map((file, index) => (
             <GalleryItem
-                uploadedFile={file}
+                fileItem={file}
                 isEditMode={false}
-                ratio={ratio}
                 handleDeleteFile={handleDeleteFile}
                 remainingItemsLength={
                     combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
                 }
             />
         ));
-    }, [
-        combinedFiles,
-        isEditMode,
-        uploadedFiles,
-        onAdd,
-        personId,
-        accessToken,
-        ratio,
-        handleDeleteFile,
-    ]);
+    }, [fileItems, isEditMode, handleAddFiles, handleDeleteFile]);
 
     return useMemo(
         () => (
@@ -239,15 +296,16 @@ const Gallery: FC<GalleryProps> = ({
                     </StyledGalleryEditModeWrapper>
                 ) : (
                     <StyledGalleryItemWrapper
+                        ratio={ratio}
                         columns={columns}
-                        uploadedFileLength={combinedFiles.length}
+                        uploadedFileLength={fileItems.length}
                     >
                         {galleryContent}
                     </StyledGalleryItemWrapper>
                 )}
             </StyledGallery>
         ),
-        [isEditMode, galleryContent, columns, combinedFiles.length, handleDrop]
+        [isEditMode, galleryContent, ratio, columns, fileItems.length, handleDrop]
     );
 };
 

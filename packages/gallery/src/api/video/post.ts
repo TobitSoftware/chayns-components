@@ -1,5 +1,5 @@
 export interface PostVideoResult {
-    id: number;
+    id: string;
     originalVideoQuality: string;
     thumbnailUrl: string;
     url: string;
@@ -17,10 +17,11 @@ interface PostVideoOptions {
 export const postVideo = async ({
     accessToken,
     file,
-}: PostVideoOptions): Promise<PostVideoResult> => {
+}: PostVideoOptions): Promise<PostVideoResult | undefined> => {
     const formData = new FormData();
 
     formData.append('files', file);
+
     const response = await fetch(
         'https://streamingservice.chayns.space/video?disableIntercom=true',
         {
@@ -33,7 +34,9 @@ export const postVideo = async ({
     );
 
     if (response.ok) {
-        return (await response.json()) as PostVideoResult;
+        const data = (await response.json()) as PostVideoResult[];
+
+        return data[0];
     }
 
     throw Error(`Failed to POST video (status code: ${response.status}).`);

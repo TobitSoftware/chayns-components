@@ -1,53 +1,44 @@
 import { postImage } from '../api/image/post';
 import { postVideo } from '../api/video/post';
-import type { UploadedFile, Video } from '../types/file';
+import type { FileItem, Image, Video } from '../types/file';
 
 interface UploadFilesOptions {
-    filesToUpload: File[];
+    fileToUpload: FileItem;
     accessToken: string;
     personId: string;
+    callback: (UploadedFile: Video | Image) => void;
 }
 
-export const uploadFiles = async ({
-    filesToUpload,
+export const uploadFile = async ({
+    fileToUpload,
     personId,
     accessToken,
-}: UploadFilesOptions): Promise<UploadedFile[]> => {
-    if (!filesToUpload) {
-        return [];
+    callback,
+}: UploadFilesOptions): Promise<void> => {
+    if (!fileToUpload || fileToUpload.state !== 'none') {
+        return;
     }
 
-    const videos = filesToUpload.filter(({ type }) => type.includes('video/'));
-    const images = filesToUpload.filter(({ type }) => type.includes('image/'));
+    if (fileToUpload.file?.type.includes('video/')) {
+        const uploadedVideo = await postVideo({ file: fileToUpload.file, accessToken });
 
-    let newUploadedFiles: UploadedFile[] = [];
+        if (uploadedVideo) {
+            callback({
+                ...uploadedVideo,
+                id: uploadedVideo.id.toString(),
+            });
+        }
+    }
 
-    // Upload videos
-    const videoUploadPromises: Promise<Video>[] = videos.map((video) =>
-        postVideo({ accessToken, file: video })
-    );
+    if (fileToUpload.file?.type.includes('image/')) {
+        const uploadedImage = await postImage({ file: fileToUpload.file, personId, accessToken });
 
-    newUploadedFiles = newUploadedFiles.concat(await Promise.all(videoUploadPromises));
-    newUploadedFiles = newUploadedFiles.flat();
-
-    // Upload images
-    const imageUploadPromises = images.map((image) =>
-        postImage({
-            accessToken,
-            file: image,
-            personId,
-        })
-    );
-
-    const uploadedImages = await Promise.all(imageUploadPromises);
-
-    const newImages: UploadedFile[] = uploadedImages.map((file) => ({
-        url: `${file.base}/${file.key}`,
-        id: file.key,
-        meta: file.meta,
-    }));
-
-    newUploadedFiles = newUploadedFiles.concat(newImages);
-
-    return newUploadedFiles;
+        if (uploadedImage) {
+            callback({
+                url: `${uploadedImage.base}/${uploadedImage.key}`,
+                id: uploadedImage.key,
+                meta: uploadedImage.meta,
+            });
+        }
+    }
 };

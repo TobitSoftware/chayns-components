@@ -1,14 +1,19 @@
-import type { UploadedFile } from '../types/file';
+import type { FileItem } from '../types/file';
 
 interface SelectFilesOptions {
     type: string;
     multiple: boolean;
 }
 
-export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<null | FileList> =>
+export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<File[]> =>
     new Promise((resolve) => {
         const input = document.createElement('input');
+
         input.type = 'file';
+        input.style.visibility = 'none';
+        input.style.width = '0';
+        input.style.height = '0';
+        input.style.display = 'none';
 
         if (type !== '*/*' && type) {
             input.accept = type;
@@ -18,70 +23,59 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<nul
             input.multiple = true;
         }
 
-        input.style.visibility = 'none';
-        input.style.width = '0';
-        input.style.height = '0';
-        input.style.display = 'none';
-
         document.body.appendChild(input);
 
         input.addEventListener('change', (event) => {
             document.body.removeChild(input);
 
             const target = event.target as HTMLInputElement;
+
             const { files } = target;
 
-            resolve(files);
+            if (!files) {
+                resolve([]);
+
+                return;
+            }
+
+            const fileArray = Object.values(files);
+
+            const filteredFileArray = fileArray.filter((file) => {
+                const sizeInMB = file.size / 1024 / 1024;
+
+                if (file.type.includes('video/') && sizeInMB > 500) {
+                    return false;
+                }
+
+                return !(file.type.includes('image/') && sizeInMB > 64);
+            });
+
+            if (fileArray.length !== filteredFileArray.length) {
+                // ToDo show dialog that some files are to big
+            }
+
+            if (filteredFileArray.length === 0) {
+                // ToDo show dialog that all files are to big
+            }
+
+            resolve(filteredFileArray);
         });
 
         input.click();
     });
 
-export const convertFileListToArray = (fileList: FileList): File[] => {
-    const filesArray = [];
-
-    for (let i = 0; i < fileList.length; i++) {
-        const file = fileList.item(i);
-
-        if (file) {
-            filesArray.push(file);
-        }
-    }
-
-    return filesArray;
-};
-
-interface FilterDuplicateFilesOptions {
-    oldFiles: UploadedFile[];
-    newFiles: UploadedFile[];
+interface FilerDuplicateFileOptions {
+    files: FileItem[];
+    newFile: File;
 }
 
-export const filterDuplicateFiles = ({ oldFiles, newFiles }: FilterDuplicateFilesOptions) => {
-    const seenKeys = new Set<string>();
-
-    const filteredFiles: UploadedFile[] = [];
-
-    oldFiles.forEach((file) => {
-        seenKeys.add(file.id?.toString() ?? file.url);
-        filteredFiles.push(file);
+export const filterDuplicateFile = ({ newFile, files }: FilerDuplicateFileOptions) => {
+    const duplicates = files.filter((fileItem) => {
+        const { file } = fileItem;
+        return file && file.name === newFile.name && file.size === newFile.size;
     });
 
-    const newUniqueFiles: UploadedFile[] = [];
-
-    newFiles.forEach((file) => {
-        const key = file.id?.toString() ?? file.url;
-
-        const oldFile = oldFiles.find((f) => f.id === file.id);
-
-        const alreadyAdded = newUniqueFiles.find((f) => f.id === file.id);
-
-        if (!oldFile && !alreadyAdded) {
-            seenKeys.add(key);
-            newUniqueFiles.push(file);
-        }
-    });
-
-    return { filteredFiles, newUniqueFiles };
+    return duplicates.length > 0;
 };
 
 export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
@@ -100,3 +94,20 @@ export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> 
 
         reader.readAsArrayBuffer(file);
     });
+
+interface GeneratePreviewUrlOptions {
+    file: File;
+    callback: (previewUrl: string) => void;
+}
+
+export const generatePreviewUrl = ({ callback, file }: GeneratePreviewUrlOptions): void => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+        const previewUrl = event.target?.result as string;
+
+        callback(previewUrl);
+    };
+
+    reader.readAsDataURL(file);
+};
