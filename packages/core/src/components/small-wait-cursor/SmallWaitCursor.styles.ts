@@ -24,7 +24,9 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
     z-index: 1;
 `;
 
-type StyledSmallWaitCursorWaitCursorProps = WithTheme<unknown>;
+type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
+    speed: number;
+}>;
 
 const spin = keyframes`
   from {
@@ -49,5 +51,6 @@ export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorW
     display: inline-block;
     border-top: 3px solid transparent;
 
-    animation: ${spin} 1s linear infinite;
+    animation: ${spin} ${({ speed }: StyledSmallWaitCursorWaitCursorProps) => speed}s linear
+        infinite;
 `;
