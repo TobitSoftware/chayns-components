@@ -300,6 +300,7 @@ FileInput.typePresets = {
         'image/gif',
         'image/webp',
         'image/svg+xml',
+        'image/avif',
     ],
     STREAMINGSERVICE: [
         'video/mp4',
