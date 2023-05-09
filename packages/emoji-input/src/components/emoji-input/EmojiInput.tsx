@@ -2,6 +2,7 @@ import React, {
     ChangeEvent,
     ClipboardEvent,
     FC,
+    KeyboardEvent,
     KeyboardEventHandler,
     ReactNode,
     useCallback,
@@ -70,7 +71,8 @@ export type EmojiInputProps = {
      */
     rightElement?: ReactNode;
     /**
-     * Value of the input field
+     * The plain text value of the input field. Instead of HTML elements BB codes must be used at
+     * this point. These are then converted by the input field into corresponding HTML elements.
      */
     value: string;
 };
@@ -89,6 +91,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     value,
 }) => {
     const [isMobile] = useState(getIsMobile());
+    const [plainTextValue, setPlainTextValue] = useState(value);
 
     const editorRef = useRef<HTMLDivElement>(null);
 
@@ -108,12 +111,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
         let newInnerHTML = convertEmojisToUnicode(html);
 
         newInnerHTML = convertTextToHTML(newInnerHTML);
-
-        console.debug('handleUpdateHTML', {
-            html,
-            newInnerHTML,
-            isDifferent: newInnerHTML !== editorRef.current.innerHTML,
-        });
 
         if (newInnerHTML !== editorRef.current.innerHTML) {
             saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
@@ -136,16 +133,35 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
             handleUpdateHTML(editorRef.current.innerHTML);
 
-            if (typeof onInput === 'function') {
-                console.debug('handleInput', {
-                    innerHTML: editorRef.current.innerHTML,
-                    text: convertHTMLToText(editorRef.current.innerHTML),
-                });
+            const text = convertHTMLToText(editorRef.current.innerHTML);
 
-                onInput(event, convertHTMLToText(editorRef.current.innerHTML));
+            setPlainTextValue(text);
+
+            if (typeof onInput === 'function') {
+                onInput(event, text);
             }
         },
         [handleUpdateHTML, onInput]
+    );
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            if (typeof onKeyDown === 'function') {
+                onKeyDown(event);
+            }
+
+            if (
+                event.key === 'Enter' &&
+                !event.shiftKey &&
+                !event.isPropagationStopped() &&
+                editorRef.current
+            ) {
+                event.preventDefault();
+
+                document.execCommand('insertLineBreak', false);
+            }
+        },
+        [onKeyDown]
     );
 
     /**
@@ -188,40 +204,42 @@ const EmojiInput: FC<EmojiInputProps> = ({
         }
     }, []);
 
-    /**
-     * This function ensures that the input field does not lose focus when the popup is opened or an
-     * emoji is selected in it. For this purpose the corresponding elements get the class
-     * 'prevent-lose-focus'.
-     *
-     * The class can also be set to any other elements that should also not cause the input field to
-     * lose focus.
-     */
-    const handlePreventLoseFocus = useCallback((event: MouseEvent) => {
-        const element = event.target as Element;
+    useEffect(() => {
+        if (value !== plainTextValue) {
+            setPlainTextValue(value);
 
-        if (
-            element.classList.contains('prevent-lose-focus') ||
-            element.parentElement?.classList.contains('prevent-lose-focus') ||
-            element.parentElement?.parentElement?.classList.contains('prevent-lose-focus')
-        ) {
-            event.preventDefault();
-            event.stopPropagation();
+            handleUpdateHTML(plainTextValue);
         }
-    }, []);
+    }, [handleUpdateHTML, plainTextValue, value]);
 
     useEffect(() => {
-        console.debug('useEffect', { text: value });
+        /**
+         * This function ensures that the input field does not lose focus when the popup is opened
+         * or an emoji is selected in it. For this purpose the corresponding elements get the class
+         * 'prevent-lose-focus'.
+         *
+         * The class can also be set to any other elements that should also not cause the input
+         * field to lose focus.
+         */
+        const handlePreventLoseFocus = (event: MouseEvent) => {
+            const element = event.target as Element;
 
-        handleUpdateHTML(value);
-    }, [handleUpdateHTML, value]);
+            if (
+                element.classList.contains('prevent-lose-focus') ||
+                element.parentElement?.classList.contains('prevent-lose-focus') ||
+                element.parentElement?.parentElement?.classList.contains('prevent-lose-focus')
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        };
 
-    useEffect(() => {
         document.body.addEventListener('mousedown', handlePreventLoseFocus);
 
         return () => {
             document.body.removeEventListener('mousedown', handlePreventLoseFocus);
         };
-    }, [handlePreventLoseFocus]);
+    }, []);
 
     return (
         <StyledEmojiInput isDisabled={isDisabled}>
@@ -230,7 +248,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     contentEditable={!isDisabled}
                     id={inputId}
                     onInput={handleInput}
-                    onKeyDown={onKeyDown}
+                    onKeyDown={handleKeyDown}
                     onPaste={handlePaste}
                     placeholder={placeholder}
                     ref={editorRef}

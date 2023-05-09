@@ -7,6 +7,7 @@ export const convertTextToHTML = (text: string) => {
     element.style.position = 'absolute';
     element.style.opacity = '0';
 
+    element.contentEditable = 'true';
     element.innerText = text;
 
     document.body.appendChild(element);
@@ -37,6 +38,7 @@ export const convertHTMLToText = (text: string) => {
     element.style.position = 'absolute';
     element.style.opacity = '0';
 
+    element.contentEditable = 'true';
     element.innerHTML = result;
 
     document.body.appendChild(element);

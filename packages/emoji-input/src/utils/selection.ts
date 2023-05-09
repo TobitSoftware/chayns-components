@@ -12,12 +12,6 @@ export const saveSelection = (
 ) => {
     const selection = window.getSelection();
 
-    console.debug('saveSelection 1', {
-        anchorNode: selection?.anchorNode,
-        selection,
-        shouldIgnoreEmptyTextNodes,
-    });
-
     if (!selection) {
         return;
     }
@@ -43,25 +37,12 @@ export const saveSelection = (
 
     endOffset = range.endOffset;
     startOffset = range.startOffset;
-
-    console.debug('saveSelection 2', { childIndex, endOffset, startOffset });
 };
 
 export const restoreSelection = (element: HTMLDivElement) => {
     let childNode = element.childNodes[childIndex];
 
     const selection = window.getSelection();
-
-    console.debug('restoreSelection 1', {
-        childIndex,
-        childNode,
-        childNodes: element.childNodes,
-        element,
-        endOffset,
-        nodeValue: childNode?.nodeValue,
-        selection,
-        startOffset,
-    });
 
     if (!childNode || !element || !selection) {
         return;
@@ -100,13 +81,6 @@ export const restoreSelection = (element: HTMLDivElement) => {
     }
 
     const range = document.createRange();
-
-    console.debug('restoreSelection 2', {
-        childNode,
-        endOffset,
-        range,
-        startOffset,
-    });
 
     range.setStart(childNode, startOffset);
     range.setEnd(childNode, endOffset);

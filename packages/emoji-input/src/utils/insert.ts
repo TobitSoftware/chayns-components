@@ -39,9 +39,16 @@ export const insertTextAtCursorPosition = ({
 
         if (firstPart) {
             if (selection.anchorNode.nodeType === Node.TEXT_NODE) {
-                selection.anchorNode.nodeValue += firstPart;
+                const { nodeValue } = selection.anchorNode;
 
-                moveSelectionOffset(firstPart.length);
+                if (typeof nodeValue === 'string') {
+                    selection.anchorNode.nodeValue =
+                        nodeValue.slice(0, range.startOffset) +
+                        firstPart +
+                        nodeValue.slice(range.startOffset);
+
+                    moveSelectionOffset(firstPart.length);
+                }
             } else if (selection.anchorNode === editorElement) {
                 const textNode = document.createTextNode(firstPart);
 
