@@ -30,6 +30,8 @@ export const convertHTMLToText = (text: string) => {
     let result = text;
 
     result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
+    // eslint-disable-next-line no-irregular-whitespace
+    result = result.replace(/​/g, '');
 
     result = unescapeHTML(result);
 

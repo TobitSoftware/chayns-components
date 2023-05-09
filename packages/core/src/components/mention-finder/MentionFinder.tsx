@@ -39,7 +39,8 @@ const MentionFinder: FC<MentionFinderProps> = ({
     const [activeMember, setActiveMember] = useState(members[0]);
 
     const [fullMatch, searchString] = useMemo(() => {
-        const regExpMatchArray = inputValue.match(/@(\S*)/);
+        // eslint-disable-next-line no-irregular-whitespace
+        const regExpMatchArray = inputValue.match(/@([^\s​]*)/);
 
         return [regExpMatchArray?.[0], regExpMatchArray?.[1]?.toLowerCase() ?? ''];
     }, [inputValue]);
