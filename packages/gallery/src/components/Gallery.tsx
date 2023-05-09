@@ -77,7 +77,6 @@ const Gallery: FC<GalleryProps> = ({
                     return {
                         ...prevFile,
                         uploadedFile: UploadedFile,
-                        id: UploadedFile.id,
                         state: 'uploaded',
                     };
                 }
@@ -240,8 +239,6 @@ const Gallery: FC<GalleryProps> = ({
             default:
                 return 1;
         }
-        // // If the length is 1, the ratio or at least 1 is returned
-        // fileItems.length === 1 ? Math.max(fileItems[0]?.uploadedFile?.ratio ?? 1, 1) : 1,
     }, [fileItems]);
 
     /**
@@ -262,7 +259,12 @@ const Gallery: FC<GalleryProps> = ({
 
         if (isEditMode) {
             const items = fileItems.map((file) => (
-                <GalleryItem fileItem={file} isEditMode handleDeleteFile={handleDeleteFile} />
+                <GalleryItem
+                    key={file.id}
+                    fileItem={file}
+                    isEditMode
+                    handleDeleteFile={handleDeleteFile}
+                />
             ));
 
             items.push(<AddFile onAdd={handleAddFiles} />);
@@ -274,6 +276,7 @@ const Gallery: FC<GalleryProps> = ({
 
         return shortedFiles.map((file, index) => (
             <GalleryItem
+                key={file.id}
                 fileItem={file}
                 isEditMode={false}
                 handleDeleteFile={handleDeleteFile}
