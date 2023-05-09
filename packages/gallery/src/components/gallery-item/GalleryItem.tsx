@@ -1,17 +1,14 @@
 import { Icon } from '@chayns-components/core';
-import React, { FC, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import React, { FC, useCallback, useMemo } from 'react';
 import type { FileItem } from '../../types/file';
 import {
     StyledGalleryItem,
     StyledGalleryItemDeleteButton,
-    StyledGalleryItemImage,
-    StyledGalleryItemImageWrapper,
-    StyledGalleryItemLoadingIcon,
     StyledGalleryItemMoreItemsIndicator,
-    StyledGalleryItemPlayIcon,
-    StyledGalleryItemVideo,
-    StyledGalleryItemVideoWrapper,
 } from './GalleryItem.styles';
+import MediaItem from './media-item/MediaItem';
+import PreviewItem from './preview-item/PreviewItem';
 
 export type GalleryItemProps = {
     /**
@@ -61,41 +58,41 @@ const GalleryItem: FC<GalleryItemProps> = ({
         void chayns.openImage([file.uploadedFile?.url], 0);
     }, []);
 
-    return (
-        <StyledGalleryItem>
-            {isEditMode && (
-                <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(fileItem.id)}>
-                    <Icon size={20} icons={['ts-wrong']} />
-                </StyledGalleryItemDeleteButton>
-            )}
-            {fileItem.uploadedFile && 'thumbnailUrl' in fileItem.uploadedFile ? (
-                <StyledGalleryItemVideoWrapper onClick={() => openSelectedFile(fileItem)}>
-                    <StyledGalleryItemPlayIcon>
-                        <Icon size={isEditMode ? 30 : 50} icons={['fa fa-play']} />
-                    </StyledGalleryItemPlayIcon>
-                    <StyledGalleryItemVideo>
-                        <source src={fileItem.uploadedFile?.url} type="video/mp4" />
-                    </StyledGalleryItemVideo>
-                </StyledGalleryItemVideoWrapper>
-            ) : (
-                <StyledGalleryItemImageWrapper onClick={() => openSelectedFile(fileItem)}>
-                    {fileItem.state !== 'uploaded' && (
-                        <StyledGalleryItemLoadingIcon>
-                            <Icon size={30} icons={['fa fa-loader']} />
-                        </StyledGalleryItemLoadingIcon>
-                    )}
-                    <StyledGalleryItemImage
-                        draggable={false}
-                        src={fileItem.uploadedFile?.url ?? fileItem.previewUrl}
-                    />
-                </StyledGalleryItemImageWrapper>
-            )}
-            {remainingItemsLength && (
-                <StyledGalleryItemMoreItemsIndicator>
-                    <p>{`+ ${remainingItemsLength - 3}`}</p>
-                </StyledGalleryItemMoreItemsIndicator>
-            )}
-        </StyledGalleryItem>
+    return useMemo(
+        () => (
+            <StyledGalleryItem>
+                {isEditMode && (
+                    <StyledGalleryItemDeleteButton onClick={() => handleDeleteFile(fileItem.id)}>
+                        <Icon size={20} icons={['ts-wrong']} />
+                    </StyledGalleryItemDeleteButton>
+                )}
+                {!fileItem.state ||
+                fileItem.state === 'none' ||
+                (!fileItem.previewUrl && !fileItem.uploadedFile) ? null : (
+                    <AnimatePresence initial={false}>
+                        {fileItem.state === 'uploading' ? (
+                            <PreviewItem
+                                key={`uploading_${fileItem.id ?? ''}`}
+                                fileItem={fileItem}
+                            />
+                        ) : (
+                            <MediaItem
+                                key={`uploaded_${fileItem.id ?? ''}`}
+                                fileItem={fileItem}
+                                isEditMode={isEditMode}
+                                openSelectedFile={openSelectedFile}
+                            />
+                        )}
+                    </AnimatePresence>
+                )}
+                {remainingItemsLength && (
+                    <StyledGalleryItemMoreItemsIndicator>
+                        <p>{`+ ${remainingItemsLength - 3}`}</p>
+                    </StyledGalleryItemMoreItemsIndicator>
+                )}
+            </StyledGalleryItem>
+        ),
+        [fileItem, handleDeleteFile, isEditMode, openSelectedFile, remainingItemsLength]
     );
 };
 

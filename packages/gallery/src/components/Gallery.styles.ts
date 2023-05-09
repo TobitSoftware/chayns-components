@@ -8,14 +8,17 @@ export const StyledGalleryItemWrapper = styled.div<{
     ratio: number;
 }>`
     ${({ columns, uploadedFileLength, ratio }) =>
-        uploadedFileLength > 1 &&
-        css`
-            display: grid;
-            grid-template-columns: ${columns};
-            row-gap: 5px;
-            column-gap: 5px;
-            aspect-ratio: ${ratio};
-        `}
+        uploadedFileLength > 1
+            ? css`
+                  display: grid;
+                  grid-template-columns: ${columns};
+                  row-gap: 5px;
+                  column-gap: 5px;
+                  aspect-ratio: ${ratio};
+              `
+            : css`
+                  aspect-ratio: ${ratio};
+              `}
 `;
 
 export const StyledGalleryEditModeWrapper = styled.div`

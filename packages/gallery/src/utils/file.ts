@@ -111,3 +111,30 @@ export const generatePreviewUrl = ({ callback, file }: GeneratePreviewUrlOptions
 
     reader.readAsDataURL(file);
 };
+
+interface GenerateVideoThumbnailOptions {
+    file: File;
+    callback: (previewUrl: string) => void;
+}
+
+export const generateVideoThumbnail = ({ file, callback }: GenerateVideoThumbnailOptions) => {
+    const canvas = document.createElement('canvas');
+    const video = document.createElement('video');
+
+    // this is important
+    video.autoplay = true;
+    video.muted = true;
+    video.src = URL.createObjectURL(file);
+
+    video.onloadeddata = () => {
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        ctx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        video.pause();
+
+        callback(canvas.toDataURL('image/png'));
+    };
+};
