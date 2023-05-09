@@ -1,7 +1,7 @@
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { FileItem, Image, Video } from '../types/file';
-import { filterDuplicateFile, generatePreviewUrl } from '../utils/file';
+import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
 import { uploadFile } from '../utils/upload';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
@@ -108,6 +108,15 @@ const Gallery: FC<GalleryProps> = ({
 
         filesToGeneratePreview.forEach((file) => {
             if (!file.file) {
+                return;
+            }
+
+            if (file.file.type.includes('video/')) {
+                generateVideoThumbnail({
+                    file: file.file,
+                    callback: (previewUrl) => handlePreviewUrlCallback(previewUrl, file),
+                });
+
                 return;
             }
 
