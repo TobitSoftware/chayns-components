@@ -17,14 +17,13 @@ export type PreviewItemProps = {
 
 const PreviewItem: FC<PreviewItemProps> = ({ fileItem }) => (
     <StyledMotionPreviewItem
-        key={`uploading_${fileItem.id ?? ''}`}
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
         exit={{
             opacity: 0,
-            transition: { duration: 0.2, delay: 0.2 },
+            transition: { duration: 3.2, delay: 3.2 },
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 3.2 }}
         style={{ position: 'absolute' }}
     >
         <StyledPreviewItemImageWrapper>
