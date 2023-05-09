@@ -148,6 +148,7 @@ export default class DateInfo extends PureComponent {
                     ),
                 }}
                 bindListeners
+                removeParentSpace
             >
                 {newChild}
             </Tooltip>
