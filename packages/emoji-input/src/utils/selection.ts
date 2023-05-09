@@ -51,6 +51,13 @@ export const restoreSelection = (element: HTMLDivElement) => {
     if (typeof childNode.nodeValue !== 'string') {
         const textNode = document.createTextNode('\u200B');
 
+        console.debug('[1] Will add ZeroWithSpace...', {
+            childNode,
+            nextSibling: childNode.nextSibling,
+            parentNode: childNode.parentNode,
+            textNode,
+        });
+
         childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
         childNode = textNode;
@@ -66,6 +73,14 @@ export const restoreSelection = (element: HTMLDivElement) => {
                 startOffset = childNode.nodeValue.length;
             } else {
                 const textNode = document.createTextNode('\u200B');
+
+                console.debug('[2] Will add ZeroWithSpace...', {
+                    childNode,
+                    nextSibling: childNode.nextSibling,
+                    nodeType: childNode.nodeType,
+                    parentNode: childNode.parentNode,
+                    textNode,
+                });
 
                 childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
