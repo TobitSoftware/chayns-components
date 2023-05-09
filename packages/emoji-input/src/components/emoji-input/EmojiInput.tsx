@@ -208,7 +208,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
         if (value !== plainTextValue) {
             setPlainTextValue(value);
 
-            handleUpdateHTML(plainTextValue);
+            handleUpdateHTML(value);
         }
     }, [handleUpdateHTML, plainTextValue, value]);
 
