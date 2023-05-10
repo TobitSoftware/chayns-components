@@ -6,14 +6,23 @@
  * @param html - The text from which a part should be taken
  * @param length - The length of the text to be extracted
  *
- * @return string - The text part with the specified length - additionally the HTML elements are added
+ * @return GetSubTextFromHTMLResult - The text part with the specified length, the current character and the remaining characters of the word - additionally the HTML elements are added
  */
-export const getSubTextFromHTML = (html: string, length: number): string => {
+
+interface GetSubTextFromHTMLResult {
+    shownText: string;
+    shownWordCharacters: string;
+    remainingWordCharacters: string;
+}
+
+export const getSubTextFromHTML = (html: string, length: number): GetSubTextFromHTMLResult => {
     const div = document.createElement('div');
 
     div.innerHTML = html;
 
-    let text = '';
+    let shownText = '';
+    let shownWordCharacters = '';
+    let remainingWordCharacters = '';
     let currLength = 0;
 
     const traverse = (element: Element): boolean => {
@@ -21,10 +30,19 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
             const nodeText = element.textContent;
 
             if (currLength + nodeText.length <= length) {
-                text += nodeText;
+                shownText += nodeText;
                 currLength += nodeText.length;
+                shownWordCharacters = '';
+                remainingWordCharacters = '';
             } else {
-                text += nodeText.substring(0, length - currLength);
+                const lastSpaceIndex = nodeText.lastIndexOf(' ', length - 1);
+                const substring = nodeText.substring(length);
+                const nextSpaceIndex = substring.indexOf(' ');
+                const endIndex = nextSpaceIndex !== -1 ? nextSpaceIndex : nodeText.length;
+
+                shownText += nodeText.substring(0, lastSpaceIndex + 1);
+                shownWordCharacters = nodeText.substring(lastSpaceIndex + 1, length);
+                remainingWordCharacters = substring.substring(0, endIndex);
 
                 return false;
             }
@@ -40,17 +58,21 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
                 attributes += ` ${attribute.name}="${attribute.value}"`;
             }
 
-            text += `<${nodeName}${attributes}>`;
+            shownText += `<${nodeName}${attributes}>`;
+
+            console.log(element.childNodes, element.childNodes.length);
 
             for (let i = 0; i < element.childNodes.length; i++) {
                 const childNode = element.childNodes[i];
+
+                console.log(childNode);
 
                 if (childNode && !traverse(childNode as Element)) {
                     return false;
                 }
             }
 
-            text += `</${nodeName}>`;
+            shownText += `</${nodeName}>`;
         }
 
         return true;
@@ -60,11 +82,11 @@ export const getSubTextFromHTML = (html: string, length: number): string => {
         const childNode = div.childNodes[i];
 
         if (childNode && !traverse(childNode as Element)) {
-            return text;
+            return { shownText, shownWordCharacters, remainingWordCharacters };
         }
     }
 
-    return text;
+    return { shownText, shownWordCharacters, remainingWordCharacters };
 };
 
 export const getCharactersCount = (html: string): number => {

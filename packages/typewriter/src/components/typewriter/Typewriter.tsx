@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import {
     StyledTypewriter,
     StyledTypewriterPseudoText,
+    StyledTypewriterShownWordCharacters,
     StyledTypewriterText,
 } from './Typewriter.styles';
 import { getCharactersCount, getSubTextFromHTML, shuffleArray } from './utils';
@@ -17,7 +18,7 @@ export enum TypewriterResetDelay {
 // noinspection JSUnusedGlobalSymbols
 export enum TypewriterSpeed {
     Slow = 40,
-    Medium = 30,
+    Medium = 3000,
     Fast = 20,
 }
 
@@ -218,10 +219,12 @@ const Typewriter: FC<TypewriterProps> = ({
         }
     }, [isAnimatingText, onFinish]);
 
-    const shownText = useMemo(
+    const { shownText, shownWordCharacters, remainingWordCharacters } = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
         [shownCharCount, textContent]
     );
+
+    // console.log({ shownText, shownWordCharacters, remainingWordCharacters });
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
@@ -249,10 +252,15 @@ const Typewriter: FC<TypewriterProps> = ({
         () => (
             <StyledTypewriter onClick={handleClick}>
                 {isAnimatingText ? (
-                    <StyledTypewriterText
-                        dangerouslySetInnerHTML={{ __html: shownText }}
-                        isAnimatingText
-                    />
+                    <StyledTypewriterText isAnimatingText>
+                        {shownText}
+                        <span>
+                            <StyledTypewriterShownWordCharacters>
+                                {shownWordCharacters}
+                            </StyledTypewriterShownWordCharacters>
+                            <span style={{ opacity: 0 }}>{remainingWordCharacters}</span>
+                        </span>
+                    </StyledTypewriterText>
                 ) : (
                     <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
                 )}
@@ -263,7 +271,15 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoTextHTML, shownText, sortedChildren]
+        [
+            handleClick,
+            isAnimatingText,
+            pseudoTextHTML,
+            remainingWordCharacters,
+            shownText,
+            shownWordCharacters,
+            sortedChildren,
+        ]
     );
 };
 

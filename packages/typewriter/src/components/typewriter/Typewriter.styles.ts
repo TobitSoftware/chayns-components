@@ -1,5 +1,5 @@
 import type { WithTheme } from '@chayns-components/core';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.div`
     position: relative;
@@ -17,6 +17,17 @@ export const StyledTypewriterPseudoText = styled.span`
     user-select: none;
 `;
 
+export const StyledTypewriterShownWordCharacters = styled.span`
+    &:after {
+        animation: ${blinkAnimation} 1s steps(5, start) infinite;
+        color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
+        content: '▋';
+        margin-left: 0.25rem;
+        opacity: 0.85;
+        vertical-align: baseline;
+    }
+`;
+
 type StyledTypewriterTextProps = WithTheme<{
     isAnimatingText?: boolean;
 }>;
@@ -25,17 +36,4 @@ export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
     color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
     position: ${({ isAnimatingText }) => (isAnimatingText ? 'absolute' : 'relative')};
     width: 100%;
-
-    ${({ isAnimatingText }) =>
-        isAnimatingText &&
-        css`
-            &:after {
-                animation: ${blinkAnimation} 1s steps(5, start) infinite;
-                color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
-                content: '▋';
-                margin-left: 0.25rem;
-                opacity: 0.85;
-                vertical-align: baseline;
-            }
-        `}
 `;
