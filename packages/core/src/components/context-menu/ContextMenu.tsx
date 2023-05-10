@@ -4,10 +4,10 @@ import React, {
     MouseEvent,
     MouseEventHandler,
     ReactNode,
+    ReactPortal,
     useCallback,
     useEffect,
     useImperativeHandle,
-    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -90,6 +90,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             ContextMenuAlignment.TopLeft
         );
         const [isContentShown, setIsContentShown] = useState(false);
+        const [portal, setPortal] = useState<ReactPortal>();
 
         const uuid = useUuid();
 
@@ -198,9 +199,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             };
         }, [handleDocumentClick, handleHide, isContentShown, onHide, onShow]);
 
-        const portal = useMemo(
-            () =>
-                typeof window !== 'undefined' &&
+        useEffect(() => {
+            setPortal(() =>
                 createPortal(
                     <AnimatePresence initial={false}>
                         {isContentShown && (
@@ -214,18 +214,18 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                         )}
                     </AnimatePresence>,
                     container
-                ),
-            [
-                container,
-                coordinates,
-                internalCoordinates,
-                internalAlignment,
-                isContentShown,
-                items,
-                alignment,
-                uuid,
-            ]
-        );
+                )
+            );
+        }, [
+            alignment,
+            container,
+            coordinates,
+            internalAlignment,
+            internalCoordinates,
+            isContentShown,
+            items,
+            uuid,
+        ]);
 
         return (
             <>
