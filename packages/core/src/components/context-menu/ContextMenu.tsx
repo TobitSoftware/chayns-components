@@ -200,6 +200,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
         const portal = useMemo(
             () =>
+                typeof window !== 'undefined' &&
                 createPortal(
                     <AnimatePresence initial={false}>
                         {isContentShown && (
