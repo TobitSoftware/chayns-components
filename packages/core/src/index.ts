@@ -4,6 +4,7 @@ export { default as Accordion } from './components/accordion/Accordion';
 export { default as AccordionContent } from './components/accordion/accordion-content/AccordionContent';
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
 export { default as AccordionIntro } from './components/accordion/accordion-intro/AccordionIntro';
+export { default as AmountControl } from './components/amount-control/AmountControl';
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
