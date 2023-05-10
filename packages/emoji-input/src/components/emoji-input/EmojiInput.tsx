@@ -14,7 +14,11 @@ import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
 import { insertTextAtCursorPosition } from '../../utils/insert';
-import { restoreSelection, saveSelection } from '../../utils/selection';
+import {
+    getCharCodeThatWillBeDeleted,
+    restoreSelection,
+    saveSelection,
+} from '../../utils/selection';
 import { convertHTMLToText, convertTextToHTML } from '../../utils/text';
 import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
@@ -95,6 +99,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const editorRef = useRef<HTMLDivElement>(null);
 
+    const shouldDeleteOneMoreBackwards = useRef(false);
+    const shouldDeleteOneMoreForwards = useRef(false);
+
     /**
      * This function updates the content of the 'contentEditable' element if the new text is
      * different from the previous content. So this is only true if, for example, a text like ":-)"
@@ -131,6 +138,30 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 return;
             }
 
+            if (shouldDeleteOneMoreBackwards.current) {
+                shouldDeleteOneMoreBackwards.current = false;
+                shouldDeleteOneMoreForwards.current = false;
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                document.execCommand('delete', false);
+
+                return;
+            }
+
+            if (shouldDeleteOneMoreForwards.current) {
+                shouldDeleteOneMoreBackwards.current = false;
+                shouldDeleteOneMoreForwards.current = false;
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                document.execCommand('forwardDelete', false);
+
+                return;
+            }
+
             handleUpdateHTML(editorRef.current.innerHTML);
 
             const text = convertHTMLToText(editorRef.current.innerHTML);
@@ -159,6 +190,18 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 event.preventDefault();
 
                 document.execCommand('insertLineBreak', false);
+            }
+
+            if (event.key === 'Backspace' || event.key === 'Delete') {
+                const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
+
+                if (charCodeThatWillBeDeleted === 8203) {
+                    if (event.key === 'Backspace') {
+                        shouldDeleteOneMoreBackwards.current = true;
+                    } else {
+                        shouldDeleteOneMoreForwards.current = true;
+                    }
+                }
             }
         },
         [onKeyDown]

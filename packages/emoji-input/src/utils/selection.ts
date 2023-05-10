@@ -1,3 +1,5 @@
+import type { KeyboardEvent } from 'react';
+
 let childIndex = -1;
 let endOffset = -1;
 let startOffset = -1;
@@ -49,21 +51,37 @@ export const restoreSelection = (element: HTMLDivElement) => {
     }
 
     if (typeof childNode.nodeValue !== 'string') {
-        const textNode = document.createTextNode('\u200B');
+        if (childNode.nextSibling) {
+            childNode = childNode.nextSibling;
 
-        console.debug('[1] Will add ZeroWithSpace...', {
-            childNode,
-            nextSibling: childNode.nextSibling,
-            parentNode: childNode.parentNode,
-            textNode,
-        });
+            if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
+                if (childNode.nodeValue.charCodeAt(0) === 8203) {
+                    endOffset = 1;
+                    startOffset = 1;
+                } else {
+                    endOffset = 0;
+                    startOffset = 0;
+                }
+            } else {
+                const textNode = document.createTextNode('\u200B');
 
-        childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+                childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
-        childNode = textNode;
+                childNode = textNode;
 
-        endOffset = 0;
-        startOffset = 0;
+                endOffset = textNode.length;
+                startOffset = textNode.length;
+            }
+        } else {
+            const textNode = document.createTextNode('\u200B');
+
+            childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+
+            childNode = textNode;
+
+            endOffset = textNode.length;
+            startOffset = textNode.length;
+        }
     } else if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
         if (childNode.nextSibling) {
             childNode = childNode.nextSibling;
@@ -74,20 +92,12 @@ export const restoreSelection = (element: HTMLDivElement) => {
             } else {
                 const textNode = document.createTextNode('\u200B');
 
-                console.debug('[2] Will add ZeroWithSpace...', {
-                    childNode,
-                    nextSibling: childNode.nextSibling,
-                    nodeType: childNode.nodeType,
-                    parentNode: childNode.parentNode,
-                    textNode,
-                });
-
                 childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
 
                 childNode = textNode;
 
-                endOffset = 0;
-                startOffset = 0;
+                endOffset = textNode.length;
+                startOffset = textNode.length;
             }
         } else {
             endOffset = childNode.nodeValue.length;
@@ -113,4 +123,46 @@ export const moveSelectionOffset = (distance: number) => {
 
 export const setChildIndex = (index: number) => {
     childIndex = index;
+};
+
+/**
+ * This function returns the code of the character that will be removed by the KeyDown event in the
+ * next step, if the "Backspace" or "Delete" key was pressed and there is no selection of multiple
+ * characters.
+ *
+ * @param event - Keyboard event from "onKeyDown"
+ */
+export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement>) => {
+    const range = window.getSelection()?.getRangeAt(0);
+
+    /**
+     * At this point the function is aborted if there is no selection range, several characters have
+     * been selected and therefore no single letter is removed or neither the "Backspace" nor the
+     * "Delete" key has been pressed.
+     */
+    if (
+        !range ||
+        range.endOffset !== range.startOffset ||
+        (event.key !== 'Backspace' && event.key !== 'Delete')
+    ) {
+        return null;
+    }
+
+    if (event.key === 'Backspace') {
+        const { nodeValue, previousSibling } = range.startContainer;
+
+        if (range.startOffset > 0) {
+            return nodeValue?.charCodeAt(range.startOffset - 1);
+        }
+
+        return previousSibling?.nodeValue?.charCodeAt(previousSibling.nodeValue.length - 1);
+    }
+
+    const { nextSibling, nodeValue } = range.endContainer;
+
+    if (range.endOffset < (nodeValue?.length ?? 0)) {
+        return nodeValue?.charCodeAt(range.endOffset);
+    }
+
+    return nextSibling?.nodeValue?.charCodeAt(0);
 };
