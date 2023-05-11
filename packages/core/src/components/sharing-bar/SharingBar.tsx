@@ -19,8 +19,6 @@ const SharingBar: FC<SharingBarProps> = ({ link }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
 
     const handleImageDownload = async () => {
-        // ToDo Add callingCode download
-
         const image = await fetch(
             `https://cube.tobit.cloud/qr-code-generator/v1.0/png?value=${link}&color=005EB8&text=Teilen`
         );
