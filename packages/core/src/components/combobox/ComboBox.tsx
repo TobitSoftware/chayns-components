@@ -8,7 +8,7 @@ import {
     StyledComboBoxPlaceholder,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
-import { calculateContentWidth } from './utils';
+import { calculateContentHeight, calculateContentWidth } from './utils';
 
 export interface IComboBoxItem {
     text: string;
@@ -38,6 +38,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
     const [item, setItem] = useState<IComboBoxItem>();
     const [isAnimation, setIsAnimation] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
     const ref = useRef<HTMLDivElement>(null);
 
@@ -78,6 +79,8 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
      */
     useEffect(() => {
         const textArray = list.map(({ text }) => text);
+
+        setHeight(calculateContentHeight(textArray));
 
         textArray.push(placeholder);
 
@@ -136,6 +139,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                     </StyledComboBoxIconWrapper>
                 </StyledComboBoxHeader>
                 <StyledMotionComboBoxBody
+                    height={height}
                     initial={{ height: 0, opacity: 0 }}
                     animate={
                         isAnimation

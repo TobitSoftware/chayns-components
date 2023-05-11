@@ -44,7 +44,9 @@ export const StyledComboBoxIconWrapper = styled.div`
     margin-left: 5px;
 `;
 
-type StyledComboBoxBodyProps = WithTheme<unknown>;
+type StyledComboBoxBodyProps = WithTheme<{
+    height: number;
+}>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
     background: ${({ theme }: StyledComboBoxBodyProps) => theme['001']};
@@ -56,7 +58,7 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     border-top: none;
     cursor: pointer;
     max-height: 300px;
-    overflow-y: auto;
+    overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxBodyProps) => theme['009-rgb']}, 0.08)
         inset;
 
