@@ -21,6 +21,7 @@ export { MentionFinderPopupAlignment } from './components/mention-finder/constan
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as SharingBar } from './components/sharing-bar/SharingBar';
+export { default as Slider } from './components/slider/Slider';
 export {
     default as SmallWaitCursor,
     SmallWaitCursorSpeed,
