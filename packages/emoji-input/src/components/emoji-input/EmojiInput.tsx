@@ -75,6 +75,10 @@ export type EmojiInputProps = {
      */
     rightElement?: ReactNode;
     /**
+     * Prevents the EmojiPickerPopup icon from being displayed
+     */
+    shouldPreventEmojiPicker?: boolean;
+    /**
      * The plain text value of the input field. Instead of HTML elements BB codes must be used at
      * this point. These are then converted by the input field into corresponding HTML elements.
      */
@@ -92,6 +96,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     placeholder,
     popupAlignment,
     rightElement,
+    shouldPreventEmojiPicker,
     value,
 }) => {
     const [isMobile] = useState(getIsMobile());
@@ -296,7 +301,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     placeholder={placeholder}
                     ref={editorRef}
                 />
-                {!isMobile && (
+                {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
                         accessToken={accessToken}
                         alignment={popupAlignment}
