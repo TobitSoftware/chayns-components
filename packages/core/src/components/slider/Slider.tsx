@@ -37,20 +37,18 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange }) => {
     }, [maxValue, minValue, value]);
 
     /**
-     * This function alls the onChange function
-     */
-    const handelInputBlur = useCallback(() => {
-        if (onChange) {
-            onChange(editedValue);
-        }
-    }, [editedValue, onChange]);
-
-    /**
      * This function updates the value
      */
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setEditedValue(Number(event.target.value));
-    };
+    const handleInputChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            setEditedValue(Number(event.target.value));
+
+            if (onChange) {
+                onChange(Number(event.target.value));
+            }
+        },
+        [onChange]
+    );
 
     return useMemo(
         () => (
@@ -61,11 +59,10 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange }) => {
                     max={maxValue}
                     min={minValue}
                     onChange={handleInputChange}
-                    onMouseUp={handelInputBlur}
                 />
             </StyledSlider>
         ),
-        [editedValue, handelInputBlur, maxValue, minValue]
+        [editedValue, handleInputChange, maxValue, minValue]
     );
 };
 
