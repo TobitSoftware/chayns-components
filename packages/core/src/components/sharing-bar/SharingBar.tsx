@@ -121,6 +121,9 @@ const SharingBar: FC<SharingBarProps> = ({ link }) => {
 
     return (
         <StyledSharingBar onClick={handleSharingBarClick}>
+            <StyledSharingBarIconWrapper>
+                <Icon icons={['fa fa-share-nodes']} />
+            </StyledSharingBarIconWrapper>
             <ContextMenu
                 items={contextMenuItems}
                 ref={contextMenuRef}
@@ -129,9 +132,6 @@ const SharingBar: FC<SharingBarProps> = ({ link }) => {
             >
                 {null}
             </ContextMenu>
-            <StyledSharingBarIconWrapper>
-                <Icon icons={['fa fa-share-nodes']} />
-            </StyledSharingBarIconWrapper>
             <StyledSharingBarText>Teilen</StyledSharingBarText>
         </StyledSharingBar>
     );
