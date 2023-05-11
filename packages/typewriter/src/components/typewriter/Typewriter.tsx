@@ -233,9 +233,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 return getSubTextFromHTML(pseudoText, shownCharCount);
             }
 
-            return React.isValidElement(pseudoChildren)
-                ? renderToString(pseudoChildren)
-                : pseudoChildren;
+            return pseudoText;
         }
 
         if (shouldUseAnimationHeight && textContent) {
