@@ -153,7 +153,7 @@ const ListItem: FC<ListItemProps> = ({
                 title={title}
             />
             <AnimatePresence initial={false}>
-                {isExpandable && isItemOpen && <ListItemBody>{children}</ListItemBody>}
+                {isExpandable && isItemOpen && <ListItemBody id={uuid}>{children}</ListItemBody>}
             </AnimatePresence>
         </StyledListItem>
     );
