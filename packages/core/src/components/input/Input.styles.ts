@@ -18,10 +18,6 @@ export const StyledInput = styled.div<StyledInputProps>`
     padding: 8px 10px;
     transition: opacity 0.3s ease;
     width: 100%;
-
-    &:not(&:first-child) {
-        margin-top: 8px;
-    }
 `;
 
 export const StyledInputContent = styled.div`
@@ -40,6 +36,10 @@ export const StyledInputField = styled.input`
 `;
 
 export const StyledMotionInputLabel = styled(motion.label)`
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 4px;
     line-height: 1.15;
     pointer-events: none;
     position: absolute;

@@ -5,6 +5,7 @@ import React, {
     FocusEventHandler,
     HTMLInputTypeAttribute,
     KeyboardEventHandler,
+    ReactNode,
     useCallback,
     useEffect,
     useMemo,
@@ -43,6 +44,10 @@ export type InputProps = {
      */
     placeholder?: string;
     /**
+     * Element to be displayed next to or instead of the "placeholder"
+     */
+    placeholderElement?: ReactNode;
+    /**
      * Input type set for input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
@@ -59,6 +64,7 @@ const Input: FC<InputProps> = ({
     onFocus,
     onKeyDown,
     placeholder,
+    placeholderElement,
     type = 'text',
     value,
 }) => {
@@ -103,10 +109,12 @@ const Input: FC<InputProps> = ({
                 />
                 <StyledMotionInputLabel
                     animate={{ scale: hasValue ? 0.6 : 1 }}
+                    initial={false}
                     layout
                     style={{ ...labelPosition, originX: 1, originY: 1 }}
                     transition={{ type: 'tween' }}
                 >
+                    {placeholderElement}
                     {placeholder}
                 </StyledMotionInputLabel>
             </StyledInputContent>
