@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { ChangeEventHandler, FC, useCallback, useEffect, useState } from 'react';
-import { Icon, Input } from '../../index';
+import Icon from '../icon/Icon';
+import Input from '../input/Input';
 import {
     StyledMotionSearchInputContentWrapper,
     StyledMotionSearchInputIconWrapper,
