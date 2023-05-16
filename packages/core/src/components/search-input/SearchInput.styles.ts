@@ -6,6 +6,8 @@ export const StyledSearchInput = styled.div`
     display: flex;
     gap: 8px;
     height: 42px;
+    justify-content: flex-end;
+    width: 100%;
 `;
 
 export const StyledMotionSearchInputContentWrapper = styled(motion.div)`

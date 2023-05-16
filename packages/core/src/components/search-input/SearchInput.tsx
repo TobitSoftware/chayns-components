@@ -65,6 +65,7 @@ const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placehold
                         exit={{ opacity: 0, width: 0 }}
                         initial={{ opacity: 0, width: 0 }}
                         key="searchInputContentWrapper"
+                        transition={{ duration: 0.2 }}
                     >
                         <Input
                             onChange={onChange}
