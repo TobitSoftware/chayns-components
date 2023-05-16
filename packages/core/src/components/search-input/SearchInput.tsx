@@ -1,7 +1,9 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { ChangeEventHandler, FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from 'react';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
-import Input from '../input/Input';
+import Input, { InputRef } from '../input/Input';
 import {
     StyledMotionSearchInputContentWrapper,
     StyledMotionSearchInputIconWrapper,
@@ -28,15 +30,21 @@ export type SearchInputProps = {
 const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placeholder, value }) => {
     const [isActive, setIsActive] = useState(typeof value === 'string' && value.trim() !== '');
 
-    const handleBackIconClick = useCallback(() => {
-        setIsActive(false);
-    }, []);
+    const inputRef = useRef<InputRef>(null);
+
+    const theme = useTheme() as Theme;
+
+    const handleBackIconClick = useCallback(() => setIsActive(false), []);
 
     const handleSearchIconClick = useCallback(() => setIsActive(true), []);
 
     useEffect(() => {
         if (typeof onActiveChange === 'function') {
             onActiveChange(isActive);
+        }
+
+        if (isActive) {
+            inputRef.current?.focus();
         }
     }, [isActive, onActiveChange]);
 
@@ -49,6 +57,7 @@ const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placehold
                         exit={{ opacity: 0, position: 'absolute' }}
                         initial={{ opacity: 0 }}
                         key={isActive ? 'backIcon' : 'searchIcon'}
+                        transition={{ duration: 0.3 }}
                     >
                         <Icon
                             icons={isActive ? ['fa fa-arrow-left'] : ['fa fa-search']}
@@ -65,12 +74,15 @@ const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placehold
                         exit={{ opacity: 0, width: 0 }}
                         initial={{ opacity: 0, width: 0 }}
                         key="searchInputContentWrapper"
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.3 }}
                     >
                         <Input
                             onChange={onChange}
                             placeholder={placeholder}
-                            placeholderElement={<Icon icons={['fa fa-search']} />}
+                            placeholderElement={
+                                <Icon color={theme.text} icons={['far fa-search']} size={14} />
+                            }
+                            ref={inputRef}
                             value={value}
                         />
                     </StyledMotionSearchInputContentWrapper>

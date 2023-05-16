@@ -30,7 +30,7 @@ export type ContextMenuItem = {
     text: string;
 };
 
-type ContextMenuRef = {
+export type ContextMenuRef = {
     hide: VoidFunction;
     show: VoidFunction;
 };

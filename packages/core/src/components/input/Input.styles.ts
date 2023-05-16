@@ -36,7 +36,7 @@ export const StyledInputField = styled.input`
 `;
 
 export const StyledMotionInputLabel = styled(motion.label)`
-    align-items: center;
+    align-items: baseline;
     display: flex;
     flex: 0 0 auto;
     gap: 4px;

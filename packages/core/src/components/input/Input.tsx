@@ -1,14 +1,16 @@
 import React, {
     ChangeEvent,
     ChangeEventHandler,
-    FC,
     FocusEventHandler,
+    forwardRef,
     HTMLInputTypeAttribute,
     KeyboardEventHandler,
     ReactNode,
     useCallback,
     useEffect,
+    useImperativeHandle,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import {
@@ -17,6 +19,10 @@ import {
     StyledInputField,
     StyledMotionInputLabel,
 } from './Input.styles';
+
+export type InputRef = {
+    focus: VoidFunction;
+};
 
 export type InputProps = {
     /**
@@ -57,70 +63,86 @@ export type InputProps = {
     value?: string;
 };
 
-const Input: FC<InputProps> = ({
-    isDisabled,
-    onBlur,
-    onChange,
-    onFocus,
-    onKeyDown,
-    placeholder,
-    placeholderElement,
-    type = 'text',
-    value,
-}) => {
-    const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
-
-    const handleInputFieldChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            setHasValue(event.target.value !== '');
-
-            if (typeof onChange === 'function') {
-                onChange(event);
-            }
+const Input = forwardRef<InputRef, InputProps>(
+    (
+        {
+            isDisabled,
+            onBlur,
+            onChange,
+            onFocus,
+            onKeyDown,
+            placeholder,
+            placeholderElement,
+            type = 'text',
+            value,
         },
-        [onChange]
-    );
+        ref
+    ) => {
+        const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
 
-    useEffect(() => {
-        if (typeof value === 'string') {
-            setHasValue(value !== '');
-        }
-    }, [value]);
+        const inputRef = useRef<HTMLInputElement>(null);
 
-    const labelPosition = useMemo(() => {
-        if (hasValue) {
-            return { bottom: -8, right: -6 };
-        }
+        const handleInputFieldChange = useCallback(
+            (event: ChangeEvent<HTMLInputElement>) => {
+                setHasValue(event.target.value !== '');
 
-        return { left: 0, top: 0 };
-    }, [hasValue]);
+                if (typeof onChange === 'function') {
+                    onChange(event);
+                }
+            },
+            [onChange]
+        );
 
-    return (
-        <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
-            <StyledInputContent>
-                <StyledInputField
-                    disabled={isDisabled}
-                    onBlur={onBlur}
-                    onChange={handleInputFieldChange}
-                    onFocus={onFocus}
-                    onKeyDown={onKeyDown}
-                    value={value}
-                    type={type}
-                />
-                <StyledMotionInputLabel
-                    animate={{ scale: hasValue ? 0.6 : 1 }}
-                    initial={false}
-                    layout
-                    style={{ ...labelPosition, originX: 1, originY: 1 }}
-                    transition={{ type: 'tween' }}
-                >
-                    {placeholderElement}
-                    {placeholder}
-                </StyledMotionInputLabel>
-            </StyledInputContent>
-        </StyledInput>
-    );
-};
+        useImperativeHandle(
+            ref,
+            () => ({
+                focus: () => inputRef.current?.focus(),
+            }),
+            []
+        );
+
+        useEffect(() => {
+            if (typeof value === 'string') {
+                setHasValue(value !== '');
+            }
+        }, [value]);
+
+        const labelPosition = useMemo(() => {
+            if (hasValue) {
+                return { bottom: -8, right: -6 };
+            }
+
+            return { left: 0, top: 0 };
+        }, [hasValue]);
+
+        return (
+            <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
+                <StyledInputContent>
+                    <StyledInputField
+                        disabled={isDisabled}
+                        onBlur={onBlur}
+                        onChange={handleInputFieldChange}
+                        onFocus={onFocus}
+                        onKeyDown={onKeyDown}
+                        ref={inputRef}
+                        type={type}
+                        value={value}
+                    />
+                    <StyledMotionInputLabel
+                        animate={{ scale: hasValue ? 0.6 : 1 }}
+                        initial={false}
+                        layout
+                        style={{ ...labelPosition, originX: 1, originY: 1 }}
+                        transition={{ type: 'tween' }}
+                    >
+                        {placeholderElement}
+                        {placeholder}
+                    </StyledMotionInputLabel>
+                </StyledInputContent>
+            </StyledInput>
+        );
+    }
+);
 
 Input.displayName = 'Input';
 
