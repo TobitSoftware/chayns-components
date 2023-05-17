@@ -30,3 +30,4 @@ export {
     default as SmallWaitCursor,
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
+export { default as TextArea } from './components/text-area/TextArea';
