@@ -4,7 +4,9 @@ import AmountControl from '../src/components/amount-control/AmountControl';
 export default {
     title: 'Core/AmountControl',
     component: AmountControl,
-    args: {},
+    args: {
+        label: '1,43',
+    },
 } as ComponentMeta<typeof AmountControl>;
 
 const Template: ComponentStory<typeof AmountControl> = (args) => <AmountControl {...args} />;
