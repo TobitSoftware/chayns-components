@@ -12,6 +12,7 @@ export { default as ColorSchemeProvider } from './components/color-scheme-provid
 export type { WithTheme } from './components/color-scheme-provider/ColorSchemeProvider';
 export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
+export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
