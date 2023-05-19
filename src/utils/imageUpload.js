@@ -46,7 +46,7 @@ export default async function imageUpload(
         return response.json();
     }
 
-    throw Error(
+    throw new Error(
         `Uploading the image failed with status code ${response.status}.`
     );
 }

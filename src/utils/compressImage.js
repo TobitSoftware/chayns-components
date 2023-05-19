@@ -50,7 +50,7 @@ const exportCanvasSized = async (
                 Math.round(origCanvas.height * scale)
             );
         } else {
-            throw Error('offscreen canvas not supported');
+            throw new Error('offscreen canvas not supported');
         }
 
         if (isIOS) {
@@ -224,7 +224,7 @@ const exportCanvasSized = async (
                 Math.round(origCanvas.height * scale)
             );
         } else {
-            throw Error('offscreen canvas not supported');
+            throw new Error('offscreen canvas not supported');
         }
 
         if (isIOS) {
