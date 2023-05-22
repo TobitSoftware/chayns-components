@@ -1,6 +1,6 @@
-import React, { CSSProperties, FC, useMemo, useState } from 'react';
+import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
 import Icon from '../../icon/Icon';
-import type { FilterButtonItemShape, FilterButtonSize } from '../interface';
+import { FilterButtonItemShape, FilterButtonSize } from '../interface';
 import {
     StyledFilterButtonItem,
     StyledFilterButtonItemBackground,
@@ -15,6 +15,8 @@ export type FilterButtonItemProps = {
     shape: FilterButtonItemShape;
     size: FilterButtonSize;
     text: string;
+    id: string;
+    onSelect: (key: string) => void;
 };
 
 const FilterButtonItem: FC<FilterButtonItemProps> = ({
@@ -24,21 +26,32 @@ const FilterButtonItem: FC<FilterButtonItemProps> = ({
     text,
     color,
     selected,
+    id,
+    onSelect,
 }) => {
-    const [selectedItem, setSelectedItem] = useState();
+    const handleClick = useCallback(() => {
+        onSelect(id);
+    }, [id, onSelect]);
 
     return useMemo(
         () => (
-            <StyledFilterButtonItem selected={selected} color={color} size={size} shape={shape}>
-                <StyledFilterButtonItemTextWrapper>
-                    {icons && <Icon icons={icons} />}
-                    <StyledFilterButtonItemText>{text}</StyledFilterButtonItemText>
+            <StyledFilterButtonItem
+                onClick={handleClick}
+                shape={shape}
+                color={color}
+                selected={selected}
+                size={size}
+            >
+                <StyledFilterButtonItemTextWrapper size={size}>
+                    {icons && (
+                        <Icon icons={icons} size={size === FilterButtonSize.Small ? 10 : 15} />
+                    )}
+                    <StyledFilterButtonItemText size={size}>{text}</StyledFilterButtonItemText>
                 </StyledFilterButtonItemTextWrapper>
-
-                <StyledFilterButtonItemBackground color={color} size={size} shape={shape} />
+                <StyledFilterButtonItemBackground color={color} shape={shape} />
             </StyledFilterButtonItem>
         ),
-        [color, icons, selected, shape, size, text]
+        [color, handleClick, icons, selected, shape, size, text]
     );
 };
 
