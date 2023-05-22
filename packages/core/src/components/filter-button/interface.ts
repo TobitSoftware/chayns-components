@@ -12,6 +12,6 @@ export enum FilterButtonSize {
 export interface IFilterButtonItem {
     id: string;
     text: string;
-    color: CSSProperties['color'];
+    color?: CSSProperties['color'];
     icons?: string[];
 }

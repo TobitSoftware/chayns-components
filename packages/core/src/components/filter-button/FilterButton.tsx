@@ -1,8 +1,7 @@
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import FilterButtonItem from './filter-button-item/FilterButtonItem';
 import { StyledFilterButton } from './FilterButton.styles';
 import { FilterButtonItemShape, FilterButtonSize, IFilterButtonItem } from './interface';
-import { selectFilterButtonItemByKey } from './utils';
 
 export type FilterButtonProps = {
     /**
@@ -12,7 +11,7 @@ export type FilterButtonProps = {
     /**
      * A function that should be executed when an item is selected.
      */
-    onSelect?: (itemKey: string) => void;
+    onSelect?: (key: string) => void;
     /**
      * The key of an item that should be selected.
      */
@@ -29,43 +28,49 @@ const FilterButton: FC<FilterButtonProps> = ({
     items,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedItem, setSelectedItem] = useState<IFilterButtonItem>();
+    const [selectedItemId, setSelectedItemId] = useState<string>('all');
 
     /**
      * Function that calls the onSelect
      */
     useEffect(() => {
-        if (onSelect) {
-            onSelect(selectedItem);
+        if (onSelect && selectedItemId) {
+            onSelect(selectedItemId);
         }
-    }, [onSelect, selectedItem]);
+    }, [items, onSelect, selectedItemId]);
 
     /**
      * This function set the selectedItemKey
      */
     useEffect(() => {
         if (selectedItemKey) {
-            const filteredItem = selectFilterButtonItemByKey({ key: selectedItemKey, items });
-
-            if (!filteredItem) {
-                return;
-            }
-
-            setSelectedItem(filteredItem);
+            setSelectedItemId(selectedItemKey);
         }
-    }, [items, selectedItemKey]);
+    }, [selectedItemKey]);
 
     /**
      * Function to update the selected item
      */
-    // const handleSelect = (key: string) => {
-    //
-    // }
+    const handleSelect = useCallback(
+        (key: string) => {
+            if (key === selectedItemId) {
+                setSelectedItemId('all');
+
+                return;
+            }
+
+            setSelectedItemId(key);
+        },
+        [selectedItemId]
+    );
 
     const reactItems = useMemo(() => {
         const array: ReactElement[] = [
             <FilterButtonItem
+                id="all"
                 key="all"
+                onSelect={handleSelect}
+                selected={selectedItemId === 'all'}
                 shape={FilterButtonItemShape.Rectangular}
                 size={size}
                 text="Alle"
@@ -75,18 +80,21 @@ const FilterButton: FC<FilterButtonProps> = ({
         items.forEach(({ icons, text, color, id }) => {
             array.push(
                 <FilterButtonItem
+                    color={color}
+                    icons={icons}
+                    id={id}
                     key={id}
+                    onSelect={handleSelect}
+                    selected={selectedItemId === id}
                     shape={FilterButtonItemShape.Round}
                     size={size}
                     text={text}
-                    icons={icons}
-                    color={color}
                 />
             );
         });
 
         return array;
-    }, [items, size]);
+    }, [handleSelect, items, selectedItemId, size]);
 
     return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
 };
