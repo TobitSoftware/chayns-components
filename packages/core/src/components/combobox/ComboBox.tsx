@@ -36,7 +36,7 @@ export type ComboBoxProps = {
 
 const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem }) => {
     const [item, setItem] = useState<IComboBoxItem>();
-    const [isAnimation, setIsAnimation] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
@@ -45,7 +45,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
     const handleClick = useCallback(
         (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
-                setIsAnimation(false);
+                setIsAnimating(false);
             }
         },
         [ref]
@@ -65,7 +65,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
     const handleSetSelectedItem = useCallback(
         (itemToSelect: IComboBoxItem) => {
             setItem(itemToSelect);
-            setIsAnimation(false);
+            setIsAnimating(false);
 
             if (onSelect) {
                 onSelect(itemToSelect);
@@ -120,7 +120,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
      * This function opens the content of the combobox
      */
     const handleHeaderClick = () => {
-        setIsAnimation((prevState) => !prevState);
+        setIsAnimating((prevState) => !prevState);
     };
 
     return useMemo(
@@ -129,7 +129,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 <StyledComboBoxHeader
                     minWidth={minWidth}
                     onClick={handleHeaderClick}
-                    isOpen={isAnimation}
+                    isOpen={isAnimating}
                 >
                     <StyledComboBoxPlaceholder>
                         {item?.text ?? placeholder}
@@ -142,7 +142,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                     height={height}
                     initial={{ height: 0, opacity: 0 }}
                     animate={
-                        isAnimation
+                        isAnimating
                             ? { height: 'fit-content', opacity: 1 }
                             : { height: 0, opacity: 0 }
                     }
@@ -154,7 +154,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 </StyledMotionComboBoxBody>
             </StyledComboBox>
         ),
-        [content, isAnimation, item?.text, minWidth, placeholder]
+        [content, height, isAnimating, item?.text, minWidth, placeholder]
     );
 };
 
