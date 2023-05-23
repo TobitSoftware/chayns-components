@@ -15,7 +15,7 @@ export type FilterButtonProps = {
     /**
      * The key of an item that should be selected.
      */
-    selectedItemKey?: string;
+    selectedItemId?: string;
     /**
      * The size auf the filter buttons. Use the FilterButtonSize enum.
      */
@@ -23,54 +23,49 @@ export type FilterButtonProps = {
 };
 
 const FilterButton: FC<FilterButtonProps> = ({
-    selectedItemKey,
+    selectedItemId,
     onSelect,
     items,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedItemId, setSelectedItemId] = useState<string>('all');
-
-    /**
-     * Function that calls the onSelect
-     */
-    useEffect(() => {
-        if (onSelect && selectedItemId) {
-            onSelect(selectedItemId);
-        }
-    }, [items, onSelect, selectedItemId]);
+    const [selectedId, setSelectedId] = useState<string>('all');
 
     /**
      * This function set the selectedItemKey
      */
     useEffect(() => {
-        if (selectedItemKey) {
-            setSelectedItemId(selectedItemKey);
+        if (selectedItemId) {
+            setSelectedId(selectedItemId);
         }
-    }, [selectedItemKey]);
+    }, [selectedItemId]);
 
     /**
      * Function to update the selected item
      */
     const handleSelect = useCallback(
-        (key: string) => {
-            if (key === selectedItemId) {
-                setSelectedItemId('all');
+        (id: string) => {
+            const newId = id === selectedId ? 'all' : id;
 
-                return;
+            setSelectedId(newId);
+
+            if (typeof onSelect === 'function') {
+                onSelect(newId);
             }
-
-            setSelectedItemId(key);
         },
-        [selectedItemId]
+        [onSelect, selectedId]
     );
 
     const reactItems = useMemo(() => {
+        if (items.length === 0) {
+            return null;
+        }
+
         const array: ReactElement[] = [
             <FilterButtonItem
                 id="all"
                 key="all"
                 onSelect={handleSelect}
-                selected={selectedItemId === 'all'}
+                isSelected={selectedId === 'all'}
                 shape={FilterButtonItemShape.Rectangular}
                 size={size}
                 text="Alle"
@@ -85,7 +80,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                     id={id}
                     key={id}
                     onSelect={handleSelect}
-                    selected={selectedItemId === id}
+                    isSelected={selectedId === id}
                     shape={FilterButtonItemShape.Round}
                     size={size}
                     text={text}
@@ -94,7 +89,7 @@ const FilterButton: FC<FilterButtonProps> = ({
         });
 
         return array;
-    }, [handleSelect, items, selectedItemId, size]);
+    }, [handleSelect, items, selectedId, size]);
 
     return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
 };

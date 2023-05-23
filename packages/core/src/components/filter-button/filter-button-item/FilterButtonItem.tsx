@@ -3,15 +3,16 @@ import Icon from '../../icon/Icon';
 import { FilterButtonItemShape, FilterButtonSize } from '../interface';
 import {
     StyledFilterButtonItem,
-    StyledFilterButtonItemBackground,
-    StyledFilterButtonItemText,
-    StyledFilterButtonItemTextWrapper,
+    StyledFilterButtonItemBorder,
+    StyledFilterButtonItemLabel,
+    StyledFilterButtonItemLabelText,
+    StyledMotionFilterButtonItemBackground,
 } from './FilterButtonItem.styles';
 
 export type FilterButtonItemProps = {
     color?: CSSProperties['color'];
     icons?: string[];
-    selected: boolean;
+    isSelected: boolean;
     shape: FilterButtonItemShape;
     size: FilterButtonSize;
     text: string;
@@ -25,7 +26,7 @@ const FilterButtonItem: FC<FilterButtonItemProps> = ({
     shape,
     text,
     color,
-    selected,
+    isSelected,
     id,
     onSelect,
 }) => {
@@ -35,23 +36,22 @@ const FilterButtonItem: FC<FilterButtonItemProps> = ({
 
     return useMemo(
         () => (
-            <StyledFilterButtonItem
-                onClick={handleClick}
-                shape={shape}
-                color={color}
-                selected={selected}
-                size={size}
-            >
-                <StyledFilterButtonItemTextWrapper size={size}>
+            <StyledFilterButtonItem isSelected={isSelected} size={size} onClick={handleClick}>
+                <StyledFilterButtonItemLabel>
                     {icons && (
-                        <Icon icons={icons} size={size === FilterButtonSize.Small ? 10 : 15} />
+                        <Icon icons={icons} size={size === FilterButtonSize.Normal ? 15 : 10} />
                     )}
-                    <StyledFilterButtonItemText size={size}>{text}</StyledFilterButtonItemText>
-                </StyledFilterButtonItemTextWrapper>
-                <StyledFilterButtonItemBackground color={color} shape={shape} />
+                    <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
+                </StyledFilterButtonItemLabel>
+                <StyledFilterButtonItemBorder isSelected={isSelected} shape={shape} color={color} />
+                <StyledMotionFilterButtonItemBackground
+                    isSelected={isSelected}
+                    shape={shape}
+                    color={color}
+                />
             </StyledFilterButtonItem>
         ),
-        [color, handleClick, icons, selected, shape, size, text]
+        [color, handleClick, icons, isSelected, shape, size, text]
     );
 };
 

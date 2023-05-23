@@ -1,149 +1,81 @@
+import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { FilterButtonItemShape, FilterButtonSize } from '../interface';
 
-// ToDo redo all
-
-type StyledFilterButtonItemProps = WithTheme<{
-    shape: FilterButtonItemShape;
-    color?: CSSProperties['color'];
-    selected?: boolean;
-    size: FilterButtonSize;
-}>;
+type StyledFilterButtonItemProps = WithTheme<{ size: FilterButtonSize; isSelected: boolean }>;
 
 export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
-    border-style: solid;
-    border-width: 1px;
-    padding: 3px 14px;
+    position: relative;
+    font-size: ${({ size }) => (size === FilterButtonSize.Normal ? 15 : 12)}px;
     cursor: pointer;
     user-select: none;
+    padding: 3px 14px;
 
-    height: ${({ size }: StyledFilterButtonItemProps) =>
-        size === FilterButtonSize.Small ? 22 : 30}px;
-
-    border-color: ${({ color, theme }: StyledFilterButtonItemProps) => color ?? theme.hedline};
-
-    border-radius: ${({ shape }: StyledFilterButtonItemProps) =>
-        shape === FilterButtonItemShape.Round ? 100 : 0}px;
-
-    // Background color
-    ${({ color, selected, theme }: StyledFilterButtonItemProps) =>
-        selected &&
-        css`
-            background-color: ${() => color ?? theme.headline};
-        `};
+    &:hover > div:last-child {
+        ${({ isSelected }) =>
+            !isSelected &&
+            css`
+                opacity: 0.2;
+            `}
+    }
 `;
 
-type StyledFilterButtonItemTextWrapperProps = WithTheme<{
-    size: FilterButtonSize;
-}>;
-
-export const StyledFilterButtonItemTextWrapper = styled.div<StyledFilterButtonItemTextWrapperProps>`
+export const StyledFilterButtonItemLabel = styled.div`
     display: flex;
+    gap: 5px;
     align-items: center;
-    gap: ${({ size }: StyledFilterButtonItemTextWrapperProps) =>
-        size === FilterButtonSize.Normal ? 5 : 1}px;
 `;
 
-type StyledFilterButtonItemTextProps = WithTheme<{
-    size: FilterButtonSize;
+type StyledFilterButtonItemLabelTextProps = WithTheme<unknown>;
+
+export const StyledFilterButtonItemLabelText = styled.p<StyledFilterButtonItemLabelTextProps>`
+    color: ${({ theme }: StyledFilterButtonItemLabelTextProps) => theme.text};
+    margin-top: 2px;
+`;
+
+type StyledFilterButtonItemBorderProps = WithTheme<{
+    shape: FilterButtonItemShape;
+    color: CSSProperties['color'];
+    isSelected: boolean;
 }>;
 
-export const StyledFilterButtonItemText = styled.div<StyledFilterButtonItemTextProps>`
-    scale: ${({ size }: StyledFilterButtonItemTextProps) =>
-        size === FilterButtonSize.Normal ? 1 : 0.7};
+export const StyledFilterButtonItemBorder = styled.div<StyledFilterButtonItemBorderProps>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.4;
+    z-index: -1;
+    border-radius: ${({ shape }) => (shape === FilterButtonItemShape.Round ? 100 : 0)}px;
+    ${({ color, theme, isSelected }: StyledFilterButtonItemBorderProps) =>
+        !isSelected &&
+        css`
+            border-width: 1px;
+            border-style: solid;
+            border-color: ${color ?? theme.headline};
+        `};
 `;
 
 type StyledFilterButtonItemBackgroundProps = WithTheme<{
     shape: FilterButtonItemShape;
-    color?: CSSProperties['color'];
+    color: CSSProperties['color'];
+    isSelected: boolean;
 }>;
 
-export const StyledFilterButtonItemBackground = styled.div<StyledFilterButtonItemBackgroundProps>`
-    z-index: 1;
-    opacity: 0;
+export const StyledMotionFilterButtonItemBackground = styled(
+    motion.div
+)<StyledFilterButtonItemBackgroundProps>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 100%;
-
-    border-radius: ${({ shape }: StyledFilterButtonItemProps) =>
-        shape === FilterButtonItemShape.Round ? 100 : 0}px;
-
-    background-color: ${({ color, theme }: StyledFilterButtonItemProps) => color ?? theme.hedline};
-
-    &:hover {
-        opacity: 0.5;
-    }
+    z-index: -1;
+    opacity: ${({ isSelected }) => (isSelected ? 0.4 : 0)};
+    border-radius: ${({ shape }) => (shape === FilterButtonItemShape.Round ? 100 : 0)}px;
+    background-color: ${({ color, theme }: StyledFilterButtonItemBackgroundProps) =>
+        color ?? theme.headline};
 `;
-
-// type StyledFilterButtonItemProps = WithTheme<{
-//     size: FilterButtonSize;
-//     shape: FilterButtonItemShape;
-//     color?: CSSProperties['color'];
-//     selected?: boolean;
-// }>;
-//
-// export const StyledFilterButtonItem = styled.div<StyledFilterButtonItemProps>`
-//     position: relative;
-//     cursor: pointer;
-//     border-style: solid;
-//     border-width: 1px;
-//     width: 100%;
-//
-//     border-color: ${({ color, theme }: StyledFilterButtonItemProps) => color ?? theme.hedline};
-//
-//     border-radius: ${({ shape }: StyledFilterButtonItemProps) =>
-//         shape === FilterButtonItemShape.Round ? 100 : 0}px;
-//
-//     height: ${({ size }: StyledFilterButtonItemProps) =>
-//         size === FilterButtonSize.Small ? 22 : 30}px;
-//
-//     // Background color
-//     ${({ color, selected, theme }: StyledFilterButtonItemProps) =>
-//         selected &&
-//         css`
-//             background-color: ${() => color ?? theme.headline};
-//         `};
-// `;
-//
-// type StyledFilterButtonItemTextWrapperProps = WithTheme<{ size: FilterButtonSize }>;
-//
-// export const StyledFilterButtonItemTextWrapper = styled.div<StyledFilterButtonItemTextWrapperProps>`
-//     display: flex;
-//     align-items: center;
-//     position: absolute;
-//     padding: ${({ size }: StyledFilterButtonItemTextWrapperProps) =>
-//         size === FilterButtonSize.Normal ? '3px 14px' : '0 10px'};
-//     z-index: 2;
-// `;
-//
-// type StyledFilterButtonItemTextProps = WithTheme<{ size: FilterButtonSize }>;
-//
-// export const StyledFilterButtonItemText = styled.div<StyledFilterButtonItemTextProps>`
-//     line-height: ${({ size }: StyledFilterButtonItemTextProps) =>
-//         size === FilterButtonSize.Normal ? 18 : 14}px;
-//     margin-left: 5px;
-// `;
-//
-// type StyledFilterButtonItemBackgroundProps = WithTheme<{
-//     size: FilterButtonSize;
-//     shape: FilterButtonItemShape;
-//     color?: CSSProperties['color'];
-// }>;
-//
-// export const StyledFilterButtonItemBackground = styled.div<StyledFilterButtonItemBackgroundProps>`
-//     z-index: 1;
-//     opacity: 0;
-//     width: 100%;
-//
-//     height: ${({ size }: StyledFilterButtonItemProps) =>
-//         size === FilterButtonSize.Small ? 22 : 30}px;
-//
-//     border-radius: ${({ shape }: StyledFilterButtonItemProps) =>
-//         shape === FilterButtonItemShape.Round ? 100 : 0}px;
-//
-//     background-color: ${({ color, theme }: StyledFilterButtonItemProps) => color ?? theme.hedline};
-//
-//     &:hover {
-//         opacity: 0.5;
-//     }
-// `;
