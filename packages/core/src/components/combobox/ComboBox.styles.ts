@@ -36,7 +36,10 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     }
 `;
 
-export const StyledComboBoxPlaceholder = styled.p`
+type StyledComboBoxPlaceholderProps = WithTheme<unknown>;
+
+export const StyledComboBoxPlaceholder = styled.p<StyledComboBoxPlaceholderProps>`
+    color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
     margin: 0;
 `;
 

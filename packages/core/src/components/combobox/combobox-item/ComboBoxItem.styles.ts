@@ -9,6 +9,9 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
     }
 `;
 
-export const StyledComboBoxItemText = styled.p`
+type StyledComboBoxItemTextProps = WithTheme<unknown>;
+
+export const StyledComboBoxItemText = styled.p<StyledComboBoxItemTextProps>`
+    color: ${({ theme }: StyledComboBoxItemTextProps) => theme.text};
     margin: 5px;
 `;
