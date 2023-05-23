@@ -1,5 +1,5 @@
 import React, { FC, useRef } from 'react';
-import { ContextMenuAlignment } from '../context-menu/constants/alignment';
+import type { ContextMenuAlignment } from '../context-menu/constants/alignment';
 import ContextMenu from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import {
@@ -10,12 +10,20 @@ import {
 
 export type SharingBarProps = {
     /**
+     * The label that should be displayed.
+     */
+    label: string;
+    /**
      * The link that should be shared.
      */
     link: string;
+    /**
+     * The alignment of the sharing options.
+     */
+    popupAlignment: ContextMenuAlignment;
 };
 
-const SharingBar: FC<SharingBarProps> = ({ link }) => {
+const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
     const contextMenuRef = useRef<{ hide: VoidFunction; show: VoidFunction }>(null);
 
     const handleImageDownload = async () => {
@@ -41,9 +49,13 @@ const SharingBar: FC<SharingBarProps> = ({ link }) => {
         url.click();
 
         document.body.removeChild(url);
+
+        contextMenuRef.current?.hide();
     };
 
     const handleShare = (key: string) => {
+        contextMenuRef.current?.hide();
+
         const encodedUrl = encodeURIComponent(link);
         let preparedLink;
 
@@ -122,15 +134,10 @@ const SharingBar: FC<SharingBarProps> = ({ link }) => {
             <StyledSharingBarIconWrapper>
                 <Icon icons={['fa fa-share-nodes']} />
             </StyledSharingBarIconWrapper>
-            <ContextMenu
-                items={contextMenuItems}
-                ref={contextMenuRef}
-                // ToDo change alignment
-                alignment={ContextMenuAlignment.BottomRight}
-            >
+            <ContextMenu items={contextMenuItems} ref={contextMenuRef} alignment={popupAlignment}>
                 {null}
             </ContextMenu>
-            <StyledSharingBarText>Teilen</StyledSharingBarText>
+            <StyledSharingBarText>{label}</StyledSharingBarText>
         </StyledSharingBar>
     );
 };
