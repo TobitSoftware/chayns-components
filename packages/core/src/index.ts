@@ -14,6 +14,11 @@ export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
+export type {
+    FilterButtonItemShape,
+    FilterButtonSize,
+    IFilterButtonItem as FilterButtonItem,
+} from './components/filter-button/interface';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
 export { default as Input } from './components/input/Input';
