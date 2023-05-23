@@ -75,6 +75,7 @@ export const StyledMotionFilterButtonItemBackground = styled(
     width: 100%;
     z-index: -1;
     opacity: ${({ isSelected }) => (isSelected ? 0.4 : 0)};
+    transition: opacity 0.5s ease;
     border-radius: ${({ shape }) => (shape === FilterButtonItemShape.Round ? 100 : 0)}px;
     background-color: ${({ color, theme }: StyledFilterButtonItemBackgroundProps) =>
         color ?? theme.headline};
