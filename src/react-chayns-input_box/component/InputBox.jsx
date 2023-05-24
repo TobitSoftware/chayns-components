@@ -82,8 +82,23 @@ const InputBox = React.forwardRef((props, ref) => {
     );
 
     useEffect(() => {
-        function handleBlur(event) {
+        async function handleBlur(event) {
             if (isHidden) return;
+
+            if (event.type === 'touchstart') {
+                const isScrolling = await new Promise((resolve) => {
+                    const l = () => {
+                        resolve(true);
+                        chayns.removeScrollListener(l);
+                    };
+                    chayns.addScrollListener(l, 1);
+                    setTimeout(resolve, 400, false);
+                });
+
+                if (isScrolling) {
+                    return;
+                }
+            }
 
             if (
                 wrapperRef.current?.contains(event.target) ||
