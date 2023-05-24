@@ -36,15 +36,19 @@ export type SearchBoxProps = {
      * Function to be executed when the input is changed.
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * Function to be executed when an item is selected.
+     */
+    onSelect?: (item: ISearchBoxItem) => void;
 };
 
-const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) => {
+const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, onSelect }) => {
     const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
     const [value, setValue] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
     const [height, setHeight] = useState<number>(0);
 
-    const ref = useRef<HTMLDivElement>(null);
+    const boxRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
 
     /**
@@ -52,11 +56,11 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
      */
     const handleOutsideClick = useCallback(
         (event: MouseEvent) => {
-            if (ref.current && !ref.current.contains(event.target as Node)) {
+            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
                 setIsAnimating(false);
             }
         },
-        [ref]
+        [boxRef]
     );
 
     /**
@@ -68,7 +72,7 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         return () => {
             document.removeEventListener('click', handleOutsideClick);
         };
-    }, [handleOutsideClick, ref]);
+    }, [handleOutsideClick, boxRef]);
 
     /**
      * This hook calculates the greatest width
@@ -112,10 +116,17 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
     /**
      * This function handles the item selection
      */
-    const handleSelect = (item: ISearchBoxItem) => {
-        setValue(item.text);
-        setIsAnimating(false);
-    };
+    const handleSelect = useCallback(
+        (item: ISearchBoxItem) => {
+            setValue(item.text);
+            setIsAnimating(false);
+
+            if (typeof onSelect === 'function') {
+                onSelect(item);
+            }
+        },
+        [onSelect]
+    );
 
     const content = useMemo(() => {
         const items: ReactElement[] = [];
@@ -125,11 +136,11 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         });
 
         return items;
-    }, [matchingItems]);
+    }, [handleSelect, matchingItems]);
 
     return useMemo(
         () => (
-            <StyledSearchBox ref={ref}>
+            <StyledSearchBox ref={boxRef}>
                 <Input
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -151,9 +162,7 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
                             type: 'tween',
                         }}
                     >
-                        <div ref={contentRef}>
-                            <AnimatePresence initial={false}>{content}</AnimatePresence>
-                        </div>
+                        <div ref={contentRef}>{content}</div>
                     </StyledMotionSearchBoxBody>
                 </AnimatePresence>
             </StyledSearchBox>
