@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -11,12 +12,11 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { StyledMotionComboBoxBody } from '../combobox/ComboBox.styles';
-import { calculateContentHeight } from '../combobox/utils';
+import { calculateContentHeight } from '../../utils/calculate';
 import Input from '../input/Input';
 import type { ISearchBoxItem } from './interface';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
-import { StyledSearchBox } from './SearchBox.styles';
+import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
 import { searchList } from './utils';
 
 export type SearchBoxProps = {
@@ -45,8 +45,12 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
     const [height, setHeight] = useState<number>(0);
 
     const ref = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement | null>(null);
 
-    const handleClick = useCallback(
+    /**
+     * This function closes the list of items
+     */
+    const handleOutsideClick = useCallback(
         (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
                 setIsAnimating(false);
@@ -55,16 +59,19 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         [ref]
     );
 
+    /**
+     * This hook listens for clicks
+     */
     useEffect(() => {
-        document.addEventListener('click', handleClick);
+        document.addEventListener('click', handleOutsideClick);
 
         return () => {
-            document.removeEventListener('click', handleClick);
+            document.removeEventListener('click', handleOutsideClick);
         };
-    }, [handleClick, ref]);
+    }, [handleOutsideClick, ref]);
 
     /**
-     * This function calculates the greatest width
+     * This hook calculates the greatest width
      */
     useEffect(() => {
         const textArray = list.map(({ text }) => text);
@@ -72,6 +79,9 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         setHeight(calculateContentHeight(textArray));
     }, [list, placeholder]);
 
+    /**
+     * This function handles changes of the input
+     */
     const handleChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const searchedItems = searchList({ items: list, searchString: event.target.value });
@@ -87,6 +97,9 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         [list, onChange]
     );
 
+    /**
+     * This function handles the blur event of the input
+     */
     const handleBlur = useCallback(
         (event: FocusEvent<HTMLInputElement>) => {
             if (typeof onBlur === 'function') {
@@ -96,6 +109,9 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
         [onBlur]
     );
 
+    /**
+     * This function handles the item selection
+     */
     const handleSelect = (item: ISearchBoxItem) => {
         setValue(item.text);
         setIsAnimating(false);
@@ -120,20 +136,26 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur }) 
                     placeholder={placeholder}
                     value={value}
                 />
-                <StyledMotionComboBoxBody
-                    height={height}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={
-                        isAnimating
-                            ? { height: 'fit-content', opacity: 1 }
-                            : { height: 0, opacity: 0 }
-                    }
-                    transition={{
-                        duration: 0.2,
-                    }}
-                >
-                    {content}
-                </StyledMotionComboBoxBody>
+                <AnimatePresence initial={false}>
+                    <StyledMotionSearchBoxBody
+                        key="content"
+                        height={height}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={
+                            isAnimating
+                                ? { height: 'fit-content', opacity: 1 }
+                                : { height: 0, opacity: 0 }
+                        }
+                        transition={{
+                            duration: 0.2,
+                            type: 'tween',
+                        }}
+                    >
+                        <div ref={contentRef}>
+                            <AnimatePresence initial={false}>{content}</AnimatePresence>
+                        </div>
+                    </StyledMotionSearchBoxBody>
+                </AnimatePresence>
             </StyledSearchBox>
         ),
         [content, handleBlur, handleChange, height, isAnimating, placeholder, value]
