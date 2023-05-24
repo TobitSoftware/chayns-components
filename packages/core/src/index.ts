@@ -29,6 +29,8 @@ export { default as ListItem } from './components/list/list-item/ListItem';
 export { MentionFinderPopupAlignment } from './components/mention-finder/constants/alignment';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
+export type { ISearchBoxItem as SearchBoxItem } from './components/search-box/interface';
+export { default as SearchBox } from './components/search-box/SearchBox';
 export { default as SearchInput } from './components/search-input/SearchInput';
 export { default as SharingBar } from './components/sharing-bar/SharingBar';
 export { default as Slider } from './components/slider/Slider';
