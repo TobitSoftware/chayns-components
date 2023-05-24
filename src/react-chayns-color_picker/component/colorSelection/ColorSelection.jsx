@@ -70,12 +70,9 @@ const ColorSelection = ({
             colorsArr.push(
                 ...customColorsArray
                     .map((c) => hsvToHexString(c).toLowerCase())
-                    .filter(
-                        (c) => !showGlobalColors || !globalColors.includes(c)
-                    )
             );
         }
-        return colorsArr;
+        return colorsArr.filter((c, i, arr) => arr.indexOf(c) === i);
     }, [showGlobalColors, showCustomColors, globalColors, customColorsArray]);
 
     const colorAlreadyExists = useMemo(
