@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
 import {
@@ -8,7 +9,6 @@ import {
     StyledComboBoxPlaceholder,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
-import { calculateContentHeight, calculateContentWidth } from './utils';
 
 export interface IComboBoxItem {
     text: string;
