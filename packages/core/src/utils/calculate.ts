@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export const calculateContentWidth = (texts: string[]) => {
     const length: number[] = [];
 
@@ -19,24 +21,36 @@ export const calculateContentWidth = (texts: string[]) => {
     return Math.max.apply(null, length);
 };
 
-export const calculateContentHeight = (texts: string[]) => {
+export const calculateContentHeight = (elements: string[] | ReactNode) => {
     const length: number[] = [];
 
-    texts.forEach((text) => {
-        const div = document.createElement('p');
-        div.style.visibility = 'hidden';
-        div.style.position = 'absolute';
-        div.style.width = 'auto';
-        div.style.margin = '5px';
-        div.style.whiteSpace = 'nowrap';
-        document.body.appendChild(div);
+    const div = document.createElement('p');
+    div.style.visibility = 'hidden';
+    div.style.position = 'absolute';
+    div.style.width = 'auto';
+    div.style.margin = '5px';
+    div.style.whiteSpace = 'nowrap';
+    document.body.appendChild(div);
 
-        div.innerText = text;
+    if (Array.isArray(elements)) {
+        elements.forEach((element: string) => {
+            div.innerText = element;
 
-        length.push(div.offsetHeight);
+            length.push(div.offsetHeight);
 
-        document.body.removeChild(div);
-    });
+            document.body.removeChild(div);
+        });
 
-    return length.reduce((partialSum, a) => partialSum + a, 0);
+        return length.reduce((partialSum, a) => partialSum + a, 0);
+    }
+
+    const htmlString = ReactDOMServer.renderToString(elements);
+
+    div.appendChild(elements);
+
+    length.push(div.offsetHeight);
+
+    document.body.removeChild(div);
+
+    return length[0];
 };

@@ -51,28 +51,59 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
         if (popupRef.current) {
             const rootElement = document.querySelector('.tapp') || document.body;
 
+            // const contentHeight = calculateContentHeight(content);
+
+            // console.log(calculateContentHeight(content.toString()));
+
+            // const { height: contentHeight } = popupContentRef.current.getBoundingClientRect();
+
             const {
+                top: childrenTopCoordinates,
+                bottom: childrenBottomCoordinates,
+                left: childrenLeftCoordinates,
+                right: childrenRightCoordinates,
                 x,
                 y,
                 height: childrenHeight,
                 width: childrenWidth,
             } = popupRef.current.getBoundingClientRect();
 
-            setCoordinates({ x: x + childrenWidth / 2, y: y + childrenHeight / 2 });
+            const {
+                top: bodyTopCoordinates,
+                bottom: bodyBottomCoordinates,
+                left: bodyLeftCoordinates,
+                right: bodyRightCoordinates,
+                height,
+                width,
+            } = rootElement.getBoundingClientRect();
 
-            const { height, width } = rootElement.getBoundingClientRect();
+            console.log({
+                top: bodyTopCoordinates,
+                bottom: bodyBottomCoordinates,
+                left: bodyLeftCoordinates,
+                right: bodyRightCoordinates,
+            });
 
             if (x < width / 2) {
                 if (y < height / 2) {
+                    setCoordinates({
+                        x: childrenRightCoordinates - 15,
+                        y: childrenBottomCoordinates,
+                    });
                     setAlignment(PopupAlignment.BottomRight);
                 } else {
+                    setCoordinates({ x: childrenRightCoordinates - 15, y: childrenTopCoordinates });
                     setAlignment(PopupAlignment.TopRight);
                 }
             } else if (y < height / 2) {
+                setCoordinates({ x: childrenLeftCoordinates + 15, y: childrenBottomCoordinates });
                 setAlignment(PopupAlignment.BottomLeft);
             } else {
+                setCoordinates({ x: childrenLeftCoordinates + 15, y: childrenTopCoordinates });
                 setAlignment(PopupAlignment.TopLeft);
             }
+
+            setAlignment(PopupAlignment.BottomLeft);
 
             setIsOpen(true);
         }
@@ -83,7 +114,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
     };
 
     const handleHide = useCallback(() => {
-        setIsOpen(false);
+        // setIsOpen(false);
     }, []);
 
     const handleDocumentClick = useCallback<EventListener>(
@@ -146,8 +177,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
 
     return (
         <>
-            <StyledPopup ref={popupRef}>
-                <span onClick={handleChildrenClick}>{children}</span>
+            <StyledPopup ref={popupRef} onClick={handleChildrenClick}>
+                {children}
             </StyledPopup>
             {portal}
         </>

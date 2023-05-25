@@ -6,10 +6,10 @@ export default {
     component: Popup,
     args: {
         content: (
-            <div style={{ display: 'block', padding: '5px' }}>
+            <span style={{ display: 'block', padding: '5px' }}>
                 <h1>Popup</h1>
                 <p>Das ist ein popup!</p>
-            </div>
+            </span>
         ),
     },
 } as ComponentMeta<typeof Popup>;
