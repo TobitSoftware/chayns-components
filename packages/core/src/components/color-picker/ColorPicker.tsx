@@ -1,19 +1,14 @@
 import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
-import type { ContextMenuAlignment } from '../context-menu/constants/alignment';
-import ColorArea from './color-area/ColorArea';
+import Popup from '../popup/Popup';
+import ColorPickerContent from './color-picker-content/ColorPickerContent';
 import {
     StyledColorPicker,
-    StyledColorPickerContent,
     StyledColorPickerDot,
     StyledColorPickerLabel,
     StyledColorPickerLabelWrapper,
 } from './ColorPicker.styles';
 
 export type ColorPickerProps = {
-    /**
-     * The alignment of the popup.
-     */
-    alignment?: ContextMenuAlignment;
     /**
      * A selected color to be displayed.
      */
@@ -28,12 +23,7 @@ export type ColorPickerProps = {
     shouldShowHexCode?: boolean;
 };
 
-const ColorPicker: FC<ColorPickerProps> = ({
-    color,
-    shouldShowColorPrefix,
-    shouldShowHexCode,
-    alignment,
-}) => {
+const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shouldShowHexCode }) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
 
     useEffect(() => {
@@ -47,20 +37,22 @@ const ColorPicker: FC<ColorPickerProps> = ({
     };
 
     const label = useMemo(() => {
-        let h;
+        if (shouldShowHexCode) {
+            return `#${color ?? ''}`;
+        }
+
         return 'hallo';
-    }, []);
+    }, [color, shouldShowHexCode]);
 
     return useMemo(
         () => (
             <StyledColorPicker>
-                <StyledColorPickerLabelWrapper>
-                    <StyledColorPickerDot color={selectedColor} />
-                    <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
-                </StyledColorPickerLabelWrapper>
-                <StyledColorPickerContent>
-                    <ColorArea onChange={handleColorChange} />
-                </StyledColorPickerContent>
+                <Popup content={<ColorPickerContent onColorChange={handleColorChange} />}>
+                    <StyledColorPickerLabelWrapper>
+                        <StyledColorPickerDot color={selectedColor} />
+                        <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
+                    </StyledColorPickerLabelWrapper>
+                </Popup>
             </StyledColorPicker>
         ),
         [label, selectedColor]

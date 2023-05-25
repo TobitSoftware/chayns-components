@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledColorArea = styled.div`
     height: 150px;
@@ -17,7 +17,7 @@ export const StyledColorAreaCanvas = styled.canvas`
 
 type StyledColorAreaPointerProps = WithTheme<{ top: number; left: number }>;
 
-export const StyledColorAreaPointer = styled.canvas<StyledColorAreaPointerProps>`
+export const StyledColorAreaPointer = styled.div<StyledColorAreaPointerProps>`
     position: absolute;
     border-radius: 100%;
     border: 2px solid white;
