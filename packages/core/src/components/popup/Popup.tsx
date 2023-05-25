@@ -13,7 +13,7 @@ import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import { PopupAlignment, PopupCoordinates, PopupRef } from './interface';
 import PopupContent from './popup-content/PopupContent';
-import { StyledPopup } from './Popup.styles';
+import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
 
 export type PopupProps = {
     /**
@@ -45,65 +45,45 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
 
     // ToDo: Replace with hook if new chayns api is ready
     const popupContentRef = useRef<HTMLDivElement>(null);
+    const popupPseudoContentRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
 
     const handleShow = useCallback(() => {
-        if (popupRef.current) {
-            const rootElement = document.querySelector('.tapp') || document.body;
-
-            // const contentHeight = calculateContentHeight(content);
-
-            // console.log(calculateContentHeight(content.toString()));
-
-            // const { height: contentHeight } = popupContentRef.current.getBoundingClientRect();
+        if (popupRef.current && popupPseudoContentRef.current) {
+            const { height: pseudoHeight, width: pseudoWidth } =
+                popupPseudoContentRef.current.getBoundingClientRect();
 
             const {
-                top: childrenTopCoordinates,
-                bottom: childrenBottomCoordinates,
-                left: childrenLeftCoordinates,
-                right: childrenRightCoordinates,
-                x,
-                y,
+                x: childrenX,
+                y: childrenY,
                 height: childrenHeight,
                 width: childrenWidth,
             } = popupRef.current.getBoundingClientRect();
 
-            const {
-                top: bodyTopCoordinates,
-                bottom: bodyBottomCoordinates,
-                left: bodyLeftCoordinates,
-                right: bodyRightCoordinates,
-                height,
-                width,
-            } = rootElement.getBoundingClientRect();
-
-            console.log({
-                top: bodyTopCoordinates,
-                bottom: bodyBottomCoordinates,
-                left: bodyLeftCoordinates,
-                right: bodyRightCoordinates,
-            });
-
-            if (x < width / 2) {
-                if (y < height / 2) {
-                    setCoordinates({
-                        x: childrenRightCoordinates - 15,
-                        y: childrenBottomCoordinates,
-                    });
+            if (pseudoHeight > childrenY - 25) {
+                if (pseudoWidth > childrenX + childrenWidth / 2 - 25) {
                     setAlignment(PopupAlignment.BottomRight);
                 } else {
-                    setCoordinates({ x: childrenRightCoordinates - 15, y: childrenTopCoordinates });
-                    setAlignment(PopupAlignment.TopRight);
+                    setAlignment(PopupAlignment.BottomLeft);
                 }
-            } else if (y < height / 2) {
-                setCoordinates({ x: childrenLeftCoordinates + 15, y: childrenBottomCoordinates });
-                setAlignment(PopupAlignment.BottomLeft);
-            } else {
-                setCoordinates({ x: childrenLeftCoordinates + 15, y: childrenTopCoordinates });
-                setAlignment(PopupAlignment.TopLeft);
-            }
 
-            setAlignment(PopupAlignment.BottomLeft);
+                setCoordinates({
+                    x: childrenX + childrenWidth / 2,
+                    y: childrenY + childrenHeight - 15,
+                });
+            } else if (pseudoWidth > childrenX + childrenWidth / 2 - 25) {
+                setAlignment(PopupAlignment.TopRight);
+                setCoordinates({
+                    x: childrenX + childrenWidth / 2,
+                    y: childrenY,
+                });
+            } else {
+                setAlignment(PopupAlignment.TopLeft);
+                setCoordinates({
+                    x: childrenX + childrenWidth / 2,
+                    y: childrenY + 15,
+                });
+            }
 
             setIsOpen(true);
         }
@@ -114,7 +94,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
     };
 
     const handleHide = useCallback(() => {
-        // setIsOpen(false);
+        setIsOpen(false);
     }, []);
 
     const handleDocumentClick = useCallback<EventListener>(
@@ -177,6 +157,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(({ content, onShow, onHide, child
 
     return (
         <>
+            <StyledPopupPseudo ref={popupPseudoContentRef}>{content}</StyledPopupPseudo>
             <StyledPopup ref={popupRef} onClick={handleChildrenClick}>
                 {children}
             </StyledPopup>
