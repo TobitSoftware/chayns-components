@@ -117,6 +117,21 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
     }, [handleSetSelectedItem, list]);
 
     /**
+     * This function resets the placeholder
+     */
+    const placeholderText = useMemo(() => {
+        let text = placeholder;
+
+        if (!selectedItem) {
+            text = placeholder;
+        } else if (item?.text) {
+            text = item.text;
+        }
+
+        return text;
+    }, [item?.text, placeholder, selectedItem]);
+
+    /**
      * This function opens the content of the combobox
      */
     const handleHeaderClick = () => {
@@ -131,9 +146,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                     onClick={handleHeaderClick}
                     isOpen={isAnimating}
                 >
-                    <StyledComboBoxPlaceholder>
-                        {item?.text ?? placeholder}
-                    </StyledComboBoxPlaceholder>
+                    <StyledComboBoxPlaceholder>{placeholderText}</StyledComboBoxPlaceholder>
                     <StyledComboBoxIconWrapper>
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>

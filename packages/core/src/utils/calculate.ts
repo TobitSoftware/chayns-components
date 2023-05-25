@@ -19,19 +19,19 @@ export const calculateContentWidth = (texts: string[]) => {
     return Math.max.apply(null, length);
 };
 
-export const calculateContentHeight = (texts: string[]) => {
+export const calculateContentHeight = (elements: string[]) => {
     const length: number[] = [];
 
-    texts.forEach((text) => {
-        const div = document.createElement('p');
-        div.style.visibility = 'hidden';
-        div.style.position = 'absolute';
-        div.style.width = 'auto';
-        div.style.margin = '5px';
-        div.style.whiteSpace = 'nowrap';
-        document.body.appendChild(div);
+    const div = document.createElement('p');
+    div.style.visibility = 'hidden';
+    div.style.position = 'absolute';
+    div.style.width = 'auto';
+    div.style.margin = '5px';
+    div.style.whiteSpace = 'nowrap';
+    document.body.appendChild(div);
 
-        div.innerText = text;
+    elements.forEach((element: string) => {
+        div.innerText = element;
 
         length.push(div.offsetHeight);
 

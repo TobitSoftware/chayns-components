@@ -27,7 +27,7 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange }) => {
      * This function sets the value
      */
     useEffect(() => {
-        if (!value) {
+        if (typeof value !== 'number') {
             return;
         }
 
