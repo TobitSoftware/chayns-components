@@ -17,6 +17,10 @@ import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
 
 export type PopupProps = {
     /**
+     * The element over which the content of the `ContextMenu` should be displayed.
+     */
+    children?: ReactNode;
+    /**
      * The content that should be displayed inside the popup.
      */
     content: ReactNode;
