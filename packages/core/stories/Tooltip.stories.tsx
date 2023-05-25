@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { TooltipAlignment } from '../src/components/tooltip/interface';
 import Tooltip from '../src/components/tooltip/Tooltip';
 
 export default {
@@ -10,7 +9,6 @@ export default {
             headline: 'Info',
             text: 'Dieses Gericht enthält Gluten!',
         },
-        alignment: TooltipAlignment.BottomCenter,
     },
 } as ComponentMeta<typeof Tooltip>;
 
