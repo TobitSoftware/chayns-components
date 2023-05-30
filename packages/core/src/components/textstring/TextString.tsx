@@ -1,5 +1,14 @@
-import React, { createElement, FC, ReactHTML, ReactNode, useContext, useMemo } from 'react';
+import React, {
+    createElement,
+    FC,
+    ReactHTML,
+    ReactNode,
+    useCallback,
+    useContext,
+    useMemo,
+} from 'react';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
+import { updateTextstringDialog } from '../textstring-provider/utils/update';
 import type { ITextstring, TextstringReplacement } from './interface';
 import { StyledTextString } from './TextString.styles';
 
@@ -56,7 +65,21 @@ const TextString: FC<TextStringProps> = ({
         return element;
     }, [children, childrenTagName, text]);
 
-    return useMemo(() => <StyledTextString>{childElement}</StyledTextString>, [childElement]);
+    const handleClick = useCallback(
+        (event: MouseEvent) => {
+            if (event.ctrlKey)
+                updateTextstringDialog({
+                    textstringText: textStrings[textString.name] ?? '',
+                    textstringName: textString.name,
+                });
+        },
+        [textString.name, textStrings]
+    );
+
+    return useMemo(
+        () => <StyledTextString onClick={handleClick}>{childElement}</StyledTextString>,
+        [childElement, handleClick]
+    );
 };
 
 TextString.displayName = 'TextString';
