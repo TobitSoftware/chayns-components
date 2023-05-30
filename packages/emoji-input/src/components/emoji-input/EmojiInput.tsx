@@ -2,6 +2,7 @@ import React, {
     ChangeEvent,
     ClipboardEvent,
     FC,
+    FocusEventHandler,
     KeyboardEvent,
     KeyboardEventHandler,
     ReactNode,
@@ -41,6 +42,14 @@ export type EmojiInputProps = {
      * Disables the input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
+    /**
+     * Function that is executed when the input field loses focus.
+     */
+    onBlur?: FocusEventHandler<HTMLDivElement>;
+    /**
+     * Function that is executed when the input field gets the focus.
+     */
+    onFocus?: FocusEventHandler<HTMLDivElement>;
     /**
      * Function that is executed when the text of the input changes. In addition to the original
      * event, the original text is returned as second parameter, in which the internally used HTML
@@ -89,6 +98,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
     accessToken,
     inputId,
     isDisabled,
+    onBlur,
+    onFocus,
     onInput,
     onKeyDown,
     onPopupVisibilityChange,
@@ -295,6 +306,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
                     id={inputId}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
                     onInput={handleInput}
                     onKeyDown={handleKeyDown}
                     onPaste={handlePaste}
