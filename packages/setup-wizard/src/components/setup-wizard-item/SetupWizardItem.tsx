@@ -19,6 +19,10 @@ export type SetupWizardItemProps = {
      */
     children: ReactNode;
     /**
+     * The id of the item.
+     */
+    id: number;
+    /**
      * Whether the item is the last.
      */
     isLastItem?: boolean;
@@ -44,6 +48,7 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({
     children,
     step,
     title,
+    id,
     onStepComplete,
     shouldEnableButton = true,
     isLastItem = false,
@@ -52,24 +57,24 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({
 
     const handleClick = useCallback(() => {
         if (typeof updateSelectedId === 'function') {
-            updateSelectedId(step + 1);
+            updateSelectedId(id + 1);
         }
 
         if (typeof onStepComplete === 'function') {
-            onStepComplete(step);
+            onStepComplete(id);
         }
-    }, [step, onStepComplete, updateSelectedId]);
+    }, [id, onStepComplete, updateSelectedId]);
 
     const shouldBeDisabled = useMemo(() => {
-        if (step === 1) {
+        if (id === 0) {
             return false;
         }
 
-        return !!(selectedId && step > selectedId);
-    }, [selectedId, step]);
+        return !!(selectedId && id > selectedId);
+    }, [selectedId, id]);
 
     const rightElement = useMemo(() => {
-        if (selectedId && step < selectedId) {
+        if (selectedId && id < selectedId) {
             return (
                 <Badge>
                     <StyledSetupWizardItemBadge>
@@ -80,14 +85,14 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({
         }
 
         return null;
-    }, [selectedId, step]);
+    }, [selectedId, id]);
 
     return useMemo(
         () => (
             <StyledSetupWizardItem>
                 <Accordion
                     title={`${step}. ${title}`}
-                    isDefaultOpen={step === selectedId}
+                    isDefaultOpen={id === selectedId}
                     isDisabled={shouldBeDisabled}
                     rightElement={rightElement}
                 >

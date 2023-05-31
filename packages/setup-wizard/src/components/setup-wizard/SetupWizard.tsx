@@ -1,15 +1,18 @@
 import AccordionGroup from '@chayns-components/core/lib/components/accordion/accordion-group/AccordionGroup';
-import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import type { SetupWizardItemProps } from '../setup-wizard-item/SetupWizardItem';
 import { StyledSetupWizard } from './SetupWizard.styles';
 
-type IUpdateSelectedId = (id: number) => void;
+type UpdateSelectedId = (id: number) => void;
 
-interface ISetupWizardContext {
+interface SetupWizardContextProps {
+    allIds: number[];
     selectedId: number | undefined;
-    updateSelectedId?: IUpdateSelectedId;
+    updateSelectedId?: UpdateSelectedId;
 }
 
-export const SetupWizardContext = React.createContext<ISetupWizardContext>({
+export const SetupWizardContext = React.createContext<SetupWizardContextProps>({
+    allIds: [],
     selectedId: undefined,
     updateSelectedId: undefined,
 });
@@ -20,13 +23,20 @@ export type SetupWizardProps = {
     /**
      * The steps of the setup. Use the SetupWizardItem component.
      */
-    children?: ReactNode;
+    children: ReactElement<SetupWizardItemProps> | ReactElement<SetupWizardItemProps>[];
 };
 
 const SetupWizard: FC<SetupWizardProps> = ({ children }) => {
-    const [selectedId, setSelectedId] = useState<ISetupWizardContext['selectedId']>(1);
+    const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
+    const [allIds, setAllIds] = useState<SetupWizardContextProps['allIds']>([]);
 
-    const updateSelectedId = useCallback<IUpdateSelectedId>(
+    useEffect(() => {
+        React.Children.map(children, (child) => {
+            setAllIds((prevState) => [...prevState, child.props.id]);
+        });
+    }, [children]);
+
+    const updateSelectedId = useCallback<UpdateSelectedId>(
         (id) => {
             setSelectedId((currentId) => {
                 if (currentId === id) {
@@ -39,9 +49,10 @@ const SetupWizard: FC<SetupWizardProps> = ({ children }) => {
         [setSelectedId]
     );
 
-    const providerValue = useMemo<ISetupWizardContext>(
+    const providerValue = useMemo<SetupWizardContextProps>(
         () => ({
             selectedId,
+            allIds,
             updateSelectedId,
         }),
         [selectedId, updateSelectedId]

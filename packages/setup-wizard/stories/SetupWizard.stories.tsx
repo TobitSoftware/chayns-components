@@ -13,7 +13,7 @@ export default {
 
 const Template: ComponentStory<typeof SetupWizard> = ({ ...args }) => (
     <SetupWizard {...args}>
-        <SetupWizardItem step={1} title="Intro" shouldEnableButton>
+        <SetupWizardItem id={0} step={1} title="Intro" shouldEnableButton>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et dui eget sapien
             convallis tincidunt. Sed dictum vestibulum mi, quis euismod nunc suscipit vitae. Aenean
             quis nisi eu purus efficitur ullamcorper sed vitae est. Duis quis diam non orci
@@ -26,11 +26,11 @@ const Template: ComponentStory<typeof SetupWizard> = ({ ...args }) => (
             interdum risus, sit amet vestibulum turpis. Integer dolor risus, sodales a faucibus eu,
             iaculis dignissim augue.
         </SetupWizardItem>
-        <SetupWizardItem step={2} title="Dein Name" shouldEnableButton>
+        <SetupWizardItem id={1} step={2} title="Dein Name" shouldEnableButton>
             <h3>Teile uns deinen Namen mit</h3>
             <Input placeholder="Namen eingeben" />
         </SetupWizardItem>
-        <SetupWizardItem step={3} title="Dein Essen" shouldEnableButton>
+        <SetupWizardItem id={2} step={3} title="Dein Essen" shouldEnableButton>
             <h3>Teile uns dein Lieblingsessen mit</h3>
             <RadioButtonGroup>
                 <RadioButton id="0" label="Nudeln" />
@@ -41,7 +41,7 @@ const Template: ComponentStory<typeof SetupWizard> = ({ ...args }) => (
             <h5>Dein Essen ist nicht dabei? Kein Problem, schreibe es uns einfach.</h5>
             <Input placeholder="Essen eingeben" />
         </SetupWizardItem>
-        <SetupWizardItem step={4} title="Fertig" shouldEnableButton isLastItem>
+        <SetupWizardItem id={3} step={4} title="Fertig" shouldEnableButton isLastItem>
             <h3>Danke für deine Zeit :)</h3>
         </SetupWizardItem>
     </SetupWizard>

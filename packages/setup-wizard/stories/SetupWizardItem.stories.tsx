@@ -9,6 +9,7 @@ export default {
     component: SetupWizardItem,
     args: {
         step: 1,
+        id: 0,
         title: 'Dein Essen',
         shouldEnableButton: true,
         children: (
