@@ -76,7 +76,12 @@ declare enum SelectType {
 }
 
 export interface Env {
+    user: User;
     isApp: boolean;
     isMobile: boolean;
     isTablet: boolean;
+}
+
+export interface User {
+    tobitAccessToken: string;
 }

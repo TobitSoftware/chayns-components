@@ -1,52 +1,24 @@
-// interface UpdateTextStringOptions {
-//     text: string;
-//     textStringName: string;
-//     language: string;
-//     accessToken: string;
-// }
-//
-// export const updateTextString = async ({
-//     textStringName,
-//     text,
-//     language,
-//     accessToken,
-// }: UpdateTextStringOptions) => {
-//     const body = {
-//         textStringName,
-//     };
-//
-//     body[`text${language}`] = text;
-//
-//     const response = await fetch('https://webapi.tobit.com/TextStringService/v1.0/V2/LangStrings', {
-//         method: 'put',
-//         headers: {
-//             Accept: 'application/json',
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${accessToken}`,
-//         },
-//         body: JSON.stringify(body),
-//     });
-//
-//     if (response.status === 200) {
-//         void chayns.dialog.alert(
-//             '',
-//             'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.'
-//         );
-//     } else {
-//         void chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
-//     }
-// };
+import type { SelectDialogItem } from '../../../types/chayns';
+import type { TextStringValue } from '../TextStringProvider';
 
-interface updateTextstringOptions {}
+interface ChangeTextStringOptions {
+    textstringName: string;
+    textstringText: string;
+    language: string;
+}
 
-const updateTextstring = ({}: updateTextstringOptions) => {
+const changeTextString = ({
+    textstringText,
+    textstringName,
+    language,
+}: ChangeTextStringOptions) => {
     const body = {
-        stringName,
+        textstringName,
     };
 
-    body[`text${language}`] = text;
+    body[`text${language}`] = textstringText;
     return new Promise((resolve, reject) => {
-        fetch(`${CHAYNS_RES_URL}/V2/LangStrings`, {
+        fetch(`https://webapi.tobit.com/TextStringService/v1.0/V2/LangStrings`, {
             method: 'put',
             headers: {
                 Accept: 'application/json',
@@ -64,29 +36,52 @@ const updateTextstring = ({}: updateTextstringOptions) => {
     });
 };
 
-interface SelectLanguageDialog {
-    textstringName: string;
-}
-
-const selectLanguageDialog = ({ textstringName }: SelectLanguageDialog) => {
-    void chayns.dialog
-        .iFrame({
-            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-            buttons: [],
-            input: { textstring: textstringName },
-        })
-        .then(() => {});
-};
-
-interface UpdateTextstringDialogOptions {
+interface ChangeStringResultOptions {
     textstringName: string;
     textstringText: string;
+    language: string;
+    // data: ;
 }
 
-export const updateTextstringDialog = ({
+const changeStringResult = ({
+    data,
+    language,
+    textstringText,
+    textstringName,
+}: ChangeStringResultOptions) => {
+    if (data.buttonType === 1 && (data.text || data.value)) {
+        changeTextString({
+            textstringName,
+            textstringText,
+            language,
+        })
+            .then((result) => {
+                if (result.ResultCode === 0) {
+                    void chayns.dialog.alert(
+                        '',
+                        'Die Änderungen wurden erfolgreich gespeichert. Es kann bis zu 5 Minuten dauern, bis die Änderung sichtbar wird.'
+                    );
+                } else {
+                    void chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
+                }
+            })
+            .catch(() => {
+                void chayns.dialog.alert('', 'Es ist ein Fehler aufgetreten.');
+            });
+    }
+};
+
+interface ChangeStringDialogOptions {
+    textstringName: string;
+    textstringText: string;
+    language: string;
+}
+
+const changeStringDialog = ({
     textstringName,
     textstringText,
-}: UpdateTextstringDialogOptions) => {
+    language,
+}: ChangeStringDialogOptions) => {
     if (textstringText) {
         chayns.register({ apiDialogs: true });
         void chayns.dialog
@@ -94,7 +89,6 @@ export const updateTextstringDialog = ({
                 url: 'https://frontend.tobit.com/dialog-html-editor/v1.0/',
                 input: { textstringText },
                 title: textstringName,
-                message: 'Sprache: Deutsch',
                 buttons: [
                     {
                         text: 'Speichern',
@@ -106,10 +100,66 @@ export const updateTextstringDialog = ({
                     },
                 ],
             })
-            .then((result: string) => {
-                // ToDo open fetch to update textstring
+            .then((result) => {
+                changeStringResult({ data: result, language });
             });
     } else {
         void chayns.dialog.alert(textstringName, 'Der TextString existiert nicht.');
     }
+};
+
+interface SelectLanguageToChangeOptions {
+    textstringName: string | number | undefined;
+    textstringText: string;
+}
+
+const selectLanguageToChange = ({
+    textstringName,
+    textstringText,
+}: SelectLanguageToChangeOptions) => {
+    void chayns.dialog
+        .iFrame({
+            url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+            buttons: [],
+            input: { textstring: textstringName },
+        })
+        .then((result: string) => {
+            changeStringDialog({
+                textstringName: textstringName?.toString() ?? '',
+                textstringText,
+                language: result,
+            });
+        });
+};
+
+interface UpdateTextstringOptions {
+    textstringText: string;
+    textstringList: TextStringValue;
+}
+
+export const updateTextstring = ({ textstringList, textstringText }: UpdateTextstringOptions) => {
+    const formattedList: SelectDialogItem[] = [];
+
+    Object.keys(textstringList).forEach((key) => {
+        formattedList.push({
+            name: key,
+            value: key,
+        });
+    });
+
+    void chayns.dialog
+        .select({
+            title: 'TextString wählen',
+            message: 'Wähle den TextString, den du ändern möchtest:',
+            multiselect: false,
+            list: formattedList,
+        })
+        .then((data) => {
+            if (data.buttonType === 1 && data.selection && data.selection.length > 0) {
+                selectLanguageToChange({
+                    textstringName: data.selection[0]?.value,
+                    textstringText,
+                });
+            }
+        });
 };
