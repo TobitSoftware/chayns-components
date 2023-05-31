@@ -51,3 +51,15 @@ export const convertHTMLToText = (text: string) => {
 
     return result;
 };
+
+export const getElementTextLength = (element: Element) => {
+    let textLength = 0;
+
+    try {
+        textLength = convertHTMLToText(element.outerHTML).length;
+    } catch (e) {
+        // Do nothing
+    }
+
+    return textLength;
+};
