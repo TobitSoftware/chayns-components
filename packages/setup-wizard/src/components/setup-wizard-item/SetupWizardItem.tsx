@@ -109,6 +109,7 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({
         [
             children,
             handleClick,
+            isLastItem,
             rightElement,
             selectedId,
             shouldBeDisabled,
