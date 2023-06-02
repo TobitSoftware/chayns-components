@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useMemo, useState } from 'react';
-import { RadioButtonItem } from '../src/components/radio-button/interface';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
+import { RadioButtonItem } from '../src/components/radio-button/types';
 import TextStringProvider from '../src/components/textstring-provider/TextStringProvider';
 import TextString from '../src/components/textstring/TextString';
 

@@ -14,9 +14,9 @@ import React, {
 } from 'react';
 import { calculateContentHeight } from '../../utils/calculate';
 import Input from '../input/Input';
-import type { ISearchBoxItem } from './interface';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
+import type { ISearchBoxItem } from './types';
 import { searchList } from './utils';
 
 export type SearchBoxProps = {

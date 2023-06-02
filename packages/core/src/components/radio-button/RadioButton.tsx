@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { RadioButtonItem } from './interface';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledRadioButton,
@@ -7,6 +6,7 @@ import {
     StyledRadioButtonCheckBoxMark,
     StyledRadioButtonLabel,
 } from './RadioButton.styles';
+import type { RadioButtonItem } from './types';
 
 export type RadioButtonProps = {
     /**

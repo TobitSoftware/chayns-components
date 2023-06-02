@@ -1,7 +1,7 @@
 import React, { createElement, FC, ReactHTML, ReactNode, useContext, useMemo } from 'react';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
-import type { ITextstring, TextstringReplacement } from './interface';
 import { StyledTextString } from './TextString.styles';
+import type { ITextstring, TextstringReplacement } from './types';
 
 export type TextStringProps = {
     /**

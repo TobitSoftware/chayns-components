@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useRef } from 'react';
-import type { PopupRef } from '../popup/interface';
 import Popup from '../popup/Popup';
+import type { PopupRef } from '../popup/types';
 import type { ITooltipItem } from './interface';
 import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip } from './Tooltip.styles';

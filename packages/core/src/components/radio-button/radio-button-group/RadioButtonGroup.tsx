@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { RadioButtonItem } from '../interface';
+import type { RadioButtonItem } from '../types';
 
 type IUpdateSelectedRadioButtonId = (id: string) => void;
 

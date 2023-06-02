@@ -19,7 +19,7 @@ export type {
     FilterButtonItemShape,
     FilterButtonSize,
     IFilterButtonItem as FilterButtonItem,
-} from './components/filter-button/interface';
+} from './components/filter-button/types';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
 export { default as Input } from './components/input/Input';
@@ -34,8 +34,8 @@ export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
 export { default as RadioButton } from './components/radio-button/RadioButton';
 export { default as ScrollView } from './components/scroll-view/ScrollView';
-export type { ISearchBoxItem as SearchBoxItem } from './components/search-box/interface';
 export { default as SearchBox } from './components/search-box/SearchBox';
+export type { ISearchBoxItem as SearchBoxItem } from './components/search-box/types';
 export { default as SearchInput } from './components/search-input/SearchInput';
 export { default as SharingBar } from './components/sharing-bar/SharingBar';
 export { default as Slider } from './components/slider/Slider';
@@ -45,9 +45,9 @@ export {
 } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as TextStringProvider } from './components/textstring-provider/TextStringProvider';
+export { default as TextString } from './components/textstring/TextString';
 export type {
     ITextstring as Textstring,
     TextstringReplacement,
-} from './components/textstring/interface';
-export { default as TextString } from './components/textstring/TextString';
+} from './components/textstring/types';
 export { default as Tooltip } from './components/tooltip/Tooltip';

@@ -1,5 +1,5 @@
 import React, { createContext, FC, useEffect, useState } from 'react';
-import { loadLibrary } from './library';
+import { loadLibrary } from './utils';
 
 export type TextStringValue = {
     [key: string]: string;

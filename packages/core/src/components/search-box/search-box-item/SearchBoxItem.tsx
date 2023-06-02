@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import type { ISearchBoxItem } from '../interface';
+import type { ISearchBoxItem } from '../types';
 import { StyledSearchBoxItem, StyledSearchBoxItemText } from './SearchBoxItem.styles';
 
 export type SearchBoxItemProps = {

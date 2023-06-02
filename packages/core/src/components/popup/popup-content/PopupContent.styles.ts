@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { PopupAlignment } from '../interface';
+import { PopupAlignment } from '../types';
 
 type StyledMotionPopupContentProps = WithTheme<{
     position: PopupAlignment;
