@@ -1,14 +1,15 @@
 import React, {
     createElement,
     FC,
+    MouseEventHandler,
     ReactHTML,
     ReactNode,
     useCallback,
     useContext,
     useMemo,
 } from 'react';
+import { selectLanguageToChange } from '../textstring-provider/library';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
-import { updateTextstring } from '../textstring-provider/utils/update';
 import type { ITextstring, TextstringReplacement } from './interface';
 import { StyledTextString } from './TextString.styles';
 
@@ -65,15 +66,14 @@ const TextString: FC<TextStringProps> = ({
         return element;
     }, [children, childrenTagName, text]);
 
-    const handleClick = useCallback(
-        (event: MouseEvent) => {
+    const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
+        (event) => {
             if (event.ctrlKey)
-                updateTextstring({
-                    textstringList: textStrings,
-                    textstringText: textStrings[textString.name],
+                selectLanguageToChange({
+                    textstringName: textString.name,
                 });
         },
-        [textString.name, textStrings]
+        [textString.name]
     );
 
     return useMemo(
