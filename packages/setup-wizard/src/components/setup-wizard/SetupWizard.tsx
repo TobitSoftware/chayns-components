@@ -1,23 +1,39 @@
 import AccordionGroup from '@chayns-components/core/lib/components/accordion/accordion-group/AccordionGroup';
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    forwardRef,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useState,
+} from 'react';
 import type { SetupWizardItemProps } from '../setup-wizard-item/SetupWizardItem';
 import { StyledSetupWizard } from './SetupWizard.styles';
 
 type UpdateSelectedId = (id: number) => void;
+type UpdateActiveId = (id: number) => void;
 
 interface SetupWizardContextProps {
-    allIds: number[];
     selectedId: number | undefined;
     updateSelectedId?: UpdateSelectedId;
+    activeId: number | undefined;
+    updateActiveId?: UpdateActiveId;
 }
 
 export const SetupWizardContext = React.createContext<SetupWizardContextProps>({
-    allIds: [],
     selectedId: undefined,
     updateSelectedId: undefined,
+    activeId: undefined,
+    updateActiveId: undefined,
 });
 
 SetupWizardContext.displayName = 'SetupWizardContext';
+
+export type SetupWizardRef = {
+    next: (stepId?: number) => void;
+    reset: () => void;
+};
 
 export type SetupWizardProps = {
     /**
@@ -26,36 +42,84 @@ export type SetupWizardProps = {
     children: ReactElement<SetupWizardItemProps> | ReactElement<SetupWizardItemProps>[];
 };
 
-const SetupWizard: FC<SetupWizardProps> = ({ children }) => {
+const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, ref) => {
     const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
-    const [allIds, setAllIds] = useState<SetupWizardContextProps['allIds']>([]);
+    const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
+    const [allIds, setAllIds] = useState<number[]>([]);
 
     useEffect(() => {
-        React.Children.map(children, (child) => {
+        React.Children.map(children, (child: ReactElement<SetupWizardItemProps>) => {
             setAllIds((prevState) => [...prevState, child.props.id]);
         });
     }, [children]);
 
     const updateSelectedId = useCallback<UpdateSelectedId>(
         (id) => {
-            setSelectedId((currentId) => {
-                if (currentId === id) {
-                    return undefined;
-                }
-
-                return id;
-            });
+            setSelectedId(id);
         },
         [setSelectedId]
+    );
+
+    const updateActiveId = useCallback<UpdateSelectedId>(
+        (id) => {
+            setActiveId(id);
+        },
+        [setActiveId]
+    );
+
+    const handleNext = useCallback(
+        (stepId: number | undefined) => {
+            if (typeof stepId === 'number') {
+                updateSelectedId(stepId);
+
+                if (typeof activeId === 'number' && stepId > activeId) {
+                    updateActiveId(stepId);
+                }
+            } else {
+                const index = allIds.findIndex((id) => id === selectedId);
+
+                if (index < 0) {
+                    return;
+                }
+
+                const numberAtIndex = allIds[index + 1];
+
+                if (!numberAtIndex) {
+                    return;
+                }
+
+                updateSelectedId(numberAtIndex);
+
+                if (typeof activeId === 'number' && numberAtIndex > activeId) {
+                    updateActiveId(numberAtIndex);
+                }
+            }
+        },
+        [activeId, allIds, selectedId, updateActiveId, updateSelectedId]
+    );
+
+    const handleReset = useCallback(() => {
+        updateSelectedId(0);
+        updateActiveId(0);
+    }, [updateActiveId, updateSelectedId]);
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            next: handleNext,
+            reset: handleReset,
+        }),
+        [handleNext, handleReset]
     );
 
     const providerValue = useMemo<SetupWizardContextProps>(
         () => ({
             selectedId,
-            allIds,
             updateSelectedId,
+            activeId,
+            updateActiveId,
         }),
-        [selectedId, updateSelectedId]
+        [activeId, selectedId, updateActiveId, updateSelectedId]
     );
 
     return useMemo(
@@ -68,7 +132,7 @@ const SetupWizard: FC<SetupWizardProps> = ({ children }) => {
         ),
         [children, providerValue]
     );
-};
+});
 
 SetupWizard.displayName = 'SetupWizard';
 

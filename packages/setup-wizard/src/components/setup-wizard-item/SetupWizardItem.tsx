@@ -1,17 +1,10 @@
 import Accordion from '@chayns-components/core/lib/components/accordion/Accordion';
 import AccordionContent from '@chayns-components/core/lib/components/accordion/accordion-content/AccordionContent';
 import Badge from '@chayns-components/core/lib/components/badge/Badge';
-import Button from '@chayns-components/core/lib/components/button/Button';
 import Icon from '@chayns-components/core/lib/components/icon/Icon';
 import React, { FC, ReactNode, useCallback, useContext, useMemo } from 'react';
 import { SetupWizardContext } from '../setup-wizard/SetupWizard';
-import {
-    StyledSetupWizardItem,
-    StyledSetupWizardItemBadge,
-    StyledSetupWizardItemContent,
-    StyledSetupWizardItemContentButton,
-    StyledSetupWizardItemContentChildren,
-} from './SetupWizardItem.styles';
+import { StyledSetupWizardItem, StyledSetupWizardItemBadge } from './SetupWizardItem.styles';
 
 export type SetupWizardItemProps = {
     /**
@@ -23,18 +16,6 @@ export type SetupWizardItemProps = {
      */
     id: number;
     /**
-     * Whether the item is the last.
-     */
-    isLastItem?: boolean;
-    /**
-     * A function to be executed when the current step is completed.
-     */
-    onStepComplete?: (id: number) => void;
-    /**
-     * Whether the button should be enabled.
-     */
-    shouldEnableButton?: boolean;
-    /**
      * The step of the item.
      */
     step: number;
@@ -44,37 +25,19 @@ export type SetupWizardItemProps = {
     title: string;
 };
 
-const SetupWizardItem: FC<SetupWizardItemProps> = ({
-    children,
-    step,
-    title,
-    id,
-    onStepComplete,
-    shouldEnableButton = true,
-    isLastItem = false,
-}) => {
-    const { selectedId, updateSelectedId } = useContext(SetupWizardContext);
-
-    const handleClick = useCallback(() => {
-        if (typeof updateSelectedId === 'function') {
-            updateSelectedId(id + 1);
-        }
-
-        if (typeof onStepComplete === 'function') {
-            onStepComplete(id);
-        }
-    }, [id, onStepComplete, updateSelectedId]);
+const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }) => {
+    const { selectedId, updateSelectedId, activeId } = useContext(SetupWizardContext);
 
     const shouldBeDisabled = useMemo(() => {
-        if (id === 0) {
+        if (typeof activeId === 'number' && activeId === id) {
             return false;
         }
 
-        return !!(selectedId && id > selectedId);
-    }, [selectedId, id]);
+        return typeof activeId === 'number' && activeId < id;
+    }, [activeId, id]);
 
     const rightElement = useMemo(() => {
-        if (selectedId && id < selectedId) {
+        if (activeId && id < activeId) {
             return (
                 <Badge>
                     <StyledSetupWizardItemBadge>
@@ -85,43 +48,29 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({
         }
 
         return null;
-    }, [selectedId, id]);
+    }, [activeId, id]);
+
+    const handleAccordionOpen = useCallback(() => {
+        if (typeof updateSelectedId === 'function') {
+            updateSelectedId(id);
+        }
+    }, [id, updateSelectedId]);
 
     return useMemo(
         () => (
             <StyledSetupWizardItem>
                 <Accordion
+                    onOpen={handleAccordionOpen}
                     title={`${step}. ${title}`}
                     isDefaultOpen={id === selectedId}
                     isDisabled={shouldBeDisabled}
                     rightElement={rightElement}
                 >
-                    <AccordionContent>
-                        <StyledSetupWizardItemContent>
-                            <StyledSetupWizardItemContentChildren>
-                                {children}
-                            </StyledSetupWizardItemContentChildren>
-                            <StyledSetupWizardItemContentButton>
-                                <Button onClick={handleClick} isDisabled={!shouldEnableButton}>
-                                    {isLastItem ? 'Fertig' : 'Weiter'}
-                                </Button>
-                            </StyledSetupWizardItemContentButton>
-                        </StyledSetupWizardItemContent>
-                    </AccordionContent>
+                    <AccordionContent>{children}</AccordionContent>
                 </Accordion>
             </StyledSetupWizardItem>
         ),
-        [
-            children,
-            handleClick,
-            isLastItem,
-            rightElement,
-            selectedId,
-            shouldBeDisabled,
-            shouldEnableButton,
-            step,
-            title,
-        ]
+        [children, handleAccordionOpen, id, rightElement, selectedId, shouldBeDisabled, step, title]
     );
 };
 
