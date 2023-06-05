@@ -22,6 +22,7 @@ const exportCanvasSized = async (
 
     if (isIOS) {
         scale = Math.min(1200 / origCanvas.width, 1200 / origCanvas.height, 1);
+        step = scale;
     }
 
     for (let i = 0; i < 10; i += 1) {
@@ -196,6 +197,7 @@ const exportCanvasSized = async (
 
     if (isIOS) {
         scale = Math.min(1200 / origCanvas.width, 1200 / origCanvas.height, 1);
+        step = scale;
     }
 
     for (let i = 0; i < 10; i += 1) {
