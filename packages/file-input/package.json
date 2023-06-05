@@ -1,0 +1,66 @@
+{
+    "name": "@chayns-components/file-input",
+    "version": "5.0.0-beta.186",
+    "description": "A set of beautiful React components for developing your own applications with chayns.",
+    "keywords": [
+        "chayns",
+        "react",
+        "components"
+    ],
+    "author": "Tobit.Software",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/file-input#readme",
+    "license": "MIT",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "directories": {
+        "lib": "lib",
+        "test": "__tests__"
+    },
+    "files": [
+        "lib"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TobitSoftware/chayns-components.git"
+    },
+    "scripts": {
+        "build": "npm run build:js && npm run build:types",
+        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
+        "build:types": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "bugs": {
+        "url": "https://github.com/TobitSoftware/chayns-components/issues"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.21.5",
+        "@babel/core": "^7.22.1",
+        "@babel/preset-env": "^7.22.4",
+        "@babel/preset-react": "^7.22.3",
+        "@babel/preset-typescript": "^7.21.5",
+        "@types/react": "^17.0.60",
+        "@types/react-dom": "^17.0.20",
+        "@types/styled-components": "^5.1.26",
+        "@types/uuid": "^9.0.1",
+        "babel-loader": "^8.3.0",
+        "lerna": "^6.6.2",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "styled-components": "^5.3.11",
+        "typescript": "^4.9.5"
+    },
+    "dependencies": {
+        "@chayns-components/core": "^5.0.0-beta.186",
+        "clsx": "^1.2.1",
+        "framer-motion": "^6.5.1",
+        "uuid": "^9.0.0"
+    },
+    "peerDependencies": {
+        "react": ">=16.14.0",
+        "react-dom": ">=16.14.0",
+        "styled-components": ">=5.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
