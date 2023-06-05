@@ -10,8 +10,8 @@ import React, {
 } from 'react';
 import { selectLanguageToChange } from '../textstring-provider/library';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
-import type { ITextstring, TextstringReplacement } from './interface';
 import { StyledTextString } from './TextString.styles';
+import type { ITextstring, TextstringReplacement } from './types';
 
 export type TextStringProps = {
     /**

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { PopupAlignment, PopupCoordinates } from '../interface';
+import { PopupAlignment, PopupCoordinates } from '../types';
 import { StyledMotionPopupContent } from './PopupContent.styles';
 
 type PopupContentProps = {

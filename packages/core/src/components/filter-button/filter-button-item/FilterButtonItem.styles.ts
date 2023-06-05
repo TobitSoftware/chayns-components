@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { FilterButtonItemShape, FilterButtonSize } from '../interface';
+import { FilterButtonItemShape, FilterButtonSize } from '../types';
 
 type StyledFilterButtonItemProps = WithTheme<{ size: FilterButtonSize; isSelected: boolean }>;
 
