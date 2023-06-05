@@ -134,6 +134,11 @@ export const restoreSelection = (element: HTMLDivElement) => {
 
     const range = document.createRange();
 
+    if (childNode.nodeValue) {
+        startOffset = Math.min(childNode.nodeValue.length, startOffset);
+        endOffset = Math.min(childNode.nodeValue.length, endOffset);
+    }
+
     range.setStart(childNode, startOffset);
     range.setEnd(childNode, endOffset);
 
