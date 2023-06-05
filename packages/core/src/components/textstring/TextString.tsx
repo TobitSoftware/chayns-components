@@ -8,8 +8,8 @@ import React, {
     useContext,
     useMemo,
 } from 'react';
-import { selectLanguageToChange } from '../textstring-provider/library';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
+import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
 
@@ -68,10 +68,11 @@ const TextString: FC<TextStringProps> = ({
 
     const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
         (event) => {
-            if (event.ctrlKey)
+            if (event.ctrlKey) {
                 selectLanguageToChange({
                     textstringName: textString.name,
                 });
+            }
         },
         [textString.name]
     );
