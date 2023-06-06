@@ -1,7 +1,13 @@
+import type { WithTheme } from '@chayns-components/core';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const StyledFileInput = styled.div`
-    border: 1px dotted rgba(160, 160, 160, 0.3);
+export const StyledFileInput = styled.div``;
+
+type StyledFileInputContainerProps = WithTheme<unknown>;
+
+export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps>`
+    border: ${({ theme }: StyledFileInputContainerProps) => theme.text} 1px dotted;
     cursor: pointer;
     display: flex;
     gap: 10px;
@@ -11,4 +17,10 @@ export const StyledFileInput = styled.div`
     width: 100%;
 `;
 
-export const StyledFileInputText = styled.p``;
+type StyledFileInputTextProps = WithTheme<unknown>;
+
+export const StyledFileInputText = styled.p<StyledFileInputTextProps>`
+    color: ${({ theme }: StyledFileInputTextProps) => theme.text};
+`;
+
+export const StyledMotionFileInputList = styled(motion.div)``;
