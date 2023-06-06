@@ -1,10 +1,5 @@
+import type { Meta } from '../../types/file';
 import { getFileAsArrayBuffer } from '../../utils/fileDialog';
-
-interface Meta {
-    preview: string;
-    width: string;
-    height: string;
-}
 
 export interface PostImageResult {
     key: string;

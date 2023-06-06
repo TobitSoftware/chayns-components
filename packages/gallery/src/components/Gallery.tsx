@@ -1,7 +1,7 @@
+import type { FileItem, Image, Video } from '@chayns-components/core/src/types/file';
 import { uploadFile } from '@chayns-components/core/src/utils/uploadFile';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import type { FileItem, Image, Video } from '../types/file';
 import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';

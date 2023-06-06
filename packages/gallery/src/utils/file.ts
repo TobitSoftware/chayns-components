@@ -1,4 +1,4 @@
-import type { FileItem } from '../types/file';
+import type { FileItem } from '@chayns-components/core/src/types/file';
 
 interface FilerDuplicateFileOptions {
     files: FileItem[];

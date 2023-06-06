@@ -1,6 +1,6 @@
-import type { FileItem, Image, Video } from '@chayns-components/gallery/lib/types/file';
 import { postImage } from '../api/image/post';
 import { postVideo } from '../api/video/post';
+import type { FileItem, Image, Video } from '../types/file';
 
 interface UploadFilesOptions {
     fileToUpload: FileItem;
