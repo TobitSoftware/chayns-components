@@ -53,10 +53,10 @@ const InputBox = React.forwardRef((props, ref) => {
             setRect({
                 top:
                     wrapperRect.top -
-                    (isParentRelative ? parentRect?.top ?? 0 : 0),
+                    (isParentRelative ? (parentRect?.top ?? 0) - parentElement.scrollTop : 0),
                 bottom:
                     wrapperRect.bottom -
-                    (isParentRelative ? parentRect?.top ?? 0 : 0),
+                    (isParentRelative ? (parentRect?.top ?? 0) - parentElement.scrollTop : 0),
                 left:
                     wrapperRect.left -
                     (isParentRelative ? parentRect?.left ?? 0 : 0),
