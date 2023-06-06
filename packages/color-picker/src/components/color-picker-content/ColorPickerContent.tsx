@@ -1,4 +1,5 @@
 import React, { CSSProperties, FC, useMemo, useState } from 'react';
+import ColorArea from './color-area/ColorArea';
 import { StyledColorPickerContent } from './ColorPickerContent.styles';
 
 export type ColorPickerContentProps = {
@@ -8,7 +9,15 @@ export type ColorPickerContentProps = {
 const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange }) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
 
-    return useMemo(() => <StyledColorPickerContent>test</StyledColorPickerContent>, []);
+    return useMemo(
+        () => (
+            <StyledColorPickerContent>
+                <ColorArea />
+                {/* <Slider /> */}
+            </StyledColorPickerContent>
+        ),
+        []
+    );
 };
 
 ColorPickerContent.displayName = 'ColorPickerContent';

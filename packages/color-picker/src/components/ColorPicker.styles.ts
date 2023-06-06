@@ -1,6 +1,6 @@
+import type { WithTheme } from '@chayns-components/core';
 import type { CSSProperties } from 'react';
 import styled from 'styled-components';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledColorPicker = styled.div``;
 

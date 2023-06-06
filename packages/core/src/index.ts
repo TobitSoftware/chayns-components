@@ -30,6 +30,7 @@ export { MentionFinderPopupAlignment } from './components/mention-finder/constan
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as Popup } from './components/popup/Popup';
+export type { PopupRef } from './components/popup/types';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
 export { default as RadioButton } from './components/radio-button/RadioButton';
