@@ -15,14 +15,14 @@
 
 ## Installation
 
-First you need to install the typewriter part of the chayns-components.
+First you need to install the emoji input part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/typewriter
+npm install @chayns-components/emoji-input
 
 # Yarn
-yarn add @chayns-components/typewriter
+yarn add @chayns-components/emoji-input
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -34,12 +34,7 @@ yarn add @chayns-components/typewriter
 You can use the components in your project as in the following example.
 
 ```typescript jsx
-import { Typewriter } from '@chayns-components/typewriter';
+import { EmojiInput } from '@chayns-components/emoji-input';
 
-<Typewriter>
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor
-    sit amet.
-</Typewriter>;
+<EmojiInput value="Hello world 👍" placeholder="Write message" />;
 ```
