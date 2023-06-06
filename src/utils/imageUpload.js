@@ -26,7 +26,7 @@ export default async function imageUpload(
     let personId;
     let siteId;
     let url;
-    if (typeof options === 'object') {
+    if (options && typeof options === 'object') {
         ({ referenceId, personId, siteId, url = 'https://api.tsimg.cloud/image' } = options);
     } else {
         referenceId = options;
