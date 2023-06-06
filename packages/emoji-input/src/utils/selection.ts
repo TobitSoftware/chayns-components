@@ -1,4 +1,6 @@
 import type { KeyboardEvent } from 'react';
+import { clamp } from './number';
+import { getElementTextLength } from './text';
 
 let childIndex = -1;
 let endOffset = -1;
@@ -51,16 +53,18 @@ export const restoreSelection = (element: HTMLDivElement) => {
     }
 
     if (typeof childNode.nodeValue !== 'string') {
+        const elementTextLength = getElementTextLength(childNode as Element);
+
         if (childNode.nextSibling) {
             childNode = childNode.nextSibling;
 
             if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
-                if (childNode.nodeValue.charCodeAt(0) === 8203) {
-                    endOffset = 1;
-                    startOffset = 1;
-                } else {
-                    endOffset = 0;
-                    startOffset = 0;
+                endOffset -= elementTextLength;
+                startOffset -= elementTextLength;
+
+                if (childNode.nodeValue.charCodeAt(endOffset) === 8203) {
+                    endOffset += 1;
+                    startOffset += 1;
                 }
             } else {
                 const textNode = document.createTextNode('\u200B');
@@ -84,20 +88,44 @@ export const restoreSelection = (element: HTMLDivElement) => {
         }
     } else if (childNode.nodeValue && endOffset > childNode.nodeValue.length) {
         if (childNode.nextSibling) {
+            let elementTextLength = childNode.nodeValue.length;
+
             childNode = childNode.nextSibling;
 
-            if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
-                endOffset = childNode.nodeValue.length;
-                startOffset = childNode.nodeValue.length;
-            } else {
-                const textNode = document.createTextNode('\u200B');
+            if (typeof childNode.nodeValue !== 'string') {
+                elementTextLength += getElementTextLength(childNode as Element);
 
-                childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+                if (childNode.nextSibling) {
+                    childNode = childNode.nextSibling;
 
-                childNode = textNode;
+                    if (childNode.nodeType === Node.TEXT_NODE && childNode.nodeValue) {
+                        endOffset -= elementTextLength;
+                        startOffset -= elementTextLength;
 
-                endOffset = textNode.length;
-                startOffset = textNode.length;
+                        if (childNode.nodeValue.charCodeAt(endOffset) === 8203) {
+                            endOffset += 1;
+                            startOffset += 1;
+                        }
+                    } else {
+                        const textNode = document.createTextNode('\u200B');
+
+                        childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+
+                        childNode = textNode;
+
+                        endOffset = textNode.length;
+                        startOffset = textNode.length;
+                    }
+                } else {
+                    const textNode = document.createTextNode('\u200B');
+
+                    childNode.parentNode?.insertBefore(textNode, childNode.nextSibling);
+
+                    childNode = textNode;
+
+                    endOffset = textNode.length;
+                    startOffset = textNode.length;
+                }
             }
         } else {
             endOffset = childNode.nodeValue.length;
@@ -106,6 +134,11 @@ export const restoreSelection = (element: HTMLDivElement) => {
     }
 
     const range = document.createRange();
+
+    if (childNode.nodeValue) {
+        startOffset = clamp(startOffset, 0, childNode.nodeValue.length);
+        endOffset = clamp(endOffset, 0, childNode.nodeValue.length);
+    }
 
     range.setStart(childNode, startOffset);
     range.setEnd(childNode, endOffset);

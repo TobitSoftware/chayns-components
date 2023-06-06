@@ -1,5 +1,5 @@
 import type { Meta } from '../../types/file';
-import { getFileAsArrayBuffer } from '../../utils/file';
+import { getFileAsArrayBuffer } from '../../utils/fileDialog';
 
 export interface PostImageResult {
     key: string;

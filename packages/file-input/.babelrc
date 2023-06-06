@@ -1,0 +1,12 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": ">0.5%, not dead, not op_mini all, chrome 71"
+            }
+        ],
+        "@babel/preset-react",
+        "@babel/preset-typescript"
+    ]
+}

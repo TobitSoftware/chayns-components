@@ -1,7 +1,7 @@
 import { Icon } from '@chayns-components/core';
+import type { FileItem } from '@chayns-components/core/src/types/file';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useCallback, useMemo } from 'react';
-import type { FileItem } from '../../types/file';
 import {
     StyledGalleryItem,
     StyledGalleryItemDeleteButton,

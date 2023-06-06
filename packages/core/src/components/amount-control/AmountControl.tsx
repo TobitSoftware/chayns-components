@@ -14,7 +14,7 @@ import {
     StyledAmountControlInput,
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
-import { checkForValidAmount } from './utils/amountControl';
+import { checkForValidAmount } from './utils';
 
 export type DisplayState = 'default' | 'delete' | 'normal';
 

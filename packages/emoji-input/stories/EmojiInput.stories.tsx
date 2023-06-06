@@ -33,7 +33,10 @@ const Template: ComponentStory<typeof EmojiInput> = ({ ...args }) => {
                 voluptua.
             </p>
             <p>[lc_mention id="MIC-HAEL1"]Michael[/lc_mention]</p>
-            <p>[lc_mention id="DER-PROFI"]Simon[/lc_mention]</p>
+            <p>
+                [lc_mention id="CHA-YNSAI"]chayns Assistant[/lc_mention] fasse die letzten
+                Nachrichten kurz zusammen.
+            </p>
             <EmojiInput {...args} onInput={handleInput} value={text} />
         </>
     );

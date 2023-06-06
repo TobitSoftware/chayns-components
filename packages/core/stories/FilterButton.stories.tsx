@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import FilterButton from '../src/components/filter-button/FilterButton';
-import { FilterButtonSize } from '../src/components/filter-button/interface';
+import { FilterButtonSize } from '../src/components/filter-button/types';
 
 export default {
     title: 'Core/FilterButton',

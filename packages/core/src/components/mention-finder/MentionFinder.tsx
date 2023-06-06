@@ -51,7 +51,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 ? members.filter(
                       ({ id, info, name }) =>
                           id.toLowerCase().includes(searchString) ||
-                          info.toLowerCase().includes(searchString) ||
+                          info.replace('chayns', '').toLowerCase().includes(searchString) ||
                           name.toLowerCase().includes(searchString)
                   )
                 : members,

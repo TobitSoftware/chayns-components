@@ -50,6 +50,12 @@ export default {
                 info: 'chaynsID: 132-50444',
                 name: 'Günther Grütze',
             },
+            {
+                id: 'CHA-YNSAI',
+                imageUrl: 'https://sub60.tobit.com/u/CHA-YNSAI',
+                info: 'chaynsID: CHA-YNSAI',
+                name: 'chayns Assistant',
+            },
         ],
         popupAlignment: MentionFinderPopupAlignment.Bottom,
     },

@@ -22,15 +22,14 @@ export const calculateContentWidth = (texts: string[]) => {
 export const calculateContentHeight = (elements: string[]) => {
     const length: number[] = [];
 
-    const div = document.createElement('p');
-    div.style.visibility = 'hidden';
-    div.style.position = 'absolute';
-    div.style.width = 'auto';
-    div.style.margin = '5px';
-    div.style.whiteSpace = 'nowrap';
-    document.body.appendChild(div);
-
     elements.forEach((element: string) => {
+        const div = document.createElement('p');
+        div.style.visibility = 'hidden';
+        div.style.position = 'absolute';
+        div.style.width = 'auto';
+        div.style.margin = '5px';
+        div.style.whiteSpace = 'nowrap';
+        document.body.appendChild(div);
         div.innerText = element;
 
         length.push(div.offsetHeight);
