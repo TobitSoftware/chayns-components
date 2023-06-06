@@ -82,23 +82,8 @@ const InputBox = React.forwardRef((props, ref) => {
     );
 
     useEffect(() => {
-        async function handleBlur(event) {
+        function handleBlur(event) {
             if (isHidden) return;
-
-            if (event.type === 'touchstart') {
-                const isScrolling = await new Promise((resolve) => {
-                    const l = () => {
-                        resolve(true);
-                        chayns.removeScrollListener(l);
-                    };
-                    chayns.addScrollListener(l, 1);
-                    setTimeout(resolve, 400, false);
-                });
-
-                if (isScrolling) {
-                    return;
-                }
-            }
 
             if (
                 wrapperRef.current?.contains(event.target) ||
@@ -124,15 +109,13 @@ const InputBox = React.forwardRef((props, ref) => {
             }
         }
 
-        document.addEventListener('mousedown', handleBlur);
-        document.addEventListener('touchstart', handleBlur);
+        document.addEventListener('click', handleBlur);
 
         window.addEventListener('blur', hide);
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            document.removeEventListener('mousedown', handleBlur);
-            document.removeEventListener('touchstart', handleBlur);
+            document.removeEventListener('click', handleBlur);
 
             window.removeEventListener('blur', hide);
             window.removeEventListener('keydown', handleKeyDown);
