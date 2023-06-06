@@ -1,5 +1,5 @@
 interface SelectFilesOptions {
-    type: string;
+    type?: string;
     multiple: boolean;
 }
 
