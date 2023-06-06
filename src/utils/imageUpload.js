@@ -55,6 +55,9 @@ export default async function imageUpload(
     } else {
         headers.set('Content-Type', 'image/*');
         body = await getFileArrayBuffer(file);
+        if (url === 'https://api.tsimg.cloud/image' && body.byteLength > 4 * 1024 * 1024) {
+            url = 'https://cube.tobit.cloud/image-resizer-backend/api/v1.0/image'
+        }
     }
 
     const response = await fetch(url, { method: 'POST', body, headers });
