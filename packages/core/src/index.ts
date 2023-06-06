@@ -51,3 +51,5 @@ export type {
     TextstringReplacement,
 } from './components/textstring/types';
 export { default as Tooltip } from './components/tooltip/Tooltip';
+export { selectFiles } from './utils/fileDialog';
+export { uploadFile } from './utils/uploadFile';
