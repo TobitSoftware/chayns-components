@@ -1,6 +1,6 @@
 {
     "name": "chayns-components",
-    "version": "4.30.0",
+    "version": "4.30.1",
     "description": "A set of beautiful React components for developing chayns® applications.",
     "keywords": [
         "react",
