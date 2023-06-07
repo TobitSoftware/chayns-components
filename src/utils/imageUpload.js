@@ -4,9 +4,10 @@
  * @export
  * @param {string | File} file A URL as a string or a `File` object that should be uploaded.
  * @param {object} options either object or referenceId (deprecated)
- * @param {string} options.referenceId
- * @param {string} options.personId A person is that should be associated with the uploaded image.
- * @param {string} options.siteId A site id that should be associated with the uploaded image.
+ * @param {string} [options.referenceId]
+ * @param {string} [options.personId] A person is that should be associated with the uploaded image.
+ * @param {string} [options.siteId] A site id that should be associated with the uploaded image.
+ * @param {string} [options.accessToken=chayns.env.user.tobitAccessToken] The tobitAccessToken
  * @param {string} [options.url='https://api.tsimg.cloud/image']
  * @param {string} _personId A person is that should be associated with the uploaded image. (deprecated, use options instead)
  * @param {string} _siteId A site id that should be associated with the uploaded image. (deprecated, use options instead)
@@ -26,8 +27,9 @@ export default async function imageUpload(
     let personId;
     let siteId;
     let url;
+    let accessToken;
     if (options && typeof options === 'object') {
-        ({ referenceId, personId, siteId, url = 'https://api.tsimg.cloud/image' } = options);
+        ({ referenceId, personId, siteId, url = 'https://api.tsimg.cloud/image', accessToken } = options);
     } else {
         referenceId = options;
         personId = _personId;
@@ -35,16 +37,14 @@ export default async function imageUpload(
         url = _url;
     }
 
+    if (!accessToken && typeof chayns !== 'undefined' && chayns?.env?.user?.isAuthenticated) {
+        accessToken = chayns.env.user.tobitAccessToken;
+    }
+
     if (referenceId) headers.set('X-Reference-Id', referenceId);
     if (personId) headers.set('X-Person-Id', personId);
     if (siteId) headers.set('X-Site-Id', siteId);
-
-    if (chayns.env.user.isAuthenticated) {
-        headers.set(
-            'Authorization',
-            `bearer ${chayns.env.user.tobitAccessToken}`
-        );
-    }
+    if (accessToken) headers.set('Authorization', `bearer ${accessToken}`);
 
     /** @type {string | ArrayBuffer} */
     let body;
