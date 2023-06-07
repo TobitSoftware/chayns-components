@@ -2,7 +2,7 @@ import type { WithTheme } from '@chayns-components/core';
 import type { CSSProperties } from 'react';
 import styled from 'styled-components';
 
-export const StyledColorPicker = styled.div``;
+export const StyledColorPicker = styled.span``;
 
 export const StyledColorPickerLabelWrapper = styled.span`
     display: flex;
@@ -16,6 +16,9 @@ type StyledColorPickerDotProps = WithTheme<{ color: CSSProperties['color'] }>;
 export const StyledColorPickerDot = styled.div<StyledColorPickerDotProps>`
     color: ${({ color }) => color};
     border-radius: 50%;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
     height: 15px;
     width: 15px;
 `;

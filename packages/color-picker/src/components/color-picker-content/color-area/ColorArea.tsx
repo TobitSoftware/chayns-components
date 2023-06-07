@@ -1,23 +1,37 @@
 import { useDragControls } from 'framer-motion';
-import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    CSSProperties,
+    FC,
+    PointerEventHandler,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     StyledColorArea,
     StyledColorAreaCanvas,
     StyledMotionColorAreaPointer,
 } from './ColorArea.styles';
 
+interface Coordinates {
+    x: number;
+    y: number;
+}
+
 export type ColorAreaProps = {
     color: CSSProperties['color'];
-    onChange?: (colorToSelect: CSSProperties['color']) => void;
+    onChange: (colorToSelect: CSSProperties['color']) => void;
 };
 
 const ColorArea: FC<ColorAreaProps> = ({ onChange, color }) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
-    const [isDragging, setIsDragging] = useState(false);
-    const [coordinates, setCoordinates] = useState<{ left: number; top: number }>({
-        left: 0,
-        top: 0,
+    const [coordinates, setCoordinates] = useState<Coordinates>({
+        x: 0,
+        y: 0,
     });
+    const [imageData, setImageData] = useState<ImageData>();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -44,70 +58,64 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color }) => {
 
         ctx.fillStyle = transparentGradiant;
         ctx.fillRect(0, 0, 300, 150);
+
+        setImageData(ctx.getImageData(0, 0, 300, 150));
     }, [color]);
 
-    const updatePointerPosition = (event: MouseEvent) => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-            const rect = canvas.getBoundingClientRect();
-            const left = event.clientX - rect.left;
-            const top = event.clientY - rect.top;
-            setCoordinates({ left, top });
-        }
-    };
-
-    const handleMouseDown = useCallback((event: MouseEvent) => {
-        setIsDragging(true);
-        updatePointerPosition(event);
-    }, []);
-
-    const handleMouseMove = useCallback(
-        (event: MouseEvent) => {
-            if (isDragging) {
-                updatePointerPosition(event);
+    const getColorFromCoordinates = useCallback(
+        (selectedCoordinates: Coordinates) => {
+            if (!imageData) {
+                return;
             }
+
+            const { data } = imageData;
+            const { y, x } = selectedCoordinates;
+
+            const pixel = 300 * x + y;
+            const position = pixel * 4;
+
+            const red = data[position];
+            const green = data[position + 1];
+            const blue = data[position + 2];
+            const alpha = data[position + 3];
+
+            const rGBAColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+
+            console.log({ rGBAColor, selectedCoordinates });
         },
-        [isDragging]
+        [imageData]
     );
 
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
+    const handleStartDrag: PointerEventHandler = useCallback(
+        (event) => {
+            dragControls.start(event, { snapToCursor: true });
+        },
+        [dragControls]
+    );
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-            canvas.addEventListener('mousedown', handleMouseDown);
-            canvas.addEventListener('mousemove', handleMouseMove);
-            canvas.addEventListener('mouseup', handleMouseUp);
-            return () => {
-                canvas.removeEventListener('mousedown', handleMouseDown);
-                canvas.removeEventListener('mousemove', handleMouseMove);
-                canvas.removeEventListener('mouseup', handleMouseUp);
-            };
-        }
-
-        return () => {};
-    }, [handleMouseDown, handleMouseMove]);
-
-    function startDrag(event) {
-        dragControls.start(event, { snapToCursor: true });
-    }
+    const handleDrag = useCallback(
+        (event: DragEvent) => {
+            setCoordinates({ x: event.clientX, y: event.clientY });
+            getColorFromCoordinates({ x: event.clientX, y: event.clientY });
+        },
+        [getColorFromCoordinates]
+    );
 
     return useMemo(
         () => (
             <StyledColorArea>
-                <StyledColorAreaCanvas ref={canvasRef} onPointerDown={startDrag} />
+                <StyledColorAreaCanvas ref={canvasRef} onPointerDown={handleStartDrag} />
                 <StyledMotionColorAreaPointer
                     drag
                     dragConstraints={canvasRef}
                     dragElastic={false}
                     dragMomentum={false}
                     dragControls={dragControls}
+                    onDrag={handleDrag}
                 />
             </StyledColorArea>
         ),
-        [dragControls, startDrag]
+        [dragControls, handleDrag, handleStartDrag]
     );
 };
 

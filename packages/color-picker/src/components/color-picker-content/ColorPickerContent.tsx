@@ -4,19 +4,20 @@ import { StyledColorPickerContent } from './ColorPickerContent.styles';
 
 export type ColorPickerContentProps = {
     onColorChange: (color: CSSProperties['color']) => void;
+    color: CSSProperties['color'];
 };
 
-const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange }) => {
+const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange, color }) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
 
     return useMemo(
         () => (
             <StyledColorPickerContent>
-                <ColorArea />
+                <ColorArea onChange={onColorChange} color={color} />
                 {/* <Slider /> */}
             </StyledColorPickerContent>
         ),
-        []
+        [color, onColorChange]
     );
 };
 
