@@ -22,10 +22,11 @@ interface Coordinates {
 
 export type ColorAreaProps = {
     color: CSSProperties['color'];
+    hueColor: CSSProperties['color'];
     onChange: (colorToSelect: CSSProperties['color']) => void;
 };
 
-const ColorArea: FC<ColorAreaProps> = ({ onChange, color }) => {
+const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
     const [coordinates, setCoordinates] = useState<Coordinates>({
         x: 0,
@@ -46,7 +47,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color }) => {
 
         const colorGradiant = ctx.createLinearGradient(0, 0, 300, 0);
         colorGradiant.addColorStop(0, 'white');
-        colorGradiant.addColorStop(1, color ?? 'red');
+        colorGradiant.addColorStop(1, hueColor ?? 'red');
 
         ctx.fillStyle = colorGradiant;
         ctx.fillRect(0, 0, 300, 150);
@@ -60,7 +61,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color }) => {
         ctx.fillRect(0, 0, 300, 150);
 
         setImageData(ctx.getImageData(0, 0, 300, 150));
-    }, [color]);
+    }, [color, hueColor]);
 
     const getColorFromCoordinates = useCallback(
         (selectedCoordinates: Coordinates) => {
