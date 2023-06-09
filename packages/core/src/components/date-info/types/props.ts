@@ -67,7 +67,7 @@ export interface FormatOptions {
     /*
      * Removes the leading text "noch" of timeTillNow format. So you can decide yourself, what text you want to use.
      */
-    removeTimeTillNowText?: boolean;
+    hideTimeTillNowText?: boolean;
 }
 
 type EditProps =

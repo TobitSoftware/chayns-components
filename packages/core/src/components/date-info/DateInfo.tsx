@@ -13,7 +13,7 @@ import {
     getSimpleTime,
     getSimpleTimePeriod,
     getTimeTillNow,
-} from './utils.ts/format';
+} from './utils/format';
 
 const DateInfo: FC<DateInfoProps> = ({
     secondDate,

@@ -135,7 +135,7 @@ interface GetTimeTillNowOptions {
 }
 
 export const getTimeTillNow = ({ date, secondDate, formatOptions }: GetTimeTillNowOptions) => {
-    const { removeTimeTillNowText } = formatOptions;
+    const { hideTimeTillNowText } = formatOptions;
     const time: Time = {
         value: 0,
         type: TimeType.Years,
@@ -175,7 +175,7 @@ export const getTimeTillNow = ({ date, secondDate, formatOptions }: GetTimeTillN
                 break;
         }
 
-        return `${!removeTimeTillNowText ? 'vor' : ''} ${time.value} ${getFormattedPastTimeString(
+        return `${!hideTimeTillNowText ? 'vor' : ''} ${time.value} ${getFormattedPastTimeString(
             time
         )}`;
     }
@@ -213,7 +213,7 @@ export const getTimeTillNow = ({ date, secondDate, formatOptions }: GetTimeTillN
             break;
     }
 
-    return `${!removeTimeTillNowText ? 'noch' : ''} ${time.value} ${getFormattedFutureTimeString(
+    return `${!hideTimeTillNowText ? 'noch' : ''} ${time.value} ${getFormattedFutureTimeString(
         time
     )}`;
 };

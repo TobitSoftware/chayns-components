@@ -8,8 +8,7 @@ export default {
     component: DateInfo,
     args: {
         date: new Date('2023-06-09T10:58:26.530Z'),
-        secondDate: new Date('2023-08-03T16:40:26.530Z'),
-        format: DateFormat.DayWithTimePeriod,
+        format: DateFormat.SimpleDate,
     },
 } as ComponentMeta<typeof DateInfo>;
 
