@@ -15,19 +15,6 @@ export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboB
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as DateInfo } from './components/date-info/DateInfo';
-export {
-    getDateWithTime,
-    getDateWithTimePeriod,
-    getDayWithDate,
-    getDayWithDatePeriod,
-    getDayWithTime,
-    getDayWithTimePeriod,
-    getSimpleDate,
-    getSimpleDatePeriod,
-    getSimpleTime,
-    getSimpleTimePeriod,
-    getTimeTillNow,
-} from './components/date-info/utils/format';
 export { default as FilterButton } from './components/filter-button/FilterButton';
 export type {
     FilterButtonItemShape,
