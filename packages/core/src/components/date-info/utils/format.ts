@@ -1,219 +1,77 @@
-import { format, isPast } from 'date-fns';
-import type { FormatOptions } from '../types/props';
-import {
-    getDay,
-    getFormattedFutureTimeString,
-    getFormattedMonth,
-    getFormattedPastTimeString,
-    getFormattedYear,
-    getTime,
-    getWeekDay,
-    Time,
-    TimeType,
-} from './helper';
+import { format, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns';
 
-interface GetSimpleDateOptions {
+interface GetFormattedYearOptions {
     date: Date;
-    formatOptions: FormatOptions;
+    shouldShowThisYear?: boolean;
 }
 
-export const getSimpleDate = ({ date, formatOptions }: GetSimpleDateOptions) => {
-    const formatString = `dd. ${getFormattedMonth({ formatOptions })} ${getFormattedYear({
-        date,
-        formatOptions,
-    })}`;
+export const getFormattedYear = ({ date, shouldShowThisYear }: GetFormattedYearOptions) => {
+    if (shouldShowThisYear) {
+        return ' yyyy';
+    }
 
-    return format(date, formatString);
+    return isThisYear(date) ? '' : ' yyyy';
 };
 
-interface GetSimpleTimeOptions {
+interface GetFormattedMonthOptions {
+    shouldUseShortText?: boolean;
+}
+
+export const getFormattedMonth = ({ shouldUseShortText }: GetFormattedMonthOptions) => {
+    if (shouldUseShortText) {
+        return 'MMM.';
+    }
+
+    return 'MMMM';
+};
+
+interface GetFormattedDayOfWeekOptions {
+    shouldShowDayOfWeek?: boolean;
+    shouldShowRelativeDayOfWeek?: boolean;
+    shouldUseShortText?: boolean;
     date: Date;
 }
 
-export const getSimpleTime = ({ date }: GetSimpleTimeOptions) => `${getTime({ date })} Uhr`;
-
-interface GetDateWithTimeOptions {
-    date: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDateWithTime = ({ date, formatOptions }: GetDateWithTimeOptions) =>
-    `${getDay({ date, formatOptions })}, ${getSimpleTime({ date })}`;
-
-interface GetDayWithDateOptions {
-    date: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDayWithDate = ({ date, formatOptions }: GetDayWithDateOptions) =>
-    `${getWeekDay({ date, formatOptions })}, ${getSimpleDate({ date, formatOptions })}`;
-
-interface GetDayWithTimeOptions {
-    date: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDayWithTime = ({ date, formatOptions }: GetDayWithTimeOptions) =>
-    `${getWeekDay({ date, formatOptions })}, ${getSimpleTime({ date })}`;
-
-interface GetSimpleDatePeriodOptions {
-    date: Date;
-    secondDate: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getSimpleDatePeriod = ({
+export const getFormattedDayOfWeek = ({
+    shouldShowRelativeDayOfWeek,
+    shouldShowDayOfWeek,
+    shouldUseShortText,
     date,
-    secondDate,
-    formatOptions,
-}: GetSimpleDatePeriodOptions) =>
-    `${getSimpleDate({ date, formatOptions })} - ${getSimpleDate({
-        date: secondDate,
-        formatOptions,
-    })}`;
+}: GetFormattedDayOfWeekOptions) => {
+    if (!shouldShowDayOfWeek && !shouldShowRelativeDayOfWeek) {
+        return '';
+    }
 
-interface GetSimpleTimePeriodOptions {
-    date: Date;
-    secondDate: Date;
-}
-
-export const getSimpleTimePeriod = ({ date, secondDate }: GetSimpleTimePeriodOptions) =>
-    `${getSimpleTime({ date })} - ${getSimpleTime({ date: secondDate })}`;
-
-interface GetDateWithTimePeriodOptions {
-    date: Date;
-    secondDate: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDateWithTimePeriod = ({
-    date,
-    secondDate,
-    formatOptions,
-}: GetDateWithTimePeriodOptions) =>
-    `${getDateWithTime({ date, formatOptions })} - ${getDateWithTime({
-        date: secondDate,
-        formatOptions,
-    })}`;
-
-interface GetDayWithDatePeriodOptions {
-    date: Date;
-    secondDate: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDayWithDatePeriod = ({
-    date,
-    secondDate,
-    formatOptions,
-}: GetDayWithDatePeriodOptions) =>
-    `${getDayWithDate({ date, formatOptions })} - ${getDayWithDate({
-        date: secondDate,
-        formatOptions,
-    })}`;
-
-interface GetDayWithTimePeriodOptions {
-    date: Date;
-    secondDate: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getDayWithTimePeriod = ({
-    date,
-    secondDate,
-    formatOptions,
-}: GetDayWithTimePeriodOptions) =>
-    `${getDayWithTime({ date, formatOptions })} - ${getDayWithTime({
-        date: secondDate,
-        formatOptions,
-    })}`;
-
-interface GetTimeTillNowOptions {
-    date: Date;
-    secondDate: Date;
-    formatOptions: FormatOptions;
-}
-
-export const getTimeTillNow = ({ date, secondDate, formatOptions }: GetTimeTillNowOptions) => {
-    const { hideTimeTillNowText } = formatOptions;
-    const time: Time = {
-        value: 0,
-        type: TimeType.Years,
-    };
-
-    if (isPast(date)) {
-        const elapsedMilliseconds = secondDate.getTime() - date.getTime();
-
-        switch (true) {
-            case elapsedMilliseconds < 60000:
-                time.value = Math.floor(elapsedMilliseconds / 1000);
-                time.type = TimeType.Seconds;
-                break;
-            case elapsedMilliseconds < 3600000:
-                time.value = Math.floor(elapsedMilliseconds / 60000);
-                time.type = TimeType.Minutes;
-                break;
-            case elapsedMilliseconds < 86400000:
-                time.value = Math.floor(elapsedMilliseconds / 3600000);
-                time.type = TimeType.Hours;
-                break;
-            case elapsedMilliseconds < 604800000:
-                time.value = Math.floor(elapsedMilliseconds / 86400000);
-                time.type = TimeType.Days;
-                break;
-            case elapsedMilliseconds < 2592000000:
-                time.value = Math.floor(elapsedMilliseconds / 604800000);
-                time.type = TimeType.Weeks;
-                break;
-            case elapsedMilliseconds < 31536000000:
-                time.value = Math.floor(elapsedMilliseconds / 2592000000);
-                time.type = TimeType.Months;
-                break;
-            default:
-                time.value = Math.floor(elapsedMilliseconds / 31536000000);
-                time.type = TimeType.Years;
-                break;
+    if (shouldShowRelativeDayOfWeek) {
+        if (isToday(date)) {
+            return 'Heute, ';
         }
 
-        return `${!hideTimeTillNowText ? 'vor' : ''} ${time.value} ${getFormattedPastTimeString(
-            time
-        )}`;
+        if (isTomorrow(date)) {
+            return 'Morgen, ';
+        }
+
+        if (isYesterday(date)) {
+            return 'Gestern, ';
+        }
     }
 
-    const remainingMilliseconds = date.getTime() - secondDate.getTime();
-
-    switch (true) {
-        case remainingMilliseconds < 60000:
-            time.value = Math.floor(remainingMilliseconds / 1000);
-            time.type = TimeType.Seconds;
-            break;
-        case remainingMilliseconds < 3600000:
-            time.value = Math.floor(remainingMilliseconds / 60000);
-            time.type = TimeType.Minutes;
-            break;
-        case remainingMilliseconds < 86400000:
-            time.value = Math.floor(remainingMilliseconds / 3600000);
-            time.type = TimeType.Hours;
-            break;
-        case remainingMilliseconds < 604800000:
-            time.value = Math.floor(remainingMilliseconds / 86400000);
-            time.type = TimeType.Days;
-            break;
-        case remainingMilliseconds < 2592000000:
-            time.value = Math.floor(remainingMilliseconds / 604800000);
-            time.type = TimeType.Weeks;
-            break;
-        case remainingMilliseconds < 31536000000:
-            time.value = Math.floor(remainingMilliseconds / 2592000000);
-            time.type = TimeType.Months;
-            break;
-        default:
-            time.value = Math.floor(remainingMilliseconds / 31536000000);
-            time.type = TimeType.Years;
-            break;
+    if (shouldUseShortText) {
+        return format(date, 'E., ');
     }
 
-    return `${!hideTimeTillNowText ? 'noch' : ''} ${time.value} ${getFormattedFutureTimeString(
-        time
-    )}`;
+    return format(date, 'EEEE, ');
+};
+
+interface GetFormattedTimeOptions {
+    shouldShowTime?: boolean;
+    date: Date;
+}
+
+export const getFormattedTime = ({ shouldShowTime, date }: GetFormattedTimeOptions) => {
+    if (!shouldShowTime) {
+        return '';
+    }
+
+    return `, ${format(date, 'HH:mm')} Uhr`;
 };
