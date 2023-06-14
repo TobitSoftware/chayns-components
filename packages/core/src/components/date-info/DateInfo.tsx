@@ -148,7 +148,7 @@ const DateInfo: FC<DateInfoProps> = ({
     return useMemo(
         () => (
             <div>
-                {preText} {formattedDateString}
+                {preText.trim()} {formattedDateString}
             </div>
         ),
         [formattedDateString, preText]
