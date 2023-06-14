@@ -129,8 +129,11 @@ const DateInfo: FC<DateInfoProps> = ({
         shouldUseShortText,
     ]);
 
+    // Calculate remaining time till next minute to update time according to time left
+    // Optimise interval for time difference greater one minute
     const [currentDate, setCurrentDate] = useState(new Date());
 
+    // If the seconds of date are after seconds of current time, the timeoutTime has to be calculated differently
     useEffect(() => {
         // This useEffect is for calculating date to now difference
         if (!shouldShowDateToNowDifference) {
@@ -142,10 +145,12 @@ const DateInfo: FC<DateInfoProps> = ({
         if (timeoutTime < 0) {
             timeoutTime = 60 - new Date().getSeconds() + date.getSeconds();
         }
+        // time difference is less than a minute
 
-        // initial remaining time
+        // initial set remaining time
         let timeDiffInMs = date.getTime() - currentDate.getTime();
 
+        // Set timeoutTime to at least 1000ms
         // set to elapsed time
         if (isPast(date)) {
             timeDiffInMs = currentDate.getTime() - date.getTime();
