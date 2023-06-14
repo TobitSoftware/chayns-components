@@ -95,6 +95,7 @@ const DateInfo: FC<DateInfoProps> = ({
     const [currentDate, setCurrentDate] = useState(new Date());
 
     useEffect(() => {
+        // This useEffect is for calculating date to now difference
         if (!shouldShowDateToNowDifference) {
             return () => {};
         }
