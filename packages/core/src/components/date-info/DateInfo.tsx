@@ -10,37 +10,37 @@ import {
 import { getLanguage } from './utils/language';
 
 export type DateInfoProps = {
-    /*
+    /**
      * The date, that should be displayed
      */
     date: Date;
-    /*
+    /**
      * Additional text for "shouldShowDateToNowDifference" prop. Writes a text before the calculated time
      */
     preText?: string;
-    /*
+    /**
      * Adds the current year to the display
      */
     shouldShowThisYear?: boolean;
-    /*
+    /**
      * Adds the time to the display
      * NOTE: The time is display with german text
      */
     shouldShowTime?: boolean;
-    /*
+    /**
      * Whether the relative day of week to today should be shown (today, yesterday or tomorrow)
      */
     shouldShowRelativeDayOfWeek?: boolean;
-    /*
+    /**
      * Shortens the day and month text to maximum three digits
      */
     shouldUseShortText?: boolean;
-    /*
+    /**
      * Adds the day of week to the display
      */
     shouldShowDayOfWeek?: boolean;
-    /*
-     * Shows the difference from the date to now. The component handels updates itself
+    /**
+     * Shows the difference from the date to now. The component handles updates itself
      * NOTE: This options is only available in german
      */
     shouldShowDateToNowDifference?: boolean;
