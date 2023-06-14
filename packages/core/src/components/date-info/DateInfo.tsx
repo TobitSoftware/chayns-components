@@ -40,6 +40,7 @@ export type DateInfoProps = {
     shouldShowDayOfWeek?: boolean;
     /*
      * Shows the difference from the date to now. The component handels updates itself
+     * NOTE: This options is only available in german
      */
     shouldShowDateToNowDifference?: boolean;
 };
