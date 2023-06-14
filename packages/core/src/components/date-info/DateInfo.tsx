@@ -1,5 +1,4 @@
 import { format, isPast } from 'date-fns';
-import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     getFormattedDayOfWeek,
@@ -8,6 +7,7 @@ import {
     getTimeTillNow,
     getYearFormat,
 } from './utils/format';
+import { getLanguage } from './utils/language';
 
 export type DateInfoProps = {
     /*
@@ -57,41 +57,7 @@ const DateInfo: FC<DateInfoProps> = ({
     shouldShowDateToNowDifference,
 }) => {
     const [formattedDateString, setFormattedDateString] = useState<string>('');
-    const [language, setLanguage] = useState(de);
-
-    useEffect(() => {
-        switch (chayns.env.parameters.translang || chayns.env.language) {
-            case 'en':
-                setLanguage(enGB);
-                break;
-            case 'nl':
-                setLanguage(nl);
-                break;
-            case 'fr':
-                setLanguage(fr);
-                break;
-            case 'it':
-                setLanguage(it);
-                break;
-            case 'pl':
-                setLanguage(pl);
-                break;
-            case 'pt':
-                setLanguage(pt);
-                break;
-            case 'es':
-                setLanguage(es);
-                break;
-            case 'tr':
-                setLanguage(tr);
-                break;
-            case 'uk':
-                setLanguage(uk);
-                break;
-            default:
-                break;
-        }
-    }, []);
+    const [language] = useState(getLanguage());
 
     useEffect(() => {
         // This useEffect is used for normal date formation
@@ -132,7 +98,6 @@ const DateInfo: FC<DateInfoProps> = ({
     ]);
 
     // Calculate remaining time till next minute to update time according to time left
-    // Optimise interval for time difference greater one minute
     const [currentDate, setCurrentDate] = useState(new Date());
 
     useEffect(() => {

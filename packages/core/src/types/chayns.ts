@@ -61,6 +61,8 @@ declare enum SelectType {
 }
 
 export interface Env {
+    language: any;
+    parameters: any;
     isApp: boolean;
     isMobile: boolean;
     isTablet: boolean;
