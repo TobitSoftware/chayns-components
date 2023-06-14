@@ -47,9 +47,9 @@ export type DateInfoProps = {
 const DateInfo: FC<DateInfoProps> = ({
     date,
     preText = '',
+    shouldShowThisYear,
     shouldShowTime,
     shouldShowRelativeDayOfWeek,
-    shouldShowThisYear,
     shouldUseShortText,
     shouldShowDayOfWeek,
     shouldShowDateToNowDifference,
