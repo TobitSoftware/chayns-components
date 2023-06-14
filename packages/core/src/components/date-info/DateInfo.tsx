@@ -24,6 +24,7 @@ export type DateInfoProps = {
     shouldShowThisYear?: boolean;
     /*
      * Adds the time to the display
+     * NOTE: The time is display with german text
      */
     shouldShowTime?: boolean;
     /*
