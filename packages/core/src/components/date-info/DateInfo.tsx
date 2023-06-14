@@ -164,12 +164,12 @@ const DateInfo: FC<DateInfoProps> = ({
         // Set timeoutTime to at least 1000ms
         timeoutTime = Math.max(timeoutTime * 1000, 1000);
 
-        const intervall = setTimeout(() => {
+        const timeout = setTimeout(() => {
             setCurrentDate(new Date());
         }, timeoutTime);
 
         return () => {
-            clearTimeout(intervall);
+            clearTimeout(timeout);
         };
     }, [currentDate, date, shouldShowDateToNowDifference]);
 
