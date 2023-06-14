@@ -3,10 +3,10 @@ import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     getFormattedDayOfWeek,
-    getFormattedMonth,
     getFormattedTime,
-    getFormattedYear,
+    getMonthFormat,
     getTimeTillNow,
+    getYearFormat,
 } from './utils/format';
 
 export type DateInfoProps = {
@@ -98,27 +98,27 @@ const DateInfo: FC<DateInfoProps> = ({
             return;
         }
 
-        let formatString = 'dd. ';
-
-        formatString += ` ${getFormattedMonth({ shouldUseShortText })}`;
-
-        formatString += `${getFormattedYear({
-            date,
-            shouldShowThisYear,
-        })}`;
-
-        let string = getFormattedDayOfWeek({
+        let newFormattedDateString = getFormattedDayOfWeek({
             shouldShowDayOfWeek,
             shouldShowRelativeDayOfWeek,
             shouldUseShortText,
             date,
         });
 
-        string += format(date, formatString, { locale: language });
+        let formatString = 'dd. ';
 
-        string += getFormattedTime({ date, shouldShowTime });
+        formatString += `${getMonthFormat({ shouldUseShortText })}`;
 
-        setFormattedDateString(string);
+        formatString += `${getYearFormat({
+            date,
+            shouldShowThisYear,
+        })}`;
+
+        newFormattedDateString += format(date, formatString, { locale: language });
+
+        newFormattedDateString += getFormattedTime({ date, shouldShowTime });
+
+        setFormattedDateString(newFormattedDateString);
     }, [
         date,
         language,

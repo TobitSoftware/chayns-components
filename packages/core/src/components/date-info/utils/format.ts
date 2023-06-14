@@ -5,7 +5,7 @@ interface GetFormattedYearOptions {
     shouldShowThisYear?: boolean;
 }
 
-export const getFormattedYear = ({ date, shouldShowThisYear }: GetFormattedYearOptions) => {
+export const getYearFormat = ({ date, shouldShowThisYear }: GetFormattedYearOptions) => {
     if (shouldShowThisYear) {
         return ' yyyy';
     }
@@ -17,7 +17,7 @@ interface GetFormattedMonthOptions {
     shouldUseShortText?: boolean;
 }
 
-export const getFormattedMonth = ({ shouldUseShortText }: GetFormattedMonthOptions) => {
+export const getMonthFormat = ({ shouldUseShortText }: GetFormattedMonthOptions) => {
     if (shouldUseShortText) {
         return 'MMM.';
     }
