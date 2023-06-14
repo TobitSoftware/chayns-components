@@ -13,7 +13,7 @@ export type DateInfoProps = {
     /**
      * The date, that should be displayed
      */
-    date: Date;
+    date: Date | string;
     /**
      * Additional text for "shouldShowDateToNowDifference" prop. Writes a text before the calculated time
      */
@@ -23,7 +23,7 @@ export type DateInfoProps = {
      */
     shouldShowThisYear?: boolean;
     /**
-     * Adds the time to the display
+     * Adds the time to the display.
      * NOTE: The time is display with german text
      */
     shouldShowTime?: boolean;
@@ -40,8 +40,8 @@ export type DateInfoProps = {
      */
     shouldShowDayOfWeek?: boolean;
     /**
-     * Shows the difference from the date to now. The component handles updates itself
-     * NOTE: This options is only available in german
+     * Shows the difference from the date to now. The component handles updates itself.
+     * NOTE: This option is only available in german
      */
     shouldShowDateToNowDifference?: boolean;
 };
@@ -56,6 +56,7 @@ const DateInfo: FC<DateInfoProps> = ({
     shouldShowDayOfWeek,
     shouldShowDateToNowDifference,
 }) => {
+    const [formattedDate, setFormattedDate] = useState(new Date(date));
     const [formattedDateString, setFormattedDateString] = useState<string>('');
     const [language] = useState(getLanguage());
 
@@ -69,7 +70,7 @@ const DateInfo: FC<DateInfoProps> = ({
             shouldShowDayOfWeek,
             shouldShowRelativeDayOfWeek,
             shouldUseShortText,
-            date,
+            date: formattedDate,
         });
 
         let formatString = 'dd. ';
@@ -77,17 +78,18 @@ const DateInfo: FC<DateInfoProps> = ({
         formatString += `${getMonthFormat({ shouldUseShortText })}`;
 
         formatString += `${getYearFormat({
-            date,
+            date: formattedDate,
             shouldShowThisYear,
         })}`;
 
-        newFormattedDateString += format(date, formatString, { locale: language });
+        newFormattedDateString += format(formattedDate, formatString, { locale: language });
 
-        newFormattedDateString += getFormattedTime({ date, shouldShowTime });
+        newFormattedDateString += getFormattedTime({ date: formattedDate, shouldShowTime });
 
         setFormattedDateString(newFormattedDateString);
     }, [
         date,
+        formattedDate,
         language,
         shouldShowDateToNowDifference,
         shouldShowDayOfWeek,
@@ -106,19 +108,19 @@ const DateInfo: FC<DateInfoProps> = ({
             return () => {};
         }
 
-        let timeoutTime = date.getSeconds() - new Date().getSeconds();
+        let timeoutTime = formattedDate.getSeconds() - new Date().getSeconds();
 
         // If the seconds of date are after seconds of current time, the timeoutTime has to be calculated differently
         if (timeoutTime < 0) {
-            timeoutTime = 60 - new Date().getSeconds() + date.getSeconds();
+            timeoutTime = 60 - new Date().getSeconds() + formattedDate.getSeconds();
         }
 
         // initialized with remaining time
-        let timeDiffInMs = date.getTime() - currentDate.getTime();
+        let timeDiffInMs = formattedDate.getTime() - currentDate.getTime();
 
         // set to elapsed time
-        if (isPast(date)) {
-            timeDiffInMs = currentDate.getTime() - date.getTime();
+        if (isPast(formattedDate)) {
+            timeDiffInMs = currentDate.getTime() - formattedDate.getTime();
         }
 
         // time difference is less than a minute, time should be updated every second
@@ -136,14 +138,18 @@ const DateInfo: FC<DateInfoProps> = ({
         return () => {
             clearTimeout(timeout);
         };
-    }, [currentDate, date, shouldShowDateToNowDifference]);
+    }, [currentDate, date, formattedDate, shouldShowDateToNowDifference]);
 
     useEffect(() => {
         // This useEffect is for showing the difference of the date to now
         if (shouldShowDateToNowDifference) {
-            setFormattedDateString(getTimeTillNow({ date, currentDate }));
+            setFormattedDateString(getTimeTillNow({ date: formattedDate, currentDate }));
         }
-    }, [currentDate, date, shouldShowDateToNowDifference]);
+    }, [currentDate, date, formattedDate, shouldShowDateToNowDifference]);
+
+    useEffect(() => {
+        setFormattedDate(new Date(date));
+    }, [date]);
 
     return useMemo(
         () => (
