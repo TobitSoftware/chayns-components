@@ -177,44 +177,115 @@ export const getTimeTillNow = ({ date, currentDate }: GetTimeTillNowOptions): st
     return `${time.value} ${getFormattedFutureTimeString(time)}`;
 };
 
+const timeTypeStrings = {
+    past: {
+        seconds: {
+            singular: 'Sekunde',
+            plural: 'Sekunden',
+        },
+        minutes: {
+            singular: 'Minute',
+            plural: 'Minuten',
+        },
+        hours: {
+            singular: 'Stunde',
+            plural: 'Stunden',
+        },
+        days: {
+            singular: 'Tag',
+            plural: 'Tagen',
+        },
+        weeks: {
+            singular: 'Woche',
+            plural: 'Wochen',
+        },
+        months: {
+            singular: 'Monat',
+            plural: 'Monaten',
+        },
+        years: {
+            singular: 'Jahr',
+            plural: 'Jahren',
+        },
+    },
+    future: {
+        seconds: {
+            singular: 'Sekunde',
+            plural: 'Sekunden',
+        },
+        minutes: {
+            singular: 'Minute',
+            plural: 'Minuten',
+        },
+        hours: {
+            singular: 'Stunde',
+            plural: 'Stunden',
+        },
+        days: {
+            singular: 'Tag',
+            plural: 'Tagen',
+        },
+        weeks: {
+            singular: 'Woche',
+            plural: 'Wochen',
+        },
+        months: {
+            singular: 'Monat',
+            plural: 'Monaten',
+        },
+        years: {
+            singular: 'Jahr',
+            plural: 'Jahren',
+        },
+    },
+};
+
 export const getFormattedPastTimeString = (time: Time): string => {
     const { value, type } = time;
+    const {
+        past: { seconds, days, weeks, months, years, minutes, hours },
+    } = timeTypeStrings;
+    const isSingular = value === 1;
 
     switch (true) {
         case type === TimeType.Seconds:
-            return `Sekunde${value !== 1 ? 'n' : ''}`;
+            return isSingular ? seconds.singular : seconds.plural;
         case type === TimeType.Minutes:
-            return `Minute${value !== 1 ? 'n' : ''}`;
+            return isSingular ? minutes.singular : minutes.plural;
         case type === TimeType.Hours:
-            return `Stunde${value !== 1 ? 'n' : ''}`;
+            return isSingular ? hours.singular : hours.plural;
         case type === TimeType.Days:
-            return `Tag${value !== 1 ? 'en' : ''}`;
+            return isSingular ? days.singular : days.plural;
         case type === TimeType.Weeks:
-            return `Woche${value !== 1 ? 'n' : ''}`;
+            return isSingular ? weeks.singular : weeks.plural;
         case type === TimeType.Months:
-            return `Monat${value !== 1 ? 'en' : ''}`;
+            return isSingular ? months.singular : months.plural;
         default:
-            return `Jahr${value !== 1 ? 'en' : ''}`;
+            return isSingular ? years.singular : years.plural;
     }
 };
 
 export const getFormattedFutureTimeString = (time: Time): string => {
     const { value, type } = time;
+    const {
+        future: { seconds, days, weeks, months, years, minutes, hours },
+    } = timeTypeStrings;
+    const isSingular = value === 1;
 
     switch (true) {
         case type === TimeType.Seconds:
-            return `Sekunde${value !== 1 ? 'n' : ''}`;
+            return isSingular ? seconds.singular : seconds.plural;
         case type === TimeType.Minutes:
-            return `Minute${value !== 1 ? 'n' : ''}`;
+            return isSingular ? minutes.singular : minutes.plural;
         case type === TimeType.Hours:
-            return `Stunde${value !== 1 ? 'n' : ''}`;
+            return isSingular ? hours.singular : hours.plural;
         case type === TimeType.Days:
-            return `Tag${value !== 1 ? 'e' : ''}`;
+            return isSingular ? days.singular : days.plural;
         case type === TimeType.Weeks:
-            return `Woche${value !== 1 ? 'n' : ''}`;
+            return isSingular ? weeks.singular : weeks.plural;
         case type === TimeType.Months:
-            return `Monat${value !== 1 ? 'e' : ''}`;
+            return isSingular ? months.singular : months.plural;
         default:
-            return `Jahr${value !== 1 ? 'e' : ''}`;
+            return isSingular ? years.singular : years.plural;
     }
 };
