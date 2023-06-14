@@ -5,7 +5,8 @@ export default {
     title: 'Core/DateInfo',
     component: DateInfo,
     args: {
-        date: new Date(),
+        date: new Date('2023-06-14T08:29:02.461Z'),
+        shouldShowDateToNowDifference: true,
     },
 } as ComponentMeta<typeof DateInfo>;
 
