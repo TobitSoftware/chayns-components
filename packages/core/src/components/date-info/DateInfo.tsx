@@ -135,33 +135,33 @@ const DateInfo: FC<DateInfoProps> = ({
     // Optimise interval for time difference greater one minute
     const [currentDate, setCurrentDate] = useState(new Date());
 
-    // If the seconds of date are after seconds of current time, the timeoutTime has to be calculated differently
     useEffect(() => {
-        // This useEffect is for calculating date to now difference
+        // This useEffect is for calculating the current date for shouldShowDateToNowDifference option
         if (!shouldShowDateToNowDifference) {
             return () => {};
         }
 
         let timeoutTime = date.getSeconds() - new Date().getSeconds();
 
+        // If the seconds of date are after seconds of current time, the timeoutTime has to be calculated differently
         if (timeoutTime < 0) {
             timeoutTime = 60 - new Date().getSeconds() + date.getSeconds();
         }
-        // time difference is less than a minute
 
-        // initial set remaining time
+        // initialized with remaining time
         let timeDiffInMs = date.getTime() - currentDate.getTime();
 
-        // Set timeoutTime to at least 1000ms
         // set to elapsed time
         if (isPast(date)) {
             timeDiffInMs = currentDate.getTime() - date.getTime();
         }
 
+        // time difference is less than a minute, time should be updated every second
         if (timeDiffInMs < 60000) {
             timeoutTime = 1;
         }
 
+        // Set timeoutTime to at least 1000ms
         timeoutTime = Math.max(timeoutTime * 1000, 1000);
 
         const intervall = setTimeout(() => {
@@ -174,6 +174,7 @@ const DateInfo: FC<DateInfoProps> = ({
     }, [currentDate, date, shouldShowDateToNowDifference]);
 
     useEffect(() => {
+        // This useEffect is for showing the difference of the date to now
         if (shouldShowDateToNowDifference) {
             setFormattedDateString(getTimeTillNow({ date, currentDate }));
         }
