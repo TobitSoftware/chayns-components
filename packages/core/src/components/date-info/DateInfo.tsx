@@ -28,7 +28,8 @@ export type DateInfoProps = {
      */
     shouldShowTime?: boolean;
     /**
-     * Whether the relative day of week to today should be shown (today, yesterday or tomorrow)
+     * Whether the relative day of week to today should be shown (today, yesterday or tomorrow).
+     * NOTE: The text is only available in german
      */
     shouldShowRelativeDayOfWeek?: boolean;
     /**
