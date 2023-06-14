@@ -1,4 +1,5 @@
 import { format, isPast } from 'date-fns';
+import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     getFormattedDayOfWeek,
@@ -54,6 +55,41 @@ const DateInfo: FC<DateInfoProps> = ({
     shouldShowDateToNowDifference,
 }) => {
     const [formattedDateString, setFormattedDateString] = useState<string>('');
+    const [language, setLanguage] = useState(de);
+
+    useEffect(() => {
+        switch (chayns.env.parameters.translang || chayns.env.language) {
+            case 'en':
+                setLanguage(enGB);
+                break;
+            case 'nl':
+                setLanguage(nl);
+                break;
+            case 'fr':
+                setLanguage(fr);
+                break;
+            case 'it':
+                setLanguage(it);
+                break;
+            case 'pl':
+                setLanguage(pl);
+                break;
+            case 'pt':
+                setLanguage(pt);
+                break;
+            case 'es':
+                setLanguage(es);
+                break;
+            case 'tr':
+                setLanguage(tr);
+                break;
+            case 'uk':
+                setLanguage(uk);
+                break;
+            default:
+                break;
+        }
+    }, []);
 
     useEffect(() => {
         // This useEffect is used for normal date formation
@@ -77,13 +113,14 @@ const DateInfo: FC<DateInfoProps> = ({
             date,
         });
 
-        string += format(date, formatString);
+        string += format(date, formatString, { locale: language });
 
         string += getFormattedTime({ date, shouldShowTime });
 
         setFormattedDateString(string);
     }, [
         date,
+        language,
         shouldShowDateToNowDifference,
         shouldShowDayOfWeek,
         shouldShowRelativeDayOfWeek,
