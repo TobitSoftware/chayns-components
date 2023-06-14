@@ -19,10 +19,10 @@ interface GetFormattedMonthOptions {
 
 export const getMonthFormat = ({ shouldUseShortText }: GetFormattedMonthOptions) => {
     if (shouldUseShortText) {
-        return 'MMM.';
+        return 'LLL.';
     }
 
-    return 'MMMM';
+    return 'LLLL';
 };
 
 interface GetFormattedDayOfWeekOptions {
