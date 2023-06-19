@@ -51,9 +51,7 @@ export const StyledOpacitySliderInput = styled.input<StyledOpacitySliderInputPro
         appearance: none;
         width: 20px;
         height: 20px;
-        background-image: url('https://t3.ftcdn.net/jpg/03/76/74/78/360_F_376747823_L8il80K6c2CM1lnPYJhhJZQNl6ynX1yj.jpg');
-        //background-color: ${({ color, opacity }) => `rgba(${color ?? ''},${opacity})`};
-        background-color: rgba(255, 45, 45, 0.7);
+        background-color: ${({ color }) => color};
         cursor: pointer;
         border-radius: 50%;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
