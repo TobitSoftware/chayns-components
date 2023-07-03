@@ -26,7 +26,7 @@ export type ContextMenuCoordinates = {
 export type ContextMenuItem = {
     icons: string[];
     key: string;
-    onClick: (event?: MouseEvent<HTMLDivElement>) => void;
+    onClick: (event?: MouseEvent<HTMLDivElement>) => Promise<void> | void;
     text: string;
 };
 
@@ -118,7 +118,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 });
 
                 if (buttonType === 1 && typeof selection[0]?.value === 'number') {
-                    items[selection[0].value]?.onClick();
+                    void items[selection[0].value]?.onClick();
                 }
             } else if (contextMenuRef.current) {
                 const rootElement = document.querySelector('.tapp') || document.body;

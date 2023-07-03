@@ -1,4 +1,5 @@
 import type { KeyboardEvent } from 'react';
+import { clamp } from './number';
 import { getElementTextLength } from './text';
 
 let childIndex = -1;
@@ -135,8 +136,8 @@ export const restoreSelection = (element: HTMLDivElement) => {
     const range = document.createRange();
 
     if (childNode.nodeValue) {
-        startOffset = Math.min(childNode.nodeValue.length, startOffset);
-        endOffset = Math.min(childNode.nodeValue.length, endOffset);
+        startOffset = clamp(startOffset, 0, childNode.nodeValue.length);
+        endOffset = clamp(endOffset, 0, childNode.nodeValue.length);
     }
 
     range.setStart(childNode, startOffset);

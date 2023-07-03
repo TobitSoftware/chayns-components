@@ -99,6 +99,10 @@ export type AccordionProps = {
      * Additional elements to be displayed in the header next to the title.
      */
     titleElement?: ReactNode;
+    /**
+     * This will render the Accordion closed on the first render.
+     */
+    shouldRenderClosed?: boolean;
 };
 
 const Accordion: FC<AccordionProps> = ({
@@ -120,6 +124,7 @@ const Accordion: FC<AccordionProps> = ({
     shouldHideBackground = false,
     title,
     titleElement,
+    shouldRenderClosed = false,
 }) => {
     const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
@@ -191,8 +196,12 @@ const Accordion: FC<AccordionProps> = ({
                         titleElement={titleElement}
                     />
                     <AnimatePresence initial={false}>
-                        {isOpen && (
-                            <AccordionBody maxHeight={bodyMaxHeight} onScroll={onBodyScroll}>
+                        {(isOpen || shouldRenderClosed) && (
+                            <AccordionBody
+                                maxHeight={bodyMaxHeight}
+                                onScroll={onBodyScroll}
+                                shouldHideBody={shouldRenderClosed && !isOpen}
+                            >
                                 {children}
                             </AccordionBody>
                         )}

@@ -15,14 +15,14 @@
 
 ## Installation
 
-First you need to install the emoji input part of the chayns-components.
+First you need to install the file input part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/emoji-input
+npm install @chayns-components/file-input
 
 # Yarn
-yarn add @chayns-components/emoji-input
+yarn add @chayns-components/file-input
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -34,7 +34,7 @@ yarn add @chayns-components/emoji-input
 You can use the components in your project as in the following example.
 
 ```typescript jsx
-import { EmojiInput } from '@chayns-components/emoji-input';
+import { FileInput } from '@chayns-components/file-input';
 
-<EmojiInput value="Hello world 👍" placeholder="Write message" />;
+<FileInput />;
 ```

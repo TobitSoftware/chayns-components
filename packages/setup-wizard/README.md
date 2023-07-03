@@ -15,14 +15,14 @@
 
 ## Installation
 
-First you need to install the typewriter part of the chayns-components.
+First you need to install the setup wizard part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/setup-wizard-item
+npm install @chayns-components/setup-wizard
 
 # Yarn
-yarn add @chayns-components/setup-wizard-item
+yarn add @chayns-components/setup-wizard
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -34,12 +34,20 @@ yarn add @chayns-components/setup-wizard-item
 You can use the components in your project as in the following example.
 
 ```typescript jsx
-import { Typewriter } from '@chayns-components/typewriter';
+import { SetupWizard, SetupWizardItem } from '@chayns-components/setup-wizard';
 
-<Typewriter>
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor
-    sit amet.
-</Typewriter>;
+<SetupWizard>
+    <SetupWizardItem id={0} step={1} title="Intro">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+        et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+        Lorem ipsum dolor sit amet.
+    </SetupWizardItem>
+    <SetupWizardItem id={1} step={2} title="Info">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+        et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+        Lorem ipsum dolor sit amet.
+    </SetupWizardItem>
+</SetupWizard>;
 ```

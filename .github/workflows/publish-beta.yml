@@ -16,7 +16,6 @@ jobs:
           node-version: '16.13.2'
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: lerna bootstrap
       - run: npm run lerna:build
       - run: lerna publish from-package --yes
         env:

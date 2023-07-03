@@ -95,6 +95,7 @@ export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInpu
         ${({ theme }: StyledMotionRightInputProps) => theme['headline-rgb']},
         0.45
     );
+    color: ${({ theme }: StyledMotionRightInputProps) => theme.text};
     grid-area: header;
     padding: ${({ hasIcon }) => (hasIcon ? '5px 23px 5px 1px' : '5px 1px')};
 `;

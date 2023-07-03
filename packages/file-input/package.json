@@ -1,5 +1,5 @@
 {
-    "name": "@chayns-components/core",
+    "name": "@chayns-components/file-input",
     "version": "5.0.0-beta.195",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
@@ -8,7 +8,7 @@
         "components"
     ],
     "author": "Tobit.Software",
-    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/core#readme",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/file-input#readme",
     "license": "MIT",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -50,9 +50,8 @@
         "typescript": "^4.9.5"
     },
     "dependencies": {
-        "@chayns/colors": "^2.0.0",
+        "@chayns-components/core": "^5.0.0-beta.195",
         "clsx": "^1.2.1",
-        "date-fns": "^2.30.0",
         "framer-motion": "^6.5.1",
         "uuid": "^9.0.0"
     },

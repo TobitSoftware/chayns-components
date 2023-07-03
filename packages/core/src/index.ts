@@ -4,6 +4,7 @@ export { default as Accordion } from './components/accordion/Accordion';
 export { default as AccordionContent } from './components/accordion/accordion-content/AccordionContent';
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
 export { default as AccordionIntro } from './components/accordion/accordion-intro/AccordionIntro';
+export { default as AccordionItem } from './components/accordion/accordion-item/AccordionItem';
 export { default as AmountControl } from './components/amount-control/AmountControl';
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
@@ -14,6 +15,7 @@ export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
+export { default as DateInfo } from './components/date-info/DateInfo';
 export { default as FilterButton } from './components/filter-button/FilterButton';
 export type {
     FilterButtonItemShape,
@@ -51,3 +53,5 @@ export type {
     TextstringReplacement,
 } from './components/textstring/types';
 export { default as Tooltip } from './components/tooltip/Tooltip';
+export { selectFiles } from './utils/fileDialog';
+export { uploadFile } from './utils/uploadFile';
