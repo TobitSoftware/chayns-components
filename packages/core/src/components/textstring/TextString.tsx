@@ -8,6 +8,7 @@ import React, {
     useContext,
     useMemo,
 } from 'react';
+import { isTobitEmployee } from '../../utils/isTobitEmployee';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
 import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
@@ -68,6 +69,8 @@ const TextString: FC<TextStringProps> = ({
 
     const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
         (event) => {
+            isTobitEmployee();
+
             if (event.ctrlKey) {
                 selectLanguageToChange({
                     textstringName: textString.name,

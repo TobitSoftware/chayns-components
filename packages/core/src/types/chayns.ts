@@ -75,14 +75,35 @@ declare enum SelectType {
     IconAndText,
 }
 
+export interface Group {
+    id: number;
+    isActive: boolean;
+}
+
+export interface User {
+    name: string;
+    firstName: string;
+    gender: number;
+    lastName: string;
+    id: number;
+    personId: string;
+    tobitAccessToken: string;
+    groups: Group[];
+    isAuthenticated: boolean;
+    adminMode: boolean;
+    isAdmin: boolean;
+}
+
+export interface Site {
+    id: string;
+}
+
 export interface Env {
+    site: Site;
+    user: User;
     language: any;
     parameters: any;
     isApp: boolean;
     isMobile: boolean;
     isTablet: boolean;
-}
-
-export interface User {
-    tobitAccessToken: string;
 }
