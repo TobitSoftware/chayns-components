@@ -1,16 +1,43 @@
-import React, { ChangeEvent, CSSProperties, FC, useCallback, useMemo, useState } from 'react';
+import React, {
+    ChangeEvent,
+    CSSProperties,
+    FC,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { StyledHueSlider, StyledHueSliderInput } from './HueSlider.styles';
 
 export type HueSliderProps = {
+    /**
+     * The color that should be selected.
+     */
+    color?: CSSProperties['color'];
     /**
      * Function that will be executed when the color is changed.
      */
     onChange?: (color: CSSProperties['color']) => void;
 };
 
-const HueSlider: FC<HueSliderProps> = ({ onChange }) => {
+const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'hsl(267, 100%, 50%)' }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
+
+    useEffect(() => {
+        if (color) {
+            const match = color.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
+
+            if (!match) {
+                return;
+            }
+
+            const hue = parseInt(match[1], 10);
+
+            setEditedValue(hue);
+            setHueColor(color);
+        }
+    }, [color]);
 
     /**
      * This function updates the value
