@@ -51,6 +51,7 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
+        "@chayns/uac-service": "^0.0.40",
         "clsx": "^1.2.1",
         "date-fns": "^2.30.0",
         "framer-motion": "^6.5.1",
