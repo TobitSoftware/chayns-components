@@ -83,8 +83,9 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
             const rGBAColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 
             console.log({ rGBAColor, selectedCoordinates });
+            onChange(rGBAColor);
         },
-        [imageData]
+        [imageData, onChange]
     );
 
     const handleStartDrag: PointerEventHandler = useCallback(
