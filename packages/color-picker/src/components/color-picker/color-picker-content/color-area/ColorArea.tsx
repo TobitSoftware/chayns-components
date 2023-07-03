@@ -8,7 +8,9 @@ import React, {
     useEffect,
     useMemo,
     useRef,
+    useState,
 } from 'react';
+import type { Coordinates } from '../../../../types';
 import { getColorFromCoordinates } from '../../../../utils/color';
 import {
     StyledColorArea,
@@ -24,8 +26,20 @@ export type ColorAreaProps = {
 
 const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [coordinates, setCoordinates] = useState<Coordinates>();
 
     const dragControls = useDragControls();
+
+    useEffect(() => {
+        if (hueColor && coordinates) {
+            onChange(
+                getColorFromCoordinates({
+                    coordinates: { x: coordinates.x, y: coordinates.y },
+                    canvas: canvasRef,
+                })
+            );
+        }
+    }, [coordinates, hueColor, onChange]);
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
@@ -59,6 +73,8 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     const handleDrag = useCallback(
         (event: DragEvent) => {
+            setCoordinates({ x: event.clientX, y: event.clientY });
+
             onChange(
                 getColorFromCoordinates({
                     coordinates: { x: event.clientX, y: event.clientY },
@@ -71,6 +87,8 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
+            setCoordinates({ x: event.clientX, y: event.clientY });
+
             onChange(
                 getColorFromCoordinates({
                     coordinates: { x: event.clientX, y: event.clientY },

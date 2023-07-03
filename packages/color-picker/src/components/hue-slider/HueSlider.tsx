@@ -24,6 +24,8 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'hsl(267, 100%, 50%)'
     const [editedValue, setEditedValue] = useState(0);
     const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
 
+    // ToDo add @chayns/colors to convert colors to hsl
+
     useEffect(() => {
         if (color) {
             const match = color.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
