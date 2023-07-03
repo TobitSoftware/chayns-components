@@ -1,7 +1,13 @@
-import React, { CSSProperties, FC, useMemo, useState } from 'react';
+import React, { CSSProperties, FC, useCallback, useMemo, useState } from 'react';
 import HueSlider from '../../hue-slider/HueSlider';
+import OpacitySlider from '../../opacity-slider/OpacitySlider';
 import ColorArea from './color-area/ColorArea';
-import { StyledColorPickerContent } from './ColorPickerContent.styles';
+import {
+    StyledColorPickerColorPreview,
+    StyledColorPickerContent,
+    StyledColorPickerContentSliders,
+    StyledColorPickerContentSliderSelect,
+} from './ColorPickerContent.styles';
 
 export type ColorPickerContentProps = {
     onColorChange: (color: CSSProperties['color']) => void;
@@ -15,14 +21,22 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange, color 
         setHueColor(selectedHueColor);
     };
 
+    const handleColorChange = useCallback(() => {}, []);
+
     return useMemo(
         () => (
             <StyledColorPickerContent>
                 <ColorArea onChange={onColorChange} color={color} hueColor={hueColor} />
-                <HueSlider onChange={handleHueColorChange} />
+                <StyledColorPickerContentSliderSelect>
+                    <StyledColorPickerContentSliders>
+                        <HueSlider onChange={handleHueColorChange} />
+                        <OpacitySlider color={hueColor} />
+                    </StyledColorPickerContentSliders>
+                    <StyledColorPickerColorPreview color={color} />
+                </StyledColorPickerContentSliderSelect>
             </StyledColorPickerContent>
         ),
-        [color, hueColor, onColorChange]
+        [color, handleColorChange, hueColor]
     );
 };
 

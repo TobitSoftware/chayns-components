@@ -23,7 +23,9 @@ export type ColorPickerProps = {
 };
 
 const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shouldShowHexCode }) => {
-    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>('white');
+    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(
+        'rgba(255, 255, 255, 255)'
+    );
 
     useEffect(() => {
         if (color) {
@@ -46,7 +48,14 @@ const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shoul
     return useMemo(
         () => (
             <StyledColorPicker>
-                {/* <Popup content={<ColorPickerContent onColorChange={handleColorChange} />}> */}
+                {/* <Popup */}
+                {/*    content={ */}
+                {/*        <ColorPickerContent */}
+                {/*            onColorChange={handleColorChange} */}
+                {/*            color={selectedColor} */}
+                {/*        /> */}
+                {/*    } */}
+                {/* > */}
                 <StyledColorPickerLabelWrapper>
                     <StyledColorPickerDot color={selectedColor} />
                     <StyledColorPickerLabel>{label}</StyledColorPickerLabel>

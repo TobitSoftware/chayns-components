@@ -9,16 +9,12 @@ import React, {
     useMemo,
     useRef,
 } from 'react';
+import { getColorFromCoordinates } from '../../../../utils/color';
 import {
     StyledColorArea,
     StyledColorAreaCanvas,
     StyledMotionColorAreaPointer,
 } from './ColorArea.styles';
-
-interface Coordinates {
-    x: number;
-    y: number;
-}
 
 export type ColorAreaProps = {
     color: CSSProperties['color'];
@@ -54,28 +50,6 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
         ctx.fillRect(0, 0, 300, 150);
     }, [color, hueColor]);
 
-    const getColorFromCoordinates = useCallback(
-        (selectedCoordinates: Coordinates) => {
-            const { offsetLeft, offsetTop } = canvasRef.current;
-            const x = selectedCoordinates.x - offsetTop;
-            const y = selectedCoordinates.y - offsetLeft;
-            const c = canvasRef.current?.getContext('2d');
-            const p = c?.getImageData(x, y, 1, 1).data;
-
-            if (!p) {
-                return;
-            }
-
-            // If transparency on the image
-            if (p[0] === 0 && p[1] === 0 && p[2] === 0 && p[3] === 0) {
-                return;
-            }
-
-            onChange(`rgba(${p[0] ?? 0}, ${p[1] ?? 0}, ${p[2] ?? 0}, ${p[3] ?? 0})`);
-        },
-        [onChange]
-    );
-
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {
             dragControls.start(event, { snapToCursor: true });
@@ -85,16 +59,26 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     const handleDrag = useCallback(
         (event: DragEvent) => {
-            getColorFromCoordinates({ x: event.clientX, y: event.clientY });
+            onChange(
+                getColorFromCoordinates({
+                    coordinates: { x: event.clientX, y: event.clientY },
+                    canvas: canvasRef,
+                })
+            );
         },
-        [getColorFromCoordinates]
+        [onChange]
     );
 
     const handleClick = useCallback(
         (event: MouseEvent) => {
-            getColorFromCoordinates({ x: event.clientX, y: event.clientY });
+            onChange(
+                getColorFromCoordinates({
+                    coordinates: { x: event.clientX, y: event.clientY },
+                    canvas: canvasRef,
+                })
+            );
         },
-        [getColorFromCoordinates]
+        [onChange]
     );
 
     return useMemo(
@@ -107,12 +91,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                 />
                 <StyledMotionColorAreaPointer
                     drag
-                    dragConstraints={{
-                        top: canvasRef.current?.offsetTop + 50,
-                        left: canvasRef.current?.offsetLeft,
-                        right: canvasRef.current?.offsetWidth,
-                        bottom: canvasRef.current?.offsetHeight,
-                    }}
+                    dragConstraints={canvasRef}
                     dragElastic={false}
                     dragMomentum={false}
                     dragControls={dragControls}
