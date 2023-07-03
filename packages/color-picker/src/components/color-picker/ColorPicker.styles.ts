@@ -14,7 +14,7 @@ export const StyledColorPickerLabelWrapper = styled.span`
 type StyledColorPickerDotProps = WithTheme<{ color: CSSProperties['color'] }>;
 
 export const StyledColorPickerDot = styled.div<StyledColorPickerDotProps>`
-    color: ${({ color }) => color};
+    background-color: ${({ color }) => color};
     border-radius: 50%;
     border-color: black;
     border-style: solid;

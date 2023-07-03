@@ -23,7 +23,7 @@ export type ColorPickerProps = {
 };
 
 const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shouldShowHexCode }) => {
-    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>('red');
+    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>('white');
 
     useEffect(() => {
         if (color) {
@@ -40,8 +40,8 @@ const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shoul
             return `#${color ?? ''}`;
         }
 
-        return 'hallo';
-    }, [color, shouldShowHexCode]);
+        return selectedColor;
+    }, [color, selectedColor, shouldShowHexCode]);
 
     return useMemo(
         () => (

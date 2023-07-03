@@ -26,5 +26,4 @@ export const StyledMotionColorAreaPointer = styled(motion.div)`
     user-select: none;
     top: 0;
     left: 0;
-    transform: translate(0, -70%);
 `;

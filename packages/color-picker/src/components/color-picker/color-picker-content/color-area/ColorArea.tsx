@@ -2,12 +2,12 @@ import { useDragControls } from 'framer-motion';
 import React, {
     CSSProperties,
     FC,
+    MouseEvent,
     PointerEventHandler,
     useCallback,
     useEffect,
     useMemo,
     useRef,
-    useState,
 } from 'react';
 import {
     StyledColorArea,
@@ -27,13 +27,6 @@ export type ColorAreaProps = {
 };
 
 const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
-    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>();
-    const [coordinates, setCoordinates] = useState<Coordinates>({
-        x: 0,
-        y: 0,
-    });
-    const [imageData, setImageData] = useState<ImageData>();
-
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const dragControls = useDragControls();
@@ -59,33 +52,28 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
         ctx.fillStyle = transparentGradiant;
         ctx.fillRect(0, 0, 300, 150);
-
-        setImageData(ctx.getImageData(0, 0, 300, 150));
     }, [color, hueColor]);
 
     const getColorFromCoordinates = useCallback(
         (selectedCoordinates: Coordinates) => {
-            if (!imageData) {
+            const { offsetLeft, offsetTop } = canvasRef.current;
+            const x = selectedCoordinates.x - offsetTop;
+            const y = selectedCoordinates.y - offsetLeft;
+            const c = canvasRef.current?.getContext('2d');
+            const p = c?.getImageData(x, y, 1, 1).data;
+
+            if (!p) {
                 return;
             }
 
-            const { data } = imageData;
-            const { y, x } = selectedCoordinates;
+            // If transparency on the image
+            if (p[0] === 0 && p[1] === 0 && p[2] === 0 && p[3] === 0) {
+                return;
+            }
 
-            const pixel = 300 * x + y;
-            const position = pixel * 4;
-
-            const red = data[position];
-            const green = data[position + 1];
-            const blue = data[position + 2];
-            const alpha = data[position + 3];
-
-            const rGBAColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-
-            console.log({ rGBAColor, selectedCoordinates });
-            onChange(rGBAColor);
+            onChange(`rgba(${p[0] ?? 0}, ${p[1] ?? 0}, ${p[2] ?? 0}, ${p[3] ?? 0})`);
         },
-        [imageData, onChange]
+        [onChange]
     );
 
     const handleStartDrag: PointerEventHandler = useCallback(
@@ -97,7 +85,13 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     const handleDrag = useCallback(
         (event: DragEvent) => {
-            setCoordinates({ x: event.clientX, y: event.clientY });
+            getColorFromCoordinates({ x: event.clientX, y: event.clientY });
+        },
+        [getColorFromCoordinates]
+    );
+
+    const handleClick = useCallback(
+        (event: MouseEvent) => {
             getColorFromCoordinates({ x: event.clientX, y: event.clientY });
         },
         [getColorFromCoordinates]
@@ -106,10 +100,19 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
     return useMemo(
         () => (
             <StyledColorArea>
-                <StyledColorAreaCanvas ref={canvasRef} onPointerDown={handleStartDrag} />
+                <StyledColorAreaCanvas
+                    ref={canvasRef}
+                    onPointerDown={handleStartDrag}
+                    onClick={handleClick}
+                />
                 <StyledMotionColorAreaPointer
                     drag
-                    dragConstraints={canvasRef}
+                    dragConstraints={{
+                        top: canvasRef.current?.offsetTop + 50,
+                        left: canvasRef.current?.offsetLeft,
+                        right: canvasRef.current?.offsetWidth,
+                        bottom: canvasRef.current?.offsetHeight,
+                    }}
                     dragElastic={false}
                     dragMomentum={false}
                     dragControls={dragControls}
@@ -117,7 +120,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                 />
             </StyledColorArea>
         ),
-        [dragControls, handleDrag, handleStartDrag]
+        [dragControls, handleClick, handleDrag, handleStartDrag]
     );
 };
 
