@@ -3,6 +3,7 @@ import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import AccordionGroup from '../src/components/accordion/accordion-group/AccordionGroup';
+import AccordionItem from '../src/components/accordion/accordion-item/AccordionItem';
 import Badge from '../src/components/badge/Badge';
 
 export default {
@@ -67,6 +68,8 @@ export const AccordionWithBadgeAndSearch = Template.bind({});
 export const DisabledAccordion = Template.bind({});
 
 export const ScrollableAccordion = Template.bind({});
+
+export const WithAccordionItems = Template.bind({});
 
 General.args = {
     children: (
@@ -235,5 +238,21 @@ ScrollableAccordion.args = {
         </AccordionContent>
     ),
     onBodyScroll: console.debug,
+    title: 'Lorem ipsum dolor sit amet',
+};
+
+WithAccordionItems.args = {
+    children: (
+        <>
+            <AccordionItem>Lorem ipsum dolor sit amet</AccordionItem>
+            <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
+            <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
+            <AccordionItem>Et dolore magna aliquyam erat</AccordionItem>
+            <Accordion isWrapped title="At vero eos et accusam">
+                <AccordionItem>Consetetur sadipscing elitr</AccordionItem>
+                <AccordionItem>Sed diam nonumy eirmod tempor invidunt ut labore</AccordionItem>
+            </Accordion>
+        </>
+    ),
     title: 'Lorem ipsum dolor sit amet',
 };

@@ -12,9 +12,18 @@ export type AccordionBodyProps = {
      * Function that is executed when the element will be scrolled
      */
     onScroll?: (event: UIEvent<HTMLDivElement>) => void;
+    /**
+     *
+     */
+    shouldHideBody: boolean;
 };
 
-const AccordionBody: FC<AccordionBodyProps> = ({ children, maxHeight, onScroll }) => {
+const AccordionBody: FC<AccordionBodyProps> = ({
+    children,
+    maxHeight,
+    onScroll,
+    shouldHideBody,
+}) => {
     const AccordionGroupContextProviderValue = useMemo(
         () => ({ openAccordionUuid: undefined }),
         []
@@ -22,7 +31,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({ children, maxHeight, onScroll }
 
     return (
         <StyledMotionAccordionBody
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={{ height: shouldHideBody ? '0' : 'auto', opacity: shouldHideBody ? 0 : 1 }}
             className="beta-chayns-accordion-body"
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
