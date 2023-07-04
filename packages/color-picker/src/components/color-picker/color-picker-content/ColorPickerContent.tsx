@@ -1,7 +1,5 @@
-import React, { CSSProperties, FC, useCallback, useMemo, useState } from 'react';
-import HueSlider from '../../hue-slider/HueSlider';
+import React, { CSSProperties, FC, useMemo } from 'react';
 import OpacitySlider from '../../opacity-slider/OpacitySlider';
-import ColorArea from './color-area/ColorArea';
 import {
     StyledColorPickerColorPreview,
     StyledColorPickerContent,
@@ -10,33 +8,29 @@ import {
 } from './ColorPickerContent.styles';
 
 export type ColorPickerContentProps = {
-    onColorChange: (color: CSSProperties['color']) => void;
+    onChange: (color: CSSProperties['color']) => void;
     color: CSSProperties['color'];
 };
 
-const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange, color }) => {
-    const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
-
-    const handleHueColorChange = (selectedHueColor: CSSProperties['color']) => {
-        setHueColor(selectedHueColor);
-    };
-
-    const handleColorChange = useCallback(() => {}, []);
+const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, onChange }) => {
+    const test = '';
 
     return useMemo(
         () => (
             <StyledColorPickerContent>
-                <ColorArea onChange={onColorChange} color={color} hueColor={hueColor} />
+                {/* <ColorArea */}
+                {/*    */}
+                {/* /> */}
                 <StyledColorPickerContentSliderSelect>
                     <StyledColorPickerContentSliders>
-                        <HueSlider onChange={handleHueColorChange} />
-                        <OpacitySlider color={hueColor} />
+                        {/* <HueSlider onChange={onHueColorChange} color={internalColor} /> */}
+                        <OpacitySlider color={color} onChange={onChange} />
                     </StyledColorPickerContentSliders>
                     <StyledColorPickerColorPreview color={color} />
                 </StyledColorPickerContentSliderSelect>
             </StyledColorPickerContent>
         ),
-        [color, hueColor, onColorChange]
+        [color, onChange]
     );
 };
 

@@ -1,4 +1,12 @@
-import React, { ChangeEvent, CSSProperties, FC, useCallback, useMemo, useState } from 'react';
+import React, {
+    ChangeEvent,
+    CSSProperties,
+    FC,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import {
     StyledOpacitySlider,
     StyledOpacitySliderBackground,
@@ -17,8 +25,14 @@ export type HueSliderProps = {
 };
 
 const OpacitySlider: FC<HueSliderProps> = ({ onChange, color }) => {
-    const [value, setValue] = useState(0);
-    const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
+    const [value, setValue] = useState(100);
+    const [hueColor, setHueColor] = useState<CSSProperties['color']>('rgba(255, 255, 255, 1)');
+
+    useEffect(() => {
+        if (color) {
+            setHueColor(color);
+        }
+    }, [color]);
 
     /**
      * This function updates the value
@@ -27,19 +41,23 @@ const OpacitySlider: FC<HueSliderProps> = ({ onChange, color }) => {
         (event: ChangeEvent<HTMLInputElement>) => {
             setValue(Number(event.target.value));
 
-            const percentage = (Number(event.target.value) / 360) * 100;
-            const hue = (percentage / 100) * 360;
-            const saturation = 100;
-            const lightness = 50;
+            const rgba = color?.match(/[\d.]+/g);
 
-            const hsl = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-            setHueColor(hsl);
+            if (!rgba) {
+                return;
+            }
+
+            const newColor = `rgba(${Number(rgba[0])},${Number(rgba[1])},${Number(
+                rgba[2]
+            )},${Number(event.target.value)})`;
+
+            setHueColor(newColor);
 
             if (typeof onChange === 'function') {
-                onChange(hsl);
+                onChange(newColor);
             }
         },
-        [onChange]
+        [color, onChange]
     );
 
     return useMemo(
