@@ -1,3 +1,4 @@
+import { hslToRgb255 } from '@chayns/colors';
 import React, {
     ChangeEvent,
     CSSProperties,
@@ -23,32 +24,34 @@ export type HueSliderProps = {
 
 const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
     const [editedValue, setEditedValue] = useState(0);
-    const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
+    // const [rgbColor, setRgbColor] = useState<CSSProperties['color']>('rgba(255, 0, 0,1)');
+    const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
 
     useEffect(() => {
         if (color) {
-            const hsl = convertColorToHsl(color);
+            const rgba = color.match(/[\d.]+/g);
 
-            if (!hsl) {
+            if (!rgba) {
                 return;
             }
 
-            const match = hsl.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
+            // setRgbColor(
+            //     `rgba(${Math.ceil(Number(rgba[0]))}, ${Math.ceil(Number(rgba[1]))}, ${Math.ceil(
+            //         Number(rgba[2])
+            //     )}, 1)`
+            // );
+
+            const hsl = convertColorToHsl(color);
+            const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
 
             if (!match || !match[1]) {
                 return;
             }
 
-            const hue = parseInt(match[1], 10);
-
-            setEditedValue(hue);
-            setHueColor(hsl.toString());
-
-            // if (typeof onChange === 'function') {
-            //     onChange(hsl);
-            // }
+            setHslColor(hsl);
+            setEditedValue(parseInt(match[1], 10));
         }
-    }, [color, onChange]);
+    }, [color]);
 
     /**
      * This function updates the value
@@ -63,10 +66,19 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
             const lightness = 50;
 
             const hsl = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-            setHueColor(hsl);
+            setHslColor(hsl);
 
             if (typeof onChange === 'function') {
-                onChange(hsl);
+                console.log({ hue, saturation, lightness });
+
+                const rgb = hslToRgb255({ h: hue, s: saturation, l: lightness });
+
+                if (!rgb) {
+                    return;
+                }
+
+                console.log('H', rgb);
+                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
             }
         },
         [onChange]
@@ -76,7 +88,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
         () => (
             <StyledHueSlider>
                 <StyledHueSliderInput
-                    color={hueColor}
+                    color={hslColor}
                     type="range"
                     min={0}
                     max={360}
@@ -85,7 +97,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
                 />
             </StyledHueSlider>
         ),
-        [editedValue, handleInputChange, hueColor]
+        [editedValue, handleInputChange, hslColor]
     );
 };
 

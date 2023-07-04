@@ -47,9 +47,9 @@ const OpacitySlider: FC<HueSliderProps> = ({ onChange, color }) => {
                 return;
             }
 
-            const newColor = `rgba(${Number(rgba[0])},${Number(rgba[1])},${Number(
-                rgba[2]
-            )},${Number(event.target.value)})`;
+            const newColor = `rgba(${Math.ceil(Number(rgba[0]))}, ${Math.ceil(
+                Number(rgba[1])
+            )}, ${Math.ceil(Number(rgba[2]))}, ${Number(event.target.value)})`;
 
             setHueColor(newColor);
 

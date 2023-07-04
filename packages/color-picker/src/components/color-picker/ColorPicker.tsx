@@ -22,34 +22,22 @@ export type ColorPickerProps = {
     shouldShowHexCode?: boolean;
 };
 
-const ColorPicker: FC<ColorPickerProps> = ({
-    color = 'rgba(222, 225, 24, 255)',
-    shouldShowColorPrefix,
-    shouldShowHexCode,
-}) => {
-    const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(
-        'rgba(255, 255, 255, 255)'
-    );
+const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(116, 116, 20, 1)' }) => {
+    const [internalColor, setInternalColor] =
+        useState<CSSProperties['color']>('rgba(255, 255, 255, 1)');
 
     useEffect(() => {
+        console.log('hallo');
         if (color) {
-            setSelectedColor(color);
+            setInternalColor(color);
         }
     }, [color]);
 
     const handleColorChange = (colorToSelect: CSSProperties['color']) => {
-        setSelectedColor(colorToSelect);
+        setInternalColor(colorToSelect);
     };
 
-    console.log('selectedColor', selectedColor);
-
-    const label = useMemo(() => {
-        if (shouldShowHexCode) {
-            return `#${color ?? ''}`;
-        }
-
-        return selectedColor;
-    }, [color, selectedColor, shouldShowHexCode]);
+    const label = useMemo(() => internalColor, [internalColor]);
 
     return useMemo(
         () => (
@@ -63,14 +51,14 @@ const ColorPicker: FC<ColorPickerProps> = ({
                 {/*    } */}
                 {/* > */}
                 <StyledColorPickerLabelWrapper>
-                    <StyledColorPickerDot color={selectedColor} />
+                    <StyledColorPickerDot color={internalColor} />
                     <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
                 </StyledColorPickerLabelWrapper>
-                <ColorPickerContent onColorChange={handleColorChange} color={selectedColor} />
+                <ColorPickerContent color={internalColor} onChange={handleColorChange} />
                 {/* </Popup> */}
             </StyledColorPicker>
         ),
-        [label, selectedColor]
+        [internalColor, label]
     );
 };
 

@@ -1,4 +1,5 @@
 import React, { CSSProperties, FC, useMemo } from 'react';
+import { HueSlider } from '../../index';
 import OpacitySlider from '../../opacity-slider/OpacitySlider';
 import {
     StyledColorPickerColorPreview,
@@ -23,7 +24,7 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, onChange }) =>
                 {/* /> */}
                 <StyledColorPickerContentSliderSelect>
                     <StyledColorPickerContentSliders>
-                        {/* <HueSlider onChange={onHueColorChange} color={internalColor} /> */}
+                        <HueSlider onChange={onChange} color={color} />
                         <OpacitySlider color={color} onChange={onChange} />
                     </StyledColorPickerContentSliders>
                     <StyledColorPickerColorPreview color={color} />
