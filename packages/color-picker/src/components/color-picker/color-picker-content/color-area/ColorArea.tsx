@@ -62,7 +62,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
         ctx.fillStyle = transparentGradiant;
         ctx.fillRect(0, 0, 300, 150);
-    }, [color, hueColor]);
+    }, [hueColor]);
 
     const handleStartDrag: PointerEventHandler = useCallback(
         (event) => {

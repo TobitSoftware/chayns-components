@@ -43,8 +43,12 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
 
             setEditedValue(hue);
             setHueColor(hsl.toString());
+
+            // if (typeof onChange === 'function') {
+            //     onChange(hsl);
+            // }
         }
-    }, [color]);
+    }, [color, onChange]);
 
     /**
      * This function updates the value

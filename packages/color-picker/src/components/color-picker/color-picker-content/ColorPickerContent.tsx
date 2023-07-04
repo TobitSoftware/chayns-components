@@ -36,7 +36,7 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ onColorChange, color 
                 </StyledColorPickerContentSliderSelect>
             </StyledColorPickerContent>
         ),
-        [color, handleColorChange, hueColor]
+        [color, hueColor, onColorChange]
     );
 };
 

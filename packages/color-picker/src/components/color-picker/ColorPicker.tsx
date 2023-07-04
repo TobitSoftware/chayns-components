@@ -22,7 +22,11 @@ export type ColorPickerProps = {
     shouldShowHexCode?: boolean;
 };
 
-const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shouldShowHexCode }) => {
+const ColorPicker: FC<ColorPickerProps> = ({
+    color = 'rgba(222, 225, 24, 255)',
+    shouldShowColorPrefix,
+    shouldShowHexCode,
+}) => {
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(
         'rgba(255, 255, 255, 255)'
     );
@@ -36,6 +40,8 @@ const ColorPicker: FC<ColorPickerProps> = ({ color, shouldShowColorPrefix, shoul
     const handleColorChange = (colorToSelect: CSSProperties['color']) => {
         setSelectedColor(colorToSelect);
     };
+
+    console.log('selectedColor', selectedColor);
 
     const label = useMemo(() => {
         if (shouldShowHexCode) {
