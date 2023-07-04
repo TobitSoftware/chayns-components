@@ -153,6 +153,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 </StyledComboBoxHeader>
                 <StyledMotionComboBoxBody
                     height={height}
+                    minWidth={minWidth}
                     initial={{ height: 0, opacity: 0 }}
                     animate={
                         isAnimating
@@ -167,7 +168,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 </StyledMotionComboBoxBody>
             </StyledComboBox>
         ),
-        [content, height, isAnimating, item?.text, minWidth, placeholder]
+        [content, height, isAnimating, minWidth, placeholderText]
     );
 };
 

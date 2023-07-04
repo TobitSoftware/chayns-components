@@ -27,7 +27,7 @@ export const postVideo = async ({
         {
             body: formData,
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `bearer ${accessToken}`,
             },
             method: 'POST',
         }

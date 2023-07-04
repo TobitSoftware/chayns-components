@@ -49,17 +49,22 @@ export const StyledComboBoxIconWrapper = styled.div`
 
 type StyledComboBoxBodyProps = WithTheme<{
     height: number;
+    minWidth: number;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
     background: ${({ theme }: StyledComboBoxBodyProps) => theme['001']};
     display: flex;
+    position: absolute;
+    z-index: 4;
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     border-top: none;
     cursor: pointer;
+    min-width: ${({ minWidth }) => minWidth}px;
+    max-width: ${({ minWidth }) => minWidth}px;
     max-height: 300px;
     overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxBodyProps) => theme['009-rgb']}, 0.08)
