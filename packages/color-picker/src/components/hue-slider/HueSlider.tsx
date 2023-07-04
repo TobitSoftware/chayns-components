@@ -21,7 +21,7 @@ export type HueSliderProps = {
     onChange?: (color: CSSProperties['color']) => void;
 };
 
-const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'hsl(267, 100%, 50%)' }) => {
+const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hueColor, setHueColor] = useState<CSSProperties['color']>('red');
 
@@ -42,7 +42,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'hsl(267, 100%, 50%)'
             const hue = parseInt(match[1], 10);
 
             setEditedValue(hue);
-            setHueColor(color);
+            setHueColor(hsl.toString());
         }
     }, [color]);
 

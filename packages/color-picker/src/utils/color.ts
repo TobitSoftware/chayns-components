@@ -1,4 +1,5 @@
 import { hexToHsl, rgb255ToHsl } from '@chayns/colors';
+import type { HSL, HSLA } from '@chayns/colors/lib/types/hsl';
 import type { RefObject } from 'react';
 import type { Coordinates } from '../types';
 
@@ -43,12 +44,19 @@ export const convertColorToHsl = (color: string) => {
         /^hsla?\(\s*((360|3[0-5]\d|[12]\d{2}|[1-9]\d|\d)\s*,\s*){2}(360|3[0-5]\d|[12]\d{2}|[1-9]\d|\d)\s*(,\s*\d+(\.\d+)?)?\)$/i;
 
     let rgba: string[] | null;
+    let hsl: HSL | HSLA | null;
 
     const newColor = color.replaceAll('%', '');
 
     switch (true) {
         case hexRegex.test(newColor):
-            return hexToHsl(color);
+            hsl = hexToHsl(color);
+
+            if (!hsl) {
+                return undefined;
+            }
+
+            return `hsl(${Math.floor(hsl.h)},100%,50%)`;
         case rgbRegex.test(newColor):
             rgba = color.match(/[\d.]+/g);
 
@@ -56,12 +64,17 @@ export const convertColorToHsl = (color: string) => {
                 return undefined;
             }
 
-            return rgb255ToHsl({
+            hsl = rgb255ToHsl({
                 r: Number(rgba[0]),
                 g: Number(rgba[1]),
                 b: Number(rgba[2]),
-                a: Number(rgba[3]),
             });
+
+            if (!hsl) {
+                return undefined;
+            }
+
+            return `hsl(${Math.floor(hsl.h)},100%,50%)`;
         case hslRegex.test(newColor):
             return color;
         default:
