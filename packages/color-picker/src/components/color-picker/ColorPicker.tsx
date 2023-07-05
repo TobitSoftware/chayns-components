@@ -1,3 +1,4 @@
+import Popup from '@chayns-components/core/lib/components/popup/Popup';
 import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
 import ColorPickerContent from './color-picker-content/ColorPickerContent';
 import {
@@ -41,24 +42,25 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' })
     return useMemo(
         () => (
             <StyledColorPicker>
-                {/* <Popup */}
-                {/*    content={ */}
-                {/*        <ColorPickerContent */}
-                {/*            onColorChange={handleColorChange} */}
-                {/*            color={selectedColor} */}
-                {/*        /> */}
-                {/*    } */}
-                {/* > */}
-                <StyledColorPickerLabelWrapper>
-                    <StyledColorPickerDot color={internalColor} />
-                    <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
-                </StyledColorPickerLabelWrapper>
-                <ColorPickerContent
-                    color={color}
-                    internalColor={internalColor}
-                    onChange={handleColorChange}
-                />
-                {/* </Popup> */}
+                <Popup
+                    content={
+                        <ColorPickerContent
+                            color={color}
+                            internalColor={internalColor}
+                            onChange={handleColorChange}
+                        />
+                    }
+                >
+                    <StyledColorPickerLabelWrapper>
+                        <StyledColorPickerDot color={internalColor} />
+                        <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
+                    </StyledColorPickerLabelWrapper>
+                    {/* <ColorPickerContent */}
+                    {/*    color={color} */}
+                    {/*    internalColor={internalColor} */}
+                    {/*    onChange={handleColorChange} */}
+                    {/* /> */}
+                </Popup>
             </StyledColorPicker>
         ),
         [color, internalColor, label]
