@@ -3,9 +3,11 @@ import { splitRgb } from '../../../utils/color';
 import { HueSlider } from '../../index';
 import OpacitySlider from '../../opacity-slider/OpacitySlider';
 import ColorArea from './color-area/ColorArea';
+import ColorPresent from './color-present/ColorPresent';
 import {
     StyledColorPickerColorPreview,
     StyledColorPickerContent,
+    StyledColorPickerContentPresentWrapper,
     StyledColorPickerContentSliders,
     StyledColorPickerContentSliderSelect,
 } from './ColorPickerContent.styles';
@@ -20,6 +22,33 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor,
     const [hueColor, setHueColor] = useState<CSSProperties['color']>();
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(color);
     const [opacity, setOpacity] = useState<number>(1);
+
+    const colorPresents = useMemo(() => {
+        return [
+            { id: 0, color: 'rgb(0, 0, 0)' },
+            { id: 1, color: 'rgb(67, 67, 67)' },
+            { id: 2, color: 'rgb(102, 102, 102)' },
+            { id: 3, color: 'rgb(153, 153, 153)' },
+            { id: 4, color: 'rgb(183, 183, 183)' },
+            { id: 5, color: 'rgb(204, 204, 204)' },
+            { id: 6, color: 'rgb(217, 217, 217)' },
+            { id: 7, color: 'rgb(239, 239, 239)' },
+            { id: 8, color: 'rgb(243, 243, 243)' },
+            { id: 9, color: 'rgb(255, 255, 255)' },
+            { id: 10, color: 'rgb(244, 67, 54)' },
+            { id: 11, color: 'rgb(255, 152, 0)' },
+            { id: 12, color: 'rgb(255, 235, 59)' },
+            { id: 13, color: 'rgb(0, 150, 136)' },
+            { id: 14, color: 'rgb(121, 85, 72)' },
+            { id: 15, color: 'rgb(139, 195, 74)' },
+            { id: 16, color: 'rgb(76, 175, 80)' },
+            { id: 17, color: 'rgb(156, 39, 176)' },
+            { id: 18, color: 'rgb(63, 81, 181)' },
+            { id: 19, color: 'rgb(3, 169, 244)' },
+            { id: 19, color: 'rgb(0, 0, 255)' },
+            { id: 19, color: 'rgb(255, 0, 0)' },
+        ];
+    }, []);
 
     useEffect(() => {
         if (color) {
@@ -47,6 +76,14 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor,
         }
     }, []);
 
+    const handlePresentSelect = (selectedPresentColor: CSSProperties['color']) => {
+        const rgb = splitRgb(selectedPresentColor);
+
+        if (rgb) {
+            onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
+        }
+    };
+
     useEffect(() => {
         const rgb = splitRgb(selectedColor);
 
@@ -66,10 +103,16 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor,
                     </StyledColorPickerContentSliders>
                     <StyledColorPickerColorPreview color={internalColor} />
                 </StyledColorPickerContentSliderSelect>
+                <StyledColorPickerContentPresentWrapper>
+                    {colorPresents.map(({ color: presentColor, id }) => (
+                        <ColorPresent id={id} color={presentColor} onClick={handlePresentSelect} />
+                    ))}
+                </StyledColorPickerContentPresentWrapper>
             </StyledColorPickerContent>
         ),
         [
             color,
+            colorPresents,
             handleColorChange,
             handleHueColorChange,
             handleOpacityChange,

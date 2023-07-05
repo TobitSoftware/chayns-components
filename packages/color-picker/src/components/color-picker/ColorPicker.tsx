@@ -55,11 +55,6 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' })
                         <StyledColorPickerDot color={internalColor} />
                         <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
                     </StyledColorPickerLabelWrapper>
-                    {/* <ColorPickerContent */}
-                    {/*    color={color} */}
-                    {/*    internalColor={internalColor} */}
-                    {/*    onChange={handleColorChange} */}
-                    {/* /> */}
                 </Popup>
             </StyledColorPicker>
         ),
