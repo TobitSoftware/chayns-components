@@ -125,10 +125,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 if (!popupContentRef.current?.contains(event.target as Node)) {
                     event.preventDefault();
                     event.stopPropagation();
-                }
 
-                if (!shouldShowOnHover) {
-                    handleHide();
+                    if (!shouldShowOnHover) {
+                        handleHide();
+                    }
                 }
             },
             [handleHide, shouldShowOnHover]
