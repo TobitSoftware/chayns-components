@@ -7,6 +7,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import { splitRgb } from '../../utils/color';
 import {
     StyledOpacitySlider,
     StyledOpacitySliderBackground,
@@ -30,13 +31,15 @@ const OpacitySlider: FC<HueSliderProps> = ({ onChange, color }) => {
 
     useEffect(() => {
         if (color) {
+            const rgba = splitRgb(color);
+
+            if (rgba && rgba.a) {
+                setValue(rgba.a);
+            }
             setHueColor(color);
         }
     }, [color]);
 
-    /**
-     * This function updates the value
-     */
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             setValue(Number(event.target.value));

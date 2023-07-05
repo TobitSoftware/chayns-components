@@ -37,12 +37,13 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
 
             setHslColor(hsl);
             setEditedValue(parseInt(match[1], 10));
-        }
-    }, [color]);
 
-    /**
-     * This function updates the value
-     */
+            if (typeof onChange === 'function') {
+                onChange(color);
+            }
+        }
+    }, [color, onChange]);
+
     const handleInputChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             setEditedValue(Number(event.target.value));

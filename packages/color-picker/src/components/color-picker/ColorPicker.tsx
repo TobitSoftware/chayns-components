@@ -22,7 +22,7 @@ export type ColorPickerProps = {
     shouldShowHexCode?: boolean;
 };
 
-const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(116, 116, 20, 1)' }) => {
+const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' }) => {
     const [internalColor, setInternalColor] =
         useState<CSSProperties['color']>('rgba(255, 255, 255, 1)');
 
@@ -53,11 +53,15 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(116, 116, 20, 1)' }) 
                     <StyledColorPickerDot color={internalColor} />
                     <StyledColorPickerLabel>{label}</StyledColorPickerLabel>
                 </StyledColorPickerLabelWrapper>
-                <ColorPickerContent color={internalColor} onChange={handleColorChange} />
+                <ColorPickerContent
+                    color={color}
+                    internalColor={internalColor}
+                    onChange={handleColorChange}
+                />
                 {/* </Popup> */}
             </StyledColorPicker>
         ),
-        [internalColor, label]
+        [color, internalColor, label]
     );
 };
 
