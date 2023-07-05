@@ -27,7 +27,6 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(116, 116, 20, 1)' }) 
         useState<CSSProperties['color']>('rgba(255, 255, 255, 1)');
 
     useEffect(() => {
-        console.log('hallo');
         if (color) {
             setInternalColor(color);
         }

@@ -27,8 +27,21 @@ export type ColorAreaProps = {
 const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [coordinates, setCoordinates] = useState<Coordinates>();
+    const [opacity, setOpacity] = useState<number>(1);
 
     const dragControls = useDragControls();
+
+    useEffect(() => {
+        if (color) {
+            const rgba = color.match(/[\d.]+/g);
+
+            if (!rgba) {
+                return;
+            }
+
+            setOpacity(Number(rgba[3]));
+        }
+    }, [color]);
 
     useEffect(() => {
         if (hueColor && coordinates) {
@@ -36,10 +49,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                 getColorFromCoordinates({
                     coordinates: { x: coordinates.x, y: coordinates.y },
                     canvas: canvasRef,
+                    opacity,
                 })
             );
         }
-    }, [coordinates, hueColor, onChange]);
+    }, [coordinates, hueColor, onChange, opacity]);
 
     useEffect(() => {
         if (color) {
@@ -96,10 +110,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                         y: event.clientY,
                     },
                     canvas: canvasRef,
+                    opacity,
                 })
             );
         },
-        [onChange]
+        [onChange, opacity]
     );
 
     const handleClick = useCallback(
@@ -110,10 +125,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                 getColorFromCoordinates({
                     coordinates: { x: event.clientX, y: event.clientY },
                     canvas: canvasRef,
+                    opacity,
                 })
             );
         },
-        [onChange]
+        [onChange, opacity]
     );
 
     return useMemo(

@@ -1,16 +1,18 @@
 import { hexToHsl, rgb255ToHsl } from '@chayns/colors';
 import type { HSL, HSLA } from '@chayns/colors/lib/types/hsl';
 import type { CSSProperties, RefObject } from 'react';
-import type { Coordinates } from '../types';
+import type { Coordinates, RGB } from '../types';
 
 interface GetColorFromCoordinatesOptions {
     coordinates: Coordinates;
     canvas: RefObject<HTMLCanvasElement>;
+    opacity: number;
 }
 
 export const getColorFromCoordinates = ({
     coordinates,
     canvas,
+    opacity,
 }: GetColorFromCoordinatesOptions) => {
     if (!canvas.current) {
         return undefined;
@@ -33,7 +35,7 @@ export const getColorFromCoordinates = ({
         return 'transparent';
     }
 
-    return `rgba(${pixels[0] ?? 0}, ${pixels[1] ?? 0}, ${pixels[2] ?? 0}, ${pixels[3] ?? 0})`;
+    return `rgba(${pixels[0] ?? 0}, ${pixels[1] ?? 0}, ${pixels[2] ?? 0}, ${opacity})`;
 };
 
 interface GetCoordinatesFromColorOptions {
@@ -129,4 +131,14 @@ export const convertColorToHsl = (color: string) => {
         default:
             return undefined;
     }
+};
+
+export const splitRgb = (color: CSSProperties['color']): null | RGB => {
+    const rgba = color?.match(/[\d.]+/g);
+
+    if (!rgba) {
+        return null;
+    }
+
+    return { r: Number(rgba[0]), g: Number(rgba[1]), b: Number(rgba[2]), a: Number(rgba[3]) };
 };

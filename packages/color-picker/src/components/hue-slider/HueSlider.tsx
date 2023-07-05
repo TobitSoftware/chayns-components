@@ -25,18 +25,9 @@ export type HueSliderProps = {
 const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
     const [editedValue, setEditedValue] = useState(0);
     const [hslColor, setHslColor] = useState<CSSProperties['color']>('hsl(0, 0, 100)');
-    const [opacity, setOpacity] = useState<number>();
 
     useEffect(() => {
         if (color) {
-            const rgba = color.match(/[\d.]+/g);
-
-            if (!rgba) {
-                return;
-            }
-
-            setOpacity(Number(rgba[3]));
-
             const hsl = convertColorToHsl(color);
             const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
 
@@ -58,23 +49,23 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
 
             const percentage = (Number(event.target.value) / 360) * 100;
             const hue = (percentage / 100) * 360;
-            const saturation = 1;
-            const lightness = 0.5;
+            const saturation = 100;
+            const lightness = 50;
 
             const hsl = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
             setHslColor(hsl);
 
             if (typeof onChange === 'function') {
-                const rgb = hslToRgb255({ h: hue, s: saturation, l: lightness });
+                const rgb = hslToRgb255({ h: hue, s: 1, l: 0.5 });
 
                 if (!rgb) {
                     return;
                 }
 
-                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity ?? 1})`);
+                onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
             }
         },
-        [onChange, opacity]
+        [onChange]
     );
 
     return useMemo(
