@@ -16,9 +16,15 @@ export type ColorPickerContentProps = {
     onChange: (color: CSSProperties['color']) => void;
     color: CSSProperties['color'];
     internalColor: CSSProperties['color'];
+    shouldShowColorPrefix?: boolean;
 };
 
-const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor, onChange }) => {
+const ColorPickerContent: FC<ColorPickerContentProps> = ({
+    color,
+    internalColor,
+    onChange,
+    shouldShowColorPrefix,
+}) => {
     const [hueColor, setHueColor] = useState<CSSProperties['color']>();
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(color);
     const [opacity, setOpacity] = useState<number>(1);
@@ -103,11 +109,17 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor,
                     </StyledColorPickerContentSliders>
                     <StyledColorPickerColorPreview color={internalColor} />
                 </StyledColorPickerContentSliderSelect>
-                <StyledColorPickerContentPresentWrapper>
-                    {colorPresents.map(({ color: presentColor, id }) => (
-                        <ColorPresent id={id} color={presentColor} onClick={handlePresentSelect} />
-                    ))}
-                </StyledColorPickerContentPresentWrapper>
+                {shouldShowColorPrefix && (
+                    <StyledColorPickerContentPresentWrapper>
+                        {colorPresents.map(({ color: presentColor, id }) => (
+                            <ColorPresent
+                                id={id}
+                                color={presentColor}
+                                onClick={handlePresentSelect}
+                            />
+                        ))}
+                    </StyledColorPickerContentPresentWrapper>
+                )}
             </StyledColorPickerContent>
         ),
         [
@@ -116,9 +128,11 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({ color, internalColor,
             handleColorChange,
             handleHueColorChange,
             handleOpacityChange,
+            handlePresentSelect,
             hueColor,
             internalColor,
             selectedColor,
+            shouldShowColorPrefix,
         ]
     );
 };

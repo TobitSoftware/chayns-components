@@ -1,5 +1,7 @@
 import Popup from '@chayns-components/core/lib/components/popup/Popup';
+import { rgb255ToHex } from '@chayns/colors';
 import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
+import { splitRgb } from '../../utils/color';
 import ColorPickerContent from './color-picker-content/ColorPickerContent';
 import {
     StyledColorPicker,
@@ -23,7 +25,11 @@ export type ColorPickerProps = {
     shouldShowHexCode?: boolean;
 };
 
-const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' }) => {
+const ColorPicker: FC<ColorPickerProps> = ({
+    color = 'rgba(24, 15, 108, 0.6)',
+    shouldShowColorPrefix,
+    shouldShowHexCode,
+}) => {
     const [internalColor, setInternalColor] =
         useState<CSSProperties['color']>('rgba(255, 255, 255, 1)');
 
@@ -37,7 +43,17 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' })
         setInternalColor(colorToSelect);
     };
 
-    const label = useMemo(() => internalColor, [internalColor]);
+    const label = useMemo(() => {
+        if (shouldShowHexCode) {
+            const rgba = splitRgb(internalColor);
+
+            if (rgba) {
+                return rgb255ToHex({ r: rgba.r, g: rgba.g, b: rgba.b, a: rgba.a });
+            }
+        }
+
+        return internalColor;
+    }, [internalColor, shouldShowHexCode]);
 
     return useMemo(
         () => (
@@ -48,6 +64,7 @@ const ColorPicker: FC<ColorPickerProps> = ({ color = 'rgba(24, 15, 108, 0.6)' })
                             color={color}
                             internalColor={internalColor}
                             onChange={handleColorChange}
+                            shouldShowColorPrefix={shouldShowColorPrefix}
                         />
                     }
                 >
