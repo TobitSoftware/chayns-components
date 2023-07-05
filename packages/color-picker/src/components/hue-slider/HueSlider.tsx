@@ -8,7 +8,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import { convertColorToHsl } from '../../utils/color';
+import { convertColorToHsl, splitRgb } from '../../utils/color';
 import { StyledHueSlider, StyledHueSliderInput } from './HueSlider.styles';
 
 export type HueSliderProps = {
@@ -28,7 +28,13 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
 
     useEffect(() => {
         if (color) {
-            const hsl = convertColorToHsl(color);
+            const rgb = splitRgb(color);
+
+            if (!rgb) {
+                return;
+            }
+
+            const hsl = convertColorToHsl(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`);
             const match = hsl?.toString().match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
 
             if (!match || !match[1]) {

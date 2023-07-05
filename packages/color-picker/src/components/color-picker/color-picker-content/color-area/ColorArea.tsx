@@ -10,7 +10,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import type { Coordinates } from '../../../../types';
+import type { Coordinates, Scale } from '../../../../types';
 import { getColorFromCoordinates } from '../../../../utils/color';
 import {
     StyledColorArea,
@@ -28,6 +28,7 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [coordinates, setCoordinates] = useState<Coordinates>();
     const [opacity, setOpacity] = useState<number>(1);
+    const [scale, setScale] = useState<Scale>({ scaleX: 0, scaleY: 0 });
 
     const dragControls = useDragControls();
 
@@ -50,10 +51,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                     coordinates: { x: coordinates.x, y: coordinates.y },
                     canvas: canvasRef,
                     opacity,
+                    scale,
                 })
             );
         }
-    }, [coordinates, hueColor, onChange, opacity]);
+    }, [coordinates, hueColor, onChange, opacity, scale]);
 
     useEffect(() => {
         if (color) {
@@ -68,6 +70,21 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
             // setCoordinates(cords);
         }
     }, [color]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+
+        if (!canvas) {
+            return;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        setScale({ scaleX, scaleY });
+    }, []);
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
@@ -111,10 +128,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                     },
                     canvas: canvasRef,
                     opacity,
+                    scale,
                 })
             );
         },
-        [onChange, opacity]
+        [onChange, opacity, scale]
     );
 
     const handleClick = useCallback(
@@ -126,10 +144,11 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
                     coordinates: { x: event.clientX, y: event.clientY },
                     canvas: canvasRef,
                     opacity,
+                    scale,
                 })
             );
         },
-        [onChange, opacity]
+        [onChange, opacity, scale]
     );
 
     return useMemo(

@@ -1,27 +1,29 @@
 import { hexToHsl, rgb255ToHsl } from '@chayns/colors';
 import type { HSL, HSLA } from '@chayns/colors/lib/types/hsl';
 import type { CSSProperties, RefObject } from 'react';
-import type { Coordinates, RGB } from '../types';
+import type { Coordinates, RGB, Scale } from '../types';
 
 interface GetColorFromCoordinatesOptions {
     coordinates: Coordinates;
     canvas: RefObject<HTMLCanvasElement>;
     opacity: number;
+    scale: Scale;
 }
 
 export const getColorFromCoordinates = ({
     coordinates,
     canvas,
     opacity,
+    scale,
 }: GetColorFromCoordinatesOptions) => {
     if (!canvas.current) {
         return undefined;
     }
 
-    const { offsetTop, offsetLeft } = canvas.current;
+    const { top, left } = canvas.current.getBoundingClientRect();
 
-    const { x } = coordinates;
-    const { y } = coordinates;
+    const x = (coordinates.x - left) * scale.scaleX;
+    const y = (coordinates.y - top) * scale.scaleY;
 
     const ctx = canvas.current?.getContext('2d');
     const pixels = ctx?.getImageData(x, y, 1, 1).data;
