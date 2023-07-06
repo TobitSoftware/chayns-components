@@ -55,32 +55,29 @@ export const getCoordinatesFromColor = ({ canvas, color }: GetCoordinatesFromCol
     const { data } = ctx.getImageData(0, 0, 300, 150); /// get image data
     let x = 0;
     let y = 0;
-    let p;
-    let px;
 
-    const rgba = color.match(/[\d.]+/g);
+    const rgb = splitRgb(color);
 
-    if (!rgba) {
+    if (!rgb) {
         return undefined;
     }
 
-    console.log(data);
+    console.log('DATA', data);
 
-    console.log(rgba);
+    console.log('RGBA', rgb);
 
     // iterating x/y instead of forward to get position the easy way
     for (; y < 150; y++) {
         // common value for all x
-        p = y * 4 * 300;
+        const p = y * 4 * 300;
 
         for (x = 0; x < 300; x++) {
             // next pixel (skipping 4 bytes as each pixel is RGBA bytes)
-            px = p + x * 4;
+            const px = p + x * 4;
 
             // if red component match check the others
-            if (data[px] === Number(rgba[0])) {
-                console.log('eee', data[px]);
-                if (data[px + 1] === rgba[1] && data[px + 2] === rgba[2]) {
+            if (data[px] === rgb.r) {
+                if (data[px + 1] === rgb.g && data[px + 2] === rgb.b) {
                     return { x, y };
                 }
             }

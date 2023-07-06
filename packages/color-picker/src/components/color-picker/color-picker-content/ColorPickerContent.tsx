@@ -28,9 +28,10 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
     const [hueColor, setHueColor] = useState<CSSProperties['color']>();
     const [selectedColor, setSelectedColor] = useState<CSSProperties['color']>(color);
     const [opacity, setOpacity] = useState<number>(1);
+    const [externalColor, setExternalColor] = useState<CSSProperties['color']>();
 
-    const colorPresents = useMemo(() => {
-        return [
+    const colorPresents = useMemo(
+        () => [
             { id: 0, color: 'rgb(0, 0, 0)' },
             { id: 1, color: 'rgb(67, 67, 67)' },
             { id: 2, color: 'rgb(102, 102, 102)' },
@@ -51,10 +52,15 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
             { id: 17, color: 'rgb(156, 39, 176)' },
             { id: 18, color: 'rgb(63, 81, 181)' },
             { id: 19, color: 'rgb(3, 169, 244)' },
-            { id: 19, color: 'rgb(0, 0, 255)' },
-            { id: 19, color: 'rgb(255, 0, 0)' },
-        ];
-    }, []);
+        ],
+        []
+    );
+
+    useEffect(() => {
+        if (color) {
+            setExternalColor(color);
+        }
+    }, [color]);
 
     useEffect(() => {
         if (color) {
@@ -82,13 +88,17 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
         }
     }, []);
 
-    const handlePresentSelect = (selectedPresentColor: CSSProperties['color']) => {
-        const rgb = splitRgb(selectedPresentColor);
+    const handlePresentSelect = useCallback(
+        (selectedPresentColor: CSSProperties['color']) => {
+            const rgb = splitRgb(selectedPresentColor);
 
-        if (rgb) {
-            onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
-        }
-    };
+            if (rgb) {
+                setExternalColor(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
+                // onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
+            }
+        },
+        [opacity]
+    );
 
     useEffect(() => {
         const rgb = splitRgb(selectedColor);
@@ -104,7 +114,7 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
                 <ColorArea onChange={handleColorChange} color={internalColor} hueColor={hueColor} />
                 <StyledColorPickerContentSliderSelect>
                     <StyledColorPickerContentSliders>
-                        <HueSlider onChange={handleHueColorChange} color={color} />
+                        <HueSlider onChange={handleHueColorChange} color={externalColor} />
                         <OpacitySlider color={selectedColor} onChange={handleOpacityChange} />
                     </StyledColorPickerContentSliders>
                     <StyledColorPickerColorPreview color={internalColor} />
@@ -123,8 +133,8 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
             </StyledColorPickerContent>
         ),
         [
-            color,
             colorPresents,
+            externalColor,
             handleColorChange,
             handleHueColorChange,
             handleOpacityChange,

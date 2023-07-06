@@ -41,11 +41,11 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color }) => {
                 return;
             }
 
-            setHslColor(hsl);
+            setHslColor(`hsl(${match[1]}, 100%, 50%)`);
             setEditedValue(parseInt(match[1], 10));
 
             if (typeof onChange === 'function') {
-                onChange(color);
+                onChange(hsl);
             }
         }
     }, [color, onChange]);

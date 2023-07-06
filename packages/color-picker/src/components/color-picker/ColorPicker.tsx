@@ -26,7 +26,7 @@ export type ColorPickerProps = {
 };
 
 const ColorPicker: FC<ColorPickerProps> = ({
-    color = 'rgba(24, 15, 108, 0.6)',
+    color = 'rgba(162, 29, 29, 1)',
     shouldShowColorPrefix,
     shouldShowHexCode,
 }) => {
@@ -75,7 +75,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
                 </Popup>
             </StyledColorPicker>
         ),
-        [color, internalColor, label]
+        [color, internalColor, label, shouldShowColorPrefix]
     );
 };
 

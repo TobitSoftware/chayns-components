@@ -46,6 +46,15 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     useEffect(() => {
         if (hueColor && coordinates) {
+            console.log(
+                getColorFromCoordinates({
+                    coordinates: { x: coordinates.x, y: coordinates.y },
+                    canvas: canvasRef,
+                    opacity,
+                    scale,
+                })
+            );
+
             onChange(
                 getColorFromCoordinates({
                     coordinates: { x: coordinates.x, y: coordinates.y },
@@ -57,19 +66,20 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
         }
     }, [coordinates, hueColor, onChange, opacity, scale]);
 
-    useEffect(() => {
-        if (color) {
-            // const cords = getCoordinatesFromColor({ color, canvas: canvasRef });
-            //
-            // console.log(cords);
-            //
-            // if (!cords) {
-            //     return;
-            // }
-            //
-            // setCoordinates(cords);
-        }
-    }, [color]);
+    // useEffect(() => {
+    //     if (color) {
+    //         const cords = getCoordinatesFromColor({ color, canvas: canvasRef });
+    //
+    //         console.log("CORDS",cords)
+    //
+    //         if (!cords) {
+    //             return;
+    //
+    //         }
+    //
+    //         setCoordinates(cords);
+    //     }
+    // }, [color]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
