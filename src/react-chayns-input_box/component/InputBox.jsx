@@ -34,6 +34,7 @@ const InputBox = React.forwardRef((props, ref) => {
 
     const wrapperRef = useRef();
     const boxRef = useRef();
+    const hasTouchStartedRef = useRef(false);
 
     const [isHidden, setIsHidden] = useState(true);
     const [rect, setRect] = useState(null);
@@ -83,6 +84,9 @@ const InputBox = React.forwardRef((props, ref) => {
 
     useEffect(() => {
         function handleBlur(event) {
+            if (!hasTouchStartedRef.current && event.type === 'click') {
+                return;
+            }
             if (isHidden) return;
 
             if (
@@ -109,13 +113,29 @@ const InputBox = React.forwardRef((props, ref) => {
             }
         }
 
+        function handleTouchStart() {
+            hasTouchStartedRef.current = true;
+        }
+
+        function handleTouchEnd() {
+            hasTouchStartedRef.current = false;
+        }
+
         document.addEventListener('click', handleBlur);
+        document.addEventListener('mousedown', handleBlur);
+        document.addEventListener('touchstart', handleTouchStart)
+        document.addEventListener('touchend', handleTouchEnd);
+        document.addEventListener('mousemove', handleTouchEnd);
 
         window.addEventListener('blur', hide);
         window.addEventListener('keydown', handleKeyDown);
 
         return () => {
             document.removeEventListener('click', handleBlur);
+            document.removeEventListener('mousedown', handleBlur);
+            document.removeEventListener('touchstart', handleTouchStart);
+            document.removeEventListener('touchend', handleTouchEnd);
+            document.removeEventListener('mousemove', handleTouchEnd);
 
             window.removeEventListener('blur', hide);
             window.removeEventListener('keydown', handleKeyDown);
