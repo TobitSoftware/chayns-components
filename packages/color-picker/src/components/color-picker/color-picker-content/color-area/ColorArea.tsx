@@ -46,15 +46,6 @@ const ColorArea: FC<ColorAreaProps> = ({ onChange, color, hueColor }) => {
 
     useEffect(() => {
         if (hueColor && coordinates) {
-            console.log(
-                getColorFromCoordinates({
-                    coordinates: { x: coordinates.x, y: coordinates.y },
-                    canvas: canvasRef,
-                    opacity,
-                    scale,
-                })
-            );
-
             onChange(
                 getColorFromCoordinates({
                     coordinates: { x: coordinates.x, y: coordinates.y },
