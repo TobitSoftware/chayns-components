@@ -44,7 +44,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             x: 0,
             y: 0,
         });
-        const container = document.body;
+        const container = document.querySelector('.tapp') || document.body;
+
+        console.debug('container', container);
 
         const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
         const [isOpen, setIsOpen] = useState(false);
@@ -105,8 +107,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         };
 
         const handleHide = useCallback(() => {
-            setIsOpen(false);
+            // setIsOpen(false);
         }, []);
+
+        console.debug('TEST', isOpen);
 
         const handleMouseEnter = () => {
             if (shouldShowOnHover) {

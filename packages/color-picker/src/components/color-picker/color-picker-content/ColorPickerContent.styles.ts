@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
 export const StyledColorPickerContent = styled.div`
-    max-width: 320px;
+    padding: 8px;
+
+    > div:not(:first-child) {
+        margin-top: 8px;
+    }
 `;

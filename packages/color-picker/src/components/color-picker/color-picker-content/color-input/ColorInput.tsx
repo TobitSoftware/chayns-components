@@ -1,5 +1,7 @@
-import { Accordion, AccordionContent, Input } from '@chayns-components/core';
-import React, { CSSProperties, FC, useCallback, useMemo, useState } from 'react';
+import { Accordion, Input } from '@chayns-components/core';
+import { rgb255ToHex } from '@chayns/colors';
+import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { splitRgb } from '../../../../utils/color';
 import { StyledColorInput, StyledColorInputWrapper } from './ColorInput.styles';
 
 export type ColorInputProps = {
@@ -11,22 +13,37 @@ const ColorInput: FC<ColorInputProps> = ({ color, onChange }) => {
     const [rgba, setRgba] = useState<CSSProperties['color']>();
     const [hex, setHex] = useState<CSSProperties['color']>();
 
-    const handleBlur = useCallback(() => {}, []);
+    useEffect(() => {
+        if (color) {
+            setRgba(color);
+
+            const rgb = splitRgb(color);
+
+            if (rgb) {
+                const hexColor = rgb255ToHex({ r: rgb.r, g: rgb.g, b: rgb.b, a: rgb.a });
+
+                if (hexColor) {
+                    setHex(hexColor);
+                }
+            }
+        }
+    }, [color]);
+
+    const handleHexBlur = useCallback(() => {}, []);
+    const handleRgbBlur = useCallback(() => {}, []);
 
     return useMemo(
         () => (
             <StyledColorInput>
-                <Accordion title="Erweitert">
-                    <AccordionContent>
-                        <StyledColorInputWrapper>
-                            <Input onBlur={handleBlur} value={hex} />
-                            <Input onBlur={handleBlur} value={rgba} />
-                        </StyledColorInputWrapper>
-                    </AccordionContent>
+                <Accordion isWrapped shouldHideBackground title="Erweitert">
+                    <StyledColorInputWrapper>
+                        <Input onBlur={handleHexBlur} value={hex} />
+                        <Input onBlur={handleRgbBlur} value={rgba} />
+                    </StyledColorInputWrapper>
                 </Accordion>
             </StyledColorInput>
         ),
-        [handleBlur, hex, rgba]
+        [handleHexBlur, handleRgbBlur, hex, rgba]
     );
 };
 

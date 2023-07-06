@@ -8,7 +8,6 @@ export const StyledColorArea = styled.div`
     user-select: none;
     overflow: hidden;
     cursor: crosshair;
-    margin: 11px 11px 5px 11px;
 `;
 
 export const StyledColorAreaCanvas = styled.canvas`

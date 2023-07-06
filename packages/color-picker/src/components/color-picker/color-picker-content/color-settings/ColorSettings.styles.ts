@@ -6,7 +6,6 @@ export const StyledColorSettings = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 0 20px 10px 20px;
 `;
 
 export const StyledColorSettingsSliders = styled.div`

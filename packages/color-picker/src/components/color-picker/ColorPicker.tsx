@@ -1,4 +1,4 @@
-import Popup from '@chayns-components/core/lib/components/popup/Popup';
+import { Popup } from '@chayns-components/core';
 import { rgb255ToHex } from '@chayns/colors';
 import React, { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
 import { splitRgb } from '../../utils/color';
