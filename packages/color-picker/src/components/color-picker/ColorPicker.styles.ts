@@ -16,9 +16,8 @@ type StyledColorPickerDotProps = WithTheme<{ color: CSSProperties['color'] }>;
 export const StyledColorPickerDot = styled.div<StyledColorPickerDotProps>`
     background-color: ${({ color }) => color};
     border-radius: 50%;
-    border-color: black;
-    border-style: solid;
-    border-width: 1px;
+    box-shadow: 0 0 0 1px rgba(${({ theme }: StyledColorPickerDotProps) => theme['009-rgb']}, 0.08)
+        inset;
     height: 15px;
     width: 15px;
 `;

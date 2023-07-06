@@ -2,7 +2,7 @@ import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useState } f
 import { splitRgb } from '../../../utils/color';
 import ColorArea from './color-area/ColorArea';
 import ColorInput from './color-input/ColorInput';
-import ColorPresents from './color-presents/ColorPresents';
+import ColorPresets from './color-presets/ColorPresets';
 import ColorSettings from './color-settings/ColorSettings';
 import { StyledColorPickerContent } from './ColorPickerContent.styles';
 
@@ -87,7 +87,7 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
                     onHueColorChange={handleHueColorChange}
                     onOpacityChange={handleOpacityChange}
                 />
-                {shouldShowColorPrefix && <ColorPresents onClick={handlePresentSelect} />}
+                {shouldShowColorPrefix && <ColorPresets onClick={handlePresentSelect} />}
                 <ColorInput color={selectedColor} onChange={() => {}} />
             </StyledColorPickerContent>
         ),
