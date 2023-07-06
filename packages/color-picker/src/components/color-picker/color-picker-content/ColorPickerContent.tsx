@@ -56,21 +56,15 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
         }
     }, []);
 
-    const handlePresentSelect = useCallback(
-        (selectedPresentColor: CSSProperties['color']) => {
-            const rgb = splitRgb(selectedPresentColor);
+    const handlePresentSelect = useCallback((selectedPresentColor: CSSProperties['color']) => {
+        const rgb = splitRgb(selectedPresentColor);
 
-            if (rgb) {
-                setExternalColor(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
-                // onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`);
-            }
-        },
-        [opacity]
-    );
+        if (rgb) {
+            setExternalColor(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
+        }
+    }, []);
 
     const handleInputChange = useCallback((selectedInputColor: CSSProperties['color']) => {
-        console.log('inputColor', selectedInputColor);
-
         const rgb = splitRgb(selectedInputColor);
 
         if (rgb) {
