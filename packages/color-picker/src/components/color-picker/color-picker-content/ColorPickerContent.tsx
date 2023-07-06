@@ -68,6 +68,16 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
         [opacity]
     );
 
+    const handleInputChange = useCallback((selectedInputColor: CSSProperties['color']) => {
+        console.log('inputColor', selectedInputColor);
+
+        const rgb = splitRgb(selectedInputColor);
+
+        if (rgb) {
+            setExternalColor(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a ?? 1})`);
+        }
+    }, []);
+
     useEffect(() => {
         const rgb = splitRgb(selectedColor);
 
@@ -88,13 +98,14 @@ const ColorPickerContent: FC<ColorPickerContentProps> = ({
                     onOpacityChange={handleOpacityChange}
                 />
                 {shouldShowColorPrefix && <ColorPresets onClick={handlePresentSelect} />}
-                <ColorInput color={selectedColor} onChange={() => {}} />
+                <ColorInput color={selectedColor} onChange={handleInputChange} />
             </StyledColorPickerContent>
         ),
         [
             externalColor,
             handleColorChange,
             handleHueColorChange,
+            handleInputChange,
             handleOpacityChange,
             handlePresentSelect,
             hueColor,

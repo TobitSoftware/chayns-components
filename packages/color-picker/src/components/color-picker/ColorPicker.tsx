@@ -18,7 +18,7 @@ export type ColorPickerProps = {
     /**
      * Whether standard colors can be selected.
      */
-    shouldShowColorPrefix?: boolean;
+    shouldShowColorPresets?: boolean;
     /**
      * Whether the color should be displayed as hex code or rgb.
      */
@@ -27,7 +27,7 @@ export type ColorPickerProps = {
 
 const ColorPicker: FC<ColorPickerProps> = ({
     color = 'rgba(162, 29, 29, 1)',
-    shouldShowColorPrefix,
+    shouldShowColorPresets,
     shouldShowHexCode,
 }) => {
     const [internalColor, setInternalColor] =
@@ -64,7 +64,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
                             color={color}
                             internalColor={internalColor}
                             onChange={handleColorChange}
-                            shouldShowColorPrefix={shouldShowColorPrefix}
+                            shouldShowColorPrefix={shouldShowColorPresets}
                         />
                     }
                 >
@@ -75,7 +75,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
                 </Popup>
             </StyledColorPicker>
         ),
-        [color, internalColor, label, shouldShowColorPrefix]
+        [color, internalColor, label, shouldShowColorPresets]
     );
 };
 
