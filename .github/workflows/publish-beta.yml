@@ -1,22 +1,22 @@
 name: Publish to NPM (v5)
 
 on:
-  workflow_dispatch:
-  push:
-    tags:
-      - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
+    workflow_dispatch:
+    push:
+        tags:
+            - 'v5.[0-9]+.[0-9]+-beta.[0-9]+'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16.13.2'
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm run lerna:build
-      - run: lerna publish from-package --yes
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: '16.13.2'
+                  registry-url: https://registry.npmjs.org/
+            - run: npm ci
+            - run: npm run lerna:build
+            - run: lerna publish from-package --yes
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
