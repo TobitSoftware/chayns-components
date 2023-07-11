@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/src/types/file';
+import type { FileItem } from '@chayns-components/core/lib/types/file';
 import React, { FC } from 'react';
 import {
     StyledMediaItemImage,
@@ -20,7 +20,7 @@ export type MediaItemProps = {
      */
     isEditMode: boolean;
     /**
-     *  Function to be executed wehen a file is selected
+     *  Function to be executed when a file is selected
      */
     openSelectedFile: (file: FileItem) => void;
 };

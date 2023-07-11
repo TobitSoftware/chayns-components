@@ -1,5 +1,4 @@
-import Button from '@chayns-components/core/lib/components/button/Button';
-import Input from '@chayns-components/core/lib/components/input/Input';
+import { Button, Input } from '@chayns-components/core';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useRef } from 'react';
 import RadioButtonGroup from '../../core/src/components/radio-button/radio-button-group/RadioButtonGroup';
