@@ -13,7 +13,7 @@ import React, { useMemo } from 'react';
 /**
  * Adjusts the color scheme for all child components.
  */
-const ColorScheme = (props) => {
+const ColorScheme = React.forwardRef((props, ref) => {
     let { color, colorMode, secondaryColor } = props;
 
     const { children, style, cssVariables, ...otherProps } = props;
@@ -78,6 +78,7 @@ const ColorScheme = (props) => {
 
     return (
         <div
+            ref={ref}
             data-colormode={colorMode}
             data-color={color}
             data-secondarycolor={secondaryColor}
@@ -87,7 +88,7 @@ const ColorScheme = (props) => {
             {children}
         </div>
     );
-};
+});
 
 ColorScheme.propTypes = {
     /**
