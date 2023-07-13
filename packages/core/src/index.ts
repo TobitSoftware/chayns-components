@@ -43,6 +43,7 @@ export { default as SharingBar } from './components/sharing-bar/SharingBar';
 export { default as Slider } from './components/slider/Slider';
 export {
     default as SmallWaitCursor,
+    SmallWaitCursorSize,
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TextArea } from './components/text-area/TextArea';
