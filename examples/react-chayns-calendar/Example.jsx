@@ -12,6 +12,11 @@ export default class CalendarExample extends Component {
         this.setState({ selected: date });
     };
 
+    handleMonthSelect = (date) => {
+        console.log('month selected', date);
+        // handle e.g. data loading after selecting another month
+    };
+
     render() {
         const { selected } = this.state;
         return (
@@ -19,6 +24,7 @@ export default class CalendarExample extends Component {
                 <Calendar
                     style={{ margin: '20px 0' }}
                     onDateSelect={this.handleDateSelect}
+                    onMonthSelect={this.handleMonthSelect}
                     startDate={new Date('2018-08-01T00:00:00')}
                     endDate={new Date('2018-12-31T00:00:00')}
                     selected={selected}
@@ -55,7 +61,7 @@ export default class CalendarExample extends Component {
                             },
                         },
                     ]}
-                    circleColor='#000000'
+                    circleColor="#000000"
                 />
                 <Calendar
                     style={{ margin: '20px 0' }}

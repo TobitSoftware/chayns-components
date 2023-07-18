@@ -52,7 +52,7 @@ export default class Calendar extends Component {
     static IsMobile = () => window.matchMedia('(max-width: 450px)').matches;
 
     constructor(props) {
-        super();
+        super(props);
 
         this.state = {
             focus: new Date(),
@@ -61,6 +61,7 @@ export default class Calendar extends Component {
 
         this.navigateLeftOnClick = this.navigateLeftOnClick.bind(this);
         this.navigateRightOnClick = this.navigateRightOnClick.bind(this);
+        this.setMonths = this.setMonths.bind(this);
 
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleTouchMove = this.handleTouchMove.bind(this);
@@ -110,6 +111,8 @@ export default class Calendar extends Component {
     }
 
     setMonths(_focus, translate) {
+        const { onMonthSelect } = this.props;
+
         const { setTimeout } = window;
 
         const OFFSET = Calendar.IsMobile() ? -50 : -25;
@@ -220,6 +223,10 @@ export default class Calendar extends Component {
                 });
             }, 300);
         }, 25);
+
+        if (translate && onMonthSelect) {
+            onMonthSelect(_focus);
+        }
     }
 
     getNavigateLeft() {
@@ -529,6 +536,11 @@ Calendar.propTypes = {
     onDateSelect: PropTypes.func,
 
     /**
+     * This callback is called when the currently selected month changes
+     */
+    onMonthSelect: PropTypes.func,
+
+    /**
      * The currently selected date as a JavaScript `Date` element.
      */
     selected: PropTypes.instanceOf(Date),
@@ -585,6 +597,7 @@ Calendar.defaultProps = {
     startDate: null,
     endDate: null,
     onDateSelect: null,
+    onMonthSelect: null,
     activateAll: true,
     activated: null,
     highlighted: null,
