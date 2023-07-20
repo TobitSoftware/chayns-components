@@ -64,6 +64,7 @@ const PersonFinderResults = ({
                                     'knownPersons',
                                     'personsRelated',
                                     'personsUnrelated',
+                                    'uacPersons',
                                 ].includes(group)
                             ) {
                                 (data[group] || []).forEach((value) => {

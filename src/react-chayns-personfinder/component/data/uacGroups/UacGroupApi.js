@@ -1,25 +1,29 @@
 /* eslint-disable import/prefer-default-export,no-console */
 
-export const fetchGroups = async () => {
-    let result = [];
-    const response = await fetch(
-        `https://sub50.tobit.com/backend/${chayns.env.site.locationId}/UserGroup`,
-        {
-            method: 'GET',
-            headers: {
-                Authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
-                Accept: 'application/json',
-            },
-        }
-    );
+import uacServiceClient from '../../../../utils/uacServiceClient';
 
-    if (response.ok) {
-        result = await response.json().catch(() => []);
-    } else {
-        console.error(
-            '[chayns components] Personfinder: failed to fetch uac groups',
-            response.status
-        );
-    }
-    return result;
+export const fetchGroups = async () => {
+    const response = await uacServiceClient
+        .getUserGroups({
+            countUsers: false,
+            withMeta: true,
+        })
+        .catch((error) => {
+            console.error(
+                '[chayns components] Personfinder: uacServiceClient.getUserGroups failed',
+                error
+            );
+            return [];
+        });
+
+    return response.map((group) => ({
+        id: group.id,
+        name: group.showName,
+        locationId: chayns.env.site.locationId,
+        tappId: group.pageId || 0,
+        pageId: group.pageId || 0,
+        showName: group.showName,
+        description: group.description,
+        isSystemGroup: !!group.isSystemGroup,
+    }));
 };

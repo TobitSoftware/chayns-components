@@ -3,13 +3,13 @@ import React from 'react';
 import Icon from '../../../react-chayns-icon/component/Icon';
 import { useStateValue } from '../data/persons/PersonsContext';
 
-const FriendsIndicator = ({ personId, userId, name }) => {
+const FriendsIndicator = ({ personId, name }) => {
     const { isFriend, setFriend } = useStateValue();
 
     const handleClick = (event) => {
         event.stopPropagation();
 
-        setFriend(personId, userId, name, !isFriend(personId));
+        setFriend(personId, name, !isFriend(personId));
     };
 
     return (
@@ -29,7 +29,6 @@ const FriendsIndicator = ({ personId, userId, name }) => {
 
 FriendsIndicator.propTypes = {
     personId: PropTypes.string.isRequired,
-    userId: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
 };
 

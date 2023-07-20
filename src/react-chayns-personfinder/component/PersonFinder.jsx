@@ -76,11 +76,6 @@ PersonFinder.propTypes = {
     uacId: PropTypes.number,
 
     /**
-     * The locationId of a UAC group to search persons in.
-     */
-    locationId: PropTypes.number,
-
-    /**
      * A function to reduce the results.
      */
     reducerFunction: PropTypes.func,
@@ -208,7 +203,6 @@ PersonFinder.defaultProps = {
     showUacGroups: false,
     showKnownPersons: false,
     uacId: null,
-    locationId: null,
     reducerFunction: null,
     context: PersonsContext,
     onChange: null,

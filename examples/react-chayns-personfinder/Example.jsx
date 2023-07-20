@@ -81,8 +81,8 @@ export default class PersonFinderExample extends PureComponent {
         if (this.leftItemFinder) this.leftItemFinder.clear();
         if (this.uacFinder) this.uacFinder.clear();
         if (this.relationFinderUac) this.relationFinderUac.clear();
-        if (this.relationFinderUacLocation)
-            this.relationFinderUacLocation.clear();
+        if (this.relationFinderKnownPersons)
+            this.relationFinderKnownPersons.clear();
         this.simplePersonFinderRef1.current.clear();
         this.simplePersonFinderRef2.current.clear();
         this.simplePersonFinderRef3.current.clear();
@@ -189,11 +189,11 @@ export default class PersonFinderExample extends PureComponent {
                 />
                 <PersonFinder
                     ref={(ref) => {
-                        this.relationFinderUacLocation = ref;
+                        this.relationFinderKnownPersons = ref;
                     }}
-                    placeholder="UAC 1 Location 1"
-                    uacId={1}
-                    locationId={1}
+                    placeholder="Known Persons"
+                    showKnownPersons
+                    showPersons={false}
                     onChange={PersonFinderExample.handleSelect}
                 />
                 <PersonFinder

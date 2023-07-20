@@ -6,6 +6,7 @@ export const initialState = {
         friends: [],
         groups: [],
         knownPersons: [],
+        uacPersons: [],
     },
     showWaitCursor: {
         personsRelated: false,
@@ -13,6 +14,7 @@ export const initialState = {
         personsUnrelated: false,
         groups: false,
         knownPersons: false,
+        uacPersons: false,
     },
     isLoading: {
         personsRelated: false,
@@ -20,6 +22,7 @@ export const initialState = {
         personsUnrelated: false,
         groups: false,
         knownPersons: false,
+        uacPersons: false,
     },
     hasMore: {
         personsRelated: true,
@@ -27,6 +30,7 @@ export const initialState = {
         personsUnrelated: false,
         groups: false,
         knownPersons: false,
+        uacPersons: false,
     },
 };
 
@@ -82,6 +86,18 @@ export const reducer = (state = initialState, action) => {
                     knownPersons: action.showWaitCursor,
                 },
                 isLoading: { ...state.isLoading, knownPersons: true },
+            };
+        case 'REQUEST_UAC_PERSONS':
+            return {
+                ...state,
+                data: action.clear
+                    ? { ...state.data, uacPersons: [] }
+                    : state.data,
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    uacPersons: action.showWaitCursor,
+                },
+                isLoading: { ...state.isLoading, uacPersons: true },
             };
         case 'RECEIVE_PERSONS':
             return {
@@ -151,6 +167,20 @@ export const reducer = (state = initialState, action) => {
                 },
                 isLoading: { ...state.isLoading, knownPersons: false },
                 hasMore: { ...state.hasMore, knownPersons: action.hasMore },
+            };
+        case 'RECEIVE_UAC_PERSONS':
+            return {
+                ...state,
+                data: {
+                    ...state.data,
+                    uacPersons: [...state.data.uacPersons, ...action.data],
+                },
+                showWaitCursor: {
+                    ...state.showWaitCursor,
+                    uacPersons: false,
+                },
+                isLoading: { ...state.isLoading, uacPersons: false },
+                hasMore: { ...state.hasMore, uacPersons: action.hasMore },
             };
         case 'ADD_FRIEND':
             return {

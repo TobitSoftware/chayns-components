@@ -46,19 +46,13 @@ class FriendsHelper {
 
     static getFriendsList = () => FriendsHelper.#friends;
 
-    static setFriend = async (
-        personId,
-        userId,
-        fullName,
-        friendship = true
-    ) => {
+    static setFriend = async (personId, fullName, friendship = true) => {
         const success = await setFriend(personId, friendship);
         if (!success) return;
 
         if (friendship) {
             const friend = FriendsHelper.convertFriend({
                 personId,
-                userId,
                 fullName,
             });
             FriendsHelper.#friends.push(friend);
@@ -89,7 +83,6 @@ class FriendsHelper {
         name:
             friend.fullName ||
             [friend.firstName, friend.lastName].join(' ').trim(),
-        userId: friend.userId,
         fullName:
             friend.fullName ||
             [friend.firstName, friend.lastName].join(' ').trim(),

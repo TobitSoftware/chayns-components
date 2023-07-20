@@ -100,7 +100,6 @@ The `PersonFinder`-component takes the following props:
 | [showUacGroups](#showuacgroups)       | `boolean`                                                                                           | `false`          |          |
 | [showKnownPersons](#showknownpersons) | `boolean`                                                                                           | `false`          |          |
 | [uacId](#uacid)                       | `number`                                                                                            |                  |          |
-| [locationId](#locationid)             | `number`                                                                                            |                  |          |
 | [reducerFunction](#reducerfunction)   | `function`                                                                                          |                  |          |
 | [context](#context)                   | `{ Provider: function, Consumer: object }`                                                          | `PersonsContext` |          |
 | [onChange](#onchange)                 | `function`                                                                                          |                  |          |
@@ -187,16 +186,6 @@ uacId?: number
 ```
 
 The id of a UAC group to search persons in.
-
----
-
-### `locationId`
-
-```ts
-locationId?: number
-```
-
-The locationId of a UAC group to search persons in.
 
 ---
 
