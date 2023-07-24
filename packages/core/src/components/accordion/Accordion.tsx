@@ -157,8 +157,16 @@ const Accordion: FC<AccordionProps> = ({
     }, [isDisabled, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
-        setIsAccordionOpen(shouldOpen);
-    }, [shouldOpen]);
+        if (isDisabled) {
+            return;
+        }
+
+        if (typeof updateOpenAccordionUuid === 'function') {
+            updateOpenAccordionUuid(uuid);
+        }
+
+        setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
+    }, [isDisabled, shouldOpen, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
