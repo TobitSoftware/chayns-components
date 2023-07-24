@@ -1,4 +1,4 @@
-import AccordionGroup from '@chayns-components/core/lib/components/accordion/accordion-group/AccordionGroup';
+import { AccordionGroup } from '@chayns-components/core';
 import React, {
     forwardRef,
     ReactElement,

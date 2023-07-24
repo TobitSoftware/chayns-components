@@ -1,5 +1,4 @@
-import { Icon } from '@chayns-components/core';
-import { selectFiles } from '@chayns-components/core/src/utils/fileDialog';
+import { Icon, selectFiles } from '@chayns-components/core';
 import React, { FC, useCallback } from 'react';
 import { StyledAddFile, StyledAddFIleIconWrapper } from './AddFile.styles';
 

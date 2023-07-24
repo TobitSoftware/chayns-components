@@ -1,4 +1,4 @@
-import Icon from '@chayns-components/core/lib/components/icon/Icon';
+import { Icon } from '@chayns-components/core';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { PopupAlignment } from '../../constants/alignment';

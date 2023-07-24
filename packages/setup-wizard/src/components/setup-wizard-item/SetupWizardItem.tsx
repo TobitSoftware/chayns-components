@@ -1,7 +1,4 @@
-import Accordion from '@chayns-components/core/lib/components/accordion/Accordion';
-import AccordionContent from '@chayns-components/core/lib/components/accordion/accordion-content/AccordionContent';
-import Badge from '@chayns-components/core/lib/components/badge/Badge';
-import Icon from '@chayns-components/core/lib/components/icon/Icon';
+import { Accordion, AccordionContent, Badge, Icon } from '@chayns-components/core';
 import React, { FC, ReactNode, useCallback, useContext, useMemo } from 'react';
 import { SetupWizardContext } from '../setup-wizard/SetupWizard';
 import { StyledSetupWizardItem, StyledSetupWizardItemBadge } from './SetupWizardItem.styles';

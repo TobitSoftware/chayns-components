@@ -1,5 +1,5 @@
-import type { FileItem, Image, Video } from '@chayns-components/core/src/types/file';
-import { uploadFile } from '@chayns-components/core/src/utils/uploadFile';
+import { uploadFile } from '@chayns-components/core';
+import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
