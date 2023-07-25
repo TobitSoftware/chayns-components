@@ -1,17 +1,21 @@
 import { UacServiceClient } from '@chayns/uac-service';
 
-export const isTobitEmployee = () => {
-    const client = new UacServiceClient({
-        getToken: async () => chayns.env.user.tobitAccessToken || '',
-        getDefaultSiteId: () => chayns.env.site.id,
-        getDefaultPersonId: () => chayns.env.user.personId || '',
+const client = new UacServiceClient({
+    // ToDo replace with new api function if new api is ready
+    // eslint-disable-next-line @typescript-eslint/require-await
+    getToken: async () => chayns.env.user.tobitAccessToken || '',
+    getDefaultSiteId: () => chayns.env.site.id,
+    getDefaultPersonId: () => chayns.env.user.personId || '',
+});
+
+export const isTobitEmployee = async () => {
+    const siteInfos = await client.getMembershipSites({ groupId: 8255 });
+
+    let isEmployee = false;
+
+    siteInfos.forEach(({ siteId }) => {
+        isEmployee = siteId === '60038-22141';
     });
 
-    console.log(
-        client.isUserInGroup({
-            personId: chayns.env.user.personId,
-            siteId: chayns.env.site.id,
-            groupId: 8255,
-        })
-    );
+    return isEmployee;
 };

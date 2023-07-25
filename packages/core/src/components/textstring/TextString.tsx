@@ -69,11 +69,13 @@ const TextString: FC<TextStringProps> = ({
 
     const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
         (event) => {
-            isTobitEmployee();
-
             if (event.ctrlKey) {
-                selectLanguageToChange({
-                    textstringName: textString.name,
+                void isTobitEmployee().then((inGroup) => {
+                    if (inGroup) {
+                        selectLanguageToChange({
+                            textstringName: textString.name,
+                        });
+                    }
                 });
             }
         },
