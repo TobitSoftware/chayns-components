@@ -14,32 +14,23 @@ export const StyledRadioButton = styled.span`
 type StyledRadioButtonCheckBoxProps = WithTheme<unknown>;
 
 export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
+    opacity: 0;
+`;
+
+type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{ isChecked: boolean }>;
+
+export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseudoCheckBoxProps>`
+    background-color: ${({ theme, isChecked }: StyledRadioButtonPseudoCheckBoxProps) =>
+        isChecked ? theme.secondary : theme['secondary-103']};
+    opacity: 0.5;
+    border: 1px solid rgba(160, 160, 160, 0.3);
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    border-radius: 100%;
+    top: 22%;
+    left: -1%;
     cursor: pointer !important;
-
-    :before {
-        background-color: ${({ theme }: StyledRadioButtonCheckBoxProps) => theme['secondary-103']};
-        border: 1px solid rgba(160, 160, 160, 0.3);
-        content: '';
-        width: 13px;
-        height: 13px;
-        position: absolute;
-        border-radius: 100%;
-        top: 5.8px;
-        left: 0;
-        cursor: pointer !important;
-    }
-
-    :checked::before {
-        content: '';
-        width: 13px;
-        height: 13px;
-        background-color: ${({ theme }: StyledRadioButtonCheckBoxProps) => theme.secondary};
-        position: absolute;
-        border-radius: 100%;
-        top: 5.75px;
-        left: 0;
-        cursor: pointer !important;
-    }
 `;
 
 type StyledRadioButtonCheckBoxMarkProps = WithTheme<{
@@ -51,8 +42,8 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     cursor: pointer;
     background-color: transparent;
     position: absolute;
-    top: 7px;
-    left: 3.75px;
+    top: 0;
+    left: 3px;
     display: inline-block;
     transform: rotate(35deg);
     height: 9px;
