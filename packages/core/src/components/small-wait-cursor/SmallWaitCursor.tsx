@@ -1,11 +1,17 @@
-import React, { FC, useMemo } from 'react';
+// noinspection JSUnusedGlobalSymbols
+
+import React, { CSSProperties, FC } from 'react';
 import {
     StyledSmallWaitCursor,
     StyledSmallWaitCursorBackground,
     StyledSmallWaitCursorWaitCursor,
 } from './SmallWaitCursor.styles';
 
-// noinspection JSUnusedGlobalSymbols
+export enum SmallWaitCursorSize {
+    Small = 16,
+    Medium = 30,
+}
+
 export enum SmallWaitCursorSpeed {
     Slow = 1.5,
     Medium = 1,
@@ -13,6 +19,7 @@ export enum SmallWaitCursorSpeed {
 }
 
 export type SmallWaitCursorProps = {
+    color?: CSSProperties['color'];
     /**
      * Specifies whether the wait cursor should be displayed with a background.
      */
@@ -20,7 +27,11 @@ export type SmallWaitCursorProps = {
     /**
      * Specifies whether the wait cursor should be displayed.
      */
-    shouldShowWaitCursor: boolean;
+    shouldShowWaitCursor?: boolean;
+    /**
+     * The size of the wait cursor in pixels. Use the SmallWaitCursorSize enum for this prop.
+     */
+    size?: SmallWaitCursorSize;
     /**
      * The speed of the animation in seconds. Use the SmallWaitCursorSpeed enum for this prop.
      */
@@ -28,19 +39,22 @@ export type SmallWaitCursorProps = {
 };
 
 const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
-    shouldShowWaitCursor,
-    shouldShowBackground = true,
+    color,
+    shouldShowWaitCursor = true, // TODO: Revert prop to hide wait cursor
+    shouldShowBackground = true, // TODO: Revert prop to hide background
+    size = SmallWaitCursorSize.Medium,
     speed = SmallWaitCursorSpeed.Medium,
-}) =>
-    useMemo(
-        () => (
-            <StyledSmallWaitCursor shouldShowWaitCursor={shouldShowWaitCursor}>
-                <StyledSmallWaitCursorWaitCursor speed={speed} />
-                {shouldShowBackground && <StyledSmallWaitCursorBackground />}
-            </StyledSmallWaitCursor>
-        ),
-        [shouldShowBackground, shouldShowWaitCursor, speed]
-    );
+}) => (
+    <StyledSmallWaitCursor shouldShowWaitCursor={shouldShowWaitCursor} size={size}>
+        <StyledSmallWaitCursorWaitCursor
+            color={color}
+            shouldShowBackground={shouldShowBackground}
+            size={size}
+            speed={speed}
+        />
+        {shouldShowBackground && <StyledSmallWaitCursorBackground />}
+    </StyledSmallWaitCursor>
+);
 
 SmallWaitCursor.displayName = 'SmallWaitCursor';
 

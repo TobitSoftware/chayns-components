@@ -1,7 +1,14 @@
 import clsx from 'clsx';
+import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode } from 'react';
 import Icon from '../icon/Icon';
-import { StyledButton, StyledIconWrapper } from './Button.styles';
+import SmallWaitCursor, { SmallWaitCursorSize } from '../small-wait-cursor/SmallWaitCursor';
+import {
+    StyledButton,
+    StyledIconWrapper,
+    StyledMotionChildrenWrapper,
+    StyledMotionWaitCursorWrapper,
+} from './Button.styles';
 
 export type ButtonProps = {
     /**
@@ -29,6 +36,10 @@ export type ButtonProps = {
      */
     onClick: MouseEventHandler<HTMLButtonElement>;
     /**
+     * Shows a wait cursor instead of button text
+     */
+    shouldShowWaitCursor?: boolean;
+    /**
      * Stops event propagation on click
      */
     shouldStopPropagation?: boolean;
@@ -41,6 +52,7 @@ const Button: FC<ButtonProps> = ({
     isDisabled,
     isSecondary,
     onClick,
+    shouldShowWaitCursor,
     shouldStopPropagation,
 }) => {
     const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -61,14 +73,40 @@ const Button: FC<ButtonProps> = ({
             isSecondary={isSecondary}
             onClick={handleClick}
         >
-            <>
+            <AnimatePresence initial={false}>
                 {icon && (
                     <StyledIconWrapper>
                         <Icon color="white" icons={[icon]} />
                     </StyledIconWrapper>
                 )}
-                {children}
-            </>
+                {shouldShowWaitCursor ? (
+                    <StyledMotionWaitCursorWrapper
+                        animate={{ opacity: 1, width: 40 }}
+                        exit={{ opacity: 0, width: 0 }}
+                        initial={{ opacity: 0, width: 0 }}
+                        key="wait-cursor"
+                        style={{ overflow: 'hidden' }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <SmallWaitCursor
+                            color="white"
+                            shouldShowBackground={false}
+                            size={SmallWaitCursorSize.Small}
+                        />
+                    </StyledMotionWaitCursorWrapper>
+                ) : (
+                    <StyledMotionChildrenWrapper
+                        animate={{ opacity: 1, width: 'auto' }}
+                        exit={{ opacity: 0, width: 0 }}
+                        initial={{ opacity: 0, width: 0 }}
+                        key="children"
+                        style={{ overflow: 'hidden' }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {children}
+                    </StyledMotionChildrenWrapper>
+                )}
+            </AnimatePresence>
         </StyledButton>
     );
 };

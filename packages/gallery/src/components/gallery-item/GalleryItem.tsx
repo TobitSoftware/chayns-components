@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/src/types/file';
+import type { FileItem } from '@chayns-components/core/lib/types/file';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useCallback, useMemo } from 'react';
 import {
@@ -20,7 +20,7 @@ export type GalleryItemProps = {
      */
     isEditMode: boolean;
     /**
-     *  Function to be executed wehen a file is deleted
+     *  Function to be executed when a file is deleted
      */
     handleDeleteFile: (id?: string) => void;
     /**

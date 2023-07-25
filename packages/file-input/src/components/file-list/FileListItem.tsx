@@ -1,5 +1,4 @@
-import Icon from '@chayns-components/core/lib/components/icon/Icon';
-import ListItem from '@chayns-components/core/lib/components/list/list-item/ListItem';
+import { Icon, ListItem } from '@chayns-components/core';
 import React, { FC, useMemo } from 'react';
 import { getHumanSize, getIconByMimeType } from '../../utils/file';
 import { StyledFileListItem } from './FileListItem.styles';

@@ -5,6 +5,7 @@ import {
     StyledRadioButtonCheckBox,
     StyledRadioButtonCheckBoxMark,
     StyledRadioButtonLabel,
+    StyledRadioButtonPseudoCheckBox,
 } from './RadioButton.styles';
 import type { RadioButtonItem } from './types';
 
@@ -77,7 +78,9 @@ const RadioButton: FC<RadioButtonProps> = ({ isChecked, label, onChange, id }) =
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
-                <StyledRadioButtonCheckBoxMark isHovered={isHovered} isSelected={isMarked} />
+                <StyledRadioButtonPseudoCheckBox isChecked={isMarked}>
+                    <StyledRadioButtonCheckBoxMark isHovered={isHovered} isSelected={isMarked} />
+                </StyledRadioButtonPseudoCheckBox>
                 <StyledRadioButtonCheckBox type="radio" checked={isMarked} onChange={() => {}} />
                 {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
             </StyledRadioButton>

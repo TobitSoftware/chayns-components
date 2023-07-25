@@ -63,34 +63,33 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     popupPseudoContentRef.current.getBoundingClientRect();
 
                 const {
-                    x: childrenX,
-                    y: childrenY,
                     height: childrenHeight,
+                    left: childrenLeft,
+                    top: childrenTop,
                     width: childrenWidth,
                 } = popupRef.current.getBoundingClientRect();
 
-                if (pseudoHeight > childrenY - 25) {
-                    if (pseudoWidth > childrenX + childrenWidth / 2 - 25) {
+                if (pseudoHeight > childrenTop - 25) {
+                    if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
                         setAlignment(PopupAlignment.BottomRight);
                     } else {
                         setAlignment(PopupAlignment.BottomLeft);
                     }
 
                     setCoordinates({
-                        x: childrenX + childrenWidth / 2,
-                        y: childrenY + childrenHeight - 15,
-                    });
-                } else if (pseudoWidth > childrenX + childrenWidth / 2 - 25) {
-                    setAlignment(PopupAlignment.TopRight);
-                    setCoordinates({
-                        x: childrenX + childrenWidth / 2,
-                        y: childrenY,
+                        x: childrenLeft + childrenWidth / 2,
+                        y: childrenTop + childrenHeight + 4,
                     });
                 } else {
-                    setAlignment(PopupAlignment.TopLeft);
+                    if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
+                        setAlignment(PopupAlignment.TopRight);
+                    } else {
+                        setAlignment(PopupAlignment.TopLeft);
+                    }
+
                     setCoordinates({
-                        x: childrenX + childrenWidth / 2,
-                        y: childrenY + 15,
+                        x: childrenLeft + childrenWidth / 2,
+                        y: childrenTop - 4,
                     });
                 }
 
@@ -125,10 +124,10 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 if (!popupContentRef.current?.contains(event.target as Node)) {
                     event.preventDefault();
                     event.stopPropagation();
-                }
 
-                if (!shouldShowOnHover) {
-                    handleHide();
+                    if (!shouldShowOnHover) {
+                        handleHide();
+                    }
                 }
             },
             [handleHide, shouldShowOnHover]
