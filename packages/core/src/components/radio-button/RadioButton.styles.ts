@@ -47,16 +47,16 @@ type StyledRadioButtonCheckBoxMarkProps = WithTheme<{
     isSelected: boolean;
 }>;
 
-export const StyledRadioButtonCheckBoxMark = styled.input<StyledRadioButtonCheckBoxMarkProps>`
+export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckBoxMarkProps>`
     cursor: pointer;
     background-color: transparent;
     position: absolute;
-    top: 6.8px;
-    left: 3.25px;
+    top: 7px;
+    left: 3.75px;
     display: inline-block;
     transform: rotate(35deg);
     height: 9px;
-    width: 0.75px;
+    width: 5px;
     border-bottom: 2px solid white;
     border-right: 2px solid white;
     border-top: transparent;
