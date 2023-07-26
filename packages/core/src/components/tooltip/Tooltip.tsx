@@ -39,7 +39,7 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, item, item]
+        [isDisabled, children, item]
     );
 };
 
