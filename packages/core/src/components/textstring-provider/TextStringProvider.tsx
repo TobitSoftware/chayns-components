@@ -1,4 +1,4 @@
-import React, { createContext, FC, useEffect, useState } from 'react';
+import React, { createContext, FC, ReactNode, useEffect, useState } from 'react';
 import { loadLibrary } from './utils';
 
 export type TextStringValue = {
@@ -8,6 +8,10 @@ export type TextStringValue = {
 export const TextStringContext = createContext<TextStringValue>({});
 
 export type TextStringProviderProps = {
+    /**
+     * The element that should use the library.
+     */
+    children?: ReactNode;
     /**
      * The language that should be used.
      */
