@@ -43,7 +43,7 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     background-color: transparent;
     position: absolute;
     top: 0;
-    left: 3px;
+    left: 2.925px;
     display: inline-block;
     transform: rotate(35deg);
     height: 9px;
