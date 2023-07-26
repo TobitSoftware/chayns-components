@@ -23,11 +23,11 @@ export type SmallWaitCursorProps = {
     /**
      * Specifies whether the wait cursor should be displayed with a background.
      */
-    shouldShowBackground?: boolean;
+    shouldHideBackground?: boolean;
     /**
      * Specifies whether the wait cursor should be displayed.
      */
-    shouldShowWaitCursor?: boolean;
+    shouldHideWaitCursor?: boolean;
     /**
      * The size of the wait cursor in pixels. Use the SmallWaitCursorSize enum for this prop.
      */
@@ -40,19 +40,19 @@ export type SmallWaitCursorProps = {
 
 const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
     color,
-    shouldShowWaitCursor = true, // TODO: Revert prop to hide wait cursor
-    shouldShowBackground = true, // TODO: Revert prop to hide background
+    shouldHideBackground = false,
+    shouldHideWaitCursor = false,
     size = SmallWaitCursorSize.Medium,
     speed = SmallWaitCursorSpeed.Medium,
 }) => (
-    <StyledSmallWaitCursor shouldShowWaitCursor={shouldShowWaitCursor} size={size}>
+    <StyledSmallWaitCursor shouldShowWaitCursor={!shouldHideBackground} size={size}>
         <StyledSmallWaitCursorWaitCursor
             color={color}
-            shouldShowBackground={shouldShowBackground}
+            shouldShowBackground={!shouldHideWaitCursor}
             size={size}
             speed={speed}
         />
-        {shouldShowBackground && <StyledSmallWaitCursorBackground />}
+        {!shouldHideWaitCursor && <StyledSmallWaitCursorBackground />}
     </StyledSmallWaitCursor>
 );
 

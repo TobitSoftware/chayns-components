@@ -5,8 +5,8 @@ export default {
     title: 'Core/SmallWaitCursor',
     component: SmallWaitCursor,
     args: {
-        shouldShowBackground: true,
-        shouldShowWaitCursor: true,
+        shouldHideBackground: false,
+        shouldHideWaitCursor: false,
     },
 } as ComponentMeta<typeof SmallWaitCursor>;
 
