@@ -92,10 +92,6 @@ export type AccordionProps = {
      */
     shouldHideBackground?: boolean;
     /**
-     * Whether the Accordion should be opened or closed. Can not be used with isDefaultOpen
-     */
-    shouldOpen?: boolean;
-    /**
      * Title of the Accordion displayed in the head
      */
     title: string;
@@ -126,7 +122,6 @@ const Accordion: FC<AccordionProps> = ({
     searchIcon,
     searchPlaceholder,
     shouldHideBackground = false,
-    shouldOpen = false,
     title,
     titleElement,
     shouldRenderClosed = false,
@@ -155,18 +150,6 @@ const Accordion: FC<AccordionProps> = ({
 
         setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
     }, [isDisabled, updateOpenAccordionUuid, uuid]);
-
-    useEffect(() => {
-        if (isDisabled) {
-            return;
-        }
-
-        if (typeof updateOpenAccordionUuid === 'function') {
-            updateOpenAccordionUuid(uuid);
-        }
-
-        setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
-    }, [isDisabled, shouldOpen, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {
