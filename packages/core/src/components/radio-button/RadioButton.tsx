@@ -104,9 +104,7 @@ const RadioButton: FC<RadioButtonProps> = ({
                     checked={isMarked}
                     onChange={() => {}}
                 />
-                {label && (
-                    <StyledRadioButtonLabel isDisabled={isDisabled}>{label}</StyledRadioButtonLabel>
-                )}
+                {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
             </StyledRadioButton>
         ),
         [handleClick, handleMouseEnter, isDisabled, isHovered, isMarked, label]

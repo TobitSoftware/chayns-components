@@ -77,9 +77,8 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     }}
 `;
 
-type StyledRadioButtonLabelProps = WithTheme<{ isDisabled: boolean }>;
+type StyledRadioButtonLabelProps = WithTheme<unknown>;
 
 export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
     color: ${({ theme }: StyledRadioButtonLabelProps) => theme.text};
-    //opacity: ${({ isDisabled }: StyledRadioButtonLabelProps) => (isDisabled ? 0.5 : 1)};
 `;
