@@ -1,14 +1,18 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledRadioButton = styled.span`
+type StyledRadioButtonProps = WithTheme<{ isDisabled: boolean }>;
+
+export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
     gap: 5px;
-    cursor: pointer;
     user-select: none;
     width: fit-content;
     align-items: center;
     position: relative;
+    cursor: ${({ isDisabled }: StyledRadioButtonProps) =>
+        isDisabled ? 'default !important' : 'pointer'};
+    opacity: ${({ isDisabled }: StyledRadioButtonProps) => (isDisabled ? 0.5 : 1)};
 `;
 
 type StyledRadioButtonCheckBoxProps = WithTheme<unknown>;
@@ -73,8 +77,9 @@ export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckB
     }}
 `;
 
-type StyledRadioButtonLabelProps = WithTheme<unknown>;
+type StyledRadioButtonLabelProps = WithTheme<{ isDisabled: boolean }>;
 
 export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
     color: ${({ theme }: StyledRadioButtonLabelProps) => theme.text};
+    //opacity: ${({ isDisabled }: StyledRadioButtonLabelProps) => (isDisabled ? 0.5 : 1)};
 `;

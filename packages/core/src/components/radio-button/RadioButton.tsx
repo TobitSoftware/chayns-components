@@ -15,6 +15,10 @@ export type RadioButtonProps = {
      */
     isChecked?: boolean;
     /**
+     * whether the RadioButton should be shown.
+     */
+    isDisabled?: boolean;
+    /**
      * The id of the radio button.
      */
     id: string;
@@ -28,7 +32,13 @@ export type RadioButtonProps = {
     onChange?: (item: RadioButtonItem) => void;
 };
 
-const RadioButton: FC<RadioButtonProps> = ({ isChecked, label, onChange, id }) => {
+const RadioButton: FC<RadioButtonProps> = ({
+    isChecked,
+    label,
+    onChange,
+    id,
+    isDisabled = false,
+}) => {
     const { selectedRadioButtonId, updateSelectedRadioButtonId } =
         useContext(RadioButtonGroupContext);
 
@@ -56,16 +66,22 @@ const RadioButton: FC<RadioButtonProps> = ({ isChecked, label, onChange, id }) =
     }, [id, isMarked, onChange]);
 
     const handleClick = useCallback(() => {
+        if (isDisabled) {
+            return;
+        }
+
         if (typeof updateSelectedRadioButtonId === 'function') {
             updateSelectedRadioButtonId(id);
         }
 
         setInternalIsChecked((prevState) => !prevState);
-    }, [id, updateSelectedRadioButtonId]);
+    }, [id, isDisabled, updateSelectedRadioButtonId]);
 
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-    };
+    const handleMouseEnter = useCallback(() => {
+        if (!isDisabled) {
+            setIsHovered(true);
+        }
+    }, [isDisabled]);
 
     const handleMouseLeave = () => {
         setIsHovered(false);
@@ -74,6 +90,7 @@ const RadioButton: FC<RadioButtonProps> = ({ isChecked, label, onChange, id }) =
     return useMemo(
         () => (
             <StyledRadioButton
+                isDisabled={isDisabled}
                 onClick={handleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -81,11 +98,18 @@ const RadioButton: FC<RadioButtonProps> = ({ isChecked, label, onChange, id }) =
                 <StyledRadioButtonPseudoCheckBox isChecked={isMarked}>
                     <StyledRadioButtonCheckBoxMark isHovered={isHovered} isSelected={isMarked} />
                 </StyledRadioButtonPseudoCheckBox>
-                <StyledRadioButtonCheckBox type="radio" checked={isMarked} onChange={() => {}} />
-                {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
+                <StyledRadioButtonCheckBox
+                    disabled={isDisabled}
+                    type="radio"
+                    checked={isMarked}
+                    onChange={() => {}}
+                />
+                {label && (
+                    <StyledRadioButtonLabel isDisabled={isDisabled}>{label}</StyledRadioButtonLabel>
+                )}
             </StyledRadioButton>
         ),
-        [handleClick, isHovered, isMarked, label]
+        [handleClick, handleMouseEnter, isDisabled, isHovered, isMarked, label]
     );
 };
 
