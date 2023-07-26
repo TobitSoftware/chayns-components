@@ -278,7 +278,7 @@ const Gallery: FC<GalleryProps> = ({
                 />
             ));
 
-            items.push(<AddFile onAdd={handleAddFiles} />);
+            items.push(<AddFile key="add_file" onAdd={handleAddFiles} />);
 
             return items;
         }
