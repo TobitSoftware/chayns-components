@@ -1,5 +1,16 @@
-import React, { createElement, FC, ReactHTML, ReactNode, useContext, useMemo } from 'react';
+import React, {
+    createElement,
+    FC,
+    MouseEventHandler,
+    ReactHTML,
+    ReactNode,
+    useCallback,
+    useContext,
+    useMemo,
+} from 'react';
+import { isTobitEmployee } from '../../utils/isTobitEmployee';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
+import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
 
@@ -56,7 +67,25 @@ const TextString: FC<TextStringProps> = ({
         return element;
     }, [children, childrenTagName, text]);
 
-    return useMemo(() => <StyledTextString>{childElement}</StyledTextString>, [childElement]);
+    const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
+        (event) => {
+            if (event.ctrlKey) {
+                void isTobitEmployee().then((inGroup) => {
+                    if (inGroup) {
+                        selectLanguageToChange({
+                            textstringName: textString.name,
+                        });
+                    }
+                });
+            }
+        },
+        [textString.name]
+    );
+
+    return useMemo(
+        () => <StyledTextString onClick={handleClick}>{childElement}</StyledTextString>,
+        [childElement, handleClick]
+    );
 };
 
 TextString.displayName = 'TextString';
