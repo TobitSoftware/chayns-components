@@ -29,9 +29,9 @@ export type GalleryProps = {
      */
     files?: FileItem[];
     /**
-     *  Function to be executed when files are added
+     *  Function to be executed when files are added and uploaded
      */
-    onAdd?: (files: FileItem[]) => void;
+    onAdd?: (files: FileItem) => void;
     /**
      *  Function to be executed when a file is removed
      */
@@ -70,29 +70,31 @@ const Gallery: FC<GalleryProps> = ({
     /**
      * This function adds uploaded files to fileItems
      */
-    const handleUploadFileCallback = (file: FileItem, UploadedFile: Video | Image) => {
-        setFileItems((prevState) =>
-            prevState.map((prevFile) => {
-                if (prevFile.id === file.id) {
-                    return {
-                        ...prevFile,
-                        uploadedFile: UploadedFile,
-                        state: 'uploaded',
-                    };
-                }
-                return prevFile;
-            })
-        );
-    };
+    const handleUploadFileCallback = useCallback(
+        (file: FileItem, UploadedFile: Video | Image) => {
+            setFileItems((prevState) =>
+                prevState.map((prevFile) => {
+                    if (prevFile.id === file.id) {
+                        if (typeof onAdd === 'function') {
+                            onAdd({
+                                ...prevFile,
+                                uploadedFile: UploadedFile,
+                                state: 'uploaded',
+                            });
+                        }
 
-    /**
-     * This function returns the fileItems if some files are updated
-     */
-    useEffect(() => {
-        if (onAdd) {
-            onAdd(fileItems);
-        }
-    }, [fileItems, onAdd]);
+                        return {
+                            ...prevFile,
+                            uploadedFile: UploadedFile,
+                            state: 'uploaded',
+                        };
+                    }
+                    return prevFile;
+                })
+            );
+        },
+        [onAdd]
+    );
 
     /**
      * Prepares files for previewUrl and upload
@@ -143,7 +145,7 @@ const Gallery: FC<GalleryProps> = ({
                 callback: (UploadedFile) => handleUploadFileCallback(file, UploadedFile),
             });
         });
-    }, [accessToken, fileItems, personId]);
+    }, [accessToken, fileItems, handleUploadFileCallback, personId]);
 
     /**
      * This function formats and adds files to fileItems
@@ -206,7 +208,7 @@ const Gallery: FC<GalleryProps> = ({
 
             setFileItems(filteredFiles);
 
-            if (!fileToDelete || !onRemove) {
+            if (!fileToDelete || typeof onRemove !== 'function') {
                 return;
             }
 
@@ -276,7 +278,7 @@ const Gallery: FC<GalleryProps> = ({
                 />
             ));
 
-            items.push(<AddFile onAdd={handleAddFiles} />);
+            items.push(<AddFile key="add_file" onAdd={handleAddFiles} />);
 
             return items;
         }

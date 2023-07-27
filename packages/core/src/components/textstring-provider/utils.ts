@@ -16,3 +16,15 @@ export const loadLibrary = async ({ language, libraryName }: LoadLibraryOptions)
 
     return (await response.json()) as TextStringValue;
 };
+
+interface SelectLanguageToChangeOptions {
+    textstringName: string;
+}
+
+export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChangeOptions) => {
+    void chayns.dialog.iFrame({
+        url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+        buttons: [],
+        input: { textstring: textstringName },
+    });
+};

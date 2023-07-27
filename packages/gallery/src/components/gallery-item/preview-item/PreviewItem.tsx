@@ -28,7 +28,7 @@ const PreviewItem: FC<PreviewItemProps> = ({ fileItem }) => (
     >
         <StyledPreviewItemImageWrapper>
             <StyledPreviewItemLoadingIcon>
-                <SmallWaitCursor shouldShowWaitCursor shouldShowBackground={false} />
+                <SmallWaitCursor shouldHideWaitCursor={false} shouldHideBackground />
             </StyledPreviewItemLoadingIcon>
             <StyledPreviewItemImage draggable={false} src={fileItem.previewUrl} />
         </StyledPreviewItemImageWrapper>

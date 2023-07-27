@@ -90,7 +90,7 @@ const Button: FC<ButtonProps> = ({
                     >
                         <SmallWaitCursor
                             color="white"
-                            shouldShowBackground={false}
+                            shouldHideBackground
                             size={SmallWaitCursorSize.Small}
                         />
                     </StyledMotionWaitCursorWrapper>

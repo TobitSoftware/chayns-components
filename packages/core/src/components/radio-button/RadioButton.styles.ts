@@ -1,45 +1,40 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledRadioButton = styled.span`
+type StyledRadioButtonProps = WithTheme<{ isDisabled: boolean }>;
+
+export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
     gap: 5px;
-    cursor: pointer;
     user-select: none;
     width: fit-content;
     align-items: center;
     position: relative;
+    cursor: ${({ isDisabled }: StyledRadioButtonProps) =>
+        isDisabled ? 'default !important' : 'pointer'};
+    opacity: ${({ isDisabled }: StyledRadioButtonProps) => (isDisabled ? 0.5 : 1)};
 `;
 
 type StyledRadioButtonCheckBoxProps = WithTheme<unknown>;
 
 export const StyledRadioButtonCheckBox = styled.input<StyledRadioButtonCheckBoxProps>`
+    opacity: 0;
+`;
+
+type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{ isChecked: boolean }>;
+
+export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseudoCheckBoxProps>`
+    background-color: ${({ theme, isChecked }: StyledRadioButtonPseudoCheckBoxProps) =>
+        isChecked ? theme.secondary : theme['secondary-103']};
+    opacity: 0.5;
+    border: 1px solid rgba(160, 160, 160, 0.3);
+    width: 13px;
+    height: 13px;
+    position: absolute;
+    border-radius: 100%;
+    top: 22%;
+    left: -1%;
     cursor: pointer !important;
-
-    :before {
-        background-color: ${({ theme }: StyledRadioButtonCheckBoxProps) => theme['secondary-103']};
-        border: 1px solid rgba(160, 160, 160, 0.3);
-        content: '';
-        width: 13px;
-        height: 13px;
-        position: absolute;
-        border-radius: 100%;
-        top: 5.8px;
-        left: 0;
-        cursor: pointer !important;
-    }
-
-    :checked::before {
-        content: '';
-        width: 13px;
-        height: 13px;
-        background-color: ${({ theme }: StyledRadioButtonCheckBoxProps) => theme.secondary};
-        position: absolute;
-        border-radius: 100%;
-        top: 5.75px;
-        left: 0;
-        cursor: pointer !important;
-    }
 `;
 
 type StyledRadioButtonCheckBoxMarkProps = WithTheme<{
@@ -47,16 +42,16 @@ type StyledRadioButtonCheckBoxMarkProps = WithTheme<{
     isSelected: boolean;
 }>;
 
-export const StyledRadioButtonCheckBoxMark = styled.input<StyledRadioButtonCheckBoxMarkProps>`
+export const StyledRadioButtonCheckBoxMark = styled.span<StyledRadioButtonCheckBoxMarkProps>`
     cursor: pointer;
     background-color: transparent;
     position: absolute;
-    top: 6.8px;
-    left: 3.25px;
+    top: 0;
+    left: 2.925px;
     display: inline-block;
     transform: rotate(35deg);
     height: 9px;
-    width: 0.75px;
+    width: 5px;
     border-bottom: 2px solid white;
     border-right: 2px solid white;
     border-top: transparent;

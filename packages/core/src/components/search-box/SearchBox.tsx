@@ -47,9 +47,11 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
     const [value, setValue] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
     const [height, setHeight] = useState<number>(0);
+    const [width, setWidth] = useState(0);
 
     const boxRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     /**
      * This function closes the list of items
@@ -75,13 +77,24 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
     }, [handleOutsideClick, boxRef]);
 
     /**
-     * This hook calculates the greatest width
+     * This hook calculates the height
      */
     useEffect(() => {
         const textArray = list.map(({ text }) => text);
 
         setHeight(calculateContentHeight(textArray));
     }, [list, placeholder]);
+
+    /**
+     * This hook calculates the width
+     */
+    useEffect(() => {
+        const input = document.getElementById('search_box_input');
+
+        if (input) {
+            setWidth(input.offsetWidth);
+        }
+    }, []);
 
     /**
      * This function handles changes of the input
@@ -131,6 +144,8 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
+        matchingItems.sort((a, b) => a.text.localeCompare(b.text));
+
         matchingItems.forEach(({ id, text }) => {
             items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect} />);
         });
@@ -141,16 +156,20 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
     return useMemo(
         () => (
             <StyledSearchBox ref={boxRef}>
-                <Input
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder={placeholder}
-                    value={value}
-                />
+                <div id="search_box_input">
+                    <Input
+                        ref={inputRef}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        placeholder={placeholder}
+                        value={value}
+                    />
+                </div>
                 <AnimatePresence initial={false}>
                     <StyledMotionSearchBoxBody
                         key="content"
                         height={height}
+                        width={width}
                         initial={{ height: 0, opacity: 0 }}
                         animate={
                             isAnimating
@@ -167,7 +186,7 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
                 </AnimatePresence>
             </StyledSearchBox>
         ),
-        [content, handleBlur, handleChange, height, isAnimating, placeholder, value]
+        [content, handleBlur, handleChange, height, isAnimating, placeholder, value, width]
     );
 };
 

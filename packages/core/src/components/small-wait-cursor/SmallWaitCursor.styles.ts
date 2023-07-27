@@ -32,7 +32,7 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
     color: SmallWaitCursorProps['color'];
-    shouldShowBackground: SmallWaitCursorProps['shouldShowBackground'];
+    shouldHideBackground: SmallWaitCursorProps['shouldHideBackground'];
     size: SmallWaitCursorSize;
     speed: SmallWaitCursorSpeed;
 }>;
@@ -48,17 +48,17 @@ const spin = keyframes`
 
 export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorWaitCursorProps>`
     position: absolute;
-    top: ${({ shouldShowBackground }) => (shouldShowBackground ? 5 : 0)}px;
-    left: ${({ shouldShowBackground }) => (shouldShowBackground ? 5 : 0)}px;
+    top: ${({ shouldHideBackground }) => (shouldHideBackground ? 0 : 5)}px;
+    left: ${({ shouldHideBackground }) => (shouldHideBackground ? 0 : 5)}px;
     z-index: 2;
     border-style: solid;
     border-width: 3px;
     border-color: ${({ color, theme }: StyledSmallWaitCursorWaitCursorProps) =>
         color ?? theme.headline};
-    height: ${({ shouldShowBackground, size }) =>
-        shouldShowBackground ? `${size - 10}px` : '100%'};
-    width: ${({ shouldShowBackground, size }) =>
-        shouldShowBackground ? `${size - 10}px` : '100%'};
+    height: ${({ shouldHideBackground, size }) =>
+        shouldHideBackground ? '100%' : `${size - 10}px`};
+    width: ${({ shouldHideBackground, size }) =>
+        shouldHideBackground ? '100%' : `${size - 10}px`};
     border-radius: 50%;
     display: inline-block;
     border-top: 3px solid transparent;

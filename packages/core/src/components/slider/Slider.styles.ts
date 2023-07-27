@@ -28,6 +28,7 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     opacity: 0.7;
     -webkit-transition: 0.2s;
     transition: opacity 0.2s;
+    cursor: pointer !important;
 
     // Slider thumb for chrome
     &::-webkit-slider-thumb {
