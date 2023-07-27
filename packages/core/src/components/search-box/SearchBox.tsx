@@ -131,6 +131,8 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
+        matchingItems.sort((a, b) => a.text.localeCompare(b.text));
+
         matchingItems.forEach(({ id, text }) => {
             items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect} />);
         });
