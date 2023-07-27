@@ -16,7 +16,7 @@ import {
 } from './AmountControl.styles';
 import { checkForValidAmount } from './utils';
 
-export type DisplayState = 'default' | 'delete' | 'normal';
+export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount';
 
 export type AmountControlProps = {
     /**
@@ -51,6 +51,9 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
         switch (true) {
             case maxAmount === 1 && amountValue === 1:
                 setDisplayState('delete');
+                return;
+            case maxAmount && amountValue >= maxAmount:
+                setDisplayState('maxAmount');
                 return;
             case amountValue > 0:
                 setDisplayState('normal');
@@ -140,6 +143,9 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
                 item = <Icon icons={['fa ts-trash']} size={25} />;
                 break;
             case 'normal':
+                item = <Icon icons={['fa fa-minus']} size={15} color="red" />;
+                break;
+            case 'maxAmount':
                 item = <Icon icons={['fa fa-minus']} size={15} color="red" />;
                 break;
             default:
