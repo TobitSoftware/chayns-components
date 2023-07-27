@@ -44,7 +44,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             x: 0,
             y: 0,
         });
-        const container = document.body;
+        const container = document.querySelector('.tapp') || document.body;
 
         const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
         const [isOpen, setIsOpen] = useState(false);
