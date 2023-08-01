@@ -20,7 +20,6 @@ export const convertPerson = (relation) => {
         type: 'PERSON',
         id: relation.personId || relation.PersonID,
         name: fullName,
-        userId: relation.userId || relation.UserID,
         personId: relation.personId || relation.PersonID,
         fullName,
         firstName:
@@ -62,6 +61,9 @@ export const convertPersons = (persons) => {
     };
 };
 
+export const convertUacPersons = (persons) =>
+    persons.map((person) => convertPerson(person));
+
 export const convertSites = (sites) =>
     sites.map((site) => ({
         type: 'SITE',
@@ -77,7 +79,6 @@ export const convertKnownPerson = (knownPersons) =>
         type: 'KNOWN_PERSON',
         id: person.personId,
         name: [person.firstname, person.lastname].join(' ').trim(),
-        userId: Number.parseInt(person.id, 10),
         personId: person.personId,
         fullName: [person.firstname, person.lastname].join(' ').trim(),
         firstName: person.firstname,

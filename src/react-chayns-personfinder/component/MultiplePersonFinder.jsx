@@ -238,7 +238,6 @@ class MultiplePersonFinder extends Component {
                     {...(Context.Provider === PersonsContext.Provider
                         ? {
                               uacId: props.uacId,
-                              locationId: props.locationId,
                               includeOwn: props.includeOwn,
                               enableSites: showSites,
                               enablePersons: showPersons,

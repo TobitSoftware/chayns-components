@@ -23,6 +23,7 @@ import {
     convertPerson,
     convertPersons,
     convertSites,
+    convertUacPersons,
 } from './PersonsConverter';
 import FriendsHelper from './FriendsHelper';
 import simplifyString from '../../../../utils/simplifyString';
@@ -91,6 +92,16 @@ const ObjectMapping = {
                 en: 'known persons',
             },
             roundIcons: true,
+            show: (value) => value && value.length >= 3,
+        },
+        {
+            key: 'uacPersons',
+            lang: {
+                de: 'Personen',
+                en: 'persons',
+            },
+            roundIcons: true,
+            show: (value) => value && value.length >= 3,
         },
         {
             key: 'addEntry',
@@ -141,7 +152,6 @@ const PersonFinderStateProvider = ({
     enableUacGroups,
     enableKnownPersons,
     includeOwn,
-    locationId,
     uacId,
     reducerFunction,
     inputValue,
@@ -152,6 +162,7 @@ const PersonFinderStateProvider = ({
         state.data.personsUnrelated.length + state.data.personsRelated.length;
     const skipSites = state.data.sites.length;
     const skipKnownPersons = state.data.knownPersons.length;
+    const skipUacPersons = state.data.uacPersons.length;
     const knownPersonsInitialized = useRef(false);
     const uacGroupsInitialized = useRef(false);
     const [lastValue, setLastValue] = useState('');
@@ -227,7 +238,6 @@ const PersonFinderStateProvider = ({
                     firstName: chayns.env.user.firstName,
                     lastName: chayns.env.user.lastName,
                     personId: chayns.env.user.personId,
-                    userId: chayns.env.user.id,
                 },
             ]).personsRelated;
 
@@ -274,32 +284,26 @@ const PersonFinderStateProvider = ({
             if (value.length < 3 || !uacId) return;
 
             dispatch({
-                type: 'REQUEST_PERSONS',
-                showWaitCursor: {
-                    personsRelated: state.hasMore.personsRelated,
-                    personsUnrelated: !state.hasMore.personsRelated,
-                },
+                type: 'REQUEST_UAC_PERSONS',
+                showWaitCursor: true,
                 clear,
             });
 
-            const persons = await fetchUacPersons(uacId, locationId)(
+            const persons = await fetchUacPersons(uacId)(
                 value,
-                clear ? 0 : skipPersons,
+                clear ? 0 : skipUacPersons,
                 take
             );
-            const convertedPersons = convertPersons(persons);
-            const hasMore = {
-                personsRelated: false,
-                personsUnrelated: false,
-            };
+            const convertedPersons = convertUacPersons(persons);
+            const hasMore = convertedPersons.length === take;
 
             dispatch({
-                type: 'RECEIVE_PERSONS',
+                type: 'RECEIVE_UAC_PERSONS',
                 data: convertedPersons,
                 hasMore,
             });
         },
-        [uacId, state.hasMore.personsRelated, locationId, skipPersons, take]
+        [uacId, skipUacPersons, take]
     );
 
     const loadSites = useCallback(
@@ -378,22 +382,31 @@ const PersonFinderStateProvider = ({
             enableSites,
             enableUacGroups,
             enableKnownPersons,
+            uacId,
         ]
     );
 
     useEffect(() => {
-        // only trigger when enablePersons, enableSite or enableKnownPersons props change
+        // only trigger when enablePersons, enableSite, enableKnownPersons or uacId props change
         if (lastValue) {
             onChange(lastValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enablePersons, enableSites, enableKnownPersons]);
+    }, [enablePersons, enableSites, enableKnownPersons, uacId]);
 
     const onLoadMore = useCallback(
         async (type, value) => {
             const promises = [];
-            if (!type || (type !== 'sites' && type !== 'knownPersons')) {
+            if (
+                !type ||
+                (type !== 'sites' &&
+                    type !== 'knownPersons' &&
+                    type !== 'uacPersons')
+            ) {
                 promises.push(loadPersons(value));
+            }
+            if (!type || type === 'uacPersons') {
+                promises.push(loadUacPersons(value));
             }
             if (!type || type === 'sites') {
                 promises.push(loadSites(value));
@@ -408,7 +421,13 @@ const PersonFinderStateProvider = ({
 
             await Promise.all(promises);
         },
-        [loadPersons, loadSites, loadKnownPersons, enablePersons]
+        [
+            loadPersons,
+            loadSites,
+            loadKnownPersons,
+            loadUacPersons,
+            enablePersons,
+        ]
     );
 
     const unreducedData = {
@@ -417,6 +436,7 @@ const PersonFinderStateProvider = ({
         sites: enableSites ? state.data.sites : [],
         groups: enableUacGroups ? state.data.groups : [],
         knownPersons: enableKnownPersons ? state.data.knownPersons : [],
+        uacPersons: uacId ? state.data.uacPersons : [],
         friends: enableFriends ? FriendsHelper.getFriendsList() : [],
         addEntry: addInputToList
             ? [
@@ -483,7 +503,6 @@ PersonFinderStateProvider.propTypes = {
     enableUacGroups: PropTypes.bool,
     enableKnownPersons: PropTypes.bool,
     includeOwn: PropTypes.bool,
-    locationId: PropTypes.number,
     uacId: PropTypes.number,
     reducerFunction: PropTypes.func,
     addInputToList: PropTypes.bool,
@@ -499,7 +518,6 @@ PersonFinderStateProvider.defaultProps = {
     enableUacGroups: false,
     enableKnownPersons: false,
     includeOwn: false,
-    locationId: null,
     uacId: null,
     reducerFunction: null,
     addInputToList: false,
