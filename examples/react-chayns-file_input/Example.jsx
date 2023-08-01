@@ -60,7 +60,7 @@ const FileInputExample = () => {
                 items={[
                     {
                         types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
-                        maxFileSize: 4194304, // max file size is 4 MB
+                        maxFileSize: 50 * 1024 * 1024, // max file size is 50 MB
                         maxNumberOfFiles: 0, // no limit for number of files
                         onChange,
                         content: { text: 'Bild hochladen' },
@@ -125,13 +125,13 @@ const FileInputExample = () => {
                 items={[
                     {
                         types: FileInput.typePresets.TSIMG_CLOUD, // only images are allowed
-                        maxFileSize: 4194304, // max file size is 4 MB
+                        maxFileSize: 50 * 1024 * 1024, // max file size is 50 MB
                         maxNumberOfFiles: 1, // limit for number of files
                         onChange: (validFiles, invalidFiles) => {
                             if (invalidFiles.length === 0) {
                                 setErrorMessage('');
                             }
-                            onChange(validFiles)
+                            onChange(validFiles);
                         },
                         content: { text: 'Bild hochladen' },
                         onError: setErrorMessage,
