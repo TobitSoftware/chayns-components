@@ -10,7 +10,6 @@ import SmallWaitCursor from '../../react-chayns-smallwaitcursor/component/SmallW
 import { isFunction } from '../../utils/is';
 import fileInputCall from '../utils/fileInputCall';
 import supportsFileInput from '../utils/supportsFileInput';
-import compressImage from '../../utils/compressImage';
 
 /**
  * Accepts specified file types via dialog or drag and drop.
@@ -77,23 +76,6 @@ export default class FileInput extends PureComponent {
                     item.maxFileSize > 0 &&
                     file.size > item.maxFileSize
                 ) {
-                    if (
-                        file.type?.startsWith('image') &&
-                        file.type !== 'image/svg+xml'
-                    ) {
-                        try {
-                            // eslint-disable-next-line no-await-in-loop
-                            const result = await compressImage(
-                                file,
-                                item.maxFileSize
-                            );
-                            validFiles.push(result);
-                            // eslint-disable-next-line no-continue
-                            continue;
-                        } catch {
-                            // fallback to error dialog for too big files
-                        }
-                    }
                     this.onError(
                         item,
                         errorMessages.fileTooBig.replace(
