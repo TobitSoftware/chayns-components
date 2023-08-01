@@ -49,6 +49,10 @@ export type AccordionProps = {
      */
     isFixed?: boolean;
     /**
+     * This can be used to open the Accordion from the outside.
+     */
+    isOpened?: boolean;
+    /**
      * This will gray out the title of the Accordion to indicate hidden content, for example.
      */
     isTitleGreyed?: boolean;
@@ -112,6 +116,7 @@ const Accordion: FC<AccordionProps> = ({
     isDefaultOpen = false,
     isDisabled = false,
     isFixed = false,
+    isOpened,
     isTitleGreyed = false,
     isWrapped = false,
     onBodyScroll,
@@ -126,7 +131,8 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     shouldRenderClosed = false,
 }) => {
-    const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
+    const { openAccordionUuid, setOpenAccordionUuid, updateOpenAccordionUuid } =
+        useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen);
@@ -164,10 +170,24 @@ const Accordion: FC<AccordionProps> = ({
     }, [isOpen, onClose, onOpen]);
 
     useEffect(() => {
-        if (isDefaultOpen && typeof updateOpenAccordionUuid === 'function') {
-            updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
+        if (isDefaultOpen) {
+            if (typeof updateOpenAccordionUuid === 'function') {
+                updateOpenAccordionUuid(uuid, { shouldOnlyOpen: true });
+            } else {
+                setIsAccordionOpen(true);
+            }
         }
     }, [isDefaultOpen, updateOpenAccordionUuid, uuid]);
+
+    useEffect(() => {
+        if (typeof isOpened === 'boolean') {
+            if (typeof setOpenAccordionUuid === 'function') {
+                setOpenAccordionUuid(isOpened ? uuid : undefined);
+            } else {
+                setIsAccordionOpen(isOpened);
+            }
+        }
+    }, [isOpened, setOpenAccordionUuid, updateOpenAccordionUuid, uuid]);
 
     const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
 

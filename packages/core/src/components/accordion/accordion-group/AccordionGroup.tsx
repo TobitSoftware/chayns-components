@@ -1,14 +1,26 @@
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    Dispatch,
+    FC,
+    ReactNode,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 
 interface IAccordionGroupContext {
     openAccordionUuid: string | undefined;
+    setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
 }
 
 export const AccordionGroupContext = React.createContext<IAccordionGroupContext>({
     openAccordionUuid: undefined,
+    setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
 });
 
@@ -64,6 +76,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, onClose, onOpen }) 
     const providerValue = useMemo<IAccordionGroupContext>(
         () => ({
             openAccordionUuid,
+            setOpenAccordionUuid,
             updateOpenAccordionUuid,
         }),
         [openAccordionUuid, updateOpenAccordionUuid]
