@@ -139,5 +139,4 @@ export const fetchSites = async (value, skip, take) => {
     return result;
 };
 
-export const fetchKnownPersons = (value, skip, take) =>
-    fetchUacPersons(-1)(value, skip, take);
+export const fetchKnownPersons = fetchUacPersons(-1);

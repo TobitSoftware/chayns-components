@@ -329,7 +329,7 @@ const PersonFinderStateProvider = ({
 
     const loadKnownPersons = useCallback(
         async (value, clear = false) => {
-            if (!enableKnownPersons) return;
+            if (value.length < 3 || !enableKnownPersons) return;
 
             dispatch({
                 type: 'REQUEST_KNOWN_PERSONS',

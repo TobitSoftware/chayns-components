@@ -61,8 +61,7 @@ export const convertPersons = (persons) => {
     };
 };
 
-export const convertUacPersons = (persons) =>
-    persons.map((person) => convertPerson(person));
+export const convertUacPersons = (persons) => persons.map(convertPerson);
 
 export const convertSites = (sites) =>
     sites.map((site) => ({
