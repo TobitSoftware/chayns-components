@@ -205,8 +205,17 @@ class PersonFinderView extends Component {
         }
 
         const showResults = !selectedValue && hasEntries;
+
         const showWaitCursor =
-            waitCursor === true || Object.values(waitCursor).some((x) => x);
+            waitCursor === true ||
+            Object.entries(waitCursor).some(([k, v]) => {
+                if (!v) {
+                    return false;
+                }
+                // prevent show global wait cursor when handling load more for one type
+                return (data[k]?.length ?? 0) <= 0;
+            });
+
         if (showResults || showWaitCursor) {
             return [
                 showResults && (
