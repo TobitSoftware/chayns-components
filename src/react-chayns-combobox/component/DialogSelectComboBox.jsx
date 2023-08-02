@@ -167,8 +167,9 @@ const DialogSelectComboBox = ({
                 const parentElement = parent || document.querySelector('.tapp');
                 if (
                     parentElement &&
-                    window.getComputedStyle(parentElement).position ===
-                        'relative'
+                    ['absolute', 'relative'].includes(
+                        window.getComputedStyle(parentElement).position
+                    )
                 ) {
                     const rect = e.target.getBoundingClientRect();
                     const parentRect = parentElement.getBoundingClientRect();
