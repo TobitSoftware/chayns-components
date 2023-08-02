@@ -20,6 +20,7 @@ export const convertPerson = (relation) => {
         type: 'PERSON',
         id: relation.personId || relation.PersonID,
         name: fullName,
+        userId: relation.userId || relation.UserID,
         personId: relation.personId || relation.PersonID,
         fullName,
         firstName:
