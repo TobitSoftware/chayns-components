@@ -92,9 +92,10 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
      */
     useEffect(() => {
         if (selectedItem) {
-            handleSetSelectedItem(selectedItem);
+            setItem(selectedItem);
+            setIsAnimating(false);
         }
-    }, [handleSetSelectedItem, selectedItem]);
+    }, [selectedItem]);
 
     /**
      * Function that renders the combobox items
