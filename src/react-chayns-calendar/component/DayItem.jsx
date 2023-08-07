@@ -101,8 +101,9 @@ class DayItem extends PureComponent {
                     </div>
                     {categories?.length > 0 && (
                         <div className="day__item__category--wrapper">
-                            {categories.map((color) => (
+                            {categories.map((color, index) => (
                                 <div
+                                    key={`${index}__${color}`}
                                     className="day__item__category-circle"
                                     style={{ backgroundColor: color }}
                                 />
