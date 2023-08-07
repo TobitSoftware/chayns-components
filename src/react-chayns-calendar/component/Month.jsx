@@ -12,6 +12,7 @@ const Month = ({
     selected,
     activated,
     highlighted,
+    categories,
     circleColor,
     activateAll,
 }) => (
@@ -24,6 +25,7 @@ const Month = ({
             selected={selected}
             activated={activated}
             highlighted={highlighted}
+            categories={categories}
             circleColor={circleColor}
             activateAll={activateAll}
         />
@@ -57,7 +59,16 @@ Month.propTypes = {
             })
         ),
     ]),
-    circleColor:PropTypes.string,
+    categories: PropTypes.arrayOf(
+        PropTypes.shape({
+            date: PropTypes.oneOfType([
+                PropTypes.instanceOf(Date),
+                PropTypes.string,
+            ]),
+            color: PropTypes.string,
+        })
+    ),
+    circleColor: PropTypes.string,
 };
 
 Month.defaultProps = {
@@ -68,7 +79,8 @@ Month.defaultProps = {
     startDate: null,
     endDate: null,
     highlighted: false,
-    circleColor:null,
+    categories: null,
+    circleColor: null,
     activateAll: true,
     onDateSelect: null,
 };

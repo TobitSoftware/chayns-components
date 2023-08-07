@@ -296,6 +296,7 @@ export default class Calendar extends Component {
             startDate,
             activated: activatedProp,
             highlighted,
+            categories,
             circleColor,
             selected,
             activateAll,
@@ -449,6 +450,7 @@ export default class Calendar extends Component {
                     selected={_selected}
                     activated={activated}
                     highlighted={tempHighlighted}
+                    categories={categories}
                     circleColor={_circleColor}
                     activateAll={activateAll}
                     key={month.startDate.getTime()}
@@ -570,6 +572,19 @@ Calendar.propTypes = {
     ]),
 
     /**
+     * This prop is used to add a small category marker for a day
+     */
+    categories: PropTypes.arrayOf(
+        PropTypes.shape({
+            date: PropTypes.oneOfType([
+                PropTypes.instanceOf(Date),
+                PropTypes.string,
+            ]),
+            color: PropTypes.string,
+        })
+    ),
+
+    /**
      * Circle color of selected day
      */
     circleColor: PropTypes.string,
@@ -601,6 +616,7 @@ Calendar.defaultProps = {
     activateAll: true,
     activated: null,
     highlighted: null,
+    categories: null,
     circleColor: null,
     style: null,
     className: null,

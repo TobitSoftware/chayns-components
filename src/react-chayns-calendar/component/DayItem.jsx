@@ -28,6 +28,7 @@ class DayItem extends PureComponent {
             selected,
             highlighted,
             highlightStyle,
+            categories,
             circleColor,
         } = this.props;
 
@@ -88,16 +89,24 @@ class DayItem extends PureComponent {
                     style={_style}
                     onClick={_onClick ? this.onClick : null}
                 >
-                    {_selected && circleColor ? (
-                        <div
-                            className={_contentClassName}
-                            style={{ backgroundColor: circleColor }}
-                        >
-                            {date.getDate()}
-                        </div>
-                    ) : (
-                        <div className={_contentClassName}>
-                            {date.getDate()}
+                    <div
+                        className={_contentClassName}
+                        style={
+                            _selected && circleColor
+                                ? { backgroundColor: circleColor }
+                                : undefined
+                        }
+                    >
+                        {date.getDate()}
+                    </div>
+                    {categories?.length > 0 && (
+                        <div className="day__item__category--wrapper">
+                            {categories.map((color) => (
+                                <div
+                                    className="day__item__category-circle"
+                                    style={{ backgroundColor: color }}
+                                />
+                            ))}
                         </div>
                     )}
                 </div>
@@ -122,6 +131,7 @@ DayItem.propTypes = {
     highlighted: PropTypes.bool,
     highlightStyle: PropTypes.object,
     circleColor: PropTypes.string,
+    categories: PropTypes.arrayOf(PropTypes.string),
 };
 
 DayItem.defaultProps = {
@@ -132,6 +142,7 @@ DayItem.defaultProps = {
     highlightStyle: null,
     circleColor: null,
     onDateSelect: null,
+    categories: null,
 };
 
 DayItem.displayName = 'DayItem';

@@ -46,6 +46,7 @@ The `Calendar`-component takes the following props:
 | [selected](#selected)           | `Date`                                                                                  | `new Date()` |          |
 | [activated](#activated)         | `Array<Date>`                                                                           |              |          |
 | [highlighted](#highlighted)     | `{ dates: Array<Date>, color: string } \| Array<{ dates: Array<Date>, color: string }>` |              |          |
+| [categories](#categories)       | `Array<{ date: Date \| string, color: string }>`                                        |              |          |
 | [circleColor](#circlecolor)     | `string`                                                                                |              |          |
 | [activateAll](#activateall)     | `boolean`                                                                               | `true`       |          |
 | [style](#style)                 | `{ [key: string]: string \| number }`                                                   |              |          |
@@ -120,6 +121,16 @@ highlighted?: { dates: Array<Date>, color: string } | Array<{ dates: Array<Date>
 This prop is used to highlight dates. It takes object in the form of
 `{ dates: [...<date objects>], color: '<css color>' }`, either supplied directly
 or in an array.
+
+---
+
+### `categories`
+
+```ts
+categories?: Array<{ date: Date | string, color: string }>
+```
+
+This prop is used to add a small category marker for a day
 
 ---
 

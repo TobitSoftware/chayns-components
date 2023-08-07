@@ -105,6 +105,14 @@ export default class CalendarExample extends Component {
                             new Date('2018-12-23T00:00:00'),
                         ],
                     }}
+                    categories={[
+                        { date: '2018-12-21T00:00:00', color: '#4fae32' },
+                        { date: '2018-12-22T00:00:00', color: '#4fae32' },
+                        { date: '2018-12-22T00:00:00', color: '#1ba3d3' },
+                        { date: '2018-12-23T00:00:00', color: '#4fae32' },
+                        { date: '2018-12-23T00:00:00', color: '#1ba3d3' },
+                        { date: '2018-12-24T00:00:00', color: '#1ba3d3' },
+                    ]}
                 />
             </div>
         );

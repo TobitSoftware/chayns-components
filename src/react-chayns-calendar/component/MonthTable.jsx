@@ -47,6 +47,16 @@ export default class MonthTable extends PureComponent {
         };
     }
 
+    static getCategoryData(categories, date) {
+        if (!categories) {
+            return null;
+        }
+
+        return categories
+            .filter((c) => areDatesEqual(new Date(c.date), date))
+            .map((c) => c.color);
+    }
+
     createTable() {
         const { startDate } = this.props;
 
@@ -150,6 +160,7 @@ export default class MonthTable extends PureComponent {
             selected,
             highlighted: highlightedList,
             circleColor,
+            categories,
             onDateSelect,
         } = this.props;
         const _table = this.createTable();
@@ -172,19 +183,21 @@ export default class MonthTable extends PureComponent {
                     <div className="day__row" key={index}>
                         {/* TODO: SELECTED DATE SHOULD NOT HAVE EVENT LISTENER */}
                         {row.map((day) => {
-                            const {
-                                style,
-                                highlighted,
-                            } = MonthTable.getHighlightedData(
-                                highlightedList,
-                                day.date
-                            );
+                            const { style, highlighted } =
+                                MonthTable.getHighlightedData(
+                                    highlightedList,
+                                    day.date
+                                );
 
                             return (
                                 <DayItem
                                     key={day.date.getTime()}
                                     date={day.date}
                                     inMonth={day.inMonth}
+                                    categories={MonthTable.getCategoryData(
+                                        categories,
+                                        day.date
+                                    )}
                                     activateAll={activateAll}
                                     activated={MonthTable.isActivated(
                                         activated,
@@ -218,6 +231,15 @@ MonthTable.propTypes = {
             style: PropTypes.object,
         })
     ),
+    categories: PropTypes.arrayOf(
+        PropTypes.shape({
+            date: PropTypes.oneOfType([
+                PropTypes.instanceOf(Date),
+                PropTypes.string,
+            ]),
+            color: PropTypes.string,
+        })
+    ),
     circleColor: PropTypes.string,
 };
 
@@ -226,6 +248,7 @@ MonthTable.defaultProps = {
     activated: null,
     highlighted: null,
     circleColor: null,
+    categories: null,
     startDate: null,
     activateAll: true,
     onDateSelect: null,
