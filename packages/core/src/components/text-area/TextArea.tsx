@@ -47,15 +47,6 @@ const TextArea: FC<TextAreaProps> = ({
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    /**
-     * This function sets the external value
-     */
-    useEffect(() => {
-        if (typeof value === 'string') {
-            setDisplayedValue(value);
-        }
-    }, [value]);
-
     const adjustTextareaHeight = useCallback(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto';
@@ -66,19 +57,36 @@ const TextArea: FC<TextAreaProps> = ({
     }, [maxHeight]);
 
     /**
+     * This hook calculates the height of the TextArea after the displayValue is changed and the content is inside the "textareaRef".
+     * To maintain the functionality while clearing the input, the length need to be greater than -1.
+     */
+    useEffect(() => {
+        if (displayedValue.length > -1) {
+            adjustTextareaHeight();
+        }
+    }, [adjustTextareaHeight, displayedValue]);
+
+    /**
+     * This function sets the external value
+     */
+    useEffect(() => {
+        if (typeof value === 'string') {
+            setDisplayedValue(value);
+        }
+    }, [value]);
+
+    /**
      * This function updates the value
      */
     const handleChange = useCallback(
         (event: ChangeEvent<HTMLTextAreaElement>) => {
             setDisplayedValue(event.target.value);
 
-            adjustTextareaHeight();
-
             if (onChange) {
                 onChange(event);
             }
         },
-        [adjustTextareaHeight, onChange]
+        [onChange]
     );
 
     return useMemo(
