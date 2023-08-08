@@ -39,13 +39,18 @@ const NumberInput: FC<NumberInputProps> = ({
     placeholder,
     onNumberChange,
 }) => {
-    const [value, setValue] = useState<number | null>(number);
     const [stringValue, setStringValue] = useState<string>('');
 
     const handleChange = (newValue: number | null = null) => {
-        setValue(newValue);
+        if (typeof newValue !== 'number') {
+            setStringValue('');
 
-        setStringValue(newValue?.toString() || '');
+            return;
+        }
+
+        const parsedValue = parseFloatAndRound({ stringValue: newValue?.toString() });
+
+        setStringValue(formateNumber({ number: parsedValue }));
     };
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
