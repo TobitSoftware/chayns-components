@@ -31,6 +31,7 @@ export { default as ListItem } from './components/list/list-item/ListItem';
 export { MentionFinderPopupAlignment } from './components/mention-finder/constants/alignment';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
+export { default as NumberInput } from './components/number-input/NumberInput';
 export { default as Popup } from './components/popup/Popup';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
