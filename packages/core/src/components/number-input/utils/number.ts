@@ -6,22 +6,24 @@ interface ParseFloatAndRoundOptions {
 export const parseFloatAndRound = ({ stringValue, decimals }: ParseFloatAndRoundOptions) => {
     const parsed = parseFloat(stringValue.replace(',', '.'));
 
-    return parseFloat(parsed.toFixed(decimals ?? 2));
+    if (decimals) {
+        return parseFloat(parsed.toFixed(decimals));
+    }
+
+    return parsed;
 };
 
 interface FormateNumberOptions {
     number: number | null;
-    forceFractionDigits?: boolean;
 }
 
-export const formateNumber = ({ number, forceFractionDigits }: FormateNumberOptions) => {
+export const formateNumber = ({ number }: FormateNumberOptions) => {
     if (typeof number !== 'number') {
         return '';
     }
 
     return number.toLocaleString('de-DE', {
         useGrouping: true,
-        minimumFractionDigits: forceFractionDigits ? 2 : 0,
-        maximumFractionDigits: 2,
+        maximumSignificantDigits: 20,
     });
 };

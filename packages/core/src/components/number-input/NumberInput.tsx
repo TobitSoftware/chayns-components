@@ -1,26 +1,26 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import Input from '../input/Input';
-import { INTEGER_TEST, NUMBER_CLEAR_REGEX } from './constants/number';
+import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, NUMBER_CLEAR_REGEX } from './constants/number';
 import { formateNumber, parseFloatAndRound } from './utils/number';
 
 export type NumberInputProps = {
     /**
-     * The number that should be displayed formatted in the input field. NOTE: A zero as number is not allowed
+     * Whether the user can add decimal places. Enables the user to input a zero as first number
      */
-    number: number | null;
-    /**
-     * Limits the number to this value
-     */
-    maxNumber?: number;
+    isDecimalInput?: boolean;
     /**
      * Applies rules for money input.
      * Rules: only two decimal places, one leading zero
      */
     isMoneyInput?: boolean;
     /**
-     * Whether the user can add decimal places. Enables the user to input a zero as first number
+     * Limits the number to this value
      */
-    isDecimalInput?: boolean;
+    maxNumber?: number;
+    /**
+     * The number that should be displayed formatted in the input field. NOTE: A zero as number is not allowed
+     */
+    number: number | null;
     /**
      * The placeholder that should be in the input
      */
@@ -58,6 +58,35 @@ const NumberInput: FC<NumberInputProps> = ({
             .replace(',', '.');
 
         if (sanitizedValue.trim().length > 0) {
+            // Allows numbers, a comma and any number of decimal places
+            if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
+                const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
+
+                if (parsedNumber > maxNumber) {
+                    return;
+                }
+
+                setStringValue(sanitizedValue.replace('.', ','));
+
+                return;
+            }
+
+            // Allows numbers, a comma and 2 numbers of decimal places
+            if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
+                const parsedNumber = parseFloatAndRound({
+                    stringValue: sanitizedValue,
+                    decimals: 2,
+                });
+
+                if (parsedNumber > maxNumber) {
+                    return;
+                }
+
+                setStringValue(sanitizedValue.replace('.', ','));
+
+                return;
+            }
+
             // Allows numbers but excludes numbers with leading 0
             if (INTEGER_TEST.test(sanitizedValue)) {
                 const parsedNumber = Number(sanitizedValue);
@@ -82,7 +111,6 @@ const NumberInput: FC<NumberInputProps> = ({
                 ? ''
                 : formateNumber({
                       number: parsedValue,
-                      forceFractionDigits: false,
                   })
         );
 
