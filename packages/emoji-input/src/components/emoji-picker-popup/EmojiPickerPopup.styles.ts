@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { PopupAlignment } from '../../constants/alignment';
 
-export const StyledEmojiPickerPopup = styled.div`
+type StyledEmojiPickerPopupProps = WithTheme<{ width: number }>;
+
+export const StyledEmojiPickerPopup = styled.div<StyledEmojiPickerPopupProps>`
     align-items: center;
     display: flex;
     height: ${() => getComputedStyle(document.body).getPropertyValue('line-height')};
-    position: relative;
+    position: absolute;
+    translate: ${({ width }) => width}px;
 `;
 
 type StyledMotionEmojiPickerPopupContentProps = WithTheme<{

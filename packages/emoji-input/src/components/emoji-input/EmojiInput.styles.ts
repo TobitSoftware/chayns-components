@@ -13,7 +13,7 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     min-height: 42px;
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'initial')};
-    position: relative;
+    //position: relative;
     transition: opacity 0.3s ease;
 `;
 
@@ -40,7 +40,10 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
+type StyledEmojiInputEditorProps = WithTheme<{
+    width: number;
+    placeholder: EmojiInputProps['placeholder'];
+}>;
 
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
@@ -49,6 +52,7 @@ export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     max-height: 210px;
     overflow-y: scroll;
     word-break: break-word;
+    max-width: ${({ width }) => width}px;
 
     // This fixes a bug where the field is not editable in certain browsers.
     // This is for example the case on iOS 15 or older.

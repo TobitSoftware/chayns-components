@@ -34,6 +34,10 @@ export type EmojiPickerPopupProps = {
      * @param {string} emoji - Emoji that was selected
      */
     onSelect: (emoji: string) => void;
+    /**
+     * The width of the parent element.
+     */
+    parentWidth: number;
 };
 
 export type PopupPosition = {
@@ -49,6 +53,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     onPopupVisibilityChange,
     onSelect,
     personId,
+    parentWidth,
 }) => {
     const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
         PopupAlignment.TopLeft
@@ -154,7 +159,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
             : 16;
 
     return (
-        <StyledEmojiPickerPopup>
+        <StyledEmojiPickerPopup width={parentWidth - 40}>
             <AnimatePresence initial={false}>
                 {shouldShowPopup && (
                     <StyledMotionEmojiPickerPopupContent

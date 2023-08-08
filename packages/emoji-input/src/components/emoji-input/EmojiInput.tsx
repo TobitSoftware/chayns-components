@@ -112,8 +112,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
 }) => {
     const [isMobile] = useState(getIsMobile());
     const [plainTextValue, setPlainTextValue] = useState(value);
+    const [width, setWidth] = useState(0);
 
     const editorRef = useRef<HTMLDivElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const shouldDeleteOneMoreBackwards = useRef(false);
     const shouldDeleteOneMoreForwards = useRef(false);
@@ -300,8 +302,14 @@ const EmojiInput: FC<EmojiInputProps> = ({
         };
     }, []);
 
+    useEffect(() => {
+        if (wrapperRef.current) {
+            setWidth(wrapperRef.current.offsetWidth);
+        }
+    }, []);
+
     return (
-        <StyledEmojiInput isDisabled={isDisabled}>
+        <StyledEmojiInput isDisabled={isDisabled} ref={wrapperRef}>
             <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
@@ -313,6 +321,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     onPaste={handlePaste}
                     placeholder={placeholder}
                     ref={editorRef}
+                    width={width - 50}
                 />
                 {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
@@ -320,6 +329,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                         alignment={popupAlignment}
                         onSelect={handlePopupSelect}
                         onPopupVisibilityChange={onPopupVisibilityChange}
+                        parentWidth={width}
                         personId={personId}
                     />
                 )}
