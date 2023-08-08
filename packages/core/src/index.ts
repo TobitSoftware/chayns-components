@@ -33,6 +33,7 @@ export { default as MentionFinder } from './components/mention-finder/MentionFin
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as NumberInput } from './components/number-input/NumberInput';
 export { default as Popup } from './components/popup/Popup';
+export type { PopupRef } from './components/popup/types';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
 export { default as RadioButton } from './components/radio-button/RadioButton';
@@ -44,6 +45,7 @@ export { default as SharingBar } from './components/sharing-bar/SharingBar';
 export { default as Slider } from './components/slider/Slider';
 export {
     default as SmallWaitCursor,
+    SmallWaitCursorSize,
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TextArea } from './components/text-area/TextArea';
@@ -54,5 +56,7 @@ export type {
     TextstringReplacement,
 } from './components/textstring/types';
 export { default as Tooltip } from './components/tooltip/Tooltip';
+export type { FileItem, Image, Meta, Video } from './types/file';
 export { selectFiles } from './utils/fileDialog';
+export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';

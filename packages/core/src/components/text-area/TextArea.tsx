@@ -51,7 +51,7 @@ const TextArea: FC<TextAreaProps> = ({
      * This function sets the external value
      */
     useEffect(() => {
-        if (value) {
+        if (typeof value === 'string') {
             setDisplayedValue(value);
         }
     }, [value]);

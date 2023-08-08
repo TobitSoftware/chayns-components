@@ -1,5 +1,5 @@
 import { SmallWaitCursor } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/src/types/file';
+import type { FileItem } from '@chayns-components/core/lib/types/file';
 import React, { FC } from 'react';
 import {
     StyledMotionPreviewItem,
@@ -28,7 +28,7 @@ const PreviewItem: FC<PreviewItemProps> = ({ fileItem }) => (
     >
         <StyledPreviewItemImageWrapper>
             <StyledPreviewItemLoadingIcon>
-                <SmallWaitCursor shouldShowWaitCursor shouldShowBackground={false} />
+                <SmallWaitCursor shouldHideWaitCursor={false} shouldHideBackground />
             </StyledPreviewItemLoadingIcon>
             <StyledPreviewItemImage draggable={false} src={fileItem.previewUrl} />
         </StyledPreviewItemImageWrapper>

@@ -71,6 +71,12 @@ export default {
     },
 } as ComponentMeta<typeof ComboBox>;
 
-const Template: ComponentStory<typeof ComboBox> = (args) => <ComboBox {...args} />;
+const Template: ComponentStory<typeof ComboBox> = (args) => (
+    <>
+        <h1>Pizza auswählen</h1>
+        <ComboBox {...args} />
+        <p>Pizza ist sehr lecker</p>
+    </>
+);
 
 export const General = Template.bind({});

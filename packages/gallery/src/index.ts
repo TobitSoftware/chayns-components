@@ -1,2 +1,3 @@
-export type { FileItem, Image, Meta, Video } from '@chayns-components/core/src/types/file';
+// noinspection JSUnusedGlobalSymbols
+
 export { default as Gallery } from './components/Gallery';

@@ -1,6 +1,4 @@
-import Icon from '@chayns-components/core/lib/components/icon/Icon';
-import List from '@chayns-components/core/lib/components/list/List';
-import { selectFiles } from '@chayns-components/core/src/utils/fileDialog';
+import { Icon, List, selectFiles } from '@chayns-components/core';
 import { AnimatePresence } from 'framer-motion';
 import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import { filterDuplicateFile } from '../utils/file';

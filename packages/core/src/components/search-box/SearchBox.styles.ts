@@ -6,11 +6,13 @@ export const StyledSearchBox = styled.div``;
 
 type StyledMotionSearchBoxBodyProps = WithTheme<{
     height: number;
+    width: number;
 }>;
 
 export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
     background: ${({ theme }: StyledMotionSearchBoxBodyProps) => theme['001']};
-    z-index: 2;
+    position: absolute;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
@@ -18,6 +20,7 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
     border-bottom-right-radius: 3px;
     border-top: none;
     cursor: pointer;
+    width: ${({ width }) => width}px;
     max-height: 300px;
     overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px

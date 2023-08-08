@@ -7,6 +7,7 @@ export interface Chayns {
     env: Env;
     openImage(urls: string | string[], start?: number): Promise<undefined>;
     openVideo(url: string): Promise<void>;
+    register(config: object): any;
 }
 
 export interface Dialog {
@@ -20,6 +21,20 @@ export interface Dialog {
         buttons?: DialogButton[];
         selectAllButton?: string;
     }): Promise<SelectDialogResult>;
+    alert(headline: string, text: string): Promise<ButtonType>;
+    iFrame(config: {
+        url: string;
+        input?: object;
+        title?: string;
+        message?: string;
+        buttons?: DialogButton[];
+        seamless?: boolean;
+        transparent?: boolean;
+        waitCursor?: boolean;
+        maxHeight?: string;
+        width?: number;
+        customTransitionTimeout?: number;
+    }): Promise<any>;
 }
 
 declare enum ButtonText {
@@ -60,7 +75,32 @@ declare enum SelectType {
     IconAndText,
 }
 
+export interface Group {
+    id: number;
+    isActive: boolean;
+}
+
+export interface User {
+    name: string;
+    firstName: string;
+    gender: number;
+    lastName: string;
+    id: number;
+    personId: string;
+    tobitAccessToken: string;
+    groups: Group[];
+    isAuthenticated: boolean;
+    adminMode: boolean;
+    isAdmin: boolean;
+}
+
+export interface Site {
+    id: string;
+}
+
 export interface Env {
+    site: Site;
+    user: User;
     language: any;
     parameters: any;
     isApp: boolean;

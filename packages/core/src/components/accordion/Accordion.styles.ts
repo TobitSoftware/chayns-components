@@ -14,10 +14,8 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !isWrapped &&
         !shouldHideBackground &&
         css`
-            background-color: rgba(
-                ${({ theme }: StyledMotionAccordionProps) => theme['100-rgb']},
-                0.85
-            );
+            background-color: ${({ theme }: StyledMotionAccordionProps) =>
+                theme['100']}; // ToDo: Add opacity here
             border-radius: 3px; // ToDo: Add correct border-radius here
             box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
         `}
