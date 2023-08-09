@@ -29,8 +29,12 @@ const FriendsIndicator = ({ personId, userId, name }) => {
 
 FriendsIndicator.propTypes = {
     personId: PropTypes.string.isRequired,
-    userId: PropTypes.number.isRequired,
+    userId: PropTypes.number,
     name: PropTypes.string.isRequired,
+};
+
+FriendsIndicator.defaultProps = {
+    userId: null,
 };
 
 FriendsIndicator.displayName = 'FriendsIndicator';
