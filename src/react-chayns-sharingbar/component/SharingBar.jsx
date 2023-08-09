@@ -105,6 +105,7 @@ const SharingBar = ({
             <ContextMenu
                 items={sharingItems}
                 childrenStyle={{ display: 'inline' }}
+                disableDialog={chayns.env.isDialog}
             >
                 {indicator}
             </ContextMenu>
