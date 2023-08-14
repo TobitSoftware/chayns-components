@@ -39,7 +39,7 @@ const RadioButton: FC<RadioButtonProps> = ({
     id,
     isDisabled = false,
 }) => {
-    const { selectedRadioButtonId, updateSelectedRadioButtonId } =
+    const { selectedRadioButtonId, updateSelectedRadioButtonId, setSelectedRadioButtonId } =
         useContext(RadioButtonGroupContext);
 
     const [internalIsChecked, setInternalIsChecked] = useState(false);
@@ -52,10 +52,14 @@ const RadioButton: FC<RadioButtonProps> = ({
     const isInitialRenderRef = useRef(true);
 
     useEffect(() => {
-        if (isChecked) {
-            setInternalIsChecked(isChecked);
+        if (typeof isChecked === 'boolean') {
+            if (typeof setSelectedRadioButtonId === 'function') {
+                setSelectedRadioButtonId(isChecked ? id : undefined);
+            } else {
+                setInternalIsChecked(isChecked);
+            }
         }
-    }, [isChecked]);
+    }, [id, isChecked, setSelectedRadioButtonId]);
 
     useEffect(() => {
         if (isInitialRenderRef.current) {

@@ -1,15 +1,27 @@
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    Dispatch,
+    FC,
+    ReactNode,
+    SetStateAction,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import type { RadioButtonItem } from '../types';
 
 type IUpdateSelectedRadioButtonId = (id: string) => void;
 
 interface IRadioButtonGroupContext {
     selectedRadioButtonId: string | undefined;
+    setSelectedRadioButtonId?: Dispatch<SetStateAction<string | undefined>>;
     updateSelectedRadioButtonId?: IUpdateSelectedRadioButtonId;
 }
 
 export const RadioButtonGroupContext = React.createContext<IRadioButtonGroupContext>({
     selectedRadioButtonId: undefined,
+    setSelectedRadioButtonId: undefined,
     updateSelectedRadioButtonId: undefined,
 });
 
@@ -56,6 +68,7 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children, onChange }) => 
     const providerValue = useMemo<IRadioButtonGroupContext>(
         () => ({
             selectedRadioButtonId,
+            setSelectedRadioButtonId,
             updateSelectedRadioButtonId,
         }),
         [selectedRadioButtonId, updateSelectedRadioButtonId]
