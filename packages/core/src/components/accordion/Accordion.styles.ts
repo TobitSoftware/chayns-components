@@ -20,9 +20,36 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
             box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
         `}
 
+    border-bottom: 1px solid transparent;
     margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
-    transition: background-color 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease,
-        margin-bottom 0.3s ease;
+    transition: background-color 0.3s ease, border-bottom-color 0.3s ease, border-radius 0.3s ease,
+        box-shadow 0.3s ease, margin-bottom 0.3s ease;
+
+    ${({ isOpen, isWrapped }) => {
+        if (isWrapped) {
+            return css`
+                :not(:last-child) {
+                    border-bottom-color: ${({ theme }: StyledMotionAccordionProps) =>
+                        theme.headline};
+                }
+            `;
+        }
+
+        if (!isOpen) {
+            return css`
+                border-bottom-color: ${({ theme }: StyledMotionAccordionProps) => theme.headline};
+            `;
+        }
+
+        return undefined;
+    }}
+
+    ${({ isOpen, isWrapped }) =>
+        !isOpen &&
+        !isWrapped &&
+        css`
+            border-bottom-color: ${({ theme }: StyledMotionAccordionProps) => theme.headline};
+        `}
 
     ${({ isParentWrapped }) =>
         isParentWrapped &&
