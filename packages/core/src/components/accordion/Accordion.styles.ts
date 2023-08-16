@@ -25,7 +25,9 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
     transition: background-color 0.3s ease, border-bottom-color 0.3s ease, border-radius 0.3s ease,
         box-shadow 0.3s ease, margin-bottom 0.3s ease;
 
-    ${({ isOpen, isWrapped }) => {
+    ${({ isOpen, isWrapped, shouldForceBackground }) => {
+        if (shouldForceBackground) return undefined;
+
         if (isWrapped) {
             return css`
                 :not(:last-child) {
@@ -43,13 +45,6 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
 
         return undefined;
     }}
-
-    ${({ isOpen, isWrapped }) =>
-        !isOpen &&
-        !isWrapped &&
-        css`
-            border-bottom-color: ${({ theme }: StyledMotionAccordionProps) => theme.headline};
-        `}
 
     ${({ isParentWrapped }) =>
         isParentWrapped &&
