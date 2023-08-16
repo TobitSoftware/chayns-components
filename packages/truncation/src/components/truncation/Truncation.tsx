@@ -1,60 +1,50 @@
 import { motion } from 'framer-motion';
-import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, {
+    FC,
+    MouseEvent,
+    MouseEventHandler,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
+import { truncateElement } from '../../utils/truncation';
 import TruncationClamp from './truncation-clamp/TruncationClamp';
 
+export type TruncationOnChangeHandler = (e: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
+
 export type TruncationProps = {
-    isDefaultOpen?: boolean;
+    className?: string;
     collapsedHeight?: number;
     moreLabel?: string;
     lessLabel?: string;
+    animationDuration?: number;
+    onChange?: TruncationOnChangeHandler;
     children: ReactElement;
 };
 
-const doesOverflow = (element: HTMLElement, referenceHeight: number): boolean =>
-    element.scrollHeight > referenceHeight;
-
-function hasOnlyText(element: HTMLElement): boolean {
-    // Check if element has no child elements.
-    if (element.children.length === 0) {
-        // If element has text (not empty), it is only text.
-        return element.textContent !== '';
-    }
-    // Element has child elements or no text, so it's not only text.
-    return false;
-}
-
-const removeLastLeafElement = (element: HTMLElement) => {
-    // remove last element of html element where the last element is a leaf element and its content is a string
-    const lastChild: Element | null = element.lastElementChild;
-    if (lastChild && !hasOnlyText(lastChild as HTMLElement) && lastChild.hasChildNodes()) {
-        removeLastLeafElement(lastChild as HTMLElement);
-    } else if (lastChild) {
-        element.removeChild(lastChild);
-    }
-};
-const truncatedElement = (element: HTMLElement, referenceHeight: number) => {
-    while (doesOverflow(element, referenceHeight)) {
-        removeLastLeafElement(element);
-    }
-};
-
-const ChildrenContainer = styled(motion.div)`
-    overflow: hidden;
-`;
-
 const Truncation: FC<TruncationProps> = ({
-    isDefaultOpen,
+    className,
     collapsedHeight = 150,
     moreLabel = 'Mehr',
     lessLabel = 'Weniger',
+    animationDuration = 0.5,
+    onChange,
     children,
 }) => {
     const childrenContainerRef = useRef<HTMLDivElement | null>(null);
     const truncatedContentRef = useRef<HTMLElement | null>(null);
     const contentRef = useRef<HTMLElement | null>(null);
 
-    const [isOpen, setIsOpen] = useState(isDefaultOpen ?? false);
+    const [childrenContainerHeight, setChildrenContainerHeight] = useState<number>();
+    const maxOpenedHeight = useMemo(
+        () => (childrenContainerHeight ? `${childrenContainerHeight}px` : 'auto'),
+        [childrenContainerHeight]
+    );
+
+    const [isOpen, setIsOpen] = useState(false);
 
     const clampLabel = useMemo(
         () => (isOpen ? lessLabel : moreLabel),
@@ -62,18 +52,23 @@ const Truncation: FC<TruncationProps> = ({
     );
     const [showClamp, setShowClamp] = useState(true);
 
+    // initialization logic
+    // set the height of the children container to the collapsed height
     useEffect(() => {
         if (isOpen || !!truncatedContentRef.current || !childrenContainerRef.current) return;
+        setChildrenContainerHeight(childrenContainerRef.current.scrollHeight);
         contentRef.current = childrenContainerRef.current.cloneNode(true) as HTMLElement;
-        truncatedElement(childrenContainerRef.current, collapsedHeight);
+        truncateElement(childrenContainerRef.current, collapsedHeight);
         truncatedContentRef.current = childrenContainerRef.current.cloneNode(true) as HTMLElement;
     }, [collapsedHeight, isOpen]);
 
+    // if truncated content is the same as the content, don't show the clamp because its not truncated
     useEffect(() => {
         setShowClamp(contentRef.current?.innerHTML !== truncatedContentRef.current?.innerHTML);
     }, []);
 
-    useEffect(() => {
+    // updates the content of the children container on animation completion
+    const handleAnimationCompletion = useCallback(() => {
         if (isOpen) {
             if (!childrenContainerRef?.current) return;
             childrenContainerRef.current.innerHTML = contentRef.current?.innerHTML ?? '';
@@ -83,20 +78,28 @@ const Truncation: FC<TruncationProps> = ({
         }
     }, [isOpen]);
 
-    const handleClampClick = useCallback(() => {
-        setIsOpen((o) => !o);
-    }, []);
+    // changes the state of the truncation
+    const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
+        (e) => {
+            setIsOpen((o) => {
+                onChange?.(e, !o);
+                return !o;
+            });
+        },
+        [onChange]
+    );
 
     return (
-        <div>
-            <ChildrenContainer
+        <div className={className}>
+            <motion.div
                 ref={childrenContainerRef}
                 initial={false}
-                animate={{ maxHeight: isOpen ? '10000px' : `${collapsedHeight}px` }}
-                transition={{ duration: 5 }}
+                animate={{ height: isOpen ? maxOpenedHeight : `${collapsedHeight}px` }}
+                transition={{ duration: animationDuration }}
+                onAnimationComplete={handleAnimationCompletion}
             >
                 {children}
-            </ChildrenContainer>
+            </motion.div>
             {showClamp && (
                 <TruncationClamp onClick={handleClampClick}>{clampLabel}</TruncationClamp>
             )}
