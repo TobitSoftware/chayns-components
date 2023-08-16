@@ -1,5 +1,13 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { ChangeEventHandler, FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    ChangeEventHandler,
+    CSSProperties,
+    FC,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
@@ -12,6 +20,13 @@ import {
 } from './SearchInput.styles';
 
 export type SearchInputProps = {
+    /**
+     * Color of the icon
+     */
+    iconColor?: CSSProperties['color'];
+    /**
+     * Function that is executed when the active state of the input changes
+     */
     onActiveChange?: (isActive: boolean) => void;
     /**
      * Function that is executed when the text of the input changes
@@ -27,7 +42,13 @@ export type SearchInputProps = {
     value?: string;
 };
 
-const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placeholder, value }) => {
+const SearchInput: FC<SearchInputProps> = ({
+    iconColor,
+    onActiveChange,
+    onChange,
+    placeholder,
+    value,
+}) => {
     const [isActive, setIsActive] = useState(typeof value === 'string' && value.trim() !== '');
 
     const inputRef = useRef<InputRef>(null);
@@ -60,6 +81,7 @@ const SearchInput: FC<SearchInputProps> = ({ onActiveChange, onChange, placehold
                         transition={{ duration: 0.3 }}
                     >
                         <Icon
+                            color={iconColor}
                             icons={isActive ? ['fa fa-arrow-left'] : ['fa fa-search']}
                             onClick={isActive ? handleBackIconClick : handleSearchIconClick}
                             size={18}
