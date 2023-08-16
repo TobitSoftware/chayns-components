@@ -92,6 +92,10 @@ export type AccordionProps = {
      */
     searchPlaceholder?: string;
     /**
+     * This will force the background color of the accordion to be used even if it is closed and not hovered.
+     */
+    shouldForceBackground?: boolean;
+    /**
      * This will hide the background color of the accordion
      */
     shouldHideBackground?: boolean;
@@ -126,6 +130,7 @@ const Accordion: FC<AccordionProps> = ({
     rightElement,
     searchIcon,
     searchPlaceholder,
+    shouldForceBackground = false,
     shouldHideBackground = false,
     title,
     titleElement,
@@ -197,6 +202,7 @@ const Accordion: FC<AccordionProps> = ({
             isOpen={isOpen}
             isParentWrapped={isParentWrapped}
             isWrapped={isWrapped}
+            shouldForceBackground={shouldForceBackground}
             shouldHideBackground={shouldHideBackground}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
