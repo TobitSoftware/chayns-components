@@ -6,6 +6,8 @@ import TruncationClamp from './truncation-clamp/TruncationClamp';
 export type TruncationProps = {
     isDefaultOpen?: boolean;
     collapsedHeight?: number;
+    moreLabel?: string;
+    lessLabel?: string;
     children: ReactElement;
 };
 
@@ -37,16 +39,28 @@ const truncatedElement = (element: HTMLElement, referenceHeight: number) => {
     }
 };
 
-const ChildrenContainer = styled(motion.div)``;
+const ChildrenContainer = styled(motion.div)`
+    overflow: hidden;
+`;
 
-const Truncation: FC<TruncationProps> = ({ isDefaultOpen, collapsedHeight = 150, children }) => {
+const Truncation: FC<TruncationProps> = ({
+    isDefaultOpen,
+    collapsedHeight = 150,
+    moreLabel = 'Mehr',
+    lessLabel = 'Weniger',
+    children,
+}) => {
     const childrenContainerRef = useRef<HTMLDivElement | null>(null);
     const truncatedContentRef = useRef<HTMLElement | null>(null);
     const contentRef = useRef<HTMLElement | null>(null);
 
     const [isOpen, setIsOpen] = useState(isDefaultOpen ?? false);
 
-    const clampLabel = useMemo(() => (isOpen ? 'Weniger' : 'Mehr'), [isOpen]);
+    const clampLabel = useMemo(
+        () => (isOpen ? lessLabel : moreLabel),
+        [isOpen, lessLabel, moreLabel]
+    );
+    const [showClamp, setShowClamp] = useState(true);
 
     useEffect(() => {
         if (isOpen || !!truncatedContentRef.current || !childrenContainerRef.current) return;
@@ -56,11 +70,13 @@ const Truncation: FC<TruncationProps> = ({ isDefaultOpen, collapsedHeight = 150,
     }, [collapsedHeight, isOpen]);
 
     useEffect(() => {
+        setShowClamp(contentRef.current?.innerHTML !== truncatedContentRef.current?.innerHTML);
+    }, []);
+
+    useEffect(() => {
         if (isOpen) {
-            setTimeout(() => {
-                if (!childrenContainerRef?.current) return;
-                childrenContainerRef.current.innerHTML = contentRef.current?.innerHTML ?? '';
-            }, 50);
+            if (!childrenContainerRef?.current) return;
+            childrenContainerRef.current.innerHTML = contentRef.current?.innerHTML ?? '';
         } else {
             if (!childrenContainerRef?.current) return;
             childrenContainerRef.current.innerHTML = truncatedContentRef.current?.innerHTML ?? '';
@@ -75,11 +91,15 @@ const Truncation: FC<TruncationProps> = ({ isDefaultOpen, collapsedHeight = 150,
         <div>
             <ChildrenContainer
                 ref={childrenContainerRef}
-                animate={{ height: isOpen ? 'auto' : collapsedHeight }}
+                initial={false}
+                animate={{ maxHeight: isOpen ? '10000px' : `${collapsedHeight}px` }}
+                transition={{ duration: 5 }}
             >
                 {children}
             </ChildrenContainer>
-            <TruncationClamp onClick={handleClampClick}>{clampLabel}</TruncationClamp>
+            {showClamp && (
+                <TruncationClamp onClick={handleClampClick}>{clampLabel}</TruncationClamp>
+            )}
         </div>
     );
 };
