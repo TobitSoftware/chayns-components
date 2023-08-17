@@ -13,10 +13,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import Icon from '../icon/Icon';
 import {
     StyledInput,
+    StyledInputClearIcon,
     StyledInputContent,
     StyledInputField,
+    StyledInputIconWrapper,
     StyledMotionInputLabel,
 } from './Input.styles';
 
@@ -25,6 +28,10 @@ export type InputRef = {
 };
 
 export type InputProps = {
+    /**
+     * Icon element to be displayed on the left side of the input field
+     */
+    iconElement?: ReactNode;
     /**
      * Disables the input so that it cannot be changed anymore
      */
@@ -54,6 +61,10 @@ export type InputProps = {
      */
     placeholderElement?: ReactNode;
     /**
+     * If true, a clear icon is displayed at the end of the input field
+     */
+    shouldShowClearIcon?: boolean;
+    /**
      * Input type set for input element (e.g. 'text', 'number' or 'password')
      */
     type?: HTMLInputTypeAttribute;
@@ -66,6 +77,7 @@ export type InputProps = {
 const Input = forwardRef<InputRef, InputProps>(
     (
         {
+            iconElement,
             isDisabled,
             onBlur,
             onChange,
@@ -73,6 +85,7 @@ const Input = forwardRef<InputRef, InputProps>(
             onKeyDown,
             placeholder,
             placeholderElement,
+            shouldShowClearIcon = false,
             type = 'text',
             value,
         },
@@ -81,6 +94,16 @@ const Input = forwardRef<InputRef, InputProps>(
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
 
         const inputRef = useRef<HTMLInputElement>(null);
+
+        const handleClearIconClick = useCallback(() => {
+            if (inputRef.current) {
+                inputRef.current.value = '';
+
+                if (typeof onChange === 'function') {
+                    onChange({ target: inputRef.current } as ChangeEvent<HTMLInputElement>);
+                }
+            }
+        }, [onChange]);
 
         const handleInputFieldChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +140,7 @@ const Input = forwardRef<InputRef, InputProps>(
 
         return (
             <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
+                {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                 <StyledInputContent>
                     <StyledInputField
                         disabled={isDisabled}
@@ -139,6 +163,11 @@ const Input = forwardRef<InputRef, InputProps>(
                         {placeholder}
                     </StyledMotionInputLabel>
                 </StyledInputContent>
+                {shouldShowClearIcon && (
+                    <StyledInputClearIcon onClick={handleClearIconClick}>
+                        <Icon icons={['fa fa-times']} />
+                    </StyledInputClearIcon>
+                )}
             </StyledInput>
         );
     }
