@@ -16,6 +16,16 @@ const removeLastLeafElement = (element: HTMLElement) => {
     const lastChild: Element | null = element.lastElementChild;
     if (lastChild && !hasOnlyText(lastChild as HTMLElement) && lastChild.hasChildNodes()) {
         removeLastLeafElement(lastChild as HTMLElement);
+    } else if (
+        lastChild &&
+        hasOnlyText(lastChild as HTMLElement) &&
+        lastChild.textContent &&
+        lastChild.textContent.length > 25
+    ) {
+        lastChild.textContent = `${lastChild.textContent.substring(
+            0,
+            lastChild.textContent.length - 25
+        )} ...`;
     } else if (lastChild) {
         element.removeChild(lastChild);
     }
