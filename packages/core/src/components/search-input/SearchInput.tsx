@@ -99,12 +99,11 @@ const SearchInput: FC<SearchInputProps> = ({
                         transition={{ duration: 0.3 }}
                     >
                         <Input
+                            iconElement={<Icon color={theme.text} icons={['far fa-search']} />}
                             onChange={onChange}
                             placeholder={placeholder}
-                            placeholderElement={
-                                <Icon color={theme.text} icons={['far fa-search']} size={14} />
-                            }
                             ref={inputRef}
+                            shouldShowClearIcon
                             value={value}
                         />
                     </StyledMotionSearchInputContentWrapper>
