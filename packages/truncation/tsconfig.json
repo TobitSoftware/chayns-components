@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "emitDeclarationOnly": true,
+        "forceConsistentCasingInFileNames": true,
+        "importsNotUsedAsValues": "error",
+        "isolatedModules": true,
+        "jsx": "react",
+        "lib": ["DOM", "ESNext", "DOM.Iterable"],
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUncheckedIndexedAccess": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "outDir": "lib"
+    },
+    "exclude": ["node_modules"],
+    "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.json"]
+}
