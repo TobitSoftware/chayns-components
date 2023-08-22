@@ -2,11 +2,7 @@ import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Truncation } from '../src';
 
 const BASE_HTML_TEXT =
-    '<p id="isPasted">Diese gebrauchte Samsung Galaxy Watch4 Classic, ' +
-    '46 mm, schwarz mit LTE und grauen Armband hat einen deutlichen Kratzer auf dem Display.&nbsp;</p>' +
-    '<p>Verkauf im Originalkarton komplett mit Zubehör.</p><p><strong>technische Daten:</strong></p><ul>' +
-    '<li>Displaygröße 3,45 cm</li><li>UMTS, LTE</li><li>Akku 247 mAh</li><li>Farbe Schwarz</li>' +
-    '<li>interner Speicher 16 GB</li><li>Abmessungen 45,5 x 45,5 x 11,0 mm</li></ul>';
+    '<p id="isPasted">Der legendärste Abend: Homecoming at next! Studenten und Ausreißer, Urlauber und Daheimgebliebene, Partymäuse und Partymuffel – sie alle zieht es am Tag vor Heiligabend in die Heimat an einen zuvor ausgemachten Ort, um all die guten Freunde und alte Bekannte wiederzutreffen.</p><p>Was damals vor vielen Jahren auf der StattAlm auf dem Campus in Ahaus begann, führen wir bei uns im next fort!&nbsp;</p><p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>';
 export default {
     title: 'Truncation/Truncation',
     component: Truncation,
