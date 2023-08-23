@@ -29,6 +29,10 @@ export type NumberInputProps = {
      * Callback function that is called when the input gets out of focus
      */
     onNumberChange: (newNumber: number | null) => void;
+    /**
+     * Whether the input is disabled
+     */
+    isDisabled?: boolean;
 };
 
 const NumberInput: FC<NumberInputProps> = ({
@@ -38,6 +42,7 @@ const NumberInput: FC<NumberInputProps> = ({
     number,
     placeholder,
     onNumberChange,
+    isDisabled
 }) => {
     const [stringValue, setStringValue] = useState<string>('');
 
@@ -137,6 +142,7 @@ const NumberInput: FC<NumberInputProps> = ({
             placeholder={placeholder}
             onBlur={onBlur}
             onFocus={onFocus}
+            isDisabled={isDisabled}
         />
     );
 };
