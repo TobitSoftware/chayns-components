@@ -1,5 +1,4 @@
 // noinspection JSUnusedGlobalSymbols
-
 export { default as Accordion } from './components/accordion/Accordion';
 export { default as AccordionContent } from './components/accordion/accordion-content/AccordionContent';
 export { default as AccordionGroup } from './components/accordion/accordion-group/AccordionGroup';
@@ -55,6 +54,7 @@ export type {
     ITextstring as Textstring,
     TextstringReplacement,
 } from './components/textstring/types';
+export { getTextstringValue } from './utils/textstring';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export type { FileItem, Image, Meta, Video } from './types/file';
 export { selectFiles } from './utils/fileDialog';

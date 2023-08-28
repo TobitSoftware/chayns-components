@@ -13,6 +13,7 @@ import { TextStringContext } from '../textstring-provider/TextStringProvider';
 import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
+import { getTextstringValue } from '../../utils/textstring';
 
 export type TextStringProps = {
     /**
