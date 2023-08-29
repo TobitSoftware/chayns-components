@@ -46,7 +46,7 @@ export const StyledMotionInputLabel = styled(motion.label)`
     user-select: none;
 `;
 
-export const StyledInputClearIcon = styled.div`
+export const StyledMotionInputClearIcon = styled(motion.div)`
     align-items: center;
     border-left: 1px solid rgba(160, 160, 160, 0.3);
     color: ${({ theme }: StyledInputProps) => theme.headline};

@@ -16,10 +16,10 @@ import React, {
 import Icon from '../icon/Icon';
 import {
     StyledInput,
-    StyledInputClearIcon,
     StyledInputContent,
     StyledInputField,
     StyledInputIconWrapper,
+    StyledMotionInputClearIcon,
     StyledMotionInputLabel,
 } from './Input.styles';
 
@@ -164,9 +164,14 @@ const Input = forwardRef<InputRef, InputProps>(
                     </StyledMotionInputLabel>
                 </StyledInputContent>
                 {shouldShowClearIcon && (
-                    <StyledInputClearIcon onClick={handleClearIconClick}>
+                    <StyledMotionInputClearIcon
+                        animate={{ opacity: hasValue ? 1 : 0 }}
+                        initial={false}
+                        onClick={handleClearIconClick}
+                        transition={{ type: 'tween' }}
+                    >
                         <Icon icons={['fa fa-times']} />
-                    </StyledInputClearIcon>
+                    </StyledMotionInputClearIcon>
                 )}
             </StyledInput>
         );
