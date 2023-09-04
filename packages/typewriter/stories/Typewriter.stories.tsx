@@ -16,18 +16,15 @@ const Template: ComponentStory<typeof Typewriter> = ({ children, ...args }) => (
 
 export const General = Template.bind({});
 
-export const HTMLText = Template.bind({});
-
 export const CustomElements = Template.bind({});
-
-export const MultipleTexts = Template.bind({});
 
 export const Empty = Template.bind({});
 
-HTMLText.args = {
-    children:
-        'Lorem ipsum dolor sit amet, <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <s><b>At vero eos et accusam et justo duo dolores et ea rebum.</b></s> Stet clita kasd gubergren, no sea takimata sanctus est. <u>Lorem ipsum</u> dolor sit amet.',
-};
+export const HTMLText = Template.bind({});
+
+export const MultipleTexts = Template.bind({});
+
+export const WithOwnStyles = Template.bind({});
 
 CustomElements.args = {
     children: (
@@ -41,6 +38,15 @@ CustomElements.args = {
     ),
 };
 
+Empty.args = {
+    children: '',
+};
+
+HTMLText.args = {
+    children:
+        'Lorem ipsum dolor sit amet, <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <s><b>At vero eos et accusam et justo duo dolores et ea rebum.</b></s> Stet clita kasd gubergren, no sea takimata sanctus est. <u>Lorem ipsum</u> dolor sit amet.',
+};
+
 MultipleTexts.args = {
     children: [
         'Hmm, ich würde sagen...',
@@ -50,6 +56,10 @@ MultipleTexts.args = {
     ],
 };
 
-Empty.args = {
-    children: '',
+WithOwnStyles.args = {
+    children: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.',
+    speed: 150,
+    textStyle: {
+        color: 'red',
+    },
 };
