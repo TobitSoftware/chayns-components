@@ -63,7 +63,11 @@ export type TypewriterProps = {
     /**
      * The speed of the animation. Use the TypewriterSpeed enum for this prop.
      */
-    speed?: TypewriterSpeed;
+    speed?: TypewriterSpeed | number;
+    /**
+     * The style of the typewriter text element
+     */
+    textStyle?: React.CSSProperties;
 };
 
 const Typewriter: FC<TypewriterProps> = ({
@@ -76,6 +80,7 @@ const Typewriter: FC<TypewriterProps> = ({
     shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
     speed = TypewriterSpeed.Medium,
+    textStyle,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
 
@@ -250,9 +255,10 @@ const Typewriter: FC<TypewriterProps> = ({
                     <StyledTypewriterText
                         dangerouslySetInnerHTML={{ __html: shownText }}
                         isAnimatingText
+                        style={textStyle}
                     />
                 ) : (
-                    <StyledTypewriterText>{sortedChildren}</StyledTypewriterText>
+                    <StyledTypewriterText style={textStyle}>{sortedChildren}</StyledTypewriterText>
                 )}
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
@@ -261,7 +267,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoTextHTML, shownText, sortedChildren]
+        [handleClick, isAnimatingText, pseudoTextHTML, shownText, sortedChildren, textStyle]
     );
 };
 
