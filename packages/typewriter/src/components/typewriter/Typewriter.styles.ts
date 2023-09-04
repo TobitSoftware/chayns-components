@@ -35,6 +35,7 @@ export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
                 content: '▋';
                 margin-left: 0.25rem;
                 opacity: 0.85;
+                position: absolute;
                 vertical-align: baseline;
             }
         `}
