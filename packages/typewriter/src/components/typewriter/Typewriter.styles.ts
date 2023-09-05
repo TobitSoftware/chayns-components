@@ -3,6 +3,8 @@ import styled, { css, keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.div`
     position: relative;
+    display: flex;
+    align-items: inherit;
 `;
 
 const blinkAnimation = keyframes`
