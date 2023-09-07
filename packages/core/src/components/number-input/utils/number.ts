@@ -15,15 +15,18 @@ export const parseFloatAndRound = ({ stringValue, decimals }: ParseFloatAndRound
 
 interface FormateNumberOptions {
     number: number | null;
+    isMoneyInput?: boolean;
 }
 
-export const formateNumber = ({ number }: FormateNumberOptions) => {
+export const formateNumber = ({ number, isMoneyInput }: FormateNumberOptions) => {
     if (typeof number !== 'number') {
         return '';
     }
 
     return number.toLocaleString('de-DE', {
         useGrouping: true,
-        maximumSignificantDigits: 20,
+        minimumFractionDigits: isMoneyInput ? 2 : undefined,
+        maximumFractionDigits: isMoneyInput ? 2 : undefined,
+        maximumSignificantDigits: !isMoneyInput ? 20 : undefined,
     });
 };

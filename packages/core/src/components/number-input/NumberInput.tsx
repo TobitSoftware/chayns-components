@@ -35,15 +35,16 @@ export type NumberInputProps = {
     isDisabled?: boolean;
 };
 
-const NumberInput: FC<NumberInputProps> = ({
-    isDecimalInput,
-    isMoneyInput,
-    maxNumber = Infinity,
-    number,
-    placeholder,
-    onNumberChange,
-    isDisabled
-}) => {
+const NumberInput: FC<NumberInputProps> = (
+    {
+        isDecimalInput,
+        isMoneyInput,
+        maxNumber = Infinity,
+        number,
+        placeholder,
+        onNumberChange,
+        isDisabled
+    }) => {
     const [stringValue, setStringValue] = useState<string>('');
 
     const handleChange = (newValue: number | null = null) => {
@@ -68,6 +69,7 @@ const NumberInput: FC<NumberInputProps> = ({
             .replace(',', '.');
 
         if (sanitizedValue.trim().length > 0) {
+
             // Allows numbers, a comma and any number of decimal places
             if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
                 const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
@@ -120,8 +122,9 @@ const NumberInput: FC<NumberInputProps> = ({
             stringValue.length === 0
                 ? ''
                 : formateNumber({
-                      number: parsedValue,
-                  })
+                    number: parsedValue,
+                    isMoneyInput
+                })
         );
 
         onNumberChange(parsedValue === 0 ? null : parsedValue);
