@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import Input from '../input/Input';
 import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, NUMBER_CLEAR_REGEX } from './constants/number';
 import { formateNumber, parseFloatAndRound } from './utils/number';
@@ -47,7 +47,7 @@ const NumberInput: FC<NumberInputProps> = (
     }) => {
     const [stringValue, setStringValue] = useState<string>('');
 
-    const handleChange = (newValue: number | null = null) => {
+    const handleChange = useCallback((newValue: number | null = null) => {
         if (typeof newValue !== 'number') {
             setStringValue('');
 
@@ -56,8 +56,8 @@ const NumberInput: FC<NumberInputProps> = (
 
         const parsedValue = parseFloatAndRound({ stringValue: newValue?.toString() });
 
-        setStringValue(formateNumber({ number: parsedValue }));
-    };
+        setStringValue(formateNumber({ number: parsedValue, isMoneyInput }));
+    }, [isMoneyInput]);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
@@ -136,7 +136,7 @@ const NumberInput: FC<NumberInputProps> = (
 
     useEffect(() => {
         handleChange(number);
-    }, [number]);
+    }, [handleChange, number]);
 
     return (
         <Input
