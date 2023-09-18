@@ -65,8 +65,19 @@ export const General = Template.bind({});
 
 export const TextStringWithReplacement = TextStringWithReplacementTemplate.bind({});
 
+export const TextStringWithStyles = Template.bind({});
+
 General.args = {
     childrenTagName: 'h1',
+    textString: {
+        fallback: 'Das ist ein TextString! Pizza ist lecker.',
+        name: 'txt_chayns_chaynsComponents_textString_example',
+    },
+};
+
+TextStringWithStyles.args = {
+    childrenTagName: 'h1',
+    childrenStyles: { color: 'red' },
     textString: {
         fallback: 'Das ist ein TextString! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',

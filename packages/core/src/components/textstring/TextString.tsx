@@ -1,5 +1,6 @@
 import React, {
     createElement,
+    CSSProperties,
     FC,
     MouseEventHandler,
     ReactHTML,
@@ -13,13 +14,16 @@ import { TextStringContext } from '../textstring-provider/TextStringProvider';
 import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
-import { getTextstringValue } from '../../utils/textstring';
 
 export type TextStringProps = {
     /**
      * The element that the text should be displayed in.
      */
     children?: ReactNode;
+    /**
+     * The styles of the HTML element that the text should be displayed in.
+     */
+    childrenStyles?: CSSProperties;
     /**
      * The tag of the HTML element that the text should be displayed in.
      */
@@ -39,6 +43,7 @@ const TextString: FC<TextStringProps> = ({
     replacements,
     childrenTagName,
     children,
+    childrenStyles,
 }) => {
     const textStrings = useContext(TextStringContext);
 
@@ -59,14 +64,22 @@ const TextString: FC<TextStringProps> = ({
     }, [replacements, textString, textStrings]);
 
     const childElement = useMemo(() => {
-        let element = createElement('', null, children);
+        let element = createElement(
+            '',
+            childrenStyles ? { style: childrenStyles } : null,
+            children
+        );
 
         if (!children) {
-            element = createElement(childrenTagName || 'span', null, text);
+            element = createElement(
+                childrenTagName || 'span',
+                childrenStyles ? { style: childrenStyles } : null,
+                text
+            );
         }
 
         return element;
-    }, [children, childrenTagName, text]);
+    }, [children, childrenStyles, childrenTagName, text]);
 
     const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
         (event) => {
