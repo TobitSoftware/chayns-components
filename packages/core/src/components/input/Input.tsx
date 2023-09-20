@@ -72,6 +72,10 @@ export type InputProps = {
      * Value if the input field should be controlled
      */
     value?: string;
+    /**
+     * If true, the input field is focused when the component is mounted
+     */
+    shouldUseAutoFocus?: boolean;
 };
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -88,6 +92,7 @@ const Input = forwardRef<InputRef, InputProps>(
             shouldShowClearIcon = false,
             type = 'text',
             value,
+            shouldUseAutoFocus = false,
         },
         ref
     ) => {
@@ -151,6 +156,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         ref={inputRef}
                         type={type}
                         value={value}
+                        autoFocus={shouldUseAutoFocus}
                     />
                     <StyledMotionInputLabel
                         animate={{ scale: hasValue ? 0.6 : 1 }}
