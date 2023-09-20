@@ -143,9 +143,14 @@ ListItem.propTypes = {
      * `style.body` and `style.head` will be applied to the body and head parts
      * of the list item accordingly.
      */
-    style: PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    ),
+    style: PropTypes.shape({
+        head: PropTypes.objectOf(
+            PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        ),
+        body: PropTypes.objectOf(
+            PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        ),
+    }),
 
     /**
      * Any additional props that will be applied to the head of the list item.
