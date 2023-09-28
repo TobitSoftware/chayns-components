@@ -10,6 +10,7 @@ import {
     StyledGalleryEditModeWrapper,
     StyledGalleryItemWrapper,
 } from './Gallery.styles';
+import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 
 export type GalleryProps = {
     /**
@@ -235,6 +236,25 @@ const Gallery: FC<GalleryProps> = ({
     );
 
     /**
+     * Opens the files in a slideShow
+     */
+    const openFiles = useCallback(
+        (file: FileItem) => {
+            const startIndex = fileItems.findIndex((item) => item.id === file.id);
+
+            const items: OpenMediaItem[] = fileItems.map((item) => ({
+                url: item.uploadedFile?.url ?? '',
+                mediaType: item.file?.type.includes('video/') ? MediaType.VIDEO : MediaType.IMAGE,
+            }));
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            void openMedia({ items, startIndex });
+        },
+        [fileItems]
+    );
+
+    /**
      * Returns the ratio of the single file
      */
     const ratio = useMemo(() => {
@@ -274,6 +294,7 @@ const Gallery: FC<GalleryProps> = ({
                     key={file.id}
                     fileItem={file}
                     isEditMode
+                    onClick={openFiles}
                     handleDeleteFile={handleDeleteFile}
                 />
             ));
@@ -291,12 +312,13 @@ const Gallery: FC<GalleryProps> = ({
                 fileItem={file}
                 isEditMode={false}
                 handleDeleteFile={handleDeleteFile}
+                onClick={openFiles}
                 remainingItemsLength={
                     combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
                 }
             />
         ));
-    }, [fileItems, isEditMode, handleAddFiles, handleDeleteFile]);
+    }, [fileItems, isEditMode, handleAddFiles, openFiles, handleDeleteFile]);
 
     return useMemo(
         () => (
