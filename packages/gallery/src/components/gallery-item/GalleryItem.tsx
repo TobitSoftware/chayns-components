@@ -1,7 +1,7 @@
 import { Icon } from '@chayns-components/core';
 import type { FileItem } from '@chayns-components/core/lib/types/file';
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import {
     StyledGalleryItem,
     StyledGalleryItemDeleteButton,
@@ -27,6 +27,10 @@ export type GalleryItemProps = {
      *  Length of the uploaded files
      */
     remainingItemsLength?: number;
+    /**
+     * Function to be executed if a file should be opened
+     */
+    onClick: (file: FileItem) => void;
 };
 
 const GalleryItem: FC<GalleryItemProps> = ({
@@ -34,31 +38,9 @@ const GalleryItem: FC<GalleryItemProps> = ({
     handleDeleteFile,
     isEditMode,
     remainingItemsLength,
-}) => {
-    /**
-     * This function opens a selected file
-     */
-    const openSelectedFile = useCallback((file: FileItem) => {
-        if (file.state !== 'uploaded') {
-            // ToDo add dialog that the file is not loaded yet
-
-            return;
-        }
-
-        if (file.uploadedFile && 'thumbnailUrl' in file.uploadedFile) {
-            // @ts-expect-error: Type is correct here
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-            void chayns.openVideo(file.uploadedFile.url);
-
-            return;
-        }
-
-        // @ts-expect-error: Type is correct here
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        void chayns.openImage([file.uploadedFile?.url], 0);
-    }, []);
-
-    return useMemo(
+    onClick,
+}) =>
+    useMemo(
         () => (
             <StyledGalleryItem>
                 {isEditMode && (
@@ -80,7 +62,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                                 key={`uploaded_${fileItem.id ?? ''}`}
                                 fileItem={fileItem}
                                 isEditMode={isEditMode}
-                                openSelectedFile={openSelectedFile}
+                                openSelectedFile={onClick}
                             />
                         )}
                     </AnimatePresence>
@@ -92,9 +74,8 @@ const GalleryItem: FC<GalleryItemProps> = ({
                 )}
             </StyledGalleryItem>
         ),
-        [fileItem, handleDeleteFile, isEditMode, openSelectedFile, remainingItemsLength]
+        [fileItem, handleDeleteFile, isEditMode, onClick, remainingItemsLength]
     );
-};
 
 GalleryItem.displayName = 'GalleryItem';
 
