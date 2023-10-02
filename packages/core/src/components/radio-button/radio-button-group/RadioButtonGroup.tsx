@@ -9,7 +9,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import type { RadioButtonItem } from '../types';
 
 type IUpdateSelectedRadioButtonId = (id: string) => void;
 
@@ -33,13 +32,9 @@ export type RadioButtonGroupProps = {
      * automatically unchecked when an `RadioButton` of the group is checked.
      */
     children: ReactNode;
-    /**
-     * Function to be executed when a button is checked.
-     */
-    onChange?: (item: RadioButtonItem) => void;
 };
 
-const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children, onChange }) => {
+const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children }) => {
     const [selectedRadioButtonId, setSelectedRadioButtonId] =
         useState<IRadioButtonGroupContext['selectedRadioButtonId']>(undefined);
 
@@ -58,12 +53,8 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = ({ children, onChange }) => 
     useEffect(() => {
         if (isInitialRenderRef.current) {
             isInitialRenderRef.current = false;
-        } else if (typeof selectedRadioButtonId === 'string') {
-            if (typeof onChange === 'function') {
-                onChange({ id: selectedRadioButtonId ?? '', isChecked: true });
-            }
         }
-    }, [onChange, selectedRadioButtonId]);
+    }, [selectedRadioButtonId]);
 
     const providerValue = useMemo<IRadioButtonGroupContext>(
         () => ({
