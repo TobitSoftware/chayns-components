@@ -243,7 +243,7 @@ const Gallery: FC<GalleryProps> = ({
             const startIndex = fileItems.findIndex((item) => item.id === file.id);
 
             const items: OpenMediaItem[] = fileItems.map((item) => ({
-                url: item.uploadedFile?.url ?? '',
+                url: item.uploadedFile?.url.replace('_0.mp4', '.mp4') ?? '',
                 mediaType: item.file?.type.includes('video/') ? MediaType.VIDEO : MediaType.IMAGE,
             }));
 
