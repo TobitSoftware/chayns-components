@@ -9,11 +9,11 @@ import React, {
     useContext,
     useMemo,
 } from 'react';
-import { isTobitEmployee } from '../../utils/isTobitEmployee';
 import { TextStringContext } from '../textstring-provider/TextStringProvider';
-import { selectLanguageToChange } from '../textstring-provider/utils';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
+import { isTobitEmployee } from '@chayns-components/core';
+import { selectLanguageToChange } from '../../utils/textstring';
 
 export type TextStringProps = {
     /**
