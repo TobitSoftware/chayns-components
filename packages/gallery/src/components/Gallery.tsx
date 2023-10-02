@@ -242,10 +242,14 @@ const Gallery: FC<GalleryProps> = ({
         (file: FileItem) => {
             const startIndex = fileItems.findIndex((item) => item.id === file.id);
 
+            console.debug('Files: ', fileItems);
+
             const items: OpenMediaItem[] = fileItems.map((item) => ({
                 url: item.uploadedFile?.url ?? '',
                 mediaType: item.file?.type.includes('video/') ? MediaType.VIDEO : MediaType.IMAGE,
             }));
+
+            console.debug('MediaItem: ', items);
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
