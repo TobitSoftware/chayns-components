@@ -48,13 +48,6 @@ export {
     SmallWaitCursorSpeed,
 } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TextArea } from './components/text-area/TextArea';
-export { default as TextStringProvider } from './components/textstring-provider/TextStringProvider';
-export { default as TextString } from './components/textstring/TextString';
-export type {
-    ITextstring as Textstring,
-    TextstringReplacement,
-} from './components/textstring/types';
-export { getTextstringValue } from './utils/textstring';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export type { FileItem, Image, Meta, Video } from './types/file';
 export { selectFiles } from './utils/fileDialog';

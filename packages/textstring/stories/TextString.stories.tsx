@@ -1,13 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useMemo, useState } from 'react';
-import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
-import RadioButton from '../src/components/radio-button/RadioButton';
-import { RadioButtonItem } from '../src/components/radio-button/types';
-import TextStringProvider from '../src/components/textstring-provider/TextStringProvider';
-import TextString from '../src/components/textstring/TextString';
+import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
+import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
+import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
+import TextStringProvider from '@chayns-components/core/lib/components/textstring-provider/TextStringProvider';
+import TextString from '@chayns-components/core/lib/components/textstring/TextString';
 
 export default {
-    title: 'Core/TextString',
+    title: 'TextString/TextString',
     component: TextString,
     args: {},
 } as ComponentMeta<typeof TextString>;
