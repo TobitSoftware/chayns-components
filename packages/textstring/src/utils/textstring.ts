@@ -1,9 +1,4 @@
-import type { ITextstring, TextstringReplacement } from '../components/textstring/types';
-import { useContext } from 'react';
-import {
-    TextStringContext,
-    TextStringValue,
-} from '../components/textstring-provider/TextStringProvider';
+import type { TextStringValue } from '../components/textstring-provider/TextStringProvider';
 
 interface LoadLibraryOptions {
     libraryName: string;
@@ -32,29 +27,4 @@ export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChang
         buttons: [],
         input: { textstring: textstringName },
     });
-};
-
-export interface GetTextstringValue {
-    textString: ITextstring;
-    replacements?: TextstringReplacement[];
-}
-
-export const getTextstringValue = ({ replacements, textString }: GetTextstringValue) => {
-    // Ignore rule to get the textstrings from the library
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const textStrings = useContext(TextStringContext);
-
-    const value = textStrings[textString.name] ?? textString.fallback;
-
-    if (!replacements) {
-        return value;
-    }
-
-    let newValue = value;
-
-    replacements.forEach(({ replacement, key }) => {
-        newValue = newValue.replace(key, replacement);
-    });
-
-    return newValue;
 };
