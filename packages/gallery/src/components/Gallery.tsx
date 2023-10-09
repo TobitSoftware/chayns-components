@@ -183,6 +183,7 @@ const Gallery: FC<GalleryProps> = ({
                     uploadedFile: file.uploadedFile,
                     file: file.file,
                     state: file.uploadedFile ? 'uploaded' : 'none',
+                    previewUrl: file.uploadedFile ? file.uploadedFile.url : undefined,
                 });
             });
 
