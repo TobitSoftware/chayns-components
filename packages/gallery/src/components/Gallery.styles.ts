@@ -27,5 +27,6 @@ export const StyledGalleryEditModeWrapper = styled.div<{
     display: grid;
     grid-template-columns: ${({ fileMinWidth }) =>
         `repeat(auto-fill, minmax(${fileMinWidth}px, 1fr))`};
+    grid-auto-rows: 1fr;
     gap: 6px;
 `;
