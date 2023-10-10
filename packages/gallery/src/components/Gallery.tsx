@@ -38,6 +38,10 @@ export type GalleryProps = {
      */
     onAdd?: (file: FileItem) => void;
     /**
+     * Function to be executed when the count of files are changed. Needed to check if all files are uploaded
+     */
+    onFileCountChange?: (fileCount: number) => void;
+    /**
      *  Function to be executed when a file is removed
      */
     onRemove?: (file: FileItem) => void;
@@ -51,11 +55,12 @@ const Gallery: FC<GalleryProps> = ({
     accessToken,
     allowDragAndDrop = false,
     isEditMode = false,
+    fileMinWidth = 100,
     files,
     onAdd,
+    onFileCountChange,
     onRemove,
     personId,
-    fileMinWidth = 100,
 }) => {
     const [fileItems, setFileItems] = useState<FileItem[]>([]);
 
@@ -101,6 +106,15 @@ const Gallery: FC<GalleryProps> = ({
         },
         [onAdd]
     );
+
+    /**
+     * Returns the current count to check if all files are uploaded
+     */
+    useEffect(() => {
+        if (typeof onFileCountChange === 'function') {
+            onFileCountChange(fileItems.length);
+        }
+    }, [fileItems.length, onFileCountChange]);
 
     /**
      * Prepares files for previewUrl and upload
