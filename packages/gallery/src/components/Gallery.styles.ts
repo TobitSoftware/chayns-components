@@ -21,15 +21,11 @@ export const StyledGalleryItemWrapper = styled.div<{
               `}
 `;
 
-export const StyledGalleryEditModeWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    row-gap: 10px;
-    column-gap: 10px;
-    padding: 15px;
-
-    & > * {
-        flex-basis: calc(25% - 7.5px);
-    }
+export const StyledGalleryEditModeWrapper = styled.div<{
+    fileMinWidth: number;
+}>`
+    display: grid;
+    grid-template-columns: ${({ fileMinWidth }) =>
+        `repeat(auto-fill, minmax(${fileMinWidth}px, 1fr))`};
+    gap: 6px;
 `;

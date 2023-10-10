@@ -26,13 +26,17 @@ export type GalleryProps = {
      */
     isEditMode?: boolean;
     /**
+     * The minimum width of a file in the edit mode
+     */
+    fileMinWidth?: number;
+    /**
      *  Images and videos which should be displayed
      */
     files?: FileItem[];
     /**
      *  Function to be executed when files are added and uploaded
      */
-    onAdd?: (files: FileItem) => void;
+    onAdd?: (file: FileItem) => void;
     /**
      *  Function to be executed when a file is removed
      */
@@ -51,6 +55,7 @@ const Gallery: FC<GalleryProps> = ({
     onAdd,
     onRemove,
     personId,
+    fileMinWidth = 100,
 }) => {
     const [fileItems, setFileItems] = useState<FileItem[]>([]);
 
@@ -326,6 +331,7 @@ const Gallery: FC<GalleryProps> = ({
             <StyledGallery>
                 {isEditMode ? (
                     <StyledGalleryEditModeWrapper
+                        fileMinWidth={fileMinWidth}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => void handleDrop(e)}
                     >
@@ -342,7 +348,7 @@ const Gallery: FC<GalleryProps> = ({
                 )}
             </StyledGallery>
         ),
-        [isEditMode, galleryContent, ratio, columns, fileItems.length, handleDrop]
+        [isEditMode, fileMinWidth, galleryContent, ratio, columns, fileItems.length, handleDrop]
     );
 };
 
