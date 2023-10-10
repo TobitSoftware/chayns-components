@@ -5,11 +5,13 @@ import styled from 'styled-components';
 export const StyledMotionPreviewItem = styled(motion.div)`
     display: flex;
     width: 100%;
+    height: 100%;
 `;
 
 export const StyledPreviewItemImageWrapper = styled.div`
     display: flex;
     width: 100%;
+    height: 100%;
     aspect-ratio: 1;
 `;
 
@@ -21,6 +23,7 @@ export const StyledPreviewItemImage = styled.img<StyledPreviewItemImageProps>`
         rgba(${({ theme }: StyledPreviewItemImageProps) => theme['009-rgb']}, 0.08) inset;
     z-index: 1;
     width: 100%;
+    height: 100%;
     object-fit: cover;
 `;
 

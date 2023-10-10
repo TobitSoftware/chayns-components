@@ -5,17 +5,20 @@ import styled from 'styled-components';
 export const StyledMotionMediaItem = styled(motion.div)`
     display: flex;
     width: 100%;
+    height: 100%;
 `;
 
 export const StyledMediaItemVideoWrapper = styled.div`
     display: flex;
     width: 100%;
+    height: 100%;
     aspect-ratio: 1;
 `;
 
 export const StyledMediaItemImageWrapper = styled.div`
     display: flex;
     width: 100%;
+    height: 100%;
     aspect-ratio: 1;
 `;
 
@@ -29,6 +32,7 @@ export const StyledMediaItemImage = styled.img<StyledMediaItemImageProps>`
         inset;
     z-index: 1;
     width: 100%;
+    height: 100%;
     object-fit: cover;
 `;
 
