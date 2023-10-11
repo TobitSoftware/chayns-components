@@ -41,11 +41,11 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
                 if (testFile) {
                     void getFileAsArrayBuffer(testFile).then((result) => {
-                        console.log('arrayBuffer', result);
+                        console.log('TEST with file from file list', result);
                     });
                 }
             } catch (e) {
-                console.error('Failed to test get file as array buffer', e);
+                console.error('1: Failed to test get file as array buffer', e);
             }
 
             if (!files) {
@@ -55,6 +55,18 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
             }
 
             const fileArray = Object.values(files);
+
+            try {
+                const testFile = fileArray[0];
+
+                if (testFile) {
+                    void getFileAsArrayBuffer(testFile).then((result) => {
+                        console.log('TEST with file from array', result);
+                    });
+                }
+            } catch (e) {
+                console.error('2: Failed to test get file as array buffer', e);
+            }
 
             const filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
