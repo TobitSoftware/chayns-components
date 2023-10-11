@@ -121,16 +121,16 @@ const Gallery: FC<GalleryProps> = ({
      * Prepares files for previewUrl and upload
      */
     useEffect(() => {
-        try {
-            const testFile = fileItems[0] && fileItems[0].file;
+        const testFile = fileItems[0] && fileItems[0].file;
 
-            if (testFile) {
-                void getFileAsArrayBuffer(testFile).then((result: string | ArrayBuffer) => {
-                    console.log('Files are uploading - useEffect', result);
+        if (testFile) {
+            void getFileAsArrayBuffer(testFile)
+                .then((result) => {
+                    console.log('USEEFFECT - file change', { testFile, result });
+                })
+                .catch((e) => {
+                    console.error('Error at USEEFFECT - file change', e);
                 });
-            }
-        } catch (e) {
-            console.error('2: Failed to test get file as array buffer', e);
         }
 
         const filesToGeneratePreview = fileItems.filter(
@@ -209,16 +209,16 @@ const Gallery: FC<GalleryProps> = ({
         if (files) {
             const newFileItems: FileItem[] = [];
 
-            try {
-                const testFile = newFileItems[0] && newFileItems[0].file;
+            const testFile = newFileItems[0] && newFileItems[0].file;
 
-                if (testFile) {
-                    void getFileAsArrayBuffer(testFile).then((result) => {
-                        console.log('File is set into Component', result);
+            if (testFile) {
+                void getFileAsArrayBuffer(testFile)
+                    .then((result) => {
+                        console.log('USEEFFECT - file input', { testFile, result });
+                    })
+                    .catch((e) => {
+                        console.error('Error at USEEFFECT - file input', e);
                     });
-                }
-            } catch (e) {
-                console.error('1: Failed to test get file as array buffer', e);
             }
 
             files.forEach((file) => {

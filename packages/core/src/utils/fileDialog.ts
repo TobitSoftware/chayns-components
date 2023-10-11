@@ -36,18 +36,6 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
             const { files } = target;
 
-            try {
-                const testFile = files?.[0];
-
-                if (testFile) {
-                    void getFileAsArrayBuffer(testFile).then((result) => {
-                        console.log('TEST with file from file list', result);
-                    });
-                }
-            } catch (e) {
-                console.error('0.1: Failed to test get file as array buffer', e);
-            }
-
             if (!files) {
                 resolve([]);
 
@@ -56,16 +44,16 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
             const fileArray = Object.values(files);
 
-            try {
-                const testFile = fileArray[0];
+            const testFile = fileArray[0];
 
-                if (testFile) {
-                    void getFileAsArrayBuffer(testFile).then((result) => {
-                        console.log('TEST with file from array', result);
+            if (testFile) {
+                void getFileAsArrayBuffer(testFile)
+                    .then((result) => {
+                        console.log('SELECT FILES 1', { testFile, result });
+                    })
+                    .catch((e) => {
+                        console.error('Error at SELECT FILES 1', e);
                     });
-                }
-            } catch (e) {
-                console.error('0.2: Failed to test get file as array buffer', e);
             }
 
             const filteredFileArray = fileArray.filter((file) => {
@@ -94,8 +82,6 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
 export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
     new Promise((resolve, reject) => {
-        console.log('FILE', file);
-
         const reader = new FileReader();
 
         reader.onload = (e) => {
