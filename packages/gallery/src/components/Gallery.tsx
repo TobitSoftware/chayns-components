@@ -1,4 +1,4 @@
-import { getFileAsArrayBuffer, uploadFile } from '@chayns-components/core';
+import { uploadFile } from '@chayns-components/core';
 import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,6 +11,7 @@ import {
     StyledGalleryItemWrapper,
 } from './Gallery.styles';
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
+import { getFileAsArrayBuffer } from '@chayns-components/core/lib/utils/fileDialog';
 
 export type GalleryProps = {
     /**
@@ -121,7 +122,7 @@ const Gallery: FC<GalleryProps> = ({
      */
     useEffect(() => {
         try {
-            const testFile = fileItems[0];
+            const testFile = fileItems[0] && fileItems[0].file;
 
             if (testFile) {
                 void getFileAsArrayBuffer(testFile).then((result: string | ArrayBuffer) => {
