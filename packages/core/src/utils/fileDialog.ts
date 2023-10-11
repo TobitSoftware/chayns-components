@@ -45,7 +45,7 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
                     });
                 }
             } catch (e) {
-                console.error('1: Failed to test get file as array buffer', e);
+                console.error('0.1: Failed to test get file as array buffer', e);
             }
 
             if (!files) {
@@ -65,7 +65,7 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
                     });
                 }
             } catch (e) {
-                console.error('2: Failed to test get file as array buffer', e);
+                console.error('0.2: Failed to test get file as array buffer', e);
             }
 
             const filteredFileArray = fileArray.filter((file) => {

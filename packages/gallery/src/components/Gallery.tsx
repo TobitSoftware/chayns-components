@@ -1,4 +1,4 @@
-import { uploadFile } from '@chayns-components/core';
+import { getFileAsArrayBuffer, uploadFile } from '@chayns-components/core';
 import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -120,6 +120,18 @@ const Gallery: FC<GalleryProps> = ({
      * Prepares files for previewUrl and upload
      */
     useEffect(() => {
+        try {
+            const testFile = fileItems[0];
+
+            if (testFile) {
+                void getFileAsArrayBuffer(testFile).then((result: string | ArrayBuffer) => {
+                    console.log('Files are uploading - useEffect', result);
+                });
+            }
+        } catch (e) {
+            console.error('2: Failed to test get file as array buffer', e);
+        }
+
         const filesToGeneratePreview = fileItems.filter(
             (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state)
         );
@@ -195,6 +207,18 @@ const Gallery: FC<GalleryProps> = ({
     useEffect(() => {
         if (files) {
             const newFileItems: FileItem[] = [];
+
+            try {
+                const testFile = newFileItems[0] && newFileItems[0].file;
+
+                if (testFile) {
+                    void getFileAsArrayBuffer(testFile).then((result) => {
+                        console.log('File is set into Component', result);
+                    });
+                }
+            } catch (e) {
+                console.error('1: Failed to test get file as array buffer', e);
+            }
 
             files.forEach((file) => {
                 newFileItems.push({

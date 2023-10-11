@@ -50,6 +50,6 @@ export {
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export type { FileItem, Image, Meta, Video } from './types/file';
-export { selectFiles } from './utils/fileDialog';
+export { selectFiles, getFileAsArrayBuffer } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';
