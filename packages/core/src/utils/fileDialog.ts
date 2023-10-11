@@ -26,9 +26,27 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
         input.addEventListener('change', (event) => {
             document.body.removeChild(input);
 
+            if (!event.target) {
+                resolve([]);
+
+                return;
+            }
+
             const target = event.target as HTMLInputElement;
 
             const { files } = target;
+
+            try {
+                const testFile = files?.[0];
+
+                if (testFile) {
+                    void getFileAsArrayBuffer(testFile).then((result) => {
+                        console.log('arrayBuffer', result);
+                    });
+                }
+            } catch (e) {
+                console.error('Failed to test get file as array buffer', e);
+            }
 
             if (!files) {
                 resolve([]);
@@ -64,6 +82,8 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
 export const getFileAsArrayBuffer = (file: File): Promise<string | ArrayBuffer> =>
     new Promise((resolve, reject) => {
+        console.log('FILE', file);
+
         const reader = new FileReader();
 
         reader.onload = (e) => {
