@@ -21,8 +21,6 @@ export const postImage = async ({
     file,
     personId,
 }: PostImageOptions): Promise<PostImageResult> => {
-    console.log('postImage', { accessToken, file, personId });
-
     const body = await getFileAsArrayBuffer(file);
 
     const response = await fetch('https://api.tsimg.cloud/image', {

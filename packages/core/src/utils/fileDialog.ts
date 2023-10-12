@@ -44,18 +44,6 @@ export const selectFiles = ({ type, multiple }: SelectFilesOptions): Promise<Fil
 
             const fileArray = Object.values(files);
 
-            const testFile = fileArray[0];
-
-            if (testFile) {
-                void getFileAsArrayBuffer(testFile)
-                    .then((result) => {
-                        console.log('SELECT FILES 1', { testFile, result });
-                    })
-                    .catch((e) => {
-                        console.error('Error at SELECT FILES 1', e);
-                    });
-            }
-
             const filteredFileArray = fileArray.filter((file) => {
                 const sizeInMB = file.size / 1024 / 1024;
 

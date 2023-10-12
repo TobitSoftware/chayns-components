@@ -11,7 +11,6 @@ import {
     StyledGalleryItemWrapper,
 } from './Gallery.styles';
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
-import { getFileAsArrayBuffer } from '@chayns-components/core/lib/utils/fileDialog';
 
 export type GalleryProps = {
     /**
@@ -121,18 +120,6 @@ const Gallery: FC<GalleryProps> = ({
      * Prepares files for previewUrl and upload
      */
     useEffect(() => {
-        const testFile = fileItems[0] && fileItems[0].file;
-
-        if (testFile) {
-            void getFileAsArrayBuffer(testFile)
-                .then((result) => {
-                    console.log('USEEFFECT - file change', { testFile, result });
-                })
-                .catch((e) => {
-                    console.error('Error at USEEFFECT - file change', e);
-                });
-        }
-
         const filesToGeneratePreview = fileItems.filter(
             (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state)
         );
@@ -208,18 +195,6 @@ const Gallery: FC<GalleryProps> = ({
     useEffect(() => {
         if (files) {
             const newFileItems: FileItem[] = [];
-
-            const testFile = newFileItems[0] && newFileItems[0].file;
-
-            if (testFile) {
-                void getFileAsArrayBuffer(testFile)
-                    .then((result) => {
-                        console.log('USEEFFECT - file input', { testFile, result });
-                    })
-                    .catch((e) => {
-                        console.error('Error at USEEFFECT - file input', e);
-                    });
-            }
 
             files.forEach((file) => {
                 newFileItems.push({
