@@ -8,6 +8,21 @@ export interface Chayns {
     openImage(urls: string | string[], start?: number): Promise<undefined>;
     openVideo(url: string): Promise<void>;
     register(config: object): any;
+    getWindowMetrics(): Promise<WindowMetrics>;
+}
+
+export interface WindowMetrics {
+    bottomBarHeight: number;
+    coverHeight: 0;
+    frameX: number;
+    frameY: number;
+    height: number;
+    menuHeight: number;
+    offsetTop: number;
+    pageYOffset: number;
+    scrollTop: number;
+    windowHeight: number;
+    windowWidth: number;
 }
 
 export interface Dialog {

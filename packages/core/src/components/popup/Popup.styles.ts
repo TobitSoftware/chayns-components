@@ -5,8 +5,10 @@ export const StyledPopup = styled.span`
     position: relative;
 `;
 
-export const StyledPopupPseudo = styled.div`
-    top: 0;
+export const StyledPopupPseudo = styled.div<{
+    menuHeight: number;
+}>`
+    top: ${({ menuHeight }) => `${menuHeight - 0}px`};
     left: 0;
     pointer-events: none;
     visibility: hidden;

@@ -49,6 +49,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         const [alignment, setAlignment] = useState<PopupAlignment>(PopupAlignment.TopLeft);
         const [isOpen, setIsOpen] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
+        const [menuHeight, setMenuHeight] = useState(0);
 
         const uuid = useUuid();
 
@@ -143,6 +144,14 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         );
 
         useEffect(() => {
+            void chayns.getWindowMetrics().then((result) => {
+                if (result.menuHeight) {
+                    setMenuHeight(result.menuHeight);
+                }
+            });
+        }, []);
+
+        useEffect(() => {
             if (isOpen) {
                 document.addEventListener('click', handleDocumentClick, true);
                 window.addEventListener('blur', handleHide);
@@ -181,7 +190,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                <StyledPopupPseudo ref={popupPseudoContentRef}>{content}</StyledPopupPseudo>
+                <StyledPopupPseudo ref={popupPseudoContentRef} menuHeight={menuHeight}>
+                    {content}
+                </StyledPopupPseudo>
                 <StyledPopup
                     ref={popupRef}
                     onClick={handleChildrenClick}
