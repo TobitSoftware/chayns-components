@@ -9,10 +9,10 @@ type StyledMotionPopupContentProps = WithTheme<{
 
 export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupContentProps>`
     background-color: ${({ theme }: StyledMotionPopupContentProps) => theme['001']};
-    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
+    overflow: hidden;
     position: absolute;
     z-index: 0;
 
