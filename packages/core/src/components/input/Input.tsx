@@ -162,7 +162,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         animate={{ scale: hasValue ? 0.6 : 1 }}
                         initial={false}
                         layout
-                        style={{ ...labelPosition, originX: 1, originY: 1 }}
+                        style={{ ...labelPosition }}
                         transition={{ type: 'tween' }}
                     >
                         {placeholderElement}

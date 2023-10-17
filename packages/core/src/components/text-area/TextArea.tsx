@@ -4,13 +4,14 @@ import React, {
     CSSProperties,
     FC,
     FocusEventHandler,
+    ReactElement,
     useCallback,
     useEffect,
     useMemo,
     useRef,
     useState,
 } from 'react';
-import { StyledTextArea, StyledTextAreaInput } from './TextArea.styles';
+import { StyledTextArea, StyledTextAreaInput, StyledTextAreaLabel } from './TextArea.styles';
 
 export type TextAreaProps = {
     /**
@@ -28,7 +29,7 @@ export type TextAreaProps = {
     /**
      * Placeholder for the text area field.
      */
-    placeholder?: string;
+    placeholder?: string | ReactElement;
     /**
      * Value if the text area should be controlled.
      */
@@ -95,13 +96,13 @@ const TextArea: FC<TextAreaProps> = ({
                 <StyledTextAreaInput
                     ref={textareaRef}
                     value={displayedValue}
-                    placeholder={placeholder}
                     onBlur={onBlur}
                     onChange={handleChange}
                     maxHeight={maxHeight}
                     isOverflowing={isOverflowing}
                     rows={1}
                 />
+                {!displayedValue && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
             </StyledTextArea>
         ),
         [displayedValue, handleChange, isOverflowing, maxHeight, onBlur, placeholder]
