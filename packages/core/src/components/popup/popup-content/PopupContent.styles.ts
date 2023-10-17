@@ -12,7 +12,6 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
-    overflow: hidden;
     position: absolute;
     z-index: 0;
 
@@ -70,4 +69,9 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
         top: 0;
         z-index: -1;
     }
+`;
+
+export const StyledPopupContentInner = styled.div`
+    border-radius: 3px;
+    overflow: hidden;
 `;

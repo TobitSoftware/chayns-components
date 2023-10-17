@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../types';
-import { StyledMotionPopupContent } from './PopupContent.styles';
+import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
 
 type PopupContentProps = {
     alignment: PopupAlignment;
@@ -39,7 +39,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                     translateY(${y})
                 `}
             >
-                {content}
+                <StyledPopupContentInner>{content}</StyledPopupContentInner>
             </StyledMotionPopupContent>
         );
     }
