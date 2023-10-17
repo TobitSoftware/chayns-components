@@ -7,9 +7,7 @@ export interface GetTextstringValue {
     replacements?: TextstringReplacement[];
 }
 
-export const getTextstringValue = ({ replacements, textString }: GetTextstringValue) => {
-    // Ignore rule to get the textstrings from the library
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+export const useTextstringValue = ({ replacements, textString }: GetTextstringValue) => {
     const textStrings = useContext(TextStringContext);
 
     const value = textStrings[textString.name] ?? textString.fallback;

@@ -6,14 +6,13 @@ import React, {
     ReactHTML,
     ReactNode,
     useCallback,
-    useContext,
     useMemo,
 } from 'react';
-import { TextStringContext } from '../textstring-provider/TextStringProvider';
 import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
 import { isTobitEmployee } from '@chayns-components/core';
 import { selectLanguageToChange } from '../../utils/textstring';
+import { useTextstringValue } from '../../utils/getTextstringValue';
 
 export type TextStringProps = {
     /**
@@ -45,23 +44,7 @@ const TextString: FC<TextStringProps> = ({
     children,
     childrenStyles,
 }) => {
-    const textStrings = useContext(TextStringContext);
-
-    const text = useMemo(() => {
-        const value = textStrings[textString.name] ?? textString.fallback;
-
-        if (!replacements) {
-            return value;
-        }
-
-        let newValue = value;
-
-        replacements.forEach(({ replacement, key }) => {
-            newValue = newValue.replace(key, replacement);
-        });
-
-        return newValue;
-    }, [replacements, textString, textStrings]);
+    const text = useTextstringValue({ textString, replacements });
 
     const childElement = useMemo(() => {
         let element = createElement(
