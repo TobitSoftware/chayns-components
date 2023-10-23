@@ -35,29 +35,31 @@ export type NumberInputProps = {
     isDisabled?: boolean;
 };
 
-const NumberInput: FC<NumberInputProps> = (
-    {
-        isDecimalInput,
-        isMoneyInput,
-        maxNumber = Infinity,
-        number,
-        placeholder,
-        onNumberChange,
-        isDisabled
-    }) => {
+const NumberInput: FC<NumberInputProps> = ({
+    isDecimalInput,
+    isMoneyInput,
+    maxNumber = Infinity,
+    number,
+    placeholder,
+    onNumberChange,
+    isDisabled,
+}) => {
     const [stringValue, setStringValue] = useState<string>('');
 
-    const handleChange = useCallback((newValue: number | null = null) => {
-        if (typeof newValue !== 'number') {
-            setStringValue('');
+    const handleChange = useCallback(
+        (newValue: number | null = null) => {
+            if (typeof newValue !== 'number') {
+                setStringValue('');
 
-            return;
-        }
+                return;
+            }
 
-        const parsedValue = parseFloatAndRound({ stringValue: newValue?.toString() });
+            const parsedValue = parseFloatAndRound({ stringValue: newValue?.toString() });
 
-        setStringValue(formateNumber({ number: parsedValue, isMoneyInput }));
-    }, [isMoneyInput]);
+            setStringValue(formateNumber({ number: parsedValue, isMoneyInput }));
+        },
+        [isMoneyInput]
+    );
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
@@ -69,7 +71,6 @@ const NumberInput: FC<NumberInputProps> = (
             .replace(',', '.');
 
         if (sanitizedValue.trim().length > 0) {
-
             // Allows numbers, a comma and any number of decimal places
             if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
                 const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
@@ -122,9 +123,9 @@ const NumberInput: FC<NumberInputProps> = (
             stringValue.length === 0
                 ? ''
                 : formateNumber({
-                    number: parsedValue,
-                    isMoneyInput
-                })
+                      number: parsedValue,
+                      isMoneyInput,
+                  })
         );
 
         onNumberChange(parsedValue === 0 ? null : parsedValue);
@@ -140,6 +141,7 @@ const NumberInput: FC<NumberInputProps> = (
 
     return (
         <Input
+            type="number"
             onChange={onChange}
             value={stringValue}
             placeholder={placeholder}
