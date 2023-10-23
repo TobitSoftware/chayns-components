@@ -141,7 +141,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
     return (
         <Input
-            type="number"
+            inputMode="decimal"
             onChange={onChange}
             value={stringValue}
             placeholder={placeholder}
