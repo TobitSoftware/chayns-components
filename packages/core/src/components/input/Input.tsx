@@ -27,11 +27,26 @@ export type InputRef = {
     focus: VoidFunction;
 };
 
+type InputMode =
+    | 'email'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'url'
+    | 'none'
+    | 'numeric'
+    | 'decimal'
+    | undefined;
+
 export type InputProps = {
     /**
      * Icon element to be displayed on the left side of the input field
      */
     iconElement?: ReactNode;
+    /**
+     * Defines the input mode of the input
+     */
+    inputMode?: InputMode;
     /**
      * Disables the input so that it cannot be changed anymore
      */
@@ -82,6 +97,7 @@ const Input = forwardRef<InputRef, InputProps>(
     (
         {
             iconElement,
+            inputMode,
             isDisabled,
             onBlur,
             onChange,
@@ -157,6 +173,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         type={type}
                         value={value}
                         autoFocus={shouldUseAutoFocus}
+                        inputMode={inputMode}
                     />
                     <StyledMotionInputLabel
                         animate={{ scale: hasValue ? 0.6 : 1 }}
