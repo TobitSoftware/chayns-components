@@ -40,9 +40,21 @@ export type SearchBoxProps = {
      * Function to be executed when an item is selected.
      */
     onSelect?: (item: ISearchBoxItem) => void;
+    /**
+     * Control the selected item. If you use this prop, make sure to update it when the user selects an item.
+     */
+    selectedId?: string;
 };
 
-const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, onSelect }) => {
+const SearchBox: FC<SearchBoxProps> = (
+    {
+        placeholder,
+        list,
+        onChange,
+        onBlur,
+        onSelect,
+        selectedId
+    }) => {
     const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
     const [value, setValue] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
@@ -96,6 +108,16 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
         }
     }, []);
 
+    useEffect(() => {
+        if (selectedId) {
+            const selectedItem = list.find(({ id }) => id === selectedId);
+
+            if (selectedItem) {
+                setValue(selectedItem.text);
+            }
+        }
+    }, [list, selectedId]);
+
     /**
      * This function handles changes of the input
      */
@@ -147,7 +169,7 @@ const SearchBox: FC<SearchBoxProps> = ({ placeholder, list, onChange, onBlur, on
         matchingItems.sort((a, b) => a.text.localeCompare(b.text));
 
         matchingItems.forEach(({ id, text }) => {
-            items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect} />);
+            items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect}/>);
         });
 
         return items;
