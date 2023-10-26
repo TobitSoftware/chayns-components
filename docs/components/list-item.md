@@ -38,34 +38,34 @@ import { ListItem } from 'chayns-components';
 
 The `ListItem`-component takes the following props:
 
-| Name                                  | Type                                  | Default                                     | Required |
-| ------------------------------------- | ------------------------------------- | ------------------------------------------- | :------: |
-| [title](#title)                       | `ReactNode \| Array<ReactNode>`       |                                             |    ✓     |
-| [subtitle](#subtitle)                 | `ReactNode \| Array<ReactNode>`       |                                             |          |
-| [image](#image)                       | `string`                              |                                             |          |
-| [images](#images)                     | `Array<string>`                       |                                             |          |
-| [openImageOnClick](#openimageonclick) | `boolean`                             | `false`                                     |          |
-| [icon](#icon)                         | `string \| object`                    |                                             |          |
-| [className](#classname)               | `string`                              |                                             |          |
-| [onClick](#onclick)                   | `function`                            |                                             |          |
-| [right](#right)                       | `ReactNode \| Array<ReactNode>`       |                                             |          |
-| [style](#style)                       | `{ [key: string]: string \| number }` |                                             |          |
-| [headerProps](#headerprops)           | `object`                              |                                             |          |
-| [circle](#circle)                     | `boolean`                             | `false`                                     |          |
-| [hoverItem](#hoveritem)               | `ReactNode`                           |                                             |          |
-| [onLongPress](#onlongpress)           | `function`                            |                                             |          |
-| [onMouseDown](#onmousedown)           | `function`                            |                                             |          |
-| [onMouseMove](#onmousemove)           | `function`                            |                                             |          |
-| [onMouseUp](#onmouseup)               | `function`                            |                                             |          |
-| [onTouchStart](#ontouchstart)         | `function`                            |                                             |          |
-| [onTouchMove](#ontouchmove)           | `function`                            |                                             |          |
-| [onTouchEnd](#ontouchend)             | `function`                            |                                             |          |
-| [onTouchCancel](#ontouchcancel)       | `function`                            |                                             |          |
-| [longPressTimeout](#longpresstimeout) | `number`                              | `450`                                       |          |
-| [noContentClass](#nocontentclass)     | `boolean`                             |                                             |          |
-| [onOpen](#onopen)                     | `function`                            |                                             |          |
-| [imageBorderColor](#imagebordercolor) | `string`                              | `'rgba(var(--chayns-color-rgb--009), .08)'` |          |
-| [headMultiline](#headmultiline)       | `boolean`                             | `false`                                     |          |
+| Name                                  | Type                                                                                       | Default                                     | Required |
+| ------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------- | :------: |
+| [title](#title)                       | `ReactNode \| Array<ReactNode>`                                                            |                                             |    ✓     |
+| [subtitle](#subtitle)                 | `ReactNode \| Array<ReactNode>`                                                            |                                             |          |
+| [image](#image)                       | `string`                                                                                   |                                             |          |
+| [images](#images)                     | `Array<string>`                                                                            |                                             |          |
+| [openImageOnClick](#openimageonclick) | `boolean`                                                                                  | `false`                                     |          |
+| [icon](#icon)                         | `string \| object`                                                                         |                                             |          |
+| [className](#classname)               | `string`                                                                                   |                                             |          |
+| [onClick](#onclick)                   | `function`                                                                                 |                                             |          |
+| [right](#right)                       | `ReactNode \| Array<ReactNode>`                                                            |                                             |          |
+| [style](#style)                       | `{ head: { [key: string]: string \| number }, body: { [key: string]: string \| number } }` |                                             |          |
+| [headerProps](#headerprops)           | `object`                                                                                   |                                             |          |
+| [circle](#circle)                     | `boolean`                                                                                  | `false`                                     |          |
+| [hoverItem](#hoveritem)               | `ReactNode`                                                                                |                                             |          |
+| [onLongPress](#onlongpress)           | `function`                                                                                 |                                             |          |
+| [onMouseDown](#onmousedown)           | `function`                                                                                 |                                             |          |
+| [onMouseMove](#onmousemove)           | `function`                                                                                 |                                             |          |
+| [onMouseUp](#onmouseup)               | `function`                                                                                 |                                             |          |
+| [onTouchStart](#ontouchstart)         | `function`                                                                                 |                                             |          |
+| [onTouchMove](#ontouchmove)           | `function`                                                                                 |                                             |          |
+| [onTouchEnd](#ontouchend)             | `function`                                                                                 |                                             |          |
+| [onTouchCancel](#ontouchcancel)       | `function`                                                                                 |                                             |          |
+| [longPressTimeout](#longpresstimeout) | `number`                                                                                   | `450`                                       |          |
+| [noContentClass](#nocontentclass)     | `boolean`                                                                                  |                                             |          |
+| [onOpen](#onopen)                     | `function`                                                                                 |                                             |          |
+| [imageBorderColor](#imagebordercolor) | `string`                                                                                   | `'rgba(var(--chayns-color-rgb--009), .08)'` |          |
+| [headMultiline](#headmultiline)       | `boolean`                                                                                  | `false`                                     |          |
 
 ### `title`
 
@@ -163,7 +163,7 @@ A `ReactNode` that should be displayed on the right side of the list item.
 ### `style`
 
 ```ts
-style?: { [key: string]: string | number }
+style?: { head: { [key: string]: string | number }, body: { [key: string]: string | number } }
 ```
 
 A React style object that will be applied to the outer-most `<div>`-element of
