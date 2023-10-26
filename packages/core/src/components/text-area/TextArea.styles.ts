@@ -1,13 +1,11 @@
 import type { CSSProperties } from 'react';
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { motion } from 'framer-motion';
 
 export const StyledTextArea = styled.div`
     display: flex;
     flex: 1 1 auto;
     min-width: 0;
-    margin: 8px 10px;
     position: relative;
 `;
 
