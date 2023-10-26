@@ -12,6 +12,10 @@ import {
 
 export type FileInputProps = {
     /**
+     * An array of icons that should be displayed inside the FileInput
+     */
+    icons?: string[];
+    /**
      * A function to be executed when files are added.
      */
     onAdd?: (files: File[]) => void;
@@ -19,9 +23,18 @@ export type FileInputProps = {
      * A function to be executed when a file is removed.
      */
     onRemove?: (file: File) => void;
+    /**
+     * The text that should be displayed inside the FileInput
+     */
+    placeholder?: string;
 };
 
-const FileInput: FC<FileInputProps> = ({ onRemove, onAdd }) => {
+const FileInput: FC<FileInputProps> = ({
+    icons = ['fa fa-upload'],
+    onRemove,
+    onAdd,
+    placeholder = 'Dateien hinzufügen',
+}) => {
     const [internalFiles, setInternalFiles] = useState<File[]>([]);
 
     const handleAddFiles = useCallback(
@@ -114,15 +127,15 @@ const FileInput: FC<FileInputProps> = ({ onRemove, onAdd }) => {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => void handleDrop(e)}
                 >
-                    <Icon icons={['fa fa-upload']} />
-                    <StyledFileInputText>Dateien hinzufügen</StyledFileInputText>
+                    <Icon icons={icons} />
+                    <StyledFileInputText>{placeholder}</StyledFileInputText>
                 </StyledFileInputContainer>
                 <List>
                     <AnimatePresence initial={false}>{content}</AnimatePresence>
                 </List>
             </StyledFileInput>
         ),
-        [content, handleClick, handleDrop]
+        [content, handleClick, handleDrop, icons, placeholder]
     );
 };
 
