@@ -96,7 +96,7 @@ const ColorPicker = forwardRef(
             y: 0,
         });
         const [colorModel, setColorModel] = useState(
-            defaultColorModel ||
+            defaultColorModel ??
             (transparency
                 ? ColorPicker.colorModels.RGB
                 : ColorPicker.colorModels.HEX)
