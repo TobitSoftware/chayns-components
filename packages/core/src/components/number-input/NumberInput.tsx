@@ -51,11 +51,16 @@ const NumberInput: FC<NumberInputProps> = (
         onChange
     }) => {
     const [stringValue, setStringValue] = useState<string>('');
+    const [hasFocus, setHasFocus] = useState<boolean>(false);
 
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
     const handleChange = useCallback(
         (newValue: number | null = null) => {
+            if (hasFocus) {
+                return;
+            }
+
             if (typeof newValue !== 'number') {
                 setStringValue('');
 
@@ -66,7 +71,7 @@ const NumberInput: FC<NumberInputProps> = (
 
             setStringValue(formateNumber({ number: parsedValue, isMoneyInput }));
         },
-        [isMoneyInput]
+        [hasFocus, isMoneyInput]
     );
 
     const onLocalChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +147,8 @@ const NumberInput: FC<NumberInputProps> = (
     };
 
     const onLocalBlur = () => {
+        setHasFocus(false);
+
         const sanitizedValue = stringValue.length === 0 ? '0' : stringValue;
         const parsedValue = parseFloatAndRound({ stringValue: sanitizedValue });
 
@@ -160,6 +167,8 @@ const NumberInput: FC<NumberInputProps> = (
     };
 
     const onFocus = () => {
+        setHasFocus(true);
+
         setStringValue(stringValue.replaceAll('.', ''));
     };
 
