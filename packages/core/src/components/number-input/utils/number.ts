@@ -1,10 +1,9 @@
-interface ParseFloatAndRoundOptions {
-    stringValue: string;
-    decimals?: number;
+interface ParseFloatWithDecimals {
+    ({ stringValue, decimals }: { stringValue: string; decimals?: number }): number;
 }
 
-export const parseFloatAndRound = ({ stringValue, decimals }: ParseFloatAndRoundOptions) => {
-    const parsed = parseFloat(stringValue.replace(',', '.'));
+export const parseFloatWithDecimals: ParseFloatWithDecimals = ({ stringValue, decimals }) => {
+    const parsed = parseFloat(stringValue);
 
     if (decimals) {
         return parseFloat(parsed.toFixed(decimals));

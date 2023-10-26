@@ -5,7 +5,7 @@ export default {
     title: 'Core/NumberInput',
     component: NumberInput,
     args: {
-        number: null,
+        value: null,
     },
 } as ComponentMeta<typeof NumberInput>;
 

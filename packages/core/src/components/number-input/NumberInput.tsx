@@ -1,13 +1,17 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
 import Input from '../input/Input';
 import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, NUMBER_CLEAR_REGEX } from './constants/number';
-import { formateNumber, parseFloatAndRound } from './utils/number';
+import { formateNumber, parseFloatWithDecimals } from './utils/number';
 
 export type NumberInputProps = {
     /**
      * Whether the user can add decimal places. Enables the user to input a zero as first number
      */
     isDecimalInput?: boolean;
+    /**
+     * Whether the input is disabled
+     */
+    isDisabled?: boolean;
     /**
      * Applies rules for money input.
      * Rules: only two decimal places, one leading zero
@@ -18,25 +22,26 @@ export type NumberInputProps = {
      */
     maxNumber?: number;
     /**
-     * The number that should be displayed formatted in the input field. NOTE: The number has to match the mode (integer, decimal or money)
+     * Limits the number to this value
      */
-    number: number | null;
+    minNumber?: number;
+    /**
+     * Callback function that is called when the input gets out of focus
+     */
+    onBlur?: (newNumber: number | null, isInvalid: boolean) => void;
+    /**
+     * Callback function that is called when the input changes, returns the sanitized value
+     */
+    onChange?: (newValue: string) => void;
     /**
      * The placeholder that should be in the input
      */
     placeholder?: string;
     /**
-     * Callback function that is called when the input gets out of focus
+     * The number that should be displayed formatted in the input field. NOTE: The number has to match the mode (integer, decimal or money)
+     * If the number is a string, the formatting will be skipped and the string will be set as value
      */
-    onBlur?: (newNumber: number | null) => void;
-    /**
-     * Callback function that is called when the input changes
-     */
-    onChange?: (newNumber: number | null) => void;
-    /**
-     * Whether the input is disabled
-     */
-    isDisabled?: boolean;
+    value: number | string | null;
 };
 
 const NumberInput: FC<NumberInputProps> = (
@@ -44,34 +49,39 @@ const NumberInput: FC<NumberInputProps> = (
         isDecimalInput,
         isMoneyInput,
         maxNumber = Infinity,
-        number,
+        value,
         placeholder,
         onBlur,
         isDisabled,
-        onChange
+        onChange,
+        minNumber= -Infinity
     }) => {
-    const [stringValue, setStringValue] = useState<string>('');
-    const [hasFocus, setHasFocus] = useState<boolean>(false);
+    const [localValue, setLocalValue] = useState<string>('');
+    const [isValueInvalid, setIsValueInvalid] = useState(false);
 
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
     const handleChange = useCallback(
-        (newValue: number | null = null) => {
-            if (hasFocus) {
+        (newValue: number | string | null = null) => {
+            if (typeof newValue === 'string') {
+                setLocalValue(newValue.replace('.', ','));
+
                 return;
             }
 
             if (typeof newValue !== 'number') {
-                setStringValue('');
+                setLocalValue('');
 
                 return;
             }
 
-            const parsedValue = parseFloatAndRound({ stringValue: newValue?.toString() });
+            const sanitizedValueString = newValue.toString().replace(',', '.');
 
-            setStringValue(formateNumber({ number: parsedValue, isMoneyInput }));
+            const parsedValue = parseFloatWithDecimals({ stringValue: sanitizedValueString });
+
+            setLocalValue(formateNumber({ number: parsedValue, isMoneyInput }));
         },
-        [hasFocus, isMoneyInput]
+        [isMoneyInput]
     );
 
     const onLocalChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -83,108 +93,93 @@ const NumberInput: FC<NumberInputProps> = (
             // Calculations need points for decimal indication
             .replace(',', '.');
 
+
         if (sanitizedValue.length === 0) {
-            setStringValue('');
+            setLocalValue('');
 
             if (typeof onChange === 'function') {
-                onChange?.(null);
+                onChange('');
             }
 
             return;
         }
+
+        let isValid = false;
 
         // Allows numbers, one (comma/point) and any number of decimal places
         if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
-            const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
-
-            if (parsedNumber > maxNumber) {
-                return;
-            }
-
-            setStringValue(sanitizedValue.replace('.', ','));
-
-            if (typeof onChange === 'function') {
-                onChange(parsedNumber);
-            }
-
-            return;
-        }
-
-        // Allows numbers, one (comma/point) and 2 numbers of decimal places
-        if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
-            const parsedNumber = parseFloatAndRound({
-                stringValue: sanitizedValue,
-                decimals: 2,
-            });
-
-            if (parsedNumber > maxNumber) {
-                return;
-            }
-
-            setStringValue(sanitizedValue.replace('.', ','));
-
-            if (typeof onChange === 'function') {
-                onChange(parsedNumber);
-            }
-
-            return;
+            isValid = true;
         }
 
         // Allows numbers but excludes numbers with leading 0
-        if (INTEGER_TEST.test(sanitizedValue)) {
-            const parsedNumber = Number(sanitizedValue);
+        if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
+            isValid = true;
+        }
 
-            if (parsedNumber > maxNumber) {
-                return;
-            }
+        // Allows numbers but excludes numbers with leading 0
+        if (!isDecimalInput && !isMoneyInput && INTEGER_TEST.test(sanitizedValue)) {
+            isValid = true;
+        }
 
-            setStringValue(sanitizedValue);
+        if (!isValid) {
+            return;
+        }
 
-            if (typeof onChange === 'function') {
-                onChange(parsedNumber);
-            }
+        setLocalValue(sanitizedValue.replace('.', ','));
+
+        if (typeof onChange === 'function') {
+            onChange(sanitizedValue);
         }
     };
 
     const onLocalBlur = () => {
-        setHasFocus(false);
+        const sanitizedValue = localValue.length === 0 ? '0' : localValue;
+        let isInvalid = false;
 
-        const sanitizedValue = stringValue.length === 0 ? '0' : stringValue;
-        const parsedValue = parseFloatAndRound({ stringValue: sanitizedValue });
+        const parsedNumber = parseFloatWithDecimals({
+            stringValue: sanitizedValue.replace(',', '.'),
+            decimals: isMoneyInput ? 2 : undefined
+        });
 
-        setStringValue(
-            stringValue.length === 0
+        if (parsedNumber > maxNumber || parsedNumber < minNumber) {
+            isInvalid = true;
+        }
+
+        setIsValueInvalid(isInvalid);
+
+        setLocalValue(
+            localValue.length === 0
                 ? ''
                 : formateNumber({
-                    number: parsedValue,
+                    number: parsedNumber,
                     isMoneyInput,
                 })
         );
 
         if (typeof onBlur === 'function') {
-            onBlur(parsedValue === 0 ? null : parsedValue);
+            onBlur(parsedNumber === 0 ? null : parsedNumber, isInvalid);
         }
     };
 
     const onFocus = () => {
-        setHasFocus(true);
-
-        setStringValue(stringValue.replaceAll('.', ''));
+        setIsValueInvalid(false);
+        setLocalValue(localValue.replaceAll('.', ''));
     };
 
     useEffect(() => {
-        handleChange(number);
-    }, [handleChange, number]);
+        handleChange(value);
+    }, [handleChange, value]);
 
     return (
         <Input
             inputMode="decimal"
             onChange={onLocalChange}
-            value={stringValue}
+            value={localValue}
             placeholder={localPlaceholder}
             onBlur={onLocalBlur}
             onFocus={onFocus}
             isDisabled={isDisabled}
+            isInvalid={isValueInvalid}
         />
     );
 };
