@@ -22,6 +22,8 @@ import {
     StyledMotionInputClearIcon,
     StyledMotionInputLabel,
 } from './Input.styles';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
+import { useTheme } from 'styled-components';
 
 export type InputRef = {
     focus: VoidFunction;
@@ -91,6 +93,10 @@ export type InputProps = {
      * If true, the input field is focused when the component is mounted
      */
     shouldUseAutoFocus?: boolean;
+    /**
+     * If true, the input field is marked as invalid
+     */
+    isInvalid?: boolean;
 };
 
 const Input = forwardRef<InputRef, InputProps>(
@@ -109,11 +115,12 @@ const Input = forwardRef<InputRef, InputProps>(
             type = 'text',
             value,
             shouldUseAutoFocus = false,
+            isInvalid = false
         },
         ref
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
-
+        const theme = useTheme() as Theme;
         const inputRef = useRef<HTMLInputElement>(null);
 
         const handleClearIconClick = useCallback(() => {
@@ -160,7 +167,7 @@ const Input = forwardRef<InputRef, InputProps>(
         }, [hasValue]);
 
         return (
-            <StyledInput className="beta-chayns-input" isDisabled={isDisabled}>
+            <StyledInput className="beta-chayns-input" isDisabled={isDisabled} isInvalid={isInvalid}>
                 {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                 <StyledInputContent>
                     <StyledInputField
@@ -174,6 +181,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         value={value}
                         autoFocus={shouldUseAutoFocus}
                         inputMode={inputMode}
+                        isInvalid={isInvalid}
                     />
                     <StyledMotionInputLabel
                         animate={{ scale: hasValue ? 0.6 : 1 }}
@@ -181,6 +189,7 @@ const Input = forwardRef<InputRef, InputProps>(
                         layout
                         style={{ ...labelPosition }}
                         transition={{ type: 'tween' }}
+                        isInvalid={isInvalid}
                     >
                         {placeholderElement}
                         {placeholder}
@@ -192,8 +201,9 @@ const Input = forwardRef<InputRef, InputProps>(
                         initial={false}
                         onClick={handleClearIconClick}
                         transition={{ type: 'tween' }}
+                        isInvalid={isInvalid}
                     >
-                        <Icon icons={['fa fa-times']} />
+                        <Icon icons={['fa fa-times']} color={isInvalid ? theme.wrong : undefined}/>
                     </StyledMotionInputClearIcon>
                 )}
             </StyledInput>

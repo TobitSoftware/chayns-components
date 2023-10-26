@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputProps } from './Input';
 
-type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled'>>;
+type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled'| 'isInvalid'>>;
 
 export const StyledInput = styled.div<StyledInputProps>`
     align-items: center;
     background-color: ${({ theme }: StyledInputProps) => theme['100']};
-    border: 1px solid rgba(160, 160, 160, 0.3);
+    border: 1px solid ${({theme, isInvalid}:StyledInputProps ) => isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
     border-radius: 3px;
     color: ${({ theme }: StyledInputProps) => theme['006']};
     display: flex;
@@ -27,15 +27,19 @@ export const StyledInputContent = styled.div`
     position: relative;
 `;
 
-export const StyledInputField = styled.input`
+type StyledInputFieldProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+
+export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
     border: none;
-    color: ${({ theme }: StyledInputProps) => theme.text};
+    color: ${({ theme, isInvalid }: StyledInputFieldProps) => isInvalid ? theme.wrong : theme.text};
     padding: 0;
     width: 100%;
 `;
 
-export const StyledMotionInputLabel = styled(motion.label)`
+type StyledMotionInputLabelProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+
+export const StyledMotionInputLabel = styled(motion.label)<StyledMotionInputLabelProps>`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
@@ -44,12 +48,14 @@ export const StyledMotionInputLabel = styled(motion.label)`
     pointer-events: none;
     position: absolute;
     user-select: none;
+    color: ${({theme, isInvalid}: StyledMotionInputLabelProps)=> isInvalid ? theme.wrong : undefined}
 `;
 
-export const StyledMotionInputClearIcon = styled(motion.div)`
+type StyledMotionInputClearIconProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+
+export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
     align-items: center;
     border-left: 1px solid rgba(160, 160, 160, 0.3);
-    color: ${({ theme }: StyledInputProps) => theme.headline};
     cursor: pointer;
     display: flex;
     flex: 0 0 auto;
