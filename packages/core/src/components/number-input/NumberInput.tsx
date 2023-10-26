@@ -18,7 +18,7 @@ export type NumberInputProps = {
      */
     maxNumber?: number;
     /**
-     * The number that should be displayed formatted in the input field. NOTE: A zero as number is not allowed
+     * The number that should be displayed formatted in the input field. NOTE: The number has to match the mode (integer, decimal or money)
      */
     number: number | null;
     /**
@@ -28,23 +28,31 @@ export type NumberInputProps = {
     /**
      * Callback function that is called when the input gets out of focus
      */
-    onNumberChange: (newNumber: number | null) => void;
+    onBlur?: (newNumber: number | null) => void;
+    /**
+     * Callback function that is called when the input changes
+     */
+    onChange?: (newNumber: number | null) => void;
     /**
      * Whether the input is disabled
      */
     isDisabled?: boolean;
 };
 
-const NumberInput: FC<NumberInputProps> = ({
-    isDecimalInput,
-    isMoneyInput,
-    maxNumber = Infinity,
-    number,
-    placeholder,
-    onNumberChange,
-    isDisabled,
-}) => {
+const NumberInput: FC<NumberInputProps> = (
+    {
+        isDecimalInput,
+        isMoneyInput,
+        maxNumber = Infinity,
+        number,
+        placeholder,
+        onBlur,
+        isDisabled,
+        onChange
+    }) => {
     const [stringValue, setStringValue] = useState<string>('');
+
+    const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
     const handleChange = useCallback(
         (newValue: number | null = null) => {
@@ -61,61 +69,79 @@ const NumberInput: FC<NumberInputProps> = ({
         [isMoneyInput]
     );
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const onLocalChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
 
         const sanitizedValue = newValue
-            // Removes everything except numbers and commas (decimals should be indicated with a comma)
+            // Removes everything except numbers, commas and points
             .replace(NUMBER_CLEAR_REGEX, '')
             // Calculations need points for decimal indication
             .replace(',', '.');
 
-        if (sanitizedValue.trim().length > 0) {
-            // Allows numbers, a comma and any number of decimal places
-            if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
-                const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
-
-                if (parsedNumber > maxNumber) {
-                    return;
-                }
-
-                setStringValue(sanitizedValue.replace('.', ','));
-
-                return;
-            }
-
-            // Allows numbers, a comma and 2 numbers of decimal places
-            if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
-                const parsedNumber = parseFloatAndRound({
-                    stringValue: sanitizedValue,
-                    decimals: 2,
-                });
-
-                if (parsedNumber > maxNumber) {
-                    return;
-                }
-
-                setStringValue(sanitizedValue.replace('.', ','));
-
-                return;
-            }
-
-            // Allows numbers but excludes numbers with leading 0
-            if (INTEGER_TEST.test(sanitizedValue)) {
-                const parsedNumber = Number(sanitizedValue);
-
-                if (parsedNumber > maxNumber) {
-                    return;
-                }
-
-                setStringValue(sanitizedValue);
-            }
-        } else {
+        if (sanitizedValue.length === 0) {
             setStringValue('');
+
+            if (typeof onChange === 'function') {
+                onChange?.(null);
+            }
+
+            return;
+        }
+
+        // Allows numbers, one (comma/point) and any number of decimal places
+        if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
+            const parsedNumber = parseFloatAndRound({ stringValue: sanitizedValue });
+
+            if (parsedNumber > maxNumber) {
+                return;
+            }
+
+            setStringValue(sanitizedValue.replace('.', ','));
+
+            if (typeof onChange === 'function') {
+                onChange(parsedNumber);
+            }
+
+            return;
+        }
+
+        // Allows numbers, one (comma/point) and 2 numbers of decimal places
+        if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
+            const parsedNumber = parseFloatAndRound({
+                stringValue: sanitizedValue,
+                decimals: 2,
+            });
+
+            if (parsedNumber > maxNumber) {
+                return;
+            }
+
+            setStringValue(sanitizedValue.replace('.', ','));
+
+            if (typeof onChange === 'function') {
+                onChange(parsedNumber);
+            }
+
+            return;
+        }
+
+        // Allows numbers but excludes numbers with leading 0
+        if (INTEGER_TEST.test(sanitizedValue)) {
+            const parsedNumber = Number(sanitizedValue);
+
+            if (parsedNumber > maxNumber) {
+                return;
+            }
+
+            setStringValue(sanitizedValue);
+
+            if (typeof onChange === 'function') {
+                onChange(parsedNumber);
+            }
         }
     };
 
-    const onBlur = () => {
+    const onLocalBlur = () => {
         const sanitizedValue = stringValue.length === 0 ? '0' : stringValue;
         const parsedValue = parseFloatAndRound({ stringValue: sanitizedValue });
 
@@ -123,12 +149,14 @@ const NumberInput: FC<NumberInputProps> = ({
             stringValue.length === 0
                 ? ''
                 : formateNumber({
-                      number: parsedValue,
-                      isMoneyInput,
-                  })
+                    number: parsedValue,
+                    isMoneyInput,
+                })
         );
 
-        onNumberChange(parsedValue === 0 ? null : parsedValue);
+        if (typeof onBlur === 'function') {
+            onBlur(parsedValue === 0 ? null : parsedValue);
+        }
     };
 
     const onFocus = () => {
@@ -142,10 +170,10 @@ const NumberInput: FC<NumberInputProps> = ({
     return (
         <Input
             inputMode="decimal"
-            onChange={onChange}
+            onChange={onLocalChange}
             value={stringValue}
-            placeholder={placeholder}
-            onBlur={onBlur}
+            placeholder={localPlaceholder}
+            onBlur={onLocalBlur}
             onFocus={onFocus}
             isDisabled={isDisabled}
         />
