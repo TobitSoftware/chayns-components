@@ -3,8 +3,7 @@ import { useMemo, useState } from 'react';
 import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
 import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
-import TextStringProvider from '@chayns-components/core/lib/components/textstring-provider/TextStringProvider';
-import TextString from '@chayns-components/core/lib/components/textstring/TextString';
+import { TextString, TextStringProvider } from '../src';
 
 export default {
     title: 'TextString/TextString',
@@ -77,7 +76,7 @@ General.args = {
 
 TextStringWithStyles.args = {
     childrenTagName: 'h1',
-    childrenStyles: { color: 'red' },
+    childrenStyles: { color: 'rebeccapurple' },
     textString: {
         fallback: 'Das ist ein TextString! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',
