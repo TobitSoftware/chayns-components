@@ -2,9 +2,10 @@ import type { WithTheme } from '@chayns-components/core';
 import styled, { css, keyframes } from 'styled-components';
 
 export const StyledTypewriter = styled.div`
-    position: relative;
-    display: flex;
     align-items: inherit;
+    display: flex;
+    position: relative;
+    width: 100%;
 `;
 
 const blinkAnimation = keyframes`
