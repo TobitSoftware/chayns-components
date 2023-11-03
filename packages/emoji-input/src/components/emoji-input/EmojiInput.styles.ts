@@ -40,15 +40,15 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<{
-    placeholder: EmojiInputProps['placeholder'];
-}>;
+type StyledEmojiInputEditorProps = WithTheme<
+    Pick<EmojiInputProps, 'inputMaxHeight' | 'placeholder'>
+>;
 
 export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
-    max-height: 210px;
+    max-height: ${({ inputMaxHeight }) => inputMaxHeight};
     overflow-y: scroll;
     word-break: break-word;
 

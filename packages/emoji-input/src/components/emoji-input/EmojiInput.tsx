@@ -1,6 +1,7 @@
 import React, {
     ChangeEvent,
     ClipboardEvent,
+    CSSProperties,
     FC,
     FocusEventHandler,
     KeyboardEvent,
@@ -38,6 +39,10 @@ export type EmojiInputProps = {
      * HTML id of the input element
      */
     inputId?: string;
+    /**
+     * Maximum height of the input field. If the content is larger, a scrollbar is displayed.
+     */
+    inputMaxHeight?: CSSProperties['maxHeight'];
     /**
      * Disables the input so that it cannot be changed anymore
      */
@@ -97,6 +102,7 @@ export type EmojiInputProps = {
 const EmojiInput: FC<EmojiInputProps> = ({
     accessToken,
     inputId,
+    inputMaxHeight = '210px',
     isDisabled,
     onBlur,
     onFocus,
@@ -306,6 +312,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 <StyledEmojiInputEditor
                     contentEditable={!isDisabled}
                     id={inputId}
+                    inputMaxHeight={inputMaxHeight}
                     onBlur={onBlur}
                     onFocus={onFocus}
                     onInput={handleInput}
