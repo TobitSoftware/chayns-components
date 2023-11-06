@@ -1,5 +1,4 @@
 import type { WithTheme } from '@chayns-components/core';
-import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
 import type { EmojiInputProps } from './EmojiInput';
@@ -57,7 +56,7 @@ type StyledEmojiInputEditorProps = WithTheme<
     Pick<EmojiInputProps, 'placeholder' | 'shouldUseFullHeight'>
 >;
 
-export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
+export const StyledEmojiInputEditor = styled.div<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
