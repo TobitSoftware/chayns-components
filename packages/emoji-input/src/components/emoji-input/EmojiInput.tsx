@@ -1,6 +1,7 @@
 import React, {
     ChangeEvent,
     ClipboardEvent,
+    CSSProperties,
     FC,
     FocusEventHandler,
     KeyboardEvent,
@@ -25,8 +26,8 @@ import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
     StyledEmojiInputContent,
-    StyledEmojiInputEditor,
     StyledEmojiInputRightWrapper,
+    StyledMotionEmojiInputEditor,
 } from './EmojiInput.styles';
 
 export type EmojiInputProps = {
@@ -35,6 +36,10 @@ export type EmojiInputProps = {
      */
     accessToken?: string;
     /**
+     * Sets the height of the input field to a fixed value. If this value is not set, the component will use the needed height until the maximum height is reached.
+     */
+    height?: CSSProperties['height'];
+    /**
      * HTML id of the input element
      */
     inputId?: string;
@@ -42,6 +47,10 @@ export type EmojiInputProps = {
      * Disables the input so that it cannot be changed anymore
      */
     isDisabled?: boolean;
+    /**
+     * Sets the maximum height of the input field.
+     */
+    maxHeight?: CSSProperties['maxHeight'];
     /**
      * Function that is executed when the input field loses focus.
      */
@@ -88,10 +97,6 @@ export type EmojiInputProps = {
      */
     shouldPreventEmojiPicker?: boolean;
     /**
-     * Sets the maximum height of the input field to the size of the parent element.
-     */
-    shouldUseFullHeight?: boolean;
-    /**
      * The plain text value of the input field. Instead of HTML elements BB codes must be used at
      * this point. These are then converted by the input field into corresponding HTML elements.
      */
@@ -100,8 +105,10 @@ export type EmojiInputProps = {
 
 const EmojiInput: FC<EmojiInputProps> = ({
     accessToken,
+    height,
     inputId,
     isDisabled,
+    maxHeight = '210px',
     onBlur,
     onFocus,
     onInput,
@@ -112,7 +119,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
     popupAlignment,
     rightElement,
     shouldPreventEmojiPicker,
-    shouldUseFullHeight,
     value,
 }) => {
     const [isMobile] = useState(getIsMobile());
@@ -306,12 +312,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, []);
 
     return (
-        <StyledEmojiInput isDisabled={isDisabled} shouldUseFullHeight={shouldUseFullHeight}>
-            <StyledEmojiInputContent
-                isRightElementGiven={!!rightElement}
-                shouldUseFullHeight={shouldUseFullHeight}
-            >
-                <StyledEmojiInputEditor
+        <StyledEmojiInput isDisabled={isDisabled}>
+            <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
+                <StyledMotionEmojiInputEditor
+                    animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                     contentEditable={!isDisabled}
                     id={inputId}
                     onBlur={onBlur}
@@ -321,7 +325,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     onPaste={handlePaste}
                     placeholder={placeholder}
                     ref={editorRef}
-                    shouldUseFullHeight={shouldUseFullHeight}
+                    transition={{ type: 'tween', duration: 0.2 }}
                 />
                 {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
