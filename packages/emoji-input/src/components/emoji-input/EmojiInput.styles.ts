@@ -53,25 +53,15 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<
-    Pick<EmojiInputProps, 'placeholder' | 'shouldUseFullHeight'>
->;
+type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
+    height: 100%;
     overflow-y: scroll;
     word-break: break-word;
-
-    ${({ shouldUseFullHeight }) =>
-        shouldUseFullHeight
-            ? css`
-                  height: 100%;
-              `
-            : css`
-                  max-height: 210px;
-              `}
 
     // This fixes a bug where the field is not editable in certain browsers.
     // This is for example the case on iOS 15 or older.
