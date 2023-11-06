@@ -25,8 +25,8 @@ import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
     StyledEmojiInputContent,
-    StyledEmojiInputEditor,
     StyledEmojiInputRightWrapper,
+    StyledMotionEmojiInputEditor,
 } from './EmojiInput.styles';
 
 export type EmojiInputProps = {
@@ -311,9 +311,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 isRightElementGiven={!!rightElement}
                 shouldUseFullHeight={shouldUseFullHeight}
             >
-                <StyledEmojiInputEditor
+                <StyledMotionEmojiInputEditor
                     contentEditable={!isDisabled}
                     id={inputId}
+                    layout="size"
                     onBlur={onBlur}
                     onFocus={onFocus}
                     onInput={handleInput}
