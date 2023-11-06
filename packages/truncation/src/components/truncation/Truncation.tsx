@@ -16,11 +16,26 @@ import {
 } from './Truncation.styles';
 
 export type TruncationProps = {
-    collapsedHeight?: number;
-    moreLabel?: string;
-    lessLabel?: string;
-    onChange?: (event: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
+    /**
+     * The elements that should be expanding or collapsing.
+     */
     children: ReactElement;
+    /**
+     * The height of the children Element in it`s collapsed state.
+     */
+    collapsedHeight?: number;
+    /**
+     * A text that should be displayed if the content is expanded.
+     */
+    lessLabel?: string;
+    /**
+     * A text that should be displayed if the content is collapsed.
+     */
+    moreLabel?: string;
+    /**
+     * Function to be executed when the component is expanding or collapsing.
+     */
+    onChange?: (event: MouseEvent<HTMLAnchorElement>, isOpen: boolean) => void;
 };
 
 const Truncation: FC<TruncationProps> = ({
