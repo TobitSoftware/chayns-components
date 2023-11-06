@@ -312,10 +312,9 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 shouldUseFullHeight={shouldUseFullHeight}
             >
                 <StyledMotionEmojiInputEditor
-                    animate={{ maxHeight: shouldUseFullHeight ? '100%' : '210px' }}
                     contentEditable={!isDisabled}
                     id={inputId}
-                    initial={false}
+                    layout="size"
                     onBlur={onBlur}
                     onFocus={onFocus}
                     onInput={handleInput}
@@ -323,6 +322,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     onPaste={handlePaste}
                     placeholder={placeholder}
                     ref={editorRef}
+                    shouldUseFullHeight={shouldUseFullHeight}
                 />
                 {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
