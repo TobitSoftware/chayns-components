@@ -108,7 +108,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
     height,
     inputId,
     isDisabled,
-    maxHeight = '210px',
+    maxHeight = '190px',
     onBlur,
     onFocus,
     onInput,
