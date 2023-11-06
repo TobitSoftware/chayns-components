@@ -13,6 +13,10 @@ export type SetupWizardItemProps = {
      */
     id: number;
     /**
+     * This value must be set if the SetupWizard is inside an Accordion.
+     */
+    isWrapped?: boolean;
+    /**
      * The step of the item.
      */
     step: number;
@@ -22,7 +26,7 @@ export type SetupWizardItemProps = {
     title: string;
 };
 
-const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }) => {
+const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id, isWrapped }) => {
     const { selectedId, updateSelectedId, activeId } = useContext(SetupWizardContext);
 
     const shouldBeDisabled = useMemo(() => {
@@ -57,6 +61,7 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }
         () => (
             <StyledSetupWizardItem>
                 <Accordion
+                    isWrapped={isWrapped}
                     onOpen={handleAccordionOpen}
                     title={`${step}. ${title}`}
                     isDefaultOpen={id === selectedId}
@@ -67,7 +72,17 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id }
                 </Accordion>
             </StyledSetupWizardItem>
         ),
-        [children, handleAccordionOpen, id, rightElement, selectedId, shouldBeDisabled, step, title]
+        [
+            children,
+            handleAccordionOpen,
+            id,
+            isWrapped,
+            rightElement,
+            selectedId,
+            shouldBeDisabled,
+            step,
+            title,
+        ]
     );
 };
 
