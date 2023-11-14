@@ -40,7 +40,7 @@ export type AccordionProps = {
      */
     isDefaultOpen?: boolean;
     /**
-     * This will disable the Accordion so that it cannot be opened and will gray out the title.
+     * This will disable the Accordion so that it cannot be opened and will gray out the title. Does not work with isOpened.
      */
     isDisabled?: boolean;
     /**
@@ -136,11 +136,10 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     shouldRenderClosed = false,
 }) => {
-    const { openAccordionUuid, setOpenAccordionUuid, updateOpenAccordionUuid } =
-        useContext(AccordionGroupContext);
+    const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
-    const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen);
+    const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
 
     const uuid = useUuid();
 
@@ -186,13 +185,13 @@ const Accordion: FC<AccordionProps> = ({
 
     useEffect(() => {
         if (typeof isOpened === 'boolean') {
-            if (typeof setOpenAccordionUuid === 'function') {
-                setOpenAccordionUuid(isOpened ? uuid : undefined);
+            if (typeof updateOpenAccordionUuid === 'function' && isOpened) {
+                updateOpenAccordionUuid(uuid);
             } else {
                 setIsAccordionOpen(isOpened);
             }
         }
-    }, [isOpened, setOpenAccordionUuid, updateOpenAccordionUuid, uuid]);
+    }, [isOpened, updateOpenAccordionUuid, uuid]);
 
     const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
 
