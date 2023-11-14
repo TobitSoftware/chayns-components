@@ -33,38 +33,80 @@ import { Meta } from '@storybook/addon-docs';
 <h2 style={{ marginTop: '32px' }}>Installation</h2>
 
 <p style={{ fontSize: '1.1rem' }}>
-    First the components must be installed. We decide between the core components and other
-    components.
+    We differentiate between the core components and sub-components,
+    which need to be installed separately. The installation of packages can be done using npm or yarn.
 </p>
 
-```bash
-# NPM
-npm install @chayns-components/color-picker # beta
-npm install @chayns-components/core
-npm install @chayns-components/emoji-input
-npm install @chayns-components/file-input
-npm install @chayns-components/gallery
-npm install @chayns-components/setup-wizard
-npm install @chayns-components/textstring
-npm install @chayns-components/truncation
-npm install @chayns-components/typewriter
-npm install @chayns-components/person-finder # coming soon
+<details>
+    <summary>Installation using NPM</summary>
 
-# Yarn
-yarn add @chayns-components/color-picker # beta
-yarn add @chayns-components/core
-yarn add @chayns-components/emoji-input
-yarn add @chayns-components/file-input
-yarn add @chayns-components/gallery
-yarn add @chayns-components/setup-wizard
-yarn add @chayns-components/textstring
-yarn add @chayns-components/truncation
-yarn add @chayns-components/typewriter
-yarn add @chayns-components/person-finder # coming soon
-```
+    core components
+    npm install @chayns-components/core
+
+    sub-components
+    npm install @chayns-components/color-picker # beta
+    npm install @chayns-components/emoji-input
+    npm install @chayns-components/file-input
+    npm install @chayns-components/gallery
+    npm install @chayns-components/setup-wizard
+    npm install @chayns-components/textstring
+    npm install @chayns-components/truncation
+    npm install @chayns-components/typewriter
+    npm install @chayns-components/person-finder # coming soon
+</details>
+
+<details>
+    <summary>Installation using Yarn</summary>
+
+    core components
+    yarn add @chayns-components/core
+
+    sub-components
+    yarn add @chayns-components/color-picker # beta
+    yarn add @chayns-components/emoji-input
+    yarn add @chayns-components/file-input
+    yarn add @chayns-components/gallery
+    yarn add @chayns-components/setup-wizard
+    yarn add @chayns-components/textstring
+    yarn add @chayns-components/truncation
+    yarn add @chayns-components/typewriter
+    yarn add @chayns-components/person-finder # coming soon
+</details>
 
 > **Information:** The styles for the components are supplied directly by the package in the new
 > version.
+
+<h2 style={{ marginTop: '32px' }}>How to use</h2>
+
+<p style={{ fontSize: '1.1rem' }}>
+    Initially, ensure the installation of the core package along with any additional packages you wish to incorporate.
+    Follow the commands outlined in the <b>Installation</b> guide for this purpose.
+    Once all the packages are successfully installed, enclose your top-level
+    elements with the ColorSchemeProvider as demonstrated below:
+</p>
+
+```tsx
+import React from 'react';
+import { ColorSchemeProvider } from '@chayns-components/core';
+import { ChaynsProvider, getSite } from 'chayns-api';
+
+const AppWrapper = () => {
+    const { color, colorMode } = getSite();
+
+    return (
+        <ChaynsProvider>
+            <ColorSchemeProvider color={color} colorMode={colorMode}>
+                <YourComponents/>
+            </ColorSchemeProvider>
+        </ChaynsProvider>
+    )
+}
+
+export default AppWrapper;
+```
+
+
+
 
 <h2 style={{ marginTop: '32px' }}>Contribution</h2>
 
