@@ -9,6 +9,7 @@ import React, {
     ReactNode,
     useCallback,
     useEffect,
+    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
@@ -128,6 +129,8 @@ const EmojiInput: FC<EmojiInputProps> = ({
 
     const shouldDeleteOneMoreBackwards = useRef(false);
     const shouldDeleteOneMoreForwards = useRef(false);
+
+    const valueRef = useRef(value);
 
     /**
      * This function updates the content of the 'contentEditable' element if the new text is
@@ -281,6 +284,13 @@ const EmojiInput: FC<EmojiInputProps> = ({
             handleUpdateHTML(value);
         }
     }, [handleUpdateHTML, plainTextValue, value]);
+
+    // This effect is used to call the 'handleUpdateHTML' function once after the component has been
+    // rendered. This is necessary because the 'contentEditable' element otherwise does not display
+    // the HTML content correctly when the component is rendered for the first time.
+    useLayoutEffect(() => {
+        handleUpdateHTML(valueRef.current);
+    }, [handleUpdateHTML]);
 
     useEffect(() => {
         /**
