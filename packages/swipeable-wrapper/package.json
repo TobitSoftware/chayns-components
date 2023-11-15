@@ -1,5 +1,5 @@
 {
-    "name": "@chayns-components/file-input",
+    "name": "@chayns-components/swipeable-wrapper",
     "version": "5.0.0-beta.289",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
@@ -8,7 +8,7 @@
         "components"
     ],
     "author": "Tobit.Software",
-    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/file-input#readme",
+    "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/swipeable-wrapper#readme",
     "license": "MIT",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
