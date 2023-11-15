@@ -113,11 +113,11 @@ const NumberInput: FC<NumberInputProps> = (
             });
 
         setFormattedValue(newStringValue);
-        setPlainText(newStringValue);
+        setPlainText(newStringValue.replaceAll('.', ''));
         setHasFocus(false);
 
         if (typeof onChange === 'function') {
-            onChange(newStringValue);
+            onChange(newStringValue.replaceAll('.', ''));
         }
 
         if (typeof onBlur === 'function') {
@@ -139,24 +139,19 @@ const NumberInput: FC<NumberInputProps> = (
         setHasFocus(true);
     };
 
-    // This is used for the first render, when formattedValue is not set
     useEffect(() => {
-        if (plainText.length > 0 && formattedValue.length === 0) {
-            const parsedNumber = parseFloatWithDecimals({
-                stringValue: plainText.replace(',', '.'),
-                decimals: isMoneyInput ? 2 : undefined
-            });
+        const parsedNumber = parseFloatWithDecimals({
+            stringValue: plainText.replace(',', '.'),
+            decimals: isMoneyInput ? 2 : undefined
+        });
 
-            setIsValueInvalid(parsedNumber > maxNumber || parsedNumber < minNumber);
-
-            setFormattedValue(plainText.length === 0
-                ? ''
-                : formateNumber({
-                    number: parsedNumber,
-                    isMoneyInput,
-                }));
-        }
-    }, [formattedValue.length, isMoneyInput, maxNumber, minNumber, onChange, plainText]);
+        setFormattedValue(plainText.length === 0
+            ? ''
+            : formateNumber({
+                number: parsedNumber,
+                isMoneyInput,
+            }))
+    }, [isMoneyInput, plainText]);
 
     useEffect(() => {
         if (typeof value === 'string') {
