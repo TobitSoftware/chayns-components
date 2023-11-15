@@ -36,22 +36,22 @@
     },
     "homepage": "https://github.com/TobitSoftware/chayns-components#readme",
     "devDependencies": {
-        "@babel/cli": "^7.22.10",
-        "@babel/core": "^7.22.11",
-        "@babel/preset-env": "^7.22.14",
-        "@babel/preset-react": "^7.22.5",
-        "@babel/preset-typescript": "^7.22.11",
+        "@babel/cli": "^7.23.0",
+        "@babel/core": "^7.23.3",
+        "@babel/preset-env": "^7.23.3",
+        "@babel/preset-react": "^7.23.3",
+        "@babel/preset-typescript": "^7.23.3",
         "@chayns-toolkit/eslint-config": "^2.0.2",
         "@storybook/addon-actions": "^6.5.16",
         "@storybook/addon-essentials": "^6.5.16",
         "@storybook/addon-links": "^6.5.16",
         "@storybook/react": "^6.5.16",
-        "@types/uuid": "^9.0.3",
+        "@types/uuid": "^9.0.7",
         "babel-loader": "^8.3.0",
         "eslint": "^7.32.0",
-        "eslint-plugin-storybook": "^0.6.13",
+        "eslint-plugin-storybook": "^0.6.15",
         "husky": "^8.0.3",
-        "lerna": "^7.2.0",
+        "lerna": "^7.4.2",
         "organize-imports-cli": "^0.10.0",
         "prettier": "^2.8.8",
         "react": "^17.0.2",
@@ -60,6 +60,6 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
-        "uuid": "^9.0.0"
+        "uuid": "^9.0.1"
     }
 }
