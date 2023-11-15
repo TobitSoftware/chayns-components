@@ -4,11 +4,13 @@ import NumberInput from '../src/components/number-input/NumberInput';
 export default {
     title: 'Core/NumberInput',
     component: NumberInput,
-    args: {
-        value: null,
-    },
+    args: {},
 } as ComponentMeta<typeof NumberInput>;
 
-const Template: ComponentStory<typeof NumberInput> = (args) => <NumberInput {...args} />;
+const Template: ComponentStory<typeof NumberInput> = (args) => (
+    <NumberInput
+        {...args}
+    />
+);
 
 export const General = Template.bind({});

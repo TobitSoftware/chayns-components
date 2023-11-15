@@ -1,11 +1,12 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
 import Input from '../input/Input';
-import { DECIMAL_TEST, INTEGER_TEST, MONEY_TEST, NUMBER_CLEAR_REGEX } from './constants/number';
-import { formateNumber, parseFloatWithDecimals } from './utils/number';
+import { NUMBER_CLEAR_REGEX } from './constants/number';
+import { formateNumber, isValidString, parseFloatWithDecimals } from './utils/number';
 
 export type NumberInputProps = {
     /**
-     * Whether the user can add decimal places. Enables the user to input a zero as first number
+     * Applies rules for decimal input.
+     * Enables the user to input one zero as number before the comma
      */
     isDecimalInput?: boolean;
     /**
@@ -14,7 +15,7 @@ export type NumberInputProps = {
     isDisabled?: boolean;
     /**
      * Applies rules for money input.
-     * Rules: only two decimal places, one leading zero
+     * Rules: only two decimal places, one zero before the comma
      */
     isMoneyInput?: boolean;
     /**
@@ -30,18 +31,20 @@ export type NumberInputProps = {
      */
     onBlur?: (newNumber: number | null, isInvalid: boolean) => void;
     /**
-     * Callback function that is called when the input changes, returns the sanitized value
+     * Callback function that is called when the input changes
+     * It will pass the text from the input
      */
     onChange?: (newValue: string) => void;
     /**
-     * The placeholder that should be in the input
+     * Placeholder for the input field
      */
     placeholder?: string;
     /**
-     * The number that should be displayed formatted in the input field. NOTE: The number has to match the mode (integer, decimal or money)
-     * If the number is a string, the formatting will be skipped and the string will be set as value
+     * The value, that should be displayed in the input, when it is in focus.
+     * You can also pass a stringified number as default value.
+     * NOTE: If you pass a stringified number, it will be formatted to the selected format
      */
-    value: number | string | null;
+    value?: string;
 };
 
 const NumberInput: FC<NumberInputProps> = (
@@ -54,86 +57,41 @@ const NumberInput: FC<NumberInputProps> = (
         onBlur,
         isDisabled,
         onChange,
-        minNumber= -Infinity
+        minNumber = -Infinity
     }) => {
-    const [localValue, setLocalValue] = useState<string>('');
-    const [isValueInvalid, setIsValueInvalid] = useState(false);
+    // the plainText will be shown in the input, when it is in focus
+    const [plainText, setPlainText] = useState<string>('');
+    // the formattedValue will be shown in the input, when it is not in focus
+    const [formattedValue, setFormattedValue] = useState<string>('');
+    const [hasFocus, setHasFocus] = useState<boolean>(false);
 
+    const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
-    const handleChange = useCallback(
-        (newValue: number | string | null = null) => {
-            if (typeof newValue === 'string') {
-                setLocalValue(newValue.replace('.', ','));
 
+    const onLocalChange: ChangeEventHandler<HTMLInputElement> =
+        (event) => {
+            const newValue = event.target.value;
+
+            const sanitizedValueString = newValue
+                // Removes everything except numbers, commas and points
+                .replace(NUMBER_CLEAR_REGEX, '');
+
+            const valueToCheck = sanitizedValueString.replaceAll(',', '.');
+
+            if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput })) {
                 return;
             }
 
-            if (typeof newValue !== 'number') {
-                setLocalValue('');
-
-                return;
-            }
-
-            const sanitizedValueString = newValue.toString().replace(',', '.');
-
-            const parsedValue = parseFloatWithDecimals({ stringValue: sanitizedValueString });
-
-            setLocalValue(formateNumber({ number: parsedValue, isMoneyInput }));
-        },
-        [isMoneyInput]
-    );
-
-    const onLocalChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-
-        const sanitizedValue = newValue
-            // Removes everything except numbers, commas and points
-            .replace(NUMBER_CLEAR_REGEX, '')
-            // Calculations need points for decimal indication
-            .replace(',', '.');
-
-
-        if (sanitizedValue.length === 0) {
-            setLocalValue('');
+            setPlainText(sanitizedValueString.replaceAll('.', ','));
 
             if (typeof onChange === 'function') {
-                onChange('');
+                onChange(sanitizedValueString.replaceAll('.', ','));
             }
-
-            return;
-        }
-
-        let isValid = false;
-
-        // Allows numbers, one (comma/point) and any number of decimal places
-        if (isDecimalInput && DECIMAL_TEST.test(sanitizedValue)) {
-            isValid = true;
-        }
-
-        // Allows numbers but excludes numbers with leading 0
-        if (isMoneyInput && MONEY_TEST.test(sanitizedValue)) {
-            isValid = true;
-        }
-
-        // Allows numbers but excludes numbers with leading 0
-        if (!isDecimalInput && !isMoneyInput && INTEGER_TEST.test(sanitizedValue)) {
-            isValid = true;
-        }
-
-        if (!isValid) {
-            return;
-        }
-
-        setLocalValue(sanitizedValue.replace('.', ','));
-
-        if (typeof onChange === 'function') {
-            onChange(sanitizedValue);
-        }
-    };
+        };
 
     const onLocalBlur = () => {
-        const sanitizedValue = localValue.length === 0 ? '0' : localValue;
+        const sanitizedValue = plainText.length === 0 ? '0' : plainText;
         let isInvalid = false;
 
         const parsedNumber = parseFloatWithDecimals({
@@ -141,43 +99,79 @@ const NumberInput: FC<NumberInputProps> = (
             decimals: isMoneyInput ? 2 : undefined
         });
 
-        if (parsedNumber > maxNumber || parsedNumber < minNumber) {
+        if (parsedNumber !== 0 && (parsedNumber > maxNumber || parsedNumber < minNumber)) {
             isInvalid = true;
         }
 
         setIsValueInvalid(isInvalid);
 
-        setLocalValue(
-            localValue.length === 0
-                ? ''
-                : formateNumber({
-                    number: parsedNumber,
-                    isMoneyInput,
-                })
-        );
+        const newStringValue = plainText.length === 0
+            ? ''
+            : formateNumber({
+                number: parsedNumber,
+                isMoneyInput,
+            });
+
+        setFormattedValue(newStringValue);
+        setPlainText(newStringValue);
+        setHasFocus(false);
+
+        if (typeof onChange === 'function') {
+            onChange(newStringValue);
+        }
 
         if (typeof onBlur === 'function') {
             onBlur(parsedNumber === 0 ? null : parsedNumber, isInvalid);
         }
     };
 
-    const onFocus = () => {
+    const onLocalFocus = () => {
+        // formattedValue will be a number string with german number format (e.g. 1.000,00)
+        // It will remove all dots, so that the user can type in the number
+        setPlainText(formattedValue.replaceAll('.', ''));
+
+        // This will update the external state
+        if (typeof onChange === 'function') {
+            onChange(formattedValue.replaceAll('.', ''));
+        }
+
         setIsValueInvalid(false);
-        setLocalValue(localValue.replaceAll('.', ''));
+        setHasFocus(true);
     };
 
+    // This is used for the first render, when formattedValue is not set
     useEffect(() => {
-        handleChange(value);
-    }, [handleChange, value]);
+        if (plainText.length > 0 && formattedValue.length === 0) {
+            const parsedNumber = parseFloatWithDecimals({
+                stringValue: plainText.replace(',', '.'),
+                decimals: isMoneyInput ? 2 : undefined
+            });
+
+            setIsValueInvalid(parsedNumber > maxNumber || parsedNumber < minNumber);
+
+            setFormattedValue(plainText.length === 0
+                ? ''
+                : formateNumber({
+                    number: parsedNumber,
+                    isMoneyInput,
+                }));
+        }
+    }, [formattedValue.length, isMoneyInput, maxNumber, minNumber, onChange, plainText]);
+
+    useEffect(() => {
+        if (typeof value === 'string') {
+            setPlainText(value);
+        }
+    }, [value]);
 
     return (
         <Input
             inputMode="decimal"
             onChange={onLocalChange}
-            value={localValue}
+            value={hasFocus ? plainText : formattedValue}
             placeholder={localPlaceholder}
             onBlur={onLocalBlur}
-            onFocus={onFocus}
+            onFocus={onLocalFocus}
             isDisabled={isDisabled}
             isInvalid={isValueInvalid}
         />
