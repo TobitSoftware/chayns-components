@@ -139,19 +139,25 @@ const NumberInput: FC<NumberInputProps> = (
         setHasFocus(true);
     };
 
+    // updates the formattedValue, when the value changes
     useEffect(() => {
         const parsedNumber = parseFloatWithDecimals({
             stringValue: plainText.replace(',', '.'),
             decimals: isMoneyInput ? 2 : undefined
         });
 
+        // checks, if a given number is invalid, if the input is not in focus
+        if (!hasFocus) {
+            setIsValueInvalid(parsedNumber > maxNumber || parsedNumber < minNumber);
+        }
+
         setFormattedValue(plainText.length === 0
             ? ''
             : formateNumber({
                 number: parsedNumber,
                 isMoneyInput,
-            }))
-    }, [isMoneyInput, plainText]);
+            }));
+    }, [hasFocus, isMoneyInput, maxNumber, minNumber, plainText]);
 
     useEffect(() => {
         if (typeof value === 'string') {
