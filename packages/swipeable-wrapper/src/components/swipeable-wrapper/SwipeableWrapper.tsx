@@ -34,7 +34,6 @@ export type SwipeableWrapperProps = {
      * The left-side actions, ordered from the left to the right.
      */
     leftActions?: SwipeableActionItem[];
-
     /**
      * The right-side actions, ordered from left to the right.
      */
@@ -145,6 +144,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
 
                 if (hasCrossedLeftThreshold || hasCrossedRightThreshold) {
                     // @ts-expect-error: No chayns typings given.
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
                     chayns?.vibrate([150], 6);
                 }
             }),
@@ -161,7 +161,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                 (currentXOffset > 0 && info.delta.x < 0) ||
                 (currentXOffset < 0 && info.delta.x > 0)
                     ? 1
-                    : 0.75 / (Math.abs(info.offset.x) / 8);
+                    : 0.75 / (Math.abs(info.offset.x) / 9);
 
             if (Math.abs(info.offset.x) > 30 || currentXOffset > 0) {
                 listItemXOffset.set(currentXOffset + info.delta.x * dampingFactor);
