@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Typewriter from '../src/components/typewriter/Typewriter';
 
-const meta = {
+export default {
     title: 'Typewriter/Typewriter',
     component: Typewriter,
     args: {
@@ -9,8 +9,6 @@ const meta = {
             'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.',
     },
 } as Meta<typeof Typewriter>;
-
-export default meta;
 
 const Template: StoryFn<typeof Typewriter> = ({ children, ...args }) => (
     <Typewriter {...args}>{children}</Typewriter>
