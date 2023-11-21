@@ -1,8 +1,9 @@
+import { getLanguage as getChaynsLanguage } from 'chayns-api';
 import { de, enGB, es, fr, it, nl, pl, pt, tr, uk } from 'date-fns/locale';
 
 export const getLanguage = (): Locale => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    switch (chayns.env.parameters.translang || chayns.env.language) {
+    switch (getChaynsLanguage().translation || getChaynsLanguage().site) {
         case 'en':
             return enGB;
         case 'nl':
