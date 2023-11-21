@@ -51,6 +51,7 @@
     },
     "dependencies": {
         "@chayns-components/core": "^5.0.0-beta.295",
+        "chayns-api": "^1.0.39",
         "clsx": "^1.2.1",
         "framer-motion": "^6.5.1",
         "uuid": "^9.0.1"
