@@ -1,11 +1,10 @@
 import { UacServiceClient } from '@chayns/uac-service';
+import { getAccessToken, getSite, getUser } from 'chayns-api';
 
 const client = new UacServiceClient({
-    // ToDo replace with new api function if new api is ready
-    // eslint-disable-next-line @typescript-eslint/require-await
-    getToken: async () => chayns.env.user.tobitAccessToken || '',
-    getDefaultSiteId: () => chayns.env.site.id,
-    getDefaultPersonId: () => chayns.env.user.personId || '',
+    getToken: async () => (await getAccessToken()).accessToken || '',
+    getDefaultSiteId: () => getSite().id,
+    getDefaultPersonId: () => getUser()?.personId || '',
 });
 
 export const isTobitEmployee = async () => {
