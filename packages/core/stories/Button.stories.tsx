@@ -1,5 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
+import { Meta, StoryFn } from '@storybook/react';
 import Button from '../src/components/button/Button';
 
 export default {
@@ -11,9 +10,9 @@ export default {
         isSecondary: false,
         shouldStopPropagation: false,
     },
-} as ComponentMeta<typeof Button>;
+} as Meta<typeof Button>;
 
-const Template: ComponentStory<typeof Button> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Button> = ({ children, ...args }) => (
     <Button {...args}>{children}</Button>
 );
 

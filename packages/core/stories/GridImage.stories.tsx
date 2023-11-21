@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import GridImage from '../src/components/grid-image/GridImage';
 
 export default {
@@ -13,8 +13,8 @@ export default {
         ],
         size: 250,
     },
-} as ComponentMeta<typeof GridImage>;
+} as Meta<typeof GridImage>;
 
-const Template: ComponentStory<typeof GridImage> = (args) => <GridImage {...args} />;
+const Template: StoryFn<typeof GridImage> = (args) => <GridImage {...args} />;
 
 export const General = Template.bind({});

@@ -1,4 +1,4 @@
-import type { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Truncation } from '../src';
 
 const BASE_HTML_TEXT =
@@ -10,9 +10,9 @@ export default {
         collapsedHeight: 100,
         children: BASE_HTML_TEXT,
     },
-} as ComponentMeta<typeof Truncation>;
+} as Meta<typeof Truncation>;
 
-const Template: ComponentStory<typeof Truncation> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Truncation> = ({ children, ...args }) => (
     <Truncation {...args}>
         <div
             dangerouslySetInnerHTML={{

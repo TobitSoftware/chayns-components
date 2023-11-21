@@ -1,5 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-
+import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
 
 export default {
@@ -11,9 +10,9 @@ export default {
         shouldStopPropagation: false,
         size: 24,
     },
-} as ComponentMeta<typeof Icon>;
+} as Meta<typeof Icon>;
 
-const Template: ComponentStory<typeof Icon> = (args) => <Icon {...args} />;
+const Template: StoryFn<typeof Icon> = (args) => <Icon {...args} />;
 
 export const General = Template.bind({});
 

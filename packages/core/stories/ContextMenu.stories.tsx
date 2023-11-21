@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
 import ContextMenu from '../src/components/context-menu/ContextMenu';
@@ -28,9 +28,9 @@ export default {
             },
         ],
     },
-} as ComponentMeta<typeof ContextMenu>;
+} as Meta<typeof ContextMenu>;
 
-const Template: ComponentStory<typeof ContextMenu> = ({ children, ...args }) => (
+const Template: StoryFn<typeof ContextMenu> = ({ children, ...args }) => (
     <>
         <h1>Context Menu Example</h1>
         <p>

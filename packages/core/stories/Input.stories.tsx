@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Icon from '../src/components/icon/Icon';
 import Input from '../src/components/input/Input';
 
@@ -8,9 +8,9 @@ export default {
     args: {
         placeholder: 'Try me out',
     },
-} as ComponentMeta<typeof Input>;
+} as Meta<typeof Input>;
 
-const Template: ComponentStory<typeof Input> = (args) => <Input {...args} />;
+const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
 
 export const General = Template.bind({});
 

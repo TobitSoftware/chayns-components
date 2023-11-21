@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Badge, Icon } from '../src';
 import List from '../src/components/list/List';
 import ListItemContent from '../src/components/list/list-item/list-item-content/ListItemContent';
@@ -8,9 +8,9 @@ export default {
     title: 'Core/List',
     component: List,
     args: {},
-} as ComponentMeta<typeof List>;
+} as Meta<typeof List>;
 
-const Template: ComponentStory<typeof List> = ({ children }) => <List>{children}</List>;
+const Template: StoryFn<typeof List> = ({ children }) => <List>{children}</List>;
 
 export const General = Template.bind({});
 

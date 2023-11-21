@@ -1,13 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Checkbox from '../src/components/checkbox/Checkbox';
 
 export default {
     title: 'Core/Checkbox',
     component: Checkbox,
     args: {},
-} as ComponentMeta<typeof Checkbox>;
+} as Meta<typeof Checkbox>;
 
-const Template: ComponentStory<typeof Checkbox> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Checkbox> = ({ children, ...args }) => (
     <Checkbox {...args}>{children}</Checkbox>
 );
 

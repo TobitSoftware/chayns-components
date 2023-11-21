@@ -1,5 +1,5 @@
 import { Input } from '@chayns-components/core';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import RadioButtonGroup from '../../core/src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../../core/src/components/radio-button/RadioButton';
 import SetupWizardItem from '../src/components/setup-wizard-item/SetupWizardItem';
@@ -26,9 +26,9 @@ export default {
             </>
         ),
     },
-} as ComponentMeta<typeof SetupWizardItem>;
+} as Meta<typeof SetupWizardItem>;
 
-const Template: ComponentStory<typeof SetupWizardItem> = ({ children, ...args }) => (
+const Template: StoryFn<typeof SetupWizardItem> = ({ children, ...args }) => (
     <SetupWizardItem {...args}>{children}</SetupWizardItem>
 );
 

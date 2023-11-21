@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';
 import EmojiInput from '../src/components/emoji-input/EmojiInput';
 
@@ -8,9 +8,9 @@ export default {
     args: {
         placeholder: 'Nachricht schreiben',
     },
-} as ComponentMeta<typeof EmojiInput>;
+} as Meta<typeof EmojiInput>;
 
-const Template: ComponentStory<typeof EmojiInput> = ({ ...args }) => {
+const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
     const [text, setText] = useState('');
 
     const handleInput = (event: ChangeEvent<HTMLDivElement>, originalText: string) => {

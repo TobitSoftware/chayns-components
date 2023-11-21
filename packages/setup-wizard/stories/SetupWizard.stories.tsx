@@ -1,5 +1,5 @@
 import { Accordion, Button, Input } from '@chayns-components/core';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { useRef } from 'react';
 import RadioButtonGroup from '../../core/src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../../core/src/components/radio-button/RadioButton';
@@ -10,9 +10,9 @@ export default {
     title: 'SetupWizard/SetupWizard',
     component: SetupWizard,
     args: {},
-} as ComponentMeta<typeof SetupWizard>;
+} as Meta<typeof SetupWizard>;
 
-const Template: ComponentStory<typeof SetupWizard> = ({ ...args }) => {
+const Template: StoryFn<typeof SetupWizard> = ({ ...args }) => {
     const setupRef = useRef<SetupWizardRef>();
 
     return (
@@ -88,7 +88,7 @@ const Template: ComponentStory<typeof SetupWizard> = ({ ...args }) => {
     );
 };
 
-const InsideAccordionTemplate: ComponentStory<typeof SetupWizard> = ({ ...args }) => {
+const InsideAccordionTemplate: StoryFn<typeof SetupWizard> = ({ ...args }) => {
     const setupRef = useRef<SetupWizardRef>();
 
     return (

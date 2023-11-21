@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import FilterButton from '../src/components/filter-button/FilterButton';
 import { FilterButtonSize } from '../src/components/filter-button/types';
 
@@ -33,9 +33,9 @@ export default {
             },
         ],
     },
-} as ComponentMeta<typeof FilterButton>;
+} as Meta<typeof FilterButton>;
 
-const Template: ComponentStory<typeof FilterButton> = (args) => <FilterButton {...args} />;
+const Template: StoryFn<typeof FilterButton> = (args) => <FilterButton {...args} />;
 
 export const General = Template.bind({});
 

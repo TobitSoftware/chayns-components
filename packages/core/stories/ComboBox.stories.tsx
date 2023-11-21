@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import ComboBox from '../src/components/combobox/ComboBox';
 
 export default {
@@ -69,9 +69,9 @@ export default {
         ],
         placeholder: 'Select Pizza',
     },
-} as ComponentMeta<typeof ComboBox>;
+} as Meta<typeof ComboBox>;
 
-const Template: ComponentStory<typeof ComboBox> = (args) => (
+const Template: StoryFn<typeof ComboBox> = (args) => (
     <>
         <h1>Pizza auswählen</h1>
         <ComboBox {...args} />

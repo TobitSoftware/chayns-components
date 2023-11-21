@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Button from '../src/components/button/Button';
 import Popup from '../src/components/popup/Popup';
 
@@ -13,9 +13,9 @@ export default {
             </span>
         ),
     },
-} as ComponentMeta<typeof Popup>;
+} as Meta<typeof Popup>;
 
-const Template: ComponentStory<typeof Popup> = ({ ...args }) => (
+const Template: StoryFn<typeof Popup> = ({ ...args }) => (
     <>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et dui eget sapien

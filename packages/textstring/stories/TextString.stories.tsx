@@ -1,23 +1,23 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useMemo, useState } from 'react';
 import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
 import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
+import { Meta, StoryFn } from '@storybook/react';
+import { useMemo, useState } from 'react';
 import { TextString, TextStringProvider } from '../src';
 
 export default {
     title: 'TextString/TextString',
     component: TextString,
     args: {},
-} as ComponentMeta<typeof TextString>;
+} as Meta<typeof TextString>;
 
-const Template: ComponentStory<typeof TextString> = ({ ...args }) => (
+const Template: StoryFn<typeof TextString> = ({ ...args }) => (
     <TextStringProvider language="de" libraryName="chayns.components">
         <TextString {...args} />
     </TextStringProvider>
 );
 
-const TextStringWithReplacementTemplate: ComponentStory<typeof TextString> = ({ ...args }) => {
+const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args }) => {
     const [food, setFood] = useState('##food##');
     const handleFoodChange = (item: RadioButtonItem) => {
         switch (item.id) {

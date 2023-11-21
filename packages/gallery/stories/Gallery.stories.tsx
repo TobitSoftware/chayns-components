@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import Gallery from '../src/components/Gallery';
 
@@ -27,9 +27,9 @@ export default {
             },
         ],
     },
-} as unknown as ComponentMeta<typeof Gallery>;
+} as Meta<typeof Gallery>;
 
-const Template: ComponentStory<typeof Gallery> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Gallery> = ({ children, ...args }) => (
     <Gallery {...args}>{children}</Gallery>
 );
 

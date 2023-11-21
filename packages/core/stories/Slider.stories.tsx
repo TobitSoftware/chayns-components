@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Slider from '../src/components/slider/Slider';
 
 export default {
@@ -8,8 +8,8 @@ export default {
         maxValue: 100,
         minValue: 0,
     },
-} as ComponentMeta<typeof Slider>;
+} as Meta<typeof Slider>;
 
-const Template: ComponentStory<typeof Slider> = (args) => <Slider {...args} />;
+const Template: StoryFn<typeof Slider> = (args) => <Slider {...args} />;
 
 export const General = Template.bind({});
