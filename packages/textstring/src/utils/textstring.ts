@@ -23,9 +23,9 @@ interface SelectLanguageToChangeOptions {
 }
 
 export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChangeOptions) => {
-    createDialog({
+    void createDialog({
         type: DialogType.IFRAME,
         url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
         dialogInput: { textstring: textstringName },
-    });
+    }).open();
 };
