@@ -73,7 +73,6 @@ export const StyledRightWrapper = styled.div`
     flex: 0 0 auto;
     grid-template-areas: 'right';
     margin-right: 5px;
-    overflow: hidden;
     position: relative;
 `;
 
