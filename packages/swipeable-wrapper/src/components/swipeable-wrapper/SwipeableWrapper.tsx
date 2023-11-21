@@ -1,3 +1,4 @@
+import { vibrate } from 'chayns-api';
 import { animate, PanInfo, useMotionValue } from 'framer-motion';
 import React, {
     CSSProperties,
@@ -143,9 +144,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     (previous > rightThreshold && newValue <= rightThreshold);
 
                 if (hasCrossedLeftThreshold || hasCrossedRightThreshold) {
-                    // @ts-expect-error: No chayns typings given.
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-                    chayns?.vibrate([150], 6);
+                    void vibrate({ iOSFeedbackVibration: 6, pattern: [150] });
                 }
             }),
         [leftThreshold, listItemXOffset, rightThreshold]
