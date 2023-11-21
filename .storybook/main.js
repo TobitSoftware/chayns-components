@@ -1,7 +1,9 @@
+import { dirname, join } from 'path';
 module.exports = {
     stories: ['../packages/**/*.stories.mdx', '../packages/**/*.stories.@(js|jsx|ts|tsx)'],
+
     addons: [
-        '@storybook/addon-links',
+        getAbsolutePath('@storybook/addon-links'),
         {
             name: '@storybook/addon-essentials',
             options: {
@@ -10,7 +12,9 @@ module.exports = {
                 toolbars: false,
             },
         },
+        getAbsolutePath('@storybook/addon-mdx-gfm'),
     ],
+
     webpackFinal: async (config) => {
         /**
          * This webpack rule is needed so that the storybook can handle the "mjs" files
@@ -24,4 +28,17 @@ module.exports = {
 
         return config;
     },
+
+    framework: {
+        name: getAbsolutePath('@storybook/react-webpack5'),
+        options: {},
+    },
+
+    docs: {
+        autodocs: true,
+    },
 };
+
+function getAbsolutePath(value) {
+    return dirname(require.resolve(join(value, 'package.json')));
+}
