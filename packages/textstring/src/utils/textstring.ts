@@ -1,3 +1,4 @@
+import { createDialog, DialogType } from 'chayns-api';
 import type { TextStringValue } from '../components/textstring-provider/TextStringProvider';
 
 interface LoadLibraryOptions {
@@ -22,9 +23,9 @@ interface SelectLanguageToChangeOptions {
 }
 
 export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChangeOptions) => {
-    void chayns.dialog.iFrame({
+    createDialog({
+        type: DialogType.IFRAME,
         url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-        buttons: [],
-        input: { textstring: textstringName },
+        dialogInput: { textstring: textstringName },
     });
 };
