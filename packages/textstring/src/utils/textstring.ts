@@ -1,4 +1,3 @@
-import { createDialog, DialogType } from 'chayns-api';
 import type { TextStringValue } from '../components/textstring-provider/TextStringProvider';
 
 interface LoadLibraryOptions {
@@ -23,9 +22,10 @@ interface SelectLanguageToChangeOptions {
 }
 
 export const selectLanguageToChange = ({ textstringName }: SelectLanguageToChangeOptions) => {
-    createDialog({
-        type: DialogType.IFRAME,
-        url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
-        dialogInput: { textstring: textstringName },
-    });
+    // createDialog({
+    //     animation: {},
+    //     type: DialogType.IFRAME,
+    //     url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
+    //     dialogInput: { textstring: textstringName },
+    // });
 };
