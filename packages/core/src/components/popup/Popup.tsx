@@ -1,3 +1,4 @@
+import { getWindowMetrics } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     forwardRef,
@@ -144,9 +145,9 @@ const Popup = forwardRef<PopupRef, PopupProps>(
         );
 
         useEffect(() => {
-            void chayns.getWindowMetrics().then((result) => {
-                if (result.menuHeight) {
-                    setMenuHeight(result.menuHeight);
+            void getWindowMetrics().then((result) => {
+                if (result.topBarHeight) {
+                    setMenuHeight(result.topBarHeight);
                 }
             });
         }, []);
