@@ -89,7 +89,7 @@ const Typewriter: FC<TypewriterProps> = ({
             Array.isArray(children) && shouldSortChildrenRandomly
                 ? shuffleArray<ReactElement | string>(children)
                 : children,
-        [children, shouldSortChildrenRandomly]
+        [children, shouldSortChildrenRandomly],
     );
 
     const areMultipleChildrenGiven = Array.isArray(sortedChildren);
@@ -102,7 +102,7 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(currentChildren)
-                    : currentChildren;
+                    : (currentChildren as string);
             }
 
             return '';
@@ -110,14 +110,14 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(sortedChildren)
-            : sortedChildren;
+            : (sortedChildren as string);
     }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
     const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
     const [shownCharCount, setShownCharCount] = useState(
-        charactersCount > 0 ? 0 : textContent.length
+        charactersCount > 0 ? 0 : textContent.length,
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
@@ -142,7 +142,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
                 return newIndex;
             }),
-        [childrenCount, currentChildrenIndex]
+        [childrenCount, currentChildrenIndex],
     );
 
     useEffect(() => {
@@ -225,14 +225,14 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
-        [shownCharCount, textContent]
+        [shownCharCount, textContent],
     );
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(pseudoChildren)
-                : pseudoChildren;
+                : (pseudoChildren as string);
 
             if (shouldUseAnimationHeight) {
                 return getSubTextFromHTML(pseudoText, shownCharCount);
@@ -263,7 +263,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoTextHTML, shownText, textStyle]
+        [handleClick, isAnimatingText, pseudoTextHTML, shownText, textStyle],
     );
 };
 
