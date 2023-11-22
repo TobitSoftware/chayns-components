@@ -42,7 +42,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       height: 10px;
                       left: 1px;
                       opacity: ${isChecked ? 1 : 0};
-                      top: 5.5px;
+                      top: 7px;
                       transform: rotateZ(37deg);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
@@ -71,7 +71,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         height: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '13px' : '15px')};
         left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '10px' : 0)};
         position: absolute;
-        top: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '5px' : '3.5px')};
+        top: 5px;
         transition: background-color 0.2s ease;
         width: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '28px' : '15px')};
     }
