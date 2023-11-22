@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/gallery",
-    "version": "5.0.0-beta.298",
+    "version": "5.0.0-beta.300",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
@@ -50,7 +50,7 @@
         "typescript": "^4.9.5"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.298",
+        "@chayns-components/core": "^5.0.0-beta.300",
         "@chayns/colors": "^2.0.0",
         "chayns-api": "^1.0.38",
         "clsx": "^1.2.1",

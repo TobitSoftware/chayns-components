@@ -31,7 +31,8 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      transform: translateY(-50%) translateX(${isChecked ? '18px' : 0});
+                      top: 3.5px;
+                      transform: translateX(${isChecked ? '18px' : 0});
                       transition: transform 0.2s ease;
                       width: 16px;
                   `
@@ -41,14 +42,14 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       height: 10px;
                       left: 1px;
                       opacity: ${isChecked ? 1 : 0};
-                      transform: translateY(-50%) rotateZ(37deg);
+                      top: 7px;
+                      transform: rotateZ(37deg);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
                   `}
 
         content: ' ';
         position: absolute;
-        top: 50%;
         transform-origin: 100% 100%;
     }
 
@@ -70,8 +71,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         height: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '13px' : '15px')};
         left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '10px' : 0)};
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 5px;
         transition: background-color 0.2s ease;
         width: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '28px' : '15px')};
     }
