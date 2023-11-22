@@ -19,8 +19,6 @@ import { StyledAccordion } from './Accordion.styles';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
 
-AccordionContext.displayName = 'AccordionContext';
-
 export type AccordionProps = {
     /**
      * Maximum height of the accordion body element. This automatically makes the content of the
