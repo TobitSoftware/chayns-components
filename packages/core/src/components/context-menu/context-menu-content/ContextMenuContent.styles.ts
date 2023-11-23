@@ -8,7 +8,7 @@ type StyledMotionContextMenuContentProps = WithTheme<{
 }>;
 
 export const StyledMotionContextMenuContent = styled(
-    motion.div
+    motion.div,
 )<StyledMotionContextMenuContentProps>`
     background-color: ${({ theme }: StyledMotionContextMenuContentProps) => theme['001']};
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -18,7 +18,7 @@ export const StyledMotionContextMenuContent = styled(
     position: absolute;
     z-index: 0;
 
-    ::after {
+    &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-right-radius: 3px;
@@ -62,7 +62,7 @@ export const StyledMotionContextMenuContent = styled(
         }}
     }
 
-    ::before {
+    &::before {
         background-color: inherit;
         bottom: 0;
         content: '';
@@ -82,7 +82,7 @@ export const StyledContextMenuContentItem = styled.div<StyledContextMenuContentI
     padding: 5px 8px 5px 5px;
     transition: background-color 0.3s ease;
 
-    :hover {
+    &:hover {
         background-color: ${({ theme }: StyledContextMenuContentItemProps) =>
             theme['secondary-103']};
     }
