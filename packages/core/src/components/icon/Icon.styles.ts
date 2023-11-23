@@ -14,7 +14,7 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     cursor: ${({ isDisabled, onClick }) =>
         typeof onClick === 'function' && !isDisabled ? 'pointer' : 'inherit'};
     display: inline-flex;
-    height: ${({ size }) => `${size}px`};
+    min-height: ${({ size }) => `${size}px`};
     justify-content: center;
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     position: relative;
