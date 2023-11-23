@@ -15,7 +15,7 @@ type StyledMotionEmojiPickerPopupContentProps = WithTheme<{
 }>;
 
 export const StyledMotionEmojiPickerPopupContent = styled(
-    motion.div
+    motion.div,
 )<StyledMotionEmojiPickerPopupContentProps>`
     background-color: ${({ theme }: StyledMotionEmojiPickerPopupContentProps) => theme['001']};
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -25,7 +25,7 @@ export const StyledMotionEmojiPickerPopupContent = styled(
     position: absolute;
     z-index: 2;
 
-    ::after {
+    &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-right-radius: 3px;
@@ -69,7 +69,7 @@ export const StyledMotionEmojiPickerPopupContent = styled(
         }}
     }
 
-    ::before {
+    &::before {
         background-color: inherit;
         bottom: 0;
         content: '';

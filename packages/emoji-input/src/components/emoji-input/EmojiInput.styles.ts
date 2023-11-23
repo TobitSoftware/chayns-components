@@ -70,20 +70,20 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
     }
 
     // Styles for custom scrollbar
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
         width: 5px;
     }
 
-    ::-webkit-scrollbar-track {
+    &::-webkit-scrollbar-track {
         background-color: transparent;
     }
 
-    ::-webkit-scrollbar-button {
+    &::-webkit-scrollbar-button {
         background-color: transparent;
         height: 5px;
     }
 
-    ::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb {
         background-color: rgba(
             ${({ theme }: StyledEmojiInputEditorProps) => theme['text-rgb']},
             0.15
