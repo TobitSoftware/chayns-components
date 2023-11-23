@@ -44,6 +44,9 @@ export type WithTheme<T> = T & {
     theme: Theme;
 };
 
+// ToDo remove type after Bug is Fixed
+export type FramerMotionBugFix = WithTheme<unknown>;
+
 const GlobalStyle = createGlobalStyle`
   ${generateFontFaces}
 
@@ -85,12 +88,10 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 newThemeColors[colorName] = hexColor;
 
                 if (rgbColor) {
-                    newColors[
-                        `--chayns-color-rgb--${colorName}`
-                    ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-                    newThemeColors[
-                        `${colorName}-rgb`
-                    ] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                    newColors[`--chayns-color-rgb--${colorName}`] =
+                        `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                    newThemeColors[`${colorName}-rgb`] =
+                        `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
                 }
             }
         });
