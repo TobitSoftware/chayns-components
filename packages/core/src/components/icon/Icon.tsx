@@ -103,7 +103,7 @@ const Icon: FC<IconProps> = ({
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
-                const iconClasses = clsx(icon, className, {
+                const iconClasses = clsx(icon, {
                     'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
                 });
 
