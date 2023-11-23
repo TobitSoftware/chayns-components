@@ -20,11 +20,10 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
         background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['002']};
     }
 
-    ${({ isActive }) =>
+    ${({ isActive, theme }) =>
         isActive &&
         css`
-            background-color: ${({ theme }: StyledMentionFinderItemProps) =>
-                theme['102']} !important;
+            background-color: ${theme['102']} !important;
         `}
 `;
 

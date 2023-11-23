@@ -1,8 +1,8 @@
-import type { WithTheme } from '@chayns-components/core';
+import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const StyledMotionMediaItem = styled(motion.div)`
+export const StyledMotionMediaItem = styled(motion.div)<FramerMotionBugFix>`
     display: flex;
     width: 100%;
     height: 100%;
