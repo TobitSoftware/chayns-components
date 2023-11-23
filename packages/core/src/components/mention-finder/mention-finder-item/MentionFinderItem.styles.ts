@@ -11,12 +11,12 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
     height: 64px;
     padding: 12px 9px;
 
-    :not(:last-child) {
+    &:not(:last-child) {
         border-bottom: 1px solid
             rgba(${({ theme }: StyledMentionFinderItemProps) => theme['text-rgb']}, 0.15);
     }
 
-    :nth-child(even) {
+    &:nth-child(even) {
         background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['002']};
     }
 
