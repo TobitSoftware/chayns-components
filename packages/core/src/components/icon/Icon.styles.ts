@@ -19,6 +19,7 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     position: relative;
     transition: opacity 0.3s ease;
+    min-width: ${({ size }) => `${size}px`};
 `;
 
 type StyledIconProps = Omit<IconProps, 'icons'> &
