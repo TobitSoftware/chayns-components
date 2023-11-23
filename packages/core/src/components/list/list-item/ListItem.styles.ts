@@ -23,7 +23,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
             }
         `}
 
-    :not(:last-child) {
+    &:not(:last-child) {
         border-bottom: 1px solid ${({ theme }: StyledListItemProps) => theme.headline};
     }
 `;
