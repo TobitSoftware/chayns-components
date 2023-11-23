@@ -14,7 +14,7 @@ export type ButtonProps = {
     /**
      * The label of the button
      */
-    children: ReactNode;
+    children?: ReactNode;
     /**
      * Additional class names for the button element
      */
@@ -69,6 +69,7 @@ const Button: FC<ButtonProps> = ({
         <StyledButton
             className={buttonClasses}
             disabled={isDisabled}
+            hasChildren={!!children}
             hasIcon={typeof icon === 'string' && icon !== ''}
             isSecondary={isSecondary}
             onClick={handleClick}
@@ -79,7 +80,7 @@ const Button: FC<ButtonProps> = ({
                         <Icon color="white" icons={[icon]} />
                     </StyledIconWrapper>
                 )}
-                {shouldShowWaitCursor ? (
+                {shouldShowWaitCursor && (
                     <StyledMotionWaitCursorWrapper
                         animate={{ opacity: 1, width: 40 }}
                         exit={{ opacity: 0, width: 0 }}
@@ -94,7 +95,8 @@ const Button: FC<ButtonProps> = ({
                             size={SmallWaitCursorSize.Small}
                         />
                     </StyledMotionWaitCursorWrapper>
-                ) : (
+                )}
+                {!shouldShowWaitCursor && children && (
                     <StyledMotionChildrenWrapper
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}

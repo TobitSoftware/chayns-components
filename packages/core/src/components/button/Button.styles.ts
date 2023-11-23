@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ButtonProps } from './Button';
 
 type StyledButtonProps = ButtonProps &
     WithTheme<{
         hasIcon: boolean;
+        hasChildren: boolean;
     }>;
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -21,10 +22,25 @@ export const StyledButton = styled.button<StyledButtonProps>`
     line-height: 1.15;
     min-height: 32px;
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-    padding: ${({ hasIcon }) => `7px 12px 7px ${hasIcon ? '42px' : '12px'}`};
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
+
+    ${({ hasIcon, hasChildren }) => {
+        if (hasIcon) {
+            if (hasChildren) {
+                return css`
+                    padding: 7px 12px 7px 42px;
+                `;
+            }
+            return css`
+                padding: 7px 12px 7px 18px;
+            `;
+        }
+        return css`
+            padding: 7px 12px 7px 12px;
+        `;
+    }}
 `;
 
 export const StyledIconWrapper = styled.span`

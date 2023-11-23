@@ -5,7 +5,6 @@ export default {
     title: 'Core/Button',
     component: Button,
     args: {
-        children: 'Click me!',
         isDisabled: false,
         isSecondary: false,
         shouldStopPropagation: false,
@@ -20,6 +19,17 @@ export const General = Template.bind({});
 
 export const IconButton = Template.bind({});
 
+export const ButtonWithIcon = Template.bind({});
+
+General.args = {
+    children: 'Click me!',
+};
+
 IconButton.args = {
     icon: 'fa fa-rocket',
+};
+
+ButtonWithIcon.args = {
+    icon: 'fa fa-rocket',
+    children: 'Click me!',
 };
