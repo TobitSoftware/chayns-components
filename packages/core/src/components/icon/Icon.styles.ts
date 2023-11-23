@@ -1,7 +1,7 @@
 import type { MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
-import type { IconProps } from './Icon';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { IconProps } from './Icon';
 
 type StyledIconWrapperProps = {
     isDisabled?: boolean;
@@ -19,7 +19,6 @@ export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     position: relative;
     transition: opacity 0.3s ease;
-    width: ${({ size }) => `${size}px`};
 `;
 
 type StyledIconProps = Omit<IconProps, 'icons'> &
