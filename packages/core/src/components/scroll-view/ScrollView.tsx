@@ -1,7 +1,11 @@
-import React, { CSSProperties, FC, useMemo } from 'react';
+import React, { CSSProperties, FC, ReactNode, useMemo } from 'react';
 import { StyledScrollView } from './ScrollView.styles';
 
 export type ScrollViewProps = {
+    /**
+     * The elements that should be shown inside the scrollview
+     */
+    children: ReactNode;
     /**
      * The maximum height of the scroll view.
      */
@@ -11,7 +15,7 @@ export type ScrollViewProps = {
 const ScrollView: FC<ScrollViewProps> = ({ maxHeight = '300px', children }) =>
     useMemo(
         () => <StyledScrollView maxHeight={maxHeight}>{children}</StyledScrollView>,
-        [children, maxHeight]
+        [children, maxHeight],
     );
 
 ScrollView.displayName = 'ScrollView';
