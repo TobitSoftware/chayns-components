@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 export const StyledTruncation = styled.div``;
 
+// Fix framer-motion bug
 export const StyledMotionTruncationContent = styled(motion.div)<FramerMotionBugFix>``;
 
 export const StyledTruncationClamp = styled.a`
