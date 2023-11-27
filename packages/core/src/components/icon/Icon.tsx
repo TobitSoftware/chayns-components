@@ -88,7 +88,7 @@ const Icon: FC<IconProps> = ({
     const wrapperClasses = clsx(
         'beta-chayns-icon',
         shouldUseStackedIcon ? 'fa-stack' : '',
-        className
+        className,
     );
 
     return (
@@ -103,7 +103,7 @@ const Icon: FC<IconProps> = ({
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
-                const iconClasses = clsx(icon, className, {
+                const iconClasses = clsx(icon, {
                     'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
                 });
 
