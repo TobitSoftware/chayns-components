@@ -1,3 +1,4 @@
+import type { FramerMotionBugFix } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { getFontFamily } from '../../../utils/font';
@@ -12,7 +13,7 @@ export const StyledEmojiPickerCategories = styled.div`
     width: 100%;
 `;
 
-export const StyledMotionEmojiPickerCategory = styled(motion.div)`
+export const StyledMotionEmojiPickerCategory = styled(motion.div)<FramerMotionBugFix>`
     cursor: pointer;
     font-family: ${getFontFamily};
     font-size: 20px;

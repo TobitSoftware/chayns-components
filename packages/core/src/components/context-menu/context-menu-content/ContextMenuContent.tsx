@@ -47,7 +47,12 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 `}
             >
                 {items.map(({ icons, key, onClick, text }) => (
-                    <StyledContextMenuContentItem key={key} onClick={onClick}>
+                    <StyledContextMenuContentItem
+                        key={key}
+                        onClick={(event) => {
+                            void onClick(event);
+                        }}
+                    >
                         <StyledContextMenuContentItemIconWrapper>
                             <Icon icons={icons} />
                         </StyledContextMenuContentItemIconWrapper>
@@ -56,7 +61,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 ))}
             </StyledMotionContextMenuContent>
         );
-    }
+    },
 );
 
 ContextMenuContent.displayName = 'ContextMenuContent';

@@ -15,7 +15,7 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
     position: absolute;
     z-index: 0;
 
-    ::after {
+    &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-right-radius: 3px;
@@ -59,7 +59,7 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
         }}
     }
 
-    ::before {
+    &::before {
         background-color: inherit;
         bottom: 0;
         content: '';

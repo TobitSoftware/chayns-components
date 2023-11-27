@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Icon } from '../src';
 import Accordion from '../src/components/accordion/Accordion';
 import AccordionContent from '../src/components/accordion/accordion-content/AccordionContent';
@@ -10,13 +10,13 @@ export default {
     title: 'Core/Accordion',
     component: Accordion,
     args: {},
-} as ComponentMeta<typeof Accordion>;
+} as Meta<typeof Accordion>;
 
-const Template: ComponentStory<typeof Accordion> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Accordion> = ({ children, ...args }) => (
     <Accordion {...args}>{children}</Accordion>
 );
 
-const MultipleAccordionsTemplate: ComponentStory<typeof Accordion> = () => (
+const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
     <AccordionGroup>
         <Accordion title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr">
             <AccordionContent>

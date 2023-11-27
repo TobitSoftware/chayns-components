@@ -9,7 +9,10 @@ export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
 export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
-export type { WithTheme } from './components/color-scheme-provider/ColorSchemeProvider';
+export type {
+    FramerMotionBugFix,
+    WithTheme,
+} from './components/color-scheme-provider/ColorSchemeProvider';
 export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
@@ -50,6 +53,6 @@ export {
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export type { FileItem, Image, Meta, Video } from './types/file';
-export { selectFiles, getFileAsArrayBuffer } from './utils/fileDialog';
+export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';

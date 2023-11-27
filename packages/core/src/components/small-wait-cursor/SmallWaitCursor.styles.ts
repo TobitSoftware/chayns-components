@@ -5,7 +5,6 @@ import type {
     SmallWaitCursorSize,
     SmallWaitCursorSpeed,
 } from './SmallWaitCursor';
-import {} from './SmallWaitCursor';
 
 type StyledSmallWaitCursorProps = WithTheme<{
     shouldShowWaitCursor: boolean;

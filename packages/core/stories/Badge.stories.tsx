@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import Badge from '../src/components/badge/Badge';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         children: '10.000 Euro',
     },
-} as ComponentMeta<typeof Badge>;
+} as Meta<typeof Badge>;
 
-const Template: ComponentStory<typeof Badge> = ({ children, ...args }) => (
+const Template: StoryFn<typeof Badge> = ({ children, ...args }) => (
     <Badge {...args}>{children}</Badge>
 );
 

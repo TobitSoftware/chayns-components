@@ -1,13 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import ScrollView from '../src/components/scroll-view/ScrollView';
 
 export default {
     title: 'Core/ScrollView',
     component: ScrollView,
     args: {},
-} as ComponentMeta<typeof ScrollView>;
+} as Meta<typeof ScrollView>;
 
-const Template: ComponentStory<typeof ScrollView> = ({ ...args }) => (
+const Template: StoryFn<typeof ScrollView> = ({ ...args }) => (
     <ScrollView {...args}>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium suscipit euismod.

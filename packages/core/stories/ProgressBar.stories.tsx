@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import ProgressBar from '../src/components/progress-bar/ProgressBar';
 
 export default {
@@ -7,8 +7,8 @@ export default {
     args: {
         percentage: 34,
     },
-} as ComponentMeta<typeof ProgressBar>;
+} as Meta<typeof ProgressBar>;
 
-const Template: ComponentStory<typeof ProgressBar> = ({ ...args }) => <ProgressBar {...args} />;
+const Template: StoryFn<typeof ProgressBar> = ({ ...args }) => <ProgressBar {...args} />;
 
 export const General = Template.bind({});

@@ -1,5 +1,5 @@
 import { Icon, ListItem } from '@chayns-components/core';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import SwipeableWrapper from '../src/components/swipeable-wrapper/SwipeableWrapper';
 
 export default {
@@ -36,9 +36,9 @@ export default {
             },
         ],
     },
-} as ComponentMeta<typeof SwipeableWrapper>;
+} as Meta<typeof SwipeableWrapper>;
 
-const Template: ComponentStory<typeof SwipeableWrapper> = ({ children, ...args }) => (
+const Template: StoryFn<typeof SwipeableWrapper> = ({ children, ...args }) => (
     <SwipeableWrapper {...args}>{children}</SwipeableWrapper>
 );
 

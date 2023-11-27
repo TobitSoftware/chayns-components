@@ -1,10 +1,10 @@
-import type { WithTheme } from '@chayns-components/core';
+import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { AnchorAlignment } from '../../../../../constants/alignment';
 import type { SkinTonePopupProps } from './SkinTonePopup';
 
-export const StyledMotionSkinTonePopup = styled(motion.div)`
+export const StyledMotionSkinTonePopup = styled(motion.div)<FramerMotionBugFix>`
     z-index: 1;
 `;
 
@@ -30,7 +30,7 @@ export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentP
     width: ${skinTonePopupContentSize.width}px;
     z-index: 2;
 
-    ::after {
+    &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         border-bottom-right-radius: 3px;
@@ -62,7 +62,7 @@ export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentP
         }}
     }
 
-    ::before {
+    &::before {
         background-color: inherit;
         bottom: 0;
         content: '';

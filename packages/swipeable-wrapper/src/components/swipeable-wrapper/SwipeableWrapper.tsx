@@ -51,7 +51,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
             actionCount: leftActions.length,
             direction: 'left',
             width: window.innerWidth,
-        })
+        }),
     );
 
     const [rightThreshold, setRightThreshold] = useState(
@@ -59,7 +59,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
             actionCount: rightActions.length,
             direction: 'right',
             width: window.innerWidth,
-        })
+        }),
     );
 
     const swipeableWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -67,23 +67,23 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
     const listItemXOffset = useMotionValue(0);
 
     const close = useCallback(() => {
-        animate(listItemXOffset, 0);
+        void animate(listItemXOffset, 0);
     }, [listItemXOffset]);
 
     const open = useCallback(
         (direction: 'left' | 'right') => {
             switch (direction) {
                 case 'left':
-                    animate(listItemXOffset, SWIPEABLE_ACTION_WIDTH * leftActions.length);
+                    void animate(listItemXOffset, SWIPEABLE_ACTION_WIDTH * leftActions.length);
                     break;
                 case 'right':
-                    animate(listItemXOffset, -SWIPEABLE_ACTION_WIDTH * rightActions.length);
+                    void animate(listItemXOffset, -SWIPEABLE_ACTION_WIDTH * rightActions.length);
                     break;
                 default:
                     break;
             }
         },
-        [leftActions.length, listItemXOffset, rightActions.length]
+        [leftActions.length, listItemXOffset, rightActions.length],
     );
 
     useEffect(() => {
@@ -96,7 +96,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     actionCount: leftActions.length,
                     direction: 'left',
                     width,
-                })
+                }),
             );
 
             setRightThreshold(
@@ -104,7 +104,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     actionCount: rightActions.length,
                     direction: 'right',
                     width,
-                })
+                }),
             );
         }
     }, [leftActions.length, rightActions.length]);
@@ -147,7 +147,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     void vibrate({ iOSFeedbackVibration: 6, pattern: [150] });
                 }
             }),
-        [leftThreshold, listItemXOffset, rightThreshold]
+        [leftThreshold, listItemXOffset, rightThreshold],
     );
 
     const handlePan = useCallback(
@@ -166,7 +166,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                 listItemXOffset.set(currentXOffset + info.delta.x * dampingFactor);
             }
         },
-        [leftActions.length, listItemXOffset, rightActions.length]
+        [leftActions.length, listItemXOffset, rightActions.length],
     );
 
     const handlePanEnd = useCallback(() => {
@@ -233,7 +233,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                         totalActionCount={leftActions.length}
                     />
                 )),
-        [close, leftActions, leftThreshold, listItemXOffset]
+        [close, leftActions, leftThreshold, listItemXOffset],
     );
 
     const rightActionElements = useMemo(
@@ -250,7 +250,7 @@ const SwipeableWrapper: FC<SwipeableWrapperProps> = ({
                     totalActionCount={rightActions.length}
                 />
             )),
-        [close, rightActions, rightThreshold, listItemXOffset]
+        [close, rightActions, rightThreshold, listItemXOffset],
     );
 
     return (

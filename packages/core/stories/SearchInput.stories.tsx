@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import SearchInput from '../src/components/search-input/SearchInput';
 
 export default {
@@ -7,9 +7,9 @@ export default {
     args: {
         placeholder: 'Finden',
     },
-} as ComponentMeta<typeof SearchInput>;
+} as Meta<typeof SearchInput>;
 
-const Template: ComponentStory<typeof SearchInput> = (args) => (
+const Template: StoryFn<typeof SearchInput> = (args) => (
     <div style={{ textAlign: 'right' }}>
         <SearchInput {...args} />
     </div>

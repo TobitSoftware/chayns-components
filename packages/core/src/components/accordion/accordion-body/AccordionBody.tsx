@@ -1,9 +1,13 @@
-import React, { FC, UIEvent, useMemo } from 'react';
+import React, { FC, ReactNode, UIEvent, useMemo } from 'react';
 import type { AccordionProps } from '../Accordion';
 import { AccordionGroupContext } from '../accordion-group/AccordionGroup';
 import { StyledMotionAccordionBody } from './AccordionBody.styles';
 
 export type AccordionBodyProps = {
+    /**
+     * The elements that should be shown inside the body.
+     */
+    children: ReactNode;
     /**
      * Maximum height of the element. This automatically makes the content of the element scrollable.
      */
@@ -13,7 +17,7 @@ export type AccordionBodyProps = {
      */
     onScroll?: (event: UIEvent<HTMLDivElement>) => void;
     /**
-     *
+     * Whether the body should be shown.
      */
     shouldHideBody: boolean;
 };
@@ -26,7 +30,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
 }) => {
     const AccordionGroupContextProviderValue = useMemo(
         () => ({ openAccordionUuid: undefined }),
-        []
+        [],
     );
 
     return (

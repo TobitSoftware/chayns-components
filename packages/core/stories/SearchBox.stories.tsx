@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import SearchBox from '../src/components/search-box/SearchBox';
 
 export default {
@@ -33,8 +33,8 @@ export default {
         ],
         placeholder: 'Essen Suchen',
     },
-} as ComponentMeta<typeof SearchBox>;
+} as Meta<typeof SearchBox>;
 
-const Template: ComponentStory<typeof SearchBox> = (args) => <SearchBox {...args} />;
+const Template: StoryFn<typeof SearchBox> = (args) => <SearchBox {...args} />;
 
 export const General = Template.bind({});

@@ -88,7 +88,7 @@ const Icon: FC<IconProps> = ({
     const wrapperClasses = clsx(
         'beta-chayns-icon',
         shouldUseStackedIcon ? 'fa-stack' : '',
-        className
+        className,
     );
 
     return (

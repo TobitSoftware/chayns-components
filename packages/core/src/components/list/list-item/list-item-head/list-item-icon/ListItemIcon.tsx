@@ -6,13 +6,11 @@ type ListItemIconProps = {
     icons: string[];
 };
 
-const ListItemIcon: React.FC<ListItemIconProps> = ({ icons }) => {
-    return (
-        <StyledListItemIcon>
-            <Icon icons={icons} size={22} />
-        </StyledListItemIcon>
-    );
-};
+const ListItemIcon: React.FC<ListItemIconProps> = ({ icons }) => (
+    <StyledListItemIcon>
+        <Icon icons={icons} size={22} />
+    </StyledListItemIcon>
+);
 
 ListItemIcon.displayName = 'ListItemIcon';
 

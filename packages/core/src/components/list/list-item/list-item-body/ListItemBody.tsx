@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { StyledMotionListItemBody } from './ListItemBody.styles';
 
 interface ListItemBodyProps {
+    children?: ReactNode;
     id: string;
 }
 

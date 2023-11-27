@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '../src/components/radio-button/RadioButton';
 
@@ -8,13 +8,13 @@ export default {
     args: {
         label: 'Test',
     },
-} as ComponentMeta<typeof RadioButton>;
+} as Meta<typeof RadioButton>;
 
-const Template: ComponentStory<typeof RadioButton> = ({ ...args }) => (
+const Template: StoryFn<typeof RadioButton> = ({ ...args }) => (
     <RadioButton {...args}></RadioButton>
 );
 
-const MultipleRadioButtonsTemplate: ComponentStory<typeof RadioButton> = () => (
+const MultipleRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
     <>
         <h1>Speisen</h1>
         <RadioButtonGroup>
@@ -34,7 +34,7 @@ const MultipleRadioButtonsTemplate: ComponentStory<typeof RadioButton> = () => (
     </>
 );
 
-const DisabledRadioButtonsTemplate: ComponentStory<typeof RadioButton> = () => (
+const DisabledRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
     <>
         <h1>Bester StarWars Film?</h1>
         <RadioButtonGroup>

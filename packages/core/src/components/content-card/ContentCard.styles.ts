@@ -7,7 +7,7 @@ export const StyledContentCard = styled.div`
     background-color: ${({ theme }: StyledContentCardProps) => theme['secondary-100']};
     padding: 8px 12px;
 
-    :not(:last-child) {
+    &:not(:last-child) {
         margin-bottom: 8px;
     }
 `;

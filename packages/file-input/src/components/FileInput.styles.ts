@@ -1,4 +1,4 @@
-import type { WithTheme } from '@chayns-components/core';
+import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
@@ -23,4 +23,4 @@ export const StyledFileInputText = styled.p<StyledFileInputTextProps>`
     color: ${({ theme }: StyledFileInputTextProps) => theme.text};
 `;
 
-export const StyledMotionFileInputList = styled(motion.div)``;
+export const StyledMotionFileInputList = styled(motion.div)<FramerMotionBugFix>``;

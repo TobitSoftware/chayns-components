@@ -5,11 +5,11 @@ type StyledAccordionItemProps = WithTheme<{
     isWrapped: boolean;
 }>;
 
-export const StyledAccordionItem = styled.div`
+export const StyledAccordionItem = styled.div<StyledAccordionItemProps>`
     color: ${({ theme }: StyledAccordionItemProps) => theme.text};
     padding: ${({ isWrapped }) => (isWrapped ? '8px 9px 8px 30px' : '8px 9px')};
 
-    :not(:first-child) {
+    &:not(:first-child) {
         border-top: 1px solid
             rgba(${({ theme }: StyledAccordionItemProps) => theme['headline-rgb']}, 0.5);
     }

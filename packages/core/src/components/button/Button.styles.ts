@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ButtonProps } from './Button';
 
 type StyledButtonProps = ButtonProps &
@@ -55,9 +55,9 @@ export const StyledIconWrapper = styled.span`
     width: 30px;
 `;
 
-export const StyledMotionChildrenWrapper = styled(motion.div)``;
+export const StyledMotionChildrenWrapper = styled(motion.div)<FramerMotionBugFix>``;
 
-export const StyledMotionWaitCursorWrapper = styled(motion.div)`
+export const StyledMotionWaitCursorWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
     justify-content: center;

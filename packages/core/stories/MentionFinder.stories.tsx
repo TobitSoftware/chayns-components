@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { MentionFinderPopupAlignment } from '../src';
 import MentionFinder from '../src/components/mention-finder/MentionFinder';
 
@@ -59,9 +59,9 @@ export default {
         ],
         popupAlignment: MentionFinderPopupAlignment.Bottom,
     },
-} as ComponentMeta<typeof MentionFinder>;
+} as Meta<typeof MentionFinder>;
 
-const Template: ComponentStory<typeof MentionFinder> = (args) => (
+const Template: StoryFn<typeof MentionFinder> = (args) => (
     <div style={{ height: '500px' }}>
         <MentionFinder {...args} />
     </div>

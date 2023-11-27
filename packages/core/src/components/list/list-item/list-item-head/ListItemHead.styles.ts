@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
+import type {
+    FramerMotionBugFix,
+    WithTheme,
+} from '../../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledListItemHeadProps = WithTheme<{
     isClickable: boolean;
@@ -20,7 +23,7 @@ export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
         `}
 `;
 
-export const StyledMotionListItemHeadIndicator = styled(motion.div)`
+export const StyledMotionListItemHeadIndicator = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     display: flex;
     flex: 0 0 auto;
@@ -88,6 +91,6 @@ export const StyledListItemHeadRightElement = styled.div`
     margin-left: 8px;
 `;
 
-export const StyledMotionListItemHeadHoverItem = styled(motion.div)`
+export const StyledMotionListItemHeadHoverItem = styled(motion.div)<FramerMotionBugFix>`
     overflow: hidden;
 `;

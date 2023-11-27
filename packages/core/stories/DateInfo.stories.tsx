@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import DateInfo from '../src/components/date-info/DateInfo';
 
 export default {
@@ -7,8 +7,8 @@ export default {
     args: {
         date: new Date(),
     },
-} as ComponentMeta<typeof DateInfo>;
+} as Meta<typeof DateInfo>;
 
-const Template: ComponentStory<typeof DateInfo> = (args) => <DateInfo {...args} />;
+const Template: StoryFn<typeof DateInfo> = (args) => <DateInfo {...args} />;
 
 export const General = Template.bind({});
