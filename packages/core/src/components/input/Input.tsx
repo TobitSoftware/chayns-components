@@ -13,6 +13,8 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
     StyledInput,
@@ -22,8 +24,6 @@ import {
     StyledMotionInputClearIcon,
     StyledMotionInputLabel,
 } from './Input.styles';
-import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
-import { useTheme } from 'styled-components';
 
 export type InputRef = {
     focus: VoidFunction;
@@ -115,9 +115,9 @@ const Input = forwardRef<InputRef, InputProps>(
             type = 'text',
             value,
             shouldUseAutoFocus = false,
-            isInvalid = false
+            isInvalid = false,
         },
-        ref
+        ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
         const theme = useTheme() as Theme;
@@ -141,7 +141,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     onChange(event);
                 }
             },
-            [onChange]
+            [onChange],
         );
 
         useImperativeHandle(
@@ -149,7 +149,7 @@ const Input = forwardRef<InputRef, InputProps>(
             () => ({
                 focus: () => inputRef.current?.focus(),
             }),
-            []
+            [],
         );
 
         useEffect(() => {
@@ -167,7 +167,11 @@ const Input = forwardRef<InputRef, InputProps>(
         }, [hasValue]);
 
         return (
-            <StyledInput className="beta-chayns-input" isDisabled={isDisabled} isInvalid={isInvalid}>
+            <StyledInput
+                className="beta-chayns-input"
+                isDisabled={isDisabled}
+                isInvalid={isInvalid}
+            >
                 {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                 <StyledInputContent>
                     <StyledInputField
@@ -184,11 +188,13 @@ const Input = forwardRef<InputRef, InputProps>(
                         isInvalid={isInvalid}
                     />
                     <StyledMotionInputLabel
-                        animate={{ scale: hasValue ? 0.6 : 1 }}
+                        animate={{
+                            fontSize: hasValue ? '10px' : '16px',
+                        }}
                         initial={false}
                         layout
                         style={{ ...labelPosition }}
-                        transition={{ type: 'tween' }}
+                        transition={{ type: 'tween', duration: 0.3 }}
                         isInvalid={isInvalid}
                     >
                         {placeholderElement}
@@ -203,12 +209,12 @@ const Input = forwardRef<InputRef, InputProps>(
                         transition={{ type: 'tween' }}
                         isInvalid={isInvalid}
                     >
-                        <Icon icons={['fa fa-times']} color={isInvalid ? theme.wrong : undefined}/>
+                        <Icon icons={['fa fa-times']} color={isInvalid ? theme.wrong : undefined} />
                     </StyledMotionInputClearIcon>
                 )}
             </StyledInput>
         );
-    }
+    },
 );
 
 Input.displayName = 'Input';
