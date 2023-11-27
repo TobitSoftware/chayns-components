@@ -44,7 +44,7 @@ export type WithTheme<T> = T & {
     theme: Theme;
 };
 
-// ToDo remove type after Bug is Fixed
+// ToDo remove type after framer-motion bug is Fixed
 export type FramerMotionBugFix = WithTheme<unknown>;
 
 const GlobalStyle = createGlobalStyle`
