@@ -21,14 +21,16 @@ import { Meta } from '@storybook/addon-docs';
 ---
 
 <p style={{ fontSize: '1.1rem' }}>
-    This is the storybook for the new version<sup>1</sup> of the chayns-components. You can find an
-    overview of the components via the navigation on the left side. The basic components can be
-    found in the Core section. Further components are located in a separate area.
+    This is the Storybook for the new version<sup>1</sup> of the chayns-components.
+    You can navigate through the components using the left-hand side navigation to get an overview.
+    The basic components are categorized under the Core section,
+    while additional components can be found in a separate area.
 </p>
 
-> <sup>1</sup> In the new version the components were completely refactored. These have been changed
-> to functional components with hooks. In addition, the animations have been partially optimized and
-> converted to FramerMotion animations. The properties have also been updated to make their use clearer.
+> <sup>1</sup> In the latest version, the components have undergone a complete refactor.
+> They have been transformed into functional components with hooks. Additionally,
+> some optimizations have been applied to the animations, which have been converted to FramerMotion animations.
+> Furthermore, the properties have been updated to enhance their clarity and ease of use.
 
 <h2 style={{ marginTop: '32px' }}>Installation</h2>
 
@@ -39,11 +41,11 @@ import { Meta } from '@storybook/addon-docs';
 
 <details>
     <summary>Installation using NPM</summary>
-
-    core components
+    ```bash
+    # core components
     npm install @chayns-components/core
 
-    sub-components
+    # sub-components
     npm install @chayns-components/color-picker # beta
     npm install @chayns-components/emoji-input
     npm install @chayns-components/file-input
@@ -54,15 +56,16 @@ import { Meta } from '@storybook/addon-docs';
     npm install @chayns-components/truncation
     npm install @chayns-components/typewriter
     npm install @chayns-components/person-finder # coming soon
+    ```
 </details>
 
 <details>
     <summary>Installation using Yarn</summary>
-
-    core components
+    ```bash
+    # core components
     yarn add @chayns-components/core
 
-    sub-components
+    # sub-components
     yarn add @chayns-components/color-picker # beta
     yarn add @chayns-components/emoji-input
     yarn add @chayns-components/file-input
@@ -73,6 +76,7 @@ import { Meta } from '@storybook/addon-docs';
     yarn add @chayns-components/truncation
     yarn add @chayns-components/typewriter
     yarn add @chayns-components/person-finder # coming soon
+    ```
 </details>
 
 > **Information:** The styles for the components are supplied directly by the package in the new
@@ -98,7 +102,7 @@ const AppWrapper = () => {
     return (
         <ChaynsProvider>
             <ColorSchemeProvider color={color} colorMode={colorMode}>
-                <YourComponents/>
+                <YourComponent/>
             </ColorSchemeProvider>
         </ChaynsProvider>
     )
@@ -107,15 +111,12 @@ const AppWrapper = () => {
 export default AppWrapper;
 ```
 
-
-
-
 <h2 style={{ marginTop: '32px' }}>Contribution</h2>
 
 <p style={{ fontSize: '1.1rem' }}>
-    Check, that your node version is one of 16.
-    First you need to install all the dependencies of the main project and the sub-projects and link
-    them. Just use the following commands:
+    Make sure that your node version is 16 or above.
+    To begin, install all the dependencies for the main project and its sub-projects,
+    and then link them. Simply use the provided commands:
 </p>
 
 ```bash
@@ -127,8 +128,7 @@ yarn install
 ```
 
 <p style={{ fontSize: '1.1rem' }}>
-    Then use one of the following commands to launch the local version of the storybook and develop
-    in it:
+    Next, run one of the given commands to initiate the local version of Storybook and start developing within it:
 </p>
 
 ```bash
@@ -139,5 +139,5 @@ npm run storybook
 yarn run storybook
 ```
 
-> **Information:** The local storybook is started via port 6006 of your localhost. You can reach
-> this at the following URL: `http://localhost:6006/`
+> **Information:** The local Storybook can be accessed through port 6006 on your localhost.
+> You can visit it using the following URL: `http://localhost:6006/`
