@@ -28,6 +28,7 @@
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
+        "@chayns-components/core": "^5.0.0-beta.308",
         "framer-motion": "^10.16.5"
     },
     "devDependencies": {
