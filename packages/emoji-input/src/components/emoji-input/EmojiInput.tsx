@@ -3,6 +3,7 @@ import React, {
     ClipboardEvent,
     CSSProperties,
     FC,
+    FocusEvent,
     FocusEventHandler,
     KeyboardEvent,
     KeyboardEventHandler,
@@ -11,6 +12,7 @@ import React, {
     useCallback,
     useEffect,
     useLayoutEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -96,6 +98,10 @@ export type EmojiInputProps = {
      */
     rightElement?: ReactNode;
     /**
+     * Whether the placeholder should be shown after the input has focus.
+     */
+    shouldHidePlaceholderOnFocus?: boolean;
+    /**
      * Prevents the EmojiPickerPopup icon from being displayed
      */
     shouldPreventEmojiPicker?: boolean;
@@ -121,11 +127,13 @@ const EmojiInput: FC<EmojiInputProps> = ({
     placeholder,
     popupAlignment,
     rightElement,
+    shouldHidePlaceholderOnFocus = true,
     shouldPreventEmojiPicker,
     value,
 }) => {
     const [isMobile] = useState(getIsMobile());
     const [plainTextValue, setPlainTextValue] = useState(value);
+    const [hasFocus, setHasFocus] = useState(false);
 
     const editorRef = useRef<HTMLDivElement>(null);
 
@@ -323,6 +331,42 @@ const EmojiInput: FC<EmojiInputProps> = ({
         };
     }, []);
 
+    const shouldShowPlaceholder = useMemo(() => {
+        if (plainTextValue === 'nicht anzeigen') {
+            return false;
+        }
+
+        if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
+            return false;
+        }
+
+        if (!shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
+            return true;
+        }
+
+        if (!shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue) {
+            return true;
+        }
+
+        return shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue;
+    }, [hasFocus, plainTextValue, shouldHidePlaceholderOnFocus]);
+
+    const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
+        if (typeof onFocus === 'function') {
+            onFocus(event);
+        }
+
+        setHasFocus(true);
+    };
+
+    const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+        if (typeof onBlur === 'function') {
+            onBlur(event);
+        }
+
+        setHasFocus(false);
+    };
+
     return (
         <StyledEmojiInput isDisabled={isDisabled}>
             <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
@@ -330,15 +374,17 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                     contentEditable={!isDisabled}
                     id={inputId}
-                    onBlur={onBlur}
-                    onFocus={onFocus}
+                    onBlur={handleBlur}
+                    onFocus={handleFocus}
                     onInput={handleInput}
                     onKeyDown={handleKeyDown}
                     onPaste={handlePaste}
                     ref={editorRef}
                     transition={{ type: 'tween', duration: 0.2 }}
                 />
-                {!plainTextValue && <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>}
+                {shouldShowPlaceholder && (
+                    <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>
+                )}
                 {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
                         accessToken={accessToken}
