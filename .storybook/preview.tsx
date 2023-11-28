@@ -1,4 +1,5 @@
 import { action as brokenAction } from '@storybook/addon-actions';
+import { ChaynsProvider } from 'chayns-api';
 import { BaseSyntheticEvent, useEffect } from 'react';
 import ColorSchemeProvider from '../packages/core/src/components/color-scheme-provider/ColorSchemeProvider';
 
@@ -80,9 +81,11 @@ export const decorators = [
 
         return (
             <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
-                <ColorSchemeProvider colorMode={colorMode}>
-                    <Story />
-                </ColorSchemeProvider>
+                <ChaynsProvider>
+                    <ColorSchemeProvider colorMode={colorMode}>
+                        <Story />
+                    </ColorSchemeProvider>
+                </ChaynsProvider>
             </div>
         );
     },
