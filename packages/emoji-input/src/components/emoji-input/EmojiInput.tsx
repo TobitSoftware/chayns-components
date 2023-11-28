@@ -6,6 +6,7 @@ import React, {
     FocusEventHandler,
     KeyboardEvent,
     KeyboardEventHandler,
+    ReactElement,
     ReactNode,
     useCallback,
     useEffect,
@@ -27,6 +28,7 @@ import EmojiPickerPopup from '../emoji-picker-popup/EmojiPickerPopup';
 import {
     StyledEmojiInput,
     StyledEmojiInputContent,
+    StyledEmojiInputLabel,
     StyledEmojiInputRightWrapper,
     StyledMotionEmojiInputEditor,
 } from './EmojiInput.styles';
@@ -82,7 +84,7 @@ export type EmojiInputProps = {
     /**
      * Placeholder for the input field
      */
-    placeholder?: string;
+    placeholder?: string | ReactElement;
     /**
      * Sets the alignment of the popup to a fixed value. If this value is not set, the component
      * calculates the best position on its own. Use the imported 'PopupAlignment' enum to set this
@@ -202,7 +204,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 onInput(event, text);
             }
         },
-        [handleUpdateHTML, onInput]
+        [handleUpdateHTML, onInput],
     );
 
     const handleKeyDown = useCallback(
@@ -234,7 +236,7 @@ const EmojiInput: FC<EmojiInputProps> = ({
                 }
             }
         },
-        [onKeyDown]
+        [onKeyDown],
     );
 
     /**
@@ -333,10 +335,10 @@ const EmojiInput: FC<EmojiInputProps> = ({
                     onInput={handleInput}
                     onKeyDown={handleKeyDown}
                     onPaste={handlePaste}
-                    placeholder={placeholder}
                     ref={editorRef}
                     transition={{ type: 'tween', duration: 0.2 }}
                 />
+                {!plainTextValue && <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>}
                 {!isMobile && !shouldPreventEmojiPicker && (
                     <EmojiPickerPopup
                         accessToken={accessToken}

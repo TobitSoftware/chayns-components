@@ -41,7 +41,7 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<Pick<EmojiInputProps, 'placeholder'>>;
+type StyledEmojiInputEditorProps = WithTheme<unknown>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
     color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
@@ -54,12 +54,6 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
     // This is for example the case on iOS 15 or older.
     -webkit-user-modify: read-write;
     -webkit-user-select: text;
-
-    &:empty:not(:focus):before {
-        content: '${({ placeholder }) => placeholder}';
-        color: ${({ theme }: StyledEmojiInputEditorProps) => theme['006']};
-        pointer-events: none;
-    }
 
     lc_mention {
         font-weight: bold;
@@ -109,4 +103,20 @@ export const StyledEmojiInputRightWrapper = styled.div`
     border-top-right-radius: 3px;
     flex: 0 0 auto;
     overflow: hidden;
+`;
+
+type StyledEmojiInputLabelProps = WithTheme<unknown>;
+
+export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
+    color: ${({ theme }: StyledEmojiInputLabelProps) => theme['006']};
+    left: 10px;
+    top: 12px;
+    align-items: baseline;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 4px;
+    line-height: 1.3;
+    pointer-events: none;
+    position: absolute;
+    user-select: none;
 `;
