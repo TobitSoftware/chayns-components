@@ -45,6 +45,10 @@ export type TypewriterProps = {
      */
     shouldForceCursorAnimation?: boolean;
     /**
+     * Specifies whether the cursor should be hidden
+     */
+    shouldHideCursor?: boolean;
+    /**
      * Specifies whether the children should be sorted randomly if there are multiple texts.
      * This makes the typewriter start with a different text each time and also changes them
      * in a random order.
@@ -76,6 +80,7 @@ const Typewriter: FC<TypewriterProps> = ({
     pseudoChildren,
     resetDelay = TypewriterResetDelay.Medium,
     shouldForceCursorAnimation = false,
+    shouldHideCursor = false,
     shouldSortChildrenRandomly = false,
     shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
@@ -89,7 +94,7 @@ const Typewriter: FC<TypewriterProps> = ({
             Array.isArray(children) && shouldSortChildrenRandomly
                 ? shuffleArray<ReactElement | string>(children)
                 : children,
-        [children, shouldSortChildrenRandomly],
+        [children, shouldSortChildrenRandomly]
     );
 
     const areMultipleChildrenGiven = Array.isArray(sortedChildren);
@@ -102,7 +107,7 @@ const Typewriter: FC<TypewriterProps> = ({
             if (currentChildren) {
                 return React.isValidElement(currentChildren)
                     ? renderToString(currentChildren)
-                    : (currentChildren as string);
+                    : currentChildren;
             }
 
             return '';
@@ -110,14 +115,14 @@ const Typewriter: FC<TypewriterProps> = ({
 
         return React.isValidElement(sortedChildren)
             ? renderToString(sortedChildren)
-            : (sortedChildren as string);
+            : sortedChildren;
     }, [areMultipleChildrenGiven, currentChildrenIndex, sortedChildren]);
 
     const charactersCount = useMemo(() => getCharactersCount(textContent), [textContent]);
 
     const [isResetAnimationActive, setIsResetAnimationActive] = useState(false);
     const [shownCharCount, setShownCharCount] = useState(
-        charactersCount > 0 ? 0 : textContent.length,
+        charactersCount > 0 ? 0 : textContent.length
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
@@ -142,7 +147,7 @@ const Typewriter: FC<TypewriterProps> = ({
 
                 return newIndex;
             }),
-        [childrenCount, currentChildrenIndex],
+        [childrenCount, currentChildrenIndex]
     );
 
     useEffect(() => {
@@ -225,14 +230,14 @@ const Typewriter: FC<TypewriterProps> = ({
 
     const shownText = useMemo(
         () => getSubTextFromHTML(textContent, shownCharCount),
-        [shownCharCount, textContent],
+        [shownCharCount, textContent]
     );
 
     const pseudoTextHTML = useMemo(() => {
         if (pseudoChildren) {
             const pseudoText = React.isValidElement(pseudoChildren)
                 ? renderToString(pseudoChildren)
-                : (pseudoChildren as string);
+                : pseudoChildren;
 
             if (shouldUseAnimationHeight) {
                 return getSubTextFromHTML(pseudoText, shownCharCount);
@@ -254,6 +259,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 <StyledTypewriterText
                     dangerouslySetInnerHTML={{ __html: shownText }}
                     isAnimatingText={isAnimatingText}
+                    shouldHideCursor={shouldHideCursor}
                     style={textStyle}
                 />
                 {isAnimatingText && (
@@ -263,7 +269,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoTextHTML, shownText, textStyle],
+        [handleClick, isAnimatingText, pseudoTextHTML, shouldHideCursor, shownText, textStyle]
     );
 };
 
