@@ -40,7 +40,7 @@ type StyledTextAreaLabelProps = WithTheme<unknown>;
 export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
     color: ${({ theme }: StyledTextAreaLabelProps) => theme['006']};
     left: 10px;
-    top: 11px;
+    top: 12px;
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
