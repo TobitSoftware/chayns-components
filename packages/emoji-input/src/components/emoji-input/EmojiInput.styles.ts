@@ -108,7 +108,7 @@ export const StyledEmojiInputRightWrapper = styled.div`
 type StyledEmojiInputLabelProps = WithTheme<unknown>;
 
 export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
-    color: ${({ theme }: StyledEmojiInputLabelProps) => theme['006']};
+    color: rgba(${({ theme }: StyledEmojiInputLabelProps) => theme['text-rgb']}, 0.45);
     left: 10px;
     top: 12px;
     align-items: baseline;

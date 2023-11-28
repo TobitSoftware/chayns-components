@@ -38,7 +38,7 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
 type StyledTextAreaLabelProps = WithTheme<unknown>;
 
 export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
-    color: ${({ theme }: StyledTextAreaLabelProps) => theme['006']};
+    color: rgba(${({ theme }: StyledTextAreaLabelProps) => theme['text-rgb']}, 0.45);
     left: 10px;
     top: 12px;
     align-items: baseline;
