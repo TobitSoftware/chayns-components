@@ -44,6 +44,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     highlightedLines,
     shouldShowLineNumbers = false,
 }) => {
+    // function to style highlighted code
     const lineWrapper = useCallback(
         (lineNumber: number) => {
             let style = {
