@@ -4,23 +4,78 @@
 />
 
 <link rel="stylesheet" href="https://dev-cats.github.io/code-snippets/JetBrainsMono.css" />
-
-<script src="https://api.chayns-static.space/js/v4.0/chayns.min.js"></script>
+<script src="https://api.chayns-static.space/api/production/v5.0/chayns-api.js"></script>
+<script src="https://unpkg.com/comlink@4.3.1/dist/umd/comlink.js"></script>
 
 <script>
     if (self === top) {
         location.href = 'https://components.chayns.net/Storybook_Development';
     } else {
-        chayns.ready.then(() => {
-            chayns.invokeCall({ action: 238, value: { hide: true } });
-            chayns.hideTitleImage();
-            chayns.disallowRefreshScroll();
-            chayns.getWindowMetrics().then(({ frameY, windowHeight }) => {
-                chayns.setHeight({
-                    height: windowHeight - frameY,
-                    forceHeight: true,
+        (async () => {
+            window.chaynsApi = new window.ChaynsApi.StaticChaynsApi();
+
+            const eventTarget = document.createElement('div');
+
+            await chaynsApi.ready;
+
+            await new Promise((resolve, reject) => {
+                let el = document.querySelector('iframe');
+                if (el) {
+                    resolve(el);
+                    return;
+                }
+                new MutationObserver((mutationRecords, observer) => {
+                    // Query for elements matching the specified selector
+                    Array.from(document.querySelectorAll('iframe')).forEach((element) => {
+                        resolve(element);
+                        //Once we have resolved we don't need the observer anymore.
+                        observer.disconnect();
+                    });
+                }).observe(document.documentElement, {
+                    childList: true,
+                    subtree: true,
                 });
             });
-        });
+
+            chaynsApi.addDataListener(({ type, value }) => {
+                eventTarget.dispatchEvent(
+                    new CustomEvent('data_update', {
+                        detail: {
+                            type,
+                            value,
+                        },
+                    }),
+                );
+            });
+
+            const $iframe = document.querySelector('iframe');
+            const obj = {
+                ['']: {
+                    functions: {
+                        ...chaynsApi._wrapper.functions,
+                    },
+                    addDataListener: (cb) => {
+                        eventTarget.addEventListener('data_update', (ev) => {
+                            cb(ev.detail);
+                        });
+                    },
+                    getInitialData: () => chaynsApi._wrapper.values,
+                },
+            };
+            window.Comlink.expose(obj, window.Comlink.windowEndpoint($iframe.contentWindow));
+            $iframe.contentWindow.postMessage('chayns-api-host-ready', '*');
+        })();
+
+        // chayns.ready.then(() => {
+        //     chayns.invokeCall({ action: 238, value: { hide: true } });
+        //     chayns.hideTitleImage();
+        //     chayns.disallowRefreshScroll();
+        //     chayns.getWindowMetrics().then(({ frameY, windowHeight }) => {
+        //         chayns.setHeight({
+        //             height: windowHeight - frameY,
+        //             forceHeight: true,
+        //         });
+        //     });
+        // });
     }
 </script>
