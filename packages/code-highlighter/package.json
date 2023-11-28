@@ -1,5 +1,5 @@
 {
-    "name": "@chayns-components/typewriter",
+    "name": "@chayns-components/code-highlighter",
     "version": "5.0.0-beta.310",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
@@ -52,8 +52,10 @@
     "dependencies": {
         "@chayns-components/core": "^5.0.0-beta.310",
         "@chayns/colors": "^2.0.0",
+        "@types/react-syntax-highlighter": "^15.5.10",
         "clsx": "^2.0.0",
         "framer-motion": "^10.16.5",
+        "react-syntax-highlighter": "^15.5.0",
         "uuid": "^9.0.1"
     },
     "peerDependencies": {
