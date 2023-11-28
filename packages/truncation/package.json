@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/truncation",
-    "version": "5.0.0-beta.311",
+    "version": "5.0.0-beta.314",
     "description": "> TODO: description",
     "author": "Tobit.Software",
     "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/truncation#readme",
@@ -28,7 +28,7 @@
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.311",
+        "@chayns-components/core": "^5.0.0-beta.314",
         "framer-motion": "^10.16.5"
     },
     "devDependencies": {
