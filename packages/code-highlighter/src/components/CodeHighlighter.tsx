@@ -1,7 +1,11 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { CodeHighlighterTheme, HighlightedLines } from '../types/codeHighlighter';
+import {
+    CodeHighlighterLanguage,
+    CodeHighlighterTheme,
+    HighlightedLines,
+} from '../types/codeHighlighter';
 import {
     StyledCodeHighlighter,
     StyledCodeHighlighterFileName,
@@ -10,11 +14,27 @@ import {
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
 
 export type CodeHighlighterProps = {
-    theme?: CodeHighlighterTheme;
-    language: string;
+    /**
+     * The code that should be displayed.
+     */
     code: string;
+    /**
+     * The lines of code that should be highlighted.
+     * Following lines can be highlighted: added, removed and just marked.
+     */
     highlightedLines?: HighlightedLines;
-    shouldShowLines?: boolean;
+    /**
+     * The language of the displayed code.
+     */
+    language: CodeHighlighterLanguage;
+    /**
+     * Whether the line numbers should be displayed.
+     */
+    shouldShowLineNumbers?: boolean;
+    /**
+     * The theme of the code block. Decide between dark and light.
+     */
+    theme?: CodeHighlighterTheme;
 };
 
 const CodeHighlighter: FC<CodeHighlighterProps> = ({
@@ -22,7 +42,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     code,
     language,
     highlightedLines,
-    shouldShowLines = false,
+    shouldShowLineNumbers = false,
 }) => {
     const lineWrapper = useCallback(
         (lineNumber: number) => {
@@ -56,7 +76,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </StyledCodeHighlighterHeader>
                 <SyntaxHighlighter
                     language={language}
-                    showLineNumbers={shouldShowLines}
+                    showLineNumbers={shouldShowLineNumbers}
                     style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
                     wrapLines
                     lineProps={lineWrapper}
@@ -65,7 +85,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, shouldShowLines, lineWrapper],
+        [theme, language, code, shouldShowLineNumbers, lineWrapper],
     );
 };
 

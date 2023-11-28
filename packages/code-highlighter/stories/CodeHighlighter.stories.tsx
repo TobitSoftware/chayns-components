@@ -5,7 +5,7 @@ export default {
     title: 'CodeHighlighter/CodeHighlighter',
     component: CodeHighlighter,
     args: {
-        shouldShowLines: true,
+        shouldShowLineNumbers: true,
         language: 'jsx',
     },
 } as Meta<typeof CodeHighlighter>;
