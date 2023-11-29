@@ -332,10 +332,6 @@ const EmojiInput: FC<EmojiInputProps> = ({
     }, []);
 
     const shouldShowPlaceholder = useMemo(() => {
-        if (plainTextValue === 'nicht anzeigen') {
-            return false;
-        }
-
         if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
             return false;
         }
