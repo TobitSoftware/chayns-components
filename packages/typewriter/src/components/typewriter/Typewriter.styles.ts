@@ -22,15 +22,17 @@ export const StyledTypewriterPseudoText = styled.span`
 
 type StyledTypewriterTextProps = WithTheme<{
     isAnimatingText?: boolean;
+    shouldHideCursor?: boolean;
 }>;
 
 export const StyledTypewriterText = styled.span<StyledTypewriterTextProps>`
-    color: ${({ theme }: StyledTypewriterTextProps) => theme.text};
+    color: inherit;
     position: ${({ isAnimatingText }) => (isAnimatingText ? 'absolute' : 'relative')};
     width: 100%;
 
-    ${({ isAnimatingText }) =>
+    ${({ isAnimatingText, shouldHideCursor }) =>
         isAnimatingText &&
+        !shouldHideCursor &&
         css`
             &:after {
                 animation: ${blinkAnimation} 1s steps(5, start) infinite;

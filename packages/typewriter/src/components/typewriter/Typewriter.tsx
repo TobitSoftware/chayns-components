@@ -45,6 +45,10 @@ export type TypewriterProps = {
      */
     shouldForceCursorAnimation?: boolean;
     /**
+     * Specifies whether the cursor should be hidden
+     */
+    shouldHideCursor?: boolean;
+    /**
      * Specifies whether the children should be sorted randomly if there are multiple texts.
      * This makes the typewriter start with a different text each time and also changes them
      * in a random order.
@@ -76,6 +80,7 @@ const Typewriter: FC<TypewriterProps> = ({
     pseudoChildren,
     resetDelay = TypewriterResetDelay.Medium,
     shouldForceCursorAnimation = false,
+    shouldHideCursor = false,
     shouldSortChildrenRandomly = false,
     shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
@@ -254,6 +259,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 <StyledTypewriterText
                     dangerouslySetInnerHTML={{ __html: shownText }}
                     isAnimatingText={isAnimatingText}
+                    shouldHideCursor={shouldHideCursor}
                     style={textStyle}
                 />
                 {isAnimatingText && (
@@ -263,7 +269,7 @@ const Typewriter: FC<TypewriterProps> = ({
                 )}
             </StyledTypewriter>
         ),
-        [handleClick, isAnimatingText, pseudoTextHTML, shownText, textStyle],
+        [handleClick, isAnimatingText, pseudoTextHTML, shouldHideCursor, shownText, textStyle],
     );
 };
 
