@@ -126,8 +126,8 @@ const FileInput: FC<FileInputProps> = ({
             <StyledFileInput>
                 <StyledFileInputContainer
                     onClick={() => void handleClick()}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => void handleDrop(e)}
+                    onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
+                    onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
                 >
                     <Icon icons={icons} />
                     <StyledFileInputText>{placeholder}</StyledFileInputText>
