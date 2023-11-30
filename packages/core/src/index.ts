@@ -53,6 +53,7 @@ export {
 } from './components/small-wait-cursor/SmallWaitCursor';
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
+export { default as Truncation } from './components/truncation/Truncation';
 export type {
     CodeHighlighterLanguage,
     CodeHighlighterTheme,

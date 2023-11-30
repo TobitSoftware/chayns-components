@@ -24,7 +24,7 @@ const removeLastLeafElement = (element: HTMLElement) => {
     ) {
         lastChild.textContent = `${lastChild.textContent.substring(
             0,
-            lastChild.textContent.length - 25
+            lastChild.textContent.length - 25,
         )} ...`;
     } else if (lastChild) {
         element.removeChild(lastChild);

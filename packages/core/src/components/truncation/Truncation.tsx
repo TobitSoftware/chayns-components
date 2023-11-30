@@ -71,7 +71,7 @@ const Truncation: FC<TruncationProps> = ({
                 return !current;
             });
         },
-        [onChange]
+        [onChange],
     );
 
     // initialization logic
