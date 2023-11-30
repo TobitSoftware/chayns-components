@@ -78,6 +78,12 @@ export const getCharactersCount = (html: string): number => {
         if (node.nodeType === 3 && typeof node.textContent === 'string') {
             count += node.textContent.trim().length;
         } else if (node.nodeType === 1) {
+            if (node.nodeName === 'CODE' && node.textContent !== null) {
+                count += node.textContent.length;
+
+                return;
+            }
+
             Array.from(node.childNodes).forEach(traverse);
         }
     };
