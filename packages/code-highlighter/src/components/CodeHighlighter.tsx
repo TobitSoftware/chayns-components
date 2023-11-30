@@ -76,7 +76,6 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     <CopyToClipboard text={code} theme={theme} />
                 </StyledCodeHighlighterHeader>
                 <SyntaxHighlighter
-                    data-typewriter-prevent-children-character-counting="true"
                     language={language}
                     showLineNumbers={shouldShowLineNumbers}
                     style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
