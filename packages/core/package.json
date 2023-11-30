@@ -56,7 +56,9 @@
         "clsx": "^2.0.0",
         "date-fns": "^2.30.0",
         "framer-motion": "^10.16.5",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "react-syntax-highlighter": "^15.5.0",
+        "@types/react-syntax-highlighter": "^15.5.10"
     },
     "peerDependencies": {
         "react": ">=16.14.0",

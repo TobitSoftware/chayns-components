@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import CodeHighlighter from '../src/components/CodeHighlighter';
+import CodeHighlighter from '../src/components/code-highlighter/CodeHighlighter';
 
 export default {
     title: 'CodeHighlighter/CodeHighlighter',
