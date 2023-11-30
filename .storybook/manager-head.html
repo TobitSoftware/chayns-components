@@ -13,6 +13,7 @@
     } else {
         (async () => {
             window.chaynsApi = new window.ChaynsApi.StaticChaynsApi();
+            window.history.pushState = () => {};
 
             const eventTarget = document.createElement('div');
 
