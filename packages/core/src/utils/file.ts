@@ -5,7 +5,7 @@ interface FilerDuplicateFileOptions {
 
 export const filterDuplicateFile = ({ newFile, files }: FilerDuplicateFileOptions) => {
     const duplicates = files.filter(
-        (fileItem) => fileItem && fileItem.name === newFile.name && fileItem.size === newFile.size
+        (fileItem) => fileItem && fileItem.name === newFile.name && fileItem.size === newFile.size,
     );
 
     return duplicates.length > 0;

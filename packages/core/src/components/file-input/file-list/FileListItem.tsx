@@ -1,6 +1,7 @@
-import { Icon, ListItem } from '@chayns-components/core';
 import React, { FC, useMemo } from 'react';
-import { getHumanSize, getIconByMimeType } from '../../utils/file';
+import { getHumanSize, getIconByMimeType } from '../../../utils/file';
+import Icon from '../../icon/Icon';
+import ListItem from '../../list/list-item/ListItem';
 import { StyledFileListItem } from './FileListItem.styles';
 
 export type FileListItemProps = {
@@ -28,7 +29,7 @@ const FileListItem: FC<FileListItemProps> = ({ fileName, fileSize, fileType, onR
                 />
             </StyledFileListItem>
         ),
-        [fileName, humanFileSize, icon, onRemove]
+        [fileName, humanFileSize, icon, onRemove],
     );
 };
 

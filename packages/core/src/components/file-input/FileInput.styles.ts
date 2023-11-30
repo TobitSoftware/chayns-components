@@ -1,6 +1,6 @@
-import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import type { FramerMotionBugFix, WithTheme } from '../../../lib';
 
 export const StyledFileInput = styled.div``;
 

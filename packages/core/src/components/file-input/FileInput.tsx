@@ -1,7 +1,9 @@
-import { Icon, List, selectFiles } from '@chayns-components/core';
 import { AnimatePresence } from 'framer-motion';
 import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
-import { filterDuplicateFile } from '../utils/file';
+import { filterDuplicateFile } from '../../utils/file';
+import { selectFiles } from '../../utils/fileDialog';
+import Icon from '../icon/Icon';
+import List from '../list/List';
 import FileListItem from './file-list/FileListItem';
 import {
     StyledFileInput,
@@ -53,7 +55,7 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...newFileItems]);
         },
-        [internalFiles, onAdd]
+        [internalFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
@@ -78,7 +80,7 @@ const FileInput: FC<FileInputProps> = ({
 
             onRemove(fileToDelete);
         },
-        [internalFiles, onRemove]
+        [internalFiles, onRemove],
     );
 
     const handleClick = useCallback(async () => {
@@ -96,7 +98,7 @@ const FileInput: FC<FileInputProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [handleAddFiles]
+        [handleAddFiles],
     );
 
     const content = useMemo(() => {
@@ -135,7 +137,7 @@ const FileInput: FC<FileInputProps> = ({
                 </List>
             </StyledFileInput>
         ),
-        [content, handleClick, handleDrop, icons, placeholder]
+        [content, handleClick, handleDrop, icons, placeholder],
     );
 };
 

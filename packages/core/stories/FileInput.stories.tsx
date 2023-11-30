@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
-import FileInput from '../src/components/FileInput';
+import FileInput from '../src/components/file-input/FileInput';
 
 export default {
-    title: 'FileInput/FileInput',
+    title: 'Core/FileInput',
     component: FileInput,
     args: {},
 } as Meta<typeof FileInput>;
