@@ -9,8 +9,6 @@ export default {
     },
 } as Meta<typeof DateInfo>;
 
-//
-
 const Template: StoryFn<typeof DateInfo> = (args) => <DateInfo {...args} />;
 
 export const General = Template.bind({});

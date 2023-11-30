@@ -79,8 +79,6 @@ export const decorators = [
         }
         // endregion
 
-        console.log('Preview aufgerufen');
-
         return (
             <div className="tapp" style={{ margin: 0, maxWidth: '556px', padding: 0 }}>
                 <ChaynsProvider>

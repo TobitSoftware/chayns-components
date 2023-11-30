@@ -13,18 +13,10 @@
     } else {
         (async () => {
             window.chaynsApi = new window.ChaynsApi.StaticChaynsApi();
-            console.log('1');
-            window.history.pushState = ({ ...args }) => {
-                console.log('args', args);
-                window.history.replaceState(...args);
-            };
-            console.log('2');
 
             const eventTarget = document.createElement('div');
-            console.log('3');
 
             await chaynsApi.ready;
-            console.log('4');
 
             await new Promise((resolve, reject) => {
                 let el = document.querySelector('iframe');
@@ -44,7 +36,6 @@
                     subtree: true,
                 });
             });
-            console.log('5');
 
             chaynsApi.addDataListener(({ type, value }) => {
                 eventTarget.dispatchEvent(
@@ -56,12 +47,8 @@
                     }),
                 );
             });
-            console.log('6');
 
             const $iframe = document.querySelector('iframe');
-
-            console.log('7');
-
             const obj = {
                 ['']: {
                     functions: {
@@ -78,7 +65,6 @@
             window.Comlink.expose(obj, window.Comlink.windowEndpoint($iframe.contentWindow));
             $iframe.contentWindow.postMessage('chayns-api-host-ready', '*');
         })();
-        console.log('8');
 
         // chayns.ready.then(() => {
         //     chayns.invokeCall({ action: 238, value: { hide: true } });
