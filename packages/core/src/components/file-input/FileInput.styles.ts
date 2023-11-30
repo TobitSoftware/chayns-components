@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import type { FramerMotionBugFix, WithTheme } from '../../../lib';
+import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledFileInput = styled.div``;
 
