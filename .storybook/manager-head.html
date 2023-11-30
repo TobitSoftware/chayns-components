@@ -16,6 +16,7 @@
             console.log('1');
             window.history.pushState = ({ ...args }) => {
                 console.log('args', args);
+                window.history.replaceState(...args);
             };
             console.log('2');
 
