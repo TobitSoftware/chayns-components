@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/typewriter",
-    "version": "5.0.0-beta.319",
+    "version": "5.0.0-beta.320",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
@@ -50,8 +50,8 @@
         "typescript": "^5.3.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.319",
-        "@chayns-components/emoji-input": "^5.0.0-beta.319",
+        "@chayns-components/core": "^5.0.0-beta.320",
+        "@chayns-components/emoji-input": "^5.0.0-beta.320",
         "@chayns/colors": "^2.0.0",
         "clsx": "^2.0.0",
         "framer-motion": "^10.16.5",
