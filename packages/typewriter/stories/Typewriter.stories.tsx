@@ -1,3 +1,4 @@
+import { CodeHighlighter } from '@chayns-components/code-highlighter';
 import { TextArea } from '@chayns-components/core';
 import { EmojiInput } from '@chayns-components/emoji-input';
 import { Meta, StoryFn } from '@storybook/react';
@@ -52,8 +53,34 @@ export const InsideTextArea = TextAreaTemplate.bind({});
 
 export const InsideEmojiInput = EmojiInputTemplate.bind({});
 
+export const WithCodeHighlighter = Template.bind({});
+
 InsideTextArea.args = {
     children: 'Nachricht eingeben',
+};
+
+WithCodeHighlighter.args = {
+    children: (
+        <CodeHighlighter
+            shouldShowLineNumbers
+            code={`import { CodeHighlighter } from '@chayns-components/code-highlighter';
+
+const AppWrapper = () => {
+    const { color, colorMode } = getSite();
+
+    return (
+        <CodeHighlighter
+            code={code}
+            language="jsx"
+            theme={CodeHighlighterTheme.Dark}
+        />
+    )
+}
+
+export default AppWrapper;`}
+            language={'tsx'}
+        />
+    ),
 };
 
 InsideEmojiInput.args = {
