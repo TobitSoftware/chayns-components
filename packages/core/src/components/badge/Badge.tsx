@@ -21,7 +21,6 @@ export type BadgeProps = {
     fontColor?: string;
 };
 
-//
 const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor }) => {
     const badgeClasses = clsx('beta-chayns-badge ellipsis', className);
 
