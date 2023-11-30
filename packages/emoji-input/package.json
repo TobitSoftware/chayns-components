@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/emoji-input",
-    "version": "5.0.0-beta.320",
+    "version": "5.0.0-beta.321",
     "description": "Input field that supports HTML elements and emojis",
     "keywords": [
         "chayns",
@@ -53,7 +53,7 @@
         "typescript": "^5.3.2"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.320",
+        "@chayns-components/core": "^5.0.0-beta.321",
         "@chayns/colors": "^2.0.0",
         "clsx": "^2.0.0",
         "emojilib": "^3.0.11",
