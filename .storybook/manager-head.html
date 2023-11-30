@@ -14,7 +14,9 @@
         (async () => {
             window.chaynsApi = new window.ChaynsApi.StaticChaynsApi();
             console.log('1');
-            // window.history.pushState = () => {};
+            window.history.pushState = ({ ...args }) => {
+                console.log('args', args);
+            };
             console.log('2');
 
             const eventTarget = document.createElement('div');
