@@ -1,4 +1,3 @@
-import { AccordionGroup } from '@chayns-components/core';
 import React, {
     forwardRef,
     ReactElement,
@@ -8,7 +7,8 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import type { SetupWizardItemProps } from '../setup-wizard-item/SetupWizardItem';
+import AccordionGroup from '../accordion/accordion-group/AccordionGroup';
+import type { SetupWizardItemProps } from './setup-wizard-item/SetupWizardItem';
 import { StyledSetupWizard } from './SetupWizard.styles';
 
 type UpdateSelectedId = (id: number) => void;
@@ -57,14 +57,14 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
         (id) => {
             setSelectedId(id);
         },
-        [setSelectedId]
+        [setSelectedId],
     );
 
     const updateActiveId = useCallback<UpdateSelectedId>(
         (id) => {
             setActiveId(id);
         },
-        [setActiveId]
+        [setActiveId],
     );
 
     const handleNext = useCallback(
@@ -95,7 +95,7 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
                 }
             }
         },
-        [activeId, allIds, selectedId, updateActiveId, updateSelectedId]
+        [activeId, allIds, selectedId, updateActiveId, updateSelectedId],
     );
 
     const handleReset = useCallback(() => {
@@ -109,7 +109,7 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
             next: handleNext,
             reset: handleReset,
         }),
-        [handleNext, handleReset]
+        [handleNext, handleReset],
     );
 
     const providerValue = useMemo<SetupWizardContextProps>(
@@ -119,7 +119,7 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
             activeId,
             updateActiveId,
         }),
-        [activeId, selectedId, updateActiveId, updateSelectedId]
+        [activeId, selectedId, updateActiveId, updateSelectedId],
     );
 
     return useMemo(
@@ -130,7 +130,7 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
                 </StyledSetupWizard>
             </SetupWizardContext.Provider>
         ),
-        [children, providerValue]
+        [children, providerValue],
     );
 });
 

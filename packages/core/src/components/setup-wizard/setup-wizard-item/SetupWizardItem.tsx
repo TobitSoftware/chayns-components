@@ -1,6 +1,9 @@
-import { Accordion, AccordionContent, Badge, Icon } from '@chayns-components/core';
 import React, { FC, ReactNode, useCallback, useContext, useMemo } from 'react';
-import { SetupWizardContext } from '../setup-wizard/SetupWizard';
+import Accordion from '../../accordion/Accordion';
+import AccordionContent from '../../accordion/accordion-content/AccordionContent';
+import Badge from '../../badge/Badge';
+import Icon from '../../icon/Icon';
+import { SetupWizardContext } from '../SetupWizard';
 import { StyledSetupWizardItem, StyledSetupWizardItemBadge } from './SetupWizardItem.styles';
 
 export type SetupWizardItemProps = {
@@ -82,7 +85,7 @@ const SetupWizardItem: FC<SetupWizardItemProps> = ({ children, step, title, id, 
             shouldBeDisabled,
             step,
             title,
-        ]
+        ],
     );
 };
 

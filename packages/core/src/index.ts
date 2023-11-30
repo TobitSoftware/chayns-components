@@ -44,6 +44,9 @@ export { default as ScrollView } from './components/scroll-view/ScrollView';
 export { default as SearchBox } from './components/search-box/SearchBox';
 export type { ISearchBoxItem as SearchBoxItem } from './components/search-box/types';
 export { default as SearchInput } from './components/search-input/SearchInput';
+export { default as SetupWizardItem } from './components/setup-wizard/setup-wizard-item/SetupWizardItem';
+export { default as SetupWizard } from './components/setup-wizard/SetupWizard';
+export type { SetupWizardRef } from './components/setup-wizard/SetupWizard';
 export { default as SharingBar } from './components/sharing-bar/SharingBar';
 export { default as Slider } from './components/slider/Slider';
 export {

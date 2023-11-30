@@ -1,11 +1,11 @@
-import { Input } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
-import RadioButtonGroup from '../../core/src/components/radio-button/radio-button-group/RadioButtonGroup';
-import RadioButton from '../../core/src/components/radio-button/RadioButton';
-import SetupWizardItem from '../src/components/setup-wizard-item/SetupWizardItem';
+import Input from '../src/components/input/Input';
+import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
+import RadioButton from '../src/components/radio-button/RadioButton';
+import SetupWizardItem from '../src/components/setup-wizard/setup-wizard-item/SetupWizardItem';
 
 export default {
-    title: 'SetupWizard/SetupWizardItem',
+    title: 'Core/SetupWizardItem',
     component: SetupWizardItem,
     args: {
         step: 1,

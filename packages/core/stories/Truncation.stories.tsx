@@ -1,5 +1,5 @@
-import { Truncation } from '@chayns-components/truncation';
 import { Meta, StoryFn } from '@storybook/react';
+import Truncation from '../src/components/truncation/Truncation';
 
 const BASE_HTML_TEXT =
     '<p id="isPasted">Der legendärste Abend: Homecoming at next! Studenten und Ausreißer, Urlauber und Daheimgebliebene, Partymäuse und Partymuffel – sie alle zieht es am Tag vor Heiligabend in die Heimat an einen zuvor ausgemachten Ort, um all die guten Freunde und alte Bekannte wiederzutreffen.</p><p>Was damals vor vielen Jahren auf der StattAlm auf dem Campus in Ahaus begann, führen wir bei uns im next fort!&nbsp;</p><p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>';

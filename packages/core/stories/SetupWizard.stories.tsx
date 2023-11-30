@@ -1,13 +1,15 @@
-import { Accordion, Button, Input } from '@chayns-components/core';
 import { Meta, StoryFn } from '@storybook/react';
 import { useRef } from 'react';
-import RadioButtonGroup from '../../core/src/components/radio-button/radio-button-group/RadioButtonGroup';
-import RadioButton from '../../core/src/components/radio-button/RadioButton';
-import SetupWizardItem from '../src/components/setup-wizard-item/SetupWizardItem';
+import Accordion from '../src/components/accordion/Accordion';
+import Button from '../src/components/button/Button';
+import Input from '../src/components/input/Input';
+import RadioButtonGroup from '../src/components/radio-button/radio-button-group/RadioButtonGroup';
+import RadioButton from '../src/components/radio-button/RadioButton';
+import SetupWizardItem from '../src/components/setup-wizard/setup-wizard-item/SetupWizardItem';
 import SetupWizard, { SetupWizardRef } from '../src/components/setup-wizard/SetupWizard';
 
 export default {
-    title: 'SetupWizard/SetupWizard',
+    title: 'Core/SetupWizard',
     component: SetupWizard,
     args: {},
 } as Meta<typeof SetupWizard>;
