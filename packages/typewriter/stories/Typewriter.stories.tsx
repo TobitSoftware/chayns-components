@@ -1,5 +1,4 @@
-import { CodeHighlighter } from '@chayns-components/code-highlighter';
-import { TextArea } from '@chayns-components/core';
+import { CodeHighlighter, TextArea } from '@chayns-components/core';
 import { EmojiInput } from '@chayns-components/emoji-input';
 import { Meta, StoryFn } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';

@@ -1,6 +1,6 @@
-import type { WithTheme } from 'src/index';
-import { CodeHighlighterTheme } from 'src/types/codeHighlighter';
 import styled from 'styled-components';
+import { CodeHighlighterTheme } from '../../types/codeHighlighter';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledCodeHighlighterProps = WithTheme<{
     codeTheme: CodeHighlighterTheme;

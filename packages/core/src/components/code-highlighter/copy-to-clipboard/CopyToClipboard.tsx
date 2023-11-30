@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
-import { Icon, Popup } from '../../../index';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
+import Icon from '../../icon/Icon';
+import Popup from '../../popup/Popup';
 import { StyledCopyToClipboard } from './CopyToClipboard.styles';
 
 export type CopyToClipboardProps = {
