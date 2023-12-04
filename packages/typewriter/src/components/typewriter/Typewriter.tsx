@@ -256,16 +256,21 @@ const Typewriter: FC<TypewriterProps> = ({
     return useMemo(
         () => (
             <StyledTypewriter onClick={handleClick}>
-                {isAnimatingText ? (
+                {isAnimatingText && (
                     <StyledTypewriterText
                         dangerouslySetInnerHTML={{ __html: shownText }}
                         isAnimatingText
                         shouldHideCursor={shouldHideCursor}
                         style={textStyle}
                     />
-                ) : (
-                    <StyledTypewriterText style={textStyle}>{sortedChildren}</StyledTypewriterText>
                 )}
+                <StyledTypewriterText
+                    style={
+                        isAnimatingText ? { visibility: 'hidden', position: 'absolute' } : textStyle
+                    }
+                >
+                    {sortedChildren}
+                </StyledTypewriterText>
                 {isAnimatingText && (
                     <StyledTypewriterPseudoText
                         dangerouslySetInnerHTML={{ __html: pseudoTextHTML }}

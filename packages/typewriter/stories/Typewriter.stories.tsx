@@ -60,9 +60,10 @@ InsideTextArea.args = {
 
 WithCodeHighlighter.args = {
     children: (
-        <CodeHighlighter
-            shouldShowLineNumbers
-            code={`import { CodeHighlighter } from '@chayns-components/code-highlighter';
+        <>
+            <CodeHighlighter
+                shouldShowLineNumbers
+                code={`import { CodeHighlighter } from '@chayns-components/code-highlighter';
 
 const AppWrapper = () => {
     const { color, colorMode } = getSite();
@@ -77,8 +78,14 @@ const AppWrapper = () => {
 }
 
 export default AppWrapper;`}
-            language={'tsx'}
-        />
+                language={'tsx'}
+            />
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            <button onClick={() => alert('tttt')}>Button</button>
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+            sea takimata sanctus est.
+        </>
     ),
 };
 
@@ -86,16 +93,12 @@ InsideEmojiInput.args = {
     children: 'Schreibe eine Nachricht',
 };
 
-function test() {
-    alert('Der Button funktioniertzzzzzz');
-}
-
 CustomElements.args = {
     children: (
         <>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            <button onClick={test}>Button</button>
+            <button onClick={() => alert('Der Button funktioniert')}>Button</button>
             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
             sea takimata sanctus est.
         </>
