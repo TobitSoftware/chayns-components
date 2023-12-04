@@ -86,12 +86,16 @@ InsideEmojiInput.args = {
     children: 'Schreibe eine Nachricht',
 };
 
+function test() {
+    alert('Der Button funktioniertzzzzzz');
+}
+
 CustomElements.args = {
     children: (
         <>
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
             invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-            <button onClick={() => alert('Der Button funktioniert')}>Button</button>
+            <button onClick={test}>Button</button>
             At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
             sea takimata sanctus est.
         </>
@@ -103,8 +107,19 @@ Empty.args = {
 };
 
 HTMLText.args = {
-    children:
-        'Lorem ipsum dolor sit amet, <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <s><b>At vero eos et accusam et justo duo dolores et ea rebum.</b></s> Stet clita kasd gubergren, no sea takimata sanctus est. <u>Lorem ipsum</u> dolor sit amet.',
+    children: (
+        <>
+            Lorem ipsum dolor sit amet,
+            <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et
+            dolore magna aliquyam erat, sed diam voluptua.
+            <s>
+                <b>At vero eos et accusam et justo duo dolores et ea rebum.</b>
+            </s>
+            Stet clita kasd gubergren, no sea takimata sanctus est.
+            <u>Lorem ipsum</u>
+            dolor sit amet.
+        </>
+    ),
 };
 
 MultipleTexts.args = {
