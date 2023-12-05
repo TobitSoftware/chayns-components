@@ -1,3 +1,6 @@
+import type { Options } from 'prettier';
+import parserBabel from 'prettier/parser-babel';
+import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useMemo } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -13,6 +16,11 @@ import {
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
 
+const prettierOptions: Options = {
+    parser: 'babel',
+    plugins: [parserBabel],
+};
+
 export type CodeHighlighterProps = {
     /**
      * The code that should be displayed.
@@ -23,6 +31,10 @@ export type CodeHighlighterProps = {
      * If not set, just the button is displayed without text.
      */
     copyButtonText?: string;
+    /**
+     * A config to format the code with "prettier".
+     */
+    formatConfig?: Options;
     /**
      * The lines of code that should be highlighted.
      * Following lines can be highlighted: added, removed and just marked.
@@ -46,6 +58,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     theme = CodeHighlighterTheme.Dark,
     code,
     copyButtonText,
+    formatConfig = prettierOptions,
     language,
     highlightedLines,
     shouldShowLineNumbers = false,
@@ -88,11 +101,11 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     wrapLines
                     lineProps={lineWrapper}
                 >
-                    {code}
+                    {format(code, formatConfig) as unknown as string}
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper],
+        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper, formatConfig],
     );
 };
 
