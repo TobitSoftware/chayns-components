@@ -59,15 +59,27 @@ export const unescapeHTML = (text: string) => {
 
     return text.replace(
         /&(?:amp|#38|#x26|lt|#60|#x3C|gt|#62|#x3E|apos|#39|#x27|quot|#34|#x22);/gi,
-        (match) => unescaped[match] ?? match
+        (match) => unescaped[match] ?? match,
     );
+};
+
+export const escapeHTML = (text: string) => {
+    const escaped: { [key: string]: string } = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&apos;',
+    };
+
+    return text.replace(/[&<>"']/g, (match) => escaped[match] ?? match);
 };
 
 export const convertEmojisToUnicode = (text: string): string => {
     let result = text;
 
     result = result.replace(/https?:\/\/.*?(?=$|\s)/gi, (fullMatch) =>
-        fullMatch.replace(/:/g, '%3A')
+        fullMatch.replace(/:/g, '%3A'),
     );
 
     result = result.replace(regShortnames, (shortname) => {
@@ -83,7 +95,7 @@ export const convertEmojisToUnicode = (text: string): string => {
     });
 
     result = result.replace(/https?%3A\/\/.*?(?=$|\s)/gi, (fullMatch) =>
-        fullMatch.replace(/%3A/g, ':')
+        fullMatch.replace(/%3A/g, ':'),
     );
 
     result = result.replace(regAscii, (fullMatch, m1, m2, m3) => {

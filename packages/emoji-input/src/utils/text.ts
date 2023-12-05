@@ -1,5 +1,5 @@
 import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
-import { unescapeHTML } from './emoji';
+import { escapeHTML, unescapeHTML } from './emoji';
 
 export const convertTextToHTML = (text: string) => {
     const element = document.createElement('div');
@@ -20,7 +20,7 @@ export const convertTextToHTML = (text: string) => {
 
     result = result.replace(
         BB_LC_MENTION_REGEX,
-        '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>'
+        '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
     );
 
     return result;
@@ -33,7 +33,7 @@ export const convertHTMLToText = (text: string) => {
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/​/g, '');
 
-    result = unescapeHTML(result);
+    result = escapeHTML(result);
 
     const element = document.createElement('div');
 
