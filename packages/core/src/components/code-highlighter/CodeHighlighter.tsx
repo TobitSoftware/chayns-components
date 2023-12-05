@@ -19,6 +19,11 @@ export type CodeHighlighterProps = {
      */
     code: string;
     /**
+     * The text that should be displayed after the copy button.
+     * If not set, just the button is displayed without text.
+     */
+    copyButtonText?: string;
+    /**
      * The lines of code that should be highlighted.
      * Following lines can be highlighted: added, removed and just marked.
      */
@@ -40,6 +45,7 @@ export type CodeHighlighterProps = {
 const CodeHighlighter: FC<CodeHighlighterProps> = ({
     theme = CodeHighlighterTheme.Dark,
     code,
+    copyButtonText,
     language,
     highlightedLines,
     shouldShowLineNumbers = false,
@@ -73,7 +79,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     <StyledCodeHighlighterFileName codeTheme={theme}>
                         {language}
                     </StyledCodeHighlighterFileName>
-                    <CopyToClipboard text={code} theme={theme} />
+                    <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
                 <SyntaxHighlighter
                     language={language}
@@ -86,7 +92,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, shouldShowLineNumbers, lineWrapper],
+        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper],
     );
 };
 

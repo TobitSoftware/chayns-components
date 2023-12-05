@@ -2,14 +2,15 @@ import React, { FC } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 import Icon from '../../icon/Icon';
 import Popup from '../../popup/Popup';
-import { StyledCopyToClipboard } from './CopyToClipboard.styles';
+import { StyledCopyToClipboard, StyledCopyToClipboardText } from './CopyToClipboard.styles';
 
 export type CopyToClipboardProps = {
+    copyButtonText?: string;
     text: string;
     theme: CodeHighlighterTheme;
 };
 
-const CopyToClipboard: FC<CopyToClipboardProps> = ({ text, theme }) => {
+const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme }) => {
     const handleClick = () => {
         void navigator.clipboard.writeText(text);
     };
@@ -27,6 +28,11 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ text, theme }) => {
                     icons={['fa-light fa-clipboard']}
                     color={theme === CodeHighlighterTheme.Dark ? '#e5e5e5' : '#999999'}
                 />
+                {copyButtonText && (
+                    <StyledCopyToClipboardText codeTheme={theme}>
+                        {copyButtonText}
+                    </StyledCopyToClipboardText>
+                )}
             </StyledCopyToClipboard>
         </Popup>
     );

@@ -7,6 +7,7 @@ type StyledCodeHighlighterProps = WithTheme<{
 }>;
 
 export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
+  margin: 4px 0;
   background-color: ${({ codeTheme }) =>
       codeTheme === CodeHighlighterTheme.Dark ? '#282c34' : '#fafafa'};
   border-radius: 8px;
