@@ -51,7 +51,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
     personId,
 }) => {
     const [internalAlignment, setInternalAlignment] = useState<PopupAlignment>(
-        PopupAlignment.TopLeft
+        PopupAlignment.TopLeft,
     );
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [position, setPosition] = useState({} as PopupPosition);
@@ -71,7 +71,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                 handleHide();
             }
         },
-        [handleHide]
+        [handleHide],
     );
 
     const handlePopupIconClick = useCallback(
@@ -126,20 +126,31 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
             setPosition(newPosition);
             setShouldShowPopup(true);
         },
-        [alignment, shouldShowPopup]
+        [alignment, shouldShowPopup],
+    );
+
+    const handleKeyPress = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.keyCode === 27) {
+                handleHide();
+            }
+        },
+        [handleHide],
     );
 
     useEffect(() => {
         if (shouldShowPopup) {
             document.addEventListener('click', handleDocumentClick, true);
             window.addEventListener('blur', handleHide);
+            document.addEventListener('keydown', handleKeyPress);
         }
 
         return () => {
             document.removeEventListener('click', handleDocumentClick, true);
             window.removeEventListener('blur', handleHide);
+            document.addEventListener('keydown', handleKeyPress);
         };
-    }, [handleDocumentClick, handleHide, shouldShowPopup]);
+    }, [handleDocumentClick, handleHide, handleKeyPress, shouldShowPopup]);
 
     useEffect(() => {
         if (typeof onPopupVisibilityChange === 'function') {
