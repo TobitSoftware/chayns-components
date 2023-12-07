@@ -101,7 +101,9 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     wrapLines
                     lineProps={lineWrapper}
                 >
-                    {format(code, formatConfig) as unknown as string}
+                    {language === 'markdown'
+                        ? code
+                        : (format(code, formatConfig) as unknown as string)}
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
