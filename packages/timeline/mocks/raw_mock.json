@@ -1,0 +1,124 @@
+{
+  "grouped": {
+    "2023-08-03T00:00:00Z": {
+      "groupings": [
+        {
+          "id": 4,
+          "boardId": 1,
+          "events": [
+            {
+              "color": "#666666",
+              "endIcon": "fa-home",
+              "groupingId": 4,
+              "name": "Campus 2",
+              "startIcon": "fa-home",
+              "startTime": "2023-08-03T11:00:33.736Z"
+            }
+          ],
+          "groupingMode": 1,
+          "name": "Campus 2"
+        },
+        {
+          "id": 1,
+          "boardId": 1,
+          "childGroupings": [
+            {
+              "id": 2,
+              "autoCallingCodeId": 1,
+              "boardId": 1,
+              "childGroupings": [
+                {
+                  "id": 3,
+                  "autoCallingCodeId": 2,
+                  "boardId": 1,
+                  "events": [
+                    {
+                      "color": "#666666",
+                      "duration": 245.0,
+                      "endIcon": "fa-file",
+                      "endTime": "2023-08-03T10:25:20.829Z",
+                      "groupingId": 3,
+                      "name": "Projekt X",
+                      "parentGroupingId": 2,
+                      "startIcon": "fa-file",
+                      "startTime": "2023-08-03T06:20:20.829Z"
+                    }
+                  ],
+                  "groupingMode": 2,
+                  "name": "Projekte",
+                  "parentId": 2
+                }
+              ],
+              "events": [
+                {
+                  "color": "#666666",
+                  "duration": 248.0,
+                  "endIcon": "fa-desktop",
+                  "endTime": "2023-08-03T10:26:13.751Z",
+                  "groupingId": 2,
+                  "isWorkingTime": true,
+                  "name": "Schreibtisch",
+                  "parentGroupingId": 1,
+                  "startIcon": "fa-desktop",
+                  "startTime": "2023-08-03T06:18:13.751Z"
+                },
+                {
+                  "color": "#666666",
+                  "duration": 13.0,
+                  "endIcon": "fa-coffee",
+                  "endTime": "2023-08-03T06:15:33.83Z",
+                  "groupingId": 2,
+                  "name": "Lounge",
+                  "parentGroupingId": 1,
+                  "startIcon": "fa-coffee",
+                  "startTime": "2023-08-03T06:02:33.83Z"
+                }
+              ],
+              "groupingMode": 2,
+              "name": "Arbeitszeit",
+              "parentId": 1
+            }
+          ],
+          "events": [
+            {
+              "color": "#666666",
+              "duration": 270.0,
+              "endIcon": "fa-home",
+              "endTime": "2023-08-03T10:30:33.736Z",
+              "groupingId": 1,
+              "name": "Campus",
+              "startIcon": "fa-home",
+              "startTime": "2023-08-03T06:00:33.736Z"
+            }
+          ],
+          "groupingMode": 1,
+          "name": "Campus"
+        }
+      ],
+      "totalWorkTime": 248.0
+    },
+    "2023-08-02T00:00:00Z": {
+      "groupings": [
+        {
+          "id": 1,
+          "boardId": 1,
+          "events": [
+            {
+              "color": "#666666",
+              "duration": 76.95091623333333,
+              "endIcon": "fa-home",
+              "endTime": "2023-08-02T14:53:51.067904Z",
+              "groupingId": 1,
+              "name": "Campus",
+              "startIcon": "fa-home",
+              "startTime": "2023-08-02T13:36:54.01293Z"
+            }
+          ],
+          "groupingMode": 1,
+          "name": "Campus"
+        }
+      ],
+      "totalWorkTime": 0.0
+    }
+  }
+}

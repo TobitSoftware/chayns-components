@@ -1,12 +1,11 @@
 {
-    "name": "@chayns-components/emoji-input",
+    "name": "@chayns-components/timeline",
     "version": "5.0.0-beta.333",
-    "description": "Input field that supports HTML elements and emojis",
+    "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
         "react",
-        "components",
-        "element"
+        "components"
     ],
     "author": "Tobit.Software",
     "homepage": "https://github.com/TobitSoftware/chayns-components/tree/main/packages/timeline#readme",
@@ -26,7 +25,7 @@
     },
     "scripts": {
         "build": "npm run build:js && npm run build:types",
-        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories --copy-files",
+        "build:js": "babel src --out-dir lib --extensions=.ts,.tsx --source-maps --ignore=src/stories",
         "build:types": "tsc",
         "prepublishOnly": "npm run build"
     },
@@ -54,9 +53,7 @@
         "@chayns-components/core": "^5.0.0-beta.332",
         "@chayns/colors": "^2.0.0",
         "clsx": "^2.0.0",
-        "emojilib": "^3.0.11",
         "framer-motion": "^10.16.5",
-        "unicode-emoji-json": "^0.5.0",
         "uuid": "^9.0.1"
     },
     "peerDependencies": {

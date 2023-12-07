@@ -15,7 +15,7 @@
 
 ## Installation
 
-First you need to install the timeline part of the chayns-components.
+First you need to install the typewriter part of the chayns-components.
 
 ```bash
 # NPM
@@ -31,12 +31,10 @@ yarn add @chayns-components/timeline
 
 ## Usage
 
-This package contains two components. The `Timeline` component and the `TimelineItem` component.
-
 You can use the components in your project as in the following example.
 
 ```typescript jsx
 import { Timeline } from '@chayns-components/timeline';
 
-<Timeline />;
+// ToDo Add component
 ```
