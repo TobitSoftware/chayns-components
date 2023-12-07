@@ -337,13 +337,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             [handleStartProgress, handleStopProgress],
         );
 
-        // ToDo: Muss das noch drin sein?
-        useEffect(() => {
-            if (isDisabled && editorRef.current) {
-                editorRef.current.blur();
-            }
-        }, [isDisabled]);
-
         useEffect(() => {
             /**
              * This function ensures that the input field does not lose focus when the popup is opened
