@@ -21,7 +21,7 @@ export type TextAreaProps = {
     /**
      * The minimum height of the text area.
      */
-    minHeight?: CSSProperties['maxHeight'];
+    minHeight?: CSSProperties['minHeight'];
     /**
      * Function that is executed when the text area loses focus.
      */

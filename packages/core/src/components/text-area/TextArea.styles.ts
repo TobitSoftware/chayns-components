@@ -11,7 +11,7 @@ export const StyledTextArea = styled.div`
 
 type StyledTextAreaInputProps = WithTheme<{
     maxHeight: CSSProperties['maxHeight'];
-    minHeight: CSSProperties['maxHeight'];
+    minHeight: CSSProperties['minHeight'];
     isOverflowing: boolean;
 }>;
 
