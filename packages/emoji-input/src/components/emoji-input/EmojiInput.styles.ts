@@ -18,6 +18,18 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     transition: opacity 0.3s ease;
 `;
 
+type StyledMotionEmojiInputProgressProps = WithTheme<unknown>;
+
+export const StyledMotionEmojiInputProgress = styled(
+    motion.div,
+)<StyledMotionEmojiInputProgressProps>`
+    background-color: ${({ theme }: StyledMotionEmojiInputProgressProps) => theme['402']};
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    border-radius: 3px;
+`;
+
 type StyledEmojiInputContentProps = {
     isRightElementGiven: boolean;
 };
@@ -30,6 +42,7 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
     flex: 1 1 auto;
     gap: 10px;
     padding: 8px 10px;
+    z-index: 3;
 
     ${({ isRightElementGiven }) =>
         isRightElementGiven &&

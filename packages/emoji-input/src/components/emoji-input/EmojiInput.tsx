@@ -1,16 +1,18 @@
+import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEvent,
     ClipboardEvent,
     CSSProperties,
-    FC,
     FocusEvent,
     FocusEventHandler,
+    forwardRef,
     KeyboardEvent,
     KeyboardEventHandler,
     ReactElement,
     ReactNode,
     useCallback,
     useEffect,
+    useImperativeHandle,
     useLayoutEffect,
     useMemo,
     useRef,
@@ -33,6 +35,7 @@ import {
     StyledEmojiInputLabel,
     StyledEmojiInputRightWrapper,
     StyledMotionEmojiInputEditor,
+    StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
 
 export type EmojiInputProps = {
@@ -112,291 +115,344 @@ export type EmojiInputProps = {
     value: string;
 };
 
-const EmojiInput: FC<EmojiInputProps> = ({
-    accessToken,
-    height,
-    inputId,
-    isDisabled,
-    maxHeight = '190px',
-    onBlur,
-    onFocus,
-    onInput,
-    onKeyDown,
-    onPopupVisibilityChange,
-    personId,
-    placeholder,
-    popupAlignment,
-    rightElement,
-    shouldHidePlaceholderOnFocus = true,
-    shouldPreventEmojiPicker,
-    value,
-}) => {
-    const [isMobile] = useState(getIsMobile());
-    const [plainTextValue, setPlainTextValue] = useState(value);
-    const [hasFocus, setHasFocus] = useState(false);
+export type EmojiInputRef = {
+    startProgress: (durationInSeconds: number) => void;
+    stopProgress: () => void;
+};
 
-    const editorRef = useRef<HTMLDivElement>(null);
+const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
+    (
+        {
+            accessToken,
+            height,
+            inputId,
+            isDisabled,
+            maxHeight = '190px',
+            onBlur,
+            onFocus,
+            onInput,
+            onKeyDown,
+            onPopupVisibilityChange,
+            personId,
+            placeholder,
+            popupAlignment,
+            rightElement,
+            shouldHidePlaceholderOnFocus = true,
+            shouldPreventEmojiPicker,
+            value,
+        },
+        ref,
+    ) => {
+        const [isMobile] = useState(getIsMobile());
+        const [plainTextValue, setPlainTextValue] = useState(value);
+        const [hasFocus, setHasFocus] = useState(false);
+        const [progressDuration, setProgressDuration] = useState(0);
 
-    const shouldDeleteOneMoreBackwards = useRef(false);
-    const shouldDeleteOneMoreForwards = useRef(false);
+        const editorRef = useRef<HTMLDivElement>(null);
 
-    const valueRef = useRef(value);
+        const shouldDeleteOneMoreBackwards = useRef(false);
+        const shouldDeleteOneMoreForwards = useRef(false);
 
-    /**
-     * This function updates the content of the 'contentEditable' element if the new text is
-     * different from the previous content. So this is only true if, for example, a text like ":-)"
-     * has been replaced to the corresponding emoji.
-     *
-     * When updating the HTML, the current cursor position is saved before replacing the content, so
-     * that it can be set again afterward.
-     */
-    const handleUpdateHTML = useCallback((html: string) => {
-        if (!editorRef.current) {
-            return;
-        }
+        const valueRef = useRef(value);
 
-        let newInnerHTML = convertEmojisToUnicode(html);
-
-        newInnerHTML = convertTextToHTML(newInnerHTML);
-
-        if (newInnerHTML !== editorRef.current.innerHTML) {
-            saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
-
-            editorRef.current.innerHTML = newInnerHTML;
-
-            restoreSelection(editorRef.current);
-        }
-    }, []);
-
-    /**
-     * This function handles the 'input' events of the 'contentEditable' element and also passes the
-     * respective event up accordingly if the 'onInput' property is a function.
-     */
-    const handleInput = useCallback(
-        (event: ChangeEvent<HTMLDivElement>) => {
+        /**
+         * This function updates the content of the 'contentEditable' element if the new text is
+         * different from the previous content. So this is only true if, for example, a text like ":-)"
+         * has been replaced to the corresponding emoji.
+         *
+         * When updating the HTML, the current cursor position is saved before replacing the content, so
+         * that it can be set again afterward.
+         */
+        const handleUpdateHTML = useCallback((html: string) => {
             if (!editorRef.current) {
                 return;
             }
 
-            if (shouldDeleteOneMoreBackwards.current) {
-                shouldDeleteOneMoreBackwards.current = false;
-                shouldDeleteOneMoreForwards.current = false;
+            let newInnerHTML = convertEmojisToUnicode(html);
 
-                event.preventDefault();
-                event.stopPropagation();
+            newInnerHTML = convertTextToHTML(newInnerHTML);
 
-                document.execCommand('delete', false);
+            if (newInnerHTML !== editorRef.current.innerHTML) {
+                saveSelection(editorRef.current, { shouldIgnoreEmptyTextNodes: true });
 
-                return;
+                editorRef.current.innerHTML = newInnerHTML;
+
+                restoreSelection(editorRef.current);
             }
+        }, []);
 
-            if (shouldDeleteOneMoreForwards.current) {
-                shouldDeleteOneMoreBackwards.current = false;
-                shouldDeleteOneMoreForwards.current = false;
+        /**
+         * This function handles the 'input' events of the 'contentEditable' element and also passes the
+         * respective event up accordingly if the 'onInput' property is a function.
+         */
+        const handleInput = useCallback(
+            (event: ChangeEvent<HTMLDivElement>) => {
+                if (!editorRef.current) {
+                    return;
+                }
 
-                event.preventDefault();
-                event.stopPropagation();
+                if (shouldDeleteOneMoreBackwards.current) {
+                    shouldDeleteOneMoreBackwards.current = false;
+                    shouldDeleteOneMoreForwards.current = false;
 
-                document.execCommand('forwardDelete', false);
+                    event.preventDefault();
+                    event.stopPropagation();
 
-                return;
-            }
+                    document.execCommand('delete', false);
 
-            handleUpdateHTML(editorRef.current.innerHTML);
+                    return;
+                }
 
-            const text = convertHTMLToText(editorRef.current.innerHTML);
+                if (shouldDeleteOneMoreForwards.current) {
+                    shouldDeleteOneMoreBackwards.current = false;
+                    shouldDeleteOneMoreForwards.current = false;
 
-            setPlainTextValue(text);
+                    event.preventDefault();
+                    event.stopPropagation();
 
-            if (typeof onInput === 'function') {
-                onInput(event, text);
-            }
-        },
-        [handleUpdateHTML, onInput],
-    );
+                    document.execCommand('forwardDelete', false);
 
-    const handleKeyDown = useCallback(
-        (event: KeyboardEvent<HTMLDivElement>) => {
-            if (typeof onKeyDown === 'function') {
-                onKeyDown(event);
-            }
+                    return;
+                }
 
-            if (
-                event.key === 'Enter' &&
-                !event.shiftKey &&
-                !event.isPropagationStopped() &&
-                editorRef.current
-            ) {
-                event.preventDefault();
+                handleUpdateHTML(editorRef.current.innerHTML);
 
-                document.execCommand('insertLineBreak', false);
-            }
+                const text = convertHTMLToText(editorRef.current.innerHTML);
 
-            if (event.key === 'Backspace' || event.key === 'Delete') {
-                const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
+                setPlainTextValue(text);
 
-                if (charCodeThatWillBeDeleted === 8203) {
-                    if (event.key === 'Backspace') {
-                        shouldDeleteOneMoreBackwards.current = true;
-                    } else {
-                        shouldDeleteOneMoreForwards.current = true;
+                if (typeof onInput === 'function') {
+                    onInput(event, text);
+                }
+            },
+            [handleUpdateHTML, onInput],
+        );
+
+        const handleKeyDown = useCallback(
+            (event: KeyboardEvent<HTMLDivElement>) => {
+                if (isDisabled) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                if (typeof onKeyDown === 'function') {
+                    onKeyDown(event);
+                }
+
+                if (
+                    event.key === 'Enter' &&
+                    !event.shiftKey &&
+                    !event.isPropagationStopped() &&
+                    editorRef.current
+                ) {
+                    event.preventDefault();
+
+                    document.execCommand('insertLineBreak', false);
+                }
+
+                if (event.key === 'Backspace' || event.key === 'Delete') {
+                    const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
+
+                    if (charCodeThatWillBeDeleted === 8203) {
+                        if (event.key === 'Backspace') {
+                            shouldDeleteOneMoreBackwards.current = true;
+                        } else {
+                            shouldDeleteOneMoreForwards.current = true;
+                        }
                     }
                 }
-            }
-        },
-        [onKeyDown],
-    );
+            },
+            [isDisabled, onKeyDown],
+        );
 
-    /**
-     * This function prevents formatting from being adopted when texts are inserted. To do this, the
-     * plain text is read from the event after the default behavior has been prevented. The plain
-     * text is then inserted at the correct position in the input field using the
-     * 'insertTextAtCursorPosition' function.
-     */
-    const handlePaste = useCallback((event: ClipboardEvent<HTMLDivElement>) => {
-        if (editorRef.current) {
-            event.preventDefault();
-
-            let text = event.clipboardData.getData('text/plain');
-
-            text = convertEmojisToUnicode(text);
-
-            insertTextAtCursorPosition({ editorElement: editorRef.current, text });
-
-            const newEvent = new Event('input', { bubbles: true });
-
-            editorRef.current.dispatchEvent(newEvent);
-        }
-    }, []);
-
-    /**
-     * This function uses the 'insertTextAtCursorPosition' function to insert the emoji at the
-     * correct position in the editor element.
-     *
-     * At the end an 'input' event is dispatched, so that the function 'handleInput' is triggered,
-     * which in turn executes the 'onInput' function from the props. So this serves to ensure that
-     * the event is also passed through to the top when inserting via the popup.
-     */
-    const handlePopupSelect = useCallback((emoji: string) => {
-        if (editorRef.current) {
-            insertTextAtCursorPosition({ editorElement: editorRef.current, text: emoji });
-
-            const event = new Event('input', { bubbles: true });
-
-            editorRef.current.dispatchEvent(event);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (value !== plainTextValue) {
-            setPlainTextValue(value);
-
-            handleUpdateHTML(value);
-        }
-    }, [handleUpdateHTML, plainTextValue, value]);
-
-    // This effect is used to call the 'handleUpdateHTML' function once after the component has been
-    // rendered. This is necessary because the 'contentEditable' element otherwise does not display
-    // the HTML content correctly when the component is rendered for the first time.
-    useLayoutEffect(() => {
-        handleUpdateHTML(valueRef.current);
-    }, [handleUpdateHTML]);
-
-    useEffect(() => {
         /**
-         * This function ensures that the input field does not lose focus when the popup is opened
-         * or an emoji is selected in it. For this purpose the corresponding elements get the class
-         * 'prevent-lose-focus'.
-         *
-         * The class can also be set to any other elements that should also not cause the input
-         * field to lose focus.
+         * This function prevents formatting from being adopted when texts are inserted. To do this, the
+         * plain text is read from the event after the default behavior has been prevented. The plain
+         * text is then inserted at the correct position in the input field using the
+         * 'insertTextAtCursorPosition' function.
          */
-        const handlePreventLoseFocus = (event: MouseEvent) => {
-            const element = event.target as Element;
-
-            if (
-                element.classList.contains('prevent-lose-focus') ||
-                element.parentElement?.classList.contains('prevent-lose-focus') ||
-                element.parentElement?.parentElement?.classList.contains('prevent-lose-focus')
-            ) {
+        const handlePaste = useCallback((event: ClipboardEvent<HTMLDivElement>) => {
+            if (editorRef.current) {
                 event.preventDefault();
-                event.stopPropagation();
+
+                let text = event.clipboardData.getData('text/plain');
+
+                text = convertEmojisToUnicode(text);
+
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+                const newEvent = new Event('input', { bubbles: true });
+
+                editorRef.current.dispatchEvent(newEvent);
             }
+        }, []);
+
+        /**
+         * This function uses the 'insertTextAtCursorPosition' function to insert the emoji at the
+         * correct position in the editor element.
+         *
+         * At the end an 'input' event is dispatched, so that the function 'handleInput' is triggered,
+         * which in turn executes the 'onInput' function from the props. So this serves to ensure that
+         * the event is also passed through to the top when inserting via the popup.
+         */
+        const handlePopupSelect = useCallback((emoji: string) => {
+            if (editorRef.current) {
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text: emoji });
+
+                const event = new Event('input', { bubbles: true });
+
+                editorRef.current.dispatchEvent(event);
+            }
+        }, []);
+
+        useEffect(() => {
+            if (value !== plainTextValue) {
+                setPlainTextValue(value);
+
+                handleUpdateHTML(value);
+            }
+        }, [handleUpdateHTML, plainTextValue, value]);
+
+        // This effect is used to call the 'handleUpdateHTML' function once after the component has been
+        // rendered. This is necessary because the 'contentEditable' element otherwise does not display
+        // the HTML content correctly when the component is rendered for the first time.
+        useLayoutEffect(() => {
+            handleUpdateHTML(valueRef.current);
+        }, [handleUpdateHTML]);
+
+        const handleStartProgress = useCallback((duration: number) => {
+            setProgressDuration(duration);
+        }, []);
+
+        const handleStopProgress = useCallback(() => {
+            setProgressDuration(0);
+        }, []);
+
+        useImperativeHandle(
+            ref,
+            () => ({
+                startProgress: handleStartProgress,
+                stopProgress: handleStopProgress,
+            }),
+            [handleStartProgress, handleStopProgress],
+        );
+
+        useEffect(() => {
+            /**
+             * This function ensures that the input field does not lose focus when the popup is opened
+             * or an emoji is selected in it. For this purpose the corresponding elements get the class
+             * 'prevent-lose-focus'.
+             *
+             * The class can also be set to any other elements that should also not cause the input
+             * field to lose focus.
+             */
+            const handlePreventLoseFocus = (event: MouseEvent) => {
+                const element = event.target as Element;
+
+                if (
+                    element.classList.contains('prevent-lose-focus') ||
+                    element.parentElement?.classList.contains('prevent-lose-focus') ||
+                    element.parentElement?.parentElement?.classList.contains('prevent-lose-focus')
+                ) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            };
+
+            document.body.addEventListener('mousedown', handlePreventLoseFocus);
+
+            return () => {
+                document.body.removeEventListener('mousedown', handlePreventLoseFocus);
+            };
+        }, []);
+
+        const shouldShowPlaceholder = useMemo(() => {
+            if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
+                return false;
+            }
+
+            if (!shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
+                return true;
+            }
+
+            if (!shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue) {
+                return true;
+            }
+
+            return shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue;
+        }, [hasFocus, plainTextValue, shouldHidePlaceholderOnFocus]);
+
+        const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
+            if (typeof onFocus === 'function') {
+                onFocus(event);
+            }
+
+            setHasFocus(true);
         };
 
-        document.body.addEventListener('mousedown', handlePreventLoseFocus);
+        const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+            if (typeof onBlur === 'function') {
+                onBlur(event);
+            }
 
-        return () => {
-            document.body.removeEventListener('mousedown', handlePreventLoseFocus);
+            setHasFocus(false);
         };
-    }, []);
 
-    const shouldShowPlaceholder = useMemo(() => {
-        if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
-            return false;
-        }
+        return (
+            <StyledEmojiInput isDisabled={isDisabled}>
+                <AnimatePresence initial>
+                    {progressDuration > 0 && (
+                        <StyledMotionEmojiInputProgress
+                            animate={{ width: '100%' }}
+                            exit={{ opacity: 0 }}
+                            initial={{ opacity: 1, width: '0%' }}
+                            transition={{
+                                width: {
+                                    ease: 'linear',
+                                    duration: progressDuration,
+                                },
+                                opacity: {
+                                    type: 'tween',
+                                    duration: 0.3,
+                                },
+                            }}
+                        />
+                    )}
+                </AnimatePresence>
 
-        if (!shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
-            return true;
-        }
-
-        if (!shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue) {
-            return true;
-        }
-
-        return shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue;
-    }, [hasFocus, plainTextValue, shouldHidePlaceholderOnFocus]);
-
-    const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
-        if (typeof onFocus === 'function') {
-            onFocus(event);
-        }
-
-        setHasFocus(true);
-    };
-
-    const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
-        if (typeof onBlur === 'function') {
-            onBlur(event);
-        }
-
-        setHasFocus(false);
-    };
-
-    return (
-        <StyledEmojiInput isDisabled={isDisabled}>
-            <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
-                <StyledMotionEmojiInputEditor
-                    animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
-                    contentEditable={!isDisabled}
-                    id={inputId}
-                    onBlur={handleBlur}
-                    onFocus={handleFocus}
-                    onInput={handleInput}
-                    onKeyDown={handleKeyDown}
-                    onPaste={handlePaste}
-                    ref={editorRef}
-                    transition={{ type: 'tween', duration: 0.2 }}
-                />
-                {shouldShowPlaceholder && (
-                    <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>
-                )}
-                {!isMobile && !shouldPreventEmojiPicker && (
-                    <EmojiPickerPopup
-                        accessToken={accessToken}
-                        alignment={popupAlignment}
-                        onSelect={handlePopupSelect}
-                        onPopupVisibilityChange={onPopupVisibilityChange}
-                        personId={personId}
+                <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
+                    <StyledMotionEmojiInputEditor
+                        animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
+                        contentEditable={!isDisabled}
+                        id={inputId}
+                        onBlur={handleBlur}
+                        onFocus={handleFocus}
+                        onInput={handleInput}
+                        onKeyDown={handleKeyDown}
+                        onPaste={handlePaste}
+                        ref={editorRef}
+                        transition={{ type: 'tween', duration: 0.2 }}
                     />
+                    {shouldShowPlaceholder && (
+                        <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>
+                    )}
+                    {!isMobile && !shouldPreventEmojiPicker && (
+                        <EmojiPickerPopup
+                            accessToken={accessToken}
+                            alignment={popupAlignment}
+                            onSelect={handlePopupSelect}
+                            onPopupVisibilityChange={onPopupVisibilityChange}
+                            personId={personId}
+                        />
+                    )}
+                </StyledEmojiInputContent>
+                {rightElement && (
+                    <StyledEmojiInputRightWrapper>{rightElement}</StyledEmojiInputRightWrapper>
                 )}
-            </StyledEmojiInputContent>
-            {rightElement && (
-                <StyledEmojiInputRightWrapper>{rightElement}</StyledEmojiInputRightWrapper>
-            )}
-        </StyledEmojiInput>
-    );
-};
+            </StyledEmojiInput>
+        );
+    },
+);
 
 EmojiInput.displayName = 'EmojiInput';
 
