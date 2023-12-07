@@ -19,6 +19,10 @@ export type TextAreaProps = {
      */
     maxHeight?: CSSProperties['maxHeight'];
     /**
+     * The minimum height of the text area.
+     */
+    minHeight?: CSSProperties['maxHeight'];
+    /**
      * Function that is executed when the text area loses focus.
      */
     onBlur?: FocusEventHandler<HTMLTextAreaElement>;
@@ -42,6 +46,7 @@ const TextArea: FC<TextAreaProps> = ({
     onChange,
     onBlur,
     maxHeight = '120px',
+    minHeight = '41px',
 }) => {
     const [displayedValue, setDisplayedValue] = useState('');
     const [isOverflowing, setIsOverflowing] = useState(false);
@@ -87,7 +92,7 @@ const TextArea: FC<TextAreaProps> = ({
                 onChange(event);
             }
         },
-        [onChange]
+        [onChange],
     );
 
     return useMemo(
@@ -99,13 +104,14 @@ const TextArea: FC<TextAreaProps> = ({
                     onBlur={onBlur}
                     onChange={handleChange}
                     maxHeight={maxHeight}
+                    minHeight={minHeight}
                     isOverflowing={isOverflowing}
                     rows={1}
                 />
                 {!displayedValue && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
             </StyledTextArea>
         ),
-        [displayedValue, handleChange, isOverflowing, maxHeight, onBlur, placeholder]
+        [displayedValue, handleChange, isOverflowing, maxHeight, onBlur, placeholder],
     );
 };
 

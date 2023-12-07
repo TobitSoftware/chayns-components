@@ -11,6 +11,7 @@ export const StyledTextArea = styled.div`
 
 type StyledTextAreaInputProps = WithTheme<{
     maxHeight: CSSProperties['maxHeight'];
+    minHeight: CSSProperties['maxHeight'];
     isOverflowing: boolean;
 }>;
 
@@ -22,6 +23,7 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     resize: none;
     overflow-y: ${({ isOverflowing }) => (isOverflowing ? 'scroll' : 'hidden')};
     max-height: ${({ maxHeight }: StyledTextAreaInputProps) => maxHeight};
+    min-height: ${({ minHeight }: StyledTextAreaInputProps) => minHeight};
     width: 100%;
     padding: 8px 10px;
 
