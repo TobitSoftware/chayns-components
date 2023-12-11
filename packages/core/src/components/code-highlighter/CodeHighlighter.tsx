@@ -85,6 +85,24 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
         [highlightedLines],
     );
 
+    const formattedCode = useMemo(() => {
+        const acceptedLanguages: CodeHighlighterLanguage[] = [
+            'tsx',
+            'jsx',
+            'javascript',
+            'typescript',
+        ];
+        if (
+            acceptedLanguages.includes(language) &&
+            formatConfig.plugins &&
+            (formatConfig.plugins[0] as { parsers: { babel: any } })?.parsers.babel
+        ) {
+            return format(code, formatConfig) as unknown as string;
+        }
+
+        return code;
+    }, [code, formatConfig, language]);
+
     return useMemo(
         () => (
             <StyledCodeHighlighter codeTheme={theme}>
@@ -101,13 +119,11 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                     wrapLines
                     lineProps={lineWrapper}
                 >
-                    {language === 'markdown'
-                        ? code
-                        : (format(code, formatConfig) as unknown as string)}
+                    {formattedCode}
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper, formatConfig],
+        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper, formattedCode],
     );
 };
 
