@@ -2,18 +2,20 @@ import React, {
     ChangeEvent,
     ChangeEventHandler,
     FC,
-    ReactNode,
+    ReactElement,
     useCallback,
+    useMemo,
     useState,
 } from 'react';
 import { useUuid } from '../../hooks/uuid';
+import { getHeightOfSingleTextLine } from '../../utils/calculate';
 import { StyledCheckbox, StyledCheckboxInput, StyledCheckboxLabel } from './Checkbox.styles';
 
 export type CheckboxProps = {
     /**
      * Text for checkbox or switch
      */
-    children?: ReactNode;
+    children?: ReactElement;
     /**
      * Indicates whether the checkbox or switch is selected
      */
@@ -49,10 +51,15 @@ const Checkbox: FC<CheckboxProps> = ({
                 onChange(event);
             }
         },
-        [onChange]
+        [onChange],
     );
 
     const uuid = useUuid();
+
+    const lineHeight = useMemo(
+        () => (children ? getHeightOfSingleTextLine(children) : undefined),
+        [children],
+    );
 
     return (
         <StyledCheckbox>
@@ -68,6 +75,7 @@ const Checkbox: FC<CheckboxProps> = ({
                 isChecked={isChecked ?? isActive}
                 isDisabled={isDisabled}
                 shouldShowAsSwitch={shouldShowAsSwitch}
+                lineHeight={lineHeight}
             >
                 {children}
             </StyledCheckboxLabel>

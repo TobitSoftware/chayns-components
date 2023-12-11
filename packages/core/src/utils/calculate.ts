@@ -1,3 +1,5 @@
+import type { HTMLAttributes, ReactElement } from 'react';
+
 export const calculateContentWidth = (texts: string[]) => {
     const length: number[] = [];
 
@@ -38,4 +40,37 @@ export const calculateContentHeight = (elements: string[]) => {
     });
 
     return length.reduce((partialSum, a) => partialSum + a, 0);
+};
+
+export const getHeightOfSingleTextLine = (element: ReactElement) => {
+    const isTextNode = typeof element === 'string';
+    const isChildrenTextNode = !isTextNode
+        ? !Array.isArray(element.props.children) && typeof element.props.children[0] === 'string'
+        : false;
+
+    if (isTextNode || isChildrenTextNode) {
+        const span = document.createElement('span');
+
+        if (isChildrenTextNode) {
+            const elementStyles = (element.props as HTMLAttributes<HTMLSpanElement>).style;
+
+            if (elementStyles) {
+                Object.keys(elementStyles).forEach((styleKey) => {
+                    span.style[styleKey] = elementStyles[styleKey];
+                });
+            }
+        }
+
+        span.innerText = 'A';
+
+        document.body.appendChild(span);
+
+        const height = span.offsetHeight;
+
+        document.body.removeChild(span);
+
+        return height;
+    }
+
+    return undefined;
 };

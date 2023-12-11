@@ -12,7 +12,12 @@ export const StyledCheckboxInput = styled.input`
     display: none;
 `;
 
-type StyledCheckboxLabelProps = WithTheme<Omit<CheckboxProps, 'children' | 'onChange'>>;
+type StyledCheckboxLabelProps = WithTheme<{
+    shouldShowAsSwitch?: CheckboxProps['shouldShowAsSwitch'];
+    isDisabled?: CheckboxProps['isDisabled'];
+    isChecked?: CheckboxProps['isChecked'];
+    lineHeight?: number;
+}>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
@@ -23,7 +28,7 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     user-select: none;
 
     &:after {
-        ${({ isChecked, shouldShowAsSwitch }) =>
+        ${({ isChecked, shouldShowAsSwitch, lineHeight }) =>
             shouldShowAsSwitch
                 ? css`
                       background-color: white;
@@ -31,8 +36,8 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      top: 3.5px;
-                      transform: translateX(${isChecked ? '18px' : 0});
+                      top: ${lineHeight ? `${lineHeight / 1.5}px` : '50%'};
+                      transform: translateX(${isChecked ? '18px' : 0}) translateY(-50%);
                       transition: transform 0.2s ease;
                       width: 16px;
                   `
@@ -40,17 +45,16 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       border-right: 2px solid #fff;
                       border-bottom: 2px solid #fff;
                       height: 10px;
-                      left: 1px;
+                      left: 2px;
                       opacity: ${isChecked ? 1 : 0};
-                      top: 7px;
-                      transform: rotateZ(37deg);
+                      top: ${lineHeight ? `calc(${lineHeight / 1.5}px - 2px)` : 'calc(50% - 2px)'};
+                      transform: rotateZ(37deg) translateY(-50%);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
                   `}
 
         content: ' ';
         position: absolute;
-        transform-origin: 100% 100%;
     }
 
     &:before {
@@ -71,8 +75,18 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
         height: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '13px' : '15px')};
         left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '10px' : 0)};
         position: absolute;
-        top: 5px;
         transition: background-color 0.2s ease;
         width: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '28px' : '15px')};
+        ${({ lineHeight }) =>
+            lineHeight
+                ? css`
+                      top: ${lineHeight / 1.5}px;
+                      transform: translateY(-50%);
+                  `
+                : css`
+                      top: 50%;
+                      transform: translateY(-50%);
+                  `}
+        }
     }
 `;
