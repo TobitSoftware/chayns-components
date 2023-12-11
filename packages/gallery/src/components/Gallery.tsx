@@ -1,5 +1,6 @@
 import { uploadFile } from '@chayns-components/core';
 import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
+import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
@@ -10,7 +11,6 @@ import {
     StyledGalleryEditModeWrapper,
     StyledGalleryItemWrapper,
 } from './Gallery.styles';
-import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 
 export type GalleryProps = {
     /**
@@ -74,7 +74,7 @@ const Gallery: FC<GalleryProps> = ({
                     return { ...prevFile, previewUrl };
                 }
                 return prevFile;
-            })
+            }),
         );
     };
 
@@ -101,10 +101,10 @@ const Gallery: FC<GalleryProps> = ({
                         };
                     }
                     return prevFile;
-                })
+                }),
             );
         },
-        [onAdd]
+        [onAdd],
     );
 
     /**
@@ -121,11 +121,11 @@ const Gallery: FC<GalleryProps> = ({
      */
     useEffect(() => {
         const filesToGeneratePreview = fileItems.filter(
-            (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state)
+            (file) => file.file && !file.previewUrl && (file.state === 'none' || !file.state),
         );
 
         const filesToUpload = fileItems.filter(
-            (file) => !file.uploadedFile && file.state !== 'uploading'
+            (file) => !file.uploadedFile && file.state !== 'uploading',
         );
 
         filesToGeneratePreview.forEach((file) => {
@@ -155,7 +155,7 @@ const Gallery: FC<GalleryProps> = ({
                         return { ...prevFile, state: 'uploading' };
                     }
                     return prevFile;
-                })
+                }),
             );
 
             void uploadFile({
@@ -186,7 +186,7 @@ const Gallery: FC<GalleryProps> = ({
 
             setFileItems((prevState) => [...prevState, ...newFileItems]);
         },
-        [fileItems]
+        [fileItems],
     );
 
     /**
@@ -235,7 +235,7 @@ const Gallery: FC<GalleryProps> = ({
 
             onRemove(fileToDelete);
         },
-        [fileItems, onRemove]
+        [fileItems, onRemove],
     );
 
     /**
@@ -252,7 +252,7 @@ const Gallery: FC<GalleryProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [allowDragAndDrop, handleAddFiles]
+        [allowDragAndDrop, handleAddFiles],
     );
 
     /**
@@ -264,14 +264,17 @@ const Gallery: FC<GalleryProps> = ({
 
             const items: OpenMediaItem[] = fileItems.map((item) => ({
                 url: item.uploadedFile?.url.replace('_0.mp4', '.mp4') ?? '',
-                mediaType: item.file?.type.includes('video/') ? MediaType.VIDEO : MediaType.IMAGE,
+                mediaType:
+                    item.uploadedFile && 'thumbnailUrl' in item.uploadedFile
+                        ? MediaType.VIDEO
+                        : MediaType.IMAGE,
             }));
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             void openMedia({ items, startIndex });
         },
-        [fileItems]
+        [fileItems],
     );
 
     /**
@@ -362,7 +365,7 @@ const Gallery: FC<GalleryProps> = ({
                 )}
             </StyledGallery>
         ),
-        [isEditMode, fileMinWidth, galleryContent, ratio, columns, fileItems.length, handleDrop]
+        [isEditMode, fileMinWidth, galleryContent, ratio, columns, fileItems.length, handleDrop],
     );
 };
 

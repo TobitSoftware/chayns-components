@@ -37,7 +37,7 @@ const MediaItem: FC<MediaItemProps> = ({ fileItem, isEditMode, openSelectedFile 
                 <StyledMediaItemPlayIcon>
                     <Icon size={isEditMode ? 30 : 50} icons={['fa fa-play']} />
                 </StyledMediaItemPlayIcon>
-                <StyledMediaItemVideo>
+                <StyledMediaItemVideo poster={fileItem.uploadedFile.thumbnailUrl}>
                     <source src={fileItem.uploadedFile.url} type="video/mp4" />
                 </StyledMediaItemVideo>
             </StyledMediaItemVideoWrapper>

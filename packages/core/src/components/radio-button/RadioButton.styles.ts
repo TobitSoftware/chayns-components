@@ -32,8 +32,8 @@ export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseud
     height: 13px;
     position: absolute;
     border-radius: 100%;
-    top: 22%;
-    left: -1%;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer !important;
 `;
 
