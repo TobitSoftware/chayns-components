@@ -32,6 +32,10 @@ export type CheckboxProps = {
      * Changes the design to use switch instead of checkbox
      */
     shouldShowAsSwitch?: boolean;
+    /**
+     * Whether the Checkbox should be displayed centered to the label or at the top
+     */
+    shouldShowCentered?: boolean;
 };
 
 const Checkbox: FC<CheckboxProps> = ({
@@ -40,6 +44,7 @@ const Checkbox: FC<CheckboxProps> = ({
     isDisabled,
     onChange,
     shouldShowAsSwitch,
+    shouldShowCentered = false,
 }) => {
     const [isActive, setIsActive] = useState(isChecked ?? false);
 
@@ -57,8 +62,8 @@ const Checkbox: FC<CheckboxProps> = ({
     const uuid = useUuid();
 
     const lineHeight = useMemo(
-        () => (children ? getHeightOfSingleTextLine(children) : undefined),
-        [children],
+        () => (shouldShowCentered ? undefined : getHeightOfSingleTextLine()),
+        [shouldShowCentered],
     );
 
     return (

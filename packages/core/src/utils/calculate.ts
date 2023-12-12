@@ -1,5 +1,3 @@
-import type { HTMLAttributes, ReactElement } from 'react';
-
 export const calculateContentWidth = (texts: string[]) => {
     const length: number[] = [];
 
@@ -42,41 +40,16 @@ export const calculateContentHeight = (elements: string[]) => {
     return length.reduce((partialSum, a) => partialSum + a, 0);
 };
 
-export const getHeightOfSingleTextLine = (element: ReactElement) => {
-    const isTextNode = typeof element === 'string';
-    const isChildrenTextNode = !isTextNode
-        ? // ToDo find a fix for this error
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          !Array.isArray(element.props.children) && typeof element.props.children === 'string'
-        : false;
+export const getHeightOfSingleTextLine = () => {
+    const span = document.createElement('span');
 
-    if (isTextNode || isChildrenTextNode) {
-        const span = document.createElement('span');
+    span.innerText = 'A';
 
-        if (isChildrenTextNode) {
-            const elementStyles = (element.props as HTMLAttributes<HTMLSpanElement>).style;
+    document.body.appendChild(span);
 
-            if (elementStyles) {
-                Object.keys(elementStyles).forEach((styleKey) => {
-                    // ToDo find a fix for these errors
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    span.style[styleKey] = elementStyles[styleKey];
-                });
-            }
-        }
+    const height = span.offsetHeight;
 
-        span.innerText = 'A';
+    document.body.removeChild(span);
 
-        document.body.appendChild(span);
-
-        const height = span.offsetHeight;
-
-        document.body.removeChild(span);
-
-        return height;
-    }
-
-    return undefined;
+    return height;
 };
