@@ -47,7 +47,7 @@ export const getHeightOfSingleTextLine = (element: ReactElement) => {
     const isChildrenTextNode = !isTextNode
         ? // ToDo find a fix for this error
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          !Array.isArray(element.props.children) && typeof element.props.children[0] === 'string'
+          !Array.isArray(element.props.children) && typeof element.props.children === 'string'
         : false;
 
     if (isTextNode || isChildrenTextNode) {
