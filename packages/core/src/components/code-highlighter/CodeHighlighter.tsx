@@ -35,6 +35,10 @@ export type CodeHighlighterProps = {
      */
     language: CodeHighlighterLanguage;
     /**
+     * Whether the code should be formatted with prettier.
+     */
+    shouldFormatCode?: boolean;
+    /**
      * Whether the line numbers should be displayed.
      */
     shouldShowLineNumbers?: boolean;
@@ -50,6 +54,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     copyButtonText,
     language,
     highlightedLines,
+    shouldFormatCode = false,
     shouldShowLineNumbers = false,
 }) => {
     // function to style highlighted code
@@ -77,12 +82,12 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     const formattedCode = useMemo(() => {
         const config = getParserForLanguage(language);
 
-        if (config) {
+        if (shouldFormatCode && config) {
             return format(code, config) as unknown as string;
         }
 
         return code;
-    }, [code, language]);
+    }, [code, language, shouldFormatCode]);
 
     return useMemo(
         () => (
