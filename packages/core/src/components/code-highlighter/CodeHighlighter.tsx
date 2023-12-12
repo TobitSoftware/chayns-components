@@ -1,5 +1,3 @@
-import type { Options } from 'prettier';
-import parserBabel from 'prettier/parser-babel';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useMemo } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -9,17 +7,13 @@ import {
     CodeHighlighterTheme,
     HighlightedLines,
 } from '../../types/codeHighlighter';
+import { getParserForLanguage } from '../../utils/codeHighlighter';
 import {
     StyledCodeHighlighter,
     StyledCodeHighlighterFileName,
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
-
-const prettierOptions: Options = {
-    parser: 'babel',
-    plugins: [parserBabel],
-};
 
 export type CodeHighlighterProps = {
     /**
@@ -31,10 +25,6 @@ export type CodeHighlighterProps = {
      * If not set, just the button is displayed without text.
      */
     copyButtonText?: string;
-    /**
-     * A config to format the code with "prettier".
-     */
-    formatConfig?: Options;
     /**
      * The lines of code that should be highlighted.
      * Following lines can be highlighted: added, removed and just marked.
@@ -58,7 +48,6 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     theme = CodeHighlighterTheme.Dark,
     code,
     copyButtonText,
-    formatConfig = prettierOptions,
     language,
     highlightedLines,
     shouldShowLineNumbers = false,
@@ -86,22 +75,14 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     );
 
     const formattedCode = useMemo(() => {
-        const acceptedLanguages: CodeHighlighterLanguage[] = [
-            'tsx',
-            'jsx',
-            'javascript',
-            'typescript',
-        ];
-        if (
-            acceptedLanguages.includes(language) &&
-            formatConfig.plugins &&
-            (formatConfig.plugins[0] as { parsers: { babel: any } })?.parsers.babel
-        ) {
-            return format(code, formatConfig) as unknown as string;
+        const config = getParserForLanguage(language);
+
+        if (config) {
+            return format(code, config) as unknown as string;
         }
 
         return code;
-    }, [code, formatConfig, language]);
+    }, [code, language]);
 
     return useMemo(
         () => (
