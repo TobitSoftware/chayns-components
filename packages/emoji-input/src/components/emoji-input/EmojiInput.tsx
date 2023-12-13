@@ -17,6 +17,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type FormEvent,
 } from 'react';
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
@@ -181,6 +182,27 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             }
         }, []);
 
+        const handleBeforeInput = useCallback((event: FormEvent<HTMLDivElement>) => {
+            if (!editorRef.current) {
+                return;
+            }
+
+            const { data, type } = event.nativeEvent as InputEvent;
+
+            if (type === 'textInput' && data && data.length > 1 && data.includes('\n')) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const text = convertEmojisToUnicode(data);
+
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+                const newEvent = new Event('input', { bubbles: true });
+
+                editorRef.current.dispatchEvent(newEvent);
+            }
+        }, []);
+
         /**
          * This function handles the 'input' events of the 'contentEditable' element and also passes the
          * respective event up accordingly if the 'onInput' property is a function.
@@ -278,8 +300,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 let text = event.clipboardData.getData('text/plain');
 
                 text = convertEmojisToUnicode(text);
-
-                console.debug('handlePaste', text);
 
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 
@@ -427,6 +447,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable={!isDisabled}
                         id={inputId}
+                        onBeforeInput={handleBeforeInput}
                         onBlur={handleBlur}
                         onFocus={handleFocus}
                         onInput={handleInput}

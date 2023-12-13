@@ -35,13 +35,6 @@ export const insertTextAtCursorPosition = ({
 
         const textNodes = parts.map((part) => document.createTextNode(part));
 
-        console.debug('insertTextAtCursorPosition', {
-            firstPart,
-            textNodes,
-            range,
-            selection,
-        });
-
         range.deleteContents();
 
         if (firstPart) {
