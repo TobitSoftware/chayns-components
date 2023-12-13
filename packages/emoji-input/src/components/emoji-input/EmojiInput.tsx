@@ -279,6 +279,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
                 text = convertEmojisToUnicode(text);
 
+                console.debug('handlePaste', text);
+
                 insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 
                 const newEvent = new Event('input', { bubbles: true });

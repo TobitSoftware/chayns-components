@@ -29,6 +29,8 @@ export const convertTextToHTML = (text: string) => {
 export const convertHTMLToText = (text: string) => {
     let result = text;
 
+    console.debug('convertHTMLToText 1', text);
+
     result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/​/g, '');
@@ -48,6 +50,8 @@ export const convertHTMLToText = (text: string) => {
     result = element.innerText;
 
     document.body.removeChild(element);
+
+    console.debug('convertHTMLToText 2', result);
 
     return result;
 };
