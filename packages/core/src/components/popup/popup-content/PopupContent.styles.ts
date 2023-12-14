@@ -15,8 +15,8 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
-    position: absolute;
     z-index: 0;
+    position: fixed;
 
     &::after {
         background-color: inherit;
