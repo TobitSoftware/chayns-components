@@ -28,7 +28,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
     items,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     /**
      * This function set the selectedItemKey
@@ -47,7 +47,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
             let newIds: string[];
 
             if (id === 'all') {
-                newIds = selectedIds.includes('all') ? [] : ['all'];
+                newIds = selectedIds.includes('all') ? ['all'] : [];
             } else {
                 newIds = selectedIds.includes(id)
                     ? selectedIds.filter((filteredId) => filteredId !== id)
@@ -61,7 +61,7 @@ const FilterButtons: FC<FilterButtonsProps> = ({
             setSelectedIds(newIds);
 
             if (typeof onSelect === 'function') {
-                onSelect(newIds);
+                onSelect(newIds.filter((selectedId) => selectedId !== 'all'));
             }
         },
         [onSelect, selectedIds],
