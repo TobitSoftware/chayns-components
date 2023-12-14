@@ -1,8 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { Button } from '../lib';
 import Truncation from '../src/components/truncation/Truncation';
 
 const BASE_HTML_TEXT = (
-    <>
+    <div>
         <p id="isPasted">
             Der legendärste Abend: Homecoming at next! Studenten und Ausreißer, Urlauber und
             Daheimgebliebene, Partymäuse und Partymuffel – sie alle zieht es am Tag vor Heiligabend
@@ -14,7 +15,8 @@ const BASE_HTML_TEXT = (
             bei uns im next fort!&nbsp;
         </p>
         <p>Alle Infos und Tickets zum Event in Kürze.&nbsp;</p>
-    </>
+        <Button onClick={() => alert('hallo')}>test</Button>
+    </div>
 );
 
 export default {
@@ -27,13 +29,7 @@ export default {
 } as Meta<typeof Truncation>;
 
 const Template: StoryFn<typeof Truncation> = ({ children, ...args }) => (
-    <Truncation {...args}>
-        <div
-            dangerouslySetInnerHTML={{
-                __html: children,
-            }}
-        />
-    </Truncation>
+    <Truncation {...args}>{children}</Truncation>
 );
 
 export const General = Template.bind({});
@@ -41,5 +37,5 @@ export const General = Template.bind({});
 export const SmallText = Template.bind({});
 
 SmallText.args = {
-    children: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>',
+    children: <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>,
 };
