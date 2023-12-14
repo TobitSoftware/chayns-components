@@ -68,7 +68,9 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
     -webkit-user-modify: read-write;
     -webkit-user-select: text;
 
-    lc_mention {
+    lc_mention,
+    nerIgnore,
+    nerReplace {
         font-weight: bold;
 
         span {

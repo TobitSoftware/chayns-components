@@ -1,4 +1,11 @@
-import { BB_LC_MENTION_REGEX, HTML_LC_MENTION_REGEX } from '../constants/regex';
+import {
+    BB_LC_MENTION_REGEX,
+    BB_NER_IGNORE_REGEX,
+    BB_NER_REPLACE_REGEX,
+    HTML_LC_MENTION_REGEX,
+    HTML_NER_IGNORE_REGEX,
+    HTML_NER_REPLACE_REGEX,
+} from '../constants/regex';
 import { escapeHTML, unescapeHTML } from './emoji';
 
 export const convertTextToHTML = (text: string) => {
@@ -18,10 +25,16 @@ export const convertTextToHTML = (text: string) => {
 
     result = unescapeHTML(result);
 
-    result = result.replace(
-        BB_LC_MENTION_REGEX,
-        '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
-    );
+    result = result
+        .replace(
+            BB_LC_MENTION_REGEX,
+            '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
+        )
+        .replace(BB_NER_IGNORE_REGEX, '<nerIgnore contenteditable="false">$1</nerIgnore>')
+        .replace(
+            BB_NER_REPLACE_REGEX,
+            '<nerReplace contenteditable="false" type="$1$4" value="$2$3">$5</nerReplace>',
+        );
 
     return result;
 };
@@ -29,7 +42,11 @@ export const convertTextToHTML = (text: string) => {
 export const convertHTMLToText = (text: string) => {
     let result = text;
 
-    result = result.replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]');
+    result = result
+        .replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]')
+        .replace(HTML_NER_IGNORE_REGEX, '[nerIgnore]$1[/nerIgnore]')
+        .replace(HTML_NER_REPLACE_REGEX, '[nerReplace type="$1$4" value="$2$3"]$5[/nerReplace]');
+
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/​/g, '');
 
