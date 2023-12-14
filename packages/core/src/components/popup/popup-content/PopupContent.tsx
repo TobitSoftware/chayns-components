@@ -13,8 +13,6 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
     ({ alignment, coordinates, content }, ref) => {
         const { colorMode } = getSite();
 
-        console.log(colorMode);
-
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
         const isTopRightAlignment = alignment === PopupAlignment.TopRight;
