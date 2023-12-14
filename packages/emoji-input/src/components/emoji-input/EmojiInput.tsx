@@ -189,7 +189,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
             const { data, type } = event.nativeEvent as InputEvent;
 
-            if (type === 'textInput' && data && data.length > 1 && data.includes('\n')) {
+            if (type === 'textInput' && data && data.includes('\n')) {
                 event.preventDefault();
                 event.stopPropagation();
 
