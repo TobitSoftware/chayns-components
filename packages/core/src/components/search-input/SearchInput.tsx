@@ -25,6 +25,10 @@ export type SearchInputProps = {
      */
     iconColor?: CSSProperties['color'];
     /**
+     * Force the active state of the input and override the internal state
+     */
+    isActive?: boolean;
+    /**
      * Function that is executed when the active state of the input changes
      */
     onActiveChange?: (isActive: boolean) => void;
@@ -32,6 +36,10 @@ export type SearchInputProps = {
      * Function that is executed when the text of the input changes
      */
     onChange: ChangeEventHandler<HTMLInputElement>;
+    /**
+     * Function that is executed when a key is pressed
+     */
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     /**
      * Placeholder for the input field
      */
@@ -44,30 +52,40 @@ export type SearchInputProps = {
 
 const SearchInput: FC<SearchInputProps> = ({
     iconColor,
+    isActive,
     onActiveChange,
     onChange,
+    onKeyDown,
     placeholder,
     value,
 }) => {
-    const [isActive, setIsActive] = useState(typeof value === 'string' && value.trim() !== '');
+    const [isSearchInputActive, setIsSearchInputActive] = useState(
+        isActive ?? (typeof value === 'string' && value.trim() !== ''),
+    );
 
     const inputRef = useRef<InputRef>(null);
 
     const theme = useTheme() as Theme;
 
-    const handleBackIconClick = useCallback(() => setIsActive(false), []);
+    const handleBackIconClick = useCallback(() => setIsSearchInputActive(false), []);
 
-    const handleSearchIconClick = useCallback(() => setIsActive(true), []);
+    const handleSearchIconClick = useCallback(() => setIsSearchInputActive(true), []);
 
     useEffect(() => {
         if (typeof onActiveChange === 'function') {
-            onActiveChange(isActive);
+            onActiveChange(isSearchInputActive);
         }
 
-        if (isActive) {
+        if (isSearchInputActive) {
             inputRef.current?.focus();
         }
-    }, [isActive, onActiveChange]);
+    }, [isSearchInputActive, onActiveChange]);
+
+    useEffect(() => {
+        if (typeof isActive === 'boolean') {
+            setIsSearchInputActive(isActive);
+        }
+    }, [isActive]);
 
     return (
         <StyledSearchInput className="beta-chayns-search-input">
@@ -77,20 +95,22 @@ const SearchInput: FC<SearchInputProps> = ({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, position: 'absolute' }}
                         initial={{ opacity: 0 }}
-                        key={isActive ? 'backIcon' : 'searchIcon'}
+                        key={isSearchInputActive ? 'backIcon' : 'searchIcon'}
                         transition={{ duration: 0.3 }}
                     >
                         <Icon
                             color={iconColor}
-                            icons={isActive ? ['fa fa-arrow-left'] : ['fa fa-search']}
-                            onClick={isActive ? handleBackIconClick : handleSearchIconClick}
+                            icons={isSearchInputActive ? ['fa fa-arrow-left'] : ['fa fa-search']}
+                            onClick={
+                                isSearchInputActive ? handleBackIconClick : handleSearchIconClick
+                            }
                             size={18}
                         />
                     </StyledMotionSearchInputIconWrapperContent>
                 </AnimatePresence>
             </StyledMotionSearchInputIconWrapper>
             <AnimatePresence initial={false}>
-                {isActive && (
+                {isSearchInputActive && (
                     <StyledMotionSearchInputContentWrapper
                         animate={{ opacity: 1, width: '100%' }}
                         exit={{ opacity: 0, width: 0 }}
@@ -101,6 +121,7 @@ const SearchInput: FC<SearchInputProps> = ({
                         <Input
                             iconElement={<Icon color={theme.text} icons={['far fa-search']} />}
                             onChange={onChange}
+                            onKeyDown={onKeyDown}
                             placeholder={placeholder}
                             ref={inputRef}
                             shouldShowClearIcon

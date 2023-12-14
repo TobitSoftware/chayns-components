@@ -39,3 +39,17 @@ export const calculateContentHeight = (elements: string[]) => {
 
     return length.reduce((partialSum, a) => partialSum + a, 0);
 };
+
+export const getHeightOfSingleTextLine = () => {
+    const span = document.createElement('span');
+
+    span.innerText = 'A';
+
+    document.body.appendChild(span);
+
+    const height = span.offsetHeight;
+
+    document.body.removeChild(span);
+
+    return height;
+};

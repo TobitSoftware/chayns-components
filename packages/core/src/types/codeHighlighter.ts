@@ -113,6 +113,7 @@ export type CodeHighlighterLanguage =
     | 'hoon'
     | 'hpkp'
     | 'hsts'
+    | 'html'
     | 'http'
     | 'ichigojam'
     | 'icon'
