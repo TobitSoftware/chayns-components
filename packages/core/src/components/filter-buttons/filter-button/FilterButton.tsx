@@ -7,9 +7,9 @@ import {
     StyledFilterButtonItemLabel,
     StyledFilterButtonItemLabelText,
     StyledMotionFilterButtonItemBackground,
-} from './FilterButtonItem.styles';
+} from './FilterButton.styles';
 
-export type FilterButtonItemProps = {
+export type FilterButtonProps = {
     color?: CSSProperties['color'];
     icons?: string[];
     isSelected: boolean;
@@ -20,7 +20,7 @@ export type FilterButtonItemProps = {
     onSelect: (key: string) => void;
 };
 
-const FilterButtonItem: FC<FilterButtonItemProps> = ({
+const FilterButton: FC<FilterButtonProps> = ({
     icons,
     size,
     shape,
@@ -51,10 +51,10 @@ const FilterButtonItem: FC<FilterButtonItemProps> = ({
                 />
             </StyledFilterButtonItem>
         ),
-        [color, handleClick, icons, isSelected, shape, size, text]
+        [color, handleClick, icons, isSelected, shape, size, text],
     );
 };
 
-FilterButtonItem.displayName = 'FilterButtonItem';
+FilterButton.displayName = 'FilterButton';
 
-export default FilterButtonItem;
+export default FilterButton;

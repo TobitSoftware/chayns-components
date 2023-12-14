@@ -66,7 +66,7 @@ type StyledFilterButtonItemBackgroundProps = WithTheme<{
 }>;
 
 export const StyledMotionFilterButtonItemBackground = styled(
-    motion.div
+    motion.div,
 )<StyledFilterButtonItemBackgroundProps>`
     position: absolute;
     top: 0;

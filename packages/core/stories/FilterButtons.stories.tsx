@@ -1,10 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
-import FilterButton from '../src/components/filter-button/FilterButton';
-import { FilterButtonSize } from '../src/components/filter-button/types';
+import FilterButtons from '../src/components/filter-buttons/FilterButtons';
+import { FilterButtonSize } from '../src/components/filter-buttons/types';
 
 export default {
-    title: 'Core/FilterButton',
-    component: FilterButton,
+    title: 'Core/FilterButtons',
+    component: FilterButtons,
     args: {
         items: [
             {
@@ -33,9 +33,9 @@ export default {
             },
         ],
     },
-} as Meta<typeof FilterButton>;
+} as Meta<typeof FilterButtons>;
 
-const Template: StoryFn<typeof FilterButton> = (args) => <FilterButton {...args} />;
+const Template: StoryFn<typeof FilterButtons> = (args) => <FilterButtons {...args} />;
 
 export const General = Template.bind({});
 
