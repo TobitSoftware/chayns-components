@@ -261,12 +261,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     onKeyDown(event);
                 }
 
-                if (
-                    event.key === 'Enter' &&
-                    !event.shiftKey &&
-                    !event.isPropagationStopped() &&
-                    editorRef.current
-                ) {
+                if (event.key === 'Enter' && !event.isPropagationStopped() && editorRef.current) {
                     event.preventDefault();
 
                     document.execCommand('insertLineBreak', false);
