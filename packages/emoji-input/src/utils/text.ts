@@ -33,7 +33,11 @@ export const convertTextToHTML = (text: string) => {
         .replace(BB_NER_IGNORE_REGEX, '<nerIgnore contenteditable="false">$1</nerIgnore>')
         .replace(
             BB_NER_REPLACE_REGEX,
-            '<nerReplace contenteditable="false" type="$1$4" value="$2$3">$5</nerReplace>',
+            (_, prefix: string | undefined, type: string, value: string, entity: string) => {
+                const prefixAttr = prefix ? `prefix="${prefix}" ` : '';
+
+                return `<nerReplace contenteditable="false" ${prefixAttr}type="${type}" value="${value}">${entity}</nerReplace>`;
+            },
         );
 
     return result;
@@ -45,7 +49,14 @@ export const convertHTMLToText = (text: string) => {
     result = result
         .replace(HTML_LC_MENTION_REGEX, '[lc_mention id="$1"]$2[/lc_mention]')
         .replace(HTML_NER_IGNORE_REGEX, '[nerIgnore]$1[/nerIgnore]')
-        .replace(HTML_NER_REPLACE_REGEX, '[nerReplace type="$1$4" value="$2$3"]$5[/nerReplace]');
+        .replace(
+            HTML_NER_REPLACE_REGEX,
+            (_, prefix: string | undefined, type: string, value: string, entity: string) => {
+                const prefixAttr = prefix ? `prefix="${prefix}" ` : '';
+
+                return `[nerReplace ${prefixAttr}type="${type}" value="${value}"]${entity}[/nerReplace]`;
+            },
+        );
 
     // eslint-disable-next-line no-irregular-whitespace
     result = result.replace(/​/g, '');
