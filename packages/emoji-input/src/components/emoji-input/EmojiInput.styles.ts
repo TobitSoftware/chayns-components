@@ -120,13 +120,19 @@ export const StyledEmojiInputRightWrapper = styled.div`
     overflow: hidden;
 `;
 
+export const StyledEmojiInputPrefixElement = styled.div`
+    visibility: hidden;
+    position: absolute;
+`;
+
 type StyledEmojiInputLabelProps = WithTheme<{
     maxWidth: number;
+    offsetWidth?: number;
 }>;
 
 export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
     color: rgba(${({ theme }: StyledEmojiInputLabelProps) => theme['text-rgb']}, 0.45);
-    left: 10px;
+    left: ${({ offsetWidth }) => (offsetWidth ? `${offsetWidth + 10}px` : '10px')};
     top: 12px;
     align-items: baseline;
     display: flex;
@@ -137,6 +143,6 @@ export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
     position: absolute;
     user-select: none;
     white-space: nowrap;
-    max-width: ${({ maxWidth }) => `${maxWidth}px`};
+    max-width: ${({ maxWidth, offsetWidth }) => `${maxWidth - (offsetWidth ?? 0)}px`};
     overflow: hidden;
 `;

@@ -34,6 +34,7 @@ import {
     StyledEmojiInput,
     StyledEmojiInputContent,
     StyledEmojiInputLabel,
+    StyledEmojiInputPrefixElement,
     StyledEmojiInputRightWrapper,
     StyledMotionEmojiInputEditor,
     StyledMotionEmojiInputProgress,
@@ -100,7 +101,7 @@ export type EmojiInputProps = {
     /**
      * An Element that is pre wirten inside the input but the placeholder is still displaying.
      */
-    prefixElement?: ReactNode;
+    prefixElement?: string;
     /**
      * Element that is rendered inside the EmojiInput on the right side.
      */
@@ -154,8 +155,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
         const [labelWidth, setLabelWidth] = useState(0);
+        const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
         const editorRef = useRef<HTMLDivElement>(null);
+        const prefixElementRef = useRef<HTMLDivElement>(null);
 
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
@@ -390,6 +393,13 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         const shouldShowPlaceholder = useMemo(() => {
+            if (
+                prefixElement &&
+                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
+            ) {
+                return true;
+            }
+
             if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
                 return false;
             }
@@ -403,7 +413,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             }
 
             return shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue;
-        }, [hasFocus, plainTextValue, shouldHidePlaceholderOnFocus]);
+        }, [hasFocus, plainTextValue, prefixElement, shouldHidePlaceholderOnFocus]);
 
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
             if (typeof onFocus === 'function') {
@@ -420,6 +430,24 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
             setHasFocus(false);
         };
+
+        useEffect(() => {
+            if (editorRef.current && prefixElement) {
+                handleUpdateHTML(prefixElement);
+            }
+        }, [handleUpdateHTML, prefixElement]);
+
+        useEffect(() => {
+            if (
+                prefixElementRef.current &&
+                prefixElement &&
+                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
+            ) {
+                setPrefixElementWidth(prefixElementRef.current.offsetWidth);
+            } else {
+                setPrefixElementWidth(undefined);
+            }
+        }, [plainTextValue, prefixElement]);
 
         useEffect(() => {
             const handleResize = () => {
@@ -461,6 +489,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     )}
                 </AnimatePresence>
                 <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
+                    {prefixElement && (
+                        <StyledEmojiInputPrefixElement
+                            ref={prefixElementRef}
+                            dangerouslySetInnerHTML={{ __html: convertTextToHTML(prefixElement) }}
+                        />
+                    )}
                     <StyledMotionEmojiInputEditor
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable={!isDisabled}
@@ -474,8 +508,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         ref={editorRef}
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
+
                     {shouldShowPlaceholder && (
-                        <StyledEmojiInputLabel maxWidth={labelWidth}>
+                        <StyledEmojiInputLabel
+                            maxWidth={labelWidth}
+                            offsetWidth={prefixElementWidth}
+                        >
                             {placeholder}
                         </StyledEmojiInputLabel>
                     )}
