@@ -98,6 +98,10 @@ export type EmojiInputProps = {
      */
     popupAlignment?: PopupAlignment;
     /**
+     * An Element that is pre wirten inside the input but the placeholder is still displaying.
+     */
+    prefixElement?: ReactNode;
+    /**
      * Element that is rendered inside the EmojiInput on the right side.
      */
     rightElement?: ReactNode;
@@ -137,6 +141,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             personId,
             placeholder,
             popupAlignment,
+            prefixElement,
             rightElement,
             shouldHidePlaceholderOnFocus = true,
             shouldPreventEmojiPicker,
@@ -148,6 +153,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [plainTextValue, setPlainTextValue] = useState(value);
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
+        const [labelWidth, setLabelWidth] = useState(0);
 
         const editorRef = useRef<HTMLDivElement>(null);
 
@@ -415,6 +421,24 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             setHasFocus(false);
         };
 
+        useEffect(() => {
+            const handleResize = () => {
+                if (editorRef.current) {
+                    setLabelWidth(editorRef.current.offsetWidth);
+                }
+            };
+
+            const resizeObserver = new ResizeObserver(handleResize);
+
+            if (editorRef.current) {
+                resizeObserver.observe(editorRef.current);
+            }
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }, []);
+
         return (
             <StyledEmojiInput isDisabled={isDisabled}>
                 <AnimatePresence initial>
@@ -436,7 +460,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                 </AnimatePresence>
-
                 <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                     <StyledMotionEmojiInputEditor
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
@@ -452,7 +475,9 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
                     {shouldShowPlaceholder && (
-                        <StyledEmojiInputLabel>{placeholder}</StyledEmojiInputLabel>
+                        <StyledEmojiInputLabel maxWidth={labelWidth}>
+                            {placeholder}
+                        </StyledEmojiInputLabel>
                     )}
                     {!isMobile && !shouldPreventEmojiPicker && (
                         <EmojiPickerPopup
