@@ -25,6 +25,10 @@ export type CheckboxProps = {
      */
     isDisabled?: boolean;
     /**
+     * Classname for the label
+     */
+    labelClassName?: string;
+    /**
      * Function to be executed if the checked value changes
      */
     onChange?: ChangeEventHandler<HTMLInputElement>;
@@ -42,6 +46,7 @@ const Checkbox: FC<CheckboxProps> = ({
     children,
     isChecked,
     isDisabled,
+    labelClassName,
     onChange,
     shouldShowAsSwitch,
     shouldShowCentered = false,
@@ -79,6 +84,7 @@ const Checkbox: FC<CheckboxProps> = ({
                 type="checkbox"
             />
             <StyledCheckboxLabel
+                className={labelClassName}
                 htmlFor={uuid}
                 isChecked={isChecked ?? isActive}
                 isDisabled={isDisabled}
