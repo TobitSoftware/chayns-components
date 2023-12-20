@@ -52,6 +52,9 @@ const Checkbox: FC<CheckboxProps> = ({
         (event: ChangeEvent<HTMLInputElement>) => {
             setIsActive(event.target.checked);
 
+            event.preventDefault();
+            event.stopPropagation();
+
             if (typeof onChange === 'function') {
                 onChange(event);
             }
