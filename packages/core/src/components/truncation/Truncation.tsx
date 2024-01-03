@@ -9,6 +9,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { truncateElement } from '../../utils/truncation';
 import {
     StyledMotionTruncationContent,
     StyledTruncation,
@@ -49,8 +50,12 @@ const Truncation: FC<TruncationProps> = ({
     const [isOpen, setIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
     const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
+    const [originalHeight, setOriginalHeight] = useState(0);
+    const [shouldShowCollapsedElement, setShouldShowCollapsedElement] = useState(true);
 
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
+    const childrenRef = useRef<HTMLDivElement>(null);
+    const originalChildrenRef = useRef<HTMLDivElement>(null);
 
     // Changes the state of the truncation
     const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
@@ -66,56 +71,54 @@ const Truncation: FC<TruncationProps> = ({
         [onChange],
     );
 
+    const handleAnimationEnd = useCallback(() => {
+        if (!isOpen) {
+            setShouldShowCollapsedElement(true);
+        } else {
+            setShouldShowCollapsedElement(false);
+        }
+    }, [isOpen]);
+
     useEffect(() => {
         if (!pseudoChildrenRef.current) {
             return;
         }
 
-        let summedHeight = 0;
+        setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
 
-        const elementChildren = pseudoChildrenRef.current.children;
+        truncateElement(pseudoChildrenRef.current, collapsedHeight);
 
-        if (!elementChildren[0]) {
-            return;
-        }
-
-        const element = Array.from(elementChildren[0].children);
-
-        const heights = element.map((child, index) => {
-            const computedStyle = window.getComputedStyle(child);
-            const marginTop = parseFloat(computedStyle.marginTop);
-            const marginBottom = parseFloat(computedStyle.marginBottom);
-
-            // Höhe des Elements inklusive Margin berechnen
-            const totalHeight = child.clientHeight + marginTop + marginBottom;
-
-            return {
-                index,
-                height: totalHeight,
-            };
-        });
-
-        let isSummedHeightCalculated = false;
-
-        heights.forEach(({ height }) => {
-            if (summedHeight + height <= collapsedHeight && !isSummedHeightCalculated) {
-                summedHeight += height;
-
-                return;
-            }
-
-            isSummedHeightCalculated = true;
-        });
-
-        setNewCollapsedHeight(summedHeight > 0 ? summedHeight : collapsedHeight);
+        setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
     }, [collapsedHeight, pseudoChildrenRef]);
 
     // Checks if the clamp should be shown
     useEffect(() => {
         if (pseudoChildrenRef.current) {
-            setShowClamp(pseudoChildrenRef.current.offsetHeight > newCollapsedHeight);
+            setShowClamp(originalHeight > newCollapsedHeight);
         }
-    }, [collapsedHeight, newCollapsedHeight]);
+    }, [collapsedHeight, newCollapsedHeight, originalHeight]);
+
+    useEffect(() => {
+        if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
+            if (shouldShowCollapsedElement && !isOpen) {
+                while (childrenRef.current.firstChild) {
+                    childrenRef.current.removeChild(childrenRef.current.firstChild);
+                }
+
+                childrenRef.current.appendChild(pseudoChildrenRef.current);
+
+                (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
+            } else {
+                while (childrenRef.current.firstChild) {
+                    childrenRef.current.removeChild(childrenRef.current.firstChild);
+                }
+
+                childrenRef.current.appendChild(originalChildrenRef.current);
+
+                (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
+            }
+        }
+    }, [children, isOpen, shouldShowCollapsedElement]);
 
     return useMemo(
         () => (
@@ -123,13 +126,16 @@ const Truncation: FC<TruncationProps> = ({
                 <StyledTruncationPseudoContent ref={pseudoChildrenRef}>
                     {children}
                 </StyledTruncationPseudoContent>
+                <StyledTruncationPseudoContent ref={originalChildrenRef}>
+                    {children}
+                </StyledTruncationPseudoContent>
                 <StyledMotionTruncationContent
-                    animate={{ height: isOpen ? 'auto' : newCollapsedHeight }}
+                    animate={{ height: isOpen ? originalHeight : newCollapsedHeight }}
                     initial={false}
                     transition={{ type: 'tween' }}
-                >
-                    {children}
-                </StyledMotionTruncationContent>
+                    onAnimationComplete={handleAnimationEnd}
+                    ref={childrenRef}
+                />
                 {showClamp && (
                     <StyledTruncationClamp onClick={handleClampClick}>
                         {isOpen ? lessLabel : moreLabel}
@@ -137,7 +143,17 @@ const Truncation: FC<TruncationProps> = ({
                 )}
             </StyledTruncation>
         ),
-        [children, handleClampClick, isOpen, lessLabel, moreLabel, newCollapsedHeight, showClamp],
+        [
+            children,
+            handleAnimationEnd,
+            handleClampClick,
+            isOpen,
+            lessLabel,
+            moreLabel,
+            newCollapsedHeight,
+            originalHeight,
+            showClamp,
+        ],
     );
 };
 
