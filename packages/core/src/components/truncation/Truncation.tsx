@@ -72,11 +72,7 @@ const Truncation: FC<TruncationProps> = ({
     );
 
     const handleAnimationEnd = useCallback(() => {
-        if (!isOpen) {
-            setShouldShowCollapsedElement(true);
-        } else {
-            setShouldShowCollapsedElement(false);
-        }
+        setShouldShowCollapsedElement(!isOpen);
     }, [isOpen]);
 
     useEffect(() => {
@@ -100,23 +96,17 @@ const Truncation: FC<TruncationProps> = ({
 
     useEffect(() => {
         if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
-            if (shouldShowCollapsedElement && !isOpen) {
-                while (childrenRef.current.firstChild) {
-                    childrenRef.current.removeChild(childrenRef.current.firstChild);
-                }
-
-                childrenRef.current.appendChild(pseudoChildrenRef.current);
-
-                (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
-            } else {
-                while (childrenRef.current.firstChild) {
-                    childrenRef.current.removeChild(childrenRef.current.firstChild);
-                }
-
-                childrenRef.current.appendChild(originalChildrenRef.current);
-
-                (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
+            while (childrenRef.current.firstChild) {
+                childrenRef.current.removeChild(childrenRef.current.firstChild);
             }
+
+            childrenRef.current.appendChild(
+                shouldShowCollapsedElement && !isOpen
+                    ? pseudoChildrenRef.current
+                    : originalChildrenRef.current,
+            );
+
+            (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
         }
     }, [children, isOpen, shouldShowCollapsedElement]);
 
