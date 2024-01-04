@@ -164,7 +164,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         const editorRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
-
+        const hasPrefixRendered = useRef(false);
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
@@ -341,19 +341,27 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
-            const convertedText = convertHTMLToText(editorRef.current?.innerHTML ?? '');
+            if (!hasPrefixRendered.current) {
+                return;
+            }
+
+            const convertedText = convertHTMLToText(editorRef.current?.innerHTML ?? '').replace(
+                '&nbsp;',
+                ' ',
+            );
             const convertedPrefix = prefixElement && prefixElement.replace('&nbsp;', ' ');
 
             if (
                 (convertedPrefix &&
                     convertedText.includes(convertedPrefix) &&
                     convertedText.length > convertedPrefix.length) ||
-                prefixElement === convertedText
+                convertedPrefix === convertedText
             ) {
                 return;
             }
 
             onPrefixElementRemove();
+            hasPrefixRendered.current = false;
         }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
 
         useEffect(() => {
@@ -466,6 +474,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         useEffect(() => {
             if (editorRef.current && prefixElement) {
                 handleUpdateHTML(prefixElement);
+                hasPrefixRendered.current = true;
             }
         }, [handleUpdateHTML, prefixElement]);
 
