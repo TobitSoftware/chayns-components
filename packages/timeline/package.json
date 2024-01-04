@@ -53,6 +53,7 @@
         "@chayns-components/core": "^5.0.0-beta.332",
         "@chayns/colors": "^2.0.0",
         "clsx": "^2.0.0",
+        "date-fns": "^3.0.6",
         "framer-motion": "^10.16.5",
         "uuid": "^9.0.1"
     },

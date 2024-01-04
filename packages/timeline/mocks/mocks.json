@@ -1,10 +1,9 @@
 [
   {
     "id": 2,
-    "startTime": "2023-08-02T00:00:00.000Z",
+    "startTime": "2023-08-02T12:00:00.000Z",
     "startIcon": "fa-home",
     "name": "Campus 2",
-    "groupingMode": 1,
     "duration": 100,
     "color": "#323842",
     "events": [
@@ -13,7 +12,6 @@
         "startTime": "2023-08-02T08:00:00.000Z",
         "startIcon": "fa-coffee",
         "name": "Pause",
-        "groupingMode": 1,
         "duration": 100,
         "color": "#4e5766"
       },
@@ -24,7 +22,6 @@
         "startIcon": "fa-computer",
         "endIcon": "fa-computer",
         "name": "Schreibtisch",
-        "groupingMode": 1,
         "duration": 100,
         "color": "#4e5766"
       }
@@ -32,23 +29,21 @@
   },
   {
     "id": 1,
-    "endTime": "2023-08-01T23:00:00.000Z",
+    "endTime": "2023-08-01T21:00:00.000Z",
     "startTime": "2023-08-01T00:00:00.000Z",
     "startIcon": "fa-home",
     "endIcon": "fa-home",
     "name": "Campus 2",
-    "groupingMode": 1,
     "duration": 100,
     "color": "#323842",
     "events": [
       {
         "id": 11,
-        "endTime": "2023-08-01T23:00:00.000Z",
+        "endTime": "2023-08-01T21:00:00.000Z",
         "startTime": "2023-08-01T12:00:00.000Z",
         "startIcon": "fa-coffee",
         "endIcon": "fa-coffee",
         "name": "Pause",
-        "groupingMode": 1,
         "duration": 100,
         "color": "#4e5766"
       },
@@ -59,7 +54,6 @@
         "startIcon": "fa-computer",
         "endIcon": "fa-computer",
         "name": "Schreibtisch",
-        "groupingMode": 1,
         "duration": 100,
         "color": "#4e5766",
         "events": [
@@ -70,7 +64,6 @@
             "startIcon": "fa-file",
             "endIcon": "fa-file",
             "name": "Projekt A",
-            "groupingMode": 1,
             "duration": 100,
             "color": "#728096"
           },
@@ -81,7 +74,6 @@
             "startIcon": "fa-file",
             "endIcon": "fa-file",
             "name": "Projekt B",
-            "groupingMode": 1,
             "duration": 100,
             "color": "#728096"
           }

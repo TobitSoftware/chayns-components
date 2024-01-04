@@ -4,7 +4,6 @@ export interface TimelineEvent {
     endIcon?: string;
     endTime?: string;
     events?: TimelineEvent[];
-    groupingMode: number;
     id: number;
     name: string;
     startIcon: string;

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import type { TimelineEvent } from '../../types/timeline';
+import Event from './event/Event';
 
 type TimelineProps = {
     /*
@@ -10,10 +11,13 @@ type TimelineProps = {
 };
 
 const Timeline: FC<TimelineProps> = ({ events }) => {
-    console.log(events);
 
     return (
-        <div>Timeline</div>
+        <div>
+            {events.map((event) => (
+                <Event key={event.id} event={event}/>
+            ))}
+        </div>
     );
 };
 
