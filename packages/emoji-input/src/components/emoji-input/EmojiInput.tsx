@@ -393,26 +393,23 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         const shouldShowPlaceholder = useMemo(() => {
-            if (
+            const isJustPrefixElement =
                 prefixElement &&
-                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
-            ) {
-                return true;
-            }
+                prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '');
 
-            if (shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
-                return false;
+            switch (true) {
+                case (!plainTextValue || isJustPrefixElement) &&
+                    shouldHidePlaceholderOnFocus &&
+                    !hasFocus:
+                case (!plainTextValue || isJustPrefixElement) && !shouldHidePlaceholderOnFocus:
+                    return true;
+                case (!plainTextValue || isJustPrefixElement) &&
+                    shouldHidePlaceholderOnFocus &&
+                    hasFocus:
+                    return false;
+                default:
+                    return false;
             }
-
-            if (!shouldHidePlaceholderOnFocus && hasFocus && !plainTextValue) {
-                return true;
-            }
-
-            if (!shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue) {
-                return true;
-            }
-
-            return shouldHidePlaceholderOnFocus && !hasFocus && !plainTextValue;
         }, [hasFocus, plainTextValue, prefixElement, shouldHidePlaceholderOnFocus]);
 
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
