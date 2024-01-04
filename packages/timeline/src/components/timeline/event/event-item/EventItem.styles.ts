@@ -3,9 +3,17 @@ import { motion } from 'framer-motion';
 import type { FramerMotionBugFix } from '@chayns-components/core';
 
 export const StyledEventItem = styled.div`
+    position: relative;
+    
     display: flex;
     align-items: center;
-    margin-top: 5px;
+    margin: 5px 0;
+`
+
+export const StyledEventItemDay = styled.h3`
+    position: absolute;
+    top: 50%;
+    transform: translate(calc(-100% - 8px), -50%);
 `
 
 interface StyledEventItemContentProps {
@@ -17,8 +25,6 @@ export const StyledIconWrapper = styled(motion.div)<StyledEventItemContentProps>
     width: 35px;
     height: 35px;
     border-radius: 100px;
-    margin-bottom: 5px;
-    transition: opacity 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,5 +33,4 @@ export const StyledIconWrapper = styled(motion.div)<StyledEventItemContentProps>
 
 export const StyledEventItemContent = styled(motion.div)<FramerMotionBugFix>`
     margin-left: 8px;
-    transition: opacity 0.3s;
 `

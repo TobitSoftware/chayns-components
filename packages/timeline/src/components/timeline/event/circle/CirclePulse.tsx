@@ -1,18 +1,18 @@
 import React, { type FC } from 'react';
-import { StyledCirclePulse, StyledCirclePulseWrapper } from './CirclePulse.styles';
+import { StyledCirclePulse, StyledCirclePulseDay, StyledCirclePulseWrapper } from './CirclePulse.styles';
 
 interface CirclePulseProps {
     color: string;
+    day?: string;
 }
 
-const CirclePulse: FC<CirclePulseProps> = ({ color }) => (
-    <div style={{height: '20px'}}>
-        <StyledCirclePulseWrapper>
-            <div>
-                <StyledCirclePulse color={color}/>
-            </div>
-        </StyledCirclePulseWrapper>
-    </div>
+const CirclePulse: FC<CirclePulseProps> = ({ color, day }) => (
+    <StyledCirclePulseWrapper>
+        {day && (
+            <StyledCirclePulseDay>{day}</StyledCirclePulseDay>
+        )}
+        <StyledCirclePulse color={color}/>
+    </StyledCirclePulseWrapper>
 );
 
 CirclePulse.displayName = 'CirclePulse';

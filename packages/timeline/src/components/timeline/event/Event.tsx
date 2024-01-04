@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import type { TimelineEvent } from '../../../types/timeline';
 import CirclePulse from './circle/CirclePulse';
 import EventItem from './event-item/EventItem';
@@ -18,49 +18,56 @@ export const arrows = {
 
 interface EventProps {
     event: TimelineEvent;
+    isSubEvent?: boolean;
+    day?: string;
 }
 
-const Event: FC<EventProps> = ({ event }) => {
+const Event: FC<EventProps> = ({ event, isSubEvent, day }) => {
     const { events, name, color, duration, startTime, startIcon, endTime, endIcon, id } = event;
+
+    const hasSubEvents = events && events.length > 0;
 
     return (
         <StyledEvent>
-            <div>
-                {endTime && endIcon ? (
-                    <EventItem
-                        icon={endIcon}
-                        color={color}
-                        name={name}
-                        date={endTime}
-                        arrow={arrows.right}
-                    />
-                ) : (
-                    <CirclePulse
-                        color={color}
-                    />
-                )}
-                <EventContent>
-                    <Line color={color}/>
-                    {events && events.length > 0 ? (
-                        <StyledChildEventsWrapper>
-                            {events.map((childEvent) => (
-                                <Event event={childEvent} key={childEvent.id}/>
-                            ))}
-                        </StyledChildEventsWrapper>
-                    ) : (
-                        <StyledDuration>
-                            {convertMinutes(duration)}
-                        </StyledDuration>
-                    )}
-                </EventContent>
+            {endTime && endIcon ? (
                 <EventItem
-                    icon={startIcon}
+                    icon={endIcon}
                     color={color}
                     name={name}
-                    arrow={arrows.left}
-                    date={startTime}
+                    date={endTime}
+                    arrow={arrows.right}
+                    day={day}
                 />
-            </div>
+            ) : (
+                <CirclePulse
+                    day={day}
+                    color={color}
+                />
+            )}
+            <EventContent>
+                <Line color={color}/>
+                {hasSubEvents && (
+                    <StyledChildEventsWrapper>
+                        {events.map((childEvent) => (
+                            <Event event={childEvent} key={childEvent.id} isSubEvent/>
+                        ))}
+                    </StyledChildEventsWrapper>
+                )}
+                {
+                    (!isSubEvent || !hasSubEvents) && (
+                        <StyledDuration isSubEvent={isSubEvent}>
+                            {convertMinutes(duration)}
+                        </StyledDuration>
+                    )
+                }
+            </EventContent>
+            <EventItem
+                icon={startIcon}
+                color={color}
+                name={name}
+                arrow={arrows.left}
+                date={startTime}
+            />
         </StyledEvent>
     );
 };

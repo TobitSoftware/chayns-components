@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 
 
+export const StyledCirclePulseDay = styled.h3`
+    position: absolute;
+    top: 50%;
+    transform: translate(-100%, -50%);
+`
+
 
 export const StyledCirclePulseWrapper = styled.div`
     align-items: center;
-    height: 35px;
+    height: 20px;
     display: flex;
-    transform: translateY(2px);
-    
+    transform: translateY(3px);
+    position: relative;
 `
 
 export const StyledCirclePulse = styled.div<{color: string}>`

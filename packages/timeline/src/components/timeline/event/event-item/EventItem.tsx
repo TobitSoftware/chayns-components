@@ -2,7 +2,7 @@ import React, { type FC } from 'react';
 import { DateInfo, Icon } from '@chayns-components/core';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { StyledEventItem, StyledEventItemContent, StyledIconWrapper } from './EventItem.styles';
+import { StyledEventItem, StyledEventItemContent, StyledEventItemDay, StyledIconWrapper } from './EventItem.styles';
 
 interface EventItemProps {
     icon: string;
@@ -13,11 +13,13 @@ interface EventItemProps {
         color: string;
     };
     date: string;
+    day?: string;
 }
 
-const EventItem: FC<EventItemProps> = ({ icon, color, name, arrow, date }) => {
+const EventItem: FC<EventItemProps> = ({ icon, color, name, arrow, date, day }) => {
     return (
         <StyledEventItem>
+            <StyledEventItemDay>{day}</StyledEventItemDay>
             <StyledIconWrapper
                 color={color}
             >
