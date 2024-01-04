@@ -5,6 +5,7 @@ export default {
     title: 'Core/CodeHighlighter',
     component: CodeHighlighter,
     args: {
+        copyButtonText: 'Code kopieren',
         shouldShowLineNumbers: true,
         language: 'tsx',
     },

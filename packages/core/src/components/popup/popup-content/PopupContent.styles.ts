@@ -1,3 +1,4 @@
+import { ColorMode } from 'chayns-api';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
@@ -5,15 +6,17 @@ import { PopupAlignment } from '../types';
 
 type StyledMotionPopupContentProps = WithTheme<{
     position: PopupAlignment;
+    colorMode: ColorMode;
 }>;
 
 export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupContentProps>`
-    background-color: ${({ theme }: StyledMotionPopupContentProps) => theme['001']};
+    background-color: ${({ theme, colorMode }: StyledMotionPopupContentProps) =>
+        colorMode === ColorMode.Dark ? theme['003'] : theme['001']};
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
-    position: absolute;
     z-index: 0;
+    position: fixed;
 
     &::after {
         background-color: inherit;

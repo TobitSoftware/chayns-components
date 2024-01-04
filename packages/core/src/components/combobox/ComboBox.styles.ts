@@ -15,7 +15,7 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     display: flex;
     justify-content: space-between;
     border: 1px solid rgba(160, 160, 160, 0.3);
-    padding: 8px 10px;
+    padding: 4px 10px;
     cursor: pointer;
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
     min-width: ${({ minWidth }) => minWidth}px;

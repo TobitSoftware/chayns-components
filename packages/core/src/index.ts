@@ -20,12 +20,12 @@ export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
 export { default as DateInfo } from './components/date-info/DateInfo';
 export { default as FileInput } from './components/file-input/FileInput';
-export { default as FilterButton } from './components/filter-button/FilterButton';
+export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export type {
     FilterButtonItemShape,
     FilterButtonSize,
     IFilterButtonItem as FilterButtonItem,
-} from './components/filter-button/types';
+} from './components/filter-buttons/types';
 export { default as GridImage } from './components/grid-image/GridImage';
 export { default as Icon } from './components/icon/Icon';
 export { default as Input } from './components/input/Input';

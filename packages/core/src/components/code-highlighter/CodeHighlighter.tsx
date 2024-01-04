@@ -80,10 +80,14 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     );
 
     const formattedCode = useMemo(() => {
-        const config = getParserForLanguage(language);
+        if (language) {
+            const config = getParserForLanguage(language);
 
-        if (shouldFormatCode && config) {
-            return format(code, config) as unknown as string;
+            if (shouldFormatCode && config) {
+                return format(code, config) as unknown as string;
+            }
+
+            return code;
         }
 
         return code;
@@ -94,12 +98,12 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             <StyledCodeHighlighter codeTheme={theme}>
                 <StyledCodeHighlighterHeader codeTheme={theme}>
                     <StyledCodeHighlighterFileName codeTheme={theme}>
-                        {language}
+                        {language ?? ''}
                     </StyledCodeHighlighterFileName>
                     <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
                 <SyntaxHighlighter
-                    language={language}
+                    language={language ?? ''}
                     showLineNumbers={shouldShowLineNumbers}
                     style={theme === CodeHighlighterTheme.Dark ? oneDark : oneLight}
                     wrapLines

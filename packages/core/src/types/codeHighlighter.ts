@@ -287,4 +287,5 @@ export type CodeHighlighterLanguage =
     | 'xquery'
     | 'yaml'
     | 'yang'
-    | 'zig';
+    | 'zig'
+    | undefined;

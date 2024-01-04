@@ -1,9 +1,9 @@
 import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import FilterButtonItem from './filter-button-item/FilterButtonItem';
-import { StyledFilterButton } from './FilterButton.styles';
+import FilterButton from './filter-button/FilterButton';
+import { StyledFilterButton } from './FilterButtons.styles';
 import { FilterButtonItemShape, FilterButtonSize, IFilterButtonItem } from './types';
 
-export type FilterButtonProps = {
+export type FilterButtonsProps = {
     /**
      * The items that should be displayed.
      */
@@ -22,13 +22,13 @@ export type FilterButtonProps = {
     size?: FilterButtonSize;
 };
 
-const FilterButton: FC<FilterButtonProps> = ({
+const FilterButtons: FC<FilterButtonsProps> = ({
     selectedItemIds,
     onSelect,
     items,
     size = FilterButtonSize.Normal,
 }) => {
-    const [selectedIds, setSelectedIds] = useState<string[]>(['all']);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     /**
      * This function set the selectedItemKey
@@ -47,7 +47,7 @@ const FilterButton: FC<FilterButtonProps> = ({
             let newIds: string[];
 
             if (id === 'all') {
-                newIds = selectedIds.includes('all') ? [] : ['all'];
+                newIds = selectedIds.includes('all') ? ['all'] : [];
             } else {
                 newIds = selectedIds.includes(id)
                     ? selectedIds.filter((filteredId) => filteredId !== id)
@@ -61,10 +61,10 @@ const FilterButton: FC<FilterButtonProps> = ({
             setSelectedIds(newIds);
 
             if (typeof onSelect === 'function') {
-                onSelect(newIds);
+                onSelect(newIds.filter((selectedId) => selectedId !== 'all'));
             }
         },
-        [onSelect, selectedIds]
+        [onSelect, selectedIds],
     );
 
     const reactItems = useMemo(() => {
@@ -73,7 +73,7 @@ const FilterButton: FC<FilterButtonProps> = ({
         }
 
         const array: ReactElement[] = [
-            <FilterButtonItem
+            <FilterButton
                 id="all"
                 key="all"
                 onSelect={handleSelect}
@@ -86,7 +86,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 
         items.forEach(({ icons, text, color, id }) => {
             array.push(
-                <FilterButtonItem
+                <FilterButton
                     color={color}
                     icons={icons}
                     id={id}
@@ -96,7 +96,7 @@ const FilterButton: FC<FilterButtonProps> = ({
                     shape={FilterButtonItemShape.Round}
                     size={size}
                     text={text}
-                />
+                />,
             );
         });
 
@@ -106,6 +106,6 @@ const FilterButton: FC<FilterButtonProps> = ({
     return useMemo(() => <StyledFilterButton>{reactItems}</StyledFilterButton>, [reactItems]);
 };
 
-FilterButton.displayName = 'FilterButton';
+FilterButtons.displayName = 'FilterButtons';
 
-export default FilterButton;
+export default FilterButtons;

@@ -1,3 +1,4 @@
+import { getSite } from 'chayns-api';
 import React, { ReactNode } from 'react';
 import { PopupAlignment, PopupCoordinates } from '../types';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
@@ -10,6 +11,8 @@ type PopupContentProps = {
 
 const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
     ({ alignment, coordinates, content }, ref) => {
+        const { colorMode } = getSite();
+
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
         const isTopRightAlignment = alignment === PopupAlignment.TopRight;
@@ -25,6 +28,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
         return (
             <StyledMotionPopupContent
                 animate={{ opacity: 1, y: 0 }}
+                colorMode={colorMode}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 position={alignment}
@@ -42,7 +46,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 <StyledPopupContentInner>{content}</StyledPopupContentInner>
             </StyledMotionPopupContent>
         );
-    }
+    },
 );
 
 PopupContent.displayName = 'PopupContent';

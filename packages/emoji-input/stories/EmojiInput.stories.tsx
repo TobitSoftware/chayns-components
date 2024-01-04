@@ -87,3 +87,7 @@ const TemplateWithProgress: StoryFn<typeof EmojiInput> = ({ ...args }) => {
 export const General = Template.bind({});
 
 export const EmojiInputWithProgress = TemplateWithProgress.bind({});
+export const EmojiInputWithPrefixElement = Template.bind({});
+EmojiInputWithPrefixElement.args = {
+    prefixElement: '[lc_mention id="CHA-YNSAI"]Sidekick[/lc_mention],&nbsp;',
+};

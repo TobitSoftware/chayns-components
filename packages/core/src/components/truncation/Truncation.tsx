@@ -5,6 +5,7 @@ import React, {
     ReactElement,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -13,6 +14,7 @@ import {
     StyledMotionTruncationContent,
     StyledTruncation,
     StyledTruncationClamp,
+    StyledTruncationPseudoContent,
 } from './Truncation.styles';
 
 export type TruncationProps = {
@@ -45,28 +47,23 @@ const Truncation: FC<TruncationProps> = ({
     onChange,
     children,
 }) => {
-    const childrenContainerRef = useRef<HTMLDivElement | null>(null);
-    const truncatedContentRef = useRef<HTMLElement | null>(null);
-    const contentRef = useRef<HTMLElement | null>(null);
-
-    const [childrenContainerHeight, setChildrenContainerHeight] = useState<number>();
     const [isOpen, setIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
+    const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
+    const [originalHeight, setOriginalHeight] = useState(0);
+    const [shouldShowCollapsedElement, setShouldShowCollapsedElement] = useState(true);
 
-    // updates the content of the children container on animation completion
-    const handleAnimationComplete = useCallback(() => {
-        if (childrenContainerRef.current) {
-            childrenContainerRef.current.innerHTML = isOpen
-                ? contentRef.current?.innerHTML ?? ''
-                : truncatedContentRef.current?.innerHTML ?? '';
-        }
-    }, [isOpen]);
+    const pseudoChildrenRef = useRef<HTMLDivElement>(null);
+    const childrenRef = useRef<HTMLDivElement>(null);
+    const originalChildrenRef = useRef<HTMLDivElement>(null);
 
-    // changes the state of the truncation
+    // Changes the state of the truncation
     const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (event) => {
             setIsOpen((current) => {
-                onChange?.(event, !current);
+                if (typeof onChange === 'function') {
+                    onChange(event, !current);
+                }
 
                 return !current;
             });
@@ -74,46 +71,79 @@ const Truncation: FC<TruncationProps> = ({
         [onChange],
     );
 
-    // initialization logic
-    // set the height of the children container to the collapsed height
+    const handleAnimationEnd = useCallback(() => {
+        setShouldShowCollapsedElement(!isOpen);
+    }, [isOpen]);
+
     useEffect(() => {
-        if (isOpen || !!truncatedContentRef.current || !childrenContainerRef.current) {
+        if (!pseudoChildrenRef.current) {
             return;
         }
 
-        setChildrenContainerHeight(childrenContainerRef.current.scrollHeight);
+        setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
 
-        contentRef.current = childrenContainerRef.current.cloneNode(true) as HTMLElement;
+        truncateElement(pseudoChildrenRef.current, collapsedHeight);
 
-        truncateElement(childrenContainerRef.current, collapsedHeight);
+        setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
+    }, [collapsedHeight, pseudoChildrenRef]);
 
-        truncatedContentRef.current = childrenContainerRef.current.cloneNode(true) as HTMLElement;
-    }, [collapsedHeight, isOpen]);
-
-    // If truncated content is the same as the content, don't show the clamp because it's not needed
+    // Checks if the clamp should be shown
     useEffect(() => {
-        setShowClamp(contentRef.current?.innerHTML !== truncatedContentRef.current?.innerHTML);
-    }, []);
+        if (pseudoChildrenRef.current) {
+            setShowClamp(originalHeight > newCollapsedHeight);
+        }
+    }, [collapsedHeight, newCollapsedHeight, originalHeight]);
 
-    const height = isOpen ? childrenContainerHeight ?? 'auto' : `${collapsedHeight}px`;
+    useEffect(() => {
+        if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
+            while (childrenRef.current.firstChild) {
+                childrenRef.current.removeChild(childrenRef.current.firstChild);
+            }
 
-    return (
-        <StyledTruncation className="beta-chayns-truncation">
-            <StyledMotionTruncationContent
-                animate={{ height }}
-                initial={false}
-                onAnimationComplete={handleAnimationComplete}
-                ref={childrenContainerRef}
-                transition={{ type: 'tween' }}
-            >
-                {children}
-            </StyledMotionTruncationContent>
-            {showClamp && (
-                <StyledTruncationClamp onClick={handleClampClick}>
-                    {isOpen ? lessLabel : moreLabel}
-                </StyledTruncationClamp>
-            )}
-        </StyledTruncation>
+            childrenRef.current.appendChild(
+                shouldShowCollapsedElement && !isOpen
+                    ? pseudoChildrenRef.current
+                    : originalChildrenRef.current,
+            );
+
+            (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
+        }
+    }, [children, isOpen, shouldShowCollapsedElement]);
+
+    return useMemo(
+        () => (
+            <StyledTruncation className="beta-chayns-truncation">
+                <StyledTruncationPseudoContent ref={pseudoChildrenRef}>
+                    {children}
+                </StyledTruncationPseudoContent>
+                <StyledTruncationPseudoContent ref={originalChildrenRef}>
+                    {children}
+                </StyledTruncationPseudoContent>
+                <StyledMotionTruncationContent
+                    animate={{ height: isOpen ? originalHeight : newCollapsedHeight }}
+                    initial={false}
+                    transition={{ type: 'tween' }}
+                    onAnimationComplete={handleAnimationEnd}
+                    ref={childrenRef}
+                />
+                {showClamp && (
+                    <StyledTruncationClamp onClick={handleClampClick}>
+                        {isOpen ? lessLabel : moreLabel}
+                    </StyledTruncationClamp>
+                )}
+            </StyledTruncation>
+        ),
+        [
+            children,
+            handleAnimationEnd,
+            handleClampClick,
+            isOpen,
+            lessLabel,
+            moreLabel,
+            newCollapsedHeight,
+            originalHeight,
+            showClamp,
+        ],
     );
 };
 

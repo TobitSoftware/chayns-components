@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useMemo } from 'react';
 import type { IComboBoxItem } from '../ComboBox';
-import { StyledComboBoxItem, StyledComboBoxItemText } from './ComboBoxItem.styles';
+import { StyledComboBoxItem } from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
     /**
@@ -23,12 +23,8 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({ onSelect, text, value }) => {
     }, [onSelect, text, value]);
 
     return useMemo(
-        () => (
-            <StyledComboBoxItem onClick={handleItemClick}>
-                <StyledComboBoxItemText>{text}</StyledComboBoxItemText>
-            </StyledComboBoxItem>
-        ),
-        [handleItemClick, text]
+        () => <StyledComboBoxItem onClick={handleItemClick}>{text}</StyledComboBoxItem>,
+        [handleItemClick, text],
     );
 };
 
