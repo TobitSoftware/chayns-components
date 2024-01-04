@@ -80,6 +80,10 @@ export type EmojiInputProps = {
      */
     onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
     /**
+     * Function to be executed if the prefixElement is removed.
+     */
+    onPrefixElementRemove?: () => void;
+    /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
      */
@@ -138,6 +142,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             onFocus,
             onInput,
             onKeyDown,
+            onPrefixElementRemove,
             onPopupVisibilityChange,
             personId,
             placeholder,
@@ -330,6 +335,26 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 editorRef.current.dispatchEvent(event);
             }
         }, []);
+
+        useEffect(() => {
+            if (typeof onPrefixElementRemove !== 'function') {
+                return;
+            }
+
+            const convertedText = convertHTMLToText(editorRef.current?.innerHTML ?? '');
+            const convertedPrefix = prefixElement && prefixElement.replace('&nbsp;', ' ');
+
+            if (
+                (convertedPrefix &&
+                    convertedText.includes(convertedPrefix) &&
+                    convertedText.length > convertedPrefix.length) ||
+                prefixElement === convertedText
+            ) {
+                return;
+            }
+
+            onPrefixElementRemove();
+        }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
 
         useEffect(() => {
             if (value !== plainTextValue) {
