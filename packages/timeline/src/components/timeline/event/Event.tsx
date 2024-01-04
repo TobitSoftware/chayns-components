@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import type { TimelineEvent } from '../../../types/timeline';
 import CirclePulse from './circle/CirclePulse';
 import EventItem from './event-item/EventItem';

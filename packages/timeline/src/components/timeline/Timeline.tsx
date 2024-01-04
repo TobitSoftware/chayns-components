@@ -4,6 +4,7 @@ import Event from './event/Event';
 import { StyledTimeline } from './Timeline.styles';
 import { isSameDay } from 'date-fns';
 import { toRelativeShortDateString } from '../../utils/date';
+import Line from './event/line/Line';
 
 type TimelineProps = {
     /*
@@ -19,15 +20,24 @@ const Timeline: FC<TimelineProps> = ({ events }) => {
         <StyledTimeline>
             {events.map((event, i) => {
                 const prevEvent = events[i - 1];
+                const nextEvent = events[i + 1];
 
-                const isDifferentDay = prevEvent ? !isSameDay(new Date(event.startTime), new Date(prevEvent.startTime)) : true;
+                // if latest entry, show day
+                const isPrevDayDifferent = prevEvent ? !isSameDay(event.startTime, prevEvent.startTime) : true;
+                // if next entry is on different day, show line, hide if no following entry
+                const isNextDayDifferent = nextEvent ? !isSameDay(event.startTime, nextEvent.startTime) : false;
 
                 return (
-                    <Event
-                        key={event.id}
-                        event={event}
-                        day={isDifferentDay ? toRelativeShortDateString(event.startTime) : undefined}
-                    />
+                    <>
+                        <Event
+                            key={event.id}
+                            event={event}
+                            day={isPrevDayDifferent ? toRelativeShortDateString(event.startTime) : undefined}
+                        />
+                        {isNextDayDifferent && (
+                            <Line color={event.color} isDashed/>
+                        )}
+                    </>
                 );
             })}
         </StyledTimeline>
