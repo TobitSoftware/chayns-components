@@ -37,10 +37,14 @@ export type PopupProps = {
      * Whether the popup should be opened on hover. If not, the popup will be opened on click.
      */
     shouldShowOnHover?: boolean;
+    /**
+     * The Y offset of the popup to the children.
+     */
+    yOffset?: number;
 };
 
 const Popup = forwardRef<PopupRef, PopupProps>(
-    ({ content, onShow, onHide, children, shouldShowOnHover = false }, ref) => {
+    ({ content, onShow, onHide, children, shouldShowOnHover = false, yOffset = 0 }, ref) => {
         const [coordinates, setCoordinates] = useState<PopupCoordinates>({
             x: 0,
             y: 0,
@@ -80,7 +84,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop + childrenHeight + 4,
+                        y: childrenTop + childrenHeight + 4 - yOffset,
                     });
                 } else {
                     if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
@@ -91,13 +95,13 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop - 4,
+                        y: childrenTop - 4 + yOffset,
                     });
                 }
 
                 setIsOpen(true);
             }
-        }, []);
+        }, [yOffset]);
 
         const handleChildrenClick = () => {
             if (!shouldShowOnHover) {
@@ -132,7 +136,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     }
                 }
             },
-            [handleHide, shouldShowOnHover]
+            [handleHide, shouldShowOnHover],
         );
 
         useImperativeHandle(
@@ -141,7 +145,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 hide: handleHide,
                 show: handleShow,
             }),
-            [handleHide, handleShow]
+            [handleHide, handleShow],
         );
 
         useEffect(() => {
@@ -184,8 +188,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                             />
                         )}
                     </AnimatePresence>,
-                    container
-                )
+                    container,
+                ),
             );
         }, [alignment, container, content, coordinates, isOpen, uuid]);
 
@@ -205,7 +209,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 {portal}
             </>
         );
-    }
+    },
 );
 
 Popup.displayName = 'Popup';
