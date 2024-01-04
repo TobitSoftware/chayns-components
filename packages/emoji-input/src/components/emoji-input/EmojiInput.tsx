@@ -397,12 +397,16 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 prefixElement &&
                 prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '');
 
+            const shouldRenderPlaceholder =
+                (prefixElement && !plainTextValue) ||
+                (prefixElement ? prefixElementWidth && prefixElementWidth > 0 : true);
+
             switch (true) {
                 case (!plainTextValue || isJustPrefixElement) &&
                     shouldHidePlaceholderOnFocus &&
                     !hasFocus:
                 case (!plainTextValue || isJustPrefixElement) && !shouldHidePlaceholderOnFocus:
-                    return true;
+                    return shouldRenderPlaceholder;
                 case (!plainTextValue || isJustPrefixElement) &&
                     shouldHidePlaceholderOnFocus &&
                     hasFocus:
@@ -410,7 +414,13 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 default:
                     return false;
             }
-        }, [hasFocus, plainTextValue, prefixElement, shouldHidePlaceholderOnFocus]);
+        }, [
+            hasFocus,
+            plainTextValue,
+            prefixElement,
+            shouldHidePlaceholderOnFocus,
+            prefixElementWidth,
+        ]);
 
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
             if (typeof onFocus === 'function') {
