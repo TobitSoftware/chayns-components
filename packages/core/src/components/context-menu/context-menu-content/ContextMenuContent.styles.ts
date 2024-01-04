@@ -21,7 +21,6 @@ export const StyledMotionContextMenuContent = styled(
     &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-right-radius: 3px;
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
         content: '';
@@ -34,26 +33,26 @@ export const StyledMotionContextMenuContent = styled(
             switch (position) {
                 case ContextMenuAlignment.TopLeft:
                     return css`
-                        bottom: -8px;
+                        bottom: -7px;
                         right: 13px;
                         transform: rotate(45deg);
                     `;
                 case ContextMenuAlignment.BottomLeft:
                     return css`
-                        top: -8px;
+                        top: -7px;
                         right: 13px;
                         transform: rotate(225deg);
                     `;
                 case ContextMenuAlignment.TopRight:
                     return css`
                         transform: rotate(45deg);
-                        bottom: -8px;
+                        bottom: -7px;
                         left: 13px;
                     `;
                 case ContextMenuAlignment.BottomRight:
                     return css`
                         transform: rotate(225deg);
-                        top: -8px;
+                        top: -7px;
                         left: 13px;
                     `;
                 default:
