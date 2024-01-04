@@ -74,6 +74,5 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
 `;
 
 export const StyledPopupContentInner = styled.div`
-    border-radius: 3px;
     overflow: hidden;
 `;
