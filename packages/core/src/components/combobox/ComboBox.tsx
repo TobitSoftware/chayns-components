@@ -24,7 +24,16 @@ export interface IComboBoxItem {
     value: string | number;
 }
 
+export enum ComboBoxDirection {
+    BOTTOM,
+    TOP,
+}
+
 export type ComboBoxProps = {
+    /**
+     * The direction in which the combobox should open.
+     */
+    direction?: ComboBoxDirection;
     /**
      * The list of the items that should be displayed.
      */
@@ -48,11 +57,12 @@ export type ComboBoxProps = {
 };
 
 const ComboBox: FC<ComboBoxProps> = ({
-    placeholder,
+    direction = ComboBoxDirection.BOTTOM,
     list,
-    onSelect,
-    selectedItem,
     maxHeight = '300px',
+    onSelect,
+    placeholder,
+    selectedItem,
 }) => {
     const [item, setItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
@@ -161,9 +171,33 @@ const ComboBox: FC<ComboBoxProps> = ({
         setIsAnimating((prevState) => !prevState);
     };
 
+    const comboBoxBody = useMemo(
+        () => (
+            <StyledMotionComboBoxBody
+                animate={
+                    isAnimating ? { height: 'fit-content', opacity: 1 } : { height: 0, opacity: 0 }
+                }
+                height={height}
+                initial={{ height: 0, opacity: 0 }}
+                maxHeight={maxHeight}
+                minWidth={minWidth}
+                style={
+                    direction === ComboBoxDirection.TOP
+                        ? { transform: 'translateY(-100%)' }
+                        : undefined
+                }
+                transition={{ duration: 0.2 }}
+            >
+                {content}
+            </StyledMotionComboBoxBody>
+        ),
+        [content, direction, height, isAnimating, maxHeight, minWidth],
+    );
+
     return useMemo(
         () => (
             <StyledComboBox ref={ref}>
+                {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
                     minWidth={minWidth}
                     onClick={handleHeaderClick}
@@ -175,25 +209,10 @@ const ComboBox: FC<ComboBoxProps> = ({
                         <Icon icons={['fa fa-chevron-down']} />
                     </StyledComboBoxIconWrapper>
                 </StyledComboBoxHeader>
-                <StyledMotionComboBoxBody
-                    height={height}
-                    minWidth={minWidth}
-                    maxHeight={maxHeight}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={
-                        isAnimating
-                            ? { height: 'fit-content', opacity: 1 }
-                            : { height: 0, opacity: 0 }
-                    }
-                    transition={{
-                        duration: 0.2,
-                    }}
-                >
-                    {content}
-                </StyledMotionComboBoxBody>
+                {direction === ComboBoxDirection.BOTTOM && comboBoxBody}
             </StyledComboBox>
         ),
-        [content, height, isAnimating, isMobile, maxHeight, minWidth, placeholderText],
+        [comboBoxBody, direction, isAnimating, isMobile, minWidth, placeholderText],
     );
 };
 
