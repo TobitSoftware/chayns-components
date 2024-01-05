@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
@@ -50,6 +51,7 @@ export const StyledComboBoxIconWrapper = styled.div`
 type StyledComboBoxBodyProps = WithTheme<{
     height: number;
     minWidth: number;
+    maxHeight: CSSProperties['maxHeight'];
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -65,7 +67,7 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     cursor: pointer;
     min-width: ${({ minWidth }) => minWidth}px;
     max-width: ${({ minWidth }) => minWidth}px;
-    max-height: 300px;
+    max-height: ${({ maxHeight }) => maxHeight};
     overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxBodyProps) => theme['009-rgb']}, 0.08)
         inset;

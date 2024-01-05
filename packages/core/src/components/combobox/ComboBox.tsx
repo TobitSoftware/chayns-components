@@ -1,4 +1,13 @@
-import React, { FC, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    FC,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    type CSSProperties,
+} from 'react';
 import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
@@ -21,6 +30,10 @@ export type ComboBoxProps = {
      */
     list: IComboBoxItem[];
     /**
+     * The maximum height of the combobox content.
+     */
+    maxHeight?: CSSProperties['maxHeight'];
+    /**
      * Function that should be executed when an item is selected.
      */
     onSelect?: (comboboxItem: IComboBoxItem) => void;
@@ -34,7 +47,13 @@ export type ComboBoxProps = {
     selectedItem?: IComboBoxItem;
 };
 
-const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem }) => {
+const ComboBox: FC<ComboBoxProps> = ({
+    placeholder,
+    list,
+    onSelect,
+    selectedItem,
+    maxHeight = '300px',
+}) => {
     const [item, setItem] = useState<IComboBoxItem>();
     const [isAnimating, setIsAnimating] = useState(false);
     const [minWidth, setMinWidth] = useState(0);
@@ -48,7 +67,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 setIsAnimating(false);
             }
         },
-        [ref]
+        [ref],
     );
 
     useEffect(() => {
@@ -71,7 +90,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 onSelect(itemToSelect);
             }
         },
-        [onSelect]
+        [onSelect],
     );
 
     /**
@@ -110,12 +129,13 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                     value={value}
                     text={text}
                     onSelect={handleSetSelectedItem}
-                />
+                    isSelected={selectedItem ? value === selectedItem.value : false}
+                />,
             );
         });
 
         return items;
-    }, [handleSetSelectedItem, list]);
+    }, [handleSetSelectedItem, list, selectedItem]);
 
     /**
      * This function resets the placeholder
@@ -155,6 +175,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 <StyledMotionComboBoxBody
                     height={height}
                     minWidth={minWidth}
+                    maxHeight={maxHeight}
                     initial={{ height: 0, opacity: 0 }}
                     animate={
                         isAnimating
@@ -169,7 +190,7 @@ const ComboBox: FC<ComboBoxProps> = ({ placeholder, list, onSelect, selectedItem
                 </StyledMotionComboBoxBody>
             </StyledComboBox>
         ),
-        [content, height, isAnimating, minWidth, placeholderText]
+        [content, height, isAnimating, maxHeight, minWidth, placeholderText],
     );
 };
 
