@@ -28,12 +28,12 @@ import {
 import type { CodeHighlighterLanguage } from '../types/codeHighlighter';
 
 export const getParserForLanguage = (language: CodeHighlighterLanguage): Options | undefined => {
-    let parser;
+    let parser: Options['parser'];
     let plugin;
 
     switch (true) {
         case BABEL_LANGUAGES.includes(language):
-            parser = 'babel';
+            parser = 'babel-ts';
             plugin = parserBabel;
             break;
         case HTML_LANGUAGES.includes(language):
@@ -62,6 +62,13 @@ export const getParserForLanguage = (language: CodeHighlighterLanguage): Options
 
     if (parser && plugin) {
         return {
+            trailingComma: 'all',
+            bracketSpacing: true,
+            singleQuote: true,
+            jsxSingleQuote: true,
+            bracketSameLine: false,
+            arrowParens: 'always',
+            proseWrap: 'always',
             parser,
             plugins: [plugin],
         };
