@@ -484,7 +484,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 prefixElement &&
                 prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
             ) {
-                setPrefixElementWidth(prefixElementRef.current.offsetWidth);
+                setPrefixElementWidth(prefixElementRef.current.offsetWidth + 2);
             } else {
                 setPrefixElementWidth(undefined);
             }
