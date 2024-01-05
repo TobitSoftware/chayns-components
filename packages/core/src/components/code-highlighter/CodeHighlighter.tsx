@@ -7,7 +7,7 @@ import {
     CodeHighlighterTheme,
     HighlightedLines,
 } from '../../types/codeHighlighter';
-import { getParserForLanguage } from '../../utils/codeHighlighter';
+import { formatLanguage, getParserForLanguage } from '../../utils/codeHighlighter';
 import {
     StyledCodeHighlighter,
     StyledCodeHighlighterFileName,
@@ -98,7 +98,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
             <StyledCodeHighlighter codeTheme={theme}>
                 <StyledCodeHighlighterHeader codeTheme={theme}>
                     <StyledCodeHighlighterFileName codeTheme={theme}>
-                        {language ?? ''}
+                        {formatLanguage(language)}
                     </StyledCodeHighlighterFileName>
                     <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
                 </StyledCodeHighlighterHeader>
