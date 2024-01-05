@@ -8,6 +8,7 @@ export const StyledComboBox = styled.div`
 `;
 
 type StyledComboBoxHeaderProps = WithTheme<{
+    isMobile: boolean;
     isOpen: boolean;
     minWidth: number;
 }>;
@@ -32,9 +33,13 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
                   border-radius: 3px;
               `}
 
-    &:hover {
-        background: ${({ theme }: StyledComboBoxHeaderProps) => theme['secondary-103']};
-    }
+    ${({ isMobile, theme }: StyledComboBoxHeaderProps) =>
+        !isMobile &&
+        css`
+            &:hover {
+                background-color: ${theme['secondary-101']};
+            }
+        `}
 `;
 
 type StyledComboBoxPlaceholderProps = WithTheme<unknown>;

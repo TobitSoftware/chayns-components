@@ -26,13 +26,19 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({ isSelected, onSelect, text, value
         onSelect({ text, value });
     }, [onSelect, text, value]);
 
+    const { isMobile } = chayns.env;
+
     return useMemo(
         () => (
-            <StyledComboBoxItem onClick={handleItemClick} isSelected={isSelected}>
+            <StyledComboBoxItem
+                onClick={handleItemClick}
+                isMobile={isMobile}
+                isSelected={isSelected}
+            >
                 {text}
             </StyledComboBoxItem>
         ),
-        [handleItemClick, isSelected, text],
+        [handleItemClick, isMobile, isSelected, text],
     );
 };
 

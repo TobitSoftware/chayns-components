@@ -1,7 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledComboBoxItemProps = WithTheme<{
+    isMobile: boolean;
     isSelected: boolean;
 }>;
 
@@ -11,7 +12,11 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
     background-color: ${({ theme, isSelected }: StyledComboBoxItemProps) =>
         isSelected && theme['secondary-102']};
 
-    &:hover {
-        background: ${({ theme }: StyledComboBoxItemProps) => theme['secondary-101']};
-    }
+    ${({ isMobile, theme }: StyledComboBoxItemProps) =>
+        !isMobile &&
+        css`
+            &:hover {
+                background-color: ${theme['secondary-101']};
+            }
+        `}
 `;

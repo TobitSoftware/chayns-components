@@ -61,6 +61,8 @@ const ComboBox: FC<ComboBoxProps> = ({
 
     const ref = useRef<HTMLDivElement>(null);
 
+    const { isMobile } = chayns.env;
+
     const handleClick = useCallback(
         (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -166,6 +168,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     minWidth={minWidth}
                     onClick={handleHeaderClick}
                     isOpen={isAnimating}
+                    isMobile={isMobile}
                 >
                     <StyledComboBoxPlaceholder>{placeholderText}</StyledComboBoxPlaceholder>
                     <StyledComboBoxIconWrapper>
@@ -190,7 +193,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 </StyledMotionComboBoxBody>
             </StyledComboBox>
         ),
-        [content, height, isAnimating, maxHeight, minWidth, placeholderText],
+        [content, height, isAnimating, isMobile, maxHeight, minWidth, placeholderText],
     );
 };
 
