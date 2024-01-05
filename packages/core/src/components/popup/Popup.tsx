@@ -84,7 +84,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop + childrenHeight + 4 - yOffset,
+                        y: childrenTop + childrenHeight + yOffset,
                     });
                 } else {
                     if (pseudoWidth > childrenLeft + childrenWidth / 2 - 25) {
@@ -95,7 +95,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
                     setCoordinates({
                         x: childrenLeft + childrenWidth / 2,
-                        y: childrenTop - 4 + yOffset,
+                        y: childrenTop - yOffset,
                     });
                 }
 
