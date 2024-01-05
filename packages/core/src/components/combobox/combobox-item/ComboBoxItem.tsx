@@ -4,6 +4,10 @@ import { StyledComboBoxItem } from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
     /**
+     * Whether the item is selected.
+     */
+    isSelected: boolean;
+    /**
      * Function to be executed when an item is selected.
      */
     onSelect: (itemToSelect: IComboBoxItem) => void;
@@ -17,14 +21,18 @@ export type ComboBoxItemProps = {
     value: IComboBoxItem['value'];
 };
 
-const ComboBoxItem: FC<ComboBoxItemProps> = ({ onSelect, text, value }) => {
+const ComboBoxItem: FC<ComboBoxItemProps> = ({ isSelected, onSelect, text, value }) => {
     const handleItemClick = useCallback(() => {
         onSelect({ text, value });
     }, [onSelect, text, value]);
 
     return useMemo(
-        () => <StyledComboBoxItem onClick={handleItemClick}>{text}</StyledComboBoxItem>,
-        [handleItemClick, text],
+        () => (
+            <StyledComboBoxItem onClick={handleItemClick} isSelected={isSelected}>
+                {text}
+            </StyledComboBoxItem>
+        ),
+        [handleItemClick, isSelected, text],
     );
 };
 
