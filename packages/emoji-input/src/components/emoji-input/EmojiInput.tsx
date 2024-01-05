@@ -473,6 +473,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         useEffect(() => {
             if (editorRef.current && prefixElement) {
+                const text = convertEmojisToUnicode(prefixElement);
+
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
                 handleUpdateHTML(prefixElement);
                 hasPrefixRendered.current = true;
             }
