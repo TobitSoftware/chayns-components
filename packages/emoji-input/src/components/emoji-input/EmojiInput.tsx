@@ -284,6 +284,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (event.key === 'Backspace' || event.key === 'Delete') {
                     const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
 
+                    console.log('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
+
                     if (charCodeThatWillBeDeleted === 8203) {
                         if (event.key === 'Backspace') {
                             shouldDeleteOneMoreBackwards.current = true;
