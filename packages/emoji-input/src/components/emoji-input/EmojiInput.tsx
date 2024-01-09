@@ -201,6 +201,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
+            console.debug('beforeInput', event);
+
             const { data, type } = event.nativeEvent as InputEvent;
 
             if (type === 'textInput' && data && data.includes('\n')) {
@@ -226,6 +228,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (!editorRef.current) {
                     return;
                 }
+
+                console.debug('input', event);
 
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
@@ -263,10 +267,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             },
             [handleUpdateHTML, onInput],
         );
-
-        const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
-            console.debug('KeyPress', event);
-        };
 
         const handleKeyDown = useCallback(
             (event: KeyboardEvent<HTMLDivElement>) => {
@@ -557,7 +557,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onFocus={handleFocus}
                         onInput={handleInput}
                         onKeyDown={handleKeyDown}
-                        onKeyPress={handleKeyPress}
                         onPaste={handlePaste}
                         ref={editorRef}
                         transition={{ type: 'tween', duration: 0.2 }}
