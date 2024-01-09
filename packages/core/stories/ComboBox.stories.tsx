@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import ComboBox from '../src/components/combobox/ComboBox';
+import ComboBox, { ComboBoxDirection } from '../src/components/combobox/ComboBox';
 
 export default {
     title: 'Core/ComboBox',
@@ -91,3 +91,41 @@ const Template: StoryFn<typeof ComboBox> = (args) => (
 );
 
 export const General = Template.bind({});
+
+export const WithImages = Template.bind({});
+
+WithImages.args = {
+    direction: ComboBoxDirection.TOP,
+    list: [
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Schnellstart',
+            value: 0,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Flexibles Design',
+            value: 1,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Intuitive Bedienung',
+            value: 2,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Integration',
+            value: 3,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Navigation',
+            value: 4,
+        },
+    ],
+    selectedItem: {
+        imageUrl: 'https://picsum.photos/200',
+        text: 'Flexibles Design',
+        value: 1,
+    },
+};

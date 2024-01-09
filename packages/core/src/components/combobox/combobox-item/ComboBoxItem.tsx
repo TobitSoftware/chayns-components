@@ -1,27 +1,24 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import type { IComboBoxItem } from '../ComboBox';
-import { StyledComboBoxItem } from './ComboBoxItem.styles';
+import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
+import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
 export type ComboBoxItemProps = {
-    /**
-     * Whether the item is selected.
-     */
+    imageUrl: IComboBoxItem['imageUrl'];
     isSelected: boolean;
-    /**
-     * Function to be executed when an item is selected.
-     */
     onSelect: (itemToSelect: IComboBoxItem) => void;
-    /**
-     * The text of the item.
-     */
+    shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
     text: IComboBoxItem['text'];
-    /**
-     * The value of the item.
-     */
     value: IComboBoxItem['value'];
 };
 
-const ComboBoxItem: FC<ComboBoxItemProps> = ({ isSelected, onSelect, text, value }) => {
+const ComboBoxItem: FC<ComboBoxItemProps> = ({
+    imageUrl,
+    isSelected,
+    onSelect,
+    shouldShowRoundImage,
+    text,
+    value,
+}) => {
     const handleItemClick = useCallback(() => {
         onSelect({ text, value });
     }, [onSelect, text, value]);
@@ -35,10 +32,16 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({ isSelected, onSelect, text, value
                 isMobile={isMobile}
                 isSelected={isSelected}
             >
+                {imageUrl && (
+                    <StyledComboBoxItemImage
+                        src={imageUrl}
+                        shouldShowRoundImage={shouldShowRoundImage}
+                    />
+                )}
                 {text}
             </StyledComboBoxItem>
         ),
-        [handleItemClick, isMobile, isSelected, text],
+        [handleItemClick, imageUrl, isMobile, isSelected, shouldShowRoundImage, text],
     );
 };
 

@@ -65,7 +65,7 @@ type ListItemProps = {
      */
     rightElements?: [ReactNode, ...ReactNode[]];
     /**
-     * Images of users should always be displayed in a round shape. Therefore
+     * Images of users should always be displayed in a round shape. Therefore,
      * this property can be set to true.
      */
     shouldShowRoundImage?: boolean;
@@ -112,7 +112,7 @@ const ListItem: FC<ListItemProps> = ({
                 onClick(event);
             }
         },
-        [isExpandable, onClick, updateOpenItemUuid, uuid]
+        [isExpandable, onClick, updateOpenItemUuid, uuid],
     );
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
+import type { ComboBoxItemProps } from './ComboBoxItem';
 
 type StyledComboBoxItemProps = WithTheme<{
     isMobile: boolean;
@@ -7,10 +8,13 @@ type StyledComboBoxItemProps = WithTheme<{
 }>;
 
 export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
-    color: ${({ theme }: StyledComboBoxItemProps) => theme.text};
-    padding: 4px 10px;
+    align-items: center;
     background-color: ${({ theme, isSelected }: StyledComboBoxItemProps) =>
         isSelected && theme['secondary-102']};
+    color: ${({ theme }: StyledComboBoxItemProps) => theme.text};
+    display: flex;
+    gap: 8px;
+    padding: 4px 10px;
 
     ${({ isMobile, theme }: StyledComboBoxItemProps) =>
         !isMobile &&
@@ -18,5 +22,18 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
             &:hover {
                 background-color: ${theme['secondary-101']};
             }
+        `}
+`;
+
+type StyledComboBoxItemImageProps = WithTheme<Pick<ComboBoxItemProps, 'shouldShowRoundImage'>>;
+
+export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
+    width: 22px;
+    height: 22px;
+
+    ${({ shouldShowRoundImage }) =>
+        shouldShowRoundImage &&
+        css`
+            border-radius: 50%;
         `}
 `;

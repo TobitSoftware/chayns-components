@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
 
 export const StyledComboBox = styled.div`
+    user-select: none;
     width: fit-content;
 `;
 
@@ -44,9 +46,26 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
 
 type StyledComboBoxPlaceholderProps = WithTheme<unknown>;
 
-export const StyledComboBoxPlaceholder = styled.p<StyledComboBoxPlaceholderProps>`
+export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderProps>`
+    align-items: center;
     color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
-    margin: 0;
+    display: flex;
+    gap: 8px;
+`;
+
+type StyledComboBoxPlaceholderImageProps = WithTheme<
+    Pick<ComboBoxItemProps, 'shouldShowRoundImage'>
+>;
+
+export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlaceholderImageProps>`
+    width: 22px;
+    height: 22px;
+
+    ${({ shouldShowRoundImage }) =>
+        shouldShowRoundImage &&
+        css`
+            border-radius: 50%;
+        `}
 `;
 
 export const StyledComboBoxIconWrapper = styled.div`

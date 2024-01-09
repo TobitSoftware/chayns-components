@@ -14,7 +14,7 @@ export type {
     FramerMotionBugFix,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
-export { default as ComboBox } from './components/combobox/ComboBox';
+export { ComboBoxDirection, default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
