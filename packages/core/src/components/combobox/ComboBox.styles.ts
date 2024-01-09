@@ -69,7 +69,7 @@ type StyledComboBoxPlaceholderImageProps = WithTheme<
 
 export const StyledComboBoxPlaceholderImage = styled.img<StyledComboBoxPlaceholderImageProps>`
     box-shadow: 0 0 0 1px
-        rgba(${({ theme }: StyledComboBoxPlaceholderImageProps) => theme['009']}, 0.08) inset;
+        rgba(${({ theme }: StyledComboBoxPlaceholderImageProps) => theme['009-rgb']}, 0.08) inset;
     height: 22px;
     width: 22px;
 

@@ -28,8 +28,8 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
 type StyledComboBoxItemImageProps = WithTheme<Pick<ComboBoxItemProps, 'shouldShowRoundImage'>>;
 
 export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
-    box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009']}, 0.08)
-        inset;
+    box-shadow: 0 0 0 1px
+        rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.08) inset;
     height: 22px;
     width: 22px;
 
