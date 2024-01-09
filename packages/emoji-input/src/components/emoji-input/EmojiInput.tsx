@@ -281,6 +281,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     document.execCommand('insertLineBreak', false);
                 }
 
+                console.log('event', event);
+
                 if (event.key === 'Backspace' || event.key === 'Delete') {
                     const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
 
