@@ -14,7 +14,7 @@ export type {
     FramerMotionBugFix,
     WithTheme,
 } from './components/color-scheme-provider/ColorSchemeProvider';
-export { ComboBoxDirection, default as ComboBox } from './components/combobox/ComboBox';
+export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
@@ -60,6 +60,7 @@ export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { CodeHighlighterTheme } from './types/codeHighlighter';
 export type { CodeHighlighterLanguage, HighlightedLines } from './types/codeHighlighter';
+export { ComboBoxDirection } from './types/comboBox';
 export type { FileItem, Image, Meta, Video } from './types/file';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';

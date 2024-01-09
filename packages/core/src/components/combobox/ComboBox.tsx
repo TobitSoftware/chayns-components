@@ -7,6 +7,7 @@ import React, {
     useState,
     type CSSProperties,
 } from 'react';
+import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
 import Icon from '../icon/Icon';
 import ComboBoxItem from './combobox-item/ComboBoxItem';
@@ -23,11 +24,6 @@ export interface IComboBoxItem {
     imageUrl?: string;
     text: string;
     value: string | number;
-}
-
-export enum ComboBoxDirection {
-    BOTTOM,
-    TOP,
 }
 
 export type ComboBoxProps = {

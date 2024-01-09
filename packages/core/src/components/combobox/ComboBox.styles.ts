@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
+import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { ComboBoxDirection } from './ComboBox';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
 
 export const StyledComboBox = styled.div`

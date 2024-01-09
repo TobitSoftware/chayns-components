@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import ComboBox, { ComboBoxDirection } from '../src/components/combobox/ComboBox';
+import ComboBox from '../src/components/combobox/ComboBox';
+import { ComboBoxDirection } from '../src/types/comboBox';
 
 export default {
     title: 'Core/ComboBox',
