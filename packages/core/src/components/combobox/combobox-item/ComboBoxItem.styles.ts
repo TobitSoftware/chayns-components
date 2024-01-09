@@ -29,7 +29,7 @@ type StyledComboBoxItemImageProps = WithTheme<Pick<ComboBoxItemProps, 'shouldSho
 
 export const StyledComboBoxItemImage = styled.img<StyledComboBoxItemImageProps>`
     box-shadow: 0 0 0 1px
-        rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.08) inset;
+        rgba(${({ theme }: StyledComboBoxItemImageProps) => theme['009-rgb']}, 0.08);
     height: 22px;
     width: 22px;
 
