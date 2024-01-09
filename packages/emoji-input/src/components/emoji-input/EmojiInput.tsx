@@ -264,6 +264,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             [handleUpdateHTML, onInput],
         );
 
+        const handleKeyPress = (event: KeyboardEvent<HTMLDivElement>) => {
+            console.debug('KeyPress', event);
+        };
+
         const handleKeyDown = useCallback(
             (event: KeyboardEvent<HTMLDivElement>) => {
                 if (isDisabled) {
@@ -281,12 +285,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     document.execCommand('insertLineBreak', false);
                 }
 
-                console.log('event', event);
+                console.debug('KeyDown', event);
 
                 if (event.key === 'Backspace' || event.key === 'Delete') {
                     const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
 
-                    console.log('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
+                    console.debug('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
 
                     if (charCodeThatWillBeDeleted === 8203) {
                         if (event.key === 'Backspace') {
@@ -553,6 +557,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onFocus={handleFocus}
                         onInput={handleInput}
                         onKeyDown={handleKeyDown}
+                        onKeyPress={handleKeyPress}
                         onPaste={handlePaste}
                         ref={editorRef}
                         transition={{ type: 'tween', duration: 0.2 }}
