@@ -60,7 +60,7 @@ export const StyledComboBoxPlaceholder = styled.div<StyledComboBoxPlaceholderPro
     align-items: center;
     color: ${({ theme }: StyledComboBoxPlaceholderProps) => theme.text};
     display: flex;
-    gap: 8px;
+    gap: 10px;
 `;
 
 type StyledComboBoxPlaceholderImageProps = WithTheme<

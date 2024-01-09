@@ -120,9 +120,9 @@ const ComboBox: FC<ComboBoxProps> = ({
         textArray.push(placeholder);
 
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
-        // 30px = image width + flex gap
+        // 32px = image width + flex gap
         setMinWidth(
-            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 30 : 0),
+            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0),
         );
     }, [list, placeholder]);
 

@@ -13,7 +13,7 @@ export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
         isSelected && theme['secondary-102']};
     color: ${({ theme }: StyledComboBoxItemProps) => theme.text};
     display: flex;
-    gap: 8px;
+    gap: 10px;
     padding: 4px 10px;
 
     ${({ isMobile, theme }: StyledComboBoxItemProps) =>
