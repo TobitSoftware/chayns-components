@@ -202,6 +202,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 maxHeight={maxHeight}
                 minWidth={minWidth}
                 style={style}
+                direction={direction}
                 transition={{ duration: 0.2 }}
             >
                 {items}
@@ -224,6 +225,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             <StyledComboBox ref={ref}>
                 {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
+                    direction={direction}
                     minWidth={minWidth}
                     onClick={handleHeaderClick}
                     isOpen={isAnimating}

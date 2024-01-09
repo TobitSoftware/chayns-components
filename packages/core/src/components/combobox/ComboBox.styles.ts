@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { ComboBoxDirection } from './ComboBox';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
 
 export const StyledComboBox = styled.div`
@@ -13,6 +14,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
     isMobile: boolean;
     isOpen: boolean;
     minWidth: number;
+    direction: ComboBoxDirection;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -25,15 +27,23 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     min-width: ${({ minWidth }) => minWidth}px;
     max-width: ${({ minWidth }) => minWidth}px;
 
-    ${({ isOpen }) =>
-        isOpen
-            ? css`
-                  border-top-left-radius: 3px;
-                  border-top-right-radius: 3px;
-              `
-            : css`
-                  border-radius: 3px;
-              `}
+    ${({ isOpen, direction }) => {
+        if (isOpen) {
+            return direction === ComboBoxDirection.BOTTOM
+                ? css`
+                      border-top-left-radius: 3px;
+                      border-top-right-radius: 3px;
+                  `
+                : css`
+                      border-bottom-left-radius: 3px;
+                      border-bottom-right-radius: 3px;
+                  `;
+        }
+
+        return css`
+            border-radius: 3px;
+        `;
+    }}
 
     ${({ isMobile, theme }: StyledComboBoxHeaderProps) =>
         !isMobile &&
@@ -78,6 +88,7 @@ type StyledComboBoxBodyProps = WithTheme<{
     height: number;
     minWidth: number;
     maxHeight: CSSProperties['maxHeight'];
+    direction: ComboBoxDirection;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -87,9 +98,6 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     z-index: 4;
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-top: none;
     cursor: pointer;
     min-width: ${({ minWidth }) => minWidth}px;
     max-width: ${({ minWidth }) => minWidth}px;
@@ -97,6 +105,22 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxBodyProps) => theme['009-rgb']}, 0.08)
         inset;
+
+    ${({ direction }) => {
+        if (direction === ComboBoxDirection.BOTTOM) {
+            return css`
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+                border-top: none;
+            `;
+        }
+
+        return css`
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            border-bottom: none;
+        `;
+    }}
 
     &::-webkit-scrollbar {
         width: 5px;
