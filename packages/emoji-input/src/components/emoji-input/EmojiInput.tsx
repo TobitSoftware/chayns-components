@@ -201,8 +201,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
-            console.debug('beforeInput', event);
-
             const { data, type } = event.nativeEvent as InputEvent;
 
             if (type === 'textInput' && data && data.includes('\n')) {
@@ -229,7 +227,9 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return;
                 }
 
-                console.debug('input', event);
+                const { nativeEvent } = event;
+
+                // handleBackSpace((nativeEvent as InputEvent).inputType);
 
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
@@ -285,24 +285,26 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     document.execCommand('insertLineBreak', false);
                 }
 
-                console.debug('KeyDown', event);
-
-                if (event.key === 'Backspace' || event.key === 'Delete') {
-                    const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
-
-                    console.debug('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
-
-                    if (charCodeThatWillBeDeleted === 8203) {
-                        if (event.key === 'Backspace') {
-                            shouldDeleteOneMoreBackwards.current = true;
-                        } else {
-                            shouldDeleteOneMoreForwards.current = true;
-                        }
-                    }
-                }
+                handleBackSpace(event.key);
             },
             [isDisabled, onKeyDown],
         );
+
+        const handleBackSpace = (key: string) => {
+            if (key === 'Backspace' || key === 'Delete' || key === 'deleteContentBackward') {
+                const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(key);
+
+                console.debug('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
+
+                if (charCodeThatWillBeDeleted === 8203) {
+                    if (key === 'Backspace') {
+                        shouldDeleteOneMoreBackwards.current = true;
+                    } else {
+                        shouldDeleteOneMoreForwards.current = true;
+                    }
+                }
+            }
+        };
 
         /**
          * This function prevents formatting from being adopted when texts are inserted. To do this, the

@@ -1,4 +1,3 @@
-import type { KeyboardEvent } from 'react';
 import { clamp } from './number';
 import { getElementTextLength } from './text';
 
@@ -12,7 +11,7 @@ interface SaveSelectionOptions {
 
 export const saveSelection = (
     element: HTMLDivElement,
-    { shouldIgnoreEmptyTextNodes }: SaveSelectionOptions = {}
+    { shouldIgnoreEmptyTextNodes }: SaveSelectionOptions = {},
 ) => {
     const selection = window.getSelection();
 
@@ -33,7 +32,7 @@ export const saveSelection = (
     if (shouldIgnoreEmptyTextNodes) {
         childNodesArray = childNodesArray.filter(
             ({ nodeType, nodeValue }) =>
-                nodeType !== Node.TEXT_NODE || (nodeValue !== '' && nodeValue !== '\u200B')
+                nodeType !== Node.TEXT_NODE || (nodeValue !== '' && nodeValue !== '\u200B'),
         );
     }
 
@@ -163,9 +162,9 @@ export const setChildIndex = (index: number) => {
  * next step, if the "Backspace" or "Delete" key was pressed and there is no selection of multiple
  * characters.
  *
- * @param event - Keyboard event from "onKeyDown"
+ * @param key
  */
-export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement>) => {
+export const getCharCodeThatWillBeDeleted = (key: string) => {
     const range = window.getSelection()?.getRangeAt(0);
 
     /**
@@ -176,13 +175,17 @@ export const getCharCodeThatWillBeDeleted = (event: KeyboardEvent<HTMLDivElement
     if (
         !range ||
         range.endOffset !== range.startOffset ||
-        (event.key !== 'Backspace' && event.key !== 'Delete')
+        (key !== 'Backspace' && key !== 'deleteContentBackward' && key !== 'Delete')
     ) {
         return null;
     }
 
-    if (event.key === 'Backspace') {
+    console.log('hallo1');
+
+    if (key === 'Backspace' || key === 'deleteContentBackward') {
         const { nodeValue, previousSibling } = range.startContainer;
+
+        console.log({ nodeValue, previousSibling });
 
         if (range.startOffset > 0) {
             return nodeValue?.charCodeAt(range.startOffset - 1);
