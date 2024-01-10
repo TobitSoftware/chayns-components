@@ -84,6 +84,9 @@ const ComboBox: FC<ComboBoxProps> = ({
         [ref],
     );
 
+    /**
+     * This function adds an event listener to the document to close the combobox when the user clicks outside of it
+     */
     useEffect(() => {
         document.addEventListener('click', handleClick);
 
