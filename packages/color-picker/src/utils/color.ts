@@ -62,10 +62,6 @@ export const getCoordinatesFromColor = ({ canvas, color }: GetCoordinatesFromCol
         return undefined;
     }
 
-    console.log('DATA', data);
-
-    console.log('RGBA', rgb);
-
     // iterating x/y instead of forward to get position the easy way
     for (; y < 150; y++) {
         // common value for all x

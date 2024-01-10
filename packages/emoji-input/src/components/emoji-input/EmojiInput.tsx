@@ -201,8 +201,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 return;
             }
 
-            console.debug('beforeInput', event);
-
             const { data, type } = event.nativeEvent as InputEvent;
 
             if (type === 'textInput' && data && data.includes('\n')) {
@@ -228,8 +226,6 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (!editorRef.current) {
                     return;
                 }
-
-                console.debug('input', event);
 
                 if (shouldDeleteOneMoreBackwards.current) {
                     shouldDeleteOneMoreBackwards.current = false;
@@ -285,12 +281,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     document.execCommand('insertLineBreak', false);
                 }
 
-                console.debug('KeyDown', event);
-
                 if (event.key === 'Backspace' || event.key === 'Delete') {
                     const charCodeThatWillBeDeleted = getCharCodeThatWillBeDeleted(event);
-
-                    console.debug('charCodeThatWillBeDeleted', charCodeThatWillBeDeleted);
 
                     if (charCodeThatWillBeDeleted === 8203) {
                         if (event.key === 'Backspace') {
