@@ -11,13 +11,10 @@ export const StyledPrefixElement = styled.div<StyledPrefixElementProps>`
 
 export const StyledPrefixElementPseudo = styled.div`
     visibility: hidden;
-    position: absolute;
 `;
 
 export const StyledPrefixElementLetterWrapper = styled.div`
-    position: absolute;
-    top: -26px;
-    display: flex;
+    transform: translateY(-2px);
 `;
 
 type StyledPrefixElementLetterProps = WithTheme<{

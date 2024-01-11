@@ -461,6 +461,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             prefixElementWidth,
         ]);
 
+        useEffect(() => {
+            if (prefixElement) {
+                setIsPrefixAnimationFinished(false);
+            }
+        }, [prefixElement]);
+
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
             if (typeof onFocus === 'function') {
                 onFocus(event);
