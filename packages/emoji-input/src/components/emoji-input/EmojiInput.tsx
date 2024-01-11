@@ -34,11 +34,11 @@ import {
     StyledEmojiInput,
     StyledEmojiInputContent,
     StyledEmojiInputLabel,
-    StyledEmojiInputPrefixElement,
     StyledEmojiInputRightWrapper,
     StyledMotionEmojiInputEditor,
     StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
+import PrefixElement from './prefix-element/PrefixElement';
 
 export type EmojiInputProps = {
     /**
@@ -160,6 +160,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
         const [labelWidth, setLabelWidth] = useState(0);
+        const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
         const editorRef = useRef<HTMLDivElement>(null);
@@ -426,6 +427,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         const shouldShowPlaceholder = useMemo(() => {
+            if (!isPrefixAnimationFinished) {
+                return false;
+            }
+
             const isJustPrefixElement =
                 prefixElement &&
                 prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '');
@@ -448,6 +453,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     return false;
             }
         }, [
+            isPrefixAnimationFinished,
             hasFocus,
             plainTextValue,
             prefixElement,
@@ -535,9 +541,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 </AnimatePresence>
                 <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                     {prefixElement && (
-                        <StyledEmojiInputPrefixElement
-                            ref={prefixElementRef}
-                            dangerouslySetInnerHTML={{ __html: convertTextToHTML(prefixElement) }}
+                        <PrefixElement
+                            element={prefixElement}
+                            prefixElementRef={prefixElementRef}
+                            setIsPrefixAnimationFinished={setIsPrefixAnimationFinished}
                         />
                     )}
                     <StyledMotionEmojiInputEditor
@@ -551,6 +558,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onKeyDown={handleKeyDown}
                         onPaste={handlePaste}
                         ref={editorRef}
+                        shouldShowContent={isPrefixAnimationFinished}
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
 

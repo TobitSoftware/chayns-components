@@ -54,10 +54,13 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
         `}
 `;
 
-type StyledEmojiInputEditorProps = WithTheme<unknown>;
+type StyledEmojiInputEditorProps = WithTheme<{
+    shouldShowContent: boolean;
+}>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
-    color: ${({ theme }: StyledEmojiInputEditorProps) => theme.text};
+    color: ${({ theme, shouldShowContent }: StyledEmojiInputEditorProps) =>
+        shouldShowContent ? theme.text : theme['100']};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
     overflow-y: scroll;
@@ -118,11 +121,6 @@ export const StyledEmojiInputRightWrapper = styled.div`
     border-top-right-radius: 3px;
     flex: 0 0 auto;
     overflow: hidden;
-`;
-
-export const StyledEmojiInputPrefixElement = styled.div`
-    visibility: hidden;
-    position: absolute;
 `;
 
 type StyledEmojiInputLabelProps = WithTheme<{
