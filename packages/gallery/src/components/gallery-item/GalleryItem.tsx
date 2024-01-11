@@ -59,6 +59,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                     <AnimatePresence initial={false}>
                         {fileItem.state === 'uploading' ? (
                             <PreviewItem
+                                ratio={ratio}
                                 key={`uploading_${fileItem.id ?? ''}`}
                                 fileItem={fileItem}
                             />
