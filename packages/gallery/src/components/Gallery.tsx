@@ -3,6 +3,7 @@ import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/f
 import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { GalleryViewMode } from '../types/gallery';
 import { filterDuplicateFile, generatePreviewUrl, generateVideoThumbnail } from '../utils/file';
 import AddFile from './add-file/AddFile';
 import GalleryItem from './gallery-item/GalleryItem';
@@ -49,6 +50,10 @@ export type GalleryProps = {
      * PersonId of the user
      */
     personId: string;
+    /**
+     * The mode how the images should be displayed.
+     */
+    viewMode?: GalleryViewMode;
 };
 
 const Gallery: FC<GalleryProps> = ({
@@ -61,6 +66,7 @@ const Gallery: FC<GalleryProps> = ({
     onFileCountChange,
     onRemove,
     personId,
+    viewMode = GalleryViewMode.GRID,
 }) => {
     const [fileItems, setFileItems] = useState<FileItem[]>([]);
 
@@ -295,19 +301,6 @@ const Gallery: FC<GalleryProps> = ({
         }
     }, [fileItems]);
 
-    /**
-     * Returns the number of columns
-     */
-    const columns = useMemo(() => {
-        const combinedFilesLength = fileItems.length;
-
-        if (combinedFilesLength <= 1) {
-            return '';
-        }
-
-        return `repeat(${combinedFilesLength === 3 ? 3 : 2}, 1fr)`;
-    }, [fileItems.length]);
-
     const galleryContent = useMemo(() => {
         const combinedFilesLength = fileItems.length;
 
@@ -329,19 +322,35 @@ const Gallery: FC<GalleryProps> = ({
 
         const shortedFiles = fileItems.slice(0, 4);
 
-        return shortedFiles.map((file, index) => (
-            <GalleryItem
-                key={file.id}
-                fileItem={file}
-                isEditMode={false}
-                handleDeleteFile={handleDeleteFile}
-                onClick={openFiles}
-                remainingItemsLength={
-                    combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
+        return shortedFiles.map((file, index) => {
+            let imageRatio = 1;
+
+            if (viewMode === GalleryViewMode.GRID) {
+                if (combinedFilesLength === 2 && (index === 0 || index === 1)) {
+                    imageRatio = 0.5;
+                } else if (
+                    (index === 0 && combinedFilesLength > 2) ||
+                    (combinedFilesLength === 3 && (index === 1 || index === 2))
+                ) {
+                    imageRatio = 1.5;
                 }
-            />
-        ));
-    }, [fileItems, isEditMode, handleAddFiles, openFiles, handleDeleteFile]);
+            }
+
+            return (
+                <GalleryItem
+                    key={file.id}
+                    fileItem={file}
+                    isEditMode={false}
+                    handleDeleteFile={handleDeleteFile}
+                    onClick={openFiles}
+                    ratio={imageRatio}
+                    remainingItemsLength={
+                        combinedFilesLength > 4 && index === 3 ? combinedFilesLength : undefined
+                    }
+                />
+            );
+        });
+    }, [fileItems, isEditMode, handleAddFiles, openFiles, handleDeleteFile, viewMode]);
 
     return useMemo(
         () => (
@@ -357,15 +366,15 @@ const Gallery: FC<GalleryProps> = ({
                 ) : (
                     <StyledGalleryItemWrapper
                         ratio={ratio}
-                        columns={columns}
                         uploadedFileLength={fileItems.length}
+                        viewMode={viewMode}
                     >
                         {galleryContent}
                     </StyledGalleryItemWrapper>
                 )}
             </StyledGallery>
         ),
-        [isEditMode, fileMinWidth, galleryContent, ratio, columns, fileItems.length, handleDrop],
+        [isEditMode, fileMinWidth, galleryContent, ratio, fileItems.length, viewMode, handleDrop],
     );
 };
 

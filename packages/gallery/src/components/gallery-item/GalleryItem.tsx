@@ -24,6 +24,10 @@ export type GalleryItemProps = {
      */
     handleDeleteFile: (id?: string) => void;
     /**
+     * The ratio of the image
+     */
+    ratio?: number;
+    /**
      *  Length of the uploaded files
      */
     remainingItemsLength?: number;
@@ -37,6 +41,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
     fileItem,
     handleDeleteFile,
     isEditMode,
+    ratio = 1,
     remainingItemsLength,
     onClick,
 }) =>
@@ -62,6 +67,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                                 key={`uploaded_${fileItem.id ?? ''}`}
                                 fileItem={fileItem}
                                 isEditMode={isEditMode}
+                                ratio={ratio}
                                 openSelectedFile={onClick}
                             />
                         )}
@@ -74,7 +80,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                 )}
             </StyledGalleryItem>
         ),
-        [fileItem, handleDeleteFile, isEditMode, onClick, remainingItemsLength]
+        [fileItem, handleDeleteFile, isEditMode, onClick, ratio, remainingItemsLength],
     );
 
 GalleryItem.displayName = 'GalleryItem';

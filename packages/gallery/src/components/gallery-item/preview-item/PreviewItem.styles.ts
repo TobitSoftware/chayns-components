@@ -8,11 +8,11 @@ export const StyledMotionPreviewItem = styled(motion.div)<FramerMotionBugFix>`
     height: 100%;
 `;
 
-export const StyledPreviewItemImageWrapper = styled.div`
+export const StyledPreviewItemImageWrapper = styled.div<{ ratio: number }>`
     display: flex;
     width: 100%;
     height: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: ${({ ratio }) => ratio};
 `;
 
 type StyledPreviewItemImageProps = WithTheme<unknown>;
