@@ -29,13 +29,16 @@ const waviy = keyframes`
         background: linear-gradient(to right, rgb(15, 109, 126), rgb(15, 109, 126), rgb(115, 190, 204), rgb(15, 109, 126));
         background-clip: text;
         transform: translateY(0) scale(1);
+        opacity: 1;
     }
     20% {
         transform: translateY(-2px) scale(1.2);
+        opacity: 1;
     }
     100% {
         -webkit-text-fill-color: ${({ theme }: WithTheme<unknown>) => theme.text};
         transform: translateY(0) scale(1);
+        opacity: 1;
     }
 `;
 
@@ -52,6 +55,7 @@ export const StyledPrefixElementLetter = styled.span<StyledPrefixElementLetterPr
     background-clip: text;
     -webkit-text-fill-color: transparent;
     background-color: ${({ theme }: StyledPrefixElementLetterProps) => theme.text};
+    opacity: 0;
 
     animation:
         ${waviy} 0.4s forwards,
