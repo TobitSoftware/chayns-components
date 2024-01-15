@@ -1,14 +1,17 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import type { FractionOfSecondParser } from 'date-fns/parse/_lib/parsers/FractionOfSecondParser';
+import type { FramerMotionBugFix } from '@chayns-components/core';
 
 
-export const StyledCirclePulseDay = styled.h3`
+export const StyledCirclePulseDay = styled(motion.h3)<FramerMotionBugFix>`
     position: absolute;
     top: 50%;
     transform: translate(-100%, -50%);
 `
 
 
-export const StyledCirclePulseWrapper = styled.div`
+export const StyledCirclePulseWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-items: center;
     height: 20px;
     display: flex;

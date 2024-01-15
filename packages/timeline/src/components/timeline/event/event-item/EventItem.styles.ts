@@ -10,7 +10,7 @@ export const StyledEventItem = styled.div`
     margin: 5px 0;
 `
 
-export const StyledEventItemDay = styled.h3`
+export const StyledEventItemDay = styled(motion.h3)<FramerMotionBugFix>`
     position: absolute;
     top: 50%;
     transform: translate(calc(-100% - 8px), -50%);

@@ -55,7 +55,8 @@
         "clsx": "^2.0.0",
         "date-fns": "^3.0.6",
         "framer-motion": "^10.16.5",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "use-debounce": "^9.0.4"
     },
     "peerDependencies": {
         "react": ">=16.14.0",

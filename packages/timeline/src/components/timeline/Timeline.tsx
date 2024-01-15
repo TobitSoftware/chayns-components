@@ -4,7 +4,7 @@ import Event from './event/Event';
 import { StyledTimeline } from './Timeline.styles';
 import { isSameDay } from 'date-fns';
 import { toRelativeShortDateString } from '../../utils/date';
-import Line from './event/line/Line';
+import Line from '../shared/line/Line';
 
 type TimelineProps = {
     /*
@@ -13,6 +13,9 @@ type TimelineProps = {
     */
     events: TimelineEvent[];
 };
+
+// StartOffset für die Spalten der Events
+// EventsOffset für die Zeilen
 
 const Timeline: FC<TimelineProps> = ({ events }) => {
 
@@ -30,12 +33,14 @@ const Timeline: FC<TimelineProps> = ({ events }) => {
                 return (
                     <>
                         <Event
+                            eventOffset={i}
+                            startOffset={0}
                             key={event.id}
                             event={event}
                             day={isPrevDayDifferent ? toRelativeShortDateString(event.startTime) : undefined}
                         />
                         {isNextDayDifferent && (
-                            <Line color={event.color} isDashed/>
+                            <Line color={event.color} isDashed startOffset={0} eventOffset={i}/>
                         )}
                     </>
                 );

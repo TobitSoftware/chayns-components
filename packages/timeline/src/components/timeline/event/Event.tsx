@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import type { TimelineEvent } from '../../../types/timeline';
 import CirclePulse from './circle/CirclePulse';
 import EventItem from './event-item/EventItem';
-import Line from './line/Line';
+import Line from '../../shared/line/Line';
 import { EventContent, StyledChildEventsWrapper, StyledDuration, StyledEvent } from './Event.styles';
 
 export const arrows = {
@@ -20,9 +20,11 @@ interface EventProps {
     event: TimelineEvent;
     isSubEvent?: boolean;
     day?: string;
+    startOffset: number;
+    eventOffset: number;
 }
 
-const Event: FC<EventProps> = ({ event, isSubEvent, day }) => {
+const Event: FC<EventProps> = ({ event, isSubEvent, day, eventOffset, startOffset }) => {
     const { events, name, color, duration, startTime, startIcon, endTime, endIcon, id } = event;
 
     const hasSubEvents = events && events.length > 0;
@@ -37,29 +39,42 @@ const Event: FC<EventProps> = ({ event, isSubEvent, day }) => {
                     date={endTime}
                     arrow={arrows.right}
                     day={day}
+                    startOffset={startOffset}
+                    eventOffset={eventOffset}
                 />
             ) : (
                 <CirclePulse
+                    startOffset={startOffset}
                     day={day}
                     color={color}
                 />
             )}
             <EventContent>
-                <Line color={color}/>
+                <Line color={color} startOffset={startOffset} eventOffset={eventOffset}/>
                 {hasSubEvents && (
                     <StyledChildEventsWrapper>
-                        {events.map((childEvent) => (
-                            <Event event={childEvent} key={childEvent.id} isSubEvent/>
+                        {events.map((childEvent, i) => (
+                            <Event event={childEvent} key={childEvent.id} isSubEvent startOffset={startOffset + 1} eventOffset={i}/>
                         ))}
                     </StyledChildEventsWrapper>
                 )}
-                {
-                    (!isSubEvent || !hasSubEvents) && (
-                        <StyledDuration isSubEvent={isSubEvent}>
-                            {convertMinutes(duration)}
-                        </StyledDuration>
-                    )
-                }
+                {(!isSubEvent || !hasSubEvents) && (
+                    <StyledDuration
+                        isSubEvent={isSubEvent}
+                        initial={{
+                            opacity: 0
+                        }}
+                        animate={{
+                            opacity: 0.7
+                        }}
+                        transition={{
+                            easeIn: 0.6,
+                            delay: 0.8 // (counterDuration * 0.1) + 0.8
+                        }}
+                    >
+                        {convertMinutes(duration)}
+                    </StyledDuration>
+                )}
             </EventContent>
             <EventItem
                 icon={startIcon}
