@@ -26,3 +26,26 @@ export const getLanguage = (): Locale => {
             return de;
     }
 };
+
+interface GetTimeStringProps {
+    language?: string;
+    isMorning?: boolean;
+}
+
+export const getTimeString = ({ language, isMorning }: GetTimeStringProps) => {
+    switch (language) {
+        case 'en-GB':
+        case 'pt':
+            return isMorning ? 'AM' : 'PM';
+        case 'nl':
+            return 'uur';
+        case 'fr':
+            return 'heures';
+        case 'de':
+            return 'Uhr';
+        case 'es':
+            return 'h';
+        default:
+            return '';
+    }
+};

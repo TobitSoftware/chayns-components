@@ -24,12 +24,10 @@ export type DateInfoProps = {
     shouldShowThisYear?: boolean;
     /**
      * Adds the time to the display.
-     * NOTE: The time is display with german text
      */
     shouldShowTime?: boolean;
     /**
      * Whether the relative day of week to today should be shown (today, yesterday or tomorrow).
-     * NOTE: The text is only available in german
      */
     shouldShowRelativeDayOfWeek?: boolean;
     /**
@@ -42,7 +40,6 @@ export type DateInfoProps = {
     shouldShowDayOfWeek?: boolean;
     /**
      * Shows the difference from the date to now. The component handles updates itself.
-     * NOTE: This option is only available in german
      */
     shouldShowDateToNowDifference?: boolean;
 };
@@ -72,6 +69,7 @@ const DateInfo: FC<DateInfoProps> = ({
             shouldShowRelativeDayOfWeek,
             shouldUseShortText,
             date: formattedDate,
+            language: language.code,
         });
 
         let formatString = 'dd. ';
@@ -85,7 +83,11 @@ const DateInfo: FC<DateInfoProps> = ({
 
         newFormattedDateString += format(formattedDate, formatString, { locale: language });
 
-        newFormattedDateString += getFormattedTime({ date: formattedDate, shouldShowTime });
+        newFormattedDateString += getFormattedTime({
+            date: formattedDate,
+            shouldShowTime,
+            language,
+        });
 
         setFormattedDateString(newFormattedDateString);
     }, [
@@ -144,9 +146,9 @@ const DateInfo: FC<DateInfoProps> = ({
     useEffect(() => {
         // This useEffect is for showing the difference of the date to now
         if (shouldShowDateToNowDifference) {
-            setFormattedDateString(getTimeTillNow({ date: formattedDate, currentDate }));
+            setFormattedDateString(getTimeTillNow({ date: formattedDate, currentDate, language }));
         }
-    }, [currentDate, date, formattedDate, shouldShowDateToNowDifference]);
+    }, [currentDate, date, formattedDate, language, shouldShowDateToNowDifference]);
 
     useEffect(() => {
         setFormattedDate(new Date(date));
