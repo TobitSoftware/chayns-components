@@ -1,14 +1,13 @@
 import React, { type FC } from 'react';
 import { StyledCirclePulse, StyledCirclePulseDay, StyledCirclePulseWrapper } from './CirclePulse.styles';
-import { START_OFFSET } from '../../../../constants/time';
 
 interface CirclePulseProps {
     color: string;
     day?: string;
-    startOffset: number;
+    delay: number;
 }
 
-const CirclePulse: FC<CirclePulseProps> = ({ color, day, startOffset }) => (
+const CirclePulse: FC<CirclePulseProps> = ({ color, day, delay }) => (
     <StyledCirclePulseWrapper
         initial={{ opacity: 0 }}
         animate={{
@@ -16,7 +15,7 @@ const CirclePulse: FC<CirclePulseProps> = ({ color, day, startOffset }) => (
         }}
         transition={{
             easeIn: 0.6,
-            delay: (startOffset * START_OFFSET)
+            delay,
         }}
     >
         <StyledCirclePulseDay>{day}</StyledCirclePulseDay>

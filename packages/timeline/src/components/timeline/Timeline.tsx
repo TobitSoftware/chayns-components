@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import type { TimelineEvent } from '../../types/timeline';
+import React, { FC, useMemo } from 'react';
+import type { TimelineEvent, TransformedTimelineEvent } from '../../types/timeline';
 import Event from './event/Event';
 import { StyledTimeline } from './Timeline.styles';
 import { isSameDay } from 'date-fns';
@@ -17,11 +17,30 @@ type TimelineProps = {
 // StartOffset für die Spalten der Events
 // EventsOffset für die Zeilen
 
+const transformEvents = (events: TimelineEvent[], delayObj: { delay: number }, depth: number): TransformedTimelineEvent[] => {
+    return events.map((event) => {
+        const transformedChildEvents = event.events ? transformEvents(event.events, delayObj, depth + 1) : undefined;
+        return {
+            ...event,
+            events: transformedChildEvents,
+            leafCount: transformedChildEvents?.reduce((acc, curr) => acc + (curr.events ? curr.leafCount : 1), 0),
+            // eslint-disable-next-line no-param-reassign
+            delay: transformedChildEvents?.[0] ? transformedChildEvents[0].delay : delayObj.delay++,
+            offset: depth * 0.1,
+        };
+    })
+}
+
 const Timeline: FC<TimelineProps> = ({ events }) => {
+    const ev = useMemo(() => {
+
+
+        return transformEvents(events, { delay: 0 }, 0);
+    }, [events]);
 
     return (
         <StyledTimeline>
-            {events.map((event, i) => {
+            {ev.map((event, i) => {
                 const prevEvent = events[i - 1];
                 const nextEvent = events[i + 1];
 
@@ -33,14 +52,12 @@ const Timeline: FC<TimelineProps> = ({ events }) => {
                 return (
                     <>
                         <Event
-                            eventOffset={i}
-                            startOffset={0}
                             key={event.id}
                             event={event}
                             day={isPrevDayDifferent ? toRelativeShortDateString(event.startTime) : undefined}
                         />
                         {isNextDayDifferent && (
-                            <Line color={event.color} isDashed startOffset={0} eventOffset={i}/>
+                            <Line color={event.color} isDashed delay={0} duration={0} />
                         )}
                     </>
                 );

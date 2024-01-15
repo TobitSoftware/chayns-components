@@ -9,3 +9,10 @@ export interface TimelineEvent {
     startIcon: string;
     startTime: string;
 }
+
+export interface TransformedTimelineEvent extends TimelineEvent {
+    offset: number;
+    delay: number;
+    leafCount: number;
+    events?: [TransformedTimelineEvent, ...TransformedTimelineEvent[]];
+}

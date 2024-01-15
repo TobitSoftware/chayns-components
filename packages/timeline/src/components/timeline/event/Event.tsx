@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import type { TimelineEvent } from '../../../types/timeline';
+import type { TransformedTimelineEvent } from '../../../types/timeline';
 import CirclePulse from './circle/CirclePulse';
 import EventItem from './event-item/EventItem';
 import Line from '../../shared/line/Line';
@@ -17,15 +17,15 @@ export const arrows = {
 };
 
 interface EventProps {
-    event: TimelineEvent;
+    event: TransformedTimelineEvent;
     isSubEvent?: boolean;
     day?: string;
-    startOffset: number;
-    eventOffset: number;
 }
 
-const Event: FC<EventProps> = ({ event, isSubEvent, day, eventOffset, startOffset }) => {
-    const { events, name, color, duration, startTime, startIcon, endTime, endIcon, id } = event;
+const BASE_DURATION = 0.5;
+
+const Event: FC<EventProps> = ({ event, isSubEvent, day }) => {
+    const { events, name, color, duration, startTime, startIcon, endTime, endIcon, delay, offset } = event;
 
     const hasSubEvents = events && events.length > 0;
 
@@ -39,22 +39,26 @@ const Event: FC<EventProps> = ({ event, isSubEvent, day, eventOffset, startOffse
                     date={endTime}
                     arrow={arrows.right}
                     day={day}
-                    startOffset={startOffset}
-                    eventOffset={eventOffset}
+                    delay={(delay + offset) * BASE_DURATION}
+                    duration={0.2 * (event.leafCount ?? 1) * BASE_DURATION}
                 />
             ) : (
                 <CirclePulse
-                    startOffset={startOffset}
+                    delay={(delay + offset) * BASE_DURATION}
                     day={day}
                     color={color}
                 />
             )}
             <EventContent>
-                <Line color={color} startOffset={startOffset} eventOffset={eventOffset}/>
+                <Line color={color} delay={(delay + offset + 0.2 * (event.leafCount ?? 1)) * BASE_DURATION} duration={(event.leafCount ?? 1) * 0.8 * BASE_DURATION}/>
                 {hasSubEvents && (
                     <StyledChildEventsWrapper>
-                        {events.map((childEvent, i) => (
-                            <Event event={childEvent} key={childEvent.id} isSubEvent startOffset={startOffset + 1} eventOffset={i}/>
+                        {events.map((childEvent) => (
+                            <Event
+                                event={childEvent}
+                                key={childEvent.id}
+                                isSubEvent
+                            />
                         ))}
                     </StyledChildEventsWrapper>
                 )}
@@ -69,7 +73,7 @@ const Event: FC<EventProps> = ({ event, isSubEvent, day, eventOffset, startOffse
                         }}
                         transition={{
                             easeIn: 0.6,
-                            delay: 0.8 // (counterDuration * 0.1) + 0.8
+                            delay: (delay + offset + 0.4 * (event.leafCount ?? 1)) * BASE_DURATION,
                         }}
                     >
                         {convertMinutes(duration)}
@@ -82,6 +86,8 @@ const Event: FC<EventProps> = ({ event, isSubEvent, day, eventOffset, startOffse
                 name={name}
                 arrow={arrows.left}
                 date={startTime}
+                delay={(delay + offset + 0.8 * (event.leafCount ?? 1)) * BASE_DURATION}
+                duration={0.3 * (event.leafCount ?? 1) * BASE_DURATION}
             />
         </StyledEvent>
     );
