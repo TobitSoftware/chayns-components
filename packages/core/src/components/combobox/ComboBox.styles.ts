@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
+import { is } from 'date-fns/locale';
 
 export const StyledComboBox = styled.div`
     user-select: none;
@@ -15,6 +16,7 @@ type StyledComboBoxHeaderProps = WithTheme<{
     isOpen: boolean;
     minWidth: number;
     direction: ComboBoxDirection;
+    isDisabled?: boolean;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -22,8 +24,9 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     justify-content: space-between;
     border: 1px solid rgba(160, 160, 160, 0.3);
     padding: 4px 10px;
-    cursor: pointer;
+    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'not-allowed')};
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
+    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     min-width: ${({ minWidth }) => minWidth}px;
     max-width: ${({ minWidth }) => minWidth}px;
 
@@ -45,8 +48,9 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         `;
     }}
 
-    ${({ isMobile, theme }: StyledComboBoxHeaderProps) =>
+    ${({ isMobile, isDisabled, theme }: StyledComboBoxHeaderProps) =>
         !isMobile &&
+        !isDisabled &&
         css`
             &:hover {
                 background-color: ${theme['secondary-101']};

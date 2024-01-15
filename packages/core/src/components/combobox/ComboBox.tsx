@@ -32,6 +32,10 @@ export type ComboBoxProps = {
      */
     direction?: ComboBoxDirection;
     /**
+     * Whether the combobox should be disabled.
+     */
+    isDisabled?: boolean;
+    /**
      * The list of the items that should be displayed.
      */
     list: IComboBoxItem[];
@@ -59,6 +63,7 @@ export type ComboBoxProps = {
 
 const ComboBox: FC<ComboBoxProps> = ({
     direction = ComboBoxDirection.BOTTOM,
+    isDisabled = false,
     list,
     maxHeight = '300px',
     onSelect,
@@ -81,7 +86,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 setIsAnimating(false);
             }
         },
-        [ref],
+        [ref]
     );
 
     /**
@@ -107,7 +112,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 onSelect(itemToSelect);
             }
         },
-        [onSelect],
+        [onSelect]
     );
 
     /**
@@ -125,7 +130,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
         setMinWidth(
-            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0),
+            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0)
         );
     }, [list, placeholder]);
 
@@ -169,9 +174,11 @@ const ComboBox: FC<ComboBoxProps> = ({
     /**
      * This function opens the content of the combobox
      */
-    const handleHeaderClick = () => {
-        setIsAnimating((prevState) => !prevState);
-    };
+    const handleHeaderClick = useCallback(() => {
+        if (!isDisabled) {
+            setIsAnimating((prevState) => !prevState);
+        }
+    }, [isDisabled]);
 
     const comboBoxBody = useMemo(() => {
         const items = list.map(({ imageUrl, text, value }) => (
@@ -229,6 +236,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                     onClick={handleHeaderClick}
                     isOpen={isAnimating}
                     isMobile={isMobile}
+                    isDisabled={isDisabled}
                 >
                     <StyledComboBoxPlaceholder>
                         {placeholderImageUrl && (
@@ -249,13 +257,15 @@ const ComboBox: FC<ComboBoxProps> = ({
         [
             comboBoxBody,
             direction,
+            handleHeaderClick,
             isAnimating,
+            isDisabled,
             isMobile,
             minWidth,
             placeholderImageUrl,
             placeholderText,
             shouldShowRoundImage,
-        ],
+        ]
     );
 };
 
