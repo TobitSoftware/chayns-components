@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ComboBox from '../src/components/combobox/ComboBox';
+import { ComboBoxDirection } from '../src/types/comboBox';
 
 export default {
     title: 'Core/ComboBox',
@@ -74,9 +75,58 @@ export default {
 const Template: StoryFn<typeof ComboBox> = (args) => (
     <>
         <h1>Pizza auswählen</h1>
+        <p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
+            sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+            aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+            rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+            amet. Sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita
+            kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        </p>
         <ComboBox {...args} />
-        <p>Pizza ist sehr lecker</p>
     </>
 );
 
 export const General = Template.bind({});
+
+export const WithImages = Template.bind({});
+
+WithImages.args = {
+    direction: ComboBoxDirection.TOP,
+    list: [
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Schnellstart',
+            value: 0,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Flexibles Design',
+            value: 1,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Intuitive Bedienung',
+            value: 2,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Integration',
+            value: 3,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Navigation',
+            value: 4,
+        },
+    ],
+    selectedItem: {
+        imageUrl: 'https://picsum.photos/200',
+        text: 'Flexibles Design',
+        value: 1,
+    },
+};

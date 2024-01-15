@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const StyledPopup = styled.span`
     cursor: pointer;
     position: relative;
+    display: flex;
 `;
 
 export const StyledPopupPseudo = styled.div<{

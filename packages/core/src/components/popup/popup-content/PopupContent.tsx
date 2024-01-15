@@ -1,5 +1,5 @@
-import { getSite } from 'chayns-api';
 import React, { ReactNode } from 'react';
+import { useColorMode } from '../../../hooks/colorMode';
 import { PopupAlignment, PopupCoordinates } from '../types';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
 
@@ -11,7 +11,7 @@ type PopupContentProps = {
 
 const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
     ({ alignment, coordinates, content }, ref) => {
-        const { colorMode } = getSite();
+        const colorMode = useColorMode();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;

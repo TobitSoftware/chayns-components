@@ -9,6 +9,8 @@ export interface Chayns {
     openVideo(url: string): Promise<void>;
     register(config: object): any;
     getWindowMetrics(): Promise<WindowMetrics>;
+    addDesignSettingsChangeListener(callback: () => any): Promise<any>;
+    removeDesignSettingsChangeListener(callback: () => any): Promise<any>;
 }
 
 export interface WindowMetrics {
@@ -111,6 +113,7 @@ export interface User {
 
 export interface Site {
     id: string;
+    colorMode: 0 | 1 | 2;
 }
 
 export interface Env {

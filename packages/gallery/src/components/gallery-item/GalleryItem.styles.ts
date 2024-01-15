@@ -4,6 +4,8 @@ import styled from 'styled-components';
 export const StyledGalleryItem = styled.div`
     display: flex;
     position: relative;
+    height: 100%;
+    width: 100%;
 `;
 
 type StyledGalleryItemDeleteButtonProps = WithTheme<unknown>;

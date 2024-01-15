@@ -8,18 +8,18 @@ export const StyledMotionMediaItem = styled(motion.div)<FramerMotionBugFix>`
     height: 100%;
 `;
 
-export const StyledMediaItemVideoWrapper = styled.div`
+export const StyledMediaItemVideoWrapper = styled.div<{ ratio: number }>`
     display: flex;
     width: 100%;
     height: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: ${({ ratio }) => ratio};
 `;
 
-export const StyledMediaItemImageWrapper = styled.div`
+export const StyledMediaItemImageWrapper = styled.div<{ ratio: number }>`
     display: flex;
     width: 100%;
     height: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: ${({ ratio }) => ratio};
 `;
 
 type StyledMediaItemVideoProps = WithTheme<unknown>;

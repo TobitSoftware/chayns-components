@@ -15,13 +15,12 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
     border-radius: 3px;
     box-shadow: 1px 3px 8px rgb(0 0 0 / 30%);
     color: ${({ theme }: StyledMotionPopupContentProps) => theme.text};
-    z-index: 0;
+    z-index: 100;
     position: fixed;
 
     &::after {
         background-color: inherit;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        border-bottom-right-radius: 3px;
         border-right: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 2px 2px 8px rgb(4 3 4 / 10%);
         content: '';
@@ -34,26 +33,26 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
             switch (position) {
                 case PopupAlignment.TopLeft:
                     return css`
-                        bottom: -8px;
+                        bottom: -7px;
                         right: 13px;
                         transform: rotate(45deg);
                     `;
                 case PopupAlignment.BottomLeft:
                     return css`
-                        top: -8px;
+                        top: -7px;
                         right: 13px;
                         transform: rotate(225deg);
                     `;
                 case PopupAlignment.TopRight:
                     return css`
                         transform: rotate(45deg);
-                        bottom: -8px;
+                        bottom: -7px;
                         left: 13px;
                     `;
                 case PopupAlignment.BottomRight:
                     return css`
                         transform: rotate(225deg);
-                        top: -8px;
+                        top: -7px;
                         left: 13px;
                     `;
                 default:
@@ -75,6 +74,5 @@ export const StyledMotionPopupContent = styled(motion.div)<StyledMotionPopupCont
 `;
 
 export const StyledPopupContentInner = styled.div`
-    border-radius: 3px;
     overflow: hidden;
 `;

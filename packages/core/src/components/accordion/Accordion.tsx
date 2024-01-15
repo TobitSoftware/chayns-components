@@ -160,6 +160,16 @@ const Accordion: FC<AccordionProps> = ({
     }, [isDisabled, updateOpenAccordionUuid, uuid]);
 
     useEffect(() => {
+        if (isDisabled && isOpen) {
+            if (typeof updateOpenAccordionUuid === 'function') {
+                updateOpenAccordionUuid(uuid);
+            }
+
+            setIsAccordionOpen((currentIsAccordionOpen) => !currentIsAccordionOpen);
+        }
+    }, [isDisabled, isOpen, updateOpenAccordionUuid, uuid]);
+
+    useEffect(() => {
         if (isInitialRenderRef.current) {
             isInitialRenderRef.current = false;
         } else if (isOpen) {

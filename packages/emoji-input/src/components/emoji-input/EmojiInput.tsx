@@ -34,11 +34,11 @@ import {
     StyledEmojiInput,
     StyledEmojiInputContent,
     StyledEmojiInputLabel,
-    StyledEmojiInputPrefixElement,
     StyledEmojiInputRightWrapper,
     StyledMotionEmojiInputEditor,
     StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
+import PrefixElement from './prefix-element/PrefixElement';
 
 export type EmojiInputProps = {
     /**
@@ -79,6 +79,10 @@ export type EmojiInputProps = {
      * Function that is executed when a key is pressed down.
      */
     onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
+    /**
+     * Function to be executed if the prefixElement is removed.
+     */
+    onPrefixElementRemove?: () => void;
     /**
      * Function that is executed when the visibility of the popup changes.
      * @param {boolean} isVisible - Whether the popup is visible or not
@@ -138,6 +142,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             onFocus,
             onInput,
             onKeyDown,
+            onPrefixElementRemove,
             onPopupVisibilityChange,
             personId,
             placeholder,
@@ -155,11 +160,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
         const [labelWidth, setLabelWidth] = useState(0);
+        const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
         const editorRef = useRef<HTMLDivElement>(null);
         const prefixElementRef = useRef<HTMLDivElement>(null);
-
+        const hasPrefixRendered = useRef(false);
         const shouldDeleteOneMoreBackwards = useRef(false);
         const shouldDeleteOneMoreForwards = useRef(false);
 
@@ -332,6 +338,34 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         useEffect(() => {
+            if (typeof onPrefixElementRemove !== 'function') {
+                return;
+            }
+
+            if (!hasPrefixRendered.current) {
+                return;
+            }
+
+            const convertedText = convertHTMLToText(editorRef.current?.innerHTML ?? '').replace(
+                '&nbsp;',
+                ' ',
+            );
+            const convertedPrefix = prefixElement && prefixElement.replace('&nbsp;', ' ');
+
+            if (
+                (convertedPrefix &&
+                    convertedText.includes(convertedPrefix) &&
+                    convertedText.length > convertedPrefix.length) ||
+                convertedPrefix === convertedText
+            ) {
+                return;
+            }
+
+            onPrefixElementRemove();
+            hasPrefixRendered.current = false;
+        }, [onPrefixElementRemove, plainTextValue.length, prefixElement]);
+
+        useEffect(() => {
             if (value !== plainTextValue) {
                 setPlainTextValue(value);
 
@@ -393,16 +427,24 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         const shouldShowPlaceholder = useMemo(() => {
+            if (!isPrefixAnimationFinished) {
+                return false;
+            }
+
             const isJustPrefixElement =
                 prefixElement &&
                 prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '');
+
+            const shouldRenderPlaceholder =
+                (prefixElement && !plainTextValue) ||
+                (prefixElement ? prefixElementWidth && prefixElementWidth > 0 : true);
 
             switch (true) {
                 case (!plainTextValue || isJustPrefixElement) &&
                     shouldHidePlaceholderOnFocus &&
                     !hasFocus:
                 case (!plainTextValue || isJustPrefixElement) && !shouldHidePlaceholderOnFocus:
-                    return true;
+                    return shouldRenderPlaceholder;
                 case (!plainTextValue || isJustPrefixElement) &&
                     shouldHidePlaceholderOnFocus &&
                     hasFocus:
@@ -410,7 +452,20 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 default:
                     return false;
             }
-        }, [hasFocus, plainTextValue, prefixElement, shouldHidePlaceholderOnFocus]);
+        }, [
+            isPrefixAnimationFinished,
+            hasFocus,
+            plainTextValue,
+            prefixElement,
+            shouldHidePlaceholderOnFocus,
+            prefixElementWidth,
+        ]);
+
+        useEffect(() => {
+            if (prefixElement) {
+                setIsPrefixAnimationFinished(false);
+            }
+        }, [prefixElement]);
 
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
             if (typeof onFocus === 'function') {
@@ -430,7 +485,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         useEffect(() => {
             if (editorRef.current && prefixElement) {
+                const text = convertEmojisToUnicode(prefixElement);
+
+                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
                 handleUpdateHTML(prefixElement);
+                hasPrefixRendered.current = true;
             }
         }, [handleUpdateHTML, prefixElement]);
 
@@ -440,7 +500,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 prefixElement &&
                 prefixElement === convertHTMLToText(editorRef.current?.innerHTML ?? '')
             ) {
-                setPrefixElementWidth(prefixElementRef.current.offsetWidth);
+                setPrefixElementWidth(prefixElementRef.current.offsetWidth + 2);
             } else {
                 setPrefixElementWidth(undefined);
             }
@@ -487,9 +547,10 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 </AnimatePresence>
                 <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
                     {prefixElement && (
-                        <StyledEmojiInputPrefixElement
-                            ref={prefixElementRef}
-                            dangerouslySetInnerHTML={{ __html: convertTextToHTML(prefixElement) }}
+                        <PrefixElement
+                            element={prefixElement}
+                            prefixElementRef={prefixElementRef}
+                            setIsPrefixAnimationFinished={setIsPrefixAnimationFinished}
                         />
                     )}
                     <StyledMotionEmojiInputEditor
@@ -503,6 +564,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onKeyDown={handleKeyDown}
                         onPaste={handlePaste}
                         ref={editorRef}
+                        shouldShowContent={isPrefixAnimationFinished}
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
 

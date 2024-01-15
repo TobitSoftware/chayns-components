@@ -13,9 +13,14 @@ export default {
 
 const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
     const [text, setText] = useState('');
+    const [prefix, setPrefix] = useState<string | undefined>();
 
     const handleInput = (event: ChangeEvent<HTMLDivElement>, originalText: string) => {
         setText(originalText);
+    };
+
+    const handlePrefixRemove = () => {
+        setPrefix(undefined);
     };
 
     return (
@@ -33,12 +38,24 @@ const Template: StoryFn<typeof EmojiInput> = ({ ...args }) => {
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
                 voluptua.
             </p>
-            <p>[lc_mention id="MIC-HAEL1"]Michael[/lc_mention]</p>
-            <p>
+            <p onClick={() => setPrefix('[lc_mention id="MIC-HAEL1"]Michael[/lc_mention],&nbsp;')}>
+                [lc_mention id="MIC-HAEL1"]Michael[/lc_mention]
+            </p>
+            <p
+                onClick={() =>
+                    setPrefix('[lc_mention id="CHA-YNSAI"]chayns Assistant[/lc_mention],&nbsp;')
+                }
+            >
                 [lc_mention id="CHA-YNSAI"]chayns Assistant[/lc_mention] fasse die letzten
                 Nachrichten kurz zusammen.
             </p>
-            <EmojiInput {...args} onInput={handleInput} value={text} />
+            <EmojiInput
+                {...args}
+                onInput={handleInput}
+                value={text}
+                prefixElement={prefix}
+                onPrefixElementRemove={handlePrefixRemove}
+            />
         </>
     );
 };

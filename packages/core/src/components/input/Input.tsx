@@ -127,6 +127,8 @@ const Input = forwardRef<InputRef, InputProps>(
             if (inputRef.current) {
                 inputRef.current.value = '';
 
+                setHasValue(false);
+
                 if (typeof onChange === 'function') {
                     onChange({ target: inputRef.current } as ChangeEvent<HTMLInputElement>);
                 }

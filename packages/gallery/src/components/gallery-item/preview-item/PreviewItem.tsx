@@ -13,9 +13,13 @@ export type PreviewItemProps = {
      *  Images and videos which should be displayed
      */
     fileItem: FileItem;
+    /**
+     * The ratio of the image
+     */
+    ratio: number;
 };
 
-const PreviewItem: FC<PreviewItemProps> = ({ fileItem }) => (
+const PreviewItem: FC<PreviewItemProps> = ({ fileItem, ratio }) => (
     <StyledMotionPreviewItem
         animate={{ opacity: 1 }}
         initial={{ opacity: 0 }}
@@ -26,7 +30,7 @@ const PreviewItem: FC<PreviewItemProps> = ({ fileItem }) => (
         transition={{ duration: 3.2 }}
         style={{ position: 'absolute' }}
     >
-        <StyledPreviewItemImageWrapper>
+        <StyledPreviewItemImageWrapper ratio={ratio}>
             <StyledPreviewItemLoadingIcon>
                 <SmallWaitCursor shouldHideWaitCursor={false} shouldHideBackground />
             </StyledPreviewItemLoadingIcon>

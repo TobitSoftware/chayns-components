@@ -29,9 +29,7 @@ export default {
     },
 } as Meta<typeof Gallery>;
 
-const Template: StoryFn<typeof Gallery> = ({ children, ...args }) => (
-    <Gallery {...args}>{children}</Gallery>
-);
+const Template: StoryFn<typeof Gallery> = ({ ...args }) => <Gallery {...args} />;
 
 export const General = Template.bind({});
 

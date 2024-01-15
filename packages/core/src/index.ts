@@ -60,6 +60,7 @@ export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { CodeHighlighterTheme } from './types/codeHighlighter';
 export type { CodeHighlighterLanguage, HighlightedLines } from './types/codeHighlighter';
+export { ComboBoxDirection } from './types/comboBox';
 export type { FileItem, Image, Meta, Video } from './types/file';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
