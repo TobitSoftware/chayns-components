@@ -69,7 +69,7 @@ const DateInfo: FC<DateInfoProps> = ({
             shouldShowRelativeDayOfWeek,
             shouldUseShortText,
             date: formattedDate,
-            language: language.code,
+            language,
         });
 
         let formatString = 'dd. ';

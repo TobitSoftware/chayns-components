@@ -1,10 +1,6 @@
 import { format, isPast, isThisYear, isToday, isTomorrow, isYesterday } from 'date-fns';
 import { getTimeString } from './language';
-import {
-    TIME_TYPE_STRINGS,
-    type TimeTypeStringCollection,
-    type TimeTypeStringsRecord,
-} from '../constants/language';
+import { TIME_TYPE_STRINGS, type TimeTypeStringsRecord } from '../constants/language';
 
 interface GetFormattedYearOptions {
     date: Date;
@@ -36,7 +32,7 @@ interface GetFormattedDayOfWeekOptions {
     shouldShowRelativeDayOfWeek?: boolean;
     shouldUseShortText?: boolean;
     date: Date;
-    language?: string;
+    language?: Locale;
 }
 
 export const getFormattedDayOfWeek = ({
@@ -52,7 +48,7 @@ export const getFormattedDayOfWeek = ({
 
     if (shouldShowRelativeDayOfWeek) {
         if (isToday(date)) {
-            switch (language) {
+            switch (language?.code) {
                 case 'en-GB':
                     return 'Today, ';
                 case 'nl':
@@ -77,7 +73,7 @@ export const getFormattedDayOfWeek = ({
         }
 
         if (isTomorrow(date)) {
-            switch (language) {
+            switch (language?.code) {
                 case 'en-GB':
                     return 'Tomorrow, ';
                 case 'nl':
@@ -102,7 +98,7 @@ export const getFormattedDayOfWeek = ({
         }
 
         if (isYesterday(date)) {
-            switch (language) {
+            switch (language?.code) {
                 case 'en-GB':
                     return 'Yesterday, ';
                 case 'nl':
@@ -128,10 +124,10 @@ export const getFormattedDayOfWeek = ({
     }
 
     if (shouldUseShortText) {
-        return format(date, 'E., ');
+        return format(date, 'E., ', { locale: language });
     }
 
-    return format(date, 'EEEE, ');
+    return format(date, 'EEEE, ', { locale: language });
 };
 
 interface GetFormattedTimeOptions {
