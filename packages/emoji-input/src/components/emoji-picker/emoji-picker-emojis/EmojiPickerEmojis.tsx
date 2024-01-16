@@ -71,6 +71,10 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     useEffect(() => {
         if (selectedCategory) {
             setFocusedIndex(0);
+
+            const container = emojiRef.current;
+
+            container.scrollTop = 0;
         }
     }, [selectedCategory]);
 
