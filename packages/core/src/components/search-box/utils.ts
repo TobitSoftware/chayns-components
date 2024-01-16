@@ -13,8 +13,6 @@ export const searchList = ({ searchString, items }: SearchListOptions) => {
     items.forEach((item) => {
         const lowercaseText = item.text.toLowerCase();
 
-        // console.log(item, lowercaseText.includes(lowercaseSearchString));
-
         if (lowercaseText.includes(lowercaseSearchString)) {
             matchingItems.push(item);
         }
