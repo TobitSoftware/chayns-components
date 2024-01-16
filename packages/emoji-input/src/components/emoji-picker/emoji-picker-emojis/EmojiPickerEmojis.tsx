@@ -74,6 +74,10 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
             const container = emojiRef.current;
 
+            if (!container) {
+                return;
+            }
+
             container.scrollTop = 0;
         }
     }, [selectedCategory]);

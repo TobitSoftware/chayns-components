@@ -160,6 +160,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const [hasFocus, setHasFocus] = useState(false);
         const [progressDuration, setProgressDuration] = useState(0);
         const [labelWidth, setLabelWidth] = useState(0);
+        const [isPopupVisible, setIsPopupVisible] = useState(false);
         const [isPrefixAnimationFinished, setIsPrefixAnimationFinished] = useState(!prefixElement);
         const [prefixElementWidth, setPrefixElementWidth] = useState<number | undefined>();
 
@@ -272,6 +273,12 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     event.stopPropagation();
                 }
 
+                if (event.key === 'Enter' && isPopupVisible) {
+                    event.preventDefault();
+
+                    return;
+                }
+
                 if (typeof onKeyDown === 'function') {
                     onKeyDown(event);
                 }
@@ -294,8 +301,16 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     }
                 }
             },
-            [isDisabled, onKeyDown],
+            [isDisabled, isPopupVisible, onKeyDown],
         );
+
+        const handlePopupVisibility = (isVisible: boolean) => {
+            setIsPopupVisible(isVisible);
+
+            if (typeof onPopupVisibilityChange === 'function') {
+                onPopupVisibilityChange(isVisible);
+            }
+        };
 
         /**
          * This function prevents formatting from being adopted when texts are inserted. To do this, the
@@ -581,7 +596,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                             accessToken={accessToken}
                             alignment={popupAlignment}
                             onSelect={handlePopupSelect}
-                            onPopupVisibilityChange={onPopupVisibilityChange}
+                            onPopupVisibilityChange={handlePopupVisibility}
                             personId={personId}
                         />
                     )}
