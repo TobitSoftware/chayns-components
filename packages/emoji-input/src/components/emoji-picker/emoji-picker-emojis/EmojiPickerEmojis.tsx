@@ -86,6 +86,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                 event.preventDefault();
                 const children = emojiRef.current?.children;
                 if (children && children.length > 0) {
+                    const container = emojiRef.current;
                     let newIndex = focusedIndex !== null ? focusedIndex : 0;
 
                     if (event.ctrlKey) {
@@ -119,6 +120,15 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
                     // Set focus to the element
                     const newElement = children[newIndex] as HTMLDivElement;
                     newElement.tabIndex = 0;
+
+                    const containerRect = container.getBoundingClientRect();
+                    const elementRect = newElement.getBoundingClientRect();
+
+                    if (elementRect.bottom > containerRect.bottom) {
+                        container.scrollTop += elementRect.bottom - containerRect.bottom;
+                    } else if (elementRect.top < containerRect.top) {
+                        container.scrollTop -= containerRect.top - elementRect.top;
+                    }
                 }
             } else if (
                 event.key === 'Enter' &&
