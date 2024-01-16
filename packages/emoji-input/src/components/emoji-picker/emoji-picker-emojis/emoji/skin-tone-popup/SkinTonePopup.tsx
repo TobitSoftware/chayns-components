@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useCallback, useMemo } from 'react';
+import React, { FC, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import emojiComponents from 'unicode-emoji-json/data-emoji-components.json';
 import type { AnchorAlignment } from '../../../../../constants/alignment';
 import { addSkinToneToEmoji } from '../../../../../utils/emoji';
@@ -28,6 +28,10 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
     overlayPosition,
     position,
 }) => {
+    const [focusedIndex, setFocusedIndex] = useState<number>(0);
+
+    const skinToneRef = useRef<HTMLDivElement>(null);
+
     const handleOverlayClick = useCallback(
         (event: MouseEvent<HTMLDivElement>) => {
             event.preventDefault();
@@ -35,13 +39,68 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
 
             onHidePopup();
         },
-        [onHidePopup]
+        [onHidePopup],
     );
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                const children = skinToneRef.current?.children;
+                if (children && children.length > 0) {
+                    let newIndex = focusedIndex !== null ? focusedIndex : 0;
+
+                    if (event.key === 'ArrowLeft') {
+                        newIndex = (newIndex - 1) % children.length;
+                    } else if (event.key === 'ArrowRight') {
+                        newIndex = (newIndex + 1) % children.length;
+                    }
+
+                    // remove focus from the old element
+                    if (focusedIndex !== null) {
+                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                        prevElement.tabIndex = -1;
+                    }
+
+                    if (newIndex < 0) {
+                        newIndex = children.length - 1;
+                    } else if (newIndex > children.length - 1) {
+                        newIndex = 0;
+                    }
+
+                    setFocusedIndex(newIndex);
+
+                    // Set focus to the element
+                    const newElement = children[newIndex] as HTMLDivElement;
+                    newElement.tabIndex = 0;
+                    newElement.focus();
+                }
+            } else if (event.key === 'Enter' && focusedIndex !== null) {
+                const { dataset } = skinToneRef.current?.children[focusedIndex] as HTMLDivElement;
+
+                const { skinTone } = dataset;
+
+                if (!skinTone) {
+                    return;
+                }
+
+                onSelect(skinTone);
+
+                onHidePopup();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [focusedIndex, onHidePopup, onSelect]);
 
     const emojis = useMemo(() => {
         const result: JSX.Element[] = [];
 
-        Object.entries(emojiComponents).forEach(([key, value]) => {
+        Object.entries(emojiComponents).forEach(([key, value], index) => {
             if (key.includes('skin_tone')) {
                 const emojiWithSkinTone = addSkinToneToEmoji(emoji, value);
 
@@ -55,15 +114,20 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
                 };
 
                 result.push(
-                    <StyledSkinTonePopupContentEmoji key={key} onClick={handleClick}>
+                    <StyledSkinTonePopupContentEmoji
+                        key={key}
+                        data-skin-tone={emojiWithSkinTone}
+                        isSelected={index === focusedIndex}
+                        onClick={handleClick}
+                    >
                         {emojiWithSkinTone}
-                    </StyledSkinTonePopupContentEmoji>
+                    </StyledSkinTonePopupContentEmoji>,
                 );
             }
         });
 
         return result;
-    }, [emoji, onHidePopup, onSelect]);
+    }, [emoji, focusedIndex, onHidePopup, onSelect]);
 
     return (
         <StyledMotionSkinTonePopup
@@ -73,6 +137,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
             transition={{ duration: 0.1 }}
         >
             <StyledSkinTonePopupContent
+                ref={skinToneRef}
                 anchorAlignment={anchorAlignment}
                 anchorOffset={anchorOffset}
                 style={position}

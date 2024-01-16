@@ -74,12 +74,18 @@ export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentP
     }
 `;
 
-export const StyledSkinTonePopupContentEmoji = styled.div`
+type StyledSkinTonePopupContentEmojiProps = WithTheme<{
+    isSelected: boolean;
+}>;
+
+export const StyledSkinTonePopupContentEmoji = styled.div<StyledSkinTonePopupContentEmojiProps>`
     align-items: center;
     display: flex;
     flex: 1 1 auto;
     font-size: 24px;
     justify-content: center;
+    background-color: ${({ theme, isSelected }: StyledSkinTonePopupContentEmojiProps) =>
+        isSelected ? theme['secondary-102'] : 'none'};
 `;
 
 export const StyledSkinTonePopupOverlay = styled.div`

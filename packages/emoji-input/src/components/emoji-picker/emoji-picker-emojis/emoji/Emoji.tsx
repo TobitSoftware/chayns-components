@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { FC, MouseEvent, useCallback, useEffect, useState } from 'react';
+import React, { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { AnchorAlignment } from '../../../../constants/alignment';
 import { StyledEmoji } from './Emoji.styles';
 import SkinTonePopup, { SkinTonePopupProps } from './skin-tone-popup/SkinTonePopup';
@@ -7,20 +7,30 @@ import { skinTonePopupContentSize } from './skin-tone-popup/SkinTonePopup.styles
 
 export type EmojiProps = {
     emoji: string;
+    isSelected: boolean;
+    name: string;
+    index: number;
     isSkinToneSupported: boolean;
     onPopupVisibilityChange: (isVisible: boolean) => void;
     onSelect: (emoji: string) => void;
+    onRightClick: (newIndex: number) => void;
+    shouldShowSkinTonePopup: boolean;
 };
 
 const Emoji: FC<EmojiProps> = ({
     emoji,
+    isSelected,
+    name,
     isSkinToneSupported,
     onPopupVisibilityChange,
     onSelect,
+    shouldShowSkinTonePopup,
+    onRightClick,
+    index,
 }) => {
     const [shouldShowPopup, setShouldShowPopup] = useState(false);
     const [skinTonePopupAnchorAlignment, setSkinTonePopupAnchorAlignment] = useState(
-        AnchorAlignment.Top
+        AnchorAlignment.Top,
     );
     const [skinTonePopupAnchorOffset, setSkinTonePopupAnchorOffset] = useState(0);
     const [skinTonePopupOverlayPosition, setSkinTonePopupOverlayPosition] = useState<
@@ -94,13 +104,22 @@ const Emoji: FC<EmojiProps> = ({
                     setSkinTonePopupPosition({ left, top });
                     setSkinTonePopupOverlayPosition({ top: scrollTop });
                     setShouldShowPopup(true);
+                    onRightClick(index);
                 }
             }
         },
-        [isSkinToneSupported]
+        [index, isSkinToneSupported, onRightClick],
     );
 
-    const handleHidePopup = useCallback(() => setShouldShowPopup(false), []);
+    useEffect(() => {
+        if (shouldShowSkinTonePopup) {
+            setShouldShowPopup(shouldShowSkinTonePopup);
+        }
+    }, [shouldShowSkinTonePopup]);
+
+    const handleHidePopup = useCallback(() => {
+        setShouldShowPopup(false);
+    }, []);
 
     useEffect(() => {
         onPopupVisibilityChange(shouldShowPopup);
@@ -108,6 +127,10 @@ const Emoji: FC<EmojiProps> = ({
 
     return (
         <StyledEmoji
+            isSelected={isSelected}
+            data-emoji={emoji}
+            data-name={name}
+            data-skin-tone-support={isSkinToneSupported}
             className="prevent-lose-focus"
             onClick={handleClick}
             onContextMenu={handleContextMenu}
