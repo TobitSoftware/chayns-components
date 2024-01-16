@@ -44,17 +44,21 @@ export type SearchBoxProps = {
      * Control the selected item. If you use this prop, make sure to update it when the user selects an item.
      */
     selectedId?: string;
+    /**
+     * Whether the full list of items should be displayed if the input is empty.
+     */
+    shouldShowContentOnEmptyInput?: boolean;
 };
 
-const SearchBox: FC<SearchBoxProps> = (
-    {
-        placeholder,
-        list,
-        onChange,
-        onBlur,
-        onSelect,
-        selectedId
-    }) => {
+const SearchBox: FC<SearchBoxProps> = ({
+    placeholder,
+    list,
+    onChange,
+    onBlur,
+    onSelect,
+    selectedId,
+    shouldShowContentOnEmptyInput = true,
+}) => {
     const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
     const [value, setValue] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
@@ -119,21 +123,36 @@ const SearchBox: FC<SearchBoxProps> = (
     }, [list, selectedId]);
 
     /**
+     * This function sets the items on focus if shouldShowContentOnEmptyInput
+     */
+    const handleFocus = useCallback(() => {
+        if (shouldShowContentOnEmptyInput) {
+            setMatchingItems(searchList({ items: list, searchString: value }));
+            setIsAnimating(true);
+        }
+    }, [list, shouldShowContentOnEmptyInput, value]);
+
+    /**
      * This function handles changes of the input
      */
     const handleChange = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const searchedItems = searchList({ items: list, searchString: event.target.value });
 
-            setMatchingItems(searchedItems);
-            setIsAnimating(searchedItems.length !== 0);
+            if (!shouldShowContentOnEmptyInput && !event.target.value) {
+                setMatchingItems([]);
+            } else {
+                setMatchingItems(searchedItems);
+                setIsAnimating(searchedItems.length !== 0);
+            }
+
             setValue(event.target.value);
 
             if (typeof onChange === 'function') {
                 onChange(event);
             }
         },
-        [list, onChange]
+        [list, onChange, shouldShowContentOnEmptyInput]
     );
 
     /**
@@ -169,7 +188,7 @@ const SearchBox: FC<SearchBoxProps> = (
         matchingItems.sort((a, b) => a.text.localeCompare(b.text));
 
         matchingItems.forEach(({ id, text }) => {
-            items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect}/>);
+            items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect} />);
         });
 
         return items;
@@ -183,6 +202,7 @@ const SearchBox: FC<SearchBoxProps> = (
                         ref={inputRef}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        onFocus={handleFocus}
                         placeholder={placeholder}
                         value={value}
                     />
@@ -208,7 +228,17 @@ const SearchBox: FC<SearchBoxProps> = (
                 </AnimatePresence>
             </StyledSearchBox>
         ),
-        [content, handleBlur, handleChange, height, isAnimating, placeholder, value, width]
+        [
+            content,
+            handleBlur,
+            handleChange,
+            handleFocus,
+            height,
+            isAnimating,
+            placeholder,
+            value,
+            width,
+        ]
     );
 };
 
