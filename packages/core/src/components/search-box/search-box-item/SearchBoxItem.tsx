@@ -15,11 +15,11 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({ id, text, onSelect }) => {
 
     return useMemo(
         () => (
-            <StyledSearchBoxItem onClick={handleClick}>
+            <StyledSearchBoxItem id={`search-box-item__${id}`} onClick={handleClick}>
                 <StyledSearchBoxItemText>{text}</StyledSearchBoxItemText>
             </StyledSearchBoxItem>
         ),
-        [handleClick, text]
+        [handleClick, id, text]
     );
 };
 

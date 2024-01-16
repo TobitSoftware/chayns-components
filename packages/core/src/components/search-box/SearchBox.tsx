@@ -64,6 +64,7 @@ const SearchBox: FC<SearchBoxProps> = ({
     const [isAnimating, setIsAnimating] = useState(false);
     const [height, setHeight] = useState<number>(0);
     const [width, setWidth] = useState(0);
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
     const boxRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
@@ -193,6 +194,63 @@ const SearchBox: FC<SearchBoxProps> = ({
 
         return items;
     }, [handleSelect, matchingItems]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                const children = contentRef.current?.children;
+                if (children && children.length > 0) {
+                    const newIndex =
+                        focusedIndex !== null
+                            ? (focusedIndex + (e.key === 'ArrowUp' ? -1 : 1) + children.length) %
+                              children.length
+                            : 0;
+
+                    if (focusedIndex !== null) {
+                        const prevElement = children[focusedIndex] as HTMLDivElement;
+                        prevElement.tabIndex = -1;
+                    }
+
+                    setFocusedIndex(newIndex);
+
+                    const newElement = children[newIndex] as HTMLDivElement;
+                    newElement.tabIndex = 0;
+                    newElement.focus();
+                }
+            } else if (e.key === 'Enter' && focusedIndex !== null) {
+                const element = contentRef.current?.children[focusedIndex];
+
+                if (!element) {
+                    return;
+                }
+
+                const { id, textContent } = element;
+
+                handleSelect({ id: id.replace('search-box-item__', ''), text: textContent ?? '' });
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [focusedIndex, handleSelect]);
+
+    const handleKeyPress = useCallback((event: KeyboardEvent) => {
+        if (event.keyCode === 27) {
+            setMatchingItems([]);
+        }
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.addEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     return useMemo(
         () => (

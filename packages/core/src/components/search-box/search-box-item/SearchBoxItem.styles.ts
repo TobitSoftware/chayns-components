@@ -6,6 +6,10 @@ export const StyledSearchBoxItem = styled.div<StyledSearchBoxItemProps>`
     &:hover {
         background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
     }
+
+    &:focus {
+        background: ${({ theme }: StyledSearchBoxItemProps) => theme['secondary-103']};
+    }
 `;
 
 type StyledSearchBoxItemTextProps = WithTheme<unknown>;
