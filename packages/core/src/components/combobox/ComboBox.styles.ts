@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
-import { is } from 'date-fns/locale';
 
 export const StyledComboBox = styled.div`
     user-select: none;
@@ -29,6 +28,7 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     min-width: ${({ minWidth }) => minWidth}px;
     max-width: ${({ minWidth }) => minWidth}px;
+    transition: background-color 0.2s ease-in-out;
 
     ${({ isOpen, direction }) => {
         if (isOpen) {
@@ -53,7 +53,7 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         !isDisabled &&
         css`
             &:hover {
-                background-color: ${theme['secondary-101']};
+                background-color: ${theme['secondary-102']};
             }
         `}
 `;
@@ -96,7 +96,7 @@ type StyledComboBoxBodyProps = WithTheme<{
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
-    background: ${({ theme }: StyledComboBoxBodyProps) => theme['001']};
+    background: ${({ theme }: StyledComboBoxBodyProps) => theme['101']};
     display: flex;
     position: absolute;
     z-index: 4;
@@ -107,22 +107,20 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     max-width: ${({ minWidth }) => minWidth}px;
     max-height: ${({ maxHeight }) => maxHeight};
     overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
-    box-shadow: 0 0 0 1px rgba(${({ theme }: StyledComboBoxBodyProps) => theme['009-rgb']}, 0.08)
-        inset;
 
-    ${({ direction }) => {
+    ${({ direction, theme }) => {
         if (direction === ComboBoxDirection.BOTTOM) {
             return css`
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
-                border-top: none;
+                box-shadow: 0 2px 8px 2px rgba(${theme['009-rgb']}, 0.15);
             `;
         }
 
         return css`
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
-            border-bottom: none;
+            box-shadow: 0 -2px 8px 2px rgba(${theme['009-rgb']}, 0.15);
         `;
     }}
 

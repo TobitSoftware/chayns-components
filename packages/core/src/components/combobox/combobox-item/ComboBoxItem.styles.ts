@@ -10,17 +10,18 @@ type StyledComboBoxItemProps = WithTheme<{
 export const StyledComboBoxItem = styled.div<StyledComboBoxItemProps>`
     align-items: center;
     background-color: ${({ theme, isSelected }: StyledComboBoxItemProps) =>
-        isSelected && theme['secondary-102']};
+        isSelected && theme['secondary-103']};
     color: ${({ theme }: StyledComboBoxItemProps) => theme.text};
     display: flex;
     gap: 10px;
     padding: 4px 10px;
+    transition: background-color 0.2s ease-in-out;
 
     ${({ isMobile, theme }: StyledComboBoxItemProps) =>
         !isMobile &&
         css`
             &:hover {
-                background-color: ${theme['secondary-101']};
+                background-color: ${theme['secondary-102']};
             }
         `}
 `;
