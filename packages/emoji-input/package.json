@@ -38,10 +38,10 @@
     "devDependencies": {
         "@babel/cli": "^7.23.4",
         "@babel/core": "^7.23.7",
-        "@babel/preset-env": "^7.23.7",
+        "@babel/preset-env": "^7.23.8",
         "@babel/preset-react": "^7.23.3",
         "@babel/preset-typescript": "^7.23.3",
-        "@types/react": "^18.2.46",
+        "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.18",
         "@types/styled-components": "^5.1.34",
         "@types/uuid": "^9.0.7",
@@ -49,7 +49,7 @@
         "lerna": "^8.0.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "styled-components": "^6.1.6",
+        "styled-components": "^6.1.8",
         "typescript": "^5.3.3"
     },
     "dependencies": {
@@ -57,7 +57,7 @@
         "@chayns/colors": "^2.0.0",
         "clsx": "^2.1.0",
         "emojilib": "^3.0.11",
-        "framer-motion": "^10.17.8",
+        "framer-motion": "^10.18.0",
         "unicode-emoji-json": "^0.5.0",
         "uuid": "^9.0.1"
     },
