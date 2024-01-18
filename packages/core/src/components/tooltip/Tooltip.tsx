@@ -31,7 +31,14 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
                 ) : (
                     <Popup
                         shouldShowOnHover
-                        content={<TooltipItem text={item.text} headline={item.headline} />}
+                        content={
+                            <TooltipItem
+                                text={item.text}
+                                headline={item.headline}
+                                imageUrl={item.imageUrl}
+                                button={item.button}
+                            />
+                        }
                         ref={tooltipRef}
                     >
                         {children}

@@ -12,6 +12,13 @@ export const StyledTooltipItemHeadline = styled.h5<StyledTooltipItemHeadlineProp
     margin: 0;
 `;
 
+export const StyledTooltipItemImage = styled.img``;
+
+export const StyledTooltipItemButtonWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
 type StyledTooltipItemTextProps = WithTheme<unknown>;
 
 export const StyledTooltipItemText = styled.p<StyledTooltipItemTextProps>`

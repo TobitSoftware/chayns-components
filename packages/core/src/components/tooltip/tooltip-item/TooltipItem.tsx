@@ -1,24 +1,35 @@
 import React, { FC, useMemo } from 'react';
 import {
     StyledTooltipItem,
+    StyledTooltipItemButtonWrapper,
     StyledTooltipItemHeadline,
+    StyledTooltipItemImage,
     StyledTooltipItemText,
 } from './TooltipItem.styles';
+import Button from '../../button/Button';
 
 export type TooltipProps = {
     headline?: string;
     text: string;
+    imageUrl?: string;
+    button?: { text: string; onClick: () => void };
 };
 
-const TooltipItem: FC<TooltipProps> = ({ headline, text }) =>
+const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl }) =>
     useMemo(
         () => (
             <StyledTooltipItem>
-                <StyledTooltipItemHeadline>{headline}</StyledTooltipItemHeadline>
+                {headline && <StyledTooltipItemHeadline>{headline}</StyledTooltipItemHeadline>}
+                {imageUrl && <StyledTooltipItemImage src={imageUrl} />}
                 <StyledTooltipItemText>{text}</StyledTooltipItemText>
+                {button && (
+                    <StyledTooltipItemButtonWrapper>
+                        <Button onClick={button.onClick}>{button.text}</Button>
+                    </StyledTooltipItemButtonWrapper>
+                )}
             </StyledTooltipItem>
         ),
-        [headline, text]
+        [button, headline, imageUrl, text]
     );
 
 TooltipItem.displayName = 'TooltipItem';
