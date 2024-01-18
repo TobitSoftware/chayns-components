@@ -40,76 +40,100 @@ const Emoji: FC<EmojiProps> = ({
         SkinTonePopupProps['position']
     >({ left: 0, top: 0 });
 
+    const emojiRef = useRef<HTMLDivElement>(null);
+
     const handleClick = useCallback(() => {
         onSelect(emoji);
     }, [emoji, onSelect]);
+
+    const calculatePopupPosition = useCallback(() => {
+        if (!emojiRef.current) {
+            return;
+        }
+
+        const element = emojiRef.current;
+        const { parentElement } = emojiRef.current;
+
+        if (parentElement) {
+            const {
+                height: elementHeight,
+                left: elementLeft,
+                top: elementTop,
+                width: elementWidth,
+            } = element.getBoundingClientRect();
+
+            const {
+                height: parentHeight,
+                left: parentLeft,
+                top: parentTop,
+                width: parentWidth,
+            } = parentElement.getBoundingClientRect();
+
+            const { scrollTop } = parentElement;
+
+            let anchorAlignment = AnchorAlignment.Top;
+            let anchorOffset = 0;
+
+            let left =
+                elementLeft - parentLeft - skinTonePopupContentSize.width / 2 + elementWidth / 2;
+
+            let top = elementTop - parentTop + elementHeight + scrollTop;
+
+            const maxLeft = parentWidth - skinTonePopupContentSize.width - 12;
+            const minLeft = 12;
+
+            if (left < minLeft) {
+                anchorOffset = left - minLeft;
+                left = minLeft;
+            } else if (left > maxLeft) {
+                anchorOffset = left - maxLeft;
+                left = maxLeft;
+            }
+
+            if (top + skinTonePopupContentSize.height > parentHeight + scrollTop) {
+                anchorAlignment = AnchorAlignment.Bottom;
+                top -= elementHeight + skinTonePopupContentSize.height;
+            }
+
+            if (isSkinToneSupported) {
+                setSkinTonePopupAnchorAlignment(anchorAlignment);
+                setSkinTonePopupAnchorOffset(anchorOffset);
+                setSkinTonePopupPosition({ left, top });
+                setSkinTonePopupOverlayPosition({ top: scrollTop });
+                setShouldShowPopup(true);
+            }
+        }
+    }, [isSkinToneSupported]);
 
     const handleContextMenu = useCallback(
         (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
 
-            const {
-                currentTarget: element,
-                currentTarget: { parentElement },
-            } = event;
-
-            if (parentElement) {
-                const {
-                    height: elementHeight,
-                    left: elementLeft,
-                    top: elementTop,
-                    width: elementWidth,
-                } = element.getBoundingClientRect();
-
-                const {
-                    height: parentHeight,
-                    left: parentLeft,
-                    top: parentTop,
-                    width: parentWidth,
-                } = parentElement.getBoundingClientRect();
-
-                const { scrollTop } = parentElement;
-
-                let anchorAlignment = AnchorAlignment.Top;
-                let anchorOffset = 0;
-
-                let left =
-                    elementLeft -
-                    parentLeft -
-                    skinTonePopupContentSize.width / 2 +
-                    elementWidth / 2;
-
-                let top = elementTop - parentTop + elementHeight + scrollTop;
-
-                const maxLeft = parentWidth - skinTonePopupContentSize.width - 12;
-                const minLeft = 12;
-
-                if (left < minLeft) {
-                    anchorOffset = left - minLeft;
-                    left = minLeft;
-                } else if (left > maxLeft) {
-                    anchorOffset = left - maxLeft;
-                    left = maxLeft;
-                }
-
-                if (top + skinTonePopupContentSize.height > parentHeight + scrollTop) {
-                    anchorAlignment = AnchorAlignment.Bottom;
-                    top -= elementHeight + skinTonePopupContentSize.height;
-                }
-
-                if (isSkinToneSupported) {
-                    setSkinTonePopupAnchorAlignment(anchorAlignment);
-                    setSkinTonePopupAnchorOffset(anchorOffset);
-                    setSkinTonePopupPosition({ left, top });
-                    setSkinTonePopupOverlayPosition({ top: scrollTop });
-                    setShouldShowPopup(true);
-                    onRightClick(index);
-                }
+            if (isSkinToneSupported) {
+                onRightClick(index);
+                calculatePopupPosition();
             }
         },
-        [index, isSkinToneSupported, onRightClick],
+        [calculatePopupPosition, index, isSkinToneSupported, onRightClick],
     );
+
+    useEffect(() => {
+        if (
+            emojiRef.current &&
+            shouldShowSkinTonePopup &&
+            skinTonePopupPosition.top === 0 &&
+            skinTonePopupPosition.left === 0
+        ) {
+            calculatePopupPosition();
+        }
+    }, [
+        calculatePopupPosition,
+        index,
+        isSkinToneSupported,
+        shouldShowSkinTonePopup,
+        skinTonePopupPosition,
+    ]);
 
     useEffect(() => {
         if (shouldShowSkinTonePopup) {
@@ -127,6 +151,7 @@ const Emoji: FC<EmojiProps> = ({
 
     return (
         <StyledEmoji
+            ref={emojiRef}
             isSelected={isSelected}
             data-emoji={emoji}
             data-name={name}
