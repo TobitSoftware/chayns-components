@@ -65,3 +65,5 @@ export type { FileItem, Image, Meta, Video } from './types/file';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';
+export { default as SelectButton } from './components/select-button/SelectButton';
+export type { SelectButtonItem } from './components/select-button/types';
