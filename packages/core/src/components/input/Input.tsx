@@ -19,8 +19,10 @@ import Icon from '../icon/Icon';
 import {
     StyledInput,
     StyledInputContent,
+    StyledInputContentWrapper,
     StyledInputField,
     StyledInputIconWrapper,
+    StyledInputRightElement,
     StyledMotionInputClearIcon,
     StyledMotionInputLabel,
 } from './Input.styles';
@@ -78,6 +80,10 @@ export type InputProps = {
      */
     placeholderElement?: ReactNode;
     /**
+     * An element that should be displayed on the right side of the Input.
+     */
+    rightElement?: ReactNode;
+    /**
      * If true, a clear icon is displayed at the end of the input field
      */
     shouldShowClearIcon?: boolean;
@@ -111,13 +117,14 @@ const Input = forwardRef<InputRef, InputProps>(
             onKeyDown,
             placeholder,
             placeholderElement,
+            rightElement,
             shouldShowClearIcon = false,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
             isInvalid = false,
         },
-        ref,
+        ref
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
         const theme = useTheme() as Theme;
@@ -143,7 +150,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     onChange(event);
                 }
             },
-            [onChange],
+            [onChange]
         );
 
         useImperativeHandle(
@@ -151,7 +158,7 @@ const Input = forwardRef<InputRef, InputProps>(
             () => ({
                 focus: () => inputRef.current?.focus(),
             }),
-            [],
+            []
         );
 
         useEffect(() => {
@@ -174,49 +181,55 @@ const Input = forwardRef<InputRef, InputProps>(
                 isDisabled={isDisabled}
                 isInvalid={isInvalid}
             >
-                {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
-                <StyledInputContent>
-                    <StyledInputField
-                        disabled={isDisabled}
-                        onBlur={onBlur}
-                        onChange={handleInputFieldChange}
-                        onFocus={onFocus}
-                        onKeyDown={onKeyDown}
-                        ref={inputRef}
-                        type={type}
-                        value={value}
-                        autoFocus={shouldUseAutoFocus}
-                        inputMode={inputMode}
-                        isInvalid={isInvalid}
-                    />
-                    <StyledMotionInputLabel
-                        animate={{
-                            fontSize: hasValue ? '10px' : '16px',
-                        }}
-                        initial={false}
-                        layout
-                        style={{ ...labelPosition }}
-                        transition={{ type: 'tween', duration: 0.3 }}
-                        isInvalid={isInvalid}
-                    >
-                        {placeholderElement}
-                        {placeholder}
-                    </StyledMotionInputLabel>
-                </StyledInputContent>
-                {shouldShowClearIcon && (
-                    <StyledMotionInputClearIcon
-                        animate={{ opacity: hasValue ? 1 : 0 }}
-                        initial={false}
-                        onClick={handleClearIconClick}
-                        transition={{ type: 'tween' }}
-                        isInvalid={isInvalid}
-                    >
-                        <Icon icons={['fa fa-times']} color={isInvalid ? theme.wrong : undefined} />
-                    </StyledMotionInputClearIcon>
-                )}
+                <StyledInputContentWrapper shouldRoundRightCorners={!rightElement}>
+                    {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
+                    <StyledInputContent>
+                        <StyledInputField
+                            disabled={isDisabled}
+                            onBlur={onBlur}
+                            onChange={handleInputFieldChange}
+                            onFocus={onFocus}
+                            onKeyDown={onKeyDown}
+                            ref={inputRef}
+                            type={type}
+                            value={value}
+                            autoFocus={shouldUseAutoFocus}
+                            inputMode={inputMode}
+                            isInvalid={isInvalid}
+                        />
+                        <StyledMotionInputLabel
+                            animate={{
+                                fontSize: hasValue ? '10px' : '16px',
+                            }}
+                            initial={false}
+                            layout
+                            style={{ ...labelPosition }}
+                            transition={{ type: 'tween', duration: 0.3 }}
+                            isInvalid={isInvalid}
+                        >
+                            {placeholderElement}
+                            {placeholder}
+                        </StyledMotionInputLabel>
+                    </StyledInputContent>
+                    {shouldShowClearIcon && (
+                        <StyledMotionInputClearIcon
+                            animate={{ opacity: hasValue ? 1 : 0 }}
+                            initial={false}
+                            onClick={handleClearIconClick}
+                            transition={{ type: 'tween' }}
+                            isInvalid={isInvalid}
+                        >
+                            <Icon
+                                icons={['fa fa-times']}
+                                color={isInvalid ? theme.wrong : undefined}
+                            />
+                        </StyledMotionInputClearIcon>
+                    )}
+                </StyledInputContentWrapper>
+                {rightElement && <StyledInputRightElement>{rightElement}</StyledInputRightElement>}
             </StyledInput>
         );
-    },
+    }
 );
 
 Input.displayName = 'Input';

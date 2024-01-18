@@ -16,6 +16,25 @@ export const General = Template.bind({});
 
 export const WithPlaceholderElement = Template.bind({});
 
+export const WithRightElement = Template.bind({});
+
 WithPlaceholderElement.args = {
     placeholderElement: <Icon icons={['fa fa-search']} />,
+};
+
+WithRightElement.args = {
+    rightElement: (
+        <div
+            style={{
+                backgroundColor: '#3377b6',
+                height: '42px',
+                width: '42px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <Icon icons={['ts-calling-code']} size={25} color={'white'} />
+        </div>
+    ),
 };

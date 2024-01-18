@@ -1,22 +1,38 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { InputProps } from './Input';
 
-type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled'| 'isInvalid'>>;
+type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled' | 'isInvalid'>>;
 
 export const StyledInput = styled.div<StyledInputProps>`
+    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
+    display: flex;
+`;
+
+type StyledInputContentWrapperProps = WithTheme<{ shouldRoundRightCorners: boolean }>;
+
+export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
     background-color: ${({ theme }: StyledInputProps) => theme['100']};
-    border: 1px solid ${({theme, isInvalid}:StyledInputProps ) => isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
-    border-radius: 3px;
+    border: 1px solid
+        ${({ theme, isInvalid }: StyledInputProps) =>
+            isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
     color: ${({ theme }: StyledInputProps) => theme['006']};
     display: flex;
     justify-content: space-between;
     min-height: 42px;
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-    transition: opacity 0.3s ease;
     width: 100%;
+    transition: opacity 0.3s ease;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+        
+        ${({ shouldRoundRightCorners }) =>
+            shouldRoundRightCorners &&
+            css`
+                border-bottom-right-radius: 3px;
+                border-top-right-radius: 3px;
+            `}}
 `;
 
 export const StyledInputContent = styled.div`
@@ -32,7 +48,8 @@ type StyledInputFieldProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
 export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
     border: none;
-    color: ${({ theme, isInvalid }: StyledInputFieldProps) => isInvalid ? theme.wrong : theme.text};
+    color: ${({ theme, isInvalid }: StyledInputFieldProps) =>
+        isInvalid ? theme.wrong : theme.text};
     padding: 0;
     width: 100%;
 `;
@@ -48,7 +65,8 @@ export const StyledMotionInputLabel = styled(motion.label)<StyledMotionInputLabe
     pointer-events: none;
     position: absolute;
     user-select: none;
-    color: ${({theme, isInvalid}: StyledMotionInputLabelProps)=> isInvalid ? theme.wrong : undefined}
+    color: ${({ theme, isInvalid }: StyledMotionInputLabelProps) =>
+        isInvalid ? theme.wrong : undefined};
 `;
 
 type StyledMotionInputClearIconProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
@@ -70,4 +88,11 @@ export const StyledInputIconWrapper = styled.div`
     flex: 0 0 auto;
     justify-content: center;
     margin-left: 10px;
+`;
+
+export const StyledInputRightElement = styled.div`
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    overflow: hidden;
+    flex: 0 0 auto;
 `;
