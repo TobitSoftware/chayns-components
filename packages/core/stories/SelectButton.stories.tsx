@@ -7,10 +7,11 @@ export default {
     args: {
         buttonText: 'Pizza auswählen',
         list: [
-            { text: 'Salami', id: '1' },
-            { text: 'Thunfisch', id: '2' },
-            { text: 'Döner', id: '3' },
+            { text: 'Salami', id: 1 },
+            { text: 'Thunfisch', id: 2 },
+            { text: 'Döner', id: 3 },
         ],
+        selectedItemIds: [1],
     },
 } as Meta<typeof SelectButton>;
 

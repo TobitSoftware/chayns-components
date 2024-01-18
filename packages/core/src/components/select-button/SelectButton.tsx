@@ -10,10 +10,6 @@ export type SelectButtonProps = {
      */
     buttonText: string;
     /**
-     * The description of the dialog.
-     */
-    description?: string;
-    /**
      * Whether the button should be disabled.
      */
     isDisabled?: boolean;
@@ -24,11 +20,11 @@ export type SelectButtonProps = {
     /**
      * Function to be executed after an item is selected.
      */
-    onSelect?: (ids: string[]) => void;
+    onSelect?: (ids: number[]) => void;
     /**
      * The id of an item that should be preselected.
      */
-    selectedItemId?: id;
+    selectedItemIds?: number[];
     /**
      * Whether more than one item should be selectable.
      */
@@ -37,46 +33,52 @@ export type SelectButtonProps = {
      * Whether the search should be displayed inside the dialog.
      */
     shouldShowSearch?: boolean;
-    /**
-     * The title of the dialog.
-     */
-    title?: string;
 };
 
 const SelectButton: FC<SelectButtonProps> = ({
     onSelect,
-    selectedItemId,
+    selectedItemIds,
     shouldAllowMultiSelect,
     buttonText,
     shouldShowSearch,
     list,
-    title,
-    description,
     isDisabled,
 }) => {
     const itemList = useMemo(() => {
         const items: DialogSelectListItemType[] = [];
 
         list.forEach(({ text, id }) => {
+            const isSelected = selectedItemIds ? selectedItemIds.includes(id) : false;
+
             items.push({
                 name: text,
                 id,
-                isSelected: id === selectedItemId,
+                isSelected,
             });
         });
 
         return items;
-    }, [list, selectedItemId]);
+    }, [list, selectedItemIds]);
 
     const handleClick = () => {
-        const result = createDialog({
+        void createDialog({
             type: DialogType.SELECT,
             list: itemList,
             multiselect: shouldAllowMultiSelect,
             quickfind: shouldShowSearch,
-        }).open();
-
-        console.log('result', result);
+        })
+            .open()
+            .then((result) => {
+                // Ignore because there is no type
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                if (result && result.buttonType === 1 && typeof onSelect === 'function') {
+                    // Ignore because there is no type
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    onSelect((result.result as string[]).map(Number));
+                }
+            });
     };
 
     return (
