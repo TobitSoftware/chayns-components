@@ -48,7 +48,7 @@ export const StyledFilterButtonItemBorder = styled.div<StyledFilterButtonItemBor
     height: 100%;
     width: 100%;
     opacity: 0.4;
-    z-index: -1;
+    z-index: 0;
     border-radius: ${({ shape }) => (shape === FilterButtonItemShape.Round ? 100 : 0)}px;
     ${({ color, theme, isSelected }: StyledFilterButtonItemBorderProps) =>
         !isSelected &&
@@ -66,14 +66,14 @@ type StyledFilterButtonItemBackgroundProps = WithTheme<{
 }>;
 
 export const StyledMotionFilterButtonItemBackground = styled(
-    motion.div,
+    motion.div
 )<StyledFilterButtonItemBackgroundProps>`
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: -1;
+    z-index: 0;
     opacity: ${({ isSelected }) => (isSelected ? 0.4 : 0)};
     transition: opacity 0.5s ease;
     border-radius: ${({ shape }) => (shape === FilterButtonItemShape.Round ? 100 : 0)}px;
