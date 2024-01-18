@@ -131,7 +131,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
 
     const handleKeyPress = useCallback(
         (event: KeyboardEvent) => {
-            if (event.keyCode === 27) {
+            if (event.key === 'Escape' && !event.shiftKey) {
                 handleHide();
             }
         },

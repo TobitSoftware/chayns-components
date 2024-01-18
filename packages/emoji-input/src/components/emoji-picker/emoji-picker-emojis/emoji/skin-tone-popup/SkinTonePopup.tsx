@@ -87,7 +87,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
                 onSelect(skinTone);
 
                 onHidePopup();
-            } else if (event.key === 'Escape') {
+            } else if (event.key === 'Escape' && event.shiftKey) {
                 event.preventDefault();
 
                 onHidePopup();
