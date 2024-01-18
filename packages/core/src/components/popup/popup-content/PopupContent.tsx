@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { type MouseEventHandler, ReactNode } from 'react';
 import { useColorMode } from '../../../hooks/colorMode';
 import { PopupAlignment, PopupCoordinates } from '../types';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
@@ -7,10 +7,11 @@ type PopupContentProps = {
     alignment: PopupAlignment;
     coordinates: PopupCoordinates;
     content: ReactNode;
+    onMouseLeave: MouseEventHandler<HTMLSpanElement>;
 };
 
 const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
-    ({ alignment, coordinates, content }, ref) => {
+    ({ alignment, coordinates, content, onMouseLeave }, ref) => {
         const colorMode = useColorMode();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
@@ -33,6 +34,8 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 position={alignment}
                 ref={ref}
+                data-isPopup="true"
+                onMouseLeave={onMouseLeave}
                 style={{ left: coordinates.x, top: coordinates.y }}
                 transition={{ type: 'tween' }}
                 transformTemplate={({ y = '0px' }) => `
@@ -46,7 +49,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 <StyledPopupContentInner>{content}</StyledPopupContentInner>
             </StyledMotionPopupContent>
         );
-    },
+    }
 );
 
 PopupContent.displayName = 'PopupContent';

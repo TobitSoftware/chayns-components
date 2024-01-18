@@ -2,6 +2,7 @@ import { getWindowMetrics } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     forwardRef,
+    MouseEvent,
     ReactNode,
     ReactPortal,
     useCallback,
@@ -119,11 +120,26 @@ const Popup = forwardRef<PopupRef, PopupProps>(
             }
         };
 
-        const handleMouseLeave = () => {
-            if (shouldShowOnHover) {
-                handleHide();
-            }
-        };
+        const handleMouseLeave = useCallback(
+            (event: MouseEvent) => {
+                if (shouldShowOnHover) {
+                    if ((event.currentTarget as HTMLElement).dataset.ispopup === 'true') {
+                        handleHide();
+                    }
+
+                    if (
+                        event.relatedTarget &&
+                        (event.relatedTarget === popupContentRef.current ||
+                            popupContentRef.current?.contains(event.relatedTarget as Node))
+                    ) {
+                        return;
+                    }
+
+                    handleHide();
+                }
+            },
+            [handleHide, shouldShowOnHover]
+        );
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
@@ -136,7 +152,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     }
                 }
             },
-            [handleHide, shouldShowOnHover],
+            [handleHide, shouldShowOnHover]
         );
 
         useImperativeHandle(
@@ -145,7 +161,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 hide: handleHide,
                 show: handleShow,
             }),
-            [handleHide, handleShow],
+            [handleHide, handleShow]
         );
 
         useEffect(() => {
@@ -185,13 +201,14 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                                 key={`tooltip_${uuid}`}
                                 alignment={alignment}
                                 ref={popupContentRef}
+                                onMouseLeave={handleMouseLeave}
                             />
                         )}
                     </AnimatePresence>,
-                    container,
-                ),
+                    container
+                )
             );
-        }, [alignment, container, content, coordinates, isOpen, uuid]);
+        }, [alignment, container, content, coordinates, handleMouseLeave, isOpen, uuid]);
 
         return (
             <>
@@ -209,7 +226,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 {portal}
             </>
         );
-    },
+    }
 );
 
 Popup.displayName = 'Popup';
