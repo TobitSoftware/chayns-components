@@ -3,16 +3,21 @@ import {
     StyledMotionProgressBarProgress,
     StyledProgressBar,
     StyledProgressBarBackground,
+    StyledProgressBarLable,
 } from './ProgressBar.styles';
 
 export type ProgressBarProps = {
+    /**
+     * The lable that should be displayed under the progressbar.
+     */
+    lable?: string;
     /**
      * The percentage of the progress. Number between 0 and 100.
      */
     percentage: number;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({ percentage }) => {
+const ProgressBar: FC<ProgressBarProps> = ({ percentage, lable }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
 
     useEffect(() => {
@@ -31,9 +36,10 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage }) => {
                     transition={{ type: 'tween' }}
                 />
                 <StyledProgressBarBackground />
+                {lable && <StyledProgressBarLable>{lable}</StyledProgressBarLable>}
             </StyledProgressBar>
         ),
-        [internalPercentage]
+        [lable, internalPercentage]
     );
 };
 

@@ -22,3 +22,5 @@ export const StyledMotionProgressBarProgress = styled(motion.div)<StyledProgress
     z-index: 2;
     background-color: ${({ theme }: StyledProgressBarProgressProps) => theme.headline};
 `;
+
+export const StyledProgressBarLable = styled.div``;
