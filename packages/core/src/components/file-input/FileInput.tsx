@@ -1,5 +1,13 @@
 import { AnimatePresence } from 'framer-motion';
-import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import React, {
+    DragEvent,
+    FC,
+    ReactElement,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { filterDuplicateFile } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
@@ -18,9 +26,17 @@ export type FileInputProps = {
      */
     icons?: string[];
     /**
+     * The maximum amount of Files that can be uploaded.
+     */
+    maxFiles?: number;
+    /**
      * A function to be executed when files are added.
      */
     onAdd?: (files: File[]) => void;
+    /**
+     * Function to be executed when the maximum amount of Files are reached.
+     */
+    onMaxFilesReached?: () => void;
     /**
      * A function to be executed when a file is removed.
      */
@@ -33,6 +49,8 @@ export type FileInputProps = {
 
 const FileInput: FC<FileInputProps> = ({
     icons = ['fa fa-upload'],
+    onMaxFilesReached,
+    maxFiles,
     onRemove,
     onAdd,
     placeholder = 'Dateien hinzufügen',
@@ -55,7 +73,7 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...newFileItems]);
         },
-        [internalFiles, onAdd],
+        [internalFiles, onAdd]
     );
 
     const handleDeleteFile = useCallback(
@@ -80,16 +98,34 @@ const FileInput: FC<FileInputProps> = ({
 
             onRemove(fileToDelete);
         },
-        [internalFiles, onRemove],
+        [internalFiles, onRemove]
     );
 
+    const isDisabled = useMemo(() => {
+        if (maxFiles) {
+            if (internalFiles.length >= maxFiles) {
+                if (typeof onMaxFilesReached === 'function') {
+                    onMaxFilesReached();
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }, [internalFiles.length, maxFiles, onMaxFilesReached]);
+
     const handleClick = useCallback(async () => {
+        if (isDisabled) {
+            return;
+        }
+
         const files = await selectFiles({
             multiple: true,
         });
 
         handleAddFiles(files);
-    }, [handleAddFiles]);
+    }, [handleAddFiles, isDisabled]);
 
     const handleDrop = useCallback(
         (e: DragEvent<HTMLDivElement>) => {
@@ -98,7 +134,7 @@ const FileInput: FC<FileInputProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [handleAddFiles],
+        [handleAddFiles]
     );
 
     const content = useMemo(() => {
@@ -125,6 +161,7 @@ const FileInput: FC<FileInputProps> = ({
         () => (
             <StyledFileInput>
                 <StyledFileInputContainer
+                    isDisabled={isDisabled}
                     onClick={() => void handleClick()}
                     onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
                     onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}
@@ -137,7 +174,7 @@ const FileInput: FC<FileInputProps> = ({
                 </List>
             </StyledFileInput>
         ),
-        [content, handleClick, handleDrop, icons, placeholder],
+        [content, handleClick, handleDrop, icons, isDisabled, placeholder]
     );
 };
 

@@ -4,11 +4,14 @@ import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/Col
 
 export const StyledFileInput = styled.div``;
 
-type StyledFileInputContainerProps = WithTheme<unknown>;
+type StyledFileInputContainerProps = WithTheme<{
+    isDisabled: boolean;
+}>;
 
 export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps>`
     border: ${({ theme }: StyledFileInputContainerProps) => theme.text} 1px dotted;
-    cursor: pointer;
+    cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
+    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     display: flex;
     gap: 10px;
     align-items: center;
