@@ -1,8 +1,8 @@
 import React, { type FC, useMemo } from 'react';
 import { StyledSelectButton } from './SelectButton.styles';
 import Button from '../button/Button';
-import type { SelectDialogItem } from '../../types/chayns';
 import type { SelectButtonItem } from './types';
+import { createDialog, type DialogSelectListItemType, DialogType } from 'chayns-api';
 
 export type SelectButtonProps = {
     /**
@@ -28,7 +28,7 @@ export type SelectButtonProps = {
     /**
      * The id of an item that should be preselected.
      */
-    selectedItemId?: string;
+    selectedItemId?: id;
     /**
      * Whether more than one item should be selectable.
      */
@@ -55,12 +55,12 @@ const SelectButton: FC<SelectButtonProps> = ({
     isDisabled,
 }) => {
     const itemList = useMemo(() => {
-        const items: SelectDialogItem[] = [];
+        const items: DialogSelectListItemType[] = [];
 
         list.forEach(({ text, id }) => {
             items.push({
                 name: text,
-                value: id,
+                id,
                 isSelected: id === selectedItemId,
             });
         });
@@ -69,26 +69,14 @@ const SelectButton: FC<SelectButtonProps> = ({
     }, [list, selectedItemId]);
 
     const handleClick = () => {
-        chayns.dialog
-            .select({
-                title,
-                // selectAllButton,
-                message: description,
-                quickfind: shouldShowSearch,
-                multiselect: shouldAllowMultiSelect,
-                list: itemList,
-                buttons: shouldAllowMultiSelect || [],
-            })
-            .then((result) => {
-                if (result.buttonType > 0) {
-                    console.log('result', result);
-                    // onSelect(this.getReturnList(result));
-                }
-            })
-            .catch((err) => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+        const result = createDialog({
+            type: DialogType.SELECT,
+            list: itemList,
+            multiselect: shouldAllowMultiSelect,
+            quickfind: shouldShowSearch,
+        }).open();
+
+        console.log('result', result);
     };
 
     return (
