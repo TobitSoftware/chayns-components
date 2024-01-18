@@ -98,6 +98,10 @@ export type AccordionProps = {
      */
     shouldHideBackground?: boolean;
     /**
+     * Whether the icon should be rotating.
+     */
+    shouldRotateIcon?: boolean;
+    /**
      * Title of the Accordion displayed in the head
      */
     title: string;
@@ -130,6 +134,7 @@ const Accordion: FC<AccordionProps> = ({
     searchPlaceholder,
     shouldForceBackground = false,
     shouldHideBackground = false,
+    shouldRotateIcon = true,
     title,
     titleElement,
     shouldRenderClosed = false,
@@ -233,6 +238,7 @@ const Accordion: FC<AccordionProps> = ({
                         rightElement={rightElement}
                         searchIcon={searchIcon}
                         searchPlaceholder={searchPlaceholder}
+                        shouldRotateIcon={shouldRotateIcon}
                         title={title}
                         titleElement={titleElement}
                     />

@@ -34,6 +34,7 @@ type AccordionHeadProps = {
     rightElement?: ReactNode;
     searchIcon?: string[];
     searchPlaceholder?: string;
+    shouldRotateIcon?: boolean;
     title: string;
     titleElement?: ReactNode;
 };
@@ -54,6 +55,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     rightElement,
     searchIcon,
     searchPlaceholder,
+    shouldRotateIcon,
     title,
     titleElement,
 }) => {
@@ -83,7 +85,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             initial={false}
         >
             <StyledMotionIconWrapper
-                animate={{ rotate: isOpen || isFixed ? 90 : 0 }}
+                animate={{ rotate: (isOpen || isFixed) && shouldRotateIcon ? 90 : 0 }}
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
             >
