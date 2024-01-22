@@ -52,6 +52,9 @@ export interface Dialog {
         width?: number;
         customTransitionTimeout?: number;
     }): Promise<any>;
+    signature(config: {
+        buttons?: DialogButton[];
+    }): Promise<{ buttonType: ButtonType; value: string }>;
 }
 
 declare enum ButtonText {
@@ -59,6 +62,7 @@ declare enum ButtonText {
     No = 'Nein',
     Ok = 'OK',
     Yes = 'Ja',
+    Save = 'Speichern',
 }
 
 export enum ButtonType {

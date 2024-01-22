@@ -67,3 +67,5 @@ export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';
 export { default as SelectButton } from './components/select-button/SelectButton';
 export type { SelectButtonItem } from './components/select-button/types';
+export { default as Signature } from './components/signature/Signature';
+export type { SignatureRef } from './components/signature/Signature';
