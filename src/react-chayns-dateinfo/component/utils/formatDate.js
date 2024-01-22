@@ -1,6 +1,10 @@
 import text from '../../constants/text';
 
 export const getRelativeDateString = (date, options = { language: 'de' }) => {
+    let { language } = options;
+    if (!(language in text)) {
+        language = 'de';
+    }
     const dateObj = new Date(date);
     const now = new Date();
     let timeBetween = now.getTime() - dateObj.getTime();
@@ -54,9 +58,9 @@ export const getRelativeDateString = (date, options = { language: 'de' }) => {
         hours: dateObj.getHours(),
         days: dateObj.getDate(),
         month: dateObj.getMonth() + 1,
-        monthWritten: text[options.language].MONTHS[dateObj.getMonth()],
+        monthWritten: text[language].MONTHS[dateObj.getMonth()],
         monthShortWritten:
-            text[options.language].MONTHS_SHORT[dateObj.getMonth()],
+            text[language].MONTHS_SHORT[dateObj.getMonth()],
         years: options.hideYear ? '' : dateObj.getFullYear(),
     };
 
@@ -103,7 +107,7 @@ export const getRelativeDateString = (date, options = { language: 'de' }) => {
         unit = 'hours';
     }
 
-    let txt = text[options.language].RELATIVE_TEXT[tense][unit];
+    let txt = text[language].RELATIVE_TEXT[tense][unit];
 
     if (
         options.showDate === false &&
@@ -121,16 +125,16 @@ export const getRelativeDateString = (date, options = { language: 'de' }) => {
         )
     ) {
         if (options.writeMonth) {
-            txt = text[options.language].ABSOLUTE_TEXT.dateMW;
+            txt = text[language].ABSOLUTE_TEXT.dateMW;
         } else if (options.writeMonth === false) {
-            txt = text[options.language].ABSOLUTE_TEXT.date;
+            txt = text[language].ABSOLUTE_TEXT.date;
         } else {
-            txt = text[options.language].ABSOLUTE_TEXT.dateMSW;
+            txt = text[language].ABSOLUTE_TEXT.dateMSW;
         }
     }
 
     if (options.writeDay) {
-        const day = text[options.language].WEEKDAYS[(dateObj.getDay() + 6) % 7];
+        const day = text[language].WEEKDAYS[(dateObj.getDay() + 6) % 7];
         if (options.showDate || options.writeMonth) {
             txt = `${day}, ${txt}`;
         } else {
@@ -140,17 +144,21 @@ export const getRelativeDateString = (date, options = { language: 'de' }) => {
 
     if (options.showTime) {
         if (txt) {
-            txt += ` ${text[options.language].ABSOLUTE_TEXT.at} `;
+            txt += ` ${text[language].ABSOLUTE_TEXT.at} `;
         }
-        txt += `${text[options.language].ABSOLUTE_TEXT.time}`;
+        txt += `${text[language].ABSOLUTE_TEXT.time}`;
     }
 
     return replace(txt, relativeValues, absoluteValues);
 };
 
 export const getAbsoluteDateString = (date, options = { language: 'de' }) => {
+    let { language } = options;
+    if (!(language in text)) {
+        language = 'de';
+    }
     const dateObj = new Date(date);
-    const txt = text[options.language].ABSOLUTE_TEXT.datetimeMSW;
+    const txt = text[language].ABSOLUTE_TEXT.datetimeMSW;
     const absoluteValues = {
         seconds: dateObj.getSeconds(),
         minutes: dateObj.getMinutes(),
@@ -158,7 +166,7 @@ export const getAbsoluteDateString = (date, options = { language: 'de' }) => {
         days: dateObj.getDate(),
         month: dateObj.getMonth() + 1,
         monthShortWritten:
-            text[options.language].MONTHS_SHORT[dateObj.getMonth()],
+            text[language].MONTHS_SHORT[dateObj.getMonth()],
         years: dateObj.getFullYear(),
     };
     return replace(txt, {}, absoluteValues);
