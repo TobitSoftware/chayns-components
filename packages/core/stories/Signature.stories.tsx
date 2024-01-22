@@ -5,13 +5,7 @@ export default {
     title: 'Core/Signature',
     component: Signature,
     args: {
-        buttonText: 'Pizza auswählen',
-        list: [
-            { text: 'Salami', id: 1 },
-            { text: 'Thunfisch', id: 2 },
-            { text: 'Döner', id: 3 },
-        ],
-        selectedItemIds: [1],
+        buttonText: 'Unterschreiben',
     },
 } as Meta<typeof Signature>;
 
