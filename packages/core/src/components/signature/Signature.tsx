@@ -51,7 +51,6 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
         useEffect(() => {
             const loadUserSignature = async () => {
                 await getUserSignature().then((signature) => {
-                    console.debug('getUserSignature', signature);
                     setSignatureUrl(signature);
                 });
             };
@@ -76,14 +75,14 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                         ],
                     })
                     .then(async (result) => {
-                        console.debug('Dialog result', result);
                         if (result.buttonType === 1 && result.value) {
                             await putUserSignature(result.value).then((success) => {
-                                console.debug('putUserSignature', success);
                                 if (success) {
                                     setSignatureUrl(result.value);
 
                                     if (shouldSubscribe) {
+                                        setHasSubscribed(true);
+
                                         if (typeof onSubscribe === 'function') {
                                             onSubscribe();
                                         }
@@ -104,7 +103,6 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleDelete = useCallback(async () => {
             await deleteUserSignature().then((success) => {
-                console.debug('deleteUserSignature', success);
                 if (success) {
                     setSignatureUrl(undefined);
 
