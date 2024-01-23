@@ -1,5 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyledSlider, StyledSliderInput, StyledSliderThumb } from './Slider.styles';
+import {
+    StyledSlider,
+    StyledSliderInput,
+    StyledSliderThumb,
+    StyledSliderThumbLable,
+} from './Slider.styles';
 import { fillSlider } from '../../utils/slider';
 import { useTheme } from 'styled-components';
 
@@ -26,14 +31,34 @@ export type SliderProps = {
      */
     onChange?: (value?: number, interval?: SliderInterval) => void;
     /**
+     * Whether the current value should be displayed inside the slider thumb.
+     */
+    shouldShowThumbLable?: boolean;
+    /**
+     * The steps of the slider.
+     */
+    steps?: number;
+    /**
+     * A function to format the thumb lable.
+     */
+    thumbLableFormatter?: (value: number) => string;
+    /**
      * the Value that the slider should have.
      */
     value?: number;
 };
 
-const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval }) => {
-    const [editedValue, setEditedValue] = useState(0);
-    const [fromValue, setFromValue] = useState(minValue);
+const Slider: FC<SliderProps> = ({
+    maxValue,
+    minValue,
+    value,
+    onChange,
+    interval,
+    thumbLableFormatter,
+    shouldShowThumbLable = false,
+    steps = 1,
+}) => {
+    const [fromValue, setFromValue] = useState(0);
     const [toValue, setToValue] = useState(maxValue);
 
     const fromSliderRef = useRef<HTMLInputElement>(null);
@@ -50,7 +75,7 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
         }
 
         if (value >= minValue && value <= maxValue) {
-            setEditedValue(value);
+            setFromValue(value);
         }
     }, [maxValue, minValue, value]);
 
@@ -63,16 +88,6 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
             setToValue(fromValue);
         }
     }, [fromValue, toValue]);
-
-    const toggleAccessible = useCallback(() => {
-        if (toSliderRef.current) {
-            if (Number(toSliderRef.current) <= 0) {
-                toSliderRef.current.style.zIndex = '2';
-            } else {
-                toSliderRef.current.style.zIndex = '0';
-            }
-        }
-    }, []);
 
     const handleControlFromSlider = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
@@ -125,14 +140,13 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
                 theme,
             });
 
-            toggleAccessible();
             if (from <= to) {
                 toSliderRef.current.value = String(to);
             } else {
                 toSliderRef.current.value = String(from);
             }
         },
-        [onChange, theme, toggleAccessible]
+        [onChange, theme]
     );
 
     useEffect(() => {
@@ -151,11 +165,9 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
             toSlider: toSliderRef.current,
             theme,
         });
-
-        toggleAccessible();
         // Note: interval can´t be in the deps because of rerender
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [toggleAccessible, theme]);
+    }, [theme]);
 
     /**
      * This function updates the value
@@ -170,7 +182,7 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
                 return;
             }
 
-            setEditedValue(newValue);
+            setFromValue(newValue);
 
             if (onChange) {
                 onChange(newValue);
@@ -206,31 +218,48 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
                     ref={fromSliderRef}
                     isInterval={!!interval}
                     type="range"
-                    value={interval ? fromValue : editedValue}
+                    value={fromValue}
+                    step={steps}
                     max={maxValue}
                     min={minValue}
                     onChange={handleInputChange}
                 />
-                <StyledSliderThumb position={fromSliderThumbPosition} />
-                <StyledSliderThumb position={toSliderThumbPosition} />
+                <StyledSliderThumb position={fromSliderThumbPosition}>
+                    {shouldShowThumbLable && (
+                        <StyledSliderThumbLable>
+                            {typeof thumbLableFormatter === 'function'
+                                ? thumbLableFormatter(fromValue)
+                                : fromValue}
+                        </StyledSliderThumbLable>
+                    )}
+                </StyledSliderThumb>
                 {interval && (
-                    <>
-                        <StyledSliderInput
-                            ref={toSliderRef}
-                            isInterval={!!interval}
-                            type="range"
-                            value={toValue}
-                            max={maxValue}
-                            min={minValue}
-                            onChange={handleControlToSlider}
-                        />
-                        <StyledSliderThumb position={toSliderThumbPosition} />
-                    </>
+                    <StyledSliderThumb position={toSliderThumbPosition}>
+                        {shouldShowThumbLable && (
+                            <StyledSliderThumbLable>
+                                {typeof thumbLableFormatter === 'function'
+                                    ? thumbLableFormatter(toValue)
+                                    : toValue}
+                            </StyledSliderThumbLable>
+                        )}
+                    </StyledSliderThumb>
+                )}
+                {interval && (
+                    <StyledSliderInput
+                        ref={toSliderRef}
+                        isInterval={!!interval}
+                        type="range"
+                        value={toValue}
+                        step={steps}
+                        max={maxValue}
+                        min={minValue}
+                        onChange={handleControlToSlider}
+                    />
                 )}
             </StyledSlider>
         ),
         [
-            editedValue,
+            steps,
             fromSliderThumbPosition,
             fromValue,
             handleControlToSlider,
@@ -238,6 +267,8 @@ const Slider: FC<SliderProps> = ({ maxValue, minValue, value, onChange, interval
             interval,
             maxValue,
             minValue,
+            shouldShowThumbLable,
+            thumbLableFormatter,
             toSliderThumbPosition,
             toValue,
         ]

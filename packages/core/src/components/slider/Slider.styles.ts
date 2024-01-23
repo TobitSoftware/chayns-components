@@ -52,40 +52,41 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
         appearance: none;
         width: 20px;
         height: 20px;
-        background-color: ${({ theme }: StyledSliderInputProps) => theme['100']};
         cursor: pointer;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         pointer-events: all;
         position: relative;
-        z-index: 3;
     }
 
     // slider thumb for firefox
     &::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background-color: ${({ theme }: StyledSliderInputProps) => theme['100']};
         cursor: pointer;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         pointer-events: all;
         position: relative;
-        z-index: 3;
     }
 `;
 
 type StyledSliderThumbProps = WithTheme<{ position: number }>;
 
 export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
-    width: 20px;
+    min-width: 20px;
+    width: fit-content;
     height: 20px;
     background-color: ${({ theme }: StyledSliderThumbProps) => theme['100']};
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 100px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     pointer-events: none;
     z-index: 3;
     left: ${({ position }) => position}px;
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+`;
+
+export const StyledSliderThumbLable = styled.span`
+    pointer-events: none;
 `;
