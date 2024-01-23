@@ -24,9 +24,6 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     -webkit-appearance: none;
     height: 10px;
     outline: none;
-    //opacity: 0.7;
-    //-webkit-transition: 0.2s;
-    //transition: opacity 0.2s;
     cursor: pointer !important;
     z-index: 2;
     appearance: none;
@@ -71,7 +68,6 @@ type StyledSliderThumbProps = WithTheme<{ position: number }>;
 
 export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
     min-width: 20px;
-    width: fit-content;
     height: 20px;
     background-color: ${({ theme }: StyledSliderThumbProps) => theme['100']};
     cursor: pointer;
@@ -85,6 +81,7 @@ export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
     align-items: center;
     justify-content: center;
     padding: 0 8px;
+    white-space: nowrap;
 `;
 
 export const StyledSliderThumbLable = styled.span`

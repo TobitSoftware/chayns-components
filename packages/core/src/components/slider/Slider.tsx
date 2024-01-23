@@ -63,6 +63,8 @@ const Slider: FC<SliderProps> = ({
 
     const fromSliderRef = useRef<HTMLInputElement>(null);
     const toSliderRef = useRef<HTMLInputElement>(null);
+    const fromSliderThumbRef = useRef<HTMLDivElement>(null);
+    const toSliderThumbRef = useRef<HTMLDivElement>(null);
 
     const theme = useTheme();
 
@@ -116,7 +118,7 @@ const Slider: FC<SliderProps> = ({
                 fromSliderRef.current.value = String(from);
             }
         },
-        [onChange, theme]
+        [onChange, theme],
     );
 
     const handleControlToSlider = useCallback(
@@ -146,7 +148,7 @@ const Slider: FC<SliderProps> = ({
                 toSliderRef.current.value = String(from);
             }
         },
-        [onChange, theme]
+        [onChange, theme],
     );
 
     useEffect(() => {
@@ -188,24 +190,24 @@ const Slider: FC<SliderProps> = ({
                 onChange(newValue);
             }
         },
-        [handleControlFromSlider, interval, onChange]
+        [handleControlFromSlider, interval, onChange],
     );
 
     const fromSliderThumbPosition = useMemo(() => {
-        if (fromSliderRef.current) {
+        if (fromSliderRef.current && fromSliderThumbRef.current) {
             return (
                 ((fromValue - minValue) / (maxValue - minValue)) *
-                (fromSliderRef.current.offsetWidth - 20)
+                (fromSliderRef.current.offsetWidth - fromSliderThumbRef.current.offsetWidth / 2)
             );
         }
         return 0;
     }, [fromValue, maxValue, minValue]);
 
     const toSliderThumbPosition = useMemo(() => {
-        if (toSliderRef.current) {
+        if (toSliderRef.current && toSliderThumbRef.current) {
             return (
                 ((toValue - minValue) / (maxValue - minValue)) *
-                (toSliderRef.current.offsetWidth - 20)
+                (toSliderRef.current.offsetWidth - toSliderThumbRef.current.offsetWidth / 2)
             );
         }
         return 0;
@@ -224,7 +226,7 @@ const Slider: FC<SliderProps> = ({
                     min={minValue}
                     onChange={handleInputChange}
                 />
-                <StyledSliderThumb position={fromSliderThumbPosition}>
+                <StyledSliderThumb ref={fromSliderThumbRef} position={fromSliderThumbPosition}>
                     {shouldShowThumbLable && (
                         <StyledSliderThumbLable>
                             {typeof thumbLableFormatter === 'function'
@@ -234,7 +236,7 @@ const Slider: FC<SliderProps> = ({
                     )}
                 </StyledSliderThumb>
                 {interval && (
-                    <StyledSliderThumb position={toSliderThumbPosition}>
+                    <StyledSliderThumb ref={toSliderThumbRef} position={toSliderThumbPosition}>
                         {shouldShowThumbLable && (
                             <StyledSliderThumbLable>
                                 {typeof thumbLableFormatter === 'function'
@@ -271,7 +273,7 @@ const Slider: FC<SliderProps> = ({
             thumbLableFormatter,
             toSliderThumbPosition,
             toValue,
-        ]
+        ],
     );
 };
 
