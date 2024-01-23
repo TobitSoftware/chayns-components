@@ -14,7 +14,7 @@ import {
     StyledSliderButtonItem,
 } from './SliderButton.styles';
 import type { SliderButtonItem } from '../../types/slider-button';
-import { AnimatePresence, useAnimate } from 'framer-motion';
+import { AnimatePresence, type PanInfo, useAnimate, useMotionValue } from 'framer-motion';
 import { calculateBiggestWidth } from '../../utils/calculate';
 
 export type SliderButtonProps = {
@@ -61,7 +61,19 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         }
     }, [itemWidth]);
 
-    useEffect(() => {}, []);
+    const animation = useCallback(
+        async (x: number) => {
+            await animate(
+                scope.current,
+                { x },
+                {
+                    type: 'tween',
+                    duration: 0.2,
+                },
+            );
+        },
+        [animate, scope],
+    );
 
     const handleClick = useCallback(
         (event: MouseEvent, id: string, index: number) => {
@@ -71,20 +83,9 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 onChange(id);
             }
 
-            const animation = async (x: number) => {
-                await animate(
-                    scope.current,
-                    { x },
-                    {
-                        type: 'tween',
-                        duration: 0.2,
-                    },
-                );
-            };
-
             void animation(itemWidth * index);
         },
-        [animate, itemWidth, onChange, scope],
+        [animation, itemWidth, onChange],
     );
 
     const buttons = useMemo(() => {
@@ -112,6 +113,48 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         return selectedItem ? selectedItem.text : '';
     }, [items, selectedButton]);
 
+    // const handleDragEnd = useCallback(
+    //     (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    //         if (!sliderButtonRef.current) {
+    //             return;
+    //         }
+    //
+    //         const leftOffset = sliderButtonRef.current.offsetLeft;
+    //
+    //         const snapPoints = [0];
+    //
+    //         for (let i = 1; i < items.length; i++) {
+    //             snapPoints.push(itemWidth * i);
+    //         }
+    //
+    //         console.log(snapPoints);
+    //         console.log(info, event);
+    //
+    //         const closestSnap = snapPoints.reduce(
+    //             (prev, snap) =>
+    //                 Math.abs(info.point.x - leftOffset - snap) <
+    //                 Math.abs(info.point.x - leftOffset - (prev ?? 0))
+    //                     ? snap
+    //                     : prev,
+    //             snapPoints[0],
+    //         );
+    //
+    //         console.log(closestSnap);
+    //
+    //         if (closestSnap) {
+    //             void animation(closestSnap);
+    //         }
+    //     },
+    //     [animation, itemWidth, items.length],
+    // );
+
+    const handleWhileDrag = useCallback(
+        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+            console.log(info, event);
+        },
+        [],
+    );
+
     return useMemo(
         () => (
             <StyledSliderButton isDisabled={isDisabled} ref={sliderButtonRef}>
@@ -123,13 +166,15 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                         dragElastic={0}
                         dragConstraints={{ ...dragRange }}
                         width={itemWidth}
+                        onDrag={handleWhileDrag}
+                        // onDragEnd={handleDragEnd}
                     >
                         {thumbText}
                     </StyledMotionSliderButtonThumb>
                 </AnimatePresence>
             </StyledSliderButton>
         ),
-        [buttons, dragRange, isDisabled, itemWidth, scope, thumbText],
+        [buttons, dragRange, handleWhileDrag, isDisabled, itemWidth, scope, thumbText],
     );
 };
 
