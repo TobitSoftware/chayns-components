@@ -51,8 +51,45 @@ const DisabledRadioButtonsTemplate: StoryFn<typeof RadioButton> = () => (
     </>
 );
 
+const WithChildrenTemplate: StoryFn<typeof RadioButton> = () => (
+    <>
+        <h1>StarWars Filme</h1>
+        <RadioButtonGroup>
+            <RadioButton id="0" label="Episode I">
+                The Phantom Menace
+            </RadioButton>
+            <RadioButton id="1" label="Episode II">
+                Attack of the Clones
+            </RadioButton>
+            <RadioButton id="2" label="Episode III" isChecked>
+                Revenge of the Sith
+            </RadioButton>
+            <RadioButton id="3" label="Episode IV">
+                A New Hope
+            </RadioButton>
+            <RadioButton id="4" label="Episode V">
+                The Empire Strikes Back
+            </RadioButton>
+            <RadioButton id="5" label="Episode VI">
+                Return of the Jedi
+            </RadioButton>
+            <RadioButton id="6" label="Episode VII">
+                The Force Awakens
+            </RadioButton>
+            <RadioButton id="7" label="Episode VIII">
+                The Last Jedi
+            </RadioButton>
+            <RadioButton id="8" label="Episode IX">
+                The Rise of Skywalker
+            </RadioButton>
+        </RadioButtonGroup>
+    </>
+);
+
 export const General = Template.bind({});
 
 export const MultipleRadioButtons = MultipleRadioButtonsTemplate.bind({});
 
 export const DisabledRadioButtons = DisabledRadioButtonsTemplate.bind({});
+
+export const WithChildren = WithChildrenTemplate.bind({});

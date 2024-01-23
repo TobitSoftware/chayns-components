@@ -1,18 +1,26 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import { motion } from 'framer-motion';
 
 type StyledRadioButtonProps = WithTheme<{ isDisabled: boolean }>;
 
 export const StyledRadioButton = styled.span<StyledRadioButtonProps>`
     display: flex;
-    gap: 5px;
+    flex-direction: column;
+
     user-select: none;
     width: fit-content;
-    align-items: center;
     position: relative;
     cursor: ${({ isDisabled }: StyledRadioButtonProps) =>
         isDisabled ? 'default !important' : 'pointer'};
     opacity: ${({ isDisabled }: StyledRadioButtonProps) => (isDisabled ? 0.5 : 1)};
+`;
+
+export const StyledRadioButtonWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 5px;
 `;
 
 type StyledRadioButtonCheckBoxProps = WithTheme<unknown>;
@@ -81,4 +89,8 @@ type StyledRadioButtonLabelProps = WithTheme<unknown>;
 
 export const StyledRadioButtonLabel = styled.p<StyledRadioButtonLabelProps>`
     color: ${({ theme }: StyledRadioButtonLabelProps) => theme.text};
+`;
+
+export const StyledMotionRadioButtonChildren = styled(motion.div)`
+    margin-left: 18px;
 `;

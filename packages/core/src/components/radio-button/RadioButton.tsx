@@ -1,15 +1,31 @@
-import React, { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+    FC,
+    type ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
+    StyledMotionRadioButtonChildren,
     StyledRadioButton,
     StyledRadioButtonCheckBox,
     StyledRadioButtonCheckBoxMark,
     StyledRadioButtonLabel,
     StyledRadioButtonPseudoCheckBox,
+    StyledRadioButtonWrapper,
 } from './RadioButton.styles';
 import type { RadioButtonItem } from './types';
+import { AnimatePresence } from 'framer-motion';
 
 export type RadioButtonProps = {
+    /**
+     * The children that should be displayed after the RadioButton is checked.
+     */
+    children?: ReactNode;
     /**
      * Whether the radio button should be checked.
      */
@@ -33,6 +49,7 @@ export type RadioButtonProps = {
 };
 
 const RadioButton: FC<RadioButtonProps> = ({
+    children,
     isChecked,
     label,
     onChange,
@@ -99,19 +116,38 @@ const RadioButton: FC<RadioButtonProps> = ({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
-                <StyledRadioButtonPseudoCheckBox isChecked={isMarked}>
-                    <StyledRadioButtonCheckBoxMark isHovered={isHovered} isSelected={isMarked} />
-                </StyledRadioButtonPseudoCheckBox>
-                <StyledRadioButtonCheckBox
-                    disabled={isDisabled}
-                    type="radio"
-                    checked={isMarked}
-                    onChange={() => {}}
-                />
-                {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
+                <StyledRadioButtonWrapper>
+                    <StyledRadioButtonPseudoCheckBox isChecked={isMarked}>
+                        <StyledRadioButtonCheckBoxMark
+                            isHovered={isHovered}
+                            isSelected={isMarked}
+                        />
+                    </StyledRadioButtonPseudoCheckBox>
+                    <StyledRadioButtonCheckBox
+                        disabled={isDisabled}
+                        type="radio"
+                        checked={isMarked}
+                        onChange={() => {}}
+                    />
+                    {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
+                </StyledRadioButtonWrapper>
+                {children && (
+                    <AnimatePresence initial>
+                        <StyledMotionRadioButtonChildren
+                            animate={
+                                isMarked
+                                    ? { opacity: 1, height: 'auto' }
+                                    : { opacity: 0, height: 0 }
+                            }
+                            transition={{ duration: 0.2 }}
+                        >
+                            {children}
+                        </StyledMotionRadioButtonChildren>
+                    </AnimatePresence>
+                )}
             </StyledRadioButton>
         ),
-        [handleClick, handleMouseEnter, isDisabled, isHovered, isMarked, label]
+        [children, handleClick, handleMouseEnter, isDisabled, isHovered, isMarked, label],
     );
 };
 
