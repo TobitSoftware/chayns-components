@@ -1,3 +1,5 @@
+import type { SliderButtonItem } from '../types/slider-button';
+
 export const calculateContentWidth = (texts: string[]) => {
     const length: number[] = [];
 
@@ -17,6 +19,34 @@ export const calculateContentWidth = (texts: string[]) => {
     });
 
     return Math.max.apply(null, length);
+};
+
+export const calculateBiggestWidth = (elements: SliderButtonItem[]) => {
+    const container = document.createElement('div');
+
+    container.style.visibility = 'hidden';
+    container.style.position = 'absolute';
+    container.style.width = 'auto';
+    container.style.whiteSpace = 'nowrap';
+    container.style.padding = '7px 12px';
+    container.style.display = 'block';
+
+    elements.forEach(({ text, id }) => {
+        const element = document.createElement('div');
+
+        element.accessKey = `slider-button-pseudo--${id}`;
+        element.innerText = text;
+
+        container.appendChild(element);
+    });
+
+    document.body.appendChild(container);
+
+    const width = container.offsetWidth;
+
+    document.body.removeChild(container);
+
+    return width;
 };
 
 export const calculateContentHeight = (elements: string[]) => {

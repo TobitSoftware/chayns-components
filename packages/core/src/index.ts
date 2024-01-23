@@ -69,3 +69,5 @@ export { default as SelectButton } from './components/select-button/SelectButton
 export type { SelectButtonItem } from './components/select-button/types';
 export { default as Signature } from './components/signature/Signature';
 export type { SignatureRef } from './components/signature/Signature';
+export { default as SliderButton } from './components/slider-button/SliderButton';
+export type { SliderButtonItem } from './types/slider-button';
