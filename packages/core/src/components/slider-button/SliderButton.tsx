@@ -14,7 +14,13 @@ import {
     StyledSliderButtonItem,
 } from './SliderButton.styles';
 import type { SliderButtonItem } from '../../types/slider-button';
-import { AnimatePresence, type PanInfo, useAnimate, useMotionValue } from 'framer-motion';
+import {
+    AnimatePresence,
+    type PanInfo,
+    useAnimate,
+    useMotionValue,
+    useTransform,
+} from 'framer-motion';
 import { calculateBiggestWidth } from '../../utils/calculate';
 
 export type SliderButtonProps = {
@@ -113,46 +119,89 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         return selectedItem ? selectedItem.text : '';
     }, [items, selectedButton]);
 
-    // const handleDragEnd = useCallback(
-    //     (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    //         if (!sliderButtonRef.current) {
-    //             return;
-    //         }
-    //
-    //         const leftOffset = sliderButtonRef.current.offsetLeft;
-    //
-    //         const snapPoints = [0];
-    //
-    //         for (let i = 1; i < items.length; i++) {
-    //             snapPoints.push(itemWidth * i);
-    //         }
-    //
-    //         console.log(snapPoints);
-    //         console.log(info, event);
-    //
-    //         const closestSnap = snapPoints.reduce(
-    //             (prev, snap) =>
-    //                 Math.abs(info.point.x - leftOffset - snap) <
-    //                 Math.abs(info.point.x - leftOffset - (prev ?? 0))
-    //                     ? snap
-    //                     : prev,
-    //             snapPoints[0],
-    //         );
-    //
-    //         console.log(closestSnap);
-    //
-    //         if (closestSnap) {
-    //             void animation(closestSnap);
-    //         }
-    //     },
-    //     [animation, itemWidth, items.length],
-    // );
+    const handleDragEnd = useCallback(
+        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+            if (!scope.current) {
+                return;
+            }
+
+            const { transform } = (scope.current as HTMLElement).style;
+            let position;
+
+            if (transform === 'none') {
+                position = 0;
+            } else {
+                const match = transform.match(/translateX\(([-\d.]+)px\)/);
+
+                if (match && match[1]) {
+                    position = parseFloat(match[1]);
+                }
+            }
+
+            if (!position) {
+                return;
+            }
+
+            const leftOffset = position + itemWidth / 2;
+
+            const snapPoints = [0];
+
+            for (let i = 1; i < items.length; i++) {
+                snapPoints.push(itemWidth * i);
+            }
+
+            console.log('snapPoints', snapPoints);
+
+            const sortedArray = snapPoints.sort(
+                (a, b) => Math.abs(leftOffset - a) - Math.abs(leftOffset - b),
+            );
+
+            // Die erste Zahl im sortierten Array ist die nächste Zahl zur Zielzahl
+            const closestSnap = sortedArray[0];
+
+            // const closestSnap = snapPoints.reduce(
+            //     (prev, snap) =>
+            //         Math.abs(info.point.x - leftOffset - snap) <
+            //         Math.abs(info.point.x - leftOffset - (prev ?? 0))
+            //             ? snap
+            //             : prev,
+            //     snapPoints[0],
+            // );
+
+            console.log('mitte', leftOffset);
+            console.log('closestSnap', closestSnap);
+
+            if (closestSnap) {
+                void animation(closestSnap);
+            }
+        },
+        [animation, itemWidth, items.length, scope],
+    );
 
     const handleWhileDrag = useCallback(
         (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-            console.log(info, event);
+            if (!scope.current) {
+                return;
+            }
+
+            const { transform } = (scope.current as HTMLElement).style;
+            let position;
+
+            if (transform === 'none') {
+                position = 0;
+            } else {
+                const match = transform.match(/translateX\(([-\d.]+)px\)/);
+
+                if (match && match[1]) {
+                    position = parseFloat(match[1]);
+                }
+            }
+
+            // if (!position) {
+            //     return;
+            // }
         },
-        [],
+        [scope],
     );
 
     return useMemo(
@@ -166,15 +215,15 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                         dragElastic={0}
                         dragConstraints={{ ...dragRange }}
                         width={itemWidth}
-                        onDrag={handleWhileDrag}
-                        // onDragEnd={handleDragEnd}
+                        // onDrag={handleWhileDrag}
+                        onDragEnd={handleDragEnd}
                     >
                         {thumbText}
                     </StyledMotionSliderButtonThumb>
                 </AnimatePresence>
             </StyledSliderButton>
         ),
-        [buttons, dragRange, handleWhileDrag, isDisabled, itemWidth, scope, thumbText],
+        [buttons, dragRange, handleDragEnd, isDisabled, itemWidth, scope, thumbText],
     );
 };
 
