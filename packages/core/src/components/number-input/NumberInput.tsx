@@ -19,6 +19,10 @@ export type NumberInputProps = {
      */
     isMoneyInput?: boolean;
     /**
+     * Whether the value should be formatted as a time.
+     */
+    isTimeInput?: boolean;
+    /**
      * Limits the number to this value
      */
     maxNumber?: number;
@@ -47,18 +51,18 @@ export type NumberInputProps = {
     value?: string;
 };
 
-const NumberInput: FC<NumberInputProps> = (
-    {
-        isDecimalInput,
-        isMoneyInput,
-        maxNumber = Infinity,
-        value,
-        placeholder,
-        onBlur,
-        isDisabled,
-        onChange,
-        minNumber = -Infinity
-    }) => {
+const NumberInput: FC<NumberInputProps> = ({
+    isDecimalInput,
+    isMoneyInput,
+    isTimeInput,
+    maxNumber = Infinity,
+    value,
+    placeholder,
+    onBlur,
+    isDisabled,
+    onChange,
+    minNumber = -Infinity,
+}) => {
     // the plainText will be shown in the input, when it is in focus
     const [plainText, setPlainText] = useState<string>('');
     // the formattedValue will be shown in the input, when it is not in focus
@@ -68,35 +72,37 @@ const NumberInput: FC<NumberInputProps> = (
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
+    const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+        const newValue = event.target.value;
 
-    const onLocalChange: ChangeEventHandler<HTMLInputElement> =
-        (event) => {
-            const newValue = event.target.value;
+        if (newValue.replaceAll(':', '').length > 4) {
+            return;
+        }
 
-            const sanitizedValueString = newValue
-                // Removes everything except numbers, commas and points
-                .replace(NUMBER_CLEAR_REGEX, '');
+        const sanitizedValueString = newValue
+            // Removes everything except numbers, commas and points
+            .replace(NUMBER_CLEAR_REGEX, '');
 
-            const valueToCheck = sanitizedValueString.replaceAll(',', '.');
+        const valueToCheck = sanitizedValueString.replaceAll(',', '.');
 
-            if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput })) {
-                return;
-            }
+        if (!isValidString({ string: valueToCheck, isMoneyInput, isDecimalInput, isTimeInput })) {
+            return;
+        }
 
-            setPlainText(sanitizedValueString.replaceAll('.', ','));
+        setPlainText(sanitizedValueString.replaceAll('.', ','));
 
-            if (typeof onChange === 'function') {
-                onChange(sanitizedValueString.replaceAll('.', ','));
-            }
-        };
+        if (typeof onChange === 'function') {
+            onChange(sanitizedValueString.replaceAll('.', ','));
+        }
+    };
 
     const onLocalBlur = () => {
         const sanitizedValue = plainText.length === 0 ? '0' : plainText;
         let isInvalid = false;
 
         const parsedNumber = parseFloatWithDecimals({
-            stringValue: sanitizedValue.replace(',', '.'),
-            decimals: isMoneyInput ? 2 : undefined
+            stringValue: sanitizedValue.replace(',', '.').replaceAll(':', ''),
+            decimals: isMoneyInput ? 2 : undefined,
         });
 
         if (parsedNumber !== 0 && (parsedNumber > maxNumber || parsedNumber < minNumber)) {
@@ -105,12 +111,14 @@ const NumberInput: FC<NumberInputProps> = (
 
         setIsValueInvalid(isInvalid);
 
-        const newStringValue = plainText.length === 0
-            ? ''
-            : formateNumber({
-                number: parsedNumber,
-                isMoneyInput,
-            });
+        const newStringValue =
+            plainText.length === 0
+                ? ''
+                : formateNumber({
+                      number: parsedNumber,
+                      isMoneyInput,
+                      isTimeInput,
+                  });
 
         setFormattedValue(newStringValue);
         setPlainText(newStringValue.replaceAll('.', ''));
@@ -142,8 +150,8 @@ const NumberInput: FC<NumberInputProps> = (
     // updates the formattedValue, when the value changes
     useEffect(() => {
         const parsedNumber = parseFloatWithDecimals({
-            stringValue: plainText.replace(',', '.'),
-            decimals: isMoneyInput ? 2 : undefined
+            stringValue: plainText.replace(',', '.').replaceAll(':', ''),
+            decimals: isMoneyInput ? 2 : undefined,
         });
 
         // checks, if a given number is invalid, if the input is not in focus
@@ -151,13 +159,16 @@ const NumberInput: FC<NumberInputProps> = (
             setIsValueInvalid(parsedNumber > maxNumber || parsedNumber < minNumber);
         }
 
-        setFormattedValue(plainText.length === 0
-            ? ''
-            : formateNumber({
-                number: parsedNumber,
-                isMoneyInput,
-            }));
-    }, [hasFocus, isMoneyInput, maxNumber, minNumber, plainText]);
+        setFormattedValue(
+            plainText.length === 0
+                ? ''
+                : formateNumber({
+                      number: parsedNumber,
+                      isMoneyInput,
+                      isTimeInput,
+                  }),
+        );
+    }, [hasFocus, isMoneyInput, isTimeInput, maxNumber, minNumber, plainText]);
 
     useEffect(() => {
         if (typeof value === 'string') {
