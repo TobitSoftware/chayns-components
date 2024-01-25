@@ -1,6 +1,6 @@
-import React, { FC, type ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { StyledOpeningTimes, StyledOpeningTimesWrapper } from './OpeningTimes.styles';
-import type { OpeningTime, Weekday } from '../../types/openingTimes';
+import type { OpeningTime, Time, Weekday } from '../../types/openingTimes';
 import Checkbox from '../checkbox/Checkbox';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 
@@ -27,22 +27,45 @@ const OpeningTimes: FC<OpeningTimesProps> = ({ openingTimes, weekdays, onChange 
         setNewOpeningTimes(openingTimes);
     }, [openingTimes]);
 
-    useEffect(() => {
-        if (newOpeningTimes && typeof onChange === 'function') {
-            onChange(newOpeningTimes);
-        }
-    }, [newOpeningTimes, onChange]);
+    const handleCheckBoxChange = useCallback(
+        (id: string) => {
+            setNewOpeningTimes((prevOpeningTimes) => {
+                const updatedOpeningTimes = (prevOpeningTimes ?? []).map((openingTime) => {
+                    if (openingTime.id === id) {
+                        return { ...openingTime, isDisabled: !openingTime.isDisabled };
+                    }
+                    return openingTime;
+                });
 
-    const handleCheckBoxChange = (id: string) => {
-        setNewOpeningTimes((prevOpeningTimes) =>
-            (prevOpeningTimes ?? []).map((openingTime) => {
-                if (openingTime.id === id) {
-                    return { ...openingTime, isDisabled: !openingTime.isDisabled };
+                if (typeof onChange === 'function') {
+                    onChange(updatedOpeningTimes);
                 }
-                return openingTime;
-            }),
-        );
-    };
+
+                return updatedOpeningTimes;
+            });
+        },
+        [onChange],
+    );
+
+    const handleChange = useCallback(
+        (newTimes: Time[], id: string) => {
+            setNewOpeningTimes((prevOpeningTimes) => {
+                const updatedOpeningTimes = (prevOpeningTimes ?? []).map((openingTime) => {
+                    if (openingTime.id === id) {
+                        return { ...openingTime, times: newTimes };
+                    }
+                    return openingTime;
+                });
+
+                if (typeof onChange === 'function') {
+                    onChange(updatedOpeningTimes);
+                }
+
+                return updatedOpeningTimes;
+            });
+        },
+        [onChange],
+    );
 
     const content = useMemo(() => {
         const items: ReactElement[] = [];
@@ -63,13 +86,17 @@ const OpeningTimes: FC<OpeningTimesProps> = ({ openingTimes, weekdays, onChange 
                     <Checkbox isChecked={!isDisabled} onChange={() => handleCheckBoxChange(id)}>
                         {weekday}
                     </Checkbox>
-                    <OpeningInputs times={times} isDisabled={isDisabled} onChange={() => {}} />
+                    <OpeningInputs
+                        times={times}
+                        isDisabled={isDisabled}
+                        onChange={(newTimes) => handleChange(newTimes, id)}
+                    />
                 </StyledOpeningTimesWrapper>,
             );
         });
 
         return items;
-    }, [newOpeningTimes, weekdays]);
+    }, [handleChange, handleCheckBoxChange, newOpeningTimes, weekdays]);
 
     return useMemo(() => <StyledOpeningTimes>{content}</StyledOpeningTimes>, [content]);
 };

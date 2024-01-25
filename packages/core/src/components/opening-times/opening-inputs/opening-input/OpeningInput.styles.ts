@@ -22,7 +22,7 @@ type StyledOpeningInputButtonWrapperProps = WithTheme<unknown>;
 export const StyledOpeningInputButtonWrapper = styled.div`
     width: 20px;
     height: 20px;
-    background-color: ${({ theme }: StyledOpeningInputButtonWrapperProps) => theme['408']};
+    background-color: ${({ theme }: StyledOpeningInputButtonWrapperProps) => theme['202']};
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
@@ -30,4 +30,8 @@ export const StyledOpeningInputButtonWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+export const StyledOpeningInputPseudoButton = styled.div`
+    width: 20px;
 `;

@@ -11,6 +11,6 @@ export const StyledOpeningTimes = styled.div<StyledSliderButtonProps>`
 
 export const StyledOpeningTimesWrapper = styled.div`
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
 `;

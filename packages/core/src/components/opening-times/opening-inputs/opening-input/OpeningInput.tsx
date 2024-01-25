@@ -1,8 +1,9 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../../types/openingTimes';
 import {
     StyledOpeningInput,
     StyledOpeningInputButtonWrapper,
+    StyledOpeningInputPseudoButton,
     StyledOpeningInputText,
     StyledOpeningInputWrapper,
 } from './OpeningInput.styles';
@@ -31,61 +32,77 @@ const OpeningInput: FC<OpeningInputProps> = ({
     const [startTime, setStartTime] = useState(start);
     const [endTime, setEndTime] = useState(end);
 
-    useEffect(() => {
-        onChange({ start: startTime, end: endTime });
-    }, [endTime, onChange, startTime]);
-
     const button = useMemo(() => {
         switch (buttonType) {
             case OpeningTimesButtonType.ADD:
                 return (
                     <StyledOpeningInputButtonWrapper onClick={onAdd}>
-                        <Icon icons={['fa fa-plus']} size={15} color="white" />
+                        <Icon icons={['ts-plus']} size={15} />
                     </StyledOpeningInputButtonWrapper>
                 );
             case OpeningTimesButtonType.REMOVE:
                 return (
                     <StyledOpeningInputButtonWrapper onClick={onRemove}>
-                        <Icon icons={['fa fa-x']} size={10} color="white" />
+                        <Icon icons={['ts-wrong']} size={15} />
                     </StyledOpeningInputButtonWrapper>
                 );
             default:
-                return null;
+                return <StyledOpeningInputPseudoButton />;
         }
     }, [buttonType, onAdd, onRemove]);
 
-    const handleStartTimeChange = useCallback((value: string) => {
-        setStartTime(value);
-    }, []);
+    const handleStartTimeBlur = useCallback(
+        (value: string | number | null, isInvalid: boolean) => {
+            if (isInvalid || typeof value === 'number' || !value) {
+                return;
+            }
 
-    const handleEndTimeChange = useCallback((value: string) => {
-        setEndTime(value);
-    }, []);
+            setStartTime(value);
+
+            onChange({ end: endTime, start: value });
+        },
+        [endTime, onChange],
+    );
+
+    const handleEndTimeBlur = useCallback(
+        (value: string | number | null, isInvalid: boolean) => {
+            if (isInvalid || typeof value === 'number' || !value) {
+                return;
+            }
+
+            setEndTime(value);
+
+            onChange({ end: value, start: startTime });
+        },
+        [onChange, startTime],
+    );
 
     return useMemo(
         () => (
             <StyledOpeningInput>
                 <StyledOpeningInputWrapper>
                     <NumberInput
+                        shouldShowOnlyBottomBorder
                         isTimeInput
                         value={startTime}
-                        onChange={handleStartTimeChange}
+                        onBlur={handleStartTimeBlur}
                         isDisabled={isDisabled}
                     />
                 </StyledOpeningInputWrapper>
                 <StyledOpeningInputText isDisabled={isDisabled}>-</StyledOpeningInputText>
                 <StyledOpeningInputWrapper>
                     <NumberInput
+                        shouldShowOnlyBottomBorder
                         isTimeInput
                         value={endTime}
-                        onChange={handleEndTimeChange}
+                        onBlur={handleEndTimeBlur}
                         isDisabled={isDisabled}
                     />
                 </StyledOpeningInputWrapper>
                 {button}
             </StyledOpeningInput>
         ),
-        [button, endTime, handleEndTimeChange, handleStartTimeChange, isDisabled, startTime],
+        [button, endTime, handleEndTimeBlur, handleStartTimeBlur, isDisabled, startTime],
     );
 };
 

@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
 import { StyledOpeningInputs } from './OpeningInputs.styles';
 import OpeningInput from './opening-input/OpeningInput';
@@ -16,32 +16,50 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
         setNewTimes(times);
     }, [times]);
 
-    useEffect(() => {}, []);
+    const handleAdd = useCallback(() => {
+        const defaultTime: Time = { start: '08:00', end: '18:00' };
 
-    const handleAdd = () => {
-        const defaultTime: Time = { start: '00:00', end: '00:00' };
+        setNewTimes((prevState) => {
+            const updatedTimes = prevState ? [...prevState, defaultTime] : [defaultTime];
 
-        setNewTimes((prevState) =>
-            // onChange();
+            onChange(updatedTimes);
 
-            prevState ? [...prevState, defaultTime] : [defaultTime],
-        );
-    };
+            return updatedTimes;
+        });
+    }, [onChange]);
 
-    const handleRemove = (indexToRemove: number) => {
-        setNewTimes((prevState) => (prevState ?? []).filter((_, index) => index !== indexToRemove));
-    };
+    const handleRemove = useCallback(
+        (indexToRemove: number) => {
+            setNewTimes((prevState) => {
+                const updatedTimes = (prevState ?? []).filter(
+                    (_, index) => index !== indexToRemove,
+                );
 
-    const handleChange = (newTime: Time, indexToUpdate: number) => {
-        setNewTimes((prevState) =>
-            (prevState ?? []).map((time, index) => {
-                if (index === indexToUpdate) {
-                    return newTime;
-                }
-                return time;
-            }),
-        );
-    };
+                onChange(updatedTimes);
+
+                return updatedTimes;
+            });
+        },
+        [onChange],
+    );
+
+    const handleChange = useCallback(
+        (newTime: Time, indexToUpdate: number) => {
+            setNewTimes((prevState) => {
+                const updatedTimes = (prevState ?? []).map((time, index) => {
+                    if (index === indexToUpdate) {
+                        return newTime;
+                    }
+                    return time;
+                });
+
+                onChange(updatedTimes);
+
+                return updatedTimes;
+            });
+        },
+        [onChange],
+    );
 
     const content = useMemo(() => {
         const items: ReactElement[] = [];
@@ -57,9 +75,9 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
 
             let buttonType = OpeningTimesButtonType.NONE;
 
-            if (index === 0 && times.length === 1) {
+            if (index === 0 && times.length === 1 && !isDisabled) {
                 buttonType = OpeningTimesButtonType.ADD;
-            } else if (index === 1) {
+            } else if (index === 1 && !isDisabled) {
                 buttonType = OpeningTimesButtonType.REMOVE;
             }
 
@@ -77,7 +95,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
         });
 
         return items;
-    }, [isDisabled, newTimes, times.length]);
+    }, [handleAdd, handleChange, handleRemove, isDisabled, newTimes, times.length]);
 
     return useMemo(() => <StyledOpeningInputs>{content}</StyledOpeningInputs>, [content]);
 };
