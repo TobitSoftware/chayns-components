@@ -73,3 +73,4 @@ export { default as SliderButton } from './components/slider-button/SliderButton
 export type { SliderButtonItem } from './types/slider-button';
 export { default as OpeningTimes } from './components/opening-times/OpeningTimes';
 export type { Weekday, OpeningTime, Time } from './types/openingTimes';
+export { default as PositionInput } from './components/position-input/PositionInput';
