@@ -6,7 +6,7 @@ export default {
     component: ProgressBar,
     args: {
         percentage: 34,
-        lable: 'Uploading...',
+        label: 'Uploading...',
     },
 } as Meta<typeof ProgressBar>;
 

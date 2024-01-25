@@ -39,9 +39,9 @@ export type SliderProps = {
      */
     steps?: number;
     /**
-     * A function to format the thumb lable.
+     * A function to format the thumb label.
      */
-    thumbLableFormatter?: (value: number) => string;
+    thumbLabelFormatter?: (value: number) => string;
     /**
      * the Value that the slider should have.
      */

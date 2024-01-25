@@ -8,16 +8,16 @@ import {
 
 export type ProgressBarProps = {
     /**
-     * The lable that should be displayed under the progressbar.
+     * The label that should be displayed under the progressbar.
      */
-    lable?: string;
+    label?: string;
     /**
      * The percentage of the progress. Number between 0 and 100.
      */
     percentage: number;
 };
 
-const ProgressBar: FC<ProgressBarProps> = ({ percentage, lable }) => {
+const ProgressBar: FC<ProgressBarProps> = ({ percentage, label }) => {
     const [internalPercentage, setInternalPercentage] = useState(0);
 
     useEffect(() => {
@@ -36,10 +36,10 @@ const ProgressBar: FC<ProgressBarProps> = ({ percentage, lable }) => {
                     transition={{ type: 'tween' }}
                 />
                 <StyledProgressBarBackground />
-                {lable && <StyledProgressBarLable>{lable}</StyledProgressBarLable>}
+                {label && <StyledProgressBarLable>{label}</StyledProgressBarLable>}
             </StyledProgressBar>
         ),
-        [lable, internalPercentage]
+        [label, internalPercentage],
     );
 };
 
