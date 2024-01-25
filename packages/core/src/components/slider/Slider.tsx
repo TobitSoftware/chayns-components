@@ -54,7 +54,7 @@ const Slider: FC<SliderProps> = ({
     value,
     onChange,
     interval,
-    thumbLableFormatter,
+    thumbLabelFormatter,
     shouldShowThumbLable = false,
     steps = 1,
 }) => {
@@ -229,8 +229,8 @@ const Slider: FC<SliderProps> = ({
                 <StyledSliderThumb ref={fromSliderThumbRef} position={fromSliderThumbPosition}>
                     {shouldShowThumbLable && (
                         <StyledSliderThumbLable>
-                            {typeof thumbLableFormatter === 'function'
-                                ? thumbLableFormatter(fromValue)
+                            {typeof thumbLabelFormatter === 'function'
+                                ? thumbLabelFormatter(fromValue)
                                 : fromValue}
                         </StyledSliderThumbLable>
                     )}
@@ -239,8 +239,8 @@ const Slider: FC<SliderProps> = ({
                     <StyledSliderThumb ref={toSliderThumbRef} position={toSliderThumbPosition}>
                         {shouldShowThumbLable && (
                             <StyledSliderThumbLable>
-                                {typeof thumbLableFormatter === 'function'
-                                    ? thumbLableFormatter(toValue)
+                                {typeof thumbLabelFormatter === 'function'
+                                    ? thumbLabelFormatter(toValue)
                                     : toValue}
                             </StyledSliderThumbLable>
                         )}
@@ -270,7 +270,7 @@ const Slider: FC<SliderProps> = ({
             maxValue,
             minValue,
             shouldShowThumbLable,
-            thumbLableFormatter,
+            thumbLabelFormatter,
             toSliderThumbPosition,
             toValue,
         ],
