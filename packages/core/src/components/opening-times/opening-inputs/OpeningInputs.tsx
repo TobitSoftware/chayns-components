@@ -21,11 +21,11 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
     const handleAdd = () => {
         const defaultTime: Time = { start: '00:00', end: '00:00' };
 
-        setNewTimes((prevState) => {
-            onChange();
+        setNewTimes((prevState) =>
+            // onChange();
 
-            return prevState ? [...prevState, defaultTime] : [defaultTime];
-        });
+            prevState ? [...prevState, defaultTime] : [defaultTime],
+        );
     };
 
     const handleRemove = (indexToRemove: number) => {
