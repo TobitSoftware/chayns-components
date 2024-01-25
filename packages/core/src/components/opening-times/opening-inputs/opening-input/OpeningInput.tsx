@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../../types/openingTimes';
 import {
     StyledOpeningInput,
@@ -16,6 +16,7 @@ export type OpeningInputProps = {
     buttonType: OpeningTimesButtonType;
     onAdd: () => void;
     onRemove: () => void;
+    onChange: (time: Time) => void;
 };
 
 const OpeningInput: FC<OpeningInputProps> = ({
@@ -25,9 +26,14 @@ const OpeningInput: FC<OpeningInputProps> = ({
     buttonType,
     onRemove,
     onAdd,
+    onChange,
 }) => {
     const [startTime, setStartTime] = useState(start);
     const [endTime, setEndTime] = useState(end);
+
+    useEffect(() => {
+        onChange({ start: startTime, end: endTime });
+    }, [endTime, onChange, startTime]);
 
     const button = useMemo(() => {
         switch (buttonType) {
@@ -40,7 +46,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
             case OpeningTimesButtonType.REMOVE:
                 return (
                     <StyledOpeningInputButtonWrapper onClick={onRemove}>
-                        <Icon icons={['ts-wrong']} size={15} />
+                        <Icon icons={['fa fa-x']} size={10} color="white" />
                     </StyledOpeningInputButtonWrapper>
                 );
             default:

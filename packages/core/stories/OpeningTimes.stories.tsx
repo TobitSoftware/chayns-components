@@ -21,7 +21,14 @@ export default {
                 times: [{ start: '12:00', end: '12:00' }],
                 isDisabled: true,
             },
-            { id: 'dienstag', weekdayId: 1, times: [{ start: '12:00', end: '12:00' }] },
+            {
+                id: 'dienstag',
+                weekdayId: 1,
+                times: [
+                    { start: '12:00', end: '12:00' },
+                    { start: '12:00', end: '12:00' },
+                ],
+            },
             { id: 'mittwoch', weekdayId: 2, times: [{ start: '12:00', end: '12:00' }] },
             { id: 'donnerstag', weekdayId: 3, times: [{ start: '12:00', end: '12:00' }] },
             { id: 'freitag', weekdayId: 4, times: [{ start: '12:00', end: '12:00' }] },
