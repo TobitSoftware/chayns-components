@@ -1,6 +1,5 @@
 import React, {
     FC,
-    MouseEvent,
     type ReactElement,
     useCallback,
     useEffect,
@@ -14,14 +13,9 @@ import {
     StyledSliderButtonItem,
 } from './SliderButton.styles';
 import type { SliderButtonItem } from '../../types/slider-button';
-import {
-    AnimatePresence,
-    type PanInfo,
-    useAnimate,
-    useMotionValue,
-    useTransform,
-} from 'framer-motion';
+import { AnimatePresence, useAnimate } from 'framer-motion';
 import { calculateBiggestWidth } from '../../utils/calculate';
+import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
 
 export type SliderButtonProps = {
     /**
@@ -82,7 +76,11 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
     );
 
     const handleClick = useCallback(
-        (event: MouseEvent, id: string, index: number) => {
+        (id: string, index: number) => {
+            if (isDisabled) {
+                return;
+            }
+
             setSelectedButton(id);
 
             if (typeof onChange === 'function') {
@@ -91,7 +89,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
             void animation(itemWidth * index);
         },
-        [animation, itemWidth, onChange],
+        [animation, isDisabled, itemWidth, onChange],
     );
 
     const buttons = useMemo(() => {
@@ -102,7 +100,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 <StyledSliderButtonItem
                     width={itemWidth}
                     key={`slider-button-${id}`}
-                    onClick={(event) => handleClick(event, id, index)}
+                    onClick={() => handleClick(id, index)}
                     isSelected={id === selectedButton}
                 >
                     {text}
@@ -119,90 +117,52 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         return selectedItem ? selectedItem.text : '';
     }, [items, selectedButton]);
 
-    const handleDragEnd = useCallback(
-        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-            if (!scope.current) {
-                return;
+    /**
+     * Creates an array with the snap points relative to the width of the items
+     */
+    const snapPoints = useMemo(() => {
+        const points = [0];
+
+        for (let i = 1; i < items.length; i++) {
+            points.push(itemWidth * i);
+        }
+
+        return points;
+    }, [itemWidth, items.length]);
+
+    const handleDragEnd = useCallback(() => {
+        const position = getThumbPosition({ scope, itemWidth });
+
+        if (!position) {
+            return;
+        }
+
+        const { nearestPoint, nearestIndex } = getNearestPoint({ snapPoints, position });
+
+        if (nearestPoint >= 0 && nearestIndex >= 0) {
+            void animation(nearestPoint);
+
+            const id = items[nearestIndex]?.id;
+
+            if (typeof onChange === 'function' && id) {
+                onChange(id);
             }
+        }
+    }, [animation, itemWidth, items, onChange, scope, snapPoints]);
 
-            const { transform } = (scope.current as HTMLElement).style;
-            let position;
+    const handleWhileDrag = useCallback(() => {
+        const position = getThumbPosition({ scope, itemWidth });
 
-            if (transform === 'none') {
-                position = 0;
-            } else {
-                const match = transform.match(/translateX\(([-\d.]+)px\)/);
+        if (!position) {
+            return;
+        }
 
-                if (match && match[1]) {
-                    position = parseFloat(match[1]);
-                }
-            }
+        const { nearestIndex } = getNearestPoint({ snapPoints, position });
 
-            if (!position) {
-                return;
-            }
-
-            const leftOffset = position + itemWidth / 2;
-
-            const snapPoints = [0];
-
-            for (let i = 1; i < items.length; i++) {
-                snapPoints.push(itemWidth * i);
-            }
-
-            console.log('snapPoints', snapPoints);
-
-            const sortedArray = snapPoints.sort(
-                (a, b) => Math.abs(leftOffset - a) - Math.abs(leftOffset - b),
-            );
-
-            // Die erste Zahl im sortierten Array ist die nächste Zahl zur Zielzahl
-            const closestSnap = sortedArray[0];
-
-            // const closestSnap = snapPoints.reduce(
-            //     (prev, snap) =>
-            //         Math.abs(info.point.x - leftOffset - snap) <
-            //         Math.abs(info.point.x - leftOffset - (prev ?? 0))
-            //             ? snap
-            //             : prev,
-            //     snapPoints[0],
-            // );
-
-            console.log('mitte', leftOffset);
-            console.log('closestSnap', closestSnap);
-
-            if (closestSnap) {
-                void animation(closestSnap);
-            }
-        },
-        [animation, itemWidth, items.length, scope],
-    );
-
-    const handleWhileDrag = useCallback(
-        (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-            if (!scope.current) {
-                return;
-            }
-
-            const { transform } = (scope.current as HTMLElement).style;
-            let position;
-
-            if (transform === 'none') {
-                position = 0;
-            } else {
-                const match = transform.match(/translateX\(([-\d.]+)px\)/);
-
-                if (match && match[1]) {
-                    position = parseFloat(match[1]);
-                }
-            }
-
-            // if (!position) {
-            //     return;
-            // }
-        },
-        [scope],
-    );
+        if (nearestIndex >= 0) {
+            setSelectedButton(items[nearestIndex]?.id);
+        }
+    }, [itemWidth, items, scope, snapPoints]);
 
     return useMemo(
         () => (
@@ -211,11 +171,11 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                     {buttons}
                     <StyledMotionSliderButtonThumb
                         ref={scope}
-                        drag="x"
+                        drag={isDisabled ? false : 'x'}
                         dragElastic={0}
                         dragConstraints={{ ...dragRange }}
                         width={itemWidth}
-                        // onDrag={handleWhileDrag}
+                        onDrag={handleWhileDrag}
                         onDragEnd={handleDragEnd}
                     >
                         {thumbText}
@@ -223,7 +183,16 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                 </AnimatePresence>
             </StyledSliderButton>
         ),
-        [buttons, dragRange, handleDragEnd, isDisabled, itemWidth, scope, thumbText],
+        [
+            buttons,
+            dragRange,
+            handleDragEnd,
+            handleWhileDrag,
+            isDisabled,
+            itemWidth,
+            scope,
+            thumbText,
+        ],
     );
 };
 
