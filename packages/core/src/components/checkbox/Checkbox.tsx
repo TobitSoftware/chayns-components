@@ -15,7 +15,7 @@ export type CheckboxProps = {
     /**
      * Text for checkbox or switch
      */
-    children?: ReactElement;
+    children?: ReactElement | string;
     /**
      * Indicates whether the checkbox or switch is selected
      */
