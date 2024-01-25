@@ -15,25 +15,31 @@ export const parseFloatWithDecimals: ParseFloatWithDecimals = ({ stringValue, de
 };
 
 interface FormateNumberOptions {
-    number: number | null;
+    number: number | string | null;
     isMoneyInput?: boolean;
     isTimeInput?: boolean;
 }
 
 export const formateNumber = ({ number, isMoneyInput, isTimeInput }: FormateNumberOptions) => {
-    if (typeof number !== 'number') {
-        return '';
-    }
-
-    if (isTimeInput) {
+    if (isTimeInput && typeof number === 'string') {
         let hours = 0;
         let minutes = 0;
 
-        const firstTwoNumbers = Number(String(number).substring(0, 2));
-        const lastTwoNumbers = Number(String(number).substring(2, 4));
+        const firstTwoNumbers = Number(number.substring(0, 2));
+        let lastTwoNumbers = 0;
+        let lastTwoNumbersLength = 0;
+
+        if (number.includes(':')) {
+            lastTwoNumbers = Number(number.substring(3, 5));
+            lastTwoNumbersLength = number.substring(3, 5).length;
+        } else {
+            lastTwoNumbers = Number(number.substring(2, 4));
+            lastTwoNumbersLength = number.substring(2, 4).length;
+        }
 
         hours = firstTwoNumbers > 23 ? 23 : firstTwoNumbers;
-        if (lastTwoNumbers < 7) {
+
+        if (lastTwoNumbers < 7 && lastTwoNumbersLength === 1) {
             minutes = lastTwoNumbers * 10;
         } else {
             minutes = lastTwoNumbers > 59 ? 59 : lastTwoNumbers;
@@ -43,6 +49,10 @@ export const formateNumber = ({ number, isMoneyInput, isTimeInput }: FormateNumb
         const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
 
         return `${hoursStr}:${minutesStr}`;
+    }
+
+    if (typeof number !== 'number') {
+        return '';
     }
 
     return number.toLocaleString('de-DE', {
