@@ -96,6 +96,10 @@ export type InputProps = {
      */
     value?: string;
     /**
+     * Whether only the bottom border should be displayed
+     */
+    shouldShowOnlyBottomBorder?: boolean;
+    /**
      * If true, the input field is focused when the component is mounted
      */
     shouldUseAutoFocus?: boolean;
@@ -118,13 +122,14 @@ const Input = forwardRef<InputRef, InputProps>(
             placeholder,
             placeholderElement,
             rightElement,
+            shouldShowOnlyBottomBorder,
             shouldShowClearIcon = false,
             type = 'text',
             value,
             shouldUseAutoFocus = false,
             isInvalid = false,
         },
-        ref
+        ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
         const theme = useTheme() as Theme;
@@ -150,7 +155,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     onChange(event);
                 }
             },
-            [onChange]
+            [onChange],
         );
 
         useImperativeHandle(
@@ -158,7 +163,7 @@ const Input = forwardRef<InputRef, InputProps>(
             () => ({
                 focus: () => inputRef.current?.focus(),
             }),
-            []
+            [],
         );
 
         useEffect(() => {
@@ -181,7 +186,10 @@ const Input = forwardRef<InputRef, InputProps>(
                 isDisabled={isDisabled}
                 isInvalid={isInvalid}
             >
-                <StyledInputContentWrapper shouldRoundRightCorners={!rightElement}>
+                <StyledInputContentWrapper
+                    shouldRoundRightCorners={!rightElement}
+                    shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                >
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                     <StyledInputContent>
                         <StyledInputField
@@ -213,11 +221,11 @@ const Input = forwardRef<InputRef, InputProps>(
                     </StyledInputContent>
                     {shouldShowClearIcon && (
                         <StyledMotionInputClearIcon
+                            shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                             animate={{ opacity: hasValue ? 1 : 0 }}
                             initial={false}
                             onClick={handleClearIconClick}
                             transition={{ type: 'tween' }}
-                            isInvalid={isInvalid}
                         >
                             <Icon
                                 icons={['fa fa-times']}
@@ -229,7 +237,7 @@ const Input = forwardRef<InputRef, InputProps>(
                 {rightElement && <StyledInputRightElement>{rightElement}</StyledInputRightElement>}
             </StyledInput>
         );
-    }
+    },
 );
 
 Input.displayName = 'Input';

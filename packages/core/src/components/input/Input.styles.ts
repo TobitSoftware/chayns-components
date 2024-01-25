@@ -10,7 +10,10 @@ export const StyledInput = styled.div<StyledInputProps>`
     display: flex;
 `;
 
-type StyledInputContentWrapperProps = WithTheme<{ shouldRoundRightCorners: boolean }>;
+type StyledInputContentWrapperProps = WithTheme<{
+    shouldRoundRightCorners: boolean;
+    shouldShowOnlyBottomBorder?: boolean;
+}>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
@@ -24,15 +27,29 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     min-height: 42px;
     width: 100%;
     transition: opacity 0.3s ease;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-        
-        ${({ shouldRoundRightCorners }) =>
-            shouldRoundRightCorners &&
-            css`
-                border-bottom-right-radius: 3px;
-                border-top-right-radius: 3px;
-            `}}
+
+    ${({ shouldRoundRightCorners, shouldShowOnlyBottomBorder, theme }) => {
+        if (shouldShowOnlyBottomBorder) {
+            return css`
+                border-top: none;
+                border-right: none;
+                border-left: none;
+                background-color: transparent;
+                border-color: ${theme['408']};
+            `;
+        }
+
+        if (shouldRoundRightCorners) {
+            return css`
+                border-radius: 3px;
+            `;
+        }
+
+        return css`
+            border-bottom-left-radius: 3px;
+            border-top-left-radius: 3px;
+        `;
+    }}
 `;
 
 export const StyledInputContent = styled.div`
@@ -69,11 +86,12 @@ export const StyledMotionInputLabel = styled(motion.label)<StyledMotionInputLabe
         isInvalid ? theme.wrong : undefined};
 `;
 
-type StyledMotionInputClearIconProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+type StyledMotionInputClearIconProps = WithTheme<{ shouldShowOnlyBottomBorder?: boolean }>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
     align-items: center;
-    border-left: 1px solid rgba(160, 160, 160, 0.3);
+    border-left: ${({ shouldShowOnlyBottomBorder }) =>
+        shouldShowOnlyBottomBorder ? 'none' : '1px solid rgba(160, 160, 160, 0.3)'};
     cursor: pointer;
     display: flex;
     flex: 0 0 auto;

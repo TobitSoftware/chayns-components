@@ -33,7 +33,7 @@ export type NumberInputProps = {
     /**
      * Callback function that is called when the input gets out of focus
      */
-    onBlur?: (newNumber: number | null, isInvalid: boolean) => void;
+    onBlur?: (newNumber: number | string | null, isInvalid: boolean) => void;
     /**
      * Callback function that is called when the input changes
      * It will pass the text from the input
@@ -43,6 +43,10 @@ export type NumberInputProps = {
      * Placeholder for the input field
      */
     placeholder?: string;
+    /**
+     * Whether only the bottom border should be displayed
+     */
+    shouldShowOnlyBottomBorder?: boolean;
     /**
      * The value, that should be displayed in the input, when it is in focus.
      * You can also pass a stringified number as default value.
@@ -61,6 +65,7 @@ const NumberInput: FC<NumberInputProps> = ({
     onBlur,
     isDisabled,
     onChange,
+    shouldShowOnlyBottomBorder,
     minNumber = -Infinity,
 }) => {
     // the plainText will be shown in the input, when it is in focus
@@ -129,7 +134,11 @@ const NumberInput: FC<NumberInputProps> = ({
         }
 
         if (typeof onBlur === 'function') {
-            onBlur(parsedNumber === 0 ? null : parsedNumber, isInvalid);
+            if (isTimeInput) {
+                onBlur(newStringValue, isInvalid);
+            } else {
+                onBlur(parsedNumber === 0 ? null : parsedNumber, isInvalid);
+            }
         }
     };
 
@@ -178,6 +187,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
     return (
         <Input
+            shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
             inputMode="decimal"
             onChange={onLocalChange}
             value={hasFocus ? plainText : formattedValue}
