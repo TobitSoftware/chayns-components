@@ -52,6 +52,8 @@
     "dependencies": {
         "@chayns/colors": "^2.0.0",
         "@chayns/uac-service": "^0.0.46",
+        "@googlemaps/react-wrapper": "^1.1.35",
+        "@react-google-maps/api": "^2.19.2",
         "@types/react-syntax-highlighter": "^15.5.11",
         "babel-prettier-parser": "^0.10.8",
         "chayns-api": "^1.0.45",
