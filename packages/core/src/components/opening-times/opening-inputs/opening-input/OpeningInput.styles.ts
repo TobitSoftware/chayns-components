@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { WithTheme } from '../../../../../lib';
+import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledOpeningInput = styled.div`
     display: flex;
