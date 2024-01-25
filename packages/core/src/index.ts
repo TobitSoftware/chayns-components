@@ -72,4 +72,4 @@ export type { SignatureRef } from './components/signature/Signature';
 export { default as SliderButton } from './components/slider-button/SliderButton';
 export type { SliderButtonItem } from './types/slider-button';
 export { default as OpeningTimes } from './components/opening-times/OpeningTimes';
-export type { Weekday, OpeningTime } from './types/openingTimes';
+export type { Weekday, OpeningTime, Time } from './types/openingTimes';
