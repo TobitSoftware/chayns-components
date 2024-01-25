@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
+import { motion } from 'framer-motion';
 
-export const StyledOpeningInput = styled.div`
+export const StyledOpeningInput = styled(motion.div)`
     display: flex;
     align-items: center;
     gap: 6px;

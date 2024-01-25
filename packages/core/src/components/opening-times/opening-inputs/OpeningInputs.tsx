@@ -2,14 +2,16 @@ import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState
 import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
 import { StyledOpeningInputs } from './OpeningInputs.styles';
 import OpeningInput from './opening-input/OpeningInput';
+import { AnimatePresence } from 'framer-motion';
 
 export type OpeningInputsProps = {
     times: Time[];
     isDisabled?: boolean;
     onChange: (times: Time[]) => void;
+    id: string;
 };
 
-const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) => {
+const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, id, onChange }) => {
     const [newTimes, setNewTimes] = useState<Time[]>();
 
     useEffect(() => {
@@ -83,7 +85,9 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
 
             items.push(
                 <OpeningInput
+                    key={`opening-times-input__${id}.${index}`}
                     start={start}
+                    id={`opening-times__${id}.${index}`}
                     end={end}
                     isDisabled={isDisabled}
                     buttonType={buttonType}
@@ -95,9 +99,16 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, onChange }) 
         });
 
         return items;
-    }, [handleAdd, handleChange, handleRemove, isDisabled, newTimes, times.length]);
+    }, [handleAdd, handleChange, handleRemove, id, isDisabled, newTimes, times.length]);
 
-    return useMemo(() => <StyledOpeningInputs>{content}</StyledOpeningInputs>, [content]);
+    return useMemo(
+        () => (
+            <StyledOpeningInputs>
+                <AnimatePresence initial={false}>{content}</AnimatePresence>
+            </StyledOpeningInputs>
+        ),
+        [content],
+    );
 };
 
 OpeningInputs.displayName = 'OpeningInputs';

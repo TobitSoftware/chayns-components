@@ -14,6 +14,7 @@ export type OpeningInputProps = {
     start: Time['start'];
     end: Time['end'];
     isDisabled?: boolean;
+    id: string;
     buttonType: OpeningTimesButtonType;
     onAdd: () => void;
     onRemove: () => void;
@@ -28,6 +29,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
     onRemove,
     onAdd,
     onChange,
+    id,
 }) => {
     const [startTime, setStartTime] = useState(start);
     const [endTime, setEndTime] = useState(end);
@@ -79,7 +81,12 @@ const OpeningInput: FC<OpeningInputProps> = ({
 
     return useMemo(
         () => (
-            <StyledOpeningInput>
+            <StyledOpeningInput
+                key={id}
+                animate={{ opacity: 1, height: 'auto' }}
+                initial={{ opacity: 0, height: 0 }}
+                exit={{ opacity: 0, height: 0 }}
+            >
                 <StyledOpeningInputWrapper>
                     <NumberInput
                         shouldShowOnlyBottomBorder
