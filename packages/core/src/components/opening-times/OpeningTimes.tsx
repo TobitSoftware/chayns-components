@@ -63,7 +63,7 @@ const OpeningTimes: FC<OpeningTimesProps> = ({ openingTimes, weekdays, onChange 
                     <Checkbox isChecked={!isDisabled} onChange={() => handleCheckBoxChange(id)}>
                         {weekday}
                     </Checkbox>
-                    <OpeningInputs times={times} isDisabled={isDisabled} id={id} />
+                    <OpeningInputs times={times} isDisabled={isDisabled} onChange={() => {}} />
                 </StyledOpeningTimesWrapper>,
             );
         });
