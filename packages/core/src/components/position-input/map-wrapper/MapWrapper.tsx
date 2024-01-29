@@ -193,13 +193,13 @@ const MapWrapper: FC<MapWrapperProps> = ({
         return items;
     }, [handleMarkerChange, handleMarkerRemove, internalMarkers, map]);
 
-    // ToDo find better solution
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     return useMemo(
         () => (
             <StyledMapWrapper>
                 <Wrapper apiKey={apiToken} libraries={['places']}>
+                    {/* ToDo find better solution */}
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
                     <Map
                         onClick={handleClick}
                         onIdle={handleIdle}
