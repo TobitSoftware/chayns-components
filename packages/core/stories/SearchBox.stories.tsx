@@ -59,3 +59,20 @@ const Template: StoryFn<typeof SearchBox> = (args) => (
 );
 
 export const General = Template.bind({});
+
+export const WithImages = Template.bind({});
+
+WithImages.args = {
+    list: [
+        {
+            imageUrl: 'https://picsum.photos/200',
+            id: '1',
+            text: 'Pizza',
+        },
+        { imageUrl: 'https://picsum.photos/200', id: '2', text: 'Burger' },
+        { imageUrl: 'https://picsum.photos/200', id: '3', text: 'Nudeln' },
+        { imageUrl: 'https://picsum.photos/200', id: '4', text: 'Steak' },
+        { imageUrl: 'https://picsum.photos/200', id: '5', text: 'Pommes' },
+        { imageUrl: 'https://picsum.photos/200', id: '6', text: 'Reis' },
+    ],
+};

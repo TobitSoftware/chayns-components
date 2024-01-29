@@ -48,6 +48,10 @@ export type SearchBoxProps = {
      * Whether the full list of items should be displayed if the input is empty.
      */
     shouldShowContentOnEmptyInput?: boolean;
+    /**
+     * If true, the images of the items are displayed in a round shape.
+     */
+    shouldShowRoundImage?: boolean;
 };
 
 const SearchBox: FC<SearchBoxProps> = ({
@@ -57,6 +61,7 @@ const SearchBox: FC<SearchBoxProps> = ({
     onBlur,
     onSelect,
     selectedId,
+    shouldShowRoundImage,
     shouldShowContentOnEmptyInput = true,
 }) => {
     const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
@@ -188,12 +193,21 @@ const SearchBox: FC<SearchBoxProps> = ({
 
         matchingItems.sort((a, b) => a.text.localeCompare(b.text));
 
-        matchingItems.forEach(({ id, text }) => {
-            items.push(<SearchBoxItem key={id} text={text} id={id} onSelect={handleSelect} />);
+        matchingItems.forEach(({ id, text, imageUrl }) => {
+            items.push(
+                <SearchBoxItem
+                    key={id}
+                    text={text}
+                    imageUrl={imageUrl}
+                    id={id}
+                    shouldShowRoundImage={shouldShowRoundImage}
+                    onSelect={handleSelect}
+                />,
+            );
         });
 
         return items;
-    }, [handleSelect, matchingItems]);
+    }, [shouldShowRoundImage, handleSelect, matchingItems]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
