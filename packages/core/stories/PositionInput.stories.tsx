@@ -4,7 +4,9 @@ import PositionInput from '../src/components/position-input/PositionInput';
 export default {
     title: 'Core/PositionInput',
     component: PositionInput,
-    args: {},
+    args: {
+        apiToken: 'AIzaSyCicm5YKKdfym2UtjVwuoSvMAL9uKD_yxo',
+    },
 } as Meta<typeof PositionInput>;
 
 const Template: StoryFn<typeof PositionInput> = ({ ...args }) => <PositionInput {...args} />;
