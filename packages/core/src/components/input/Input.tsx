@@ -48,6 +48,10 @@ export type InputProps = {
      */
     iconElement?: ReactNode;
     /**
+     * The id of the input
+     */
+    id?: string;
+    /**
      * Defines the input mode of the input
      */
     inputMode?: InputMode;
@@ -128,6 +132,7 @@ const Input = forwardRef<InputRef, InputProps>(
             value,
             shouldUseAutoFocus = false,
             isInvalid = false,
+            id,
         },
         ref,
     ) => {
@@ -193,6 +198,7 @@ const Input = forwardRef<InputRef, InputProps>(
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                     <StyledInputContent>
                         <StyledInputField
+                            id={id}
                             disabled={isDisabled}
                             onBlur={onBlur}
                             onChange={handleInputFieldChange}
