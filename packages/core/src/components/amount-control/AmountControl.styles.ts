@@ -35,7 +35,7 @@ type StyledAmountControlButtonProps = WithTheme<{
 }>;
 
 export const StyledMotionAmountControlButton = styled(
-    motion.button
+    motion.button,
 )<StyledAmountControlButtonProps>`
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.2);

@@ -94,7 +94,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                         }
                     });
             },
-            [onEdit, onSubscribe]
+            [onEdit, onSubscribe],
         );
 
         const handleEdit = useCallback(() => {
@@ -140,7 +140,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                 edit: handleEdit,
                 delete: handleDelete,
             }),
-            [handleDelete, handleEdit]
+            [handleDelete, handleEdit],
         );
 
         return (
@@ -159,7 +159,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                 )}
             </StyledSignature>
         );
-    }
+    },
 );
 
 Signature.displayName = 'Signature';

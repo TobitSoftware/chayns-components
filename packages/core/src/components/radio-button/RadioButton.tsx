@@ -18,7 +18,7 @@ import {
     StyledRadioButtonPseudoCheckBox,
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
-import type { RadioButtonItem } from './types';
+import type { RadioButtonItem } from '../../types/radioButton';
 import { AnimatePresence } from 'framer-motion';
 
 export type RadioButtonProps = {

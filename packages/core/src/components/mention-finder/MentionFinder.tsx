@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import type { MentionFinderPopupAlignment } from './constants/alignment';
+import type { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
 import MentionFinderItem from './mention-finder-item/MentionFinderItem';
 import { StyledMentionFinder, StyledMotionMentionFinderPopup } from './MentionFinder.styles';
 
@@ -52,10 +52,10 @@ const MentionFinder: FC<MentionFinderProps> = ({
                       ({ id, info, name }) =>
                           id.toLowerCase().includes(searchString) ||
                           info.replace('chayns', '').toLowerCase().includes(searchString) ||
-                          name.toLowerCase().includes(searchString)
+                          name.toLowerCase().includes(searchString),
                   )
                 : members,
-        [members, searchString]
+        [members, searchString],
     );
 
     const handleKeyDown = useCallback(
@@ -95,7 +95,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 event.stopPropagation();
             }
         },
-        [activeMember, filteredMembers, fullMatch, onSelect]
+        [activeMember, filteredMembers, fullMatch, onSelect],
     );
 
     const handleMemberClick = useCallback(
@@ -104,7 +104,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                 onSelect({ fullMatch, member });
             }
         },
-        [fullMatch, onSelect]
+        [fullMatch, onSelect],
     );
 
     const handleMemberHover = useCallback((member: MentionMember) => {
@@ -132,7 +132,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                     onHover={handleMemberHover}
                 />
             )),
-        [activeMember, filteredMembers, handleMemberClick, handleMemberHover]
+        [activeMember, filteredMembers, handleMemberClick, handleMemberHover],
     );
 
     const shouldShowPopup = useMemo(() => fullMatch && items.length > 0, [fullMatch, items.length]);

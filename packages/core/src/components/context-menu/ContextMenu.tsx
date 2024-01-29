@@ -13,10 +13,10 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
-import Icon from '../icon/Icon';
-import { ContextMenuAlignment } from './constants/alignment';
+import { ContextMenuAlignment } from '../../types/contextMenu';
 import ContextMenuContent from './context-menu-content/ContextMenuContent';
 import { StyledContextMenu } from './ContextMenu.styles';
+import Icon from '../icon/Icon';
 
 export type ContextMenuCoordinates = {
     x: number;
@@ -80,14 +80,14 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
             onHide,
             onShow,
         },
-        ref
+        ref,
     ) => {
         const [internalCoordinates, setInternalCoordinates] = useState<ContextMenuCoordinates>({
             x: 0,
             y: 0,
         });
         const [internalAlignment, setInternalAlignment] = useState<ContextMenuAlignment>(
-            ContextMenuAlignment.TopLeft
+            ContextMenuAlignment.TopLeft,
         );
         const [isContentShown, setIsContentShown] = useState(false);
         const [portal, setPortal] = useState<ReactPortal>();
@@ -157,7 +157,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 void handleShow();
             },
-            [handleShow]
+            [handleShow],
         );
 
         const handleDocumentClick = useCallback<EventListener>(
@@ -169,7 +169,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
 
                 handleHide();
             },
-            [handleHide]
+            [handleHide],
         );
 
         useImperativeHandle(
@@ -178,7 +178,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 hide: handleHide,
                 show: handleShow,
             }),
-            [handleHide, handleShow]
+            [handleHide, handleShow],
         );
 
         useEffect(() => {
@@ -213,8 +213,8 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                             />
                         )}
                     </AnimatePresence>,
-                    container
-                )
+                    container,
+                ),
             );
         }, [
             alignment,
@@ -239,7 +239,7 @@ const ContextMenu = forwardRef<ContextMenuRef, ContextMenuProps>(
                 {portal}
             </>
         );
-    }
+    },
 );
 
 ContextMenu.displayName = 'ContextMenu';

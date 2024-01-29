@@ -1,9 +1,9 @@
 import React, { FC, ReactNode, useMemo, useRef } from 'react';
-import Popup from '../popup/Popup';
-import type { PopupRef } from '../popup/types';
-import type { ITooltipItem } from './interface';
+import type { PopupRef } from '../../types/popup';
+import type { ITooltipItem } from '../../types/tooltip';
 import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip } from './Tooltip.styles';
+import Popup from '../popup/Popup';
 
 export type TooltipProps = {
     /**
@@ -46,7 +46,7 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, item]
+        [isDisabled, children, item],
     );
 };
 

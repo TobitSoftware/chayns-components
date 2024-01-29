@@ -1,6 +1,6 @@
 import React, { type MouseEventHandler, ReactNode } from 'react';
 import { useColorMode } from '../../../hooks/colorMode';
-import { PopupAlignment, PopupCoordinates } from '../types';
+import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
 
 type PopupContentProps = {
@@ -49,7 +49,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 <StyledPopupContentInner>{content}</StyledPopupContentInner>
             </StyledMotionPopupContent>
         );
-    }
+    },
 );
 
 PopupContent.displayName = 'PopupContent';

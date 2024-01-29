@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
 import PopupContent from './popup-content/PopupContent';
 import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
-import { PopupAlignment, PopupCoordinates, PopupRef } from './types';
+import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
 
 export type PopupProps = {
     /**
@@ -138,7 +138,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     handleHide();
                 }
             },
-            [handleHide, shouldShowOnHover]
+            [handleHide, shouldShowOnHover],
         );
 
         const handleDocumentClick = useCallback<EventListener>(
@@ -152,7 +152,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                     }
                 }
             },
-            [handleHide, shouldShowOnHover]
+            [handleHide, shouldShowOnHover],
         );
 
         useImperativeHandle(
@@ -161,7 +161,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 hide: handleHide,
                 show: handleShow,
             }),
-            [handleHide, handleShow]
+            [handleHide, handleShow],
         );
 
         useEffect(() => {
@@ -205,8 +205,8 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                             />
                         )}
                     </AnimatePresence>,
-                    container
-                )
+                    container,
+                ),
             );
         }, [alignment, container, content, coordinates, handleMouseLeave, isOpen, uuid]);
 
@@ -226,7 +226,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
                 {portal}
             </>
         );
-    }
+    },
 );
 
 Popup.displayName = 'Popup';

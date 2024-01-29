@@ -1,7 +1,7 @@
 import React, { type FC, useMemo } from 'react';
 import { StyledSelectButton } from './SelectButton.styles';
 import Button from '../button/Button';
-import type { SelectButtonItem } from './types';
+import type { SelectButtonItem } from '../../types/selectButton';
 import { createDialog, type DialogSelectListItemType, DialogType } from 'chayns-api';
 
 export type SelectButtonProps = {

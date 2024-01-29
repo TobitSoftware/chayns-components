@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { FilterButtonItemShape, FilterButtonSize } from '../types';
+import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 
 type StyledFilterButtonItemProps = WithTheme<{ size: FilterButtonSize; isSelected: boolean }>;
 
@@ -68,7 +68,7 @@ type StyledFilterButtonItemBackgroundProps = WithTheme<{
 }>;
 
 export const StyledMotionFilterButtonItemBackground = styled(
-    motion.div
+    motion.div,
 )<StyledFilterButtonItemBackgroundProps>`
     position: absolute;
     top: 0;

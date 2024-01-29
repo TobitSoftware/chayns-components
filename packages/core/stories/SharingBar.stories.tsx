@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { ContextMenuAlignment } from '../src/components/context-menu/constants/alignment';
+import { ContextMenuAlignment } from '../src/types/contextMenu';
 import SharingBar from '../src/components/sharing-bar/SharingBar';
 
 export default {

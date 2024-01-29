@@ -1,7 +1,11 @@
 import React, { FC, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import FilterButton from './filter-button/FilterButton';
 import { StyledFilterButton } from './FilterButtons.styles';
-import { FilterButtonItemShape, FilterButtonSize, IFilterButtonItem } from './types';
+import {
+    FilterButtonItemShape,
+    FilterButtonSize,
+    IFilterButtonItem,
+} from '../../types/filterButtons';
 
 export type FilterButtonsProps = {
     /**

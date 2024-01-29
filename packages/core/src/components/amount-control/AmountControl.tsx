@@ -14,7 +14,7 @@ import {
     StyledAmountControlInput,
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
-import { checkForValidAmount } from './utils';
+import { checkForValidAmount } from '../../utils/amountControl';
 
 export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount';
 
@@ -129,7 +129,7 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
 
             setInputValue(checkedValue === 0 ? '' : checkedValue.toString());
         },
-        [maxAmount, minAmount]
+        [maxAmount, minAmount],
     );
 
     const leftIcon = useMemo(() => {
@@ -199,7 +199,7 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
             leftIcon,
             maxAmount,
             minAmount,
-        ]
+        ],
     );
 };
 

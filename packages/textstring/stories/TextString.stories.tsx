@@ -1,9 +1,9 @@
 import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
-import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
 import { Meta, StoryFn } from '@storybook/react';
 import { useMemo, useState } from 'react';
 import { TextString, TextStringProvider } from '../src';
+import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
 
 export default {
     title: 'TextString/TextString',

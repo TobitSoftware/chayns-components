@@ -1,4 +1,4 @@
-import type { ISearchBoxItem } from './types';
+import type { ISearchBoxItem } from '../types/searchBox';
 
 interface SearchListOptions {
     items: ISearchBoxItem[];

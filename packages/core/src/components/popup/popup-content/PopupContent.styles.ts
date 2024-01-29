@@ -2,7 +2,7 @@ import { ColorMode } from 'chayns-api';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { PopupAlignment } from '../types';
+import { PopupAlignment } from '../../../types/popup';
 
 type StyledMotionPopupContentProps = WithTheme<{
     position: PopupAlignment;

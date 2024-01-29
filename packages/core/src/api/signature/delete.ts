@@ -1,4 +1,4 @@
-import { SIGNATURE_SERVER_URL } from '../../constants/serverUrls';
+import { SIGNATURE_SERVER_URL } from '../../constants/signature';
 
 export const deleteUserSignature = async () => {
     if (!chayns.env.user.isAuthenticated) {
@@ -20,7 +20,7 @@ export const deleteUserSignature = async () => {
 
         console.error(
             '[chayns components] Signature: failed to delete user signature',
-            response.status
+            response.status,
         );
     } catch (ex) {
         console.error('[chayns components] Signature: failed to delete user signature', ex);

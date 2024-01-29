@@ -1,4 +1,4 @@
-import { SIGNATURE_SERVER_URL } from '../../constants/serverUrls';
+import { SIGNATURE_SERVER_URL } from '../../constants/signature';
 
 export const putUserSignature = async (dataURL: string) => {
     if (!chayns.env.user.isAuthenticated) {
@@ -22,7 +22,7 @@ export const putUserSignature = async (dataURL: string) => {
 
         console.error(
             '[chayns components] Signature: failed to put user signature',
-            response.status
+            response.status,
         );
     } catch (ex) {
         console.error('[chayns components] Signature: failed to put user signature', ex);

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
-import { getStackSizeFactor } from './utils';
+import { getStackSizeFactor } from '../../utils/icon';
 
 export type IconProps = {
     /**

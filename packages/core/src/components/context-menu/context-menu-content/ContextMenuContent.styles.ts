@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import { ContextMenuAlignment } from '../constants/alignment';
+import { ContextMenuAlignment } from '../../../types/contextMenu';
 
 type StyledMotionContextMenuContentProps = WithTheme<{
     position: ContextMenuAlignment;

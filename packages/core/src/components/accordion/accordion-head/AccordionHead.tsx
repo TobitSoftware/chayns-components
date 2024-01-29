@@ -8,8 +8,6 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import Icon from '../../icon/Icon';
-import { getAccordionHeadHeight } from '../utils';
 import {
     StyledMotionAccordionHead,
     StyledMotionContentWrapper,
@@ -22,6 +20,8 @@ import {
     StyledMotionTitleWrapper,
     StyledRightWrapper,
 } from './AccordionHead.styles';
+import { getAccordionHeadHeight } from '../../../utils/accordion';
+import Icon from '../../icon/Icon';
 
 type AccordionHeadProps = {
     icon?: string;
@@ -74,7 +74,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 isWrapped,
                 title,
                 width: (titleWrapperRef.current?.clientWidth ?? 0) - 10,
-            })
+            }),
         );
     }, [isWrapped, title]);
 

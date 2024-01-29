@@ -3,11 +3,11 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import {
     getFormattedDayOfWeek,
     getFormattedTime,
+    getLanguage,
     getMonthFormat,
     getTimeTillNow,
     getYearFormat,
-} from './utils/format';
-import { getLanguage } from './utils/language';
+} from '../../utils/dateInfo';
 
 export type DateInfoProps = {
     /**
@@ -160,7 +160,7 @@ const DateInfo: FC<DateInfoProps> = ({
                 {preText.trim()} {formattedDateString}
             </span>
         ),
-        [formattedDateString, preText]
+        [formattedDateString, preText],
     );
 };
 

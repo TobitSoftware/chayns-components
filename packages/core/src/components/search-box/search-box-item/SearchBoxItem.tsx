@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import type { ISearchBoxItem } from '../types';
+import type { ISearchBoxItem } from '../../../types/searchBox';
 import { StyledSearchBoxItem, StyledSearchBoxItemText } from './SearchBoxItem.styles';
 
 export type SearchBoxItemProps = {
@@ -19,7 +19,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({ id, text, onSelect }) => {
                 <StyledSearchBoxItemText>{text}</StyledSearchBoxItemText>
             </StyledSearchBoxItem>
         ),
-        [handleClick, id, text]
+        [handleClick, id, text],
     );
 };
 

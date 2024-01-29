@@ -1,13 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
-import React, {
-    DragEvent,
-    FC,
-    ReactElement,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import React, { DragEvent, FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import { filterDuplicateFile } from '../../utils/file';
 import { selectFiles } from '../../utils/fileDialog';
 import Icon from '../icon/Icon';
@@ -73,7 +65,7 @@ const FileInput: FC<FileInputProps> = ({
 
             setInternalFiles((prevState) => [...prevState, ...newFileItems]);
         },
-        [internalFiles, onAdd]
+        [internalFiles, onAdd],
     );
 
     const handleDeleteFile = useCallback(
@@ -98,7 +90,7 @@ const FileInput: FC<FileInputProps> = ({
 
             onRemove(fileToDelete);
         },
-        [internalFiles, onRemove]
+        [internalFiles, onRemove],
     );
 
     const isDisabled = useMemo(() => {
@@ -134,7 +126,7 @@ const FileInput: FC<FileInputProps> = ({
 
             handleAddFiles(draggedFiles);
         },
-        [handleAddFiles]
+        [handleAddFiles],
     );
 
     const content = useMemo(() => {
@@ -174,7 +166,7 @@ const FileInput: FC<FileInputProps> = ({
                 </List>
             </StyledFileInput>
         ),
-        [content, handleClick, handleDrop, icons, isDisabled, placeholder]
+        [content, handleClick, handleDrop, icons, isDisabled, placeholder],
     );
 };
 

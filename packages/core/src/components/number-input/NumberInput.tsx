@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
 import Input from '../input/Input';
-import { NUMBER_CLEAR_REGEX } from './constants/number';
-import { formateNumber, isValidString, parseFloatWithDecimals } from './utils/number';
+import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
+import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
 
 export type NumberInputProps = {
     /**

@@ -1,7 +1,7 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { generateFontFaces } from './font';
+import { generateFontFaces } from '../../utils/font';
 
 enum ColorMode {
     Classic,

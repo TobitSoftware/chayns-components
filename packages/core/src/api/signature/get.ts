@@ -1,6 +1,6 @@
 import { getAccessToken } from 'chayns-api';
 import type { GetUserSignatureResult } from '../../types/signature';
-import { SIGNATURE_SERVER_URL } from '../../constants/serverUrls';
+import { SIGNATURE_SERVER_URL } from '../../constants/signature';
 
 export const getUserSignature = async (): Promise<string | undefined> => {
     const { accessToken } = await getAccessToken();
@@ -30,7 +30,7 @@ export const getUserSignature = async (): Promise<string | undefined> => {
 
         console.error(
             '[chayns components] Signature: failed to get user signature',
-            response.status
+            response.status,
         );
     } catch (ex) {
         console.error('[chayns components] Signature: failed to get user signature', ex);

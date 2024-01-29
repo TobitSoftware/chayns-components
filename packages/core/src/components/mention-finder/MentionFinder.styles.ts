@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import { MentionFinderPopupAlignment } from './constants/alignment';
+import { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
 import type { MentionFinderProps } from './MentionFinder';
 
 export const StyledMentionFinder = styled.div`

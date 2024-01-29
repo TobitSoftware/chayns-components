@@ -16,8 +16,8 @@ import { calculateContentHeight } from '../../utils/calculate';
 import Input from '../input/Input';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
-import type { ISearchBoxItem } from './types';
-import { searchList } from './utils';
+import type { ISearchBoxItem } from '../../types/searchBox';
+import { searchList } from '../../utils/searchBox';
 
 export type SearchBoxProps = {
     /**
@@ -79,7 +79,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 setIsAnimating(false);
             }
         },
-        [boxRef]
+        [boxRef],
     );
 
     /**
@@ -153,7 +153,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 onChange(event);
             }
         },
-        [list, onChange, shouldShowContentOnEmptyInput]
+        [list, onChange, shouldShowContentOnEmptyInput],
     );
 
     /**
@@ -165,7 +165,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 onBlur(event);
             }
         },
-        [onBlur]
+        [onBlur],
     );
 
     /**
@@ -180,7 +180,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 onSelect(item);
             }
         },
-        [onSelect]
+        [onSelect],
     );
 
     const content = useMemo(() => {
@@ -296,7 +296,7 @@ const SearchBox: FC<SearchBoxProps> = ({
             placeholder,
             value,
             width,
-        ]
+        ],
     );
 };
 

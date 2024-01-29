@@ -72,7 +72,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
                 }
             }, 400);
         },
-        [onLongPress]
+        [onLongPress],
     );
 
     const handleTouchEnd = useCallback(() => {

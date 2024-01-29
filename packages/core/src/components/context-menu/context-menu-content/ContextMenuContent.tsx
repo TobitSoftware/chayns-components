@@ -1,6 +1,5 @@
 import React from 'react';
-import Icon from '../../icon/Icon';
-import { ContextMenuAlignment } from '../constants/alignment';
+import { ContextMenuAlignment } from '../../../types/contextMenu';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
 import {
     StyledContextMenuContentItem,
@@ -8,6 +7,7 @@ import {
     StyledContextMenuContentItemText,
     StyledMotionContextMenuContent,
 } from './ContextMenuContent.styles';
+import Icon from '../../icon/Icon';
 
 type ContextMenuContentProps = {
     alignment: ContextMenuAlignment;

@@ -86,7 +86,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 setIsAnimating(false);
             }
         },
-        [ref]
+        [ref],
     );
 
     /**
@@ -112,7 +112,7 @@ const ComboBox: FC<ComboBoxProps> = ({
                 onSelect(itemToSelect);
             }
         },
-        [onSelect]
+        [onSelect],
     );
 
     /**
@@ -130,7 +130,7 @@ const ComboBox: FC<ComboBoxProps> = ({
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
         setMinWidth(
-            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0)
+            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0),
         );
     }, [list, placeholder]);
 
@@ -265,7 +265,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             placeholderImageUrl,
             placeholderText,
             shouldShowRoundImage,
-        ]
+        ],
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { FC, useRef } from 'react';
-import type { ContextMenuAlignment } from '../context-menu/constants/alignment';
+import type { ContextMenuAlignment } from '../../types/contextMenu';
 import ContextMenu from '../context-menu/ContextMenu';
 import Icon from '../icon/Icon';
 import {
@@ -28,7 +28,7 @@ const SharingBar: FC<SharingBarProps> = ({ label, link, popupAlignment }) => {
 
     const handleImageDownload = async () => {
         const image = await fetch(
-            `https://cube.tobit.cloud/qr-code-generator/v1.0/png?value=${link}&color=005EB8&text=Teilen`
+            `https://cube.tobit.cloud/qr-code-generator/v1.0/png?value=${link}&color=005EB8&text=Teilen`,
         );
         const imageBlog = await image.blob();
         const imageURL = URL.createObjectURL(imageBlog);

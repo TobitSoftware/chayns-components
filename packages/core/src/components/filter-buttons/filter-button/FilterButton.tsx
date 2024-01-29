@@ -1,6 +1,5 @@
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
-import Icon from '../../icon/Icon';
-import { FilterButtonItemShape, FilterButtonSize } from '../types';
+import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
 import {
     StyledFilterButtonItem,
     StyledFilterButtonItemBorder,
@@ -8,6 +7,7 @@ import {
     StyledFilterButtonItemLabelText,
     StyledMotionFilterButtonItemBackground,
 } from './FilterButton.styles';
+import Icon from '../../icon/Icon';
 
 export type FilterButtonProps = {
     color?: CSSProperties['color'];
