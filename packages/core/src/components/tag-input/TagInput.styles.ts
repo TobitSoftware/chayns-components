@@ -7,13 +7,11 @@ export const StyledTagInput = styled.div<StyledTagInputProps>`
     display: flex;
     flex-wrap: wrap;
     min-height: 42px;
-    padding: 5px 0;
+    padding: 5px;
     align-items: center;
     gap: 6px;
-    border: 1px solid ${({ theme }: StyledTagInputProps) => theme['408']};
-    border-top: none;
-    border-right: none;
-    border-left: none;
+    background-color: ${({ theme }: StyledTagInputProps) => theme['100']};
+    border: 1px solid rgba(160, 160, 160, 0.3);
 `;
 
 export const StyledTagInputTagWrapper = styled.div`
