@@ -8,6 +8,7 @@ type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled' | 'isInvalid'>>;
 export const StyledInput = styled.div<StyledInputProps>`
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     display: flex;
+    width: 100%;
 `;
 
 type StyledInputContentWrapperProps = WithTheme<{
