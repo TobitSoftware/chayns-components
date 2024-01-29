@@ -6,6 +6,7 @@ export default {
     component: PositionInput,
     args: {
         apiToken: 'AIzaSyCicm5YKKdfym2UtjVwuoSvMAL9uKD_yxo',
+        searchPlaceholder: 'Stadt suchen',
     },
 } as Meta<typeof PositionInput>;
 
