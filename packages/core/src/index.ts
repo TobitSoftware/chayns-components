@@ -74,3 +74,4 @@ export type { SliderButtonItem } from './types/slider-button';
 export { default as OpeningTimes } from './components/opening-times/OpeningTimes';
 export type { Weekday, OpeningTime, Time } from './types/openingTimes';
 export { default as PositionInput } from './components/position-input/PositionInput';
+export type { PolygonOptions, IMarker as Marker, Position } from './types/positionInput';
