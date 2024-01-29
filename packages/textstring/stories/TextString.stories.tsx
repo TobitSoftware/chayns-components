@@ -49,11 +49,11 @@ const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args
                 />
                 <i>'##food##' wird durch die ausgewählte Speise ersetzt</i>
                 <h2>Speise auswählen</h2>
-                <RadioButtonGroup onChange={handleFoodChange}>
-                    <RadioButton id="0" label="Eis" />
-                    <RadioButton id="1" label="Pizza" />
-                    <RadioButton id="2" label="Schokolade" />
-                    <RadioButton id="3" label="Salat" />
+                <RadioButtonGroup>
+                    <RadioButton id="0" label="Eis" onChange={handleFoodChange} />
+                    <RadioButton id="1" label="Pizza" onChange={handleFoodChange} />
+                    <RadioButton id="2" label="Schokolade" onChange={handleFoodChange} />
+                    <RadioButton id="3" label="Salat" onChange={handleFoodChange} />
                 </RadioButtonGroup>
             </TextStringProvider>
         );
