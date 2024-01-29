@@ -1,7 +1,10 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { generateFontFaces } from '../../utils/font';
+import type { DesignSettings } from '../../types/colorSchemeProvider';
+import { getSite } from 'chayns-api';
+import { getDesignSettings } from '../../api/theme/get';
 
 enum ColorMode {
     Classic,
@@ -26,6 +29,10 @@ type ColorSchemeProviderProps = {
      * Css variables to be added in addition to the chayns variables
      */
     cssVariables?: { [key: string]: string | number };
+    /**
+     * The design settings of a page.
+     */
+    designSettings?: DesignSettings;
     /**
      * The secondary hex color to be used for the children
      */
@@ -59,25 +66,37 @@ const GlobalStyle = createGlobalStyle`
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     children,
-    color = '#005EB8',
-    colorMode = ColorMode.Classic,
+    color,
+    colorMode,
     cssVariables = {},
     secondaryColor,
     style = {},
+    designSettings,
 }) => {
     const [colors, setColors] = useState<Theme>({});
     const [themeColors, setThemeColors] = useState<Theme>({});
+    const [theme, setTheme] = useState<Theme>({});
+
+    useEffect(() => {
+        void getDesignSettings();
+    }, []);
+
+    const site = getSite();
+
+    const internalColorMode = colorMode ?? site.colorMode;
+    const internalColor = color ?? site.color;
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
 
         const newColors: Theme = {};
         const newThemeColors: Theme = {};
+        const newTheme: Theme = {};
 
         availableColors.forEach((colorName: string) => {
             const hexColor = getColorFromPalette(colorName, {
-                color,
-                colorMode,
+                color: internalColor,
+                colorMode: internalColorMode,
                 secondaryColor,
             });
 
@@ -86,6 +105,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
                 newColors[`--chayns-color--${colorName}`] = hexColor;
                 newThemeColors[colorName] = hexColor;
+                newTheme[colorName] = hexColor;
 
                 if (rgbColor) {
                     newColors[`--chayns-color-rgb--${colorName}`] =
@@ -96,12 +116,32 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
+        const testData: DesignSettings = {
+            accordionIcon: 1110277,
+            accordionLines: true,
+            cardBorderRadius: 50,
+            cardBackgroundOpacity: 0,
+            cardShadow: 0.1,
+            iconStyle: 3,
+        };
+
+        Object.keys(testData).forEach((key) => {
+            // IDK what I need to do!!!! Pls help me!!
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            newTheme[key] = testData[key];
+        });
+
+        console.log('Theme', newTheme);
+
+        setTheme(newTheme);
         setColors(newColors);
         setThemeColors(newThemeColors);
-    }, [color, colorMode, secondaryColor]);
+    }, [internalColor, internalColorMode, secondaryColor]);
 
     return (
-        <ThemeProvider theme={themeColors}>
+        <ThemeProvider theme={theme}>
             <div style={{ ...colors, ...cssVariables, ...style }}>{children}</div>
             <GlobalStyle />
         </ThemeProvider>

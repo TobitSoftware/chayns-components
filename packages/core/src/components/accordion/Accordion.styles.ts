@@ -21,7 +21,7 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !shouldHideBackground &&
         css`
             background-color: ${theme['100']}; // ToDo: Add opacity here
-            border-radius: 3px; // ToDo: Add correct border-radius here
+            border-radius: ${theme.cardBorderRadius}px; // ToDo: Add correct border-radius here
             box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
         `}
 
