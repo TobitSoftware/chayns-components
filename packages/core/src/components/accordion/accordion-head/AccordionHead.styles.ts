@@ -28,20 +28,14 @@ export const StyledMotionIconWrapper = styled(motion.div)<FramerMotionBugFix>`
 type StyledAccordionIconProps = WithTheme<{ icon: string }>;
 
 export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
-    width: 25px;
-    height: 25px;
     align-items: center;
-    cursor: pointer;
-    display: flex;
-    flex: 0 0 auto;
     justify-content: center;
-    font-style: normal;
+    display: flex;
+    color: ${({ theme }: StyledAccordionIconProps) => theme.headline};
 
     &:before {
         content: ${({ icon }) => `"\\${icon}"`};
         font-family: 'Font Awesome 6 Pro', Fontawesome !important;
-        font-weight: 900;
-        vertical-align: middle;
     }
 `;
 

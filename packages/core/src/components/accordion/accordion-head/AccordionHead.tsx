@@ -67,7 +67,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         open: isWrapped ? 40 : 33,
     });
 
-    const { accordionIcon } = useTheme();
+    const { accordionIcon, iconStyle } = useTheme();
 
     const titleWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -90,10 +90,17 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             );
         }
 
-        console.log((accordionIcon as number)?.toString(16));
+        if (!accordionIcon) {
+            return null;
+        }
 
-        return <StyledAccordionIcon icon={(accordionIcon as number)?.toString(16)} />;
-    }, [accordionIcon, icon, isFixed]);
+        return (
+            <StyledAccordionIcon
+                className={iconStyle as string}
+                icon={(accordionIcon as number)?.toString(16)}
+            />
+        );
+    }, [accordionIcon, icon, iconStyle, isFixed]);
 
     return (
         <StyledMotionAccordionHead
