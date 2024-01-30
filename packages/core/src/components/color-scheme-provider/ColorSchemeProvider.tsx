@@ -98,7 +98,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         const availableColors = getAvailableColorList();
 
         const newColors: Theme = {};
-        const newThemeColors: Theme = {};
         const newTheme: Theme = {};
 
         availableColors.forEach((colorName: string) => {
@@ -112,14 +111,12 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 const rgbColor = hexToRgb255(hexColor);
 
                 newColors[`--chayns-color--${colorName}`] = hexColor;
-                newThemeColors[colorName] = hexColor;
                 newTheme[colorName] = hexColor;
 
                 if (rgbColor) {
                     newColors[`--chayns-color-rgb--${colorName}`] =
                         `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
-                    newThemeColors[`${colorName}-rgb`] =
-                        `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
+                    newTheme[`${colorName}-rgb`] = `${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}`;
                 }
             }
         });
@@ -132,7 +129,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                     return;
                 }
 
-                // IDK what I need to do!!!! Pls help me!!
+                // ToDo: Find better solution
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
