@@ -1,12 +1,21 @@
 import React, { FC } from 'react';
+import type { Locale } from 'date-fns';
+import { de } from 'date-fns/locale';
 import { StyledCalendar } from './Calendar.styles';
+import Month from './month/Month';
 
-export type CalendarProps = {};
+export type CalendarProps = {
+    locale?: Locale;
+};
 
-const Calendar: FC<CalendarProps> = ({}) => {
-    const maxStackSizeFactor = 1;
+const Calendar: FC<CalendarProps> = ({ locale = de }) => {
+    const test = '';
 
-    return <StyledCalendar>test</StyledCalendar>;
+    return (
+        <StyledCalendar>
+            <Month month="August" shouldShowLeftArrow shouldShowRightArrow locale={locale} />
+        </StyledCalendar>
+    );
 };
 
 Calendar.displayName = 'Calendar';
