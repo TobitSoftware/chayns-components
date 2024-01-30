@@ -1,5 +1,5 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { generateFontFaces } from '../../utils/font';
 import type { DesignSettings } from '../../types/colorSchemeProvider';
@@ -74,12 +74,20 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     designSettings,
 }) => {
     const [colors, setColors] = useState<Theme>({});
-    const [themeColors, setThemeColors] = useState<Theme>({});
     const [theme, setTheme] = useState<Theme>({});
+    const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
 
     useEffect(() => {
-        void getDesignSettings();
-    }, []);
+        if (designSettings) {
+            setInternalDesignSettings(designSettings);
+
+            return;
+        }
+
+        void getDesignSettings().then((result) => {
+            setInternalDesignSettings(result);
+        });
+    }, [designSettings]);
 
     const site = getSite();
 
@@ -116,29 +124,19 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
-        const testData: DesignSettings = {
-            accordionIcon: 1110277,
-            accordionLines: true,
-            cardBorderRadius: 50,
-            cardBackgroundOpacity: 0,
-            cardShadow: 0.1,
-            iconStyle: 3,
-        };
-
-        Object.keys(testData).forEach((key) => {
-            // IDK what I need to do!!!! Pls help me!!
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            newTheme[key] = testData[key];
-        });
-
-        console.log('Theme', newTheme);
+        if (internalDesignSettings) {
+            Object.keys(internalDesignSettings).forEach((key) => {
+                // IDK what I need to do!!!! Pls help me!!
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                newTheme[key] = internalDesignSettings[key];
+            });
+        }
 
         setTheme(newTheme);
         setColors(newColors);
-        setThemeColors(newThemeColors);
-    }, [internalColor, internalColorMode, secondaryColor]);
+    }, [internalColor, internalColorMode, internalDesignSettings, secondaryColor]);
 
     return (
         <ThemeProvider theme={theme}>
