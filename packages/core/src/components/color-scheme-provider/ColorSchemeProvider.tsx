@@ -1,7 +1,7 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { generateFontFaces } from '../../utils/font';
+import { convertIconStyle, generateFontFaces } from '../../utils/font';
 import type { DesignSettings } from '../../types/colorSchemeProvider';
 import { getSite } from 'chayns-api';
 import { getDesignSettings } from '../../api/theme/get';
@@ -126,6 +126,12 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         if (internalDesignSettings) {
             Object.keys(internalDesignSettings).forEach((key) => {
+                if (key === 'iconStyle') {
+                    newTheme[key] = convertIconStyle(internalDesignSettings.iconStyle);
+
+                    return;
+                }
+
                 // IDK what I need to do!!!! Pls help me!!
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
