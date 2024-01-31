@@ -9,15 +9,24 @@ import { Icon } from '@chayns-components/core';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
 import DayWrapper from './day-wrapper/DayWrapper';
 import type { Locale } from 'date-fns';
+import type { EMonth } from '../../../types/calendar';
+import { formatMonth } from '../../../utils/calendar';
 
 export type MonthProps = {
-    month: string;
+    month: EMonth;
+    year: string;
     shouldShowLeftArrow: boolean;
     shouldShowRightArrow: boolean;
-    locale?: Locale;
+    locale: Locale;
 };
 
-const Month: FC<MonthProps> = ({ month, shouldShowRightArrow, shouldShowLeftArrow, locale }) => {
+const Month: FC<MonthProps> = ({
+    month,
+    year,
+    shouldShowRightArrow,
+    shouldShowLeftArrow,
+    locale,
+}) => {
     const test = '';
 
     return (
@@ -28,7 +37,7 @@ const Month: FC<MonthProps> = ({ month, shouldShowRightArrow, shouldShowLeftArro
                         <Icon icons={['fa fa-angle-left']} />
                     </StyledMonthIconWrapper>
                 )}
-                <StyledMonthName>{month}</StyledMonthName>
+                <StyledMonthName>{formatMonth({ locale, month })}</StyledMonthName>
                 {shouldShowRightArrow && (
                     <StyledMonthIconWrapper>
                         <Icon icons={['fa fa-angle-right']} />

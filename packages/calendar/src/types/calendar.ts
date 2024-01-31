@@ -1,4 +1,31 @@
-export interface CalendarDays {
-    id: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
-    name: string;
+import type { CSSProperties } from 'react';
+
+export interface HighlightedDates {
+    dates: Date[];
+    style: HighlightedDateStyles;
+}
+
+export interface HighlightedDateStyles {
+    backgroundColor: CSSProperties['backgroundColor'];
+    textColor: CSSProperties['color'];
+}
+
+export interface IMonth {
+    month: EMonth;
+    year: string;
+}
+
+export enum EMonth {
+    January = 1,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December,
 }
