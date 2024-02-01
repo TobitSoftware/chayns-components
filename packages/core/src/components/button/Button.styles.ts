@@ -7,7 +7,7 @@ type StyledButtonProps = ButtonProps &
     WithTheme<{
         hasIcon: boolean;
         hasChildren: boolean;
-        isDisabled: boolean;
+        isDisabled?: boolean;
     }>;
 
 export const StyledButton = styled.button<StyledButtonProps>`
