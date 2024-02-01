@@ -1,16 +1,17 @@
 import React, { FC, useMemo } from 'react';
 import { isSameDay } from 'date-fns';
-import { StyledDay } from './Day.styles';
+import { StyledDay, StyledDayNumber } from './Day.styles';
 import type { HighlightedDates, HighlightedDateStyles } from '../../../../../types/calendar';
 
 export type DayProps = {
     date: Date;
     isSameMonth: boolean;
+    isSelected: boolean;
     onClick: (date: Date, isSameMonth: boolean) => void;
     highlightedDates?: HighlightedDates[];
 };
 
-const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, onClick }) => {
+const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, isSelected, onClick }) => {
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
         if (!highlightedDates || !isSameMonth) {
             return undefined;
@@ -28,7 +29,7 @@ const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, onClick }) => 
             backgroundColor={styles?.backgroundColor}
             textColor={styles?.textColor}
         >
-            {date.getDate()}
+            <StyledDayNumber isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
         </StyledDay>
     );
 };

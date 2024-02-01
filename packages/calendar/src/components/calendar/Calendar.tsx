@@ -7,11 +7,31 @@ import { getMonthAndYear, isDateInRange } from '../../utils/calendar';
 import type { HighlightedDates } from '../../types/calendar';
 
 export type CalendarProps = {
-    locale?: Locale;
-    startDate: Date;
+    /**
+     * The last Month that can be displayed.
+     */
     endDate: Date;
+    /**
+     * An array with dates and corresponding styles to highlight.
+     */
     highlightedDates?: HighlightedDates[];
+    /**
+     * The locale language to format the dates.
+     */
+    locale?: Locale;
+    /**
+     * Function to be executed when a date is selected.
+     * @param date
+     */
     onSelect?: (date: Date) => void;
+    /**
+     * A date that should be preselected.
+     */
+    selectedDate?: Date;
+    /**
+     * The first Month that can be displayed.
+     */
+    startDate: Date;
 };
 
 const Calendar: FC<CalendarProps> = ({
@@ -20,11 +40,19 @@ const Calendar: FC<CalendarProps> = ({
     startDate,
     highlightedDates,
     onSelect,
+    selectedDate,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
+    const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
 
     const calendarRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (selectedDate) {
+            setInternalSelectedDate(selectedDate);
+        }
+    }, [selectedDate]);
 
     useEffect(() => {
         if (calendarRef.current) {
@@ -90,6 +118,17 @@ const Calendar: FC<CalendarProps> = ({
         });
     }, [endDate, startDate]);
 
+    const handleSelect = useCallback(
+        (date: Date) => {
+            setInternalSelectedDate(date);
+
+            if (typeof onSelect === 'function') {
+                onSelect(date);
+            }
+        },
+        [onSelect],
+    );
+
     const months = useMemo(() => {
         if (!currentDate || !calendarRef.current) {
             return null;
@@ -99,7 +138,8 @@ const Calendar: FC<CalendarProps> = ({
 
         const firstMonthElement = (
             <Month
-                onSelect={onSelect}
+                selectedDate={internalSelectedDate}
+                onSelect={handleSelect}
                 month={month}
                 year={year}
                 onLeftArrowClick={handleLeftArrowClick}
@@ -125,7 +165,8 @@ const Calendar: FC<CalendarProps> = ({
 
             secondMonthElement = (
                 <Month
-                    onSelect={onSelect}
+                    selectedDate={internalSelectedDate}
+                    onSelect={handleSelect}
                     month={secondMonth}
                     year={secondYear}
                     onLeftArrowClick={handleLeftArrowClick}
@@ -141,7 +182,8 @@ const Calendar: FC<CalendarProps> = ({
         return [firstMonthElement, secondMonthElement];
     }, [
         currentDate,
-        onSelect,
+        internalSelectedDate,
+        handleSelect,
         handleLeftArrowClick,
         handleRightArrowClick,
         startDate,

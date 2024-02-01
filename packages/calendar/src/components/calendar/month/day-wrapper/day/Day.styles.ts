@@ -25,3 +25,23 @@ export const StyledDay = styled.div<StyledDayProps>`
             background-color: ${backgroundColor};
         `}
 `;
+
+type StyledDayNumberProps = WithTheme<{
+    isSelected: boolean;
+}>;
+
+export const StyledDayNumber = styled.div<StyledDayNumberProps>`
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+
+    ${({ isSelected, theme }) =>
+        isSelected &&
+        css`
+            background-color: ${theme['404']};
+            color: ${theme['409']};
+        `}
+`;

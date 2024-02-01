@@ -1,5 +1,5 @@
 import React, { FC, type ReactElement, useCallback, useMemo } from 'react';
-import { startOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
+import { startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import Day from './day/Day';
 import type { EMonth, HighlightedDates } from '../../../../types/calendar';
@@ -8,10 +8,17 @@ export type DayWrapperProps = {
     month: EMonth;
     year: string;
     highlightedDates?: HighlightedDates[];
-    onSelect?: (date: Date) => void;
+    onSelect: (date: Date) => void;
+    selectedDate?: Date;
 };
 
-const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates, onSelect }) => {
+const DayWrapper: FC<DayWrapperProps> = ({
+    month,
+    year,
+    highlightedDates,
+    onSelect,
+    selectedDate,
+}) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
@@ -31,7 +38,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates, onSele
 
     const handleDayClick = useCallback(
         (date: Date, shouldFireEvent: boolean) => {
-            if (shouldFireEvent && typeof onSelect === 'function') {
+            if (shouldFireEvent) {
                 onSelect(date);
             }
         },
@@ -45,6 +52,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates, onSele
             items.push(
                 <Day
                     date={day}
+                    isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
                     highlightedDates={highlightedDates}
@@ -53,7 +61,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates, onSele
         });
 
         return items;
-    }, [dayOfCurrentMonth, days, handleDayClick, highlightedDates]);
+    }, [dayOfCurrentMonth, days, handleDayClick, highlightedDates, selectedDate]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };
