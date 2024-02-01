@@ -1,10 +1,11 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isSameMonth, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { StyledCalendar } from './Calendar.styles';
+import { StyledCalendar, StyledMotionMonthWrapper } from './Calendar.styles';
 import Month from './month/Month';
 import { getMonthAndYear, isDateInRange } from '../../utils/calendar';
 import type { Categories, HighlightedDates } from '../../types/calendar';
+import { AnimatePresence } from 'framer-motion';
 
 const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
 
@@ -52,6 +53,7 @@ const Calendar: FC<CalendarProps> = ({
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
+    const [direction, setDirection] = useState<'left' | 'right'>();
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +94,7 @@ const Calendar: FC<CalendarProps> = ({
     }, [endDate, startDate]);
 
     const handleLeftArrowClick = useCallback(() => {
+        setDirection('left');
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
@@ -109,6 +112,7 @@ const Calendar: FC<CalendarProps> = ({
     }, [endDate, startDate]);
 
     const handleRightArrowClick = useCallback(() => {
+        setDirection('right');
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
@@ -136,6 +140,10 @@ const Calendar: FC<CalendarProps> = ({
         [onSelect],
     );
 
+    const onAnimationFinish = () => {
+        setDirection(undefined);
+    };
+
     const months = useMemo(() => {
         if (!currentDate || !calendarRef.current) {
             return null;
@@ -144,19 +152,28 @@ const Calendar: FC<CalendarProps> = ({
         const { month, year } = getMonthAndYear(currentDate);
 
         const firstMonthElement = (
-            <Month
-                categories={categories}
-                selectedDate={internalSelectedDate}
-                onSelect={handleSelect}
-                month={month}
-                year={year}
-                onLeftArrowClick={handleLeftArrowClick}
-                onRightArrowClick={handleRightArrowClick}
-                shouldShowLeftArrow={!isSameMonth(currentDate, startDate)}
-                shouldShowRightArrow={!shouldRenderTwoMonths && !isSameMonth(currentDate, endDate)}
-                locale={locale}
-                highlightedDates={highlightedDates}
-            />
+            <StyledMotionMonthWrapper
+                key={`first-month-${month}`}
+                animate={{ x: direction ? (direction === 'left' ? '100%' : '-100%') : 0 }}
+                onAnimationComplete={onAnimationFinish}
+                transition={{ duration: 1.2 }}
+            >
+                <Month
+                    categories={categories}
+                    selectedDate={internalSelectedDate}
+                    onSelect={handleSelect}
+                    month={month}
+                    year={year}
+                    onLeftArrowClick={handleLeftArrowClick}
+                    onRightArrowClick={handleRightArrowClick}
+                    shouldShowLeftArrow={!isSameMonth(currentDate, startDate)}
+                    shouldShowRightArrow={
+                        !shouldRenderTwoMonths && !isSameMonth(currentDate, endDate)
+                    }
+                    locale={locale}
+                    highlightedDates={highlightedDates}
+                />
+            </StyledMotionMonthWrapper>
         );
 
         let secondMonthElement;
@@ -172,25 +189,33 @@ const Calendar: FC<CalendarProps> = ({
             const { month: secondMonth, year: secondYear } = getMonthAndYear(newDate);
 
             secondMonthElement = (
-                <Month
-                    categories={categories}
-                    selectedDate={internalSelectedDate}
-                    onSelect={handleSelect}
-                    month={secondMonth}
-                    year={secondYear}
-                    onLeftArrowClick={handleLeftArrowClick}
-                    onRightArrowClick={handleRightArrowClick}
-                    shouldShowLeftArrow={false}
-                    shouldShowRightArrow={!isSameMonth(newDate, endDate)}
-                    locale={locale}
-                    highlightedDates={highlightedDates}
-                />
+                <StyledMotionMonthWrapper
+                    key={`second-month-${month}`}
+                    animate={{ x: direction ? (direction === 'left' ? '100%' : '-100%') : 0 }}
+                    onAnimationComplete={onAnimationFinish}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Month
+                        categories={categories}
+                        selectedDate={internalSelectedDate}
+                        onSelect={handleSelect}
+                        month={secondMonth}
+                        year={secondYear}
+                        onLeftArrowClick={handleLeftArrowClick}
+                        onRightArrowClick={handleRightArrowClick}
+                        shouldShowLeftArrow={false}
+                        shouldShowRightArrow={!isSameMonth(newDate, endDate)}
+                        locale={locale}
+                        highlightedDates={highlightedDates}
+                    />
+                </StyledMotionMonthWrapper>
             );
         }
 
         return [firstMonthElement, secondMonthElement];
     }, [
         currentDate,
+        direction,
         categories,
         internalSelectedDate,
         handleSelect,
@@ -203,7 +228,11 @@ const Calendar: FC<CalendarProps> = ({
         highlightedDates,
     ]);
 
-    return <StyledCalendar ref={calendarRef}>{months}</StyledCalendar>;
+    return (
+        <StyledCalendar ref={calendarRef}>
+            <AnimatePresence>{months}</AnimatePresence>
+        </StyledCalendar>
+    );
 };
 
 Calendar.displayName = 'Calendar';
