@@ -49,7 +49,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates }) => {
         });
 
         return items;
-    }, [dayOfCurrentMonth, days]);
+    }, [dayOfCurrentMonth, days, highlightedDates]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };

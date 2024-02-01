@@ -43,7 +43,10 @@ const Month: FC<MonthProps> = ({
                         <Icon icons={['fa fa-angle-left']} />
                     </StyledMonthIconWrapper>
                 )}
-                <StyledMonthName>{`${formatMonth({ locale, month })} ${String(currentYear) !== year ? year : ''}`}</StyledMonthName>
+                <StyledMonthName
+                    shouldShowLeftArrow={shouldShowLeftArrow}
+                    shouldShowRightArrow={shouldShowRightArrow}
+                >{`${formatMonth({ locale, month })} ${String(currentYear) !== year ? year : ''}`}</StyledMonthName>
                 {shouldShowRightArrow && (
                     <StyledMonthIconWrapper onClick={onRightArrowClick}>
                         <Icon icons={['fa fa-angle-right']} />

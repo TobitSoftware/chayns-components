@@ -6,4 +6,5 @@ export const StyledDayWrapper = styled.div`
     grid-template-columns: repeat(7, 1fr);
     padding-top: 6px;
     gap: 2px;
+    margin: 0 15px;
 `;
