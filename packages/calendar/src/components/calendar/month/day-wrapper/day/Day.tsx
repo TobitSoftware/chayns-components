@@ -6,12 +6,12 @@ export type DayProps = {
     date: Date;
     isSameMonth: boolean;
     styles?: HighlightedDateStyles;
-    onClick: (date: Date) => void;
+    onClick: (date: Date, isSameMonth: boolean) => void;
 };
 
 const Day: FC<DayProps> = ({ date, isSameMonth, styles, onClick }) => (
     <StyledDay
-        onClick={() => onClick(date)}
+        onClick={() => onClick(date, isSameMonth)}
         isSameMonth={isSameMonth}
         backgroundColor={styles?.backgroundColor}
         textColor={styles?.textColor}

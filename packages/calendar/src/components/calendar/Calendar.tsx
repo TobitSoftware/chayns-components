@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { Locale, isAfter, isBefore } from 'date-fns';
+import { isAfter, isBefore, Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { StyledCalendar } from './Calendar.styles';
 import Month from './month/Month';
@@ -31,11 +31,24 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate }) => {
         }
     }, [endDate, startDate]);
 
-    useEffect(() => {
-        if (currentDate) {
-            getMonthAndYear(currentDate);
-        }
-    }, [currentDate]);
+    const handleLeftArrowClick = () => {
+        setCurrentDate((prevDate) => {
+            if (!prevDate) {
+                return prevDate;
+            }
+
+            return new Date(prevDate.setMonth(prevDate.getMonth() - 1));
+        });
+    };
+    const handleRightArrowClick = () => {
+        setCurrentDate((prevDate) => {
+            if (!prevDate) {
+                return prevDate;
+            }
+
+            return new Date(prevDate.setMonth(prevDate.getMonth() + 1));
+        });
+    };
 
     const months = useMemo(() => {
         if (!currentDate) {
@@ -48,6 +61,8 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate }) => {
             <Month
                 month={month}
                 year={year}
+                onLeftArrowClick={handleLeftArrowClick}
+                onRightArrowClick={handleRightArrowClick}
                 shouldShowLeftArrow
                 shouldShowRightArrow
                 locale={locale}

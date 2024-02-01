@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useMemo } from 'react';
+import React, { FC, type ReactElement, useMemo, useState } from 'react';
 import {
     StyledMonth,
     StyledMonthHead,
@@ -18,6 +18,8 @@ export type MonthProps = {
     shouldShowLeftArrow: boolean;
     shouldShowRightArrow: boolean;
     locale: Locale;
+    onLeftArrowClick: () => void;
+    onRightArrowClick: () => void;
 };
 
 const Month: FC<MonthProps> = ({
@@ -26,26 +28,28 @@ const Month: FC<MonthProps> = ({
     shouldShowRightArrow,
     shouldShowLeftArrow,
     locale,
+    onLeftArrowClick,
+    onRightArrowClick,
 }) => {
-    const test = '';
+    const [currentYear] = useState(new Date().getFullYear());
 
     return (
         <StyledMonth>
             <StyledMonthHead>
                 {shouldShowLeftArrow && (
-                    <StyledMonthIconWrapper>
+                    <StyledMonthIconWrapper onClick={onLeftArrowClick}>
                         <Icon icons={['fa fa-angle-left']} />
                     </StyledMonthIconWrapper>
                 )}
-                <StyledMonthName>{formatMonth({ locale, month })}</StyledMonthName>
+                <StyledMonthName>{`${formatMonth({ locale, month })} ${String(currentYear) !== year ? year : ''}`}</StyledMonthName>
                 {shouldShowRightArrow && (
-                    <StyledMonthIconWrapper>
+                    <StyledMonthIconWrapper onClick={onRightArrowClick}>
                         <Icon icons={['fa fa-angle-right']} />
                     </StyledMonthIconWrapper>
                 )}
             </StyledMonthHead>
             <WeekdayWrapper locale={locale} />
-            <DayWrapper month={month} />
+            <DayWrapper month={month} year={year} />
         </StyledMonth>
     );
 };
