@@ -69,6 +69,7 @@ const Button: FC<ButtonProps> = ({
         <StyledButton
             className={buttonClasses}
             disabled={isDisabled}
+            isDisabled={isDisabled}
             hasChildren={!!children}
             hasIcon={typeof icon === 'string' && icon !== ''}
             isSecondary={isSecondary}

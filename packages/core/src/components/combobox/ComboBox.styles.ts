@@ -23,7 +23,7 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     justify-content: space-between;
     border: 1px solid rgba(160, 160, 160, 0.3);
     padding: 4px 10px;
-    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'not-allowed')};
+    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'default')};
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     min-width: ${({ minWidth }) => minWidth}px;
