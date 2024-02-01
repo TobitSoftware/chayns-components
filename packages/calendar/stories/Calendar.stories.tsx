@@ -6,7 +6,6 @@ export default {
     component: Calendar,
     args: {
         startDate: new Date('2023-02-01T00:00:00+00:00'),
-        endDate: new Date('2024-03-01T00:00:00+00:00'),
         highlightedDates: [
             {
                 dates: [
@@ -23,6 +22,29 @@ export default {
             {
                 dates: [new Date('Tue Feb 20 2024 00:00:00 GMT+0000')],
                 style: { textColor: 'white', backgroundColor: 'green' },
+            },
+        ],
+        categories: [
+            {
+                dates: [
+                    new Date('Sun Feb 18 2024 00:00:00 GMT+0000'),
+                    new Date('Thu Feb 13 2024 00:00:00 GMT+0000'),
+                ],
+                color: 'pink',
+                id: 'meeting',
+            },
+            {
+                dates: [
+                    new Date('Wed Feb 14 2024 00:00:00 GMT+0000'),
+                    new Date('Mon Mar 4 2024 00:00:00 GMT+0000'),
+                ],
+                color: 'yellow',
+                id: 'holiday',
+            },
+            {
+                dates: [new Date('Wed Feb 14 2024 00:00:00 GMT+0000')],
+                color: 'grey',
+                id: 'birthday',
             },
         ],
     },

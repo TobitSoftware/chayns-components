@@ -9,6 +9,7 @@ type StyledDayProps = WithTheme<{
 }>;
 
 export const StyledDay = styled.div<StyledDayProps>`
+    position: relative;
     cursor: ${({ isSameMonth }) => (isSameMonth ? 'pointer' : 'default')};
     color: ${({ isSameMonth, theme }: StyledDayProps) =>
         isSameMonth ? theme.text : `rgba(${theme['text-rgb'] ?? ''}, 0.5)`};
@@ -44,4 +45,12 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
             background-color: ${theme['404']};
             color: ${theme['409']};
         `}
+`;
+
+export const StyledDayCategoryWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    position: absolute;
+    bottom: 2px;
 `;

@@ -10,6 +10,12 @@ export interface HighlightedDateStyles {
     textColor: CSSProperties['color'];
 }
 
+export interface Categories {
+    id: string;
+    dates: Date[];
+    color: CSSProperties['color'];
+}
+
 export interface IMonth {
     month: EMonth;
     year: string;

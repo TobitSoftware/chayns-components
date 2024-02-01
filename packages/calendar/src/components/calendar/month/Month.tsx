@@ -9,7 +9,7 @@ import { Icon } from '@chayns-components/core';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
 import DayWrapper from './day-wrapper/DayWrapper';
 import type { Locale } from 'date-fns';
-import type { EMonth, HighlightedDates } from '../../../types/calendar';
+import type { Categories, EMonth, HighlightedDates } from '../../../types/calendar';
 import { formatMonth } from '../../../utils/calendar';
 
 export type MonthProps = {
@@ -23,6 +23,7 @@ export type MonthProps = {
     onRightArrowClick: () => void;
     onSelect: (date: Date) => void;
     selectedDate?: Date;
+    categories?: Categories[];
 };
 
 const Month: FC<MonthProps> = ({
@@ -36,6 +37,7 @@ const Month: FC<MonthProps> = ({
     onRightArrowClick,
     selectedDate,
     onSelect,
+    categories,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -59,6 +61,7 @@ const Month: FC<MonthProps> = ({
             </StyledMonthHead>
             <WeekdayWrapper locale={locale} />
             <DayWrapper
+                categories={categories}
                 selectedDate={selectedDate}
                 month={month}
                 year={year}

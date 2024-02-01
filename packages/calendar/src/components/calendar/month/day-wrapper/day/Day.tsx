@@ -1,7 +1,12 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, type ReactElement, useMemo } from 'react';
 import { isSameDay } from 'date-fns';
-import { StyledDay, StyledDayNumber } from './Day.styles';
-import type { HighlightedDates, HighlightedDateStyles } from '../../../../../types/calendar';
+import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
+import type {
+    Categories,
+    HighlightedDates,
+    HighlightedDateStyles,
+} from '../../../../../types/calendar';
+import Category from './category/Category';
 
 export type DayProps = {
     date: Date;
@@ -9,9 +14,17 @@ export type DayProps = {
     isSelected: boolean;
     onClick: (date: Date, isSameMonth: boolean) => void;
     highlightedDates?: HighlightedDates[];
+    categories?: Categories[];
 };
 
-const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, isSelected, onClick }) => {
+const Day: FC<DayProps> = ({
+    date,
+    highlightedDates,
+    categories,
+    isSameMonth,
+    isSelected,
+    onClick,
+}) => {
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
         if (!highlightedDates || !isSameMonth) {
             return undefined;
@@ -22,6 +35,16 @@ const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, isSelected, on
         )?.style;
     }, [date, highlightedDates, isSameMonth]);
 
+    const categoryElements = useMemo(() => {
+        if (!categories) return [];
+
+        return categories.flatMap((category) =>
+            category.dates
+                .filter((day) => isSameDay(day, date))
+                .map((day) => <Category key={day.getTime()} color={category.color} />),
+        );
+    }, [categories, date]);
+
     return (
         <StyledDay
             onClick={() => onClick(date, isSameMonth)}
@@ -30,6 +53,9 @@ const Day: FC<DayProps> = ({ date, highlightedDates, isSameMonth, isSelected, on
             textColor={styles?.textColor}
         >
             <StyledDayNumber isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
+            {categoryElements && (
+                <StyledDayCategoryWrapper>{categoryElements}</StyledDayCategoryWrapper>
+            )}
         </StyledDay>
     );
 };

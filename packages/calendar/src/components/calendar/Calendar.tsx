@@ -4,13 +4,19 @@ import { de } from 'date-fns/locale';
 import { StyledCalendar } from './Calendar.styles';
 import Month from './month/Month';
 import { getMonthAndYear, isDateInRange } from '../../utils/calendar';
-import type { HighlightedDates } from '../../types/calendar';
+import type { Categories, HighlightedDates } from '../../types/calendar';
+
+const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
 
 export type CalendarProps = {
     /**
+     * An array to group dates into a category.
+     */
+    categories?: Categories[];
+    /**
      * The last Month that can be displayed.
      */
-    endDate: Date;
+    endDate?: Date;
     /**
      * An array with dates and corresponding styles to highlight.
      */
@@ -36,11 +42,12 @@ export type CalendarProps = {
 
 const Calendar: FC<CalendarProps> = ({
     locale = de,
-    endDate,
+    endDate = END_DATE,
     startDate,
     highlightedDates,
     onSelect,
     selectedDate,
+    categories,
 }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
@@ -138,6 +145,7 @@ const Calendar: FC<CalendarProps> = ({
 
         const firstMonthElement = (
             <Month
+                categories={categories}
                 selectedDate={internalSelectedDate}
                 onSelect={handleSelect}
                 month={month}
@@ -165,6 +173,7 @@ const Calendar: FC<CalendarProps> = ({
 
             secondMonthElement = (
                 <Month
+                    categories={categories}
                     selectedDate={internalSelectedDate}
                     onSelect={handleSelect}
                     month={secondMonth}
@@ -182,6 +191,7 @@ const Calendar: FC<CalendarProps> = ({
         return [firstMonthElement, secondMonthElement];
     }, [
         currentDate,
+        categories,
         internalSelectedDate,
         handleSelect,
         handleLeftArrowClick,

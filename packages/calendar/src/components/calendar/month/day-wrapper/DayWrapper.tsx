@@ -2,7 +2,7 @@ import React, { FC, type ReactElement, useCallback, useMemo } from 'react';
 import { startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import Day from './day/Day';
-import type { EMonth, HighlightedDates } from '../../../../types/calendar';
+import type { Categories, EMonth, HighlightedDates } from '../../../../types/calendar';
 
 export type DayWrapperProps = {
     month: EMonth;
@@ -10,6 +10,7 @@ export type DayWrapperProps = {
     highlightedDates?: HighlightedDates[];
     onSelect: (date: Date) => void;
     selectedDate?: Date;
+    categories?: Categories[];
 };
 
 const DayWrapper: FC<DayWrapperProps> = ({
@@ -18,6 +19,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
     highlightedDates,
     onSelect,
     selectedDate,
+    categories,
 }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
@@ -51,6 +53,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
         days.forEach((day) => {
             items.push(
                 <Day
+                    categories={categories}
                     date={day}
                     isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
@@ -61,7 +64,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
         });
 
         return items;
-    }, [dayOfCurrentMonth, days, handleDayClick, highlightedDates, selectedDate]);
+    }, [categories, dayOfCurrentMonth, days, handleDayClick, highlightedDates, selectedDate]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };
