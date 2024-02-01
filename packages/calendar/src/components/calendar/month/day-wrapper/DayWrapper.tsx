@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useMemo } from 'react';
+import React, { FC, type ReactElement, useCallback, useMemo } from 'react';
 import { startOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import Day from './day/Day';
@@ -8,9 +8,10 @@ export type DayWrapperProps = {
     month: EMonth;
     year: string;
     highlightedDates?: HighlightedDates[];
+    onSelect?: (date: Date) => void;
 };
 
-const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates }) => {
+const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates, onSelect }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
@@ -28,11 +29,14 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates }) => {
         return dateArray;
     }, [dayOfCurrentMonth]);
 
-    const handleDayClick = (date: Date, shouldFireEvent: boolean) => {
-        if (shouldFireEvent) {
-            console.log('Clicked Date', date);
-        }
-    };
+    const handleDayClick = useCallback(
+        (date: Date, shouldFireEvent: boolean) => {
+            if (shouldFireEvent && typeof onSelect === 'function') {
+                onSelect(date);
+            }
+        },
+        [onSelect],
+    );
 
     const dayElements = useMemo(() => {
         const items: ReactElement[] = [];
@@ -49,7 +53,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates }) => {
         });
 
         return items;
-    }, [dayOfCurrentMonth, days, highlightedDates]);
+    }, [dayOfCurrentMonth, days, handleDayClick, highlightedDates]);
 
     return <StyledDayWrapper>{dayElements}</StyledDayWrapper>;
 };

@@ -11,9 +11,16 @@ export type CalendarProps = {
     startDate: Date;
     endDate: Date;
     highlightedDates?: HighlightedDates[];
+    onSelect?: (date: Date) => void;
 };
 
-const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate, highlightedDates }) => {
+const Calendar: FC<CalendarProps> = ({
+    locale = de,
+    endDate,
+    startDate,
+    highlightedDates,
+    onSelect,
+}) => {
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
 
@@ -92,6 +99,7 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate, highligh
 
         const firstMonthElement = (
             <Month
+                onSelect={onSelect}
                 month={month}
                 year={year}
                 onLeftArrowClick={handleLeftArrowClick}
@@ -117,6 +125,7 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate, highligh
 
             secondMonthElement = (
                 <Month
+                    onSelect={onSelect}
                     month={secondMonth}
                     year={secondYear}
                     onLeftArrowClick={handleLeftArrowClick}
@@ -132,10 +141,11 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate, highligh
         return [firstMonthElement, secondMonthElement];
     }, [
         currentDate,
-        shouldRenderTwoMonths,
+        onSelect,
         handleLeftArrowClick,
         handleRightArrowClick,
         startDate,
+        shouldRenderTwoMonths,
         endDate,
         locale,
         highlightedDates,

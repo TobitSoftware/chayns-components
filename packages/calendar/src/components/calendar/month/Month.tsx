@@ -21,6 +21,7 @@ export type MonthProps = {
     highlightedDates?: HighlightedDates[];
     onLeftArrowClick: () => void;
     onRightArrowClick: () => void;
+    onSelect?: (date: Date) => void;
 };
 
 const Month: FC<MonthProps> = ({
@@ -32,6 +33,7 @@ const Month: FC<MonthProps> = ({
     highlightedDates,
     onLeftArrowClick,
     onRightArrowClick,
+    onSelect,
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -54,7 +56,12 @@ const Month: FC<MonthProps> = ({
                 )}
             </StyledMonthHead>
             <WeekdayWrapper locale={locale} />
-            <DayWrapper month={month} year={year} highlightedDates={highlightedDates} />
+            <DayWrapper
+                month={month}
+                year={year}
+                onSelect={onSelect}
+                highlightedDates={highlightedDates}
+            />
         </StyledMonth>
     );
 };
