@@ -2,14 +2,15 @@ import React, { FC, type ReactElement, useMemo } from 'react';
 import { startOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import Day from './day/Day';
-import type { EMonth } from '../../../../types/calendar';
+import type { EMonth, HighlightedDates } from '../../../../types/calendar';
 
 export type DayWrapperProps = {
     month: EMonth;
     year: string;
+    highlightedDates?: HighlightedDates[];
 };
 
-const DayWrapper: FC<DayWrapperProps> = ({ month, year }) => {
+const DayWrapper: FC<DayWrapperProps> = ({ month, year, highlightedDates }) => {
     const dayOfCurrentMonth = useMemo(() => new Date(Number(year), month - 1, 13), [month, year]);
 
     const days = useMemo(() => {
@@ -42,6 +43,7 @@ const DayWrapper: FC<DayWrapperProps> = ({ month, year }) => {
                     date={day}
                     isSameMonth={isSameMonth(day, dayOfCurrentMonth)}
                     onClick={handleDayClick}
+                    highlightedDates={highlightedDates}
                 />,
             );
         });

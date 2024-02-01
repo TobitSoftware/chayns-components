@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useMemo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
     StyledMonth,
     StyledMonthHead,
@@ -9,7 +9,7 @@ import { Icon } from '@chayns-components/core';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
 import DayWrapper from './day-wrapper/DayWrapper';
 import type { Locale } from 'date-fns';
-import type { EMonth } from '../../../types/calendar';
+import type { EMonth, HighlightedDates } from '../../../types/calendar';
 import { formatMonth } from '../../../utils/calendar';
 
 export type MonthProps = {
@@ -18,6 +18,7 @@ export type MonthProps = {
     shouldShowLeftArrow: boolean;
     shouldShowRightArrow: boolean;
     locale: Locale;
+    highlightedDates?: HighlightedDates[];
     onLeftArrowClick: () => void;
     onRightArrowClick: () => void;
 };
@@ -28,6 +29,7 @@ const Month: FC<MonthProps> = ({
     shouldShowRightArrow,
     shouldShowLeftArrow,
     locale,
+    highlightedDates,
     onLeftArrowClick,
     onRightArrowClick,
 }) => {
@@ -49,7 +51,7 @@ const Month: FC<MonthProps> = ({
                 )}
             </StyledMonthHead>
             <WeekdayWrapper locale={locale} />
-            <DayWrapper month={month} year={year} />
+            <DayWrapper month={month} year={year} highlightedDates={highlightedDates} />
         </StyledMonth>
     );
 };

@@ -1,54 +1,54 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
-import { isAfter, isBefore, Locale } from 'date-fns';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { isBefore, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { StyledCalendar } from './Calendar.styles';
 import Month from './month/Month';
-import { getMonthAndYear } from '../../utils/calendar';
+import { getMonthAndYear, isDateInRange } from '../../utils/calendar';
+import type { HighlightedDates } from '../../types/calendar';
 
 export type CalendarProps = {
     locale?: Locale;
     startDate: Date;
     endDate: Date;
+    highlightedDates?: HighlightedDates[];
 };
 
-const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate }) => {
+const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate, highlightedDates }) => {
     const [currentDate, setCurrentDate] = useState<Date>();
 
     useEffect(() => {
         const date = new Date();
 
-        switch (true) {
-            case isAfter(date, endDate):
-                setCurrentDate(endDate);
-
-                return;
-            case isBefore(date, startDate):
-                setCurrentDate(startDate);
-
-                return;
-            default:
-                setCurrentDate(date);
-        }
+        setCurrentDate(isDateInRange({ startDate, endDate, currentDate: date }));
     }, [endDate, startDate]);
 
-    const handleLeftArrowClick = () => {
+    const handleLeftArrowClick = useCallback(() => {
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
             }
 
-            return new Date(prevDate.setMonth(prevDate.getMonth() - 1));
+            const date = new Date();
+
+            const newDate = new Date(date.setMonth(prevDate.getMonth() - 1));
+
+            return isDateInRange({ startDate, endDate, currentDate: newDate });
         });
-    };
-    const handleRightArrowClick = () => {
+    }, [endDate, startDate]);
+
+    const handleRightArrowClick = useCallback(() => {
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
             }
 
-            return new Date(prevDate.setMonth(prevDate.getMonth() + 1));
+            const date = new Date();
+
+            const newDate = new Date(date.setMonth(prevDate.getMonth() + 1));
+
+            return isDateInRange({ startDate, endDate, currentDate: newDate });
         });
-    };
+    }, [endDate, startDate]);
 
     const months = useMemo(() => {
         if (!currentDate) {
@@ -64,11 +64,19 @@ const Calendar: FC<CalendarProps> = ({ locale = de, endDate, startDate }) => {
                 onLeftArrowClick={handleLeftArrowClick}
                 onRightArrowClick={handleRightArrowClick}
                 shouldShowLeftArrow
-                shouldShowRightArrow
+                shouldShowRightArrow={isBefore(currentDate, endDate)}
                 locale={locale}
+                highlightedDates={highlightedDates}
             />
         );
-    }, [currentDate, locale]);
+    }, [
+        highlightedDates,
+        currentDate,
+        endDate,
+        handleLeftArrowClick,
+        handleRightArrowClick,
+        locale,
+    ]);
 
     return <StyledCalendar>{months}</StyledCalendar>;
 };
