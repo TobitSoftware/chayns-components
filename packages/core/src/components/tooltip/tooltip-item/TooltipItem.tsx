@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { type CSSProperties, FC, useMemo } from 'react';
 import {
     StyledTooltipItem,
     StyledTooltipItemButtonWrapper,
@@ -13,12 +13,13 @@ export type TooltipProps = {
     text: string;
     imageUrl?: string;
     button?: { text: string; onClick: () => void };
+    width?: CSSProperties['width'];
 };
 
-const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl }) =>
+const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width }) =>
     useMemo(
         () => (
-            <StyledTooltipItem>
+            <StyledTooltipItem width={width}>
                 {headline && <StyledTooltipItemHeadline>{headline}</StyledTooltipItemHeadline>}
                 {imageUrl && <StyledTooltipItemImage src={imageUrl} />}
                 <StyledTooltipItemText>{text}</StyledTooltipItemText>
@@ -29,7 +30,7 @@ const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl }) =>
                 )}
             </StyledTooltipItem>
         ),
-        [button, headline, imageUrl, text]
+        [button, headline, imageUrl, text],
     );
 
 TooltipItem.displayName = 'TooltipItem';
