@@ -30,7 +30,7 @@ export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
                   `
                 : css`
                       &::-webkit-scrollbar {
-                          width: 5px;
+                          height: 5px;
                       }
 
                       &::-webkit-scrollbar-track {
