@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
+import type { Browser } from 'detect-browser';
 
 export const StyledComboBox = styled.div`
     user-select: none;
@@ -93,6 +94,7 @@ type StyledComboBoxBodyProps = WithTheme<{
     minWidth: number;
     maxHeight: CSSProperties['maxHeight'];
     direction: ComboBoxDirection;
+    browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -124,11 +126,30 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
         `;
     }}
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
+    // Styles for custom scrollbar
+    ${({ browser, theme }: StyledComboBoxBodyProps) =>
+        browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 5px;
+                  }
 
-    &::-webkit-scrollbar-thumb {
-        background: rgba(160, 160, 160, 1);
-    }
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                  }
+              `}
 `;

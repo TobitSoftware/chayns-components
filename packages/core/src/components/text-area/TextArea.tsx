@@ -12,6 +12,7 @@ import React, {
     useState,
 } from 'react';
 import { StyledTextArea, StyledTextAreaInput, StyledTextAreaLabel } from './TextArea.styles';
+import { getDevice } from 'chayns-api';
 
 export type TextAreaProps = {
     /**
@@ -52,6 +53,8 @@ const TextArea: FC<TextAreaProps> = ({
     const [isOverflowing, setIsOverflowing] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const { browser } = getDevice();
 
     const adjustTextareaHeight = useCallback(() => {
         if (textareaRef.current) {
@@ -99,6 +102,7 @@ const TextArea: FC<TextAreaProps> = ({
         () => (
             <StyledTextArea>
                 <StyledTextAreaInput
+                    browser={browser?.name}
                     ref={textareaRef}
                     value={displayedValue}
                     onBlur={onBlur}

@@ -10,6 +10,7 @@ import {
     StyledEmojiPickerEmojis,
     StyledEmojiPickerEmojisNoContentInfo,
 } from './EmojiPickerEmojis.styles';
+import { getDevice } from 'chayns-api';
 
 export type EmojiPickerEmojisProps = {
     accessToken?: string;
@@ -32,6 +33,8 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const emojiRef = useRef<HTMLDivElement>(null);
     const shouldPreventEmojiControlsRef = useRef(false);
     const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
+
+    const { browser } = getDevice();
 
     const { addOrUpdateEmojiInHistory, historyEmojis } = useEmojiHistory({
         accessToken,
@@ -267,6 +270,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     return (
         <StyledEmojiPickerEmojis
+            browser={browser?.name}
             shouldPreventScroll={shouldPreventScroll}
             shouldShowNoContentInfo={shouldShowNoContentInfo}
             ref={emojiRef}

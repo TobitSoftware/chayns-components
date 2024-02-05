@@ -1,55 +1,53 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Browser } from 'detect-browser';
 
 type StyledCodeHighlighterProps = WithTheme<{
     codeTheme: CodeHighlighterTheme;
+    browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledCodeHighlighter = styled.div<StyledCodeHighlighterProps>`
-  margin: 4px 0;
-  background-color: ${({ codeTheme }) =>
-      codeTheme === CodeHighlighterTheme.Dark ? '#282c34' : '#fafafa'};
-  border-radius: 8px;
-  padding-bottom: 6px;
+    margin: 4px 0;
+    background-color: ${({ codeTheme }) =>
+        codeTheme === CodeHighlighterTheme.Dark ? '#282c34' : '#fafafa'};
+    border-radius: 8px;
+    padding-bottom: 6px;
 
-  pre {
-    margin: 0 !important;
-    overflow: auto;
-    padding: 1em;
-    line-height: 1.5;
+    pre {
+        margin: 0 !important;
+        overflow: auto;
+        padding: 1em;
+        line-height: 1.5;
 
-    // Styles for custom scrollbar
-    &::-webkit-scrollbar {
-      height: 5px;
+        // Styles for custom scrollbar
+        ${({ browser, theme }: StyledCodeHighlighterProps) =>
+            browser === 'firefox'
+                ? css`
+                      scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                      scrollbar-width: thin;
+                  `
+                : css`
+                      &::-webkit-scrollbar {
+                          width: 5px;
+                      }
+
+                      &::-webkit-scrollbar-track {
+                          background-color: transparent;
+                      }
+
+                      &::-webkit-scrollbar-button {
+                          background-color: transparent;
+                          height: 5px;
+                      }
+
+                      &::-webkit-scrollbar-thumb {
+                          background-color: rgba(${theme['text-rgb']}, 0.15);
+                          border-radius: 20px;
+                      }
+                  `}
     }
-
-    &::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-button {
-      background-color: transparent;
-      height: 2px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-
-      background-color: rgba(${({ codeTheme }) =>
-          codeTheme === CodeHighlighterTheme.Dark ? '229, 229, 229' : '153, 153, 153'},
-      1);
-      border-radius: 20px;
-    }
-
-    // Scrollbar styles for Firefox. The above styles are not supported in Firefox, these styles are
-    // only supported in Firefox:
-    * {
-      scrollbar-color: rgba(${({ codeTheme }) =>
-          codeTheme === CodeHighlighterTheme.Dark ? '229, 229, 229' : '153, 153, 153'},
-      1);)transparent;
-      scrollbar-width: thin;
-    }
-  }
 `;
 
 type StyledCodeHighlighterHeaderProps = WithTheme<{

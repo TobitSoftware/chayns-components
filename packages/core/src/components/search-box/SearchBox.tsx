@@ -18,6 +18,7 @@ import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
 import type { ISearchBoxItem } from '../../types/searchBox';
 import { searchList } from '../../utils/searchBox';
+import { getDevice } from 'chayns-api';
 
 export type SearchBoxProps = {
     /**
@@ -74,6 +75,8 @@ const SearchBox: FC<SearchBoxProps> = ({
     const boxRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    const { browser } = getDevice();
 
     /**
      * This function closes the list of items
@@ -281,6 +284,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 </div>
                 <AnimatePresence initial={false}>
                     <StyledMotionSearchBoxBody
+                        browser={browser?.name}
                         key="content"
                         height={height}
                         width={width}

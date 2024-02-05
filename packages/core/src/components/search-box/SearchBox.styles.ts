@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Browser } from 'detect-browser';
 
 export const StyledSearchBox = styled.div``;
 
 type StyledMotionSearchBoxBodyProps = WithTheme<{
     height: number;
     width: number;
+    browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
@@ -26,11 +28,30 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
+    // Styles for custom scrollbar
+    ${({ browser, theme }: StyledMotionSearchBoxBodyProps) =>
+        browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 5px;
+                  }
 
-    &::-webkit-scrollbar-thumb {
-        background: rgba(160, 160, 160, 1);
-    }
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                  }
+              `}
 `;

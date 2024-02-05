@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
+import type { Browser } from 'detect-browser';
 
 export const StyledTextArea = styled.div`
     display: flex;
@@ -13,6 +14,7 @@ type StyledTextAreaInputProps = WithTheme<{
     maxHeight: CSSProperties['maxHeight'];
     minHeight: CSSProperties['minHeight'];
     isOverflowing: boolean;
+    browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
@@ -27,14 +29,32 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     width: 100%;
     padding: 8px 10px;
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
+    // Styles for custom scrollbar
+    ${({ browser, theme }: StyledTextAreaInputProps) =>
+        browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 5px;
+                  }
 
-    &::-webkit-scrollbar-thumb {
-        background: rgba(160, 160, 160, 1);
-        border-radius: 3px;
-    }
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                  }
+              `}
 `;
 
 type StyledTextAreaLabelProps = WithTheme<unknown>;

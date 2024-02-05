@@ -14,6 +14,7 @@ import {
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
+import { getDevice } from 'chayns-api';
 
 export type CodeHighlighterProps = {
     /**
@@ -57,6 +58,8 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     shouldFormatCode = false,
     shouldShowLineNumbers = false,
 }) => {
+    const { browser } = getDevice();
+
     // function to style highlighted code
     const lineWrapper = useCallback(
         (lineNumber: number) => {
@@ -95,7 +98,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter codeTheme={theme}>
+            <StyledCodeHighlighter browser={browser?.name} codeTheme={theme}>
                 <StyledCodeHighlighterHeader codeTheme={theme}>
                     <StyledCodeHighlighterFileName codeTheme={theme}>
                         {formatLanguage(language)}
