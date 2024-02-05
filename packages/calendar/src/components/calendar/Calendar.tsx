@@ -152,28 +152,20 @@ const Calendar: FC<CalendarProps> = ({
         const { month, year } = getMonthAndYear(currentDate);
 
         const firstMonthElement = (
-            <StyledMotionMonthWrapper
-                key={`first-month-${month}`}
-                animate={{ x: direction ? (direction === 'left' ? '100%' : '-100%') : 0 }}
-                onAnimationComplete={onAnimationFinish}
-                transition={{ duration: 1.2 }}
-            >
-                <Month
-                    categories={categories}
-                    selectedDate={internalSelectedDate}
-                    onSelect={handleSelect}
-                    month={month}
-                    year={year}
-                    onLeftArrowClick={handleLeftArrowClick}
-                    onRightArrowClick={handleRightArrowClick}
-                    shouldShowLeftArrow={!isSameMonth(currentDate, startDate)}
-                    shouldShowRightArrow={
-                        !shouldRenderTwoMonths && !isSameMonth(currentDate, endDate)
-                    }
-                    locale={locale}
-                    highlightedDates={highlightedDates}
-                />
-            </StyledMotionMonthWrapper>
+            <Month
+                direction={direction}
+                categories={categories}
+                selectedDate={internalSelectedDate}
+                onSelect={handleSelect}
+                month={month}
+                year={year}
+                onLeftArrowClick={handleLeftArrowClick}
+                onRightArrowClick={handleRightArrowClick}
+                shouldShowLeftArrow={!isSameMonth(currentDate, startDate)}
+                shouldShowRightArrow={!shouldRenderTwoMonths && !isSameMonth(currentDate, endDate)}
+                locale={locale}
+                highlightedDates={highlightedDates}
+            />
         );
 
         let secondMonthElement;
@@ -189,26 +181,20 @@ const Calendar: FC<CalendarProps> = ({
             const { month: secondMonth, year: secondYear } = getMonthAndYear(newDate);
 
             secondMonthElement = (
-                <StyledMotionMonthWrapper
-                    key={`second-month-${month}`}
-                    animate={{ x: direction ? (direction === 'left' ? '100%' : '-100%') : 0 }}
-                    onAnimationComplete={onAnimationFinish}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Month
-                        categories={categories}
-                        selectedDate={internalSelectedDate}
-                        onSelect={handleSelect}
-                        month={secondMonth}
-                        year={secondYear}
-                        onLeftArrowClick={handleLeftArrowClick}
-                        onRightArrowClick={handleRightArrowClick}
-                        shouldShowLeftArrow={false}
-                        shouldShowRightArrow={!isSameMonth(newDate, endDate)}
-                        locale={locale}
-                        highlightedDates={highlightedDates}
-                    />
-                </StyledMotionMonthWrapper>
+                <Month
+                    categories={categories}
+                    direction={direction}
+                    selectedDate={internalSelectedDate}
+                    onSelect={handleSelect}
+                    month={secondMonth}
+                    year={secondYear}
+                    onLeftArrowClick={handleLeftArrowClick}
+                    onRightArrowClick={handleRightArrowClick}
+                    shouldShowLeftArrow={false}
+                    shouldShowRightArrow={!isSameMonth(newDate, endDate)}
+                    locale={locale}
+                    highlightedDates={highlightedDates}
+                />
             );
         }
 

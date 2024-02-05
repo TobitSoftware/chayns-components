@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
+    StyledDayAnimationWrapper,
     StyledMonth,
     StyledMonthHead,
     StyledMonthIconWrapper,
     StyledMonthName,
+    StyledMotionDayWrapper,
 } from './Month.styles';
 import { Icon } from '@chayns-components/core';
 import WeekdayWrapper from './weekday-wrapper/WeekdayWrapper';
@@ -11,6 +13,7 @@ import DayWrapper from './day-wrapper/DayWrapper';
 import type { Locale } from 'date-fns';
 import type { Categories, EMonth, HighlightedDates } from '../../../types/calendar';
 import { formatMonth } from '../../../utils/calendar';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export type MonthProps = {
     month: EMonth;
@@ -24,6 +27,7 @@ export type MonthProps = {
     onSelect: (date: Date) => void;
     selectedDate?: Date;
     categories?: Categories[];
+    direction?: 'left' | 'right';
 };
 
 const Month: FC<MonthProps> = ({
@@ -38,6 +42,7 @@ const Month: FC<MonthProps> = ({
     selectedDate,
     onSelect,
     categories,
+    direction = 'left',
 }) => {
     const [currentYear] = useState(new Date().getFullYear());
 
@@ -60,14 +65,26 @@ const Month: FC<MonthProps> = ({
                 )}
             </StyledMonthHead>
             <WeekdayWrapper locale={locale} />
-            <DayWrapper
-                categories={categories}
-                selectedDate={selectedDate}
-                month={month}
-                year={year}
-                onSelect={onSelect}
-                highlightedDates={highlightedDates}
-            />
+            <StyledDayAnimationWrapper>
+                <AnimatePresence>
+                    <StyledMotionDayWrapper
+                        key={month}
+                        initial={{ x: direction === 'left' ? '-100%' : '100%' }}
+                        animate={{ x: '0%' }}
+                        exit={{ x: direction === 'left' ? '100%' : '-100%' }}
+                        transition={{ duration: 1.5 }}
+                    >
+                        <DayWrapper
+                            categories={categories}
+                            selectedDate={selectedDate}
+                            month={month}
+                            year={year}
+                            onSelect={onSelect}
+                            highlightedDates={highlightedDates}
+                        />
+                    </StyledMotionDayWrapper>
+                </AnimatePresence>
+            </StyledDayAnimationWrapper>
         </StyledMonth>
     );
 };
