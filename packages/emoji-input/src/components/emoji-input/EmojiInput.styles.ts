@@ -83,24 +83,24 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
 
     // Styles for custom scrollbar
     &::-webkit-scrollbar {
-        width: 5px;
+        width: 5px !important;
     }
 
     &::-webkit-scrollbar-track {
-        background-color: transparent;
+        background-color: transparent !important;
     }
 
     &::-webkit-scrollbar-button {
-        background-color: transparent;
-        height: 5px;
+        background-color: transparent !important;
+        height: 5px !important;
     }
 
     &::-webkit-scrollbar-thumb {
         background-color: rgba(
             ${({ theme }: StyledEmojiInputEditorProps) => theme['text-rgb']},
             0.15
-        );
-        border-radius: 20px;
+        ) !important;
+        border-radius: 20px !important;
     }
 
     // Scrollbar styles for Firefox. The above styles are not supported in Firefox, these styles are
