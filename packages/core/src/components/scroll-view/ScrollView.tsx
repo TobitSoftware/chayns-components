@@ -22,7 +22,7 @@ const ScrollView: FC<ScrollViewProps> = ({ maxHeight = '300px', children }) => {
                 {children}
             </StyledScrollView>
         ),
-        [children, maxHeight],
+        [browser?.name, children, maxHeight],
     );
 };
 

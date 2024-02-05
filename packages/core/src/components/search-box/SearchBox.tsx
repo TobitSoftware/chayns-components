@@ -305,6 +305,7 @@ const SearchBox: FC<SearchBoxProps> = ({
             </StyledSearchBox>
         ),
         [
+            browser?.name,
             content,
             handleBlur,
             handleChange,

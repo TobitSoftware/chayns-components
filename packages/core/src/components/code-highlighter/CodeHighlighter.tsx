@@ -116,7 +116,16 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper, formattedCode],
+        [
+            browser?.name,
+            theme,
+            language,
+            code,
+            copyButtonText,
+            shouldShowLineNumbers,
+            lineWrapper,
+            formattedCode,
+        ],
     );
 };
 

@@ -219,6 +219,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             </StyledMotionComboBoxBody>
         );
     }, [
+        browser?.name,
         direction,
         handleSetSelectedItem,
         height,

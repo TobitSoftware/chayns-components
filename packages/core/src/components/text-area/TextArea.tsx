@@ -115,7 +115,16 @@ const TextArea: FC<TextAreaProps> = ({
                 {!displayedValue && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
             </StyledTextArea>
         ),
-        [displayedValue, handleChange, isOverflowing, maxHeight, onBlur, placeholder],
+        [
+            browser?.name,
+            displayedValue,
+            handleChange,
+            isOverflowing,
+            maxHeight,
+            minHeight,
+            onBlur,
+            placeholder,
+        ],
     );
 };
 

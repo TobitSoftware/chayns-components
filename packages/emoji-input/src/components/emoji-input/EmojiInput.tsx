@@ -19,6 +19,7 @@ import React, {
     useState,
     type FormEvent,
 } from 'react';
+import { getDevice } from 'chayns-api';
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';
@@ -39,7 +40,6 @@ import {
     StyledMotionEmojiInputProgress,
 } from './EmojiInput.styles';
 import PrefixElement from './prefix-element/PrefixElement';
-import { getDevice } from 'chayns-api';
 
 export type EmojiInputProps = {
     /**
