@@ -53,6 +53,7 @@ const DayWrapper: FC<DayWrapperProps> = ({
         days.forEach((day) => {
             items.push(
                 <Day
+                    key={`single-day-${day.toDateString()}`}
                     categories={categories}
                     date={day}
                     isSelected={selectedDate ? isSameDay(day, selectedDate) : false}

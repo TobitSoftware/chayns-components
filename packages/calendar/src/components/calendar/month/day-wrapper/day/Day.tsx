@@ -41,7 +41,9 @@ const Day: FC<DayProps> = ({
         return categories.flatMap((category) =>
             category.dates
                 .filter((day) => isSameDay(day, date))
-                .map((day) => <Category key={day.getTime()} color={category.color} />),
+                .map((day) => (
+                    <Category key={day.getTime() * Math.random()} color={category.color} />
+                )),
         );
     }, [categories, date]);
 
