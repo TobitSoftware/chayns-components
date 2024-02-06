@@ -1,5 +1,4 @@
 import {
-    BB_BOLD_REGEX,
     BB_LC_MENTION_REGEX,
     BB_NER_IGNORE_REGEX,
     BB_NER_REPLACE_REGEX,
@@ -28,7 +27,6 @@ export const convertTextToHTML = (text: string) => {
     result = unescapeHTML(result);
 
     result = result
-        .replace(BB_BOLD_REGEX, '<b>$1</b>')
         .replace(
             BB_LC_MENTION_REGEX,
             '<lc_mention contenteditable="false" id="$1"><span>@</span>$2</lc_mention>',
