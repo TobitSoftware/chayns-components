@@ -8,5 +8,5 @@ export interface GetUserSignatureResult {
 
 export interface SignatureDialogResult {
     buttonType: ButtonType;
-    value: string;
+    result: string;
 }

@@ -62,7 +62,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleCallDialog = useCallback(
             async (shouldSubscribe: boolean) => {
-                const result = (await createDialog({
+                const dialog = (await createDialog({
                     type: DialogType.SIGNATURE,
                     buttons: [
                         {
@@ -76,14 +76,10 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                     ],
                 }).open()) as SignatureDialogResult;
 
-                if (!result) {
-                    return;
-                }
-
-                if (result.buttonType === 1 && result.value) {
-                    await putUserSignature(result.value).then((success) => {
+                if (dialog.buttonType === 1 && dialog.result) {
+                    await putUserSignature(dialog.result).then((success) => {
                         if (success) {
-                            setSignatureUrl(result.value);
+                            setSignatureUrl(dialog.result);
 
                             if (shouldSubscribe) {
                                 setHasSubscribed(true);
@@ -92,7 +88,7 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
                                     onSubscribe();
                                 }
                             } else if (typeof onEdit === 'function') {
-                                onEdit(result.value);
+                                onEdit(dialog.result);
                             }
                         }
                     });
