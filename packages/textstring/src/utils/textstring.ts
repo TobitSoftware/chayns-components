@@ -26,6 +26,7 @@ export const selectLanguageToChange = async ({ textstringName }: SelectLanguageT
     // ToDo add new dialog frontend
     await createDialog({
         type: DialogType.IFRAME,
+        buttons: [],
         url: 'https://tapp-staging.chayns-static.space/text-string-tapp/v1/iframe-edit.html',
         dialogInput: { textstring: textstringName },
     }).open();
