@@ -10,6 +10,8 @@ import { putUserSignature } from '../../api/signature/put';
 import { deleteUserSignature } from '../../api/signature/delete';
 import { getUserSignature } from '../../api/signature/get';
 import Icon from '../icon/Icon';
+import { createDialog, DialogType } from 'chayns-api';
+import type { SignatureDialogResult } from '../../types/signature';
 
 export interface SignatureRef {
     edit: VoidFunction;
@@ -60,39 +62,41 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
 
         const handleCallDialog = useCallback(
             async (shouldSubscribe: boolean) => {
-                // ToDo replace with new dialog if ready
-                await chayns.dialog
-                    .signature({
-                        buttons: [
-                            {
-                                text: 'Speichern',
-                                buttonType: 1,
-                            },
-                            {
-                                text: 'Abbrechen',
-                                buttonType: 0,
-                            },
-                        ],
-                    })
-                    .then(async (result) => {
-                        if (result.buttonType === 1 && result.value) {
-                            await putUserSignature(result.value).then((success) => {
-                                if (success) {
-                                    setSignatureUrl(result.value);
+                const result = (await createDialog({
+                    type: DialogType.SIGNATURE,
+                    buttons: [
+                        {
+                            text: 'Speichern',
+                            type: 1,
+                        },
+                        {
+                            text: 'Abbrechen',
+                            type: -1,
+                        },
+                    ],
+                }).open()) as SignatureDialogResult;
 
-                                    if (shouldSubscribe) {
-                                        setHasSubscribed(true);
+                if (!result) {
+                    return;
+                }
 
-                                        if (typeof onSubscribe === 'function') {
-                                            onSubscribe();
-                                        }
-                                    } else if (typeof onEdit === 'function') {
-                                        onEdit(result.value);
-                                    }
+                if (result.buttonType === 1 && result.value) {
+                    await putUserSignature(result.value).then((success) => {
+                        if (success) {
+                            setSignatureUrl(result.value);
+
+                            if (shouldSubscribe) {
+                                setHasSubscribed(true);
+
+                                if (typeof onSubscribe === 'function') {
+                                    onSubscribe();
                                 }
-                            });
+                            } else if (typeof onEdit === 'function') {
+                                onEdit(result.value);
+                            }
                         }
                     });
+                }
             },
             [onEdit, onSubscribe],
         );

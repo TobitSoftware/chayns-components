@@ -1,7 +1,10 @@
 import { SIGNATURE_SERVER_URL } from '../../constants/signature';
+import { getAccessToken } from 'chayns-api';
 
 export const putUserSignature = async (dataURL: string) => {
-    if (!chayns.env.user.isAuthenticated) {
+    const { accessToken } = await getAccessToken();
+
+    if (!accessToken) {
         return false;
     }
 
@@ -10,7 +13,7 @@ export const putUserSignature = async (dataURL: string) => {
             method: 'PUT',
             headers: {
                 accept: 'application/json',
-                authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+                authorization: `bearer ${accessToken}`,
                 'content-type': 'application/json',
             },
             body: JSON.stringify({ value: dataURL }),
