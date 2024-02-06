@@ -50,14 +50,14 @@ const TextString: FC<TextStringProps> = ({
         let element = createElement(
             '',
             childrenStyles ? { style: childrenStyles } : null,
-            children
+            children,
         );
 
         if (!children) {
             element = createElement(
                 childrenTagName || 'span',
                 childrenStyles ? { style: childrenStyles } : null,
-                text
+                text,
             );
         }
 
@@ -69,19 +69,19 @@ const TextString: FC<TextStringProps> = ({
             if (event.ctrlKey) {
                 void isTobitEmployee().then((inGroup) => {
                     if (inGroup) {
-                        selectLanguageToChange({
+                        void selectLanguageToChange({
                             textstringName: textString.name,
                         });
                     }
                 });
             }
         },
-        [textString.name]
+        [textString.name],
     );
 
     return useMemo(
         () => <StyledTextString onClick={handleClick}>{childElement}</StyledTextString>,
-        [childElement, handleClick]
+        [childElement, handleClick],
     );
 };
 
