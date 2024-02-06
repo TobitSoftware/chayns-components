@@ -5,7 +5,7 @@ import type {
     Categories,
     HighlightedDates,
     HighlightedDateStyles,
-} from '../../../../../types/calendar';
+} from '../../../../../../types/calendar';
 import Category from './category/Category';
 
 export type DayProps = {

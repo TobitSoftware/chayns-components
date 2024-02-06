@@ -2,7 +2,7 @@ import React, { FC, type ReactElement, useCallback, useMemo } from 'react';
 import { startOfMonth, startOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 import { StyledDayWrapper } from './DayWrapper.styles';
 import Day from './day/Day';
-import type { Categories, EMonth, HighlightedDates } from '../../../../types/calendar';
+import type { Categories, EMonth, HighlightedDates } from '../../../../../types/calendar';
 
 export type DayWrapperProps = {
     month: EMonth;
