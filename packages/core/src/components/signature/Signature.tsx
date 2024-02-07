@@ -64,16 +64,6 @@ const Signature = forwardRef<SignatureRef, SignatureProps>(
             async (shouldSubscribe: boolean) => {
                 const dialog = (await createDialog({
                     type: DialogType.SIGNATURE,
-                    buttons: [
-                        {
-                            text: 'Speichern',
-                            type: 1,
-                        },
-                        {
-                            text: 'Abbrechen',
-                            type: -1,
-                        },
-                    ],
                 }).open()) as SignatureDialogResult;
 
                 if (dialog.buttonType === 1 && dialog.result) {
