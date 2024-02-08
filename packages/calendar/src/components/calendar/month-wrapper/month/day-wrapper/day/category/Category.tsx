@@ -5,11 +5,7 @@ export type CategoryProps = {
     color: CSSProperties['color'];
 };
 
-const Category: FC<CategoryProps> = ({ color }) => {
-    const test = '';
-
-    return <StyledCategory color={color} />;
-};
+const Category: FC<CategoryProps> = ({ color }) => <StyledCategory color={color} />;
 
 Category.displayName = 'Category';
 

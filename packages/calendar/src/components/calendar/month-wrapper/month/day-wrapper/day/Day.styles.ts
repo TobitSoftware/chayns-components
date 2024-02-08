@@ -50,7 +50,9 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
 export const StyledDayCategoryWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 1px;
+    justify-content: center;
+    gap: 6%;
+    width: 100%;
     position: absolute;
     bottom: 2px;
 `;
