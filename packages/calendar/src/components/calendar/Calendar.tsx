@@ -6,6 +6,7 @@ import { getNewDate, isDateInRange } from '../../utils/calendar';
 import type { Categories, HighlightedDates } from '../../types/calendar';
 import { Icon } from '@chayns-components/core';
 import MonthWrapper from './month-wrapper/MonthWrapper';
+import { AnimatePresence } from 'framer-motion';
 
 const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
 
@@ -142,34 +143,22 @@ const Calendar: FC<CalendarProps> = ({
         [onSelect],
     );
 
-    const currentDates = useMemo(() => {
-        if (!currentDate) {
-            return undefined;
-        }
-
-        if (shouldRenderTwoMonths) {
-            return [currentDate];
-        }
-
-        const newDate = getNewDate(1, currentDate);
-
-        return [currentDate, newDate];
-    }, [currentDate, shouldRenderTwoMonths]);
-
     return (
         <StyledCalendar ref={calendarRef}>
             <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
                 <Icon icons={['fa fa-angle-left']} />
             </StyledCalendarIconWrapper>
-            <MonthWrapper
-                currentDates={currentDates}
-                locale={locale}
-                direction={direction}
-                onSelect={handleSelect}
-                selectedDate={internalSelectedDate}
-                highlightedDates={highlightedDates}
-                categories={categories}
-            />
+            <AnimatePresence initial={false}>
+                <MonthWrapper
+                    currentDate={currentDate}
+                    locale={locale}
+                    direction={direction}
+                    onSelect={handleSelect}
+                    selectedDate={internalSelectedDate}
+                    highlightedDates={highlightedDates}
+                    categories={categories}
+                />
+            </AnimatePresence>
             <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
                 <Icon icons={['fa fa-angle-right']} />
             </StyledCalendarIconWrapper>
