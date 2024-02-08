@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { StyledCalendar, StyledCalendarIconWrapper } from './Calendar.styles';
-import { isDateInRange } from '../../utils/calendar';
+import { getNewDate, isDateInRange } from '../../utils/calendar';
 import type { Categories, HighlightedDates } from '../../types/calendar';
 import { Icon } from '@chayns-components/core';
 import MonthWrapper from './month-wrapper/MonthWrapper';
@@ -53,6 +53,7 @@ const Calendar: FC<CalendarProps> = ({
     const [currentDate, setCurrentDate] = useState<Date>();
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
+    const [direction, setDirection] = useState<'left' | 'right'>();
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +94,8 @@ const Calendar: FC<CalendarProps> = ({
     }, [endDate, startDate]);
 
     const handleLeftArrowClick = useCallback(() => {
+        setDirection('left');
+
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
@@ -110,6 +113,8 @@ const Calendar: FC<CalendarProps> = ({
     }, [endDate, startDate]);
 
     const handleRightArrowClick = useCallback(() => {
+        setDirection('right');
+
         setCurrentDate((prevDate) => {
             if (!prevDate) {
                 return prevDate;
@@ -137,15 +142,29 @@ const Calendar: FC<CalendarProps> = ({
         [onSelect],
     );
 
+    const currentDates = useMemo(() => {
+        if (!currentDate) {
+            return undefined;
+        }
+
+        if (shouldRenderTwoMonths) {
+            return [currentDate];
+        }
+
+        const newDate = getNewDate(1, currentDate);
+
+        return [currentDate, newDate];
+    }, [currentDate, shouldRenderTwoMonths]);
+
     return (
         <StyledCalendar ref={calendarRef}>
             <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
                 <Icon icons={['fa fa-angle-left']} />
             </StyledCalendarIconWrapper>
             <MonthWrapper
-                currentDate={currentDate}
-                shouldRenderTwoMonth={shouldRenderTwoMonths}
+                currentDates={currentDates}
                 locale={locale}
+                direction={direction}
                 onSelect={handleSelect}
                 selectedDate={internalSelectedDate}
                 highlightedDates={highlightedDates}

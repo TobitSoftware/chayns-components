@@ -38,5 +38,20 @@ export const isDateInRange = ({ startDate, endDate, currentDate }: IsDateInRange
     }
 };
 
+export const getNewDate = (index: number, currentDate: Date) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + index);
+
+    if (currentDate.getMonth() === 11 && newDate.getMonth() === 0) {
+        newDate.setFullYear(currentDate.getFullYear() + index);
+    }
+
+    if (currentDate.getMonth() === 0 && newDate.getMonth() === 11) {
+        newDate.setFullYear(currentDate.getFullYear() - index);
+    }
+
+    return newDate;
+};
+
 export const formatMonth = ({ month, locale }: FormatMonthOptions) =>
     format(new Date(2022, month - 1, 1), 'MMMM', { locale });

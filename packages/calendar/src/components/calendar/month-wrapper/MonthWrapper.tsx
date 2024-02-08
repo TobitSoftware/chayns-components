@@ -1,18 +1,10 @@
-import React, {
-    FC,
-    type ReactElement,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { FC, type ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import type { Locale } from 'date-fns';
 import { StyledMonthWrapper } from './MonthWrapper.styles';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
-import { getMonthAndYear } from '../../../utils/calendar';
-import Month from './month/Month';
+import Month, { MonthPosition } from './month/Month';
+import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 
 export type MonthWrapperProps = {
     locale: Locale;
@@ -20,56 +12,84 @@ export type MonthWrapperProps = {
     onSelect: (date: Date) => void;
     selectedDate?: Date;
     categories?: Categories[];
-    shouldRenderTwoMonth: boolean;
-    currentDates: Date[];
+    currentDates?: Date[];
+    direction?: 'left' | 'right';
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
     locale,
-    shouldRenderTwoMonth,
     currentDates,
     highlightedDates,
     selectedDate,
     onSelect,
     categories,
+    direction,
 }) => {
+    const shouldShowTwoMonths = useMemo(
+        () => !(currentDates?.length ?? 1 >= 2),
+        [currentDates?.length],
+    );
+
     const content = useMemo(() => {
         const items: ReactElement[] = [];
 
-        currentDates.forEach((date) => {
+        if (shouldShowTwoMonths) {
+            return items;
+        }
+
+        const firstDate = currentDates ? currentDates[0] : undefined;
+
+        if (!firstDate) {
+            return items;
+        }
+
+        for (let i = -1; i < 2; i++) {
+            const date = getNewDate(i, firstDate);
+
             const { month, year } = getMonthAndYear(date);
 
-            items.push(<Month />);
-        });
+            let position;
+
+            switch (i) {
+                case -1:
+                    position = MonthPosition.Prev;
+                    break;
+                case 0:
+                    position = MonthPosition.Current;
+                    break;
+                default:
+                    position = MonthPosition.Next;
+                    break;
+            }
+
+            items.push(
+                <Month
+                    month={month}
+                    year={year}
+                    locale={locale}
+                    onSelect={onSelect}
+                    highlightedDates={highlightedDates}
+                    categories={categories}
+                    selectedDate={selectedDate}
+                    position={position}
+                />,
+            );
+        }
 
         return items;
-    }, []);
-
-    const [currentDate, setCurrentDate] = useState<Date>();
+    }, [
+        categories,
+        currentDates,
+        highlightedDates,
+        locale,
+        onSelect,
+        selectedDate,
+        shouldShowTwoMonths,
+    ]);
 
     return (
-        <StyledMonthWrapper ref={calendarRef}>
-            <StyledMonthWrapperIconWrapper onClick={handleLeftArrowClick}>
-                <Icon icons={['fa fa-angle-left']} />
-            </StyledMonthWrapperIconWrapper>
-            <AnimatePresence initial={false}>
-                <StyledMotionMonthWrapper
-                    key={page}
-                    custom={direction}
-                    variants={variants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                        duration: 0.2,
-                    }}
-                >
-                    {content[imageIndex]}
-                </StyledMotionMonthWrapper>
-            </AnimatePresence>
-            <StyledMonthWrapperIconWrapper onClick={handleRightArrowClick}>
-                <Icon icons={['fa fa-angle-right']} />
-            </StyledMonthWrapperIconWrapper>
+        <StyledMonthWrapper>
+            <AnimatePresence initial={false}>{content}</AnimatePresence>
         </StyledMonthWrapper>
     );
 };

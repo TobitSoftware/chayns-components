@@ -1,4 +1,4 @@
-import React, { FC, type ReactElement, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { isSameDay } from 'date-fns';
 import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
 import type {

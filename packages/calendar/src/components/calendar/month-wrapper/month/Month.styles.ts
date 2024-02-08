@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const StyledMonth = styled.div``;
+export const StyledMonth = styled.div`
+    position: absolute;
+    width: 100%;
+`;
 
 export const StyledMonthHead = styled.div`
     display: flex;

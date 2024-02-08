@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 
 export const StyledCalendar = styled.div`
     display: flex;
-    gap: 24px;
 `;
 
 export const StyledCalendarIconWrapper = styled.div`
