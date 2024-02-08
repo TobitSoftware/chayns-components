@@ -29,6 +29,7 @@ export const StyledDay = styled.div<StyledDayProps>`
 
 type StyledDayNumberProps = WithTheme<{
     isSelected: boolean;
+    fontSize: CSSProperties['fontSize'];
 }>;
 
 export const StyledDayNumber = styled.div<StyledDayNumberProps>`
@@ -38,6 +39,7 @@ export const StyledDayNumber = styled.div<StyledDayNumberProps>`
     justify-content: center;
     width: 80%;
     height: 80%;
+    font-size: ${({ fontSize }) => fontSize};
 
     ${({ isSelected, theme }) =>
         isSelected &&

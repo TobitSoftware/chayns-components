@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { type CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react';
 import { isSameDay } from 'date-fns';
 import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
 import type {
@@ -25,6 +25,10 @@ const Day: FC<DayProps> = ({
     isSelected,
     onClick,
 }) => {
+    const [fontSize, setFontSize] = useState<CSSProperties['fontSize']>();
+
+    const dayRef = useRef<HTMLDivElement>(null);
+
     const styles: HighlightedDateStyles | undefined = useMemo(() => {
         if (!highlightedDates || !isSameMonth) {
             return undefined;
@@ -47,14 +51,37 @@ const Day: FC<DayProps> = ({
         );
     }, [categories, date]);
 
+    useEffect(() => {
+        if (dayRef.current) {
+            const resizeObserver = new ResizeObserver((entries) => {
+                if (entries && entries[0]) {
+                    const observedWidth = entries[0].contentRect.width;
+
+                    setFontSize(`${observedWidth / 2}px`);
+                }
+            });
+
+            resizeObserver.observe(dayRef.current);
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }
+
+        return () => {};
+    }, []);
+
     return (
         <StyledDay
+            ref={dayRef}
             onClick={() => onClick(date, isSameMonth)}
             isSameMonth={isSameMonth}
             backgroundColor={styles?.backgroundColor}
             textColor={styles?.textColor}
         >
-            <StyledDayNumber isSelected={isSelected}>{date.getDate()}</StyledDayNumber>
+            <StyledDayNumber isSelected={isSelected} fontSize={fontSize}>
+                {date.getDate()}
+            </StyledDayNumber>
             {categoryElements && (
                 <StyledDayCategoryWrapper>{categoryElements}</StyledDayCategoryWrapper>
             )}
