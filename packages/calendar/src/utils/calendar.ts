@@ -43,11 +43,11 @@ export const getNewDate = (index: number, currentDate: Date) => {
     newDate.setMonth(currentDate.getMonth() + index);
 
     if (currentDate.getMonth() === 11 && newDate.getMonth() === 0) {
-        newDate.setFullYear(currentDate.getFullYear() + index);
+        newDate.setFullYear(currentDate.getFullYear() + 1);
     }
 
     if (currentDate.getMonth() === 0 && newDate.getMonth() === 11) {
-        newDate.setFullYear(currentDate.getFullYear() - index);
+        newDate.setFullYear(currentDate.getFullYear() - 1);
     }
 
     return newDate;

@@ -1,7 +1,11 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Locale } from 'date-fns';
+import { isSameMonth, type Locale } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { StyledCalendar, StyledCalendarIconWrapper } from './Calendar.styles';
+import {
+    StyledCalendar,
+    StyledCalendarIconWrapper,
+    StyledCalendarIconWrapperPseudo,
+} from './Calendar.styles';
 import { getNewDate, isDateInRange } from '../../utils/calendar';
 import type { Categories, HighlightedDates } from '../../types/calendar';
 import { Icon } from '@chayns-components/core';
@@ -55,6 +59,7 @@ const Calendar: FC<CalendarProps> = ({
     const [shouldRenderTwoMonths, setShouldRenderTwoMonths] = useState(true);
     const [internalSelectedDate, setInternalSelectedDate] = useState<Date>();
     const [direction, setDirection] = useState<'left' | 'right'>();
+    const [width, setWidth] = useState(0);
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +74,8 @@ const Calendar: FC<CalendarProps> = ({
             const resizeObserver = new ResizeObserver((entries) => {
                 if (entries && entries[0]) {
                     const observedWidth = entries[0].contentRect.width;
+
+                    setWidth(observedWidth - 30);
 
                     if (observedWidth < 430) {
                         setShouldRenderTwoMonths(false);
@@ -102,12 +109,7 @@ const Calendar: FC<CalendarProps> = ({
                 return prevDate;
             }
 
-            const newDate = new Date(prevDate);
-            newDate.setMonth(prevDate.getMonth() - 1);
-
-            if (prevDate.getMonth() === 0 && newDate.getMonth() === 11) {
-                newDate.setFullYear(prevDate.getFullYear() - 1);
-            }
+            const newDate = getNewDate(-1, prevDate);
 
             return isDateInRange({ startDate, endDate, currentDate: newDate });
         });
@@ -121,12 +123,7 @@ const Calendar: FC<CalendarProps> = ({
                 return prevDate;
             }
 
-            const newDate = new Date(prevDate);
-            newDate.setMonth(prevDate.getMonth() + 1);
-
-            if (prevDate.getMonth() === 11 && newDate.getMonth() === 0) {
-                newDate.setFullYear(prevDate.getFullYear() + 1);
-            }
+            const newDate = getNewDate(1, prevDate);
 
             return isDateInRange({ startDate, endDate, currentDate: newDate });
         });
@@ -143,25 +140,58 @@ const Calendar: FC<CalendarProps> = ({
         [onSelect],
     );
 
+    const handleAnimationFinished = () => {
+        setDirection(undefined);
+    };
+
+    const ShouldShowLeftArrow = useMemo(() => {
+        if (!currentDate) {
+            return false;
+        }
+
+        return !isSameMonth(currentDate, startDate);
+    }, [currentDate, startDate]);
+
+    const ShouldShowRightArrow = useMemo(() => {
+        if (!currentDate) {
+            return false;
+        }
+
+        return !isSameMonth(currentDate, endDate);
+    }, [currentDate, endDate]);
+
     return (
         <StyledCalendar ref={calendarRef}>
-            <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
-                <Icon icons={['fa fa-angle-left']} />
-            </StyledCalendarIconWrapper>
-            <AnimatePresence initial={false}>
-                <MonthWrapper
-                    currentDate={currentDate}
-                    locale={locale}
-                    direction={direction}
-                    onSelect={handleSelect}
-                    selectedDate={internalSelectedDate}
-                    highlightedDates={highlightedDates}
-                    categories={categories}
-                />
-            </AnimatePresence>
-            <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
-                <Icon icons={['fa fa-angle-right']} />
-            </StyledCalendarIconWrapper>
+            {ShouldShowLeftArrow ? (
+                <StyledCalendarIconWrapper onClick={handleLeftArrowClick}>
+                    <Icon icons={['fa fa-angle-left']} />
+                </StyledCalendarIconWrapper>
+            ) : (
+                <StyledCalendarIconWrapperPseudo />
+            )}
+            {currentDate && (
+                <AnimatePresence initial={false}>
+                    <MonthWrapper
+                        shouldRenderTwo={shouldRenderTwoMonths}
+                        currentDate={currentDate}
+                        width={width}
+                        locale={locale}
+                        direction={direction}
+                        onSelect={handleSelect}
+                        selectedDate={internalSelectedDate}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        onAnimationFinished={handleAnimationFinished}
+                    />
+                </AnimatePresence>
+            )}
+            {ShouldShowRightArrow ? (
+                <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
+                    <Icon icons={['fa fa-angle-right']} />
+                </StyledCalendarIconWrapper>
+            ) : (
+                <StyledCalendarIconWrapperPseudo />
+            )}
         </StyledCalendar>
     );
 };

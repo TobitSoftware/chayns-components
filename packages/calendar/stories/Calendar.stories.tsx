@@ -50,10 +50,6 @@ export default {
     },
 } as Meta<typeof Calendar>;
 
-const Template: StoryFn<typeof Calendar> = ({ ...args }) => (
-    <div style={{ width: '150px' }}>
-        <Calendar {...args} />
-    </div>
-);
+const Template: StoryFn<typeof Calendar> = ({ ...args }) => <Calendar {...args} />;
 
 export const General = Template.bind({});

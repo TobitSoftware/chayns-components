@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledMonth = styled.div`
-    position: absolute;
-    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
 `;
 
 export const StyledMonthHead = styled.div`

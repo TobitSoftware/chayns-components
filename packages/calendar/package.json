@@ -59,7 +59,8 @@
     "peerDependencies": {
         "react": ">=16.14.0",
         "react-dom": ">=16.14.0",
-        "styled-components": "^5.3.11"
+        "styled-components": "^5.3.11",
+        "date-fns": "^2.30.0"
     },
     "publishConfig": {
         "access": "public"

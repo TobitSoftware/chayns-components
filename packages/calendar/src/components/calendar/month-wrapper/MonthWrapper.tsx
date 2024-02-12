@@ -1,13 +1,9 @@
 import React, { FC, type ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import type { Locale } from 'date-fns';
-import {
-    StyledMonthWrapper,
-    StyledMotionMonthWrapper,
-    StyledMotionWrapper,
-} from './MonthWrapper.styles';
-import { AnimatePresence, motion, type MotionProps, useAnimation } from 'framer-motion';
+import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
+import type { MotionProps } from 'framer-motion';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
-import Month, { MonthPosition } from './month/Month';
+import Month from './month/Month';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
 
 export type MonthWrapperProps = {
@@ -16,8 +12,11 @@ export type MonthWrapperProps = {
     onSelect: (date: Date) => void;
     selectedDate?: Date;
     categories?: Categories[];
-    currentDate?: Date;
+    currentDate: Date;
     direction?: 'left' | 'right';
+    onAnimationFinished: () => void;
+    shouldRenderTwo: boolean;
+    width: number;
 };
 
 const MonthWrapper: FC<MonthWrapperProps> = ({
@@ -28,89 +27,115 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     onSelect,
     categories,
     direction,
+    onAnimationFinished,
+    shouldRenderTwo,
+    width,
 }) => {
-    const [content, setContent] = useState<ReactElement[]>([]);
+    const [content, setContent] = useState<ReactElement[]>();
 
     useEffect(() => {
         setContent((prevState) => {
             if (!prevState) {
-                return;
+                const items: ReactElement[] = [];
+
+                for (let i = -1; i < 3; i++) {
+                    const date = getNewDate(i, currentDate);
+
+                    const { month, year } = getMonthAndYear(date);
+
+                    items.push(
+                        <Month
+                            month={month}
+                            year={year}
+                            locale={locale}
+                            onSelect={onSelect}
+                            highlightedDates={highlightedDates}
+                            categories={categories}
+                            selectedDate={selectedDate}
+                        />,
+                    );
+                }
+
+                return items;
             }
 
-            // ToDo per direction elemente vorne oder hinten hinzufügen oder entfernen
+            if (direction === 'left') {
+                const date = getNewDate(-1, currentDate);
 
-            prevState.map();
+                const { month, year } = getMonthAndYear(date);
+
+                prevState.unshift(
+                    <Month
+                        month={month}
+                        year={year}
+                        locale={locale}
+                        onSelect={onSelect}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        selectedDate={selectedDate}
+                    />,
+                );
+                prevState.pop();
+            }
+
+            if (direction === 'right') {
+                const date = getNewDate(2, currentDate);
+
+                const { month, year } = getMonthAndYear(date);
+
+                prevState.push(
+                    <Month
+                        month={month}
+                        year={year}
+                        locale={locale}
+                        onSelect={onSelect}
+                        highlightedDates={highlightedDates}
+                        categories={categories}
+                        selectedDate={selectedDate}
+                    />,
+                );
+                prevState.shift();
+            }
+
+            return prevState;
         });
-    }, []);
+    }, [categories, currentDate, direction, highlightedDates, locale, onSelect, selectedDate]);
 
-    const content = useMemo(() => {
-        const items: ReactElement[] = [];
-
-        if (shouldShowTwoMonths) {
-            return items;
-        }
-
-        const firstDate = currentDates ? currentDates[0] : undefined;
-
-        if (!firstDate) {
-            return items;
-        }
-
-        for (let i = -1; i < 2; i++) {
-            const date = getNewDate(i, firstDate);
-
-            const { month, year } = getMonthAndYear(date);
-
-            let position;
-
-            switch (i) {
-                case -1:
-                    position = MonthPosition.Prev;
-                    break;
-                case 0:
-                    position = MonthPosition.Current;
-                    break;
+    const animate: MotionProps['animate'] = useMemo(() => {
+        if (shouldRenderTwo) {
+            switch (true) {
+                case direction === 'left':
+                    return { x: '0%' };
+                case direction === 'right':
+                    return { x: '-100%' };
                 default:
-                    position = MonthPosition.Next;
-                    break;
+                    return { x: '-50%' };
             }
-
-            items.push(
-                <Month
-                    month={month}
-                    year={year}
-                    locale={locale}
-                    onSelect={onSelect}
-                    highlightedDates={highlightedDates}
-                    categories={categories}
-                    selectedDate={selectedDate}
-                    position={position}
-                />,
-            );
+        } else {
+            switch (true) {
+                case direction === 'left':
+                    return { x: '0%' };
+                case direction === 'right':
+                    return { x: '-200%' };
+                default:
+                    return { x: '-100%' };
+            }
         }
-
-        return items;
-    }, [categories, highlightedDates, locale, onSelect, selectedDate]);
-
-    // ToDo je x nach direction um 25% nach links oder rechts verschieben
-    const animate: MotionProps['animate'] = useMemo(
-        () => undefined,
-        // switch (position) {
-        //     case MonthPosition.Prev:
-        //         return { opacity: 1, x: '-100%' };
-        //     case MonthPosition.Current:
-        //         return { opacity: 1, x: 0 };
-        //     case MonthPosition.Next:
-        //         return { x: '100%' };
-        //     default:
-        //         return undefined;
-        // }
-        [],
-    );
+    }, [direction, shouldRenderTwo]);
 
     return (
-        <StyledMonthWrapper>
-            <StyledMotionWrapper animate={animate}>{content}</StyledMotionWrapper>
+        <StyledMonthWrapper height={shouldRenderTwo ? width / 2 : width}>
+            <StyledMotionWrapper
+                animate={animate}
+                transition={{
+                    type: 'tween',
+                    duration: !direction ? 0 : 0.3,
+                    delay: !direction ? 0 : 0.2,
+                }}
+                onAnimationComplete={onAnimationFinished}
+            >
+                {content}
+            </StyledMotionWrapper>
         </StyledMonthWrapper>
     );
 };

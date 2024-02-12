@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import type { WithTheme } from '@chayns-components/core';
 
-export const StyledMonthWrapper = styled.div`
-    display: flex;
-    //justify-content: space-between;
-    //overflow: hidden;
-    position: relative;
+type StyledMonthWrapperProps = WithTheme<{ height: number }>;
+
+export const StyledMonthWrapper = styled.div<StyledMonthWrapperProps>`
     width: 100%;
-    aspect-ratio: 1;
+    overflow-x: clip;
+    height: ${({ height }) => height}px;
 `;
 
-export const StyledMotionWrapper = styled(motion.div)``;
+export const StyledMotionWrapper = styled(motion.div)`
+    display: flex;
+    height: 100%;
+`;
