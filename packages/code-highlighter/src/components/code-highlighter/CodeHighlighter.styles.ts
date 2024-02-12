@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
+import type { WithTheme } from '@chayns-components/core';
 import { CodeHighlighterTheme } from '../../types/codeHighlighter';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { Browser } from 'detect-browser';
 
 type StyledCodeHighlighterProps = WithTheme<{
