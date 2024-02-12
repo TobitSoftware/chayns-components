@@ -1,7 +1,7 @@
-import React, { FC, type ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, type ReactElement, useEffect, useMemo, useState } from 'react';
 import type { Locale } from 'date-fns';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
-import type { MotionProps } from 'framer-motion';
+import { AnimateSharedLayout, type MotionProps } from 'framer-motion';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
 import Month from './month/Month';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
@@ -129,8 +129,8 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                 animate={animate}
                 transition={{
                     type: 'tween',
-                    duration: !direction ? 0 : 0.3,
-                    delay: !direction ? 0 : 0.2,
+                    duration: !direction ? 0 : 0.2,
+                    // delay: !direction ? 0 : 0.5,
                 }}
                 onAnimationComplete={onAnimationFinished}
             >

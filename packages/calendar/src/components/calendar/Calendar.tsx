@@ -170,20 +170,18 @@ const Calendar: FC<CalendarProps> = ({
                 <StyledCalendarIconWrapperPseudo />
             )}
             {currentDate && (
-                <AnimatePresence initial={false}>
-                    <MonthWrapper
-                        shouldRenderTwo={shouldRenderTwoMonths}
-                        currentDate={currentDate}
-                        width={width}
-                        locale={locale}
-                        direction={direction}
-                        onSelect={handleSelect}
-                        selectedDate={internalSelectedDate}
-                        highlightedDates={highlightedDates}
-                        categories={categories}
-                        onAnimationFinished={handleAnimationFinished}
-                    />
-                </AnimatePresence>
+                <MonthWrapper
+                    shouldRenderTwo={shouldRenderTwoMonths}
+                    currentDate={currentDate}
+                    width={width}
+                    locale={locale}
+                    direction={direction}
+                    onSelect={handleSelect}
+                    selectedDate={internalSelectedDate}
+                    highlightedDates={highlightedDates}
+                    categories={categories}
+                    onAnimationFinished={handleAnimationFinished}
+                />
             )}
             {ShouldShowRightArrow ? (
                 <StyledCalendarIconWrapper onClick={handleRightArrowClick}>
