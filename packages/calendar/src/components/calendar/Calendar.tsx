@@ -10,7 +10,6 @@ import { getNewDate, isDateInRange } from '../../utils/calendar';
 import type { Categories, HighlightedDates } from '../../types/calendar';
 import { Icon } from '@chayns-components/core';
 import MonthWrapper from './month-wrapper/MonthWrapper';
-import { AnimatePresence } from 'framer-motion';
 
 const END_DATE = new Date(new Date().setFullYear(new Date().getFullYear() + 100));
 

@@ -1,7 +1,7 @@
 import React, { FC, type ReactElement, useEffect, useMemo, useState } from 'react';
 import type { Locale } from 'date-fns';
 import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
-import { AnimateSharedLayout, type MotionProps } from 'framer-motion';
+import type { MotionProps } from 'framer-motion';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
 import Month from './month/Month';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
