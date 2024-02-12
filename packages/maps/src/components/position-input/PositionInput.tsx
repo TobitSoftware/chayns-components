@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyledPositionInput, StyledPositionInputSearch } from './PositionInput.styles';
-import Input from '../input/Input';
+import { Input } from '@chayns-components/core';
 import MapWrapper from './map-wrapper/MapWrapper';
 import type { IMarker, PolygonOptions, Position } from '../../types/positionInput';
 import { DEFAULT_POLYGON_OPTIONS, DEFAULT_POSITION } from '../../constants/positionInput';

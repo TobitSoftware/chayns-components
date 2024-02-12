@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import PositionInput from '../src/components/position-input/PositionInput';
 
 export default {
-    title: 'Core/PositionInput',
+    title: 'Maps/PositionInput',
     component: PositionInput,
     args: {
         apiToken: 'AIzaSyCicm5YKKdfym2UtjVwuoSvMAL9uKD_yxo',
