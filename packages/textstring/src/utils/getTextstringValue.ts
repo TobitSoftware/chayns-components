@@ -4,7 +4,7 @@ import { TextStringContext } from '../components/textstring-provider/TextStringP
 
 export interface GetTextstringValue {
     textString: ITextstring;
-    replacements?: TextstringReplacement[];
+    replacements?: TextstringReplacement;
 }
 
 export const useTextstringValue = ({ replacements, textString }: GetTextstringValue) => {
@@ -16,11 +16,8 @@ export const useTextstringValue = ({ replacements, textString }: GetTextstringVa
         return value;
     }
 
-    let newValue = value;
-
-    replacements.forEach(({ replacement, key }) => {
-        newValue = newValue.replace(key, replacement);
-    });
-
-    return newValue;
+    return Object.keys(replacements).reduce(
+        (current, key) => current.replace(new RegExp(key, 'g'), <string>replacements[key] || ''),
+        value,
+    );
 };

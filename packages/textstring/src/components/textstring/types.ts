@@ -1,6 +1,5 @@
 export interface TextstringReplacement {
-    key: string;
-    replacement: string;
+    [key: string]: string;
 }
 
 export interface ITextstring {

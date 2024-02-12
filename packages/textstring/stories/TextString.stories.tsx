@@ -45,7 +45,7 @@ const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args
                         fallback: '##food## ist lecker.',
                         name: 'txt_chayns_chaynsComponents_textString_example_replacement',
                     }}
-                    replacements={[{ key: '##food##', replacement: food }]}
+                    replacements={{ '##food##': food }}
                 />
                 <i>'##food##' wird durch die ausgewählte Speise ersetzt</i>
                 <h2>Speise auswählen</h2>
