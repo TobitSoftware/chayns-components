@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useMemo } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -57,6 +58,8 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
     shouldFormatCode = false,
     shouldShowLineNumbers = false,
 }) => {
+    const { browser } = getDevice();
+
     // function to style highlighted code
     const lineWrapper = useCallback(
         (lineNumber: number) => {
@@ -95,7 +98,7 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter codeTheme={theme}>
+            <StyledCodeHighlighter browser={browser?.name} codeTheme={theme}>
                 <StyledCodeHighlighterHeader codeTheme={theme}>
                     <StyledCodeHighlighterFileName codeTheme={theme}>
                         {formatLanguage(language)}
@@ -113,7 +116,16 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
                 </SyntaxHighlighter>
             </StyledCodeHighlighter>
         ),
-        [theme, language, code, copyButtonText, shouldShowLineNumbers, lineWrapper, formattedCode],
+        [
+            browser?.name,
+            theme,
+            language,
+            code,
+            copyButtonText,
+            shouldShowLineNumbers,
+            lineWrapper,
+            formattedCode,
+        ],
     );
 };
 

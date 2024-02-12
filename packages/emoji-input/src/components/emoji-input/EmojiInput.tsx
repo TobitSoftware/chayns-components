@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEvent,
@@ -171,6 +172,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         const shouldDeleteOneMoreForwards = useRef(false);
 
         const valueRef = useRef(value);
+
+        const { browser } = getDevice();
 
         /**
          * This function updates the content of the 'contentEditable' element if the new text is
@@ -569,6 +572,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                     <StyledMotionEmojiInputEditor
+                        browser={browser?.name}
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable={!isDisabled}
                         id={inputId}

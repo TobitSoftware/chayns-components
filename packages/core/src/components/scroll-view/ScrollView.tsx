@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, { CSSProperties, FC, ReactNode, useMemo } from 'react';
 import { StyledScrollView } from './ScrollView.styles';
 
@@ -12,11 +13,18 @@ export type ScrollViewProps = {
     maxHeight: CSSProperties['height'];
 };
 
-const ScrollView: FC<ScrollViewProps> = ({ maxHeight = '300px', children }) =>
-    useMemo(
-        () => <StyledScrollView maxHeight={maxHeight}>{children}</StyledScrollView>,
-        [children, maxHeight],
+const ScrollView: FC<ScrollViewProps> = ({ maxHeight = '300px', children }) => {
+    const { browser } = getDevice();
+
+    return useMemo(
+        () => (
+            <StyledScrollView browser={browser?.name} maxHeight={maxHeight}>
+                {children}
+            </StyledScrollView>
+        ),
+        [browser?.name, children, maxHeight],
     );
+};
 
 ScrollView.displayName = 'ScrollView';
 

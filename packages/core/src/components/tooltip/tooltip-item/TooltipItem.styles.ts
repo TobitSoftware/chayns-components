@@ -1,8 +1,17 @@
-import styled from 'styled-components';
+import type { CSSProperties } from 'react';
+import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
-export const StyledTooltipItem = styled.div`
+type StyledTooltipItemProps = WithTheme<{ width?: CSSProperties['width'] }>;
+
+export const StyledTooltipItem = styled.div<StyledTooltipItemProps>`
     padding: 5px;
+
+    ${({ width }) =>
+        width &&
+        css`
+            width: ${width};
+        `}
 `;
 
 type StyledTooltipItemHeadlineProps = WithTheme<unknown>;

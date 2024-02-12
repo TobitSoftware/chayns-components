@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEvent,
@@ -12,12 +13,12 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import type { ISearchBoxItem } from '../../types/searchBox';
 import { calculateContentHeight } from '../../utils/calculate';
+import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
-import type { ISearchBoxItem } from '../../types/searchBox';
-import { searchList } from '../../utils/searchBox';
 
 export type SearchBoxProps = {
     /**
@@ -74,6 +75,8 @@ const SearchBox: FC<SearchBoxProps> = ({
     const boxRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    const { browser } = getDevice();
 
     /**
      * This function closes the list of items
@@ -281,6 +284,7 @@ const SearchBox: FC<SearchBoxProps> = ({
                 </div>
                 <AnimatePresence initial={false}>
                     <StyledMotionSearchBoxBody
+                        browser={browser?.name}
                         key="content"
                         height={height}
                         width={width}
@@ -301,6 +305,7 @@ const SearchBox: FC<SearchBoxProps> = ({
             </StyledSearchBox>
         ),
         [
+            browser?.name,
             content,
             handleBlur,
             handleChange,

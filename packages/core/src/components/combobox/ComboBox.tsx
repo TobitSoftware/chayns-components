@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, {
     FC,
     useCallback,
@@ -77,6 +78,8 @@ const ComboBox: FC<ComboBoxProps> = ({
     const [height, setHeight] = useState(0);
 
     const ref = useRef<HTMLDivElement>(null);
+
+    const { browser } = getDevice();
 
     const { isMobile } = chayns.env;
 
@@ -202,6 +205,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         return (
             <StyledMotionComboBoxBody
+                browser={browser?.name}
                 animate={animate}
                 height={height}
                 initial={{ height: 0, opacity: 0 }}
@@ -215,6 +219,7 @@ const ComboBox: FC<ComboBoxProps> = ({
             </StyledMotionComboBoxBody>
         );
     }, [
+        browser?.name,
         direction,
         handleSetSelectedItem,
         height,

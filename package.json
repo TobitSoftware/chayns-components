@@ -63,7 +63,7 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
-        "chayns-api": "^1.0.45",
+        "chayns-api": "^1.0.50",
         "uuid": "^9.0.1"
     }
 }

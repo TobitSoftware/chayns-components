@@ -1,3 +1,4 @@
+import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
@@ -23,7 +24,7 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     justify-content: space-between;
     border: 1px solid rgba(160, 160, 160, 0.3);
     padding: 4px 10px;
-    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'not-allowed')};
+    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'default')};
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     min-width: ${({ minWidth }) => minWidth}px;
@@ -93,6 +94,7 @@ type StyledComboBoxBodyProps = WithTheme<{
     minWidth: number;
     maxHeight: CSSProperties['maxHeight'];
     direction: ComboBoxDirection;
+    browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -124,11 +126,30 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
         `;
     }}
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
+    // Styles for custom scrollbar
+    ${({ browser, theme }: StyledComboBoxBodyProps) =>
+        browser === 'firefox'
+            ? css`
+                  scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
+                  scrollbar-width: thin;
+              `
+            : css`
+                  &::-webkit-scrollbar {
+                      width: 5px;
+                  }
 
-    &::-webkit-scrollbar-thumb {
-        background: rgba(160, 160, 160, 1);
-    }
+                  &::-webkit-scrollbar-track {
+                      background-color: transparent;
+                  }
+
+                  &::-webkit-scrollbar-button {
+                      background-color: transparent;
+                      height: 5px;
+                  }
+
+                  &::-webkit-scrollbar-thumb {
+                      background-color: rgba(${theme['text-rgb']}, 0.15);
+                      border-radius: 20px;
+                  }
+              `}
 `;

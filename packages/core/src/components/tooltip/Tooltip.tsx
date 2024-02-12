@@ -1,9 +1,9 @@
-import React, { FC, ReactNode, useMemo, useRef } from 'react';
+import React, { FC, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
 import type { PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
+import Popup from '../popup/Popup';
 import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip } from './Tooltip.styles';
-import Popup from '../popup/Popup';
 
 export type TooltipProps = {
     /**
@@ -15,12 +15,16 @@ export type TooltipProps = {
      */
     item: ITooltipItem;
     /**
+     * The width of an item.
+     */
+    itemWidth?: CSSProperties['width'];
+    /**
      * whether the tooltip should be shown.
      */
     isDisabled?: boolean;
 };
 
-const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
+const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) => {
     const tooltipRef = useRef<PopupRef>(null);
 
     return useMemo(
@@ -33,6 +37,7 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
                         shouldShowOnHover
                         content={
                             <TooltipItem
+                                width={itemWidth}
                                 text={item.text}
                                 headline={item.headline}
                                 imageUrl={item.imageUrl}
@@ -46,7 +51,7 @@ const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled }) => {
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, item],
+        [isDisabled, children, itemWidth, item.text, item.headline, item.imageUrl, item.button],
     );
 };
 

@@ -1,20 +1,16 @@
-import type { ColorMode } from 'chayns-api';
+import { useSite, type ColorMode } from 'chayns-api';
 import { useEffect, useState } from 'react';
 
 export const useColorMode = (): ColorMode => {
-    const [colorMode, setColorMode] = useState<ColorMode>(chayns.env.site.colorMode);
+    const [colorMode, setColorMode] = useState<ColorMode>(0);
+
+    const site = useSite();
 
     useEffect(() => {
-        const listener = () => {
-            setColorMode(chayns.env.site.colorMode);
-        };
-
-        void chayns.addDesignSettingsChangeListener(listener);
-
-        return () => {
-            void chayns.removeDesignSettingsChangeListener(listener);
-        };
-    }, []);
+        if (site.colorMode) {
+            setColorMode(site.colorMode);
+        }
+    }, [site.colorMode]);
 
     return colorMode;
 };

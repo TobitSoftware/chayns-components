@@ -1,7 +1,6 @@
+import { Icon, Popup } from '@chayns-components/core';
 import React, { FC } from 'react';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
-import Icon from '../../icon/Icon';
-import Popup from '../../popup/Popup';
 import { StyledCopyToClipboard, StyledCopyToClipboardText } from './CopyToClipboard.styles';
 
 export type CopyToClipboardProps = {

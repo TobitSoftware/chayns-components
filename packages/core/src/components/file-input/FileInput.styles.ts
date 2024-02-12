@@ -10,7 +10,7 @@ type StyledFileInputContainerProps = WithTheme<{
 
 export const StyledFileInputContainer = styled.div<StyledFileInputContainerProps>`
     border: ${({ theme }: StyledFileInputContainerProps) => theme.text} 1px dotted;
-    cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
+    cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
     opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
     display: flex;
     gap: 10px;

@@ -1,7 +1,10 @@
+import { getAccessToken } from 'chayns-api';
 import { SIGNATURE_SERVER_URL } from '../../constants/signature';
 
 export const deleteUserSignature = async () => {
-    if (!chayns.env.user.isAuthenticated) {
+    const { accessToken } = await getAccessToken();
+
+    if (!accessToken) {
         return false;
     }
 
@@ -10,7 +13,7 @@ export const deleteUserSignature = async () => {
             method: 'DELETE',
             headers: {
                 accept: 'application/json',
-                authorization: `bearer ${chayns.env.user.tobitAccessToken}`,
+                authorization: `bearer ${accessToken}`,
             },
         });
 

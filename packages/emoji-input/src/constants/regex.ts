@@ -8,3 +8,4 @@ export const HTML_LC_MENTION_REGEX =
 export const HTML_NER_IGNORE_REGEX = /<nerIgnore>(.+?)<\/nerIgnore>/g;
 export const HTML_NER_REPLACE_REGEX =
     /<nerReplace\s*(?:prefix="(.*?)")?\s*type="(.*?)"\s*value="(.*?)">(.*?)<\/nerReplace>/gi;
+export const HTML_BOLD_REGEX = /<b>(.+?)<\/b>/g;

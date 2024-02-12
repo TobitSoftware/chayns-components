@@ -1,6 +1,6 @@
+import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
-import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledCopyToClipboard = styled.div`
     display: flex;

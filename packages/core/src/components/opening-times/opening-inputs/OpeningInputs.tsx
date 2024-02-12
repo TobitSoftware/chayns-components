@@ -1,17 +1,27 @@
-import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
-import { StyledOpeningInputs } from './OpeningInputs.styles';
-import OpeningInput from './opening-input/OpeningInput';
 import { AnimatePresence } from 'framer-motion';
+import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import { v4 as uuidV4 } from 'uuid';
+import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
+import OpeningInput from './opening-input/OpeningInput';
+import { StyledOpeningInputs } from './OpeningInputs.styles';
 
 export type OpeningInputsProps = {
     times: Time[];
     isDisabled?: boolean;
-    onChange: (times: Time[]) => void;
+    onChange: (time: Time) => void;
+    onAdd: (time: Time, id: string) => void;
+    onRemove: (id: Time['id']) => void;
     id: string;
 };
 
-const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, id, onChange }) => {
+const OpeningInputs: FC<OpeningInputsProps> = ({
+    times,
+    isDisabled,
+    onRemove,
+    onAdd,
+    id,
+    onChange,
+}) => {
     const [newTimes, setNewTimes] = useState<Time[]>();
 
     useEffect(() => {
@@ -19,43 +29,33 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, id, onChange
     }, [times]);
 
     const handleAdd = useCallback(() => {
-        const defaultTime: Time = { start: '08:00', end: '18:00' };
+        const defaultTime: Time = { start: '08:00', end: '18:00', id: uuidV4() };
 
-        setNewTimes((prevState) => {
-            const updatedTimes = prevState ? [...prevState, defaultTime] : [defaultTime];
+        setNewTimes((prevState) => (prevState ? [...prevState, defaultTime] : [defaultTime]));
 
-            onChange(updatedTimes);
-
-            return updatedTimes;
-        });
-    }, [onChange]);
+        onAdd(defaultTime, id);
+    }, [id, onAdd]);
 
     const handleRemove = useCallback(
-        (indexToRemove: number) => {
-            setNewTimes((prevState) => {
-                const updatedTimes = (prevState ?? []).filter(
-                    (_, index) => index !== indexToRemove,
-                );
+        (timeId: string) => {
+            setNewTimes((prevState) => (prevState ?? []).filter((time) => time.id !== timeId));
 
-                onChange(updatedTimes);
-
-                return updatedTimes;
-            });
+            onRemove(timeId);
         },
-        [onChange],
+        [onRemove],
     );
 
     const handleChange = useCallback(
-        (newTime: Time, indexToUpdate: number) => {
+        (newTime: Time) => {
             setNewTimes((prevState) => {
-                const updatedTimes = (prevState ?? []).map((time, index) => {
-                    if (index === indexToUpdate) {
+                const updatedTimes = (prevState ?? []).map((time) => {
+                    if (time.id === newTime.id) {
                         return newTime;
                     }
                     return time;
                 });
 
-                onChange(updatedTimes);
+                onChange(newTime);
 
                 return updatedTimes;
             });
@@ -70,7 +70,7 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, id, onChange
             return items;
         }
 
-        newTimes.forEach(({ end, start }, index) => {
+        newTimes.forEach(({ end, start, id: timeId }, index) => {
             if (index > 1) {
                 return;
             }
@@ -85,15 +85,15 @@ const OpeningInputs: FC<OpeningInputsProps> = ({ times, isDisabled, id, onChange
 
             items.push(
                 <OpeningInput
-                    key={`opening-times-input__${id}.${index}`}
+                    key={`opening-times-input__${id}.${timeId}`}
                     start={start}
-                    id={`opening-times__${id}.${index}`}
+                    id={timeId}
                     end={end}
                     isDisabled={isDisabled}
                     buttonType={buttonType}
                     onAdd={handleAdd}
-                    onChange={(time) => handleChange(time, index)}
-                    onRemove={() => handleRemove(index)}
+                    onChange={(time) => handleChange(time)}
+                    onRemove={() => handleRemove(timeId)}
                 />,
             );
         });

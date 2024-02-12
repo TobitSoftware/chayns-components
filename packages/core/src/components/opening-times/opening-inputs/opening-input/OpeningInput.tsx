@@ -1,5 +1,7 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../../types/openingTimes';
+import Icon from '../../../icon/Icon';
+import NumberInput from '../../../number-input/NumberInput';
 import {
     StyledOpeningInput,
     StyledOpeningInputButtonWrapper,
@@ -7,8 +9,6 @@ import {
     StyledOpeningInputText,
     StyledOpeningInputWrapper,
 } from './OpeningInput.styles';
-import NumberInput from '../../../number-input/NumberInput';
-import Icon from '../../../icon/Icon';
 
 export type OpeningInputProps = {
     start: Time['start'];
@@ -61,9 +61,9 @@ const OpeningInput: FC<OpeningInputProps> = ({
 
             setStartTime(value);
 
-            onChange({ end: endTime, start: value });
+            onChange({ end: endTime, start: value, id });
         },
-        [endTime, onChange],
+        [endTime, id, onChange],
     );
 
     const handleEndTimeBlur = useCallback(
@@ -74,9 +74,9 @@ const OpeningInput: FC<OpeningInputProps> = ({
 
             setEndTime(value);
 
-            onChange({ end: value, start: startTime });
+            onChange({ end: value, start: startTime, id });
         },
-        [onChange, startTime],
+        [id, onChange, startTime],
     );
 
     return useMemo(
@@ -109,7 +109,7 @@ const OpeningInput: FC<OpeningInputProps> = ({
                 {button}
             </StyledOpeningInput>
         ),
-        [button, endTime, handleEndTimeBlur, handleStartTimeBlur, isDisabled, startTime],
+        [button, endTime, handleEndTimeBlur, handleStartTimeBlur, id, isDisabled, startTime],
     );
 };
 

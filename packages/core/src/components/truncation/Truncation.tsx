@@ -27,6 +27,10 @@ export type TruncationProps = {
      */
     collapsedHeight?: number;
     /**
+     * If set to true, the content is exposed.
+     */
+    isOpen?: boolean;
+    /**
      * A text that should be displayed if the content is expanded.
      */
     lessLabel?: string;
@@ -42,25 +46,42 @@ export type TruncationProps = {
 
 const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
+    isOpen,
     moreLabel = 'Mehr',
     lessLabel = 'Weniger',
     onChange,
     children,
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
     const [showClamp, setShowClamp] = useState(true);
     const [newCollapsedHeight, setNewCollapsedHeight] = useState(collapsedHeight);
     const [originalHeight, setOriginalHeight] = useState(0);
     const [shouldShowCollapsedElement, setShouldShowCollapsedElement] = useState(true);
+    const [hasSizeChanged, setHasSizeChanged] = useState(false);
+    const [initialRender, setInitialRender] = useState(true);
+
+    const [originalSmallHeight, setOriginalSmallHeight] = useState(0);
+    const [originalBigHeight, setOriginalBigHeight] = useState(0);
+
+    useEffect(() => {
+        setInitialRender(false);
+    }, []);
 
     const pseudoChildrenRef = useRef<HTMLDivElement>(null);
     const childrenRef = useRef<HTMLDivElement>(null);
     const originalChildrenRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (typeof isOpen === 'boolean') {
+            setInternalIsOpen(isOpen);
+            setShowClamp(!isOpen);
+        }
+    }, [isOpen]);
+
     // Changes the state of the truncation
     const handleClampClick = useCallback<MouseEventHandler<HTMLAnchorElement>>(
         (event) => {
-            setIsOpen((current) => {
+            setInternalIsOpen((current) => {
                 if (typeof onChange === 'function') {
                     onChange(event, !current);
                 }
@@ -72,8 +93,9 @@ const Truncation: FC<TruncationProps> = ({
     );
 
     const handleAnimationEnd = useCallback(() => {
-        setShouldShowCollapsedElement(!isOpen);
-    }, [isOpen]);
+        setHasSizeChanged(false);
+        setShouldShowCollapsedElement(!internalIsOpen);
+    }, [internalIsOpen]);
 
     useEffect(() => {
         if (!pseudoChildrenRef.current) {
@@ -81,18 +103,20 @@ const Truncation: FC<TruncationProps> = ({
         }
 
         setOriginalHeight(pseudoChildrenRef.current.offsetHeight);
+        setOriginalBigHeight(pseudoChildrenRef.current.offsetHeight);
 
         truncateElement(pseudoChildrenRef.current, collapsedHeight);
 
         setNewCollapsedHeight(pseudoChildrenRef.current.offsetHeight);
+        setOriginalSmallHeight(pseudoChildrenRef.current.offsetHeight);
     }, [collapsedHeight, pseudoChildrenRef]);
 
     // Checks if the clamp should be shown
     useEffect(() => {
-        if (pseudoChildrenRef.current) {
+        if (pseudoChildrenRef.current && !hasSizeChanged && !initialRender) {
             setShowClamp(originalHeight > newCollapsedHeight);
         }
-    }, [collapsedHeight, newCollapsedHeight, originalHeight]);
+    }, [collapsedHeight, hasSizeChanged, initialRender, newCollapsedHeight, originalHeight]);
 
     useEffect(() => {
         if (childrenRef.current && pseudoChildrenRef.current && originalChildrenRef.current) {
@@ -101,14 +125,58 @@ const Truncation: FC<TruncationProps> = ({
             }
 
             childrenRef.current.appendChild(
-                shouldShowCollapsedElement && !isOpen
+                shouldShowCollapsedElement && !internalIsOpen
                     ? pseudoChildrenRef.current
                     : originalChildrenRef.current,
             );
 
             (childrenRef.current.children[0] as HTMLDivElement).style.visibility = 'visible';
         }
-    }, [children, isOpen, shouldShowCollapsedElement]);
+    }, [children, internalIsOpen, shouldShowCollapsedElement]);
+
+    useEffect(() => {
+        if (originalChildrenRef.current) {
+            const resizeObserver = new ResizeObserver((entries) => {
+                if (entries && entries[0]) {
+                    const observedHeight = entries[0].contentRect.height;
+                    setOriginalHeight(
+                        observedHeight < originalBigHeight ? originalBigHeight : observedHeight,
+                    );
+                    setHasSizeChanged(true);
+                }
+            });
+
+            resizeObserver.observe(originalChildrenRef.current);
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }
+
+        return () => {};
+    }, [originalBigHeight]);
+
+    useEffect(() => {
+        if (pseudoChildrenRef.current) {
+            const resizeObserver = new ResizeObserver((entries) => {
+                if (entries && entries[0]) {
+                    const observedHeight = entries[0].contentRect.height;
+                    setNewCollapsedHeight(
+                        observedHeight < originalSmallHeight ? originalSmallHeight : observedHeight,
+                    );
+                    setHasSizeChanged(true);
+                }
+            });
+
+            resizeObserver.observe(pseudoChildrenRef.current);
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }
+
+        return () => {};
+    }, [originalSmallHeight]);
 
     return useMemo(
         () => (
@@ -120,15 +188,15 @@ const Truncation: FC<TruncationProps> = ({
                     {children}
                 </StyledTruncationPseudoContent>
                 <StyledMotionTruncationContent
-                    animate={{ height: isOpen ? originalHeight : newCollapsedHeight }}
+                    animate={{ height: internalIsOpen ? originalHeight : newCollapsedHeight }}
                     initial={false}
-                    transition={{ type: 'tween' }}
+                    transition={{ type: 'tween', duration: hasSizeChanged ? 0 : 0.2 }}
                     onAnimationComplete={handleAnimationEnd}
                     ref={childrenRef}
                 />
                 {showClamp && (
                     <StyledTruncationClamp onClick={handleClampClick}>
-                        {isOpen ? lessLabel : moreLabel}
+                        {internalIsOpen ? lessLabel : moreLabel}
                     </StyledTruncationClamp>
                 )}
             </StyledTruncation>
@@ -137,7 +205,8 @@ const Truncation: FC<TruncationProps> = ({
             children,
             handleAnimationEnd,
             handleClampClick,
-            isOpen,
+            hasSizeChanged,
+            internalIsOpen,
             lessLabel,
             moreLabel,
             newCollapsedHeight,

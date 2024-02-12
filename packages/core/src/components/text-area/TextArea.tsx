@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -53,6 +54,8 @@ const TextArea: FC<TextAreaProps> = ({
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const { browser } = getDevice();
+
     const adjustTextareaHeight = useCallback(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto';
@@ -99,6 +102,7 @@ const TextArea: FC<TextAreaProps> = ({
         () => (
             <StyledTextArea>
                 <StyledTextAreaInput
+                    browser={browser?.name}
                     ref={textareaRef}
                     value={displayedValue}
                     onBlur={onBlur}
@@ -111,7 +115,16 @@ const TextArea: FC<TextAreaProps> = ({
                 {!displayedValue && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
             </StyledTextArea>
         ),
-        [displayedValue, handleChange, isOverflowing, maxHeight, onBlur, placeholder],
+        [
+            browser?.name,
+            displayedValue,
+            handleChange,
+            isOverflowing,
+            maxHeight,
+            minHeight,
+            onBlur,
+            placeholder,
+        ],
     );
 };
 

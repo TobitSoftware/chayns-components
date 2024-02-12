@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import emojiList from 'unicode-emoji-json/data-by-emoji.json';
@@ -32,6 +33,8 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
     const emojiRef = useRef<HTMLDivElement>(null);
     const shouldPreventEmojiControlsRef = useRef(false);
     const [shouldShowSkinTonePopup, setShouldShowSkinTonePopup] = useState(false);
+
+    const { browser } = getDevice();
 
     const { addOrUpdateEmojiInHistory, historyEmojis } = useEmojiHistory({
         accessToken,
@@ -267,6 +270,7 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     return (
         <StyledEmojiPickerEmojis
+            browser={browser?.name}
             shouldPreventScroll={shouldPreventScroll}
             shouldShowNoContentInfo={shouldShowNoContentInfo}
             ref={emojiRef}

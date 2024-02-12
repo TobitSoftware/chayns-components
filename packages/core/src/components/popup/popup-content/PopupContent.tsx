@@ -1,4 +1,4 @@
-import React, { type MouseEventHandler, ReactNode } from 'react';
+import React, { ReactNode, type MouseEventHandler } from 'react';
 import { useColorMode } from '../../../hooks/colorMode';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
@@ -34,7 +34,7 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
                 initial={{ opacity: 0, y: exitAndInitialY }}
                 position={alignment}
                 ref={ref}
-                data-isPopup="true"
+                data-ispopup="true"
                 onMouseLeave={onMouseLeave}
                 style={{ left: coordinates.x, top: coordinates.y }}
                 transition={{ type: 'tween' }}
