@@ -6,4 +6,4 @@ export type {
     ITextstring as Textstring,
     TextstringReplacement,
 } from './components/textstring/types';
-export { useTextstringValue } from './utils/getTextstringValue';
+export { useTextstringValue } from './hooks/useTextstringValue';

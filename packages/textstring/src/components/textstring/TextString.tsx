@@ -12,7 +12,7 @@ import { StyledTextString } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
 import { isTobitEmployee } from '@chayns-components/core';
 import { selectLanguageToChange } from '../../utils/textstring';
-import { useTextstringValue } from '../../utils/getTextstringValue';
+import { useTextstringValue } from '../../hooks/useTextstringValue';
 
 export type TextStringProps = {
     /**
