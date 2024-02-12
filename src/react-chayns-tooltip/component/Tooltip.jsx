@@ -111,7 +111,7 @@ export default class Tooltip extends Component {
                     : posArray[1];
         }
         let y = Bubble.isPositionBottom(pos) ? bottom : top;
-        if (typeof chayns !== 'undefined' && chayns.env.isApp) {
+        if (typeof chayns !== 'undefined' && chayns.env?.isApp) {
             const { pageYOffset } = await chayns.getWindowMetrics();
             y += pageYOffset;
         }
@@ -160,12 +160,12 @@ export default class Tooltip extends Component {
             minWidth,
             maxWidth,
             hideOnChildrenLeave,
-            isIOS,
         } = this.props;
 
         const { position, x, y } = this.state;
 
-        const ios = typeof chayns !== 'undefined' ? chayns.env.isIOS : isIOS;
+        const isIOS = typeof chayns !== 'undefined' ? (chayns.env?.isIOS ?? false) : false;
+        const showRemoveIcon = removeIcon ?? isIOS;
 
         return [
             position !== null ? (
@@ -189,7 +189,7 @@ export default class Tooltip extends Component {
                     key="bubble"
                     ref={this.bubble}
                 >
-                    {removeIcon ? (
+                    {showRemoveIcon ? (
                         <div className="cc__tooltip__icon" onClick={this.hide}>
                             <Icon icon="fa fa-times" />
                         </div>
@@ -206,9 +206,9 @@ export default class Tooltip extends Component {
                 ref={this.childrenWrapper}
                 key={`cc__tooltip__children${this.tooltipKey}`}
                 style={childrenStyle}
-                onMouseEnter={!ios && bindListeners ? this.show : null}
+                onMouseEnter={!isIOS && bindListeners ? this.show : null}
                 onMouseLeave={bindListeners ? this.hide : null}
-                onClick={ios && bindListeners ? this.show : null}
+                onClick={isIOS && bindListeners ? this.show : null}
             >
                 {children}
             </div>,
@@ -318,12 +318,6 @@ Tooltip.propTypes = {
     removeParentSpace: PropTypes.bool,
 
     /**
-     * Wether the target device is iOS (only relevant during serverside
-     * rendering).
-     */
-    isIOS: PropTypes.bool,
-
-    /**
      * Whether to stop propagation for click on close icon
      */
     stopPropagation: PropTypes.bool,
@@ -335,7 +329,7 @@ Tooltip.defaultProps = {
     position: null,
     minWidth: 100,
     maxWidth: 250,
-    removeIcon: typeof chayns !== 'undefined' ? chayns.env.isIOS : false,
+    removeIcon: null,
     parent: null,
     coordinates: null,
     childrenStyle: null,
@@ -343,7 +337,6 @@ Tooltip.defaultProps = {
     preventTriggerStyle: false,
     hideOnChildrenLeave: false,
     removeParentSpace: false,
-    isIOS: typeof chayns !== 'undefined' ? chayns.env.isIOS : false,
     stopPropagation: false,
 };
 
