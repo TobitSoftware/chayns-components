@@ -35,6 +35,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
     useEffect(() => {
         setContent((prevState) => {
+            // Initial render of months
             if (!prevState) {
                 const items: ReactElement[] = [];
 
@@ -45,6 +46,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
                     items.push(
                         <Month
+                            key={`${month}-${year}`}
                             month={month}
                             year={year}
                             locale={locale}
@@ -66,6 +68,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
                 prevState.unshift(
                     <Month
+                        key={`${month}-${year}`}
                         month={month}
                         year={year}
                         locale={locale}
@@ -85,6 +88,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
                 prevState.push(
                     <Month
+                        key={`${month}-${year}`}
                         month={month}
                         year={year}
                         locale={locale}
@@ -130,7 +134,6 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
                 transition={{
                     type: 'tween',
                     duration: !direction ? 0 : 0.2,
-                    // delay: !direction ? 0 : 0.5,
                 }}
                 onAnimationComplete={onAnimationFinished}
             >
