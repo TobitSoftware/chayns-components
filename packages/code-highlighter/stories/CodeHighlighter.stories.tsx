@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import CodeHighlighter from '../src/components/code-highlighter/CodeHighlighter';
 
 export default {
-    title: 'Core/CodeHighlighter',
+    title: 'CodeHighlighter/CodeHighlighter',
     component: CodeHighlighter,
     args: {
         copyButtonText: 'Code kopieren',

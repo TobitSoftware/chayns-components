@@ -8,7 +8,6 @@ export { default as AmountControl } from './components/amount-control/AmountCont
 export { default as Badge } from './components/badge/Badge';
 export { default as Button } from './components/button/Button';
 export { default as Checkbox } from './components/checkbox/Checkbox';
-export { default as CodeHighlighter } from './components/code-highlighter/CodeHighlighter';
 export { default as ColorSchemeProvider } from './components/color-scheme-provider/ColorSchemeProvider';
 export type {
     FramerMotionBugFix,
@@ -58,8 +57,6 @@ export {
 export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
-export { CodeHighlighterTheme } from './types/codeHighlighter';
-export type { CodeHighlighterLanguage, HighlightedLines } from './types/codeHighlighter';
 export { ComboBoxDirection } from './types/comboBox';
 export type { FileItem, Image, Meta, Video } from './types/file';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
