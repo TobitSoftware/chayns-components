@@ -34,6 +34,7 @@ type AccordionHeadProps = {
     rightElement?: ReactNode;
     searchIcon?: string[];
     searchPlaceholder?: string;
+    searchValue?: string;
     shouldRotateIcon?: boolean;
     title: string;
     titleElement?: ReactNode;
@@ -55,6 +56,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
     rightElement,
     searchIcon,
     searchPlaceholder,
+    searchValue,
     shouldRotateIcon,
     title,
     titleElement,
@@ -137,6 +139,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     onChange={onSearchChange}
                                     placeholder={searchPlaceholder}
                                     type="text"
+                                    value={searchValue}
                                 />
                                 {hasSearchIcon && (
                                     <StyledMotionRightInputIconWrapper

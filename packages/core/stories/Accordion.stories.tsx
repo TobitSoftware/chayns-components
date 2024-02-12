@@ -5,6 +5,7 @@ import AccordionContent from '../src/components/accordion/accordion-content/Acco
 import AccordionGroup from '../src/components/accordion/accordion-group/AccordionGroup';
 import AccordionItem from '../src/components/accordion/accordion-item/AccordionItem';
 import Badge from '../src/components/badge/Badge';
+import { ChangeEvent, useState } from 'react';
 
 export default {
     title: 'Core/Accordion',
@@ -51,6 +52,20 @@ const MultipleAccordionsTemplate: StoryFn<typeof Accordion> = () => (
     </AccordionGroup>
 );
 
+const WithSearchTemplate: StoryFn<typeof Accordion> = ({ children, ...args }) => {
+    const [value, setValue] = useState(args.searchValue);
+
+    const handleSearch = (event: ChangeEvent) => {
+        setValue((event.target as HTMLInputElement).value);
+    };
+
+    return (
+        <Accordion {...args} searchValue={value} onSearchChange={handleSearch}>
+            {children}
+        </Accordion>
+    );
+};
+
 export const General = Template.bind({});
 
 export const MultipleAccordions = MultipleAccordionsTemplate.bind({});
@@ -61,7 +76,7 @@ export const AccordionWithBadge = Template.bind({});
 
 export const AccordionWithTitleElement = Template.bind({});
 
-export const AccordionWithSearch = Template.bind({});
+export const AccordionWithSearch = WithSearchTemplate.bind({});
 
 export const AccordionWithBadgeAndSearch = Template.bind({});
 

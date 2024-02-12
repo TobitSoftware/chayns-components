@@ -1,6 +1,5 @@
 import { getDevice } from 'chayns-api';
 import React, {
-    ChangeEvent,
     ChangeEventHandler,
     CSSProperties,
     FC,
@@ -49,7 +48,6 @@ const TextArea: FC<TextAreaProps> = ({
     maxHeight = '120px',
     minHeight = '41px',
 }) => {
-    const [displayedValue, setDisplayedValue] = useState('');
     const [isOverflowing, setIsOverflowing] = useState(false);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -70,33 +68,10 @@ const TextArea: FC<TextAreaProps> = ({
      * To maintain the functionality while clearing the input, the length need to be greater than -1.
      */
     useEffect(() => {
-        if (displayedValue.length > -1) {
+        if (value && value.length > -1) {
             adjustTextareaHeight();
         }
-    }, [adjustTextareaHeight, displayedValue]);
-
-    /**
-     * This function sets the external value
-     */
-    useEffect(() => {
-        if (typeof value === 'string') {
-            setDisplayedValue(value);
-        }
-    }, [value]);
-
-    /**
-     * This function updates the value
-     */
-    const handleChange = useCallback(
-        (event: ChangeEvent<HTMLTextAreaElement>) => {
-            setDisplayedValue(event.target.value);
-
-            if (onChange) {
-                onChange(event);
-            }
-        },
-        [onChange],
-    );
+    }, [adjustTextareaHeight, value]);
 
     return useMemo(
         () => (
@@ -104,27 +79,18 @@ const TextArea: FC<TextAreaProps> = ({
                 <StyledTextAreaInput
                     browser={browser?.name}
                     ref={textareaRef}
-                    value={displayedValue}
+                    value={value}
                     onBlur={onBlur}
-                    onChange={handleChange}
+                    onChange={onChange}
                     maxHeight={maxHeight}
                     minHeight={minHeight}
                     isOverflowing={isOverflowing}
                     rows={1}
                 />
-                {!displayedValue && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
+                {!value && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
             </StyledTextArea>
         ),
-        [
-            browser?.name,
-            displayedValue,
-            handleChange,
-            isOverflowing,
-            maxHeight,
-            minHeight,
-            onBlur,
-            placeholder,
-        ],
+        [browser?.name, isOverflowing, maxHeight, minHeight, onBlur, onChange, placeholder, value],
     );
 };
 

@@ -90,6 +90,10 @@ export type AccordionProps = {
      */
     searchPlaceholder?: string;
     /**
+     * The value that is displayed inside the search
+     */
+    searchValue?: string;
+    /**
      * This will force the background color of the accordion to be used even if it is closed and not hovered.
      */
     shouldForceBackground?: boolean;
@@ -132,6 +136,7 @@ const Accordion: FC<AccordionProps> = ({
     rightElement,
     searchIcon,
     searchPlaceholder,
+    searchValue,
     shouldForceBackground = false,
     shouldHideBackground = false,
     shouldRotateIcon = true,
@@ -238,6 +243,7 @@ const Accordion: FC<AccordionProps> = ({
                         rightElement={rightElement}
                         searchIcon={searchIcon}
                         searchPlaceholder={searchPlaceholder}
+                        searchValue={searchValue}
                         shouldRotateIcon={shouldRotateIcon}
                         title={title}
                         titleElement={titleElement}
