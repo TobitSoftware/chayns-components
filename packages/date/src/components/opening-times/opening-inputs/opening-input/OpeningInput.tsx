@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { OpeningTimesButtonType, type Time } from '../../../../types/openingTimes';
-import Icon from '../../../icon/Icon';
-import NumberInput from '../../../number-input/NumberInput';
+import { Icon, NumberInput } from '@chayns-components/core';
 import {
     StyledOpeningInput,
     StyledOpeningInputButtonWrapper,

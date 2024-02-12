@@ -17,7 +17,6 @@ export { default as ComboBox } from './components/combobox/ComboBox';
 export type { IComboBoxItem as ComboBoxItem } from './components/combobox/ComboBox';
 export { default as ContentCard } from './components/content-card/ContentCard';
 export { default as ContextMenu } from './components/context-menu/ContextMenu';
-export { default as DateInfo } from './components/date-info/DateInfo';
 export { default as FileInput } from './components/file-input/FileInput';
 export { default as FilterButtons } from './components/filter-buttons/FilterButtons';
 export { default as GridImage } from './components/grid-image/GridImage';
@@ -29,7 +28,6 @@ export { default as ListItem } from './components/list/list-item/ListItem';
 export { default as MentionFinder } from './components/mention-finder/MentionFinder';
 export type { MentionMember } from './components/mention-finder/MentionFinder';
 export { default as NumberInput } from './components/number-input/NumberInput';
-export { default as OpeningTimes } from './components/opening-times/OpeningTimes';
 export { default as Popup } from './components/popup/Popup';
 export { default as ProgressBar } from './components/progress-bar/ProgressBar';
 export { default as RadioButtonGroup } from './components/radio-button/radio-button-group/RadioButtonGroup';
@@ -62,7 +60,6 @@ export type {
     FilterButtonSize,
     IFilterButtonItem as FilterButtonItem,
 } from './types/filterButtons';
-export type { OpeningTime, Time, Weekday } from './types/openingTimes';
 export type { PopupRef } from './types/popup';
 export type { ISearchBoxItem as SearchBoxItem } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';

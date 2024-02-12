@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { WithTheme } from '../../../color-scheme-provider/ColorSchemeProvider';
+import type { WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 
 export const StyledOpeningInput = styled(motion.div)`

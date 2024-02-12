@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import OpeningTimes from '../src/components/opening-times/OpeningTimes';
 
 export default {
-    title: 'Core/OpeningTimes',
+    title: 'Date/OpeningTimes',
     component: OpeningTimes,
     args: {
         weekdays: [

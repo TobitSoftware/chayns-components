@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import DateInfo from '../src/components/date-info/DateInfo';
 
 export default {
-    title: 'Core/DateInfo',
+    title: 'Date/DateInfo',
     component: DateInfo,
     args: {
         date: new Date(),

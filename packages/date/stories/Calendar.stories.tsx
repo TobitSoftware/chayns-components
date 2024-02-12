@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import Calendar from '../src/components/calendar/Calendar';
 
 export default {
-    title: 'Calendar/Calendar',
+    title: 'Date/Calendar',
     component: Calendar,
     args: {
         startDate: new Date('2023-02-01T00:00:00+00:00'),

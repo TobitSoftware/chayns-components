@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { OnChange, OnTimeAdd, OpeningTime, Time, Weekday } from '../../types/openingTimes';
-import Checkbox from '../checkbox/Checkbox';
+import { Checkbox } from '@chayns-components/core';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 import { StyledOpeningTimes, StyledOpeningTimesWrapper } from './OpeningTimes.styles';
 
