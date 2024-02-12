@@ -31,27 +31,4 @@ yarn add @chayns-components/swipeable-wrapper
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Icon } from '@chayns-components/icon';
-import { SwipeableWrapper } from '@chayns-components/swipeable-wrapper';
-
-<SwipeableWrapper
-    leftActions={[
-        {
-            action: () => console.log('Delete action'),
-            color: '#3B82F6',
-            icon: <Icon icons={['fa fa-trash']} />,
-            text: 'Delete',
-        },
-    ]}
-    rightActions={
-        [
-            // Same structure as leftActions
-        ]
-    }
->
-    <MyComponent />
-</SwipeableWrapper>;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

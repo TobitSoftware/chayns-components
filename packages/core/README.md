@@ -31,14 +31,4 @@ yarn add @chayns-components/core
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Button } from '@chayns-components/core';
-
-const handleButtonClick: MouseEventHandler<HTMLButtonElement> = (event) => {
-    // Your code
-};
-
-<Button onClick={handleButtonClick}>Click me!</Button>;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

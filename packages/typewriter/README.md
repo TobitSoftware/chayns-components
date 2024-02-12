@@ -4,8 +4,8 @@
     </h1>
     <p>A set of beautiful React components for developing your own applications with chayns.</p>
     <div>
-        <img src="https://img.shields.io/npm/dm/@chayns-components/typewriter.svg?style=for-the-badge" alt="" />
-        <img src="https://img.shields.io/npm/v/@chayns-components/typewriter?style=for-the-badge" alt="" />
+        <img src="https://img.shields.io/npm/dm/@chayns-components/core.svg?style=for-the-badge" alt="" />
+        <img src="https://img.shields.io/npm/v/@chayns-components/core?style=for-the-badge" alt="" />
         <img src="https://img.shields.io/github/license/TobitSoftware/chayns-components?style=for-the-badge" alt="" />
         <img src="https://img.shields.io/github/contributors/TobitSoftware/chayns-components?style=for-the-badge" alt="" />
     </div>
@@ -15,7 +15,7 @@
 
 ## Installation
 
-First you need to install the typewriter part of the chayns-components.
+First you need to install the core part of the chayns-components.
 
 ```bash
 # NPM
@@ -31,15 +31,4 @@ yarn add @chayns-components/typewriter
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Typewriter } from '@chayns-components/typewriter';
-
-<Typewriter>
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-    dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor
-    sit amet.
-</Typewriter>;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

@@ -19,10 +19,10 @@ First you need to install the core part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/core
+npm install @chayns-components/code-highlighter
 
 # Yarn
-yarn add @chayns-components/core
+yarn add @chayns-components/code-highlighter
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -31,14 +31,4 @@ yarn add @chayns-components/core
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Button } from '@chayns-components/core';
-
-const handleButtonClick: MouseEventHandler<HTMLButtonElement> = (event) => {
-    // Your code
-};
-
-<Button onClick={handleButtonClick}>Click me!</Button>;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

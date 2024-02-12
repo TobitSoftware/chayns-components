@@ -31,10 +31,4 @@ yarn add @chayns-components/color-picker
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { FileInput } from '@chayns-components/file-input';
-
-<FileInput />;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

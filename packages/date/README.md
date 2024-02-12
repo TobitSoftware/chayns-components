@@ -19,10 +19,10 @@ First you need to install the color picker part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/calendar
+npm install @chayns-components/date
 
 # Yarn
-yarn add @chayns-components/calendar
+yarn add @chayns-components/date
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -31,10 +31,4 @@ yarn add @chayns-components/calendar
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Calendar } from '@chayns-components/calendar';
-
-<Calendar />;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

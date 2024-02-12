@@ -31,10 +31,4 @@ yarn add @chayns-components/gallery
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Gallery } from '@chayns-components/gallery';
-
-<Gallery />;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

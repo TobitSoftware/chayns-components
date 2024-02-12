@@ -19,10 +19,10 @@ First you need to install the gallery part of the chayns-components.
 
 ```bash
 # NPM
-npm install @chayns-components/gallery
+npm install @chayns-components/maps
 
 # Yarn
-yarn add @chayns-components/gallery
+yarn add @chayns-components/maps
 ```
 
 > **Information:** Since the components have now been implemented with the styled-components
@@ -31,10 +31,4 @@ yarn add @chayns-components/gallery
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { Gallery } from '@chayns-components/gallery';
-
-<Gallery />;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).

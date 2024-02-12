@@ -31,10 +31,4 @@ yarn add @chayns-components/emoji-input
 
 ## Usage
 
-You can use the components in your project as in the following example.
-
-```typescript jsx
-import { EmojiInput } from '@chayns-components/emoji-input';
-
-<EmojiInput value="Hello world 👍" placeholder="Write message" />;
-```
+For detailed usage visit the [storybook](https://components.chayns.site/storybook).
