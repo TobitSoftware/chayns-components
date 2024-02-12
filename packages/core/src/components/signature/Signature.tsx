@@ -1,17 +1,17 @@
+import { createDialog, DialogType } from 'chayns-api';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { deleteUserSignature } from '../../api/signature/delete';
+import { getUserSignature } from '../../api/signature/get';
+import { putUserSignature } from '../../api/signature/put';
+import type { SignatureDialogResult } from '../../types/signature';
 import Button from '../button/Button';
+import Icon from '../icon/Icon';
 import {
     StyledSignature,
     StyledSignatureDeleteIconWrapper,
     StyledSignatureImage,
     StyledSignatureImageWrapper,
 } from './Signature.styles';
-import { putUserSignature } from '../../api/signature/put';
-import { deleteUserSignature } from '../../api/signature/delete';
-import { getUserSignature } from '../../api/signature/get';
-import Icon from '../icon/Icon';
-import { createDialog, DialogType } from 'chayns-api';
-import type { SignatureDialogResult } from '../../types/signature';
 
 export interface SignatureRef {
     edit: VoidFunction;

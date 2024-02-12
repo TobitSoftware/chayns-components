@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import { AnimatePresence } from 'framer-motion';
 import React, {
     ChangeEvent,
@@ -19,7 +20,6 @@ import React, {
     useState,
     type FormEvent,
 } from 'react';
-import { getDevice } from 'chayns-api';
 import type { PopupAlignment } from '../../constants/alignment';
 import { convertEmojisToUnicode } from '../../utils/emoji';
 import { getIsMobile } from '../../utils/environment';

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import type { WithTheme } from '@chayns-components/core';
+import styled from 'styled-components';
 import { CodeHighlighterTheme } from '../../../types/codeHighlighter';
 
 export const StyledCopyToClipboard = styled.div`

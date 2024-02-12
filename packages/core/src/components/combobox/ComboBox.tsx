@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, {
     FC,
     useCallback,
@@ -19,7 +20,6 @@ import {
     StyledComboBoxPlaceholderImage,
     StyledMotionComboBoxBody,
 } from './ComboBox.styles';
-import { getDevice } from 'chayns-api';
 
 export interface IComboBoxItem {
     imageUrl?: string;

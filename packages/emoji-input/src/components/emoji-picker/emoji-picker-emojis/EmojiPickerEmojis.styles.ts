@@ -1,6 +1,6 @@
 import type { WithTheme } from '@chayns-components/core';
-import styled, { css } from 'styled-components';
 import type { Browser } from 'detect-browser';
+import styled, { css } from 'styled-components';
 
 type StyledEmojiPickerEmojisProps = WithTheme<{
     shouldPreventScroll: boolean;

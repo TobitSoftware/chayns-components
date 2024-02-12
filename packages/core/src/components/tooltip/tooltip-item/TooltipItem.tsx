@@ -1,4 +1,5 @@
-import React, { type CSSProperties, FC, useMemo } from 'react';
+import React, { FC, useMemo, type CSSProperties } from 'react';
+import Button from '../../button/Button';
 import {
     StyledTooltipItem,
     StyledTooltipItemButtonWrapper,
@@ -6,7 +7,6 @@ import {
     StyledTooltipItemImage,
     StyledTooltipItemText,
 } from './TooltipItem.styles';
-import Button from '../../button/Button';
 
 export type TooltipProps = {
     headline?: string;

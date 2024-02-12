@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import { format } from 'prettier/standalone';
 import React, { FC, useCallback, useMemo } from 'react';
 import { PrismAsyncLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -14,7 +15,6 @@ import {
     StyledCodeHighlighterHeader,
 } from './CodeHighlighter.styles';
 import CopyToClipboard from './copy-to-clipboard/CopyToClipboard';
-import { getDevice } from 'chayns-api';
 
 export type CodeHighlighterProps = {
     /**

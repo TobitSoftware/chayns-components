@@ -1,9 +1,9 @@
-import React, { type CSSProperties, FC, ReactNode, useMemo, useRef } from 'react';
+import React, { FC, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
 import type { PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
+import Popup from '../popup/Popup';
 import TooltipItem from './tooltip-item/TooltipItem';
 import { StyledTooltip } from './Tooltip.styles';
-import Popup from '../popup/Popup';
 
 export type TooltipProps = {
     /**

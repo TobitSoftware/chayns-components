@@ -1,9 +1,9 @@
-import React, { FC, type ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import { OpeningTimesButtonType, type Time } from '../../../types/openingTimes';
-import { StyledOpeningInputs } from './OpeningInputs.styles';
 import OpeningInput from './opening-input/OpeningInput';
-import { AnimatePresence } from 'framer-motion';
+import { StyledOpeningInputs } from './OpeningInputs.styles';
 
 export type OpeningInputsProps = {
     times: Time[];

@@ -1,4 +1,4 @@
-import { type ColorMode, useSite } from 'chayns-api';
+import { useSite, type ColorMode } from 'chayns-api';
 import { useEffect, useState } from 'react';
 
 export const useColorMode = (): ColorMode => {

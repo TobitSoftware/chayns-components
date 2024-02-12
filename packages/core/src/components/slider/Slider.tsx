@@ -1,12 +1,12 @@
 import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTheme } from 'styled-components';
+import { fillSlider } from '../../utils/slider';
 import {
     StyledSlider,
     StyledSliderInput,
     StyledSliderThumb,
     StyledSliderThumbLable,
 } from './Slider.styles';
-import { fillSlider } from '../../utils/slider';
-import { useTheme } from 'styled-components';
 
 export interface SliderInterval {
     maxValue: number;

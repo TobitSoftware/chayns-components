@@ -1,6 +1,6 @@
+import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import type { CSSProperties } from 'react';
 
 type StyledTooltipItemProps = WithTheme<{ width?: CSSProperties['width'] }>;
 

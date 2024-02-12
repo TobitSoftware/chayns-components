@@ -1,6 +1,6 @@
+import { getDevice } from 'chayns-api';
 import React, { CSSProperties, FC, ReactNode, useMemo } from 'react';
 import { StyledScrollView } from './ScrollView.styles';
-import { getDevice } from 'chayns-api';
 
 export type ScrollViewProps = {
     /**

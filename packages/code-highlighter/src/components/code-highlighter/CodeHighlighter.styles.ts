@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components';
 import type { WithTheme } from '@chayns-components/core';
-import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 import type { Browser } from 'detect-browser';
+import styled, { css } from 'styled-components';
+import { CodeHighlighterTheme } from '../../types/codeHighlighter';
 
 type StyledCodeHighlighterProps = WithTheme<{
     codeTheme: CodeHighlighterTheme;

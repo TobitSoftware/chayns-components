@@ -1,10 +1,10 @@
+import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { ComboBoxDirection } from '../../types/comboBox';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import type { ComboBoxItemProps } from './combobox-item/ComboBoxItem';
-import type { Browser } from 'detect-browser';
 
 export const StyledComboBox = styled.div`
     user-select: none;

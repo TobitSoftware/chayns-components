@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import emojiLib from 'emojilib';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import emojiList from 'unicode-emoji-json/data-by-emoji.json';
@@ -10,7 +11,6 @@ import {
     StyledEmojiPickerEmojis,
     StyledEmojiPickerEmojisNoContentInfo,
 } from './EmojiPickerEmojis.styles';
-import { getDevice } from 'chayns-api';
 
 export type EmojiPickerEmojisProps = {
     accessToken?: string;

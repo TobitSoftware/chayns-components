@@ -1,3 +1,4 @@
+import { getDevice } from 'chayns-api';
 import React, {
     ChangeEvent,
     ChangeEventHandler,
@@ -12,7 +13,6 @@ import React, {
     useState,
 } from 'react';
 import { StyledTextArea, StyledTextAreaInput, StyledTextAreaLabel } from './TextArea.styles';
-import { getDevice } from 'chayns-api';
 
 export type TextAreaProps = {
     /**

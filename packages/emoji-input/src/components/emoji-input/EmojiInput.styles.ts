@@ -1,9 +1,9 @@
 import type { WithTheme } from '@chayns-components/core';
+import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
 import type { EmojiInputProps } from './EmojiInput';
-import type { Browser } from 'detect-browser';
 
 type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'isDisabled'>>;
 

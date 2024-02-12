@@ -1,4 +1,4 @@
-import React, { type MouseEventHandler, ReactNode } from 'react';
+import React, { ReactNode, type MouseEventHandler } from 'react';
 import { useColorMode } from '../../../hooks/colorMode';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
