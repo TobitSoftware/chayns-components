@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/date",
-    "version": "5.0.0-beta.417",
+    "version": "5.0.0-beta.433",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
@@ -50,17 +50,17 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.431",
+        "@chayns-components/core": "^5.0.0-beta.433",
         "chayns-api": "^1.0.50",
         "date-fns": "^2.30.0",
-        "uuid": "^9.0.1",
-        "framer-motion": "^10.18.0"
+        "framer-motion": "^10.18.0",
+        "uuid": "^9.0.1"
     },
     "peerDependencies": {
+        "date-fns": "^2.30.0",
         "react": ">=16.14.0",
         "react-dom": ">=16.14.0",
-        "styled-components": "^5.3.11",
-        "date-fns": "^2.30.0"
+        "styled-components": "^5.3.11"
     },
     "publishConfig": {
         "access": "public"
