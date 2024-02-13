@@ -62,9 +62,19 @@ const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args
 
 export const General = Template.bind({});
 
+export const WithHTML = Template.bind({});
+
 export const TextStringWithReplacement = TextStringWithReplacementTemplate.bind({});
 
 export const TextStringWithStyles = Template.bind({});
+
+WithHTML.args = {
+    textString: {
+        fallback: '<button>Drücke mich!</button>',
+        name: 'txt_chayns_chaynsComponents_textString_example_with_html',
+    },
+    isTextstringHTML: true,
+};
 
 General.args = {
     childrenTagName: 'h1',

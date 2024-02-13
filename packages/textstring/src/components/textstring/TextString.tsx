@@ -8,7 +8,7 @@ import React, {
     useCallback,
     useMemo,
 } from 'react';
-import { StyledTextString } from './TextString.styles';
+import { StyledTextString, StyledTextStringElement } from './TextString.styles';
 import type { ITextstring, TextstringReplacement } from './types';
 import { isTobitEmployee } from '@chayns-components/core';
 import { selectLanguageToChange } from '../../utils/textstring';
@@ -28,6 +28,10 @@ export type TextStringProps = {
      */
     childrenTagName?: keyof ReactHTML;
     /**
+     * Whether the textstring is an HTML element and should be displayed as an element.
+     */
+    isTextstringHTML?: boolean;
+    /**
      * A part of the text that should be replaced.
      */
     replacements?: TextstringReplacement;
@@ -40,6 +44,7 @@ export type TextStringProps = {
 const TextString: FC<TextStringProps> = ({
     textString,
     replacements,
+    isTextstringHTML,
     childrenTagName,
     children,
     childrenStyles,
@@ -47,6 +52,10 @@ const TextString: FC<TextStringProps> = ({
     const text = useTextstringValue({ textString, replacements });
 
     const childElement = useMemo(() => {
+        if (isTextstringHTML) {
+            return <StyledTextStringElement dangerouslySetInnerHTML={{ __html: text }} />;
+        }
+
         let element = createElement(
             '',
             childrenStyles ? { style: childrenStyles } : null,
@@ -62,7 +71,7 @@ const TextString: FC<TextStringProps> = ({
         }
 
         return element;
-    }, [children, childrenStyles, childrenTagName, text]);
+    }, [children, childrenStyles, childrenTagName, isTextstringHTML, text]);
 
     const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
         (event) => {
