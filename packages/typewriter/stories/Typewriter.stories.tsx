@@ -58,7 +58,7 @@ HTMLText.args = {
     children: (
         <>
             Lorem ipsum dolor sit amet,
-            <b>consetetur sadipscing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et
+            <b>consetetur sadipcing elitr</b>, sed diam nonumy eirmod tempor invidunt ut labore et
             dolore magna aliquyam erat, sed diam voluptua.
             <s>
                 <b>At vero eos et accusam et justo duo dolores et ea rebum.</b>
