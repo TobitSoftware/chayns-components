@@ -126,19 +126,13 @@ const Typewriter: FC<TypewriterProps> = ({
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
 
+    console.debug({ charactersCount, textContent, shownCharCount });
+
     const isAnimatingText =
         shownCharCount !== textContent.length ||
         shouldForceCursorAnimation ||
         areMultipleChildrenGiven ||
         textContent.length === 0;
-
-    console.debug({
-        isAnimatingText,
-        shouldForceCursorAnimation,
-        areMultipleChildrenGiven,
-        ungleich: shownCharCount !== textContent.length,
-        gleichNull: textContent.length === 0,
-    });
 
     const handleClick = useCallback(() => {
         setShouldStopAnimation(true);
