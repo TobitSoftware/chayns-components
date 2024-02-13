@@ -65,6 +65,10 @@ export type TypewriterProps = {
      */
     shouldUseResetAnimation?: boolean;
     /**
+     * Whether the typewriter should wait for new content
+     */
+    shouldWaitForContent?: boolean;
+    /**
      * The speed of the animation. Use the TypewriterSpeed enum for this prop.
      */
     speed?: TypewriterSpeed | number;
@@ -84,10 +88,12 @@ const Typewriter: FC<TypewriterProps> = ({
     shouldSortChildrenRandomly = false,
     shouldUseAnimationHeight = false,
     shouldUseResetAnimation = false,
+    shouldWaitForContent,
     speed = TypewriterSpeed.Medium,
     textStyle,
 }) => {
     const [currentChildrenIndex, setCurrentChildrenIndex] = useState(0);
+    const [shouldCount, setShouldCount] = useState(true);
 
     const sortedChildren = useMemo(
         () =>
@@ -125,6 +131,14 @@ const Typewriter: FC<TypewriterProps> = ({
         charactersCount > 0 ? 0 : textContent.length,
     );
     const [shouldStopAnimation, setShouldStopAnimation] = useState(false);
+    const [prevChildren, setPrevChildren] = useState<TypewriterProps['children']>(children);
+
+    useEffect(() => {
+        if (children !== prevChildren) {
+            setShouldCount(true);
+            setPrevChildren(children);
+        }
+    }, [children, prevChildren]);
 
     console.debug({ charactersCount, textContent, shownCharCount });
 
@@ -179,27 +193,35 @@ const Typewriter: FC<TypewriterProps> = ({
         } else {
             interval = window.setInterval(() => {
                 setShownCharCount((prevState) => {
-                    let nextState = prevState + 1;
+                    let nextState = prevState;
+
+                    if (shouldCount) {
+                        nextState = prevState + 1;
+                    }
 
                     if (nextState === charactersCount) {
-                        window.clearInterval(interval);
+                        if (shouldWaitForContent) {
+                            setShouldCount(false);
+                        } else {
+                            window.clearInterval(interval);
 
-                        /**
-                         * At this point, the next value for "shownCharCount" is deliberately set to
-                         * the length of the textContent in order to correctly display HTML elements
-                         * after the last letter.
-                         */
-                        nextState = textContent.length;
+                            /**
+                             * At this point, the next value for "shownCharCount" is deliberately set to
+                             * the length of the textContent in order to correctly display HTML elements
+                             * after the last letter.
+                             */
+                            nextState = textContent.length;
 
-                        if (areMultipleChildrenGiven) {
-                            setTimeout(() => {
-                                if (shouldUseResetAnimation) {
-                                    setIsResetAnimationActive(true);
-                                } else {
-                                    setShownCharCount(0);
-                                    setTimeout(handleSetNextChildrenIndex, resetDelay / 2);
-                                }
-                            }, resetDelay);
+                            if (areMultipleChildrenGiven) {
+                                setTimeout(() => {
+                                    if (shouldUseResetAnimation) {
+                                        setIsResetAnimationActive(true);
+                                    } else {
+                                        setShownCharCount(0);
+                                        setTimeout(handleSetNextChildrenIndex, resetDelay / 2);
+                                    }
+                                }, resetDelay);
+                            }
                         }
                     }
 
@@ -222,6 +244,8 @@ const Typewriter: FC<TypewriterProps> = ({
         childrenCount,
         handleSetNextChildrenIndex,
         shouldUseResetAnimation,
+        shouldCount,
+        shouldWaitForContent,
     ]);
 
     useEffect(() => {
