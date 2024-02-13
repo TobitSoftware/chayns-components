@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React, { FC, type MouseEventHandler, ReactNode } from 'react';
 import { StyledBadge } from './Badge.styles';
 
 export type BadgeProps = {
@@ -19,13 +19,19 @@ export type BadgeProps = {
      * The font color of the badge
      */
     fontColor?: string;
+    /**
+     * Function to be executed when the badge is clicked
+     */
+    onClick?: MouseEventHandler;
 };
 
-const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor }) => {
+const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor, onClick }) => {
     const badgeClasses = clsx('beta-chayns-badge ellipsis', className);
 
     return (
         <StyledBadge
+            onClick={onClick}
+            isOnClick={typeof onClick === 'function'}
             backgroundColor={backgroundColor}
             className={badgeClasses}
             fontColor={fontColor}

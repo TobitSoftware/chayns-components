@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { BadgeProps } from './Badge';
 
-type StyledBadgeProps = WithTheme<Pick<BadgeProps, 'backgroundColor' | 'fontColor'>>;
+type StyledBadgeProps = WithTheme<{
+    backgroundColor?: string;
+    fontColor?: string;
+    isOnClick: boolean;
+}>;
 
 export const StyledBadge = styled.div<StyledBadgeProps>`
     background-color: ${({ backgroundColor, theme }: StyledBadgeProps) =>
@@ -14,4 +17,5 @@ export const StyledBadge = styled.div<StyledBadgeProps>`
     min-width: 1.65rem;
     padding: 2px 7px;
     text-align: center;
+    cursor: ${({ isOnClick }) => (isOnClick ? 'pointer' : 'default')};
 `;
