@@ -132,6 +132,14 @@ const Typewriter: FC<TypewriterProps> = ({
         areMultipleChildrenGiven ||
         textContent.length === 0;
 
+    console.debug({
+        isAnimatingText,
+        shouldForceCursorAnimation,
+        areMultipleChildrenGiven,
+        ungleich: shownCharCount !== textContent.length,
+        gleichNull: textContent.length === 0,
+    });
+
     const handleClick = useCallback(() => {
         setShouldStopAnimation(true);
     }, []);
