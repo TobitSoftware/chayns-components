@@ -1,5 +1,4 @@
 import { TextArea } from '@chayns-components/core';
-import { EmojiInput } from '@chayns-components/emoji-input';
 import { Meta, StoryFn } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';
 import Typewriter from '../src/components/typewriter/Typewriter';
@@ -21,21 +20,6 @@ const TextAreaTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => 
     <TextArea placeholder={<Typewriter {...args}>{children}</Typewriter>} />
 );
 
-const EmojiInputTemplate: StoryFn<typeof Typewriter> = ({ children, ...args }) => {
-    const [value, setValue] = useState('');
-
-    const handleChange = (event: ChangeEvent<HTMLDivElement>) => {
-        setValue(event.target.innerHTML);
-    };
-    return (
-        <EmojiInput
-            placeholder={<Typewriter {...args}>{children}</Typewriter>}
-            value={value}
-            onInput={handleChange}
-        />
-    );
-};
-
 export const General = Template.bind({});
 
 export const CustomElements = Template.bind({});
@@ -50,14 +34,8 @@ export const WithOwnStyles = Template.bind({});
 
 export const InsideTextArea = TextAreaTemplate.bind({});
 
-export const InsideEmojiInput = EmojiInputTemplate.bind({});
-
 InsideTextArea.args = {
     children: 'Nachricht eingeben',
-};
-
-InsideEmojiInput.args = {
-    children: 'Schreibe eine Nachricht',
 };
 
 CustomElements.args = {
