@@ -60,7 +60,9 @@
     "peerDependencies": {
         "react": ">=16.14.0",
         "react-dom": ">=16.14.0",
-        "styled-components": "^5.3.11"
+        "styled-components": "^5.3.11",
+        "chayns-api": "^1.0.50",
+        "framer-motion": "^10.18.0"
     },
     "publishConfig": {
         "access": "public"

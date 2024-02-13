@@ -52,14 +52,15 @@
         "@chayns-components/core": "^5.0.0-beta.437",
         "@types/react-syntax-highlighter": "^15.5.11",
         "babel-prettier-parser": "^0.10.8",
-        "chayns-api": "^1.0.50",
         "prettier": "^3.2.3",
         "react-syntax-highlighter": "^15.5.0"
     },
     "peerDependencies": {
         "react": ">=16.14.0",
         "react-dom": ">=16.14.0",
-        "styled-components": "^5.3.11"
+        "styled-components": "^5.3.11",
+        "chayns-api": "^1.0.50",
+        "framer-motion": "^10.18.0"
     },
     "publishConfig": {
         "access": "public"
