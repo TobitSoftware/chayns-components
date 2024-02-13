@@ -129,7 +129,7 @@ const Typewriter: FC<TypewriterProps> = ({
     console.debug({ charactersCount, textContent, shownCharCount });
 
     const isAnimatingText =
-        shownCharCount !== textContent.length ||
+        shownCharCount < textContent.length ||
         shouldForceCursorAnimation ||
         areMultipleChildrenGiven ||
         textContent.length === 0;
