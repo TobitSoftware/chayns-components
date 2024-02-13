@@ -6,6 +6,7 @@
     "workspaces": [
         "packages/*"
     ],
+    "sideEffects": false,
     "scripts": {
         "storybook": "storybook dev -p 6006",
         "build:storybook": "storybook build",
@@ -35,6 +36,12 @@
         "url": "https://github.com/TobitSoftware/chayns-components/issues"
     },
     "homepage": "https://github.com/TobitSoftware/chayns-components#readme",
+    "browserslist": [
+        ">0.5%",
+        "not dead",
+        "not op_mini all",
+        "not IE 11"
+    ],
     "devDependencies": {
         "@babel/cli": "^7.23.4",
         "@babel/core": "^7.23.7",
