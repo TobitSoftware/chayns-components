@@ -33,7 +33,7 @@ const EmojiPickerCategories: FC<EmojiPickerCategoriesProps> = ({
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Tab' || event.shiftKey) {
+            if (event.key === 'Tab' || (event.key === 'Tab' && event.shiftKey)) {
                 event.preventDefault();
 
                 const children = categoryRef.current?.children;
