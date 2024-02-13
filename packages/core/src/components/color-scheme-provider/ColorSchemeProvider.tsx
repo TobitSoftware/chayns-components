@@ -121,6 +121,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
+        console.log({ internalDesignSettings, internalColorMode, internalColor });
+
         if (internalDesignSettings) {
             Object.keys(internalDesignSettings).forEach((key) => {
                 if (key === 'iconStyle') {
@@ -136,6 +138,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 newTheme[key] = internalDesignSettings[key];
             });
         }
+
+        console.debug(newTheme);
 
         setTheme(newTheme);
         setColors(newColors);
