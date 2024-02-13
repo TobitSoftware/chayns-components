@@ -92,12 +92,9 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             );
         }
 
-        if (!theme) {
-            return null;
-        }
-
-        const internalIcon = theme.accordionIcon ? (theme.accordionIcon as number) : 61701;
-        const internalIconStyle = theme.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
+        const internalIcon = theme && theme.accordionIcon ? (theme.accordionIcon as number) : 61701;
+        const internalIconStyle =
+            theme && theme.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
 
         return (
             <StyledAccordionIcon className={internalIconStyle} icon={internalIcon.toString(16)} />
