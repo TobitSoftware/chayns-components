@@ -16,6 +16,7 @@ import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { StyledAccordion } from './Accordion.styles';
+import { useTheme } from 'styled-components';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
 

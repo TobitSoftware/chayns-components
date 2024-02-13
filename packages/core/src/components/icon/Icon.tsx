@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
 import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 import { getStackSizeFactor } from '../../utils/icon';
+import { useTheme } from 'styled-components';
 
 export type IconProps = {
     /**
@@ -73,6 +74,8 @@ const Icon: FC<IconProps> = ({
         }
     };
 
+    const { iconStyle } = useTheme();
+
     let maxStackSizeFactor = 1;
 
     icons.forEach((icon) => {
@@ -103,7 +106,7 @@ const Icon: FC<IconProps> = ({
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
-                const iconClasses = clsx(icon, {
+                const iconClasses = clsx(`${iconStyle as string} ${icon}`, {
                     'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
                 });
 

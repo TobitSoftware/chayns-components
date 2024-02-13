@@ -5,10 +5,12 @@ import React, {
     MouseEventHandler,
     ReactNode,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
 import {
+    StyledAccordionIcon,
     StyledMotionAccordionHead,
     StyledMotionContentWrapper,
     StyledMotionIconWrapper,
@@ -22,6 +24,7 @@ import {
 } from './AccordionHead.styles';
 import { getAccordionHeadHeight } from '../../../utils/accordion';
 import Icon from '../../icon/Icon';
+import { useTheme } from 'styled-components';
 
 type AccordionHeadProps = {
     icon?: string;
@@ -66,6 +69,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         open: isWrapped ? 40 : 33,
     });
 
+    const { accordionIcon, iconStyle } = useTheme();
+
     const titleWrapperRef = useRef<HTMLDivElement>(null);
 
     const hasSearchIcon = Array.isArray(searchIcon);
@@ -80,6 +85,25 @@ const AccordionHead: FC<AccordionHeadProps> = ({
         );
     }, [isWrapped, title]);
 
+    const iconElement = useMemo(() => {
+        if (icon || (icon && isFixed)) {
+            return (
+                <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
+            );
+        }
+
+        if (!accordionIcon) {
+            return null;
+        }
+
+        return (
+            <StyledAccordionIcon
+                className={iconStyle as string}
+                icon={(accordionIcon as number)?.toString(16)}
+            />
+        );
+    }, [accordionIcon, icon, iconStyle, isFixed]);
+
     return (
         <StyledMotionAccordionHead
             animate={{ height: isOpen ? headHeight.open : headHeight.closed }}
@@ -91,7 +115,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                 initial={false}
                 onClick={!isFixed ? onClick : undefined}
             >
-                <Icon icons={[isFixed ? 'fa fa-horizontal-rule' : icon ?? 'fa fa-chevron-right']} />
+                {iconElement}
             </StyledMotionIconWrapper>
             <StyledMotionContentWrapper
                 animate={{ opacity: isTitleGreyed ? 0.5 : 1 }}

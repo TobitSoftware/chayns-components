@@ -20,12 +20,17 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !isWrapped &&
         !shouldHideBackground &&
         css`
-            background-color: ${theme['100']}; // ToDo: Add opacity here
-            border-radius: 3px; // ToDo: Add correct border-radius here
-            box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); // ToDo: Add correct box-shadow here
+            background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
+            border-radius: ${theme.cardBorderRadius}px;
+            box-shadow: 0 2px 6px 0 rgba(0, 0, 0, ${theme.cardShadow});
         `}
 
-    border-bottom: 1px solid transparent;
+    ${({ theme }: StyledMotionAccordionProps) =>
+        theme.accordionLines &&
+        css`
+            border-bottom: 1px solid transparent;
+        `}
+    
     margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
     transition:
         background-color 0.3s ease,
@@ -71,7 +76,7 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         !shouldHideBackground &&
         css`
             &:hover {
-                background-color: ${theme['100']}; // ToDo: Add opacity here
+                background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
         `}
 `;

@@ -25,6 +25,20 @@ export const StyledMotionIconWrapper = styled(motion.div)<FramerMotionBugFix>`
     width: 25px;
 `;
 
+type StyledAccordionIconProps = WithTheme<{ icon: string }>;
+
+export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: ${({ theme }: StyledAccordionIconProps) => theme.headline};
+
+    &:before {
+        content: ${({ icon }) => `"\\${icon}"`};
+        font-family: 'Font Awesome 6 Pro', Fontawesome !important;
+    }
+`;
+
 export const StyledMotionContentWrapper = styled(motion.div)<FramerMotionBugFix>`
     align-self: flex-start;
     cursor: ${({ onClick }) => (typeof onClick === 'function' ? 'pointer' : 'default')};

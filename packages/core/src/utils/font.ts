@@ -1,3 +1,5 @@
+import { IconStyle } from '../types/colorSchemeProvider';
+
 export interface Font {
     family: string;
     src: string;
@@ -66,6 +68,21 @@ const fonts: Font[] = [
     },
 ];
 
+export const convertIconStyle = (iconStyle: IconStyle) => {
+    switch (iconStyle) {
+        case IconStyle.SOLID:
+            return 'fa-solid';
+        case IconStyle.DUOTONE:
+            return 'fa-duotone';
+        case IconStyle.SHARP:
+            return 'fa-sharp';
+        case IconStyle.LIGHT:
+            return 'fa-light';
+        default:
+            return 'fa-regular';
+    }
+};
+
 export const generateFontFaces = () =>
     fonts
         .map(
@@ -78,6 +95,6 @@ export const generateFontFaces = () =>
     src: url("${font.src}") format("woff2");
     ${font.unicodeRange ? `unicode-range: ${font.unicodeRange};` : ''}
   }
-`
+`,
         )
         .join('');
