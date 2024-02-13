@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/typewriter",
-    "version": "5.0.0-beta.440",
+    "version": "5.0.0-beta.441",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "keywords": [
         "chayns",
@@ -50,7 +50,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.438"
+        "@chayns-components/core": "^5.0.0-beta.441"
     },
     "peerDependencies": {
         "chayns-api": ">=1.0.50",
