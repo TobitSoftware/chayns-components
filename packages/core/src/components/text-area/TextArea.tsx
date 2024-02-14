@@ -11,7 +11,12 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { StyledTextArea, StyledTextAreaInput, StyledTextAreaLabel } from './TextArea.styles';
+import {
+    StyledTextArea,
+    StyledTextAreaInput,
+    StyledTextAreaLabel,
+    StyledTextAreaLabelWrapper,
+} from './TextArea.styles';
 
 export type TextAreaProps = {
     /**
@@ -87,7 +92,12 @@ const TextArea: FC<TextAreaProps> = ({
                     isOverflowing={isOverflowing}
                     rows={1}
                 />
-                {!value && <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>}
+                {!value && (
+                    <StyledTextAreaLabelWrapper>
+                        {' '}
+                        <StyledTextAreaLabel>{placeholder}</StyledTextAreaLabel>
+                    </StyledTextAreaLabelWrapper>
+                )}
             </StyledTextArea>
         ),
         [browser?.name, isOverflowing, maxHeight, minHeight, onBlur, onChange, placeholder, value],

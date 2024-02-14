@@ -57,10 +57,7 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
               `}
 `;
 
-type StyledTextAreaLabelProps = WithTheme<unknown>;
-
-export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
-    color: rgba(${({ theme }: StyledTextAreaLabelProps) => theme['text-rgb']}, 0.45);
+export const StyledTextAreaLabelWrapper = styled.label`
     left: 10px;
     top: 12px;
     align-items: baseline;
@@ -71,4 +68,16 @@ export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
     pointer-events: none;
     position: absolute;
     user-select: none;
+    width: calc(100% - 20px);
+`;
+
+type StyledTextAreaLabelProps = WithTheme<unknown>;
+
+export const StyledTextAreaLabel = styled.label<StyledTextAreaLabelProps>`
+    color: rgba(${({ theme }: StyledTextAreaLabelProps) => theme['text-rgb']}, 0.45);
+    line-height: 1.3;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
