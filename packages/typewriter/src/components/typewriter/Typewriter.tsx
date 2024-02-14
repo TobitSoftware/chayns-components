@@ -204,7 +204,7 @@ const Typewriter: FC<TypewriterProps> = ({
                         shouldCount,
                     });
 
-                    if (nextState === charactersCount) {
+                    if (nextState >= charactersCount) {
                         if (shouldWaitForContent) {
                             setShouldCount(false);
                         } else {
