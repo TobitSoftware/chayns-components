@@ -22,9 +22,10 @@ import {
     StyledInputContentWrapper,
     StyledInputField,
     StyledInputIconWrapper,
+    StyledInputLabel,
     StyledInputRightElement,
     StyledMotionInputClearIcon,
-    StyledMotionInputLabel,
+    StyledMotionInputLabelWrapper,
 } from './Input.styles';
 
 export type InputRef = {
@@ -137,7 +138,10 @@ const Input = forwardRef<InputRef, InputProps>(
         ref,
     ) => {
         const [hasValue, setHasValue] = useState(typeof value === 'string' && value !== '');
+        const [width, setWidth] = useState(0);
+
         const theme = useTheme() as Theme;
+
         const inputRef = useRef<HTMLInputElement>(null);
 
         const handleClearIconClick = useCallback(() => {
@@ -151,6 +155,25 @@ const Input = forwardRef<InputRef, InputProps>(
                 }
             }
         }, [onChange]);
+
+        useEffect(() => {
+            if (inputRef.current) {
+                const resizeObserver = new ResizeObserver((entries) => {
+                    if (entries && entries[0]) {
+                        const observedWidth = entries[0].contentRect.width;
+                        setWidth(observedWidth);
+                    }
+                });
+
+                resizeObserver.observe(inputRef.current);
+
+                return () => {
+                    resizeObserver.disconnect();
+                };
+            }
+
+            return () => {};
+        }, []);
 
         const handleInputFieldChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +234,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             inputMode={inputMode}
                             isInvalid={isInvalid}
                         />
-                        <StyledMotionInputLabel
+                        <StyledMotionInputLabelWrapper
                             animate={{
                                 fontSize: hasValue ? '10px' : '16px',
                             }}
@@ -219,11 +242,11 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.3 }}
-                            isInvalid={isInvalid}
+                            width={width}
                         >
                             {placeholderElement}
-                            {placeholder}
-                        </StyledMotionInputLabel>
+                            <StyledInputLabel isInvalid={isInvalid}>{placeholder}</StyledInputLabel>
+                        </StyledMotionInputLabelWrapper>
                     </StyledInputContent>
                     {shouldShowClearIcon && (
                         <StyledMotionInputClearIcon

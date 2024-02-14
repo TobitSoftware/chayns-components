@@ -72,9 +72,11 @@ export const StyledInputField = styled.input<StyledInputFieldProps>`
     width: 100%;
 `;
 
-type StyledMotionInputLabelProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+type StyledMotionInputLabelWrapperProps = WithTheme<{ width: number }>;
 
-export const StyledMotionInputLabel = styled(motion.label)<StyledMotionInputLabelProps>`
+export const StyledMotionInputLabelWrapper = styled(
+    motion.label,
+)<StyledMotionInputLabelWrapperProps>`
     align-items: baseline;
     display: flex;
     flex: 0 0 auto;
@@ -83,7 +85,19 @@ export const StyledMotionInputLabel = styled(motion.label)<StyledMotionInputLabe
     pointer-events: none;
     position: absolute;
     user-select: none;
-    color: ${({ theme, isInvalid }: StyledMotionInputLabelProps) =>
+    max-width: ${({ width }) => width}px;
+`;
+
+type StyledInputLabelProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+
+export const StyledInputLabel = styled.label<StyledInputLabelProps>`
+    line-height: 1.3;
+    pointer-events: none;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: ${({ theme, isInvalid }: StyledInputLabelProps) =>
         isInvalid ? theme.wrong : undefined};
 `;
 
