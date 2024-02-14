@@ -66,6 +66,7 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
     flex: 1 1 auto;
     font-family: ${getFontFamily};
     overflow-y: scroll;
+    overflow-x: hidden;
     word-break: break-word;
 
     // This fixes a bug where the field is not editable in certain browsers.
