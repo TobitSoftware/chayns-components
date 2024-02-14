@@ -197,13 +197,6 @@ const Typewriter: FC<TypewriterProps> = ({
                         nextState = prevState + 1;
                     }
 
-                    console.log({
-                        nextState,
-                        total: textContent.length,
-                        shouldWaitForContent,
-                        shouldCount,
-                    });
-
                     if (nextState >= charactersCount) {
                         if (shouldWaitForContent) {
                             setShouldCount(false);
