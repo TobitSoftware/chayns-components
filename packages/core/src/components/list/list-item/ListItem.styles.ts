@@ -22,8 +22,14 @@ export const StyledListItem = styled.div<StyledListItemProps>`
                 background-color: rgba(${theme['100-rgb']}, 0.85);
             }
         `}
+    
+    ${({ theme }: StyledListItemProps) =>
+        theme.accordionLines &&
+        css`
+            &:not(:last-child) {
+                border-bottom: 1px solid ${theme.headline};
+            }
+        `}}
 
-    &:not(:last-child) {
-        border-bottom: 1px solid ${({ theme }: StyledListItemProps) => theme.headline};
-    }
+    
 `;
