@@ -15,10 +15,6 @@ import {
 
 export type GalleryProps = {
     /**
-     * AccessToken of the user
-     */
-    accessToken: string;
-    /**
      * Whether drag and drop is allowed or not
      */
     allowDragAndDrop?: boolean;
@@ -47,17 +43,12 @@ export type GalleryProps = {
      */
     onRemove?: (file: FileItem) => void;
     /**
-     * PersonId of the user
-     */
-    personId: string;
-    /**
      * The mode how the images should be displayed.
      */
     viewMode?: GalleryViewMode;
 };
 
 const Gallery: FC<GalleryProps> = ({
-    accessToken,
     allowDragAndDrop = false,
     isEditMode = false,
     fileMinWidth = 100,
@@ -65,7 +56,6 @@ const Gallery: FC<GalleryProps> = ({
     onAdd,
     onFileCountChange,
     onRemove,
-    personId,
     viewMode = GalleryViewMode.GRID,
 }) => {
     const [fileItems, setFileItems] = useState<FileItem[]>([]);
@@ -166,12 +156,10 @@ const Gallery: FC<GalleryProps> = ({
 
             void uploadFile({
                 fileToUpload: file,
-                personId,
-                accessToken,
                 callback: (UploadedFile) => handleUploadFileCallback(file, UploadedFile),
             });
         });
-    }, [accessToken, fileItems, handleUploadFileCallback, personId]);
+    }, [fileItems, handleUploadFileCallback]);
 
     /**
      * This function formats and adds files to fileItems
