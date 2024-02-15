@@ -192,7 +192,7 @@ const Gallery: FC<GalleryProps> = ({
 
             files.forEach((file) => {
                 newFileItems.push({
-                    id: uuidv4(),
+                    id: file.id,
                     uploadedFile: file.uploadedFile,
                     file: file.file,
                     state: file.uploadedFile ? 'uploaded' : 'none',
@@ -200,7 +200,18 @@ const Gallery: FC<GalleryProps> = ({
                 });
             });
 
-            setFileItems((prevState) => [...prevState, ...newFileItems]);
+            setFileItems((prevState) => {
+                const updatedItems = prevState.map((prevItem) => {
+                    const newItem = newFileItems.find((item) => item.id === prevItem.id);
+                    return newItem || prevItem;
+                });
+
+                return updatedItems.concat(
+                    newFileItems.filter(
+                        (newItem) => !prevState.some((prevItem) => prevItem.id === newItem.id),
+                    ),
+                );
+            });
         }
     }, [files]);
 
