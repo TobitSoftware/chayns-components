@@ -27,6 +27,11 @@ export const StyledButton = styled.button<StyledButtonProps>`
     user-select: none;
     transition: opacity 0.3s ease;
 
+    &:hover {
+        background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
+            isSecondary ? theme['203'] : theme['409']};
+    }
+
     ${({ hasIcon, hasChildren }) => {
         if (hasIcon) {
             if (hasChildren) {
