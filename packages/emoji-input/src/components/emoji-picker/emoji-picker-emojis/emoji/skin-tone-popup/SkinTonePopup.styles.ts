@@ -2,7 +2,6 @@ import type { FramerMotionBugFix, WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { AnchorAlignment } from '../../../../../constants/alignment';
-import type { SkinTonePopupProps } from './SkinTonePopup';
 
 export const StyledMotionSkinTonePopup = styled(motion.div)<FramerMotionBugFix>`
     z-index: 1;
@@ -13,9 +12,10 @@ export const skinTonePopupContentSize = {
     width: 200,
 };
 
-type StyledSkinTonePopupContentProps = WithTheme<
-    Pick<SkinTonePopupProps, 'anchorAlignment' | 'anchorOffset'>
->;
+type StyledSkinTonePopupContentProps = WithTheme<{
+    $anchorAlignment: AnchorAlignment;
+    $anchorOffset: number;
+}>;
 
 export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentProps>`
     align-items: stretch;
@@ -42,18 +42,18 @@ export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentP
         width: 14px;
         z-index: -2;
 
-        ${({ anchorAlignment, anchorOffset }) => {
-            switch (anchorAlignment) {
+        ${({ $anchorAlignment, $anchorOffset }) => {
+            switch ($anchorAlignment) {
                 case AnchorAlignment.Bottom:
                     return css`
                         bottom: -7px;
-                        left: calc(50% - 7px + ${anchorOffset}px);
+                        left: calc(50% - 7px + ${$anchorOffset}px);
                         transform: rotate(45deg);
                     `;
                 case AnchorAlignment.Top:
                     return css`
                         top: -7px;
-                        left: calc(50% - 7px + ${anchorOffset}px);
+                        left: calc(50% - 7px + ${$anchorOffset}px);
                         transform: rotate(225deg);
                     `;
                 default:
@@ -75,7 +75,7 @@ export const StyledSkinTonePopupContent = styled.div<StyledSkinTonePopupContentP
 `;
 
 type StyledSkinTonePopupContentEmojiProps = WithTheme<{
-    isSelected: boolean;
+    $isSelected: boolean;
 }>;
 
 export const StyledSkinTonePopupContentEmoji = styled.div<StyledSkinTonePopupContentEmojiProps>`
@@ -84,8 +84,8 @@ export const StyledSkinTonePopupContentEmoji = styled.div<StyledSkinTonePopupCon
     flex: 1 1 auto;
     font-size: 24px;
     justify-content: center;
-    background-color: ${({ theme, isSelected }: StyledSkinTonePopupContentEmojiProps) =>
-        isSelected ? theme['secondary-102'] : 'none'};
+    background-color: ${({ theme, $isSelected }: StyledSkinTonePopupContentEmojiProps) =>
+        $isSelected ? theme['secondary-102'] : 'none'};
 `;
 
 export const StyledSkinTonePopupOverlay = styled.div`

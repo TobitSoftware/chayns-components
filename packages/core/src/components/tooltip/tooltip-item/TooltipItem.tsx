@@ -19,7 +19,7 @@ export type TooltipProps = {
 const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width }) =>
     useMemo(
         () => (
-            <StyledTooltipItem width={width}>
+            <StyledTooltipItem $width={width}>
                 {headline && <StyledTooltipItemHeadline>{headline}</StyledTooltipItemHeadline>}
                 {imageUrl && <StyledTooltipItemImage src={imageUrl} />}
                 <StyledTooltipItemText>{text}</StyledTooltipItemText>

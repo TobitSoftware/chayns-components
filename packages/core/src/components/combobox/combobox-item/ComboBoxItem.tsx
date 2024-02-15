@@ -29,13 +29,13 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
         () => (
             <StyledComboBoxItem
                 onClick={handleItemClick}
-                isMobile={isMobile}
-                isSelected={isSelected}
+                $isMobile={isMobile}
+                $isSelected={isSelected}
             >
                 {imageUrl && (
                     <StyledComboBoxItemImage
                         src={imageUrl}
-                        shouldShowRoundImage={shouldShowRoundImage}
+                        $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
                 {text}

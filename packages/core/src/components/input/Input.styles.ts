@@ -1,27 +1,26 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { InputProps } from './Input';
 
-type StyledInputProps = WithTheme<Pick<InputProps, 'isDisabled' | 'isInvalid'>>;
+type StyledInputProps = WithTheme<{ $isDisabled?: boolean; $isInvalid?: boolean }>;
 
 export const StyledInput = styled.div<StyledInputProps>`
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     display: flex;
     width: 100%;
 `;
 
 type StyledInputContentWrapperProps = WithTheme<{
-    shouldRoundRightCorners: boolean;
-    shouldShowOnlyBottomBorder?: boolean;
+    $shouldRoundRightCorners: boolean;
+    $shouldShowOnlyBottomBorder?: boolean;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
     background-color: ${({ theme }: StyledInputProps) => theme['100']};
     border: 1px solid
-        ${({ theme, isInvalid }: StyledInputProps) =>
-            isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
+        ${({ theme, $isInvalid }: StyledInputProps) =>
+            $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
     color: ${({ theme }: StyledInputProps) => theme['006']};
     display: flex;
     justify-content: space-between;
@@ -29,8 +28,8 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
     width: 100%;
     transition: opacity 0.3s ease;
 
-    ${({ shouldRoundRightCorners, shouldShowOnlyBottomBorder, theme }) => {
-        if (shouldShowOnlyBottomBorder) {
+    ${({ $shouldRoundRightCorners, $shouldShowOnlyBottomBorder, theme }) => {
+        if ($shouldShowOnlyBottomBorder) {
             return css`
                 border-top: none;
                 border-right: none;
@@ -40,7 +39,7 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
             `;
         }
 
-        if (shouldRoundRightCorners) {
+        if ($shouldRoundRightCorners) {
             return css`
                 border-radius: 3px;
             `;
@@ -61,18 +60,18 @@ export const StyledInputContent = styled.div`
     position: relative;
 `;
 
-type StyledInputFieldProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+type StyledInputFieldProps = WithTheme<{ $isInvalid?: boolean }>;
 
 export const StyledInputField = styled.input<StyledInputFieldProps>`
     background: none;
     border: none;
-    color: ${({ theme, isInvalid }: StyledInputFieldProps) =>
-        isInvalid ? theme.wrong : theme.text};
+    color: ${({ theme, $isInvalid }: StyledInputFieldProps) =>
+        $isInvalid ? theme.wrong : theme.text};
     padding: 0;
     width: 100%;
 `;
 
-type StyledMotionInputLabelWrapperProps = WithTheme<{ width: number }>;
+type StyledMotionInputLabelWrapperProps = WithTheme<{ $width: number }>;
 
 export const StyledMotionInputLabelWrapper = styled(
     motion.label,
@@ -85,10 +84,10 @@ export const StyledMotionInputLabelWrapper = styled(
     pointer-events: none;
     position: absolute;
     user-select: none;
-    max-width: ${({ width }) => width}px;
+    max-width: ${({ $width }) => $width}px;
 `;
 
-type StyledInputLabelProps = WithTheme<Pick<InputProps, 'isInvalid'>>;
+type StyledInputLabelProps = WithTheme<{ $isInvalid?: boolean }>;
 
 export const StyledInputLabel = styled.label<StyledInputLabelProps>`
     line-height: 1.3;
@@ -97,16 +96,16 @@ export const StyledInputLabel = styled.label<StyledInputLabelProps>`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: ${({ theme, isInvalid }: StyledInputLabelProps) =>
-        isInvalid ? theme.wrong : undefined};
+    color: ${({ theme, $isInvalid }: StyledInputLabelProps) =>
+        $isInvalid ? theme.wrong : undefined};
 `;
 
-type StyledMotionInputClearIconProps = WithTheme<{ shouldShowOnlyBottomBorder?: boolean }>;
+type StyledMotionInputClearIconProps = WithTheme<{ $shouldShowOnlyBottomBorder?: boolean }>;
 
 export const StyledMotionInputClearIcon = styled(motion.div)<StyledMotionInputClearIconProps>`
     align-items: center;
-    border-left: ${({ shouldShowOnlyBottomBorder }) =>
-        shouldShowOnlyBottomBorder ? 'none' : '1px solid rgba(160, 160, 160, 0.3)'};
+    border-left: ${({ $shouldShowOnlyBottomBorder }) =>
+        $shouldShowOnlyBottomBorder ? 'none' : '1px solid rgba(160, 160, 160, 0.3)'};
     cursor: pointer;
     display: flex;
     flex: 0 0 auto;

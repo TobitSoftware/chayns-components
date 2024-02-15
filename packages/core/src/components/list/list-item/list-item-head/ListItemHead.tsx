@@ -94,7 +94,7 @@ const ListItemHead: FC<ListItemHeadProps> = ({
     return (
         <StyledListItemHead
             className="beta-chayns-list-item-head"
-            isClickable={typeof onClick === 'function' || isExpandable}
+            $isClickable={typeof onClick === 'function' || isExpandable}
             onClick={onClick}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -113,8 +113,8 @@ const ListItemHead: FC<ListItemHeadProps> = ({
             {leftElements}
             {iconOrImageElement}
             <StyledListItemHeadContent
-                isIconOrImageGiven={iconOrImageElement !== undefined}
-                isOpen={isOpen}
+                $isIconOrImageGiven={iconOrImageElement !== undefined}
+                $isOpen={isOpen}
             >
                 <StyledListItemHeadTitle>
                     <StyledListItemHeadTitleText className="ellipsis">

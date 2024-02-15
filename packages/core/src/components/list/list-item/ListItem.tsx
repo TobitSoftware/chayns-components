@@ -134,8 +134,8 @@ const ListItem: FC<ListItemProps> = ({
     return (
         <StyledListItem
             className="beta-chayns-list-item"
-            isClickable={typeof onClick === 'function' || isExpandable}
-            isOpen={isItemOpen}
+            $isClickable={typeof onClick === 'function' || isExpandable}
+            $isOpen={isItemOpen}
         >
             <ListItemHead
                 hoverItem={hoverItem}

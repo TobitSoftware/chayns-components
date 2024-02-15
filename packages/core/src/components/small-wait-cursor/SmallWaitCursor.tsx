@@ -45,12 +45,12 @@ const SmallWaitCursor: FC<SmallWaitCursorProps> = ({
     size = SmallWaitCursorSize.Medium,
     speed = SmallWaitCursorSpeed.Medium,
 }) => (
-    <StyledSmallWaitCursor shouldShowWaitCursor={!shouldHideWaitCursor} size={size}>
+    <StyledSmallWaitCursor $shouldShowWaitCursor={!shouldHideWaitCursor} $size={size}>
         <StyledSmallWaitCursorWaitCursor
-            color={color}
-            shouldHideBackground={shouldHideBackground}
-            size={size}
-            speed={speed}
+            $color={color}
+            $shouldHideBackground={shouldHideBackground}
+            $size={size}
+            $speed={speed}
         />
         {!shouldHideBackground && <StyledSmallWaitCursorBackground />}
     </StyledSmallWaitCursor>

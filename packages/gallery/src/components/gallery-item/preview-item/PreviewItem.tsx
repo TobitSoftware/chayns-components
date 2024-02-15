@@ -30,7 +30,7 @@ const PreviewItem: FC<PreviewItemProps> = ({ fileItem, ratio }) => (
         transition={{ duration: 3.2 }}
         style={{ position: 'absolute' }}
     >
-        <StyledPreviewItemImageWrapper ratio={ratio}>
+        <StyledPreviewItemImageWrapper $ratio={ratio}>
             <StyledPreviewItemLoadingIcon>
                 <SmallWaitCursor shouldHideWaitCursor={false} shouldHideBackground />
             </StyledPreviewItemLoadingIcon>

@@ -6,7 +6,7 @@ import type {
 } from '../../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledListItemHeadProps = WithTheme<{
-    isClickable: boolean;
+    $isClickable: boolean;
 }>;
 
 export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
@@ -16,8 +16,8 @@ export const StyledListItemHead = styled.div<StyledListItemHeadProps>`
     height: 64px;
     padding: 12px 9px;
 
-    ${({ isClickable }) =>
-        isClickable &&
+    ${({ $isClickable }) =>
+        $isClickable &&
         css`
             cursor: pointer;
         `}
@@ -33,18 +33,18 @@ export const StyledMotionListItemHeadIndicator = styled(motion.div)<FramerMotion
 `;
 
 type StyledListItemHeadContentProps = {
-    isIconOrImageGiven: boolean;
-    isOpen: boolean;
+    $isIconOrImageGiven: boolean;
+    $isOpen: boolean;
 };
 
 export const StyledListItemHeadContent = styled.div<StyledListItemHeadContentProps>`
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    font-weight: ${({ isOpen }) => (isOpen ? 'bold' : 'normal')};
+    font-weight: ${({ $isOpen }) => ($isOpen ? 'bold' : 'normal')};
     justify-content: center;
     line-height: normal;
-    margin-left: ${({ isIconOrImageGiven }) => (isIconOrImageGiven ? '10px' : undefined)};
+    margin-left: ${({ $isIconOrImageGiven }) => ($isIconOrImageGiven ? '10px' : undefined)};
     min-width: 0;
 `;
 

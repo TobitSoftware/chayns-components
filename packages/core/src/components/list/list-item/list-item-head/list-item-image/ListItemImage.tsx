@@ -23,9 +23,9 @@ const ListItemImage: React.FC<ListItemImageProps> = ({ images, shouldShowRoundIm
 
     if (images && images[0]) {
         return (
-            <StyledListItemHeadImageWrapper shouldShowRoundImage={shouldShowRoundImage}>
+            <StyledListItemHeadImageWrapper $shouldShowRoundImage={shouldShowRoundImage}>
                 <StyledListItemHeadImage
-                    isHidden={!hasLoadedImage}
+                    $isHidden={!hasLoadedImage}
                     onLoad={handleImageLoaded}
                     src={images[0]}
                 />

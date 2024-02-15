@@ -6,9 +6,9 @@ import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 export const StyledSearchBox = styled.div``;
 
 type StyledMotionSearchBoxBodyProps = WithTheme<{
-    height: number;
-    width: number;
-    browser: Browser | 'bot' | null | undefined;
+    $height: number;
+    $width: number;
+    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBoxBodyProps>`
@@ -22,15 +22,15 @@ export const StyledMotionSearchBoxBody = styled(motion.div)<StyledMotionSearchBo
     border-bottom-right-radius: 3px;
     border-top: none;
     cursor: pointer;
-    width: ${({ width }) => width}px;
+    width: ${({ $width }) => $width}px;
     max-height: 300px;
-    overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
+    overflow-y: ${({ $height }) => ($height <= 300 ? 'hidden' : 'auto')};
     box-shadow: 0 0 0 1px
         rgba(${({ theme }: StyledMotionSearchBoxBodyProps) => theme['009-rgb']}, 0.08) inset;
 
     // Styles for custom scrollbar
-    ${({ browser, theme }: StyledMotionSearchBoxBodyProps) =>
-        browser === 'firefox'
+    ${({ $browser, theme }: StyledMotionSearchBoxBodyProps) =>
+        $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
                   scrollbar-width: thin;

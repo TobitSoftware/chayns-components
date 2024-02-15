@@ -104,14 +104,14 @@ const SwipeableAction: FC<SwipeableActionProps> = ({
 
     return (
         <StyledMotionSwipeableAction
-            backgroundColor={item.backgroundColor}
-            position={position}
+            $backgroundColor={item.backgroundColor}
+            $position={position}
             style={{ x: actionX }}
         >
             <StyledSwipeableActionButton
-                color={item.color}
+                $color={item.color}
                 onClick={handleButtonClick}
-                width={`${SWIPEABLE_ACTION_WIDTH}px`}
+                $width={`${SWIPEABLE_ACTION_WIDTH}px`}
             >
                 {item.icon}
                 {item.text}

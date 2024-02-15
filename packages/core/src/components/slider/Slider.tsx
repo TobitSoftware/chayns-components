@@ -235,7 +235,7 @@ const Slider: FC<SliderProps> = ({
             <StyledSlider>
                 <StyledSliderInput
                     ref={fromSliderRef}
-                    isInterval={!!interval}
+                    $isInterval={!!interval}
                     type="range"
                     value={fromValue}
                     step={steps}
@@ -243,8 +243,11 @@ const Slider: FC<SliderProps> = ({
                     min={minValue}
                     onChange={handleInputChange}
                     onMouseUp={handleMouseUp}
+                    $max={maxValue}
+                    $min={minValue}
+                    $value={fromValue}
                 />
-                <StyledSliderThumb ref={fromSliderThumbRef} position={fromSliderThumbPosition}>
+                <StyledSliderThumb ref={fromSliderThumbRef} $position={fromSliderThumbPosition}>
                     {shouldShowThumbLable && (
                         <StyledSliderThumbLable>
                             {typeof thumbLabelFormatter === 'function'
@@ -254,7 +257,7 @@ const Slider: FC<SliderProps> = ({
                     )}
                 </StyledSliderThumb>
                 {interval && (
-                    <StyledSliderThumb ref={toSliderThumbRef} position={toSliderThumbPosition}>
+                    <StyledSliderThumb ref={toSliderThumbRef} $position={toSliderThumbPosition}>
                         {shouldShowThumbLable && (
                             <StyledSliderThumbLable>
                                 {typeof thumbLabelFormatter === 'function'
@@ -266,8 +269,11 @@ const Slider: FC<SliderProps> = ({
                 )}
                 {interval && (
                     <StyledSliderInput
+                        $max={maxValue}
+                        $min={minValue}
+                        $value={toValue}
                         ref={toSliderRef}
-                        isInterval={!!interval}
+                        $isInterval={!!interval}
                         type="range"
                         value={toValue}
                         step={steps}

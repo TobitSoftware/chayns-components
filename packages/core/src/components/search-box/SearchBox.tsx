@@ -284,10 +284,10 @@ const SearchBox: FC<SearchBoxProps> = ({
                 </div>
                 <AnimatePresence initial={false}>
                     <StyledMotionSearchBoxBody
-                        browser={browser?.name}
+                        $browser={browser?.name}
                         key="content"
-                        height={height}
-                        width={width}
+                        $height={height}
+                        $width={width}
                         initial={{ height: 0, opacity: 0 }}
                         animate={
                             isAnimating

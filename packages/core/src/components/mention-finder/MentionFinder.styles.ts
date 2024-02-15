@@ -1,14 +1,13 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 import { MentionFinderPopupAlignment } from '../../constants/mentionFinder';
-import type { MentionFinderProps } from './MentionFinder';
+import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 export const StyledMentionFinder = styled.div`
     position: relative;
 `;
 
-type StyledMentionFinderPopupProps = WithTheme<Pick<MentionFinderProps, 'popupAlignment'>>;
+type StyledMentionFinderPopupProps = WithTheme<{ $popupAlignment: MentionFinderPopupAlignment }>;
 
 export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFinderPopupProps>`
     background-color: ${({ theme }: StyledMentionFinderPopupProps) => theme['001']};
@@ -21,8 +20,8 @@ export const StyledMotionMentionFinderPopup = styled(motion.div)<StyledMentionFi
     position: absolute;
     width: 100%;
 
-    ${({ popupAlignment }) => {
-        switch (popupAlignment) {
+    ${({ $popupAlignment }) => {
+        switch ($popupAlignment) {
             case MentionFinderPopupAlignment.Bottom:
                 return css`
                     top: 0;

@@ -37,7 +37,7 @@ const MediaItem: FC<MediaItemProps> = ({ fileItem, isEditMode, openSelectedFile,
         transition={{ duration: 3.2 }}
     >
         {fileItem.uploadedFile && 'thumbnailUrl' in fileItem.uploadedFile ? (
-            <StyledMediaItemVideoWrapper onClick={() => openSelectedFile(fileItem)} ratio={ratio}>
+            <StyledMediaItemVideoWrapper onClick={() => openSelectedFile(fileItem)} $ratio={ratio}>
                 <StyledMediaItemPlayIcon>
                     <Icon size={isEditMode ? 30 : 50} icons={['fa fa-play']} />
                 </StyledMediaItemPlayIcon>
@@ -46,7 +46,7 @@ const MediaItem: FC<MediaItemProps> = ({ fileItem, isEditMode, openSelectedFile,
                 </StyledMediaItemVideo>
             </StyledMediaItemVideoWrapper>
         ) : (
-            <StyledMediaItemImageWrapper onClick={() => openSelectedFile(fileItem)} ratio={ratio}>
+            <StyledMediaItemImageWrapper onClick={() => openSelectedFile(fileItem)} $ratio={ratio}>
                 <StyledMediaItemImage draggable={false} src={fileItem.uploadedFile?.url} />
             </StyledMediaItemImageWrapper>
         )}

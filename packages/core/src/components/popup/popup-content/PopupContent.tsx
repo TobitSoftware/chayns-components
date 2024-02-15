@@ -29,10 +29,10 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
         return (
             <StyledMotionPopupContent
                 animate={{ opacity: 1, y: 0 }}
-                colorMode={colorMode}
+                $colorMode={colorMode}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
-                position={alignment}
+                $position={alignment}
                 ref={ref}
                 data-ispopup="true"
                 onMouseLeave={onMouseLeave}

@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import type { WithTheme } from '@chayns-components/core';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const StyledOpeningInput = styled(motion.div)`
     display: flex;
@@ -12,10 +12,10 @@ export const StyledOpeningInputWrapper = styled.div`
     width: 60px;
 `;
 
-type StyledOpeningInputTextProps = WithTheme<{ isDisabled?: boolean }>;
+type StyledOpeningInputTextProps = WithTheme<{ $isDisabled?: boolean }>;
 
 export const StyledOpeningInputText = styled.div<StyledOpeningInputTextProps>`
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
 `;
 
 type StyledOpeningInputButtonWrapperProps = WithTheme<unknown>;

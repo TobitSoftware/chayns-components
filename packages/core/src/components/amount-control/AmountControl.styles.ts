@@ -13,7 +13,7 @@ export const StyledAmountControl = styled.div<StyledAmountControlProps>`
 `;
 
 type StyledAmountControlInputProps = WithTheme<{
-    displayState: DisplayState;
+    $displayState: DisplayState;
 }>;
 
 export const StyledAmountControlInput = styled.input<StyledAmountControlInputProps>`
@@ -22,8 +22,8 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
     height: 28px;
     width: 95px;
     text-align: center;
-    ${({ displayState }) =>
-        displayState !== 'normal' &&
+    ${({ $displayState }) =>
+        $displayState !== 'normal' &&
         css`
             border-bottom-right-radius: 3px;
             border-top-right-radius: 3px;
@@ -31,7 +31,7 @@ export const StyledAmountControlInput = styled.input<StyledAmountControlInputPro
 `;
 
 type StyledAmountControlButtonProps = WithTheme<{
-    disabled: boolean;
+    $isDisabled: boolean;
 }>;
 
 export const StyledMotionAmountControlButton = styled(
@@ -42,8 +42,8 @@ export const StyledMotionAmountControlButton = styled(
     height: 28px;
     width: 40px;
 
-    ${({ disabled }) =>
-        disabled &&
+    ${({ $isDisabled }) =>
+        $isDisabled &&
         css`
             opacity: 0.5;
         `}

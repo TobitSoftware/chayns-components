@@ -1,7 +1,7 @@
-import styled from 'styled-components';
 import type { WithTheme } from '@chayns-components/core';
+import styled from 'styled-components';
 
-type StyledSliderButtonProps = WithTheme<{ isDisabled?: boolean }>;
+type StyledSliderButtonProps = WithTheme<{ $isDisabled?: boolean }>;
 
 export const StyledOpeningTimes = styled.div<StyledSliderButtonProps>`
     display: flex;

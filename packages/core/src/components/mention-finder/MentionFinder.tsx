@@ -156,7 +156,7 @@ const MentionFinder: FC<MentionFinderProps> = ({
                         className="prevent-lose-focus"
                         exit={{ height: 0, opacity: 0 }}
                         initial={{ height: 0, opacity: 0 }}
-                        popupAlignment={popupAlignment}
+                        $popupAlignment={popupAlignment}
                         transition={{ duration: 0.15 }}
                     >
                         {items}

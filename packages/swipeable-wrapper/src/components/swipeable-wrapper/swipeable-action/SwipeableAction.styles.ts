@@ -1,22 +1,22 @@
 import { motion } from 'framer-motion';
 import type { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
-import type { SwipeableActionItem } from '../SwipeableWrapper';
-import type { SwipeableActionProps } from './SwipeableAction';
 
-type StyledSwipeableActionProps = Pick<SwipeableActionProps, 'position'> &
-    Pick<SwipeableActionItem, 'backgroundColor'>;
+type StyledSwipeableActionProps = {
+    $position: 'left' | 'right';
+    $backgroundColor: CSSProperties['backgroundColor'];
+};
 
 export const StyledMotionSwipeableAction = styled(motion.div)<StyledSwipeableActionProps>`
-    background-color: ${({ backgroundColor }) => backgroundColor};
+    background-color: ${({ $backgroundColor }) => $backgroundColor};
     display: flex;
     height: 100%;
     position: absolute;
     top: 0;
     width: 200vw;
 
-    ${({ position }) => {
-        if (position === 'left') {
+    ${({ $position }) => {
+        if ($position === 'left') {
             return css`
                 justify-content: flex-end;
                 right: 100%;
@@ -29,8 +29,9 @@ export const StyledMotionSwipeableAction = styled(motion.div)<StyledSwipeableAct
     }}
 `;
 
-type StyledSwipeableActionButtonsProps = Pick<SwipeableActionItem, 'color'> & {
-    width: CSSProperties['width'];
+type StyledSwipeableActionButtonsProps = {
+    $width: CSSProperties['width'];
+    $color: CSSProperties['color'];
 };
 
 export const StyledSwipeableActionButton = styled.button<StyledSwipeableActionButtonsProps>`
@@ -38,7 +39,7 @@ export const StyledSwipeableActionButton = styled.button<StyledSwipeableActionBu
     appearance: none;
     background: none;
     box-shadow: none;
-    color: ${({ color }) => color};
+    color: ${({ $color }) => $color};
     display: flex;
     flex-direction: column;
     font-size: 88%;
@@ -47,5 +48,5 @@ export const StyledSwipeableActionButton = styled.button<StyledSwipeableActionBu
     justify-content: center;
     margin: 0;
     padding: 0;
-    width: ${({ width }) => width};
+    width: ${({ $width }) => $width};
 `;

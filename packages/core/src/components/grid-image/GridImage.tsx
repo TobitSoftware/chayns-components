@@ -38,21 +38,21 @@ const GridImage: FC<GridImageProps> = ({ images, shouldShowRoundImage, size }) =
         !hasLoadedLeftImage || !hasLoadedTopRightImage || !hasLoadedBottomRightImage;
 
     return (
-        <StyledGridImage shouldShowRoundImage={shouldShowRoundImage} size={size}>
+        <StyledGridImage $shouldShowRoundImage={shouldShowRoundImage} $size={size}>
             <StyledGridLeftImage
-                isHidden={isGridImageHidden}
+                $isHidden={isGridImageHidden}
                 onLoad={handleLeftImageLoaded}
-                size={size}
+                $size={size}
                 src={images[0]}
             />
             <StyledGridTopRightImage
-                isHidden={isGridImageHidden}
+                $isHidden={isGridImageHidden}
                 onLoad={handleTopRightImageLoaded}
-                size={size}
+                $size={size}
                 src={images[1]}
             />
             <StyledGridBottomRightImage
-                isHidden={isGridImageHidden}
+                $isHidden={isGridImageHidden}
                 onLoad={handleBottomRightImageLoaded}
                 src={images[2]}
             />

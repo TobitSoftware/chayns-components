@@ -39,7 +39,7 @@ const AccordionBody: FC<AccordionBodyProps> = ({
             className="beta-chayns-accordion-body"
             exit={{ height: 0, opacity: 0 }}
             initial={{ height: 0, opacity: 0 }}
-            maxHeight={maxHeight}
+            $maxHeight={maxHeight}
             onScroll={onScroll}
         >
             <AccordionGroupContext.Provider value={AccordionGroupContextProviderValue}>

@@ -83,10 +83,10 @@ const Checkbox: FC<CheckboxProps> = ({
             <StyledCheckboxLabel
                 className={labelClassName}
                 htmlFor={uuid}
-                isChecked={isChecked ?? isActive}
-                isDisabled={isDisabled}
-                shouldShowAsSwitch={shouldShowAsSwitch}
-                lineHeight={lineHeight}
+                $isChecked={isChecked ?? isActive}
+                $isDisabled={isDisabled}
+                $shouldShowAsSwitch={shouldShowAsSwitch}
+                $lineHeight={lineHeight}
             >
                 {children}
             </StyledCheckboxLabel>

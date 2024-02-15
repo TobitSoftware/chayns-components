@@ -17,7 +17,7 @@ export const StyledSearchBoxItem = styled.div<StyledSearchBoxItemProps>`
     }
 `;
 
-type StyledSearchBoxItemImageProps = WithTheme<{ shouldShowRoundImage?: boolean }>;
+type StyledSearchBoxItemImageProps = WithTheme<{ $shouldShowRoundImage?: boolean }>;
 
 export const StyledSearchBoxItemImage = styled.img<StyledSearchBoxItemImageProps>`
     box-shadow: 0 0 0 1px
@@ -25,8 +25,8 @@ export const StyledSearchBoxItemImage = styled.img<StyledSearchBoxItemImageProps
     height: 22px;
     width: 22px;
 
-    ${({ shouldShowRoundImage }) =>
-        shouldShowRoundImage &&
+    ${({ $shouldShowRoundImage }) =>
+        $shouldShowRoundImage &&
         css`
             border-radius: 50%;
         `}

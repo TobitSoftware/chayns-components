@@ -205,14 +205,14 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         return (
             <StyledMotionComboBoxBody
-                browser={browser?.name}
+                $browser={browser?.name}
                 animate={animate}
-                height={height}
+                $height={height}
                 initial={{ height: 0, opacity: 0 }}
-                maxHeight={maxHeight}
-                minWidth={minWidth}
+                $maxHeight={maxHeight}
+                $minWidth={minWidth}
                 style={style}
-                direction={direction}
+                $direction={direction}
                 transition={{ duration: 0.2 }}
             >
                 {items}
@@ -236,12 +236,12 @@ const ComboBox: FC<ComboBoxProps> = ({
             <StyledComboBox ref={ref}>
                 {direction === ComboBoxDirection.TOP && comboBoxBody}
                 <StyledComboBoxHeader
-                    direction={direction}
-                    minWidth={minWidth}
+                    $direction={direction}
+                    $minWidth={minWidth}
                     onClick={handleHeaderClick}
-                    isOpen={isAnimating}
-                    isMobile={isMobile}
-                    isDisabled={isDisabled}
+                    $isOpen={isAnimating}
+                    $isMobile={isMobile}
+                    $isDisabled={isDisabled}
                 >
                     <StyledComboBoxPlaceholder>
                         {placeholderImageUrl && (

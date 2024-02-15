@@ -12,7 +12,7 @@ export type AccordionItemProps = {
 const AccordionItem: FC<AccordionItemProps> = ({ children }) => (
     <AccordionContext.Consumer>
         {({ isWrapped }) => (
-            <StyledAccordionItem className="beta-chayns-accordion-item" isWrapped={isWrapped}>
+            <StyledAccordionItem className="beta-chayns-accordion-item" $isWrapped={isWrapped}>
                 {children}
             </StyledAccordionItem>
         )}

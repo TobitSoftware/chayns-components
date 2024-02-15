@@ -1,11 +1,11 @@
-import React, { type CSSProperties, FC } from 'react';
+import React, { FC, type CSSProperties } from 'react';
 import { StyledCategory } from './Category.styles';
 
 export type CategoryProps = {
     color: CSSProperties['color'];
 };
 
-const Category: FC<CategoryProps> = ({ color }) => <StyledCategory color={color} />;
+const Category: FC<CategoryProps> = ({ color }) => <StyledCategory $color={color} />;
 
 Category.displayName = 'Category';
 

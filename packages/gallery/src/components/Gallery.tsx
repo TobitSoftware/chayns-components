@@ -345,7 +345,7 @@ const Gallery: FC<GalleryProps> = ({
             <StyledGallery>
                 {isEditMode ? (
                     <StyledGalleryEditModeWrapper
-                        fileMinWidth={fileMinWidth}
+                        $fileMinWidth={fileMinWidth}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => void handleDrop(e)}
                     >
@@ -353,9 +353,9 @@ const Gallery: FC<GalleryProps> = ({
                     </StyledGalleryEditModeWrapper>
                 ) : (
                     <StyledGalleryItemWrapper
-                        ratio={ratio}
-                        uploadedFileLength={fileItems.length}
-                        viewMode={viewMode}
+                        $ratio={ratio}
+                        $uploadedFileLength={fileItems.length}
+                        $viewMode={viewMode}
                     >
                         {galleryContent}
                     </StyledGalleryItemWrapper>

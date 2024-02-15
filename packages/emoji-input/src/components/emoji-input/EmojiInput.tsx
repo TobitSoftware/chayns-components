@@ -543,7 +543,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, []);
 
         return (
-            <StyledEmojiInput isDisabled={isDisabled}>
+            <StyledEmojiInput $isDisabled={isDisabled}>
                 <AnimatePresence initial>
                     {progressDuration > 0 && (
                         <StyledMotionEmojiInputProgress
@@ -563,7 +563,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                 </AnimatePresence>
-                <StyledEmojiInputContent isRightElementGiven={!!rightElement}>
+                <StyledEmojiInputContent $isRightElementGiven={!!rightElement}>
                     {prefixElement && (
                         <PrefixElement
                             element={prefixElement}
@@ -572,7 +572,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         />
                     )}
                     <StyledMotionEmojiInputEditor
-                        browser={browser?.name}
+                        $browser={browser?.name}
                         animate={{ maxHeight: height ?? maxHeight, minHeight: height ?? '26px' }}
                         contentEditable={!isDisabled}
                         id={inputId}
@@ -583,14 +583,14 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                         onKeyDown={handleKeyDown}
                         onPaste={handlePaste}
                         ref={editorRef}
-                        shouldShowContent={isPrefixAnimationFinished}
+                        $shouldShowContent={isPrefixAnimationFinished}
                         transition={{ type: 'tween', duration: 0.2 }}
                     />
 
                     {shouldShowPlaceholder && (
                         <StyledEmojiInputLabel
-                            maxWidth={labelWidth}
-                            offsetWidth={prefixElementWidth}
+                            $maxWidth={labelWidth}
+                            $offsetWidth={prefixElementWidth}
                         >
                             {placeholder}
                         </StyledEmojiInputLabel>

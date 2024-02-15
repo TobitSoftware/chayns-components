@@ -8,7 +8,7 @@ export const StyledHueSlider = styled.div`
 `;
 
 type StyledHueSliderInputProps = WithTheme<{
-    color: CSSProperties['color'];
+    $color: CSSProperties['color'];
 }>;
 
 export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
@@ -43,7 +43,7 @@ export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
         appearance: none;
         width: 20px;
         height: 20px;
-        background-color: ${({ color }) => color};
+        background-color: ${({ $color }) => $color};
         cursor: pointer;
         border-radius: 50%;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -53,7 +53,7 @@ export const StyledHueSliderInput = styled.input<StyledHueSliderInputProps>`
     &::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background-color: ${({ color }) => color};
+        background-color: ${({ $color }) => $color};
         cursor: pointer;
         border-radius: 50%;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);

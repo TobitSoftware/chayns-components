@@ -1,13 +1,15 @@
+import { AnimatePresence } from 'framer-motion';
 import React, {
     FC,
-    type ReactNode,
     useCallback,
     useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
+    type ReactNode,
 } from 'react';
+import type { RadioButtonItem } from '../../types/radioButton';
 import { RadioButtonGroupContext } from './radio-button-group/RadioButtonGroup';
 import {
     StyledMotionRadioButtonChildren,
@@ -18,8 +20,6 @@ import {
     StyledRadioButtonPseudoCheckBox,
     StyledRadioButtonWrapper,
 } from './RadioButton.styles';
-import type { RadioButtonItem } from '../../types/radioButton';
-import { AnimatePresence } from 'framer-motion';
 
 export type RadioButtonProps = {
     /**
@@ -111,16 +111,16 @@ const RadioButton: FC<RadioButtonProps> = ({
     return useMemo(
         () => (
             <StyledRadioButton
-                isDisabled={isDisabled}
+                $isDisabled={isDisabled}
                 onClick={handleClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
                 <StyledRadioButtonWrapper>
-                    <StyledRadioButtonPseudoCheckBox isChecked={isMarked}>
+                    <StyledRadioButtonPseudoCheckBox $isChecked={isMarked}>
                         <StyledRadioButtonCheckBoxMark
-                            isHovered={isHovered}
-                            isSelected={isMarked}
+                            $isHovered={isHovered}
+                            $isSelected={isMarked}
                         />
                     </StyledRadioButtonPseudoCheckBox>
                     <StyledRadioButtonCheckBox

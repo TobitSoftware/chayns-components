@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { FC, type MouseEventHandler, ReactNode } from 'react';
+import React, { FC, ReactNode, type MouseEventHandler } from 'react';
 import { StyledBadge } from './Badge.styles';
 
 export type BadgeProps = {
@@ -31,10 +31,10 @@ const Badge: FC<BadgeProps> = ({ backgroundColor, children, className, fontColor
     return (
         <StyledBadge
             onClick={onClick}
-            isOnClick={typeof onClick === 'function'}
-            backgroundColor={backgroundColor}
+            $isOnClick={typeof onClick === 'function'}
+            $backgroundColor={backgroundColor}
             className={badgeClasses}
-            fontColor={fontColor}
+            $fontColor={fontColor}
         >
             {children}
         </StyledBadge>

@@ -270,9 +270,9 @@ const EmojiPickerEmojis: FC<EmojiPickerEmojisProps> = ({
 
     return (
         <StyledEmojiPickerEmojis
-            browser={browser?.name}
-            shouldPreventScroll={shouldPreventScroll}
-            shouldShowNoContentInfo={shouldShowNoContentInfo}
+            $browser={browser?.name}
+            $shouldPreventScroll={shouldPreventScroll}
+            $shouldShowNoContentInfo={shouldShowNoContentInfo}
             ref={emojiRef}
         >
             {emojis}

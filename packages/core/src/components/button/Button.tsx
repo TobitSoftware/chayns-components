@@ -73,10 +73,10 @@ const Button: FC<ButtonProps> = ({
         <StyledMotionButton
             className={buttonClasses}
             disabled={isDisabled}
-            isDisabled={isDisabled}
-            hasChildren={!!children}
-            hasIcon={typeof icon === 'string' && icon !== ''}
-            isSecondary={isSecondary}
+            $isDisabled={isDisabled}
+            $hasChildren={!!children}
+            $hasIcon={typeof icon === 'string' && icon !== ''}
+            $isSecondary={isSecondary}
             onClick={handleClick}
             whileTap={
                 isDisabled ? {} : { backgroundColor: isSecondary ? theme['201'] : theme['407'] }

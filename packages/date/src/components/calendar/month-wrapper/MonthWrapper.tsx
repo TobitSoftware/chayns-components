@@ -1,10 +1,10 @@
-import React, { FC, type ReactElement, useEffect, useMemo, useState } from 'react';
 import type { Locale } from 'date-fns';
-import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
 import type { MotionProps } from 'framer-motion';
+import React, { FC, useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { Categories, HighlightedDates } from '../../../types/calendar';
-import Month from './month/Month';
 import { getMonthAndYear, getNewDate } from '../../../utils/calendar';
+import Month from './month/Month';
+import { StyledMonthWrapper, StyledMotionWrapper } from './MonthWrapper.styles';
 
 export type MonthWrapperProps = {
     locale: Locale;
@@ -128,7 +128,7 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     }, [direction, shouldRenderTwo]);
 
     return (
-        <StyledMonthWrapper height={shouldRenderTwo ? width / 2 : width}>
+        <StyledMonthWrapper $height={shouldRenderTwo ? width / 2 : width}>
             <StyledMotionWrapper
                 animate={animate}
                 transition={{

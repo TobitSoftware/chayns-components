@@ -283,8 +283,8 @@ const Typewriter: FC<TypewriterProps> = ({
                 {isAnimatingText && (
                     <StyledTypewriterText
                         dangerouslySetInnerHTML={{ __html: shownText }}
-                        isAnimatingText
-                        shouldHideCursor={shouldHideCursor}
+                        $isAnimatingText
+                        $shouldHideCursor={shouldHideCursor}
                         style={textStyle}
                     />
                 )}

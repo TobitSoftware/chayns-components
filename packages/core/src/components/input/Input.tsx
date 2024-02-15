@@ -211,12 +211,12 @@ const Input = forwardRef<InputRef, InputProps>(
         return (
             <StyledInput
                 className="beta-chayns-input"
-                isDisabled={isDisabled}
-                isInvalid={isInvalid}
+                $isDisabled={isDisabled}
+                $isInvalid={isInvalid}
             >
                 <StyledInputContentWrapper
-                    shouldRoundRightCorners={!rightElement}
-                    shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                    $shouldRoundRightCorners={!rightElement}
+                    $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
                     <StyledInputContent>
@@ -232,7 +232,7 @@ const Input = forwardRef<InputRef, InputProps>(
                             value={value}
                             autoFocus={shouldUseAutoFocus}
                             inputMode={inputMode}
-                            isInvalid={isInvalid}
+                            $isInvalid={isInvalid}
                         />
                         <StyledMotionInputLabelWrapper
                             animate={{
@@ -242,15 +242,17 @@ const Input = forwardRef<InputRef, InputProps>(
                             layout
                             style={{ ...labelPosition }}
                             transition={{ type: 'tween', duration: 0.3 }}
-                            width={width}
+                            $width={width}
                         >
                             {placeholderElement}
-                            <StyledInputLabel isInvalid={isInvalid}>{placeholder}</StyledInputLabel>
+                            <StyledInputLabel $isInvalid={isInvalid}>
+                                {placeholder}
+                            </StyledInputLabel>
                         </StyledMotionInputLabelWrapper>
                     </StyledInputContent>
                     {shouldShowClearIcon && (
                         <StyledMotionInputClearIcon
-                            shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
+                            $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                             animate={{ opacity: hasValue ? 1 : 0 }}
                             initial={false}
                             onClick={handleClearIconClick}

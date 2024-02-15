@@ -1,9 +1,9 @@
+import type { WithTheme } from '@chayns-components/core';
 import styled from 'styled-components';
 import { getFontFamily } from '../../../../utils/font';
-import type { WithTheme } from '@chayns-components/core';
 
 type StyledEmojiProps = WithTheme<{
-    isSelected: boolean;
+    $isSelected: boolean;
 }>;
 
 export const StyledEmoji = styled.div<StyledEmojiProps>`
@@ -15,6 +15,6 @@ export const StyledEmoji = styled.div<StyledEmojiProps>`
     justify-content: center;
     width: 48px;
     height: 48px;
-    background-color: ${({ theme, isSelected }: StyledEmojiProps) =>
-        isSelected ? theme['secondary-102'] : 'none'};
+    background-color: ${({ theme, $isSelected }: StyledEmojiProps) =>
+        $isSelected ? theme['secondary-102'] : 'none'};
 `;

@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react';
 import { FilterButtonItemShape, FilterButtonSize } from '../../../types/filterButtons';
+import Icon from '../../icon/Icon';
 import {
     StyledFilterButtonItem,
     StyledFilterButtonItemBorder,
@@ -7,7 +8,6 @@ import {
     StyledFilterButtonItemLabelText,
     StyledMotionFilterButtonItemBackground,
 } from './FilterButton.styles';
-import Icon from '../../icon/Icon';
 
 export type FilterButtonProps = {
     color?: CSSProperties['color'];
@@ -36,18 +36,22 @@ const FilterButton: FC<FilterButtonProps> = ({
 
     return useMemo(
         () => (
-            <StyledFilterButtonItem isSelected={isSelected} size={size} onClick={handleClick}>
+            <StyledFilterButtonItem $isSelected={isSelected} $size={size} onClick={handleClick}>
                 <StyledFilterButtonItemLabel>
                     {icons && (
                         <Icon icons={icons} size={size === FilterButtonSize.Normal ? 15 : 10} />
                     )}
                     <StyledFilterButtonItemLabelText>{text}</StyledFilterButtonItemLabelText>
                 </StyledFilterButtonItemLabel>
-                <StyledFilterButtonItemBorder isSelected={isSelected} shape={shape} color={color} />
+                <StyledFilterButtonItemBorder
+                    $isSelected={isSelected}
+                    $shape={shape}
+                    $color={color}
+                />
                 <StyledMotionFilterButtonItemBackground
-                    isSelected={isSelected}
-                    shape={shape}
-                    color={color}
+                    $isSelected={isSelected}
+                    $shape={shape}
+                    $color={color}
                 />
             </StyledFilterButtonItem>
         ),

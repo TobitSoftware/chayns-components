@@ -1,35 +1,34 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { FramerMotionBugFix, WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { ButtonProps } from './Button';
 
-type StyledButtonProps = ButtonProps &
-    WithTheme<{
-        hasIcon: boolean;
-        hasChildren: boolean;
-        isDisabled?: boolean;
-    }>;
+type StyledButtonProps = WithTheme<{
+    $hasIcon: boolean;
+    $hasChildren: boolean;
+    $isDisabled?: boolean;
+    $isSecondary?: boolean;
+}>;
 
 export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     align-items: center;
-    background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
-        isSecondary ? theme['202'] : theme['408']};
+    background-color: ${({ $isSecondary, theme }: StyledButtonProps) =>
+        $isSecondary ? theme['202'] : theme['408']};
     border-radius: 3px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
     border: none;
-    color: ${({ isSecondary, theme }: StyledButtonProps) => (isSecondary ? theme.text : 'white')};
-    cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
+    color: ${({ $isSecondary, theme }: StyledButtonProps) => ($isSecondary ? theme.text : 'white')};
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
     display: inline-flex;
     line-height: 1.15;
     min-height: 32px;
-    opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
 
-    ${({ hasIcon, hasChildren }) => {
-        if (hasIcon) {
-            if (hasChildren) {
+    ${({ $hasIcon, $hasChildren }) => {
+        if ($hasIcon) {
+            if ($hasChildren) {
                 return css`
                     padding: 7px 12px 7px 42px;
                 `;

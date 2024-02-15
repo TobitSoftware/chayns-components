@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
-import { StyledIcon, StyledIconWrapper } from './Icon.styles';
-import { getStackSizeFactor } from '../../utils/icon';
 import { useTheme } from 'styled-components';
+import { getStackSizeFactor } from '../../utils/icon';
+import { StyledIcon, StyledIconWrapper } from './Icon.styles';
 
 export type IconProps = {
     /**
@@ -97,11 +97,11 @@ const Icon: FC<IconProps> = ({
     return (
         <StyledIconWrapper
             className={wrapperClasses}
-            isDisabled={isDisabled}
+            $isDisabled={isDisabled}
             onClick={typeof onClick === 'function' ? handleClick : undefined}
             onDoubleClick={typeof onDoubleClick === 'function' ? handleDoubleClick : undefined}
             onMouseDown={onMouseDown}
-            size={size}
+            $size={size}
         >
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
@@ -116,11 +116,11 @@ const Icon: FC<IconProps> = ({
                 return (
                     <StyledIcon
                         className={iconClasses}
-                        color={icon.includes('fa-inverse') ? 'white' : color}
-                        fontSize={((stackSizeFactor || 1) / maxStackSizeFactor) * size}
-                        isStacked={shouldUseStackedIcon}
+                        $color={icon.includes('fa-inverse') ? 'white' : color}
+                        $fontSize={((stackSizeFactor || 1) / maxStackSizeFactor) * size}
+                        $isStacked={shouldUseStackedIcon}
                         key={icon}
-                        size={size}
+                        $size={size}
                     />
                 );
             })}

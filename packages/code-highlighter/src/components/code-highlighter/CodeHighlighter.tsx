@@ -98,9 +98,9 @@ const CodeHighlighter: FC<CodeHighlighterProps> = ({
 
     return useMemo(
         () => (
-            <StyledCodeHighlighter browser={browser?.name} codeTheme={theme}>
-                <StyledCodeHighlighterHeader codeTheme={theme}>
-                    <StyledCodeHighlighterFileName codeTheme={theme}>
+            <StyledCodeHighlighter $browser={browser?.name} $codeTheme={theme}>
+                <StyledCodeHighlighterHeader $codeTheme={theme}>
+                    <StyledCodeHighlighterFileName $codeTheme={theme}>
                         {formatLanguage(language)}
                     </StyledCodeHighlighterFileName>
                     <CopyToClipboard text={code} theme={theme} copyButtonText={copyButtonText} />
