@@ -10,7 +10,7 @@ type StyledButtonProps = ButtonProps &
         isDisabled?: boolean;
     }>;
 
-export const StyledButton = styled.button<StyledButtonProps>`
+export const StyledMotionButton = styled(motion.button)<StyledButtonProps>`
     align-items: center;
     background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
         isSecondary ? theme['202'] : theme['408']};
@@ -26,11 +26,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
     position: relative;
     user-select: none;
     transition: opacity 0.3s ease;
-
-    &:hover {
-        background-color: ${({ isSecondary, theme }: StyledButtonProps) =>
-            isSecondary ? theme['203'] : theme['409']};
-    }
 
     ${({ hasIcon, hasChildren }) => {
         if (hasIcon) {

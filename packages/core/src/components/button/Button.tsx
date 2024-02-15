@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, MouseEventHandler, ReactNode } from 'react';
+import { useTheme } from 'styled-components';
+import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import SmallWaitCursor, { SmallWaitCursorSize } from '../small-wait-cursor/SmallWaitCursor';
 import {
-    StyledButton,
     StyledIconWrapper,
+    StyledMotionButton,
     StyledMotionChildrenWrapper,
     StyledMotionWaitCursorWrapper,
 } from './Button.styles';
@@ -65,8 +67,10 @@ const Button: FC<ButtonProps> = ({
 
     const buttonClasses = clsx('beta-chayns-button ellipsis', className);
 
+    const theme: Theme = useTheme();
+
     return (
-        <StyledButton
+        <StyledMotionButton
             className={buttonClasses}
             disabled={isDisabled}
             isDisabled={isDisabled}
@@ -74,6 +78,12 @@ const Button: FC<ButtonProps> = ({
             hasIcon={typeof icon === 'string' && icon !== ''}
             isSecondary={isSecondary}
             onClick={handleClick}
+            whileTap={
+                isDisabled ? {} : { backgroundColor: isSecondary ? theme['201'] : theme['407'] }
+            }
+            whileHover={
+                isDisabled ? {} : { backgroundColor: isSecondary ? theme['203'] : theme['409'] }
+            }
         >
             <AnimatePresence initial={false}>
                 {icon && (
@@ -110,7 +120,7 @@ const Button: FC<ButtonProps> = ({
                     </StyledMotionChildrenWrapper>
                 )}
             </AnimatePresence>
-        </StyledButton>
+        </StyledMotionButton>
     );
 };
 
