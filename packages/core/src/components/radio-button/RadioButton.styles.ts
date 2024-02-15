@@ -33,9 +33,10 @@ type StyledRadioButtonPseudoCheckBoxProps = WithTheme<{ $isChecked: boolean }>;
 
 export const StyledRadioButtonPseudoCheckBox = styled.div<StyledRadioButtonPseudoCheckBoxProps>`
     background-color: ${({ theme, $isChecked }: StyledRadioButtonPseudoCheckBoxProps) =>
-        $isChecked ? theme.secondary : theme['secondary-103']};
-    opacity: 0.5;
-    border: 1px solid rgba(160, 160, 160, 0.3);
+        $isChecked ? theme['secondary-408'] : theme['secondary-403']};
+    opacity: 1;
+    border: 1px solid
+        rgba(${({ theme }: StyledRadioButtonPseudoCheckBoxProps) => theme['409-rgb']}, 0.5);
     width: 13px;
     height: 13px;
     position: absolute;
