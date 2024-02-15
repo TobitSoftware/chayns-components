@@ -132,7 +132,7 @@ const RadioButton: FC<RadioButtonProps> = ({
                     {label && <StyledRadioButtonLabel>{label}</StyledRadioButtonLabel>}
                 </StyledRadioButtonWrapper>
                 {children && (
-                    <AnimatePresence initial>
+                    <AnimatePresence initial={false}>
                         <StyledMotionRadioButtonChildren
                             animate={
                                 isMarked
