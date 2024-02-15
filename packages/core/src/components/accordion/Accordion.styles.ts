@@ -44,41 +44,40 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
     ${({ $isOpen, $isWrapped, $shouldForceBackground, theme }: StyledMotionAccordionProps) => {
         if ($shouldForceBackground) return undefined;
 
-        if ($isWrapped) {
-            return css`
-                :not(:last-child) {
-                    border-bottom-color: ${theme.headline};
-                }
-            `;
-        }
+        if (theme.accordionLines) {
+            if ($isWrapped) {
+                return css`
+                    :not(:last-child) {
+                        border-bottom-color: ${theme.headline};
+                    }
+                `;
+            }
 
-        if (!$isOpen) {
-            return css`
-                border-bottom-color: ${theme.headline};
-            `;
+            if (!$isOpen) {
+                return css`
+                    border-bottom-color: ${theme.headline};
+                `;
+            }
         }
 
         return undefined;
     }}
-
     ${({ $isParentWrapped }: StyledMotionAccordionProps) =>
         $isParentWrapped &&
         css`
             padding-left: 17px;
         `}
-
-    ${({ $isWrapped }: StyledMotionAccordionProps) =>
+            ${({ $isWrapped }: StyledMotionAccordionProps) =>
         !$isWrapped &&
         css`
             margin-top: 10px;
         `}
-
-    ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
+            ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
         !$isWrapped &&
         !$shouldHideBackground &&
         css`
             &:hover {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
-        `}
+        `};
 `;
