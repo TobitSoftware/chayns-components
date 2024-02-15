@@ -16,7 +16,6 @@ import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { StyledAccordion } from './Accordion.styles';
-import { useTheme } from 'styled-components';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
 
@@ -225,11 +224,11 @@ const Accordion: FC<AccordionProps> = ({
     return (
         <StyledAccordion
             className="beta-chayns-accordion"
-            isOpen={isOpen}
-            isParentWrapped={isParentWrapped}
-            isWrapped={isWrapped}
-            shouldForceBackground={shouldForceBackground}
-            shouldHideBackground={shouldHideBackground}
+            $isOpen={isOpen}
+            $isParentWrapped={isParentWrapped}
+            $isWrapped={isWrapped}
+            $shouldForceBackground={shouldForceBackground}
+            $shouldHideBackground={shouldHideBackground}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>

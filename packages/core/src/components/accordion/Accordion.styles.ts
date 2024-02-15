@@ -1,24 +1,25 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
-import type { AccordionProps } from './Accordion';
 
 type StyledMotionAccordionProps = WithTheme<{
-    isOpen: boolean;
-    isParentWrapped: boolean;
-}> &
-    Pick<AccordionProps, 'isWrapped' | 'shouldForceBackground' | 'shouldHideBackground'>;
+    $isOpen: boolean;
+    $isParentWrapped: boolean;
+    $isWrapped?: boolean;
+    $shouldForceBackground?: boolean;
+    $shouldHideBackground?: boolean;
+}>;
 
 export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
     ${({
-        isOpen,
-        isWrapped,
-        shouldForceBackground,
-        shouldHideBackground,
+        $isOpen,
+        $isWrapped,
+        $shouldForceBackground,
+        $shouldHideBackground,
         theme,
     }: StyledMotionAccordionProps) =>
-        (isOpen || shouldForceBackground) &&
-        !isWrapped &&
-        !shouldHideBackground &&
+        ($isOpen || $shouldForceBackground) &&
+        !$isWrapped &&
+        !$shouldHideBackground &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             border-radius: ${theme.cardBorderRadius}px;
@@ -31,7 +32,8 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
             border-bottom: 1px solid transparent;
         `}
     
-    margin-bottom: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '30px' : '0px')};
+    margin-bottom: ${({ $isOpen, $isWrapped }: StyledMotionAccordionProps) =>
+        $isOpen && !$isWrapped ? '30px' : '0px'};
     transition:
         background-color 0.3s ease,
         border-bottom-color 0.3s ease,
@@ -39,10 +41,10 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         box-shadow 0.3s ease,
         margin-bottom 0.3s ease;
 
-    ${({ isOpen, isWrapped, shouldForceBackground, theme }: StyledMotionAccordionProps) => {
-        if (shouldForceBackground) return undefined;
+    ${({ $isOpen, $isWrapped, $shouldForceBackground, theme }: StyledMotionAccordionProps) => {
+        if ($shouldForceBackground) return undefined;
 
-        if (isWrapped) {
+        if ($isWrapped) {
             return css`
                 :not(:last-child) {
                     border-bottom-color: ${theme.headline};
@@ -50,7 +52,7 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
             `;
         }
 
-        if (!isOpen) {
+        if (!$isOpen) {
             return css`
                 border-bottom-color: ${theme.headline};
             `;
@@ -59,21 +61,21 @@ export const StyledAccordion = styled.div<StyledMotionAccordionProps>`
         return undefined;
     }}
 
-    ${({ isParentWrapped }) =>
-        isParentWrapped &&
+    ${({ $isParentWrapped }: StyledMotionAccordionProps) =>
+        $isParentWrapped &&
         css`
             padding-left: 17px;
         `}
 
-    ${({ isWrapped }) =>
-        !isWrapped &&
+    ${({ $isWrapped }: StyledMotionAccordionProps) =>
+        !$isWrapped &&
         css`
             margin-top: 10px;
         `}
 
-    ${({ isWrapped, shouldHideBackground, theme }) =>
-        !isWrapped &&
-        !shouldHideBackground &&
+    ${({ $isWrapped, $shouldHideBackground, theme }: StyledMotionAccordionProps) =>
+        !$isWrapped &&
+        !$shouldHideBackground &&
         css`
             &:hover {
                 background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
