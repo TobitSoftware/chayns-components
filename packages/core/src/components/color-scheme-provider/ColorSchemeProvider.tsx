@@ -1,10 +1,10 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import React, { FC, ReactNode, useEffect, useState } from 'react';
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { convertIconStyle, generateFontFaces } from '../../utils/font';
-import type { DesignSettings } from '../../types/colorSchemeProvider';
 import { getSite } from 'chayns-api';
+import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings } from '../../api/theme/get';
+import type { DesignSettings } from '../../types/colorSchemeProvider';
+import { convertIconStyle, generateFontFaces } from '../../utils/font';
 
 enum ColorMode {
     Classic,
@@ -91,8 +91,29 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
     const site = getSite();
 
-    const internalColorMode = colorMode ?? site.colorMode;
-    const internalColor = color ?? site.color;
+    const internalColorMode = useMemo(() => {
+        if (colorMode) {
+            return colorMode;
+        }
+
+        if (!site || !site.colorMode) {
+            return ColorMode.Classic;
+        }
+
+        return site.colorMode;
+    }, [colorMode, site]);
+
+    const internalColor = useMemo(() => {
+        if (color) {
+            return color;
+        }
+
+        if (!site || !site.color) {
+            return '#005EB8';
+        }
+
+        return site.color;
+    }, [color, site]);
 
     useEffect(() => {
         const availableColors = getAvailableColorList();
