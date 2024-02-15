@@ -22,6 +22,8 @@ export type TextStringProviderProps = {
     libraryName: string;
 };
 
+export const PassTextstringProvider: { value?: TextStringValue } = {};
+
 const TextStringProvider: FC<TextStringProviderProps> = ({ children, libraryName, language }) => {
     const [textStrings, setTextStrings] = useState<TextStringValue>({});
 
@@ -31,6 +33,7 @@ const TextStringProvider: FC<TextStringProviderProps> = ({ children, libraryName
 
             if (textStringResult) {
                 setTextStrings(textStringResult);
+                PassTextstringProvider.value = textStringResult;
             }
         };
 
