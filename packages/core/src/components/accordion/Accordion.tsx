@@ -214,7 +214,10 @@ const Accordion: FC<AccordionProps> = ({
         }
     }, [isOpened, updateOpenAccordionUuid, uuid]);
 
-    const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
+    const accordionContextProviderValue = useMemo(
+        () => ({ isWrapped: isWrapped === true }),
+        [isWrapped],
+    );
 
     return (
         <StyledAccordion
@@ -232,7 +235,7 @@ const Accordion: FC<AccordionProps> = ({
                         isOpen={isOpen}
                         isFixed={isFixed}
                         isTitleGreyed={isTitleGreyed || isDisabled}
-                        isWrapped={isWrapped}
+                        isWrapped={isWrapped === true}
                         onClick={handleHeadClick}
                         onSearchChange={onSearchChange}
                         rightElement={rightElement}
