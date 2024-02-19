@@ -11,7 +11,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
     ${({ $isOpen, theme }) =>
         $isOpen &&
         css`
-            background-color: rgba(${theme['100-rgb']}, 0.85);
+            background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
 
     transition: background-color 0.3s ease;
