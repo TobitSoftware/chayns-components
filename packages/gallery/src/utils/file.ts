@@ -1,4 +1,4 @@
-import type { InternalFileItem } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
+import type { InternalFileItem } from '@chayns-components/core';
 
 interface FilerDuplicateFileOptions {
     files: InternalFileItem[];
