@@ -3,6 +3,7 @@ import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 interface IListContext {
     incrementExpandableItemCount: () => () => void;
     isAnyItemExpandable: boolean;
+    isWrapped: boolean;
     openItemUuid: string | undefined;
     updateOpenItemUuid: (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 }
@@ -10,6 +11,7 @@ interface IListContext {
 export const ListContext = React.createContext<IListContext>({
     incrementExpandableItemCount: () => () => {},
     isAnyItemExpandable: false,
+    isWrapped: false,
     openItemUuid: undefined,
     updateOpenItemUuid: () => {},
 });
@@ -21,9 +23,14 @@ type ListProps = {
      * The items of the list
      */
     children: ReactNode;
+    /**
+     * This value must be set for nested AccordionGroup components. This adjusts the style of
+     * the head and the padding of the content accordions.
+     */
+    isWrapped?: boolean;
 };
 
-const List: FC<ListProps> = ({ children }) => {
+const List: FC<ListProps> = ({ children, isWrapped = false }) => {
     const [openItemUuid, setOpenItemUuid] = useState<IListContext['openItemUuid']>(undefined);
     const [expandableItemCount, setExpandableItemCount] = useState<number>(0);
 
@@ -37,7 +44,7 @@ const List: FC<ListProps> = ({ children }) => {
                 return uuid;
             });
         },
-        [setOpenItemUuid]
+        [setOpenItemUuid],
     );
 
     const incrementExpandableItemCount = useCallback(() => {
@@ -50,12 +57,19 @@ const List: FC<ListProps> = ({ children }) => {
 
     const providerValue = useMemo<IListContext>(
         () => ({
-            isAnyItemExpandable: expandableItemCount > 0,
-            updateOpenItemUuid,
-            openItemUuid,
             incrementExpandableItemCount,
+            isAnyItemExpandable: expandableItemCount > 0,
+            isWrapped,
+            openItemUuid,
+            updateOpenItemUuid,
         }),
-        [expandableItemCount, incrementExpandableItemCount, openItemUuid, updateOpenItemUuid]
+        [
+            expandableItemCount,
+            incrementExpandableItemCount,
+            isWrapped,
+            openItemUuid,
+            updateOpenItemUuid,
+        ],
     );
 
     return <ListContext.Provider value={providerValue}>{children}</ListContext.Provider>;

@@ -13,12 +13,14 @@ import React, {
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 
 interface IAccordionGroupContext {
-    openAccordionUuid: string | undefined;
+    isWrapped: boolean;
+    openAccordionUuid?: string;
     setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
 }
 
 export const AccordionGroupContext = React.createContext<IAccordionGroupContext>({
+    isWrapped: false,
     openAccordionUuid: undefined,
     setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
@@ -33,6 +35,11 @@ type AccordionGroupProps = {
      */
     children: ReactNode;
     /**
+     * This value must be set for nested AccordionGroup components. This adjusts the style of
+     * the head and the padding of the content accordions.
+     */
+    isWrapped?: boolean;
+    /**
      * Function that is executed when all accordions in group are closed.
      */
     onClose?: VoidFunction;
@@ -42,7 +49,12 @@ type AccordionGroupProps = {
     onOpen?: VoidFunction;
 };
 
-const AccordionGroup: FC<AccordionGroupProps> = ({ children, onClose, onOpen }) => {
+const AccordionGroup: FC<AccordionGroupProps> = ({
+    children,
+    isWrapped = false,
+    onClose,
+    onOpen,
+}) => {
     const [openAccordionUuid, setOpenAccordionUuid] =
         useState<IAccordionGroupContext['openAccordionUuid']>(undefined);
 
@@ -58,7 +70,7 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, onClose, onOpen }) 
                 return uuid;
             });
         },
-        [setOpenAccordionUuid]
+        [setOpenAccordionUuid],
     );
 
     useEffect(() => {
@@ -75,11 +87,12 @@ const AccordionGroup: FC<AccordionGroupProps> = ({ children, onClose, onOpen }) 
 
     const providerValue = useMemo<IAccordionGroupContext>(
         () => ({
+            isWrapped,
             openAccordionUuid,
             setOpenAccordionUuid,
             updateOpenAccordionUuid,
         }),
-        [openAccordionUuid, updateOpenAccordionUuid]
+        [isWrapped, openAccordionUuid, updateOpenAccordionUuid],
     );
 
     return (

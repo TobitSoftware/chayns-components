@@ -55,11 +55,6 @@ export type AccordionProps = {
      */
     isTitleGreyed?: boolean;
     /**
-     * This value must be set for nested Accordions. This adjusts the style of
-     * the head and the padding of the content.
-     */
-    isWrapped?: boolean;
-    /**
      * Function that is executed when the accordion body will be scrolled
      */
     onBodyScroll?: (event: UIEvent<HTMLDivElement>) => void;
@@ -128,7 +123,6 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isOpened,
     isTitleGreyed = false,
-    isWrapped = false,
     onBodyScroll,
     onClose,
     onOpen,
@@ -144,7 +138,8 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     shouldRenderClosed = false,
 }) => {
-    const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
+    const { isWrapped, openAccordionUuid, updateOpenAccordionUuid } =
+        useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);

@@ -4,6 +4,7 @@ import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider'
 type StyledListItemProps = WithTheme<{
     $isClickable: boolean;
     $isOpen: boolean;
+    $isWrapped: boolean;
 }>;
 
 export const StyledListItem = styled.div<StyledListItemProps>`
@@ -31,5 +32,9 @@ export const StyledListItem = styled.div<StyledListItemProps>`
             }
         `}}
 
-    
+    ${({ $isWrapped }) =>
+        $isWrapped &&
+        css`
+            margin-left: 26px;
+        `}
 `;

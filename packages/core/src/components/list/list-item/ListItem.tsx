@@ -94,8 +94,13 @@ const ListItem: FC<ListItemProps> = ({
     shouldShowRoundImage,
     title,
 }) => {
-    const { incrementExpandableItemCount, isAnyItemExpandable, openItemUuid, updateOpenItemUuid } =
-        useContext(ListContext);
+    const {
+        incrementExpandableItemCount,
+        isAnyItemExpandable,
+        isWrapped,
+        openItemUuid,
+        updateOpenItemUuid,
+    } = useContext(ListContext);
 
     const uuid = useUuid();
 
@@ -136,6 +141,7 @@ const ListItem: FC<ListItemProps> = ({
             className="beta-chayns-list-item"
             $isClickable={typeof onClick === 'function' || isExpandable}
             $isOpen={isItemOpen}
+            $isWrapped={isWrapped}
         >
             <ListItemHead
                 hoverItem={hoverItem}
