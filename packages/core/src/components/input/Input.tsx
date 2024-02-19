@@ -12,6 +12,7 @@ import React, {
     useMemo,
     useRef,
     useState,
+    type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
@@ -87,7 +88,7 @@ export type InputProps = {
     /**
      * An element that should be displayed on the right side of the Input.
      */
-    rightElement?: ReactNode;
+    rightElement?: ReactElement;
     /**
      * If true, a clear icon is displayed at the end of the input field
      */
@@ -156,6 +157,16 @@ const Input = forwardRef<InputRef, InputProps>(
             }
         }, [onChange]);
 
+        const shouldShowBorder = useMemo(() => {
+            if (rightElement) {
+                // Ignore because rightElement can be any type of element.
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                return rightElement.props.style.backgroundColor === undefined;
+            }
+
+            return true;
+        }, [rightElement]);
+
         useEffect(() => {
             if (inputRef.current) {
                 const resizeObserver = new ResizeObserver((entries) => {
@@ -215,7 +226,7 @@ const Input = forwardRef<InputRef, InputProps>(
                 $isInvalid={isInvalid}
             >
                 <StyledInputContentWrapper
-                    $shouldRoundRightCorners={!rightElement}
+                    $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >
                     {iconElement && <StyledInputIconWrapper>{iconElement}</StyledInputIconWrapper>}
@@ -264,8 +275,11 @@ const Input = forwardRef<InputRef, InputProps>(
                             />
                         </StyledMotionInputClearIcon>
                     )}
+                    {rightElement && shouldShowBorder && rightElement}
                 </StyledInputContentWrapper>
-                {rightElement && <StyledInputRightElement>{rightElement}</StyledInputRightElement>}
+                {rightElement && !shouldShowBorder && (
+                    <StyledInputRightElement>{rightElement}</StyledInputRightElement>
+                )}
             </StyledInput>
         );
     },
