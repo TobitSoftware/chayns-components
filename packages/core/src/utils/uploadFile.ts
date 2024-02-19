@@ -1,9 +1,9 @@
 import { postImage } from '../api/image/post';
 import { postVideo } from '../api/video/post';
-import type { FileItem, Image, Video } from '../types/file';
+import type { Image, InternalFileItem, Video } from '../types/file';
 
 interface UploadFilesOptions {
-    fileToUpload: FileItem;
+    fileToUpload: InternalFileItem;
     callback: (UploadedFile: Video | Image) => void;
 }
 

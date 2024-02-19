@@ -21,7 +21,7 @@ export interface Meta {
     height: string;
 }
 
-export interface FileItem {
+export interface InternalFileItem {
     /**
      * The state will be set in this component
      */
@@ -43,4 +43,9 @@ export interface FileItem {
      * Preview url of the file
      */
     previewUrl?: string;
+}
+
+export interface FileItem {
+    file: Video | Image;
+    id?: string;
 }

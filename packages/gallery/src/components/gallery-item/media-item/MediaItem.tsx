@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/lib/types/file';
+import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
 import React, { FC } from 'react';
 import {
     StyledMediaItemImage,
@@ -14,7 +14,7 @@ export type MediaItemProps = {
     /**
      *  Images and videos which should be displayed
      */
-    fileItem: FileItem;
+    fileItem: InternalFileItem;
     /**
      *  Whether images and videos can be edited
      */
@@ -22,7 +22,7 @@ export type MediaItemProps = {
     /**
      *  Function to be executed when a file is selected
      */
-    openSelectedFile: (file: FileItem) => void;
+    openSelectedFile: (file: InternalFileItem) => void;
     /**
      * The ratio of the image
      */

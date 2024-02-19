@@ -1,13 +1,13 @@
-import type { FileItem } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
+import type { InternalFileItem } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
 
 interface FilerDuplicateFileOptions {
-    files: FileItem[];
+    files: InternalFileItem[];
     newFile: File;
 }
 
 export const filterDuplicateFile = ({ newFile, files }: FilerDuplicateFileOptions) => {
     const duplicates = files.filter(
-        ({ file }) => file && file.name === newFile.name && file.size === newFile.size
+        ({ file }) => file && file.name === newFile.name && file.size === newFile.size,
     );
 
     return duplicates.length > 0;

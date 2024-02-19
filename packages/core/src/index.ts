@@ -54,7 +54,7 @@ export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
 export { ComboBoxDirection } from './types/comboBox';
-export type { FileItem, Image, Meta, Video } from './types/file';
+export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
 export type {
     FilterButtonItemShape,
     FilterButtonSize,
