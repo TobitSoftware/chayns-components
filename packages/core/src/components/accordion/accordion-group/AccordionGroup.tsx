@@ -13,14 +13,14 @@ import React, {
 type IUpdateOpenAccordionUuid = (uuid: string, options?: { shouldOnlyOpen?: boolean }) => void;
 
 interface IAccordionGroupContext {
-    isWrapped: boolean;
+    isWrapped?: boolean;
     openAccordionUuid?: string;
     setOpenAccordionUuid?: Dispatch<SetStateAction<string | undefined>>;
     updateOpenAccordionUuid?: IUpdateOpenAccordionUuid;
 }
 
 export const AccordionGroupContext = React.createContext<IAccordionGroupContext>({
-    isWrapped: false,
+    isWrapped: undefined,
     openAccordionUuid: undefined,
     setOpenAccordionUuid: undefined,
     updateOpenAccordionUuid: undefined,
