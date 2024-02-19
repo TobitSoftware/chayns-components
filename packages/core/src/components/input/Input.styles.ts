@@ -48,6 +48,7 @@ export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperPro
         return css`
             border-bottom-left-radius: 3px;
             border-top-left-radius: 3px;
+            border-right: none;
         `;
     }}
 `;
