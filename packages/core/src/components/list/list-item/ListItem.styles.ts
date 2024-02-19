@@ -35,6 +35,6 @@ export const StyledListItem = styled.div<StyledListItemProps>`
     ${({ $isWrapped }) =>
         $isWrapped &&
         css`
-            margin-left: 26px;
+            padding-left: 26px;
         `}
 `;
