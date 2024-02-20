@@ -41,7 +41,7 @@ const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args
             <TextstringProvider language="de" libraryName="chayns.components">
                 <Textstring
                     childrenTagName="h1"
-                    textString={{
+                    textstring={{
                         fallback: '##food## ist lecker.',
                         name: 'txt_chayns_chaynsComponents_textString_example_replacement',
                     }}
@@ -69,7 +69,7 @@ export const TextstringWithReplacement = TextstringWithReplacementTemplate.bind(
 export const TextstringWithStyles = Template.bind({});
 
 WithHTML.args = {
-    textString: {
+    textstring: {
         fallback: '<button>Drücke mich!</button>',
         name: 'txt_chayns_chaynsComponents_textString_example_with_html',
     },
@@ -78,7 +78,7 @@ WithHTML.args = {
 
 General.args = {
     childrenTagName: 'h1',
-    textString: {
+    textstring: {
         fallback: 'Das ist ein Textstring! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',
     },
@@ -87,7 +87,7 @@ General.args = {
 TextstringWithStyles.args = {
     childrenTagName: 'h1',
     childrenStyles: { color: 'rebeccapurple' },
-    textString: {
+    textstring: {
         fallback: 'Das ist ein Textstring! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',
     },

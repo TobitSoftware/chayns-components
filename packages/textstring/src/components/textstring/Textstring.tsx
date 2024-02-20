@@ -39,7 +39,7 @@ export type TextstringProps = {
     /**
      * The text that should be displayed.
      */
-    textString: ITextstring;
+    textstring: ITextstring;
 };
 
 const Textstring: FC<TextstringProps> = ({
@@ -49,9 +49,9 @@ const Textstring: FC<TextstringProps> = ({
     childrenTagName,
     isTextstringHTML,
     replacements,
-    textString,
+    textstring,
 }) => {
-    const text = useTextstringValue({ textString, replacements });
+    const text = useTextstringValue({ textstring, replacements });
 
     const handleClick = useCallback(
         ({ ctrlKey }: MouseEvent<HTMLElement>) => {
@@ -59,13 +59,13 @@ const Textstring: FC<TextstringProps> = ({
                 void isTobitEmployee().then((inGroup) => {
                     if (inGroup) {
                         selectLanguageToChange({
-                            textstringName: textString.name,
+                            textstringName: textstring.name,
                         });
                     }
                 });
             }
         },
-        [textString.name],
+        [textstring.name],
     );
 
     if (children) {
