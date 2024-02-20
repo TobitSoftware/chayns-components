@@ -141,6 +141,12 @@ const SearchBox: FC<SearchBoxProps> = ({
         }
     }, [list, shouldShowContentOnEmptyInput, value]);
 
+    useEffect(() => {
+        if (list) {
+            setMatchingItems(searchList({ items: list, searchString: value }));
+        }
+    }, [list, value]);
+
     /**
      * This function handles changes of the input
      */
