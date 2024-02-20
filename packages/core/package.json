@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/core",
-    "version": "5.0.0-beta.468",
+    "version": "5.0.0-beta.470",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -58,8 +58,8 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
-        "@react-hook/resize-observer": "^1.2.6",
         "@chayns/uac-service": "^0.0.46",
+        "@react-hook/resize-observer": "^1.2.6",
         "clsx": "^2.1.0",
         "uuid": "^9.0.1"
     },
