@@ -201,26 +201,29 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             }
         }, []);
 
-        const handleBeforeInput = useCallback((event: FormEvent<HTMLDivElement>) => {
-            if (!editorRef.current) {
-                return;
-            }
+        const handleBeforeInput = useCallback(
+            (event: FormEvent<HTMLDivElement>) => {
+                if (!editorRef.current || isDisabled) {
+                    return;
+                }
 
-            const { data, type } = event.nativeEvent as InputEvent;
+                const { data, type } = event.nativeEvent as InputEvent;
 
-            if (type === 'textInput' && data && data.includes('\n')) {
-                event.preventDefault();
-                event.stopPropagation();
+                if (type === 'textInput' && data && data.includes('\n')) {
+                    event.preventDefault();
+                    event.stopPropagation();
 
-                const text = convertEmojisToUnicode(data);
+                    const text = convertEmojisToUnicode(data);
 
-                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
 
-                const newEvent = new Event('input', { bubbles: true });
+                    const newEvent = new Event('input', { bubbles: true });
 
-                editorRef.current.dispatchEvent(newEvent);
-            }
-        }, []);
+                    editorRef.current.dispatchEvent(newEvent);
+                }
+            },
+            [isDisabled],
+        );
 
         /**
          * This function handles the 'input' events of the 'contentEditable' element and also passes the
@@ -274,6 +277,8 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 if (isDisabled) {
                     event.preventDefault();
                     event.stopPropagation();
+
+                    return;
                 }
 
                 if (event.key === 'Enter' && isPopupVisible) {
@@ -321,21 +326,30 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
          * text is then inserted at the correct position in the input field using the
          * 'insertTextAtCursorPosition' function.
          */
-        const handlePaste = useCallback((event: ClipboardEvent<HTMLDivElement>) => {
-            if (editorRef.current) {
-                event.preventDefault();
+        const handlePaste = useCallback(
+            (event: ClipboardEvent<HTMLDivElement>) => {
+                if (editorRef.current) {
+                    event.preventDefault();
 
-                let text = event.clipboardData.getData('text/plain');
+                    if (isDisabled) {
+                        event.stopPropagation();
 
-                text = convertEmojisToUnicode(text);
+                        return;
+                    }
 
-                insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+                    let text = event.clipboardData.getData('text/plain');
 
-                const newEvent = new Event('input', { bubbles: true });
+                    text = convertEmojisToUnicode(text);
 
-                editorRef.current.dispatchEvent(newEvent);
-            }
-        }, []);
+                    insertTextAtCursorPosition({ editorElement: editorRef.current, text });
+
+                    const newEvent = new Event('input', { bubbles: true });
+
+                    editorRef.current.dispatchEvent(newEvent);
+                }
+            },
+            [isDisabled],
+        );
 
         /**
          * This function uses the 'insertTextAtCursorPosition' function to insert the emoji at the
