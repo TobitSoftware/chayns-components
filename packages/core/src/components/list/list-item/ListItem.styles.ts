@@ -20,7 +20,7 @@ export const StyledListItem = styled.div<StyledListItemProps>`
         $isClickable &&
         css`
             :hover {
-                background-color: rgba(${theme['100-rgb']}, 0.85);
+                background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
             }
         `}
     
