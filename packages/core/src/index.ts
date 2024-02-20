@@ -64,6 +64,7 @@ export type { PopupRef } from './types/popup';
 export type { ISearchBoxItem as SearchBoxItem } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
+export { ClampPosition } from './types/truncation';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';

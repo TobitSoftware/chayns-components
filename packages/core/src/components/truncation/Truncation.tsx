@@ -9,11 +9,13 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { ClampPosition } from '../../types/truncation';
 import { truncateElement } from '../../utils/truncation';
 import {
     StyledMotionTruncationContent,
     StyledTruncation,
     StyledTruncationClamp,
+    StyledTruncationClampWrapper,
     StyledTruncationPseudoContent,
 } from './Truncation.styles';
 
@@ -22,6 +24,10 @@ export type TruncationProps = {
      * The elements that should be expanding or collapsing.
      */
     children: ReactElement;
+    /**
+     * The position of the clamp.
+     */
+    clampPosition?: ClampPosition;
     /**
      * The height of the children Element in it`s collapsed state.
      */
@@ -46,6 +52,7 @@ export type TruncationProps = {
 
 const Truncation: FC<TruncationProps> = ({
     collapsedHeight = 150,
+    clampPosition = ClampPosition.Right,
     isOpen,
     moreLabel = 'Mehr',
     lessLabel = 'Weniger',
@@ -195,14 +202,17 @@ const Truncation: FC<TruncationProps> = ({
                     ref={childrenRef}
                 />
                 {showClamp && (
-                    <StyledTruncationClamp onClick={handleClampClick}>
-                        {internalIsOpen ? lessLabel : moreLabel}
-                    </StyledTruncationClamp>
+                    <StyledTruncationClampWrapper $position={clampPosition}>
+                        <StyledTruncationClamp onClick={handleClampClick}>
+                            {internalIsOpen ? lessLabel : moreLabel}
+                        </StyledTruncationClamp>
+                    </StyledTruncationClampWrapper>
                 )}
             </StyledTruncation>
         ),
         [
             children,
+            clampPosition,
             handleAnimationEnd,
             handleClampClick,
             hasSizeChanged,
