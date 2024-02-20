@@ -1,38 +1,39 @@
+import { isTobitEmployee } from '@chayns-components/core';
 import React, {
-    createElement,
     CSSProperties,
     FC,
-    MouseEventHandler,
+    MouseEvent,
     ReactHTML,
-    ReactNode,
     useCallback,
-    useMemo,
+    type ReactElement,
 } from 'react';
-import { StyledTextString, StyledTextStringElement } from './TextString.styles';
-import type { ITextstring, TextstringReplacement } from './types';
-import { isTobitEmployee } from '@chayns-components/core';
-import { selectLanguageToChange } from '../../utils/textstring';
 import { useTextstringValue } from '../../hooks/useTextstringValue';
+import { selectLanguageToChange } from '../../utils/textstring';
+import type { ITextstring, TextstringReplacement } from './types';
 
 export type TextStringProps = {
     /**
      * The element that the text should be displayed in.
      */
-    children?: ReactNode;
+    children?: ReactElement;
     /**
-     * The styles of the HTML element that the text should be displayed in.
+     * The class name of the HTML element that the text should be displayed in. Only used if `children` is not set.
+     */
+    childrenClassName?: string;
+    /**
+     * The styles of the HTML element that the text should be displayed in. Only used if `children` is not set.
      */
     childrenStyles?: CSSProperties;
     /**
-     * The tag of the HTML element that the text should be displayed in.
+     * The tag of the HTML element that the text should be displayed in. Only used if `children` is not set.
      */
     childrenTagName?: keyof ReactHTML;
     /**
-     * Whether the textstring is an HTML element and should be displayed as an element.
+     * Whether the textstring contains HTML elements and should be displayed as HTML.
      */
     isTextstringHTML?: boolean;
     /**
-     * A part of the text that should be replaced.
+     * Replacement values for the textstring.
      */
     replacements?: TextstringReplacement;
     /**
@@ -42,40 +43,19 @@ export type TextStringProps = {
 };
 
 const TextString: FC<TextStringProps> = ({
-    textString,
-    replacements,
-    isTextstringHTML,
-    childrenTagName,
     children,
+    childrenClassName,
     childrenStyles,
+    childrenTagName,
+    isTextstringHTML,
+    replacements,
+    textString,
 }) => {
     const text = useTextstringValue({ textString, replacements });
 
-    const childElement = useMemo(() => {
-        if (isTextstringHTML) {
-            return <StyledTextStringElement dangerouslySetInnerHTML={{ __html: text }} />;
-        }
-
-        let element = createElement(
-            '',
-            childrenStyles ? { style: childrenStyles } : null,
-            children,
-        );
-
-        if (!children) {
-            element = createElement(
-                childrenTagName || 'span',
-                childrenStyles ? { style: childrenStyles } : null,
-                text,
-            );
-        }
-
-        return element;
-    }, [children, childrenStyles, childrenTagName, isTextstringHTML, text]);
-
-    const handleClick: MouseEventHandler<HTMLDivElement> = useCallback(
-        (event) => {
-            if (event.ctrlKey) {
+    const handleClick = useCallback(
+        ({ ctrlKey }: MouseEvent<HTMLElement>) => {
+            if (ctrlKey) {
                 void isTobitEmployee().then((inGroup) => {
                     if (inGroup) {
                         selectLanguageToChange({
@@ -88,9 +68,27 @@ const TextString: FC<TextStringProps> = ({
         [textString.name],
     );
 
-    return useMemo(
-        () => <StyledTextString onClick={handleClick}>{childElement}</StyledTextString>,
-        [childElement, handleClick],
+    if (children) {
+        return React.cloneElement(
+            children,
+            {
+                dangerouslySetInnerHTML: isTextstringHTML ? { __html: text } : undefined,
+                onClick: handleClick,
+            },
+            isTextstringHTML ? undefined : text,
+        );
+    }
+
+    // eslint-disable-next-line react/no-danger-with-children
+    return React.createElement(
+        childrenTagName || 'span',
+        {
+            dangerouslySetInnerHTML: isTextstringHTML ? { __html: text } : undefined,
+            className: childrenClassName,
+            onClick: handleClick,
+            style: childrenStyles,
+        },
+        isTextstringHTML ? undefined : text,
     );
 };
 
