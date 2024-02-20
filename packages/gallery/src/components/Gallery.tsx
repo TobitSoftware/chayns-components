@@ -154,10 +154,14 @@ const Gallery: FC<GalleryProps> = ({
             (file) => !file.uploadedFile && file.state !== 'uploading',
         );
 
+        console.log('Gallery', { filesToGeneratePreview, filesToUpload, fileItems });
+
         filesToGeneratePreview.forEach((file) => {
             if (!file.file) {
                 return;
             }
+
+            console.log('filesToGeneratePreview:', file);
 
             if (file.file.type.includes('video/')) {
                 generateVideoThumbnail({
