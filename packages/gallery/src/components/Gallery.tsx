@@ -103,10 +103,17 @@ const Gallery: FC<GalleryProps> = ({
 
                     if (prevFile.id === file.id) {
                         if (typeof onAdd === 'function') {
-                            onAdd({
-                                file: uploadedFile,
-                                id: file.id,
-                            });
+                            const prevElement = prevState.find(
+                                ({ uploadedFile: newUploadedFile }) =>
+                                    newUploadedFile?.url === uploadedFile?.url,
+                            );
+
+                            if (!prevElement) {
+                                onAdd({
+                                    file: uploadedFile,
+                                    id: file.id,
+                                });
+                            }
                         }
 
                         return {
@@ -154,14 +161,10 @@ const Gallery: FC<GalleryProps> = ({
             (file) => !file.uploadedFile && file.state !== 'uploading',
         );
 
-        console.log('Gallery', { filesToGeneratePreview, filesToUpload, fileItems });
-
         filesToGeneratePreview.forEach((file) => {
             if (!file.file) {
                 return;
             }
-
-            console.log('filesToGeneratePreview:', file);
 
             if (file.file.type.includes('video/')) {
                 generateVideoThumbnail({
