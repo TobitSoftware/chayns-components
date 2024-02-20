@@ -1,23 +1,23 @@
 import RadioButtonGroup from '@chayns-components/core/lib/components/radio-button/radio-button-group/RadioButtonGroup';
 import RadioButton from '@chayns-components/core/lib/components/radio-button/RadioButton';
+import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
 import { Meta, StoryFn } from '@storybook/react';
 import { useMemo, useState } from 'react';
-import { TextString, TextStringProvider } from '../src';
-import { RadioButtonItem } from '@chayns-components/core/lib/components/radio-button/types';
+import { Textstring, TextstringProvider } from '../src';
 
 export default {
-    title: 'TextString/TextString',
-    component: TextString,
+    title: 'Textstring/Textstring',
+    component: Textstring,
     args: {},
-} as Meta<typeof TextString>;
+} as Meta<typeof Textstring>;
 
-const Template: StoryFn<typeof TextString> = ({ ...args }) => (
-    <TextStringProvider language="de" libraryName="chayns.components">
-        <TextString {...args} />
-    </TextStringProvider>
+const Template: StoryFn<typeof Textstring> = ({ ...args }) => (
+    <TextstringProvider language="de" libraryName="chayns.components">
+        <Textstring {...args} />
+    </TextstringProvider>
 );
 
-const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args }) => {
+const TextstringWithReplacementTemplate: StoryFn<typeof Textstring> = ({ ...args }) => {
     const [food, setFood] = useState('##food##');
     const handleFoodChange = (item: RadioButtonItem) => {
         switch (item.id) {
@@ -38,8 +38,8 @@ const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args
 
     return useMemo(() => {
         return (
-            <TextStringProvider language="de" libraryName="chayns.components">
-                <TextString
+            <TextstringProvider language="de" libraryName="chayns.components">
+                <Textstring
                     childrenTagName="h1"
                     textString={{
                         fallback: '##food## ist lecker.',
@@ -55,7 +55,7 @@ const TextStringWithReplacementTemplate: StoryFn<typeof TextString> = ({ ...args
                     <RadioButton id="2" label="Schokolade" onChange={handleFoodChange} />
                     <RadioButton id="3" label="Salat" onChange={handleFoodChange} />
                 </RadioButtonGroup>
-            </TextStringProvider>
+            </TextstringProvider>
         );
     }, [food]);
 };
@@ -64,9 +64,9 @@ export const General = Template.bind({});
 
 export const WithHTML = Template.bind({});
 
-export const TextStringWithReplacement = TextStringWithReplacementTemplate.bind({});
+export const TextstringWithReplacement = TextstringWithReplacementTemplate.bind({});
 
-export const TextStringWithStyles = Template.bind({});
+export const TextstringWithStyles = Template.bind({});
 
 WithHTML.args = {
     textString: {
@@ -79,16 +79,16 @@ WithHTML.args = {
 General.args = {
     childrenTagName: 'h1',
     textString: {
-        fallback: 'Das ist ein TextString! Pizza ist lecker.',
+        fallback: 'Das ist ein Textstring! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',
     },
 };
 
-TextStringWithStyles.args = {
+TextstringWithStyles.args = {
     childrenTagName: 'h1',
     childrenStyles: { color: 'rebeccapurple' },
     textString: {
-        fallback: 'Das ist ein TextString! Pizza ist lecker.',
+        fallback: 'Das ist ein Textstring! Pizza ist lecker.',
         name: 'txt_chayns_chaynsComponents_textString_example',
     },
 };
