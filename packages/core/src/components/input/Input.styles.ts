@@ -1,8 +1,9 @@
+import { ColorMode } from 'chayns-api';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
-type StyledInputProps = WithTheme<{ $isDisabled?: boolean; $isInvalid?: boolean }>;
+type StyledInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
 export const StyledInput = styled.div<StyledInputProps>`
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
@@ -13,15 +14,18 @@ export const StyledInput = styled.div<StyledInputProps>`
 type StyledInputContentWrapperProps = WithTheme<{
     $shouldRoundRightCorners: boolean;
     $shouldShowOnlyBottomBorder?: boolean;
+    $isInvalid?: boolean;
+    $colorMode: ColorMode;
 }>;
 
 export const StyledInputContentWrapper = styled.div<StyledInputContentWrapperProps>`
     align-items: center;
-    background-color: ${({ theme }: StyledInputProps) => theme['100']};
+    background-color: ${({ theme, $colorMode }: StyledInputContentWrapperProps) =>
+        $colorMode === ColorMode.Classic ? theme['000'] : theme['100']};
     border: 1px solid
-        ${({ theme, $isInvalid }: StyledInputProps) =>
+        ${({ theme, $isInvalid }: StyledInputContentWrapperProps) =>
             $isInvalid ? theme.wrong : 'rgba(160, 160, 160, 0.3)'};
-    color: ${({ theme }: StyledInputProps) => theme['006']};
+    color: ${({ theme }: StyledInputContentWrapperProps) => theme['006']};
     display: flex;
     justify-content: space-between;
     min-height: 42px;
