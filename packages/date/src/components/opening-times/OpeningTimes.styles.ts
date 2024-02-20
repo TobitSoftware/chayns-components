@@ -14,3 +14,9 @@ export const StyledOpeningTimesWrapper = styled.div`
     align-items: baseline;
     justify-content: space-between;
 `;
+
+type StyledOpeningTimesWeekDayProps = WithTheme<unknown>;
+
+export const StyledOpeningTimesWeekDay = styled.div<StyledOpeningTimesWeekDayProps>`
+    color: ${({ theme }: StyledOpeningTimesWeekDayProps) => theme.text};
+`;

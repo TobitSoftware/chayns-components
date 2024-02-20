@@ -1,10 +1,22 @@
+import { Checkbox } from '@chayns-components/core';
 import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { OnChange, OnTimeAdd, OpeningTime, Time, Weekday } from '../../types/openingTimes';
-import { Checkbox } from '@chayns-components/core';
 import OpeningInputs from './opening-inputs/OpeningInputs';
-import { StyledOpeningTimes, StyledOpeningTimesWrapper } from './OpeningTimes.styles';
+import {
+    StyledOpeningTimes,
+    StyledOpeningTimesWeekDay,
+    StyledOpeningTimesWrapper,
+} from './OpeningTimes.styles';
 
 export type OpeningTimesProps = {
+    /**
+     * The text that should be displayed when a day is closed.
+     */
+    closedText?: string;
+    /**
+     * Whether the opening times can be edited.
+     */
+    editMode?: boolean;
     /**
      * Function to be executed when a time is changed or a day is enabled/disabled.
      * @param openingTimes
@@ -29,6 +41,8 @@ export type OpeningTimesProps = {
 };
 
 const OpeningTimes: FC<OpeningTimesProps> = ({
+    closedText = 'closed',
+    editMode = false,
     openingTimes,
     weekdays,
     onChange,
@@ -144,23 +158,38 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
 
             items.push(
                 <StyledOpeningTimesWrapper key={`openingTimes__${id}`}>
-                    <Checkbox isChecked={!isDisabled} onChange={() => handleCheckBoxChange(id)}>
-                        {weekday}
-                    </Checkbox>
+                    {editMode ? (
+                        <Checkbox isChecked={!isDisabled} onChange={() => handleCheckBoxChange(id)}>
+                            {weekday}
+                        </Checkbox>
+                    ) : (
+                        <StyledOpeningTimesWeekDay>{weekday}</StyledOpeningTimesWeekDay>
+                    )}
                     <OpeningInputs
+                        closedText={closedText}
                         id={id}
                         times={times}
                         isDisabled={isDisabled}
                         onChange={(newTime) => handleChange(newTime, id)}
                         onRemove={handleRemove}
                         onAdd={handleAdd}
+                        editMode={editMode}
                     />
                 </StyledOpeningTimesWrapper>,
             );
         });
 
         return items;
-    }, [handleAdd, handleChange, handleCheckBoxChange, handleRemove, newOpeningTimes, weekdays]);
+    }, [
+        closedText,
+        editMode,
+        handleAdd,
+        handleChange,
+        handleCheckBoxChange,
+        handleRemove,
+        newOpeningTimes,
+        weekdays,
+    ]);
 
     return useMemo(() => <StyledOpeningTimes>{content}</StyledOpeningTimes>, [content]);
 };

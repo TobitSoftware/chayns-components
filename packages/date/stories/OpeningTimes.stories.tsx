@@ -5,6 +5,7 @@ export default {
     title: 'Date/OpeningTimes',
     component: OpeningTimes,
     args: {
+        closedText: 'geschlossen',
         weekdays: [
             { id: 0, name: 'Montag' },
             { id: 1, name: 'Dienstag' },
