@@ -43,4 +43,5 @@ export const StyledTruncationClampWrapper = styled.div<StyledTruncationClampWrap
 
 export const StyledTruncationClamp = styled.a`
     cursor: pointer;
+    z-index: 2;
 `;
