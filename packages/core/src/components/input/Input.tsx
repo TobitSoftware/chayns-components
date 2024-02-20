@@ -15,7 +15,6 @@ import React, {
     type ReactElement,
 } from 'react';
 import { useTheme } from 'styled-components';
-import { useColorMode } from '../../hooks/colorMode';
 import type { Theme } from '../color-scheme-provider/ColorSchemeProvider';
 import Icon from '../icon/Icon';
 import {
@@ -220,13 +219,10 @@ const Input = forwardRef<InputRef, InputProps>(
             return { left: 0, top: 0 };
         }, [hasValue]);
 
-        const colorMode = useColorMode();
-
         return (
             <StyledInput className="beta-chayns-input" $isDisabled={isDisabled}>
                 <StyledInputContentWrapper
                     $isInvalid={isInvalid}
-                    $colorMode={colorMode}
                     $shouldRoundRightCorners={shouldShowBorder}
                     $shouldShowOnlyBottomBorder={shouldShowOnlyBottomBorder}
                 >

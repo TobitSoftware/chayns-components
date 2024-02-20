@@ -142,6 +142,18 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
+        switch (colorMode) {
+            case ColorMode.Light:
+                newTheme.colorMode = 'light';
+                break;
+            case ColorMode.Dark:
+                newTheme.colorMode = 'dark';
+                break;
+            default:
+                newTheme.colorMode = 'classic';
+                break;
+        }
+
         if (internalDesignSettings) {
             Object.keys(internalDesignSettings).forEach((key) => {
                 if (key === 'iconStyle') {
@@ -160,7 +172,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         setTheme(newTheme);
         setColors(newColors);
-    }, [internalColor, internalColorMode, internalDesignSettings, secondaryColor]);
+    }, [colorMode, internalColor, internalColorMode, internalDesignSettings, secondaryColor]);
 
     return (
         <ThemeProvider theme={theme}>
