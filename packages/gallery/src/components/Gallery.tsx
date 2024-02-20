@@ -5,7 +5,7 @@ import {
     type FileItem,
     type InternalFileItem,
 } from '@chayns-components/core';
-import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
+import { createDialog, DialogType, MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { GalleryViewMode } from '../types/gallery';
@@ -23,6 +23,10 @@ export type GalleryProps = {
      * Whether drag and drop is allowed or not
      */
     allowDragAndDrop?: boolean;
+    /**
+     * The message that should be displayed if a File is already given.
+     */
+    doubleFileDialogMessage?: string;
     /**
      *  Whether images and videos can be edited
      */
@@ -55,6 +59,7 @@ export type GalleryProps = {
 
 const Gallery: FC<GalleryProps> = ({
     allowDragAndDrop = false,
+    doubleFileDialogMessage = 'Diese Datei ist bereits vorhanden',
     isEditMode = false,
     fileMinWidth = 100,
     files,
@@ -79,32 +84,53 @@ const Gallery: FC<GalleryProps> = ({
         );
     };
 
+    const callDuplicateFileDialog = useCallback(() => {
+        createDialog({ type: DialogType.ALERT, text: doubleFileDialogMessage });
+    }, [doubleFileDialogMessage]);
+
     /**
      * This function adds uploaded files to fileItems
      */
     const handleUploadFileCallback = useCallback(
-        (file: InternalFileItem, UploadedFile: Video | Image) => {
-            setFileItems((prevState) =>
-                prevState.map((prevFile) => {
+        (file: InternalFileItem, uploadedFile: Video | Image) => {
+            setFileItems((prevState) => {
+                const updatedState = prevState.map((prevFile) => {
+                    if (prevFile.uploadedFile?.url === uploadedFile.url) {
+                        callDuplicateFileDialog();
+
+                        return undefined;
+                    }
+
                     if (prevFile.id === file.id) {
                         if (typeof onAdd === 'function') {
                             onAdd({
-                                file: UploadedFile,
+                                file: uploadedFile,
                                 id: file.id,
                             });
                         }
 
                         return {
                             ...prevFile,
-                            uploadedFile: UploadedFile,
+                            uploadedFile,
                             state: 'uploaded',
                         };
                     }
+
                     return prevFile;
-                }),
-            );
+                });
+
+                const tmp: InternalFileItem[] = [];
+
+                updatedState.forEach((updatedFile) => {
+                    if (updatedFile !== undefined) {
+                        tmp.push(updatedFile as InternalFileItem);
+                    }
+                });
+
+                return tmp ?? [];
+            });
         },
-        [onAdd],
+        [callDuplicateFileDialog, onAdd],
     );
 
     /**
@@ -229,8 +255,6 @@ const Gallery: FC<GalleryProps> = ({
             });
         }
     }, [files]);
-
-    console.log(fileItems);
 
     /**
      * This function deletes a selected file from the file list
