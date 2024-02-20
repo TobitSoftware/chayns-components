@@ -58,6 +58,7 @@
     },
     "dependencies": {
         "@chayns/colors": "^2.0.0",
+        "@react-hook/resize-observer": "^1.2.6",
         "@chayns/uac-service": "^0.0.46",
         "clsx": "^2.1.0",
         "uuid": "^9.0.1"
