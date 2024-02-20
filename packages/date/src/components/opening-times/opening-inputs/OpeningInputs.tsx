@@ -8,9 +8,9 @@ import { StyledOpeningInputPreview, StyledOpeningInputs } from './OpeningInputs.
 export type OpeningInputsProps = {
     times: Time[];
     isDisabled?: boolean;
-    onChange: (time: Time) => void;
-    onAdd: (time: Time, id: string) => void;
-    onRemove: (id: Time['id']) => void;
+    onChange?: (time: Time) => void;
+    onAdd?: (time: Time, id: string) => void;
+    onRemove?: (id: Time['id']) => void;
     id: string;
     editMode: boolean;
     closedText: string;
@@ -37,14 +37,18 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
 
         setNewTimes((prevState) => (prevState ? [...prevState, defaultTime] : [defaultTime]));
 
-        onAdd(defaultTime, id);
+        if (typeof onAdd === 'function') {
+            onAdd(defaultTime, id);
+        }
     }, [id, onAdd]);
 
     const handleRemove = useCallback(
         (timeId: string) => {
             setNewTimes((prevState) => (prevState ?? []).filter((time) => time.id !== timeId));
 
-            onRemove(timeId);
+            if (typeof onRemove === 'function') {
+                onRemove(timeId);
+            }
         },
         [onRemove],
     );
@@ -59,7 +63,9 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
                     return time;
                 });
 
-                onChange(newTime);
+                if (typeof onChange === 'function') {
+                    onChange(newTime);
+                }
 
                 return updatedTimes;
             });
@@ -78,7 +84,11 @@ const OpeningInputs: FC<OpeningInputsProps> = ({
             if (!editMode) {
                 const text = isDisabled ? closedText : `${start} - ${end}`;
 
-                items.push(<StyledOpeningInputPreview>{text}</StyledOpeningInputPreview>);
+                items.push(
+                    <StyledOpeningInputPreview key={`opening-times-preview__${id}.${timeId}`}>
+                        {text}
+                    </StyledOpeningInputPreview>,
+                );
 
                 return;
             }

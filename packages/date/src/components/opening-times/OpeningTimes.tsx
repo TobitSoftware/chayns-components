@@ -1,9 +1,18 @@
-import { Checkbox } from '@chayns-components/core';
-import React, { FC, useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import { Checkbox, Tooltip, useElementSize } from '@chayns-components/core';
+import React, {
+    FC,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    type ReactElement,
+} from 'react';
 import type { OnChange, OnTimeAdd, OpeningTime, Time, Weekday } from '../../types/openingTimes';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 import {
     StyledOpeningTimes,
+    StyledOpeningTimesTooltipContent,
     StyledOpeningTimesWeekDay,
     StyledOpeningTimesWrapper,
 } from './OpeningTimes.styles';
@@ -13,6 +22,10 @@ export type OpeningTimesProps = {
      * The text that should be displayed when a day is closed.
      */
     closedText?: string;
+    /**
+     * If set just the current day is displayed and the whole week in a tooltip.
+     */
+    currentDayId?: OpeningTime['id'];
     /**
      * Whether the opening times can be edited.
      */
@@ -42,6 +55,7 @@ export type OpeningTimesProps = {
 
 const OpeningTimes: FC<OpeningTimesProps> = ({
     closedText = 'closed',
+    currentDayId,
     editMode = false,
     openingTimes,
     weekdays,
@@ -50,6 +64,8 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     onTimeRemove,
 }) => {
     const [newOpeningTimes, setNewOpeningTimes] = useState<OpeningTime[]>();
+
+    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setNewOpeningTimes(openingTimes);
@@ -191,7 +207,50 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         weekdays,
     ]);
 
-    return useMemo(() => <StyledOpeningTimes>{content}</StyledOpeningTimes>, [content]);
+    const size = useElementSize(ref);
+
+    const displayedContent = useMemo(() => {
+        if (!currentDayId || editMode) {
+            return content;
+        }
+
+        const singleDay = newOpeningTimes?.find(({ id }) => id === currentDayId);
+
+        if (!singleDay) {
+            return content;
+        }
+
+        const { id, times, weekdayId } = singleDay;
+
+        const weekday = weekdays.find((weekDay) => weekDay.id === weekdayId)?.name;
+
+        const element = (
+            <StyledOpeningTimesWrapper
+                key={`currentDay__${currentDayId}`}
+                style={size && { width: size.width }}
+            >
+                <StyledOpeningTimesWeekDay>{weekday}</StyledOpeningTimesWeekDay>
+                <OpeningInputs closedText={closedText} id={id} times={times} editMode={editMode} />
+            </StyledOpeningTimesWrapper>
+        );
+
+        return (
+            <Tooltip
+                item={
+                    <StyledOpeningTimesTooltipContent key="opening-time-tooltip">
+                        {content}
+                    </StyledOpeningTimesTooltipContent>
+                }
+            >
+                {element}
+            </Tooltip>
+        );
+    }, [closedText, content, currentDayId, editMode, newOpeningTimes, weekdays, size]);
+
+    return useMemo(
+        () => <StyledOpeningTimes ref={ref}>{displayedContent}</StyledOpeningTimes>,
+        [displayedContent],
+    );
 };
 
 OpeningTimes.displayName = 'OpeningTimes';

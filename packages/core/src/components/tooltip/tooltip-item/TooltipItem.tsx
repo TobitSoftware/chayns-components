@@ -30,7 +30,7 @@ const TooltipItem: FC<TooltipProps> = ({ headline, text, button, imageUrl, width
                 )}
             </StyledTooltipItem>
         ),
-        [button, headline, imageUrl, text],
+        [button, headline, imageUrl, text, width],
     );
 
 TooltipItem.displayName = 'TooltipItem';

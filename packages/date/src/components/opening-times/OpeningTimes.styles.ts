@@ -13,6 +13,11 @@ export const StyledOpeningTimesWrapper = styled.div`
     display: flex;
     align-items: baseline;
     justify-content: space-between;
+    gap: 16px;
+`;
+
+export const StyledOpeningTimesTooltipContent = styled.div`
+    padding: 8px;
 `;
 
 type StyledOpeningTimesWeekDayProps = WithTheme<unknown>;
