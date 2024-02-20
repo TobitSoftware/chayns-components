@@ -11,7 +11,7 @@ import { useTextstringValue } from '../../hooks/useTextstringValue';
 import { selectLanguageToChange } from '../../utils/textstring';
 import type { ITextstring, TextstringReplacement } from './types';
 
-export type TextStringProps = {
+export type TextstringProps = {
     /**
      * The element that the text should be displayed in.
      */
@@ -42,7 +42,7 @@ export type TextStringProps = {
     textString: ITextstring;
 };
 
-const TextString: FC<TextStringProps> = ({
+const Textstring: FC<TextstringProps> = ({
     children,
     childrenClassName,
     childrenStyles,
@@ -92,6 +92,6 @@ const TextString: FC<TextStringProps> = ({
     );
 };
 
-TextString.displayName = 'TextString';
+Textstring.displayName = 'Textstring';
 
-export default TextString;
+export default Textstring;
