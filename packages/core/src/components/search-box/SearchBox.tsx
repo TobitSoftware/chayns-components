@@ -6,9 +6,11 @@ import React, {
     FC,
     FocusEvent,
     FocusEventHandler,
+    forwardRef,
     ReactElement,
     useCallback,
     useEffect,
+    useImperativeHandle,
     useMemo,
     useRef,
     useState,
@@ -19,6 +21,10 @@ import { searchList } from '../../utils/searchBox';
 import Input from '../input/Input';
 import SearchBoxItem from './search-box-item/SearchBoxItem';
 import { StyledMotionSearchBoxBody, StyledSearchBox } from './SearchBox.styles';
+
+export type SearchBoxRef = {
+    clear: VoidFunction;
+};
 
 export type SearchBoxProps = {
     /**
@@ -55,285 +61,303 @@ export type SearchBoxProps = {
     shouldShowRoundImage?: boolean;
 };
 
-const SearchBox: FC<SearchBoxProps> = ({
-    placeholder,
-    list,
-    onChange,
-    onBlur,
-    onSelect,
-    selectedId,
-    shouldShowRoundImage,
-    shouldShowContentOnEmptyInput = true,
-}) => {
-    const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
-    const [value, setValue] = useState('');
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [height, setHeight] = useState<number>(0);
-    const [width, setWidth] = useState(0);
-    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
+    (
+        {
+            placeholder,
+            list,
+            onChange,
+            onBlur,
+            onSelect,
+            selectedId,
+            shouldShowRoundImage,
+            shouldShowContentOnEmptyInput = true,
+        },
+        ref,
+    ) => {
+        const [matchingItems, setMatchingItems] = useState<ISearchBoxItem[]>([]);
+        const [value, setValue] = useState('');
+        const [isAnimating, setIsAnimating] = useState(false);
+        const [height, setHeight] = useState<number>(0);
+        const [width, setWidth] = useState(0);
+        const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
-    const boxRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement | null>(null);
-    const inputRef = useRef<HTMLInputElement | null>(null);
+        const boxRef = useRef<HTMLDivElement>(null);
+        const contentRef = useRef<HTMLDivElement | null>(null);
+        const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const { browser } = getDevice();
+        const { browser } = getDevice();
 
-    /**
-     * This function closes the list of items
-     */
-    const handleOutsideClick = useCallback(
-        (event: MouseEvent) => {
-            if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+        /**
+         * This function closes the list of items
+         */
+        const handleOutsideClick = useCallback(
+            (event: MouseEvent) => {
+                if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+                    setIsAnimating(false);
+                }
+            },
+            [boxRef],
+        );
+
+        /**
+         * This hook listens for clicks
+         */
+        useEffect(() => {
+            document.addEventListener('click', handleOutsideClick);
+
+            return () => {
+                document.removeEventListener('click', handleOutsideClick);
+            };
+        }, [handleOutsideClick, boxRef]);
+
+        /**
+         * This hook calculates the height
+         */
+        useEffect(() => {
+            const textArray = list.map(({ text }) => text);
+
+            setHeight(calculateContentHeight(textArray));
+        }, [list, placeholder]);
+
+        /**
+         * This hook calculates the width
+         */
+        useEffect(() => {
+            const input = document.getElementById('search_box_input');
+
+            if (input) {
+                setWidth(input.offsetWidth);
+            }
+        }, []);
+
+        useEffect(() => {
+            if (selectedId) {
+                const selectedItem = list.find(({ id }) => id === selectedId);
+
+                if (selectedItem) {
+                    setValue(selectedItem.text);
+                }
+            }
+        }, [list, selectedId]);
+
+        /**
+         * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
+         * should not be reset if the list changes and the selectedId is still undefined.
+         */
+        useEffect(() => {
+            if (!selectedId) {
+                setValue('');
+            }
+        }, [selectedId]);
+
+        /**
+         * This function sets the items on focus if shouldShowContentOnEmptyInput
+         */
+        const handleFocus = useCallback(() => {
+            if (shouldShowContentOnEmptyInput) {
+                setMatchingItems(searchList({ items: list, searchString: value }));
+                setIsAnimating(true);
+            }
+        }, [list, shouldShowContentOnEmptyInput, value]);
+
+        useEffect(() => {
+            if (list) {
+                setMatchingItems(searchList({ items: list, searchString: value }));
+            }
+        }, [list, value]);
+
+        /**
+         * This function handles changes of the input
+         */
+        const handleChange = useCallback(
+            (event: ChangeEvent<HTMLInputElement>) => {
+                const searchedItems = searchList({ items: list, searchString: event.target.value });
+
+                if (!shouldShowContentOnEmptyInput && !event.target.value) {
+                    setMatchingItems([]);
+                } else {
+                    setMatchingItems(searchedItems);
+                    setIsAnimating(searchedItems.length !== 0);
+                }
+
+                setValue(event.target.value);
+
+                if (typeof onChange === 'function') {
+                    onChange(event);
+                }
+            },
+            [list, onChange, shouldShowContentOnEmptyInput],
+        );
+
+        /**
+         * This function handles the blur event of the input
+         */
+        const handleBlur = useCallback(
+            (event: FocusEvent<HTMLInputElement>) => {
+                if (typeof onBlur === 'function') {
+                    onBlur(event);
+                }
+            },
+            [onBlur],
+        );
+
+        /**
+         * This function handles the item selection
+         */
+        const handleSelect = useCallback(
+            (item: ISearchBoxItem) => {
+                setValue(item.text);
                 setIsAnimating(false);
-            }
-        },
-        [boxRef],
-    );
 
-    /**
-     * This hook listens for clicks
-     */
-    useEffect(() => {
-        document.addEventListener('click', handleOutsideClick);
+                if (typeof onSelect === 'function') {
+                    onSelect(item);
+                }
+            },
+            [onSelect],
+        );
 
-        return () => {
-            document.removeEventListener('click', handleOutsideClick);
-        };
-    }, [handleOutsideClick, boxRef]);
+        const content = useMemo(() => {
+            const items: ReactElement[] = [];
 
-    /**
-     * This hook calculates the height
-     */
-    useEffect(() => {
-        const textArray = list.map(({ text }) => text);
+            matchingItems.sort((a, b) => a.text.localeCompare(b.text));
 
-        setHeight(calculateContentHeight(textArray));
-    }, [list, placeholder]);
+            matchingItems.forEach(({ id, text, imageUrl }) => {
+                items.push(
+                    <SearchBoxItem
+                        key={id}
+                        text={text}
+                        imageUrl={imageUrl}
+                        id={id}
+                        shouldShowRoundImage={shouldShowRoundImage}
+                        onSelect={handleSelect}
+                    />,
+                );
+            });
 
-    /**
-     * This hook calculates the width
-     */
-    useEffect(() => {
-        const input = document.getElementById('search_box_input');
+            return items;
+        }, [shouldShowRoundImage, handleSelect, matchingItems]);
 
-        if (input) {
-            setWidth(input.offsetWidth);
-        }
-    }, []);
+        useEffect(() => {
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const children = contentRef.current?.children;
+                    if (children && children.length > 0) {
+                        const newIndex =
+                            focusedIndex !== null
+                                ? (focusedIndex +
+                                      (e.key === 'ArrowUp' ? -1 : 1) +
+                                      children.length) %
+                                  children.length
+                                : 0;
 
-    useEffect(() => {
-        if (selectedId) {
-            const selectedItem = list.find(({ id }) => id === selectedId);
+                        if (focusedIndex !== null) {
+                            const prevElement = children[focusedIndex] as HTMLDivElement;
+                            prevElement.tabIndex = -1;
+                        }
 
-            if (selectedItem) {
-                setValue(selectedItem.text);
-            }
-        }
-    }, [list, selectedId]);
+                        setFocusedIndex(newIndex);
 
-    /**
-     * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
-     * should not be reset if the list changes and the selectedId is still undefined.
-     */
-    useEffect(() => {
-        if (!selectedId) {
-            setValue('');
-        }
-    }, [selectedId]);
+                        const newElement = children[newIndex] as HTMLDivElement;
+                        newElement.tabIndex = 0;
+                        newElement.focus();
+                    }
+                } else if (e.key === 'Enter' && focusedIndex !== null) {
+                    const element = contentRef.current?.children[focusedIndex];
 
-    /**
-     * This function sets the items on focus if shouldShowContentOnEmptyInput
-     */
-    const handleFocus = useCallback(() => {
-        if (shouldShowContentOnEmptyInput) {
-            setMatchingItems(searchList({ items: list, searchString: value }));
-            setIsAnimating(true);
-        }
-    }, [list, shouldShowContentOnEmptyInput, value]);
-
-    useEffect(() => {
-        if (list) {
-            setMatchingItems(searchList({ items: list, searchString: value }));
-        }
-    }, [list, value]);
-
-    /**
-     * This function handles changes of the input
-     */
-    const handleChange = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const searchedItems = searchList({ items: list, searchString: event.target.value });
-
-            if (!shouldShowContentOnEmptyInput && !event.target.value) {
-                setMatchingItems([]);
-            } else {
-                setMatchingItems(searchedItems);
-                setIsAnimating(searchedItems.length !== 0);
-            }
-
-            setValue(event.target.value);
-
-            if (typeof onChange === 'function') {
-                onChange(event);
-            }
-        },
-        [list, onChange, shouldShowContentOnEmptyInput],
-    );
-
-    /**
-     * This function handles the blur event of the input
-     */
-    const handleBlur = useCallback(
-        (event: FocusEvent<HTMLInputElement>) => {
-            if (typeof onBlur === 'function') {
-                onBlur(event);
-            }
-        },
-        [onBlur],
-    );
-
-    /**
-     * This function handles the item selection
-     */
-    const handleSelect = useCallback(
-        (item: ISearchBoxItem) => {
-            setValue(item.text);
-            setIsAnimating(false);
-
-            if (typeof onSelect === 'function') {
-                onSelect(item);
-            }
-        },
-        [onSelect],
-    );
-
-    const content = useMemo(() => {
-        const items: ReactElement[] = [];
-
-        matchingItems.sort((a, b) => a.text.localeCompare(b.text));
-
-        matchingItems.forEach(({ id, text, imageUrl }) => {
-            items.push(
-                <SearchBoxItem
-                    key={id}
-                    text={text}
-                    imageUrl={imageUrl}
-                    id={id}
-                    shouldShowRoundImage={shouldShowRoundImage}
-                    onSelect={handleSelect}
-                />,
-            );
-        });
-
-        return items;
-    }, [shouldShowRoundImage, handleSelect, matchingItems]);
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                e.preventDefault();
-                const children = contentRef.current?.children;
-                if (children && children.length > 0) {
-                    const newIndex =
-                        focusedIndex !== null
-                            ? (focusedIndex + (e.key === 'ArrowUp' ? -1 : 1) + children.length) %
-                              children.length
-                            : 0;
-
-                    if (focusedIndex !== null) {
-                        const prevElement = children[focusedIndex] as HTMLDivElement;
-                        prevElement.tabIndex = -1;
+                    if (!element) {
+                        return;
                     }
 
-                    setFocusedIndex(newIndex);
+                    const { id, textContent } = element;
 
-                    const newElement = children[newIndex] as HTMLDivElement;
-                    newElement.tabIndex = 0;
-                    newElement.focus();
+                    handleSelect({
+                        id: id.replace('search-box-item__', ''),
+                        text: textContent ?? '',
+                    });
                 }
-            } else if (e.key === 'Enter' && focusedIndex !== null) {
-                const element = contentRef.current?.children[focusedIndex];
+            };
 
-                if (!element) {
-                    return;
-                }
+            document.addEventListener('keydown', handleKeyDown);
 
-                const { id, textContent } = element;
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }, [focusedIndex, handleSelect]);
 
-                handleSelect({ id: id.replace('search-box-item__', ''), text: textContent ?? '' });
+        const handleKeyPress = useCallback((event: KeyboardEvent) => {
+            if (event.keyCode === 27) {
+                setMatchingItems([]);
             }
-        };
+        }, []);
 
-        document.addEventListener('keydown', handleKeyDown);
+        useImperativeHandle(
+            ref,
+            () => ({
+                clear: () => setValue(''),
+            }),
+            [],
+        );
 
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [focusedIndex, handleSelect]);
-
-    const handleKeyPress = useCallback((event: KeyboardEvent) => {
-        if (event.keyCode === 27) {
-            setMatchingItems([]);
-        }
-    }, []);
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-
-        return () => {
+        useEffect(() => {
             document.addEventListener('keydown', handleKeyPress);
-        };
-    }, [handleKeyPress]);
 
-    return useMemo(
-        () => (
-            <StyledSearchBox ref={boxRef}>
-                <div id="search_box_input">
-                    <Input
-                        ref={inputRef}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onFocus={handleFocus}
-                        placeholder={placeholder}
-                        value={value}
-                    />
-                </div>
-                <AnimatePresence initial={false}>
-                    <StyledMotionSearchBoxBody
-                        $browser={browser?.name}
-                        key="content"
-                        $height={height}
-                        $width={width}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={
-                            isAnimating
-                                ? { height: 'fit-content', opacity: 1 }
-                                : { height: 0, opacity: 0 }
-                        }
-                        transition={{
-                            duration: 0.2,
-                            type: 'tween',
-                        }}
-                    >
-                        <div ref={contentRef}>{content}</div>
-                    </StyledMotionSearchBoxBody>
-                </AnimatePresence>
-            </StyledSearchBox>
-        ),
-        [
-            browser?.name,
-            content,
-            handleBlur,
-            handleChange,
-            handleFocus,
-            height,
-            isAnimating,
-            placeholder,
-            value,
-            width,
-        ],
-    );
-};
+            return () => {
+                document.addEventListener('keydown', handleKeyPress);
+            };
+        }, [handleKeyPress]);
+
+        return useMemo(
+            () => (
+                <StyledSearchBox ref={boxRef}>
+                    <div id="search_box_input">
+                        <Input
+                            ref={inputRef}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            onFocus={handleFocus}
+                            placeholder={placeholder}
+                            value={value}
+                        />
+                    </div>
+                    <AnimatePresence initial={false}>
+                        <StyledMotionSearchBoxBody
+                            $browser={browser?.name}
+                            key="content"
+                            $height={height}
+                            $width={width}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={
+                                isAnimating
+                                    ? { height: 'fit-content', opacity: 1 }
+                                    : { height: 0, opacity: 0 }
+                            }
+                            transition={{
+                                duration: 0.2,
+                                type: 'tween',
+                            }}
+                        >
+                            <div ref={contentRef}>{content}</div>
+                        </StyledMotionSearchBoxBody>
+                    </AnimatePresence>
+                </StyledSearchBox>
+            ),
+            [
+                browser?.name,
+                content,
+                handleBlur,
+                handleChange,
+                handleFocus,
+                height,
+                isAnimating,
+                placeholder,
+                value,
+                width,
+            ],
+        );
+    },
+);
 
 SearchBox.displayName = 'SearchBox';
 
