@@ -143,13 +143,14 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
-                if (!popupContentRef.current?.contains(event.target as Node)) {
+                if (
+                    !popupContentRef.current?.contains(event.target as Node) &&
+                    !shouldShowOnHover
+                ) {
                     event.preventDefault();
                     event.stopPropagation();
 
-                    if (!shouldShowOnHover) {
-                        handleHide();
-                    }
+                    handleHide();
                 }
             },
             [handleHide, shouldShowOnHover],
