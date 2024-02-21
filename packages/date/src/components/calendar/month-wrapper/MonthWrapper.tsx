@@ -32,6 +32,13 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
     width,
 }) => {
     const [content, setContent] = useState<ReactElement[]>();
+    const [prevSelectedDate, setPrevSelectedDate] = useState<Date>();
+
+    useEffect(() => {
+        if (prevSelectedDate !== selectedDate) {
+            setPrevSelectedDate(selectedDate);
+        }
+    }, [prevSelectedDate, selectedDate]);
 
     useEffect(() => {
         setContent((prevState) => {
@@ -103,7 +110,27 @@ const MonthWrapper: FC<MonthWrapperProps> = ({
 
             return prevState;
         });
-    }, [categories, currentDate, direction, highlightedDates, locale, onSelect, selectedDate]);
+    }, [
+        categories,
+        currentDate,
+        direction,
+        highlightedDates,
+        locale,
+        onSelect,
+        prevSelectedDate,
+        selectedDate,
+    ]);
+
+    useEffect(() => {
+        if (selectedDate) {
+            setContent((prevState) =>
+                (prevState ?? []).map((element) => ({
+                    ...element,
+                    props: { ...element.props, selectedDate } as ReactElement,
+                })),
+            );
+        }
+    }, [selectedDate]);
 
     const animate: MotionProps['animate'] = useMemo(() => {
         if (shouldRenderTwo) {
