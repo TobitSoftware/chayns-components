@@ -132,6 +132,16 @@ const SearchBox: FC<SearchBoxProps> = ({
     }, [list, selectedId]);
 
     /**
+     * This hook resets the value if the selectedId changes to undefined. This is an own useEffect because the value
+     * should not be reset if the list changes and the selectedId is still undefined.
+     */
+    useEffect(() => {
+        if (!selectedId) {
+            setValue('');
+        }
+    }, [selectedId]);
+
+    /**
      * This function sets the items on focus if shouldShowContentOnEmptyInput
      */
     const handleFocus = useCallback(() => {
