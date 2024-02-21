@@ -1,6 +1,6 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
-import { getSite } from 'chayns-api';
-import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useSite } from 'chayns-api';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { getDesignSettings } from '../../api/theme/get';
 import type { DesignSettings } from '../../types/colorSchemeProvider';
@@ -55,13 +55,12 @@ export type WithTheme<T> = T & {
 export type FramerMotionBugFix = WithTheme<unknown>;
 
 const GlobalStyle = createGlobalStyle`
-  ${generateFontFaces}
-
-  .ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    ${generateFontFaces}
+    .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 `;
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
@@ -77,6 +76,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const [theme, setTheme] = useState<Theme>({});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
 
+    const { color: internalColor, colorMode: internalColorMode } = useSite();
+
     useEffect(() => {
         if (designSettings) {
             setInternalDesignSettings(designSettings);
@@ -89,32 +90,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         });
     }, [designSettings]);
 
-    const site = getSite();
-
-    const internalColorMode = useMemo(() => {
-        if (colorMode) {
-            return colorMode;
-        }
-
-        if (!site || !site.colorMode) {
-            return ColorMode.Classic;
-        }
-
-        return site.colorMode;
-    }, [colorMode, site]);
-
-    const internalColor = useMemo(() => {
-        if (color) {
-            return color;
-        }
-
-        if (!site || !site.color) {
-            return '#005EB8';
-        }
-
-        return site.color;
-    }, [color, site]);
-
     useEffect(() => {
         const availableColors = getAvailableColorList();
 
@@ -123,8 +98,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         availableColors.forEach((colorName: string) => {
             const hexColor = getColorFromPalette(colorName, {
-                color: internalColor,
-                colorMode: internalColorMode,
+                color: color ?? internalColor,
+                colorMode: colorMode ?? internalColorMode,
                 secondaryColor,
             });
 
@@ -142,7 +117,7 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
             }
         });
 
-        switch (colorMode) {
+        switch (colorMode ?? internalColorMode) {
             case ColorMode.Light:
                 newTheme.colorMode = 'light';
                 break;
@@ -172,7 +147,14 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         setTheme(newTheme);
         setColors(newColors);
-    }, [colorMode, internalColor, internalColorMode, internalDesignSettings, secondaryColor]);
+    }, [
+        color,
+        colorMode,
+        internalColor,
+        internalColorMode,
+        internalDesignSettings,
+        secondaryColor,
+    ]);
 
     return (
         <ThemeProvider theme={theme}>
