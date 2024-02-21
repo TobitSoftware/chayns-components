@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
+import React, { FC, isValidElement, ReactNode, useMemo, useRef, type CSSProperties } from 'react';
 import type { PopupRef } from '../../types/popup';
 import type { ITooltipItem } from '../../types/tooltip';
 import Popup from '../popup/Popup';
@@ -13,7 +13,7 @@ export type TooltipProps = {
     /**
      * The content that should be displayed.
      */
-    item: ITooltipItem;
+    item: ITooltipItem | ReactNode;
     /**
      * The width of an item.
      */
@@ -27,31 +27,35 @@ export type TooltipProps = {
 const Tooltip: FC<TooltipProps> = ({ item, children, isDisabled, itemWidth }) => {
     const tooltipRef = useRef<PopupRef>(null);
 
+    const content = useMemo(() => {
+        if (isValidElement(item)) {
+            return item;
+        }
+
+        return (
+            <TooltipItem
+                width={itemWidth}
+                text={(item as ITooltipItem).text}
+                headline={(item as ITooltipItem).headline}
+                imageUrl={(item as ITooltipItem).imageUrl}
+                button={(item as ITooltipItem).button}
+            />
+        );
+    }, [item, itemWidth]);
+
     return useMemo(
         () => (
             <StyledTooltip>
                 {isDisabled ? (
                     children
                 ) : (
-                    <Popup
-                        shouldShowOnHover
-                        content={
-                            <TooltipItem
-                                width={itemWidth}
-                                text={item.text}
-                                headline={item.headline}
-                                imageUrl={item.imageUrl}
-                                button={item.button}
-                            />
-                        }
-                        ref={tooltipRef}
-                    >
+                    <Popup shouldShowOnHover content={content} ref={tooltipRef}>
                         {children}
                     </Popup>
                 )}
             </StyledTooltip>
         ),
-        [isDisabled, children, itemWidth, item.text, item.headline, item.imageUrl, item.button],
+        [isDisabled, children, content],
     );
 };
 

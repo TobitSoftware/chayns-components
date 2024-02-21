@@ -25,7 +25,7 @@ export const StyledMotionIconWrapper = styled(motion.div)<FramerMotionBugFix>`
     width: 25px;
 `;
 
-type StyledAccordionIconProps = WithTheme<{ icon: string }>;
+type StyledAccordionIconProps = WithTheme<{ $icon: string }>;
 
 export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
     align-items: center;
@@ -34,7 +34,7 @@ export const StyledAccordionIcon = styled.i<StyledAccordionIconProps>`
     color: ${({ theme }: StyledAccordionIconProps) => theme.headline};
 
     &:before {
-        content: ${({ icon }) => `"\\${icon}"`};
+        content: ${({ $icon }) => `"\\${$icon}"`};
         font-family: 'Font Awesome 6 Pro', Fontawesome !important;
     }
 `;
@@ -56,23 +56,23 @@ export const StyledMotionTitleWrapper = styled(motion.div)<FramerMotionBugFix>`
 `;
 
 interface StyledMotionTitleProps {
-    isOpen: boolean;
-    isWrapped: boolean;
+    $isOpen: boolean;
+    $isWrapped: boolean;
 }
 
 export const StyledMotionTitle = styled(motion.div)<StyledMotionTitleProps>`
-    font-size: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? '1.3rem' : undefined)};
-    font-weight: ${({ isOpen, isWrapped }) => (isOpen && isWrapped ? 700 : 'normal')};
+    font-size: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? '1.3rem' : undefined)};
+    font-weight: ${({ $isOpen, $isWrapped }) => ($isOpen && $isWrapped ? 700 : 'normal')};
     grid-area: header;
-    height: ${({ isWrapped }) => (isWrapped ? '100%' : undefined)};
+    height: ${({ $isWrapped }) => ($isWrapped ? '100%' : undefined)};
     overflow: hidden;
     text-overflow: ellipsis;
     transform-origin: top left;
     user-select: none;
-    white-space: ${({ isOpen, isWrapped }) => (isOpen && !isWrapped ? 'normal' : 'nowrap')};
+    white-space: ${({ $isOpen, $isWrapped }) => ($isOpen && !$isWrapped ? 'normal' : 'nowrap')};
 
-    ${({ isWrapped }) =>
-        isWrapped &&
+    ${({ $isWrapped }) =>
+        $isWrapped &&
         css`
             align-items: center;
             display: flex;
@@ -102,7 +102,7 @@ export const StyledMotionRightElementWrapper = styled(motion.div)<FramerMotionBu
 `;
 
 type StyledMotionRightInputProps = WithTheme<{
-    hasIcon: boolean;
+    $hasIcon: boolean;
 }>;
 
 export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInputProps>`
@@ -114,7 +114,7 @@ export const StyledMotionRightInput = styled(motion.input)<StyledMotionRightInpu
     );
     color: ${({ theme }: StyledMotionRightInputProps) => theme.text};
     grid-area: header;
-    padding: ${({ hasIcon }) => (hasIcon ? '5px 23px 5px 1px' : '5px 1px')};
+    padding: ${({ $hasIcon }) => ($hasIcon ? '5px 23px 5px 1px' : '5px 1px')};
 `;
 
 export const StyledMotionRightInputIconWrapper = styled(motion.div)<FramerMotionBugFix>`

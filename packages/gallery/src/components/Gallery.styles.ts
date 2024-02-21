@@ -4,22 +4,22 @@ import { GalleryViewMode } from '../types/gallery';
 export const StyledGallery = styled.div``;
 
 export const StyledGalleryItemWrapper = styled.div<{
-    uploadedFileLength: number;
-    ratio: number;
-    viewMode: GalleryViewMode;
+    $uploadedFileLength: number;
+    $ratio: number;
+    $viewMode: GalleryViewMode;
 }>`
     display: grid;
     gap: 5px;
 
-    ${({ viewMode, uploadedFileLength }) => {
-        if (viewMode === GalleryViewMode.GRID) {
+    ${({ $viewMode, $uploadedFileLength }) => {
+        if ($viewMode === GalleryViewMode.GRID) {
             return css`
                 > div:first-child {
                     grid-column: 1 / -1;
                 }
 
                 ${() => {
-                    switch (uploadedFileLength) {
+                    switch ($uploadedFileLength) {
                         case 1:
                             return css`
                                 grid-template-columns: 1fr;
@@ -50,7 +50,7 @@ export const StyledGalleryItemWrapper = styled.div<{
             `;
         }
 
-        switch (uploadedFileLength) {
+        switch ($uploadedFileLength) {
             case 1:
                 return css`
                     grid-template-columns: 1fr;
@@ -73,15 +73,15 @@ export const StyledGalleryItemWrapper = styled.div<{
         }
     }}
 
-    aspect-ratio: ${({ ratio }) => ratio};
+    aspect-ratio: ${({ $ratio }) => $ratio};
 `;
 
 export const StyledGalleryEditModeWrapper = styled.div<{
-    fileMinWidth: number;
+    $fileMinWidth: number;
 }>`
     display: grid;
-    grid-template-columns: ${({ fileMinWidth }) =>
-        `repeat(auto-fill, minmax(${fileMinWidth}px, 1fr))`};
+    grid-template-columns: ${({ $fileMinWidth }) =>
+        `repeat(auto-fill, minmax(${$fileMinWidth}px, 1fr))`};
     grid-auto-rows: 1fr;
     gap: 6px;
 `;

@@ -1,3 +1,5 @@
+import { getAccessToken } from 'chayns-api';
+
 export interface PostVideoResult {
     id: string;
     originalVideoQuality: string;
@@ -7,7 +9,6 @@ export interface PostVideoResult {
 }
 
 interface PostVideoOptions {
-    accessToken: string;
     file: File | Blob;
 }
 
@@ -15,9 +16,14 @@ interface PostVideoOptions {
  * Uploads a video to the streaming service
  */
 export const postVideo = async ({
-    accessToken,
     file,
 }: PostVideoOptions): Promise<PostVideoResult | undefined> => {
+    const { accessToken } = await getAccessToken();
+
+    if (!accessToken) {
+        return undefined;
+    }
+
     const formData = new FormData();
 
     formData.append('files', file);
@@ -30,7 +36,7 @@ export const postVideo = async ({
                 Authorization: `bearer ${accessToken}`,
             },
             method: 'POST',
-        }
+        },
     );
 
     if (response.ok) {

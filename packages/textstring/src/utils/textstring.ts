@@ -1,4 +1,4 @@
-import type { TextStringValue } from '../components/textstring-provider/TextStringProvider';
+import type { TextstringValue } from '../components/textstring-provider/TextstringProvider';
 
 interface LoadLibraryOptions {
     libraryName: string;
@@ -7,14 +7,14 @@ interface LoadLibraryOptions {
 
 export const loadLibrary = async ({ language, libraryName }: LoadLibraryOptions) => {
     const response = await fetch(
-        `https://webapi.tobit.com/TextStringService/v1.0/LangStrings/${libraryName}?language=${language}`
+        `https://webapi.tobit.com/TextstringService/v1.0/LangStrings/${libraryName}?language=${language}`,
     );
 
     if (response.status !== 200) {
         return null;
     }
 
-    return (await response.json()) as TextStringValue;
+    return (await response.json()) as TextstringValue;
 };
 
 interface SelectLanguageToChangeOptions {

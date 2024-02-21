@@ -1,5 +1,6 @@
 import React from 'react';
 import { ContextMenuAlignment } from '../../../types/contextMenu';
+import Icon from '../../icon/Icon';
 import type { ContextMenuCoordinates, ContextMenuItem } from '../ContextMenu';
 import {
     StyledContextMenuContentItem,
@@ -7,7 +8,6 @@ import {
     StyledContextMenuContentItemText,
     StyledMotionContextMenuContent,
 } from './ContextMenuContent.styles';
-import Icon from '../../icon/Icon';
 
 type ContextMenuContentProps = {
     alignment: ContextMenuAlignment;
@@ -34,7 +34,7 @@ const ContextMenuContent = React.forwardRef<HTMLDivElement, ContextMenuContentPr
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
-                position={alignment}
+                $position={alignment}
                 ref={ref}
                 style={{ left: coordinates.x, top: coordinates.y }}
                 transition={{ type: 'tween' }}

@@ -1,23 +1,16 @@
 import { useContext } from 'react';
-import {
-    PassTextstringProvider,
-    TextStringContext,
-} from '../components/textstring-provider/TextStringProvider';
+import { TextstringContext } from '../components/textstring-provider/TextstringProvider';
 import type { ITextstring, TextstringReplacement } from '../components/textstring/types';
 
 export interface UseTextstringValue {
-    textString: ITextstring;
+    textstring: ITextstring;
     replacements?: TextstringReplacement;
 }
 
-export const useTextstringValue = ({ replacements, textString }: UseTextstringValue) => {
-    const textStrings = useContext(TextStringContext);
+export const useTextstringValue = ({ replacements, textstring }: UseTextstringValue) => {
+    const textstrings = useContext(TextstringContext);
 
-    const test = PassTextstringProvider.value;
-
-    console.log({ test, textStrings });
-
-    const value = textStrings[textString.name] ?? textString.fallback;
+    const value = textstrings[textstring.name] ?? textstring.fallback;
 
     if (!replacements) {
         return value;

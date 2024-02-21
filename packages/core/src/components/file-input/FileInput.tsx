@@ -153,7 +153,7 @@ const FileInput: FC<FileInputProps> = ({
         () => (
             <StyledFileInput>
                 <StyledFileInputContainer
-                    isDisabled={isDisabled}
+                    $isDisabled={isDisabled}
                     onClick={() => void handleClick()}
                     onDragOver={(e: DragEvent<HTMLDivElement>) => e.preventDefault()}
                     onDrop={(e: DragEvent<HTMLDivElement>) => void handleDrop(e)}

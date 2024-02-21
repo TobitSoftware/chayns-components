@@ -2,7 +2,7 @@ import type { WithTheme } from '@chayns-components/core';
 import styled, { keyframes } from 'styled-components';
 
 type StyledPrefixElementProps = WithTheme<{
-    shouldShow: boolean;
+    $shouldShow: boolean;
 }>;
 
 export const StyledPrefixElement = styled.div<StyledPrefixElementProps>`
@@ -18,7 +18,7 @@ export const StyledPrefixElementLetterWrapper = styled.div`
 `;
 
 type StyledPrefixElementLetterProps = WithTheme<{
-    index: number;
+    $index: number;
 }>;
 
 const waviy = keyframes`
@@ -57,7 +57,7 @@ export const StyledPrefixElementLetter = styled.span<StyledPrefixElementLetterPr
     animation:
         ${waviy} 0.4s forwards,
         ${backgroundPan} 0.1s linear infinite;
-    animation-delay: calc(0.03s * ${({ index }) => index});
+    animation-delay: calc(0.03s * ${({ $index }) => $index});
 
-    font-weight: ${({ index }) => (index > 0 ? 'bold' : 'normal')};
+    font-weight: ${({ $index }) => ($index > 0 ? 'bold' : 'normal')};
 `;

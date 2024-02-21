@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { Checkbox } from '../src';
 import Tooltip from '../src/components/tooltip/Tooltip';
 
 export default {
@@ -16,10 +17,18 @@ export default {
     },
 } as Meta<typeof Tooltip>;
 
-const Template: StoryFn<typeof Tooltip> = (args) => (
-    <Tooltip {...args}>
-        <p>Pizza</p>
-    </Tooltip>
+const Template: StoryFn<typeof Tooltip> = ({ children, ...args }) => (
+    <Tooltip {...args}>{children}</Tooltip>
 );
 
 export const General = Template.bind({});
+
+export const OnCheckbox = Template.bind({});
+
+General.args = {
+    children: 'Hover me!',
+};
+
+OnCheckbox.args = {
+    children: <Checkbox>Checkbox mit Tooltip</Checkbox>,
+};

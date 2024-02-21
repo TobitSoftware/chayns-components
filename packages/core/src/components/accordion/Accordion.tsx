@@ -16,7 +16,6 @@ import AccordionBody from './accordion-body/AccordionBody';
 import { AccordionGroupContext } from './accordion-group/AccordionGroup';
 import AccordionHead from './accordion-head/AccordionHead';
 import { StyledAccordion } from './Accordion.styles';
-import { useTheme } from 'styled-components';
 
 export const AccordionContext = React.createContext({ isWrapped: false });
 
@@ -55,11 +54,6 @@ export type AccordionProps = {
      * This will gray out the title of the Accordion to indicate hidden content, for example.
      */
     isTitleGreyed?: boolean;
-    /**
-     * This value must be set for nested Accordions. This adjusts the style of
-     * the head and the padding of the content.
-     */
-    isWrapped?: boolean;
     /**
      * Function that is executed when the accordion body will be scrolled
      */
@@ -129,7 +123,6 @@ const Accordion: FC<AccordionProps> = ({
     isFixed = false,
     isOpened,
     isTitleGreyed = false,
-    isWrapped = false,
     onBodyScroll,
     onClose,
     onOpen,
@@ -145,7 +138,8 @@ const Accordion: FC<AccordionProps> = ({
     titleElement,
     shouldRenderClosed = false,
 }) => {
-    const { openAccordionUuid, updateOpenAccordionUuid } = useContext(AccordionGroupContext);
+    const { isWrapped, openAccordionUuid, updateOpenAccordionUuid } =
+        useContext(AccordionGroupContext);
     const { isWrapped: isParentWrapped } = useContext(AccordionContext);
 
     const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(isDefaultOpen ?? isOpened);
@@ -220,16 +214,19 @@ const Accordion: FC<AccordionProps> = ({
         }
     }, [isOpened, updateOpenAccordionUuid, uuid]);
 
-    const accordionContextProviderValue = useMemo(() => ({ isWrapped }), [isWrapped]);
+    const accordionContextProviderValue = useMemo(
+        () => ({ isWrapped: isWrapped === true }),
+        [isWrapped],
+    );
 
     return (
         <StyledAccordion
             className="beta-chayns-accordion"
-            isOpen={isOpen}
-            isParentWrapped={isParentWrapped}
-            isWrapped={isWrapped}
-            shouldForceBackground={shouldForceBackground}
-            shouldHideBackground={shouldHideBackground}
+            $isOpen={isOpen}
+            $isParentWrapped={isParentWrapped}
+            $isWrapped={isWrapped}
+            $shouldForceBackground={shouldForceBackground}
+            $shouldHideBackground={shouldHideBackground}
         >
             <AccordionContext.Provider value={accordionContextProviderValue}>
                 <MotionConfig transition={{ type: 'tween' }}>
@@ -238,7 +235,7 @@ const Accordion: FC<AccordionProps> = ({
                         isOpen={isOpen}
                         isFixed={isFixed}
                         isTitleGreyed={isTitleGreyed || isDisabled}
-                        isWrapped={isWrapped}
+                        isWrapped={isWrapped === true}
                         onClick={handleHeadClick}
                         onSearchChange={onSearchChange}
                         rightElement={rightElement}

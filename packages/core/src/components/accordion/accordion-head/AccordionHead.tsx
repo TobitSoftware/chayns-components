@@ -9,6 +9,9 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import { useTheme } from 'styled-components';
+import { getAccordionHeadHeight } from '../../../utils/accordion';
+import Icon from '../../icon/Icon';
 import {
     StyledAccordionIcon,
     StyledMotionAccordionHead,
@@ -22,9 +25,6 @@ import {
     StyledMotionTitleWrapper,
     StyledRightWrapper,
 } from './AccordionHead.styles';
-import { getAccordionHeadHeight } from '../../../utils/accordion';
-import Icon from '../../icon/Icon';
-import { useTheme } from 'styled-components';
 
 type AccordionHeadProps = {
     icon?: string;
@@ -97,7 +97,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
             theme && theme.iconStyle ? (theme.iconStyle as string) : 'fa-regular';
 
         return (
-            <StyledAccordionIcon className={internalIconStyle} icon={internalIcon.toString(16)} />
+            <StyledAccordionIcon className={internalIconStyle} $icon={internalIcon.toString(16)} />
         );
     }, [icon, theme, isFixed]);
 
@@ -126,8 +126,8 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                             <StyledMotionTitle
                                 animate={{ scale: 1 }}
                                 initial={{ scale: isOpen && !isWrapped ? 1 / 1.3 : 1.3 }}
-                                isOpen={isOpen}
-                                isWrapped={isWrapped}
+                                $isOpen={isOpen}
+                                $isWrapped={isWrapped}
                                 key={
                                     isOpen && !isWrapped
                                         ? 'accordionHeadTitleBig'
@@ -154,7 +154,7 @@ const AccordionHead: FC<AccordionHeadProps> = ({
                                     animate={{ opacity: 1, width: '165px' }}
                                     autoComplete="off"
                                     exit={{ opacity: 0, width: 0 }}
-                                    hasIcon={hasSearchIcon}
+                                    $hasIcon={hasSearchIcon}
                                     initial={{ opacity: 0, width: 0 }}
                                     key="rightInput"
                                     onChange={onSearchChange}

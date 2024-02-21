@@ -169,7 +169,7 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
             <AnimatePresence initial={false}>
                 {shouldShowPopup && (
                     <StyledMotionEmojiPickerPopupContent
-                        alignment={internalAlignment}
+                        $alignment={internalAlignment}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: exitAndInitialY }}
                         initial={{ opacity: 0, y: exitAndInitialY }}

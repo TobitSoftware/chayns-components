@@ -1,5 +1,5 @@
+import { useSite } from 'chayns-api';
 import React, { ReactNode, type MouseEventHandler } from 'react';
-import { useColorMode } from '../../../hooks/colorMode';
 import { PopupAlignment, PopupCoordinates } from '../../../types/popup';
 import { StyledMotionPopupContent, StyledPopupContentInner } from './PopupContent.styles';
 
@@ -12,7 +12,7 @@ type PopupContentProps = {
 
 const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
     ({ alignment, coordinates, content, onMouseLeave }, ref) => {
-        const colorMode = useColorMode();
+        const { colorMode } = useSite();
 
         const isBottomLeftAlignment = alignment === PopupAlignment.BottomLeft;
         const isTopLeftAlignment = alignment === PopupAlignment.TopLeft;
@@ -29,10 +29,10 @@ const PopupContent = React.forwardRef<HTMLDivElement, PopupContentProps>(
         return (
             <StyledMotionPopupContent
                 animate={{ opacity: 1, y: 0 }}
-                colorMode={colorMode}
+                $colorMode={colorMode}
                 exit={{ opacity: 0, y: exitAndInitialY }}
                 initial={{ opacity: 0, y: exitAndInitialY }}
-                position={alignment}
+                $position={alignment}
                 ref={ref}
                 data-ispopup="true"
                 onMouseLeave={onMouseLeave}

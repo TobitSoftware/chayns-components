@@ -72,14 +72,14 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                 onChange(`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1})`);
             }
         },
-        [onChange]
+        [onChange],
     );
 
     return useMemo(
         () => (
             <StyledHueSlider>
                 <StyledHueSliderInput
-                    color={hslColor}
+                    $color={hslColor}
                     type="range"
                     min={0}
                     max={360}
@@ -88,7 +88,7 @@ const HueSlider: FC<HueSliderProps> = ({ onChange, color = 'rgba(255, 0, 0, 1)' 
                 />
             </StyledHueSlider>
         ),
-        [editedValue, handleInputChange, hslColor]
+        [editedValue, handleInputChange, hslColor],
     );
 };
 

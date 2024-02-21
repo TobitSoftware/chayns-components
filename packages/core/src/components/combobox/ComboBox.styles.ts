@@ -12,11 +12,11 @@ export const StyledComboBox = styled.div`
 `;
 
 type StyledComboBoxHeaderProps = WithTheme<{
-    isMobile: boolean;
-    isOpen: boolean;
-    minWidth: number;
-    direction: ComboBoxDirection;
-    isDisabled?: boolean;
+    $isMobile: boolean;
+    $isOpen: boolean;
+    $minWidth: number;
+    $direction: ComboBoxDirection;
+    $isDisabled?: boolean;
 }>;
 
 export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
@@ -24,16 +24,16 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
     justify-content: space-between;
     border: 1px solid rgba(160, 160, 160, 0.3);
     padding: 4px 10px;
-    cursor: ${({ isDisabled }) => (!isDisabled ? 'pointer' : 'default')};
+    cursor: ${({ $isDisabled }) => (!$isDisabled ? 'pointer' : 'default')};
     background: ${({ theme }: StyledComboBoxHeaderProps) => theme['001']};
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-    min-width: ${({ minWidth }) => minWidth}px;
-    max-width: ${({ minWidth }) => minWidth}px;
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    min-width: ${({ $minWidth }) => $minWidth}px;
+    max-width: ${({ $minWidth }) => $minWidth}px;
     transition: background-color 0.2s ease-in-out;
 
-    ${({ isOpen, direction }) => {
-        if (isOpen) {
-            return direction === ComboBoxDirection.BOTTOM
+    ${({ $isOpen, $direction }) => {
+        if ($isOpen) {
+            return $direction === ComboBoxDirection.BOTTOM
                 ? css`
                       border-top-left-radius: 3px;
                       border-top-right-radius: 3px;
@@ -49,9 +49,9 @@ export const StyledComboBoxHeader = styled.div<StyledComboBoxHeaderProps>`
         `;
     }}
 
-    ${({ isMobile, isDisabled, theme }: StyledComboBoxHeaderProps) =>
-        !isMobile &&
-        !isDisabled &&
+    ${({ $isMobile, $isDisabled, theme }: StyledComboBoxHeaderProps) =>
+        !$isMobile &&
+        !$isDisabled &&
         css`
             &:hover {
                 background-color: ${theme['secondary-102']};
@@ -90,11 +90,11 @@ export const StyledComboBoxIconWrapper = styled.div`
 `;
 
 type StyledComboBoxBodyProps = WithTheme<{
-    height: number;
-    minWidth: number;
-    maxHeight: CSSProperties['maxHeight'];
-    direction: ComboBoxDirection;
-    browser: Browser | 'bot' | null | undefined;
+    $height: number;
+    $minWidth: number;
+    $maxHeight: CSSProperties['maxHeight'];
+    $direction: ComboBoxDirection;
+    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyProps>`
@@ -105,13 +105,13 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     flex-direction: column;
     border: 1px solid rgba(160, 160, 160, 0.3);
     cursor: pointer;
-    min-width: ${({ minWidth }) => minWidth}px;
-    max-width: ${({ minWidth }) => minWidth}px;
-    max-height: ${({ maxHeight }) => maxHeight};
-    overflow-y: ${({ height }) => (height <= 300 ? 'hidden' : 'auto')};
+    min-width: ${({ $minWidth }) => $minWidth}px;
+    max-width: ${({ $minWidth }) => $minWidth}px;
+    max-height: ${({ $maxHeight }) => $maxHeight};
+    overflow-y: ${({ $height }) => ($height <= 300 ? 'hidden' : 'auto')};
 
-    ${({ direction, theme }) => {
-        if (direction === ComboBoxDirection.BOTTOM) {
+    ${({ $direction, theme }) => {
+        if ($direction === ComboBoxDirection.BOTTOM) {
             return css`
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
@@ -127,8 +127,8 @@ export const StyledMotionComboBoxBody = styled(motion.div)<StyledComboBoxBodyPro
     }}
 
     // Styles for custom scrollbar
-    ${({ browser, theme }: StyledComboBoxBodyProps) =>
-        browser === 'firefox'
+    ${({ $browser, theme }: StyledComboBoxBodyProps) =>
+        $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
                   scrollbar-width: thin;

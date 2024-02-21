@@ -53,8 +53,9 @@ export { default as TextArea } from './components/text-area/TextArea';
 export { default as Tooltip } from './components/tooltip/Tooltip';
 export { default as Truncation } from './components/truncation/Truncation';
 export { MentionFinderPopupAlignment } from './constants/mentionFinder';
+export { useElementSize } from './hooks/useElementSize';
 export { ComboBoxDirection } from './types/comboBox';
-export type { FileItem, Image, Meta, Video } from './types/file';
+export type { FileItem, Image, InternalFileItem, Meta, Video } from './types/file';
 export type {
     FilterButtonItemShape,
     FilterButtonSize,
@@ -64,6 +65,7 @@ export type { PopupRef } from './types/popup';
 export type { ISearchBoxItem as SearchBoxItem } from './types/searchBox';
 export type { SelectButtonItem } from './types/selectButton';
 export type { SliderButtonItem } from './types/slider-button';
+export { ClampPosition } from './types/truncation';
 export { getFileAsArrayBuffer, selectFiles } from './utils/fileDialog';
 export { isTobitEmployee } from './utils/isTobitEmployee';
 export { uploadFile } from './utils/uploadFile';

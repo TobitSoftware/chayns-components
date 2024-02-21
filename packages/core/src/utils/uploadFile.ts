@@ -1,26 +1,19 @@
 import { postImage } from '../api/image/post';
 import { postVideo } from '../api/video/post';
-import type { FileItem, Image, Video } from '../types/file';
+import type { Image, InternalFileItem, Video } from '../types/file';
 
 interface UploadFilesOptions {
-    fileToUpload: FileItem;
-    accessToken: string;
-    personId: string;
+    fileToUpload: InternalFileItem;
     callback: (UploadedFile: Video | Image) => void;
 }
 
-export const uploadFile = async ({
-    fileToUpload,
-    personId,
-    accessToken,
-    callback,
-}: UploadFilesOptions): Promise<void> => {
+export const uploadFile = async ({ fileToUpload, callback }: UploadFilesOptions): Promise<void> => {
     if (!fileToUpload || fileToUpload.state !== 'none') {
         return;
     }
 
     if (fileToUpload.file?.type.includes('video/')) {
-        const uploadedVideo = await postVideo({ file: fileToUpload.file, accessToken });
+        const uploadedVideo = await postVideo({ file: fileToUpload.file });
 
         if (uploadedVideo) {
             callback({
@@ -31,7 +24,7 @@ export const uploadFile = async ({
     }
 
     if (fileToUpload.file?.type.includes('image/')) {
-        const uploadedImage = await postImage({ file: fileToUpload.file, personId, accessToken });
+        const uploadedImage = await postImage({ file: fileToUpload.file });
 
         if (uploadedImage) {
             callback({

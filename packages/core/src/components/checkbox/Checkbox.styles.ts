@@ -13,31 +13,31 @@ export const StyledCheckboxInput = styled.input`
 `;
 
 type StyledCheckboxLabelProps = WithTheme<{
-    shouldShowAsSwitch?: CheckboxProps['shouldShowAsSwitch'];
-    isDisabled?: CheckboxProps['isDisabled'];
-    isChecked?: CheckboxProps['isChecked'];
-    lineHeight?: number;
+    $shouldShowAsSwitch?: CheckboxProps['shouldShowAsSwitch'];
+    $isDisabled?: CheckboxProps['isDisabled'];
+    $isChecked?: CheckboxProps['isChecked'];
+    $lineHeight?: number;
 }>;
 
 export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
     color: ${({ theme }: StyledCheckboxLabelProps) => theme.text};
-    cursor: ${({ isDisabled }) => (isDisabled ? 'default' : 'pointer')};
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-    padding-left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '48px' : '20px')};
+    cursor: ${({ $isDisabled }) => ($isDisabled ? 'default' : 'pointer')};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    padding-left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '48px' : '20px')};
     transition: opacity 0.2s ease;
     user-select: none;
 
     &:after {
-        ${({ isChecked, shouldShowAsSwitch, lineHeight }) =>
-            shouldShowAsSwitch
+        ${({ $isChecked, $shouldShowAsSwitch, $lineHeight }) =>
+            $shouldShowAsSwitch
                 ? css`
                       background-color: white;
                       border-radius: 50%;
                       box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
                       height: 16px;
                       left: 7px;
-                      top: ${lineHeight ? `${lineHeight / 1.5}px` : '50%'};
-                      transform: translateX(${isChecked ? '18px' : 0}) translateY(-50%);
+                      top: ${$lineHeight ? `${$lineHeight / 1.5}px` : '50%'};
+                      transform: translateX(${$isChecked ? '18px' : 0}) translateY(-50%);
                       transition: transform 0.2s ease;
                       width: 16px;
                   `
@@ -46,8 +46,10 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
                       border-bottom: 2px solid #fff;
                       height: 10px;
                       left: 2px;
-                      opacity: ${isChecked ? 1 : 0};
-                      top: ${lineHeight ? `calc(${lineHeight / 1.5}px - 2px)` : 'calc(50% - 2px)'};
+                      opacity: ${$isChecked ? 1 : 0};
+                      top: ${$lineHeight
+                          ? `calc(${$lineHeight / 1.5}px - 2px)`
+                          : 'calc(50% - 2px)'};
                       transform: rotateZ(37deg) translateY(-50%);
                       transition: opacity 0.2s ease;
                       width: 5.5px;
@@ -59,28 +61,28 @@ export const StyledCheckboxLabel = styled.label<StyledCheckboxLabelProps>`
 
     &:before {
         background-color: ${({
-            isChecked,
-            shouldShowAsSwitch,
+            $isChecked,
+            $shouldShowAsSwitch,
             theme,
         }: StyledCheckboxLabelProps) => {
-            if (shouldShowAsSwitch) {
-                return isChecked ? theme.green : theme.red;
+            if ($shouldShowAsSwitch) {
+                return $isChecked ? theme.green : theme.red;
             }
 
-            return isChecked ? theme['408'] : theme['403'];
+            return $isChecked ? theme['408'] : theme['403'];
         }};
         border: 1px solid rgba(${({ theme }: StyledCheckboxLabelProps) => theme['409-rgb']}, 0.5);
-        border-radius: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '100px' : 0)};
+        border-radius: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '100px' : 0)};
         content: ' ';
-        height: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '13px' : '15px')};
-        left: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '10px' : 0)};
+        height: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '13px' : '15px')};
+        left: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '10px' : 0)};
         position: absolute;
         transition: background-color 0.2s ease;
-        width: ${({ shouldShowAsSwitch }) => (shouldShowAsSwitch ? '28px' : '15px')};
-        ${({ lineHeight }) =>
-            lineHeight
+        width: ${({ $shouldShowAsSwitch }) => ($shouldShowAsSwitch ? '28px' : '15px')};
+        ${({ $lineHeight }) =>
+            $lineHeight
                 ? css`
-                      top: ${lineHeight / 1.5}px;
+                      top: ${$lineHeight / 1.5}px;
                       transform: translateY(-50%);
                   `
                 : css`

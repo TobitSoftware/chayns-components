@@ -22,8 +22,8 @@ const AccordionContent: FC<AccordionContentProps> = ({ children, maxHeight, onSc
         {({ isWrapped }) => (
             <StyledAccordionContent
                 className="beta-chayns-accordion-content"
-                isWrapped={isWrapped}
-                maxHeight={maxHeight}
+                $isWrapped={isWrapped}
+                $maxHeight={maxHeight}
                 onScroll={onScroll}
             >
                 {children}

@@ -7,15 +7,15 @@ import type {
 } from './SmallWaitCursor';
 
 type StyledSmallWaitCursorProps = WithTheme<{
-    shouldShowWaitCursor: boolean;
-    size: SmallWaitCursorSize;
+    $shouldShowWaitCursor: boolean;
+    $size: SmallWaitCursorSize;
 }>;
 
 export const StyledSmallWaitCursor = styled.div<StyledSmallWaitCursorProps>`
     position: relative;
-    height: ${({ size }) => size}px;
-    width: ${({ size }) => size}px;
-    opacity: ${({ shouldShowWaitCursor }) => (shouldShowWaitCursor ? 1 : 0)};
+    height: ${({ $size }) => $size}px;
+    width: ${({ $size }) => $size}px;
+    opacity: ${({ $shouldShowWaitCursor }) => ($shouldShowWaitCursor ? 1 : 0)};
 `;
 
 type StyledSmallWaitCursorBackgroundProps = WithTheme<unknown>;
@@ -30,10 +30,10 @@ export const StyledSmallWaitCursorBackground = styled.div<StyledSmallWaitCursorB
 `;
 
 type StyledSmallWaitCursorWaitCursorProps = WithTheme<{
-    color: SmallWaitCursorProps['color'];
-    shouldHideBackground: SmallWaitCursorProps['shouldHideBackground'];
-    size: SmallWaitCursorSize;
-    speed: SmallWaitCursorSpeed;
+    $color: SmallWaitCursorProps['color'];
+    $shouldHideBackground: SmallWaitCursorProps['shouldHideBackground'];
+    $size: SmallWaitCursorSize;
+    $speed: SmallWaitCursorSpeed;
 }>;
 
 const spin = keyframes`
@@ -47,20 +47,20 @@ const spin = keyframes`
 
 export const StyledSmallWaitCursorWaitCursor = styled.div<StyledSmallWaitCursorWaitCursorProps>`
     position: absolute;
-    top: ${({ shouldHideBackground }) => (shouldHideBackground ? 0 : 5)}px;
-    left: ${({ shouldHideBackground }) => (shouldHideBackground ? 0 : 5)}px;
+    top: ${({ $shouldHideBackground }) => ($shouldHideBackground ? 0 : 5)}px;
+    left: ${({ $shouldHideBackground }) => ($shouldHideBackground ? 0 : 5)}px;
     z-index: 2;
     border-style: solid;
     border-width: 3px;
-    border-color: ${({ color, theme }: StyledSmallWaitCursorWaitCursorProps) =>
-        color ?? theme.headline};
-    height: ${({ shouldHideBackground, size }) =>
-        shouldHideBackground ? '100%' : `${size - 10}px`};
-    width: ${({ shouldHideBackground, size }) =>
-        shouldHideBackground ? '100%' : `${size - 10}px`};
+    border-color: ${({ $color, theme }: StyledSmallWaitCursorWaitCursorProps) =>
+        $color ?? theme.headline};
+    height: ${({ $shouldHideBackground, $size }) =>
+        $shouldHideBackground ? '100%' : `${$size - 10}px`};
+    width: ${({ $shouldHideBackground, $size }) =>
+        $shouldHideBackground ? '100%' : `${$size - 10}px`};
     border-radius: 50%;
     display: inline-block;
     border-top: 3px solid transparent;
 
-    animation: ${spin} ${({ speed }) => speed}s linear infinite;
+    animation: ${spin} ${({ $speed }) => $speed}s linear infinite;
 `;

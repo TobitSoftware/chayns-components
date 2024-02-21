@@ -3,9 +3,8 @@ import type { Browser } from 'detect-browser';
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { getFontFamily } from '../../utils/font';
-import type { EmojiInputProps } from './EmojiInput';
 
-type StyledEmojiInputProps = WithTheme<Pick<EmojiInputProps, 'isDisabled'>>;
+type StyledEmojiInputProps = WithTheme<{ $isDisabled?: boolean }>;
 
 export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     align-items: center;
@@ -13,8 +12,8 @@ export const StyledEmojiInput = styled.div<StyledEmojiInputProps>`
     border-radius: 3px;
     display: flex;
     min-height: 42px;
-    opacity: ${({ isDisabled }) => (isDisabled ? 0.5 : 1)};
-    pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'initial')};
+    opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 1)};
+    pointer-events: ${({ $isDisabled }) => ($isDisabled ? 'none' : 'initial')};
     position: relative;
     transition: opacity 0.3s ease;
 `;
@@ -32,7 +31,7 @@ export const StyledMotionEmojiInputProgress = styled(
 `;
 
 type StyledEmojiInputContentProps = {
-    isRightElementGiven: boolean;
+    $isRightElementGiven: boolean;
 };
 
 export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
@@ -45,8 +44,8 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
     padding: 8px 10px;
     z-index: 3;
 
-    ${({ isRightElementGiven }) =>
-        isRightElementGiven &&
+    ${({ $isRightElementGiven }) =>
+        $isRightElementGiven &&
         css`
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
@@ -56,13 +55,13 @@ export const StyledEmojiInputContent = styled.div<StyledEmojiInputContentProps>`
 `;
 
 type StyledEmojiInputEditorProps = WithTheme<{
-    shouldShowContent: boolean;
-    browser: Browser | 'bot' | null | undefined;
+    $shouldShowContent: boolean;
+    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputEditorProps>`
-    color: ${({ theme, shouldShowContent }: StyledEmojiInputEditorProps) =>
-        shouldShowContent ? theme.text : theme['100']};
+    color: ${({ theme, $shouldShowContent }: StyledEmojiInputEditorProps) =>
+        $shouldShowContent ? theme.text : theme['100']};
     flex: 1 1 auto;
     font-family: ${getFontFamily};
     overflow-y: scroll;
@@ -85,8 +84,8 @@ export const StyledMotionEmojiInputEditor = styled(motion.div)<StyledEmojiInputE
     }
 
     // Styles for custom scrollbar
-    ${({ browser, theme }: StyledEmojiInputEditorProps) =>
-        browser === 'firefox'
+    ${({ $browser, theme }: StyledEmojiInputEditorProps) =>
+        $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
                   scrollbar-width: thin;
@@ -121,13 +120,13 @@ export const StyledEmojiInputRightWrapper = styled.div`
 `;
 
 type StyledEmojiInputLabelProps = WithTheme<{
-    maxWidth: number;
-    offsetWidth?: number;
+    $maxWidth: number;
+    $offsetWidth?: number;
 }>;
 
 export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
     color: rgba(${({ theme }: StyledEmojiInputLabelProps) => theme['text-rgb']}, 0.45);
-    left: ${({ offsetWidth }) => (offsetWidth ? `${offsetWidth + 10}px` : '10px')};
+    left: ${({ $offsetWidth }) => ($offsetWidth ? `${$offsetWidth + 10}px` : '10px')};
     top: 12px;
     align-items: baseline;
     display: flex;
@@ -138,6 +137,6 @@ export const StyledEmojiInputLabel = styled.label<StyledEmojiInputLabelProps>`
     position: absolute;
     user-select: none;
     white-space: nowrap;
-    max-width: ${({ maxWidth, offsetWidth }) => `${maxWidth - (offsetWidth ?? 0)}px`};
+    max-width: ${({ $maxWidth, $offsetWidth }) => `${$maxWidth - ($offsetWidth ?? 0)}px`};
     overflow: hidden;
 `;

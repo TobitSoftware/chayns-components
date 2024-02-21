@@ -1,10 +1,10 @@
 import { getAvailableColorList, getColorFromPalette, hexToRgb255 } from '@chayns/colors';
+import { useSite } from 'chayns-api';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { convertIconStyle, generateFontFaces } from '../../utils/font';
-import type { DesignSettings } from '../../types/colorSchemeProvider';
-import { getSite } from 'chayns-api';
 import { getDesignSettings } from '../../api/theme/get';
+import type { DesignSettings } from '../../types/colorSchemeProvider';
+import { convertIconStyle, generateFontFaces } from '../../utils/font';
 
 enum ColorMode {
     Classic,
@@ -55,13 +55,12 @@ export type WithTheme<T> = T & {
 export type FramerMotionBugFix = WithTheme<unknown>;
 
 const GlobalStyle = createGlobalStyle`
-  ${generateFontFaces}
-
-  .ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    ${generateFontFaces}
+    .ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 `;
 
 const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
@@ -77,6 +76,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const [theme, setTheme] = useState<Theme>({});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
 
+    const { color: internalColor, colorMode: internalColorMode } = useSite();
+
     useEffect(() => {
         if (designSettings) {
             setInternalDesignSettings(designSettings);
@@ -89,11 +90,6 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
         });
     }, [designSettings]);
 
-    const site = getSite();
-
-    const internalColorMode = colorMode ?? site.colorMode;
-    const internalColor = color ?? site.color;
-
     useEffect(() => {
         const availableColors = getAvailableColorList();
 
@@ -102,8 +98,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         availableColors.forEach((colorName: string) => {
             const hexColor = getColorFromPalette(colorName, {
-                color: internalColor,
-                colorMode: internalColorMode,
+                color: color ?? internalColor,
+                colorMode: colorMode ?? internalColorMode,
                 secondaryColor,
             });
 
@@ -120,6 +116,18 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
                 }
             }
         });
+
+        switch (colorMode ?? internalColorMode) {
+            case ColorMode.Light:
+                newTheme.colorMode = 'light';
+                break;
+            case ColorMode.Dark:
+                newTheme.colorMode = 'dark';
+                break;
+            default:
+                newTheme.colorMode = 'classic';
+                break;
+        }
 
         if (internalDesignSettings) {
             Object.keys(internalDesignSettings).forEach((key) => {
@@ -139,7 +147,14 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
 
         setTheme(newTheme);
         setColors(newColors);
-    }, [internalColor, internalColorMode, internalDesignSettings, secondaryColor]);
+    }, [
+        color,
+        colorMode,
+        internalColor,
+        internalColorMode,
+        internalDesignSettings,
+        secondaryColor,
+    ]);
 
     return (
         <ThemeProvider theme={theme}>

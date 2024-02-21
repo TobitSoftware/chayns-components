@@ -82,14 +82,14 @@ const TextArea: FC<TextAreaProps> = ({
         () => (
             <StyledTextArea>
                 <StyledTextAreaInput
-                    browser={browser?.name}
+                    $browser={browser?.name}
                     ref={textareaRef}
                     value={value}
                     onBlur={onBlur}
                     onChange={onChange}
-                    maxHeight={maxHeight}
-                    minHeight={minHeight}
-                    isOverflowing={isOverflowing}
+                    $maxHeight={maxHeight}
+                    $minHeight={minHeight}
+                    $isOverflowing={isOverflowing}
                     rows={1}
                 />
                 {!value && (

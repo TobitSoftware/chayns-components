@@ -40,9 +40,13 @@ export type SetupWizardProps = {
      * The steps of the setup. Use the SetupWizardItem component.
      */
     children: ReactElement<SetupWizardItemProps> | ReactElement<SetupWizardItemProps>[];
+    /**
+     * This value must be set if the SetupWizard is inside an Accordion.
+     */
+    isWrapped?: boolean;
 };
 
-const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, ref) => {
+const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children, isWrapped }, ref) => {
     const [selectedId, setSelectedId] = useState<SetupWizardContextProps['selectedId']>(0);
     const [activeId, setActiveId] = useState<SetupWizardContextProps['activeId']>(0);
     const [allIds, setAllIds] = useState<number[]>([]);
@@ -126,11 +130,11 @@ const SetupWizard = forwardRef<SetupWizardRef, SetupWizardProps>(({ children }, 
         () => (
             <SetupWizardContext.Provider value={providerValue}>
                 <StyledSetupWizard>
-                    <AccordionGroup>{children}</AccordionGroup>
+                    <AccordionGroup isWrapped={isWrapped}>{children}</AccordionGroup>
                 </StyledSetupWizard>
             </SetupWizardContext.Provider>
         ),
-        [children, providerValue],
+        [children, isWrapped, providerValue],
     );
 });
 

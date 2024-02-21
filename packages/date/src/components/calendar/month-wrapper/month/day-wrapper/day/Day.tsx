@@ -1,12 +1,12 @@
-import React, { type CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react';
 import { isSameDay } from 'date-fns';
-import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
+import React, { FC, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type {
     Categories,
     HighlightedDates,
     HighlightedDateStyles,
 } from '../../../../../../types/calendar';
 import Category from './category/Category';
+import { StyledDay, StyledDayCategoryWrapper, StyledDayNumber } from './Day.styles';
 
 export type DayProps = {
     date: Date;
@@ -75,11 +75,11 @@ const Day: FC<DayProps> = ({
         <StyledDay
             ref={dayRef}
             onClick={() => onClick(date, isSameMonth)}
-            isSameMonth={isSameMonth}
-            backgroundColor={styles?.backgroundColor}
-            textColor={styles?.textColor}
+            $isSameMonth={isSameMonth}
+            $backgroundColor={styles?.backgroundColor}
+            $textColor={styles?.textColor}
         >
-            <StyledDayNumber isSelected={isSelected} fontSize={fontSize}>
+            <StyledDayNumber $isSelected={isSelected} $fontSize={fontSize}>
                 {date.getDate()}
             </StyledDayNumber>
             {categoryElements && (

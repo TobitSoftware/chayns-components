@@ -4,17 +4,17 @@ import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledScrollViewProps = WithTheme<{
-    maxHeight: CSSProperties['height'];
-    browser: Browser | 'bot' | null | undefined;
+    $maxHeight: CSSProperties['height'];
+    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledScrollView = styled.div<StyledScrollViewProps>`
-    max-height: ${({ maxHeight }) => maxHeight};
+    max-height: ${({ $maxHeight }) => $maxHeight};
     overflow-y: scroll;
 
     // Styles for custom scrollbar
-    ${({ browser, theme }: StyledScrollViewProps) =>
-        browser === 'firefox'
+    ${({ $browser, theme }: StyledScrollViewProps) =>
+        $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
                   scrollbar-width: thin;

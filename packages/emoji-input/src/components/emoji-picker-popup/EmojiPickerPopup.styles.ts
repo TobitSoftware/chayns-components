@@ -11,7 +11,7 @@ export const StyledEmojiPickerPopup = styled.div`
 `;
 
 type StyledMotionEmojiPickerPopupContentProps = WithTheme<{
-    alignment: PopupAlignment;
+    $alignment: PopupAlignment;
 }>;
 
 export const StyledMotionEmojiPickerPopupContent = styled(
@@ -37,8 +37,8 @@ export const StyledMotionEmojiPickerPopupContent = styled(
         width: 14px;
         z-index: -2;
 
-        ${({ alignment }) => {
-            switch (alignment) {
+        ${({ $alignment }) => {
+            switch ($alignment) {
                 case PopupAlignment.TopLeft:
                     return css`
                         bottom: -7px;

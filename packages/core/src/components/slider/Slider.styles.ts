@@ -11,10 +11,10 @@ export const StyledSlider = styled.div`
 `;
 
 type StyledSliderInputProps = WithTheme<{
-    min: number;
-    max: number;
-    value: number;
-    isInterval: boolean;
+    $min: number;
+    $max: number;
+    $value: number;
+    $isInterval: boolean;
 }>;
 
 export const StyledSliderInput = styled.input<StyledSliderInputProps>`
@@ -27,18 +27,18 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     cursor: pointer !important;
     z-index: 2;
     appearance: none;
-    pointer-events: ${({ isInterval }) => (isInterval ? 'none' : 'all')};
+    pointer-events: ${({ $isInterval }) => ($isInterval ? 'none' : 'all')};
 
-    ${({ isInterval, theme, min, max, value }: StyledSliderInputProps) =>
-        !isInterval &&
+    ${({ $isInterval, theme, $min, $max, $value }: StyledSliderInputProps) =>
+        !$isInterval &&
         css`
             background: ${`linear-gradient(
             to right,
             ${theme['409'] ?? ''} 0%,
             ${theme['409'] ?? ''}
-            ${((value - min) / (max - min)) * 100}%,
+            ${(($value - $min) / ($max - $min)) * 100}%,
             ${theme['403'] ?? ''}
-            ${((value - min) / (max - min)) * 100}%,
+            ${(($value - $min) / ($max - $min)) * 100}%,
             ${theme['403'] ?? ''}
         )`};
         `}
@@ -64,7 +64,7 @@ export const StyledSliderInput = styled.input<StyledSliderInputProps>`
     }
 `;
 
-type StyledSliderThumbProps = WithTheme<{ position: number }>;
+type StyledSliderThumbProps = WithTheme<{ $position: number }>;
 
 export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
     min-width: 20px;
@@ -75,7 +75,7 @@ export const StyledSliderThumb = styled.div<StyledSliderThumbProps>`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     pointer-events: none;
     z-index: 3;
-    left: ${({ position }) => position}px;
+    left: ${({ $position }) => $position}px;
     position: absolute;
     display: flex;
     align-items: center;

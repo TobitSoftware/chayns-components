@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
-import type { MentionFinderItemProps } from './MentionFinderItem';
 
-type StyledMentionFinderItemProps = WithTheme<Pick<MentionFinderItemProps, 'isActive'>>;
+type StyledMentionFinderItemProps = WithTheme<{ $isActive: boolean }>;
 
 export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
     align-items: center;
@@ -20,8 +19,8 @@ export const StyledMentionFinderItem = styled.div<StyledMentionFinderItemProps>`
         background-color: ${({ theme }: StyledMentionFinderItemProps) => theme['002']};
     }
 
-    ${({ isActive, theme }) =>
-        isActive &&
+    ${({ $isActive, theme }) =>
+        $isActive &&
         css`
             background-color: ${theme['102']} !important;
         `}

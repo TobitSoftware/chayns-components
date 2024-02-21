@@ -121,7 +121,7 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
                     <StyledSkinTonePopupContentEmoji
                         key={key}
                         data-skin-tone={emojiWithSkinTone}
-                        isSelected={index === focusedIndex}
+                        $isSelected={index === focusedIndex}
                         onClick={handleClick}
                     >
                         {emojiWithSkinTone}
@@ -142,8 +142,8 @@ const SkinTonePopup: FC<SkinTonePopupProps> = ({
         >
             <StyledSkinTonePopupContent
                 ref={skinToneRef}
-                anchorAlignment={anchorAlignment}
-                anchorOffset={anchorOffset}
+                $anchorAlignment={anchorAlignment}
+                $anchorOffset={anchorOffset}
                 style={position}
             >
                 {emojis}

@@ -13,9 +13,9 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { useUuid } from '../../hooks/uuid';
+import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
 import PopupContent from './popup-content/PopupContent';
 import { StyledPopup, StyledPopupPseudo } from './Popup.styles';
-import { PopupAlignment, PopupCoordinates, PopupRef } from '../../types/popup';
 
 export type PopupProps = {
     /**
@@ -143,13 +143,14 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         const handleDocumentClick = useCallback<EventListener>(
             (event) => {
-                if (!popupContentRef.current?.contains(event.target as Node)) {
+                if (
+                    !popupContentRef.current?.contains(event.target as Node) &&
+                    !shouldShowOnHover
+                ) {
                     event.preventDefault();
                     event.stopPropagation();
 
-                    if (!shouldShowOnHover) {
-                        handleHide();
-                    }
+                    handleHide();
                 }
             },
             [handleHide, shouldShowOnHover],
@@ -212,7 +213,7 @@ const Popup = forwardRef<PopupRef, PopupProps>(
 
         return (
             <>
-                <StyledPopupPseudo ref={popupPseudoContentRef} menuHeight={menuHeight}>
+                <StyledPopupPseudo ref={popupPseudoContentRef} $menuHeight={menuHeight}>
                     {content}
                 </StyledPopupPseudo>
                 <StyledPopup

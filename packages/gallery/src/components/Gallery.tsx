@@ -1,6 +1,11 @@
-import { uploadFile } from '@chayns-components/core';
-import type { FileItem, Image, Video } from '@chayns-components/core/lib/types/file'; // TODO: Check why absolute import is needed
-import { MediaType, openMedia, OpenMediaItem } from 'chayns-api';
+import {
+    Image,
+    uploadFile,
+    Video,
+    type FileItem,
+    type InternalFileItem,
+} from '@chayns-components/core';
+import { createDialog, DialogType, MediaType, openMedia, OpenMediaItem } from 'chayns-api';
 import React, { DragEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { GalleryViewMode } from '../types/gallery';
@@ -15,13 +20,13 @@ import {
 
 export type GalleryProps = {
     /**
-     * AccessToken of the user
-     */
-    accessToken: string;
-    /**
      * Whether drag and drop is allowed or not
      */
     allowDragAndDrop?: boolean;
+    /**
+     * The message that should be displayed if a File is already given.
+     */
+    doubleFileDialogMessage?: string;
     /**
      *  Whether images and videos can be edited
      */
@@ -47,33 +52,28 @@ export type GalleryProps = {
      */
     onRemove?: (file: FileItem) => void;
     /**
-     * PersonId of the user
-     */
-    personId: string;
-    /**
      * The mode how the images should be displayed.
      */
     viewMode?: GalleryViewMode;
 };
 
 const Gallery: FC<GalleryProps> = ({
-    accessToken,
     allowDragAndDrop = false,
+    doubleFileDialogMessage = 'Diese Datei ist bereits vorhanden',
     isEditMode = false,
     fileMinWidth = 100,
     files,
     onAdd,
     onFileCountChange,
     onRemove,
-    personId,
     viewMode = GalleryViewMode.GRID,
 }) => {
-    const [fileItems, setFileItems] = useState<FileItem[]>([]);
+    const [fileItems, setFileItems] = useState<InternalFileItem[]>([]);
 
     /**
      * This function adds a previewUrl to fileItems
      */
-    const handlePreviewUrlCallback = (previewUrl: string, file: FileItem) => {
+    const handlePreviewUrlCallback = (previewUrl: string, file: InternalFileItem) => {
         setFileItems((prevState) =>
             prevState.map((prevFile) => {
                 if (prevFile.id === file.id) {
@@ -84,33 +84,60 @@ const Gallery: FC<GalleryProps> = ({
         );
     };
 
+    const callDuplicateFileDialog = useCallback(() => {
+        createDialog({ type: DialogType.ALERT, text: doubleFileDialogMessage });
+    }, [doubleFileDialogMessage]);
+
     /**
      * This function adds uploaded files to fileItems
      */
     const handleUploadFileCallback = useCallback(
-        (file: FileItem, UploadedFile: Video | Image) => {
-            setFileItems((prevState) =>
-                prevState.map((prevFile) => {
+        (file: InternalFileItem, uploadedFile: Video | Image) => {
+            setFileItems((prevState) => {
+                const updatedState = prevState.map((prevFile) => {
+                    if (prevFile.uploadedFile?.url === uploadedFile.url) {
+                        callDuplicateFileDialog();
+
+                        return undefined;
+                    }
+
                     if (prevFile.id === file.id) {
                         if (typeof onAdd === 'function') {
-                            onAdd({
-                                ...prevFile,
-                                uploadedFile: UploadedFile,
-                                state: 'uploaded',
-                            });
+                            const prevElement = prevState.find(
+                                ({ uploadedFile: newUploadedFile }) =>
+                                    newUploadedFile?.url === uploadedFile?.url,
+                            );
+
+                            if (!prevElement) {
+                                onAdd({
+                                    file: uploadedFile,
+                                    id: file.id,
+                                });
+                            }
                         }
 
                         return {
                             ...prevFile,
-                            uploadedFile: UploadedFile,
+                            uploadedFile,
                             state: 'uploaded',
                         };
                     }
+
                     return prevFile;
-                }),
-            );
+                });
+
+                const tmp: InternalFileItem[] = [];
+
+                updatedState.forEach((updatedFile) => {
+                    if (updatedFile !== undefined) {
+                        tmp.push(updatedFile as InternalFileItem);
+                    }
+                });
+
+                return tmp ?? [];
+            });
         },
-        [onAdd],
+        [callDuplicateFileDialog, onAdd],
     );
 
     /**
@@ -166,19 +193,17 @@ const Gallery: FC<GalleryProps> = ({
 
             void uploadFile({
                 fileToUpload: file,
-                personId,
-                accessToken,
                 callback: (UploadedFile) => handleUploadFileCallback(file, UploadedFile),
             });
         });
-    }, [accessToken, fileItems, handleUploadFileCallback, personId]);
+    }, [fileItems, handleUploadFileCallback]);
 
     /**
      * This function formats and adds files to fileItems
      */
     const handleAddFiles = useCallback(
         (filesToAdd: File[]) => {
-            const newFileItems: FileItem[] = [];
+            const newFileItems: InternalFileItem[] = [];
 
             filesToAdd.forEach((file) => {
                 if (file && !filterDuplicateFile({ files: fileItems, newFile: file })) {
@@ -200,19 +225,41 @@ const Gallery: FC<GalleryProps> = ({
      */
     useEffect(() => {
         if (files) {
-            const newFileItems: FileItem[] = [];
+            const newFileItems: InternalFileItem[] = [];
 
             files.forEach((file) => {
                 newFileItems.push({
-                    id: uuidv4(),
-                    uploadedFile: file.uploadedFile,
-                    file: file.file,
-                    state: file.uploadedFile ? 'uploaded' : 'none',
-                    previewUrl: file.uploadedFile ? file.uploadedFile.url : undefined,
+                    id: file.id ?? uuidv4(),
+                    uploadedFile: file.file,
+                    file: undefined,
+                    state: 'uploaded',
+                    previewUrl: undefined,
                 });
             });
 
-            setFileItems((prevState) => [...prevState, ...newFileItems]);
+            setFileItems((prevState) => {
+                const updatedItems = prevState.map((prevItem) => {
+                    const newItem = newFileItems.find(
+                        (item) =>
+                            item.uploadedFile &&
+                            item.uploadedFile.url ===
+                                (prevItem.uploadedFile && prevItem.uploadedFile.url),
+                    );
+                    return newItem || prevItem;
+                });
+
+                return updatedItems.concat(
+                    newFileItems.filter(
+                        (newItem) =>
+                            !prevState.some(
+                                (prevItem) =>
+                                    prevItem.uploadedFile &&
+                                    newItem.uploadedFile &&
+                                    prevItem.uploadedFile.url === newItem.uploadedFile.url,
+                            ),
+                    ),
+                );
+            });
         }
     }, [files]);
 
@@ -226,8 +273,8 @@ const Gallery: FC<GalleryProps> = ({
             const filteredFiles = fileItems.filter((file) => {
                 const fileId = file.id;
 
-                if (fileId === id) {
-                    fileToDelete = file;
+                if (fileId === id && file.uploadedFile) {
+                    fileToDelete = { file: file.uploadedFile, id };
                 }
 
                 return fileId !== id;
@@ -265,7 +312,7 @@ const Gallery: FC<GalleryProps> = ({
      * Opens the files in a slideShow
      */
     const openFiles = useCallback(
-        (file: FileItem) => {
+        (file: InternalFileItem) => {
             const startIndex = fileItems.findIndex((item) => item.id === file.id);
 
             const items: OpenMediaItem[] = fileItems.map((item) => ({
@@ -357,7 +404,7 @@ const Gallery: FC<GalleryProps> = ({
             <StyledGallery>
                 {isEditMode ? (
                     <StyledGalleryEditModeWrapper
-                        fileMinWidth={fileMinWidth}
+                        $fileMinWidth={fileMinWidth}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => void handleDrop(e)}
                     >
@@ -365,9 +412,9 @@ const Gallery: FC<GalleryProps> = ({
                     </StyledGalleryEditModeWrapper>
                 ) : (
                     <StyledGalleryItemWrapper
-                        ratio={ratio}
-                        uploadedFileLength={fileItems.length}
-                        viewMode={viewMode}
+                        $ratio={ratio}
+                        $uploadedFileLength={fileItems.length}
+                        $viewMode={viewMode}
                     >
                         {galleryContent}
                     </StyledGalleryItemWrapper>

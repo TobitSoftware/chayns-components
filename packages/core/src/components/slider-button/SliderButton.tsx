@@ -1,21 +1,21 @@
+import { AnimatePresence, useAnimate } from 'framer-motion';
 import React, {
     FC,
-    type ReactElement,
     useCallback,
     useEffect,
     useMemo,
     useRef,
     useState,
+    type ReactElement,
 } from 'react';
+import type { SliderButtonItem } from '../../types/slider-button';
+import { calculateBiggestWidth } from '../../utils/calculate';
+import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
 import {
     StyledMotionSliderButtonThumb,
     StyledSliderButton,
     StyledSliderButtonItem,
 } from './SliderButton.styles';
-import type { SliderButtonItem } from '../../types/slider-button';
-import { AnimatePresence, useAnimate } from 'framer-motion';
-import { calculateBiggestWidth } from '../../utils/calculate';
-import { getNearestPoint, getThumbPosition } from '../../utils/sliderButton';
 
 export type SliderButtonProps = {
     /**
@@ -98,10 +98,10 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
         items.forEach(({ id, text }, index) => {
             list.push(
                 <StyledSliderButtonItem
-                    width={itemWidth}
+                    $width={itemWidth}
                     key={`slider-button-${id}`}
                     onClick={() => handleClick(id, index)}
-                    isSelected={id === selectedButton}
+                    $isSelected={id === selectedButton}
                 >
                     {text}
                 </StyledSliderButtonItem>,
@@ -166,7 +166,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
 
     return useMemo(
         () => (
-            <StyledSliderButton isDisabled={isDisabled} ref={sliderButtonRef}>
+            <StyledSliderButton $isDisabled={isDisabled} ref={sliderButtonRef}>
                 <AnimatePresence>
                     {buttons}
                     <StyledMotionSliderButtonThumb
@@ -174,7 +174,7 @@ const SliderButton: FC<SliderButtonProps> = ({ selectedButtonId, isDisabled, ite
                         drag={isDisabled ? false : 'x'}
                         dragElastic={0}
                         dragConstraints={{ ...dragRange }}
-                        width={itemWidth}
+                        $width={itemWidth}
                         onDrag={handleWhileDrag}
                         onDragEnd={handleDragEnd}
                     >

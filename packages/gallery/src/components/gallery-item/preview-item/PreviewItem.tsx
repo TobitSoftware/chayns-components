@@ -1,5 +1,5 @@
 import { SmallWaitCursor } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/lib/types/file';
+import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
 import React, { FC } from 'react';
 import {
     StyledMotionPreviewItem,
@@ -12,7 +12,7 @@ export type PreviewItemProps = {
     /**
      *  Images and videos which should be displayed
      */
-    fileItem: FileItem;
+    fileItem: InternalFileItem;
     /**
      * The ratio of the image
      */
@@ -30,7 +30,7 @@ const PreviewItem: FC<PreviewItemProps> = ({ fileItem, ratio }) => (
         transition={{ duration: 3.2 }}
         style={{ position: 'absolute' }}
     >
-        <StyledPreviewItemImageWrapper ratio={ratio}>
+        <StyledPreviewItemImageWrapper $ratio={ratio}>
             <StyledPreviewItemLoadingIcon>
                 <SmallWaitCursor shouldHideWaitCursor={false} shouldHideBackground />
             </StyledPreviewItemLoadingIcon>

@@ -31,7 +31,7 @@ const SearchBoxItem: FC<SearchBoxItemProps> = ({
                 {imageUrl && (
                     <StyledSearchBoxItemImage
                         src={imageUrl}
-                        shouldShowRoundImage={shouldShowRoundImage}
+                        $shouldShowRoundImage={shouldShowRoundImage}
                     />
                 )}
                 <StyledSearchBoxItemText>{text}</StyledSearchBoxItemText>

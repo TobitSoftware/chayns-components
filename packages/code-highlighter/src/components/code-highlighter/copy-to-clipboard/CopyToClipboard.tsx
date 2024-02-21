@@ -28,7 +28,7 @@ const CopyToClipboard: FC<CopyToClipboardProps> = ({ copyButtonText, text, theme
                     color={theme === CodeHighlighterTheme.Dark ? '#e5e5e5' : '#999999'}
                 />
                 {copyButtonText && (
-                    <StyledCopyToClipboardText codeTheme={theme}>
+                    <StyledCopyToClipboardText $codeTheme={theme}>
                         {copyButtonText}
                     </StyledCopyToClipboardText>
                 )}

@@ -152,7 +152,7 @@ const Emoji: FC<EmojiProps> = ({
     return (
         <StyledEmoji
             ref={emojiRef}
-            isSelected={isSelected}
+            $isSelected={isSelected}
             data-emoji={emoji}
             data-name={name}
             data-skin-tone-support={isSkinToneSupported}

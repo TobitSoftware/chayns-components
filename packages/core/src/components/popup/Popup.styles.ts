@@ -9,9 +9,9 @@ export const StyledPopup = styled.span`
 `;
 
 export const StyledPopupPseudo = styled.div<{
-    menuHeight: number;
+    $menuHeight: number;
 }>`
-    top: ${({ menuHeight }) => `${menuHeight - 0}px`};
+    top: ${({ $menuHeight }) => `${$menuHeight - 0}px`};
     left: 0;
     pointer-events: none;
     visibility: hidden;

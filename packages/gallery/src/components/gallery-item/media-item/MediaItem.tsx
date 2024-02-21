@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/lib/types/file';
+import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
 import React, { FC } from 'react';
 import {
     StyledMediaItemImage,
@@ -14,7 +14,7 @@ export type MediaItemProps = {
     /**
      *  Images and videos which should be displayed
      */
-    fileItem: FileItem;
+    fileItem: InternalFileItem;
     /**
      *  Whether images and videos can be edited
      */
@@ -22,7 +22,7 @@ export type MediaItemProps = {
     /**
      *  Function to be executed when a file is selected
      */
-    openSelectedFile: (file: FileItem) => void;
+    openSelectedFile: (file: InternalFileItem) => void;
     /**
      * The ratio of the image
      */
@@ -37,7 +37,7 @@ const MediaItem: FC<MediaItemProps> = ({ fileItem, isEditMode, openSelectedFile,
         transition={{ duration: 3.2 }}
     >
         {fileItem.uploadedFile && 'thumbnailUrl' in fileItem.uploadedFile ? (
-            <StyledMediaItemVideoWrapper onClick={() => openSelectedFile(fileItem)} ratio={ratio}>
+            <StyledMediaItemVideoWrapper onClick={() => openSelectedFile(fileItem)} $ratio={ratio}>
                 <StyledMediaItemPlayIcon>
                     <Icon size={isEditMode ? 30 : 50} icons={['fa fa-play']} />
                 </StyledMediaItemPlayIcon>
@@ -46,7 +46,7 @@ const MediaItem: FC<MediaItemProps> = ({ fileItem, isEditMode, openSelectedFile,
                 </StyledMediaItemVideo>
             </StyledMediaItemVideoWrapper>
         ) : (
-            <StyledMediaItemImageWrapper onClick={() => openSelectedFile(fileItem)} ratio={ratio}>
+            <StyledMediaItemImageWrapper onClick={() => openSelectedFile(fileItem)} $ratio={ratio}>
                 <StyledMediaItemImage draggable={false} src={fileItem.uploadedFile?.url} />
             </StyledMediaItemImageWrapper>
         )}

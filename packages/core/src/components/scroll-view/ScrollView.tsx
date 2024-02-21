@@ -18,7 +18,7 @@ const ScrollView: FC<ScrollViewProps> = ({ maxHeight = '300px', children }) => {
 
     return useMemo(
         () => (
-            <StyledScrollView browser={browser?.name} maxHeight={maxHeight}>
+            <StyledScrollView $browser={browser?.name} $maxHeight={maxHeight}>
                 {children}
             </StyledScrollView>
         ),

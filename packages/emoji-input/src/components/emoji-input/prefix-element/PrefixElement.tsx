@@ -51,7 +51,7 @@ const PrefixElement: FC<PrefixElementProps> = ({
             prefixText.split('').map((letter, index) => (
                 <StyledPrefixElementLetter
                     onAnimationEnd={() => handleAnimationEnd(index)}
-                    index={index}
+                    $index={index}
                 >
                     {letter}
                 </StyledPrefixElementLetter>
@@ -60,7 +60,7 @@ const PrefixElement: FC<PrefixElementProps> = ({
     );
 
     return (
-        <StyledPrefixElement shouldShow={shouldShow}>
+        <StyledPrefixElement $shouldShow={shouldShow}>
             <StyledPrefixElementPseudo
                 ref={prefixElementRef}
                 dangerouslySetInnerHTML={{ __html: convertTextToHTML(element) }}

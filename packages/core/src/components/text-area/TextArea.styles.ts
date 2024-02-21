@@ -11,10 +11,10 @@ export const StyledTextArea = styled.div`
 `;
 
 type StyledTextAreaInputProps = WithTheme<{
-    maxHeight: CSSProperties['maxHeight'];
-    minHeight: CSSProperties['minHeight'];
-    isOverflowing: boolean;
-    browser: Browser | 'bot' | null | undefined;
+    $maxHeight: CSSProperties['maxHeight'];
+    $minHeight: CSSProperties['minHeight'];
+    $isOverflowing: boolean;
+    $browser: Browser | 'bot' | null | undefined;
 }>;
 
 export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
@@ -23,15 +23,15 @@ export const StyledTextAreaInput = styled.textarea<StyledTextAreaInputProps>`
     background-color: ${({ theme }: StyledTextAreaInputProps) => theme['100']};
     color: ${({ theme }: StyledTextAreaInputProps) => theme.text};
     resize: none;
-    overflow-y: ${({ isOverflowing }) => (isOverflowing ? 'scroll' : 'hidden')};
-    max-height: ${({ maxHeight }: StyledTextAreaInputProps) => maxHeight};
-    min-height: ${({ minHeight }: StyledTextAreaInputProps) => minHeight};
+    overflow-y: ${({ $isOverflowing }) => ($isOverflowing ? 'scroll' : 'hidden')};
+    max-height: ${({ $maxHeight }: StyledTextAreaInputProps) => $maxHeight};
+    min-height: ${({ $minHeight }: StyledTextAreaInputProps) => $minHeight};
     width: 100%;
     padding: 8px 10px;
 
     // Styles for custom scrollbar
-    ${({ browser, theme }: StyledTextAreaInputProps) =>
-        browser === 'firefox'
+    ${({ $browser, theme }: StyledTextAreaInputProps) =>
+        $browser === 'firefox'
             ? css`
                   scrollbar-color: rgba(${theme['text-rgb']}, 0.15) transparent;
                   scrollbar-width: thin;

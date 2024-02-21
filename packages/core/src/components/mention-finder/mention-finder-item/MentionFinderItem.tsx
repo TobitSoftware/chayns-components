@@ -23,7 +23,7 @@ const MentionFinderItem: FC<MentionFinderItemProps> = ({ isActive, member, onCli
     return (
         <StyledMentionFinderItem
             className="prevent-lose-focus"
-            isActive={isActive}
+            $isActive={isActive}
             onClick={handleItemClick}
             onMouseEnter={handleItemMouseEnter}
         >

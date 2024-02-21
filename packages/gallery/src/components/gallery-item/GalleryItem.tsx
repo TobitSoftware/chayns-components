@@ -1,5 +1,5 @@
 import { Icon } from '@chayns-components/core';
-import type { FileItem } from '@chayns-components/core/lib/types/file';
+import type { InternalFileItem } from '@chayns-components/core/lib/types/file';
 import { AnimatePresence } from 'framer-motion';
 import React, { FC, useMemo } from 'react';
 import {
@@ -14,7 +14,7 @@ export type GalleryItemProps = {
     /**
      *  Images and videos which should be displayed
      */
-    fileItem: FileItem;
+    fileItem: InternalFileItem;
     /**
      *  Whether images and videos can be edited
      */
@@ -34,7 +34,7 @@ export type GalleryItemProps = {
     /**
      * Function to be executed if a file should be opened
      */
-    onClick: (file: FileItem) => void;
+    onClick: (file: InternalFileItem) => void;
 };
 
 const GalleryItem: FC<GalleryItemProps> = ({

@@ -8,10 +8,11 @@ export const StyledCopyToClipboard = styled.div`
 `;
 
 type StyledCopyToClipboardTextProps = WithTheme<{
-    codeTheme: CodeHighlighterTheme;
+    $codeTheme: CodeHighlighterTheme;
 }>;
 export const StyledCopyToClipboardText = styled.span<StyledCopyToClipboardTextProps>`
-    color: ${({ codeTheme }) => (codeTheme === CodeHighlighterTheme.Dark ? '#e5e5e5' : '#999999')};
+    color: ${({ $codeTheme }) =>
+        $codeTheme === CodeHighlighterTheme.Dark ? '#e5e5e5' : '#999999'};
     font-size: small;
     margin-left: 4px;
 `;

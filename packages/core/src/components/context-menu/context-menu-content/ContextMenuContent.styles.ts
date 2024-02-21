@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
-import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 import { ContextMenuAlignment } from '../../../types/contextMenu';
+import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
 type StyledMotionContextMenuContentProps = WithTheme<{
-    position: ContextMenuAlignment;
+    $position: ContextMenuAlignment;
 }>;
 
 export const StyledMotionContextMenuContent = styled(
@@ -29,8 +29,8 @@ export const StyledMotionContextMenuContent = styled(
         width: 14px;
         z-index: -2;
 
-        ${({ position }) => {
-            switch (position) {
+        ${({ $position }) => {
+            switch ($position) {
                 case ContextMenuAlignment.TopLeft:
                     return css`
                         bottom: -7px;

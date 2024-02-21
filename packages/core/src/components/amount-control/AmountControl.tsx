@@ -8,13 +8,13 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import { checkForValidAmount } from '../../utils/amountControl';
 import Icon from '../icon/Icon';
 import {
     StyledAmountControl,
     StyledAmountControlInput,
     StyledMotionAmountControlButton,
 } from './AmountControl.styles';
-import { checkForValidAmount } from '../../utils/amountControl';
 
 export type DisplayState = 'default' | 'delete' | 'normal' | 'maxAmount';
 
@@ -161,11 +161,12 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
                 <StyledMotionAmountControlButton
                     onClick={handleAmountRemove}
                     disabled={amountValue !== 0 && amountValue <= minAmount}
+                    $isDisabled={amountValue !== 0 && amountValue <= minAmount}
                 >
                     {leftIcon}
                 </StyledMotionAmountControlButton>
                 <StyledAmountControlInput
-                    displayState={displayState}
+                    $displayState={displayState}
                     onBlur={handleInputBlur}
                     onChange={handleInputChange}
                     value={displayState === 'default' && label ? label : inputValue}
@@ -181,6 +182,7 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
                             transition={{ duration: 0.2, type: 'tween' }}
                             onClick={handleAmountAdd}
                             disabled={maxAmount ? amountValue >= maxAmount : false}
+                            $isDisabled={maxAmount ? amountValue >= maxAmount : false}
                         >
                             <Icon icons={['fa fa-plus']} size={15} color="green" />
                         </StyledMotionAmountControlButton>

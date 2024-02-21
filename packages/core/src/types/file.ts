@@ -21,7 +21,7 @@ export interface Meta {
     height: string;
 }
 
-export interface FileItem {
+export interface InternalFileItem {
     /**
      * The state will be set in this component
      */
@@ -38,9 +38,14 @@ export interface FileItem {
      * The ID of the file. If an `uploadedFile` object is provided, the ID is set to the ID of the uploaded file.
      * If no `uploadedFile` object is provided, a new ID will be generated.
      */
-    id?: string;
+    id: string;
     /**
      * Preview url of the file
      */
     previewUrl?: string;
+}
+
+export interface FileItem {
+    file: Video | Image;
+    id?: string;
 }
