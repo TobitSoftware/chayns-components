@@ -22,9 +22,10 @@ export type TextstringProviderProps = {
     libraryName: string;
 };
 
+export const PassTextstringProvider: { value?: TextstringValue } = {};
+
 const TextstringProvider: FC<TextstringProviderProps> = ({ children, libraryName, language }) => {
     const [textstrings, setTextstrings] = useState<TextstringValue>({});
-    export const PassTextstringProvider: { value?: TextStringValue } = {};
 
     useEffect(() => {
         const loadData = async () => {
@@ -32,7 +33,7 @@ const TextstringProvider: FC<TextstringProviderProps> = ({ children, libraryName
 
             if (textstringResult) {
                 setTextstrings(textstringResult);
-                PassTextstringProvider.value = textStringResult;
+                PassTextstringProvider.value = textstringResult;
             }
         };
 
