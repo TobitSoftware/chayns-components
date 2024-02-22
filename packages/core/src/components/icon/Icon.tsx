@@ -99,6 +99,7 @@ const Icon: FC<IconProps> = ({
             className={wrapperClasses}
             $isDisabled={isDisabled}
             onClick={typeof onClick === 'function' ? handleClick : undefined}
+            $isOnClick={typeof onClick === 'function'}
             onDoubleClick={typeof onDoubleClick === 'function' ? handleDoubleClick : undefined}
             onMouseDown={onMouseDown}
             $size={size}

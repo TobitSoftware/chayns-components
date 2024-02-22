@@ -1,17 +1,16 @@
-import type { MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../color-scheme-provider/ColorSchemeProvider';
 
 type StyledIconWrapperProps = {
     $isDisabled?: boolean;
-    $onClick?: MouseEventHandler<HTMLSpanElement>;
+    $isOnClick: boolean;
     $size: number;
 };
 
 export const StyledIconWrapper = styled.span<StyledIconWrapperProps>`
     align-items: center;
-    cursor: ${({ $isDisabled, $onClick }) =>
-        typeof $onClick === 'function' && !$isDisabled ? 'pointer' : 'inherit'};
+    cursor: ${({ $isDisabled, $isOnClick }) =>
+        $isOnClick && !$isDisabled ? 'pointer' : 'inherit'};
     display: inline-flex;
     min-height: ${({ $size }) => `${$size}px`};
     justify-content: center;
