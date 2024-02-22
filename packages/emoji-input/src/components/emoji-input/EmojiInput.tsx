@@ -203,7 +203,14 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
 
         const handleBeforeInput = useCallback(
             (event: FormEvent<HTMLDivElement>) => {
-                if (!editorRef.current || isDisabled) {
+                if (!editorRef.current) {
+                    return;
+                }
+
+                if (isDisabled) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
                     return;
                 }
 
@@ -233,6 +240,11 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
             (event: ChangeEvent<HTMLDivElement>) => {
                 if (!editorRef.current) {
                     return;
+                }
+
+                if (isDisabled) {
+                    event.stopPropagation();
+                    event.preventDefault();
                 }
 
                 if (shouldDeleteOneMoreBackwards.current) {
@@ -269,7 +281,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                     onInput(event, text);
                 }
             },
-            [handleUpdateHTML, onInput],
+            [handleUpdateHTML, isDisabled, onInput],
         );
 
         const handleKeyDown = useCallback(
@@ -500,7 +512,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         }, [prefixElement]);
 
         const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
-            if (typeof onFocus === 'function') {
+            if (typeof onFocus === 'function' && !isDisabled) {
                 onFocus(event);
             }
 
@@ -508,7 +520,7 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
         };
 
         const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
-            if (typeof onBlur === 'function') {
+            if (typeof onBlur === 'function' && !isDisabled) {
                 onBlur(event);
             }
 
@@ -555,6 +567,24 @@ const EmojiInput = forwardRef<EmojiInputRef, EmojiInputProps>(
                 resizeObserver.disconnect();
             };
         }, []);
+
+        useEffect(() => {
+            const blurElement = () => {
+                if (
+                    editorRef.current &&
+                    document.activeElement === editorRef.current &&
+                    isDisabled
+                ) {
+                    editorRef.current.blur();
+                }
+            };
+
+            document.addEventListener('focus', blurElement, true);
+
+            return () => {
+                document.removeEventListener('focus', blurElement, true);
+            };
+        }, [isDisabled]);
 
         return (
             <StyledEmojiInput $isDisabled={isDisabled}>
