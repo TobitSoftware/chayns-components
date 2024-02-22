@@ -1,6 +1,6 @@
 {
     "name": "@chayns-components/gallery",
-    "version": "5.0.0-beta.479",
+    "version": "5.0.0-beta.482",
     "description": "A set of beautiful React components for developing your own applications with chayns.",
     "sideEffects": false,
     "browserslist": [
@@ -57,7 +57,7 @@
         "typescript": "^5.3.3"
     },
     "dependencies": {
-        "@chayns-components/core": "^5.0.0-beta.479",
+        "@chayns-components/core": "^5.0.0-beta.482",
         "uuid": "^9.0.1"
     },
     "peerDependencies": {
