@@ -6,6 +6,7 @@ import EmojiPicker from '../emoji-picker/EmojiPicker';
 import { emojiPickerSize } from '../emoji-picker/EmojiPicker.styles';
 import {
     StyledEmojiPickerPopup,
+    StyledEmojiPickerPopupIconWrapper,
     StyledMotionEmojiPickerPopupContent,
 } from './EmojiPickerPopup.styles';
 
@@ -186,12 +187,14 @@ const EmojiPickerPopup: FC<EmojiPickerPopupProps> = ({
                     </StyledMotionEmojiPickerPopupContent>
                 )}
             </AnimatePresence>
-            <Icon
-                className="prevent-lose-focus"
-                icons={['far fa-smile']}
-                onClick={handlePopupIconClick}
-                size={18}
-            />
+            <StyledEmojiPickerPopupIconWrapper>
+                <Icon
+                    className="prevent-lose-focus"
+                    icons={['far fa-smile']}
+                    onClick={handlePopupIconClick}
+                    size={18}
+                />
+            </StyledEmojiPickerPopupIconWrapper>
         </StyledEmojiPickerPopup>
     );
 };

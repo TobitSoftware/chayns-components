@@ -80,3 +80,7 @@ export const StyledMotionEmojiPickerPopupContent = styled(
         z-index: -1;
     }
 `;
+
+export const StyledEmojiPickerPopupIconWrapper = styled.div`
+    cursor: pointer;
+`;
