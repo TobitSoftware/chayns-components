@@ -151,7 +151,7 @@ WithSuffixElements.args = {
         {
             imageUrl: 'https://picsum.photos/200',
             text: 'Intuitive Bedienung',
-            suffixElement: <Icon icons={['far fa-user']} />,
+            suffixElement: <Icon icons={['fa fa-user']} />,
             value: 2,
         },
         {
