@@ -107,12 +107,16 @@ const Icon: FC<IconProps> = ({
             {icons.map((icon) => {
                 const stackSizeFactor = getStackSizeFactor(icon);
 
-                const iconClasses = clsx(
-                    `${theme && theme.iconStyle ? (theme.iconStyle as string) : 'fa-regular'} ${icon}`,
-                    {
-                        'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
-                    },
-                );
+                const isIconStyleGiven =
+                    /fa[srltd]|fa-(?:regular|solid|thin|light|duotone|sharp)/.test(icon);
+
+                const iconStyle = isIconStyleGiven
+                    ? undefined
+                    : (theme?.iconStyle as string) ?? 'fa-regular';
+
+                const iconClasses = clsx(iconStyle, icon, {
+                    'fa-stack-1x': shouldUseStackedIcon && stackSizeFactor === undefined,
+                });
 
                 return (
                     <StyledIcon
