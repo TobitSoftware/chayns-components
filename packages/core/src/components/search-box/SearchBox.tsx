@@ -174,6 +174,12 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
             (event: ChangeEvent<HTMLInputElement>) => {
                 const searchedItems = searchList({ items: list, searchString: event.target.value });
 
+                console.debug('SearchBox | handleChange', {
+                    searchedItems,
+                    list,
+                    targetValue: event.target.value,
+                });
+
                 if (!shouldShowContentOnEmptyInput && !event.target.value) {
                     setMatchingItems([]);
                 } else {
