@@ -76,7 +76,8 @@ const ColorSchemeProvider: FC<ColorSchemeProviderProps> = ({
     const [theme, setTheme] = useState<Theme>({});
     const [internalDesignSettings, setInternalDesignSettings] = useState<DesignSettings>();
 
-    const { color: internalColor, colorMode: internalColorMode } = useSite();
+    // Empty object is used to prevent error if ColorSchemeProvider is rendered on server
+    const { color: internalColor, colorMode: internalColorMode } = useSite() ?? {};
 
     useEffect(() => {
         if (designSettings) {

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import type { ComboBoxProps, IComboBoxItem } from '../ComboBox';
 import { StyledComboBoxItem, StyledComboBoxItemImage } from './ComboBoxItem.styles';
 
@@ -7,6 +7,7 @@ export type ComboBoxItemProps = {
     isSelected: boolean;
     onSelect: (itemToSelect: IComboBoxItem) => void;
     shouldShowRoundImage: ComboBoxProps['shouldShowRoundImage'];
+    suffixElement?: ReactNode;
     text: IComboBoxItem['text'];
     value: IComboBoxItem['value'];
 };
@@ -16,6 +17,7 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
     isSelected,
     onSelect,
     shouldShowRoundImage,
+    suffixElement,
     text,
     value,
 }) => {
@@ -39,9 +41,18 @@ const ComboBoxItem: FC<ComboBoxItemProps> = ({
                     />
                 )}
                 {text}
+                {suffixElement}
             </StyledComboBoxItem>
         ),
-        [handleItemClick, imageUrl, isMobile, isSelected, shouldShowRoundImage, text],
+        [
+            handleItemClick,
+            imageUrl,
+            isMobile,
+            isSelected,
+            shouldShowRoundImage,
+            suffixElement,
+            text,
+        ],
     );
 };
 

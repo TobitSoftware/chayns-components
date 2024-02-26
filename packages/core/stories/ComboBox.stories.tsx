@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { ComboBoxDirection } from '../src';
 import ComboBox from '../src/components/combobox/ComboBox';
-import { ComboBoxDirection } from '../src/types/comboBox';
+import Icon from '../src/components/icon/Icon';
 
 export default {
     title: 'Core/ComboBox',
@@ -95,6 +96,8 @@ export const General = Template.bind({});
 
 export const WithImages = Template.bind({});
 
+export const WithSuffixElements = Template.bind({});
+
 WithImages.args = {
     direction: ComboBoxDirection.TOP,
     list: [
@@ -128,5 +131,44 @@ WithImages.args = {
         imageUrl: 'https://picsum.photos/200',
         text: 'Flexibles Design',
         value: 1,
+    },
+};
+
+WithSuffixElements.args = {
+    direction: ComboBoxDirection.TOP,
+    list: [
+        {
+            imageUrl: 'https://picsum.photos/200',
+            suffixElement: <Icon icons={['fal fa-image']} />,
+            text: 'Schnellstart',
+            value: 0,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Flexibles Design',
+            value: 1,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Intuitive Bedienung',
+            suffixElement: <Icon icons={['far fa-user']} />,
+            value: 2,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Integration',
+            value: 3,
+        },
+        {
+            imageUrl: 'https://picsum.photos/200',
+            text: 'Navigation',
+            value: 4,
+        },
+    ],
+    selectedItem: {
+        imageUrl: 'https://picsum.photos/200',
+        text: 'Intuitive Bedienung',
+        suffixElement: <Icon icons={['far fa-user']} />,
+        value: 2,
     },
 };

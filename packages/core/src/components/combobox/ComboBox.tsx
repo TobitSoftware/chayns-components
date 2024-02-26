@@ -7,6 +7,7 @@ import React, {
     useRef,
     useState,
     type CSSProperties,
+    type ReactNode,
 } from 'react';
 import { ComboBoxDirection } from '../../types/comboBox';
 import { calculateContentHeight, calculateContentWidth } from '../../utils/calculate';
@@ -23,6 +24,7 @@ import {
 
 export interface IComboBoxItem {
     imageUrl?: string;
+    suffixElement?: ReactNode;
     text: string;
     value: string | number;
 }
@@ -132,9 +134,7 @@ const ComboBox: FC<ComboBoxProps> = ({
 
         // 45px = padding left + padding right + border left + border right + arrow icon width + arrow icon margin left
         // 32px = image width + flex gap
-        setMinWidth(
-            calculateContentWidth(textArray) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0),
-        );
+        setMinWidth(calculateContentWidth(list) + 45 + (isAtLeastOneItemWithImageGiven ? 32 : 0));
     }, [list, placeholder]);
 
     /**
@@ -184,13 +184,14 @@ const ComboBox: FC<ComboBoxProps> = ({
     }, [isDisabled]);
 
     const comboBoxBody = useMemo(() => {
-        const items = list.map(({ imageUrl, text, value }) => (
+        const items = list.map(({ imageUrl, suffixElement, text, value }) => (
             <ComboBoxItem
                 imageUrl={imageUrl}
                 isSelected={selectedItem ? value === selectedItem.value : false}
                 key={value}
                 onSelect={handleSetSelectedItem}
                 shouldShowRoundImage={shouldShowRoundImage}
+                suffixElement={suffixElement}
                 text={text}
                 value={value}
             />

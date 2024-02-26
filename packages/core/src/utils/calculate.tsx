@@ -1,17 +1,35 @@
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import ColorSchemeProvider from '../components/color-scheme-provider/ColorSchemeProvider';
+import type { IComboBoxItem } from '../components/combobox/ComboBox';
 import type { SliderButtonItem } from '../types/slider-button';
 
-export const calculateContentWidth = (texts: string[]) => {
+export const calculateContentWidth = (list: IComboBoxItem[]) => {
     const length: number[] = [];
 
-    texts.forEach((text) => {
+    list.forEach(({ suffixElement, text }) => {
         const div = document.createElement('div');
-        div.style.visibility = 'hidden';
+
+        div.style.display = 'flex';
+        div.style.gap = '10px';
         div.style.position = 'absolute';
-        div.style.width = 'auto';
+        div.style.visibility = 'hidden';
         div.style.whiteSpace = 'nowrap';
+        div.style.width = 'auto';
+
         document.body.appendChild(div);
 
         div.innerText = text;
+
+        if (suffixElement) {
+            // ColorSchemeProvider is used to prevent missing scheme context error.
+            // Due to the fact that the element is never rendered visible, the values are irrelevant.
+            div.innerHTML += renderToString(
+                <ColorSchemeProvider color="#005EB8" colorMode={0}>
+                    {suffixElement}
+                </ColorSchemeProvider>,
+            );
+        }
 
         length.push(div.offsetWidth);
 
