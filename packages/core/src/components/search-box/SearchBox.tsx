@@ -163,9 +163,14 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
 
         useEffect(() => {
             if (list) {
-                setMatchingItems(searchList({ items: list, searchString: value }));
+                const newMatchingItems = searchList({ items: list, searchString: value });
+
+                if (shouldShowContentOnEmptyInput || value !== '') {
+                    setMatchingItems(newMatchingItems);
+                    setIsAnimating(newMatchingItems.length !== 0);
+                }
             }
-        }, [list, value]);
+        }, [list, shouldShowContentOnEmptyInput, value]);
 
         /**
          * This function handles changes of the input
@@ -173,12 +178,6 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
         const handleChange = useCallback(
             (event: ChangeEvent<HTMLInputElement>) => {
                 const searchedItems = searchList({ items: list, searchString: event.target.value });
-
-                console.debug('SearchBox | handleChange', {
-                    searchedItems,
-                    list,
-                    targetValue: event.target.value,
-                });
 
                 if (!shouldShowContentOnEmptyInput && !event.target.value) {
                     setMatchingItems([]);
