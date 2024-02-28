@@ -141,10 +141,8 @@ const ComboBox: FC<ComboBoxProps> = ({
      * This function sets the external selected item
      */
     useEffect(() => {
-        if (selectedItem) {
-            setItem(selectedItem);
-            setIsAnimating(false);
-        }
+        setIsAnimating(false);
+        setItem(selectedItem);
     }, [selectedItem]);
 
     const placeholderImageUrl = useMemo(() => {
