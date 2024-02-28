@@ -1,3 +1,4 @@
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 
 interface IListContext {
@@ -72,7 +73,13 @@ const List: FC<ListProps> = ({ children, isWrapped = false }) => {
         ],
     );
 
-    return <ListContext.Provider value={providerValue}>{children}</ListContext.Provider>;
+    return (
+        <ListContext.Provider value={providerValue}>
+            <MotionConfig transition={{ type: 'tween' }}>
+                <AnimatePresence initial={false}>{children}</AnimatePresence>
+            </MotionConfig>
+        </ListContext.Provider>
+    );
 };
 
 List.displayName = 'List';

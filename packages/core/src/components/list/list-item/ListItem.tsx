@@ -12,7 +12,7 @@ import { useUuid } from '../../../hooks/uuid';
 import { ListContext } from '../List';
 import ListItemBody from './list-item-body/ListItemBody';
 import ListItemHead from './list-item-head/ListItemHead';
-import { StyledListItem } from './ListItem.styles';
+import { StyledMotionListItem } from './ListItem.styles';
 
 type ListItemProps = {
     /**
@@ -137,8 +137,12 @@ const ListItem: FC<ListItemProps> = ({
     }, [isDefaultOpen, updateOpenItemUuid, uuid]);
 
     return (
-        <StyledListItem
+        <StyledMotionListItem
+            animate={{ height: 'auto', opacity: 1 }}
             className="beta-chayns-list-item"
+            exit={{ height: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
+            key={`list-item-${uuid}`}
             $isClickable={typeof onClick === 'function' || isExpandable}
             $isOpen={isItemOpen}
             $isWrapped={isWrapped}
@@ -161,7 +165,7 @@ const ListItem: FC<ListItemProps> = ({
             <AnimatePresence initial={false}>
                 {isExpandable && isItemOpen && <ListItemBody id={uuid}>{children}</ListItemBody>}
             </AnimatePresence>
-        </StyledListItem>
+        </StyledMotionListItem>
     );
 };
 

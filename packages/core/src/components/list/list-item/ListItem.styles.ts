@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import type { WithTheme } from '../../color-scheme-provider/ColorSchemeProvider';
 
@@ -7,13 +8,14 @@ type StyledListItemProps = WithTheme<{
     $isWrapped: boolean;
 }>;
 
-export const StyledListItem = styled.div<StyledListItemProps>`
+export const StyledMotionListItem = styled(motion.div)<StyledListItemProps>`
     ${({ $isOpen, theme }) =>
         $isOpen &&
         css`
             background-color: rgba(${theme['100-rgb']}, ${theme.cardBackgroundOpacity});
         `}
 
+    overflow: hidden;
     transition: background-color 0.3s ease;
 
     ${({ $isClickable, theme }) =>
