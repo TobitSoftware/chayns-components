@@ -1,7 +1,7 @@
 import React, { ChangeEventHandler, FC, useEffect, useState } from 'react';
-import Input from '../input/Input';
 import { NUMBER_CLEAR_REGEX } from '../../constants/numberInput';
 import { formateNumber, isValidString, parseFloatWithDecimals } from '../../utils/numberInput';
+import Input from '../input/Input';
 
 export type NumberInputProps = {
     /**
@@ -13,6 +13,10 @@ export type NumberInputProps = {
      * Whether the input is disabled
      */
     isDisabled?: boolean;
+    /**
+     * Whether the value is invalid.
+     */
+    isInvalid?: boolean;
     /**
      * Applies rules for money input.
      * Rules: only two decimal places, one zero before the comma
@@ -59,6 +63,7 @@ const NumberInput: FC<NumberInputProps> = ({
     isDecimalInput,
     isMoneyInput,
     isTimeInput,
+    isInvalid,
     maxNumber = Infinity,
     value,
     placeholder,
@@ -76,6 +81,12 @@ const NumberInput: FC<NumberInputProps> = ({
 
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
+
+    useEffect(() => {
+        if (typeof isInvalid === 'boolean') {
+            setIsValueInvalid(isInvalid);
+        }
+    }, [isInvalid]);
 
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newValue = event.target.value;
@@ -103,7 +114,7 @@ const NumberInput: FC<NumberInputProps> = ({
 
     const onLocalBlur = () => {
         const sanitizedValue = plainText.length === 0 ? '0' : plainText;
-        let isInvalid = false;
+        let newIsInvalid = false;
         let parsedNumber = null;
 
         if (!isTimeInput) {
@@ -113,10 +124,10 @@ const NumberInput: FC<NumberInputProps> = ({
             });
 
             if (parsedNumber !== 0 && (parsedNumber > maxNumber || parsedNumber < minNumber)) {
-                isInvalid = true;
+                newIsInvalid = true;
             }
 
-            setIsValueInvalid(isInvalid);
+            setIsValueInvalid(newIsInvalid);
         }
 
         const newStringValue =
@@ -138,9 +149,9 @@ const NumberInput: FC<NumberInputProps> = ({
 
         if (typeof onBlur === 'function') {
             if (isTimeInput) {
-                onBlur(newStringValue, isInvalid);
+                onBlur(newStringValue, newIsInvalid);
             } else {
-                onBlur(parsedNumber === 0 ? null : parsedNumber, isInvalid);
+                onBlur(parsedNumber === 0 ? null : parsedNumber, newIsInvalid);
             }
         }
     };
