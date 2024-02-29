@@ -82,12 +82,6 @@ const NumberInput: FC<NumberInputProps> = ({
     const [isValueInvalid, setIsValueInvalid] = useState(false);
     const localPlaceholder = placeholder ?? (isMoneyInput ? '€' : undefined);
 
-    useEffect(() => {
-        if (typeof isInvalid === 'boolean') {
-            setIsValueInvalid(isInvalid);
-        }
-    }, [isInvalid]);
-
     const onLocalChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         const newValue = event.target.value;
 
@@ -213,7 +207,7 @@ const NumberInput: FC<NumberInputProps> = ({
             onBlur={onLocalBlur}
             onFocus={onLocalFocus}
             isDisabled={isDisabled}
-            isInvalid={isValueInvalid}
+            isInvalid={typeof isInvalid === 'boolean' ? isInvalid : isValueInvalid}
         />
     );
 };
