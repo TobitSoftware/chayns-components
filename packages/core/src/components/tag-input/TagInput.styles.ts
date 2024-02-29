@@ -26,6 +26,7 @@ export const StyledTagInputTagWrapperText = styled.p`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 15px;
 `;
 
 type StyledTagInputTagInputProps = WithTheme<unknown>;
