@@ -24,6 +24,10 @@ export type AmountControlProps = {
      */
     amount?: number;
     /**
+     * The icon that should be displayed if no amount is selected.
+     */
+    icon?: string;
+    /**
      * A Text that should be displayed, if no amount is selected;
      */
     label?: string;
@@ -37,7 +41,7 @@ export type AmountControlProps = {
     onChange?: (amount: number) => void;
 };
 
-const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onChange }) => {
+const AmountControl: FC<AmountControlProps> = ({ amount, icon, label, maxAmount, onChange }) => {
     const [amountValue, setAmountValue] = useState(0);
     const [inputValue, setInputValue] = useState('0');
     const [displayState, setDisplayState] = useState<DisplayState>('default');
@@ -137,7 +141,7 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
 
         switch (displayState) {
             case 'default':
-                item = <Icon icons={['fa fa-cart-shopping']} size={15} />;
+                item = <Icon icons={[icon ?? 'fa fa-cart-shopping']} size={15} />;
                 break;
             case 'delete':
                 item = <Icon icons={['fa ts-trash']} size={25} />;
@@ -153,7 +157,7 @@ const AmountControl: FC<AmountControlProps> = ({ amount, label, maxAmount, onCha
         }
 
         return item;
-    }, [displayState]);
+    }, [displayState, icon]);
 
     return useMemo(
         () => (
