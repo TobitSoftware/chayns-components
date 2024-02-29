@@ -8,7 +8,15 @@ import React, {
     useState,
     type ReactElement,
 } from 'react';
-import type { OnChange, OnTimeAdd, OpeningTime, Time, Weekday } from '../../types/openingTimes';
+import {
+    HintTextPosition,
+    type OnChange,
+    type OnTimeAdd,
+    type OpeningTime,
+    type Time,
+    type Weekday,
+} from '../../types/openingTimes';
+import HintText from './hint-text/HintText';
 import OpeningInputs from './opening-inputs/OpeningInputs';
 import {
     StyledOpeningTimes,
@@ -30,6 +38,14 @@ export type OpeningTimesProps = {
      * Whether the opening times can be edited.
      */
     editMode?: boolean;
+    /**
+     * The text that should be displayed if times are colliding.
+     */
+    hintText?: string;
+    /**
+     * The position of the hint text.
+     */
+    hintTextPosition?: HintTextPosition;
     /**
      * Function to be executed when a time is changed or a day is enabled/disabled.
      * @param openingTimes
@@ -57,6 +73,8 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
     closedText = 'closed',
     currentDayId,
     editMode = false,
+    hintText,
+    hintTextPosition = HintTextPosition.Bottom,
     openingTimes,
     weekdays,
     onChange,
@@ -247,9 +265,37 @@ const OpeningTimes: FC<OpeningTimesProps> = ({
         );
     }, [closedText, content, currentDayId, editMode, newOpeningTimes, weekdays, size]);
 
+    const shouldShowHint = useMemo(() => {
+        let tmp = false;
+
+        openingTimes.forEach(({ times }) => {
+            if (times.length > 1) {
+                if (!times[0] || !times[1]) {
+                    return;
+                }
+
+                if (times[0].start >= times[1].end) {
+                    tmp = true;
+                }
+            }
+        });
+
+        return tmp;
+    }, [openingTimes]);
+
     return useMemo(
-        () => <StyledOpeningTimes ref={ref}>{displayedContent}</StyledOpeningTimes>,
-        [displayedContent],
+        () => (
+            <StyledOpeningTimes ref={ref}>
+                {shouldShowHint && hintText && hintTextPosition === HintTextPosition.Top && (
+                    <HintText text={hintText} />
+                )}
+                {displayedContent}
+                {shouldShowHint && hintText && hintTextPosition === HintTextPosition.Bottom && (
+                    <HintText text={hintText} />
+                )}
+            </StyledOpeningTimes>
+        ),
+        [displayedContent, hintText, hintTextPosition, shouldShowHint],
     );
 };
 

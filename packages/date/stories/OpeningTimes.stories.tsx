@@ -40,6 +40,8 @@ export default {
         closedText: 'geschlossen',
         weekdays: WEEKDAYS,
         openingTimes: OPENINGTIMES,
+        hintText:
+            'Einige der Öffnungszeiten überschneiden sich oder sind nicht in der richtigen Reihenfolge.',
     },
 } as Meta<typeof OpeningTimes>;
 

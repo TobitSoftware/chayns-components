@@ -31,3 +31,8 @@ export enum OpeningTimesButtonType {
     ADD,
     REMOVE,
 }
+
+export enum HintTextPosition {
+    Top,
+    Bottom,
+}
