@@ -1,23 +1,23 @@
 import React, {
-    type ChangeEvent,
-    type KeyboardEvent,
     FC,
-    type ReactElement,
+    useCallback,
     useEffect,
     useMemo,
     useState,
-    useCallback,
+    type ChangeEvent,
+    type KeyboardEvent,
+    type ReactElement,
 } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import type { Tag } from '../../types/tagInput';
+import Badge from '../badge/Badge';
+import Icon from '../icon/Icon';
 import {
     StyledTagInput,
     StyledTagInputTagInput,
     StyledTagInputTagWrapper,
     StyledTagInputTagWrapperText,
 } from './TagInput.styles';
-import type { Tag } from '../../types/tagInput';
-import Badge from '../badge/Badge';
-import Icon from '../icon/Icon';
-import { v4 as uuidv4 } from 'uuid';
 
 export type TagInputProps = {
     /**
@@ -118,14 +118,14 @@ const TagInput: FC<TagInputProps> = ({ placeholder, tags, onRemove, onAdd }) => 
             <StyledTagInput>
                 {content}
                 <StyledTagInputTagInput
-                    placeholder={placeholder}
+                    placeholder={tags && tags.length > 0 ? undefined : placeholder}
                     onKeyDown={handleKeyDown}
                     onChange={handleChange}
                     value={currentValue}
                 />
             </StyledTagInput>
         ),
-        [content, currentValue, handleKeyDown, placeholder],
+        [content, currentValue, handleKeyDown, placeholder, tags],
     );
 };
 
