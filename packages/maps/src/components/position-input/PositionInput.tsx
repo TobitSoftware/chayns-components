@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
-import { StyledPositionInput, StyledPositionInputSearch } from './PositionInput.styles';
 import { Input } from '@chayns-components/core';
-import MapWrapper from './map-wrapper/MapWrapper';
-import type { IMarker, PolygonOptions, Position } from '../../types/positionInput';
+import React, { FC } from 'react';
 import { DEFAULT_POLYGON_OPTIONS, DEFAULT_POSITION } from '../../constants/positionInput';
+import type { IMarker, PolygonOptions, Position } from '../../types/positionInput';
+import MapWrapper from './map-wrapper/MapWrapper';
+import { StyledPositionInput, StyledPositionInputSearch } from './PositionInput.styles';
 
 export type PositionInputProps = {
     /**
@@ -21,15 +21,15 @@ export type PositionInputProps = {
     /**
      * Function to be executed when a marker is added.
      */
-    onMarkerAdd: (marker: IMarker) => void;
+    onMarkerAdd?: (marker: IMarker) => void;
     /**
      * Function to be executed when a marker position is changed.
      */
-    onMarkerChange: (markers: IMarker[]) => void;
+    onMarkerChange?: (markers: IMarker[]) => void;
     /**
      * Function to be executed when a marker is removed.
      */
-    onMarkerRemove: (id: number) => void;
+    onMarkerRemove?: (id: number) => void;
     /**
      * Options to style the polygon.
      */
