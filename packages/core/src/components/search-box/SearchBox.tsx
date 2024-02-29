@@ -105,6 +105,7 @@ const SearchBox: FC<SearchBoxProps> = forwardRef<SearchBoxRef, SearchBoxProps>(
          */
         useEffect(() => {
             document.addEventListener('click', handleOutsideClick);
+            window.addEventListener('blur', () => setIsAnimating(false));
 
             return () => {
                 document.removeEventListener('click', handleOutsideClick);
